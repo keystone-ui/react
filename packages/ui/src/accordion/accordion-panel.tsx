@@ -1,0 +1,42 @@
+"use client";
+
+import { Accordion as AccordionPrimitive } from "@base-ui-components/react/accordion";
+import * as React from "react";
+
+import { cn } from "../lib/utils";
+import { AccordionVariantContext } from "./accordion";
+import { AccordionPanelProps } from "./types";
+
+/**
+ * Panel section of the accordion that expands/collapses.
+ */
+const AccordionPanel = React.forwardRef<
+  React.ElementRef<typeof AccordionPrimitive.Panel>,
+  AccordionPanelProps
+>(({ className, children, variant: variantProp, ...props }, ref) => {
+  const contextVariant = React.useContext(AccordionVariantContext);
+  const variant = variantProp ?? contextVariant;
+
+  return (
+    <AccordionPrimitive.Panel
+      ref={ref}
+      className={cn(
+        "h-[var(--accordion-panel-height)] overflow-hidden text-sm text-gray-600",
+        "transition-[height] ease-out data-[ending-style]:h-0 data-[starting-style]:h-0",
+        className
+      )}
+      {...props}
+    >
+      <div className={cn(
+        "pb-3",
+        (variant === "box" || variant === "table") && "px-4"
+      )}>
+        {children}
+      </div>
+    </AccordionPrimitive.Panel>
+  );
+});
+
+AccordionPanel.displayName = "AccordionPanel";
+
+export { AccordionPanel }; 
