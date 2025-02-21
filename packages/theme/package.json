@@ -1,0 +1,24 @@
+{
+  "name": "@acme/theme",
+  "version": "0.0.0",
+  "exports": {
+    ".": "./src/index.css"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "lint": "eslint .",
+    "format": "prettier --check \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "tailwindcss": "^4.0.7"
+  }
+}

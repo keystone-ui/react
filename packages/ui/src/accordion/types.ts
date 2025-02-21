@@ -102,9 +102,10 @@ export type AccordionHeaderProps = Omit<React.ComponentPropsWithoutRef<typeof Ac
 
 export type AccordionTriggerProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>, 'className' | 'render'> & {
   /**
-   * Custom icon to replace the default chevron
+   * Icon to replace the default chevron icon on the right side.
+   * If provided, this will not inherit the default chevron's animation and styling.
    */
-  icon?: React.ReactNode;
+  chevronIcon?: React.ReactNode;
   /**
    * The visual style variant of the trigger
    * Inherited from parent AccordionItem if not specified

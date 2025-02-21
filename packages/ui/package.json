@@ -17,19 +17,29 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint . --max-warnings 0",
-    "clean": "rm -rf .turbo node_modules dist"
+    "clean": "rm -rf .turbo node_modules dist",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/react": "^18.2.61",
-    "@types/react-dom": "^18.2.19",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^18.3.2",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.57.0",
+    "jsdom": "^26.0.0",
     "tsup": "^8.0.2",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "vitest": "^3.0.6"
   },
   "dependencies": {
+    "@acme/theme": "workspace:*",
     "@base-ui-components/react": "1.0.0-alpha.6",
+    "accordion": "link:@base-ui-components/react/accordion",
     "clsx": "^2.1.1",
     "lucide-react": "^0.475.0",
     "react": "^18.2.0",
@@ -38,5 +48,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
   }
 }

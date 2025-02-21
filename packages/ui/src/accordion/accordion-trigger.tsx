@@ -14,7 +14,7 @@ import { AccordionTriggerProps } from "./types";
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
   AccordionTriggerProps
->(({ className, children, icon, variant: variantProp, ...props }, ref) => {
+>(({ className, children, chevronIcon, variant: variantProp, ...props }, ref) => {
   const contextVariant = React.useContext(AccordionVariantContext);
   const variant = variantProp ?? contextVariant;
 
@@ -22,20 +22,33 @@ const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "group flex w-full cursor-pointer items-center justify-between gap-4 py-2 text-left text-sm font-semibold",
-        (variant === "box" || variant === "table") && "px-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-800",
-        variant === "box" && "rounded-lg",
-        variant !== "box" && variant !== "table" && "focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-800",
+        "group flex w-full cursor-pointer items-center justify-between gap-4 py-2.5 text-left text-sm font-semibold",
+        "focus:ring-0 focus:ring-offset-0",
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-outline",
+        variant === "box" && [
+          "px-3",
+          "rounded-lg"
+        ],
+        variant === "table" && "px-3",
         className
       )}
       {...props}
     >
       {children}
-      {icon || <ChevronDown className="size-3 shrink-0 transition-transform ease-out group-data-[panel-open]:rotate-180" />}
+      {chevronIcon ? (
+        <span className="flex shrink-0 items-center justify-center transition-transform ease-out group-data-[panel-open]:rotate-180" aria-hidden="true">
+          {chevronIcon}
+        </span>
+      ) : (
+        <ChevronDown 
+          className="size-3 shrink-0 opacity-75 transition-transform ease-out group-data-[panel-open]:rotate-180" 
+          aria-hidden="true" 
+        />
+      )}
     </AccordionPrimitive.Trigger>
   );
 });
 
 AccordionTrigger.displayName = "AccordionTrigger";
 
-export { AccordionTrigger }; 
+export { AccordionTrigger };

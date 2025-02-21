@@ -16,16 +16,23 @@ const AccordionItem = React.forwardRef<
 >(({ className, variant: variantProp, ...props }, ref) => {
   const contextVariant = React.useContext(AccordionVariantContext);
   const variant = variantProp ?? contextVariant;
-  
+
   return (
     <AccordionPrimitive.Item
       ref={ref}
       className={cn(
-        variant === "underline" && "border-b border-gray-200",
-        variant === "box" && "mb-2 rounded-lg border border-gray-200 bg-white",
+        "group",
+        variant === "box" && [
+          "mb-2 rounded-lg border border-border"
+        ],
         variant === "table" && [
-          "border border-gray-200 bg-white [&:not(:first-child)]:-mt-[1px]",
+          "border border-border",
+          "[&:not(:first-child)]:-mt-[1px]",
           "first:rounded-t-lg last:rounded-b-lg"
+        ],
+        variant === "underline" && [
+          "border-b border-border",
+          "last:border-b-0"
         ],
         variant === "ghost" && "border-none",
         className

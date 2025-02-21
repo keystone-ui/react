@@ -9,7 +9,6 @@ import {
   AccordionTrigger,
 } from "@acme/ui/accordion";
 
-
 // import { Button } from "@acme/ui/button";
 
 const meta: Meta<typeof Accordion> = {
@@ -106,16 +105,22 @@ type Story = StoryObj<typeof Accordion>;
 // Example content for our stories
 const items = [
   {
-    trigger: "What is your refund policy?",
-    content: "If you're unhappy with your purchase for any reason, email us within 90 days and we'll refund you in full, no questions asked.",
+    id: "1",
+    title: "What makes our UI different?",
+    content:
+      "Our UI focuses on developer experience and performance. Built with TypeScript, it offers excellent type safety, follows accessibility standards, and provides comprehensive documentation with regular updates.",
   },
   {
-    trigger: "Do you offer technical support?",
-    content: "Yes, we offer email and phone support 9am-5pm EST, Monday through Friday.",
+    id: "2",
+    title: "How can I customize the components?",
+    content:
+      "Use our CSS variables for global styling, or className and style props for component-specific changes. We support CSS modules, Tailwind, and dark mode out of the box.",
   },
   {
-    trigger: "Can I change my subscription plan later?",
-    content: "Yes, you can upgrade or downgrade your plan at any time through your account settings.",
+    id: "3",
+    title: "Is it optimized for performance?",
+    content:
+      "Yes, with tree-shaking, code splitting, and minimal runtime overhead. Most components are under 5KB gzipped.",
   },
 ];
 
@@ -126,12 +131,16 @@ export const BoxVariant: Story = {
   },
   render: (args) => (
     <Accordion {...args}>
-      {items.map((item, index) => (
-        <AccordionItem key={index} value={`item-${index + 1}`}>
+      {items.map((item) => (
+        <AccordionItem key={item.id} value={item.id}>
           <AccordionHeader>
-            <AccordionTrigger>{item.trigger}</AccordionTrigger>
+            <AccordionTrigger>
+              {item.title}
+            </AccordionTrigger>
           </AccordionHeader>
-          <AccordionPanel>{item.content}</AccordionPanel>
+          <AccordionPanel>
+            {item.content}
+          </AccordionPanel>
         </AccordionItem>
       ))}
     </Accordion>
@@ -143,14 +152,22 @@ export const TableVariant: Story = {
     openMultiple: false,
     variant: "table",
   },
-  render: BoxVariant.render,
-  parameters: {
-    docs: {
-      description: {
-        story: "The table variant shows items merged together with rounded corners on first and last items.",
-      },
-    },
-  },
+  render: (args) => (
+    <Accordion {...args}>
+      {items.map((item) => (
+        <AccordionItem key={item.id} value={item.id}>
+          <AccordionHeader>
+            <AccordionTrigger>
+              {item.title}
+            </AccordionTrigger>
+          </AccordionHeader>
+          <AccordionPanel>
+            {item.content}
+          </AccordionPanel>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  ),
 };
 
 export const UnderlineVariant: Story = {
@@ -158,14 +175,22 @@ export const UnderlineVariant: Story = {
     openMultiple: false,
     variant: "underline",
   },
-  render: BoxVariant.render,
-  parameters: {
-    docs: {
-      description: {
-        story: "The underline variant shows a bottom border on each item.",
-      },
-    },
-  },
+  render: (args) => (
+    <Accordion {...args}>
+      {items.map((item) => (
+        <AccordionItem key={item.id} value={item.id}>
+          <AccordionHeader>
+            <AccordionTrigger>
+              {item.title}
+            </AccordionTrigger>
+          </AccordionHeader>
+          <AccordionPanel>
+            {item.content}
+          </AccordionPanel>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  ),
 };
 
 export const GhostVariant: Story = {
@@ -173,14 +198,22 @@ export const GhostVariant: Story = {
     openMultiple: false,
     variant: "ghost",
   },
-  render: BoxVariant.render,
-  parameters: {
-    docs: {
-      description: {
-        story: "The ghost variant has no borders, only hover states.",
-      },
-    },
-  },
+  render: (args) => (
+    <Accordion {...args}>
+      {items.map((item) => (
+        <AccordionItem key={item.id} value={item.id}>
+          <AccordionHeader>
+            <AccordionTrigger>
+              {item.title}
+            </AccordionTrigger>
+          </AccordionHeader>
+          <AccordionPanel>
+            {item.content}
+          </AccordionPanel>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  ),
 };
 
 export const Multiple: Story = {
@@ -188,17 +221,55 @@ export const Multiple: Story = {
     openMultiple: true,
     variant: "box",
   },
-  render: BoxVariant.render,
+  render: (args) => (
+    <Accordion {...args}>
+      {items.map((item) => (
+        <AccordionItem key={item.id} value={item.id}>
+          <AccordionHeader>
+            <AccordionTrigger>
+              {item.title}
+            </AccordionTrigger>
+          </AccordionHeader>
+          <AccordionPanel>
+            {item.content}
+          </AccordionPanel>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  ),
+};
+
+export const WithCustomChevron: Story = {
+  args: {
+    openMultiple: false,
+    variant: "box",
+  },
+  render: (args) => (
+    <Accordion {...args}>
+      <AccordionItem value="item-1">
+        <AccordionHeader>
+          <AccordionTrigger 
+            chevronIcon={<Plus className="size-3 shrink-0 transition-all ease-out group-data-[panel-open]:scale-110 group-data-[panel-open]:rotate-45" aria-hidden="true" />}
+          >
+            Custom Chevron Icon
+          </AccordionTrigger>
+        </AccordionHeader>
+        <AccordionPanel>
+          This accordion uses a plus icon instead of the default chevron.
+        </AccordionPanel>
+      </AccordionItem>
+    </Accordion>
+  ),
   parameters: {
     docs: {
       description: {
-        story: "Multiple items can be opened at once by setting `openMultiple` to true.",
+        story: "Use the `chevronIcon` prop to replace the default chevron icon on the right side.",
       },
     },
   },
 };
 
-export const WithIcon: Story = {
+export const WithCustomLayout: Story = {
   args: {
     openMultiple: false,
     variant: "box",
@@ -208,14 +279,17 @@ export const WithIcon: Story = {
       <AccordionItem value="item-1">
         <AccordionHeader>
           <AccordionTrigger>
-            <span className="flex items-center">
-              <Settings className="w-4 h-4 mr-2" />
-              Account Settings
-            </span>
+            <div className="flex items-start gap-4">
+              <Settings className="size-4 mt-1 shrink-0 opacity-75" aria-hidden="true" />
+              <div className="flex flex-col items-start gap-0">
+                <span className="font-semibold">Account Settings</span>
+                <span className="text-sm font-normal">Manage your preferences</span>
+              </div>
+            </div>
           </AccordionTrigger>
         </AccordionHeader>
-        <AccordionPanel>
-          Manage your account settings and preferences.
+        <AccordionPanel className="ps-10.5">
+          This example shows how to create a custom layout with icons and additional content.
         </AccordionPanel>
       </AccordionItem>
     </Accordion>
@@ -223,35 +297,7 @@ export const WithIcon: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Icons can be added to the trigger content.",
-      },
-    },
-  },
-};
-
-export const CustomIcon: Story = {
-  args: {
-    openMultiple: false,
-    variant: "box",
-  },
-  render: (args) => (
-    <Accordion {...args}>
-      <AccordionItem value="item-1">
-        <AccordionHeader>
-          <AccordionTrigger icon={<Plus className="mr-2 size-3 shrink-0 transition-all ease-out group-data-[panel-open]:scale-110 group-data-[panel-open]:rotate-45" />}>
-            With Custom Icon
-          </AccordionTrigger>
-        </AccordionHeader>
-        <AccordionPanel>
-          This accordion uses a custom icon instead of the default chevron.
-        </AccordionPanel>
-      </AccordionItem>
-    </Accordion>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: "The default chevron icon can be replaced using the `icon` prop on AccordionTrigger.",
+        story: "Example of a more complex custom layout with icons and multiple text elements.",
       },
     },
   },

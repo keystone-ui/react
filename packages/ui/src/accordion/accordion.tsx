@@ -7,6 +7,7 @@ import { cn } from "../lib/utils";
 import { AccordionProps } from "./types";
 
 const AccordionVariantContext = React.createContext<AccordionProps["variant"]>("underline");
+const AccordionLeadingIconContext = React.createContext<boolean>(false);
 
 /**
  * Accordion component that displays a list of expandable items.
@@ -29,22 +30,24 @@ const Accordion = React.forwardRef<
   ...props 
 }, ref) => (
   <AccordionVariantContext.Provider value={variant}>
-    <AccordionPrimitive.Root
-      ref={ref}
-      defaultValue={defaultValue}
-      value={value}
-      onValueChange={onValueChange}
-      hiddenUntilFound={hiddenUntilFound}
-      openMultiple={openMultiple}
-      disabled={disabled}
-      loop={loop}
-      orientation={orientation}
-      className={cn("flex w-full flex-col justify-center text-gray-900", className)}
-      {...props}
-    />
+    <AccordionLeadingIconContext.Provider value={false}>
+      <AccordionPrimitive.Root
+        ref={ref}
+        defaultValue={defaultValue}
+        value={value}
+        onValueChange={onValueChange}
+        hiddenUntilFound={hiddenUntilFound}
+        openMultiple={openMultiple}
+        disabled={disabled}
+        loop={loop}
+        orientation={orientation}
+        className={cn("flex w-full flex-col justify-center", className)}
+        {...props}
+      />
+    </AccordionLeadingIconContext.Provider>
   </AccordionVariantContext.Provider>
 ));
 
 Accordion.displayName = "Accordion";
 
-export { Accordion, AccordionVariantContext }; 
+export { Accordion, AccordionVariantContext, AccordionLeadingIconContext }; 

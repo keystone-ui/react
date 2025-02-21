@@ -21,18 +21,15 @@ const AccordionPanel = React.forwardRef<
     <AccordionPrimitive.Panel
       ref={ref}
       className={cn(
-        "h-[var(--accordion-panel-height)] overflow-hidden text-sm text-gray-600",
+        "h-[var(--accordion-panel-height)] overflow-hidden text-sm text-muted-foreground",
+        "pb-3",
         "transition-[height] ease-out data-[ending-style]:h-0 data-[starting-style]:h-0",
+        (variant === "box" || variant === "table") && "px-3",
         className
       )}
       {...props}
     >
-      <div className={cn(
-        "pb-3",
-        (variant === "box" || variant === "table") && "px-4"
-      )}>
-        {children}
-      </div>
+      {children}
     </AccordionPrimitive.Panel>
   );
 });
