@@ -2,9 +2,7 @@ import React from "react";
 import { cn } from "../utils";
 import { 
   buttonVariants, 
-  type ButtonVariantsProps,
-  type ButtonSizesProps,
-  type ButtonVariantProps
+  type ButtonVariantsProps
 } from "./button-variants";
 // TODO: Fix Loader import when Loader component is added
 
@@ -19,22 +17,22 @@ type CommonButtonProps = {
   /** Custom styles applied through className */
   className?: string;
   /** The size of the button */
-  size?: ButtonSizesProps;
+  size?: ButtonVariantsProps["size"];
   /** The variant of the button */
-  variant?: ButtonVariantProps;
+  variant?: ButtonVariantsProps["variant"];
 };
 
 // Type for when Button is rendered as an anchor
 type AnchorButtonProps = CommonButtonProps & 
   Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'color'> & 
-  Omit<ButtonVariantsProps, 'variant' | 'size' | 'fullWidth'> & {
+  Omit<ButtonVariantsProps, 'variant' | 'size'> & {
     href: string;
   };
 
 // Type for when Button is rendered as a button
 type ButtonElementProps = CommonButtonProps & 
   Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'color'> & 
-  Omit<ButtonVariantsProps, 'variant' | 'size' | 'fullWidth'> & {
+  Omit<ButtonVariantsProps, 'variant' | 'size'> & {
     href?: never;
   };
 
@@ -62,10 +60,10 @@ export const Button = React.forwardRef<
 
     const buttonStyles = cn(
       buttonVariants({
-        variant: variant as ButtonVariantProps,
-        size: size as ButtonSizesProps,
-        fullWidth: fullWidth
+        variant,
+        size,
       }),
+      fullWidth && "w-full",
       className
     );
 

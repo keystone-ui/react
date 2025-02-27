@@ -231,8 +231,7 @@ export const DebugClasses: Story = {
     // Get the classes using buttonVariants directly
     const directClasses = buttonVariants({ 
       variant: "secondary", 
-      size: "md", 
-      fullWidth: false 
+      size: "md"
     });
     
     // Create a button using the React component
