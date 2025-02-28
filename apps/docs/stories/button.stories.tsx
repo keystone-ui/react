@@ -27,7 +27,7 @@ import { Button } from "@acme/ui";
 
 // Button sizes
 <Button size="sm">Small</Button>
-<Button size="md">Medium</Button>
+<Button>Medium</Button>
 <Button size="lg">Large</Button>
 
 // Link button
@@ -37,7 +37,7 @@ import { Button } from "@acme/ui";
 ## Features
 
 - Multiple variants: default, secondary, destructive, ghost, outline
-- Four sizes: xs, sm, md, lg
+- Four sizes: xs, sm, default, lg
 - Loading state with spinner
 - Disabled state
 - Anchor links with correct semantics
@@ -56,8 +56,8 @@ import { Button } from "@acme/ui";
     },
     size: {
       control: "select",
-      options: ["xs", "sm", "md", "lg"],
-      defaultValue: "md",
+      options: ["xs", "sm", "default", "lg"],
+      defaultValue: "default",
       description: "The size of the button",
     },
     disabled: {
@@ -141,7 +141,7 @@ export const Small: Story = {
 export const Medium: Story = {
   args: {
     children: "Medium Button",
-    size: "md",
+    size: "default",
   } as any,
 };
 
@@ -186,8 +186,13 @@ export const Link: Story = {
 // With icons
 export const WithIcon: Story = {
   render: (args) => (
-    <Button {...args}>
-      Next <ArrowRight className="ml-2 h-4 w-4" />
+    <Button className="group" {...args}>
+      Next
+      <ArrowRight
+        className="-me-1 transition-transform group-hover:translate-x-0.5"
+        size={16}
+        aria-hidden="true"
+      />
     </Button>
   ),
 };
@@ -195,7 +200,7 @@ export const WithIcon: Story = {
 export const WithIconLeft: Story = {
   render: (args) => (
     <Button {...args}>
-      <Mail className="mr-2 h-4 w-4" /> Email
+      <Mail /> Email
     </Button>
   ),
 };
@@ -216,7 +221,7 @@ export const ButtonGroup: Story = {
 export const CustomLoading: Story = {
   render: () => (
     <Button disabled className="flex items-center gap-2">
-      <Loader2 className="h-4 w-4 animate-spin" />
+      <Loader2 className="animate-spin" />
       Please wait
     </Button>
   ),
@@ -231,7 +236,7 @@ export const DebugClasses: Story = {
     // Get the classes using buttonVariants directly
     const directClasses = buttonVariants({ 
       variant: "secondary", 
-      size: "md"
+      size: "default"
     });
     
     // Create a button using the React component
