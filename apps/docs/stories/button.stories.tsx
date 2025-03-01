@@ -14,8 +14,22 @@ import {
   AlignJustify,
   FlipHorizontalIcon,
   FlipVerticalIcon,
-  ChevronDown
+  ChevronDown,
+  ThumbsUpIcon,
+  StarIcon,
 } from "lucide-react";
+import { 
+  RiMailLine, 
+  RiTwitterXLine, 
+  RiFacebookLine, 
+  RiGithubLine, 
+  RiGoogleLine, 
+  RiAppleLine,
+  RiFacebookFill,
+  RiGithubFill,
+  RiGoogleFill,
+  RiTwitterXFill
+} from "@remixicon/react";
 import { Button } from "@acme/ui/button";
 import type { ButtonProps } from "@acme/ui/button";
 import { useState } from "react";
@@ -44,8 +58,9 @@ import { Button } from "@acme/ui";
 <Button variant="outline">Outline</Button>
 
 // Button sizes
+<Button size="xs">Extra Small</Button>
 <Button size="sm">Small</Button>
-<Button size="md">Medium</Button>
+<Button>Default</Button>
 <Button size="lg">Large</Button>
 <Button size="icon"><Icon /></Button>
 
@@ -68,7 +83,7 @@ import { Button } from "@acme/ui";
 ## Features
 
 - Multiple variants: default, secondary, destructive, ghost, outline
-- Four sizes: xs, sm, md, lg, icon
+- Five sizes: xs, sm, default, lg, icon
 - Loading state with spinner
 - Disabled state
 - Anchor links with correct semantics
@@ -87,8 +102,8 @@ import { Button } from "@acme/ui";
     },
     size: {
       control: "select",
-      options: ["xs", "sm", "md", "lg", "icon"],
-      defaultValue: "md",
+      options: ["xs", "sm", "default", "lg", "icon"],
+      defaultValue: "default",
       description: "The size of the button",
     },
     disabled: {
@@ -156,6 +171,17 @@ export const Outline: Story = {
   } as any,
 };
 
+// Link variant with back icon
+export const Link: Story = {
+  render: () => (
+    <div className="flex flex-wrap gap-4">
+      <Button variant="link">
+        <ArrowLeft /> Go back
+      </Button>
+    </div>
+  ),
+};
+
 // Button sizes
 export const Small: Story = {
   args: {
@@ -166,8 +192,8 @@ export const Small: Story = {
 
 export const Medium: Story = {
   args: {
-    children: "Medium Button",
-    size: "md",
+    children: "Default Button",
+    size: "default",
   } as any,
 };
 
@@ -263,7 +289,7 @@ export const FullWidth: Story = {
 };
 
 // Link button
-export const Link: Story = {
+export const AsLink: Story = {
   args: {
     children: "Link Button",
     href: "https://example.com",
@@ -472,6 +498,111 @@ export const ButtonGroup: Story = {
               <FlipVerticalIcon size={16} aria-hidden="true" />
             </Button>
           </div>
+        </div>
+      </div>
+    </div>
+  ),
+};
+
+// Social buttons example
+export const SocialButtons: Story = {
+  render: () => (
+    <div className="space-y-8">
+      {/* Vertical social buttons with text */}
+      <div>
+        <h3 className="text-sm font-medium mb-2">Vertical with Text</h3>
+        <div className="flex flex-col gap-2 max-w-xs">
+          <Button variant="outline" size="sm">
+            <RiGoogleFill 
+              className="me-1 text-[#DB4437] dark:text-white/60" 
+              size={16} 
+              aria-hidden="true" 
+            />
+            Login with Google
+          </Button>
+          <Button variant="outline" size="sm">
+            <RiTwitterXFill 
+              className="me-1 text-[#14171a] dark:text-white/60" 
+              size={16} 
+              aria-hidden="true" 
+            />
+            Login with X
+          </Button>
+          <Button variant="outline" size="sm">
+            <RiFacebookFill 
+              className="me-1 text-[#1877f2] dark:text-white/60" 
+              size={16} 
+              aria-hidden="true" 
+            />
+            Login with Facebook
+          </Button>
+          <Button variant="outline" size="sm">
+            <RiGithubFill 
+              className="me-1 text-[#333333] dark:text-white/60" 
+              size={16} 
+              aria-hidden="true" 
+            />
+            Login with GitHub
+          </Button>
+        </div>
+      </div>
+      
+      {/* Horizontal social buttons with icons only */}
+      <div>
+        <h3 className="text-sm font-medium mb-2">Horizontal Icons Only</h3>
+        <div className="flex gap-2">
+          <Button variant="outline" size="icon" aria-label="Login with Google">
+            <RiGoogleFill 
+              className="text-[#DB4437] dark:text-white/60" 
+              size={16} 
+              aria-hidden="true" 
+            />
+          </Button>
+          <Button variant="outline" size="icon" aria-label="Login with X">
+            <RiTwitterXFill 
+              className="text-[#14171a] dark:text-white/60" 
+              size={16} 
+              aria-hidden="true" 
+            />
+          </Button>
+          <Button variant="outline" size="icon" aria-label="Login with Facebook">
+            <RiFacebookFill 
+              className="text-[#1877f2] dark:text-white/60" 
+              size={16} 
+              aria-hidden="true" 
+            />
+          </Button>
+          <Button variant="outline" size="icon" aria-label="Login with GitHub">
+            <RiGithubFill 
+              className="text-[#333333] dark:text-white/60" 
+              size={16} 
+              aria-hidden="true" 
+            />
+          </Button>
+        </div>
+      </div>
+
+      {/* Social interaction buttons */}
+      <div>
+        <h3 className="text-sm font-medium mb-2">Social Interaction Buttons</h3>
+        <div className="flex flex-wrap gap-4">
+          {/* Like button with counter */}
+          <Button className="py-0 pe-0" variant="outline">
+            <ThumbsUpIcon className="opacity-60 me-1" size={16} aria-hidden="true" />
+            Like
+            <span className="text-muted-foreground before:bg-input relative ms-1 inline-flex h-full items-center justify-center rounded-full px-3 text-xs font-medium before:absolute before:inset-0 before:left-0 before:w-px">
+              86
+            </span>
+          </Button>
+
+          {/* Star button with counter */}
+          <Button>
+            <StarIcon className="-ms-1 opacity-60" size={16} aria-hidden="true" />
+            <span className="flex items-baseline gap-2">
+              Star
+              <span className="text-primary-foreground/60 text-xs">729</span>
+            </span>
+          </Button>
         </div>
       </div>
     </div>
