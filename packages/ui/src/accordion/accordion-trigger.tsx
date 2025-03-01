@@ -4,7 +4,7 @@ import { Accordion as AccordionPrimitive } from "@base-ui-components/react/accor
 import { ChevronDown } from "lucide-react";
 import * as React from "react";
 
-import { cn } from "../lib/utils";
+import { cn } from "@acme/ui";
 import { AccordionVariantContext } from "./accordion";
 import { AccordionTriggerProps } from "./types";
 

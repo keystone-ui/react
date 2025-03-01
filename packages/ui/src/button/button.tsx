@@ -1,6 +1,6 @@
 import React from "react";
 import { LoaderCircleIcon } from "lucide-react";
-import { cn } from "../utils";
+import { cn } from "@acme/ui";
 import { 
   buttonVariants, 
   type ButtonVariantsProps
