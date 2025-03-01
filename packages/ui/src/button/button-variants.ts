@@ -14,14 +14,10 @@ export const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
+        default: "text-sm h-10 px-4 py-2",
         xs: "text-xs h-6 py-1 px-2.5",
         sm: "text-sm h-8 py-1.5 px-3",
-        default: "text-sm h-10 px-4 py-2",
         lg: "text-base h-12 py-3.5 px-5",
-        icon: "size-10 p-2",
-      },
-      fullWidth: {
-        true: "w-full",
       },
     },
     defaultVariants: {

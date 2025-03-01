@@ -4,7 +4,6 @@ import {
   ArrowLeft, 
   Mail, 
   Loader2, 
-  LoaderCircleIcon,
   Bold,
   Italic,
   Underline,
@@ -17,14 +16,9 @@ import {
   ChevronDown,
   ThumbsUpIcon,
   StarIcon,
+  Plus,
 } from "lucide-react";
 import { 
-  RiMailLine, 
-  RiTwitterXLine, 
-  RiFacebookLine, 
-  RiGithubLine, 
-  RiGoogleLine, 
-  RiAppleLine,
   RiFacebookFill,
   RiGithubFill,
   RiGoogleFill,
@@ -208,43 +202,28 @@ export const Large: Story = {
 export const IconButton: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
-      <Button size="icon" aria-label="Next">
+      <Button className="aspect-square" aria-label="Next">
         <ArrowRight size={16} />
       </Button>
       
-      <Button size="icon" variant="secondary" aria-label="Mail">
+      <Button className="aspect-square" variant="secondary" aria-label="Mail">
         <Mail size={16} />
       </Button>
       
-      <Button size="icon" variant="outline" aria-label="Bold">
+      <Button className="aspect-square" variant="outline" aria-label="Bold">
         <Bold size={16} />
       </Button>
       
-      <Button size="icon" variant="ghost" aria-label="Italic">
+      <Button className="aspect-square" variant="ghost" aria-label="Italic">
         <Italic size={16} />
       </Button>
       
       <Button 
-        size="icon" 
+        className="aspect-square rounded-full" 
         variant="outline" 
-        className="rounded-full" 
         aria-label="Add"
       >
-        <svg 
-          width="15" 
-          height="15" 
-          viewBox="0 0 15 15" 
-          fill="none" 
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
-          <path 
-            d="M8 2.75C8 2.47386 7.77614 2.25 7.5 2.25C7.22386 2.25 7 2.47386 7 2.75V7H2.75C2.47386 7 2.25 7.22386 2.25 7.5C2.25 7.77614 2.47386 8 2.75 8H7V12.25C7 12.5261 7.22386 12.75 7.5 12.75C7.77614 12.75 8 12.5261 8 12.25V8H12.25C12.5261 8 12.75 7.77614 12.75 7.5C12.75 7.22386 12.5261 7 12.25 7H8V2.75Z" 
-            fill="currentColor" 
-            fillRule="evenodd" 
-            clipRule="evenodd"
-          />
-        </svg>
+        <Plus size={16} aria-hidden="true" />
       </Button>
     </div>
   ),
@@ -401,13 +380,14 @@ export const ButtonGroup: Story = {
         <h3 className="text-sm font-medium mb-2">Border Button Group</h3>
         <div className="inline-flex divide-x divide-primary-foreground/30 rounded-md shadow-xs rtl:space-x-reverse">
           <Button 
+            size="sm"
             className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
           >
             Merge pull request
           </Button>
           <Button 
-            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-            size="icon"
+            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10 aspect-square"
+            size="sm"
             aria-label="Options"
           >
             <ChevronDown size={16} aria-hidden="true" />
@@ -423,25 +403,25 @@ export const ButtonGroup: Story = {
           <div className="inline-flex -space-x-px rounded-md shadow-xs rtl:space-x-reverse">
             <Button 
               variant="outline" 
-              size="icon" 
+              size="sm" 
+              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
               aria-label="Bold"
-              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
             >
               <Bold size={16} aria-hidden="true" />
             </Button>
             <Button 
               variant="outline" 
-              size="icon" 
+              size="sm" 
+              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
               aria-label="Italic"
-              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
             >
               <Italic size={16} aria-hidden="true" />
             </Button>
             <Button 
               variant="outline" 
-              size="icon" 
+              size="sm" 
+              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
               aria-label="Underline"
-              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
             >
               <Underline size={16} aria-hidden="true" />
             </Button>
@@ -450,30 +430,30 @@ export const ButtonGroup: Story = {
           {/* Alignment */}
           <div className="inline-flex -space-x-px rounded-md shadow-xs rtl:space-x-reverse">
             <Button 
-              size="icon" 
+              size="sm" 
+              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
               aria-label="Align Left"
-              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
             >
               <AlignLeft size={16} aria-hidden="true" />
             </Button>
             <Button 
-              size="icon" 
+              size="sm" 
+              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
               aria-label="Align Center"
-              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
             >
               <AlignCenter size={16} aria-hidden="true" />
             </Button>
             <Button 
-              size="icon" 
+              size="sm" 
+              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
               aria-label="Align Right"
-              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
             >
               <AlignRight size={16} aria-hidden="true" />
             </Button>
             <Button 
-              size="icon" 
+              size="sm" 
+              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
               aria-label="Align Justify"
-              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
             >
               <AlignJustify size={16} aria-hidden="true" />
             </Button>
@@ -482,17 +462,17 @@ export const ButtonGroup: Story = {
           {/* Flip */}
           <div className="inline-flex -space-x-px rounded-md shadow-xs rtl:space-x-reverse">
             <Button
-              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
               variant="outline"
-              size="icon"
+              size="sm"
               aria-label="Flip Horizontal"
             >
               <FlipHorizontalIcon size={16} aria-hidden="true" />
             </Button>
             <Button
-              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
               variant="outline"
-              size="icon"
+              size="sm"
               aria-label="Flip Vertical"
             >
               <FlipVerticalIcon size={16} aria-hidden="true" />
@@ -551,28 +531,28 @@ export const SocialButtons: Story = {
       <div>
         <h3 className="text-sm font-medium mb-2">Horizontal Icons Only</h3>
         <div className="flex gap-2">
-          <Button variant="outline" size="icon" aria-label="Login with Google">
+          <Button variant="outline" size="sm" className="aspect-square" aria-label="Login with Google">
             <RiGoogleFill 
               className="text-[#DB4437] dark:text-white/60" 
               size={16} 
               aria-hidden="true" 
             />
           </Button>
-          <Button variant="outline" size="icon" aria-label="Login with X">
+          <Button variant="outline" size="sm" className="aspect-square" aria-label="Login with X">
             <RiTwitterXFill 
               className="text-[#14171a] dark:text-white/60" 
               size={16} 
               aria-hidden="true" 
             />
           </Button>
-          <Button variant="outline" size="icon" aria-label="Login with Facebook">
+          <Button variant="outline" size="sm" className="aspect-square" aria-label="Login with Facebook">
             <RiFacebookFill 
               className="text-[#1877f2] dark:text-white/60" 
               size={16} 
               aria-hidden="true" 
             />
           </Button>
-          <Button variant="outline" size="icon" aria-label="Login with GitHub">
+          <Button variant="outline" size="sm" className="aspect-square" aria-label="Login with GitHub">
             <RiGithubFill 
               className="text-[#333333] dark:text-white/60" 
               size={16} 
