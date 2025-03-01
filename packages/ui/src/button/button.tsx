@@ -5,14 +5,11 @@ import {
   buttonVariants, 
   type ButtonVariantsProps
 } from "./button-variants";
-// TODO: Fix Loader import when Loader component is added
 
 // Define the custom props we're adding to the button
 interface ButtonCustomProps {
   /** If true the button will display a spinner */
   isLoading?: boolean;
-  /** Button will extend full width of the container */
-  fullWidth?: boolean;
   /** The variant of the button */
   variant?: ButtonVariantsProps["variant"];
   /** The size of the button */
@@ -43,7 +40,6 @@ export const Button = React.forwardRef<
       className,
       variant = "default",
       size = "default",
-      fullWidth = false,
       isLoading = false,
       children,
       ...props
@@ -60,22 +56,14 @@ export const Button = React.forwardRef<
         variant,
         size,
       }),
-      fullWidth && "w-full",
+      isLoading && "relative",
       className
     );
 
-    const content = (
-      <>
-        {isLoading && (
-        <LoaderCircleIcon 
-            className={cn( "animate-spin")}
-            size={16} 
-            aria-hidden="true" 
-        />
-        )}
-        {!isLoading && children}
-      </>
-    );
+    // Set data-loading attribute for styling with CSS
+    const dataAttributes = {
+      'data-loading': isLoading || undefined
+    };
 
     if ('href' in props && props.href !== undefined) {
       // Render as anchor
@@ -86,9 +74,21 @@ export const Button = React.forwardRef<
           aria-disabled={disabled}
           tabIndex={disabled ? -1 : undefined}
           ref={ref as React.Ref<HTMLAnchorElement>}
+          {...dataAttributes}
           {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
         >
-          {content}
+          <span className={cn("inline-flex items-center justify-center gap-2", isLoading ? "invisible" : "visible")}>
+            {children}
+          </span>
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <LoaderCircleIcon 
+                className="animate-spin" 
+                size={16} 
+                aria-hidden="true" 
+              />
+            </div>
+          )}
         </a>
       );
     }
@@ -99,9 +99,21 @@ export const Button = React.forwardRef<
         ref={ref as React.Ref<HTMLButtonElement>}
         disabled={isDisabled}
         className={buttonStyles}
+        {...dataAttributes}
         {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
       >
-        {content}
+        <span className={cn("inline-flex items-center justify-center gap-2", isLoading ? "invisible" : "visible")}>
+          {children}
+        </span>
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <LoaderCircleIcon 
+              className="animate-spin" 
+              size={16} 
+              aria-hidden="true" 
+            />
+          </div>
+        )}
       </button>
     );
   }

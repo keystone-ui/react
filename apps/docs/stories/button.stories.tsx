@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ArrowRight, Mail, Loader2 } from "lucide-react";
+import { ArrowRight, Mail, Loader2, LoaderCircleIcon } from "lucide-react";
 import { Button } from "@acme/ui/button";
 import type { ButtonProps } from "@acme/ui/button";
+import { useState } from "react";
 
 // Use a cast to silence TypeScript for the meta configuration
 const meta = {
@@ -27,7 +28,7 @@ import { Button } from "@acme/ui";
 
 // Button sizes
 <Button size="sm">Small</Button>
-<Button>Medium</Button>
+<Button size="md">Medium</Button>
 <Button size="lg">Large</Button>
 
 // Link button
@@ -37,7 +38,7 @@ import { Button } from "@acme/ui";
 ## Features
 
 - Multiple variants: default, secondary, destructive, ghost, outline
-- Four sizes: xs, sm, default, lg
+- Four sizes: xs, sm, md, lg
 - Loading state with spinner
 - Disabled state
 - Anchor links with correct semantics
@@ -56,8 +57,8 @@ import { Button } from "@acme/ui";
     },
     size: {
       control: "select",
-      options: ["xs", "sm", "default", "lg"],
-      defaultValue: "default",
+      options: ["xs", "sm", "md", "lg"],
+      defaultValue: "md",
       description: "The size of the button",
     },
     disabled: {
@@ -69,11 +70,6 @@ import { Button } from "@acme/ui";
       control: "boolean",
       defaultValue: false,
       description: "Whether the button shows a loading spinner",
-    },
-    fullWidth: {
-      control: "boolean",
-      defaultValue: false,
-      description: "Whether the button should take up the full width of its container",
     },
     href: {
       control: "text",
@@ -141,7 +137,7 @@ export const Small: Story = {
 export const Medium: Story = {
   args: {
     children: "Medium Button",
-    size: "default",
+    size: "md",
   } as any,
 };
 
@@ -170,7 +166,7 @@ export const Loading: Story = {
 export const FullWidth: Story = {
   args: {
     children: "Full Width Button",
-    fullWidth: true,
+    className: "w-full",
   } as any,
 };
 
@@ -186,13 +182,8 @@ export const Link: Story = {
 // With icons
 export const WithIcon: Story = {
   render: (args) => (
-    <Button className="group" {...args}>
-      Next
-      <ArrowRight
-        className="-me-1 transition-transform group-hover:translate-x-0.5"
-        size={16}
-        aria-hidden="true"
-      />
+    <Button {...args}>
+      Next <ArrowRight className="ml-2 h-4 w-4" />
     </Button>
   ),
 };
@@ -200,9 +191,65 @@ export const WithIcon: Story = {
 export const WithIconLeft: Story = {
   render: (args) => (
     <Button {...args}>
-      <Mail /> Email
+      <Mail className="mr-2 h-4 w-4" /> Email
     </Button>
   ),
+};
+
+// Interactive loading state example
+export const InteractiveLoading: Story = {
+  render: () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    const handleClick = () => {
+      setIsLoading(true);
+      // Simulate an async operation
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1500); // Reset after 1.5 seconds
+    };
+
+    return (
+      <div className="flex flex-col gap-4">
+        <p className="text-sm text-muted-foreground">
+          Click any button to see the loading state in action
+        </p>
+        <div className="flex flex-wrap gap-4">
+          {/* Text only button */}
+          <Button
+            onClick={handleClick}
+            isLoading={isLoading}
+            disabled={isLoading}
+          >
+            Text only
+          </Button>
+          
+          {/* Button with icon on the left */}
+          <Button
+            variant="secondary"
+            onClick={handleClick}
+            isLoading={isLoading}
+            disabled={isLoading}
+          >
+            <Mail /> 
+            Icon left
+          </Button>
+          
+          {/* Button with icon on the right */}
+          <Button
+            variant="outline"
+            onClick={handleClick}
+            isLoading={isLoading}
+            disabled={isLoading}
+          >
+            Icon right
+            <ArrowRight />
+          </Button>
+        </div>
+      </div>
+    );
+  },
 };
 
 // Button group example
@@ -219,12 +266,70 @@ export const ButtonGroup: Story = {
 
 // Custom loading button example with Lucide icon
 export const CustomLoading: Story = {
-  render: () => (
-    <Button disabled className="flex items-center gap-2">
-      <Loader2 className="animate-spin" />
-      Please wait
-    </Button>
-  ),
+  render: () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    
+    const toggleLoading = () => {
+      setIsLoading(!isLoading);
+    };
+    
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={toggleLoading}
+          >
+            {isLoading ? "Stop Loading" : "Start Loading"}
+          </Button>
+          <p className="text-sm text-muted-foreground">
+            ← Click to toggle loading state on all buttons
+          </p>
+        </div>
+        
+        <div className="flex flex-wrap gap-4">
+          {/* Custom loading indicator */}
+          <Button disabled={isLoading} className="flex items-center gap-2">
+            {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+            Manual loader
+          </Button>
+          
+          {/* Icon on left with loading */}
+          <Button 
+            variant="secondary" 
+            isLoading={isLoading}
+            className="flex items-center gap-2"
+          >
+            <Mail className="h-4 w-4" />
+            With left icon
+          </Button>
+          
+          {/* Icon on right with loading */}
+          <Button 
+            variant="outline"
+            isLoading={isLoading} 
+            className="flex items-center gap-2"
+          >
+            With right icon
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
+          
+          {/* Multiple icons with loading */}
+          <Button 
+            variant="destructive"
+            isLoading={isLoading}
+            className="flex items-center gap-2"
+          >
+            <Mail className="h-4 w-4" />
+            Multiple icons
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    );
+  },
 };
 
 // Debug story to inspect class generation
@@ -236,7 +341,7 @@ export const DebugClasses: Story = {
     // Get the classes using buttonVariants directly
     const directClasses = buttonVariants({ 
       variant: "secondary", 
-      size: "default"
+      size: "md"
     });
     
     // Create a button using the React component
