@@ -156,13 +156,6 @@ export const Disabled: Story = {
   } as any,
 };
 
-export const Loading: Story = {
-  args: {
-    children: "Loading Button",
-    isLoading: true,
-  } as any,
-};
-
 export const FullWidth: Story = {
   args: {
     children: "Full Width Button",
@@ -197,7 +190,7 @@ export const WithIconLeft: Story = {
 };
 
 // Interactive loading state example
-export const InteractiveLoading: Story = {
+export const Loading: Story = {
   render: () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -212,9 +205,6 @@ export const InteractiveLoading: Story = {
 
     return (
       <div className="flex flex-col gap-4">
-        <p className="text-sm text-muted-foreground">
-          Click any button to see the loading state in action
-        </p>
         <div className="flex flex-wrap gap-4">
           {/* Text only button */}
           <Button
