@@ -1,8 +1,25 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ArrowRight, Mail, Loader2, LoaderCircleIcon } from "lucide-react";
+import { 
+  ArrowRight, 
+  ArrowLeft, 
+  Mail, 
+  Loader2, 
+  LoaderCircleIcon,
+  Bold,
+  Italic,
+  Underline,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
+  FlipHorizontalIcon,
+  FlipVerticalIcon,
+  ChevronDown
+} from "lucide-react";
 import { Button } from "@acme/ui/button";
 import type { ButtonProps } from "@acme/ui/button";
 import { useState } from "react";
+import { cn } from "@acme/ui";
 
 // Use a cast to silence TypeScript for the meta configuration
 const meta = {
@@ -30,15 +47,28 @@ import { Button } from "@acme/ui";
 <Button size="sm">Small</Button>
 <Button size="md">Medium</Button>
 <Button size="lg">Large</Button>
+<Button size="icon"><Icon /></Button>
 
 // Link button
 <Button href="/dashboard">Go to Dashboard</Button>
+
+// Button groups
+<div className="inline-flex gap-2">
+  <Button>Button 1</Button>
+  <Button>Button 2</Button>
+</div>
+
+// Attached button group
+<div className="inline-flex -space-x-px rounded-md shadow-xs">
+  <Button className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md">Button 1</Button>
+  <Button className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md">Button 2</Button>
+</div>
 \`\`\`
 
 ## Features
 
 - Multiple variants: default, secondary, destructive, ghost, outline
-- Four sizes: xs, sm, md, lg
+- Four sizes: xs, sm, md, lg, icon
 - Loading state with spinner
 - Disabled state
 - Anchor links with correct semantics
@@ -57,7 +87,7 @@ import { Button } from "@acme/ui";
     },
     size: {
       control: "select",
-      options: ["xs", "sm", "md", "lg"],
+      options: ["xs", "sm", "md", "lg", "icon"],
       defaultValue: "md",
       description: "The size of the button",
     },
@@ -148,6 +178,75 @@ export const Large: Story = {
   } as any,
 };
 
+// Icon button example
+export const IconButton: Story = {
+  render: () => (
+    <div className="flex flex-wrap gap-4">
+      <Button size="icon" aria-label="Next">
+        <ArrowRight size={16} />
+      </Button>
+      
+      <Button size="icon" variant="secondary" aria-label="Mail">
+        <Mail size={16} />
+      </Button>
+      
+      <Button size="icon" variant="outline" aria-label="Bold">
+        <Bold size={16} />
+      </Button>
+      
+      <Button size="icon" variant="ghost" aria-label="Italic">
+        <Italic size={16} />
+      </Button>
+      
+      <Button 
+        size="icon" 
+        variant="outline" 
+        className="rounded-full" 
+        aria-label="Add"
+      >
+        <svg 
+          width="15" 
+          height="15" 
+          viewBox="0 0 15 15" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <path 
+            d="M8 2.75C8 2.47386 7.77614 2.25 7.5 2.25C7.22386 2.25 7 2.47386 7 2.75V7H2.75C2.47386 7 2.25 7.22386 2.25 7.5C2.25 7.77614 2.47386 8 2.75 8H7V12.25C7 12.5261 7.22386 12.75 7.5 12.75C7.77614 12.75 8 12.5261 8 12.25V8H12.25C12.5261 8 12.75 7.77614 12.75 7.5C12.75 7.22386 12.5261 7 12.25 7H8V2.75Z" 
+            fill="currentColor" 
+            fillRule="evenodd" 
+            clipRule="evenodd"
+          />
+        </svg>
+      </Button>
+    </div>
+  ),
+};
+
+// With icons
+export const WithIcon: Story = {
+  render: () => (
+    <div className="flex flex-wrap gap-4">
+      <Button>
+        Next <ArrowRight />
+      </Button>
+      
+      <Button variant="secondary">
+        <Mail /> Email
+      </Button>
+      
+      <Button variant="outline">
+        <ArrowLeft /> Previous
+      </Button>
+      
+      <Button variant="ghost">
+        Settings <ChevronDown />
+      </Button>
+    </div>
+  ),
+};
+
 // Button states
 export const Disabled: Story = {
   args: {
@@ -170,23 +269,6 @@ export const Link: Story = {
     href: "https://example.com",
     target: "_blank",
   } as any,
-};
-
-// With icons
-export const WithIcon: Story = {
-  render: (args) => (
-    <Button {...args}>
-      Next <ArrowRight className="ml-2 h-4 w-4" />
-    </Button>
-  ),
-};
-
-export const WithIconLeft: Story = {
-  render: (args) => (
-    <Button {...args}>
-      <Mail className="mr-2 h-4 w-4" /> Email
-    </Button>
-  ),
 };
 
 // Interactive loading state example
@@ -245,11 +327,154 @@ export const Loading: Story = {
 // Button group example
 export const ButtonGroup: Story = {
   render: () => (
-    <div className="flex flex-wrap gap-2">
-      <Button variant="default" {...{} as any}>Save</Button>
-      <Button variant="secondary" {...{} as any}>Duplicate</Button>
-      <Button variant="ghost" {...{} as any}>Cancel</Button>
-      <Button variant="destructive" {...{} as any}>Delete</Button>
+    <div className="space-y-8">
+      {/* Standard button group with gap */}
+      <div>
+        <h3 className="text-sm font-medium mb-2">Standard Button Group (with gap-2)</h3>
+        <div className="inline-flex gap-2">
+          <Button variant="default">Save</Button>
+          <Button variant="secondary">Duplicate</Button>
+          <Button variant="ghost">Cancel</Button>
+          <Button variant="destructive">Delete</Button>
+        </div>
+      </div>
+      
+      {/* Attached button group */}
+      <div>
+        <h3 className="text-sm font-medium mb-2">Attached Button Group</h3>
+        <div className="inline-flex -space-x-px rounded-md shadow-xs rtl:space-x-reverse">
+          <Button 
+            variant="outline"
+            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+          >
+            Save
+          </Button>
+          <Button 
+            variant="outline"
+            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+          >
+            Duplicate
+          </Button>
+          <Button 
+            variant="outline"
+            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+          >
+            Cancel
+          </Button>
+          <Button 
+            variant="outline"
+            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+          >
+            Delete
+          </Button>
+        </div>
+      </div>
+      
+      {/* Border Button Group */}
+      <div>
+        <h3 className="text-sm font-medium mb-2">Border Button Group</h3>
+        <div className="inline-flex divide-x divide-primary-foreground/30 rounded-md shadow-xs rtl:space-x-reverse">
+          <Button 
+            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+            size="sm"
+          >
+            Merge pull request
+          </Button>
+          <Button 
+            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+            size="icon"
+            aria-label="Options"
+          >
+            <ChevronDown size={16} aria-hidden="true" />
+          </Button>
+        </div>
+      </div>
+      
+      {/* Icon button group */}
+      <div>
+        <h3 className="text-sm font-medium mb-2">Icon Button Group</h3>
+        <div className="flex flex-col items-start gap-4">
+          {/* Text formatting */}
+          <div className="inline-flex -space-x-px rounded-md shadow-xs rtl:space-x-reverse">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              aria-label="Bold"
+              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+            >
+              <Bold size={16} aria-hidden="true" />
+            </Button>
+            <Button 
+              variant="outline" 
+              size="icon" 
+              aria-label="Italic"
+              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+            >
+              <Italic size={16} aria-hidden="true" />
+            </Button>
+            <Button 
+              variant="outline" 
+              size="icon" 
+              aria-label="Underline"
+              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+            >
+              <Underline size={16} aria-hidden="true" />
+            </Button>
+          </div>
+          
+          {/* Alignment */}
+          <div className="inline-flex -space-x-px rounded-md shadow-xs rtl:space-x-reverse">
+            <Button 
+              size="icon" 
+              aria-label="Align Left"
+              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+            >
+              <AlignLeft size={16} aria-hidden="true" />
+            </Button>
+            <Button 
+              size="icon" 
+              aria-label="Align Center"
+              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+            >
+              <AlignCenter size={16} aria-hidden="true" />
+            </Button>
+            <Button 
+              size="icon" 
+              aria-label="Align Right"
+              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+            >
+              <AlignRight size={16} aria-hidden="true" />
+            </Button>
+            <Button 
+              size="icon" 
+              aria-label="Align Justify"
+              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+            >
+              <AlignJustify size={16} aria-hidden="true" />
+            </Button>
+          </div>
+          
+          {/* Flip */}
+          <div className="inline-flex -space-x-px rounded-md shadow-xs rtl:space-x-reverse">
+            <Button
+              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+              variant="outline"
+              size="icon"
+              aria-label="Flip Horizontal"
+            >
+              <FlipHorizontalIcon size={16} aria-hidden="true" />
+            </Button>
+            <Button
+              className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+              variant="outline"
+              size="icon"
+              aria-label="Flip Vertical"
+            >
+              <FlipVerticalIcon size={16} aria-hidden="true" />
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   ),
 };
@@ -321,48 +546,3 @@ export const CustomLoading: Story = {
     );
   },
 };
-
-// Debug story to inspect class generation
-export const DebugClasses: Story = {
-  render: () => {
-    // Import both for comparison
-    const { Button, buttonVariants } = require("@acme/ui/button");
-    
-    // Get the classes using buttonVariants directly
-    const directClasses = buttonVariants({ 
-      variant: "secondary", 
-      size: "md"
-    });
-    
-    // Create a button using the React component
-    const reactButtonElement = (
-      <Button variant="secondary" {...{} as any}>React Secondary Button</Button>
-    );
-    
-    return (
-      <div className="space-y-4 p-4 border rounded">
-        <div>
-          <p className="font-bold">1. Direct Classes:</p>
-          <code className="block p-2 bg-gray-100 dark:bg-gray-800 rounded whitespace-normal break-all">{directClasses || "No classes generated"}</code>
-        </div>
-        
-        <div>
-          <p className="font-bold">2. React Component Button:</p>
-          {reactButtonElement}
-        </div>
-        
-        <div>
-          <p className="font-bold">3. Raw HTML Button with direct classes:</p>
-          <button type="button" className={directClasses}>Raw HTML Button</button>
-        </div>
-        
-        <div>
-          <p className="font-bold">4. Regular Tailwind Classes Test:</p>
-          <button type="button" className="bg-secondary text-secondary-foreground hover:bg-secondary/80 py-2 px-4 rounded">
-            Plain Tailwind Button
-          </button>
-        </div>
-      </div>
-    );
-  },
-}; 
