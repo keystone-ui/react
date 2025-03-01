@@ -376,7 +376,6 @@ export const ButtonGroup: Story = {
         <div className="inline-flex divide-x divide-primary-foreground/30 rounded-md shadow-xs rtl:space-x-reverse">
           <Button 
             className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-            size="sm"
           >
             Merge pull request
           </Button>

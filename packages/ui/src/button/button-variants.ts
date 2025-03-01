@@ -18,7 +18,7 @@ export const buttonVariants = cva(
         sm: "text-sm h-8 py-1.5 px-3",
         default: "text-sm h-10 px-4 py-2",
         lg: "text-base h-12 py-3.5 px-5",
-        icon: "size-9 p-2",
+        icon: "size-10 p-2",
       },
       fullWidth: {
         true: "w-full",
