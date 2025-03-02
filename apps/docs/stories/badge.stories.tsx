@@ -30,7 +30,7 @@ import { Badge } from "@acme/ui";
 <Badge>Default</Badge>
 
 // Status badge with custom indicator
-<Badge className="gap-1.5">
+<Badge>
   <span className="size-1.5 rounded-full bg-green-500" aria-hidden="true"></span>
   Online
 </Badge>
@@ -44,6 +44,7 @@ import { Badge } from "@acme/ui";
 - Rounded design for modern UI
 - Dark mode support with optimized colors
 - Consistent sizing with 1px border (visible by default)
+- Built-in gap spacing between elements
 `,
       },
     },
@@ -102,7 +103,7 @@ export const Small: Story = {
   },
 };
 
-export const Medium: Story = {
+export const DefaultSize: Story = {
   args: {
     children: "Default",
     size: "default",
@@ -148,27 +149,27 @@ export const IconBadges: Story = {
     <div className="space-y-4">
       <h3 className="text-sm font-medium mb-2">With Status Dots</h3>
       <div className="flex flex-wrap gap-2">
-        <Badge className="gap-1.5">
+        <Badge>
           <span className="size-1.5 rounded-full bg-green-500" aria-hidden="true"></span>
           Active
         </Badge>
-        <Badge className="gap-1.5">
+        <Badge>
           <span className="size-1.5 rounded-full bg-yellow-500" aria-hidden="true"></span>
           Pending
         </Badge>
-        <Badge className="gap-1.5">
+        <Badge>
           <span className="size-1.5 rounded-full bg-red-500" aria-hidden="true"></span>
           Failed
         </Badge>
-        <Badge className="gap-1.5">
+        <Badge>
           <span className="size-1.5 rounded-full bg-blue-500" aria-hidden="true"></span>
           Processing
         </Badge>
-        <Badge className="gap-1.5">
+        <Badge>
           <span className="size-1.5 rounded-full bg-gray-400" aria-hidden="true"></span>
           Inactive
         </Badge>
-        <Badge className="gap-1.5">
+        <Badge>
           <span className="size-1.5 rounded-full bg-purple-500" aria-hidden="true"></span>
           Custom
         </Badge>
@@ -176,27 +177,27 @@ export const IconBadges: Story = {
       
       <h3 className="text-sm font-medium mt-4 mb-2">With Status Indicators</h3>
       <div className="flex flex-wrap gap-2">
-        <Badge className="gap-1.5">
+        <Badge>
           <span className="size-1.5 rounded-full bg-green-500" aria-hidden="true"></span>
           Online
         </Badge>
-        <Badge className="gap-1.5">
+        <Badge>
           <span className="size-1.5 rounded-full bg-yellow-500" aria-hidden="true"></span>
           Away
         </Badge>
-        <Badge className="gap-1.5">
+        <Badge>
           <span className="size-1.5 rounded-full bg-red-500" aria-hidden="true"></span>
           Offline
         </Badge>
-        <Badge className="gap-1.5">
+        <Badge>
           <span className="size-1.5 rounded-full bg-blue-500" aria-hidden="true"></span>
           Busy
         </Badge>
-        <Badge className="gap-1.5">
+        <Badge>
           <span className="size-1.5 rounded-full bg-purple-500" aria-hidden="true"></span>
           Do Not Disturb
         </Badge>
-        <Badge className="gap-1.5">
+        <Badge>
           <span className="size-1.5 rounded-full bg-gray-500" aria-hidden="true"></span>
           Invisible
         </Badge>
@@ -204,21 +205,49 @@ export const IconBadges: Story = {
       
       <h3 className="text-sm font-medium mt-4 mb-2">With Icons</h3>
       <div className="flex flex-wrap gap-2">
-        <Badge className="gap-1.5">
-          <CheckIcon className="text-emerald-500" size={12} aria-hidden="true" />
+        <Badge>
+          <CheckIcon className="text-emerald-500" aria-hidden="true" />
           Completed
         </Badge>
-        <Badge className="gap-1.5">
-          <XIcon className="text-red-500" size={12} aria-hidden="true" />
+        <Badge>
+          <XIcon className="text-red-500" aria-hidden="true" />
           Rejected
         </Badge>
-        <Badge className="gap-1.5">
-          <AlertCircleIcon className="text-amber-500" size={12} aria-hidden="true" />
+        <Badge>
+          <AlertCircleIcon className="text-amber-500" aria-hidden="true" />
           Warning
         </Badge>
-        <Badge className="gap-1.5">
-          <InfoIcon className="text-blue-500" size={12} aria-hidden="true" />
+        <Badge>
+          <InfoIcon className="text-blue-500" aria-hidden="true" />
           Information
+        </Badge>
+      </div>
+      
+      <h3 className="text-sm font-medium mt-4 mb-2">Custom Colored Badges with Icons</h3>
+      <div className="flex flex-wrap gap-2">
+        <Badge variant="green">
+          <CheckIcon aria-hidden="true" />
+          Approved
+        </Badge>
+        <Badge variant="red">
+          <XIcon aria-hidden="true" />
+          Declined
+        </Badge>
+        <Badge variant="amber">
+          <AlertCircleIcon aria-hidden="true" />
+          Caution
+        </Badge>
+        <Badge variant="blue">
+          <InfoIcon aria-hidden="true" />
+          Notice
+        </Badge>
+        <Badge variant="purple">
+          <CheckIcon aria-hidden="true" />
+          Verified
+        </Badge>
+        <Badge variant="indigo">
+          <InfoIcon aria-hidden="true" />
+          Details
         </Badge>
       </div>
     </div>

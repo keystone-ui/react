@@ -29,7 +29,7 @@ export const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
     ref
   ) => {
     return (
-      <div
+      <span
         ref={ref}
         className={cn(
           badgeVariants({ 
@@ -41,7 +41,7 @@ export const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
         {...props}
       >
         {children}
-      </div>
+      </span>
     );
   }
 );
