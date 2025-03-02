@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Input } from "@acme/ui/input";
-import { Label } from "@acme/ui/label";
+import { Form, Label, Description, ErrorMessage } from "@acme/ui/form";
 import { Button } from "@acme/ui/button";
 import { 
   SearchIcon, 
@@ -122,17 +122,17 @@ export const Disabled: Story = {
 export const WithError: Story = {
   render: () => {
     return (
-      <div className="grid w-full max-w-sm items-center gap-1.5">
+      <Form>
         <Label htmlFor="with-error">Email Address</Label>
         <Input 
           id="with-error" 
           aria-invalid="true" 
           placeholder="Invalid input" 
         />
-        <p className="text-[0.8125rem] text-destructive">
+        <ErrorMessage>
           Please enter a valid email address
-        </p>
-      </div>
+        </ErrorMessage>
+      </Form>
     );
   }
 };
@@ -162,42 +162,42 @@ export const Examples: Story = {
         <div className="space-y-4">
           <h3 className="text-lg font-medium">Basic Inputs</h3>
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
+            <Form className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <Input id="name" placeholder="Enter your name" />
-            </div>
-            <div className="space-y-2">
+            </Form>
+            <Form className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" placeholder="Enter your email" />
-            </div>
+            </Form>
           </div>
         </div>
 
         <div className="space-y-4">
           <h3 className="text-lg font-medium">Focus Style</h3>
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
+            <Form className="space-y-2">
               <Label htmlFor="focus-demo">Click or tab to this input</Label>
               <Input 
                 id="focus-demo" 
                 placeholder="Focus me to see the 2px inset ring" 
                 autoFocus
               />
-              <p className="text-xs text-muted-foreground">
+              <Description>
                 This input has a 2px inset ring focus style for better accessibility and removes the default browser outline
-              </p>
-            </div>
-            <div className="space-y-2">
+              </Description>
+            </Form>
+            <Form className="space-y-2">
               <Label htmlFor="focus-error">Focus with error state</Label>
               <Input 
                 id="focus-error" 
                 placeholder="Focus me to see error state ring" 
                 aria-invalid="true"
               />
-              <p className="text-xs text-destructive">
+              <ErrorMessage>
                 Error state maintains the same focus style with error colors
-              </p>
-            </div>
+              </ErrorMessage>
+            </Form>
           </div>
         </div>
 
@@ -240,19 +240,19 @@ export const Examples: Story = {
         <div className="space-y-4">
           <h3 className="text-lg font-medium">Input States</h3>
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="space-y-2">
+            <Form className="space-y-2">
               <Label htmlFor="default-state">Default</Label>
               <Input id="default-state" placeholder="Default input" />
-            </div>
-            <div className="space-y-2">
+            </Form>
+            <Form className="space-y-2">
               <Label htmlFor="disabled-state">Disabled</Label>
               <Input id="disabled-state" disabled placeholder="Disabled input" />
-            </div>
-            <div className="space-y-2">
+            </Form>
+            <Form className="space-y-2">
               <Label htmlFor="error-state">Error</Label>
               <Input id="error-state" aria-invalid="true" placeholder="Invalid input" />
-              <p className="text-xs text-destructive">This field is required</p>
-            </div>
+              <ErrorMessage>This field is required</ErrorMessage>
+            </Form>
           </div>
         </div>
 
@@ -354,9 +354,9 @@ export const FloatingLabel: Story = {
           >
             Floating Label
           </Label>
-          <p className="text-xs text-muted-foreground mt-1">
+          <Description className="mt-1">
             Label floats when input is focused or has content
-          </p>
+          </Description>
         </div>
       </div>
     );
@@ -367,16 +367,16 @@ export const FloatingLabel: Story = {
 export const WithLabel: Story = {
   render: () => {
     return (
-      <div className="grid w-full max-w-sm items-center gap-1.5">
+      <Form>
         <Label htmlFor="with-label">Your Name</Label>
         <Input 
           id="with-label" 
           placeholder="John Doe" 
         />
-        <p className="text-[0.8125rem] text-muted-foreground">
+        <Description>
           Standard input with label positioned above
-        </p>
-      </div>
+        </Description>
+      </Form>
     );
   }
 };
@@ -405,9 +405,9 @@ export const SubscribeForm: Story = {
               Subscribe
             </Button>
           </form>
-          <p className="text-xs text-muted-foreground mt-1">
+          <Description className="mt-1">
             Subscribe to our newsletter to receive updates
-          </p>
+          </Description>
         </div>
       </div>
     );

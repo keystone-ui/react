@@ -1,2 +1,2 @@
-export { Label } from "./label";
-export type { LabelProps } from "./label"; 
+export { Form, Label, Description, ErrorMessage } from "./label";
+export type { FormProps, LabelProps, DescriptionProps, ErrorMessageProps } from "./label"; 
