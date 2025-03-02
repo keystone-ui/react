@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Badge } from './badge';
 
 describe('Badge', () => {
@@ -10,33 +10,33 @@ describe('Badge', () => {
 
   test('applies different variants', () => {
     const { rerender } = render(<Badge variant="red">Red</Badge>);
-    const redBadge = screen.getByText('Red').closest('div');
+    const redBadge = screen.getByText('Red').closest('span');
     expect(redBadge).toHaveClass('bg-red-500/15');
     
     rerender(<Badge variant="blue">Blue</Badge>);
-    const blueBadge = screen.getByText('Blue').closest('div');
+    const blueBadge = screen.getByText('Blue').closest('span');
     expect(blueBadge).toHaveClass('bg-blue-500/15');
     
     rerender(<Badge variant="green">Green</Badge>);
-    const greenBadge = screen.getByText('Green').closest('div');
+    const greenBadge = screen.getByText('Green').closest('span');
     expect(greenBadge).toHaveClass('bg-green-500/15');
     
     rerender(<Badge variant="default">Default</Badge>);
-    const defaultBadge = screen.getByText('Default').closest('div');
+    const defaultBadge = screen.getByText('Default').closest('span');
     expect(defaultBadge).toHaveClass('bg-transparent');
   });
 
   test('applies different sizes', () => {
     const { rerender } = render(<Badge size="xs">Extra Small</Badge>);
-    const xsBadge = screen.getByText('Extra Small').closest('div');
+    const xsBadge = screen.getByText('Extra Small').closest('span');
     expect(xsBadge).toHaveClass('text-[0.625rem]');
     
     rerender(<Badge size="sm">Small</Badge>);
-    const smBadge = screen.getByText('Small').closest('div');
+    const smBadge = screen.getByText('Small').closest('span');
     expect(smBadge).toHaveClass('text-xs');
     
     rerender(<Badge size="default">Default</Badge>);
-    const defaultBadge = screen.getByText('Default').closest('div');
+    const defaultBadge = screen.getByText('Default').closest('span');
     expect(defaultBadge).toHaveClass('text-xs');
   });
 
@@ -56,16 +56,63 @@ describe('Badge', () => {
 
   test('applies custom className', () => {
     render(<Badge className="test-class">Custom Class</Badge>);
-    const badge = screen.getByText('Custom Class').closest('div');
+    const badge = screen.getByText('Custom Class').closest('span');
     expect(badge).toHaveClass('test-class');
   });
 
-  test('wraps children in a span with proper classes', () => {
-    render(<Badge>Test Content</Badge>);
-    const badge = screen.getByText('Test Content');
-    expect(badge.tagName).toBe('SPAN');
-    expect(badge).toHaveClass('inline-flex');
-    expect(badge).toHaveClass('items-center');
-    expect(badge).toHaveClass('gap-1.5');
+  test('renders as a button when asButton is true', () => {
+    render(<Badge asButton>Button Badge</Badge>);
+    const button = screen.getByRole('button', { name: 'Button Badge' });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveClass('cursor-pointer');
+  });
+
+  test('calls onClick when clicked as a button', () => {
+    const handleClick = jest.fn();
+    render(<Badge asButton onClick={handleClick}>Clickable Badge</Badge>);
+    const button = screen.getByRole('button', { name: 'Clickable Badge' });
+    fireEvent.click(button);
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  test('calls onClick when clicked as a span', () => {
+    const handleClick = jest.fn();
+    render(<Badge onClick={handleClick}>Clickable Span</Badge>);
+    const span = screen.getByText('Clickable Span');
+    fireEvent.click(span);
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  test('applies variant and size to button badge', () => {
+    render(
+      <Badge asButton variant="blue" size="sm">
+        Blue Button
+      </Badge>
+    );
+    const button = screen.getByRole('button', { name: 'Blue Button' });
+    expect(button).toHaveClass('bg-blue-500/15');
+    expect(button).toHaveClass('text-xs');
+  });
+
+  test('button has type="button" by default', () => {
+    render(<Badge asButton>Default Button</Badge>);
+    const button = screen.getByRole('button', { name: 'Default Button' });
+    expect(button).toHaveAttribute('type', 'button');
+  });
+
+  test('applies cursor-pointer class to clickable badges', () => {
+    const { rerender } = render(<Badge asButton>Button Badge</Badge>);
+    const button = screen.getByRole('button', { name: 'Button Badge' });
+    expect(button).toHaveClass('cursor-pointer');
+    
+    rerender(<Badge onClick={() => {}}>Clickable Span</Badge>);
+    const span = screen.getByText('Clickable Span');
+    expect(span).toHaveClass('cursor-pointer');
+  });
+
+  test('does not apply cursor-pointer class when no onClick handler', () => {
+    render(<Badge>Regular Badge</Badge>);
+    const span = screen.getByText('Regular Badge');
+    expect(span).not.toHaveClass('cursor-pointer');
   });
 }); 

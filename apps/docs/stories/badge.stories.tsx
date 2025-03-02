@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Badge } from "@acme/ui/badge";
-import { CheckIcon, XIcon, AlertCircleIcon, InfoIcon } from "lucide-react";
+import { CheckIcon, XIcon, AlertCircleIcon, InfoIcon, DownloadIcon } from "lucide-react";
 
 const meta = {
   title: "Components/Badge",
@@ -34,6 +34,22 @@ import { Badge } from "@acme/ui";
   <span className="size-1.5 rounded-full bg-green-500" aria-hidden="true"></span>
   Online
 </Badge>
+
+// Badge as a button
+<Badge asButton onClick={() => console.log('Badge clicked')}>
+  Clickable Badge
+</Badge>
+
+// Removable badge
+<Badge className="gap-0">
+  Removable
+  <button
+    className="focus-visible:border-ring focus-visible:ring-ring/50 text-foreground/60 hover:text-foreground -my-px -ms-px -me-1.5 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-[inherit] p-0 transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
+    onClick={() => handleRemove()}
+  >
+    <XIcon size={12} aria-hidden="true" />
+  </button>
+</Badge>
 \`\`\`
 
 ## Features
@@ -41,6 +57,8 @@ import { Badge } from "@acme/ui";
 - Multiple color variants: red, orange, amber, yellow, lime, green, emerald, teal, cyan, sky, blue, indigo, violet, purple, fuchsia, pink, rose, slate, gray, zinc, neutral, stone
 - Three sizes: xs, sm, default
 - Support for custom content including status indicators
+- Can be rendered as a button with onClick handler
+- Can be made removable with a close button
 - Rounded design for modern UI
 - Dark mode support with optimized colors
 - Consistent sizing with 1px border (visible by default)
@@ -252,4 +270,214 @@ export const IconBadges: Story = {
       </div>
     </div>
   ),
+};
+
+// Link badges
+export const LinkBadges: Story = {
+  name: "Button Badges",
+  render: () => (
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-4">
+        <h3 className="text-lg font-medium">Badge Buttons</h3>
+        <div className="flex flex-wrap items-center gap-4">
+          <Badge asButton onClick={() => console.log("Default badge clicked")}>
+            Click me
+          </Badge>
+          <Badge asButton onClick={() => console.log("Blue badge clicked")} variant="blue">
+            Click me
+          </Badge>
+          <Badge asButton onClick={() => console.log("Green badge clicked")} variant="green">
+            Click me
+          </Badge>
+          <Badge asButton onClick={() => console.log("Red badge clicked")} variant="red">
+            Click me
+          </Badge>
+          <Badge asButton onClick={() => console.log("Small badge clicked")} size="sm">
+            Click me
+          </Badge>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <h3 className="text-lg font-medium">Interactive Badges with Icons</h3>
+        <div className="flex flex-wrap items-center gap-4">
+          <Badge asButton onClick={() => console.log("Info badge clicked")}>
+            <InfoIcon className="size-3" />
+            Info
+          </Badge>
+          <Badge asButton onClick={() => console.log("Download badge clicked")} variant="blue">
+            <DownloadIcon className="size-3" />
+            Download
+          </Badge>
+          <Badge asButton onClick={() => console.log("Success badge clicked")} variant="green">
+            <CheckIcon className="size-3" />
+            Success
+          </Badge>
+        </div>
+      </div>
+    </div>
+  ),
+};
+
+// Removable badges
+export const RemovableBadges: Story = {
+  render: () => {
+    // Using a simple object to track visibility instead of React.useState
+    // This avoids the need for React import in Storybook
+    const visibilityState = {
+      default: true,
+      blue: true,
+      green: true,
+      red: true,
+      purple: true,
+      amber: true,
+      indigo: true,
+      pink: true
+    };
+    
+    // Create a simple state management system
+    let visibleBadges = { ...visibilityState };
+    
+    // Function to handle badge removal
+    const handleRemove = (key: string, element: HTMLElement) => {
+      // Find the parent badge element and hide it
+      const badge = element.closest('.badge-container');
+      if (badge) {
+        badge.classList.add('hidden');
+      }
+      
+      // Show the reset button if any badge is hidden
+      const resetButton = document.getElementById('reset-badges-button');
+      if (resetButton) {
+        resetButton.classList.remove('hidden');
+      }
+    };
+    
+    // Function to reset all badges
+    const resetBadges = () => {
+      // Show all badges
+      document.querySelectorAll('.badge-container.hidden').forEach(badge => {
+        badge.classList.remove('hidden');
+      });
+      
+      // Hide the reset button
+      const resetButton = document.getElementById('reset-badges-button');
+      if (resetButton) {
+        resetButton.classList.add('hidden');
+      }
+    };
+
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
+          <h3 className="text-lg font-medium">Removable Badges</h3>
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="badge-container">
+              <Badge className="gap-0">
+                Removable
+                <button
+                  className="focus-visible:border-ring focus-visible:ring-ring/50 text-foreground/60 hover:text-foreground -my-px -ms-px -me-1.5 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-[inherit] p-0 transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
+                  onClick={(e) => handleRemove('default', e.currentTarget)}
+                >
+                  <XIcon size={12} aria-hidden="true" />
+                </button>
+              </Badge>
+            </div>
+            
+            <div className="badge-container">
+              <Badge variant="blue" className="gap-0">
+                Info
+                <button
+                  className="focus-visible:border-ring focus-visible:ring-ring/50 text-blue-700/60 hover:text-blue-700 dark:text-blue-400/60 dark:hover:text-blue-400 -my-px -ms-px -me-1.5 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-[inherit] p-0 transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
+                  onClick={(e) => handleRemove('blue', e.currentTarget)}
+                >
+                  <XIcon size={12} aria-hidden="true" />
+                </button>
+              </Badge>
+            </div>
+            
+            <div className="badge-container">
+              <Badge variant="green" className="gap-0">
+                Success
+                <button
+                  className="focus-visible:border-ring focus-visible:ring-ring/50 text-green-700/60 hover:text-green-700 dark:text-green-400/60 dark:hover:text-green-400 -my-px -ms-px -me-1.5 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-[inherit] p-0 transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
+                  onClick={(e) => handleRemove('green', e.currentTarget)}
+                >
+                  <XIcon size={12} aria-hidden="true" />
+                </button>
+              </Badge>
+            </div>
+            
+            <div className="badge-container">
+              <Badge variant="red" className="gap-0">
+                Error
+                <button
+                  className="focus-visible:border-ring focus-visible:ring-ring/50 text-red-700/60 hover:text-red-700 dark:text-red-400/60 dark:hover:text-red-400 -my-px -ms-px -me-1.5 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-[inherit] p-0 transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
+                  onClick={(e) => handleRemove('red', e.currentTarget)}
+                >
+                  <XIcon size={12} aria-hidden="true" />
+                </button>
+              </Badge>
+            </div>
+            
+            <div className="badge-container">
+              <Badge variant="purple" className="gap-0">
+                Tag
+                <button
+                  className="focus-visible:border-ring focus-visible:ring-ring/50 text-purple-700/60 hover:text-purple-700 dark:text-purple-400/60 dark:hover:text-purple-400 -my-px -ms-px -me-1.5 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-[inherit] p-0 transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
+                  onClick={(e) => handleRemove('purple', e.currentTarget)}
+                >
+                  <XIcon size={12} aria-hidden="true" />
+                </button>
+              </Badge>
+            </div>
+            
+            <div className="badge-container">
+              <Badge variant="amber" className="gap-0">
+                Warning
+                <button
+                  className="focus-visible:border-ring focus-visible:ring-ring/50 text-amber-700/60 hover:text-amber-700 dark:text-amber-400/60 dark:hover:text-amber-400 -my-px -ms-px -me-1.5 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-[inherit] p-0 transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
+                  onClick={(e) => handleRemove('amber', e.currentTarget)}
+                >
+                  <XIcon size={12} aria-hidden="true" />
+                </button>
+              </Badge>
+            </div>
+            
+            <div className="badge-container">
+              <Badge variant="indigo" className="gap-0">
+                Indigo
+                <button
+                  className="focus-visible:border-ring focus-visible:ring-ring/50 text-indigo-700/60 hover:text-indigo-700 dark:text-indigo-400/60 dark:hover:text-indigo-400 -my-px -ms-px -me-1.5 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-[inherit] p-0 transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
+                  onClick={(e) => handleRemove('indigo', e.currentTarget)}
+                >
+                  <XIcon size={12} aria-hidden="true" />
+                </button>
+              </Badge>
+            </div>
+            
+            <div className="badge-container">
+              <Badge variant="pink" className="gap-0">
+                Pink
+                <button
+                  className="focus-visible:border-ring focus-visible:ring-ring/50 text-pink-700/60 hover:text-pink-700 dark:text-pink-400/60 dark:hover:text-pink-400 -my-px -ms-px -me-1.5 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-[inherit] p-0 transition-[color,box-shadow] outline-none focus-visible:ring-[3px]"
+                  onClick={(e) => handleRemove('pink', e.currentTarget)}
+                >
+                  <XIcon size={12} aria-hidden="true" />
+                </button>
+              </Badge>
+            </div>
+          </div>
+          
+          <button
+            id="reset-badges-button"
+            className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 mt-2 w-fit hidden"
+            onClick={resetBadges}
+          >
+            Reset badges
+          </button>
+        </div>
+      </div>
+    );
+  },
 }; 
