@@ -656,3 +656,38 @@ export const CustomLoading: Story = {
     );
   },
 };
+
+// Rounded buttons example
+export const RoundedButtons: Story = {
+  render: () => (
+    <div className="flex flex-wrap gap-4">
+      <Button className="rounded-full" size="sm">
+        Default
+      </Button>
+      
+      <Button className="rounded-full" variant="secondary" size="sm">
+        Secondary
+      </Button>
+      
+      <Button className="rounded-full" variant="destructive" size="sm">
+        Destructive
+      </Button>
+      
+      <Button className="rounded-full" variant="outline" size="sm">
+        Outline
+      </Button>
+      
+      <Button className="rounded-full" variant="ghost" size="sm">
+        Ghost
+      </Button>
+      
+      <Button className="rounded-full" variant="link" size="sm">
+        Link
+      </Button>
+      
+      <Button className="rounded-full aspect-square" size="sm" aria-label="Icon">
+        <Plus size={16} aria-hidden="true" />
+      </Button>
+    </div>
+  ),
+};

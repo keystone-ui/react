@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Badge } from "@acme/ui/badge";
-import { CheckIcon, XIcon, AlertCircleIcon, InfoIcon, DownloadIcon } from "lucide-react";
+import { CheckIcon, XIcon, AlertCircleIcon, InfoIcon, DownloadIcon, BedIcon, BathIcon, LandPlotIcon, UsersIcon, CalendarIcon } from "lucide-react";
 
 const meta = {
   title: "Components/Badge",
@@ -476,6 +476,102 @@ export const RemovableBadges: Story = {
           >
             Reset badges
           </button>
+        </div>
+      </div>
+    );
+  },
+};
+
+// Stats badges example
+export const StatsBadges: Story = {
+  render: () => {
+    return (
+      <div className="space-y-8">
+        {/* Property listing stats */}
+        <div>
+          <h3 className="text-lg font-medium mb-3">Property Listing Stats</h3>
+          <div className="p-4 border rounded-lg bg-card">
+            <div className="flex items-center gap-2 flex-wrap">
+              <Badge variant="default" size="sm">
+                <BedIcon />
+                4
+              </Badge>
+              <Badge variant="default" size="sm">
+                <BathIcon />
+                2
+              </Badge>
+              <Badge variant="default" size="sm">
+                <LandPlotIcon />
+                350m²
+              </Badge>
+              <div className="ml-auto font-medium tabular-nums">$135,000</div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Numeric badges */}
+        <div>
+          <h3 className="text-lg font-medium mb-3">Numeric Badges</h3>
+          <div className="flex flex-wrap gap-3">
+            <Badge>1</Badge>
+            <Badge variant="blue">42</Badge>
+            <Badge variant="red">99+</Badge>
+            <Badge variant="green">$24.99</Badge>
+            <Badge variant="purple">5.0</Badge>
+            <Badge variant="amber">3/5</Badge>
+          </div>
+        </div>
+        
+        {/* Stats with icons */}
+        <div>
+          <h3 className="text-lg font-medium mb-3">Stats with Icons</h3>
+          <div className="flex flex-wrap gap-3">
+            <Badge variant="blue">
+              <UsersIcon />
+              128 users
+            </Badge>
+            <Badge variant="green">
+              <CheckIcon />
+              87% complete
+            </Badge>
+            <Badge variant="amber">
+              <CalendarIcon />
+              3 days left
+            </Badge>
+            <Badge variant="red">
+              <AlertCircleIcon />
+              2 issues
+            </Badge>
+          </div>
+        </div>
+        
+        {/* Card with stats footer */}
+        <div>
+          <h3 className="text-lg font-medium mb-3">Card with Stats Footer</h3>
+          <div className="border rounded-lg overflow-hidden bg-card">
+            <div className="p-4 border-b">
+              <h4 className="font-medium">Luxury Apartment</h4>
+              <p className="text-sm text-muted-foreground">123 Main Street, Anytown</p>
+            </div>
+            <div className="p-4">
+              <p className="text-sm">Modern apartment with stunning views and premium amenities.</p>
+            </div>
+            <div className="px-4 py-3 bg-muted/50 flex items-center gap-2 flex-wrap">
+              <Badge variant="default" size="sm">
+                <BedIcon />
+                3
+              </Badge>
+              <Badge variant="default" size="sm">
+                <BathIcon />
+                2
+              </Badge>
+              <Badge variant="default" size="sm">
+                <LandPlotIcon />
+                120m²
+              </Badge>
+              <div className="ml-auto font-medium tabular-nums">$1,200/mo</div>
+            </div>
+          </div>
         </div>
       </div>
     );
