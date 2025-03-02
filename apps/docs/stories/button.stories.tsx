@@ -25,6 +25,7 @@ import {
   RiTwitterXFill
 } from "@remixicon/react";
 import { Button } from "@acme/ui/button";
+import { ButtonGroup } from "@acme/ui/button";
 import type { ButtonProps } from "@acme/ui/button";
 import { useState } from "react";
 import { cn } from "@acme/ui";
@@ -329,159 +330,186 @@ export const Loading: Story = {
   },
 };
 
-// Button group example
-export const ButtonGroup: Story = {
+// New ButtonGroup component example
+export const ButtonGroups: Story = {
   render: () => (
     <div className="space-y-8">
-      {/* Standard button group with gap */}
+      {/* Horizontal ButtonGroup */}
       <div>
-        <h3 className="text-sm font-medium mb-2">Standard Button Group (with gap-2)</h3>
-        <div className="inline-flex gap-2">
+        <h3 className="text-sm font-medium mb-2">Horizontal ButtonGroup (attached)</h3>
+        <ButtonGroup>
           <Button variant="default">Save</Button>
-          <Button variant="secondary">Duplicate</Button>
-          <Button variant="ghost">Cancel</Button>
-          <Button variant="destructive">Delete</Button>
-        </div>
+          <Button variant="default">Duplicate</Button>
+          <Button variant="default">Delete</Button>
+        </ButtonGroup>
       </div>
       
-      {/* Attached button group */}
+      {/* Horizontal ButtonGroup with secondary variant */}
       <div>
-        <h3 className="text-sm font-medium mb-2">Attached Button Group</h3>
-        <div className="inline-flex -space-x-px rounded-md shadow-xs rtl:space-x-reverse">
-          <Button 
-            variant="outline"
-            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-          >
-            Save
-          </Button>
-          <Button 
-            variant="outline"
-            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-          >
-            Duplicate
-          </Button>
-          <Button 
-            variant="outline"
-            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-          >
-            Cancel
-          </Button>
-          <Button 
-            variant="outline"
-            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-          >
-            Delete
-          </Button>
-        </div>
+        <h3 className="text-sm font-medium mb-2">Secondary Variants</h3>
+        <ButtonGroup>
+          <Button variant="secondary">Previous</Button>
+          <Button variant="secondary">Current</Button>
+          <Button variant="secondary">Next</Button>
+        </ButtonGroup>
       </div>
       
-      {/* Border Button Group */}
+      {/* Horizontal ButtonGroup with outline variant */}
       <div>
-        <h3 className="text-sm font-medium mb-2">Border Button Group</h3>
-        <div className="inline-flex divide-x divide-primary-foreground/30 rounded-md shadow-xs rtl:space-x-reverse">
-          <Button 
-            size="sm"
-            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-          >
-            Merge pull request
-          </Button>
-          <Button 
-            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10 aspect-square"
-            size="sm"
-            aria-label="Options"
-          >
-            <ChevronDown size={16} aria-hidden="true" />
-          </Button>
-        </div>
+        <h3 className="text-sm font-medium mb-2">Outline Variant</h3>
+        <ButtonGroup>
+          <Button variant="outline">Day</Button>
+          <Button variant="outline">Week</Button>
+          <Button variant="outline">Month</Button>
+          <Button variant="outline">Year</Button>
+        </ButtonGroup>
       </div>
       
-      {/* Icon button group */}
+      {/* Icon-only button groups */}
       <div>
-        <h3 className="text-sm font-medium mb-2">Icon Button Group</h3>
+        <h3 className="text-sm font-medium mb-2">Icon-only Button Groups</h3>
         <div className="flex flex-col items-start gap-4">
-          {/* Text formatting */}
-          <div className="inline-flex -space-x-px rounded-md shadow-xs rtl:space-x-reverse">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-              aria-label="Bold"
-            >
-              <Bold size={16} aria-hidden="true" />
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-              aria-label="Italic"
-            >
-              <Italic size={16} aria-hidden="true" />
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-              aria-label="Underline"
-            >
-              <Underline size={16} aria-hidden="true" />
-            </Button>
+          <div className="flex items-center gap-2">
+            <ButtonGroup>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="aspect-square"
+                aria-label="Bold"
+              >
+                <Bold aria-hidden="true" />
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="aspect-square"
+                aria-label="Italic"
+              >
+                <Italic aria-hidden="true" />
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="aspect-square"
+                aria-label="Underline"
+              >
+                <Underline aria-hidden="true" />
+              </Button>
+            </ButtonGroup>
           </div>
           
           {/* Alignment */}
-          <div className="inline-flex -space-x-px rounded-md shadow-xs rtl:space-x-reverse">
-            <Button 
-              size="sm" 
-              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-              aria-label="Align Left"
-            >
-              <AlignLeft size={16} aria-hidden="true" />
-            </Button>
-            <Button 
-              size="sm" 
-              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-              aria-label="Align Center"
-            >
-              <AlignCenter size={16} aria-hidden="true" />
-            </Button>
-            <Button 
-              size="sm" 
-              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-              aria-label="Align Right"
-            >
-              <AlignRight size={16} aria-hidden="true" />
-            </Button>
-            <Button 
-              size="sm" 
-              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-              aria-label="Align Justify"
-            >
-              <AlignJustify size={16} aria-hidden="true" />
-            </Button>
+          <div className="flex items-center gap-2">
+            <ButtonGroup>
+              <Button 
+                variant="default"
+                size="sm" 
+                className="aspect-square"
+                aria-label="Align Left"
+              >
+                <AlignLeft aria-hidden="true" />
+              </Button>
+              <Button 
+                variant="default"
+                size="sm" 
+                className="aspect-square"
+                aria-label="Align Center"
+              >
+                <AlignCenter aria-hidden="true" />
+              </Button>
+              <Button 
+                variant="default"
+                size="sm" 
+                className="aspect-square"
+                aria-label="Align Right"
+              >
+                <AlignRight aria-hidden="true" />
+              </Button>
+              <Button 
+                variant="default"
+                size="sm" 
+                className="aspect-square"
+                aria-label="Align Justify"
+              >
+                <AlignJustify aria-hidden="true" />
+              </Button>
+            </ButtonGroup>
           </div>
           
           {/* Flip */}
-          <div className="inline-flex -space-x-px rounded-md shadow-xs rtl:space-x-reverse">
-            <Button
-              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-              variant="outline"
-              size="sm"
-              aria-label="Flip Horizontal"
-            >
-              <FlipHorizontalIcon size={16} aria-hidden="true" />
-            </Button>
-            <Button
-              className="aspect-square rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
-              variant="outline"
-              size="sm"
-              aria-label="Flip Vertical"
-            >
-              <FlipVerticalIcon size={16} aria-hidden="true" />
-            </Button>
+          <div className="flex items-center gap-2">
+            <ButtonGroup>
+              <Button
+                variant="outline"
+                size="sm"
+                className="aspect-square"
+                aria-label="Flip Horizontal"
+              >
+                <FlipHorizontalIcon aria-hidden="true" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="aspect-square"
+                aria-label="Flip Vertical"
+              >
+                <FlipVerticalIcon aria-hidden="true" />
+              </Button>
+            </ButtonGroup>
+          </div>
+        </div>
+      </div>
+      
+      {/* Vertical ButtonGroup */}
+      <div>
+        <h3 className="text-sm font-medium mb-2">Vertical ButtonGroup</h3>
+        <ButtonGroup orientation="vertical">
+          <Button variant="default">Top</Button>
+          <Button variant="default">Middle</Button>
+          <Button variant="default">Bottom</Button>
+        </ButtonGroup>
+      </div>
+      
+      {/* Non-attached ButtonGroup */}
+      <div>
+        <h3 className="text-sm font-medium mb-2">Non-attached ButtonGroup</h3>
+        <ButtonGroup attached={false}>
+          <Button variant="default">Save</Button>
+          <Button variant="secondary">Duplicate</Button>
+          <Button variant="destructive">Delete</Button>
+        </ButtonGroup>
+      </div>
+      
+      {/* Split button example */}
+      <div>
+        <h3 className="text-sm font-medium mb-2">Split Button Examples</h3>
+        <div className="flex flex-col gap-4">
+          {/* Using ButtonGroup */}
+          <div className="flex items-center gap-2">
+            <ButtonGroup className="divide-x divide-primary-foreground/30">
+              <Button size="sm">
+                Merge pull request
+              </Button>
+              <Button 
+                size="sm"
+                className="aspect-square"
+                aria-label="Options"
+              >
+                <ChevronDown aria-hidden="true" />
+              </Button>
+            </ButtonGroup>
           </div>
         </div>
       </div>
     </div>
   ),
+  parameters: {
+    docs: {
+      description: {
+        story: "The `ButtonGroup` component provides an easy way to create attached button groups with proper styling for borders and border radius.",
+      },
+    },
+  },
 };
 
 // Social buttons example
