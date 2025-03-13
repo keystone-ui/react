@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Input } from './input';
+import { InputGroup, InputAdornment } from './input-group';
 
 describe('Input', () => {
   test('renders correctly', () => {
@@ -54,5 +55,35 @@ describe('Input', () => {
     const input = screen.getByRole('textbox');
     expect(input).toHaveClass('file:border-r');
     expect(input).toHaveClass('file:not-italic');
+  });
+
+  it('renders correctly', () => {
+    render(<Input placeholder="Test input" data-testid="input" />);
+    expect(screen.getByTestId('input')).toBeInTheDocument();
+  });
+
+  it('passes props correctly', () => {
+    render(<Input type="email" placeholder="Email" data-testid="input" />);
+    const input = screen.getByTestId('input');
+    expect(input).toHaveAttribute('type', 'email');
+    expect(input).toHaveAttribute('placeholder', 'Email');
+  });
+
+  it('works with InputAdornment', () => {
+    render(
+      <InputGroup>
+        <InputAdornment position="start" data-testid="start-adornment">
+          $
+        </InputAdornment>
+        <Input placeholder="0.00" data-testid="input" />
+        <InputAdornment position="end" data-testid="end-adornment">
+          USD
+        </InputAdornment>
+      </InputGroup>
+    );
+    
+    expect(screen.getByTestId('start-adornment')).toBeInTheDocument();
+    expect(screen.getByTestId('input')).toBeInTheDocument();
+    expect(screen.getByTestId('end-adornment')).toBeInTheDocument();
   });
 }); 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Input } from "@acme/ui/input";
+import { Input, InputGroup, InputAdornment } from "@acme/ui/input";
 import { Form, Label, Description, ErrorMessage } from "@acme/ui/form";
 import { Button } from "@acme/ui/button";
 import { 
@@ -22,10 +22,10 @@ const meta = {
     docs: {
       description: {
         component: `
-A versatile input component with support for different types and states.
+A versatile input component with support for different types, states, and adornments.
 
 \`\`\`tsx
-import { Input } from "@acme/ui";
+import { Input, InputGroup, InputAdornment } from "@acme/ui";
 
 // Default input
 <Input placeholder="Enter your name" />
@@ -35,6 +35,18 @@ import { Input } from "@acme/ui";
 
 // Password input
 <Input type="password" placeholder="Enter your password" />
+
+// Input with left icon adornment
+<InputGroup>
+  <InputAdornment position="start" data-type="icon"><MailIcon className="size-4" /></InputAdornment>
+  <Input placeholder="Email" />
+</InputGroup>
+
+// Input with right icon adornment
+<InputGroup>
+  <Input placeholder="Email" />
+  <InputAdornment position="end" data-type="icon"><MailIcon className="size-4" /></InputAdornment>
+</InputGroup>
 
 // Disabled input
 <Input disabled placeholder="Disabled input" />
@@ -54,6 +66,7 @@ import { Input } from "@acme/ui";
 - Support for all HTML input types
 - Consistent styling with the rest of the UI
 - Clean 2px inset ring focus style for better accessibility
+- Support for left and right adornments (icons, text, buttons, selects)
 - Special styling for search and file inputs
 - Proper disabled and error states
 - Customizable with additional classes
@@ -118,6 +131,18 @@ export const Disabled: Story = {
   },
 };
 
+// Input with AtSign icon prefix
+export const WithLeftIconAdornment: Story = {
+  render: () => (
+    <InputGroup>
+      <InputAdornment position="start" data-type="icon">
+        <AtSignIcon className="h-4 w-4" />
+      </InputAdornment>
+      <Input type="email" placeholder="john.doe@example.com" />
+    </InputGroup>
+  ),
+};
+
 // Input with error
 export const WithError: Story = {
   render: () => {
@@ -149,6 +174,116 @@ export const Search: Story = {
 export const File: Story = {
   args: {
     type: "file",
+  },
+};
+
+// Left Adornment examples
+export const LeftAdornment: Story = {
+  render: () => (
+    <div className="space-y-4">
+      <h3 className="text-lg font-medium">Left Adornment Examples</h3>
+      
+      {/* Icon as left adornment */}
+      <div className="space-y-1">
+        <Label htmlFor="email-icon-left">Email with icon adornment</Label>
+        <InputGroup>
+          <InputAdornment position="start" data-type="icon">
+            <MailIcon className="size-4" />
+          </InputAdornment>
+          <Input id="email-icon-left" placeholder="Email" />
+        </InputGroup>
+      </div>
+      
+      {/* Text as left adornment */}
+      <div className="space-y-1">
+        <Label htmlFor="website-text-left">Website with text adornment</Label>
+        <InputGroup>
+          <InputAdornment position="start">https://</InputAdornment>
+          <Input id="website-text-left" placeholder="google.com" />
+        </InputGroup>
+      </div>
+      
+      {/* Select as left adornment */}
+      <div className="space-y-1">
+        <Label htmlFor="protocol-select-left">Website with protocol selector</Label>
+        <InputGroup>
+          <InputAdornment position="start" data-type="select">
+            <select className="h-10 border-0 bg-transparent text-sm focus:ring-0 focus:outline-none text-muted-foreground">
+              <option>https://</option>
+              <option>http://</option>
+              <option>ftp://</option>
+            </select>
+          </InputAdornment>
+          <Input id="protocol-select-left" placeholder="example.com" />
+        </InputGroup>
+      </div>
+    </div>
+  ),
+};
+
+// Right Adornment examples
+export const RightAdornment: Story = {
+  render: () => {
+    const [showPassword, setShowPassword] = useState(false);
+    
+    return (
+      <div className="space-y-4">
+        <h3 className="text-lg font-medium">Right Adornment Examples</h3>
+        
+        {/* Icon as right adornment */}
+        <div className="space-y-1">
+          <Label htmlFor="email-icon-right">Email with icon adornment</Label>
+          <InputGroup>
+            <Input id="email-icon-right" placeholder="Email" />
+            <InputAdornment position="end" data-type="icon">
+              <MailIcon className="size-4" />
+            </InputAdornment>
+          </InputGroup>
+        </div>
+        
+        {/* Text as right adornment */}
+        <div className="space-y-1">
+          <Label htmlFor="domain-text-right">Domain with text adornment</Label>
+          <InputGroup>
+            <Input id="domain-text-right" placeholder="google" />
+            <InputAdornment position="end">.com</InputAdornment>
+          </InputGroup>
+        </div>
+        
+        {/* Password toggle as right adornment */}
+        <div className="space-y-1">
+          <Label htmlFor="password-toggle">Password with toggle</Label>
+          <InputGroup>
+            <Input 
+              id="password-toggle" 
+              type={showPassword ? "text" : "password"} 
+              placeholder="Enter your password" 
+            />
+            <InputAdornment position="end" data-type="button">
+              <button 
+                className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground"
+                onClick={() => setShowPassword(!showPassword)}
+                type="button"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
+              </button>
+            </InputAdornment>
+          </InputGroup>
+        </div>
+        
+        {/* Button as right adornment */}
+        <div className="space-y-1">
+          <Label htmlFor="email-button-right">Email with button adornment</Label>
+          <InputGroup>
+            <Input id="email-button-right" placeholder="Enter your email" />
+            <InputAdornment position="end" data-type="button">
+              <Button>Subscribe</Button>
+            </InputAdornment>
+          </InputGroup>
+        </div>
+      </div>
+    );
   },
 };
 
@@ -280,6 +415,125 @@ export const Examples: Story = {
             <div className="space-y-2">
               <Label htmlFor="file-input">File</Label>
               <Input id="file-input" type="file" />
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium">Input Groups</h3>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1">
+              <Label htmlFor="url-input">Website URL</Label>
+              <InputGroup>
+                <InputAdornment position="start">https://</InputAdornment>
+                <Input id="url-input" placeholder="example.com" />
+              </InputGroup>
+              <Description>
+                Input with a text prefix adornment
+              </Description>
+            </div>
+            
+            <div className="space-y-1">
+              <Label htmlFor="domain-input">Domain</Label>
+              <InputGroup>
+                <Input id="domain-input" placeholder="example" />
+                <InputAdornment position="end">.com</InputAdornment>
+              </InputGroup>
+              <Description>
+                Input with a text suffix adornment
+              </Description>
+            </div>
+          </div>
+          
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1">
+              <Label htmlFor="email-with-icon">Email</Label>
+              <InputGroup>
+                <InputAdornment position="start" data-type="icon">
+                  <AtSignIcon className="h-4 w-4" />
+                </InputAdornment>
+                <Input id="email-with-icon" type="email" placeholder="john.doe@example.com" />
+              </InputGroup>
+              <Description>
+                Input with an icon prefix adornment
+              </Description>
+            </div>
+            
+            <div className="space-y-1">
+              <Label htmlFor="email-input">Newsletter</Label>
+              <InputGroup>
+                <Input id="email-input" placeholder="Enter your email" />
+                <InputAdornment position="end" data-type="button">
+                  <Button>Subscribe</Button>
+                </InputAdornment>
+              </InputGroup>
+              <Description>
+                Input with a button suffix adornment
+              </Description>
+            </div>
+          </div>
+          
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1">
+              <Label htmlFor="search-input">Search</Label>
+              <InputGroup>
+                <InputAdornment position="start" data-type="icon">
+                  <SearchIcon className="h-4 w-4" />
+                </InputAdornment>
+                <Input id="search-input" type="search" placeholder="Search..." />
+                <InputAdornment position="end" className="text-xs">
+                  <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100">
+                    <span className="text-xs">⌘</span>K
+                  </kbd>
+                </InputAdornment>
+              </InputGroup>
+              <Description>
+                Search input with icon and keyboard shortcut
+              </Description>
+            </div>
+            
+            <div className="space-y-1">
+              <Label htmlFor="currency-input">Amount</Label>
+              <InputGroup>
+                <InputAdornment position="start">$</InputAdornment>
+                <Input id="currency-input" type="number" placeholder="0.00" />
+                <InputAdornment position="end" data-type="select">
+                  <select className="h-10 border-0 bg-transparent text-sm focus:ring-0 focus:outline-none text-muted-foreground">
+                    <option>USD</option>
+                    <option>EUR</option>
+                    <option>GBP</option>
+                  </select>
+                </InputAdornment>
+              </InputGroup>
+              <Description>
+                Input with currency symbol and selector
+              </Description>
+            </div>
+          </div>
+          
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1">
+              <Label htmlFor="password-input">Password</Label>
+              <InputGroup>
+                <Input 
+                  id="password-input" 
+                  type={showPassword ? "text" : "password"} 
+                  placeholder="Enter your password" 
+                />
+                <InputAdornment position="end" data-type="button">
+                  <button 
+                    className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground"
+                    onClick={() => setShowPassword(!showPassword)}
+                    type="button"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
+                  </button>
+                </InputAdornment>
+              </InputGroup>
+              <Description>
+                Password input with toggle button
+              </Description>
             </div>
           </div>
         </div>

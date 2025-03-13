@@ -15,15 +15,18 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <input
         type={type}
+        data-slot="input"
         className={cn(
-          "bg-transparent",
-          "border-input file:text-foreground placeholder:text-muted-foreground/70 flex h-10 w-full min-w-0 rounded-md border px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-          "focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring focus-visible:border-ring focus-visible:outline-none",
+          "bg-transparent text-sm",
+          "border border-input rounded-md",
+          "flex h-10 w-full min-w-0 px-3 py-1 shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+          "placeholder:text-muted-foreground/70",
           "aria-invalid:ring-destructive dark:aria-invalid:ring-destructive aria-invalid:border-destructive",
+          // Special styling for different input types
           type === "search" &&
             "[&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none",
           type === "file" &&
-            "file:bg-transparent text-muted-foreground/70 file:border-input file:text-foreground p-0 pr-3 italic file:me-3 file:h-full file:border-0 file:border-r file:border-solid file:px-3 file:text-sm file:font-medium file:not-italic",
+            "file:bg-transparent text-muted-foreground/70 file:border-input file:text-foreground p-0 pr-3 italic file:me-3 file:h-full file:border-0 file:border-r file:border-solid file:px-3 file:text-sm  file:not-italic file:inline-flex file:font-medium",
           className
         )}
         ref={ref}
