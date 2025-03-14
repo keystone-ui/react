@@ -18,6 +18,7 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
   ({ className, children, ...props }, ref) => {
     return (
       <div
+        data-slot="input-group"
         ref={ref}
         className={cn(
           "transition-[color,box-shadow] shadow-xs flex border rounded-md focus-within:ring-1 focus-within:ring-inset focus-within:ring-ring focus-within:border-ring focus-within:outline-none",

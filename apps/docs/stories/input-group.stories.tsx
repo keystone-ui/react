@@ -137,8 +137,8 @@ export const WithBasicAdornments: Story = {
     <div className="space-y-4 max-w-[320px]">
       <div>
         <h3 className="text-sm font-medium mb-2">Left Icon Adornment</h3>
-        <InputGroup data-slot="input">
-          <InputAdornment position="start" variant="inline" data-type="icon">
+        <InputGroup>
+          <InputAdornment position="start" variant="inline">
             <MailIcon className="size-4" />
           </InputAdornment>
           <Input placeholder="Email" />
@@ -147,9 +147,9 @@ export const WithBasicAdornments: Story = {
       
       <div>
         <h3 className="text-sm font-medium mb-2">Right Icon Adornment</h3>
-        <InputGroup data-slot="input">
+        <InputGroup>
           <Input placeholder="Type message" />
-          <InputAdornment position="end" variant="inline" data-type="icon">
+          <InputAdornment position="end" variant="inline">
             <SendIcon className="size-4" />
           </InputAdornment>
         </InputGroup>
@@ -189,11 +189,13 @@ export const WithBasicAdornments: Story = {
       </div>
 
       <div>
-        <h3 className="text-sm font-medium mb-2">Input with End Icon</h3>
+        <h3 className="text-sm font-medium mb-2">Input with End Icon Button</h3>
         <InputGroup>
           <Input placeholder="Search..." />
-          <InputAdornment position="end" variant="inline" data-type="button">
-            <SearchIcon className="size-4" />
+          <InputAdornment position="end" variant="inline">
+            <button className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground">
+              <SearchIcon className="h-4 w-4" />
+            </button>
           </InputAdornment>
         </InputGroup>
       </div>
@@ -205,7 +207,7 @@ export const WithRightButtonIconAdornment: Story = {
   render: () => (
     <InputGroup>
       <Input placeholder="Email" />
-      <InputAdornment position="end" variant="inline" data-type="button">
+      <InputAdornment position="end" variant="inline">
         <button className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground">
           <SendIcon className="h-4 w-4" />
         </button>
@@ -218,7 +220,7 @@ export const WithRightButtonAdornment: Story = {
   render: () => (
     <InputGroup>
       <Input placeholder="Enter your email" />
-      <InputAdornment position="end" variant="inline" data-type="button">
+      <InputAdornment position="end" variant="inline">
         <Button>Subscribe</Button>
       </InputAdornment>
     </InputGroup>
@@ -243,7 +245,7 @@ export const PasswordWithToggleButton: Story = {
           type={showPassword ? "text" : "password"} 
           placeholder="Password" 
         />
-        <InputAdornment position="end" data-type="button">
+        <InputAdornment position="end">
           <button 
             className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground"
             onClick={() => setShowPassword(!showPassword)}
@@ -268,7 +270,7 @@ export const WithClearButtonAdornment: Story = {
           onChange={(e) => setValue(e.target.value)}
           placeholder="Type something..." 
         />
-        <InputAdornment position="end" data-type="button">
+        <InputAdornment position="end">
           <button 
             className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground"
             onClick={() => setValue("")}
@@ -287,7 +289,7 @@ export const WithClearButtonAdornment: Story = {
 export const SearchWithKeyboardShortcutAdornment: Story = {
   render: () => (
     <InputGroup>
-      <InputAdornment position="start" data-type="icon">
+      <InputAdornment position="start">
         <SearchIcon className="h-4 w-4" />
       </InputAdornment>
       <Input type="search" placeholder="Search..." />
@@ -303,11 +305,11 @@ export const SearchWithKeyboardShortcutAdornment: Story = {
 export const SearchWithIconAndButtonAdornments: Story = {
   render: () => (
     <InputGroup>
-      <InputAdornment position="start" data-type="icon">
+      <InputAdornment position="start">
         <SearchIcon className="h-4 w-4" />
       </InputAdornment>
       <Input type="search" placeholder="Search..." />
-      <InputAdornment position="end" data-type="button">
+      <InputAdornment position="end">
         <Button size="sm">Search</Button>
       </InputAdornment>
     </InputGroup>
@@ -317,11 +319,11 @@ export const SearchWithIconAndButtonAdornments: Story = {
 export const SearchWithLoaderAdornment: Story = {
   render: () => (
     <InputGroup>
-      <InputAdornment position="start" data-type="icon">
+      <InputAdornment position="start">
         <SearchIcon className="h-4 w-4" />
       </InputAdornment>
       <Input type="search" placeholder="Search..." />
-      <InputAdornment position="end" data-type="icon">
+      <InputAdornment position="end">
         <div className="h-4 w-4 animate-spin rounded-full border-2 border-muted-foreground/20 border-t-muted-foreground"></div>
       </InputAdornment>
     </InputGroup>
@@ -333,7 +335,7 @@ export const WithCurrencySelectAdornment: Story = {
     <InputGroup>
       <InputAdornment position="start">$</InputAdornment>
       <Input type="number" placeholder="0.00" />
-      <InputAdornment position="end" data-type="select">
+      <InputAdornment position="end">
         <select className="h-10 border-0 bg-transparent text-sm focus:ring-0 focus:outline-none text-muted-foreground">
           <option>USD</option>
           <option>EUR</option>
@@ -348,11 +350,11 @@ export const WithCurrencySelectAdornment: Story = {
 export const WithLeftAndRightIconAdornments: Story = {
   render: () => (
     <InputGroup>
-      <InputAdornment position="start" data-type="icon">
+      <InputAdornment position="start">
         <MailIcon className="h-4 w-4" />
       </InputAdornment>
       <Input placeholder="Email" />
-      <InputAdornment position="end" data-type="icon">
+      <InputAdornment position="end">
         <XIcon className="h-4 w-4" />
       </InputAdornment>
     </InputGroup>
@@ -363,7 +365,7 @@ export const WithRightButtonAndIconAdornment: Story = {
   render: () => (
     <InputGroup>
       <Input placeholder="Search..." />
-      <InputAdornment position="end" data-type="button">
+      <InputAdornment position="end">
         <Button>
           <SearchIcon className="h-4 w-4" />
         </Button>
@@ -376,7 +378,7 @@ export const WithRightButtonAndTextAdornment: Story = {
   render: () => (
     <InputGroup>
       <Input placeholder="Enter your email" />
-      <InputAdornment position="end" data-type="button">
+      <InputAdornment position="end">
         <Button>
           Subscribe
           <SendIcon className="ml-2 h-4 w-4" />
@@ -390,7 +392,7 @@ export const WithRightButtonLoadingAdornment: Story = {
   render: () => (
     <InputGroup>
       <Input placeholder="Enter your email" />
-      <InputAdornment position="end" data-type="button">
+      <InputAdornment position="end">
         <Button disabled>
           <span className="mr-2">Subscribing</span>
           <span className="animate-spin">
@@ -419,7 +421,7 @@ export const WithRightButtonLoadingAdornment: Story = {
 export const SearchWithIconAdornments: Story = {
   render: () => (
     <InputGroup>
-      <InputAdornment position="start" data-type="icon">
+      <InputAdornment position="start">
         <SearchIcon className="h-4 w-4" />
       </InputAdornment>
       <Input type="search" placeholder="Search..." />
@@ -444,7 +446,7 @@ export const AllExamples: Story = {
         <div>
           <h3 className="text-sm font-medium mb-2">Left Icon Adornment</h3>
           <InputGroup>
-            <InputAdornment position="start" data-type="icon">
+            <InputAdornment position="start">
               <MailIcon className="h-4 w-4" />
             </InputAdornment>
             <Input placeholder="Email" />
@@ -455,7 +457,7 @@ export const AllExamples: Story = {
           <h3 className="text-sm font-medium mb-2">Right Icon Adornment</h3>
           <InputGroup>
             <Input placeholder="Email" />
-            <InputAdornment position="end" data-type="icon">
+            <InputAdornment position="end">
               <MailIcon className="h-4 w-4" />
             </InputAdornment>
           </InputGroup>
@@ -490,7 +492,7 @@ export const AllExamples: Story = {
         <div>
           <h3 className="text-sm font-medium mb-2">Left Select Adornment</h3>
           <InputGroup>
-            <InputAdornment position="start" data-type="select">
+            <InputAdornment position="start">
               <select className="h-10 border-0 bg-transparent text-sm focus:ring-0 focus:outline-none text-muted-foreground">
                 <option>https://</option>
                 <option>http://</option>
@@ -505,7 +507,7 @@ export const AllExamples: Story = {
           <h3 className="text-sm font-medium mb-2">Right Select Adornment</h3>
           <InputGroup>
             <Input placeholder="example" />
-            <InputAdornment position="end" data-type="select">
+            <InputAdornment position="end">
               <select className="h-10 border-0 bg-transparent text-sm focus:ring-0 focus:outline-none text-muted-foreground">
                 <option>.com</option>
                 <option>.org</option>
@@ -519,7 +521,7 @@ export const AllExamples: Story = {
           <h3 className="text-sm font-medium mb-2">Right Button Adornment (Icon)</h3>
           <InputGroup>
             <Input placeholder="Email" />
-            <InputAdornment position="end" data-type="button">
+            <InputAdornment position="end">
               <button className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground">
                 <SendIcon className="h-4 w-4" />
               </button>
@@ -531,7 +533,7 @@ export const AllExamples: Story = {
           <h3 className="text-sm font-medium mb-2">Right Button Adornment (Text)</h3>
           <InputGroup>
             <Input placeholder="Enter your email" />
-            <InputAdornment position="end" data-type="button">
+            <InputAdornment position="end">
               <Button>Subscribe</Button>
             </InputAdornment>
           </InputGroup>
@@ -553,7 +555,7 @@ export const AllExamples: Story = {
               type={showPassword ? "text" : "password"} 
               placeholder="Password" 
             />
-            <InputAdornment position="end" data-type="button">
+            <InputAdornment position="end">
               <button 
                 className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground"
                 onClick={() => setShowPassword(!showPassword)}
@@ -574,7 +576,7 @@ export const AllExamples: Story = {
               onChange={(e) => setClearValue(e.target.value)}
               placeholder="Type something..." 
             />
-            <InputAdornment position="end" data-type="button">
+            <InputAdornment position="end">
               <button 
                 className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground"
                 onClick={() => setClearValue("")}
@@ -592,7 +594,7 @@ export const AllExamples: Story = {
         <div>
           <h3 className="text-sm font-medium mb-2">Search with left icon & keyboard shortcut</h3>
           <InputGroup>
-            <InputAdornment position="start" data-type="icon">
+            <InputAdornment position="start">
               <SearchIcon className="h-4 w-4" />
             </InputAdornment>
             <Input type="search" placeholder="Search..." />
@@ -607,11 +609,11 @@ export const AllExamples: Story = {
         <div>
           <h3 className="text-sm font-medium mb-2">Search with left icon & button</h3>
           <InputGroup>
-            <InputAdornment position="start" data-type="icon">
+            <InputAdornment position="start">
               <SearchIcon className="h-4 w-4" />
             </InputAdornment>
             <Input type="search" placeholder="Search..." />
-            <InputAdornment position="end" data-type="button">
+            <InputAdornment position="end">
               <Button size="sm">Search</Button>
             </InputAdornment>
           </InputGroup>
@@ -620,11 +622,11 @@ export const AllExamples: Story = {
         <div>
           <h3 className="text-sm font-medium mb-2">Search with left icon & loading indicator</h3>
           <InputGroup>
-            <InputAdornment position="start" data-type="icon">
+            <InputAdornment position="start">
               <SearchIcon className="h-4 w-4" />
             </InputAdornment>
             <Input type="search" placeholder="Search..." />
-            <InputAdornment position="end" data-type="icon">
+            <InputAdornment position="end">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-muted-foreground/20 border-t-muted-foreground"></div>
             </InputAdornment>
           </InputGroup>
@@ -635,7 +637,7 @@ export const AllExamples: Story = {
           <InputGroup>
             <InputAdornment position="start">$</InputAdornment>
             <Input type="number" placeholder="0.00" />
-            <InputAdornment position="end" data-type="select">
+            <InputAdornment position="end">
               <select className="h-10 border-0 bg-transparent text-sm focus:ring-0 focus:outline-none text-muted-foreground">
                 <option>USD</option>
                 <option>EUR</option>
