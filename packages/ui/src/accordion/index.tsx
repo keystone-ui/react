@@ -5,4 +5,5 @@ export { AccordionHeader } from "./accordion-header";
 export { AccordionItem } from "./accordion-item";
 export { AccordionPanel } from "./accordion-panel";
 export { AccordionTrigger } from "./accordion-trigger";
+export { AccordionVariantContext, AccordionLeadingIconContext } from "./accordion-context";
 export * from "./types";

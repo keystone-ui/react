@@ -4,14 +4,13 @@ import { Accordion as AccordionPrimitive } from "@base-ui-components/react/accor
 import * as React from "react";
 
 import { cn } from "@acme/ui";
-import { AccordionHeaderProps } from "./types";
 
 /**
  * Header component that contains the trigger.
  */
 const AccordionHeader = React.forwardRef<
-  React.ElementRef<typeof AccordionPrimitive.Header>,
-  AccordionHeaderProps
+  React.ComponentRef<typeof AccordionPrimitive.Header>,
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Header>
 >(({ className, ...props }, ref) => (
   <AccordionPrimitive.Header
     ref={ref}

@@ -13,5 +13,6 @@ export default defineConfig({
       '@acme/ui': resolve(__dirname, '../../packages/ui/src'),
       '@acme/theme': resolve(__dirname, '../../packages/theme/src/index.css'),
     },
+    dedupe: ['react', 'react-dom']
   },
 });

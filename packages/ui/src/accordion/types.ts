@@ -1,12 +1,20 @@
 import { Accordion as AccordionPrimitive } from "@base-ui-components/react/accordion";
 import * as React from "react";
 
-export type AccordionVariant = "box" | "underline" | "ghost" | "table";
+// Base props inferred from the primitive, excluding those we customize or add
+type AccordionRootBaseProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>, 'className' | 'render' | 'variant' | 'defaultValue' | 'value' | 'onValueChange' | 'hiddenUntilFound' | 'openMultiple' | 'disabled' | 'loop' | 'orientation' | 'keepMounted'>;
+type AccordionItemBaseProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>, 'className' | 'render' | 'variant' | 'onOpenChange' | 'disabled'>;
+type AccordionHeaderBaseProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Header>, 'className' | 'render'>;
+type AccordionTriggerBaseProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>, 'className' | 'render' | 'chevronIcon' | 'variant'>;
+type AccordionPanelBaseProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Panel>, 'className' | 'render' | 'variant' | 'hiddenUntilFound' | 'keepMounted'>;
 
+// Custom utility types
+export type AccordionVariant = "box" | "underline" | "ghost" | "table";
 type RenderProp = React.ReactElement | ((props: any, state: any) => React.ReactElement);
 type ClassNameProp = string | ((state: any) => string);
 
-export type AccordionProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>, 'className' | 'render'> & {
+// Combine base props with our custom/overridden props
+export type AccordionProps = AccordionRootBaseProps & {
   /**
    * The visual style variant of the accordion
    * @default "underline"
@@ -64,7 +72,7 @@ export type AccordionProps = Omit<React.ComponentPropsWithoutRef<typeof Accordio
   render?: RenderProp;
 };
 
-export type AccordionItemProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>, 'className' | 'render'> & {
+export type AccordionItemProps = AccordionItemBaseProps & {
   /**
    * The visual style variant of the accordion item
    * Inherited from parent Accordion if not specified
@@ -89,7 +97,7 @@ export type AccordionItemProps = Omit<React.ComponentPropsWithoutRef<typeof Acco
   render?: RenderProp;
 };
 
-export type AccordionHeaderProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Header>, 'className' | 'render'> & {
+export type AccordionHeaderProps = AccordionHeaderBaseProps & {
   /**
    * Optional class name or function that returns a class name
    */
@@ -100,7 +108,7 @@ export type AccordionHeaderProps = Omit<React.ComponentPropsWithoutRef<typeof Ac
   render?: RenderProp;
 };
 
-export type AccordionTriggerProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>, 'className' | 'render'> & {
+export type AccordionTriggerProps = AccordionTriggerBaseProps & {
   /**
    * Icon to replace the default chevron icon on the right side.
    * If provided, this will not inherit the default chevron's animation and styling.
@@ -121,7 +129,7 @@ export type AccordionTriggerProps = Omit<React.ComponentPropsWithoutRef<typeof A
   render?: RenderProp;
 };
 
-export type AccordionPanelProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Panel>, 'className' | 'render'> & {
+export type AccordionPanelProps = AccordionPanelBaseProps & {
   /**
    * The visual style variant of the panel
    * Inherited from parent AccordionItem if not specified
