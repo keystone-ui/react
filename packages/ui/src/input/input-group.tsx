@@ -21,7 +21,9 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
         data-slot="input-group"
         ref={ref}
         className={cn(
+          "group",
           "transition-[color,box-shadow] shadow-xs flex border rounded-md focus-within:ring-1 focus-within:ring-inset focus-within:ring-ring focus-within:border-ring focus-within:outline-none",
+          "relative",
           // Remove border styling from input when inside InputGroup
           "**:data-[slot=input]:border-0",
           "**:data-[slot=input]:rounded-none",
@@ -82,12 +84,29 @@ export const InputAdornment = React.forwardRef<HTMLDivElement, InputAdornmentPro
           "inline-flex items-center",
           "text-muted-foreground inline-flex items-center text-sm",
           "placeholder:text-muted-foreground/70",
+          "relative", // Need relative position for absolute pseudo-elements
 
-          // Add borders for box variant based on position
-          "data-[variant=box]:border-border",
-          "data-[slot=start]:data-[variant=box]:border-r",
-          "data-[slot=end]:data-[variant=box]:border-l",
-
+          // Use pseudo-elements instead of borders for box variant
+          "data-[slot=start]:data-[variant=box]:after:content-['']",
+          "data-[slot=start]:data-[variant=box]:after:absolute",
+          "data-[slot=start]:data-[variant=box]:after:right-0",
+          "data-[slot=start]:data-[variant=box]:after:top-0", 
+          "data-[slot=start]:data-[variant=box]:after:bottom-0",
+          "group-focus-within:data-[slot=start]:data-[variant=box]:after:top-[1px]",
+          "group-focus-within:data-[slot=start]:data-[variant=box]:after:bottom-[1px]",
+          "data-[slot=start]:data-[variant=box]:after:w-[1px]",
+          "data-[slot=start]:data-[variant=box]:after:bg-border",
+          
+          "data-[slot=end]:data-[variant=box]:after:content-['']",
+          "data-[slot=end]:data-[variant=box]:after:absolute", 
+          "data-[slot=end]:data-[variant=box]:after:left-0",
+          "data-[slot=end]:data-[variant=box]:after:top-0",
+          "data-[slot=end]:data-[variant=box]:after:bottom-0", 
+          "group-focus-within:data-[slot=end]:data-[variant=box]:after:top-[1px]",
+          "group-focus-within:data-[slot=end]:data-[variant=box]:after:bottom-[1px]",
+          "data-[slot=end]:data-[variant=box]:after:w-[1px]", 
+          "data-[slot=end]:data-[variant=box]:after:bg-border",
+          
           // Adjust padding based on position and variant
           "data-[slot=start]:pl-3",
           "data-[slot=start]:data-[variant=box]:pr-3",
