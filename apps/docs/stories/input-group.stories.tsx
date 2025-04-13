@@ -4,6 +4,7 @@ import {
   Input, 
   InputGroup, 
   InputAdornment,
+  AdornmentButton,
   Button
 } from "@acme/ui";
 import {
@@ -172,6 +173,14 @@ export const WithBasicAdornments: Story = {
       </div>
 
       <div>
+        <h3 className="text-sm font-medium mb-2">Right Text Adornment (Box variant)</h3>
+        <InputGroup>
+          <Input placeholder="google" />
+          <InputAdornment position="end" variant="box">.com</InputAdornment>
+        </InputGroup>
+      </div>
+
+      <div>
         <h3 className="text-sm font-medium mb-2">Left and Right Text Adornments</h3>
         <InputGroup>
           <InputAdornment position="start" variant="inline">€</InputAdornment>
@@ -193,9 +202,21 @@ export const WithBasicAdornments: Story = {
         <InputGroup>
           <Input placeholder="Search..." />
           <InputAdornment position="end" variant="inline">
-            <button className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground">
+            <AdornmentButton>
               <SearchIcon className="h-4 w-4" />
-            </button>
+            </AdornmentButton>
+          </InputAdornment>
+        </InputGroup>
+      </div>
+
+      <div>
+        <h3 className="text-sm font-medium mb-2">Input with End Icon Button (Box variant)</h3>
+        <InputGroup>
+          <Input placeholder="Search..." />
+          <InputAdornment position="end" variant="box">
+            <AdornmentButton>
+              <SearchIcon className="h-4 w-4" />
+            </AdornmentButton>
           </InputAdornment>
         </InputGroup>
       </div>
@@ -208,7 +229,7 @@ export const WithRightButtonIconAdornment: Story = {
     <InputGroup>
       <Input placeholder="Email" />
       <InputAdornment position="end" variant="inline">
-        <button className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground">
+        <button className="flex h-full items-center text-muted-foreground hover:text-foreground">
           <SendIcon className="h-4 w-4" />
         </button>
       </InputAdornment>
@@ -221,7 +242,7 @@ export const WithRightButtonAdornment: Story = {
     <InputGroup>
       <Input placeholder="Enter your email" />
       <InputAdornment position="end" variant="inline">
-        <Button>Subscribe</Button>
+        <Button className="h-full">Subscribe</Button>
       </InputAdornment>
     </InputGroup>
   ),
@@ -247,7 +268,7 @@ export const PasswordWithToggleButton: Story = {
         />
         <InputAdornment position="end">
           <button 
-            className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground"
+            className="flex h-full items-center text-muted-foreground hover:text-foreground"
             onClick={() => setShowPassword(!showPassword)}
             type="button"
             aria-label={showPassword ? "Hide password" : "Show password"}
@@ -267,12 +288,12 @@ export const WithClearButtonAdornment: Story = {
       <InputGroup>
         <Input 
           value={value} 
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
           placeholder="Type something..." 
         />
         <InputAdornment position="end">
           <button 
-            className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground"
+            className="flex h-full items-center text-muted-foreground hover:text-foreground"
             onClick={() => setValue("")}
             type="button"
             aria-label="Clear input"
@@ -310,7 +331,7 @@ export const SearchWithIconAndButtonAdornments: Story = {
       </InputAdornment>
       <Input type="search" placeholder="Search..." />
       <InputAdornment position="end">
-        <Button size="sm">Search</Button>
+        <Button data-slot="button" size="sm" className="h-full">Search</Button>
       </InputAdornment>
     </InputGroup>
   ),
@@ -366,7 +387,7 @@ export const WithRightButtonAndIconAdornment: Story = {
     <InputGroup>
       <Input placeholder="Search..." />
       <InputAdornment position="end">
-        <Button>
+        <Button data-slot="button" className="h-full">
           <SearchIcon className="h-4 w-4" />
         </Button>
       </InputAdornment>
@@ -379,7 +400,7 @@ export const WithRightButtonAndTextAdornment: Story = {
     <InputGroup>
       <Input placeholder="Enter your email" />
       <InputAdornment position="end">
-        <Button>
+        <Button data-slot="button" className="h-full">
           Subscribe
           <SendIcon className="ml-2 h-4 w-4" />
         </Button>
@@ -393,7 +414,7 @@ export const WithRightButtonLoadingAdornment: Story = {
     <InputGroup>
       <Input placeholder="Enter your email" />
       <InputAdornment position="end">
-        <Button disabled>
+        <Button data-slot="button" disabled className="h-full">
           <span className="mr-2">Subscribing</span>
           <span className="animate-spin">
             <svg className="h-4 w-4" viewBox="0 0 24 24">
@@ -481,11 +502,19 @@ export const AllExamples: Story = {
         </div>
         
         <div>
-          <h3 className="text-sm font-medium mb-2">Left & Right Text Adornments</h3>
+          <h3 className="text-sm font-medium mb-2">Right Text Adornment (Box variant)</h3>
           <InputGroup>
-            <InputAdornment position="start">€</InputAdornment>
+            <Input placeholder="google" />
+            <InputAdornment position="end" variant="box">.com</InputAdornment>
+          </InputGroup>
+        </div>
+        
+        <div>
+          <h3 className="text-sm font-medium mb-2">Left and Right Text Adornments</h3>
+          <InputGroup>
+            <InputAdornment position="start" variant="inline">€</InputAdornment>
             <Input placeholder="0.00" />
-            <InputAdornment position="end">EUR</InputAdornment>
+            <InputAdornment position="end" variant="inline">EUR</InputAdornment>
           </InputGroup>
         </div>
         
@@ -521,8 +550,8 @@ export const AllExamples: Story = {
           <h3 className="text-sm font-medium mb-2">Right Button Adornment (Icon)</h3>
           <InputGroup>
             <Input placeholder="Email" />
-            <InputAdornment position="end">
-              <button className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground">
+            <InputAdornment position="end" variant="inline">
+              <button className="flex h-full items-center text-muted-foreground hover:text-foreground">
                 <SendIcon className="h-4 w-4" />
               </button>
             </InputAdornment>
@@ -533,8 +562,8 @@ export const AllExamples: Story = {
           <h3 className="text-sm font-medium mb-2">Right Button Adornment (Text)</h3>
           <InputGroup>
             <Input placeholder="Enter your email" />
-            <InputAdornment position="end">
-              <Button>Subscribe</Button>
+            <InputAdornment position="end" variant="inline">
+              <Button data-slot="button" className="h-full">Subscribe</Button>
             </InputAdornment>
           </InputGroup>
         </div>
@@ -557,7 +586,7 @@ export const AllExamples: Story = {
             />
             <InputAdornment position="end">
               <button 
-                className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground"
+                className="flex h-full items-center text-muted-foreground hover:text-foreground"
                 onClick={() => setShowPassword(!showPassword)}
                 type="button"
                 aria-label={showPassword ? "Hide password" : "Show password"}
@@ -573,12 +602,12 @@ export const AllExamples: Story = {
           <InputGroup>
             <Input 
               value={clearValue} 
-              onChange={(e) => setClearValue(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setClearValue(e.target.value)}
               placeholder="Type something..." 
             />
             <InputAdornment position="end">
               <button 
-                className="flex h-full items-center px-3 text-muted-foreground hover:text-foreground"
+                className="flex h-full items-center text-muted-foreground hover:text-foreground"
                 onClick={() => setClearValue("")}
                 type="button"
                 aria-label="Clear input"
@@ -614,7 +643,7 @@ export const AllExamples: Story = {
             </InputAdornment>
             <Input type="search" placeholder="Search..." />
             <InputAdornment position="end">
-              <Button size="sm">Search</Button>
+              <Button data-slot="button" size="sm" className="h-full">Search</Button>
             </InputAdornment>
           </InputGroup>
         </div>
