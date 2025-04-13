@@ -22,7 +22,7 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
         ref={ref}
         className={cn(
           "group",
-          "transition-[color,box-shadow] shadow-xs flex border rounded-md focus-within:ring-1 focus-within:ring-inset focus-within:ring-ring focus-within:border-ring focus-within:outline-none",
+          "transition-[color,box-shadow] shadow-xs flex border rounded-md has-[[data-slot=input]:focus]:ring-1 has-[[data-slot=input]:focus]:ring-inset has-[[data-slot=input]:focus]:ring-ring has-[[data-slot=input]:focus]:border-ring has-[[data-slot=input]:focus]:outline-none",
           "relative",
           // Remove border styling from input when inside InputGroup
           "**:data-[slot=input]:border-0",
@@ -92,8 +92,8 @@ export const InputAdornment = React.forwardRef<HTMLDivElement, InputAdornmentPro
           "data-[slot=start]:data-[variant=box]:after:right-0",
           "data-[slot=start]:data-[variant=box]:after:top-0", 
           "data-[slot=start]:data-[variant=box]:after:bottom-0",
-          "group-focus-within:data-[slot=start]:data-[variant=box]:after:top-[1px]",
-          "group-focus-within:data-[slot=start]:data-[variant=box]:after:bottom-[1px]",
+          "group-has-[[data-slot=input]:focus]:data-[slot=start]:data-[variant=box]:after:top-[1px]",
+          "group-has-[[data-slot=input]:focus]:data-[slot=start]:data-[variant=box]:after:bottom-[1px]",
           "data-[slot=start]:data-[variant=box]:after:w-[1px]",
           "data-[slot=start]:data-[variant=box]:after:bg-border",
           
@@ -102,8 +102,8 @@ export const InputAdornment = React.forwardRef<HTMLDivElement, InputAdornmentPro
           "data-[slot=end]:data-[variant=box]:after:left-0",
           "data-[slot=end]:data-[variant=box]:after:top-0",
           "data-[slot=end]:data-[variant=box]:after:bottom-0", 
-          "group-focus-within:data-[slot=end]:data-[variant=box]:after:top-[1px]",
-          "group-focus-within:data-[slot=end]:data-[variant=box]:after:bottom-[1px]",
+          "group-has-[[data-slot=input]:focus]:data-[slot=end]:data-[variant=box]:after:top-[1px]",
+          "group-has-[[data-slot=input]:focus]:data-[slot=end]:data-[variant=box]:after:bottom-[1px]",
           "data-[slot=end]:data-[variant=box]:after:w-[1px]", 
           "data-[slot=end]:data-[variant=box]:after:bg-border",
           
@@ -168,9 +168,17 @@ export const AdornmentButton = React.forwardRef<HTMLButtonElement, AdornmentButt
         className={cn(
           "flex h-full items-center",
           "text-muted-foreground hover:text-foreground",
-          "transition-colors focus-visible:outline-none",
+          "transition-colors",
           "relative z-20",
-
+          
+          // Focus styles for keyboard navigation
+          "focus-visible:outline-none",
+          "focus-visible:text-foreground",
+          "focus-visible:bg-accent/30",
+          "focus-visible:ring-2",
+          "focus-visible:ring-ring",
+          "focus-visible:ring-inset",
+          "focus-visible:rounded-sm",
 
           // Position-specific styles will be applied via context from parent
           // or can be added with className
