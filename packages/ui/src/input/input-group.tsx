@@ -127,10 +127,10 @@ export const InputAdornment = React.forwardRef<HTMLDivElement, InputAdornmentPro
           // Apply padding directly to AdornmentButton based on position and variant
           "data-[slot=start]:**:data-[slot=adornment-button]:pl-3",
           "data-[slot=start]:data-[variant=box]:**:data-[slot=adornment-button]:pr-3",
-          "data-[slot=start]:data-[variant=inline]:**:data-[slot=adornment-button]:pr-1.5",
+          "data-[slot=start]:data-[variant=inline]:**:data-[slot=adornment-button]:pr-3",
           "data-[slot=end]:**:data-[slot=adornment-button]:pr-3",
           "data-[slot=end]:data-[variant=box]:**:data-[slot=adornment-button]:pl-3",
-          "data-[slot=end]:data-[variant=inline]:**:data-[slot=adornment-button]:pl-1.5",
+          "data-[slot=end]:data-[variant=inline]:**:data-[slot=adornment-button]:pl-3",
           
           // Adjust border radius based on position
           "data-[slot=start]:rounded-s-md",
