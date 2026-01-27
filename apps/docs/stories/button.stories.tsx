@@ -25,11 +25,8 @@ import {
   RiGoogleFill,
   RiTwitterXFill
 } from "@remixicon/react";
-import { Button } from "../components/ui/button";
-import { ButtonGroup } from "../components/ui/button-group";
-import type { ButtonProps } from "../components/ui/button";
+import { Button, ButtonGroup, type ButtonProps, cn } from "@acme/ui";
 import { useState } from "react";
-import { cn } from "../lib/utils";
 
 // Use a cast to silence TypeScript for the meta configuration
 const meta = {
