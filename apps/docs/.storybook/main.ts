@@ -1,6 +1,7 @@
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
 import type { StorybookConfig } from "@storybook/react-vite";
+import { mergeConfig } from "vite";
 
 const config: StorybookConfig = {
   stories: ["../**/*.stories.@(js|jsx|ts|tsx)", "../**/*.mdx"],
@@ -19,6 +20,14 @@ const config: StorybookConfig = {
   ],
   docs: {
     defaultName: "Documentation"
+  },
+
+  viteFinal: async (config) => {
+    // Dynamic import required - static import causes ESM/CJS issues
+    const { default: tailwindcss } = await import("@tailwindcss/vite");
+    return mergeConfig(config, {
+      plugins: [tailwindcss()],
+    });
   },
 };
 

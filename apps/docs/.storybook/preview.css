@@ -1,2 +1,7 @@
 @import "tailwindcss";
+
+/* Tell Tailwind where to scan for class usage */
+@source "../../../packages/ui/src/**/*.{ts,tsx}";
+@source "../stories/**/*.{ts,tsx}";
+
 @import "@acme/theme";
