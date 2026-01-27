@@ -1,31 +1,9 @@
-import type { Preview } from "@storybook/react";
-import { themes } from '@storybook/theming';
+import type { Preview } from "@storybook/react-vite";
+import { themes } from 'storybook/theming';
 import "./preview.css";
 import * as React from 'react';
-import { DocsContainer } from '@storybook/addon-docs';
-import { addons } from '@storybook/preview-api';
-import { DARK_MODE_EVENT_NAME } from 'storybook-dark-mode';
-
-// Get the channel to listen for dark mode changes
-const channel = addons.getChannel();
-
-// Custom docs container that responds to dark mode changes
-const CustomDocsContainer = (props) => {
-  const [isDark, setDark] = React.useState(false);
-
-  React.useEffect(() => {
-    // Listen to dark mode toggle events
-    channel.on(DARK_MODE_EVENT_NAME, setDark);
-    return () => channel.removeListener(DARK_MODE_EVENT_NAME, setDark);
-  }, []);
-
-  return (
-    <DocsContainer
-      {...props}
-      theme={isDark ? themes.dark : themes.normal}
-    />
-  );
-};
+import { DocsContainer } from 'storybook/blocks';
+import { withThemeByClassName } from '@storybook/addon-themes';
 
 const preview: Preview = {
   parameters: {
@@ -36,21 +14,20 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
-    darkMode: {
-      dark: { ...themes.dark },
-      light: { ...themes.normal },
-      current: 'light',
-      classTarget: 'html',
-      darkClass: 'dark',
-      lightClass: 'light',
-      stylePreview: true
-    },
     docs: {
-      container: CustomDocsContainer,
-      theme: themes.normal,
-      darkTheme: themes.dark
+      theme: themes.dark,
     }
   },
+  decorators: [
+    withThemeByClassName({
+      themes: {
+        light: 'light',
+        dark: 'dark',
+      },
+      defaultTheme: 'light',
+    }),
+  ],
+  tags: ['autodocs']
 };
 
-export default preview; 
+export default preview;

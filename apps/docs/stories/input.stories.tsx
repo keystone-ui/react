@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Input, InputGroup, InputAdornment } from "@acme/ui/input";
 import { Form, Label, Description, ErrorMessage } from "@acme/ui/form";
 import { Button } from "@acme/ui/button";

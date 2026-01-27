@@ -4,6 +4,7 @@
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
     "paths": {
+      "@/*": ["./*"],
       "@acme/ui/*": ["../../packages/ui/src/*"],
       "@acme/theme/*": ["../../packages/theme/src/*"]
     }

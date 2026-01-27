@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { 
   ArrowRight, 
   ArrowLeft, 
@@ -24,11 +24,11 @@ import {
   RiGoogleFill,
   RiTwitterXFill
 } from "@remixicon/react";
-import { Button } from "@acme/ui/button";
-import { ButtonGroup } from "@acme/ui/button";
-import type { ButtonProps } from "@acme/ui/button";
+import { Button } from "../components/ui/button";
+import { ButtonGroup } from "../components/ui/button-group";
+import type { ButtonProps } from "../components/ui/button";
 import { useState } from "react";
-import { cn } from "@acme/ui";
+import { cn } from "../lib/utils";
 
 // Use a cast to silence TypeScript for the meta configuration
 const meta = {

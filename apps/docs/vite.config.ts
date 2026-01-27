@@ -10,6 +10,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      '@': resolve(__dirname, './'),
       '@acme/ui': resolve(__dirname, '../../packages/ui/src'),
       '@acme/theme': resolve(__dirname, '../../packages/theme/src/index.css'),
     },

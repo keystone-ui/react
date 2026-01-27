@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Badge } from "@acme/ui/badge";
 import { CheckIcon, XIcon, AlertCircleIcon, InfoIcon, DownloadIcon, BedIcon, BathIcon, LandPlotIcon, UsersIcon, CalendarIcon } from "lucide-react";
 
