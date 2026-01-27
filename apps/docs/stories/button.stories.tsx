@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { 
   ArrowRight, 
   ArrowLeft, 
@@ -135,7 +136,18 @@ export const Default: Story = {
   args: {
     children: "Button",
     variant: "default",
+    onClick: fn(),
   } as any,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole("button", { name: /button/i });
+
+    // Simulate click
+    await userEvent.click(button);
+
+    // Assert onClick was called
+    await expect(args.onClick).toHaveBeenCalledOnce();
+  },
 };
 
 export const Secondary: Story = {
@@ -258,7 +270,19 @@ export const Disabled: Story = {
   args: {
     children: "Disabled Button",
     disabled: true,
+    onClick: fn(),
   } as any,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole("button", { name: /disabled button/i });
+
+    // Simulate click on disabled button
+    await userEvent.click(button);
+
+    // Assert button is disabled and onClick was not called
+    await expect(button).toBeDisabled();
+    await expect(args.onClick).not.toHaveBeenCalled();
+  },
 };
 
 export const FullWidth: Story = {

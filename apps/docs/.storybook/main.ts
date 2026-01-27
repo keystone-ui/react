@@ -12,7 +12,11 @@ const config: StorybookConfig = {
   typescript: {
     check: true,
   },
-  addons: [getAbsolutePath("@storybook/addon-docs"), getAbsolutePath("@storybook/addon-themes")],
+  addons: [
+    getAbsolutePath("@storybook/addon-docs"),
+    getAbsolutePath("@storybook/addon-themes"),
+    getAbsolutePath("@storybook/addon-vitest")
+  ],
   docs: {
     defaultName: "Documentation"
   },

@@ -8,7 +8,9 @@
     "build": "storybook build --docs",
     "preview-storybook": "serve storybook-static",
     "clean": "rm -rf .turbo && rm -rf node_modules",
-    "lint": "eslint ./stories/*.stories.tsx --max-warnings 0"
+    "lint": "eslint ./stories/*.stories.tsx --max-warnings 0",
+    "test": "vitest",
+    "test-storybook": "vitest --project=storybook"
   },
   "dependencies": {
     "@acme/theme": "workspace:*",
@@ -30,6 +32,7 @@
     "@storybook/addon-links": "^10.2.1",
     "@storybook/addon-onboarding": "^10.2.1",
     "@storybook/addon-themes": "^10.2.1",
+    "@storybook/addon-vitest": "^10.2.1",
     "@storybook/react": "^10.2.1",
     "@storybook/react-vite": "^10.2.1",
     "@tailwindcss/vite": "4.1.18",
@@ -41,6 +44,10 @@
     "serve": "^14.2.5",
     "storybook": "^10.2.1",
     "typescript": "^5.9.3",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18",
+    "playwright": "^1.58.0",
+    "@vitest/browser-playwright": "^4.0.18",
+    "@vitest/coverage-v8": "^4.0.18"
   }
 }
