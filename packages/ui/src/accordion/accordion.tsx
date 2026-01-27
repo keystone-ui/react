@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Accordion as AccordionPrimitive } from "@base-ui-components/react/accordion";
+import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion";
 
 import { cn } from "@acme/ui";
 import type { AccordionProps } from "./types";
@@ -27,9 +27,8 @@ const Accordion = React.forwardRef<
     value,
     onValueChange,
     hiddenUntilFound,
-    openMultiple,
+    multiple,
     disabled,
-    loop,
     orientation
   } = props as AccordionProps;
 
@@ -44,9 +43,8 @@ const Accordion = React.forwardRef<
           value={value}
           onValueChange={onValueChange}
           hiddenUntilFound={hiddenUntilFound}
-          openMultiple={openMultiple}
+          multiple={multiple}
           disabled={disabled}
-          loop={loop}
           orientation={orientation}
           className={cn(baseClasses, classNameProp)}
           {...props}

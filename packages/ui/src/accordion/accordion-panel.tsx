@@ -1,6 +1,6 @@
 "use client";
 
-import { Accordion as AccordionPrimitive } from "@base-ui-components/react/accordion";
+import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion";
 import * as React from "react";
 
 import { cn } from "@acme/ui";

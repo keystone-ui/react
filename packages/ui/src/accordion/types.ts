@@ -1,8 +1,8 @@
-import { Accordion as AccordionPrimitive } from "@base-ui-components/react/accordion";
+import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion";
 import * as React from "react";
 
 // Base props inferred from the primitive, excluding those we customize or add
-type AccordionRootBaseProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>, 'className' | 'render' | 'variant' | 'defaultValue' | 'value' | 'onValueChange' | 'hiddenUntilFound' | 'openMultiple' | 'disabled' | 'loop' | 'orientation' | 'keepMounted'>;
+type AccordionRootBaseProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>, 'className' | 'render' | 'variant' | 'defaultValue' | 'value' | 'onValueChange' | 'hiddenUntilFound' | 'multiple' | 'disabled' | 'orientation' | 'keepMounted'>;
 type AccordionItemBaseProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>, 'className' | 'render' | 'variant' | 'onOpenChange' | 'disabled'>;
 type AccordionHeaderBaseProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Header>, 'className' | 'render'>;
 type AccordionTriggerBaseProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>, 'className' | 'render' | 'chevronIcon' | 'variant'>;
@@ -41,17 +41,12 @@ export type AccordionProps = AccordionRootBaseProps & {
    * Whether multiple items can be opened at once
    * @default true
    */
-  openMultiple?: boolean;
+  multiple?: boolean;
   /**
    * Whether the accordion is disabled
    * @default false
    */
   disabled?: boolean;
-  /**
-   * Whether keyboard navigation should loop
-   * @default true
-   */
-  loop?: boolean;
   /**
    * The orientation of the accordion
    * @default 'vertical'
