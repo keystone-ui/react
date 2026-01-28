@@ -54,7 +54,8 @@ describe('AccordionItem', () => {
     );
 
     const trigger = screen.getByRole('button', { name: 'Test Trigger' });
-    expect(trigger).toBeDisabled();
+    // Base UI uses aria-disabled instead of native disabled attribute
+    expect(trigger).toHaveAttribute('aria-disabled', 'true');
   });
 
   it('applies box variant styles correctly', () => {

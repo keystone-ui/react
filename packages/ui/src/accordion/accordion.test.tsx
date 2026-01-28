@@ -54,14 +54,14 @@ describe('Accordion', () => {
     const user = userEvent.setup();
     
     render(
-      <Accordion openMultiple>
-        <AccordionItem value="item-1">
+      <Accordion multiple>
+        <AccordionItem value="item-1" data-testid="item-1">
           <AccordionHeader>
             <AccordionTrigger>Trigger 1</AccordionTrigger>
           </AccordionHeader>
           <AccordionPanel>Content 1</AccordionPanel>
         </AccordionItem>
-        <AccordionItem value="item-2">
+        <AccordionItem value="item-2" data-testid="item-2">
           <AccordionHeader>
             <AccordionTrigger>Trigger 2</AccordionTrigger>
           </AccordionHeader>
@@ -72,15 +72,17 @@ describe('Accordion', () => {
 
     const trigger1 = screen.getByRole('button', { name: 'Trigger 1' });
     const trigger2 = screen.getByRole('button', { name: 'Trigger 2' });
-    const item1 = trigger1.closest('[data-closed]');
-    const item2 = trigger2.closest('[data-closed]');
 
     // Open both panels
     await user.click(trigger1);
     await user.click(trigger2);
 
-    expect(item1).not.toHaveAttribute('data-closed');
-    expect(item2).not.toHaveAttribute('data-closed');
+    // After opening, check via data-testid to avoid stale references
+    const item1 = screen.getByTestId('item-1');
+    const item2 = screen.getByTestId('item-2');
+
+    expect(item1).toHaveAttribute('data-open');
+    expect(item2).toHaveAttribute('data-open');
   });
 
   it('renders with custom chevron icon', () => {
@@ -198,10 +200,11 @@ describe('Accordion', () => {
     const trigger = screen.getByRole('button', { name: 'Trigger 1' });
     
     await user.click(trigger);
-    expect(onValueChange).toHaveBeenCalledWith(['item-1']);
+    // Base UI passes value array as first argument, event data as second
+    expect(onValueChange).toHaveBeenCalledWith(['item-1'], expect.anything());
     
     await user.click(trigger);
-    expect(onValueChange).toHaveBeenCalledWith([]);
+    expect(onValueChange).toHaveBeenCalledWith([], expect.anything());
   });
 
   it('respects disabled prop on accordion', () => {
@@ -217,7 +220,8 @@ describe('Accordion', () => {
     );
 
     const trigger = screen.getByRole('button', { name: 'Trigger 1' });
-    expect(trigger).toBeDisabled();
+    // Base UI uses aria-disabled instead of native disabled attribute
+    expect(trigger).toHaveAttribute('aria-disabled', 'true');
   });
 
   it('respects disabled prop on accordion item', () => {
@@ -241,7 +245,8 @@ describe('Accordion', () => {
     const trigger1 = screen.getByRole('button', { name: 'Trigger 1' });
     const trigger2 = screen.getByRole('button', { name: 'Trigger 2' });
     
-    expect(trigger1).toBeDisabled();
-    expect(trigger2).not.toBeDisabled();
+    // Base UI uses aria-disabled instead of native disabled attribute
+    expect(trigger1).toHaveAttribute('aria-disabled', 'true');
+    expect(trigger2).toHaveAttribute('aria-disabled', 'false');
   });
 }); 

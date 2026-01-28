@@ -47,13 +47,14 @@ describe('AccordionPanel', () => {
       </Accordion>
     );
 
-    // Panel should exist in the DOM but be hidden
-    const panel = screen.getByText('Test Panel Content');
-    expect(panel).toBeInTheDocument();
+    // Base UI doesn't render panel content when closed
+    // Instead, check that the item has the data-closed attribute
+    const trigger = screen.getByRole('button', { name: 'Test Trigger' });
+    const item = trigger.closest('[data-closed]');
+    expect(item).toBeInTheDocument();
     
-    // The panel's parent should have the hidden attribute
-    const panelContainer = panel.closest('[hidden]');
-    expect(panelContainer).toBeInTheDocument();
+    // Panel content should not be in the DOM when closed
+    expect(screen.queryByText('Test Panel Content')).not.toBeInTheDocument();
   });
 
   it('is visible when accordion item is open', () => {
@@ -85,7 +86,10 @@ describe('AccordionPanel', () => {
       </Accordion>
     );
 
-    const panel = screen.getByRole('region');
+    // Find the panel by its content, then check the parent panel element
+    const panelContent = screen.getByText('Test Panel Content');
+    const panel = panelContent.closest('[role="region"][aria-labelledby]');
+    expect(panel).toBeInTheDocument();
     expect(panel).toHaveAttribute('aria-labelledby');
   });
 }); 
