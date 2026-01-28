@@ -20,21 +20,24 @@ const AccordionPanel = React.forwardRef<
   const contextVariant = React.useContext(AccordionVariantContext);
   const variant = variantProp ?? contextVariant;
 
-  // Define base classes based on variant
+  // Keyframe-based animation like shadcn
   const baseClasses = cn(
-    "h-[var(--accordion-panel-height)] overflow-hidden text-sm text-muted-foreground",
+    "overflow-hidden text-sm text-muted-foreground",
+    "data-[open]:animate-accordion-down data-[closed]:animate-accordion-up"
+  );
+
+  const innerClasses = cn(
     "pb-3",
-    "transition-[height] ease-out data-[ending-style]:h-0 data-[starting-style]:h-0",
     (variant === "box" || variant === "table") && "px-3"
   );
 
   return (
     <AccordionPrimitive.Panel
       ref={ref}
-      className={cn(baseClasses, classNameProp)} // Pass base and original className
-      {...props} // Spread remaining props
+      className={cn(baseClasses, classNameProp)}
+      {...props}
     >
-      {children}
+      <div className={innerClasses}>{children}</div>
     </AccordionPrimitive.Panel>
   );
 });
