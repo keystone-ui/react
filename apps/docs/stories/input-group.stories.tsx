@@ -6,7 +6,9 @@ import {
   InputGroupInput,
   InputGroupButton,
   InputGroupText,
-  Button
+  Button,
+  Kbd,
+  KbdGroup,
 } from "@acme/ui";
 import {
   Mail as MailIcon,
@@ -20,7 +22,7 @@ import {
 } from "lucide-react";
 
 const meta = {
-  title: "Components/InputGroup",
+  title: "Components/Input/Group",
   component: InputGroup,
   parameters: {
     docs: {
@@ -204,7 +206,7 @@ export const SearchWithKeyboardShortcut: Story = {
         </InputGroupAddon>
         <InputGroupInput type="search" placeholder="Search..." />
         <InputGroupAddon align="inline-end">
-          <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium">
+          <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded-sm border bg-muted px-1.5 font-mono text-[10px] font-medium">
             <span className="text-xs">⌘</span>K
           </kbd>
         </InputGroupAddon>
@@ -446,11 +448,12 @@ export const AllExamples: Story = {
               <SearchIcon className="size-4" />
             </InputGroupAddon>
             <InputGroupInput placeholder="Search..." />
-            <InputGroupAddon align="inline-end">
-              <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium">
-                <span className="text-xs">⌘</span>K
-              </kbd>
-            </InputGroupAddon>
+        <InputGroupAddon align="inline-end">
+          <KbdGroup>
+            <Kbd>⌘</Kbd>
+            <Kbd>K</Kbd>
+          </KbdGroup>
+        </InputGroupAddon>
           </InputGroup>
         </div>
       </div>
