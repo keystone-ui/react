@@ -8,7 +8,7 @@ import {
   InputGroupText,
 } from "@acme/ui/input";
 import { Form, Label, Description, ErrorMessage } from "@acme/ui/form";
-import { Button } from "@acme/ui/button";
+import { Button, ButtonGroup } from "@acme/ui/button";
 import { 
   SearchIcon, 
   EyeIcon, 
@@ -433,125 +433,19 @@ export const Examples: Story = {
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-lg font-medium">Input Groups</h3>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1">
-              <Label htmlFor="url-input">Website URL</Label>
-              <InputGroup>
-                <InputGroupAddon>
-                  <InputGroupText>https://</InputGroupText>
-                </InputGroupAddon>
-                <InputGroupInput id="url-input" placeholder="example.com" />
-              </InputGroup>
-              <Description>
-                Input with a text prefix adornment
-              </Description>
-            </div>
-            
-            <div className="space-y-1">
-              <Label htmlFor="domain-input">Domain</Label>
-              <InputGroup>
-                <InputGroupInput id="domain-input" placeholder="example" />
-                <InputGroupAddon align="inline-end">
-                  <InputGroupText>.com</InputGroupText>
-                </InputGroupAddon>
-              </InputGroup>
-              <Description>
-                Input with a text suffix adornment
-              </Description>
-            </div>
-          </div>
-          
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1">
-              <Label htmlFor="email-with-icon">Email</Label>
-              <InputGroup>
-                <InputGroupAddon>
-                  <AtSignIcon className="h-4 w-4" />
-                </InputGroupAddon>
-                <InputGroupInput id="email-with-icon" type="email" placeholder="john.doe@example.com" />
-              </InputGroup>
-              <Description>
-                Input with an icon prefix adornment
-              </Description>
-            </div>
-            
-            <div className="space-y-1">
-              <Label htmlFor="email-input">Newsletter</Label>
-              <InputGroup>
-                <InputGroupInput id="email-input" placeholder="Enter your email" />
-                <InputGroupAddon align="inline-end">
-                  <InputGroupButton size="sm">Subscribe</InputGroupButton>
-                </InputGroupAddon>
-              </InputGroup>
-              <Description>
-                Input with a button suffix adornment
-              </Description>
-            </div>
-          </div>
-          
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1">
-              <Label htmlFor="search-input-group">Search</Label>
-              <InputGroup>
-                <InputGroupAddon>
-                  <SearchIcon className="h-4 w-4" />
-                </InputGroupAddon>
-                <InputGroupInput id="search-input-group" type="search" placeholder="Search..." />
-                <InputGroupAddon align="inline-end">
-                  <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100">
-                    <span className="text-xs">⌘</span>K
-                  </kbd>
-                </InputGroupAddon>
-              </InputGroup>
-              <Description>
-                Search input with icon and keyboard shortcut
-              </Description>
-            </div>
-            
-            <div className="space-y-1">
-              <Label htmlFor="currency-input">Amount</Label>
-              <InputGroup>
-                <InputGroupAddon>
-                  <InputGroupText>$</InputGroupText>
-                </InputGroupAddon>
-                <InputGroupInput id="currency-input" type="number" placeholder="0.00" />
-                <InputGroupAddon align="inline-end">
-                  <select className="h-full border-0 bg-transparent text-sm focus:ring-0 focus:outline-none text-muted-foreground">
-                    <option>USD</option>
-                    <option>EUR</option>
-                    <option>GBP</option>
-                  </select>
-                </InputGroupAddon>
-              </InputGroup>
-              <Description>
-                Input with currency symbol and selector
-              </Description>
-            </div>
-          </div>
-          
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1">
-              <Label htmlFor="password-input">Password</Label>
-              <InputGroup>
-                <InputGroupInput 
-                  id="password-input" 
-                  type={showPassword ? "text" : "password"} 
-                  placeholder="Enter your password" 
-                />
-                <InputGroupAddon align="inline-end">
-                  <InputGroupButton 
-                    onClick={() => setShowPassword(!showPassword)}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
-                  >
-                    {showPassword ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
-                  </InputGroupButton>
-                </InputGroupAddon>
-              </InputGroup>
-              <Description>
-                Password input with toggle button
-              </Description>
-            </div>
+          <h3 className="text-lg font-medium">Input Group</h3>
+          <p className="text-sm text-muted-foreground">
+            To add adornments to an input, use the <code className="text-foreground">InputGroup</code> component. 
+            See the <a href="?path=/docs/components-inputgroup--docs" className="text-primary underline">InputGroup documentation</a> for more examples.
+          </p>
+          <div className="space-y-1 max-w-sm">
+            <Label htmlFor="url-input">Website URL</Label>
+            <InputGroup>
+              <InputGroupAddon>
+                <InputGroupText>https://</InputGroupText>
+              </InputGroupAddon>
+              <InputGroupInput id="url-input" placeholder="example.com" />
+            </InputGroup>
           </div>
         </div>
 
@@ -683,4 +577,25 @@ export const SubscribeForm: Story = {
       </div>
     );
   }
+};
+
+// Input with ButtonGroup
+export const InputButtonGroup: Story = {
+  name: "Input with Button Group",
+  render: () => (
+    <Form className="max-w-sm">
+      <Label htmlFor="input-button-group">Search</Label>
+      <ButtonGroup>
+        <Input id="input-button-group" placeholder="Type to search..." />
+        <Button variant="outline">Search</Button>
+      </ButtonGroup>
+    </Form>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "To attach a button to an input, use the `ButtonGroup` component. See the [ButtonGroup documentation](?path=/docs/components-buttongroup--docs) for more examples.",
+      },
+    },
+  },
 };
