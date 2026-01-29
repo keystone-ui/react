@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Label } from "@acme/ui/label";
+import { Input } from "@acme/ui/input";
+import { Textarea } from "@acme/ui/textarea";
 
 const meta = {
   title: "Components/Label",
@@ -99,17 +101,15 @@ export const Examples: Story = {
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="first-name">First name</Label>
-            <input
+            <Input
               id="first-name"
-              className="border rounded-md px-3 py-2 w-full"
               placeholder="Enter your first name"
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="last-name">Last name</Label>
-            <input
+            <Input
               id="last-name"
-              className="border rounded-md px-3 py-2 w-full"
               placeholder="Enter your last name"
             />
           </div>
@@ -123,9 +123,8 @@ export const Examples: Story = {
             <Label htmlFor="email-required">
               Email <span className="text-red-500">*</span>
             </Label>
-            <input
+            <Input
               id="email-required"
-              className="border rounded-md px-3 py-2 w-full"
               placeholder="Enter your email"
               required
             />
@@ -134,10 +133,9 @@ export const Examples: Story = {
             <Label htmlFor="password-required">
               Password <span className="text-red-500">*</span>
             </Label>
-            <input
+            <Input
               id="password-required"
               type="password"
-              className="border rounded-md px-3 py-2 w-full"
               placeholder="Enter your password"
               required
             />
@@ -157,9 +155,9 @@ export const Examples: Story = {
                 </p>
               </div>
             </Label>
-            <textarea
+            <Textarea
               id="bio"
-              className="border rounded-md px-3 py-2 w-full h-24"
+              className="h-24"
               placeholder="I'm a software developer..."
             />
           </div>
@@ -169,11 +167,10 @@ export const Examples: Story = {
       <div className="space-y-4">
         <h3 className="text-lg font-medium">Disabled State</h3>
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2 group" data-disabled="true">
+          <div className="space-y-2">
             <Label htmlFor="disabled-input">Disabled field</Label>
-            <input
+            <Input
               id="disabled-input"
-              className="border rounded-md px-3 py-2 w-full opacity-50 cursor-not-allowed"
               placeholder="This field is disabled"
               disabled
             />
