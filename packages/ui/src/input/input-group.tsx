@@ -1,8 +1,14 @@
 "use client";
 
-import React from "react";
-import { cn } from "@acme/ui";
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "../utils";
+import { Button } from "../button";
+import { Input } from "./input";
 
+// =============================================================================
+// InputGroup
+// =============================================================================
 export interface InputGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Optional additional className for the input group
@@ -19,27 +25,24 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
     return (
       <div
         data-slot="input-group"
+        role="group"
         ref={ref}
         className={cn(
-          "group",
-          "transition-[color,box-shadow] shadow-xs flex border rounded-md has-[[data-slot=input]:focus]:ring-1 has-[[data-slot=input]:focus]:ring-inset has-[[data-slot=input]:focus]:ring-ring has-[[data-slot=input]:focus]:border-ring has-[[data-slot=input]:focus]:outline-none",
-          "relative",
-          // Remove border styling from input when inside InputGroup
-          "**:data-[slot=input]:border-0",
-          "**:data-[slot=input]:rounded-none",
-          "**:data-[slot=input]:shadow-none",
+          "group/input-group border-input relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none",
+          "h-10 min-w-0",
 
-          // Add margin/padding/radius to input when start/end exists
-          "[&:has([data-slot=start])]:**:data-[slot=input]:-ms-px",
-          "[&:has([data-slot=end])]:**:data-[slot=input]:-me-px",
+          // Alignment variants - adjust input padding based on addon position
+          "has-[>[data-align=inline-start]]:[&_[data-slot=input-group-control]]:pl-2",
+          "has-[>[data-align=inline-end]]:[&_[data-slot=input-group-control]]:pr-2",
+          "has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&_[data-slot=input-group-control]]:pb-3",
+          "has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&_[data-slot=input-group-control]]:pt-3",
 
-          "[&:has([data-slot=start])]:**:data-[slot=input]:rounded-e-md",
-          "[&:has([data-slot=end])]:**:data-[slot=input]:rounded-s-md",
-          
-          // Adjust input padding when using inline variants
-          "[&:has([data-variant=inline][data-slot=start])]:**:data-[slot=input]:pl-1.5",
-          "[&:has([data-variant=inline][data-slot=end])]:**:data-[slot=input]:pr-1.5",
-          
+          // Focus state
+          "has-[[data-slot=input-group-control]:focus]:border-ring has-[[data-slot=input-group-control]:focus]:ring-ring has-[[data-slot=input-group-control]:focus]:ring-1 has-[[data-slot=input-group-control]:focus]:ring-inset",
+
+          // Error state
+          "has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive",
+
           className
         )}
         {...props}
@@ -49,94 +52,56 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
     );
   }
 );
-
 InputGroup.displayName = "InputGroup";
 
-// InputAdornment component
-export interface InputAdornmentProps extends React.HTMLAttributes<HTMLDivElement> {
+// =============================================================================
+// InputGroupAddon
+// =============================================================================
+const inputGroupAddonVariants = cva(
+  "text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&>svg:not([class*='size-'])]:size-4 group-data-[disabled=true]/input-group:opacity-50",
+  {
+    variants: {
+      align: {
+        "inline-start":
+          "order-first pl-3 has-[>button]:ml-[-0.45rem]",
+        "inline-end":
+          "order-last pr-3 has-[>button]:mr-[-0.45rem]",
+        "block-start":
+          "order-first w-full justify-start px-3 pt-3 group-has-[[data-slot=input-group-control]]/input-group:pt-2.5",
+        "block-end":
+          "order-last w-full justify-start px-3 pb-3 group-has-[[data-slot=input-group-control]]/input-group:pb-2.5",
+      },
+    },
+    defaultVariants: {
+      align: "inline-start",
+    },
+  }
+);
+
+export interface InputGroupAddonProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof inputGroupAddonVariants> {
   /**
-   * Optional additional className for the adornment
-   */
-  className?: string;
-  /**
-   * The content of the adornment
+   * The children of the addon
    */
   children: React.ReactNode;
-  /**
-   * The position of the adornment
-   */
-  position: "start" | "end";
-  /**
-   * The variant of the adornment
-   * @default "box"
-   */
-  variant?: "box" | "inline";
 }
 
-export const InputAdornment = React.forwardRef<HTMLDivElement, InputAdornmentProps>(
-  ({ className, children, position, variant = "box", ...props }, ref) => {
+export const InputGroupAddon = React.forwardRef<HTMLDivElement, InputGroupAddonProps>(
+  ({ className, align = "inline-start", children, ...props }, ref) => {
     return (
       <div
         ref={ref}
-        data-slot={position === "start" ? "start" : "end"}
-        data-variant={variant}
-        className={cn(
-          "inline-flex items-center",
-          "text-muted-foreground inline-flex items-center text-sm",
-          "placeholder:text-muted-foreground/70",
-          "relative", // Need relative position for absolute pseudo-elements
-
-          // Use pseudo-elements instead of borders for box variant
-          "data-[slot=start]:data-[variant=box]:after:content-['']",
-          "data-[slot=start]:data-[variant=box]:after:absolute",
-          "data-[slot=start]:data-[variant=box]:after:right-0",
-          "data-[slot=start]:data-[variant=box]:after:top-0", 
-          "data-[slot=start]:data-[variant=box]:after:bottom-0",
-          "group-has-[[data-slot=input]:focus]:data-[slot=start]:data-[variant=box]:after:top-[1px]",
-          "group-has-[[data-slot=input]:focus]:data-[slot=start]:data-[variant=box]:after:bottom-[1px]",
-          "data-[slot=start]:data-[variant=box]:after:w-[1px]",
-          "data-[slot=start]:data-[variant=box]:after:bg-border",
-          
-          "data-[slot=end]:data-[variant=box]:after:content-['']",
-          "data-[slot=end]:data-[variant=box]:after:absolute", 
-          "data-[slot=end]:data-[variant=box]:after:left-0",
-          "data-[slot=end]:data-[variant=box]:after:top-0",
-          "data-[slot=end]:data-[variant=box]:after:bottom-0", 
-          "group-has-[[data-slot=input]:focus]:data-[slot=end]:data-[variant=box]:after:top-[1px]",
-          "group-has-[[data-slot=input]:focus]:data-[slot=end]:data-[variant=box]:after:bottom-[1px]",
-          "data-[slot=end]:data-[variant=box]:after:w-[1px]", 
-          "data-[slot=end]:data-[variant=box]:after:bg-border",
-          
-          // Adjust padding based on position and variant
-          "data-[slot=start]:pl-3",
-          "data-[slot=start]:data-[variant=box]:pr-3",
-          "data-[slot=start]:data-[variant=inline]:pr-1.5",
-
-          "data-[slot=end]:pr-3",
-          "data-[slot=end]:data-[variant=box]:pl-3",
-          "data-[slot=end]:data-[variant=inline]:pl-1.5",
-          
-          // Remove padding from adornment when it has a button
-          "data-[slot=start]:[&:has(button)]:p-0", 
-          "data-[slot=end]:[&:has(button)]:p-0",
-          "data-[slot=start]:data-[variant=box]:[&:has(button)]:p-0", 
-          "data-[slot=start]:data-[variant=inline]:[&:has(button)]:p-0",
-          "data-[slot=end]:data-[variant=box]:[&:has(button)]:p-0", 
-          "data-[slot=end]:data-[variant=inline]:[&:has(button)]:p-0",
-
-          // Apply padding directly to AdornmentButton based on position and variant
-          "data-[slot=start]:**:data-[slot=adornment-button]:pl-3",
-          "data-[slot=start]:data-[variant=box]:**:data-[slot=adornment-button]:pr-3",
-          "data-[slot=start]:data-[variant=inline]:**:data-[slot=adornment-button]:pr-3",
-          "data-[slot=end]:**:data-[slot=adornment-button]:pr-3",
-          "data-[slot=end]:data-[variant=box]:**:data-[slot=adornment-button]:pl-3",
-          "data-[slot=end]:data-[variant=inline]:**:data-[slot=adornment-button]:pl-3",
-          
-          // Adjust border radius based on position
-          "data-[slot=start]:rounded-s-md",
-          "data-[slot=end]:rounded-e-md",
-          className
-        )}
+        role="group"
+        data-slot="input-group-addon"
+        data-align={align}
+        className={cn(inputGroupAddonVariants({ align }), className)}
+        onClick={(e) => {
+          if ((e.target as HTMLElement).closest("button")) {
+            return;
+          }
+          e.currentTarget.parentElement?.querySelector<HTMLInputElement>("[data-slot=input-group-control]")?.focus();
+        }}
         {...props}
       >
         {children}
@@ -144,52 +109,109 @@ export const InputAdornment = React.forwardRef<HTMLDivElement, InputAdornmentPro
     );
   }
 );
+InputGroupAddon.displayName = "InputGroupAddon";
 
-InputAdornment.displayName = "InputAdornment";
-
-// AdornmentButton component
-export interface AdornmentButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * Optional additional className for the button
-   */
-  className?: string;
-  /**
-   * The content of the button
-   */
-  children: React.ReactNode;
-}
-
-export const AdornmentButton = React.forwardRef<HTMLButtonElement, AdornmentButtonProps>(
-  ({ className, children, ...props }, ref) => {
-    return (
-      <button
-        ref={ref}
-        data-slot="adornment-button"
-        className={cn(
-          "flex h-full items-center",
-          "text-muted-foreground hover:text-foreground",
-          "transition-colors",
-          "relative z-20",
-          
-          // Focus styles for keyboard navigation
-          "focus-visible:outline-none",
-          "focus-visible:text-foreground",
-          "focus-visible:bg-accent/30",
-          "focus-visible:ring-2",
-          "focus-visible:ring-ring",
-          "focus-visible:ring-inset",
-          "focus-visible:rounded-sm",
-
-          // Position-specific styles will be applied via context from parent
-          // or can be added with className
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </button>
-    );
+// =============================================================================
+// InputGroupButton
+// =============================================================================
+const inputGroupButtonVariants = cva(
+  "text-sm shadow-none flex gap-2 items-center",
+  {
+    variants: {
+      size: {
+        xs: "h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-3.5 has-[>svg]:px-2",
+        sm: "h-8 px-2.5 gap-1.5 rounded-md has-[>svg]:px-2.5",
+        "icon-xs": "size-6 rounded-[calc(var(--radius)-5px)] p-0 has-[>svg]:p-0",
+        "icon-sm": "size-8 rounded-md p-0 has-[>svg]:p-0",
+      },
+    },
+    defaultVariants: {
+      size: "xs",
+    },
   }
 );
 
-AdornmentButton.displayName = "AdornmentButton"; 
+export interface InputGroupButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof inputGroupButtonVariants> {
+  /**
+   * The type of button
+   * @default "button"
+   */
+  type?: "button" | "submit" | "reset";
+  /**
+   * The variant of the button
+   * @default "ghost"
+   */
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  /**
+   * Whether the button is loading
+   */
+  isLoading?: boolean;
+}
+
+export const InputGroupButton = React.forwardRef<HTMLButtonElement, InputGroupButtonProps>(
+  ({ className, type = "button", variant = "ghost", size = "xs", isLoading, children, ...props }, ref) => {
+    return (
+      <Button
+        ref={ref}
+        type={type}
+        data-size={size}
+        variant={variant}
+        isLoading={isLoading}
+        className={cn(inputGroupButtonVariants({ size }), className)}
+        {...props}
+      >
+        {children}
+      </Button>
+    );
+  }
+);
+InputGroupButton.displayName = "InputGroupButton";
+
+// =============================================================================
+// InputGroupText
+// =============================================================================
+export interface InputGroupTextProps extends React.HTMLAttributes<HTMLSpanElement> {}
+
+export const InputGroupText = React.forwardRef<HTMLSpanElement, InputGroupTextProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <span
+        ref={ref}
+        className={cn(
+          "text-muted-foreground flex items-center gap-2 text-sm [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+          className
+        )}
+        {...props}
+      />
+    );
+  }
+);
+InputGroupText.displayName = "InputGroupText";
+
+// =============================================================================
+// InputGroupInput
+// =============================================================================
+export interface InputGroupInputProps extends React.ComponentProps<typeof Input> {}
+
+export const InputGroupInput = React.forwardRef<HTMLInputElement, InputGroupInputProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <Input
+        ref={ref}
+        data-slot="input-group-control"
+        className={cn(
+          "flex-1 rounded-none border-0 bg-transparent shadow-none",
+          "focus:ring-0 focus:border-transparent focus:shadow-none",
+          className
+        )}
+        {...props}
+      />
+    );
+  }
+);
+InputGroupInput.displayName = "InputGroupInput";
+
+// Export variants for external use
+export { inputGroupAddonVariants, inputGroupButtonVariants };

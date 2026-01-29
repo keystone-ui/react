@@ -18,6 +18,10 @@ export const buttonVariants = cva(
         xs: "text-xs h-6 py-1 px-2.5",
         sm: "text-sm h-8 py-1.5 px-3",
         lg: "text-base h-12 py-3.5 px-5",
+        icon: "size-10 p-2",
+      },
+      fullWidth: {
+        true: "w-full",
       },
     },
     defaultVariants: {

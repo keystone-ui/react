@@ -21,6 +21,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           "border border-input rounded-md",
           "flex h-10 w-full min-w-0 px-3 py-1 shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
           "placeholder:text-muted-foreground/70",
+          // Focus styles
+          "focus:ring-1 focus:ring-inset focus:ring-ring focus:border-ring",
           "aria-invalid:ring-destructive dark:aria-invalid:ring-destructive aria-invalid:border-destructive",
           // Special styling for different input types
           type === "search" &&

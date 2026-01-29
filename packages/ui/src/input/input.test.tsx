@@ -1,8 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { describe, expect, it, test } from 'vitest';
 import { Input } from './input';
-import { InputGroup, InputAdornment } from './input-group';
+import { InputGroup, InputGroupAddon } from './input-group';
 
 describe('Input', () => {
   test('renders correctly', () => {
@@ -38,10 +38,9 @@ describe('Input', () => {
   test('applies focus ring styles', () => {
     render(<Input placeholder="Focus Ring Test" />);
     const input = screen.getByPlaceholderText('Focus Ring Test');
-    expect(input).toHaveClass('focus-visible:ring-2');
-    expect(input).toHaveClass('focus-visible:ring-inset');
-    expect(input).toHaveClass('focus-visible:ring-ring');
-    expect(input).toHaveClass('focus-visible:outline-none');
+    expect(input).toHaveClass('focus:ring-1');
+    expect(input).toHaveClass('focus:ring-inset');
+    expect(input).toHaveClass('focus:ring-ring');
   });
 
   test('applies search-specific styles for search type', () => {
@@ -51,8 +50,8 @@ describe('Input', () => {
   });
 
   test('applies file-specific styles for file type', () => {
-    render(<Input type="file" />);
-    const input = screen.getByRole('textbox');
+    render(<Input type="file" data-testid="file-input" />);
+    const input = screen.getByTestId('file-input');
     expect(input).toHaveClass('file:border-r');
     expect(input).toHaveClass('file:not-italic');
   });
@@ -69,21 +68,21 @@ describe('Input', () => {
     expect(input).toHaveAttribute('placeholder', 'Email');
   });
 
-  it('works with InputAdornment', () => {
+  it('works with InputGroupAddon', () => {
     render(
       <InputGroup>
-        <InputAdornment position="start" data-testid="start-adornment">
+        <InputGroupAddon align="inline-start" data-testid="start-addon">
           $
-        </InputAdornment>
+        </InputGroupAddon>
         <Input placeholder="0.00" data-testid="input" />
-        <InputAdornment position="end" data-testid="end-adornment">
+        <InputGroupAddon align="inline-end" data-testid="end-addon">
           USD
-        </InputAdornment>
+        </InputGroupAddon>
       </InputGroup>
     );
     
-    expect(screen.getByTestId('start-adornment')).toBeInTheDocument();
+    expect(screen.getByTestId('start-addon')).toBeInTheDocument();
     expect(screen.getByTestId('input')).toBeInTheDocument();
-    expect(screen.getByTestId('end-adornment')).toBeInTheDocument();
+    expect(screen.getByTestId('end-addon')).toBeInTheDocument();
   });
 }); 

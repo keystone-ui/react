@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { 
-  Input, 
   InputGroup, 
-  InputAdornment,
-  AdornmentButton,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupButton,
+  InputGroupText,
   Button
 } from "@acme/ui";
 import {
@@ -13,9 +14,9 @@ import {
   Eye as EyeIcon,
   EyeOff as EyeOffIcon,
   Send as SendIcon,
-  Download as DownloadIcon,
   X as XIcon,
-  Command as CommandIcon,
+  Copy as CopyIcon,
+  DollarSign as DollarSignIcon,
 } from "lucide-react";
 
 const meta = {
@@ -27,102 +28,38 @@ const meta = {
         component: `
 # InputGroup
 
-A flexible input component that supports various adornments like icons, text, buttons, and selects.
+A flexible input component that supports various adornments like icons, text, and buttons.
+
+## New API (shadcn-style)
+
+The InputGroup now uses an \`align\` prop instead of \`position\` + \`variant\`:
+
+- \`align="inline-start"\` - Left side of input (horizontal)
+- \`align="inline-end"\` - Right side of input (horizontal)
+- \`align="block-start"\` - Above input (vertical)
+- \`align="block-end"\` - Below input (vertical)
+
+## Components
+
+- \`InputGroup\` - Container with border and focus states
+- \`InputGroupAddon\` - Adornment container with alignment
+- \`InputGroupInput\` - Specialized input (border/shadow removed)
+- \`InputGroupButton\` - Button with size variants (xs, sm, icon-xs, icon-sm)
+- \`InputGroupText\` - Text wrapper for icons/text
 
 ## Basic Usage
 
 \`\`\`tsx
-import { InputGroup, InputAdornment, Input } from "@acme/ui";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@acme/ui";
+import { Search } from "lucide-react";
 
-// Left icon adornment (with inline variant)
 <InputGroup>
-  <InputAdornment position="start" variant="inline">
-    <MailIcon className="size-4" />
-  </InputAdornment>
-  <Input placeholder="Email" />
-</InputGroup>
-
-// Right icon adornment (with inline variant)
-<InputGroup>
-  <Input placeholder="Type message" />
-  <InputAdornment position="end" variant="inline">
-    <SendIcon className="size-4" />
-  </InputAdornment>
+  <InputGroupAddon>
+    <Search />
+  </InputGroupAddon>
+  <InputGroupInput placeholder="Search..." />
 </InputGroup>
 \`\`\`
-
-## Text Adornments
-
-\`\`\`tsx
-// Left text adornment (with inline variant)
-<InputGroup>
-  <InputAdornment position="start" variant="inline">https://</InputAdornment>
-  <Input placeholder="google.com" />
-</InputGroup>
-
-// Right text adornment (with inline variant)
-<InputGroup>
-  <Input placeholder="google" />
-  <InputAdornment position="end" variant="inline">.com</InputAdornment>
-</InputGroup>
-
-// Left and right text adornments (with inline variant)
-<InputGroup>
-  <InputAdornment position="start" variant="inline">€</InputAdornment>
-  <Input placeholder="0.00" />
-  <InputAdornment position="end" variant="inline">EUR</InputAdornment>
-</InputGroup>
-\`\`\`
-
-## Box Variant (Default)
-
-\`\`\`tsx
-// Box variant is the default and adds a divider between the adornment and input
-<InputGroup>
-  <InputAdornment position="start">https://</InputAdornment>
-  <Input placeholder="example.com" />
-</InputGroup>
-\`\`\`
-
-## Button Adornments
-
-\`\`\`tsx
-// Input with end icon button
-<InputGroup>
-  <Input placeholder="Search..." />
-  <InputAdornment position="end" variant="inline">
-    <SearchIcon />
-  </InputAdornment>
-</InputGroup>
-\`\`\`
-
-## Nested Adornments
-
-\`\`\`tsx
-// Input with nested icon and text adornment
-<InputGroup>
-  <InputAdornment position="start" data-type="icon">
-    <div className="flex items-center gap-1">
-      <MailIcon className="size-4" />
-      <span>Email:</span>
-    </div>
-  </InputAdornment>
-  <Input placeholder="john.doe@example.com" />
-</InputGroup>
-\`\`\`
-
-## Features
-
-- Support for left and right adornments
-- Box variant (default) with dividers between elements
-- Inline variant for seamless appearance
-- Icon integration
-- Text adornments
-- Button adornments
-- Select adornments
-- Support for nested adornments (combining icons and text)
-- Consistent styling with the rest of the UI
-- Clean focus styles for better accessibility
 `,
       },
     },
@@ -132,548 +69,388 @@ import { InputGroup, InputAdornment, Input } from "@acme/ui";
 export default meta;
 type Story = StoryObj<typeof InputGroup>;
 
-// Basic examples
-export const WithBasicAdornments: Story = {
+// Basic Icon Addon
+export const BasicIconAddon: Story = {
+  name: "Basic Icon Addon",
   render: () => (
-    <div className="space-y-4 max-w-[320px]">
-      <div>
-        <h3 className="text-sm font-medium mb-2">Left Icon Adornment</h3>
-        <InputGroup>
-          <InputAdornment position="start" variant="inline">
-            <MailIcon className="size-4" />
-          </InputAdornment>
-          <Input placeholder="Email" />
-        </InputGroup>
-      </div>
-      
-      <div>
-        <h3 className="text-sm font-medium mb-2">Right Icon Adornment</h3>
-        <InputGroup>
-          <Input placeholder="Type message" />
-          <InputAdornment position="end" variant="inline">
-            <SendIcon className="size-4" />
-          </InputAdornment>
-        </InputGroup>
-      </div>
-
-      <div>
-        <h3 className="text-sm font-medium mb-2">Left Text Adornment</h3>
-        <InputGroup>
-          <InputAdornment position="start" variant="inline">https://</InputAdornment>
-          <Input placeholder="google.com" />
-        </InputGroup>
-      </div>
-
-      <div>
-        <h3 className="text-sm font-medium mb-2">Right Text Adornment</h3>
-        <InputGroup>
-          <Input placeholder="google" />
-          <InputAdornment position="end" variant="inline">.com</InputAdornment>
-        </InputGroup>
-      </div>
-
-      <div>
-        <h3 className="text-sm font-medium mb-2">Right Text Adornment (Box variant)</h3>
-        <InputGroup>
-          <Input placeholder="google" />
-          <InputAdornment position="end" variant="box">.com</InputAdornment>
-        </InputGroup>
-      </div>
-
-      <div>
-        <h3 className="text-sm font-medium mb-2">Left and Right Text Adornments</h3>
-        <InputGroup>
-          <InputAdornment position="start" variant="inline">€</InputAdornment>
-          <Input placeholder="0.00" />
-          <InputAdornment position="end" variant="inline">EUR</InputAdornment>
-        </InputGroup>
-      </div>
-
-      <div>
-        <h3 className="text-sm font-medium mb-2">Box Variant (Default)</h3>
-        <InputGroup>
-          <InputAdornment position="start">https://</InputAdornment>
-          <Input placeholder="example.com" />
-        </InputGroup>
-      </div>
-
-      <div>
-        <h3 className="text-sm font-medium mb-2">Input with End Icon Button</h3>
-        <InputGroup>
-          <Input placeholder="Search..." />
-          <InputAdornment position="end" variant="inline">
-            <AdornmentButton>
-              <SearchIcon className="h-4 w-4" />
-            </AdornmentButton>
-          </InputAdornment>
-        </InputGroup>
-      </div>
-
-      <div>
-        <h3 className="text-sm font-medium mb-2">Input with End Icon Button (Box variant)</h3>
-        <InputGroup>
-          <Input placeholder="Search..." />
-          <InputAdornment position="end" variant="box">
-            <AdornmentButton>
-              <SearchIcon className="h-4 w-4" />
-            </AdornmentButton>
-          </InputAdornment>
-        </InputGroup>
-      </div>
+    <div className="max-w-sm">
+      <InputGroup>
+        <InputGroupAddon>
+          <SearchIcon className="size-4" />
+        </InputGroupAddon>
+        <InputGroupInput placeholder="Search..." />
+      </InputGroup>
     </div>
   ),
 };
 
-export const WithRightButtonIconAdornment: Story = {
+// Text Prefix
+export const TextPrefix: Story = {
+  name: "Text Prefix",
   render: () => (
-    <InputGroup>
-      <Input placeholder="Email" />
-      <InputAdornment position="end" variant="inline">
-        <button className="flex h-full items-center text-muted-foreground hover:text-foreground">
-          <SendIcon className="h-4 w-4" />
-        </button>
-      </InputAdornment>
-    </InputGroup>
-  ),
-};
-
-export const WithRightButtonAdornment: Story = {
-  render: () => (
-    <InputGroup>
-      <Input placeholder="Enter your email" />
-      <InputAdornment position="end" variant="inline">
-        <Button className="h-full">Subscribe</Button>
-      </InputAdornment>
-    </InputGroup>
-  ),
-};
-
-export const WithSeparateButton: Story = {
-  render: () => (
-    <div className="flex gap-2">
-      <Input placeholder="Email" />
-      <Button>Send</Button>
+    <div className="max-w-sm">
+      <InputGroup>
+        <InputGroupAddon>
+          <InputGroupText>https://</InputGroupText>
+        </InputGroupAddon>
+        <InputGroupInput placeholder="example.com" />
+      </InputGroup>
     </div>
   ),
 };
 
-export const PasswordWithToggleButton: Story = {
+// Text Suffix
+export const TextSuffix: Story = {
+  name: "Text Suffix",
+  render: () => (
+    <div className="max-w-sm">
+      <InputGroup>
+        <InputGroupInput placeholder="username" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupText>@gmail.com</InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
+  ),
+};
+
+// Currency Input
+export const CurrencyInput: Story = {
+  name: "Currency Input",
+  render: () => (
+    <div className="max-w-sm">
+      <InputGroup>
+        <InputGroupAddon>
+          <InputGroupText>$</InputGroupText>
+        </InputGroupAddon>
+        <InputGroupInput placeholder="0.00" type="number" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupText>USD</InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
+  ),
+};
+
+// With Button
+export const WithButton: Story = {
+  name: "With Button",
+  render: () => (
+    <div className="max-w-sm">
+      <InputGroup>
+        <InputGroupInput placeholder="Enter code" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton>
+            <CopyIcon className="size-4" />
+          </InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
+  ),
+};
+
+// Password Toggle
+export const PasswordToggle: Story = {
+  name: "Password Toggle",
   render: () => {
     const [showPassword, setShowPassword] = useState(false);
     return (
-      <InputGroup>
-        <Input 
-          type={showPassword ? "text" : "password"} 
-          placeholder="Password" 
-        />
-        <InputAdornment position="end">
-          <button 
-            className="flex h-full items-center text-muted-foreground hover:text-foreground"
-            onClick={() => setShowPassword(!showPassword)}
-            type="button"
-            aria-label={showPassword ? "Hide password" : "Show password"}
-          >
-            {showPassword ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
-          </button>
-        </InputAdornment>
-      </InputGroup>
+      <div className="max-w-sm">
+        <InputGroup>
+          <InputGroupInput 
+            type={showPassword ? "text" : "password"} 
+            placeholder="Password" 
+          />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton 
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOffIcon className="size-4" /> : <EyeIcon className="size-4" />}
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
     );
   },
 };
 
-export const WithClearButtonAdornment: Story = {
+// Search with Results Count
+export const SearchWithResultsCount: Story = {
+  name: "Search with Results Count",
+  render: () => (
+    <div className="max-w-sm">
+      <InputGroup>
+        <InputGroupAddon>
+          <SearchIcon className="size-4" />
+        </InputGroupAddon>
+        <InputGroupInput placeholder="Search..." />
+        <InputGroupAddon align="inline-end">
+          <InputGroupText className="text-xs">12 results</InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
+  ),
+};
+
+// Search with Keyboard Shortcut
+export const SearchWithKeyboardShortcut: Story = {
+  name: "Search with Keyboard Shortcut",
+  render: () => (
+    <div className="max-w-sm">
+      <InputGroup>
+        <InputGroupAddon>
+          <SearchIcon className="size-4" />
+        </InputGroupAddon>
+        <InputGroupInput type="search" placeholder="Search..." />
+        <InputGroupAddon align="inline-end">
+          <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium">
+            <span className="text-xs">⌘</span>K
+          </kbd>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
+  ),
+};
+
+// Clear Button
+export const ClearButton: Story = {
+  name: "Clear Button",
   render: () => {
     const [value, setValue] = useState("Click to clear");
     return (
-      <InputGroup>
-        <Input 
-          value={value} 
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
-          placeholder="Type something..." 
-        />
-        <InputAdornment position="end">
-          <button 
-            className="flex h-full items-center text-muted-foreground hover:text-foreground"
-            onClick={() => setValue("")}
-            type="button"
-            aria-label="Clear input"
-            disabled={!value}
-          >
-            <XIcon className="h-4 w-4" />
-          </button>
-        </InputAdornment>
-      </InputGroup>
+      <div className="max-w-sm">
+        <InputGroup>
+          <InputGroupInput 
+            value={value} 
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="Type something..." 
+          />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton 
+              onClick={() => setValue("")}
+              aria-label="Clear input"
+              disabled={!value}
+            >
+              <XIcon className="size-4" />
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
     );
   },
 };
 
-export const SearchWithKeyboardShortcutAdornment: Story = {
+// Email Input
+export const EmailInput: Story = {
+  name: "Email Input",
   render: () => (
-    <InputGroup>
-      <InputAdornment position="start">
-        <SearchIcon className="h-4 w-4" />
-      </InputAdornment>
-      <Input type="search" placeholder="Search..." />
-      <InputAdornment position="end" className="text-xs">
-        <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100">
-          <span className="text-xs">⌘</span>K
-        </kbd>
-      </InputAdornment>
-    </InputGroup>
+    <div className="max-w-sm">
+      <InputGroup>
+        <InputGroupAddon>
+          <MailIcon className="size-4" />
+        </InputGroupAddon>
+        <InputGroupInput type="email" placeholder="you@example.com" />
+      </InputGroup>
+    </div>
   ),
 };
 
-export const SearchWithIconAndButtonAdornments: Story = {
+// Button Sizes
+export const ButtonSizes: Story = {
+  name: "Button Sizes",
   render: () => (
-    <InputGroup>
-      <InputAdornment position="start">
-        <SearchIcon className="h-4 w-4" />
-      </InputAdornment>
-      <Input type="search" placeholder="Search..." />
-      <InputAdornment position="end">
-        <Button data-slot="button" size="sm" className="h-full">Search</Button>
-      </InputAdornment>
-    </InputGroup>
+    <div className="space-y-4 max-w-sm">
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">Size: xs (default)</p>
+        <InputGroup>
+          <InputGroupInput placeholder="Enter value" />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton size="xs">Copy</InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">Size: sm</p>
+        <InputGroup>
+          <InputGroupInput placeholder="Enter value" />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton size="sm">Copy</InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">Size: icon-xs</p>
+        <InputGroup>
+          <InputGroupInput placeholder="Enter value" />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton size="icon-xs">
+              <CopyIcon className="size-4" />
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">Size: icon-sm</p>
+        <InputGroup>
+          <InputGroupInput placeholder="Enter value" />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton size="icon-sm">
+              <CopyIcon className="size-4" />
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+    </div>
   ),
 };
 
-export const SearchWithLoaderAdornment: Story = {
+// Block Layout (Vertical)
+export const BlockLayout: Story = {
+  name: "Block Layout (Vertical)",
   render: () => (
-    <InputGroup>
-      <InputAdornment position="start">
-        <SearchIcon className="h-4 w-4" />
-      </InputAdornment>
-      <Input type="search" placeholder="Search..." />
-      <InputAdornment position="end">
-        <div className="h-4 w-4 animate-spin rounded-full border-2 border-muted-foreground/20 border-t-muted-foreground"></div>
-      </InputAdornment>
-    </InputGroup>
+    <div className="space-y-4 max-w-sm">
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">Label above (block-start)</p>
+        <InputGroup>
+          <InputGroupAddon align="block-start">
+            <InputGroupText>Email address</InputGroupText>
+          </InputGroupAddon>
+          <InputGroupInput placeholder="you@example.com" />
+        </InputGroup>
+      </div>
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">Helper below (block-end)</p>
+        <InputGroup>
+          <InputGroupInput placeholder="Username" />
+          <InputGroupAddon align="block-end">
+            <InputGroupText className="text-xs text-muted-foreground">
+              Must be 3-20 characters
+            </InputGroupText>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+    </div>
   ),
 };
 
-export const WithCurrencySelectAdornment: Story = {
-  render: () => (
-    <InputGroup>
-      <InputAdornment position="start">$</InputAdornment>
-      <Input type="number" placeholder="0.00" />
-      <InputAdornment position="end">
-        <select className="h-10 border-0 bg-transparent text-sm focus:ring-0 focus:outline-none text-muted-foreground">
-          <option>USD</option>
-          <option>EUR</option>
-          <option>GBP</option>
-          <option>CAD</option>
-        </select>
-      </InputAdornment>
-    </InputGroup>
-  ),
-};
-
-export const WithLeftAndRightIconAdornments: Story = {
-  render: () => (
-    <InputGroup>
-      <InputAdornment position="start">
-        <MailIcon className="h-4 w-4" />
-      </InputAdornment>
-      <Input placeholder="Email" />
-      <InputAdornment position="end">
-        <XIcon className="h-4 w-4" />
-      </InputAdornment>
-    </InputGroup>
-  ),
-};
-
-export const WithRightButtonAndIconAdornment: Story = {
-  render: () => (
-    <InputGroup>
-      <Input placeholder="Search..." />
-      <InputAdornment position="end">
-        <Button data-slot="button" className="h-full">
-          <SearchIcon className="h-4 w-4" />
-        </Button>
-      </InputAdornment>
-    </InputGroup>
-  ),
-};
-
-export const WithRightButtonAndTextAdornment: Story = {
-  render: () => (
-    <InputGroup>
-      <Input placeholder="Enter your email" />
-      <InputAdornment position="end">
-        <Button data-slot="button" className="h-full">
-          Subscribe
-          <SendIcon className="ml-2 h-4 w-4" />
-        </Button>
-      </InputAdornment>
-    </InputGroup>
-  ),
-};
-
-export const WithRightButtonLoadingAdornment: Story = {
-  render: () => (
-    <InputGroup>
-      <Input placeholder="Enter your email" />
-      <InputAdornment position="end">
-        <Button data-slot="button" disabled className="h-full">
-          <span className="mr-2">Subscribing</span>
-          <span className="animate-spin">
-            <svg className="h-4 w-4" viewBox="0 0 24 24">
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-          </span>
-        </Button>
-      </InputAdornment>
-    </InputGroup>
-  ),
-};
-
-export const SearchWithIconAdornments: Story = {
-  render: () => (
-    <InputGroup>
-      <InputAdornment position="start">
-        <SearchIcon className="h-4 w-4" />
-      </InputAdornment>
-      <Input type="search" placeholder="Search..." />
-      <InputAdornment position="end" className="text-xs">
-        <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100">
-          <span className="text-xs">⌘</span>K
-        </kbd>
-      </InputAdornment>
-    </InputGroup>
-  ),
-};
-
-// All examples in a grid
+// All Examples Grid
 export const AllExamples: Story = {
+  name: "All Examples",
   render: () => {
     const [showPassword, setShowPassword] = useState(false);
     const [clearValue, setClearValue] = useState("Click to clear");
     
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Row 1 */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div>
-          <h3 className="text-sm font-medium mb-2">Left Icon Adornment</h3>
+          <h3 className="text-sm font-medium mb-2">Icon Prefix</h3>
           <InputGroup>
-            <InputAdornment position="start">
-              <MailIcon className="h-4 w-4" />
-            </InputAdornment>
-            <Input placeholder="Email" />
+            <InputGroupAddon>
+              <MailIcon className="size-4" />
+            </InputGroupAddon>
+            <InputGroupInput placeholder="Email" />
           </InputGroup>
         </div>
         
         <div>
-          <h3 className="text-sm font-medium mb-2">Right Icon Adornment</h3>
+          <h3 className="text-sm font-medium mb-2">Icon Suffix</h3>
           <InputGroup>
-            <Input placeholder="Email" />
-            <InputAdornment position="end">
-              <MailIcon className="h-4 w-4" />
-            </InputAdornment>
+            <InputGroupInput placeholder="Search..." />
+            <InputGroupAddon align="inline-end">
+              <SearchIcon className="size-4" />
+            </InputGroupAddon>
           </InputGroup>
         </div>
         
         <div>
-          <h3 className="text-sm font-medium mb-2">Left Text Adornment</h3>
+          <h3 className="text-sm font-medium mb-2">Text Prefix</h3>
           <InputGroup>
-            <InputAdornment position="start">https://</InputAdornment>
-            <Input placeholder="google.com" />
-          </InputGroup>
-        </div>
-        
-        {/* Row 2 */}
-        <div>
-          <h3 className="text-sm font-medium mb-2">Right Text Adornment</h3>
-          <InputGroup>
-            <Input placeholder="google" />
-            <InputAdornment position="end">.com</InputAdornment>
+            <InputGroupAddon>
+              <InputGroupText>https://</InputGroupText>
+            </InputGroupAddon>
+            <InputGroupInput placeholder="example.com" />
           </InputGroup>
         </div>
         
         <div>
-          <h3 className="text-sm font-medium mb-2">Right Text Adornment (Box variant)</h3>
+          <h3 className="text-sm font-medium mb-2">Text Suffix</h3>
           <InputGroup>
-            <Input placeholder="google" />
-            <InputAdornment position="end" variant="box">.com</InputAdornment>
+            <InputGroupInput placeholder="username" />
+            <InputGroupAddon align="inline-end">
+              <InputGroupText>@gmail.com</InputGroupText>
+            </InputGroupAddon>
           </InputGroup>
         </div>
         
         <div>
-          <h3 className="text-sm font-medium mb-2">Left and Right Text Adornments</h3>
+          <h3 className="text-sm font-medium mb-2">Both Sides</h3>
           <InputGroup>
-            <InputAdornment position="start" variant="inline">€</InputAdornment>
-            <Input placeholder="0.00" />
-            <InputAdornment position="end" variant="inline">EUR</InputAdornment>
+            <InputGroupAddon>
+              <InputGroupText>$</InputGroupText>
+            </InputGroupAddon>
+            <InputGroupInput placeholder="0.00" />
+            <InputGroupAddon align="inline-end">
+              <InputGroupText>USD</InputGroupText>
+            </InputGroupAddon>
           </InputGroup>
         </div>
         
         <div>
-          <h3 className="text-sm font-medium mb-2">Left Select Adornment</h3>
+          <h3 className="text-sm font-medium mb-2">With Button</h3>
           <InputGroup>
-            <InputAdornment position="start">
-              <select className="h-10 border-0 bg-transparent text-sm focus:ring-0 focus:outline-none text-muted-foreground">
-                <option>https://</option>
-                <option>http://</option>
-              </select>
-            </InputAdornment>
-            <Input placeholder="example.com" />
-          </InputGroup>
-        </div>
-        
-        {/* Row 3 */}
-        <div>
-          <h3 className="text-sm font-medium mb-2">Right Select Adornment</h3>
-          <InputGroup>
-            <Input placeholder="example" />
-            <InputAdornment position="end">
-              <select className="h-10 border-0 bg-transparent text-sm focus:ring-0 focus:outline-none text-muted-foreground">
-                <option>.com</option>
-                <option>.org</option>
-                <option>.net</option>
-              </select>
-            </InputAdornment>
+            <InputGroupInput placeholder="API Key" />
+            <InputGroupAddon align="inline-end">
+              <InputGroupButton>
+                <CopyIcon className="size-4" />
+              </InputGroupButton>
+            </InputGroupAddon>
           </InputGroup>
         </div>
         
         <div>
-          <h3 className="text-sm font-medium mb-2">Right Button Adornment (Icon)</h3>
+          <h3 className="text-sm font-medium mb-2">Password Toggle</h3>
           <InputGroup>
-            <Input placeholder="Email" />
-            <InputAdornment position="end" variant="inline">
-              <button className="flex h-full items-center text-muted-foreground hover:text-foreground">
-                <SendIcon className="h-4 w-4" />
-              </button>
-            </InputAdornment>
-          </InputGroup>
-        </div>
-        
-        <div>
-          <h3 className="text-sm font-medium mb-2">Right Button Adornment (Text)</h3>
-          <InputGroup>
-            <Input placeholder="Enter your email" />
-            <InputAdornment position="end" variant="inline">
-              <Button data-slot="button" className="h-full">Subscribe</Button>
-            </InputAdornment>
-          </InputGroup>
-        </div>
-        
-        {/* Row 4 */}
-        <div>
-          <h3 className="text-sm font-medium mb-2">Input with separate button</h3>
-          <div className="flex gap-2">
-            <Input placeholder="Email" />
-            <Button>Send</Button>
-          </div>
-        </div>
-        
-        <div>
-          <h3 className="text-sm font-medium mb-2">Password with toggle button</h3>
-          <InputGroup>
-            <Input 
+            <InputGroupInput 
               type={showPassword ? "text" : "password"} 
               placeholder="Password" 
             />
-            <InputAdornment position="end">
-              <button 
-                className="flex h-full items-center text-muted-foreground hover:text-foreground"
-                onClick={() => setShowPassword(!showPassword)}
-                type="button"
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
-              </button>
-            </InputAdornment>
+            <InputGroupAddon align="inline-end">
+              <InputGroupButton onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <EyeOffIcon className="size-4" /> : <EyeIcon className="size-4" />}
+              </InputGroupButton>
+            </InputGroupAddon>
           </InputGroup>
         </div>
         
         <div>
-          <h3 className="text-sm font-medium mb-2">Input with clear button</h3>
+          <h3 className="text-sm font-medium mb-2">Clear Input</h3>
           <InputGroup>
-            <Input 
+            <InputGroupInput 
               value={clearValue} 
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setClearValue(e.target.value)}
-              placeholder="Type something..." 
+              onChange={(e) => setClearValue(e.target.value)}
+              placeholder="Type..." 
             />
-            <InputAdornment position="end">
-              <button 
-                className="flex h-full items-center text-muted-foreground hover:text-foreground"
-                onClick={() => setClearValue("")}
-                type="button"
-                aria-label="Clear input"
-                disabled={!clearValue}
-              >
-                <XIcon className="h-4 w-4" />
-              </button>
-            </InputAdornment>
+            <InputGroupAddon align="inline-end">
+              <InputGroupButton onClick={() => setClearValue("")} disabled={!clearValue}>
+                <XIcon className="size-4" />
+              </InputGroupButton>
+            </InputGroupAddon>
           </InputGroup>
         </div>
         
-        {/* Row 5 */}
         <div>
-          <h3 className="text-sm font-medium mb-2">Search with left icon & keyboard shortcut</h3>
+          <h3 className="text-sm font-medium mb-2">Search with Shortcut</h3>
           <InputGroup>
-            <InputAdornment position="start">
-              <SearchIcon className="h-4 w-4" />
-            </InputAdornment>
-            <Input type="search" placeholder="Search..." />
-            <InputAdornment position="end" className="text-xs">
-              <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100">
+            <InputGroupAddon>
+              <SearchIcon className="size-4" />
+            </InputGroupAddon>
+            <InputGroupInput placeholder="Search..." />
+            <InputGroupAddon align="inline-end">
+              <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium">
                 <span className="text-xs">⌘</span>K
               </kbd>
-            </InputAdornment>
-          </InputGroup>
-        </div>
-        
-        <div>
-          <h3 className="text-sm font-medium mb-2">Search with left icon & button</h3>
-          <InputGroup>
-            <InputAdornment position="start">
-              <SearchIcon className="h-4 w-4" />
-            </InputAdornment>
-            <Input type="search" placeholder="Search..." />
-            <InputAdornment position="end">
-              <Button data-slot="button" size="sm" className="h-full">Search</Button>
-            </InputAdornment>
-          </InputGroup>
-        </div>
-        
-        <div>
-          <h3 className="text-sm font-medium mb-2">Search with left icon & loading indicator</h3>
-          <InputGroup>
-            <InputAdornment position="start">
-              <SearchIcon className="h-4 w-4" />
-            </InputAdornment>
-            <Input type="search" placeholder="Search..." />
-            <InputAdornment position="end">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-muted-foreground/20 border-t-muted-foreground"></div>
-            </InputAdornment>
-          </InputGroup>
-        </div>
-        
-        <div>
-          <h3 className="text-sm font-medium mb-2">Currency with multiple adornments</h3>
-          <InputGroup>
-            <InputAdornment position="start">$</InputAdornment>
-            <Input type="number" placeholder="0.00" />
-            <InputAdornment position="end">
-              <select className="h-10 border-0 bg-transparent text-sm focus:ring-0 focus:outline-none text-muted-foreground">
-                <option>USD</option>
-                <option>EUR</option>
-                <option>GBP</option>
-                <option>CAD</option>
-              </select>
-            </InputAdornment>
+            </InputGroupAddon>
           </InputGroup>
         </div>
       </div>
