@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 
 const meta = {
-  title: "Components/Button/Group",
+  title: "Components/ButtonGroup",
   component: ButtonGroup,
   parameters: {
     docs: {

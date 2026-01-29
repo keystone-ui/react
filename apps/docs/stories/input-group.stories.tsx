@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 
 const meta = {
-  title: "Components/Input/Group",
+  title: "Components/InputGroup",
   component: InputGroup,
   parameters: {
     docs: {
