@@ -17,7 +17,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         type={type}
         data-slot="input"
         className={cn(
-          "bg-transparent text-sm",
+          "bg-transparent dark:bg-input/30 text-sm",
           "border border-input rounded-md",
           "flex h-10 w-full min-w-0 px-3 py-1 shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
           "placeholder:text-muted-foreground/70",

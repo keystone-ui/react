@@ -28,7 +28,7 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
         role="group"
         ref={ref}
         className={cn(
-          "group/input-group border-input relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none",
+          "group/input-group border-input dark:bg-input/30 relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none",
           "h-10 min-w-0",
 
           // Alignment variants - adjust input padding based on addon position
@@ -202,7 +202,7 @@ export const InputGroupInput = React.forwardRef<HTMLInputElement, InputGroupInpu
         ref={ref}
         data-slot="input-group-control"
         className={cn(
-          "flex-1 rounded-none border-0 bg-transparent shadow-none",
+          "flex-1 rounded-none border-0 bg-transparent dark:bg-transparent shadow-none",
           "focus:ring-0 focus:border-transparent focus:shadow-none",
           className
         )}
