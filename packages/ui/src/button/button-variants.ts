@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 // Using shadcn theme variables
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 whitespace-nowrap relative cursor-pointer z-0 rounded font-medium overflow-hidden select-none transition-all disabled:cursor-not-allowed focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-outline",
+  "inline-flex items-center justify-center gap-2 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 whitespace-nowrap relative cursor-pointer z-0 rounded font-medium overflow-hidden select-none transition-all active:scale-[0.98] disabled:active:scale-100 disabled:cursor-not-allowed focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-outline",
   {
     variants: {
       variant: {
@@ -11,7 +11,7 @@ export const buttonVariants = cva(
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:bg-destructive/50 disabled:text-destructive-foreground/50 focus-visible:outline-destructive/50",
         ghost: "bg-transparent hover:bg-accent disabled:bg-transparent disabled:text-foreground/50",
         outline: "bg-transparent border border-border hover:bg-accent disabled:bg-transparent disabled:border-border/50 disabled:text-foreground/50",
-        link: "text-primary underline-offset-4 hover:underline",
+        link: "text-primary underline-offset-4 hover:underline active:scale-100",
       },
       size: {
         default: "text-sm h-10 px-4 py-2",
