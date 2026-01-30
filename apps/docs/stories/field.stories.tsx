@@ -35,7 +35,7 @@ Combine labels, controls, and help text to compose accessible form fields and gr
 - \`Field\` - Individual field wrapper with orientation variants
 - \`FieldLabel\` - Label component for form controls
 - \`FieldContent\` - Content wrapper for control + description
-- \`FieldDescription\` - Helper/description text
+- \`FieldDescription\` - Helper/description text (auto-styles red when Field is invalid)
 - \`FieldError\` - Error message display
 - \`FieldSeparator\` - Visual separator between fields
 
@@ -49,6 +49,7 @@ Combine labels, controls, and help text to compose accessible form fields and gr
 
 - Add \`data-invalid\` to Field to switch the entire block into an error state.
 - Add \`aria-invalid\` on the input itself for assistive technologies.
+- \`FieldDescription\` automatically turns red when the parent Field has \`data-invalid\`.
 - Render \`FieldError\` immediately after the control or inside \`FieldContent\` to keep error messages aligned with the field.
 
 ## Accessibility
@@ -301,6 +302,33 @@ export const ValidationError: Story = {
       </Field>
     </div>
   ),
+};
+
+// Multiple Validation Errors
+export const MultipleErrors: Story = {
+  name: "Multiple Errors",
+  render: () => (
+    <div className="w-full max-w-xs">
+      <Field data-invalid>
+        <FieldLabel htmlFor="password">Password</FieldLabel>
+        <Input id="password" type="password" aria-invalid defaultValue="abc" />
+        <FieldError
+          errors={[
+            { message: "Must be at least 8 characters" },
+            { message: "Must contain a number" },
+            { message: "Must contain a special character" },
+          ]}
+        />
+      </Field>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Use the `errors` prop to display multiple validation errors as a list. Duplicate messages are automatically deduplicated.",
+      },
+    },
+  },
 };
 
 // Required Field

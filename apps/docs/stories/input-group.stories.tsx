@@ -6,19 +6,16 @@ import {
   InputGroupInput,
   InputGroupButton,
   InputGroupText,
-  Button,
-  Kbd,
-  KbdGroup,
 } from "@acme/ui";
 import {
   Mail as MailIcon,
   Search as SearchIcon,
   Eye as EyeIcon,
   EyeOff as EyeOffIcon,
-  Send as SendIcon,
   X as XIcon,
   Copy as CopyIcon,
-  DollarSign as DollarSignIcon,
+  Check as CheckIcon,
+  Loader2 as LoaderIcon,
 } from "lucide-react";
 
 const meta = {
@@ -336,127 +333,100 @@ export const BlockLayout: Story = {
   ),
 };
 
-// All Examples Grid
-export const AllExamples: Story = {
-  name: "All Examples",
+// Loading Spinner
+export const LoadingSpinner: Story = {
+  name: "Loading Spinner",
+  render: () => (
+    <div className="space-y-4 max-w-sm">
+      <InputGroup>
+        <InputGroupInput placeholder="Searching..." />
+        <InputGroupAddon align="inline-end">
+          <LoaderIcon className="size-4 animate-spin" />
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupAddon>
+          <LoaderIcon className="size-4 animate-spin" />
+        </InputGroupAddon>
+        <InputGroupInput placeholder="Processing..." />
+      </InputGroup>
+      <InputGroup>
+        <InputGroupInput placeholder="Saving changes..." />
+        <InputGroupAddon align="inline-end">
+          <InputGroupText className="text-muted-foreground text-xs">Saving...</InputGroupText>
+          <LoaderIcon className="size-4 animate-spin" />
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Show a loading spinner inside the input to indicate processing or searching.",
+      },
+    },
+  },
+};
+
+// Copy to Clipboard
+export const CopyToClipboard: Story = {
+  name: "Copy to Clipboard",
   render: () => {
-    const [showPassword, setShowPassword] = useState(false);
-    const [clearValue, setClearValue] = useState("Click to clear");
+    const [isCopied, setIsCopied] = useState(false);
+    
+    const handleCopy = () => {
+      navigator.clipboard.writeText("https://example.com/api/key");
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    };
     
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div>
-          <h3 className="text-sm font-medium mb-2">Icon Prefix</h3>
-          <InputGroup>
-            <InputGroupAddon>
-              <MailIcon className="size-4" />
-            </InputGroupAddon>
-            <InputGroupInput placeholder="Email" />
-          </InputGroup>
-        </div>
-        
-        <div>
-          <h3 className="text-sm font-medium mb-2">Icon Suffix</h3>
-          <InputGroup>
-            <InputGroupInput placeholder="Search..." />
-            <InputGroupAddon align="inline-end">
-              <SearchIcon className="size-4" />
-            </InputGroupAddon>
-          </InputGroup>
-        </div>
-        
-        <div>
-          <h3 className="text-sm font-medium mb-2">Text Prefix</h3>
-          <InputGroup>
-            <InputGroupAddon>
-              <InputGroupText>https://</InputGroupText>
-            </InputGroupAddon>
-            <InputGroupInput placeholder="example.com" />
-          </InputGroup>
-        </div>
-        
-        <div>
-          <h3 className="text-sm font-medium mb-2">Text Suffix</h3>
-          <InputGroup>
-            <InputGroupInput placeholder="username" />
-            <InputGroupAddon align="inline-end">
-              <InputGroupText>@gmail.com</InputGroupText>
-            </InputGroupAddon>
-          </InputGroup>
-        </div>
-        
-        <div>
-          <h3 className="text-sm font-medium mb-2">Both Sides</h3>
-          <InputGroup>
-            <InputGroupAddon>
-              <InputGroupText>$</InputGroupText>
-            </InputGroupAddon>
-            <InputGroupInput placeholder="0.00" />
-            <InputGroupAddon align="inline-end">
-              <InputGroupText>USD</InputGroupText>
-            </InputGroupAddon>
-          </InputGroup>
-        </div>
-        
-        <div>
-          <h3 className="text-sm font-medium mb-2">With Button</h3>
-          <InputGroup>
-            <InputGroupInput placeholder="API Key" />
-            <InputGroupAddon align="inline-end">
-              <InputGroupButton>
-                <CopyIcon className="size-4" />
-              </InputGroupButton>
-            </InputGroupAddon>
-          </InputGroup>
-        </div>
-        
-        <div>
-          <h3 className="text-sm font-medium mb-2">Password Toggle</h3>
-          <InputGroup>
-            <InputGroupInput 
-              type={showPassword ? "text" : "password"} 
-              placeholder="Password" 
-            />
-            <InputGroupAddon align="inline-end">
-              <InputGroupButton onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <EyeOffIcon className="size-4" /> : <EyeIcon className="size-4" />}
-              </InputGroupButton>
-            </InputGroupAddon>
-          </InputGroup>
-        </div>
-        
-        <div>
-          <h3 className="text-sm font-medium mb-2">Clear Input</h3>
-          <InputGroup>
-            <InputGroupInput 
-              value={clearValue} 
-              onChange={(e) => setClearValue(e.target.value)}
-              placeholder="Type..." 
-            />
-            <InputGroupAddon align="inline-end">
-              <InputGroupButton onClick={() => setClearValue("")} disabled={!clearValue}>
-                <XIcon className="size-4" />
-              </InputGroupButton>
-            </InputGroupAddon>
-          </InputGroup>
-        </div>
-        
-        <div>
-          <h3 className="text-sm font-medium mb-2">Search with Shortcut</h3>
-          <InputGroup>
-            <InputGroupAddon>
-              <SearchIcon className="size-4" />
-            </InputGroupAddon>
-            <InputGroupInput placeholder="Search..." />
-        <InputGroupAddon align="inline-end">
-          <KbdGroup>
-            <Kbd>⌘</Kbd>
-            <Kbd>K</Kbd>
-          </KbdGroup>
-        </InputGroupAddon>
-          </InputGroup>
-        </div>
+      <div className="max-w-sm">
+        <InputGroup>
+          <InputGroupInput value="https://example.com/api/key" readOnly />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton
+              aria-label="Copy to clipboard"
+              onClick={handleCopy}
+            >
+              {isCopied ? <CheckIcon className="size-4" /> : <CopyIcon className="size-4" />}
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
       </div>
     );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "A copy button that shows visual feedback when content is copied to clipboard.",
+      },
+    },
+  },
+};
+
+// With Select Dropdown
+export const WithSelectDropdown: Story = {
+  name: "With Select Dropdown",
+  render: () => (
+    <div className="max-w-sm">
+      <InputGroup>
+        <InputGroupAddon>
+          <select className="h-full border-0 bg-transparent text-sm focus:ring-0 focus:outline-none text-muted-foreground">
+            <option>https://</option>
+            <option>http://</option>
+            <option>ftp://</option>
+          </select>
+        </InputGroupAddon>
+        <InputGroupInput placeholder="example.com" />
+      </InputGroup>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Combine a native select dropdown with the input for protocol or prefix selection.",
+      },
+    },
   },
 };
