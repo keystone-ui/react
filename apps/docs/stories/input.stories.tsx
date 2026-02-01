@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { 
-  Input, 
+  Input,
+  DateInput,
   InputGroup, 
   InputGroupAddon,
   InputGroupInput,
@@ -336,7 +337,7 @@ export const FormExample: Story = {
           </Field>
           <Field>
             <FieldLabel htmlFor="form-date">Date of Birth</FieldLabel>
-            <Input id="form-date" type="date" />
+            <DateInput id="form-date" />
           </Field>
         </div>
         <Field>
