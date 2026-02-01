@@ -220,11 +220,11 @@ export const Invalid: Story = {
   name: "Invalid",
   render: () => (
     <FieldGroup className="mx-auto w-56">
-      <Field orientation="horizontal" data-invalid>
+      <Field orientation="horizontal" data-invalid="true">
         <Checkbox
           id="terms-checkbox-invalid"
           name="terms-checkbox-invalid"
-          aria-invalid
+          aria-invalid="true"
         />
         <FieldLabel htmlFor="terms-checkbox-invalid">
           Accept terms and conditions
@@ -236,7 +236,7 @@ export const Invalid: Story = {
     docs: {
       description: {
         story:
-          "Set `aria-invalid` on the checkbox and `data-invalid` on the field wrapper to show the invalid styles.",
+          "To show invalid styles, set `aria-invalid=\"true\"` on the `<Checkbox>` for the red border and `data-invalid=\"true\"` on the `<Field>` wrapper to turn the label text red. Both attributes work together to provide clear visual feedback for validation errors.",
       },
     },
   },

@@ -10,18 +10,20 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
       data-slot="checkbox"
       className={cn(
         // Base styles
-        "border-input dark:bg-input/30 flex size-4 items-center justify-center rounded-[4px] border transition-colors",
+        "peer relative shrink-0 flex size-4 items-center justify-center rounded-[4px] border transition-colors",
+        "border-input dark:bg-input/30",
+        // Click area extension
+        "after:absolute after:-inset-x-3 after:-inset-y-2",
         // Checked state
         "data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary",
-        // Focus styles
-        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-        // Invalid styles
-        "aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-[3px]",
-        "aria-invalid:aria-checked:border-primary",
+        // Focus styles - outside border like buttons
+        "focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-outline",
+        // Invalid styles - border change always, outline only on focus, no transition
+        "aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 aria-invalid:transition-none",
+        "aria-invalid:focus-visible:outline-destructive/50",
+        "aria-invalid:data-checked:border-primary",
         // Disabled styles
         "group-has-disabled/field:opacity-50 disabled:cursor-not-allowed disabled:opacity-50",
-        // Click area extension
-        "peer relative shrink-0 outline-none after:absolute after:-inset-x-3 after:-inset-y-2",
         className
       )}
       {...props}
