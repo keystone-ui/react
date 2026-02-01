@@ -1,39 +1,39 @@
 "use client";
 
-import * as React from "react";
+import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox";
+import { CheckIcon } from "lucide-react";
 import { cn } from "../utils";
 
-export interface CheckboxProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
-  /**
-   * Optional additional className for the checkbox
-   */
-  className?: string;
+function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
+  return (
+    <CheckboxPrimitive.Root
+      data-slot="checkbox"
+      className={cn(
+        // Base styles
+        "border-input dark:bg-input/30 flex size-4 items-center justify-center rounded-[4px] border transition-colors",
+        // Checked state
+        "data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary",
+        // Focus styles
+        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+        // Invalid styles
+        "aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-[3px]",
+        "aria-invalid:aria-checked:border-primary",
+        // Disabled styles
+        "group-has-disabled/field:opacity-50 disabled:cursor-not-allowed disabled:opacity-50",
+        // Click area extension
+        "peer relative shrink-0 outline-none after:absolute after:-inset-x-3 after:-inset-y-2",
+        className
+      )}
+      {...props}
+    >
+      <CheckboxPrimitive.Indicator
+        data-slot="checkbox-indicator"
+        className="[&>svg]:size-3.5 grid place-content-center text-current transition-none"
+      >
+        <CheckIcon />
+      </CheckboxPrimitive.Indicator>
+    </CheckboxPrimitive.Root>
+  );
 }
 
-export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <input
-        type="checkbox"
-        ref={ref}
-        role="checkbox"
-        data-slot="checkbox"
-        className={cn(
-          "peer size-4 shrink-0 appearance-none rounded border border-input bg-transparent",
-          "checked:bg-primary checked:border-primary",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-          "disabled:cursor-not-allowed disabled:opacity-50",
-          // Checkmark styling using pseudo-element
-          "relative",
-          "checked:before:absolute checked:before:inset-0 checked:before:flex checked:before:items-center checked:before:justify-center",
-          "checked:before:content-['✓'] checked:before:text-[10px] checked:before:font-bold checked:before:text-primary-foreground checked:before:leading-none",
-          className
-        )}
-        {...props}
-      />
-    );
-  }
-);
-
-Checkbox.displayName = "Checkbox";
+export { Checkbox };
