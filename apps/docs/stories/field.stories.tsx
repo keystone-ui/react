@@ -79,9 +79,9 @@ import { Input } from "@acme/ui";
 export default meta;
 type Story = StoryObj<typeof Field>;
 
-// Anatomy Example
-export const Anatomy: Story = {
-  name: "Anatomy",
+// Input Example (Anatomy)
+export const InputStory: Story = {
+  name: "Input",
   render: () => (
     <div className="w-full max-w-xs">
       <Field>
@@ -181,30 +181,6 @@ export const SwitchSizes: Story = {
   ),
 };
 
-// Input Example
-export const InputExample: Story = {
-  name: "Input",
-  render: () => (
-    <FieldSet className="w-full max-w-xs">
-      <FieldGroup>
-        <Field>
-          <FieldLabel htmlFor="username">Username</FieldLabel>
-          <Input id="username" type="text" placeholder="Max Leiter" />
-          <FieldDescription>
-            Choose a unique username for your account.
-          </FieldDescription>
-        </Field>
-        <Field>
-          <FieldLabel htmlFor="password">Password</FieldLabel>
-          <FieldDescription>
-            Must be at least 8 characters long.
-          </FieldDescription>
-          <Input id="password" type="password" placeholder="••••••••" />
-        </Field>
-      </FieldGroup>
-    </FieldSet>
-  ),
-};
 
 // Textarea Example
 export const TextareaExample: Story = {
@@ -338,7 +314,7 @@ export const Required: Story = {
     <div className="w-full max-w-xs">
       <Field>
         <FieldLabel htmlFor="required-email">
-          Email<span className="text-destructive ml-0.5">*</span>
+          Email<span className="text-destructive ml-1">*</span>
         </FieldLabel>
         <Input id="required-email" type="email" required />
         <FieldDescription>We&apos;ll never share your email.</FieldDescription>
@@ -389,6 +365,98 @@ export const FieldGroupWithCheckboxes: Story = {
           </Field>
         </FieldGroup>
       </FieldSet>
+    </FieldGroup>
+  ),
+};
+
+// FieldSet Example (Address Information)
+export const FieldSetExample: Story = {
+  name: "FieldSet",
+  render: () => (
+    <FieldSet className="w-full max-w-sm">
+      <FieldLegend>Address Information</FieldLegend>
+      <FieldDescription>
+        We need your address to deliver your order.
+      </FieldDescription>
+      <FieldGroup>
+        <Field>
+          <FieldLabel htmlFor="street">Street Address</FieldLabel>
+          <Input id="street" type="text" placeholder="123 Main St" />
+        </Field>
+        <div className="grid grid-cols-2 gap-4">
+          <Field>
+            <FieldLabel htmlFor="city">City</FieldLabel>
+            <Input id="city" type="text" placeholder="New York" />
+          </Field>
+          <Field>
+            <FieldLabel htmlFor="zip">Postal Code</FieldLabel>
+            <Input id="zip" type="text" placeholder="90502" />
+          </Field>
+        </div>
+      </FieldGroup>
+    </FieldSet>
+  ),
+};
+
+// Checkbox Example
+export const CheckboxExample: Story = {
+  name: "Checkbox",
+  render: () => (
+    <FieldGroup className="w-full max-w-xs">
+      <FieldSet>
+        <FieldLegend variant="label">Show these items on the desktop</FieldLegend>
+        <FieldDescription>
+          Select the items you want to show on the desktop.
+        </FieldDescription>
+        <FieldGroup className="gap-3">
+          <Field orientation="horizontal">
+            <Checkbox id="finder-pref-hard-disks" defaultChecked />
+            <FieldLabel
+              htmlFor="finder-pref-hard-disks"
+              className="font-normal"
+            >
+              Hard disks
+            </FieldLabel>
+          </Field>
+          <Field orientation="horizontal">
+            <Checkbox id="finder-pref-external-disks" />
+            <FieldLabel
+              htmlFor="finder-pref-external-disks"
+              className="font-normal"
+            >
+              External disks
+            </FieldLabel>
+          </Field>
+          <Field orientation="horizontal">
+            <Checkbox id="finder-pref-cds-dvds" />
+            <FieldLabel htmlFor="finder-pref-cds-dvds" className="font-normal">
+              CDs, DVDs, and iPods
+            </FieldLabel>
+          </Field>
+          <Field orientation="horizontal">
+            <Checkbox id="finder-pref-connected-servers" />
+            <FieldLabel
+              htmlFor="finder-pref-connected-servers"
+              className="font-normal"
+            >
+              Connected servers
+            </FieldLabel>
+          </Field>
+        </FieldGroup>
+      </FieldSet>
+      <FieldSeparator />
+      <Field orientation="horizontal">
+        <Checkbox id="finder-pref-sync-folders" defaultChecked />
+        <FieldContent>
+          <FieldLabel htmlFor="finder-pref-sync-folders">
+            Sync Desktop & Documents folders
+          </FieldLabel>
+          <FieldDescription>
+            Your Desktop & Documents folders are being synced with iCloud Drive.
+            You can access them from other devices.
+          </FieldDescription>
+        </FieldContent>
+      </Field>
     </FieldGroup>
   ),
 };
@@ -476,61 +544,3 @@ export const PaymentMethod: Story = {
   ),
 };
 
-// All Examples Grid
-export const AllExamples: Story = {
-  name: "All Examples",
-  render: () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div>
-        <h3 className="text-sm font-medium mb-4">Basic Input</h3>
-        <Field>
-          <FieldLabel htmlFor="demo-username">Username</FieldLabel>
-          <Input id="demo-username" placeholder="Max Leiter" />
-          <FieldDescription>Choose a unique username.</FieldDescription>
-        </Field>
-      </div>
-
-      <div>
-        <h3 className="text-sm font-medium mb-4">With Textarea</h3>
-        <Field>
-          <FieldLabel htmlFor="demo-feedback">Feedback</FieldLabel>
-          <Textarea id="demo-feedback" placeholder="Your thoughts..." rows={3} />
-          <FieldDescription>Share your feedback.</FieldDescription>
-        </Field>
-      </div>
-
-      <div>
-        <h3 className="text-sm font-medium mb-4">Horizontal Checkbox</h3>
-        <Field orientation="horizontal">
-          <Checkbox id="demo-terms" />
-          <FieldLabel htmlFor="demo-terms" className="font-normal">
-            I agree to the terms and conditions
-          </FieldLabel>
-        </Field>
-      </div>
-
-      <div>
-        <h3 className="text-sm font-medium mb-4">Error State</h3>
-        <Field data-invalid>
-          <FieldLabel htmlFor="demo-email">Email</FieldLabel>
-          <Input id="demo-email" type="email" aria-invalid defaultValue="bad" />
-          <FieldError>Enter a valid email address.</FieldError>
-        </Field>
-      </div>
-
-      <div className="md:col-span-2">
-        <h3 className="text-sm font-medium mb-4">Grid Layout</h3>
-        <FieldGroup className="grid grid-cols-2 max-w-sm">
-          <Field>
-            <FieldLabel htmlFor="demo-first">First Name</FieldLabel>
-            <Input id="demo-first" placeholder="Jordan" />
-          </Field>
-          <Field>
-            <FieldLabel htmlFor="demo-last">Last Name</FieldLabel>
-            <Input id="demo-last" placeholder="Lee" />
-          </Field>
-        </FieldGroup>
-      </div>
-    </div>
-  ),
-};
