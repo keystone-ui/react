@@ -5,6 +5,8 @@
 :root {
   --background: oklch(1 0 0); /* --color-white */
   --foreground: oklch(0.141 0.005 285.823); /* --color-zinc-950 */
+  --card: oklch(1 0 0); /* --color-white */
+  --card-foreground: oklch(0.141 0.005 285.823); /* --color-zinc-950 */
   --primary: oklch(0.21 0.006 285.885); /* --color-zinc-900 */
   --primary-foreground: oklch(0.985 0 0); /* --color-zinc-50 */
   --secondary: oklch(0.967 0.001 286.375); /* --color-zinc-100 */
@@ -24,6 +26,8 @@
 .dark {
   --background: oklch(0.141 0.005 285.823); /* --color-zinc-950 */
   --foreground: oklch(0.985 0 0); /* --color-zinc-50 */
+  --card: oklch(0.141 0.005 285.823); /* --color-zinc-950 */
+  --card-foreground: oklch(0.985 0 0); /* --color-zinc-50 */
   --primary: oklch(0.985 0 0); /* --color-zinc-50 */
   --primary-foreground: oklch(0.21 0.006 285.885); /* --color-zinc-900 */
   --secondary: oklch(0.274 0.006 286.033); /* --color-zinc-800 */
@@ -42,6 +46,9 @@
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
 
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
@@ -67,6 +74,9 @@
   /* Accordion animations */
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  /* InputOTP caret animation */
+  --animate-caret-blink: caret-blink 1.2s ease-out infinite;
 }
 
 @keyframes accordion-down {
@@ -84,6 +94,15 @@
   }
   to {
     height: 0;
+  }
+}
+
+@keyframes caret-blink {
+  0%, 70%, 100% {
+    opacity: 1;
+  }
+  20%, 50% {
+    opacity: 0;
   }
 }
 
