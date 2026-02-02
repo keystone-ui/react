@@ -26,7 +26,7 @@ const AccordionTrigger = React.forwardRef<
   const baseClasses = cn(
     "group flex w-full cursor-pointer items-center justify-between gap-4 py-2.5 text-left text-sm font-semibold",
     "focus:ring-0 focus:ring-offset-0",
-    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-outline",
+    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50",
     variant === "box" && [
       "px-3",
       "rounded-lg"

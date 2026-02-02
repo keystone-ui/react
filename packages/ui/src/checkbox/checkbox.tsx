@@ -17,7 +17,7 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
         // Checked state
         "data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary",
         // Focus styles - outside border like buttons
-        "focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-outline",
+        "focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50",
         // Invalid styles - border change always, outline only on focus, no transition
         "aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 aria-invalid:transition-none",
         "aria-invalid:focus-visible:outline-destructive/50",

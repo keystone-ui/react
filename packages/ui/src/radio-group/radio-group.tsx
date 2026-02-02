@@ -28,7 +28,7 @@ function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
         // Checked state - primary bg with white indicator
         "data-checked:bg-primary data-checked:border-primary data-checked:text-primary-foreground",
         // Focus styles - outside border like buttons/checkbox
-        "focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-outline",
+        "focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50",
         // Invalid styles - border and indicator red, outline only on focus, no transition
         "aria-invalid:border-destructive aria-invalid:text-destructive dark:aria-invalid:border-destructive/50 aria-invalid:transition-none",
         "aria-invalid:focus-visible:outline-destructive/50",
