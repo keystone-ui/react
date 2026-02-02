@@ -20,17 +20,17 @@ export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
         data-slot="switch"
         data-size={size}
         className={cn(
-          "peer group/switch relative inline-flex shrink-0 items-center rounded-full border border-transparent transition-all outline-none",
+          "peer group/switch relative inline-flex shrink-0 items-center rounded-full border border-transparent transition-all",
           // Size variants
           "data-[size=default]:h-[18.4px] data-[size=default]:w-[32px]",
           "data-[size=sm]:h-[14px] data-[size=sm]:w-[24px]",
           // State colors
           "data-checked:bg-primary data-unchecked:bg-input",
           "dark:data-unchecked:bg-input/80",
-          // Focus styles
-          "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+          // Focus styles - outside outline like buttons
+          "focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50",
           // Invalid styles
-          "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 aria-invalid:ring-[3px]",
+          "aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 aria-invalid:transition-none aria-invalid:focus-visible:outline-destructive/50",
           // Disabled styles
           "data-disabled:cursor-not-allowed data-disabled:opacity-50",
           // Click area extension
