@@ -10,7 +10,7 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
       data-slot="checkbox"
       className={cn(
         // Base styles
-        "peer relative shrink-0 flex size-4 items-center justify-center rounded-[4px] border transition-colors",
+        "peer relative shrink-0 flex size-4 items-center justify-center rounded-[4px] border",
         "border-input dark:bg-input/30",
         // Click area extension
         "after:absolute after:-inset-x-3 after:-inset-y-2",

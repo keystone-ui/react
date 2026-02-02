@@ -8,6 +8,7 @@ export * from './form';
 export * from './input';
 export * from './input-otp';
 export * from './kbd';
+export * from './radio-group';
 export * from './separator';
 export * from './switch';
 export * from './textarea';
