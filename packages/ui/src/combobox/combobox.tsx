@@ -265,7 +265,7 @@ function ComboboxLabel({ className, ...props }: ComboboxLabelProps) {
   return (
     <ComboboxPrimitive.GroupLabel
       data-slot="combobox-label"
-      className={cn("text-muted-foreground px-2 py-1.5 text-xs", className)}
+      className={cn("text-muted-foreground px-1.5 py-1 text-xs", className)}
       {...props}
     />
   );
@@ -311,7 +311,7 @@ function ComboboxSeparator({ className, ...props }: ComboboxSeparatorProps) {
   return (
     <ComboboxPrimitive.Separator
       data-slot="combobox-separator"
-      className={cn("bg-border/50 -mx-1 my-1 h-px", className)}
+      className={cn("bg-border-muted -mx-1 my-1 h-px", className)}
       {...props}
     />
   );
