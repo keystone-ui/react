@@ -28,8 +28,20 @@ import {
 } from "@acme/ui/field";
 import { InputGroupAddon } from "@acme/ui/input";
 import { Button } from "@acme/ui/button";
-import { GlobeIcon } from "lucide-react";
+import { GlobeIcon, SearchIcon } from "lucide-react";
 import ReactCountryFlag from "react-country-flag";
+import {
+  FaBitcoin,
+  FaEthereum,
+} from "react-icons/fa";
+import {
+  SiSolana,
+  SiCardano,
+  SiPolkadot,
+  SiLitecoin,
+  SiDogecoin,
+  SiRipple,
+} from "react-icons/si";
 
 const meta = {
   title: "Components/Combobox",
@@ -624,6 +636,118 @@ export const Popup: Story = {
       <FieldDescription>
         Use a button trigger with the input inside the popup for a searchable
         select pattern.
+      </FieldDescription>
+    </Field>
+  ),
+};
+
+// =============================================================================
+// Popup Crypto
+// =============================================================================
+const cryptocurrencies = [
+  {
+    symbol: "BTC",
+    label: "Bitcoin",
+    value: 0.00234,
+    icon: FaBitcoin,
+  },
+  {
+    symbol: "ETH",
+    label: "Ethereum",
+    value: 1.2451,
+    icon: FaEthereum,
+  },
+  {
+    symbol: "SOL",
+    label: "Solana",
+    value: 12.847,
+    icon: SiSolana,
+  },
+  {
+    symbol: "ADA",
+    label: "Cardano",
+    value: 892.31,
+    icon: SiCardano,
+  },
+  {
+    symbol: "DOT",
+    label: "Polkadot",
+    value: 45.621,
+    icon: SiPolkadot,
+  },
+  {
+    symbol: "LTC",
+    label: "Litecoin",
+    value: 3.8742,
+    icon: SiLitecoin,
+  },
+  {
+    symbol: "DOGE",
+    label: "Dogecoin",
+    value: 15420.5,
+    icon: SiDogecoin,
+  },
+  {
+    symbol: "XRP",
+    label: "Ripple",
+    value: 523.84,
+    icon: SiRipple,
+  },
+];
+
+export const PopupCrypto: Story = {
+  name: "Popup Crypto",
+  render: () => (
+    <Field>
+      <FieldLabel>Cryptocurrency</FieldLabel>
+      <Combobox
+        items={cryptocurrencies}
+        itemToStringValue={(crypto: (typeof cryptocurrencies)[number]) =>
+          crypto.label
+        }
+      >
+        <ComboboxTrigger
+          render={
+            <Button
+              variant="outline"
+              className="w-64 justify-between font-normal focus-visible:outline-0 focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring focus-visible:border-ring"
+            >
+              <ComboboxValue placeholder="Select cryptocurrency" />
+            </Button>
+          }
+        />
+        <ComboboxContent>
+          <ComboboxInput showTrigger={false} placeholder="Search">
+            <InputGroupAddon align="inline-start">
+              <SearchIcon className="size-4 text-muted-foreground" />
+            </InputGroupAddon>
+          </ComboboxInput>
+          <ComboboxSeparator className="my-0" />
+          <ComboboxEmpty>No cryptocurrencies found.</ComboboxEmpty>
+          <ComboboxList>
+            {(item) => {
+              const Icon = item.icon;
+              return (
+                <ComboboxItem
+                  key={item.symbol}
+                  value={item}
+                  className="justify-between"
+                >
+                  <span className="flex items-center gap-2">
+                    <Icon className="size-4" />
+                    {item.symbol}
+                  </span>
+                  <span className="text-muted-foreground tabular-nums">
+                    {item.value}
+                  </span>
+                </ComboboxItem>
+              );
+            }}
+          </ComboboxList>
+        </ComboboxContent>
+      </Combobox>
+      <FieldDescription>
+        Cryptocurrency selector with icons and balance values.
       </FieldDescription>
     </Field>
   ),
