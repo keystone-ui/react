@@ -341,6 +341,12 @@ export const Groups: Story = {
 // =============================================================================
 const countries = [
   {
+    code: "",
+    value: "",
+    label: "Select country",
+    continent: "",
+  },
+  {
     code: "ar",
     value: "argentina",
     label: "Argentina",
