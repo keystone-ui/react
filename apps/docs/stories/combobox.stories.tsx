@@ -341,12 +341,6 @@ export const Groups: Story = {
 // =============================================================================
 const countries = [
   {
-    code: "",
-    value: "",
-    label: "Select country",
-    continent: "",
-  },
-  {
     code: "ar",
     value: "argentina",
     label: "Argentina",
@@ -600,7 +594,6 @@ export const Popup: Story = {
       <FieldLabel>Country</FieldLabel>
       <Combobox
         items={countries}
-        defaultValue={countries[0]}
         itemToStringValue={(country: (typeof countries)[number]) =>
           country.label
         }
@@ -617,6 +610,7 @@ export const Popup: Story = {
         />
         <ComboboxContent>
           <ComboboxInput showTrigger={false} placeholder="Search" />
+          <ComboboxSeparator className="my-0" />
           <ComboboxEmpty>No items found.</ComboboxEmpty>
           <ComboboxList>
             {(item) => (
