@@ -5,6 +5,9 @@ import { Menu as MenuPrimitive } from "@base-ui/react/menu";
 import { CheckIcon, ChevronRightIcon } from "lucide-react";
 import { cn } from "../utils";
 
+// Shared height class: default h-9 (36px), compact h-8 (32px)
+const ITEM_HEIGHT = "h-9 [[data-size=compact]_&]:h-8";
+
 // =============================================================================
 // DropdownMenu (Root)
 // =============================================================================
@@ -63,6 +66,11 @@ export interface DropdownMenuContentProps extends MenuPrimitive.Popup.Props {
    * @default 4
    */
   sideOffset?: number;
+  /**
+   * Size of the menu items
+   * @default "default"
+   */
+  size?: "default" | "compact";
 }
 
 function DropdownMenuContent({
@@ -70,6 +78,7 @@ function DropdownMenuContent({
   alignOffset = 0,
   side = "bottom",
   sideOffset = 4,
+  size = "default",
   className,
   ...props
 }: DropdownMenuContentProps) {
@@ -84,6 +93,7 @@ function DropdownMenuContent({
       >
         <MenuPrimitive.Popup
           data-slot="dropdown-menu-content"
+          data-size={size}
           className={cn(
             "bg-popover text-popover-foreground ring-border/10",
             "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95",
@@ -168,7 +178,7 @@ function DropdownMenuItem({
         "focus:bg-accent focus:text-accent-foreground",
         "data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:text-destructive",
         "not-data-[variant=destructive]:focus:**:text-accent-foreground",
-        "group/dropdown-menu-item relative flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-hidden select-none",
+        `group/dropdown-menu-item relative flex ${ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md px-1.5 text-sm outline-hidden select-none`,
         "data-disabled:pointer-events-none data-disabled:opacity-50 data-[inset]:pl-8",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
@@ -213,7 +223,7 @@ function DropdownMenuSubTrigger({
         "focus:bg-accent focus:text-accent-foreground data-open:bg-accent data-open:text-accent-foreground",
         "not-data-[variant=destructive]:focus:**:text-accent-foreground",
         "data-popup-open:bg-accent data-popup-open:text-accent-foreground",
-        "flex cursor-default items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-hidden select-none data-[inset]:pl-8",
+        `flex ${ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md px-1.5 text-sm outline-hidden select-none data-[inset]:pl-8`,
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
@@ -302,7 +312,7 @@ function DropdownMenuCheckboxItem({
       data-slot="dropdown-menu-checkbox-item"
       className={cn(
         "focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground",
-        "relative flex cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none",
+        `relative flex ${ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md pr-8 pl-1.5 text-sm outline-hidden select-none`,
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
@@ -354,7 +364,7 @@ function DropdownMenuRadioItem({
       data-slot="dropdown-menu-radio-item"
       className={cn(
         "focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground",
-        "relative flex cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none",
+        `relative flex ${ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md pr-8 pl-1.5 text-sm outline-hidden select-none`,
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
