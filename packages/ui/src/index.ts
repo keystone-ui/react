@@ -4,6 +4,7 @@ export * from './button';
 export * from './badge';
 export * from './card';
 export * from './checkbox';
+export * from './combobox';
 export * from './field';
 export * from './form';
 export * from './input';

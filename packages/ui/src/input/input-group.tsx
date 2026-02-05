@@ -41,7 +41,7 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
           "has-[[data-slot=input-group-control]:focus]:border-ring has-[[data-slot=input-group-control]:focus]:ring-ring has-[[data-slot=input-group-control]:focus]:ring-1 has-[[data-slot=input-group-control]:focus]:ring-inset",
 
           // Error state
-          "has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive",
+          "has-[[data-slot][aria-invalid=true]]:ring-1 has-[[data-slot][aria-invalid=true]]:ring-inset has-[[data-slot][aria-invalid=true]]:ring-destructive has-[[data-slot][aria-invalid=true]]:border-destructive",
 
           className
         )}
@@ -132,7 +132,7 @@ const inputGroupButtonVariants = cva(
 );
 
 export interface InputGroupButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends Omit<React.ComponentProps<typeof Button>, "size">,
     VariantProps<typeof inputGroupButtonVariants> {
   /**
    * The type of button
@@ -144,26 +144,19 @@ export interface InputGroupButtonProps
    * @default "ghost"
    */
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
-  /**
-   * Whether the button is loading
-   */
-  isLoading?: boolean;
 }
 
 export const InputGroupButton = React.forwardRef<HTMLButtonElement, InputGroupButtonProps>(
-  ({ className, type = "button", variant = "ghost", size = "xs", isLoading, children, ...props }, ref) => {
+  ({ className, type = "button", variant = "ghost", size = "xs", ...props }, ref) => {
     return (
       <Button
         ref={ref}
         type={type}
         data-size={size}
         variant={variant}
-        isLoading={isLoading}
         className={cn(inputGroupButtonVariants({ size }), className)}
         {...props}
-      >
-        {children}
-      </Button>
+      />
     );
   }
 );
