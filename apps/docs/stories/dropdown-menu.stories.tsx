@@ -380,7 +380,7 @@ export const Checkboxes: Story = {
 // Checkboxes Icons
 // =============================================================================
 export const CheckboxesIcons: Story = {
-  name: "Checkboxes Icons",
+  name: "Checkboxes with Icons",
   render: () => {
     const [notifications, setNotifications] = useState({
       email: true,
@@ -448,6 +448,61 @@ export const CheckboxesIcons: Story = {
 };
 
 // =============================================================================
+// Checkboxes Control
+// =============================================================================
+export const CheckboxesControl: Story = {
+  name: "Checkboxes Control",
+  render: () => {
+    const [showStatusBar, setShowStatusBar] = useState(true);
+    const [showActivityBar, setShowActivityBar] = useState(false);
+    const [showPanel, setShowPanel] = useState(false);
+
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={<Button variant="outline">Open</Button>}
+        />
+        <DropdownMenuContent className="w-40">
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Appearance</DropdownMenuLabel>
+            <DropdownMenuCheckboxItem
+              variant="control"
+              checked={showStatusBar ?? false}
+              onCheckedChange={setShowStatusBar}
+            >
+              Status Bar
+            </DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem
+              variant="control"
+              checked={showActivityBar}
+              onCheckedChange={setShowActivityBar}
+              disabled
+            >
+              Activity Bar
+            </DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem
+              variant="control"
+              checked={showPanel}
+              onCheckedChange={setShowPanel}
+            >
+              Panel
+            </DropdownMenuCheckboxItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use `variant="control"` to render real Checkbox components on the left instead of check icons on the right.',
+      },
+    },
+  },
+};
+
+// =============================================================================
 // Radio Group
 // =============================================================================
 export const RadioGroup: Story = {
@@ -492,7 +547,7 @@ export const RadioGroup: Story = {
 // Radio Icons
 // =============================================================================
 export const RadioIcons: Story = {
-  name: "Radio Icons",
+  name: "Radio with Icons",
   render: () => {
     const [paymentMethod, setPaymentMethod] = useState("card");
 
@@ -531,6 +586,51 @@ export const RadioIcons: Story = {
       description: {
         story:
           "Show radio options with icons.",
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Radio Control
+// =============================================================================
+export const RadioControl: Story = {
+  name: "Radio Control",
+  render: () => {
+    const [position, setPosition] = useState("bottom");
+
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={<Button variant="outline">Open</Button>}
+        />
+        <DropdownMenuContent className="w-32">
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
+            <DropdownMenuRadioGroup
+              value={position}
+              onValueChange={setPosition}
+            >
+              <DropdownMenuRadioItem variant="control" value="top">
+                Top
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem variant="control" value="bottom">
+                Bottom
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem variant="control" value="right">
+                Right
+              </DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use `variant="control"` to render real Radio components on the left instead of check icons on the right.',
       },
     },
   },

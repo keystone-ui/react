@@ -2,8 +2,9 @@
 
 import * as React from "react";
 import { Menu as MenuPrimitive } from "@base-ui/react/menu";
-import { CheckIcon, ChevronRightIcon } from "lucide-react";
+import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
 import { cn } from "../utils";
+import { Checkbox } from "../checkbox";
 
 // Shared height class: default h-9 (36px), compact h-8 (32px)
 const ITEM_HEIGHT = "h-9 [[data-size=compact]_&]:h-8";
@@ -299,20 +300,31 @@ function DropdownMenuSubContent({
 // DropdownMenuCheckboxItem
 // =============================================================================
 export interface DropdownMenuCheckboxItemProps
-  extends MenuPrimitive.CheckboxItem.Props {}
+  extends MenuPrimitive.CheckboxItem.Props {
+  /**
+   * Visual style of the checkbox indicator
+   * - "indicator": check icon on the right (default)
+   * - "control": renders a real Checkbox component on the left
+   * @default "indicator"
+   */
+  variant?: "indicator" | "control";
+}
 
 function DropdownMenuCheckboxItem({
   className,
   children,
   checked,
+  variant = "indicator",
   ...props
 }: DropdownMenuCheckboxItemProps) {
   return (
     <MenuPrimitive.CheckboxItem
       data-slot="dropdown-menu-checkbox-item"
       className={cn(
-        "focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground",
-        `relative flex ${ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md pr-8 pl-1.5 text-sm outline-hidden select-none`,
+        "focus:bg-accent focus:text-accent-foreground",
+        variant === "indicator" && "focus:**:text-accent-foreground",
+        `relative flex ${ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md text-sm outline-hidden select-none`,
+        variant === "indicator" ? "pr-8 pl-1.5" : "px-1.5",
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
@@ -320,14 +332,22 @@ function DropdownMenuCheckboxItem({
       checked={checked}
       {...props}
     >
-      <span
-        className="pointer-events-none absolute right-2 flex items-center justify-center"
-        data-slot="dropdown-menu-checkbox-item-indicator"
-      >
-        <MenuPrimitive.CheckboxItemIndicator>
-          <CheckIcon className="size-4" />
-        </MenuPrimitive.CheckboxItemIndicator>
-      </span>
+      {variant === "control" ? (
+        <Checkbox
+          checked={checked ?? false}
+          tabIndex={-1}
+          className="pointer-events-none after:hidden focus-visible:outline-none"
+        />
+      ) : (
+        <span
+          className="pointer-events-none absolute right-2 flex items-center justify-center"
+          data-slot="dropdown-menu-checkbox-item-indicator"
+        >
+          <MenuPrimitive.CheckboxItemIndicator>
+            <CheckIcon className="size-4" />
+          </MenuPrimitive.CheckboxItemIndicator>
+        </span>
+      )}
       {children}
     </MenuPrimitive.CheckboxItem>
   );
@@ -352,33 +372,60 @@ function DropdownMenuRadioGroup({ ...props }: DropdownMenuRadioGroupProps) {
 // DropdownMenuRadioItem
 // =============================================================================
 export interface DropdownMenuRadioItemProps
-  extends MenuPrimitive.RadioItem.Props {}
+  extends MenuPrimitive.RadioItem.Props {
+  /**
+   * Visual style of the radio indicator
+   * - "indicator": check icon on the right (default)
+   * - "control": renders a real Radio component on the left
+   * @default "indicator"
+   */
+  variant?: "indicator" | "control";
+}
 
 function DropdownMenuRadioItem({
   className,
   children,
+  variant = "indicator",
   ...props
 }: DropdownMenuRadioItemProps) {
   return (
     <MenuPrimitive.RadioItem
       data-slot="dropdown-menu-radio-item"
       className={cn(
-        "focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground",
-        `relative flex ${ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md pr-8 pl-1.5 text-sm outline-hidden select-none`,
+        "focus:bg-accent focus:text-accent-foreground",
+        variant === "indicator" && "focus:**:text-accent-foreground",
+        `relative flex ${ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md text-sm outline-hidden select-none`,
+        variant === "indicator" ? "pr-8 pl-1.5" : "px-1.5",
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
     >
-      <span
-        className="pointer-events-none absolute right-2 flex items-center justify-center"
-        data-slot="dropdown-menu-radio-item-indicator"
-      >
-        <MenuPrimitive.RadioItemIndicator>
-          <CheckIcon className="size-4" />
-        </MenuPrimitive.RadioItemIndicator>
-      </span>
+      {variant === "control" ? (
+        <span
+          data-slot="dropdown-menu-radio-control"
+          className={cn(
+            "relative shrink-0 flex aspect-square size-4 items-center justify-center rounded-full border",
+            "border-input text-primary dark:bg-input/30",
+            "[[data-checked]_&]:bg-primary [[data-checked]_&]:border-primary [[data-checked]_&]:text-primary-foreground",
+            "pointer-events-none"
+          )}
+        >
+          <MenuPrimitive.RadioItemIndicator>
+            <CircleIcon className="size-2 fill-current" />
+          </MenuPrimitive.RadioItemIndicator>
+        </span>
+      ) : (
+        <span
+          className="pointer-events-none absolute right-2 flex items-center justify-center"
+          data-slot="dropdown-menu-radio-item-indicator"
+        >
+          <MenuPrimitive.RadioItemIndicator>
+            <CheckIcon className="size-4" />
+          </MenuPrimitive.RadioItemIndicator>
+        </span>
+      )}
       {children}
     </MenuPrimitive.RadioItem>
   );
