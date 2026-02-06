@@ -1,10 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "@acme/ui/tabs";
+import { Button } from "@acme/ui/button";
 import {
   Card,
   CardContent,
@@ -69,14 +71,34 @@ import {
   </TabsList>
   <TabsContent value="overview">Overview content</TabsContent>
 </Tabs>
+
+// Pill shape
+<Tabs defaultValue="overview">
+  <TabsList shape="pill">
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="analytics">Analytics</TabsTrigger>
+  </TabsList>
+</Tabs>
+
+// Scrollable (with arrow buttons and gradient fades)
+<Tabs defaultValue="tab1">
+  <TabsList scrollable>
+    <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+    <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+    {/* ...many tabs */}
+  </TabsList>
+</Tabs>
 \`\`\`
 
 ## Features
 
 - Default and line style variants
+- Rounded and pill shapes
 - Horizontal and vertical orientations
+- Scrollable mode with arrow buttons and CSS scroll-driven gradient fades
 - Disabled tab support
 - Icon support in triggers
+- Controlled and uncontrolled usage
 - Keyboard navigation with arrow keys
 - Accessible via WAI-ARIA Tabs pattern
 `,
@@ -296,6 +318,71 @@ export const Disabled: Story = {
       description: {
         story:
           "Use the `disabled` prop on `TabsTrigger` to prevent interaction with a tab. Disabled tabs are visually muted and cannot be activated.",
+      },
+    },
+  },
+};
+
+// Controlled tabs
+export const Controlled: Story = {
+  render: () => {
+    const [value, setValue] = useState<string | number>("overview");
+
+    return (
+      <div className="space-y-4">
+        <Tabs value={value} onValueChange={setValue}>
+          <TabsList>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="reports">Reports</TabsTrigger>
+          </TabsList>
+          <TabsContent value="overview">
+            <p className="text-muted-foreground text-sm pt-2">
+              Overview content goes here.
+            </p>
+          </TabsContent>
+          <TabsContent value="analytics">
+            <p className="text-muted-foreground text-sm pt-2">
+              Analytics content goes here.
+            </p>
+          </TabsContent>
+          <TabsContent value="reports">
+            <p className="text-muted-foreground text-sm pt-2">
+              Reports content goes here.
+            </p>
+          </TabsContent>
+        </Tabs>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setValue("overview")}
+          >
+            Go to Overview
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setValue("analytics")}
+          >
+            Go to Analytics
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setValue("reports")}
+          >
+            Go to Reports
+          </Button>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Use the `value` and `onValueChange` props to control the active tab externally. This is useful when you need to sync the active tab with external state or navigation.",
       },
     },
   },
@@ -561,7 +648,7 @@ export const Scrollable: Story = {
     docs: {
       description: {
         story:
-          'Use the `scrollable` prop on `TabsList` when you have many tabs that may overflow the container. This enables horizontal scrolling with CSS scroll-driven gradient fades (Chrome 115+, gracefully degrades) and arrow buttons on desktop. On mobile, touch scrolling works natively and the arrows are hidden.',
+          'Use the `scrollable` prop on `TabsList` when you have many tabs that may overflow the container. This enables horizontal scrolling with CSS scroll-driven gradient fades (Chrome 115+, gracefully degrades) and arrow buttons for navigation. On mobile, users can also swipe to scroll.',
       },
     },
   },
