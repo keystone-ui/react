@@ -116,6 +116,43 @@
   }
 }
 
+/* Scrollable TabsList: gradient fade via scroll-driven animations.
+   Pure CSS — no JavaScript needed for the fade effect.
+   Gracefully degrades on unsupported browsers (no fade, still scrollable). */
+
+@property --tabs-fade-left {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --tabs-fade-right {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@keyframes tabs-scroll-fade {
+  0%        { --tabs-fade-left: 0; }
+  10%, 100% { --tabs-fade-left: 2rem; }
+  0%, 90%   { --tabs-fade-right: 2rem; }
+  100%      { --tabs-fade-right: 0; }
+}
+
+@supports (animation-timeline: scroll()) {
+  [data-slot="tabs-list-scroll"][data-scrollable] {
+    mask: linear-gradient(
+      to right,
+      transparent,
+      black var(--tabs-fade-left),
+      black calc(100% - var(--tabs-fade-right)),
+      transparent
+    );
+    animation: tabs-scroll-fade linear;
+    animation-timeline: scroll(self inline);
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

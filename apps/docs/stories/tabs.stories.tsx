@@ -1,0 +1,598 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@acme/ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@acme/ui/card";
+import {
+  AppWindowIcon,
+  BarChartIcon,
+  CodeIcon,
+  FileTextIcon,
+  GlobeIcon,
+  LayoutDashboardIcon,
+  MailIcon,
+  MessageSquareIcon,
+  SettingsIcon,
+  ShieldIcon,
+  UsersIcon,
+} from "lucide-react";
+
+const meta = {
+  title: "Components/Tabs",
+  component: Tabs,
+  parameters: {
+    docs: {
+      description: {
+        component: `
+A set of layered sections of content (known as tab panels) that are displayed one at a time.
+
+\`\`\`tsx
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@acme/ui/tabs";
+
+// Basic usage
+<Tabs defaultValue="overview">
+  <TabsList>
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="analytics">Analytics</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview">Overview content</TabsContent>
+  <TabsContent value="analytics">Analytics content</TabsContent>
+</Tabs>
+
+// Line variant
+<Tabs defaultValue="overview">
+  <TabsList variant="line">
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="analytics">Analytics</TabsTrigger>
+  </TabsList>
+</Tabs>
+
+// Vertical orientation
+<Tabs defaultValue="overview" orientation="vertical">
+  <TabsList>
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="analytics">Analytics</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview">Overview content</TabsContent>
+</Tabs>
+\`\`\`
+
+## Features
+
+- Default and line style variants
+- Horizontal and vertical orientations
+- Disabled tab support
+- Icon support in triggers
+- Keyboard navigation with arrow keys
+- Accessible via WAI-ARIA Tabs pattern
+`,
+      },
+    },
+  },
+} satisfies Meta<typeof Tabs>;
+
+export default meta;
+type Story = StoryObj<typeof Tabs>;
+
+// Basic tabs with Card content panels
+export const Default: Story = {
+  render: () => (
+    <Tabs defaultValue="overview" className="w-[400px]">
+      <TabsList>
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        <TabsTrigger value="reports">Reports</TabsTrigger>
+        <TabsTrigger value="settings">Settings</TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview">
+        <Card>
+          <CardHeader>
+            <CardTitle>Overview</CardTitle>
+            <CardDescription>
+              View your key metrics and recent project activity. Track progress
+              across all your active projects.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-muted-foreground text-sm">
+            You have 12 active projects and 3 pending tasks.
+          </CardContent>
+        </Card>
+      </TabsContent>
+      <TabsContent value="analytics">
+        <Card>
+          <CardHeader>
+            <CardTitle>Analytics</CardTitle>
+            <CardDescription>
+              Track performance and user engagement metrics. Monitor trends and
+              identify growth opportunities.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-muted-foreground text-sm">
+            Page views are up 25% compared to last month.
+          </CardContent>
+        </Card>
+      </TabsContent>
+      <TabsContent value="reports">
+        <Card>
+          <CardHeader>
+            <CardTitle>Reports</CardTitle>
+            <CardDescription>
+              Generate and download your detailed reports. Export data in
+              multiple formats for analysis.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-muted-foreground text-sm">
+            You have 5 reports ready and available to export.
+          </CardContent>
+        </Card>
+      </TabsContent>
+      <TabsContent value="settings">
+        <Card>
+          <CardHeader>
+            <CardTitle>Settings</CardTitle>
+            <CardDescription>
+              Manage your account preferences and options. Customize your
+              experience to fit your needs.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-muted-foreground text-sm">
+            Configure notifications, security, and themes.
+          </CardContent>
+        </Card>
+      </TabsContent>
+    </Tabs>
+  ),
+};
+
+// Line variant
+export const Line: Story = {
+  render: () => (
+    <Tabs defaultValue="overview">
+      <TabsList variant="line">
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        <TabsTrigger value="reports">Reports</TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview">
+        <p className="text-muted-foreground text-sm pt-2">
+          Overview content goes here.
+        </p>
+      </TabsContent>
+      <TabsContent value="analytics">
+        <p className="text-muted-foreground text-sm pt-2">
+          Analytics content goes here.
+        </p>
+      </TabsContent>
+      <TabsContent value="reports">
+        <p className="text-muted-foreground text-sm pt-2">
+          Reports content goes here.
+        </p>
+      </TabsContent>
+    </Tabs>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use the `variant="line"` prop on `TabsList` for a line-style indicator instead of the default background style.',
+      },
+    },
+  },
+};
+
+// Vertical orientation
+export const Vertical: Story = {
+  render: () => (
+    <Tabs defaultValue="overview" orientation="vertical" className="w-[400px]">
+      <TabsList>
+        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        <TabsTrigger value="reports">Reports</TabsTrigger>
+        <TabsTrigger value="settings">Settings</TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview">
+        <Card>
+          <CardHeader>
+            <CardTitle>Overview</CardTitle>
+            <CardDescription>
+              View your key metrics and recent project activity.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-muted-foreground text-sm">
+            You have 12 active projects and 3 pending tasks.
+          </CardContent>
+        </Card>
+      </TabsContent>
+      <TabsContent value="analytics">
+        <Card>
+          <CardHeader>
+            <CardTitle>Analytics</CardTitle>
+            <CardDescription>
+              Track performance and user engagement metrics.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-muted-foreground text-sm">
+            Page views are up 25% compared to last month.
+          </CardContent>
+        </Card>
+      </TabsContent>
+      <TabsContent value="reports">
+        <Card>
+          <CardHeader>
+            <CardTitle>Reports</CardTitle>
+            <CardDescription>
+              Generate and download your detailed reports.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-muted-foreground text-sm">
+            You have 5 reports ready and available to export.
+          </CardContent>
+        </Card>
+      </TabsContent>
+      <TabsContent value="settings">
+        <Card>
+          <CardHeader>
+            <CardTitle>Settings</CardTitle>
+            <CardDescription>
+              Manage your account preferences and options.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-muted-foreground text-sm">
+            Configure notifications, security, and themes.
+          </CardContent>
+        </Card>
+      </TabsContent>
+    </Tabs>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use `orientation="vertical"` on the `Tabs` root for a vertical tab layout. Tabs are displayed in a column with content to the right.',
+      },
+    },
+  },
+};
+
+// Disabled tabs
+export const Disabled: Story = {
+  render: () => (
+    <Tabs defaultValue="home">
+      <TabsList>
+        <TabsTrigger value="home">Home</TabsTrigger>
+        <TabsTrigger value="settings" disabled>
+          Disabled
+        </TabsTrigger>
+        <TabsTrigger value="notifications">Notifications</TabsTrigger>
+      </TabsList>
+      <TabsContent value="home">
+        <p className="text-muted-foreground text-sm pt-2">
+          Home content goes here.
+        </p>
+      </TabsContent>
+      <TabsContent value="notifications">
+        <p className="text-muted-foreground text-sm pt-2">
+          Notifications content goes here.
+        </p>
+      </TabsContent>
+    </Tabs>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Use the `disabled` prop on `TabsTrigger` to prevent interaction with a tab. Disabled tabs are visually muted and cannot be activated.",
+      },
+    },
+  },
+};
+
+// Tabs with icons
+export const WithIcons: Story = {
+  name: "With Icons",
+  render: () => (
+    <Tabs defaultValue="preview">
+      <TabsList>
+        <TabsTrigger value="preview">
+          <AppWindowIcon />
+          Preview
+        </TabsTrigger>
+        <TabsTrigger value="code">
+          <CodeIcon />
+          Code
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="preview">
+        <p className="text-muted-foreground text-sm pt-2">
+          Preview content goes here.
+        </p>
+      </TabsContent>
+      <TabsContent value="code">
+        <p className="text-muted-foreground text-sm pt-2">
+          Code content goes here.
+        </p>
+      </TabsContent>
+    </Tabs>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Add icons to `TabsTrigger` by including them as children alongside the text. Icons are automatically sized to 16px.",
+      },
+    },
+  },
+};
+
+// Line variant + vertical
+export const LineVertical: Story = {
+  name: "Line Vertical",
+  render: () => (
+    <Tabs defaultValue="general" orientation="vertical" className="w-[400px]">
+      <TabsList variant="line">
+        <TabsTrigger value="general">
+          <SettingsIcon />
+          General
+        </TabsTrigger>
+        <TabsTrigger value="analytics">
+          <BarChartIcon />
+          Analytics
+        </TabsTrigger>
+        <TabsTrigger value="reports">
+          <FileTextIcon />
+          Reports
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="general">
+        <Card>
+          <CardHeader>
+            <CardTitle>General Settings</CardTitle>
+            <CardDescription>
+              Configure your general application preferences.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-muted-foreground text-sm">
+            Manage your profile, language, and display settings.
+          </CardContent>
+        </Card>
+      </TabsContent>
+      <TabsContent value="analytics">
+        <Card>
+          <CardHeader>
+            <CardTitle>Analytics</CardTitle>
+            <CardDescription>
+              View your usage analytics and statistics.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-muted-foreground text-sm">
+            Track your activity and performance over time.
+          </CardContent>
+        </Card>
+      </TabsContent>
+      <TabsContent value="reports">
+        <Card>
+          <CardHeader>
+            <CardTitle>Reports</CardTitle>
+            <CardDescription>
+              Generate and export detailed reports.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-muted-foreground text-sm">
+            Download reports in CSV, PDF, or Excel format.
+          </CardContent>
+        </Card>
+      </TabsContent>
+    </Tabs>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Combine `variant="line"` on `TabsList` with `orientation="vertical"` on `Tabs` for a vertical line-style tab layout. The active indicator appears on the right side of the selected tab.',
+      },
+    },
+  },
+};
+
+// Scrollable tabs with many items in a constrained container
+export const Scrollable: Story = {
+  render: () => (
+    <div style={{ maxWidth: 480 }} className="rounded-lg border border-dashed border-border p-3">
+      <p className="text-muted-foreground mb-3 text-xs">
+        Constrained to 480px &mdash; use the arrow buttons to navigate
+      </p>
+      <Tabs defaultValue="dashboard">
+        <TabsList scrollable>
+          <TabsTrigger value="dashboard">
+            <LayoutDashboardIcon />
+            Dashboard
+          </TabsTrigger>
+          <TabsTrigger value="analytics">
+            <BarChartIcon />
+            Analytics
+          </TabsTrigger>
+          <TabsTrigger value="users">
+            <UsersIcon />
+            Users
+          </TabsTrigger>
+          <TabsTrigger value="messages">
+            <MessageSquareIcon />
+            Messages
+          </TabsTrigger>
+          <TabsTrigger value="email">
+            <MailIcon />
+            Email
+          </TabsTrigger>
+          <TabsTrigger value="security">
+            <ShieldIcon />
+            Security
+          </TabsTrigger>
+          <TabsTrigger value="domains">
+            <GlobeIcon />
+            Domains
+          </TabsTrigger>
+          <TabsTrigger value="settings">
+            <SettingsIcon />
+            Settings
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="dashboard">
+          <Card>
+            <CardHeader>
+              <CardTitle>Dashboard</CardTitle>
+              <CardDescription>
+                Your project overview and key metrics at a glance.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-muted-foreground text-sm">
+              12 active projects, 3 pending tasks.
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="analytics">
+          <Card>
+            <CardHeader>
+              <CardTitle>Analytics</CardTitle>
+              <CardDescription>
+                Track performance and engagement metrics.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-muted-foreground text-sm">
+              Page views are up 25% this month.
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="users">
+          <Card>
+            <CardHeader>
+              <CardTitle>Users</CardTitle>
+              <CardDescription>
+                Manage team members and permissions.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-muted-foreground text-sm">
+              8 active team members, 2 pending invitations.
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="messages">
+          <Card>
+            <CardHeader>
+              <CardTitle>Messages</CardTitle>
+              <CardDescription>
+                View and manage your conversations.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-muted-foreground text-sm">
+              5 unread messages from 3 contacts.
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="email">
+          <Card>
+            <CardHeader>
+              <CardTitle>Email</CardTitle>
+              <CardDescription>
+                Configure email notifications and templates.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-muted-foreground text-sm">
+              3 email templates configured.
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="security">
+          <Card>
+            <CardHeader>
+              <CardTitle>Security</CardTitle>
+              <CardDescription>
+                Manage security settings and access controls.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-muted-foreground text-sm">
+              Two-factor authentication is enabled.
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="domains">
+          <Card>
+            <CardHeader>
+              <CardTitle>Domains</CardTitle>
+              <CardDescription>
+                Manage your custom domains and DNS settings.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-muted-foreground text-sm">
+              2 domains connected, 1 pending verification.
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="settings">
+          <Card>
+            <CardHeader>
+              <CardTitle>Settings</CardTitle>
+              <CardDescription>
+                Configure your workspace preferences.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-muted-foreground text-sm">
+              Manage notifications, themes, and integrations.
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use the `scrollable` prop on `TabsList` when you have many tabs that may overflow the container. This enables horizontal scrolling with CSS scroll-driven gradient fades (Chrome 115+, gracefully degrades) and arrow buttons on desktop. On mobile, touch scrolling works natively and the arrows are hidden.',
+      },
+    },
+  },
+};
+
+// Pill shape
+export const Pill: Story = {
+  render: () => (
+    <Tabs defaultValue="all-bonuses">
+      <TabsList shape="pill">
+        <TabsTrigger value="all-bonuses">All Bonuses</TabsTrigger>
+        <TabsTrigger value="bonus-history">Bonus History</TabsTrigger>
+      </TabsList>
+      <TabsContent value="all-bonuses">
+        <p className="text-muted-foreground text-sm pt-2">
+          View all available bonuses.
+        </p>
+      </TabsContent>
+      <TabsContent value="bonus-history">
+        <p className="text-muted-foreground text-sm pt-2">
+          View your bonus history.
+        </p>
+      </TabsContent>
+    </Tabs>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use `shape="pill"` on `TabsList` for fully rounded pill-shaped tabs. Can be combined with any variant.',
+      },
+    },
+  },
+};
