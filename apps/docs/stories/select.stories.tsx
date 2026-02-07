@@ -9,7 +9,7 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "@acme/ui/select";
+} from "@keystone/ui/select";
 import {
   Field,
   FieldContent,
@@ -17,9 +17,9 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@acme/ui/field";
-import { Switch } from "@acme/ui/switch";
-import { Button } from "@acme/ui/button";
+} from "@keystone/ui/field";
+import { Switch } from "@keystone/ui/switch";
+import { Button } from "@keystone/ui/button";
 import { AppleIcon, BananaIcon, GrapeIcon, CherryIcon } from "lucide-react";
 
 // Custom checkbox indicator for multiple selection
@@ -58,7 +58,7 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "@acme/ui/select";
+} from "@keystone/ui/select";
 
 // Basic usage
 <Select>

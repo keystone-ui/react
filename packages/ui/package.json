@@ -1,5 +1,5 @@
 {
-  "name": "@acme/ui",
+  "name": "@keystone/ui",
   "version": "0.0.0",
   "sideEffects": false,
   "license": "MIT",
@@ -8,9 +8,30 @@
     "src"
   ],
   "exports": {
-    ".": "./src/index.ts",
-    "./accordion": "./src/accordion/index.tsx",
+    "./accordion": "./src/accordion.tsx",
+    "./avatar": "./src/avatar.tsx",
+    "./badge": "./src/badge.tsx",
     "./button": "./src/button.tsx",
+    "./button-group": "./src/button-group.tsx",
+    "./card": "./src/card.tsx",
+    "./checkbox": "./src/checkbox.tsx",
+    "./combobox": "./src/combobox.tsx",
+    "./date-input": "./src/date-input.tsx",
+    "./dropdown-menu": "./src/dropdown-menu.tsx",
+    "./field": "./src/field.tsx",
+    "./form": "./src/form.tsx",
+    "./input": "./src/input.tsx",
+    "./input-group": "./src/input-group.tsx",
+    "./input-otp": "./src/input-otp.tsx",
+    "./kbd": "./src/kbd.tsx",
+    "./label": "./src/label.tsx",
+    "./radio-group": "./src/radio-group.tsx",
+    "./select": "./src/select.tsx",
+    "./separator": "./src/separator.tsx",
+    "./switch": "./src/switch.tsx",
+    "./tabs": "./src/tabs.tsx",
+    "./textarea": "./src/textarea.tsx",
+    "./utils": "./src/utils.ts",
     "./styles.css": "./src/styles.css"
   },
   "scripts": {
@@ -37,9 +58,9 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@acme/theme": "workspace:*",
+    "@keystone/theme": "workspace:*",
     "@base-ui/react": "^1.1.0",
-    "@radix-ui/react-slot": "^1.2.4",
+
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "input-otp": "^1.4.2",

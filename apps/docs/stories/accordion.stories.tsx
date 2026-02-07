@@ -7,9 +7,9 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionTrigger,
-} from "@acme/ui/accordion";
+} from "@keystone/ui/accordion";
 
-// import { Button } from "@acme/ui/button";
+// import { Button } from "@keystone/ui/button";
 
 const meta: Meta<typeof Accordion> = {
   title: "Components/Accordion",
@@ -66,7 +66,7 @@ import {
       description: "The visual style variant of the accordion",
       defaultValue: "box",
     },
-    openMultiple: {
+    multiple: {
       control: "boolean",
       description: "Whether multiple items can be opened at once",
       defaultValue: false,
@@ -90,11 +90,6 @@ import {
       options: ["horizontal", "vertical"],
       description: "The orientation of the accordion",
       defaultValue: "vertical",
-    },
-    loop: {
-      control: "boolean",
-      description: "Whether keyboard navigation should loop",
-      defaultValue: true,
     },
   },
 };
@@ -126,7 +121,7 @@ const items = [
 
 export const BoxVariant: Story = {
   args: {
-    openMultiple: false,
+    multiple: false,
     variant: "box",
   },
   render: (args) => (
@@ -149,7 +144,7 @@ export const BoxVariant: Story = {
 
 export const TableVariant: Story = {
   args: {
-    openMultiple: false,
+    multiple: false,
     variant: "table",
   },
   render: (args) => (
@@ -172,7 +167,7 @@ export const TableVariant: Story = {
 
 export const UnderlineVariant: Story = {
   args: {
-    openMultiple: false,
+    multiple: false,
     variant: "underline",
   },
   render: (args) => (
@@ -195,7 +190,7 @@ export const UnderlineVariant: Story = {
 
 export const GhostVariant: Story = {
   args: {
-    openMultiple: false,
+    multiple: false,
     variant: "ghost",
   },
   render: (args) => (
@@ -218,7 +213,7 @@ export const GhostVariant: Story = {
 
 export const Multiple: Story = {
   args: {
-    openMultiple: true,
+    multiple: true,
     variant: "box",
   },
   render: (args) => (
@@ -241,7 +236,7 @@ export const Multiple: Story = {
 
 export const WithCustomChevron: Story = {
   args: {
-    openMultiple: false,
+    multiple: false,
     variant: "box",
   },
   render: (args) => (
@@ -271,7 +266,7 @@ export const WithCustomChevron: Story = {
 
 export const WithCustomLayout: Story = {
   args: {
-    openMultiple: false,
+    multiple: false,
     variant: "box",
   },
   render: (args) => (

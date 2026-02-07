@@ -18,16 +18,16 @@ import {
   ComboboxTrigger,
   ComboboxValue,
   useComboboxAnchor,
-} from "@acme/ui/combobox";
+} from "@keystone/ui/combobox";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@acme/ui/field";
-import { InputGroupAddon } from "@acme/ui/input";
-import { Button } from "@acme/ui/button";
+} from "@keystone/ui/field";
+import { InputGroupAddon } from "@keystone/ui/input-group";
+import { Button } from "@keystone/ui/button";
 import { GlobeIcon, SearchIcon } from "lucide-react";
 import ReactCountryFlag from "react-country-flag";
 import {
@@ -70,7 +70,7 @@ import {
   ComboboxTrigger,
   ComboboxValue,
   useComboboxAnchor,
-} from "@acme/ui/combobox";
+} from "@keystone/ui/combobox";
 
 // Basic usage
 <Combobox items={frameworks}>
@@ -179,7 +179,7 @@ export const CustomItems: Story = {
       <FieldLabel>Framework</FieldLabel>
       <Combobox
         items={frameworkObjects}
-        itemToStringValue={(framework) => framework.label}
+        itemToStringValue={(framework: Framework) => framework.label}
       >
         <ComboboxInput placeholder="Select a framework" />
         <ComboboxContent>

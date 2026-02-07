@@ -6,7 +6,7 @@ import {
   AvatarGroup,
   AvatarGroupCount,
   AvatarImage,
-} from "@acme/ui/avatar";
+} from "@keystone/ui/avatar";
 import { PlusIcon } from "lucide-react";
 
 const meta = {
@@ -26,7 +26,7 @@ import {
   AvatarBadge,
   AvatarGroup,
   AvatarGroupCount,
-} from "@acme/ui";
+} from "@keystone/ui/avatar";
 
 // Basic avatar with image and fallback
 <Avatar>

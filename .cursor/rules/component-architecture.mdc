@@ -1,0 +1,154 @@
+---
+description: Component architecture conventions for the @keystone/ui package. Apply when creating, editing, or reviewing UI components in packages/ui/.
+globs: packages/ui/src/**/*
+alwaysApply: false
+---
+# Component Architecture
+
+These are the structural conventions for the `@keystone/ui` component library. Follow them when creating or modifying components.
+
+## Flat Directory Structure
+
+The `packages/ui/src/` directory is completely flat. Every component is a single `.tsx` file at the root of `src/`:
+
+```
+packages/ui/src/
+  accordion.tsx
+  avatar.tsx
+  badge.tsx
+  button.tsx
+  button-group.tsx
+  card.tsx
+  checkbox.tsx
+  combobox.tsx
+  date-input.tsx
+  dropdown-menu.tsx
+  field.tsx
+  form.tsx
+  input.tsx
+  input-group.tsx
+  input-otp.tsx
+  kbd.tsx
+  label.tsx
+  radio-group.tsx
+  select.tsx
+  separator.tsx
+  switch.tsx
+  tabs.tsx
+  textarea.tsx
+  utils.ts
+  _registry.ts
+  styles.css
+```
+
+## Single-File Components
+
+Every compound component, no matter how large, lives in a single `.tsx` file. Types, contexts, sub-components, and variants are all co-located in the same file.
+
+### File Organization Within a Component
+
+```tsx
+"use client";
+
+// 1. External imports
+import * as React from "react";
+import { SomePrimitive } from "@base-ui/react/some-primitive";
+import { cva, type VariantProps } from "class-variance-authority";
+
+// 2. Internal imports (sibling files only, no barrel)
+import { cn } from "./utils";
+
+// 3. Types
+type MyComponentProps = { ... };
+
+// 4. Variants (if using CVA)
+const myComponentVariants = cva(...);
+
+// 5. Contexts (if compound component)
+const MyComponentContext = React.createContext<...>(...);
+
+// 6. Sub-components (private, not exported)
+// ... or exported if they are part of the public API
+
+// 7. Main component
+const MyComponent = React.forwardRef<...>((...) => { ... });
+MyComponent.displayName = "MyComponent";
+
+// 8. Exports (named, at the bottom)
+export { MyComponent, MySubComponent };
+export type { MyComponentProps };
+```
+
+## No Barrel Files
+
+There is no `index.ts` barrel file. Each component file is its own entry point.
+
+## Import Pattern
+
+### Internal (within packages/ui/src)
+
+Always use relative sibling imports:
+
+```tsx
+// Good
+import { cn } from "./utils";
+import { Button } from "./button";
+import { Label } from "./label";
+
+// Bad - no barrel imports
+import { cn } from ".";
+import { Button } from "@keystone/ui";
+```
+
+### External (consumers of the package)
+
+Always use subpath imports:
+
+```tsx
+// Good
+import { Button } from "@keystone/ui/button";
+import { Accordion, AccordionItem } from "@keystone/ui/accordion";
+
+// Bad - no barrel import
+import { Button } from "@keystone/ui";
+```
+
+## Package Exports
+
+Every component has a corresponding subpath export in `package.json`:
+
+```json
+{
+  "exports": {
+    "./button": "./src/button.tsx",
+    "./accordion": "./src/accordion.tsx"
+  }
+}
+```
+
+When adding a new component, you must also add its export entry.
+
+## Registry
+
+The `_registry.ts` file declares metadata for each component following the shadcn schema:
+- `dependencies`: NPM packages the component requires
+- `registryDependencies`: Other components in this registry the component depends on
+- `files`: The file path for the component
+
+Update `_registry.ts` when adding or modifying components.
+
+## No Radix UI
+
+Do not use `@radix-ui` packages. Use `@base-ui/react` as the primitive library.
+
+## Test Files
+
+Test files are co-located as siblings: `button.test.tsx` next to `button.tsx`.
+
+## Adding a New Component
+
+1. Create `src/my-component.tsx` with all types, variants, contexts, and sub-components in one file
+2. Add `"./my-component": "./src/my-component.tsx"` to `package.json` exports
+3. Add the entry to `tsup.config.ts` entryPoints
+4. Add the entry to `_registry.ts`
+5. Create `apps/docs/stories/my-component.stories.tsx` for documentation

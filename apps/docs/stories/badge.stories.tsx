@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Badge } from "@acme/ui/badge";
+import { Badge } from "@keystone/ui/badge";
 import { CheckIcon, XIcon, AlertCircleIcon, InfoIcon, DownloadIcon, BedIcon, BathIcon, LandPlotIcon, UsersIcon, CalendarIcon } from "lucide-react";
 
 const meta = {
@@ -12,7 +12,7 @@ const meta = {
 A versatile badge component with support for different color variants and sizes.
 
 \`\`\`tsx
-import { Badge } from "@acme/ui";
+import { Badge } from "@keystone/ui/badge";
 
 // Default badge
 <Badge>New</Badge>

@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Checkbox } from "@keystone/ui/checkbox";
 import {
-  Checkbox,
   Field,
   FieldContent,
   FieldDescription,
@@ -9,7 +9,7 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
-} from "@acme/ui";
+} from "@keystone/ui/field";
 
 const meta = {
   title: "Components/Checkbox",
@@ -34,8 +34,8 @@ A checkbox component built on Base UI's Checkbox primitive for accessible, custo
 Pair the checkbox with \`Field\` and \`FieldLabel\` for proper layout and labeling.
 
 \`\`\`tsx
-import { Checkbox } from "@acme/ui"
-import { Field, FieldLabel } from "@acme/ui"
+import { Checkbox } from "@keystone/ui/checkbox";
+import { Field, FieldLabel } from "@keystone/ui/field";
 
 <Field orientation="horizontal">
   <Checkbox id="terms" name="terms" />

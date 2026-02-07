@@ -6,7 +6,7 @@ import {
   InputGroupInput,
   InputGroupButton,
   InputGroupText,
-} from "@acme/ui";
+} from "@keystone/ui/input-group";
 import {
   Mail as MailIcon,
   Search as SearchIcon,
@@ -49,7 +49,7 @@ The InputGroup now uses an \`align\` prop instead of \`position\` + \`variant\`:
 ## Basic Usage
 
 \`\`\`tsx
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@acme/ui";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@keystone/ui/input-group";
 import { Search } from "lucide-react";
 
 <InputGroup>

@@ -5,15 +5,15 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@acme/ui/tabs";
-import { Button } from "@acme/ui/button";
+} from "@keystone/ui/tabs";
+import { Button } from "@keystone/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@acme/ui/card";
+} from "@keystone/ui/card";
 import {
   AppWindowIcon,
   BarChartIcon,
@@ -43,7 +43,7 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@acme/ui/tabs";
+} from "@keystone/ui/tabs";
 
 // Basic usage
 <Tabs defaultValue="overview">

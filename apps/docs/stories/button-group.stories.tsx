@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "@keystone/ui/button";
 import { 
-  Button,
   ButtonGroup, 
   ButtonGroupText,
   ButtonGroupSeparator,
-  Input,
-} from "@acme/ui";
-import { Form, Label } from "@acme/ui/form";
+} from "@keystone/ui/button-group";
+import { Input } from "@keystone/ui/input";
+import { Form, Label } from "@keystone/ui/form";
 import {
   Search as SearchIcon,
   Copy as CopyIcon,
@@ -46,7 +46,8 @@ Use \`ButtonGroup\` when you want multiple elements to appear as a single unit w
 ## Basic Usage
 
 \`\`\`tsx
-import { Button, ButtonGroup } from "@acme/ui";
+import { Button } from "@keystone/ui/button";
+import { ButtonGroup } from "@keystone/ui/button-group";
 
 <ButtonGroup>
   <Button variant="outline">Left</Button>
@@ -58,7 +59,9 @@ import { Button, ButtonGroup } from "@acme/ui";
 ## With Input
 
 \`\`\`tsx
-import { Button, ButtonGroup, Input } from "@acme/ui";
+import { Button } from "@keystone/ui/button";
+import { ButtonGroup } from "@keystone/ui/button-group";
+import { Input } from "@keystone/ui/input";
 import { Search } from "lucide-react";
 
 <ButtonGroup>

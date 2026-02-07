@@ -7,11 +7,11 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@acme/ui/card";
-import { Button } from "@acme/ui/button";
-import { Badge } from "@acme/ui/badge";
-import { Input } from "@acme/ui/input";
-import { Label } from "@acme/ui/label";
+} from "@keystone/ui/card";
+import { Button } from "@keystone/ui/button";
+import { Badge } from "@keystone/ui/badge";
+import { Input } from "@keystone/ui/input";
+import { Label } from "@keystone/ui/label";
 
 const meta = {
   title: "Components/Card",
@@ -31,7 +31,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@acme/ui";
+} from "@keystone/ui/card";
 
 // Basic card
 <Card>
@@ -194,7 +194,7 @@ export const WithImage: Story = {
       />
       <CardHeader>
         <CardAction>
-          <Badge variant="secondary">Featured</Badge>
+          <Badge variant="default">Featured</Badge>
         </CardAction>
         <CardTitle>Design systems meetup</CardTitle>
         <CardDescription>

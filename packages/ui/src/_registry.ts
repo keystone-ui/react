@@ -1,0 +1,139 @@
+import type { Registry } from "shadcn/registry";
+
+export const ui: Registry = [
+  {
+    name: "accordion",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react", "lucide-react"],
+    files: [{ path: "ui/accordion.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "avatar",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react"],
+    files: [{ path: "ui/avatar.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "badge",
+    type: "registry:ui",
+    dependencies: ["class-variance-authority"],
+    files: [{ path: "ui/badge.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "button",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react", "class-variance-authority", "lucide-react"],
+    files: [{ path: "ui/button.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "button-group",
+    type: "registry:ui",
+    dependencies: ["class-variance-authority"],
+    registryDependencies: ["button", "separator"],
+    files: [{ path: "ui/button-group.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "card",
+    type: "registry:ui",
+    files: [{ path: "ui/card.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "checkbox",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react"],
+    files: [{ path: "ui/checkbox.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "combobox",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react", "lucide-react"],
+    registryDependencies: ["button", "input-group"],
+    files: [{ path: "ui/combobox.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "date-input",
+    type: "registry:ui",
+    files: [{ path: "ui/date-input.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "dropdown-menu",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react", "lucide-react"],
+    registryDependencies: ["checkbox"],
+    files: [{ path: "ui/dropdown-menu.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "field",
+    type: "registry:ui",
+    registryDependencies: ["label", "separator"],
+    files: [{ path: "ui/field.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "form",
+    type: "registry:ui",
+    registryDependencies: ["label"],
+    files: [{ path: "ui/form.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "input",
+    type: "registry:ui",
+    files: [{ path: "ui/input.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "input-group",
+    type: "registry:ui",
+    registryDependencies: ["button"],
+    files: [{ path: "ui/input-group.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "input-otp",
+    type: "registry:ui",
+    dependencies: ["input-otp"],
+    files: [{ path: "ui/input-otp.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "kbd",
+    type: "registry:ui",
+    files: [{ path: "ui/kbd.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "label",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react"],
+    files: [{ path: "ui/label.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "radio-group",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react"],
+    files: [{ path: "ui/radio-group.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "select",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react", "lucide-react"],
+    files: [{ path: "ui/select.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "separator",
+    type: "registry:ui",
+    files: [{ path: "ui/separator.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "switch",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react"],
+    files: [{ path: "ui/switch.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "tabs",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react"],
+    files: [{ path: "ui/tabs.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "textarea",
+    type: "registry:ui",
+    files: [{ path: "ui/textarea.tsx", type: "registry:ui" }],
+  },
+];

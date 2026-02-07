@@ -18,7 +18,9 @@ import {
   RiGoogleFill,
   RiTwitterXFill
 } from "@remixicon/react";
-import { Button, ButtonGroup, type ButtonProps, cn } from "@acme/ui";
+import { Button, type ButtonProps } from "@keystone/ui/button";
+import { ButtonGroup } from "@keystone/ui/button-group";
+import { cn } from "@keystone/ui/utils";
 import { useState } from "react";
 
 // Use a cast to silence TypeScript for the meta configuration
@@ -32,7 +34,7 @@ const meta = {
 A versatile button component with support for different variants, sizes, and states.
 
 \`\`\`tsx
-import { Button } from "@acme/ui";
+import { Button } from "@keystone/ui/button";
 
 // Default button
 <Button>Click me</Button>

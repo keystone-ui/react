@@ -9,7 +9,7 @@ import {
   InputOTPSlot,
   REGEXP_ONLY_DIGITS,
   REGEXP_ONLY_DIGITS_AND_CHARS,
-} from "@acme/ui/input-otp";
+} from "@keystone/ui/input-otp";
 import {
   Card,
   CardContent,
@@ -17,9 +17,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@acme/ui/card";
-import { Field, FieldDescription, FieldError, FieldLabel } from "@acme/ui/field";
-import { Button } from "@acme/ui/button";
+} from "@keystone/ui/card";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@keystone/ui/field";
+import { Button } from "@keystone/ui/button";
 import { RefreshCwIcon } from "lucide-react";
 
 const meta = {
@@ -39,7 +39,7 @@ import {
   InputOTPSlot,
   REGEXP_ONLY_DIGITS,
   REGEXP_ONLY_DIGITS_AND_CHARS,
-} from "@acme/ui";
+} from "@keystone/ui/input-otp";
 
 // Basic 6-digit OTP input
 <InputOTP maxLength={6}>

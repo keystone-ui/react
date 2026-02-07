@@ -13,9 +13,9 @@
     "test-storybook": "vitest --project=storybook"
   },
   "dependencies": {
-    "@acme/theme": "workspace:*",
-    "@acme/ui": "workspace:*",
-    "@radix-ui/react-slot": "^1.2.4",
+    "@keystone/theme": "workspace:*",
+    "@keystone/ui": "workspace:*",
+
     "@remixicon/react": "^4.8.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

@@ -4,4 +4,4 @@
 @source "../../../packages/ui/src/**/*.{ts,tsx}";
 @source "../stories/**/*.{ts,tsx}";
 
-@import "@acme/theme";
+@import "@keystone/theme";

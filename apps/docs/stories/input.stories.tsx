@@ -1,15 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Input } from "@keystone/ui/input";
+import { DateInput } from "@keystone/ui/date-input";
 import { 
-  Input,
-  DateInput,
   InputGroup, 
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
-} from "@acme/ui/input";
-import { Description } from "@acme/ui/form";
-import { Field, FieldGroup, FieldLabel, FieldDescription, FieldError } from "@acme/ui/field";
-import { Button, ButtonGroup } from "@acme/ui/button";
+} from "@keystone/ui/input-group";
+import { Description } from "@keystone/ui/form";
+import { Field, FieldGroup, FieldLabel, FieldDescription, FieldError } from "@keystone/ui/field";
+import { Button } from "@keystone/ui/button";
+import { ButtonGroup } from "@keystone/ui/button-group";
 import { MailIcon, InfoIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -23,7 +24,8 @@ const meta = {
 A versatile input component with support for different types, states, and adornments.
 
 \`\`\`tsx
-import { Input, InputGroup, InputGroupAddon, InputGroupInput } from "@acme/ui";
+import { Input } from "@keystone/ui/input";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@keystone/ui/input-group";
 
 // Default input
 <Input placeholder="Enter your name" />

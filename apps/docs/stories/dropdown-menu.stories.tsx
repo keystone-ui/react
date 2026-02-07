@@ -17,9 +17,9 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@acme/ui/dropdown-menu";
-import { Button } from "@acme/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@acme/ui/avatar";
+} from "@keystone/ui/dropdown-menu";
+import { Button } from "@keystone/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@keystone/ui/avatar";
 import {
   BellIcon,
   Building2Icon,
@@ -72,7 +72,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@acme/ui/dropdown-menu";
+} from "@keystone/ui/dropdown-menu";
 
 <DropdownMenu>
   <DropdownMenuTrigger render={<Button variant="outline">Open</Button>} />

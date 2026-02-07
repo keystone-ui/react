@@ -5,8 +5,8 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./*"],
-      "@acme/ui/*": ["../../packages/ui/src/*"],
-      "@acme/theme/*": ["../../packages/theme/src/*"]
+      "@keystone/ui/*": ["../../packages/ui/src/*"],
+      "@keystone/theme/*": ["../../packages/theme/src/*"]
     }
   }
 }

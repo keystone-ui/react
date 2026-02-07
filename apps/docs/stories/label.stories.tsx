@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Label } from "@acme/ui/label";
-import { Input } from "@acme/ui/input";
-import { Textarea } from "@acme/ui/textarea";
+import { Label } from "@keystone/ui/label";
+import { Input } from "@keystone/ui/input";
+import { Textarea } from "@keystone/ui/textarea";
 
 const meta = {
   title: "Components/Label",
@@ -13,7 +13,7 @@ const meta = {
 A simple label component for form elements.
 
 \`\`\`tsx
-import { Label } from "@acme/ui";
+import { Label } from "@keystone/ui/label";
 
 // Basic label
 <Label htmlFor="email">Email</Label>

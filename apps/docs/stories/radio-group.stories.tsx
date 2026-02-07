@@ -7,10 +7,9 @@ import {
   FieldLegend,
   FieldSet,
   FieldTitle,
-  Label,
-  RadioGroup,
-  RadioGroupItem,
-} from "@acme/ui";
+} from "@keystone/ui/field";
+import { Label } from "@keystone/ui/label";
+import { RadioGroup, RadioGroupItem } from "@keystone/ui/radio-group";
 
 const meta = {
   title: "Components/RadioGroup",
@@ -35,8 +34,8 @@ A radio group component built on Base UI's RadioGroup and Radio primitives for a
 Use \`RadioGroup\` with \`RadioGroupItem\` and labels for proper accessibility.
 
 \`\`\`tsx
-import { RadioGroup, RadioGroupItem } from "@acme/ui"
-import { Label } from "@acme/ui"
+import { RadioGroup, RadioGroupItem } from "@keystone/ui/radio-group";
+import { Label } from "@keystone/ui/label";
 
 <RadioGroup defaultValue="option1">
   <div className="flex items-center gap-3">
