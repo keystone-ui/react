@@ -22,7 +22,7 @@ function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
       className={cn(
         // Base styles
         "peer relative shrink-0 flex aspect-square size-4 items-center justify-center rounded-full border",
-        "border-input text-primary dark:bg-input/30",
+        "border-input text-primary bg-input-bg",
         // Click area extension
         "after:absolute after:-inset-x-3 after:-inset-y-2",
         // Checked state - primary bg with white indicator

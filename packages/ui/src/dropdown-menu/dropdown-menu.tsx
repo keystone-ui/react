@@ -3,11 +3,8 @@
 import * as React from "react";
 import { Menu as MenuPrimitive } from "@base-ui/react/menu";
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
-import { cn } from "../utils";
+import { cn, POPUP_ITEM_HEIGHT } from "../utils";
 import { Checkbox } from "../checkbox";
-
-// Shared height class: default h-9 (36px), compact h-8 (32px)
-const ITEM_HEIGHT = "h-9 [[data-size=compact]_&]:h-8";
 
 // =============================================================================
 // DropdownMenu (Root)
@@ -96,7 +93,7 @@ function DropdownMenuContent({
           data-slot="dropdown-menu-content"
           data-size={size}
           className={cn(
-            "bg-popover text-popover-foreground ring-border/10",
+            "bg-popover text-popover-foreground ring-popup-ring",
             "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95",
             "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
             "data-[side=inline-start]:slide-in-from-right-2 data-[side=inline-end]:slide-in-from-left-2",
@@ -179,8 +176,8 @@ function DropdownMenuItem({
         "focus:bg-accent focus:text-accent-foreground",
         "data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:text-destructive",
         "not-data-[variant=destructive]:focus:**:text-accent-foreground",
-        `group/dropdown-menu-item relative flex ${ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md px-1.5 text-sm outline-hidden select-none`,
-        "data-disabled:pointer-events-none data-disabled:opacity-50 data-[inset]:pl-8",
+        `group/dropdown-menu-item relative flex ${POPUP_ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md px-1.5 text-sm outline-hidden select-none`,
+        "data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50 data-[inset]:pl-8",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
@@ -224,7 +221,7 @@ function DropdownMenuSubTrigger({
         "focus:bg-accent focus:text-accent-foreground data-open:bg-accent data-open:text-accent-foreground",
         "not-data-[variant=destructive]:focus:**:text-accent-foreground",
         "data-popup-open:bg-accent data-popup-open:text-accent-foreground",
-        `flex ${ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md px-1.5 text-sm outline-hidden select-none data-[inset]:pl-8`,
+        `flex ${POPUP_ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md px-1.5 text-sm outline-hidden select-none data-[inset]:pl-8`,
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
@@ -283,7 +280,7 @@ function DropdownMenuSubContent({
         <MenuPrimitive.Popup
           data-slot="dropdown-menu-sub-content"
           className={cn(
-            "bg-popover text-popover-foreground ring-border/10",
+            "bg-popover text-popover-foreground ring-popup-ring",
             "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95",
             "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
             "z-50 w-auto min-w-24 origin-(--transform-origin) overflow-hidden rounded-md p-1 shadow-lg ring-1 duration-100",
@@ -323,7 +320,7 @@ function DropdownMenuCheckboxItem({
       className={cn(
         "focus:bg-accent focus:text-accent-foreground",
         variant === "indicator" && "focus:**:text-accent-foreground",
-        `relative flex ${ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md text-sm outline-hidden select-none`,
+        `relative flex ${POPUP_ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md text-sm outline-hidden select-none`,
         variant === "indicator" ? "pr-8 pl-1.5" : "px-1.5",
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
@@ -394,7 +391,7 @@ function DropdownMenuRadioItem({
       className={cn(
         "focus:bg-accent focus:text-accent-foreground",
         variant === "indicator" && "focus:**:text-accent-foreground",
-        `relative flex ${ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md text-sm outline-hidden select-none`,
+        `relative flex ${POPUP_ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md text-sm outline-hidden select-none`,
         variant === "indicator" ? "pr-8 pl-1.5" : "px-1.5",
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
@@ -407,7 +404,7 @@ function DropdownMenuRadioItem({
           data-slot="dropdown-menu-radio-control"
           className={cn(
             "relative shrink-0 flex aspect-square size-4 items-center justify-center rounded-full border",
-            "border-input text-primary dark:bg-input/30",
+            "border-input text-primary bg-input-bg",
             "[[data-checked]_&]:bg-primary [[data-checked]_&]:border-primary [[data-checked]_&]:text-primary-foreground",
             "pointer-events-none"
           )}

@@ -41,7 +41,7 @@ export const Description = React.forwardRef<HTMLParagraphElement, DescriptionPro
       <p
         ref={ref}
         className={cn(
-          "text-[0.8125rem] text-muted-foreground",
+          "text-[13px] text-muted-foreground",
           className
         )}
         {...props}
@@ -65,7 +65,7 @@ export const ErrorMessage = React.forwardRef<HTMLParagraphElement, ErrorMessageP
       <p
         ref={ref}
         className={cn(
-          "text-[0.8125rem] text-destructive",
+          "text-[13px] text-destructive",
           className
         )}
         {...props}

@@ -20,10 +20,10 @@ export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
         data-slot="switch"
         data-size={size}
         className={cn(
-          "peer group/switch relative inline-flex shrink-0 items-center rounded-full border border-transparent transition-all",
+          "peer group/switch relative inline-flex shrink-0 items-center rounded-full border border-transparent transition-[background-color,border-color]",
           // Size variants
-          "data-[size=default]:h-[18.4px] data-[size=default]:w-[32px]",
-          "data-[size=sm]:h-[14px] data-[size=sm]:w-[24px]",
+          "data-[size=default]:h-4.5 data-[size=default]:w-8",
+          "data-[size=sm]:h-3.5 data-[size=sm]:w-6",
           // State colors
           "data-checked:bg-primary data-unchecked:bg-input",
           "dark:data-unchecked:bg-input/80",

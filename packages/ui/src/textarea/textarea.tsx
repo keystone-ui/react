@@ -18,13 +18,13 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         ref={ref}
         data-slot="textarea"
         className={cn(
-          "bg-transparent dark:bg-input/30 text-sm",
+          "bg-input-bg text-sm",
           "border border-input rounded-md",
           "flex min-h-[80px] w-full px-3 py-2 shadow-xs transition-[color,box-shadow] outline-none",
           "placeholder:text-muted-foreground/70",
           "focus:ring-1 focus:ring-inset focus:ring-ring focus:border-ring",
           "aria-invalid:ring-destructive dark:aria-invalid:ring-destructive aria-invalid:border-destructive",
-          "disabled:cursor-not-allowed disabled:opacity-50",
+          "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
           "resize-y",
           className
         )}

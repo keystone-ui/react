@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 // Using shadcn theme variables
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 whitespace-nowrap relative cursor-pointer z-0 rounded font-medium overflow-hidden select-none transition-all active:scale-[0.98] disabled:active:scale-100 disabled:cursor-not-allowed focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50",
+  "inline-flex shrink-0 items-center justify-center gap-2 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 whitespace-nowrap relative cursor-pointer z-0 rounded-lg font-medium overflow-hidden select-none transition-all active:scale-[0.98] disabled:active:scale-100 disabled:cursor-not-allowed focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       variant: {

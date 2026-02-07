@@ -28,7 +28,7 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
         role="group"
         ref={ref}
         className={cn(
-          "group/input-group border-input dark:bg-input/30 relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none",
+          "group/input-group border-input bg-input-bg relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none",
           "h-10 min-w-0",
 
           // Alignment variants - adjust input padding based on addon position
@@ -63,9 +63,9 @@ const inputGroupAddonVariants = cva(
     variants: {
       align: {
         "inline-start":
-          "order-first pl-3 has-[>button]:ml-[-0.45rem]",
+          "order-first pl-3 has-[>button]:-ml-2",
         "inline-end":
-          "order-last pr-3 has-[>button]:mr-[-0.45rem]",
+          "order-last pr-3 has-[>button]:-mr-2",
         "block-start":
           "order-first w-full justify-start px-3 pt-3 group-has-[[data-slot=input-group-control]]/input-group:pt-2.5",
         "block-end":
@@ -119,9 +119,9 @@ const inputGroupButtonVariants = cva(
   {
     variants: {
       size: {
-        xs: "h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-3.5 has-[>svg]:px-2",
+        xs: "h-6 gap-1 px-2 rounded-sm [&>svg:not([class*='size-'])]:size-3.5 has-[>svg]:px-2",
         sm: "h-8 px-2.5 gap-1.5 rounded-md has-[>svg]:px-2.5",
-        "icon-xs": "size-6 rounded-[calc(var(--radius)-5px)] p-0 has-[>svg]:p-0",
+        "icon-xs": "size-6 rounded-sm p-0 has-[>svg]:p-0",
         "icon-sm": "size-8 rounded-md p-0 has-[>svg]:p-0",
       },
     },

@@ -86,7 +86,7 @@ export const InputOTPSlot = React.forwardRef<HTMLDivElement, InputOTPSlotProps>(
         data-active={isActive}
         className={cn(
           // Base styles matching Input component
-          "bg-transparent dark:bg-input/30 text-sm",
+          "bg-input-bg text-sm",
           "relative flex h-10 w-10 items-center justify-center",
           "border border-input shadow-xs",
           "transition-[color,box-shadow] outline-none",

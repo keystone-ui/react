@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox";
 import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
-import { cn } from "../utils";
+import { cn, POPUP_ITEM_HEIGHT } from "../utils";
 import {
   InputGroup,
   InputGroupAddon,
@@ -172,7 +172,7 @@ function ComboboxContent({
           data-slot="combobox-content"
           data-chips={!!anchor}
           className={cn(
-            "bg-popover text-popover-foreground ring-border/10",
+            "bg-popover text-popover-foreground ring-popup-ring",
             "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95",
             "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
             "data-[side=inline-start]:slide-in-from-right-2 data-[side=inline-end]:slide-in-from-left-2",
@@ -222,7 +222,7 @@ function ComboboxItem({ className, children, ...props }: ComboboxItemProps) {
       data-slot="combobox-item"
       className={cn(
         "data-highlighted:bg-accent data-highlighted:text-accent-foreground not-data-[variant=destructive]:data-highlighted:**:text-accent-foreground",
-        "relative flex h-9 w-full cursor-pointer items-center gap-1.5 rounded-md pr-8 pl-1.5 text-sm outline-hidden select-none",
+        `relative flex ${POPUP_ITEM_HEIGHT} w-full cursor-pointer items-center gap-1.5 rounded-md pr-8 pl-1.5 text-sm outline-hidden select-none`,
         "data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
@@ -331,7 +331,7 @@ const ComboboxChips = React.forwardRef<HTMLDivElement, ComboboxChipsProps>(
         ref={ref}
         data-slot="combobox-chips"
         className={cn(
-          "border-input dark:bg-input/30 flex min-h-10 flex-wrap items-center gap-1 rounded-md border bg-transparent bg-clip-padding px-2.5 py-1 text-sm shadow-xs transition-colors",
+          "border-input bg-input-bg flex min-h-10 flex-wrap items-center gap-1 rounded-md border bg-clip-padding px-2.5 py-1 text-sm shadow-xs transition-colors",
           "focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-1",
           "has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40 has-aria-invalid:border-destructive dark:has-aria-invalid:border-destructive/50 has-aria-invalid:ring-1",
           "has-data-[slot=combobox-chip]:px-1",
@@ -365,7 +365,7 @@ function ComboboxChip({
     <ComboboxPrimitive.Chip
       data-slot="combobox-chip"
       className={cn(
-        "bg-muted text-foreground flex h-[calc(--spacing(5.25))] w-fit items-center justify-center gap-1 rounded-sm px-1.5 text-xs font-medium whitespace-nowrap",
+        "bg-muted text-foreground flex h-5.5 w-fit items-center justify-center gap-1 rounded-sm px-1.5 text-xs font-medium whitespace-nowrap",
         "has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50",
         "has-data-[slot=combobox-chip-remove]:pr-0",
         className
