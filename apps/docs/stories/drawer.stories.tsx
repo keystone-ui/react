@@ -18,9 +18,10 @@ import {
 } from "@keystone/ui/stepper";
 import { Button } from "@keystone/ui/button";
 import { Checkbox } from "@keystone/ui/checkbox";
-import { Label } from "@keystone/ui/label";
 import { RadioGroup, RadioGroupItem } from "@keystone/ui/radio-group";
 import {
+  ArrowLeft,
+  ChevronRight,
   Filter as FilterIcon,
   Minus,
   Plus,
@@ -302,7 +303,7 @@ export const Nested: Story = {
 };
 
 // =============================================================================
-// Multi-Step (Filter)
+// Drill-Down Filter
 // =============================================================================
 const DATE_RANGES = [
   { label: "Today", value: "today" },
@@ -328,55 +329,47 @@ const TRANSACTION_TYPES = [
   { label: "Swaps", value: "swaps" },
 ];
 
-function FilterStepIndicator() {
-  const { value, totalSteps } = useStepper();
-  const labels = ["Date", "Currency", "Type"];
+const FILTER_CATEGORIES = [
+  { label: "Date", step: 1 },
+  { label: "Currency", step: 2 },
+  { label: "Transaction Type", step: 3 },
+];
+
+function FilterMenu() {
+  const { goTo } = useStepper();
   return (
-    <div className="flex items-center gap-1 text-xs">
-      {Array.from({ length: totalSteps }).map((_, i) => (
-        <React.Fragment key={i}>
-          <span
-            className={`rounded-full px-2 py-0.5 font-medium transition-colors ${
-              i === value
-                ? "bg-primary text-primary-foreground"
-                : i < value
-                  ? "text-primary bg-primary/10"
-                  : "text-muted-foreground bg-muted"
-            }`}
-          >
-            {labels[i]}
-          </span>
-          {i < totalSteps - 1 && (
-            <span className="text-muted-foreground text-[10px]">&rsaquo;</span>
-          )}
-        </React.Fragment>
+    <div className="divide-border-muted divide-y">
+      {FILTER_CATEGORIES.map((cat) => (
+        <button
+          key={cat.step}
+          onClick={() => goTo(cat.step)}
+          className="flex h-12 w-full cursor-pointer items-center justify-between px-4 active:text-muted-foreground"
+        >
+          <span className="text-sm font-medium">{cat.label}</span>
+          <ChevronRight className="text-muted-foreground size-4" />
+        </button>
       ))}
     </div>
   );
 }
 
-function FilterNav({ onApply }: { onApply: () => void }) {
-  const { goNext, goPrevious, isFirst, isLast } = useStepper();
+function FilterSubHeader({ title }: { title: string }) {
+  const { goTo } = useStepper();
   return (
-    <DrawerFooter className="flex-row">
-      <Button
-        variant="outline"
-        onClick={goPrevious}
-        disabled={isFirst}
-        className="flex-1"
-      >
-        Back
-      </Button>
-      {isLast ? (
-        <Button onClick={onApply} className="flex-1">
-          Apply Filters
+    <DrawerHeader>
+      <div className="flex items-center gap-2">
+        <Button
+          variant="ghost"
+          size="icon-xs"
+          onClick={() => goTo(0)}
+          className="-ml-1"
+        >
+          <ArrowLeft className="size-4" />
+          <span className="sr-only">Back</span>
         </Button>
-      ) : (
-        <Button onClick={goNext} className="flex-1">
-          Next
-        </Button>
-      )}
-    </DrawerFooter>
+        <DrawerTitle>{title}</DrawerTitle>
+      </div>
+    </DrawerHeader>
   );
 }
 
@@ -424,29 +417,33 @@ function FilterDrawerDemo() {
         <DrawerContent>
           <div className="mx-auto w-full max-w-sm">
             <Stepper value={step} onValueChange={setStep}>
-              <DrawerHeader>
-                <div className="flex items-center justify-between">
-                  <DrawerTitle>Filters</DrawerTitle>
-                  <FilterStepIndicator />
-                </div>
-                <DrawerDescription>
-                  Narrow down your transaction history.
-                </DrawerDescription>
-              </DrawerHeader>
+              <StepperContent>
+                {/* Step 0: Filter Menu */}
+                <StepperStep>
+                  <DrawerHeader>
+                    <DrawerTitle className="text-center">Filter</DrawerTitle>
+                  </DrawerHeader>
+                  <FilterMenu />
+                  <DrawerFooter>
+                    <Button onClick={handleApply} className="w-full">
+                      Filter
+                    </Button>
+                  </DrawerFooter>
+                </StepperStep>
 
-              <StepperContent className="px-4">
                 {/* Step 1: Date Range */}
                 <StepperStep>
-                  <div className="grid gap-3">
-                    <Label className="text-sm font-medium">Date Range</Label>
+                  <FilterSubHeader title="Date" />
+                  <div className="pb-4">
                     <RadioGroup
                       value={dateRange}
                       onValueChange={(value) => value && setDateRange(value)}
+                      className="divide-border-muted gap-0 divide-y"
                     >
                       {DATE_RANGES.map((range) => (
                         <label
                           key={range.value}
-                          className="border-input hover:bg-accent flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors"
+                          className="flex h-12 cursor-pointer items-center gap-3 px-4"
                         >
                           <RadioGroupItem value={range.value} />
                           <span className="text-sm">{range.label}</span>
@@ -458,18 +455,18 @@ function FilterDrawerDemo() {
 
                 {/* Step 2: Currency */}
                 <StepperStep>
-                  <div className="grid gap-3">
-                    <div className="flex items-center justify-between">
-                      <Label className="text-sm font-medium">Currency</Label>
+                  <FilterSubHeader title="Currency" />
+                  <div className="pb-4">
+                    <div className="mb-2 flex items-center justify-between px-4">
                       <span className="text-muted-foreground text-xs">
                         {currencies.length} selected
                       </span>
                     </div>
-                    <div className="grid gap-2">
+                    <div className="divide-border-muted divide-y">
                       {CURRENCIES.map((currency) => (
                         <label
                           key={currency.symbol}
-                          className="border-input hover:bg-accent flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors"
+                          className="flex h-12 cursor-pointer items-center gap-3 px-4"
                         >
                           <Checkbox
                             checked={currencies.includes(currency.symbol)}
@@ -491,18 +488,17 @@ function FilterDrawerDemo() {
 
                 {/* Step 3: Transaction Type */}
                 <StepperStep>
-                  <div className="grid gap-3">
-                    <Label className="text-sm font-medium">
-                      Transaction Type
-                    </Label>
+                  <FilterSubHeader title="Transaction Type" />
+                  <div className="pb-4">
                     <RadioGroup
                       value={txType}
                       onValueChange={(value) => value && setTxType(value)}
+                      className="divide-border-muted gap-0 divide-y"
                     >
                       {TRANSACTION_TYPES.map((type) => (
                         <label
                           key={type.value}
-                          className="border-input hover:bg-accent flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors"
+                          className="flex h-12 cursor-pointer items-center gap-3 px-4"
                         >
                           <RadioGroupItem value={type.value} />
                           <span className="text-sm">{type.label}</span>
@@ -512,8 +508,6 @@ function FilterDrawerDemo() {
                   </div>
                 </StepperStep>
               </StepperContent>
-
-              <FilterNav onApply={handleApply} />
             </Stepper>
           </div>
         </DrawerContent>
@@ -528,14 +522,14 @@ function FilterDrawerDemo() {
   );
 }
 
-export const MultiStep: Story = {
-  name: "Multi-Step",
+export const DrillDownFilter: Story = {
+  name: "Drill-Down Filter",
   render: () => <FilterDrawerDemo />,
   parameters: {
     docs: {
       description: {
         story:
-          "A transaction filter wizard using the `Stepper` component inside a bottom Drawer. Three steps — Date Range, Currency, and Transaction Type — animate between each other while the Drawer API remains completely unchanged. Navigation and step indicators are built with `useStepper()`.",
+          "A drill-down filter drawer using the `Stepper` component for non-linear navigation. The main menu lists filter categories (Date, Currency, Transaction Type) — tap one to drill into its options, then use the back arrow to return. Uses `goTo()` from `useStepper()` for hub-and-spoke navigation instead of sequential steps.",
       },
     },
   },
