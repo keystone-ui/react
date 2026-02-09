@@ -16,7 +16,7 @@ The theme is defined in `packages/theme/src/index.css`. Key custom tokens beyond
 
 ## Borders
 
-- `border-input` — form controls (Input, Textarea, Select, Checkbox, Radio, Switch, ComboboxChips, InputGroup)
+- `border-input` — form controls (Input, Textarea, Select, NativeSelect, Checkbox, Radio, Switch, ComboboxChips, InputGroup)
 - `border-border` — structural borders (AccordionItem, Button outline, Badge default, Avatar, Card)
 
 These resolve to the same color, but the semantic distinction matters for maintainability.
@@ -28,12 +28,12 @@ These resolve to the same color, but the semantic distinction matters for mainta
 
 ## Rings
 
-- `ring-popup-ring` — popup container rings (DropdownMenu, Select, Combobox popups, Card). Do NOT use `ring-border/10` or `ring-foreground/10`.
+- `ring-popup-ring` — popup container rings (DropdownMenu, Select, Combobox, Popover popups, Card). Do NOT use `ring-border/10` or `ring-foreground/10`.
 
 ## Separators
 
 - `bg-border` — standalone Separator component (structural, full-contrast)
-- `bg-border-muted` — popup separators inside DropdownMenu, Select, Combobox (subtle, lower contrast)
+- `bg-border-muted` — popup separators inside DropdownMenu, Select, Combobox, Popover (subtle, lower contrast)
 
 ## Focus Styles
 
@@ -44,7 +44,7 @@ Two patterns exist, each for a different control type:
 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50
 ```
 
-### Ring-based (text inputs, textareas, selects — inset ring within bordered controls)
+### Ring-based (text inputs, textareas, selects, native selects — inset ring within bordered controls)
 ```
 focus:ring-1 focus:ring-inset focus:ring-ring focus:border-ring
 ```
@@ -53,17 +53,19 @@ Do NOT mix these patterns. Do NOT use hybrid approaches (e.g., combining ring an
 
 ## Rounded Corners
 
-Use Tailwind's built-in radius scale consistently. No custom `--radius` token exists.
+Use Tailwind's built-in radius scale consistently. No custom `--radius` theme token exists.
 
 - `rounded-sm` (4px) — small controls: Checkbox, nested InputGroupButton xs
-- `rounded-md` (6px) — form inputs: Input, Textarea, InputOTPSlot, DropdownMenuSubContent
+- `rounded-md` (6px) — form inputs: Input, Textarea, NativeSelect, InputOTPSlot, DropdownMenuSubContent
 - `rounded-lg` (8px) — containers/actions: Button, popups, TabsList, AccordionItem box
 - `rounded-xl` (12px) — large surfaces: Card
 - `rounded-full` — pills/circles: Badge, Avatar, Switch, pill tabs
 
+Exception: Calendar uses a scoped `--cell-radius` CSS custom property (`[--cell-radius:var(--radius-md)]`) with `rounded-(--cell-radius)` for cell radius in range selections. This is component-scoped via Tailwind's arbitrary property syntax, not a theme token.
+
 ## Disabled States
 
-- `disabled:` — native HTML disabled (Input, Textarea, Button, Checkbox, Radio, Select, Tabs)
+- `disabled:` — native HTML disabled (Input, Textarea, Button, Checkbox, Radio, Select, NativeSelect, Tabs)
 - `data-disabled:` — Base UI data attribute (DropdownMenuItem, ComboboxItem, SelectItem)
 - Both patterns must always include `cursor-not-allowed` and `opacity-50`
 
@@ -88,18 +90,20 @@ Import from `packages/ui/src/utils.ts`:
 
 ## Popup Container Pattern
 
-All popup containers (SelectContent, ComboboxContent, DropdownMenuContent) use this composite recipe:
+All popup containers (SelectContent, ComboboxContent, DropdownMenuContent, PopoverContent) use this composite recipe:
 ```
 bg-popover text-popover-foreground ring-popup-ring ring-1 rounded-lg shadow-lg z-50 overflow-hidden
 ```
 
 Sub-menus (DropdownMenuSubContent) use `rounded-md` and `min-w-24` instead of `rounded-lg` and `min-w-32`.
 
+Exception: PopoverContent uses `overflow-auto` instead of `overflow-hidden` because popover content can be arbitrarily long.
+
 Always apply these classes together. Do NOT mix shadow or ring values across popup types.
 
 ## Popup Animations
 
-All three popup components share an identical animation pattern:
+All four popup components (Select, Combobox, DropdownMenu, Popover) share an identical animation pattern:
 ```
 data-open:animate-in data-closed:animate-out
 data-closed:fade-out-0 data-open:fade-in-0
@@ -119,7 +123,7 @@ The Accordion uses its own custom animations: `data-[open]:animate-accordion-dow
 
 Different transition properties for different control types:
 
-- `transition-[color,box-shadow]` — form controls (Input, Textarea, Select, InputGroup, InputOTP)
+- `transition-[color,box-shadow]` — form controls (Input, Textarea, Select, NativeSelect, InputGroup, InputOTP)
 - `transition-[color,background-color,border-color,box-shadow]` — TabsTrigger (text, bg, border, and shadow all change on active)
 - `transition-[background-color,border-color]` — Switch (bg and border change on checked/invalid)
 - `transition-transform` — icon rotations (Select chevron, Accordion chevron). Paired with `duration-150 ease-out`.
@@ -134,15 +138,15 @@ Exception: Button uses `transition-all` because it combines color, background, b
 
 Three shadow tiers:
 
-- `shadow-xs` — form controls (Input, Textarea, Select, ComboboxChips, InputGroup, InputOTP, ButtonGroupSeparator)
-- `shadow-lg` — popup containers (SelectContent, ComboboxContent, DropdownMenuContent)
+- `shadow-xs` — form controls (Input, Textarea, Select, NativeSelect, ComboboxChips, InputGroup, InputOTP, ButtonGroupSeparator)
+- `shadow-lg` — popup containers (SelectContent, ComboboxContent, DropdownMenuContent, PopoverContent)
 - `shadow-sm` — TabsTrigger active state (default variant only)
 
 ## Error/Invalid States
 
 Two `aria-invalid` patterns, matching the focus style of the control:
 
-### Ring-based controls (Input, Textarea, Select, InputOTP)
+### Ring-based controls (Input, Textarea, Select, NativeSelect, InputOTP)
 ```
 aria-invalid:ring-destructive dark:aria-invalid:ring-destructive aria-invalid:border-destructive
 ```
@@ -172,13 +176,13 @@ Standard heights used across components:
 
 - `h-4` — Badge xs
 - `h-5` — Badge default, Kbd
-- `h-6` — Badge sm, InputGroupButton xs, SelectScrollButton
+- `h-6` — Badge sm, Button xs, InputGroupButton xs, SelectScrollButton
 - `h-8` — Button sm, TabsTrigger, InputGroupButton sm, popup items (compact)
 - `h-9` — SelectTrigger sm, popup items (standard via `POPUP_ITEM_HEIGHT`)
-- `h-10` — Button/Input/SelectTrigger/InputOTP default, ComboboxChips min-h
+- `h-10` — Button/Input/SelectTrigger/NativeSelect/InputOTP default, ComboboxChips min-h
 - `h-12` — Button lg
 
-Use `size-*` (not `h-*`) for square controls: Checkbox (`size-4`), Radio (`size-4`), Button icon (`size-10`).
+Use `size-*` (not `h-*`) for square controls: Checkbox (`size-4`), Radio (`size-4`), Button icon-xs (`size-6`), Button icon-sm (`size-8`), Button icon (`size-10`), Button icon-lg (`size-12`).
 
 ## `data-slot` Naming
 

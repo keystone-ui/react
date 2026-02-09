@@ -18,6 +18,7 @@ packages/ui/src/
   badge.tsx
   button.tsx
   button-group.tsx
+  calendar.tsx
   card.tsx
   checkbox.tsx
   combobox.tsx
@@ -30,6 +31,8 @@ packages/ui/src/
   input-otp.tsx
   kbd.tsx
   label.tsx
+  native-select.tsx
+  popover.tsx
   radio-group.tsx
   select.tsx
   separator.tsx
@@ -39,7 +42,11 @@ packages/ui/src/
   utils.ts
   _registry.ts
   styles.css
+  test/
+    setup.ts
 ```
+
+The `test/` subdirectory is the only exception to the flat structure — it contains shared test infrastructure (e.g., `setup.ts`).
 
 ## Single-File Components
 
