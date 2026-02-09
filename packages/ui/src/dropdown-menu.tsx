@@ -322,7 +322,7 @@ function DropdownMenuCheckboxItem({
         variant === "indicator" && "focus:**:text-accent-foreground",
         `relative flex ${POPUP_ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md text-sm outline-hidden select-none`,
         variant === "indicator" ? "pr-8 pl-1.5" : "px-1.5",
-        "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
@@ -393,7 +393,7 @@ function DropdownMenuRadioItem({
         variant === "indicator" && "focus:**:text-accent-foreground",
         `relative flex ${POPUP_ITEM_HEIGHT} cursor-pointer items-center gap-1.5 rounded-md text-sm outline-hidden select-none`,
         variant === "indicator" ? "pr-8 pl-1.5" : "px-1.5",
-        "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}

@@ -36,7 +36,7 @@ export const ui: Registry = [
     name: "calendar",
     type: "registry:ui",
     dependencies: ["react-day-picker", "lucide-react"],
-    registryDependencies: ["button"],
+    registryDependencies: ["button", "native-select"],
     files: [{ path: "ui/calendar.tsx", type: "registry:ui" }],
   },
   {
@@ -147,7 +147,7 @@ export const ui: Registry = [
   {
     name: "tabs",
     type: "registry:ui",
-    dependencies: ["@base-ui/react"],
+    dependencies: ["@base-ui/react", "class-variance-authority", "lucide-react"],
     files: [{ path: "ui/tabs.tsx", type: "registry:ui" }],
   },
   {

@@ -66,7 +66,7 @@ InputGroup.displayName = "InputGroup";
 // InputGroupAddon
 // =============================================================================
 const inputGroupAddonVariants = cva(
-  "text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm select-none [&>svg:not([class*='size-'])]:size-4 group-data-[disabled=true]/input-group:opacity-50",
+  "text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm select-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 group-data-[disabled=true]/input-group:opacity-50",
   {
     variants: {
       align: {
@@ -181,7 +181,7 @@ export const InputGroupText = React.forwardRef<HTMLSpanElement, InputGroupTextPr
       <span
         ref={ref}
         className={cn(
-          "text-muted-foreground flex items-center gap-2 text-sm [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+          "text-muted-foreground flex items-center gap-2 text-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
           className
         )}
         {...props}
