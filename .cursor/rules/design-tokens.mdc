@@ -184,16 +184,54 @@ Standard heights used across components:
 
 Use `size-*` (not `h-*`) for square controls: Checkbox (`size-4`), Radio (`size-4`), Button icon-xs (`size-6`), Button icon-sm (`size-8`), Button icon (`size-10`), Button icon-lg (`size-12`).
 
-## `data-slot` Naming
+## `data-slot` Pattern
 
-Every component part gets a `data-slot` attribute following `[component]-[part]` kebab-case naming:
+### Why `data-slot`
+
+Every exported component part gets a `data-slot` attribute. These are stable, semantic identifiers that act as a public "parts API" for compound components. Unlike Tailwind classes (which change with styling decisions) or DOM structure (which is an implementation detail), `data-slot` values are intentional API that won't break when internals are refactored.
+
+### Naming convention
+
+Follow `[component]-[part]` kebab-case naming:
 ```
 data-slot="select-trigger"
 data-slot="dropdown-menu-item"
 data-slot="combobox-chips-input"
 ```
 
-This enables parent-to-child styling via selectors like `*:data-[slot=select-value]` and `has-data-[slot=card-footer]`. Always assign a `data-slot` to every exported component part.
+Root-level components use the component name alone (e.g., `data-slot="card"`, `data-slot="button"`).
+
+### Use cases
+
+**Parent-aware layout** via `has-data-[slot=...]` — a parent adjusts its own styles based on which children are present:
+```
+// Card removes bottom padding when a footer exists
+has-data-[slot=card-footer]:pb-0
+
+// CardHeader switches to a two-column grid when an action is present
+has-data-[slot=card-action]:grid-cols-[1fr_auto]
+```
+
+**Parent-to-child styling** via `*:data-[slot=...]` — a parent styles a child part without the child needing to know:
+```
+// SelectTrigger truncates and lays out the value text
+*:data-[slot=select-value]:line-clamp-1
+*:data-[slot=select-value]:flex
+*:data-[slot=select-value]:items-center
+
+// AvatarGroup adds ring spacing to each avatar
+*:data-[slot=avatar]:ring-2
+*:data-[slot=avatar]:ring-background
+```
+
+**Consumer customization** — consumers can target specific parts for overrides without depending on class names or DOM nesting:
+```css
+[data-slot="card-title"] { font-size: 1.25rem; }
+```
+
+### Mandate
+
+Always assign a `data-slot` to every exported component part.
 
 ## `data-size` and Group Naming
 
