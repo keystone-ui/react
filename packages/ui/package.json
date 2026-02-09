@@ -15,6 +15,7 @@
     "./button": "./src/button.tsx",
     "./button-group": "./src/button-group.tsx",
     "./calendar": "./src/calendar.tsx",
+    "./callout": "./src/callout.tsx",
     "./card": "./src/card.tsx",
     "./checkbox": "./src/checkbox.tsx",
     "./combobox": "./src/combobox.tsx",

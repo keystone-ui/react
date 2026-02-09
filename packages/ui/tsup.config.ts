@@ -8,6 +8,7 @@ export default defineConfig((options) => ({
     "src/button.tsx",
     "src/button-group.tsx",
     "src/calendar.tsx",
+    "src/callout.tsx",
     "src/card.tsx",
     "src/checkbox.tsx",
     "src/combobox.tsx",

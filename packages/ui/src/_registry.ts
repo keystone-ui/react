@@ -47,6 +47,12 @@ export const ui: Registry = [
     files: [{ path: "ui/calendar.tsx", type: "registry:ui" }],
   },
   {
+    name: "callout",
+    type: "registry:ui",
+    dependencies: ["class-variance-authority"],
+    files: [{ path: "ui/callout.tsx", type: "registry:ui" }],
+  },
+  {
     name: "card",
     type: "registry:ui",
     files: [{ path: "ui/card.tsx", type: "registry:ui" }],
