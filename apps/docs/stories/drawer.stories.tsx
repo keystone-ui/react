@@ -18,13 +18,21 @@ import {
 } from "@keystone/ui/stepper";
 import { Button } from "@keystone/ui/button";
 import { Checkbox } from "@keystone/ui/checkbox";
+import { Input } from "@keystone/ui/input";
 import { RadioGroup, RadioGroupItem } from "@keystone/ui/radio-group";
+import { Switch } from "@keystone/ui/switch";
 import {
   ArrowLeft,
+  ArrowUpDown,
+  Check,
   ChevronRight,
+  Eye,
+  EyeOff,
   Filter as FilterIcon,
+  LayoutGrid,
   Minus,
   Plus,
+  Search,
 } from "lucide-react";
 
 const meta = {
@@ -530,6 +538,463 @@ export const DrillDownFilter: Story = {
       description: {
         story:
           "A drill-down filter drawer using the `Stepper` component for non-linear navigation. The main menu lists filter categories (Date, Currency, Transaction Type) — tap one to drill into its options, then use the back arrow to return. Uses `goTo()` from `useStepper()` for hub-and-spoke navigation instead of sequential steps.",
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Sort By
+// =============================================================================
+const SORT_OPTIONS = [
+  { label: "Newest", value: "newest" },
+  { label: "Oldest", value: "oldest" },
+  { label: "Price: High to Low", value: "price-desc" },
+  { label: "Price: Low to High", value: "price-asc" },
+];
+
+function SortByDrawerDemo() {
+  const [selected, setSelected] = React.useState("newest");
+
+  return (
+    <Drawer>
+      <DrawerTrigger asChild>
+        <Button variant="outline">
+          <ArrowUpDown className="size-4" />
+          Sort By
+        </Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <div className="mx-auto w-full max-w-sm">
+          <DrawerHeader>
+            <DrawerTitle className="text-center">Sort By</DrawerTitle>
+          </DrawerHeader>
+          <div className="divide-border-muted divide-y">
+            {SORT_OPTIONS.map((option) => {
+              const isSelected = selected === option.value;
+              return (
+                <button
+                  key={option.value}
+                  onClick={() => setSelected(option.value)}
+                  className={`flex h-12 w-full cursor-pointer items-center justify-between px-4 active:text-muted-foreground ${
+                    isSelected
+                      ? "text-primary font-medium"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  <span className="text-sm">{option.label}</span>
+                  {isSelected && <Check className="text-primary size-4" />}
+                </button>
+              );
+            })}
+          </div>
+          <div className="p-4" />
+        </div>
+      </DrawerContent>
+    </Drawer>
+  );
+}
+
+export const SortBy: Story = {
+  name: "Sort By",
+  render: () => <SortByDrawerDemo />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A simple single-level sort drawer. Tapping an option selects it immediately with a checkmark indicator. No stepper or sub-navigation needed — ideal for quick single-select lists.",
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Complex Filter (Drill-Down with Icons)
+// =============================================================================
+const GAME_PROVIDERS = [
+  "1spin4win",
+  "Apparat Gaming",
+  "BGaming",
+  "Betsoft Gaming",
+  "Booming Games",
+  "Clawbuster",
+  "Evolution",
+  "Evoplay Entertainment",
+  "Hacksaw Gaming",
+  "NetEnt",
+  "Nolimit City",
+  "Pragmatic Play",
+  "Push Gaming",
+  "Red Tiger",
+  "Relax Gaming",
+];
+
+const COMPLEX_SORT_OPTIONS = [
+  { label: "A-Z", value: "az" },
+  { label: "Novelty", value: "novelty" },
+  { label: "Popularity", value: "popularity" },
+];
+
+function ComplexFilterSubHeader({ title }: { title: string }) {
+  const { goTo } = useStepper();
+  return (
+    <DrawerHeader>
+      <div className="flex items-center gap-2">
+        <Button
+          variant="ghost"
+          size="icon-xs"
+          onClick={() => goTo(0)}
+          className="-ml-1"
+        >
+          <ArrowLeft className="size-4" />
+          <span className="sr-only">Back</span>
+        </Button>
+        <DrawerTitle>{title}</DrawerTitle>
+      </div>
+    </DrawerHeader>
+  );
+}
+
+function ComplexFilterMenu({
+  sortValue,
+  showBlocked,
+  onToggleBlocked,
+}: {
+  sortValue: string;
+  showBlocked: boolean;
+  onToggleBlocked: () => void;
+}) {
+  const { goTo } = useStepper();
+  const sortLabel =
+    COMPLEX_SORT_OPTIONS.find((o) => o.value === sortValue)?.label ?? sortValue;
+
+  return (
+    <div className="divide-border-muted divide-y">
+      <button
+        onClick={() => goTo(1)}
+        className="flex h-12 w-full cursor-pointer items-center gap-3 px-4 active:text-muted-foreground"
+      >
+        <LayoutGrid className="text-muted-foreground size-4 shrink-0" />
+        <span className="flex-1 text-left text-sm font-medium">Providers</span>
+        <ChevronRight className="text-muted-foreground size-4 shrink-0" />
+      </button>
+      <button
+        onClick={() => goTo(2)}
+        className="flex h-12 w-full cursor-pointer items-center gap-3 px-4 active:text-muted-foreground"
+      >
+        <ArrowUpDown className="text-muted-foreground size-4 shrink-0" />
+        <span className="flex-1 text-left text-sm font-medium">Sort By</span>
+        <span className="text-muted-foreground mr-1 text-xs">{sortLabel}</span>
+        <ChevronRight className="text-muted-foreground size-4 shrink-0" />
+      </button>
+      <div className="flex h-12 items-center gap-3 px-4">
+        {showBlocked ? (
+          <Eye className="text-muted-foreground size-4 shrink-0" />
+        ) : (
+          <EyeOff className="text-muted-foreground size-4 shrink-0" />
+        )}
+        <span className="flex-1 text-sm font-medium">Show Blocked</span>
+        <Switch checked={showBlocked} onCheckedChange={onToggleBlocked} />
+      </div>
+    </div>
+  );
+}
+
+function ComplexFilterDrawerDemo() {
+  const [step, setStep] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
+
+  // State
+  const [selectedProviders, setSelectedProviders] = React.useState<string[]>([
+    "BGaming",
+    "Evolution",
+    "Pragmatic Play",
+  ]);
+  const [sortValue, setSortValue] = React.useState("novelty");
+  const [showBlocked, setShowBlocked] = React.useState(false);
+  const [search, setSearch] = React.useState("");
+  const [applied, setApplied] = React.useState(false);
+
+  const toggleProvider = (name: string) => {
+    setSelectedProviders((prev) =>
+      prev.includes(name) ? prev.filter((p) => p !== name) : [...prev, name],
+    );
+  };
+
+  const filteredProviders = GAME_PROVIDERS.filter((p) =>
+    p.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const handleApply = () => {
+    setApplied(true);
+    setOpen(false);
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <Drawer
+        open={open}
+        onOpenChange={(isOpen) => {
+          setOpen(isOpen);
+          if (!isOpen) {
+            setStep(0);
+            setSearch("");
+          }
+        }}
+      >
+        <DrawerTrigger asChild>
+          <Button variant="outline">
+            <FilterIcon className="size-4" />
+            Filters
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <div className="mx-auto w-full max-w-sm">
+            <Stepper value={step} onValueChange={setStep}>
+              <StepperContent>
+                {/* Step 0: Menu */}
+                <StepperStep>
+                  <DrawerHeader>
+                    <DrawerTitle className="text-center">Filters</DrawerTitle>
+                  </DrawerHeader>
+                  <ComplexFilterMenu
+                    sortValue={sortValue}
+                    showBlocked={showBlocked}
+                    onToggleBlocked={() => setShowBlocked((prev) => !prev)}
+                  />
+                  <DrawerFooter>
+                    <Button onClick={handleApply} className="w-full">
+                      Apply
+                    </Button>
+                  </DrawerFooter>
+                </StepperStep>
+
+                {/* Step 1: Providers */}
+                <StepperStep>
+                  <ComplexFilterSubHeader title="Providers" />
+                  <div className="px-4 pb-2">
+                    <div className="relative">
+                      <Search className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2" />
+                      <Input
+                        placeholder="Search..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="pl-9"
+                      />
+                    </div>
+                  </div>
+                  <div className="no-scrollbar max-h-[50vh] overflow-y-auto">
+                    <div className="divide-border-muted divide-y">
+                      {filteredProviders.map((provider) => (
+                        <label
+                          key={provider}
+                          className="flex h-12 cursor-pointer items-center gap-3 px-4"
+                        >
+                          <Checkbox
+                            checked={selectedProviders.includes(provider)}
+                            onCheckedChange={() => toggleProvider(provider)}
+                          />
+                          <span className="text-sm">{provider}</span>
+                        </label>
+                      ))}
+                      {filteredProviders.length === 0 && (
+                        <div className="text-muted-foreground flex h-12 items-center px-4 text-sm">
+                          No providers found.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <DrawerFooter>
+                    <Button onClick={handleApply} className="w-full">
+                      Apply
+                    </Button>
+                  </DrawerFooter>
+                </StepperStep>
+
+                {/* Step 2: Sort By */}
+                <StepperStep>
+                  <ComplexFilterSubHeader title="Sort By" />
+                  <div className="divide-border-muted divide-y">
+                    {COMPLEX_SORT_OPTIONS.map((option) => {
+                      const isSelected = sortValue === option.value;
+                      return (
+                        <button
+                          key={option.value}
+                          onClick={() => setSortValue(option.value)}
+                          className={`flex h-12 w-full cursor-pointer items-center justify-between px-4 active:text-muted-foreground ${
+                            isSelected
+                              ? "text-primary font-medium"
+                              : "text-muted-foreground"
+                          }`}
+                        >
+                          <span className="text-sm">{option.label}</span>
+                          {isSelected && (
+                            <Check className="text-primary size-4" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <DrawerFooter>
+                    <Button onClick={handleApply} className="w-full">
+                      Apply
+                    </Button>
+                  </DrawerFooter>
+                </StepperStep>
+              </StepperContent>
+            </Stepper>
+          </div>
+        </DrawerContent>
+      </Drawer>
+      {applied && (
+        <p className="text-muted-foreground text-sm">
+          Applied: {selectedProviders.length} providers &middot; {sortValue}{" "}
+          &middot; {showBlocked ? "showing blocked" : "hiding blocked"}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export const ComplexFilter: Story = {
+  name: "Complex Filter",
+  render: () => <ComplexFilterDrawerDemo />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A realistic filter drawer combining multiple patterns: menu items with left icons, a searchable scrollable checkbox list (Providers), a checkmark-based single-select (Sort By), and an inline toggle (Show Blocked). Demonstrates icons, search filtering, overflow scrolling, and mixed control types within a single drill-down drawer.",
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Providers (Scrollable with Search)
+// =============================================================================
+const ALL_PROVIDERS = [
+  "1spin4win",
+  "Apparat Gaming",
+  "BGaming",
+  "Betsoft Gaming",
+  "Booming Games",
+  "Clawbuster",
+  "Evolution",
+  "Evoplay Entertainment",
+  "Hacksaw Gaming",
+  "NetEnt",
+  "Nolimit City",
+  "Pragmatic Play",
+  "Push Gaming",
+  "Red Tiger",
+  "Relax Gaming",
+  "Spribe",
+  "Thunderkick",
+  "Wazdan",
+  "Yggdrasil",
+];
+
+function ProvidersDrawerDemo() {
+  const [open, setOpen] = React.useState(false);
+  const [selected, setSelected] = React.useState<string[]>([
+    "BGaming",
+    "Evolution",
+  ]);
+  const [search, setSearch] = React.useState("");
+  const [applied, setApplied] = React.useState(false);
+
+  const toggleProvider = (name: string) => {
+    setSelected((prev) =>
+      prev.includes(name) ? prev.filter((p) => p !== name) : [...prev, name],
+    );
+  };
+
+  const filtered = ALL_PROVIDERS.filter((p) =>
+    p.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const handleApply = () => {
+    setApplied(true);
+    setOpen(false);
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <Drawer
+        open={open}
+        onOpenChange={(isOpen) => {
+          setOpen(isOpen);
+          if (!isOpen) setSearch("");
+        }}
+      >
+        <DrawerTrigger asChild>
+          <Button variant="outline">
+            <LayoutGrid className="size-4" />
+            Providers
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <div className="mx-auto w-full max-w-sm">
+            <DrawerHeader>
+              <DrawerTitle className="text-center">Providers</DrawerTitle>
+            </DrawerHeader>
+            <div className="px-4 pb-2">
+              <div className="relative">
+                <Search className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2" />
+                <Input
+                  placeholder="Search..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+            </div>
+            <div className="no-scrollbar max-h-[50vh] overflow-y-auto">
+              <div className="divide-border-muted divide-y">
+                {filtered.map((provider) => (
+                  <label
+                    key={provider}
+                    className="flex h-12 cursor-pointer items-center gap-3 px-4"
+                  >
+                    <Checkbox
+                      checked={selected.includes(provider)}
+                      onCheckedChange={() => toggleProvider(provider)}
+                    />
+                    <span className="text-sm">{provider}</span>
+                  </label>
+                ))}
+                {filtered.length === 0 && (
+                  <div className="text-muted-foreground flex h-12 items-center px-4 text-sm">
+                    No providers found.
+                  </div>
+                )}
+              </div>
+            </div>
+            <DrawerFooter>
+              <Button onClick={handleApply} className="w-full">
+                Apply
+              </Button>
+            </DrawerFooter>
+          </div>
+        </DrawerContent>
+      </Drawer>
+      {applied && (
+        <p className="text-muted-foreground text-sm">
+          Selected: {selected.join(", ") || "None"}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export const Providers: Story = {
+  name: "Providers",
+  render: () => <ProvidersDrawerDemo />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A single-level scrollable drawer with a search input and a long list of checkboxes. Demonstrates overflow handling, real-time search filtering, and multi-select within a drawer.",
       },
     },
   },
