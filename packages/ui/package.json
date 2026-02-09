@@ -33,6 +33,7 @@
     "./radio-group": "./src/radio-group.tsx",
     "./select": "./src/select.tsx",
     "./separator": "./src/separator.tsx",
+    "./stepper": "./src/stepper.tsx",
     "./switch": "./src/switch.tsx",
     "./tabs": "./src/tabs.tsx",
     "./textarea": "./src/textarea.tsx",
@@ -69,8 +70,10 @@
     "clsx": "^2.1.1",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.487.0",
+    "motion": "^12.34.0",
     "react": "^19.2.4",
     "react-day-picker": "^9.13.1",
+    "react-use-measure": "^2.1.7",
     "tailwind-merge": "^3.4.0",
     "vaul": "^1.1.2"
   },

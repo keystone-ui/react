@@ -10,6 +10,12 @@ import {
   ModalTitle,
   ModalTrigger,
 } from "@keystone/ui/modal";
+import {
+  Stepper,
+  StepperContent,
+  StepperStep,
+  useStepper,
+} from "@keystone/ui/stepper";
 import { Button } from "@keystone/ui/button";
 import { Input } from "@keystone/ui/input";
 import { Label } from "@keystone/ui/label";
@@ -589,6 +595,155 @@ export const Confirmation: Story = {
       description: {
         story:
           "A confirmation dialog pattern using a smaller modal with no close button. Useful for destructive actions that require explicit user confirmation.",
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Multi-Step
+// =============================================================================
+function MultiStepStepIndicator() {
+  const { value, totalSteps } = useStepper();
+  return (
+    <div className="flex items-center justify-center gap-1.5">
+      {Array.from({ length: totalSteps }).map((_, i) => (
+        <div
+          key={i}
+          className={`h-1.5 rounded-full transition-all duration-300 ${
+            i === value
+              ? "bg-primary w-6"
+              : i < value
+                ? "bg-primary/40 w-1.5"
+                : "bg-muted w-1.5"
+          }`}
+        />
+      ))}
+    </div>
+  );
+}
+
+function MultiStepNav() {
+  const { goNext, goPrevious, isFirst, isLast } = useStepper();
+  return (
+    <ModalFooter>
+      <Button onClick={isLast ? undefined : goNext}>
+        {isLast ? "Get Started" : "Continue"}
+      </Button>
+      <Button variant="outline" onClick={goPrevious} disabled={isFirst}>
+        Back
+      </Button>
+    </ModalFooter>
+  );
+}
+
+function MultiStepDemo() {
+  const [step, setStep] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <Modal
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen);
+        if (!isOpen) setStep(0);
+      }}
+    >
+      <ModalTrigger render={<Button />}>Start Onboarding</ModalTrigger>
+      <ModalContent showCloseButton={false} className="sm:max-w-md">
+        <Stepper value={step} onValueChange={setStep}>
+          <ModalHeader className="items-center">
+            <MultiStepStepIndicator />
+          </ModalHeader>
+          <StepperContent>
+            <StepperStep>
+              <div className="text-center sm:text-left">
+                <h3 className="text-lg font-semibold">Welcome aboard!</h3>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  Let&apos;s get your workspace set up in just a few steps.
+                </p>
+              </div>
+              <div className="mt-4 grid gap-3">
+                <div className="grid gap-2">
+                  <Label htmlFor="ms-name">Full name</Label>
+                  <Input id="ms-name" placeholder="John Doe" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="ms-email">Email</Label>
+                  <Input
+                    id="ms-email"
+                    type="email"
+                    placeholder="john@example.com"
+                  />
+                </div>
+              </div>
+            </StepperStep>
+            <StepperStep>
+              <div className="text-center sm:text-left">
+                <h3 className="text-lg font-semibold">Create your workspace</h3>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  Choose a name and URL for your team workspace.
+                </p>
+              </div>
+              <div className="mt-4 grid gap-3">
+                <div className="grid gap-2">
+                  <Label htmlFor="ms-workspace">Workspace name</Label>
+                  <Input id="ms-workspace" placeholder="Acme Inc." />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="ms-url">Workspace URL</Label>
+                  <Input id="ms-url" placeholder="acme" />
+                </div>
+              </div>
+            </StepperStep>
+            <StepperStep>
+              <div className="text-center sm:text-left">
+                <h3 className="text-lg font-semibold">Invite your team</h3>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  Add team members to collaborate together.
+                </p>
+              </div>
+              <div className="mt-4 grid gap-3">
+                <div className="grid gap-2">
+                  <Label htmlFor="ms-invite-1">Team member email</Label>
+                  <Input
+                    id="ms-invite-1"
+                    type="email"
+                    placeholder="teammate@example.com"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="ms-invite-2">Another email (optional)</Label>
+                  <Input
+                    id="ms-invite-2"
+                    type="email"
+                    placeholder="another@example.com"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Checkbox id="ms-skip" />
+                  <Label htmlFor="ms-skip" className="text-sm font-normal">
+                    Skip for now, I&apos;ll invite later
+                  </Label>
+                </div>
+              </div>
+            </StepperStep>
+          </StepperContent>
+          <MultiStepNav />
+        </Stepper>
+      </ModalContent>
+    </Modal>
+  );
+}
+
+export const MultiStep: Story = {
+  name: "Multi-Step",
+  render: () => <MultiStepDemo />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "An onboarding wizard using the `Stepper` component inside a Modal. The Modal API is completely unchanged — the Stepper is composed as a child of `ModalContent`. Step indicator dots, animated transitions, and Back/Continue navigation are all powered by `useStepper()`.",
       },
     },
   },

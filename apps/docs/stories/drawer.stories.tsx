@@ -10,8 +10,21 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@keystone/ui/drawer";
+import {
+  Stepper,
+  StepperContent,
+  StepperStep,
+  useStepper,
+} from "@keystone/ui/stepper";
 import { Button } from "@keystone/ui/button";
-import { Minus, Plus } from "lucide-react";
+import { Checkbox } from "@keystone/ui/checkbox";
+import { Label } from "@keystone/ui/label";
+import { RadioGroup, RadioGroupItem } from "@keystone/ui/radio-group";
+import {
+  Filter as FilterIcon,
+  Minus,
+  Plus,
+} from "lucide-react";
 
 const meta = {
   title: "Components/Drawer",
@@ -283,6 +296,246 @@ export const Nested: Story = {
       description: {
         story:
           "A bottom drawer with interactive content. Demonstrates using stateful components inside the drawer body.",
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Multi-Step (Filter)
+// =============================================================================
+const DATE_RANGES = [
+  { label: "Today", value: "today" },
+  { label: "Last 7 days", value: "7d" },
+  { label: "Last 30 days", value: "30d" },
+  { label: "Last 90 days", value: "90d" },
+  { label: "All time", value: "all" },
+];
+
+const CURRENCIES = [
+  { label: "Bitcoin", symbol: "BTC" },
+  { label: "Ethereum", symbol: "ETH" },
+  { label: "Solana", symbol: "SOL" },
+  { label: "Tether", symbol: "USDT" },
+  { label: "USD Coin", symbol: "USDC" },
+  { label: "Ripple", symbol: "XRP" },
+];
+
+const TRANSACTION_TYPES = [
+  { label: "All Transactions", value: "all" },
+  { label: "Deposits", value: "deposits" },
+  { label: "Withdrawals", value: "withdrawals" },
+  { label: "Swaps", value: "swaps" },
+];
+
+function FilterStepIndicator() {
+  const { value, totalSteps } = useStepper();
+  const labels = ["Date", "Currency", "Type"];
+  return (
+    <div className="flex items-center gap-1 text-xs">
+      {Array.from({ length: totalSteps }).map((_, i) => (
+        <React.Fragment key={i}>
+          <span
+            className={`rounded-full px-2 py-0.5 font-medium transition-colors ${
+              i === value
+                ? "bg-primary text-primary-foreground"
+                : i < value
+                  ? "text-primary bg-primary/10"
+                  : "text-muted-foreground bg-muted"
+            }`}
+          >
+            {labels[i]}
+          </span>
+          {i < totalSteps - 1 && (
+            <span className="text-muted-foreground text-[10px]">&rsaquo;</span>
+          )}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function FilterNav({ onApply }: { onApply: () => void }) {
+  const { goNext, goPrevious, isFirst, isLast } = useStepper();
+  return (
+    <DrawerFooter className="flex-row">
+      <Button
+        variant="outline"
+        onClick={goPrevious}
+        disabled={isFirst}
+        className="flex-1"
+      >
+        Back
+      </Button>
+      {isLast ? (
+        <Button onClick={onApply} className="flex-1">
+          Apply Filters
+        </Button>
+      ) : (
+        <Button onClick={goNext} className="flex-1">
+          Next
+        </Button>
+      )}
+    </DrawerFooter>
+  );
+}
+
+function FilterDrawerDemo() {
+  const [step, setStep] = React.useState(0);
+  const [open, setOpen] = React.useState(false);
+
+  // Filter state
+  const [dateRange, setDateRange] = React.useState("7d");
+  const [currencies, setCurrencies] = React.useState<string[]>([
+    "BTC",
+    "ETH",
+  ]);
+  const [txType, setTxType] = React.useState("all");
+  const [applied, setApplied] = React.useState(false);
+
+  const toggleCurrency = (symbol: string) => {
+    setCurrencies((prev) =>
+      prev.includes(symbol)
+        ? prev.filter((c) => c !== symbol)
+        : [...prev, symbol],
+    );
+  };
+
+  const handleApply = () => {
+    setApplied(true);
+    setOpen(false);
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <Drawer
+        open={open}
+        onOpenChange={(isOpen) => {
+          setOpen(isOpen);
+          if (!isOpen) setStep(0);
+        }}
+      >
+        <DrawerTrigger asChild>
+          <Button variant="outline">
+            <FilterIcon className="size-4" />
+            Filters
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <div className="mx-auto w-full max-w-sm">
+            <Stepper value={step} onValueChange={setStep}>
+              <DrawerHeader>
+                <div className="flex items-center justify-between">
+                  <DrawerTitle>Filters</DrawerTitle>
+                  <FilterStepIndicator />
+                </div>
+                <DrawerDescription>
+                  Narrow down your transaction history.
+                </DrawerDescription>
+              </DrawerHeader>
+
+              <StepperContent className="px-4">
+                {/* Step 1: Date Range */}
+                <StepperStep>
+                  <div className="grid gap-3">
+                    <Label className="text-sm font-medium">Date Range</Label>
+                    <RadioGroup
+                      value={dateRange}
+                      onValueChange={(value) => value && setDateRange(value)}
+                    >
+                      {DATE_RANGES.map((range) => (
+                        <label
+                          key={range.value}
+                          className="border-input hover:bg-accent flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors"
+                        >
+                          <RadioGroupItem value={range.value} />
+                          <span className="text-sm">{range.label}</span>
+                        </label>
+                      ))}
+                    </RadioGroup>
+                  </div>
+                </StepperStep>
+
+                {/* Step 2: Currency */}
+                <StepperStep>
+                  <div className="grid gap-3">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-sm font-medium">Currency</Label>
+                      <span className="text-muted-foreground text-xs">
+                        {currencies.length} selected
+                      </span>
+                    </div>
+                    <div className="grid gap-2">
+                      {CURRENCIES.map((currency) => (
+                        <label
+                          key={currency.symbol}
+                          className="border-input hover:bg-accent flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors"
+                        >
+                          <Checkbox
+                            checked={currencies.includes(currency.symbol)}
+                            onCheckedChange={() =>
+                              toggleCurrency(currency.symbol)
+                            }
+                          />
+                          <div className="flex items-center gap-2 text-sm">
+                            <span className="text-muted-foreground w-10 font-mono text-xs">
+                              {currency.symbol}
+                            </span>
+                            <span>{currency.label}</span>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </StepperStep>
+
+                {/* Step 3: Transaction Type */}
+                <StepperStep>
+                  <div className="grid gap-3">
+                    <Label className="text-sm font-medium">
+                      Transaction Type
+                    </Label>
+                    <RadioGroup
+                      value={txType}
+                      onValueChange={(value) => value && setTxType(value)}
+                    >
+                      {TRANSACTION_TYPES.map((type) => (
+                        <label
+                          key={type.value}
+                          className="border-input hover:bg-accent flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors"
+                        >
+                          <RadioGroupItem value={type.value} />
+                          <span className="text-sm">{type.label}</span>
+                        </label>
+                      ))}
+                    </RadioGroup>
+                  </div>
+                </StepperStep>
+              </StepperContent>
+
+              <FilterNav onApply={handleApply} />
+            </Stepper>
+          </div>
+        </DrawerContent>
+      </Drawer>
+      {applied && (
+        <p className="text-muted-foreground text-sm">
+          Applied: {dateRange} &middot; {currencies.join(", ")} &middot;{" "}
+          {txType}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export const MultiStep: Story = {
+  name: "Multi-Step",
+  render: () => <FilterDrawerDemo />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A transaction filter wizard using the `Stepper` component inside a bottom Drawer. Three steps — Date Range, Currency, and Transaction Type — animate between each other while the Drawer API remains completely unchanged. Navigation and step indicators are built with `useStepper()`.",
       },
     },
   },

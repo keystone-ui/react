@@ -152,6 +152,12 @@ export const ui: Registry = [
     files: [{ path: "ui/separator.tsx", type: "registry:ui" }],
   },
   {
+    name: "stepper",
+    type: "registry:ui",
+    dependencies: ["motion", "react-use-measure"],
+    files: [{ path: "ui/stepper.tsx", type: "registry:ui" }],
+  },
+  {
     name: "switch",
     type: "registry:ui",
     dependencies: ["@base-ui/react"],
