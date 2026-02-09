@@ -106,6 +106,13 @@ export interface ModalContentProps
    * @default true
    */
   showCloseButton?: boolean;
+  /**
+   * Where scrolling happens when content exceeds the viewport.
+   * - `"inside"` — content scrolls within the modal (default)
+   * - `"outside"` — the entire viewport scrolls, modal grows to fit
+   * @default "inside"
+   */
+  scrollBehavior?: "inside" | "outside";
 }
 
 function ModalContent({
@@ -113,27 +120,55 @@ function ModalContent({
   children,
   size = "default",
   showCloseButton = true,
+  scrollBehavior = "inside",
   ...props
 }: ModalContentProps) {
+  const closeButton = showCloseButton && (
+    <DialogPrimitive.Close
+      data-slot="modal-close"
+      className="absolute top-4 right-4 cursor-pointer rounded-sm opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+    >
+      <XIcon />
+      <span className="sr-only">Close</span>
+    </DialogPrimitive.Close>
+  );
+
+  const popup = (
+    <DialogPrimitive.Popup
+      data-slot="modal-content"
+      className={cn(
+        modalContentVariants({ size }),
+        scrollBehavior === "outside" &&
+          "relative top-auto left-auto translate-x-0 translate-y-0",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+      {closeButton}
+    </DialogPrimitive.Popup>
+  );
+
+  if (scrollBehavior === "outside") {
+    return (
+      <ModalPortal>
+        <ModalOverlay />
+        <div
+          data-slot="modal-scroll-wrapper"
+          className="fixed inset-0 z-50 overflow-y-auto"
+        >
+          <div className="flex min-h-full items-center justify-center p-4">
+            {popup}
+          </div>
+        </div>
+      </ModalPortal>
+    );
+  }
+
   return (
     <ModalPortal>
       <ModalOverlay />
-      <DialogPrimitive.Popup
-        data-slot="modal-content"
-        className={cn(modalContentVariants({ size }), className)}
-        {...props}
-      >
-        {children}
-        {showCloseButton && (
-          <DialogPrimitive.Close
-            data-slot="modal-close"
-            className="absolute top-4 right-4 cursor-pointer rounded-sm opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
-          >
-            <XIcon />
-            <span className="sr-only">Close</span>
-          </DialogPrimitive.Close>
-        )}
-      </DialogPrimitive.Popup>
+      {popup}
     </ModalPortal>
   );
 }

@@ -748,3 +748,178 @@ export const MultiStep: Story = {
     },
   },
 };
+
+// =============================================================================
+// Long Content (scrollBehavior="outside")
+// =============================================================================
+export const LongContent: Story = {
+  name: "Long Content",
+  render: () => (
+    <Modal>
+      <ModalTrigger render={<Button variant="outline" />}>
+        Terms &amp; Conditions
+      </ModalTrigger>
+      <ModalContent scrollBehavior="outside">
+        <ModalHeader>
+          <ModalTitle>Terms of Service</ModalTitle>
+          <ModalDescription>
+            Last updated: January 1, 2026. Please read these terms carefully
+            before using our services.
+          </ModalDescription>
+        </ModalHeader>
+
+        <div className="space-y-6 text-sm leading-relaxed">
+          <section>
+            <h3 className="mb-2 font-semibold">1. Acceptance of Terms</h3>
+            <p className="text-muted-foreground">
+              By accessing and using this platform, you acknowledge that you have
+              read, understood, and agree to be bound by these Terms of Service
+              and all applicable laws and regulations. If you do not agree with
+              any of these terms, you are prohibited from using or accessing this
+              site. The materials contained in this platform are protected by
+              applicable copyright and trademark law.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="mb-2 font-semibold">2. Use License</h3>
+            <p className="text-muted-foreground">
+              Permission is granted to temporarily download one copy of the
+              materials on this platform for personal, non-commercial transitory
+              viewing only. This is the grant of a license, not a transfer of
+              title, and under this license you may not: modify or copy the
+              materials; use the materials for any commercial purpose, or for any
+              public display (commercial or non-commercial); attempt to
+              decompile or reverse engineer any software contained on the
+              platform; remove any copyright or other proprietary notations from
+              the materials; or transfer the materials to another person or
+              &ldquo;mirror&rdquo; the materials on any other server.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="mb-2 font-semibold">3. Account Responsibilities</h3>
+            <p className="text-muted-foreground">
+              You are responsible for maintaining the confidentiality of your
+              account and password, including but not limited to the restriction
+              of access to your computer and/or account. You agree to accept
+              responsibility for any and all activities or actions that occur
+              under your account and/or password, whether your password is with
+              our service or a third-party service. You must notify us
+              immediately upon becoming aware of any breach of security or
+              unauthorized use of your account.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="mb-2 font-semibold">4. Privacy Policy</h3>
+            <p className="text-muted-foreground">
+              Your privacy is important to us. Our Privacy Policy explains how
+              we collect, use, disclose, and safeguard your information when you
+              use our platform. Please read our Privacy Policy carefully. By
+              using the platform, you consent to the data practices described in
+              our Privacy Policy. We reserve the right to make changes to this
+              Privacy Policy at any time and for any reason.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="mb-2 font-semibold">5. Intellectual Property</h3>
+            <p className="text-muted-foreground">
+              The platform and its original content, features, and functionality
+              are and will remain the exclusive property of the company and its
+              licensors. The platform is protected by copyright, trademark, and
+              other laws of both domestic and foreign countries. Our trademarks
+              and trade dress may not be used in connection with any product or
+              service without the prior written consent of the company.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="mb-2 font-semibold">6. User Content</h3>
+            <p className="text-muted-foreground">
+              Our platform may allow you to post, link, store, share and
+              otherwise make available certain information, text, graphics,
+              videos, or other material. You are responsible for the content that
+              you post to the platform, including its legality, reliability, and
+              appropriateness. By posting content to the platform, you grant us
+              the right to use, modify, publicly perform, publicly display,
+              reproduce, and distribute such content on and through the platform.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="mb-2 font-semibold">7. Termination</h3>
+            <p className="text-muted-foreground">
+              We may terminate or suspend your account immediately, without prior
+              notice or liability, for any reason whatsoever, including without
+              limitation if you breach the Terms. Upon termination, your right to
+              use the platform will immediately cease. If you wish to terminate
+              your account, you may simply discontinue using the platform. All
+              provisions of the Terms which by their nature should survive
+              termination shall survive termination, including, without
+              limitation, ownership provisions, warranty disclaimers, indemnity
+              and limitations of liability.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="mb-2 font-semibold">8. Limitation of Liability</h3>
+            <p className="text-muted-foreground">
+              In no event shall the company, nor its directors, employees,
+              partners, agents, suppliers, or affiliates, be liable for any
+              indirect, incidental, special, consequential or punitive damages,
+              including without limitation, loss of profits, data, use,
+              goodwill, or other intangible losses, resulting from your access
+              to or use of or inability to access or use the platform; any
+              conduct or content of any third party on the platform; any content
+              obtained from the platform; and unauthorized access, use or
+              alteration of your transmissions or content.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="mb-2 font-semibold">9. Governing Law</h3>
+            <p className="text-muted-foreground">
+              These Terms shall be governed and construed in accordance with the
+              laws of the jurisdiction in which the company is established,
+              without regard to its conflict of law provisions. Our failure to
+              enforce any right or provision of these Terms will not be
+              considered a waiver of those rights. If any provision of these
+              Terms is held to be invalid or unenforceable by a court, the
+              remaining provisions of these Terms will remain in effect.
+            </p>
+          </section>
+
+          <section>
+            <h3 className="mb-2 font-semibold">10. Changes to Terms</h3>
+            <p className="text-muted-foreground">
+              We reserve the right, at our sole discretion, to modify or replace
+              these Terms at any time. If a revision is material we will try to
+              provide at least 30 days&apos; notice prior to any new terms
+              taking effect. What constitutes a material change will be
+              determined at our sole discretion. By continuing to access or use
+              our platform after those revisions become effective, you agree to
+              be bound by the revised terms.
+            </p>
+          </section>
+        </div>
+
+        <ModalFooter>
+          <ModalClose render={<Button />}>I Accept</ModalClose>
+          <ModalClose render={<Button variant="outline" />}>
+            Decline
+          </ModalClose>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use `scrollBehavior="outside"` to let the modal grow with its content and scroll the viewport instead of constraining content inside the modal. Ideal for long-form content like terms of service or privacy policies.',
+      },
+    },
+  },
+};
