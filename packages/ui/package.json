@@ -18,6 +18,7 @@
     "./checkbox": "./src/checkbox.tsx",
     "./combobox": "./src/combobox.tsx",
     "./date-input": "./src/date-input.tsx",
+    "./drawer": "./src/drawer.tsx",
     "./dropdown-menu": "./src/dropdown-menu.tsx",
     "./field": "./src/field.tsx",
     "./form": "./src/form.tsx",
@@ -69,7 +70,8 @@
     "lucide-react": "^0.487.0",
     "react": "^19.2.4",
     "react-day-picker": "^9.13.1",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "vaul": "^1.1.2"
   },
   "publishConfig": {
     "access": "public"

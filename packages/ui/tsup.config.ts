@@ -12,6 +12,7 @@ export default defineConfig((options) => ({
     "src/checkbox.tsx",
     "src/combobox.tsx",
     "src/date-input.tsx",
+    "src/drawer.tsx",
     "src/dropdown-menu.tsx",
     "src/field.tsx",
     "src/form.tsx",

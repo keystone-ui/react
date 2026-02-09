@@ -63,6 +63,12 @@ export const ui: Registry = [
     files: [{ path: "ui/date-input.tsx", type: "registry:ui" }],
   },
   {
+    name: "drawer",
+    type: "registry:ui",
+    dependencies: ["vaul"],
+    files: [{ path: "ui/drawer.tsx", type: "registry:ui" }],
+  },
+  {
     name: "dropdown-menu",
     type: "registry:ui",
     dependencies: ["@base-ui/react", "lucide-react"],
