@@ -13,6 +13,7 @@
     "./badge": "./src/badge.tsx",
     "./button": "./src/button.tsx",
     "./button-group": "./src/button-group.tsx",
+    "./calendar": "./src/calendar.tsx",
     "./card": "./src/card.tsx",
     "./checkbox": "./src/checkbox.tsx",
     "./combobox": "./src/combobox.tsx",
@@ -60,13 +61,14 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@keystone/theme": "workspace:*",
     "@base-ui/react": "^1.1.0",
+    "@keystone/theme": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.487.0",
     "react": "^19.2.4",
+    "react-day-picker": "^9.13.1",
     "tailwind-merge": "^3.4.0"
   },
   "publishConfig": {

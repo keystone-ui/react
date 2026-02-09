@@ -33,6 +33,13 @@ export const ui: Registry = [
     files: [{ path: "ui/button-group.tsx", type: "registry:ui" }],
   },
   {
+    name: "calendar",
+    type: "registry:ui",
+    dependencies: ["react-day-picker", "lucide-react"],
+    registryDependencies: ["button"],
+    files: [{ path: "ui/calendar.tsx", type: "registry:ui" }],
+  },
+  {
     name: "card",
     type: "registry:ui",
     files: [{ path: "ui/card.tsx", type: "registry:ui" }],

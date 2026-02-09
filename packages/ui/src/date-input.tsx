@@ -11,7 +11,7 @@ import {
 import { cn } from "./utils";
 
 export interface DateInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {}
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "size"> {}
 
 export const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
   ({ className, ...props }, ref) => {

@@ -18,18 +18,26 @@ export interface InputGroupProps extends React.HTMLAttributes<HTMLDivElement> {
    * The children of the input group
    */
   children: React.ReactNode;
+  /**
+   * Size variant of the input group
+   * @default "default"
+   */
+  size?: "sm" | "default";
 }
 
 export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, children, size = "default", ...props }, ref) => {
     return (
       <div
         data-slot="input-group"
+        data-size={size}
         role="group"
         ref={ref}
         className={cn(
           "group/input-group border-input bg-input-bg relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none",
-          "h-10 min-w-0",
+          "min-w-0",
+          size === "default" && "h-10",
+          size === "sm" && "h-8",
 
           // Alignment variants - adjust input padding based on addon position
           "has-[>[data-align=inline-start]]:[&_[data-slot=input-group-control]]:pl-2",
