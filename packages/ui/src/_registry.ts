@@ -103,6 +103,12 @@ export const ui: Registry = [
     files: [{ path: "ui/label.tsx", type: "registry:ui" }],
   },
   {
+    name: "native-select",
+    type: "registry:ui",
+    dependencies: ["lucide-react"],
+    files: [{ path: "ui/native-select.tsx", type: "registry:ui" }],
+  },
+  {
     name: "popover",
     type: "registry:ui",
     dependencies: ["@base-ui/react"],

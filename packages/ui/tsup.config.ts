@@ -19,6 +19,7 @@ export default defineConfig((options) => ({
     "src/input-otp.tsx",
     "src/kbd.tsx",
     "src/label.tsx",
+    "src/native-select.tsx",
     "src/popover.tsx",
     "src/radio-group.tsx",
     "src/select.tsx",
