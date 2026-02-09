@@ -24,6 +24,7 @@
     "./input-group": "./src/input-group.tsx",
     "./input-otp": "./src/input-otp.tsx",
     "./kbd": "./src/kbd.tsx",
+    "./popover": "./src/popover.tsx",
     "./label": "./src/label.tsx",
     "./radio-group": "./src/radio-group.tsx",
     "./select": "./src/select.tsx",
@@ -60,7 +61,6 @@
   "dependencies": {
     "@keystone/theme": "workspace:*",
     "@base-ui/react": "^1.1.0",
-
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "input-otp": "^1.4.2",

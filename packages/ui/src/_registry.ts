@@ -103,6 +103,12 @@ export const ui: Registry = [
     files: [{ path: "ui/label.tsx", type: "registry:ui" }],
   },
   {
+    name: "popover",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react"],
+    files: [{ path: "ui/popover.tsx", type: "registry:ui" }],
+  },
+  {
     name: "radio-group",
     type: "registry:ui",
     dependencies: ["@base-ui/react"],
