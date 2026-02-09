@@ -8,6 +8,13 @@ export const ui: Registry = [
     files: [{ path: "ui/accordion.tsx", type: "registry:ui" }],
   },
   {
+    name: "alert-dialog",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react"],
+    registryDependencies: ["button"],
+    files: [{ path: "ui/alert-dialog.tsx", type: "registry:ui" }],
+  },
+  {
     name: "avatar",
     type: "registry:ui",
     dependencies: ["@base-ui/react"],
