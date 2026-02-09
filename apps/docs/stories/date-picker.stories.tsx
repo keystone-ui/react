@@ -86,11 +86,7 @@ type Story = StoryObj;
 
 function formatDate(date: Date | undefined) {
   if (!date) return "";
-  return date.toLocaleDateString("en-US", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
+  return format(date, "MMMM dd, yyyy");
 }
 
 function isValidDate(date: Date | undefined) {
