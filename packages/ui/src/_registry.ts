@@ -116,6 +116,13 @@ export const ui: Registry = [
     files: [{ path: "ui/label.tsx", type: "registry:ui" }],
   },
   {
+    name: "modal",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react", "class-variance-authority", "lucide-react"],
+    registryDependencies: ["button"],
+    files: [{ path: "ui/modal.tsx", type: "registry:ui" }],
+  },
+  {
     name: "native-select",
     type: "registry:ui",
     dependencies: ["lucide-react"],

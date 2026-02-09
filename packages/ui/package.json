@@ -28,6 +28,7 @@
     "./kbd": "./src/kbd.tsx",
     "./popover": "./src/popover.tsx",
     "./label": "./src/label.tsx",
+    "./modal": "./src/modal.tsx",
     "./native-select": "./src/native-select.tsx",
     "./radio-group": "./src/radio-group.tsx",
     "./select": "./src/select.tsx",
