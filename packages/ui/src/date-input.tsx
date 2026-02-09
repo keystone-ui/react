@@ -32,6 +32,7 @@ export const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
         <InputGroupAddon align="inline-end">
           <InputGroupButton
             type="button"
+            size="icon-xs"
             aria-label="Open date picker"
             onClick={() => inputRef.current?.showPicker()}
           >

@@ -139,7 +139,7 @@ export const WithButton: Story = {
       <InputGroup>
         <InputGroupInput placeholder="Enter code" />
         <InputGroupAddon align="inline-end">
-          <InputGroupButton>
+          <InputGroupButton size="icon-xs">
             <CopyIcon className="size-4" />
           </InputGroupButton>
         </InputGroupAddon>
@@ -162,6 +162,7 @@ export const PasswordToggle: Story = {
           />
           <InputGroupAddon align="inline-end">
             <InputGroupButton 
+              size="icon-xs"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
@@ -227,6 +228,7 @@ export const ClearButton: Story = {
           />
           <InputGroupAddon align="inline-end">
             <InputGroupButton 
+              size="icon-xs"
               onClick={() => setValue("")}
               aria-label="Clear input"
               disabled={!value}
@@ -386,6 +388,7 @@ export const CopyToClipboard: Story = {
           <InputGroupInput value="https://example.com/api/key" readOnly />
           <InputGroupAddon align="inline-end">
             <InputGroupButton
+              size="icon-xs"
               aria-label="Copy to clipboard"
               onClick={handleCopy}
             >
