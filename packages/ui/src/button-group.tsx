@@ -9,27 +9,44 @@ import { cn } from "./utils";
 // ButtonGroup
 // =============================================================================
 const buttonGroupVariants = cva(
-  "flex w-fit items-stretch [&>*]:focus-visible:z-10 [&>*]:focus-visible:relative [&>input]:flex-1",
+  [
+    "flex w-fit items-stretch",
+    "*:focus-visible:z-10 *:focus-visible:relative",
+    "[&>input]:flex-1",
+    // Nesting: add gap between nested ButtonGroups
+    "has-[>[data-slot=button-group]]:gap-2",
+    // Select: handle hidden select element as last child
+    "has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-lg",
+    "[&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit",
+  ].join(" "),
   {
     variants: {
       orientation: {
         horizontal: [
-          "[&>*:not(:first-child):not([data-slot=button-group-separator])]:rounded-l-none",
-          "[&>*:not(:first-child):not([data-slot=button-group-separator])]:border-l-0",
-          "[&>*:not(:last-child):not([data-slot=button-group-separator])]:rounded-r-none",
-          "[&>[data-slot=button-group-separator]+*]:rounded-l-md [&>[data-slot=button-group-separator]+*]:border-l",
+          "[&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-lg!",
+          "[&>[data-slot]~[data-slot]]:rounded-l-none",
+          "[&>[data-slot]~[data-slot]]:border-l-0",
+          "*:data-[slot]:rounded-r-none",
+          // Separator: remove border from element before separator
+          "[&>*:has(+[data-slot=button-group-separator])]:border-r-0",
+          // Input focus fix: keep 1px border, transparent when unfocused
+          "[&>[data-slot]~[data-slot=input]]:border-l",
+          "[&>[data-slot]~[data-slot=input]:not(:focus)]:border-l-transparent",
         ].join(" "),
         vertical: [
-          "[&>*:not(:first-child):not([data-slot=button-group-separator])]:rounded-t-none",
-          "[&>*:not(:first-child):not([data-slot=button-group-separator])]:border-t-0",
-          "[&>*:not(:last-child):not([data-slot=button-group-separator])]:rounded-b-none",
-          "[&>[data-slot=button-group-separator]+*]:rounded-t-md [&>[data-slot=button-group-separator]+*]:border-t",
+          "flex-col",
+          "[&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-lg!",
+          "[&>[data-slot]~[data-slot]]:rounded-t-none",
+          "[&>[data-slot]~[data-slot]]:border-t-0",
+          "*:data-[slot]:rounded-b-none",
+          "[&>*:has(+[data-slot=button-group-separator])]:border-b-0",
+          // Input focus fix: keep 1px border, transparent when unfocused
+          "[&>[data-slot]~[data-slot=input]]:border-t",
+          "[&>[data-slot]~[data-slot=input]:not(:focus)]:border-t-transparent",
         ].join(" "),
       },
     },
-    defaultVariants: {
-      orientation: "horizontal",
-    },
+    defaultVariants: { orientation: "horizontal" },
   }
 );
 
@@ -63,6 +80,7 @@ const ButtonGroupText = React.forwardRef<HTMLDivElement, ButtonGroupTextProps>(
     return (
       <div
         ref={ref}
+        data-slot="button-group-text"
         className={cn(
           "bg-muted flex items-center gap-2 rounded-md border border-border px-4 text-sm font-medium shadow-xs",
           "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
@@ -93,8 +111,8 @@ const ButtonGroupSeparator = React.forwardRef<HTMLDivElement, ButtonGroupSeparat
         data-slot="button-group-separator"
         data-orientation={orientation}
         className={cn(
-          "bg-border relative self-stretch shrink-0",
-          orientation === "vertical" ? "w-px h-auto" : "h-px w-auto",
+          "bg-input relative self-stretch",
+          orientation === "vertical" ? "w-px" : "h-px",
           className
         )}
         {...props}

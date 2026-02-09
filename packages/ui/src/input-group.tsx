@@ -5,6 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./utils";
 import { Button } from "./button";
 import { Input } from "./input";
+import { Textarea } from "./textarea";
 
 // =============================================================================
 // InputGroup
@@ -39,6 +40,9 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
           size === "default" && "h-10",
           size === "sm" && "h-8",
 
+          // Textarea: auto-height when containing a textarea
+          "has-[>textarea]:h-auto",
+
           // Alignment variants - adjust input padding based on addon position
           "has-[>[data-align=inline-start]]:[&_[data-slot=input-group-control]]:pl-2",
           "has-[>[data-align=inline-end]]:[&_[data-slot=input-group-control]]:pr-2",
@@ -66,7 +70,7 @@ InputGroup.displayName = "InputGroup";
 // InputGroupAddon
 // =============================================================================
 const inputGroupAddonVariants = cva(
-  "text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm select-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 group-data-[disabled=true]/input-group:opacity-50",
+  "text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm select-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&>kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50",
   {
     variants: {
       align: {
@@ -213,6 +217,29 @@ export const InputGroupInput = React.forwardRef<HTMLInputElement, InputGroupInpu
   }
 );
 InputGroupInput.displayName = "InputGroupInput";
+
+// =============================================================================
+// InputGroupTextarea
+// =============================================================================
+export interface InputGroupTextareaProps extends React.ComponentProps<typeof Textarea> {}
+
+export const InputGroupTextarea = React.forwardRef<HTMLTextAreaElement, InputGroupTextareaProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <Textarea
+        ref={ref}
+        data-slot="input-group-control"
+        className={cn(
+          "flex-1 resize-none rounded-none border-0 bg-transparent dark:bg-transparent py-2 shadow-none",
+          "focus:ring-0 focus:border-transparent focus:shadow-none",
+          className
+        )}
+        {...props}
+      />
+    );
+  }
+);
+InputGroupTextarea.displayName = "InputGroupTextarea";
 
 // Export variants for external use
 export { inputGroupAddonVariants, inputGroupButtonVariants };

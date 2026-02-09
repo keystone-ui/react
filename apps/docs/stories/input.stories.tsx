@@ -11,7 +11,7 @@ import { Description } from "@keystone/ui/form";
 import { Field, FieldGroup, FieldLabel, FieldDescription, FieldError } from "@keystone/ui/field";
 import { Button } from "@keystone/ui/button";
 import { ButtonGroup } from "@keystone/ui/button-group";
-import { MailIcon, InfoIcon } from "lucide-react";
+import { MailIcon, InfoIcon, Minus as MinusIcon, Plus as PlusIcon } from "lucide-react";
 import { useState } from "react";
 
 const meta = {
@@ -380,6 +380,29 @@ export const FormExample: Story = {
 export const File: Story = {
   args: {
     type: "file",
+  },
+};
+
+// Increment/Decrement
+export const IncrementDecrement: Story = {
+  name: "Increment/Decrement",
+  render: () => (
+    <ButtonGroup>
+      <Button variant="outline" size="icon">
+        <MinusIcon className="size-4" />
+      </Button>
+      <Input className="w-16 text-center" defaultValue="1" />
+      <Button variant="outline" size="icon">
+        <PlusIcon className="size-4" />
+      </Button>
+    </ButtonGroup>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Use `ButtonGroup` to create a number stepper with increment/decrement buttons.",
+      },
+    },
   },
 };
 

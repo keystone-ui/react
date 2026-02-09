@@ -4,6 +4,7 @@ import {
   InputGroup, 
   InputGroupAddon,
   InputGroupInput,
+  InputGroupTextarea,
   InputGroupButton,
   InputGroupText,
 } from "@keystone/ui/input-group";
@@ -16,6 +17,7 @@ import {
   Copy as CopyIcon,
   Check as CheckIcon,
   Loader2 as LoaderIcon,
+  SendHorizonal as SendIcon,
 } from "lucide-react";
 
 const meta = {
@@ -429,6 +431,30 @@ export const WithSelectDropdown: Story = {
     docs: {
       description: {
         story: "Combine a native select dropdown with the input for protocol or prefix selection.",
+      },
+    },
+  },
+};
+
+// Textarea
+export const WithTextarea: Story = {
+  name: "Textarea",
+  render: () => (
+    <div className="max-w-sm">
+      <InputGroup>
+        <InputGroupTextarea placeholder="Write a message..." rows={3} />
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton size="icon-xs" aria-label="Send">
+            <SendIcon className="size-4" />
+          </InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Use `InputGroupTextarea` instead of `InputGroupInput` for multiline text. The container automatically expands to fit.",
       },
     },
   },
