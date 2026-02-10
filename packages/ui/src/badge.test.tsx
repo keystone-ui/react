@@ -1,119 +1,125 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, expect, test, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
 import { Badge } from './badge';
 
 describe('Badge', () => {
-  test('renders correctly', () => {
+  test('renders correctly with default props', () => {
     render(<Badge>New</Badge>);
-    expect(screen.getByText('New')).toBeInTheDocument();
-  });
-
-  test('applies different variants', () => {
-    const { rerender } = render(<Badge variant="red">Red</Badge>);
-    const redBadge = screen.getByText('Red').closest('span');
-    expect(redBadge).toHaveClass('bg-red-500/15');
-    
-    rerender(<Badge variant="blue">Blue</Badge>);
-    const blueBadge = screen.getByText('Blue').closest('span');
-    expect(blueBadge).toHaveClass('bg-blue-500/15');
-    
-    rerender(<Badge variant="green">Green</Badge>);
-    const greenBadge = screen.getByText('Green').closest('span');
-    expect(greenBadge).toHaveClass('bg-green-500/15');
-    
-    rerender(<Badge variant="default">Default</Badge>);
-    const defaultBadge = screen.getByText('Default').closest('span');
-    expect(defaultBadge).toHaveClass('bg-transparent');
-  });
-
-  test('applies different sizes', () => {
-    const { rerender } = render(<Badge size="xs">Extra Small</Badge>);
-    const xsBadge = screen.getByText('Extra Small').closest('span');
-    expect(xsBadge).toHaveClass('text-[10px]');
-    
-    rerender(<Badge size="sm">Small</Badge>);
-    const smBadge = screen.getByText('Small').closest('span');
-    expect(smBadge).toHaveClass('text-xs');
-    
-    rerender(<Badge size="default">Default</Badge>);
-    const defaultBadge = screen.getByText('Default').closest('span');
-    expect(defaultBadge).toHaveClass('text-xs');
-  });
-
-  test('supports custom status indicator with span', () => {
-    render(
-      <Badge data-testid="badge">
-        <span className="size-1.5 rounded-full bg-green-500" aria-hidden="true" data-testid="status-dot"></span>
-        Status
-      </Badge>
-    );
-    const badge = screen.getByTestId('badge');
-    const statusDot = screen.getByTestId('status-dot');
+    const badge = screen.getByText('New');
     expect(badge).toBeInTheDocument();
-    expect(statusDot).toBeInTheDocument();
-    expect(statusDot).toHaveClass('rounded-full');
-    expect(statusDot).toHaveClass('bg-green-500');
+    expect(badge.tagName).toBe('SPAN');
   });
+
+  test('has data-slot="badge"', () => {
+    render(<Badge>Slotted</Badge>);
+    const badge = screen.getByText('Slotted');
+    expect(badge).toHaveAttribute('data-slot', 'badge');
+  });
+
+  // ---------------------------------------------------------------------------
+  // Variants
+  // ---------------------------------------------------------------------------
+
+  test('applies default variant classes', () => {
+    render(<Badge>Default</Badge>);
+    const badge = screen.getByText('Default');
+    expect(badge).toHaveClass('bg-primary');
+    expect(badge).toHaveClass('text-primary-foreground');
+  });
+
+  test('applies secondary variant classes', () => {
+    render(<Badge variant="secondary">Secondary</Badge>);
+    const badge = screen.getByText('Secondary');
+    expect(badge).toHaveClass('bg-secondary');
+    expect(badge).toHaveClass('text-secondary-foreground');
+  });
+
+  test('applies destructive variant classes', () => {
+    render(<Badge variant="destructive">Destructive</Badge>);
+    const badge = screen.getByText('Destructive');
+    expect(badge).toHaveClass('text-destructive');
+  });
+
+  test('applies outline variant classes', () => {
+    render(<Badge variant="outline">Outline</Badge>);
+    const badge = screen.getByText('Outline');
+    expect(badge).toHaveClass('border-border');
+    expect(badge).toHaveClass('text-foreground');
+  });
+
+  test('applies ghost variant classes', () => {
+    render(<Badge variant="ghost">Ghost</Badge>);
+    const badge = screen.getByText('Ghost');
+    expect(badge).toBeInTheDocument();
+  });
+
+  test('applies link variant classes', () => {
+    render(<Badge variant="link">Link</Badge>);
+    const badge = screen.getByText('Link');
+    expect(badge).toHaveClass('text-primary');
+  });
+
+  // ---------------------------------------------------------------------------
+  // Sizes
+  // ---------------------------------------------------------------------------
+
+  test('applies default size', () => {
+    render(<Badge size="default">Default Size</Badge>);
+    const badge = screen.getByText('Default Size');
+    expect(badge).toHaveClass('text-xs');
+    expect(badge).toHaveClass('h-5');
+  });
+
+  test('applies sm size', () => {
+    render(<Badge size="sm">Small</Badge>);
+    const badge = screen.getByText('Small');
+    expect(badge).toHaveClass('text-[10px]');
+    expect(badge).toHaveClass('h-4');
+  });
+
+  // ---------------------------------------------------------------------------
+  // Custom className
+  // ---------------------------------------------------------------------------
 
   test('applies custom className', () => {
     render(<Badge className="test-class">Custom Class</Badge>);
-    const badge = screen.getByText('Custom Class').closest('span');
+    const badge = screen.getByText('Custom Class');
     expect(badge).toHaveClass('test-class');
   });
 
-  test('renders as a button when asButton is true', () => {
-    render(<Badge asButton>Button Badge</Badge>);
+  // ---------------------------------------------------------------------------
+  // Render prop
+  // ---------------------------------------------------------------------------
+
+  test('renders as an anchor when render prop is an <a>', () => {
+    render(
+      <Badge render={<a href="/link" />}>Link Badge</Badge>
+    );
+    const link = screen.getByText('Link Badge');
+    expect(link.tagName).toBe('A');
+    expect(link).toHaveAttribute('href', '/link');
+    expect(link).toHaveAttribute('data-slot', 'badge');
+  });
+
+  test('renders as a button when render prop is a <button>', () => {
+    render(
+      <Badge render={<button type="button" />}>Button Badge</Badge>
+    );
     const button = screen.getByRole('button', { name: 'Button Badge' });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('cursor-pointer');
+    expect(button.tagName).toBe('BUTTON');
+    expect(button).toHaveAttribute('data-slot', 'badge');
   });
 
-  test('calls onClick when clicked as a button', () => {
-    const handleClick = vi.fn();
-    render(<Badge asButton onClick={handleClick}>Clickable Badge</Badge>);
-    const button = screen.getByRole('button', { name: 'Clickable Badge' });
-    fireEvent.click(button);
-    expect(handleClick).toHaveBeenCalledTimes(1);
-  });
-
-  test('calls onClick when clicked as a span', () => {
-    const handleClick = vi.fn();
-    render(<Badge onClick={handleClick}>Clickable Span</Badge>);
-    const span = screen.getByText('Clickable Span');
-    fireEvent.click(span);
-    expect(handleClick).toHaveBeenCalledTimes(1);
-  });
-
-  test('applies variant and size to button badge', () => {
+  test('merges variant classes onto rendered element', () => {
     render(
-      <Badge asButton variant="blue" size="sm">
-        Blue Button
+      <Badge variant="secondary" render={<a href="#" />}>
+        Styled Link
       </Badge>
     );
-    const button = screen.getByRole('button', { name: 'Blue Button' });
-    expect(button).toHaveClass('bg-blue-500/15');
-    expect(button).toHaveClass('text-xs');
+    const link = screen.getByText('Styled Link');
+    expect(link.tagName).toBe('A');
+    expect(link).toHaveClass('bg-secondary');
+    expect(link).toHaveClass('text-secondary-foreground');
   });
-
-  test('button has type="button" by default', () => {
-    render(<Badge asButton>Default Button</Badge>);
-    const button = screen.getByRole('button', { name: 'Default Button' });
-    expect(button).toHaveAttribute('type', 'button');
-  });
-
-  test('renders clickable badges correctly', () => {
-    const { rerender } = render(<Badge asButton>Button Badge</Badge>);
-    const button = screen.getByRole('button', { name: 'Button Badge' });
-    expect(button).toBeInTheDocument();
-    
-    rerender(<Badge onClick={() => {}}>Clickable Span</Badge>);
-    const span = screen.getByText('Clickable Span');
-    expect(span).toBeInTheDocument();
-  });
-
-  test('does not apply cursor-pointer class when no onClick handler', () => {
-    render(<Badge>Regular Badge</Badge>);
-    const span = screen.getByText('Regular Badge');
-    expect(span).not.toHaveClass('cursor-pointer');
-  });
-}); 
+});
