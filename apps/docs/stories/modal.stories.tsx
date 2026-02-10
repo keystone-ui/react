@@ -278,7 +278,7 @@ export const StickyFooter: Story = {
       <ModalTrigger render={<Button variant="outline" />}>
         Sticky Footer
       </ModalTrigger>
-      <ModalContent>
+      <ModalContent scrollBehavior="inside">
         <ModalHeader>
           <ModalTitle>Sticky Footer</ModalTitle>
           <ModalDescription>
@@ -311,7 +311,7 @@ export const StickyFooter: Story = {
     docs: {
       description: {
         story:
-          "Keep actions visible while the content scrolls. The scrollable area uses negative horizontal margin to extend edge-to-edge within the modal padding.",
+          'Keep actions visible while the content scrolls. Uses `scrollBehavior="inside"` so the modal stays fixed while the content area scrolls internally. The scrollable area uses negative horizontal margin to extend edge-to-edge within the modal padding.',
       },
     },
   },
@@ -326,7 +326,7 @@ export const ScrollableContent: Story = {
       <ModalTrigger render={<Button variant="outline" />}>
         Scrollable Content
       </ModalTrigger>
-      <ModalContent>
+      <ModalContent scrollBehavior="inside">
         <ModalHeader>
           <ModalTitle>Scrollable Content</ModalTitle>
           <ModalDescription>
@@ -353,7 +353,7 @@ export const ScrollableContent: Story = {
     docs: {
       description: {
         story:
-          "Long content can scroll while the header and close button stay in view.",
+          'Uses `scrollBehavior="inside"` so long content scrolls within the modal while the header and close button stay in view.',
       },
     },
   },
@@ -759,7 +759,7 @@ export const LongContent: Story = {
       <ModalTrigger render={<Button variant="outline" />}>
         Terms &amp; Conditions
       </ModalTrigger>
-      <ModalContent scrollBehavior="outside">
+      <ModalContent>
         <ModalHeader>
           <ModalTitle>Terms of Service</ModalTitle>
           <ModalDescription>
@@ -918,7 +918,7 @@ export const LongContent: Story = {
     docs: {
       description: {
         story:
-          'Use `scrollBehavior="outside"` to let the modal grow with its content and scroll the viewport instead of constraining content inside the modal. Ideal for long-form content like terms of service or privacy policies.',
+          "Long content is handled out of the box — the modal grows with its content and the viewport scrolls. This is the default `scrollBehavior` (`\"outside\"`). Ideal for long-form content like terms of service or privacy policies.",
       },
     },
   },
