@@ -23,7 +23,7 @@ export const ui: Registry = [
   {
     name: "badge",
     type: "registry:ui",
-    dependencies: ["class-variance-authority"],
+    dependencies: ["@base-ui/react", "class-variance-authority"],
     files: [{ path: "ui/badge.tsx", type: "registry:ui" }],
   },
   {
@@ -47,10 +47,10 @@ export const ui: Registry = [
     files: [{ path: "ui/calendar.tsx", type: "registry:ui" }],
   },
   {
-    name: "callout",
+    name: "alert",
     type: "registry:ui",
     dependencies: ["class-variance-authority"],
-    files: [{ path: "ui/callout.tsx", type: "registry:ui" }],
+    files: [{ path: "ui/alert.tsx", type: "registry:ui" }],
   },
   {
     name: "card",
@@ -82,6 +82,12 @@ export const ui: Registry = [
     files: [{ path: "ui/drawer.tsx", type: "registry:ui" }],
   },
   {
+    name: "empty",
+    type: "registry:ui",
+    dependencies: ["class-variance-authority"],
+    files: [{ path: "ui/empty.tsx", type: "registry:ui" }],
+  },
+  {
     name: "dropdown-menu",
     type: "registry:ui",
     dependencies: ["@base-ui/react", "lucide-react"],
@@ -99,6 +105,12 @@ export const ui: Registry = [
     type: "registry:ui",
     registryDependencies: ["label"],
     files: [{ path: "ui/form.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "item",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react", "class-variance-authority"],
+    files: [{ path: "ui/item.tsx", type: "registry:ui" }],
   },
   {
     name: "input",
@@ -163,6 +175,12 @@ export const ui: Registry = [
     name: "separator",
     type: "registry:ui",
     files: [{ path: "ui/separator.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "spinner",
+    type: "registry:ui",
+    dependencies: ["lucide-react"],
+    files: [{ path: "ui/spinner.tsx", type: "registry:ui" }],
   },
   {
     name: "stepper",
