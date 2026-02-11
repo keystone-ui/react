@@ -138,7 +138,7 @@ Exception: Button uses `transition-all` because it combines color, background, b
 
 Three shadow tiers:
 
-- `shadow-xs` — form controls (Input, Textarea, Select, NativeSelect, ComboboxChips, InputGroup, InputOTP, ButtonGroupSeparator)
+- `shadow-xs` — form controls (Input, Textarea, Select, NativeSelect, ComboboxChips, InputGroup, InputOTP)
 - `shadow-lg` — popup containers (SelectContent, ComboboxContent, DropdownMenuContent, PopoverContent)
 - `shadow-sm` — TabsTrigger active state (default variant only)
 

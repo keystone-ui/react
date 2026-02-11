@@ -27,11 +27,21 @@ const buttonGroupVariants = cva(
           "[&>[data-slot]~[data-slot]]:rounded-l-none",
           "[&>[data-slot]~[data-slot]]:border-l-0",
           "*:data-[slot]:rounded-r-none",
-          // Separator: remove border from element before separator
-          "[&>*:has(+[data-slot=button-group-separator])]:border-r-0",
           // Input focus fix: keep 1px border, transparent when unfocused
           "[&>[data-slot]~[data-slot=input]]:border-l",
           "[&>[data-slot]~[data-slot=input]:not(:focus)]:border-l-transparent",
+          // Subtle separator between adjacent buttons
+          "[&>[data-slot=button]:has(+[data-slot=button])]:border-r-0!",
+          "[&>[data-slot=button]:has(+[data-slot=button])]:shadow-none",
+          "[&>[data-slot=button]~[data-slot=button]]:before:content-['']",
+          "[&>[data-slot=button]~[data-slot=button]]:before:absolute",
+          "[&>[data-slot=button]~[data-slot=button]]:before:left-0",
+          "[&>[data-slot=button]~[data-slot=button]]:before:top-[25%]",
+          "[&>[data-slot=button]~[data-slot=button]]:before:w-px",
+          "[&>[data-slot=button]~[data-slot=button]]:before:h-[50%]",
+          "[&>[data-slot=button]~[data-slot=button]]:before:bg-current",
+          "[&>[data-slot=button]~[data-slot=button]]:before:opacity-15",
+          "[&>[data-slot=button]~[data-slot=button]]:before:rounded-sm",
         ].join(" "),
         vertical: [
           "flex-col",
@@ -39,10 +49,21 @@ const buttonGroupVariants = cva(
           "[&>[data-slot]~[data-slot]]:rounded-t-none",
           "[&>[data-slot]~[data-slot]]:border-t-0",
           "*:data-[slot]:rounded-b-none",
-          "[&>*:has(+[data-slot=button-group-separator])]:border-b-0",
           // Input focus fix: keep 1px border, transparent when unfocused
           "[&>[data-slot]~[data-slot=input]]:border-t",
           "[&>[data-slot]~[data-slot=input]:not(:focus)]:border-t-transparent",
+          // Subtle separator between adjacent buttons
+          "[&>[data-slot=button]:has(+[data-slot=button])]:border-b-0!",
+          "[&>[data-slot=button]:has(+[data-slot=button])]:shadow-none",
+          "[&>[data-slot=button]~[data-slot=button]]:before:content-['']",
+          "[&>[data-slot=button]~[data-slot=button]]:before:absolute",
+          "[&>[data-slot=button]~[data-slot=button]]:before:top-0",
+          "[&>[data-slot=button]~[data-slot=button]]:before:left-[25%]",
+          "[&>[data-slot=button]~[data-slot=button]]:before:h-px",
+          "[&>[data-slot=button]~[data-slot=button]]:before:w-[50%]",
+          "[&>[data-slot=button]~[data-slot=button]]:before:bg-current",
+          "[&>[data-slot=button]~[data-slot=button]]:before:opacity-15",
+          "[&>[data-slot=button]~[data-slot=button]]:before:rounded-sm",
         ].join(" "),
       },
     },
@@ -93,33 +114,4 @@ const ButtonGroupText = React.forwardRef<HTMLDivElement, ButtonGroupTextProps>(
 );
 ButtonGroupText.displayName = "ButtonGroupText";
 
-// =============================================================================
-// ButtonGroupSeparator
-// =============================================================================
-export interface ButtonGroupSeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** The orientation of the separator @default "vertical" */
-  orientation?: "horizontal" | "vertical";
-}
-
-const ButtonGroupSeparator = React.forwardRef<HTMLDivElement, ButtonGroupSeparatorProps>(
-  ({ className, orientation = "vertical", ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        role="separator"
-        aria-orientation={orientation}
-        data-slot="button-group-separator"
-        data-orientation={orientation}
-        className={cn(
-          "bg-input relative self-stretch",
-          orientation === "vertical" ? "w-px" : "h-px",
-          className
-        )}
-        {...props}
-      />
-    );
-  }
-);
-ButtonGroupSeparator.displayName = "ButtonGroupSeparator";
-
-export { ButtonGroup, ButtonGroupText, ButtonGroupSeparator, buttonGroupVariants };
+export { ButtonGroup, ButtonGroupText, buttonGroupVariants };

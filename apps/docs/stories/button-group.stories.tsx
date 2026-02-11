@@ -1,10 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Button } from "@keystone/ui/button";
-import { 
-  ButtonGroup, 
-  ButtonGroupSeparator,
-} from "@keystone/ui/button-group";
+import { ButtonGroup } from "@keystone/ui/button-group";
 import { Input } from "@keystone/ui/input";
 import { Textarea } from "@keystone/ui/textarea";
 import { Field, FieldLabel, FieldDescription } from "@keystone/ui/field";
@@ -61,6 +58,19 @@ import {
   AudioLines as AudioLinesIcon,
   Minus as MinusIcon,
   Plus as PlusIcon,
+  Star as StarIcon,
+  GitFork as GitForkIcon,
+  GitMerge as GitMergeIcon,
+  GitPullRequestArrow as GitPullRequestArrowIcon,
+  GitBranch as GitBranchIcon,
+  Image as ImageIcon,
+  Video as VideoIcon,
+  Ellipsis as EllipsisIcon,
+  Globe as GlobeIcon,
+  List as ListIcon,
+  LayoutGrid as LayoutGridIcon,
+  ThumbsUp as ThumbsUpIcon,
+  Pin as PinIcon,
 } from "lucide-react";
 
 const meta = {
@@ -78,12 +88,7 @@ Use \`ButtonGroup\` when you want multiple elements to appear as a single unit w
 
 ## Components
 
-- \`ButtonGroup\` - Container that removes borders between children
-- \`ButtonGroupSeparator\` - Visual divider for non-outline variants
-
-## Separator Usage
-
-Buttons with \`variant="outline"\` do not need a separator since they already have borders. For other variants (\`secondary\`, \`default\`, etc.), use \`ButtonGroupSeparator\` to improve visual hierarchy.
+- \`ButtonGroup\` - Container that removes borders between children and adds a subtle auto-separator between adjacent buttons
 
 ## Basic Usage
 
@@ -142,38 +147,58 @@ export const Basic: Story = {
   name: "Basic",
   render: () => (
     <ButtonGroup>
-      <Button variant="outline">Left</Button>
-      <Button variant="outline">Center</Button>
-      <Button variant="outline">Right</Button>
+      <Button variant="outline">
+        <ListIcon /> List
+      </Button>
+      <Button variant="outline">
+        <LayoutGridIcon /> Grid
+      </Button>
     </ButtonGroup>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          "Outline buttons don't need separators since they already have visible borders between them.",
+          "A view switcher using icon + text buttons. A subtle separator is automatically rendered between adjacent buttons.",
       },
     },
   },
 };
 
-// With Separator
-export const WithSeparator: Story = {
-  name: "With Separator",
+// Non-Outline Variants
+export const NonOutlineVariants: Story = {
+  name: "Non-Outline Variants",
   render: () => (
-    <ButtonGroup>
-      <Button>Left</Button>
-      <ButtonGroupSeparator />
-      <Button>Center</Button>
-      <ButtonGroupSeparator />
-      <Button>Right</Button>
-    </ButtonGroup>
+    <div className="flex flex-col items-start gap-8">
+      <ButtonGroup>
+        <Button variant="secondary">
+          <ImageIcon /> Photos
+        </Button>
+        <Button variant="secondary">
+          <VideoIcon /> Videos
+        </Button>
+        <Button variant="secondary" size="icon" aria-label="More">
+          <EllipsisIcon />
+        </Button>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button>
+          <GlobeIcon /> Search
+        </Button>
+        <Button>
+          <PlusIcon /> Add
+        </Button>
+        <Button>
+          <TrashIcon /> Delete
+        </Button>
+      </ButtonGroup>
+    </div>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          "Non-outline variants (`default`, `secondary`, etc.) have no visible border between them. Use `ButtonGroupSeparator` to add a visual divider.",
+          "The auto separator works across all variants. No extra markup needed.",
       },
     },
   },
@@ -220,38 +245,35 @@ export const Sizes: Story = {
     <div className="flex flex-col items-start gap-8">
       <ButtonGroup>
         <Button variant="outline" size="sm">
-          Small
+          <CopyIcon /> Copy
         </Button>
         <Button variant="outline" size="sm">
-          Button
+          <ShareIcon /> Share
         </Button>
-        <Button variant="outline" size="sm">
-          Group
-        </Button>
-        <Button variant="outline" size="icon-sm">
-          <PlusIcon />
+        <Button variant="outline" size="icon-sm" aria-label="More">
+          <EllipsisIcon />
         </Button>
       </ButtonGroup>
       <ButtonGroup>
-        <Button variant="outline">Default</Button>
-        <Button variant="outline">Button</Button>
-        <Button variant="outline">Group</Button>
-        <Button variant="outline" size="icon">
-          <PlusIcon />
+        <Button variant="outline">
+          <CopyIcon /> Copy
+        </Button>
+        <Button variant="outline">
+          <ShareIcon /> Share
+        </Button>
+        <Button variant="outline" size="icon" aria-label="More">
+          <EllipsisIcon />
         </Button>
       </ButtonGroup>
       <ButtonGroup>
         <Button variant="outline" size="lg">
-          Large
+          <CopyIcon /> Copy
         </Button>
         <Button variant="outline" size="lg">
-          Button
+          <ShareIcon /> Share
         </Button>
-        <Button variant="outline" size="lg">
-          Group
-        </Button>
-        <Button variant="outline" size="icon-lg">
-          <PlusIcon />
+        <Button variant="outline" size="icon-lg" aria-label="More">
+          <EllipsisIcon />
         </Button>
       </ButtonGroup>
     </div>
@@ -301,23 +323,33 @@ export const Toolbar: Story = {
 export const Pagination: Story = {
   name: "Pagination",
   render: () => (
-    <ButtonGroup>
-      <Button variant="outline" size="icon" aria-label="Previous page">
-        <ChevronLeftIcon className="size-4" />
-      </Button>
-      <Button variant="outline">1</Button>
-      <Button variant="outline">2</Button>
-      <Button variant="outline">3</Button>
-      <Button variant="outline" size="icon" aria-label="Next page">
-        <ChevronRightIcon className="size-4" />
-      </Button>
-    </ButtonGroup>
+    <div className="flex flex-col items-start gap-8">
+      <ButtonGroup>
+        <Button variant="outline" size="icon" aria-label="Previous page">
+          <ChevronLeftIcon className="size-4" />
+        </Button>
+        <Button variant="outline">1</Button>
+        <Button variant="outline">2</Button>
+        <Button variant="outline">3</Button>
+        <Button variant="outline" size="icon" aria-label="Next page">
+          <ChevronRightIcon className="size-4" />
+        </Button>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button variant="outline">
+          <ChevronLeftIcon /> Previous
+        </Button>
+        <Button variant="outline">
+          Next <ChevronRightIcon />
+        </Button>
+      </ButtonGroup>
+    </div>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          "Mix icon buttons with text buttons for a compact pagination control.",
+          "Mix icon buttons with text buttons for a compact pagination control. Also works as a simple prev/next navigator.",
       },
     },
   },
@@ -359,19 +391,95 @@ export const ActiveState: Story = {
 export const SplitButton: Story = {
   name: "Split Button",
   render: () => (
-    <ButtonGroup>
-      <Button variant="secondary">Save</Button>
-      <ButtonGroupSeparator />
-      <Button size="icon" variant="secondary" aria-label="More save options">
-        <ChevronDownIcon className="size-4" />
-      </Button>
-    </ButtonGroup>
+    <div className="flex flex-col items-start gap-8">
+      {/* GitHub-style merge pull request */}
+      <ButtonGroup>
+        <Button>
+          <GitMergeIcon /> Merge pull request
+        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button size="icon" aria-label="Merge options">
+                <ChevronDownIcon className="size-4" />
+              </Button>
+            }
+          />
+          <DropdownMenuContent align="end" className="w-64">
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <GitMergeIcon className="size-4" />
+                <span>
+                  <span className="font-medium">Create a merge commit</span>
+                  <span className="text-muted-foreground block text-xs">
+                    All commits will be added to the base branch.
+                  </span>
+                </span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <GitPullRequestArrowIcon className="size-4" />
+                <span>
+                  <span className="font-medium">Squash and merge</span>
+                  <span className="text-muted-foreground block text-xs">
+                    Commits will be combined into one commit.
+                  </span>
+                </span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <GitBranchIcon className="size-4" />
+                <span>
+                  <span className="font-medium">Rebase and merge</span>
+                  <span className="text-muted-foreground block text-xs">
+                    Commits will be rebased onto the base branch.
+                  </span>
+                </span>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </ButtonGroup>
+
+      {/* Secondary split button */}
+      <ButtonGroup>
+        <Button variant="secondary">
+          <PinIcon /> Pin issue
+        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button size="icon" variant="secondary" aria-label="More options">
+                <ChevronDownIcon className="size-4" />
+              </Button>
+            }
+          />
+          <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <PinIcon className="size-4" />
+                Pin issue
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <ThumbsUpIcon className="size-4" />
+                Add reaction
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem variant="destructive">
+                <TrashIcon className="size-4" />
+                Delete issue
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </ButtonGroup>
+    </div>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          "Pair a primary action with a dropdown trigger. The separator visually divides the two actions while keeping them grouped.",
+          "Pair a primary action with a dropdown trigger. The auto separator visually divides the two actions while keeping them grouped. Shown here with a GitHub-style merge pull request flow and a secondary action variant.",
       },
     },
   },
@@ -453,59 +561,60 @@ export const Nested: Story = {
 export const WithDropdownMenu: Story = {
   name: "With Dropdown Menu",
   render: () => (
-    <ButtonGroup>
-      <Button variant="outline">Follow</Button>
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={
-            <Button variant="outline" size="icon">
-              <ChevronDownIcon className="size-4" />
-            </Button>
-          }
-        />
-        <DropdownMenuContent align="end" className="w-44">
-          <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <VolumeOffIcon className="size-4" />
-              Mute Conversation
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <CheckIcon className="size-4" />
-              Mark as Read
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <AlertTriangleIcon className="size-4" />
-              Report Conversation
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <UserRoundXIcon className="size-4" />
-              Block User
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <ShareIcon className="size-4" />
-              Share Conversation
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <CopyIcon className="size-4" />
-              Copy Conversation
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem variant="destructive">
-              <TrashIcon className="size-4" />
-              Delete Conversation
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </ButtonGroup>
+    <div className="flex flex-wrap items-start gap-8">
+      {/* GitHub-style repo actions */}
+      <ButtonGroup>
+        <Button variant="outline">
+          <StarIcon /> Star
+        </Button>
+        <Button variant="outline">1.2k</Button>
+      </ButtonGroup>
+
+      <ButtonGroup>
+        <Button variant="outline">
+          <GitForkIcon /> Fork
+        </Button>
+        <Button variant="outline">342</Button>
+      </ButtonGroup>
+
+      {/* Follow with dropdown */}
+      <ButtonGroup>
+        <Button variant="outline">
+          <CheckIcon /> Following
+        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button variant="outline" size="icon">
+                <ChevronDownIcon className="size-4" />
+              </Button>
+            }
+          />
+          <DropdownMenuContent align="end" className="w-44">
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <VolumeOffIcon className="size-4" />
+                Mute Conversation
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <AlertTriangleIcon className="size-4" />
+                Report
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <UserRoundXIcon className="size-4" />
+                Block User
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </ButtonGroup>
+    </div>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          "Pair a button with a `DropdownMenu` trigger for a split-action pattern. The grouped styling keeps both elements visually connected.",
+          "Pair a button with a `DropdownMenu` trigger for a split-action pattern. Shown here with GitHub-style repo actions (Star with count, Fork with count) and a Follow button with options.",
       },
     },
   },
@@ -672,20 +781,27 @@ export const AllExamples: Story = {
       <div>
         <h3 className="text-sm font-medium mb-2">Basic</h3>
         <ButtonGroup>
-          <Button variant="outline">Left</Button>
-          <Button variant="outline">Center</Button>
-          <Button variant="outline">Right</Button>
+          <Button variant="outline">
+            <ListIcon /> List
+          </Button>
+          <Button variant="outline">
+            <LayoutGridIcon /> Grid
+          </Button>
         </ButtonGroup>
       </div>
 
       <div>
-        <h3 className="text-sm font-medium mb-2">With Separator</h3>
+        <h3 className="text-sm font-medium mb-2">Non-Outline Variants</h3>
         <ButtonGroup>
-          <Button>Left</Button>
-          <ButtonGroupSeparator />
-          <Button>Center</Button>
-          <ButtonGroupSeparator />
-          <Button>Right</Button>
+          <Button variant="secondary">
+            <ImageIcon /> Photos
+          </Button>
+          <Button variant="secondary">
+            <VideoIcon /> Videos
+          </Button>
+          <Button variant="secondary" size="icon" aria-label="More">
+            <EllipsisIcon />
+          </Button>
         </ButtonGroup>
       </div>
 
@@ -730,9 +846,10 @@ export const AllExamples: Story = {
       <div>
         <h3 className="text-sm font-medium mb-2">Split Button</h3>
         <ButtonGroup>
-          <Button variant="secondary">Save</Button>
-          <ButtonGroupSeparator />
-          <Button size="icon" variant="secondary" aria-label="More save options">
+          <Button>
+            <GitMergeIcon /> Merge pull request
+          </Button>
+          <Button size="icon" aria-label="Merge options">
             <ChevronDownIcon className="size-4" />
           </Button>
         </ButtonGroup>
@@ -765,24 +882,36 @@ export const AllExamples: Story = {
         <h3 className="text-sm font-medium mb-2">Sizes</h3>
         <div className="flex flex-col items-start gap-4">
           <ButtonGroup>
-            <Button variant="outline" size="sm">Small</Button>
-            <Button variant="outline" size="sm">Group</Button>
-            <Button variant="outline" size="icon-sm">
-              <PlusIcon />
+            <Button variant="outline" size="sm">
+              <CopyIcon /> Copy
+            </Button>
+            <Button variant="outline" size="sm">
+              <ShareIcon /> Share
+            </Button>
+            <Button variant="outline" size="icon-sm" aria-label="More">
+              <EllipsisIcon />
             </Button>
           </ButtonGroup>
           <ButtonGroup>
-            <Button variant="outline">Default</Button>
-            <Button variant="outline">Group</Button>
-            <Button variant="outline" size="icon">
-              <PlusIcon />
+            <Button variant="outline">
+              <CopyIcon /> Copy
+            </Button>
+            <Button variant="outline">
+              <ShareIcon /> Share
+            </Button>
+            <Button variant="outline" size="icon" aria-label="More">
+              <EllipsisIcon />
             </Button>
           </ButtonGroup>
           <ButtonGroup>
-            <Button variant="outline" size="lg">Large</Button>
-            <Button variant="outline" size="lg">Group</Button>
-            <Button variant="outline" size="icon-lg">
-              <PlusIcon />
+            <Button variant="outline" size="lg">
+              <CopyIcon /> Copy
+            </Button>
+            <Button variant="outline" size="lg">
+              <ShareIcon /> Share
+            </Button>
+            <Button variant="outline" size="icon-lg" aria-label="More">
+              <EllipsisIcon />
             </Button>
           </ButtonGroup>
         </div>
@@ -821,29 +950,20 @@ export const AllExamples: Story = {
 
       <div>
         <h3 className="text-sm font-medium mb-2">With Dropdown Menu</h3>
-        <ButtonGroup>
-          <Button variant="outline">Follow</Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button variant="outline" size="icon">
-                  <ChevronDownIcon className="size-4" />
-                </Button>
-              }
-            />
-            <DropdownMenuContent align="end" className="w-44">
-              <DropdownMenuItem>
-                <CopyIcon className="size-4" />
-                Copy
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">
-                <TrashIcon className="size-4" />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </ButtonGroup>
+        <div className="flex flex-wrap gap-4">
+          <ButtonGroup>
+            <Button variant="outline">
+              <StarIcon /> Star
+            </Button>
+            <Button variant="outline">1.2k</Button>
+          </ButtonGroup>
+          <ButtonGroup>
+            <Button variant="outline">
+              <GitForkIcon /> Fork
+            </Button>
+            <Button variant="outline">342</Button>
+          </ButtonGroup>
+        </div>
       </div>
 
       <div>
