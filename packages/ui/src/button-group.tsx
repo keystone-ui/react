@@ -13,6 +13,8 @@ const buttonGroupVariants = cva(
     "flex w-fit items-stretch",
     "*:focus-visible:z-10 *:focus-visible:relative",
     "[&>input]:flex-1",
+    // Disable pressed scale animation inside groups (looks jarring with shared borders)
+    "[&>[data-slot=button]]:active:scale-100",
     // Nesting: add gap between nested ButtonGroups
     "has-[>[data-slot=button-group]]:gap-2",
     // Select: handle hidden select element as last child
