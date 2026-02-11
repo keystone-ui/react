@@ -160,6 +160,12 @@ export const ui: Registry = [
     files: [{ path: "ui/popover.tsx", type: "registry:ui" }],
   },
   {
+    name: "progress",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react", "class-variance-authority"],
+    files: [{ path: "ui/progress.tsx", type: "registry:ui" }],
+  },
+  {
     name: "radio-group",
     type: "registry:ui",
     dependencies: ["@base-ui/react"],
@@ -170,6 +176,12 @@ export const ui: Registry = [
     type: "registry:ui",
     dependencies: ["@base-ui/react", "lucide-react"],
     files: [{ path: "ui/select.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "slider",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react"],
+    files: [{ path: "ui/slider.tsx", type: "registry:ui" }],
   },
   {
     name: "separator",

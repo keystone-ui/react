@@ -241,7 +241,14 @@ const AccordionPanel = React.forwardRef<
 
   const baseClasses = cn(
     "overflow-hidden text-sm text-muted-foreground",
-    "data-[open]:animate-accordion-down data-[closed]:animate-accordion-up"
+    // CSS transition on height — smoothly cancellable mid-animation
+    "h-[var(--accordion-panel-height)] transition-[height] duration-200 ease-out",
+    // Enter: start from 0 height
+    "data-[starting-style]:h-0",
+    // Exit: collapse to 0 height
+    "data-[ending-style]:h-0",
+    // Respect reduced motion
+    "motion-reduce:transition-none"
   );
 
   const innerClasses = cn(
@@ -252,6 +259,7 @@ const AccordionPanel = React.forwardRef<
   return (
     <AccordionPrimitive.Panel
       ref={ref}
+      keepMounted
       className={cn(baseClasses, classNameProp)}
       {...props}
     >

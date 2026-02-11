@@ -95,29 +95,22 @@
   --color-input-bg: var(--input-bg);
   --color-ring: var(--ring);
 
-  /* Accordion animations */
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
+  /* Progress indeterminate animation */
+  --animate-progress-indeterminate: progress-indeterminate 1.5s ease-in-out infinite;
 
   /* InputOTP caret animation */
   --animate-caret-blink: caret-blink 1.2s ease-out infinite;
 }
 
-@keyframes accordion-down {
-  from {
-    height: 0;
+@keyframes progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
   }
-  to {
-    height: var(--accordion-panel-height);
+  50% {
+    transform: translateX(200%);
   }
-}
-
-@keyframes accordion-up {
-  from {
-    height: var(--accordion-panel-height);
-  }
-  to {
-    height: 0;
+  100% {
+    transform: translateX(-100%);
   }
 }
 

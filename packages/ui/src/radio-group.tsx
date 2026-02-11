@@ -23,6 +23,8 @@ function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
         // Base styles
         "peer relative shrink-0 flex aspect-square size-4 items-center justify-center rounded-full border",
         "border-input text-primary bg-input-bg",
+        // Smooth color transitions
+        "transition-colors duration-150",
         // Click area extension
         "after:absolute after:-inset-x-3 after:-inset-y-2",
         // Checked state - primary bg with white indicator
@@ -36,11 +38,26 @@ function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
         "aria-invalid:data-checked:bg-destructive aria-invalid:data-checked:border-destructive aria-invalid:data-checked:text-destructive-foreground",
         // Disabled styles
         "group-has-disabled/field:opacity-50 disabled:cursor-not-allowed disabled:opacity-50",
+        // Reduced motion
+        "motion-reduce:transition-none",
         className
       )}
       {...props}
     >
-      <RadioPrimitive.Indicator data-slot="radio-group-indicator">
+      <RadioPrimitive.Indicator
+        data-slot="radio-group-indicator"
+        keepMounted
+        className={cn(
+          // Micro-animation: scale + opacity transition
+          "transition-[transform,opacity] duration-150",
+          // Hidden when unchecked
+          "data-[unchecked]:scale-0 data-[unchecked]:opacity-0",
+          // Visible when checked
+          "data-[checked]:scale-100 data-[checked]:opacity-100",
+          // Reduced motion
+          "motion-reduce:transition-none"
+        )}
+      >
         <CircleIcon className="size-2 fill-current" />
       </RadioPrimitive.Indicator>
     </RadioPrimitive.Root>

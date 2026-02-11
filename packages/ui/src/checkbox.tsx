@@ -12,6 +12,8 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
         // Base styles
         "peer relative shrink-0 flex size-4 items-center justify-center rounded-sm border",
         "border-input bg-input-bg",
+        // Smooth color transitions
+        "transition-colors duration-150",
         // Click area extension
         "after:absolute after:-inset-x-3 after:-inset-y-2",
         // Checked state
@@ -24,13 +26,28 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
         "aria-invalid:data-checked:bg-destructive aria-invalid:data-checked:border-destructive aria-invalid:data-checked:text-destructive-foreground",
         // Disabled styles
         "group-has-disabled/field:opacity-50 disabled:cursor-not-allowed disabled:opacity-50",
+        // Reduced motion
+        "motion-reduce:transition-none",
         className
       )}
       {...props}
     >
       <CheckboxPrimitive.Indicator
         data-slot="checkbox-indicator"
-        className="[&>svg]:size-3.5 grid place-content-center text-current transition-none"
+        keepMounted
+        className={cn(
+          "[&>svg]:size-3.5 grid place-content-center text-current",
+          // Micro-animation: scale + opacity transition
+          "transition-[transform,opacity] duration-150",
+          // Enter: animate from small + transparent
+          "data-[starting-style]:scale-50 data-[starting-style]:opacity-0",
+          // Exit: animate to small + transparent
+          "data-[ending-style]:scale-50 data-[ending-style]:opacity-0",
+          // Hide when unchecked (after exit transition completes)
+          "data-[unchecked]:hidden",
+          // Reduced motion
+          "motion-reduce:transition-none"
+        )}
       >
         <CheckIcon />
       </CheckboxPrimitive.Indicator>
