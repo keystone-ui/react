@@ -29,7 +29,7 @@ function Tabs({ className, orientation = "horizontal", ...props }: TabsProps) {
 // TabsList
 // =============================================================================
 const tabsListVariants = cva(
-  "rounded-lg p-1 data-[variant=line]:rounded-none data-[shape=pill]:rounded-full group/tabs-list text-muted-foreground inline-flex w-fit items-center justify-center group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col",
+  "relative rounded-lg p-1 data-[variant=line]:rounded-none data-[shape=pill]:rounded-full group/tabs-list text-muted-foreground inline-flex w-fit items-center justify-center group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col",
   {
     variants: {
       variant: {
@@ -60,11 +60,14 @@ function TabsList({
   variant = "default",
   shape = "rounded",
   scrollable,
+  children,
   ...props
 }: TabsListProps) {
   if (scrollable) {
     return (
-      <ScrollableTabsList className={className} variant={variant} shape={shape} {...props} />
+      <ScrollableTabsList className={className} variant={variant} shape={shape} {...props}>
+        {children}
+      </ScrollableTabsList>
     );
   }
 
@@ -75,7 +78,10 @@ function TabsList({
       data-shape={shape}
       className={cn(tabsListVariants({ variant }), className)}
       {...props}
-    />
+    >
+      <TabsIndicator />
+      {children}
+    </TabsPrimitive.List>
   );
 }
 
@@ -161,6 +167,7 @@ function ScrollableTabsList({
           )}
           {...props}
         >
+          <TabsIndicator />
           {children}
         </TabsPrimitive.List>
       </div>
@@ -191,21 +198,48 @@ function TabsTrigger({ className, ...props }: TabsTriggerProps) {
       data-slot="tabs-trigger"
       className={cn(
         // Base styles
-        "text-muted-foreground hover:text-foreground relative inline-flex h-8 cursor-pointer flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-0.5 text-sm font-medium whitespace-nowrap transition-[color,background-color,border-color,box-shadow] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "text-muted-foreground hover:text-foreground relative z-[1] inline-flex h-8 cursor-pointer flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-0.5 text-sm font-medium whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         // Shape-aware styles
         "group-data-[shape=pill]/tabs-list:rounded-full group-data-[shape=pill]/tabs-list:px-3",
         // Orientation-aware styles
         "group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:h-8 group-data-[orientation=vertical]/tabs:flex-initial group-data-[orientation=vertical]/tabs:justify-start",
-        // Variant-aware active styles
-        "group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none",
-        // Line variant overrides
-        "group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent",
-        // Active state (default variant)
-        "data-active:bg-background dark:data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input-bg data-active:text-foreground",
-        // Line indicator (after pseudo-element)
-        "after:bg-foreground after:absolute after:opacity-0 after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-right-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
+        // Active state (text color only — background/shadow handled by indicator)
+        "data-active:text-foreground dark:data-active:text-foreground",
         className
       )}
+      {...props}
+    />
+  );
+}
+
+// =============================================================================
+// TabsIndicator
+// =============================================================================
+export interface TabsIndicatorProps extends TabsPrimitive.Indicator.Props {}
+
+function TabsIndicator({ className, ...props }: TabsIndicatorProps) {
+  return (
+    <TabsPrimitive.Indicator
+      data-slot="tabs-indicator"
+      className={cn(
+        // Positioning via Base UI CSS custom properties
+        "absolute top-[var(--active-tab-top)] left-[var(--active-tab-left)] w-[var(--active-tab-width)] h-[var(--active-tab-height)]",
+        // Sliding animation
+        "transition-[top,right,bottom,left,width,height] duration-200 ease-out",
+        // Reduced motion
+        "motion-reduce:transition-none",
+        // Default variant: pill/card sliding behind active tab
+        "group-data-[variant=default]/tabs-list:bg-background group-data-[variant=default]/tabs-list:rounded-md group-data-[variant=default]/tabs-list:shadow-sm",
+        "group-data-[variant=default]/tabs-list:group-data-[shape=pill]/tabs-list:rounded-full",
+        "dark:group-data-[variant=default]/tabs-list:border dark:group-data-[variant=default]/tabs-list:border-input dark:group-data-[variant=default]/tabs-list:bg-input-bg",
+        // Line variant (horizontal): 2px bar at bottom
+        "group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:top-auto group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:bottom-0 group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:h-0.5",
+        "group-data-[variant=line]/tabs-list:bg-foreground",
+        // Line variant (vertical): 2px bar on the right edge
+        "group-data-[variant=line]/tabs-list:data-[orientation=vertical]:left-auto group-data-[variant=line]/tabs-list:data-[orientation=vertical]:-right-1 group-data-[variant=line]/tabs-list:data-[orientation=vertical]:w-0.5",
+        className
+      )}
+      renderBeforeHydration
       {...props}
     />
   );
@@ -226,4 +260,4 @@ function TabsContent({ className, ...props }: TabsContentProps) {
   );
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants };
+export { Tabs, TabsList, TabsTrigger, TabsIndicator, TabsContent, tabsListVariants };

@@ -92,6 +92,7 @@ import {
 
 ## Features
 
+- **Animated sliding indicator** powered by Base UI's \`Tabs.Indicator\` and CSS transitions
 - Default and line style variants
 - Rounded and pill shapes
 - Horizontal and vertical orientations
@@ -679,6 +680,77 @@ export const Pill: Story = {
       description: {
         story:
           'Use `shape="pill"` on `TabsList` for fully rounded pill-shaped tabs. Can be combined with any variant.',
+      },
+    },
+  },
+};
+
+// Animated indicator comparison across all variants
+export const AnimatedIndicator: Story = {
+  name: "Animated Indicator",
+  render: () => (
+    <div className="space-y-8">
+      <div className="space-y-2">
+        <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+          Default
+        </p>
+        <Tabs defaultValue="overview">
+          <TabsList>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="reports">Reports</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+
+      <div className="space-y-2">
+        <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+          Pill
+        </p>
+        <Tabs defaultValue="overview">
+          <TabsList shape="pill">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="reports">Reports</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+
+      <div className="space-y-2">
+        <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+          Line
+        </p>
+        <Tabs defaultValue="overview">
+          <TabsList variant="line">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="reports">Reports</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+
+      <div className="space-y-2">
+        <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+          Line + Vertical
+        </p>
+        <Tabs defaultValue="overview" orientation="vertical">
+          <TabsList variant="line">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="reports">Reports</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The sliding indicator animates smoothly between tabs using CSS transitions on Base UI's `Tabs.Indicator`. Click between tabs to see the indicator slide. The animation adapts to each variant: a background pill for default, a fully rounded pill for pill shape, and a 2px bar for line. Respects `prefers-reduced-motion`.",
       },
     },
   },
