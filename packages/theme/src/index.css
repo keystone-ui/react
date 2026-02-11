@@ -20,6 +20,7 @@
   --primary: oklch(0.21 0.006 285.885); /* --color-zinc-900 */
   --primary-foreground: oklch(0.985 0 0); /* --color-zinc-50 */
   --secondary: oklch(0.967 0.001 286.375); /* --color-zinc-100 */
+  --secondary-hover: color-mix(in oklch, var(--secondary) 97%, black);
   --secondary-foreground: oklch(0.21 0.006 285.885); /* --color-zinc-900 */
   --muted: oklch(0.967 0.001 286.375); /* --color-zinc-100 */
   --muted-foreground: oklch(0.55 0.01 286); /* --color-zinc-500 */
@@ -45,6 +46,7 @@
   --primary: oklch(0.985 0 0); /* --color-zinc-50 */
   --primary-foreground: oklch(0.21 0.006 285.885); /* --color-zinc-900 */
   --secondary: oklch(0.274 0.006 286.033); /* --color-zinc-800 */
+  --secondary-hover: color-mix(in oklch, var(--secondary) 97%, white);
   --secondary-foreground: oklch(0.985 0 0); /* --color-zinc-50 */
   --muted: oklch(0.21 0.006 285.885); /* --color-zinc-900 */
   --muted-foreground: oklch(0.65 0.01 286); /* Between zinc-400 and zinc-500 */
@@ -74,6 +76,7 @@
   --color-primary-foreground: var(--primary-foreground);
 
   --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
   --color-secondary-foreground: var(--secondary-foreground);
 
   --color-muted: var(--muted);
