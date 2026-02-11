@@ -11,6 +11,7 @@ import { Description } from "@keystone/ui/form";
 import { Field, FieldGroup, FieldLabel, FieldDescription, FieldError } from "@keystone/ui/field";
 import { Button } from "@keystone/ui/button";
 import { ButtonGroup } from "@keystone/ui/button-group";
+import { NativeSelect, NativeSelectOption } from "@keystone/ui/native-select";
 import { MailIcon, InfoIcon, Minus as MinusIcon, Plus as PlusIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -344,15 +345,11 @@ export const FormExample: Story = {
         </div>
         <Field>
           <FieldLabel htmlFor="form-country">Country</FieldLabel>
-          <select
-            id="form-country"
-            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50"
-            defaultValue="us"
-          >
-            <option value="us">United States</option>
-            <option value="uk">United Kingdom</option>
-            <option value="ca">Canada</option>
-          </select>
+          <NativeSelect id="form-country" className="w-full" defaultValue="us">
+            <NativeSelectOption value="us">United States</NativeSelectOption>
+            <NativeSelectOption value="uk">United Kingdom</NativeSelectOption>
+            <NativeSelectOption value="ca">Canada</NativeSelectOption>
+          </NativeSelect>
         </Field>
         <Field>
           <FieldLabel htmlFor="form-address">Address</FieldLabel>
