@@ -10,11 +10,13 @@ import { cn } from "./utils";
 // =============================================================================
 const buttonGroupVariants = cva(
   [
-    "flex w-fit items-stretch",
+    "flex w-fit items-stretch rounded-lg shadow-xs",
     "*:focus-visible:z-10 *:focus-visible:relative",
     "[&>input]:flex-1",
     // Disable pressed scale animation inside groups (looks jarring with shared borders)
     "[&>[data-slot=button]]:active:scale-100",
+    // Strip individual button shadows — the group container owns the shadow
+    "[&>[data-slot=button]]:shadow-none",
     // Nesting: add gap between nested ButtonGroups
     "has-[>[data-slot=button-group]]:gap-2",
     // Select: handle hidden select element as last child
@@ -29,14 +31,17 @@ const buttonGroupVariants = cva(
           "[&>[data-slot]~[data-slot]]:rounded-l-none",
           "[&>[data-slot]~[data-slot]:not([data-slot=input])]:border-l-0",
           "*:data-[slot]:rounded-r-none",
-          // Input focus fix: keep 1px border, transparent when unfocused,
-          // negative margin to overlap preceding element's border
-          "[&>[data-slot]~[data-slot=input]]:-ml-px",
-          "[&>[data-slot]~[data-slot=input]]:border-l",
-          "[&>[data-slot]~[data-slot=input]:not(:focus)]:border-l-transparent",
-          // Subtle separator between adjacent buttons
-          "[&>[data-slot=button]:has(+[data-slot=button])]:border-r-0!",
-          "[&>[data-slot=button]:has(+[data-slot=button])]:shadow-none",
+          // Input focus fix (non-button predecessors only): keep 1px border,
+          // transparent when unfocused, negative margin to overlap preceding border
+          "[&>[data-slot]:not([data-slot=button])+[data-slot=input]]:-ml-px",
+          "[&>[data-slot]:not([data-slot=button])+[data-slot=input]]:border-l",
+          "[&>[data-slot]:not([data-slot=button])+[data-slot=input]:not(:focus)]:border-l-transparent",
+          // Input after button: remove left border (separator handles the visual)
+          "[&>[data-slot=button]+[data-slot=input]]:border-l-0",
+          // Input before button: remove right border (separator handles the visual)
+          "[&>[data-slot=input]:has(+[data-slot=button])]:border-r-0",
+          // Subtle separator between adjacent buttons and between buttons and inputs
+          "[&>[data-slot=button]:has(+:is([data-slot=button],[data-slot=input]))]:border-r-0!",
           "[&>[data-slot=button]~[data-slot=button]]:before:content-['']",
           "[&>[data-slot=button]~[data-slot=button]]:before:absolute",
           "[&>[data-slot=button]~[data-slot=button]]:before:left-0",
@@ -46,6 +51,26 @@ const buttonGroupVariants = cva(
           "[&>[data-slot=button]~[data-slot=button]]:before:bg-current",
           "[&>[data-slot=button]~[data-slot=button]]:before:opacity-15",
           "[&>[data-slot=button]~[data-slot=button]]:before:rounded-sm",
+          // Subtle separator: button → input (via after: on the button)
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:content-['']",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:absolute",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:right-0",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:top-[25%]",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:w-px",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:h-[50%]",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:bg-current",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:opacity-15",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:rounded-sm",
+          // Subtle separator: input → button (via before: on the button)
+          "[&>[data-slot=input]+[data-slot=button]]:before:content-['']",
+          "[&>[data-slot=input]+[data-slot=button]]:before:absolute",
+          "[&>[data-slot=input]+[data-slot=button]]:before:left-0",
+          "[&>[data-slot=input]+[data-slot=button]]:before:top-[25%]",
+          "[&>[data-slot=input]+[data-slot=button]]:before:w-px",
+          "[&>[data-slot=input]+[data-slot=button]]:before:h-[50%]",
+          "[&>[data-slot=input]+[data-slot=button]]:before:bg-current",
+          "[&>[data-slot=input]+[data-slot=button]]:before:opacity-15",
+          "[&>[data-slot=input]+[data-slot=button]]:before:rounded-sm",
         ].join(" "),
         vertical: [
           "flex-col",
@@ -53,14 +78,17 @@ const buttonGroupVariants = cva(
           "[&>[data-slot]~[data-slot]]:rounded-t-none",
           "[&>[data-slot]~[data-slot]:not([data-slot=input])]:border-t-0",
           "*:data-[slot]:rounded-b-none",
-          // Input focus fix: keep 1px border, transparent when unfocused,
-          // negative margin to overlap preceding element's border
-          "[&>[data-slot]~[data-slot=input]]:-mt-px",
-          "[&>[data-slot]~[data-slot=input]]:border-t",
-          "[&>[data-slot]~[data-slot=input]:not(:focus)]:border-t-transparent",
-          // Subtle separator between adjacent buttons
-          "[&>[data-slot=button]:has(+[data-slot=button])]:border-b-0!",
-          "[&>[data-slot=button]:has(+[data-slot=button])]:shadow-none",
+          // Input focus fix (non-button predecessors only): keep 1px border,
+          // transparent when unfocused, negative margin to overlap preceding border
+          "[&>[data-slot]:not([data-slot=button])+[data-slot=input]]:-mt-px",
+          "[&>[data-slot]:not([data-slot=button])+[data-slot=input]]:border-t",
+          "[&>[data-slot]:not([data-slot=button])+[data-slot=input]:not(:focus)]:border-t-transparent",
+          // Input after button: remove top border (separator handles the visual)
+          "[&>[data-slot=button]+[data-slot=input]]:border-t-0",
+          // Input before button: remove bottom border (separator handles the visual)
+          "[&>[data-slot=input]:has(+[data-slot=button])]:border-b-0",
+          // Subtle separator between adjacent buttons and between buttons and inputs
+          "[&>[data-slot=button]:has(+:is([data-slot=button],[data-slot=input]))]:border-b-0!",
           "[&>[data-slot=button]~[data-slot=button]]:before:content-['']",
           "[&>[data-slot=button]~[data-slot=button]]:before:absolute",
           "[&>[data-slot=button]~[data-slot=button]]:before:top-0",
@@ -70,6 +98,26 @@ const buttonGroupVariants = cva(
           "[&>[data-slot=button]~[data-slot=button]]:before:bg-current",
           "[&>[data-slot=button]~[data-slot=button]]:before:opacity-15",
           "[&>[data-slot=button]~[data-slot=button]]:before:rounded-sm",
+          // Subtle separator: button → input (via after: on the button)
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:content-['']",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:absolute",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:bottom-0",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:left-[25%]",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:h-px",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:w-[50%]",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:bg-current",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:opacity-15",
+          "[&>[data-slot=button]:has(+[data-slot=input])]:after:rounded-sm",
+          // Subtle separator: input → button (via before: on the button)
+          "[&>[data-slot=input]+[data-slot=button]]:before:content-['']",
+          "[&>[data-slot=input]+[data-slot=button]]:before:absolute",
+          "[&>[data-slot=input]+[data-slot=button]]:before:top-0",
+          "[&>[data-slot=input]+[data-slot=button]]:before:left-[25%]",
+          "[&>[data-slot=input]+[data-slot=button]]:before:h-px",
+          "[&>[data-slot=input]+[data-slot=button]]:before:w-[50%]",
+          "[&>[data-slot=input]+[data-slot=button]]:before:bg-current",
+          "[&>[data-slot=input]+[data-slot=button]]:before:opacity-15",
+          "[&>[data-slot=input]+[data-slot=button]]:before:rounded-sm",
         ].join(" "),
       },
     },
