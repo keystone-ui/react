@@ -27,9 +27,11 @@ const buttonGroupVariants = cva(
         horizontal: [
           "[&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-lg!",
           "[&>[data-slot]~[data-slot]]:rounded-l-none",
-          "[&>[data-slot]~[data-slot]]:border-l-0",
+          "[&>[data-slot]~[data-slot]:not([data-slot=input])]:border-l-0",
           "*:data-[slot]:rounded-r-none",
-          // Input focus fix: keep 1px border, transparent when unfocused
+          // Input focus fix: keep 1px border, transparent when unfocused,
+          // negative margin to overlap preceding element's border
+          "[&>[data-slot]~[data-slot=input]]:-ml-px",
           "[&>[data-slot]~[data-slot=input]]:border-l",
           "[&>[data-slot]~[data-slot=input]:not(:focus)]:border-l-transparent",
           // Subtle separator between adjacent buttons
@@ -49,9 +51,11 @@ const buttonGroupVariants = cva(
           "flex-col",
           "[&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-lg!",
           "[&>[data-slot]~[data-slot]]:rounded-t-none",
-          "[&>[data-slot]~[data-slot]]:border-t-0",
+          "[&>[data-slot]~[data-slot]:not([data-slot=input])]:border-t-0",
           "*:data-[slot]:rounded-b-none",
-          // Input focus fix: keep 1px border, transparent when unfocused
+          // Input focus fix: keep 1px border, transparent when unfocused,
+          // negative margin to overlap preceding element's border
+          "[&>[data-slot]~[data-slot=input]]:-mt-px",
           "[&>[data-slot]~[data-slot=input]]:border-t",
           "[&>[data-slot]~[data-slot=input]:not(:focus)]:border-t-transparent",
           // Subtle separator between adjacent buttons
