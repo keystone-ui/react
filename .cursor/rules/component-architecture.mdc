@@ -144,6 +144,56 @@ The `_registry.ts` file declares metadata for each component following the shadc
 
 Update `_registry.ts` when adding or modifying components.
 
+## Hover Gating (`@media (hover: hover)`)
+
+The theme overrides Tailwind's built-in `hover` variant with `@media (hover: hover)` gating in `packages/theme/src/index.css`:
+
+```css
+@custom-variant hover {
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+```
+
+This ensures hover styles only apply on devices that actually support hover (mouse/trackpad), preventing "sticky hover" on touch devices where a tap triggers `:hover` and it stays active.
+
+### What this means in practice
+
+- All `hover:` prefixed utilities (e.g., `hover:bg-primary/90`, `hover:text-foreground`) are automatically gated. No manual wrapping needed.
+- Compound variants like `dark:hover:bg-input/50` work correctly — the media query wraps the hover selector.
+- Child/descendant selectors using the `hover` variant (e.g., `[a]:hover:bg-muted`) are also gated.
+
+### Arbitrary selectors: always split `:hover` into the variant
+
+Do NOT embed `:hover` inside arbitrary selectors — it bypasses the media query gating. Instead, split the selector and the `hover` variant so gating applies.
+
+```tsx
+// Good — hover variant is separate, gets @media (hover: hover) gating
+"[&>a]:hover:text-primary"
+"hover:bg-primary/90"
+"[a]:hover:bg-muted"
+
+// Bad — :hover baked into arbitrary selector, bypasses gating entirely
+"[&>a:hover]:text-primary"
+"[&>div:hover]:bg-muted"
+```
+
+The difference: `[&>a]:hover:text-primary` composes two variants (`[&>a]` + `hover`), so Tailwind applies the `hover` override. The result is `@media (hover: hover) { & > a:hover { ... } }` — same selector, but properly gated.
+
+### Components affected by hover gating
+
+Interactive elements with background/opacity hover changes (all automatically handled by the theme variant):
+
+- **Button** — all variant hover backgrounds (`hover:bg-primary/90`, `hover:bg-accent`, etc.)
+- **Badge** — ghost variant (`hover:bg-muted`), link variants, anchor variants (`[a]:hover:bg-*`)
+- **TabsTrigger** — text color change (`hover:text-foreground`)
+- **ComboboxChipRemove** — opacity change (`hover:opacity-100`)
+- **CalendarDayButton** — inherits Button hover + `dark:hover:text-foreground`
+- **Item** — link hover (`[a]:hover:bg-muted`)
+
 ## No Radix UI
 
 Do not use `@radix-ui` packages. Use `@base-ui/react` as the primitive library.
