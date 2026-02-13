@@ -35,6 +35,8 @@ export default defineConfig((options) => ({
     "src/switch.tsx",
     "src/tabs.tsx",
     "src/textarea.tsx",
+    "src/toggle.tsx",
+    "src/toggle-group.tsx",
     "src/utils.ts",
   ],
   format: ["cjs", "esm"],

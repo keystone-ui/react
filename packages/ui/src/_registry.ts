@@ -218,6 +218,19 @@ export const ui: Registry = [
     files: [{ path: "ui/textarea.tsx", type: "registry:ui" }],
   },
   {
+    name: "toggle",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react", "class-variance-authority", "lucide-react"],
+    files: [{ path: "ui/toggle.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "toggle-group",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react", "class-variance-authority"],
+    registryDependencies: ["toggle"],
+    files: [{ path: "ui/toggle-group.tsx", type: "registry:ui" }],
+  },
+  {
     name: "toast",
     type: "registry:ui",
     dependencies: ["sonner", "lucide-react"],
