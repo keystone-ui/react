@@ -4,6 +4,7 @@ import "./preview.css";
 import * as React from 'react';
 import { DocsContainer } from 'storybook/blocks';
 import { withThemeByClassName } from '@storybook/addon-themes';
+import { Toaster } from '@keystone/ui/toast';
 
 const preview: Preview = {
   parameters: {
@@ -26,6 +27,12 @@ const preview: Preview = {
       },
       defaultTheme: 'light',
     }),
+    (Story) => (
+      <>
+        <Story />
+        <Toaster />
+      </>
+    ),
   ],
   tags: ['autodocs']
 };

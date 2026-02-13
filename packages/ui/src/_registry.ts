@@ -217,4 +217,10 @@ export const ui: Registry = [
     type: "registry:ui",
     files: [{ path: "ui/textarea.tsx", type: "registry:ui" }],
   },
+  {
+    name: "toast",
+    type: "registry:ui",
+    dependencies: ["sonner", "lucide-react"],
+    files: [{ path: "ui/toast.tsx", type: "registry:ui" }],
+  },
 ];
