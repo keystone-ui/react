@@ -12,7 +12,7 @@ export interface AvatarProps extends AvatarPrimitive.Root.Props {
    * Size variant of the avatar
    * @default "default"
    */
-  size?: "default" | "sm" | "lg";
+  size?: "xs" | "default" | "sm" | "lg";
 }
 
 function Avatar({ className, size = "default", ...props }: AvatarProps) {
@@ -21,7 +21,7 @@ function Avatar({ className, size = "default", ...props }: AvatarProps) {
       data-slot="avatar"
       data-size={size}
       className={cn(
-        "after:border-border group/avatar relative flex size-8 shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten",
+        "after:border-border group/avatar relative flex size-8 shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 data-[size=xs]:size-4 dark:after:mix-blend-lighten",
         className
       )}
       {...props}
@@ -57,7 +57,7 @@ function AvatarFallback({ className, ...props }: AvatarFallbackProps) {
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
       className={cn(
-        "bg-muted text-muted-foreground flex size-full items-center justify-center rounded-full text-sm group-data-[size=sm]/avatar:text-xs",
+        "bg-muted text-muted-foreground flex size-full items-center justify-center rounded-full text-sm group-data-[size=sm]/avatar:text-xs group-data-[size=xs]/avatar:text-[8px]",
         className
       )}
       {...props}
@@ -76,6 +76,7 @@ function AvatarBadge({ className, ...props }: AvatarBadgeProps) {
       data-slot="avatar-badge"
       className={cn(
         "bg-primary text-primary-foreground ring-background absolute right-0 bottom-0 z-10 inline-flex items-center justify-center rounded-full bg-blend-color ring-2 select-none",
+        "group-data-[size=xs]/avatar:size-1.5 group-data-[size=xs]/avatar:[&>svg]:hidden",
         "group-data-[size=sm]/avatar:size-2 group-data-[size=sm]/avatar:[&>svg]:hidden",
         "group-data-[size=default]/avatar:size-2.5 group-data-[size=default]/avatar:[&>svg]:size-2",
         "group-data-[size=lg]/avatar:size-3 group-data-[size=lg]/avatar:[&>svg]:size-2",

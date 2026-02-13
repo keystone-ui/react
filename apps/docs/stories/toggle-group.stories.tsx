@@ -169,9 +169,9 @@ const AVATAR_URLS = {
 
 function SmallAvatar({ src, fallback }: { src: string; fallback: string }) {
   return (
-    <Avatar size="sm" className="size-4">
+    <Avatar size="xs">
       <AvatarImage src={src} alt={fallback} />
-      <AvatarFallback className="text-[8px]">{fallback[0]}</AvatarFallback>
+      <AvatarFallback>{fallback[0]}</AvatarFallback>
     </Avatar>
   );
 }

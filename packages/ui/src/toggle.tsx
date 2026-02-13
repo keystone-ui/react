@@ -12,7 +12,7 @@ import { cn } from "./utils";
 // ---------------------------------------------------------------------------
 
 const toggleVariants = cva(
-  "inline-flex items-center justify-center gap-1 rounded-full h-6 px-2.5 text-xs font-medium whitespace-nowrap cursor-pointer transition-colors select-none overflow-hidden shrink-0 bg-secondary text-secondary-foreground hover:bg-secondary-hover aria-pressed:bg-primary/10 aria-pressed:text-primary dark:aria-pressed:bg-primary/15 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-3 [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+  "inline-flex items-center justify-center gap-1 rounded-full h-6 px-2.5 text-xs font-medium whitespace-nowrap cursor-pointer transition-colors select-none overflow-hidden shrink-0 has-[[data-slot=avatar]]:pl-1 bg-secondary text-secondary-foreground hover:bg-secondary-hover aria-pressed:bg-primary/10 aria-pressed:text-primary dark:aria-pressed:bg-primary/15 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-3 [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
 );
 
 // ---------------------------------------------------------------------------

@@ -58,7 +58,7 @@ import {
 ## Features
 
 - Automatic fallback when image fails to load
-- Three size variants: \`sm\`, \`default\`, and \`lg\`
+- Four size variants: \`xs\`, \`sm\`, \`default\`, and \`lg\`
 - Status badges with customizable colors
 - Group layout with overlapping avatars
 - Overflow count indicator for groups
@@ -70,7 +70,7 @@ import {
   argTypes: {
     size: {
       control: "select",
-      options: ["sm", "default", "lg"],
+      options: ["xs", "sm", "default", "lg"],
       defaultValue: "default",
       description: "The size of the avatar",
     },
@@ -238,6 +238,10 @@ export const Sizes: Story = {
   name: "Sizes",
   render: () => (
     <div className="flex flex-wrap items-center gap-2 grayscale">
+      <Avatar size="xs">
+        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+        <AvatarFallback>CN</AvatarFallback>
+      </Avatar>
       <Avatar size="sm">
         <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
         <AvatarFallback>CN</AvatarFallback>
@@ -256,7 +260,7 @@ export const Sizes: Story = {
     docs: {
       description: {
         story:
-          'Use the `size` prop to change the size of the avatar. Available sizes: `"sm"`, `"default"`, and `"lg"`.',
+          'Use the `size` prop to change the size of the avatar. Available sizes: `"xs"`, `"sm"`, `"default"`, and `"lg"`.',
       },
     },
   },
