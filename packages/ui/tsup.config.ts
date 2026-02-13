@@ -33,6 +33,7 @@ export default defineConfig((options) => ({
     "src/slider.tsx",
     "src/spinner.tsx",
     "src/switch.tsx",
+    "src/table.tsx",
     "src/tabs.tsx",
     "src/textarea.tsx",
     "src/toggle.tsx",

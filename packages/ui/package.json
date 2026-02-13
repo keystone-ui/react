@@ -42,6 +42,7 @@
     "./spinner": "./src/spinner.tsx",
     "./stepper": "./src/stepper.tsx",
     "./switch": "./src/switch.tsx",
+    "./table": "./src/table.tsx",
     "./tabs": "./src/tabs.tsx",
     "./textarea": "./src/textarea.tsx",
     "./toast": "./src/toast.tsx",

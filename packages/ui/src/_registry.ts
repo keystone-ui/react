@@ -207,6 +207,11 @@ export const ui: Registry = [
     files: [{ path: "ui/switch.tsx", type: "registry:ui" }],
   },
   {
+    name: "table",
+    type: "registry:ui",
+    files: [{ path: "ui/table.tsx", type: "registry:ui" }],
+  },
+  {
     name: "tabs",
     type: "registry:ui",
     dependencies: ["@base-ui/react", "class-variance-authority", "lucide-react"],
