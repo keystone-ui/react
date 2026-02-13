@@ -94,7 +94,7 @@ const Toaster = ({ theme, className, ...props }: ToasterComponentProps) => {
       toastOptions={{
         classNames: {
           toast:
-            "group/toast !gap-1 !overflow-visible max-sm:!flex-wrap max-sm:[&_[data-content]]:!flex-[1_0_calc(100%-2rem)] max-sm:[&_[data-button]]:!ml-0 max-sm:[&_[data-button]]:!mt-1.5 max-sm:has-data-[icon]:[&_[data-button]]:!ml-5 max-sm:has-data-[icon]:[&_[data-button]~[data-button]]:!ml-0 has-data-[description]:[&_[data-icon]]:!self-start has-data-[description]:[&_[data-icon]]:!mt-[3px]",
+            "group/toast !gap-1 !overflow-visible max-sm:!flex-wrap max-sm:[&_[data-content]]:!flex-[1_0_calc(100%-2rem)] max-sm:[&_[data-button]]:!ml-0 max-sm:[&_[data-button]]:!mt-1.5 max-sm:has-data-[icon]:[&_[data-button]]:!ml-5 max-sm:has-data-[icon]:[&_[data-button]~[data-button]]:!ml-0 has-data-[description]:[&_[data-icon]]:!self-start has-data-[description]:[&_[data-icon]]:!mt-[3px] data-[dismissible=false]:[&_[data-close-button]]:!hidden",
           closeButton: cn(
             // Position: centered on the top-right corner of the toast
             "!left-auto !right-0 !top-0 !translate-x-1/2 !-translate-y-1/2 ![transform:none]",

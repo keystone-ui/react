@@ -525,9 +525,9 @@ export const CustomToast: Story = {
           variant="outline"
           onClick={() =>
             toast.custom((t) => (
-              <div className="flex w-(--width) items-center gap-3 rounded-lg border border-border-muted bg-popover p-4 text-popover-foreground shadow-lg">
+              <div className="flex w-(--width) flex-wrap items-center gap-3 rounded-lg border border-border-muted bg-popover p-4 text-popover-foreground shadow-lg">
                 <UsersIcon className="size-5 shrink-0 text-muted-foreground" />
-                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0 basis-[calc(100%-2.75rem)]">
                   <p className="text-sm font-medium">
                     You have been invited to join a team
                   </p>
@@ -552,8 +552,8 @@ export const CustomToast: Story = {
           variant="outline"
           onClick={() =>
             toast.custom((t) => (
-              <div className="flex w-(--width) items-center gap-3 rounded-lg border border-border-muted bg-popover p-4 text-popover-foreground shadow-lg">
-                <div className="flex-1 min-w-0">
+              <div className="flex w-(--width) flex-wrap items-center gap-3 rounded-lg border border-border-muted bg-popover p-4 text-popover-foreground shadow-lg">
+                <div className="flex-1 min-w-0 basis-full">
                   <p className="text-sm font-medium">
                     New deployment ready
                   </p>
