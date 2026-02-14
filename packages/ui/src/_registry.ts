@@ -8,6 +8,12 @@ export const ui: Registry = [
     files: [{ path: "ui/accordion.tsx", type: "registry:ui" }],
   },
   {
+    name: "aspect-ratio",
+    type: "registry:ui",
+    dependencies: [],
+    files: [{ path: "ui/aspect-ratio.tsx", type: "registry:ui" }],
+  },
+  {
     name: "alert-dialog",
     type: "registry:ui",
     dependencies: ["@base-ui/react"],
@@ -79,6 +85,12 @@ export const ui: Registry = [
     type: "registry:ui",
     dependencies: ["@base-ui/react"],
     files: [{ path: "ui/checkbox.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "collapsible",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react"],
+    files: [{ path: "ui/collapsible.tsx", type: "registry:ui" }],
   },
   {
     name: "combobox",

@@ -10,6 +10,7 @@
   "exports": {
     "./accordion": "./src/accordion.tsx",
     "./alert-dialog": "./src/alert-dialog.tsx",
+    "./aspect-ratio": "./src/aspect-ratio.tsx",
     "./avatar": "./src/avatar.tsx",
     "./badge": "./src/badge.tsx",
     "./breadcrumb": "./src/breadcrumb.tsx",
@@ -20,6 +21,7 @@
     "./alert": "./src/alert.tsx",
     "./card": "./src/card.tsx",
     "./checkbox": "./src/checkbox.tsx",
+    "./collapsible": "./src/collapsible.tsx",
     "./combobox": "./src/combobox.tsx",
     "./date-input": "./src/date-input.tsx",
     "./description-list": "./src/description-list.tsx",
