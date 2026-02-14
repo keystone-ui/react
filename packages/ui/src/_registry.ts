@@ -53,6 +53,17 @@ export const ui: Registry = [
     files: [{ path: "ui/calendar.tsx", type: "registry:ui" }],
   },
   {
+    name: "carousel",
+    type: "registry:ui",
+    dependencies: [
+      "embla-carousel-react",
+      "embla-carousel-wheel-gestures",
+      "lucide-react",
+    ],
+    registryDependencies: ["button"],
+    files: [{ path: "ui/carousel.tsx", type: "registry:ui" }],
+  },
+  {
     name: "alert",
     type: "registry:ui",
     dependencies: ["class-variance-authority"],
