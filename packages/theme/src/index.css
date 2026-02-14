@@ -34,6 +34,7 @@
   --input: oklch(0.92 0.004 286.32); /* --color-zinc-200 */
   --input-bg: transparent;
   --ring: oklch(0.705 0.015 286.067); /* --color-zinc-400 */
+  --skeleton-shimmer: oklch(1 0 0 / 0.06);
 }
 
 .dark {
@@ -60,6 +61,7 @@
   --input: oklch(1 0 0 / 15%); /* white at 15% */
   --input-bg: oklch(1 0 0 / 5%); /* white at 5% */
   --ring: oklch(0.552 0.016 285.938); /* --color-zinc-500 */
+  --skeleton-shimmer: oklch(1 0 0 / 0.1);
 }
 
 @theme {
@@ -100,6 +102,10 @@
 
   /* InputOTP caret animation */
   --animate-caret-blink: caret-blink 1.2s ease-out infinite;
+
+  /* Skeleton shimmer animation */
+  --color-skeleton-shimmer: var(--skeleton-shimmer);
+  --animate-skeleton-shimmer: skeleton-shimmer 2s ease-in-out infinite;
 }
 
 @keyframes progress-indeterminate {
@@ -120,6 +126,15 @@
   }
   20%, 50% {
     opacity: 0;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -50% 0;
   }
 }
 
