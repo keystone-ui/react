@@ -1,59 +1,54 @@
 "use client";
 
 import * as React from "react";
-import { Drawer as DrawerPrimitive } from "vaul";
+import { DrawerPreview as DrawerPrimitive } from "@base-ui/react/drawer";
+
 import { cn } from "./utils";
 
 // =============================================================================
 // Drawer (Root)
 // =============================================================================
-function Drawer({
-  ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Root>) {
+function Drawer({ ...props }: DrawerPrimitive.Root.Props) {
   return <DrawerPrimitive.Root data-slot="drawer" {...props} />;
 }
 
 // =============================================================================
 // DrawerTrigger
 // =============================================================================
-function DrawerTrigger({
-  ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Trigger>) {
+export interface DrawerTriggerProps extends DrawerPrimitive.Trigger.Props {}
+
+function DrawerTrigger({ ...props }: DrawerTriggerProps) {
   return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />;
 }
 
 // =============================================================================
 // DrawerPortal
 // =============================================================================
-function DrawerPortal({
-  ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Portal>) {
+export interface DrawerPortalProps extends DrawerPrimitive.Portal.Props {}
+
+function DrawerPortal({ ...props }: DrawerPortalProps) {
   return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />;
 }
 
 // =============================================================================
 // DrawerClose
 // =============================================================================
-function DrawerClose({
-  ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Close>) {
+export interface DrawerCloseProps extends DrawerPrimitive.Close.Props {}
+
+function DrawerClose({ ...props }: DrawerCloseProps) {
   return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />;
 }
 
 // =============================================================================
 // DrawerOverlay
 // =============================================================================
-export interface DrawerOverlayProps
-  extends React.ComponentProps<typeof DrawerPrimitive.Overlay> {}
+export interface DrawerOverlayProps extends DrawerPrimitive.Backdrop.Props {}
 
 function DrawerOverlay({ className, ...props }: DrawerOverlayProps) {
   return (
-    <DrawerPrimitive.Overlay
+    <DrawerPrimitive.Backdrop
       data-slot="drawer-overlay"
-      className={cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
-        className,
-      )}
+      className={cn("fixed inset-0 z-50 bg-black/50", className)}
       {...props}
     />
   );
@@ -62,28 +57,39 @@ function DrawerOverlay({ className, ...props }: DrawerOverlayProps) {
 // =============================================================================
 // DrawerContent
 // =============================================================================
-export interface DrawerContentProps
-  extends React.ComponentProps<typeof DrawerPrimitive.Content> {}
+export interface DrawerContentProps extends DrawerPrimitive.Popup.Props {}
 
 function DrawerContent({ className, children, ...props }: DrawerContentProps) {
   return (
     <DrawerPortal>
       <DrawerOverlay />
-      <DrawerPrimitive.Content
-        data-slot="drawer-content"
-        className={cn(
-          "bg-background group/drawer-content fixed z-50 flex h-auto flex-col text-sm",
-          "data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[80vh] data-[vaul-drawer-direction=bottom]:rounded-t-xl data-[vaul-drawer-direction=bottom]:border-t",
-          "data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:mb-24 data-[vaul-drawer-direction=top]:max-h-[80vh] data-[vaul-drawer-direction=top]:rounded-b-xl data-[vaul-drawer-direction=top]:border-b",
-          "data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:left-0 data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:rounded-r-xl data-[vaul-drawer-direction=left]:border-r data-[vaul-drawer-direction=left]:sm:max-w-sm",
-          "data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:rounded-l-xl data-[vaul-drawer-direction=right]:border-l data-[vaul-drawer-direction=right]:sm:max-w-sm",
-          className,
-        )}
-        {...props}
+      <DrawerPrimitive.Viewport
+        data-slot="drawer-viewport"
+        className="fixed inset-0 z-50"
       >
-        <div className="bg-muted mx-auto mt-4 hidden h-1 w-[50px] shrink-0 rounded-full group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
-        {children}
-      </DrawerPrimitive.Content>
+        <DrawerPrimitive.Popup
+          data-slot="drawer-content"
+          className={cn(
+            "group/drawer-content bg-background fixed z-50 flex h-auto flex-col text-sm outline-none",
+            // Bottom (swipeDirection="down", default)
+            "data-[swipe-direction=down]:inset-x-0 data-[swipe-direction=down]:bottom-0 data-[swipe-direction=down]:mt-24 data-[swipe-direction=down]:max-h-[80vh] data-[swipe-direction=down]:rounded-t-xl data-[swipe-direction=down]:border-t",
+            // Top (swipeDirection="up")
+            "data-[swipe-direction=up]:inset-x-0 data-[swipe-direction=up]:top-0 data-[swipe-direction=up]:mb-24 data-[swipe-direction=up]:max-h-[80vh] data-[swipe-direction=up]:rounded-b-xl data-[swipe-direction=up]:border-b",
+            // Left (swipeDirection="left")
+            "data-[swipe-direction=left]:inset-y-0 data-[swipe-direction=left]:left-0 data-[swipe-direction=left]:w-3/4 data-[swipe-direction=left]:rounded-r-xl data-[swipe-direction=left]:border-r data-[swipe-direction=left]:sm:max-w-sm",
+            // Right (swipeDirection="right")
+            "data-[swipe-direction=right]:inset-y-0 data-[swipe-direction=right]:right-0 data-[swipe-direction=right]:w-3/4 data-[swipe-direction=right]:rounded-l-xl data-[swipe-direction=right]:border-l data-[swipe-direction=right]:sm:max-w-sm",
+            className,
+          )}
+          {...props}
+        >
+          {/* Drag handle for bottom drawer */}
+          <div className="bg-muted mx-auto mt-4 hidden h-1 w-[50px] shrink-0 rounded-full group-data-[swipe-direction=down]/drawer-content:block" />
+          <DrawerPrimitive.Content data-slot="drawer-inner-content">
+            {children}
+          </DrawerPrimitive.Content>
+        </DrawerPrimitive.Popup>
+      </DrawerPrimitive.Viewport>
     </DrawerPortal>
   );
 }
@@ -98,7 +104,7 @@ function DrawerHeader({ className, ...props }: DrawerHeaderProps) {
     <div
       data-slot="drawer-header"
       className={cn(
-        "flex flex-col gap-0.5 p-4 group-data-[vaul-drawer-direction=bottom]/drawer-content:text-center group-data-[vaul-drawer-direction=top]/drawer-content:text-center md:gap-0.5 md:text-left",
+        "flex flex-col gap-0.5 p-4 group-data-[swipe-direction=down]/drawer-content:text-center group-data-[swipe-direction=up]/drawer-content:text-center md:gap-0.5 md:text-left",
         className,
       )}
       {...props}
@@ -124,8 +130,7 @@ function DrawerFooter({ className, ...props }: DrawerFooterProps) {
 // =============================================================================
 // DrawerTitle
 // =============================================================================
-export interface DrawerTitleProps
-  extends React.ComponentProps<typeof DrawerPrimitive.Title> {}
+export interface DrawerTitleProps extends DrawerPrimitive.Title.Props {}
 
 function DrawerTitle({ className, ...props }: DrawerTitleProps) {
   return (
@@ -141,7 +146,7 @@ function DrawerTitle({ className, ...props }: DrawerTitleProps) {
 // DrawerDescription
 // =============================================================================
 export interface DrawerDescriptionProps
-  extends React.ComponentProps<typeof DrawerPrimitive.Description> {}
+  extends DrawerPrimitive.Description.Props {}
 
 function DrawerDescription({ className, ...props }: DrawerDescriptionProps) {
   return (

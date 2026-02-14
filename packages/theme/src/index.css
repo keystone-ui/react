@@ -175,6 +175,73 @@
   }
 }
 
+/* Drawer: swipe-movement transforms + open/close transitions.
+   Driven by Base UI's CSS variables and data attributes.
+   Positioning and visual styles (bg, border, rounded) are in Tailwind on the component. */
+
+/* --- Backdrop (drawer-overlay) --- */
+[data-slot="drawer-overlay"] {
+  opacity: calc(1 - var(--drawer-swipe-progress, 0));
+  transition: opacity 300ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+[data-slot="drawer-overlay"][data-starting-style] {
+  opacity: 0;
+}
+[data-slot="drawer-overlay"][data-ending-style] {
+  opacity: 0;
+  transition-duration: calc(var(--drawer-swipe-strength, 1) * 300ms);
+}
+[data-slot="drawer-overlay"][data-swiping] {
+  transition: none;
+}
+
+/* --- Popup (drawer-content) --- */
+[data-slot="drawer-content"] {
+  transition: transform 500ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+[data-slot="drawer-content"][data-swiping] {
+  transition: none;
+}
+[data-slot="drawer-content"][data-ending-style] {
+  transition-duration: calc(var(--drawer-swipe-strength, 1) * 400ms);
+}
+
+/* Right drawer */
+[data-slot="drawer-content"][data-swipe-direction="right"] {
+  transform: translateX(var(--drawer-swipe-movement-x, 0px));
+}
+[data-slot="drawer-content"][data-swipe-direction="right"][data-starting-style],
+[data-slot="drawer-content"][data-swipe-direction="right"][data-ending-style] {
+  transform: translateX(100%);
+}
+
+/* Left drawer */
+[data-slot="drawer-content"][data-swipe-direction="left"] {
+  transform: translateX(var(--drawer-swipe-movement-x, 0px));
+}
+[data-slot="drawer-content"][data-swipe-direction="left"][data-starting-style],
+[data-slot="drawer-content"][data-swipe-direction="left"][data-ending-style] {
+  transform: translateX(-100%);
+}
+
+/* Bottom drawer (swipeDirection="down") */
+[data-slot="drawer-content"][data-swipe-direction="down"] {
+  transform: translateY(var(--drawer-swipe-movement-y, 0px));
+}
+[data-slot="drawer-content"][data-swipe-direction="down"][data-starting-style],
+[data-slot="drawer-content"][data-swipe-direction="down"][data-ending-style] {
+  transform: translateY(100%);
+}
+
+/* Top drawer (swipeDirection="up") */
+[data-slot="drawer-content"][data-swipe-direction="up"] {
+  transform: translateY(var(--drawer-swipe-movement-y, 0px));
+}
+[data-slot="drawer-content"][data-swipe-direction="up"][data-starting-style],
+[data-slot="drawer-content"][data-swipe-direction="up"][data-ending-style] {
+  transform: translateY(-100%);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

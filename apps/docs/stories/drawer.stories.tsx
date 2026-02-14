@@ -42,7 +42,7 @@ const meta = {
     docs: {
       description: {
         component: `
-A drawer component built on top of [Vaul](https://github.com/emilkowalski/vaul). Drawers slide in from any edge of the screen and are ideal for mobile-friendly interactions, forms, and supplementary content.
+A drawer component built on top of [Base UI Drawer](https://base-ui.com/react/components/drawer). Drawers slide in from any edge of the screen and are ideal for mobile-friendly interactions, forms, and supplementary content.
 
 \`\`\`tsx
 import {
@@ -57,8 +57,8 @@ import {
 } from "@keystone/ui/drawer";
 
 <Drawer>
-  <DrawerTrigger asChild>
-    <Button variant="outline">Open Drawer</Button>
+  <DrawerTrigger render={<Button variant="outline" />}>
+    Open Drawer
   </DrawerTrigger>
   <DrawerContent>
     <DrawerHeader>
@@ -67,8 +67,8 @@ import {
     </DrawerHeader>
     <DrawerFooter>
       <Button>Submit</Button>
-      <DrawerClose asChild>
-        <Button variant="outline">Cancel</Button>
+      <DrawerClose render={<Button variant="outline" />}>
+        Cancel
       </DrawerClose>
     </DrawerFooter>
   </DrawerContent>
@@ -78,14 +78,15 @@ import {
 ## Features
 
 - Slides in from bottom, top, left, or right
-- Drag-to-dismiss gesture support (bottom drawer)
+- Swipe-to-dismiss gesture support
 - Accessible overlay with backdrop
 - Composable header, footer, title, and description
 - Mobile-friendly interaction patterns
+- Snap point support for bottom sheets
 
 ## API Reference
 
-See the [Vaul documentation](https://vaul.emilkowal.ski/) for the full API reference.
+See the [Base UI Drawer documentation](https://base-ui.com/react/components/drawer) for the full API reference.
 `,
       },
     },
@@ -101,8 +102,8 @@ type Story = StoryObj<typeof Drawer>;
 export const Default: Story = {
   render: () => (
     <Drawer>
-      <DrawerTrigger asChild>
-        <Button variant="outline">Open Drawer</Button>
+      <DrawerTrigger render={<Button variant="outline" />}>
+        Open Drawer
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
@@ -115,8 +116,8 @@ export const Default: Story = {
           </DrawerHeader>
           <DrawerFooter>
             <Button>Submit</Button>
-            <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
+            <DrawerClose render={<Button variant="outline" />}>
+              Cancel
             </DrawerClose>
           </DrawerFooter>
         </div>
@@ -130,9 +131,9 @@ export const Default: Story = {
 // =============================================================================
 export const ScrollableContent: Story = {
   render: () => (
-    <Drawer direction="right">
-      <DrawerTrigger asChild>
-        <Button variant="outline">Scrollable Content</Button>
+    <Drawer swipeDirection="right">
+      <DrawerTrigger render={<Button variant="outline" />}>
+        Scrollable Content
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
@@ -156,8 +157,8 @@ export const ScrollableContent: Story = {
         </div>
         <DrawerFooter>
           <Button>Accept</Button>
-          <DrawerClose asChild>
-            <Button variant="outline">Decline</Button>
+          <DrawerClose render={<Button variant="outline" />}>
+            Decline
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
@@ -176,28 +177,27 @@ export const ScrollableContent: Story = {
 // =============================================================================
 // Sides
 // =============================================================================
-const DRAWER_SIDES = ["top", "right", "bottom", "left"] as const;
+const DRAWER_SIDES = [
+  { swipeDirection: "up", label: "Top" },
+  { swipeDirection: "right", label: "Right" },
+  { swipeDirection: "down", label: "Bottom" },
+  { swipeDirection: "left", label: "Left" },
+] as const;
 
 export const Sides: Story = {
   render: () => (
     <div className="flex flex-wrap gap-2">
       {DRAWER_SIDES.map((side) => (
-        <Drawer
-          key={side}
-          direction={
-            side === "bottom" ? undefined : (side as "top" | "right" | "left")
-          }
-        >
-          <DrawerTrigger asChild>
-            <Button variant="outline" className="capitalize">
-              {side}
-            </Button>
+        <Drawer key={side.swipeDirection} swipeDirection={side.swipeDirection}>
+          <DrawerTrigger render={<Button variant="outline" />}>
+            {side.label}
           </DrawerTrigger>
-          <DrawerContent className="data-[vaul-drawer-direction=bottom]:max-h-[50vh] data-[vaul-drawer-direction=top]:max-h-[50vh]">
+          <DrawerContent className="data-[swipe-direction=down]:max-h-[50vh] data-[swipe-direction=up]:max-h-[50vh]">
             <DrawerHeader>
-              <DrawerTitle>Drawer from {side}</DrawerTitle>
+              <DrawerTitle>Drawer from {side.label.toLowerCase()}</DrawerTitle>
               <DrawerDescription>
-                This drawer slides in from the {side} of the screen.
+                This drawer slides in from the {side.label.toLowerCase()} of the
+                screen.
               </DrawerDescription>
             </DrawerHeader>
             <div className="no-scrollbar overflow-y-auto px-4">
@@ -212,8 +212,8 @@ export const Sides: Story = {
             </div>
             <DrawerFooter>
               <Button>Submit</Button>
-              <DrawerClose asChild>
-                <Button variant="outline">Cancel</Button>
+              <DrawerClose render={<Button variant="outline" />}>
+                Cancel
               </DrawerClose>
             </DrawerFooter>
           </DrawerContent>
@@ -225,7 +225,7 @@ export const Sides: Story = {
     docs: {
       description: {
         story:
-          "Use the `direction` prop to control which side the drawer slides in from. Available options are `top`, `right`, `bottom` (default), and `left`.",
+          "Use the `swipeDirection` prop to control which side the drawer slides in from. Available options are `up` (top), `right`, `down` (bottom, default), and `left`.",
       },
     },
   },
@@ -243,8 +243,8 @@ function GoalDrawerDemo() {
 
   return (
     <Drawer>
-      <DrawerTrigger asChild>
-        <Button variant="outline">Move Goal</Button>
+      <DrawerTrigger render={<Button variant="outline" />}>
+        Move Goal
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
@@ -288,8 +288,8 @@ function GoalDrawerDemo() {
           </div>
           <DrawerFooter>
             <Button>Submit</Button>
-            <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
+            <DrawerClose render={<Button variant="outline" />}>
+              Cancel
             </DrawerClose>
           </DrawerFooter>
         </div>
@@ -416,11 +416,9 @@ function FilterDrawerDemo() {
           if (!isOpen) setStep(0);
         }}
       >
-        <DrawerTrigger asChild>
-          <Button variant="outline">
-            <FilterIcon className="size-4" />
-            Filters
-          </Button>
+        <DrawerTrigger render={<Button variant="outline" />}>
+          <FilterIcon className="size-4" />
+          Filters
         </DrawerTrigger>
         <DrawerContent>
           <div className="mx-auto w-full max-w-sm">
@@ -558,11 +556,9 @@ function SortByDrawerDemo() {
 
   return (
     <Drawer>
-      <DrawerTrigger asChild>
-        <Button variant="outline">
-          <ArrowUpDown className="size-4" />
-          Sort By
-        </Button>
+      <DrawerTrigger render={<Button variant="outline" />}>
+        <ArrowUpDown className="size-4" />
+        Sort By
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
@@ -742,11 +738,9 @@ function ComplexFilterDrawerDemo() {
           }
         }}
       >
-        <DrawerTrigger asChild>
-          <Button variant="outline">
-            <FilterIcon className="size-4" />
-            Filters
-          </Button>
+        <DrawerTrigger render={<Button variant="outline" />}>
+          <FilterIcon className="size-4" />
+          Filters
         </DrawerTrigger>
         <DrawerContent>
           <div className="mx-auto w-full max-w-sm">
@@ -927,11 +921,9 @@ function ProvidersDrawerDemo() {
           if (!isOpen) setSearch("");
         }}
       >
-        <DrawerTrigger asChild>
-          <Button variant="outline">
-            <LayoutGrid className="size-4" />
-            Providers
-          </Button>
+        <DrawerTrigger render={<Button variant="outline" />}>
+          <LayoutGrid className="size-4" />
+          Providers
         </DrawerTrigger>
         <DrawerContent>
           <div className="mx-auto w-full max-w-sm">
