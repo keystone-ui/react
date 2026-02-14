@@ -437,7 +437,57 @@ export const Sizes: Story = {
     docs: {
       description: {
         story:
-          'Use the `size` prop on `SelectTrigger` to change the size. Available options are `"default"` and `"sm"`.',
+          'Use the `size` prop on `SelectTrigger` to change the trigger size. Available options are `"default"` (40px) and `"sm"` (32px).',
+      },
+    },
+  },
+};
+
+export const CompactItems: Story = {
+  name: "Compact Items",
+  render: () => (
+    <div className="flex items-start gap-8">
+      <div className="flex flex-col items-center gap-2">
+        <span className="text-muted-foreground text-xs">Default (36px)</span>
+        <Select defaultValue="apple">
+          <SelectTrigger className="w-40">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="apple">Apple</SelectItem>
+              <SelectItem value="banana">Banana</SelectItem>
+              <SelectItem value="blueberry">Blueberry</SelectItem>
+              <SelectItem value="grape">Grape</SelectItem>
+              <SelectItem value="pineapple">Pineapple</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="flex flex-col items-center gap-2">
+        <span className="text-muted-foreground text-xs">Compact (32px)</span>
+        <Select defaultValue="apple">
+          <SelectTrigger className="w-40">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent size="compact">
+            <SelectGroup>
+              <SelectItem value="apple">Apple</SelectItem>
+              <SelectItem value="banana">Banana</SelectItem>
+              <SelectItem value="blueberry">Blueberry</SelectItem>
+              <SelectItem value="grape">Grape</SelectItem>
+              <SelectItem value="pineapple">Pineapple</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use `size="compact"` on `SelectContent` to reduce item height from 36px to 32px.',
       },
     },
   },

@@ -146,6 +146,11 @@ export interface ComboboxContentProps extends ComboboxPrimitive.Popup.Props {
    * Custom anchor element (used for chips mode)
    */
   anchor?: React.RefObject<HTMLElement | null>;
+  /**
+   * Size of the menu items
+   * @default "default"
+   */
+  size?: "default" | "compact";
 }
 
 function ComboboxContent({
@@ -156,6 +161,7 @@ function ComboboxContent({
   align = "start",
   alignOffset = 0,
   anchor,
+  size = "default",
   ...props
 }: ComboboxContentProps) {
   return (
@@ -170,6 +176,7 @@ function ComboboxContent({
       >
         <ComboboxPrimitive.Popup
           data-slot="combobox-content"
+          data-size={size}
           data-chips={!!anchor}
           className={cn(
             "bg-popover text-popover-foreground ring-popup-ring",

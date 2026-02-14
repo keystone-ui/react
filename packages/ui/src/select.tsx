@@ -62,7 +62,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "group border-input data-placeholder:text-muted-foreground/70 bg-input-bg flex w-fit items-center justify-between gap-1.5 rounded-md border py-2 pr-2 pl-3 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none select-none focus:ring-1 focus:ring-inset focus:ring-ring focus:border-ring data-[popup-open]:ring-1 data-[popup-open]:ring-inset data-[popup-open]:ring-ring data-[popup-open]:border-ring aria-invalid:ring-destructive dark:aria-invalid:ring-destructive aria-invalid:border-destructive disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-10 data-[size=sm]:h-9 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "group border-input data-placeholder:text-muted-foreground/70 bg-input-bg flex w-fit items-center justify-between gap-1.5 rounded-md border py-2 pr-2 pl-3 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none select-none focus:ring-1 focus:ring-inset focus:ring-ring focus:border-ring data-[popup-open]:ring-1 data-[popup-open]:ring-inset data-[popup-open]:ring-ring data-[popup-open]:border-ring aria-invalid:ring-destructive dark:aria-invalid:ring-destructive aria-invalid:border-destructive disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-10 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
@@ -106,6 +106,11 @@ export interface SelectContentProps extends SelectPrimitive.Popup.Props {
    * @default false
    */
   alignItemWithTrigger?: boolean;
+  /**
+   * Size of the menu items
+   * @default "default"
+   */
+  size?: "default" | "compact";
 }
 
 function SelectContent({
@@ -116,6 +121,7 @@ function SelectContent({
   align = "center",
   alignOffset = 0,
   alignItemWithTrigger = false,
+  size = "default",
   ...props
 }: SelectContentProps) {
   return (
@@ -130,6 +136,7 @@ function SelectContent({
       >
         <SelectPrimitive.Popup
           data-slot="select-content"
+          data-size={size}
           data-align-trigger={alignItemWithTrigger}
           className={cn(
             "bg-popover text-popover-foreground ring-popup-ring data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=inline-end]:slide-in-from-left-2 relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-hidden rounded-lg shadow-lg ring-1 duration-100 data-[align-trigger=true]:animate-none",

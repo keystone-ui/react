@@ -943,3 +943,55 @@ export const Scrollable: Story = {
     </Field>
   ),
 };
+
+// =============================================================================
+// Compact Items
+// =============================================================================
+
+export const CompactItems: Story = {
+  name: "Compact Items",
+  render: () => (
+    <div className="flex items-start gap-8">
+      <div className="flex flex-col items-center gap-2">
+        <span className="text-muted-foreground text-xs">Default (36px)</span>
+        <Combobox items={frameworks}>
+          <ComboboxInput placeholder="Select a framework" />
+          <ComboboxContent>
+            <ComboboxEmpty>No items found.</ComboboxEmpty>
+            <ComboboxList>
+              {(item) => (
+                <ComboboxItem key={item} value={item}>
+                  {item}
+                </ComboboxItem>
+              )}
+            </ComboboxList>
+          </ComboboxContent>
+        </Combobox>
+      </div>
+      <div className="flex flex-col items-center gap-2">
+        <span className="text-muted-foreground text-xs">Compact (32px)</span>
+        <Combobox items={frameworks}>
+          <ComboboxInput placeholder="Select a framework" />
+          <ComboboxContent size="compact">
+            <ComboboxEmpty>No items found.</ComboboxEmpty>
+            <ComboboxList>
+              {(item) => (
+                <ComboboxItem key={item} value={item}>
+                  {item}
+                </ComboboxItem>
+              )}
+            </ComboboxList>
+          </ComboboxContent>
+        </Combobox>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use `size="compact"` on `ComboboxContent` to reduce item height from 36px to 32px.',
+      },
+    },
+  },
+};

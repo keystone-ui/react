@@ -158,7 +158,7 @@ export const DataTable: Story = {
       <div className="flex items-center space-x-2">
         <FieldLabel htmlFor="select-rows-per-page">Rows per page</FieldLabel>
         <Select defaultValue="25">
-          <SelectTrigger className="w-20" id="select-rows-per-page">
+          <SelectTrigger className="w-20" size="sm" id="select-rows-per-page">
             <SelectValue />
           </SelectTrigger>
           <SelectContent align="start">
