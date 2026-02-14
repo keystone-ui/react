@@ -82,6 +82,11 @@ export const ui: Registry = [
     files: [{ path: "ui/date-input.tsx", type: "registry:ui" }],
   },
   {
+    name: "description-list",
+    type: "registry:ui",
+    files: [{ path: "ui/description-list.tsx", type: "registry:ui" }],
+  },
+  {
     name: "drawer",
     type: "registry:ui",
     dependencies: ["vaul"],

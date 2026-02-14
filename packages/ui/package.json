@@ -21,6 +21,7 @@
     "./checkbox": "./src/checkbox.tsx",
     "./combobox": "./src/combobox.tsx",
     "./date-input": "./src/date-input.tsx",
+    "./description-list": "./src/description-list.tsx",
     "./drawer": "./src/drawer.tsx",
     "./empty": "./src/empty.tsx",
     "./dropdown-menu": "./src/dropdown-menu.tsx",
