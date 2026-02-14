@@ -27,6 +27,22 @@ import {
   EmptyDescription,
 } from "@keystone/ui/empty";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@keystone/ui/select";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationFirst,
+  PaginationItem,
+  PaginationLast,
+  PaginationNext,
+  PaginationPrevious,
+} from "@keystone/ui/pagination";
+import {
   MoreHorizontalIcon,
   ArrowUpRightIcon,
   ArrowDownLeftIcon,
@@ -38,7 +54,7 @@ import {
   CheckIcon,
   MinusIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 const meta = {
   title: "Components/Table",
@@ -90,6 +106,8 @@ import {
 - Footer section with muted background
 - Caption support for accessibility
 - Size variants: \`default\` and \`sm\` for compact/dense layouts
+- Visual variants: \`default\` (bordered rows) and \`card\` (spaced rows with rounded corners)
+- Opt-in row hover highlight via \`hoverable\` prop (disabled by default)
 - Composable with Badge, DropdownMenu, and other components
 `,
       },
@@ -100,6 +118,15 @@ import {
       control: "select",
       options: ["default", "sm"],
       description: "The size variant of the table",
+    },
+    variant: {
+      control: "select",
+      options: ["default", "card"],
+      description: "The visual variant of the table",
+    },
+    hoverable: {
+      control: "boolean",
+      description: "Whether rows show a hover highlight",
     },
   },
 } satisfies Meta<typeof Table>;
@@ -789,4 +816,464 @@ export const HighlightedHeader: Story = {
       </TableBody>
     </Table>
   ),
+};
+
+// ---------------------------------------------------------------------------
+// Hoverable
+// ---------------------------------------------------------------------------
+
+export const Hoverable: Story = {
+  render: () => (
+    <div className="flex flex-col gap-10">
+      <div>
+        <p className="text-muted-foreground mb-3 text-sm font-medium">Default variant with hover</p>
+        <Table hoverable>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">Invoice</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Method</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {invoices.slice(0, 5).map((invoice) => (
+              <TableRow key={invoice.invoice}>
+                <TableCell className="font-medium">{invoice.invoice}</TableCell>
+                <TableCell>{invoice.paymentStatus}</TableCell>
+                <TableCell>{invoice.paymentMethod}</TableCell>
+                <TableCell className="text-right">
+                  {invoice.totalAmount}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      <div>
+        <p className="text-muted-foreground mb-3 text-sm font-medium">Card variant with hover</p>
+        <Table variant="card" hoverable>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">Invoice</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Method</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {invoices.slice(0, 5).map((invoice) => (
+              <TableRow key={invoice.invoice}>
+                <TableCell className="font-medium">{invoice.invoice}</TableCell>
+                <TableCell>{invoice.paymentStatus}</TableCell>
+                <TableCell>{invoice.paymentMethod}</TableCell>
+                <TableCell className="text-right">
+                  {invoice.totalAmount}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  ),
+};
+
+// ---------------------------------------------------------------------------
+// Card
+// ---------------------------------------------------------------------------
+
+const leaderboard = [
+  { rank: 1, name: "Alex Dumitru", role: "UI/UX", company: "Hashgraph" },
+  { rank: 2, name: "Diana Sima", role: "Graphic Designer/Illustrator", company: "Hashgraph" },
+  { rank: 3, name: "Otilia Bejenaru", role: "Graphic Designer/Illustrator", company: "Hashgraph" },
+  { rank: 4, name: "Mihai Radu", role: "Frontend Engineer", company: "Hashgraph" },
+  { rank: 5, name: "Elena Voicu", role: "Product Manager", company: "Hashgraph" },
+];
+
+export const Card: Story = {
+  render: () => (
+    <Table variant="card">
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-16">#</TableHead>
+          <TableHead>Product & User</TableHead>
+          <TableHead>Function</TableHead>
+          <TableHead className="text-right">Company</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {leaderboard.map((entry) => (
+          <TableRow key={entry.rank}>
+            <TableCell>{entry.rank}</TableCell>
+            <TableCell className="font-medium">{entry.name}</TableCell>
+            <TableCell>{entry.role}</TableCell>
+            <TableCell className="text-right">{entry.company}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  ),
+};
+
+// ---------------------------------------------------------------------------
+// CardWithBadges
+// ---------------------------------------------------------------------------
+
+export const CardWithBadges: Story = {
+  render: () => (
+    <Table variant="card">
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px]">Invoice</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead>Method</TableHead>
+          <TableHead className="text-right">Amount</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {invoices.map((invoice) => (
+          <TableRow key={invoice.invoice}>
+            <TableCell className="font-medium">{invoice.invoice}</TableCell>
+            <TableCell>
+              <Badge variant={statusBadgeVariant(invoice.paymentStatus)}>
+                {invoice.paymentStatus}
+              </Badge>
+            </TableCell>
+            <TableCell>{invoice.paymentMethod}</TableCell>
+            <TableCell className="text-right">
+              {invoice.totalAmount}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  ),
+};
+
+// ---------------------------------------------------------------------------
+// CardCompact
+// ---------------------------------------------------------------------------
+
+export const CardCompact: Story = {
+  render: () => (
+    <Table variant="card" size="sm">
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-16">#</TableHead>
+          <TableHead>Product & User</TableHead>
+          <TableHead>Function</TableHead>
+          <TableHead className="text-right">Company</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {leaderboard.map((entry) => (
+          <TableRow key={entry.rank}>
+            <TableCell>{entry.rank}</TableCell>
+            <TableCell className="font-medium">{entry.name}</TableCell>
+            <TableCell>{entry.role}</TableCell>
+            <TableCell className="text-right">{entry.company}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  ),
+};
+
+// ---------------------------------------------------------------------------
+// CardExchangePlayers
+// ---------------------------------------------------------------------------
+
+type PlayerTier = "VIP" | "Basic" | "Pro";
+type PlayerStatus = "Active" | "Pending" | "Suspended";
+
+interface Player {
+  id: string;
+  email: string;
+  tags: PlayerTier[];
+  joined: string;
+  walletId: string;
+  balance: string;
+  status: PlayerStatus;
+  note: string;
+}
+
+const players: Player[] = [
+  {
+    id: "USR-001",
+    email: "leola.wolf@gmail.com",
+    tags: ["VIP", "Pro"],
+    joined: "2 minutes ago",
+    walletId: "2123875971",
+    balance: "12.482 BTC",
+    status: "Pending",
+    note: "Check comments",
+  },
+  {
+    id: "USR-002",
+    email: "marco.chen@proton.me",
+    tags: ["Basic"],
+    joined: "14 minutes ago",
+    walletId: "2123875842",
+    balance: "0.871 ETH",
+    status: "Active",
+    note: "",
+  },
+  {
+    id: "USR-003",
+    email: "sophia.tanaka@outlook.com",
+    tags: ["VIP"],
+    joined: "1 hour ago",
+    walletId: "2123874519",
+    balance: "48,250.00 USDT",
+    status: "Active",
+    note: "",
+  },
+  {
+    id: "USR-004",
+    email: "ahmed.hassan@mail.com",
+    tags: ["Basic", "Pro"],
+    joined: "3 hours ago",
+    walletId: "2123873206",
+    balance: "1.205 BTC",
+    status: "Suspended",
+    note: "Flagged for review",
+  },
+  {
+    id: "USR-005",
+    email: "elena.popescu@yahoo.com",
+    tags: ["VIP", "Pro"],
+    joined: "5 hours ago",
+    walletId: "2123871887",
+    balance: "320.00 ETH",
+    status: "Pending",
+    note: "KYC incomplete",
+  },
+];
+
+const tierBadgeVariant = (tier: PlayerTier) => {
+  switch (tier) {
+    case "VIP":
+      return "default" as const;
+    case "Pro":
+      return "secondary" as const;
+    case "Basic":
+      return "outline" as const;
+  }
+};
+
+const playerStatusBadgeVariant = (status: PlayerStatus) => {
+  switch (status) {
+    case "Active":
+      return "secondary" as const;
+    case "Pending":
+      return "outline" as const;
+    case "Suspended":
+      return "destructive" as const;
+  }
+};
+
+function ExchangePlayersTable({ variant, hoverable }: { variant?: "default" | "card"; hoverable?: boolean }) {
+  return (
+    <Table variant={variant} hoverable={hoverable}>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Joined</TableHead>
+          <TableHead>Player</TableHead>
+          <TableHead>Wallet ID</TableHead>
+          <TableHead>Balance</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead>Note</TableHead>
+          <TableHead className="text-right">Actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {players.map((player) => (
+          <TableRow key={player.id}>
+            <TableCell className="text-muted-foreground text-xs">
+              {player.joined}
+            </TableCell>
+            <TableCell>
+              <div className="flex flex-col gap-1">
+                <span className="font-medium">{player.email}</span>
+                <div className="flex gap-1">
+                  {player.tags.map((tag) => (
+                    <Badge key={tag} size="sm" variant={tierBadgeVariant(tag)}>
+                      {tag}
+                    </Badge>
+                  ))}
+                  {player.note && (
+                    <Badge size="sm" variant="outline" className="text-muted-foreground">
+                      {player.note}
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </TableCell>
+            <TableCell className="font-mono text-xs">
+              {player.walletId}
+            </TableCell>
+            <TableCell className="font-mono text-xs font-medium">
+              {player.balance}
+            </TableCell>
+            <TableCell>
+              <Badge variant={playerStatusBadgeVariant(player.status)}>
+                {player.status}
+              </Badge>
+            </TableCell>
+            <TableCell className="text-muted-foreground text-xs max-w-[200px] truncate">
+              {player.note || "—"}
+            </TableCell>
+            <TableCell className="text-right">
+              <Button variant="outline" size="xs">
+                Details
+                <ArrowUpRightIcon className="size-3" />
+              </Button>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
+
+export const ExchangePlayers: Story = {
+  render: () => (
+    <div className="flex flex-col gap-10">
+      <div>
+        <p className="text-muted-foreground mb-3 text-sm font-medium">Default variant</p>
+        <ExchangePlayersTable />
+      </div>
+      <div>
+        <p className="text-muted-foreground mb-3 text-sm font-medium">Card variant</p>
+        <ExchangePlayersTable variant="card" />
+      </div>
+    </div>
+  ),
+};
+
+// ---------------------------------------------------------------------------
+// Pagination
+// ---------------------------------------------------------------------------
+
+const allInvoices = Array.from({ length: 28 }, (_, i) => ({
+  invoice: `INV${String(i + 1).padStart(3, "0")}`,
+  paymentStatus: (["Paid", "Pending", "Unpaid"] as const)[i % 3],
+  totalAmount: `$${((i + 1) * 75).toFixed(2)}`,
+  paymentMethod: (["Credit Card", "PayPal", "Bank Transfer"] as const)[i % 3],
+}));
+
+function PaginatedTableExample() {
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const pageCount = useMemo(
+    () => Math.ceil(allInvoices.length / pageSize),
+    [pageSize],
+  );
+
+  const rows = useMemo(
+    () => allInvoices.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize),
+    [pageIndex, pageSize],
+  );
+
+  const canPreviousPage = pageIndex > 0;
+  const canNextPage = pageIndex < pageCount - 1;
+
+  return (
+    <div className="flex flex-col gap-4">
+      <Table hoverable>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Invoice</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Method</TableHead>
+            <TableHead className="text-right">Amount</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map((invoice) => (
+            <TableRow key={invoice.invoice}>
+              <TableCell className="font-medium">{invoice.invoice}</TableCell>
+              <TableCell>
+                <Badge variant={statusBadgeVariant(invoice.paymentStatus)}>
+                  {invoice.paymentStatus}
+                </Badge>
+              </TableCell>
+              <TableCell>{invoice.paymentMethod}</TableCell>
+              <TableCell className="text-right">
+                {invoice.totalAmount}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      {/* Pagination controls */}
+      <div className="flex items-center justify-end gap-4 md:gap-6 lg:gap-8">
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-medium">Rows per page</p>
+          <Select
+            value={`${pageSize}`}
+            onValueChange={(value) => {
+              setPageSize(Number(value));
+              setPageIndex(0);
+            }}
+          >
+            <SelectTrigger size="sm" className="w-[70px]">
+              <SelectValue placeholder={`${pageSize}`} />
+            </SelectTrigger>
+            <SelectContent side="top">
+              {[5, 10, 20].map((size) => (
+                <SelectItem key={size} value={`${size}`}>
+                  {size}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <p className="text-sm font-medium">
+          Page {pageIndex + 1} of {pageCount}
+        </p>
+
+        <Pagination className="mx-0 w-auto">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationFirst
+                onClick={(e) => { e.preventDefault(); setPageIndex(0); }}
+                className={!canPreviousPage ? "pointer-events-none opacity-50" : ""}
+                aria-disabled={!canPreviousPage}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={(e) => { e.preventDefault(); setPageIndex((p) => p - 1); }}
+                className={!canPreviousPage ? "pointer-events-none opacity-50" : ""}
+                aria-disabled={!canPreviousPage}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext
+                onClick={(e) => { e.preventDefault(); setPageIndex((p) => p + 1); }}
+                className={!canNextPage ? "pointer-events-none opacity-50" : ""}
+                aria-disabled={!canNextPage}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLast
+                onClick={(e) => { e.preventDefault(); setPageIndex(pageCount - 1); }}
+                className={!canNextPage ? "pointer-events-none opacity-50" : ""}
+                aria-disabled={!canNextPage}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </div>
+    </div>
+  );
+}
+
+export const WithPagination: Story = {
+  render: () => <PaginatedTableExample />,
 };
