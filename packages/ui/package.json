@@ -51,6 +51,7 @@
     "./textarea": "./src/textarea.tsx",
     "./toast": "./src/toast.tsx",
     "./toggle": "./src/toggle.tsx",
+    "./tooltip": "./src/tooltip.tsx",
     "./toggle-group": "./src/toggle-group.tsx",
     "./utils": "./src/utils.ts",
     "./styles.css": "./src/styles.css"

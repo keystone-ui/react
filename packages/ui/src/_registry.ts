@@ -218,6 +218,11 @@ export const ui: Registry = [
     files: [{ path: "ui/separator.tsx", type: "registry:ui" }],
   },
   {
+    name: "skeleton",
+    type: "registry:ui",
+    files: [{ path: "ui/skeleton.tsx", type: "registry:ui" }],
+  },
+  {
     name: "spinner",
     type: "registry:ui",
     dependencies: ["lucide-react"],
@@ -263,6 +268,12 @@ export const ui: Registry = [
     dependencies: ["@base-ui/react", "class-variance-authority"],
     registryDependencies: ["toggle"],
     files: [{ path: "ui/toggle-group.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "tooltip",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react"],
+    files: [{ path: "ui/tooltip.tsx", type: "registry:ui" }],
   },
   {
     name: "toast",
