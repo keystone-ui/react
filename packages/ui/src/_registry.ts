@@ -27,6 +27,12 @@ export const ui: Registry = [
     files: [{ path: "ui/badge.tsx", type: "registry:ui" }],
   },
   {
+    name: "breadcrumb",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react", "lucide-react"],
+    files: [{ path: "ui/breadcrumb.tsx", type: "registry:ui" }],
+  },
+  {
     name: "button",
     type: "registry:ui",
     dependencies: ["@base-ui/react", "class-variance-authority", "lucide-react"],
@@ -152,6 +158,13 @@ export const ui: Registry = [
     type: "registry:ui",
     dependencies: ["lucide-react"],
     files: [{ path: "ui/native-select.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "pagination",
+    type: "registry:ui",
+    dependencies: ["lucide-react"],
+    registryDependencies: ["button"],
+    files: [{ path: "ui/pagination.tsx", type: "registry:ui" }],
   },
   {
     name: "popover",

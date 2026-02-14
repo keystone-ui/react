@@ -12,7 +12,7 @@ import { cn } from "./utils";
 // ---------------------------------------------------------------------------
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 whitespace-nowrap relative cursor-pointer z-0 rounded-lg font-medium overflow-hidden select-none transition-all active:scale-[0.98] disabled:active:scale-100 disabled:cursor-not-allowed focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline-flex shrink-0 items-center justify-center gap-2 text-sm [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 whitespace-nowrap relative cursor-pointer z-0 rounded-lg font-medium overflow-hidden select-none transition-all active:scale-[0.98] disabled:active:scale-100 disabled:cursor-not-allowed focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       variant: {
@@ -24,9 +24,9 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline active:scale-100",
       },
       size: {
-        default: "text-sm h-10 px-4 py-2",
+        default: "h-10 px-4 py-2",
         xs: "text-xs h-6 py-1 px-2.5",
-        sm: "text-sm h-8 py-1.5 px-3",
+        sm: "h-8 py-1.5 px-3",
         lg: "text-base h-12 py-3.5 px-5",
         icon: "size-10 p-2",
         "icon-xs": "size-6 p-0.5",
