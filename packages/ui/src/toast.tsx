@@ -258,14 +258,89 @@ const VIEWPORT_POSITION_CLASSES: Record<ToastPosition, string> = {
 };
 
 // ---------------------------------------------------------------------------
+// Toast stacking classes (matching Base UI Toast example verbatim)
+// All stacking logic lives here as Tailwind utilities — no separate CSS file.
+// ---------------------------------------------------------------------------
+
+/** Position-independent stacking, animation, and transition classes. */
+const TOAST_STACK_BASE = [
+  // CSS custom properties for stacking math
+  "[--gap:0.75rem]",
+  "[--peek:0.75rem]",
+  "[--scale:calc(max(0,1-(var(--toast-index)*0.1)))]",
+  "[--shrink:calc(1-var(--scale))]",
+  "[--height:var(--toast-frontmost-height,var(--toast-height))]",
+  // Absolute stacking
+  "absolute w-full",
+  "z-[calc(1000-var(--toast-index))]",
+  // Height: match frontmost when collapsed, own height when expanded
+  "h-[var(--height)]",
+  "data-[expanded]:h-[var(--toast-height)]",
+  // Transition
+  "[transition:transform_0.5s_cubic-bezier(0.22,1,0.36,1),opacity_0.5s,height_0.15s]",
+  "data-[swiping]:[transition:none]",
+  // Invisible gap below for hover continuity between stacked toasts
+  "after:absolute after:top-full after:left-0 after:h-[calc(var(--gap)+1px)] after:w-full after:content-['']",
+  // Expanded: fan out using --offset-y (computed per-position below)
+  "data-[expanded]:[transform:translateX(var(--toast-swipe-movement-x))_translateY(var(--offset-y))]",
+  // Fade on exit / exceed limit
+  "data-[ending-style]:opacity-0",
+  "data-[limited]:opacity-0",
+  // Swipe exit: down
+  "data-[ending-style]:data-[swipe-direction=down]:[transform:translateY(calc(var(--toast-swipe-movement-y)+150%))]",
+  "data-[expanded]:data-[ending-style]:data-[swipe-direction=down]:[transform:translateY(calc(var(--toast-swipe-movement-y)+150%))]",
+  // Swipe exit: up
+  "data-[ending-style]:data-[swipe-direction=up]:[transform:translateY(calc(var(--toast-swipe-movement-y)-150%))]",
+  "data-[expanded]:data-[ending-style]:data-[swipe-direction=up]:[transform:translateY(calc(var(--toast-swipe-movement-y)-150%))]",
+  // Swipe exit: left
+  "data-[ending-style]:data-[swipe-direction=left]:[transform:translateX(calc(var(--toast-swipe-movement-x)-150%))_translateY(var(--offset-y))]",
+  "data-[expanded]:data-[ending-style]:data-[swipe-direction=left]:[transform:translateX(calc(var(--toast-swipe-movement-x)-150%))_translateY(var(--offset-y))]",
+  // Swipe exit: right
+  "data-[ending-style]:data-[swipe-direction=right]:[transform:translateX(calc(var(--toast-swipe-movement-x)+150%))_translateY(var(--offset-y))]",
+  "data-[expanded]:data-[ending-style]:data-[swipe-direction=right]:[transform:translateX(calc(var(--toast-swipe-movement-x)+150%))_translateY(var(--offset-y))]",
+];
+
+/** Bottom position: anchor to bottom edge, peek upward. */
+const TOAST_BOTTOM_CLASSES = [
+  "[--offset-y:calc(var(--toast-offset-y)*-1+calc(var(--toast-index)*var(--gap)*-1)+var(--toast-swipe-movement-y))]",
+  "bottom-0 origin-bottom",
+  "[transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--peek))-(var(--shrink)*var(--height))))_scale(var(--scale))]",
+  "data-[starting-style]:[transform:translateY(150%)]",
+  "[&[data-ending-style]:not([data-limited]):not([data-swipe-direction])]:[transform:translateY(150%)]",
+];
+
+/** Top position: anchor to top edge, peek downward. */
+const TOAST_TOP_CLASSES = [
+  "[--offset-y:calc(var(--toast-offset-y)+calc(var(--toast-index)*var(--gap))+var(--toast-swipe-movement-y))]",
+  "top-0 origin-top",
+  "[transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)+(var(--toast-index)*var(--peek))+(var(--shrink)*var(--height))))_scale(var(--scale))]",
+  "data-[starting-style]:[transform:translateY(-150%)]",
+  "[&[data-ending-style]:not([data-limited]):not([data-swipe-direction])]:[transform:translateY(-150%)]",
+];
+
+/** Content classes: height clipping for varying heights + behind/expanded opacity. */
+const TOAST_CONTENT_CLASSES = [
+  "h-full overflow-hidden",
+  "transition-opacity [transition-duration:250ms]",
+  "data-[behind]:pointer-events-none data-[behind]:opacity-0",
+  "data-[expanded]:pointer-events-auto data-[expanded]:opacity-100",
+];
+
+// ---------------------------------------------------------------------------
 // ToastList (internal — rendered inside Toast.Provider)
 // ---------------------------------------------------------------------------
 
-function ToastList({ closeButton }: { closeButton?: boolean }) {
+function ToastList({
+  closeButton,
+  isTop,
+}: {
+  closeButton?: boolean;
+  isTop: boolean;
+}) {
   const { toasts } = Toast.useToastManager();
 
   return toasts.map((t) => (
-    <ToastItem closeButton={closeButton} key={t.id} toast={t} />
+    <ToastItem closeButton={closeButton} isTop={isTop} key={t.id} toast={t} />
   ));
 }
 
@@ -276,22 +351,28 @@ function ToastList({ closeButton }: { closeButton?: boolean }) {
 function ToastItem({
   toast: t,
   closeButton: globalCloseButton,
+  isTop,
 }: {
   toast: ReturnType<typeof Toast.useToastManager>["toasts"][number];
   closeButton?: boolean;
+  isTop: boolean;
 }) {
   const data = (t.data ?? {}) as ToastData;
+  const positionClasses = isTop ? TOAST_TOP_CLASSES : TOAST_BOTTOM_CLASSES;
 
   // ---- Custom render ----
   if (data.render) {
     return (
       <Toast.Root
-        className="pointer-events-auto w-full select-none bg-clip-padding"
-        data-slot="toast"
+        className={cn(
+          TOAST_STACK_BASE,
+          positionClasses,
+          "pointer-events-auto select-none bg-clip-padding"
+        )}
         swipeDirection={data.dismissible === false ? [] : ["down", "right"]}
         toast={t}
       >
-        <Toast.Content data-slot="toast-content">
+        <Toast.Content className={cn(TOAST_CONTENT_CLASSES)}>
           {data.render(t.id)}
         </Toast.Content>
       </Toast.Root>
@@ -307,11 +388,11 @@ function ToastItem({
   return (
     <Toast.Root
       className={cn(
-        // Layout — positioned absolutely via CSS; absolute also creates
-        // a containing block for the close button
+        // Stacking & animation (from Base UI example)
+        TOAST_STACK_BASE,
+        positionClasses,
+        // Layout
         "group/toast pointer-events-auto",
-        // Size — fills the viewport width
-        "w-full",
         // Appearance
         "select-none rounded-lg border border-border-muted bg-popover bg-clip-padding text-popover-foreground shadow-lg",
         // Semantic type colors
@@ -323,7 +404,9 @@ function ToastItem({
     >
       <Toast.Content
         className={cn(
-          "flex w-full gap-2 overflow-hidden p-3",
+          // Stacking: height clipping + behind/expanded opacity
+          TOAST_CONTENT_CLASSES,
+          "flex w-full gap-2 p-3",
           // Mobile: wrap action buttons below content
           "max-sm:flex-wrap"
         )}
@@ -467,7 +550,7 @@ function Toaster({
           data-slot="toaster"
           style={{ "--width": "356px" } as CSSProperties}
         >
-          <ToastList closeButton={closeButton} />
+          <ToastList closeButton={closeButton} isTop={isTop} />
         </Toast.Viewport>
       </Toast.Portal>
     </Toast.Provider>
