@@ -1,5 +1,5 @@
 import { Button } from "@keystone/ui/button";
-import { ButtonGroup } from "@keystone/ui/button-group";
+import { ButtonGroup, ButtonGroupText } from "@keystone/ui/button-group";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -135,6 +135,14 @@ import { Search } from "lucide-react";
       },
     },
   },
+  argTypes: {
+    orientation: {
+      control: "select",
+      options: ["horizontal", "vertical"],
+      description: "The layout direction of the button group",
+    },
+  },
+  subcomponents: { ButtonGroupText },
 } satisfies Meta<typeof ButtonGroup>;
 
 export default meta;

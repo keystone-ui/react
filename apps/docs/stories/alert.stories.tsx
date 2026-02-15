@@ -97,6 +97,7 @@ import { CheckCircle2Icon } from "lucide-react";
       description: "Additional CSS classes to apply to the alert",
     },
   },
+  subcomponents: { AlertTitle, AlertDescription, AlertAction },
 } satisfies Meta<typeof Alert>;
 
 export default meta;

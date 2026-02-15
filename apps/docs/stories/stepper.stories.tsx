@@ -80,6 +80,7 @@ Returns: \`{ value, totalSteps, direction, goTo, goNext, goPrevious, isFirst, is
       },
     },
   },
+  subcomponents: { StepperStep, StepperContent },
 } satisfies Meta<typeof Stepper>;
 
 export default meta;

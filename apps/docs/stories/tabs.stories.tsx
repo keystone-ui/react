@@ -6,7 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@keystone/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@keystone/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsIndicator,
+  TabsList,
+  TabsTrigger,
+} from "@keystone/ui/tabs";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   AppWindowIcon,
@@ -101,6 +107,13 @@ import {
       },
     },
   },
+  argTypes: {
+    defaultValue: {
+      control: "text",
+      description: "The default selected tab value (uncontrolled)",
+    },
+  },
+  subcomponents: { TabsList, TabsTrigger, TabsIndicator, TabsContent },
 } satisfies Meta<typeof Tabs>;
 
 export default meta;

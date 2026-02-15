@@ -79,6 +79,15 @@ See the [Base UI Dialog documentation](https://base-ui.com/react/components/dial
       },
     },
   },
+  subcomponents: {
+    ModalTrigger,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalTitle,
+    ModalDescription,
+    ModalClose,
+  },
 } satisfies Meta<typeof Modal>;
 
 export default meta;

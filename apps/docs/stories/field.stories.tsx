@@ -74,6 +74,16 @@ import { Input } from "@keystone/ui/input";
       },
     },
   },
+  subcomponents: {
+    FieldContent,
+    FieldLabel,
+    FieldDescription,
+    FieldError,
+    FieldGroup,
+    FieldSet,
+    FieldLegend,
+    FieldSeparator,
+  },
 } satisfies Meta<typeof Field>;
 
 export default meta;

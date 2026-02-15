@@ -141,6 +141,32 @@ See the [Base UI Toast docs](https://base-ui.com/react/components/toast) for the
       },
     },
   },
+  argTypes: {
+    position: {
+      control: "select",
+      options: [
+        "top-left",
+        "top-center",
+        "top-right",
+        "bottom-left",
+        "bottom-center",
+        "bottom-right",
+      ],
+      description: "Where toasts appear on screen",
+    },
+    duration: {
+      control: "number",
+      description: "Default auto-dismiss duration in milliseconds",
+    },
+    limit: {
+      control: "number",
+      description: "Maximum number of visible toasts",
+    },
+    closeButton: {
+      control: "boolean",
+      description: "Whether to show a close button on toasts",
+    },
+  },
 } satisfies Meta<typeof Toaster>;
 
 export default meta;

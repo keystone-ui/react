@@ -65,6 +65,20 @@ import { Search } from "lucide-react";
       },
     },
   },
+  argTypes: {
+    size: {
+      control: "select",
+      options: ["default", "sm"],
+      description: "The size of the input group",
+    },
+  },
+  subcomponents: {
+    InputGroupAddon,
+    InputGroupButton,
+    InputGroupInput,
+    InputGroupText,
+    InputGroupTextarea,
+  },
 } satisfies Meta<typeof InputGroup>;
 
 export default meta;

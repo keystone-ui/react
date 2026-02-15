@@ -1,10 +1,11 @@
 import { cn } from "./utils";
 
-function AspectRatio({
-  ratio,
-  className,
-  ...props
-}: React.ComponentProps<"div"> & { ratio: number }) {
+interface AspectRatioProps extends React.ComponentProps<"div"> {
+  /** The desired aspect ratio expressed as width / height (e.g. 16/9). */
+  ratio: number;
+}
+
+function AspectRatio({ ratio, className, ...props }: AspectRatioProps) {
   return (
     <div
       className={cn("relative aspect-(--ratio)", className)}
@@ -16,3 +17,4 @@ function AspectRatio({
 }
 
 export { AspectRatio };
+export type { AspectRatioProps };

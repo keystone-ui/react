@@ -57,6 +57,11 @@ import {
       description: "The visual variant of the description list",
     },
   },
+  subcomponents: {
+    DescriptionListItem,
+    DescriptionListTerm,
+    DescriptionListDetails,
+  },
 } satisfies Meta<typeof DescriptionList>;
 
 export default meta;

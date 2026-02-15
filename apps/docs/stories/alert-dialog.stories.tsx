@@ -94,6 +94,17 @@ For more information about the other components and their props, see the [Base U
       },
     },
   },
+  subcomponents: {
+    AlertDialogTrigger,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogFooter,
+    AlertDialogMedia,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogAction,
+    AlertDialogCancel,
+  },
 } satisfies Meta<typeof AlertDialog>;
 
 export default meta;

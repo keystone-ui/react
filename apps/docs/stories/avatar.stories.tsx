@@ -75,6 +75,13 @@ import {
       description: "The size of the avatar",
     },
   },
+  subcomponents: {
+    AvatarImage,
+    AvatarFallback,
+    AvatarGroup,
+    AvatarGroupCount,
+    AvatarBadge,
+  },
 } satisfies Meta<typeof Avatar>;
 
 export default meta;

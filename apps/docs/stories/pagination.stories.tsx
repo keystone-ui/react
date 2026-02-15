@@ -79,6 +79,16 @@ import {
       },
     },
   },
+  subcomponents: {
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationPrevious,
+    PaginationNext,
+    PaginationFirst,
+    PaginationLast,
+    PaginationEllipsis,
+  },
 } satisfies Meta<typeof Pagination>;
 
 export default meta;

@@ -74,6 +74,7 @@ Use [\`Select\`](?path=/docs/components-select--docs) for custom styling, animat
       description: "Whether the select is disabled",
     },
   },
+  subcomponents: { NativeSelectOption, NativeSelectOptGroup },
 } satisfies Meta<typeof NativeSelect>;
 
 export default meta;

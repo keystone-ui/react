@@ -133,6 +133,7 @@ See the [input-otp documentation](https://input-otp.rodz.dev/) for more informat
       description: "Whether the input is in a loading state",
     },
   },
+  subcomponents: { InputOTPGroup, InputOTPSlot, InputOTPSeparator },
 } satisfies Meta<typeof InputOTP>;
 
 export default meta;

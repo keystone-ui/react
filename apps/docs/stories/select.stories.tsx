@@ -112,6 +112,15 @@ import {
       description: "Whether a value is required",
     },
   },
+  subcomponents: {
+    SelectTrigger,
+    SelectContent,
+    SelectItem,
+    SelectGroup,
+    SelectLabel,
+    SelectValue,
+    SelectSeparator,
+  },
 } satisfies Meta<typeof Select>;
 
 export default meta;

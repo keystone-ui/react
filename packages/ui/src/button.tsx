@@ -58,7 +58,33 @@ type ButtonVariantsProps = VariantProps<typeof buttonVariants>;
 export interface ButtonProps
   extends ButtonPrimitive.Props,
     ButtonVariantsProps {
-  /** If true the button will display a spinner */
+  /**
+   * The visual style of the button.
+   * @default "default"
+   */
+  variant?:
+    | "default"
+    | "secondary"
+    | "destructive"
+    | "ghost"
+    | "outline"
+    | "link";
+  /**
+   * The size of the button.
+   * @default "default"
+   */
+  size?:
+    | "xs"
+    | "sm"
+    | "default"
+    | "lg"
+    | "icon"
+    | "icon-xs"
+    | "icon-sm"
+    | "icon-lg";
+  /** Whether the button should span the full width of its container. */
+  fullWidth?: boolean;
+  /** Shows a loading spinner and disables the button. */
   isLoading?: boolean;
 }
 

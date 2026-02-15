@@ -65,6 +65,23 @@ import { ToggleGroup, ToggleGroupItem } from "@keystone/ui/toggle-group";
       },
     },
   },
+  argTypes: {
+    variant: {
+      control: "select",
+      options: ["default", "outline"],
+      description: "The visual style applied to all items",
+    },
+    size: {
+      control: "select",
+      options: ["sm", "default", "lg"],
+      description: "The size applied to all items",
+    },
+    disabled: {
+      control: "boolean",
+      description: "Whether the entire group is disabled",
+    },
+  },
+  subcomponents: { ToggleGroupItem },
 } satisfies Meta<typeof ToggleGroup>;
 
 export default meta;

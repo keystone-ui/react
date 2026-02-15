@@ -64,7 +64,13 @@ type AlertVariantsProps = VariantProps<typeof alertVariants>;
 
 export interface AlertProps
   extends React.ComponentProps<"div">,
-    AlertVariantsProps {}
+    AlertVariantsProps {
+  /**
+   * The visual style of the alert.
+   * @default "default"
+   */
+  variant?: "default" | "success" | "warning" | "error" | "info";
+}
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
   ({ className, variant, ...props }, ref) => {

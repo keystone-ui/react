@@ -122,6 +122,17 @@ Use **Item** if you only need to display content such as a title, description, a
       description: "Additional CSS classes",
     },
   },
+  subcomponents: {
+    ItemMedia,
+    ItemContent,
+    ItemActions,
+    ItemGroup,
+    ItemSeparator,
+    ItemTitle,
+    ItemDescription,
+    ItemHeader,
+    ItemFooter,
+  },
 } satisfies Meta<typeof Item>;
 
 export default meta;

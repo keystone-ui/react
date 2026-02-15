@@ -56,6 +56,28 @@ const [checked, setChecked] = React.useState(false)
       },
     },
   },
+  argTypes: {
+    checked: {
+      control: "boolean",
+      description: "Whether the checkbox is checked (controlled)",
+    },
+    defaultChecked: {
+      control: "boolean",
+      description: "Initial checked state (uncontrolled)",
+    },
+    disabled: {
+      control: "boolean",
+      description: "Whether the checkbox is disabled",
+    },
+    required: {
+      control: "boolean",
+      description: "Whether the checkbox is required",
+    },
+    name: {
+      control: "text",
+      description: "The name attribute for form submission",
+    },
+  },
 } satisfies Meta<typeof Checkbox>;
 
 export default meta;

@@ -89,6 +89,7 @@ See the [Base UI Tooltip documentation](https://base-ui.com/react/components/too
       </TooltipProvider>
     ),
   ],
+  subcomponents: { TooltipTrigger, TooltipContent },
 } satisfies Meta<typeof Tooltip>;
 
 export default meta;

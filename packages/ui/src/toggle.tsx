@@ -39,7 +39,18 @@ type ToggleVariantsProps = VariantProps<typeof toggleVariants>;
 
 export interface ToggleProps
   extends TogglePrimitive.Props,
-    ToggleVariantsProps {}
+    ToggleVariantsProps {
+  /**
+   * The visual style of the toggle.
+   * @default "default"
+   */
+  variant?: "default" | "outline";
+  /**
+   * The size of the toggle.
+   * @default "default"
+   */
+  size?: "sm" | "default" | "lg";
+}
 
 function Toggle({ className, variant, size, ...props }: ToggleProps) {
   return (

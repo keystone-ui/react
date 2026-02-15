@@ -74,6 +74,7 @@ import {
       description: "Whether the collapsible is disabled",
     },
   },
+  subcomponents: { CollapsibleTrigger, CollapsibleContent },
 } satisfies Meta<typeof Collapsible>;
 
 export default meta;

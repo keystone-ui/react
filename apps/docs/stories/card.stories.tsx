@@ -85,6 +85,14 @@ import {
       description: "The size variant of the card",
     },
   },
+  subcomponents: {
+    CardHeader,
+    CardTitle,
+    CardDescription,
+    CardAction,
+    CardContent,
+    CardFooter,
+  },
 } satisfies Meta<typeof Card>;
 
 export default meta;

@@ -116,6 +116,11 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@keystone/ui/input
       control: "boolean",
       description: "Whether the input is disabled",
     },
+    size: {
+      control: "select",
+      options: ["default", "sm"],
+      description: "The size of the input",
+    },
     className: {
       control: "text",
       description: "Additional CSS classes to apply to the input",

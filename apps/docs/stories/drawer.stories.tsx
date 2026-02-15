@@ -91,6 +91,15 @@ See the [Base UI Drawer documentation](https://base-ui.com/react/components/draw
       },
     },
   },
+  subcomponents: {
+    DrawerTrigger,
+    DrawerContent,
+    DrawerHeader,
+    DrawerFooter,
+    DrawerTitle,
+    DrawerDescription,
+    DrawerClose,
+  },
 } satisfies Meta<typeof Drawer>;
 
 export default meta;

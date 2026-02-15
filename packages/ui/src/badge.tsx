@@ -43,7 +43,24 @@ const badgeVariants = cva(
 
 interface BadgeProps
   extends useRender.ComponentProps<"span">,
-    VariantProps<typeof badgeVariants> {}
+    VariantProps<typeof badgeVariants> {
+  /**
+   * The visual style of the badge.
+   * @default "default"
+   */
+  variant?:
+    | "default"
+    | "secondary"
+    | "destructive"
+    | "outline"
+    | "ghost"
+    | "link";
+  /**
+   * The size of the badge.
+   * @default "default"
+   */
+  size?: "default" | "sm";
+}
 
 function Badge({
   className,

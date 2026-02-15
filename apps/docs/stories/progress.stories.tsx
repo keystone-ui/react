@@ -80,6 +80,12 @@ import {
       description: "Color variant of the progress indicator",
     },
   },
+  subcomponents: {
+    ProgressTrack,
+    ProgressIndicator,
+    ProgressLabel,
+    ProgressValue,
+  },
 } satisfies Meta<typeof Progress>;
 
 export default meta;

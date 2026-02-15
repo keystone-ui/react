@@ -7,6 +7,10 @@ import { cn } from "./utils";
 // ---------------------------------------------------------------------------
 
 interface SkeletonProps extends React.ComponentProps<"div"> {
+  /**
+   * The animation style of the skeleton.
+   * @default "pulse"
+   */
   animationType?: "pulse" | "none";
 }
 

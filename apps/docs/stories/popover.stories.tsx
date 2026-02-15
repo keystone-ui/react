@@ -64,6 +64,15 @@ See the [Base UI Popover documentation](https://base-ui.com/react/components/pop
       },
     },
   },
+  subcomponents: {
+    PopoverTrigger,
+    PopoverContent,
+    PopoverHeader,
+    PopoverTitle,
+    PopoverDescription,
+    PopoverClose,
+    PopoverArrow,
+  },
 } satisfies Meta<typeof Popover>;
 
 export default meta;

@@ -87,6 +87,12 @@ import {
       description: "Size variant",
     },
   },
+  subcomponents: {
+    CircularProgressTrack,
+    CircularProgressIndicator,
+    CircularProgressValue,
+    CircularProgressLabel,
+  },
 } satisfies Meta<typeof CircularProgress>;
 
 export default meta;

@@ -129,6 +129,15 @@ import {
       description: "Whether rows show a hover highlight",
     },
   },
+  subcomponents: {
+    TableHeader,
+    TableBody,
+    TableFooter,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableCaption,
+  },
 } satisfies Meta<typeof Table>;
 
 export default meta;

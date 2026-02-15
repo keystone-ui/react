@@ -91,6 +91,12 @@ import {
       defaultValue: "vertical",
     },
   },
+  subcomponents: {
+    AccordionItem,
+    AccordionHeader,
+    AccordionTrigger,
+    AccordionPanel,
+  },
 };
 
 export default meta;

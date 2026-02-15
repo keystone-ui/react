@@ -63,6 +63,13 @@ import {
       description: "Whether the slider is disabled",
     },
   },
+  subcomponents: {
+    SliderControl,
+    SliderTrack,
+    SliderIndicator,
+    SliderThumb,
+    SliderValue,
+  },
 } satisfies Meta<typeof Slider>;
 
 export default meta;

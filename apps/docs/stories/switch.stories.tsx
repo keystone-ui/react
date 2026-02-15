@@ -55,6 +55,33 @@ const [checked, setChecked] = React.useState(false)
       },
     },
   },
+  argTypes: {
+    size: {
+      control: "select",
+      options: ["default", "sm"],
+      description: "The size of the switch",
+    },
+    checked: {
+      control: "boolean",
+      description: "Whether the switch is on (controlled)",
+    },
+    defaultChecked: {
+      control: "boolean",
+      description: "Initial on state (uncontrolled)",
+    },
+    disabled: {
+      control: "boolean",
+      description: "Whether the switch is disabled",
+    },
+    required: {
+      control: "boolean",
+      description: "Whether the switch is required",
+    },
+    name: {
+      control: "text",
+      description: "The name attribute for form submission",
+    },
+  },
 } satisfies Meta<typeof Switch>;
 
 export default meta;

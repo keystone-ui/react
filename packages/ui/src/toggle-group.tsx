@@ -24,7 +24,18 @@ const ToggleGroupContext = React.createContext<ToggleGroupContextValue>({
 
 export interface ToggleGroupProps
   extends ToggleGroupPrimitive.Props,
-    ToggleGroupContextValue {}
+    ToggleGroupContextValue {
+  /**
+   * The visual style applied to all items in the group.
+   * @default "default"
+   */
+  variant?: "default" | "outline";
+  /**
+   * The size applied to all items in the group.
+   * @default "default"
+   */
+  size?: "sm" | "default" | "lg";
+}
 
 function ToggleGroup({
   className,

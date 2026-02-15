@@ -66,6 +66,14 @@ import {
       },
     },
   },
+  subcomponents: {
+    BreadcrumbList,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+    BreadcrumbEllipsis,
+  },
 } satisfies Meta<typeof Breadcrumb>;
 
 export default meta;

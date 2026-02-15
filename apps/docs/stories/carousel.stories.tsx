@@ -140,6 +140,14 @@ Pass plugins via the \`plugins\` prop (e.g. \`plugins={[Autoplay({ delay: 2000 }
       },
     },
   },
+  subcomponents: {
+    CarouselContent,
+    CarouselItem,
+    CarouselPrevious,
+    CarouselNext,
+    CarouselDots,
+    CarouselCounter,
+  },
 } satisfies Meta<typeof Carousel>;
 
 export default meta;

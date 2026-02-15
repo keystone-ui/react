@@ -48,6 +48,7 @@ See the [react-resizable-panels documentation](https://github.com/bvaughn/react-
       },
     },
   },
+  subcomponents: { ResizablePanel, ResizableHandle },
 } satisfies Meta<typeof ResizablePanelGroup>;
 
 export default meta;

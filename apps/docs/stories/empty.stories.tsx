@@ -79,6 +79,13 @@ import { FolderCodeIcon } from "lucide-react";
       description: "Additional CSS classes to apply to the empty state",
     },
   },
+  subcomponents: {
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+    EmptyDescription,
+    EmptyContent,
+  },
 } satisfies Meta<typeof Empty>;
 
 export default meta;

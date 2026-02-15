@@ -127,7 +127,13 @@ const buttonGroupVariants = cva(
 
 export interface ButtonGroupProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof buttonGroupVariants> {}
+    VariantProps<typeof buttonGroupVariants> {
+  /**
+   * The layout direction of the button group.
+   * @default "horizontal"
+   */
+  orientation?: "horizontal" | "vertical";
+}
 
 const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
   ({ className, orientation = "horizontal", ...props }, ref) => {

@@ -7,6 +7,7 @@ import { cn } from "./utils";
 // Spinner
 // ---------------------------------------------------------------------------
 
+/** An animated loading spinner icon. Pass `className` to control size (e.g. `size-6`). */
 function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
   return (
     <Loader2Icon

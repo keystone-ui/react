@@ -114,6 +114,21 @@ import {
       description: "Whether to auto-highlight the first item",
     },
   },
+  subcomponents: {
+    ComboboxTrigger,
+    ComboboxInput,
+    ComboboxContent,
+    ComboboxList,
+    ComboboxItem,
+    ComboboxGroup,
+    ComboboxLabel,
+    ComboboxEmpty,
+    ComboboxValue,
+    ComboboxChips,
+    ComboboxChip,
+    ComboboxChipsInput,
+    ComboboxSeparator,
+  },
 } satisfies Meta<typeof Combobox>;
 
 export default meta;

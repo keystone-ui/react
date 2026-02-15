@@ -28,6 +28,16 @@ import { Kbd, KbdGroup } from "@keystone/ui/kbd";
       },
     },
   },
+  argTypes: {
+    children: {
+      control: "text",
+      description: "The key label to display",
+    },
+    className: {
+      control: "text",
+      description: "Additional CSS classes",
+    },
+  },
   tags: ["autodocs"],
 } satisfies Meta<typeof Kbd>;
 

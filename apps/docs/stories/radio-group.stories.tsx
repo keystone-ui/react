@@ -68,6 +68,13 @@ See the [Base UI Radio Group documentation](https://base-ui.com/react/components
       },
     },
   },
+  argTypes: {
+    disabled: {
+      control: "boolean",
+      description: "Whether the entire radio group is disabled",
+    },
+  },
+  subcomponents: { RadioGroupItem },
 } satisfies Meta<typeof RadioGroup>;
 
 export default meta;
