@@ -4,6 +4,7 @@ import {
   ResizablePanelGroup,
 } from "@keystone/ui/resizable";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, within } from "storybook/test";
 
 // ---------------------------------------------------------------------------
 // Meta
@@ -87,6 +88,11 @@ export const Default: Story = {
       </ResizablePanel>
     </ResizablePanelGroup>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const panelGroup = canvas.getByRole("group");
+    await expect(panelGroup).toBeInTheDocument();
+  },
 };
 
 // ---------------------------------------------------------------------------

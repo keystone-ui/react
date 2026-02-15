@@ -7,6 +7,7 @@ import {
   StarIcon,
   UnderlineIcon,
 } from "lucide-react";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/Toggle",
@@ -94,6 +95,18 @@ export const Default: Story = {
       </Toggle>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const boldToggle = canvas.getByRole("button", { name: /toggle bold/i });
+
+    // Click to toggle pressed
+    await userEvent.click(boldToggle);
+    await expect(boldToggle).toHaveAttribute("aria-pressed", "true");
+
+    // Click again to toggle unpressed
+    await userEvent.click(boldToggle);
+    await expect(boldToggle).toHaveAttribute("aria-pressed", "false");
+  },
 };
 
 // ---------------------------------------------------------------------------

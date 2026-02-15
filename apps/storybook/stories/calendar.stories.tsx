@@ -12,6 +12,7 @@ import { addDays } from "date-fns";
 import { Clock2Icon } from "lucide-react";
 import * as React from "react";
 import type { DateRange } from "react-day-picker";
+import { expect, within } from "storybook/test";
 
 const meta = {
   title: "Components/Calendar",
@@ -69,6 +70,11 @@ export const Default: Story = {
       mode="single"
     />
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const grid = canvas.getByRole("grid");
+    await expect(grid).toBeInTheDocument();
+  },
 };
 
 // =============================================================================

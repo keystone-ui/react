@@ -15,6 +15,7 @@ import { Input } from "@keystone/ui/input";
 import { Switch } from "@keystone/ui/switch";
 import { Textarea } from "@keystone/ui/textarea";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/Field",
@@ -102,6 +103,14 @@ export const InputStory: Story = {
       </Field>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByPlaceholderText("Input, Select, Switch, etc.");
+    await expect(input).toBeInTheDocument();
+
+    await userEvent.type(input, "test value");
+    await expect(input).toHaveValue("test value");
+  },
 };
 
 // Profile Example with Switch

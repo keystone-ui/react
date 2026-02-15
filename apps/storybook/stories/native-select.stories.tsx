@@ -11,6 +11,7 @@ import {
   NativeSelectOption,
 } from "@keystone/ui/native-select";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, within } from "storybook/test";
 
 const meta = {
   title: "Components/NativeSelect",
@@ -91,6 +92,13 @@ export const Default: Story = {
       <NativeSelectOption value="cancelled">Cancelled</NativeSelectOption>
     </NativeSelect>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const select = canvas.getByRole("combobox");
+
+    await expect(select).toBeInTheDocument();
+    await expect(select).toHaveValue("");
+  },
 };
 
 // With Field

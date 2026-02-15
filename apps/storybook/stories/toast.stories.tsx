@@ -3,6 +3,7 @@ import type { ToasterProps } from "@keystone/ui/toast";
 import { Toaster, toast } from "@keystone/ui/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { UsersIcon } from "lucide-react";
+import { expect, userEvent, within } from "storybook/test";
 
 // ---------------------------------------------------------------------------
 // Helpers for promise / loading stories
@@ -189,6 +190,16 @@ export const Default: Story = {
       </Button>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: /show toast/i });
+
+    await userEvent.click(trigger);
+    await new Promise((r) => setTimeout(r, 500));
+
+    const toastElement = document.querySelector("[data-slot='toast-title']");
+    await expect(toastElement).toBeInTheDocument();
+  },
 };
 
 // ── Types ───────────────────────────────────────────────────────────────

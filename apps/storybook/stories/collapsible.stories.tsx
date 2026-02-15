@@ -25,6 +25,7 @@ import {
   MinimizeIcon,
 } from "lucide-react";
 import * as React from "react";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/Collapsible",
@@ -123,6 +124,18 @@ export const Default: Story = {
         </CollapsibleContent>
       </Collapsible>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: /toggle details/i });
+
+    // Click to expand
+    await userEvent.click(trigger);
+
+    // Expect the collapsible content to be visible
+    await expect(
+      canvas.getByText("100 Market St, San Francisco")
+    ).toBeVisible();
   },
 };
 

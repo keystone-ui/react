@@ -25,6 +25,7 @@ import {
   Plus as PlusIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/Input",
@@ -135,6 +136,14 @@ type Story = StoryObj<typeof Input>;
 export const Default: Story = {
   args: {
     placeholder: "Enter text",
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByPlaceholderText("Enter text");
+
+    // Type into the input
+    await userEvent.type(input, "Hello");
+    await expect(input).toHaveValue("Hello");
   },
 };
 

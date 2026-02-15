@@ -10,6 +10,7 @@ import {
 import { Label } from "@keystone/ui/label";
 import { RadioGroup, RadioGroupItem } from "@keystone/ui/radio-group";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/RadioGroup",
@@ -99,6 +100,14 @@ export const Basic: Story = {
       </div>
     </RadioGroup>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const radios = canvas.getAllByRole("radio");
+
+    // Click the first radio button ("Default")
+    await userEvent.click(radios[0]);
+    await expect(radios[0]).toBeChecked();
+  },
   parameters: {
     docs: {
       description: {

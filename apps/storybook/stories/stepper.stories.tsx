@@ -10,6 +10,7 @@ import {
 } from "@keystone/ui/stepper";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
+import { expect, within } from "storybook/test";
 
 const meta = {
   title: "Components/Stepper",
@@ -190,6 +191,11 @@ export const Default: Story = {
           "A 3-step walkthrough with skeleton placeholders. Each step has different content height to demonstrate the smooth height animation. Navigate with Back/Continue buttons.",
       },
     },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const firstStep = canvas.getByText("This is step one");
+    await expect(firstStep).toBeInTheDocument();
   },
 };
 

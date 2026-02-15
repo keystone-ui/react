@@ -13,6 +13,7 @@ import {
   UnderlineIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/ToggleGroup",
@@ -105,6 +106,16 @@ export const Default: Story = {
       </ToggleGroupItem>
     </ToggleGroup>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const italicButton = canvas.getByRole("button", {
+      name: /toggle italic/i,
+    });
+
+    // Click the italic button to toggle it on
+    await userEvent.click(italicButton);
+    await expect(italicButton).toHaveAttribute("aria-pressed", "true");
+  },
 };
 
 // ---------------------------------------------------------------------------

@@ -28,6 +28,7 @@ import {
   UsersIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/Tabs",
@@ -187,6 +188,18 @@ export const Default: Story = {
       </TabsContent>
     </Tabs>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const tabs = canvas.getAllByRole("tab");
+
+    // Click the second tab ("Analytics")
+    await userEvent.click(tabs[1]);
+
+    // Expect the Analytics tab panel content to be visible
+    await expect(
+      canvas.getByText("Page views are up 25% compared to last month.")
+    ).toBeVisible();
+  },
 };
 
 // Line variant

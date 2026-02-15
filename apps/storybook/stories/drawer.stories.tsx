@@ -34,6 +34,7 @@ import {
   Search,
 } from "lucide-react";
 import * as React from "react";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/Drawer",
@@ -133,6 +134,17 @@ export const Default: Story = {
       </DrawerContent>
     </Drawer>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: /open drawer/i });
+
+    await userEvent.click(trigger);
+    await new Promise((r) => setTimeout(r, 500));
+
+    await expect(
+      document.querySelector("[data-slot='drawer-title']")
+    ).toBeInTheDocument();
+  },
 };
 
 // =============================================================================

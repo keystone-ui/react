@@ -15,6 +15,7 @@ import { addDays, format } from "date-fns";
 import { CalendarIcon, ChevronDownIcon } from "lucide-react";
 import * as React from "react";
 import type { DateRange } from "react-day-picker";
+import { expect, userEvent, within } from "storybook/test";
 
 // ---------------------------------------------------------------------------
 // Meta
@@ -125,6 +126,17 @@ export const Default: Story = {
         </PopoverContent>
       </Popover>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: /pick a date/i });
+    await expect(trigger).toBeInTheDocument();
+
+    await userEvent.click(trigger);
+    await new Promise((r) => setTimeout(r, 500));
+
+    const calendar = document.querySelector("[data-slot='calendar']");
+    await expect(calendar).toBeInTheDocument();
   },
 };
 

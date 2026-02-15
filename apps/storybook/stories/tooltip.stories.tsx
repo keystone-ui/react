@@ -14,6 +14,7 @@ import {
   SearchIcon,
   SettingsIcon,
 } from "lucide-react";
+import { expect, userEvent, within } from "storybook/test";
 
 // ---------------------------------------------------------------------------
 // Meta
@@ -108,6 +109,17 @@ export const Default: Story = {
       </TooltipContent>
     </Tooltip>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: /hover me/i });
+
+    await userEvent.hover(trigger);
+    await new Promise((r) => setTimeout(r, 1000));
+
+    await expect(
+      document.querySelector("[data-slot='tooltip-content']")
+    ).toBeInTheDocument();
+  },
 };
 
 // ---------------------------------------------------------------------------

@@ -579,7 +579,13 @@ describe("AccordionPanel", () => {
     const item = trigger.closest("[data-closed]");
     expect(item).toBeInTheDocument();
 
-    expect(screen.queryByText("Test Panel Content")).not.toBeInTheDocument();
+    // Panel uses keepMounted — content stays in DOM but the panel has
+    // the hidden attribute and data-closed when collapsed.
+    const panel = screen
+      .getByText("Test Panel Content")
+      .closest("[data-closed]");
+    expect(panel).toBeInTheDocument();
+    expect(panel).toHaveAttribute("hidden");
   });
 
   it("is visible when accordion item is open", () => {

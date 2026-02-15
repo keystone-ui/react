@@ -13,6 +13,7 @@ import {
 import { Button } from "@keystone/ui/button";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BluetoothIcon, CircleFadingPlusIcon, Trash2Icon } from "lucide-react";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/AlertDialog",
@@ -134,6 +135,17 @@ export const Basic: Story = {
       </AlertDialogContent>
     </AlertDialog>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: /show dialog/i });
+
+    await userEvent.click(trigger);
+    await new Promise((r) => setTimeout(r, 500));
+
+    await expect(
+      document.querySelector("[data-slot='alert-dialog-title']")
+    ).toBeInTheDocument();
+  },
   parameters: {
     docs: {
       description: {

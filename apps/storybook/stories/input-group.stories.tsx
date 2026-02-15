@@ -19,6 +19,7 @@ import {
   X as XIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/InputGroup",
@@ -97,6 +98,14 @@ export const BasicIconAddon: Story = {
       </InputGroup>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByPlaceholderText("Search...");
+    await expect(input).toBeInTheDocument();
+
+    await userEvent.type(input, "hello world");
+    await expect(input).toHaveValue("hello world");
+  },
 };
 
 // Text Prefix

@@ -26,6 +26,7 @@ import {
   ChevronsLeftIcon,
   ChevronsRightIcon,
 } from "lucide-react";
+import { expect, within } from "storybook/test";
 
 const meta = {
   title: "Components/Pagination",
@@ -125,6 +126,14 @@ export const Default: Story = {
       </PaginationContent>
     </Pagination>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const nav = canvas.getByRole("navigation");
+    await expect(nav).toBeInTheDocument();
+
+    const nextLink = canvas.getByRole("link", { name: /next/i });
+    await expect(nextLink).toBeInTheDocument();
+  },
 };
 
 // ---------------------------------------------------------------------------

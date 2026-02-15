@@ -26,6 +26,7 @@ import {
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RefreshCwIcon } from "lucide-react";
 import { useState } from "react";
+import { expect, within } from "storybook/test";
 
 const meta = {
   title: "Components/InputOTP",
@@ -152,6 +153,11 @@ export const Default: Story = {
       </InputOTPGroup>
     </InputOTP>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const firstSlot = canvas.getAllByRole("textbox")[0];
+    await expect(firstSlot).toBeInTheDocument();
+  },
 };
 
 export const WithSeparator: Story = {

@@ -21,6 +21,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import Autoplay from "embla-carousel-autoplay";
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { expect, within } from "storybook/test";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -173,6 +174,14 @@ export const Default: Story = {
       </Carousel>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const carousel = canvas.getByRole("region");
+    await expect(carousel).toBeInTheDocument();
+
+    const nextButton = canvas.getByRole("button", { name: /next/i });
+    await expect(nextButton).toBeInTheDocument();
+  },
 };
 
 // ---------------------------------------------------------------------------

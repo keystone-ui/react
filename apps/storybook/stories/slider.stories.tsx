@@ -8,6 +8,7 @@ import {
 } from "@keystone/ui/slider";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
+import { expect, within } from "storybook/test";
 
 const meta = {
   title: "Components/Slider",
@@ -90,6 +91,12 @@ export const Basic: Story = {
       </Slider>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const slider = canvas.getByRole("slider");
+
+    await expect(slider).toBeInTheDocument();
+  },
   parameters: {
     docs: {
       description: {

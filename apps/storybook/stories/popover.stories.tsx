@@ -14,6 +14,7 @@ import {
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { XIcon } from "lucide-react";
 import * as React from "react";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/Popover",
@@ -97,6 +98,17 @@ export const Default: Story = {
       </PopoverContent>
     </Popover>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: /open popover/i });
+
+    await userEvent.click(trigger);
+    await new Promise((r) => setTimeout(r, 500));
+
+    await expect(
+      document.querySelector("[data-slot='popover-title']")
+    ).toBeInTheDocument();
+  },
 };
 
 // =============================================================================

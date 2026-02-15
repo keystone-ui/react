@@ -8,6 +8,7 @@
     "version-packages": "changeset version",
     "release": "turbo run build --filter=storybook^... && changeset publish",
     "preview-storybook": "turbo run preview-storybook",
+    "test": "turbo run test",
     "check": "ultracite check",
     "fix": "ultracite fix",
     "prepare": "husky"

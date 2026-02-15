@@ -39,6 +39,7 @@ import {
   SiRipple,
   SiSolana,
 } from "react-icons/si";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/Combobox",
@@ -166,6 +167,17 @@ export const Default: Story = {
       <FieldDescription>Choose your favorite framework.</FieldDescription>
     </Field>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByPlaceholderText(/select a framework/i);
+
+    await userEvent.click(input);
+    await new Promise((r) => setTimeout(r, 500));
+
+    await expect(
+      document.querySelector("[role='listbox']")
+    ).toBeInTheDocument();
+  },
 };
 
 // =============================================================================

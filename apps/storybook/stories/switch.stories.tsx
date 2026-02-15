@@ -8,6 +8,7 @@ import {
 } from "@keystone/ui/field";
 import { Switch } from "@keystone/ui/switch";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/Switch",
@@ -96,6 +97,18 @@ export const Basic: Story = {
       <FieldLabel htmlFor="airplane-mode">Airplane Mode</FieldLabel>
     </Field>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const switchButton = canvas.getByRole("switch");
+
+    // Click to toggle on
+    await userEvent.click(switchButton);
+    await expect(switchButton).toHaveAttribute("aria-checked", "true");
+
+    // Click to toggle off
+    await userEvent.click(switchButton);
+    await expect(switchButton).toHaveAttribute("aria-checked", "false");
+  },
   parameters: {
     docs: {
       description: {

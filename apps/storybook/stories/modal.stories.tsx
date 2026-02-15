@@ -20,6 +20,7 @@ import {
 } from "@keystone/ui/stepper";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/Modal",
@@ -117,6 +118,17 @@ export const Default: Story = {
       </ModalContent>
     </Modal>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: /open modal/i });
+
+    await userEvent.click(trigger);
+    await new Promise((r) => setTimeout(r, 500));
+
+    await expect(
+      document.querySelector("[data-slot='modal-title']")
+    ).toBeInTheDocument();
+  },
 };
 
 // =============================================================================

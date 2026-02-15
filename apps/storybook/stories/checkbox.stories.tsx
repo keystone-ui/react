@@ -10,6 +10,7 @@ import {
 } from "@keystone/ui/field";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/Checkbox",
@@ -96,6 +97,18 @@ export const Basic: Story = {
       </Field>
     </FieldGroup>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const checkbox = canvas.getByRole("checkbox");
+
+    // Click to check
+    await userEvent.click(checkbox);
+    await expect(checkbox).toHaveAttribute("aria-checked", "true");
+
+    // Click to uncheck
+    await userEvent.click(checkbox);
+    await expect(checkbox).toHaveAttribute("aria-checked", "false");
+  },
   parameters: {
     docs: {
       description: {
