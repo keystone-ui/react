@@ -63,7 +63,7 @@
     },
     {
       // Relax rules for Storybook stories (demo/example code)
-      "includes": ["apps/docs/**"],
+      "includes": ["apps/storybook/**"],
       "linter": {
         "rules": {
           "a11y": {

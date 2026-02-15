@@ -43,7 +43,7 @@ Using Turborepo simplifies managing your design system monorepo, as you can have
 
 This Turborepo includes the following packages and applications:
 
-- `apps/docs`: Component documentation site with Storybook
+- `apps/storybook`: Component documentation site with Storybook
 - `packages/ui`: Core React components
 - `packages/typescript-config`: Shared `tsconfig.json`s used throughout the Turborepo
 - `packages/eslint-config`: ESLint preset
@@ -139,7 +139,7 @@ Storybook provides us with an interactive UI playground for our components. This
 
 For example, here's the included Story for our `Button` component:
 
-```js:apps/docs/stories/button.stories.mdx
+```js:apps/storybook/stories/button.stories.mdx
 import { Button } from '@keystone/ui/button';
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 
@@ -190,7 +190,7 @@ To generate your changelog, run `pnpm changeset` locally:
 When you push your code to GitHub, the [GitHub Action](https://github.com/changesets/action) will run the `release` script defined in the root `package.json`:
 
 ```bash
-turbo run build --filter=docs^... && changeset publish
+turbo run build --filter=storybook^... && changeset publish
 ```
 
 Turborepo runs the `build` script for all publishable packages (excluding docs) and publishes the packages to npm. By default, this example includes `acme` as the npm organization. To change this, do the following:

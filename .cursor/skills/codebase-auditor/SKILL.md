@@ -26,7 +26,7 @@ Before auditing, read these files to understand the current conventions:
 
 Determine what to audit based on the user's request:
 
-- **Full audit**: All components in `packages/ui/src/` + all stories in `apps/docs/stories/`
+- **Full audit**: All components in `packages/ui/src/` + all stories in `apps/storybook/stories/`
 - **Component audit**: Specific component(s) — both source and story
 - **Domain audit**: One domain only (architecture, tokens, docs, performance, animation)
 - **Changed files audit**: Only files changed since a given commit or branch
@@ -90,7 +90,7 @@ For each component file, check:
 
 **Source**: `.cursor/skills/docs-curator/SKILL.md`
 
-For each story file in `apps/docs/stories/*.stories.tsx`, check:
+For each story file in `apps/storybook/stories/*.stories.tsx`, check:
 
 - [ ] Imports use subpath pattern — `@keystone/ui/[component]`
 - [ ] No legacy import paths — no `@purposeinplay/core-v2`, no `@radix-ui`
@@ -183,7 +183,7 @@ For components with animations/transitions, check:
 
 If the user requests a focused audit:
 
-- **"Audit the button component"** — Check `packages/ui/src/button.tsx` and `apps/docs/stories/button.stories.tsx` across all 5 domains
+- **"Audit the button component"** — Check `packages/ui/src/button.tsx` and `apps/storybook/stories/button.stories.tsx` across all 5 domains
 - **"Check documentation quality"** — Run Domain 3 on all story files
 - **"Performance audit"** — Run Domain 4 on all component files
 - **"Audit recent changes"** — Run `git diff --name-only HEAD~5` to get changed files, then audit only those

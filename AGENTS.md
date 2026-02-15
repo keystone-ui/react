@@ -36,7 +36,7 @@ pnpm clean            # Remove build artifacts and node_modules
 
 ```bash
 pnpm test --filter=@keystone/ui    # Run component unit tests (Vitest)
-pnpm test --filter=docs            # Run Storybook interaction tests
+pnpm test --filter=storybook       # Run Storybook interaction tests
 ```
 
 ### Release & Versioning
@@ -54,17 +54,17 @@ Use `--filter` with the package name to target a specific workspace:
 
 ```bash
 pnpm build --filter=@keystone/ui      # Build only the UI package
-pnpm build --filter=docs              # Build only the Storybook docs
+pnpm build --filter=storybook         # Build only the Storybook docs
 pnpm dev --filter=@keystone/ui        # Watch-build the UI package
 ```
 
-Main packages: `@keystone/ui`, `@keystone/theme`, `docs`
+Main packages: `@keystone/ui`, `@keystone/theme`, `storybook`
 
 ## Monorepo Structure
 
 ```
 ├── apps/
-│   └── docs/                    # Storybook documentation app
+│   └── storybook/               # Storybook documentation app
 │       └── stories/             # Story files (one per component)
 ├── packages/
 │   ├── ui/                      # @keystone/ui — main component library

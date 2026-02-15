@@ -1,6 +1,6 @@
 ---
 name: docs-writer
-description: Use this agent to create or update technical documentation for Keystone UI components, features, or guides. This includes Storybook stories in /apps/docs/stories/ and (future) Fumadocs MDX documentation. The agent follows Keystone UI's documentation standards emphasizing brevity, accuracy, and practical code examples. Triggers on keywords like write documentation, create story, new component docs, write stories, document component, add storybook story, update docs, create guide.
+description: Use this agent to create or update technical documentation for Keystone UI components, features, or guides. This includes Storybook stories in /apps/storybook/stories/ and (future) Fumadocs MDX documentation. The agent follows Keystone UI's documentation standards emphasizing brevity, accuracy, and practical code examples. Triggers on keywords like write documentation, create story, new component docs, write stories, document component, add storybook story, update docs, create guide.
 ---
 
 # Keystone UI Documentation Writer
@@ -28,7 +28,7 @@ Examine the component file at `/packages/ui/src/[component-name].tsx`:
 
 ### 2. Check Existing Stories
 
-If updating, read the existing story file at `/apps/docs/stories/[component-name].stories.tsx` to understand current coverage and patterns.
+If updating, read the existing story file at `/apps/storybook/stories/[component-name].stories.tsx` to understand current coverage and patterns.
 
 ### 3. Cross-Reference Cursor Rules
 
@@ -54,7 +54,7 @@ Confirm the component has a subpath export in `/packages/ui/package.json`. If it
 
 ### File Template
 
-Create story files at `/apps/docs/stories/[component-name].stories.tsx`:
+Create story files at `/apps/storybook/stories/[component-name].stories.tsx`:
 
 ```tsx
 import { Component, ComponentPart } from "@keystone/ui/component";

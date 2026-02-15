@@ -6,7 +6,7 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build --filter=docs^... && changeset publish",
+    "release": "turbo run build --filter=storybook^... && changeset publish",
     "preview-storybook": "turbo run preview-storybook",
     "check": "ultracite check",
     "fix": "ultracite fix",

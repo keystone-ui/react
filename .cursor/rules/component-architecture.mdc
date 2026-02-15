@@ -235,4 +235,4 @@ Test files are co-located as siblings: `button.test.tsx` next to `button.tsx`.
 2. Add `"./my-component": "./src/my-component.tsx"` to `package.json` exports
 3. Add the entry to `tsup.config.ts` entryPoints
 4. Add the entry to `_registry.ts`
-5. Create `apps/docs/stories/my-component.stories.tsx` for documentation
+5. Create `apps/storybook/stories/my-component.stories.tsx` for documentation
