@@ -21,14 +21,44 @@ Keystone UI is a React component library built as a pnpm monorepo managed by Tur
 
 ## Development Commands
 
+### Core Commands
+
 ```bash
+pnpm install          # Install all dependencies
 pnpm dev              # Start Storybook dev server (port 6006)
-pnpm build            # Build all packages
+pnpm build            # Build all packages (via Turborepo)
 pnpm check            # Run Biome linting/formatting checks
 pnpm fix              # Auto-fix Biome issues
-pnpm preview-storybook # Preview built Storybook
-pnpm changeset        # Create a changeset for versioning
+pnpm clean            # Remove build artifacts and node_modules
 ```
+
+### Testing
+
+```bash
+pnpm test --filter=@keystone/ui    # Run component unit tests (Vitest)
+pnpm test --filter=docs            # Run Storybook interaction tests
+```
+
+### Release & Versioning
+
+```bash
+pnpm changeset           # Create a changeset for versioning
+pnpm version-packages    # Apply changesets to bump versions
+pnpm release             # Build and publish packages
+pnpm preview-storybook   # Preview built Storybook
+```
+
+### Package-Specific Commands
+
+Use `--filter` with the package name to target a specific workspace:
+
+```bash
+pnpm build --filter=@keystone/ui      # Build only the UI package
+pnpm build --filter=docs              # Build only the Storybook docs
+pnpm dev --filter=@keystone/ui        # Watch-build the UI package
+```
+
+Main packages: `@keystone/ui`, `@keystone/theme`, `docs`
 
 ## Monorepo Structure
 
