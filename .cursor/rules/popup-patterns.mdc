@@ -1,0 +1,130 @@
+---
+description: Popup component conventions for DropdownMenu, Select, Combobox, and Popover. Apply when creating or editing popup/overlay components in packages/ui/.
+globs: packages/ui/src/dropdown-menu.tsx,packages/ui/src/select.tsx,packages/ui/src/combobox.tsx,packages/ui/src/popover.tsx
+alwaysApply: false
+---
+# Popup Component Patterns
+
+Consolidated conventions for the four popup components: DropdownMenu, Select, Combobox, and Popover. These components share container styling, item sizing, and animations.
+
+## Item Height Scale
+
+All popup item components use the shared `POPUP_ITEM_HEIGHT` constant from `packages/ui/src/utils.ts`:
+
+```ts
+export const POPUP_ITEM_HEIGHT = "h-9 [[data-size=compact]_&]:h-8";
+```
+
+| Size | Class | Pixels | Use case |
+|---|---|---|---|
+| **default** | `h-9` | 36px | Standard menus and dropdowns — comfortable touch targets, good for most interfaces |
+| **compact** | `h-8` | 32px | Dense lists with many items — reduces vertical space while staying accessible |
+
+### How it works
+
+The content component (`DropdownMenuContent`, `SelectContent`, `ComboboxContent`) accepts a `size` prop:
+
+```tsx
+size?: "default" | "compact";
+```
+
+This sets `data-size="compact"` on the content container. The `POPUP_ITEM_HEIGHT` class uses Tailwind's descendant selector `[[data-size=compact]_&]:h-8` to detect the parent attribute and override `h-9` to `h-8` on all items inside.
+
+### Usage
+
+```tsx
+// Default — 36px items
+<DropdownMenuContent>
+  <DropdownMenuItem>Profile</DropdownMenuItem>
+  <DropdownMenuItem>Settings</DropdownMenuItem>
+</DropdownMenuContent>
+
+// Compact — 32px items
+<DropdownMenuContent size="compact">
+  <DropdownMenuItem>Profile</DropdownMenuItem>
+  <DropdownMenuItem>Settings</DropdownMenuItem>
+</DropdownMenuContent>
+
+// Same pattern for Select and Combobox
+<SelectContent size="compact">...</SelectContent>
+<ComboboxContent size="compact">...</ComboboxContent>
+```
+
+### Rules
+
+- **Always use `POPUP_ITEM_HEIGHT`** — never hardcode `h-9` or `h-8` on popup items directly
+- **Import from `./utils`**: `import { cn, POPUP_ITEM_HEIGHT } from "./utils";`
+- **Applies to all item types**: MenuItem, SubTrigger, CheckboxItem, RadioItem, SelectItem, ComboboxItem
+- **Popover does not use item heights** — Popover has arbitrary content, not standardized items
+
+## Components That Use `POPUP_ITEM_HEIGHT`
+
+| Component | Items that consume the height |
+|---|---|
+| **DropdownMenu** | `DropdownMenuItem`, `DropdownMenuSubTrigger`, `DropdownMenuCheckboxItem`, `DropdownMenuRadioItem` |
+| **Select** | `SelectItem` |
+| **Combobox** | `ComboboxItem` |
+
+## Container Pattern
+
+All popup containers share this composite recipe:
+
+```
+bg-popover text-popover-foreground ring-popup-ring ring-1 rounded-lg shadow-lg z-50 overflow-hidden
+```
+
+| Property | Value | Notes |
+|---|---|---|
+| Background | `bg-popover` | Semantic token — adapts to light/dark |
+| Text | `text-popover-foreground` | Set on popup root |
+| Ring | `ring-popup-ring ring-1` | Subtle border via custom token |
+| Radius | `rounded-lg` | 8px for main popups |
+| Shadow | `shadow-lg` | Elevated appearance |
+| Z-index | `z-50` | Above page content |
+| Overflow | `overflow-hidden` | Clips content to rounded corners |
+
+### Exceptions
+
+- **Sub-menus** (`DropdownMenuSubContent`): `rounded-md` and `min-w-24` instead of `rounded-lg` and `min-w-32`
+- **PopoverContent**: `overflow-auto` instead of `overflow-hidden` (popover content can be arbitrarily long)
+
+Always apply these classes together. Do NOT mix shadow or ring values across popup types.
+
+## Animation Pattern
+
+All four popup components share identical enter/exit animations:
+
+```
+data-open:animate-in data-closed:animate-out
+data-closed:fade-out-0 data-open:fade-in-0
+data-closed:zoom-out-95 data-open:zoom-in-95
+data-[side=bottom]:slide-in-from-top-2
+data-[side=left]:slide-in-from-right-2
+data-[side=right]:slide-in-from-left-2
+data-[side=top]:slide-in-from-bottom-2
+data-[side=inline-start]:slide-in-from-right-2
+data-[side=inline-end]:slide-in-from-left-2
+duration-100
+```
+
+Copy this block exactly. Do not modify individual animation values across popup types — they must stay in sync.
+
+## Separator Pattern
+
+Popup separators use `bg-border-muted` (subtle, lower contrast), NOT `bg-border` (which is for standalone Separator components):
+
+```tsx
+<DropdownMenuSeparator className="-mx-1 my-1 h-px bg-border-muted" />
+```
+
+## Creating a New Popup Component
+
+If you ever need to add a new popup-based component:
+
+1. Import `POPUP_ITEM_HEIGHT` from `./utils` for item sizing
+2. Accept `size?: "default" | "compact"` on the content component
+3. Set `data-size={size}` on the content container
+4. Apply the container recipe classes exactly as listed above
+5. Apply the animation pattern exactly as listed above
+6. Use `bg-border-muted` for separators inside the popup
+7. Use `ring-popup-ring` for the container ring — not `ring-border/10`

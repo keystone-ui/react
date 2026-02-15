@@ -86,38 +86,38 @@ Do NOT use `[&_svg]:size-4` which forces size on all SVGs with no override. Alwa
 
 Import from `packages/ui/src/utils.ts`:
 
-- `POPUP_ITEM_HEIGHT` — shared height class (`h-9` with compact variant) for popup list items in DropdownMenu, Select, and Combobox
+- `POPUP_ITEM_HEIGHT` — shared height class for popup list items in DropdownMenu, Select, and Combobox
 
-## Popup Container Pattern
+### Popup Item Height Scale
 
-All popup containers (SelectContent, ComboboxContent, DropdownMenuContent, PopoverContent) use this composite recipe:
+All popup item components (DropdownMenuItem, SelectItem, ComboboxItem, and their variants) use the `POPUP_ITEM_HEIGHT` constant to ensure consistent sizing:
+
 ```
-bg-popover text-popover-foreground ring-popup-ring ring-1 rounded-lg shadow-lg z-50 overflow-hidden
-```
-
-Sub-menus (DropdownMenuSubContent) use `rounded-md` and `min-w-24` instead of `rounded-lg` and `min-w-32`.
-
-Exception: PopoverContent uses `overflow-auto` instead of `overflow-hidden` because popover content can be arbitrarily long.
-
-Always apply these classes together. Do NOT mix shadow or ring values across popup types.
-
-## Popup Animations
-
-All four popup components (Select, Combobox, DropdownMenu, Popover) share an identical animation pattern:
-```
-data-open:animate-in data-closed:animate-out
-data-closed:fade-out-0 data-open:fade-in-0
-data-closed:zoom-out-95 data-open:zoom-in-95
-data-[side=bottom]:slide-in-from-top-2
-data-[side=left]:slide-in-from-right-2
-data-[side=right]:slide-in-from-left-2
-data-[side=top]:slide-in-from-bottom-2
-data-[side=inline-start]:slide-in-from-right-2
-data-[side=inline-end]:slide-in-from-left-2
-duration-100
+h-9 [[data-size=compact]_&]:h-8
 ```
 
-The Accordion uses its own custom animations: `data-[open]:animate-accordion-down data-[closed]:animate-accordion-up`.
+| Size | Height | Pixels | When to use |
+|---|---|---|---|
+| `default` | `h-9` | 36px | Standard menus and dropdowns — comfortable touch targets |
+| `compact` | `h-8` | 32px | Dense lists with many items — set `size="compact"` on the Content component |
+
+The `size` prop is available on `DropdownMenuContent`, `SelectContent`, and `ComboboxContent`:
+
+```tsx
+// Default (36px items)
+<DropdownMenuContent>...</DropdownMenuContent>
+
+// Compact (32px items)
+<DropdownMenuContent size="compact">...</DropdownMenuContent>
+```
+
+The compact size activates via `data-size="compact"` on the content container, which the `POPUP_ITEM_HEIGHT` class detects using Tailwind's `[[data-size=compact]_&]:` descendant selector. Always use the shared constant — never hardcode `h-9` or `h-8` on popup items directly.
+
+## Popup Patterns
+
+For popup container styling, animations, item heights, and separator conventions, see `.cursor/rules/popup-patterns.mdc`.
+
+The Accordion uses its own custom animations (not the shared popup pattern): `data-[open]:animate-accordion-down data-[closed]:animate-accordion-up`.
 
 ## Transition Properties
 
