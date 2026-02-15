@@ -1,6 +1,7 @@
 {
   "name": "@keystone/theme",
   "version": "0.0.0",
+  "license": "MIT",
   "exports": {
     ".": "./src/index.css"
   },
@@ -17,5 +18,8 @@
   },
   "dependencies": {
     "tailwindcss": "^4.1.18"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

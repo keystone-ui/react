@@ -85,6 +85,12 @@ export const ui: Registry = [
     files: [{ path: "ui/card.tsx", type: "registry:ui" }],
   },
   {
+    name: "circular-progress",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react", "class-variance-authority"],
+    files: [{ path: "ui/circular-progress.tsx", type: "registry:ui" }],
+  },
+  {
     name: "checkbox",
     type: "registry:ui",
     dependencies: ["@base-ui/react"],
@@ -219,6 +225,12 @@ export const ui: Registry = [
     type: "registry:ui",
     dependencies: ["@base-ui/react"],
     files: [{ path: "ui/radio-group.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "resizable",
+    type: "registry:ui",
+    dependencies: ["react-resizable-panels"],
+    files: [{ path: "ui/resizable.tsx", type: "registry:ui" }],
   },
   {
     name: "select",

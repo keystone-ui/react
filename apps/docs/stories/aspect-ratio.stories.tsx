@@ -37,7 +37,7 @@ import { AspectRatio } from "@keystone/ui/aspect-ratio";
       description: "Additional CSS classes",
     },
   },
-} as Meta<typeof AspectRatio>;
+} satisfies Meta<typeof AspectRatio>;
 
 export default meta;
 type Story = StoryObj<typeof AspectRatio>;

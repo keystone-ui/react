@@ -97,7 +97,7 @@ import { CheckCircle2Icon } from "lucide-react";
       description: "Additional CSS classes to apply to the alert",
     },
   },
-} as Meta<typeof Alert>;
+} satisfies Meta<typeof Alert>;
 
 export default meta;
 type Story = StoryObj<typeof Alert>;

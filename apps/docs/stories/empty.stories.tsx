@@ -79,7 +79,7 @@ import { FolderCodeIcon } from "lucide-react";
       description: "Additional CSS classes to apply to the empty state",
     },
   },
-} as Meta<typeof Empty>;
+} satisfies Meta<typeof Empty>;
 
 export default meta;
 type Story = StoryObj<typeof Empty>;

@@ -1,4 +1,5 @@
 import { Loader2Icon } from "lucide-react";
+import type * as React from "react";
 
 import { cn } from "./utils";
 

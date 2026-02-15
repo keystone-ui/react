@@ -104,10 +104,6 @@ import { Button } from "@keystone/ui/button";
       defaultValue: false,
       description: "Whether the button shows a loading spinner",
     },
-    href: {
-      control: "text",
-      description: "When provided, the button renders as an anchor element",
-    },
     className: {
       control: "text",
       description: "Additional CSS classes to apply to the button",
@@ -118,7 +114,7 @@ import { Button } from "@keystone/ui/button";
       defaultValue: "Button",
     },
   },
-} as Meta<typeof Button>;
+} satisfies Meta<typeof Button>;
 
 export default meta;
 type Story = StoryObj<typeof Button>;

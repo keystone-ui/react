@@ -52,7 +52,7 @@ import { Spinner } from "@keystone/ui/spinner";
       description: "Additional CSS classes (e.g. `size-6` to change size)",
     },
   },
-} as Meta<typeof Spinner>;
+} satisfies Meta<typeof Spinner>;
 
 export default meta;
 type Story = StoryObj<typeof Spinner>;

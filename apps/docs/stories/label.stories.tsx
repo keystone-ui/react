@@ -52,7 +52,7 @@ import { Label } from "@keystone/ui/label";
       description: "Additional CSS classes to apply to the label",
     },
   },
-} as Meta<typeof Label>;
+} satisfies Meta<typeof Label>;
 
 export default meta;
 type Story = StoryObj<typeof Label>;

@@ -141,7 +141,7 @@ See the [Base UI Toast docs](https://base-ui.com/react/components/toast) for the
       },
     },
   },
-} as Meta<typeof Toaster>;
+} satisfies Meta<typeof Toaster>;
 
 export default meta;
 type Story = StoryObj<typeof Toaster>;

@@ -54,7 +54,7 @@ Wrap skeletons in a \`SkeletonGroup\` to apply a synchronized shimmer sweep acro
       description: "Additional CSS classes for sizing and shape",
     },
   },
-} as Meta<typeof Skeleton>;
+} satisfies Meta<typeof Skeleton>;
 
 export default meta;
 type Story = StoryObj<typeof Skeleton>;

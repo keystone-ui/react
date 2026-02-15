@@ -122,7 +122,7 @@ Use **Item** if you only need to display content such as a title, description, a
       description: "Additional CSS classes",
     },
   },
-} as Meta<typeof Item>;
+} satisfies Meta<typeof Item>;
 
 export default meta;
 type Story = StoryObj<typeof Item>;

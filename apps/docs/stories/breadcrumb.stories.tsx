@@ -66,7 +66,7 @@ import {
       },
     },
   },
-} as Meta<typeof Breadcrumb>;
+} satisfies Meta<typeof Breadcrumb>;
 
 export default meta;
 type Story = StoryObj<typeof Breadcrumb>;

@@ -116,7 +116,7 @@ import { Badge } from "@keystone/ui/badge";
       defaultValue: "Badge",
     },
   },
-} as Meta<typeof Badge>;
+} satisfies Meta<typeof Badge>;
 
 export default meta;
 type Story = StoryObj<typeof Badge>;

@@ -121,7 +121,7 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@keystone/ui/input
       description: "Additional CSS classes to apply to the input",
     },
   },
-} as Meta<typeof Input>;
+} satisfies Meta<typeof Input>;
 
 export default meta;
 type Story = StoryObj<typeof Input>;
