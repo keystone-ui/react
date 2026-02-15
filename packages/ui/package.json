@@ -151,6 +151,11 @@
         "import": "./dist/carousel.js",
         "require": "./dist/carousel.cjs"
       },
+      "./circular-progress": {
+        "types": "./dist/circular-progress.d.ts",
+        "import": "./dist/circular-progress.js",
+        "require": "./dist/circular-progress.cjs"
+      },
       "./alert": {
         "types": "./dist/alert.d.ts",
         "import": "./dist/alert.js",

@@ -90,7 +90,16 @@ import { Button } from "@keystone/ui/button";
     },
     size: {
       control: "select",
-      options: ["xs", "sm", "default", "lg", "icon"],
+      options: [
+        "xs",
+        "sm",
+        "default",
+        "lg",
+        "icon",
+        "icon-xs",
+        "icon-sm",
+        "icon-lg",
+      ],
       defaultValue: "default",
       description: "The size of the button",
     },

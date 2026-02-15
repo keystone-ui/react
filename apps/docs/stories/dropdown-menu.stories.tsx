@@ -53,6 +53,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/Dropdown Menu",
@@ -109,6 +110,18 @@ type Story = StoryObj<typeof DropdownMenu>;
 // Default
 // =============================================================================
 export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: /open/i });
+    await expect(trigger).toBeVisible();
+
+    // Open the menu
+    await userEvent.click(trigger);
+
+    // Verify menu items are visible
+    const profile = await canvas.findByText("Profile");
+    await expect(profile).toBeVisible();
+  },
   render: () => (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant="outline">Open</Button>} />

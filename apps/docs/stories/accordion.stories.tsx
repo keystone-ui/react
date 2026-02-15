@@ -7,8 +7,7 @@ import {
 } from "@keystone/ui/accordion";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Plus, Settings } from "lucide-react";
-
-// import { Button } from "@keystone/ui/button";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta: Meta<typeof Accordion> = {
   title: "Components/Accordion",
@@ -26,7 +25,7 @@ import {
   AccordionHeader,
   AccordionTrigger,
   AccordionPanel 
-} from "@purposeinplay/core-v2";
+} from "@keystone/ui/accordion";
 
 <Accordion>
   <AccordionItem value="item-1">
@@ -49,11 +48,11 @@ import {
 
 ## Components
 
-- \`Accordion.Root\` - The root container
-- \`Accordion.Item\` - A single accordion item
-- \`Accordion.Header\` - The header containing the trigger
-- \`Accordion.Trigger\` - The button that toggles the panel
-- \`Accordion.Panel\` - The expandable content panel
+- \`Accordion\` - The root container
+- \`AccordionItem\` - A single accordion item
+- \`AccordionHeader\` - The header containing the trigger
+- \`AccordionTrigger\` - The button that toggles the panel
+- \`AccordionPanel\` - The expandable content panel
 `,
       },
     },
@@ -136,6 +135,18 @@ export const BoxVariant: Story = {
       ))}
     </Accordion>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const triggers = canvas.getAllByRole("button");
+    const firstTrigger = triggers[0];
+
+    // Panel should be collapsed initially
+    await expect(firstTrigger).toHaveAttribute("aria-expanded", "false");
+
+    // Click to expand
+    await userEvent.click(firstTrigger);
+    await expect(firstTrigger).toHaveAttribute("aria-expanded", "true");
+  },
 };
 
 export const TableVariant: Story = {
@@ -286,6 +297,28 @@ export const WithCustomLayout: Story = {
       description: {
         story:
           "Example of a more complex custom layout with icons and multiple text elements.",
+      },
+    },
+  },
+};
+
+export const Disabled: Story = {
+  render: () => (
+    <Accordion disabled variant="box">
+      {items.map((item) => (
+        <AccordionItem key={item.id} value={item.id}>
+          <AccordionHeader>
+            <AccordionTrigger>{item.title}</AccordionTrigger>
+          </AccordionHeader>
+          <AccordionPanel>{item.content}</AccordionPanel>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "All items are disabled and cannot be expanded.",
       },
     },
   },

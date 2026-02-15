@@ -19,6 +19,7 @@ import { Item, ItemContent, ItemMedia, ItemTitle } from "@keystone/ui/item";
 import { Spinner } from "@keystone/ui/spinner";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ArrowUpIcon } from "lucide-react";
+import { expect, within } from "storybook/test";
 
 const meta = {
   title: "Components/Spinner",
@@ -67,6 +68,12 @@ export const Default: Story = {
           "A spinner inside an Item component, showing a processing state.",
       },
     },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const spinner = canvas.getByRole("status");
+    await expect(spinner).toBeVisible();
+    await expect(spinner).toHaveAttribute("aria-label", "Loading");
   },
   render: () => (
     <div className="flex w-full max-w-xs flex-col gap-4 [--radius:1rem]">
@@ -148,11 +155,11 @@ export const WithBadge: Story = {
         <Spinner data-icon="inline-start" />
         Syncing
       </Badge>
-      <Badge variant="blue">
+      <Badge className="border-transparent bg-blue-500/15 text-blue-700 dark:text-blue-400">
         <Spinner data-icon="inline-start" />
         Uploading
       </Badge>
-      <Badge variant="amber">
+      <Badge className="border-transparent bg-amber-500/15 text-amber-700 dark:text-amber-400">
         <Spinner data-icon="inline-start" />
         Processing
       </Badge>

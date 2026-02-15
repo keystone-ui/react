@@ -369,7 +369,7 @@ function CarouselDots({ className, ...props }: React.ComponentProps<"div">) {
         <button
           aria-label={`Go to slide ${index + 1}`}
           className={cn(
-            "h-2 cursor-pointer rounded-full transition-all duration-300",
+            "h-2 cursor-pointer rounded-full transition-[width,background-color] duration-200",
             index === selectedIndex
               ? "w-4 bg-foreground"
               : "w-2 bg-foreground/25 hover:bg-foreground/50"

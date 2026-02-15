@@ -103,14 +103,15 @@ const MyComponentContext = React.createContext<...>(...);
 // 6. Sub-components (private, not exported)
 // ... or exported if they are part of the public API
 
-// 7. Main component
-const MyComponent = React.forwardRef<...>((...) => { ... });
-MyComponent.displayName = "MyComponent";
+// 7. Main component (React 19 — refs pass through props automatically, no forwardRef needed)
+function MyComponent({ ref, className, ...props }: MyComponentProps) { ... }
 
 // 8. Exports (named, at the bottom)
 export { MyComponent, MySubComponent };
 export type { MyComponentProps };
 ```
+
+**Note on `forwardRef`**: This project targets React 19+, where `forwardRef` is deprecated. Refs are forwarded automatically through props. Do NOT use `React.forwardRef` — accept `ref` as a regular prop instead. Setting `displayName` is optional since function declarations already provide a name for DevTools.
 
 ## No Barrel Files
 

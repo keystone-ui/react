@@ -15,6 +15,10 @@ import { Button, buttonVariants } from "./button";
 import { NativeSelect } from "./native-select";
 import { cn } from "./utils";
 
+// Hoisted to module scope — pure function with no parameters, avoids repeated
+// allocations on every render (CalendarDayButton alone renders ~42 instances).
+const defaultClassNames = getDefaultClassNames();
+
 // =============================================================================
 // Calendar
 // =============================================================================
@@ -35,8 +39,6 @@ function Calendar({
    */
   buttonVariant?: React.ComponentProps<typeof Button>["variant"];
 }) {
-  const defaultClassNames = getDefaultClassNames();
-
   return (
     <DayPicker
       captionLayout={captionLayout}
@@ -210,8 +212,6 @@ function CalendarDayButton({
   modifiers,
   ...props
 }: React.ComponentProps<typeof DayButton>) {
-  const defaultClassNames = getDefaultClassNames();
-
   const ref = React.useRef<HTMLButtonElement>(null);
   React.useEffect(() => {
     if (modifiers.focused) {

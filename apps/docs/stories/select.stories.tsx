@@ -21,6 +21,7 @@ import { Switch } from "@keystone/ui/switch";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AppleIcon, BananaIcon, CherryIcon, GrapeIcon } from "lucide-react";
 import { useState } from "react";
+import { expect, userEvent, within } from "storybook/test";
 
 // Custom checkbox indicator for multiple selection
 function CheckboxIndicator() {
@@ -138,6 +139,18 @@ export const Default: Story = {
       <FieldDescription>Choose your favorite fruit.</FieldDescription>
     </Field>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("combobox");
+    await expect(trigger).toBeVisible();
+
+    // Open the select
+    await userEvent.click(trigger);
+
+    // Verify items are visible
+    const apple = await canvas.findByText("Apple");
+    await expect(apple).toBeVisible();
+  },
 };
 
 // Grouped items

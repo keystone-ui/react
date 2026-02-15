@@ -15,6 +15,7 @@ import {
   UsersIcon,
   XIcon,
 } from "lucide-react";
+import { expect, within } from "storybook/test";
 
 const meta = {
   title: "Components/Badge",
@@ -128,6 +129,12 @@ type Story = StoryObj<typeof Badge>;
 export const Default: Story = {
   args: {
     children: "Badge",
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const badge = canvas.getByText("Badge");
+    await expect(badge).toBeVisible();
+    await expect(badge).toHaveAttribute("data-slot", "badge");
   },
 };
 
