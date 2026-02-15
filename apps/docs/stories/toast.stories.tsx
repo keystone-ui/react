@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Toaster, toast } from "@keystone/ui/toast";
 import { Button } from "@keystone/ui/button";
+import type { ToasterProps } from "@keystone/ui/toast";
+import { Toaster, toast } from "@keystone/ui/toast";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { UsersIcon } from "lucide-react";
 
 // ---------------------------------------------------------------------------
@@ -50,7 +51,7 @@ const meta = {
     docs: {
       description: {
         component: `
-A toast notification component powered by [Sonner](https://sonner.emilkowal.dev/). Renders non-intrusive feedback messages that appear temporarily and auto-dismiss.
+A toast notification component built on [Base UI Toast](https://base-ui.com/react/components/toast). Renders non-intrusive feedback messages that appear temporarily and auto-dismiss.
 
 The \`Toaster\` component is a provider — mount it once at the root of your app. Use the imperative \`toast()\` function to trigger notifications from anywhere.
 
@@ -96,20 +97,11 @@ toast.custom((t) => (
     <button onClick={() => toast.dismiss(t)}>Close</button>
   </div>
 ));
-
-// Custom position
-toast("Hello", { position: "top-center" });
 \`\`\`
 
 ## Theme
 
-The Toaster auto-detects light/dark mode by watching the \`.dark\` class on \`<html>\`. You can also pass a \`theme\` prop explicitly:
-
-\`\`\`tsx
-<Toaster theme="dark" />
-<Toaster theme="light" />
-<Toaster theme="system" />
-\`\`\`
+The Toaster inherits your app's light/dark theme automatically via Tailwind's \`.dark\` class — no additional configuration needed.
 
 ## Semantic Colors
 
@@ -124,10 +116,10 @@ toast("Saved", { duration: 10000 });
 // Persistent toast — stays open until dismissed
 toast("Please confirm", { duration: Infinity });
 
-// Show a close button (X) on a specific toast
+// Show/hide close button per toast
 toast("Hello", { closeButton: true });
 
-// Or enable the close button globally
+// Or control globally via Toaster
 <Toaster closeButton />
 
 // Prevent the user from swiping/clicking to dismiss
@@ -136,18 +128,15 @@ toast.warning("Critical action", { dismissible: false });
 
 ## Key Props
 
-- \`duration\` — Auto-close delay in ms. Default ~4 000. Set \`Infinity\` to keep open.
-- \`closeButton\` — Show an X close button on all toasts. Pass on \`Toaster\` or per-toast.
+- \`duration\` — Auto-close delay in ms. Default 5 000. Set \`Infinity\` to keep open.
+- \`closeButton\` — Show an × close button on all toasts. Pass on \`Toaster\` or per-toast.
 - \`dismissible\` — Whether the toast can be swiped/clicked away. Default \`true\`.
-- \`onAutoClose\` — Callback when a toast auto-closes after its duration.
-- \`onDismiss\` — Callback when a toast is manually dismissed by the user.
-- \`position\` — Where toasts appear. Default \`"bottom-right"\`.
-
-> **Note on \`richColors\`:** Sonner provides a \`richColors\` prop that applies colored backgrounds to semantic toasts. This component already applies its own coloring (icon + title only), so the two approaches should not be combined — using \`richColors\` alongside the default styling will produce conflicting visuals.
+- \`position\` — Where toasts appear (on the \`Toaster\`). Default \`"bottom-right"\`.
+- \`limit\` — Maximum simultaneous toasts. Default \`3\`.
 
 ## API Reference
 
-See the [Sonner documentation](https://sonner.emilkowal.dev/) for the full API reference, including custom JSX toasts, action buttons, dismiss behavior, and more.
+See the [Base UI Toast docs](https://base-ui.com/react/components/toast) for the full primitive API reference.
 `,
       },
     },
@@ -163,17 +152,13 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "A basic default toast triggered with a simple string message.",
+        story: "A basic default toast triggered with a simple string message.",
       },
     },
   },
   render: () => (
     <div>
-      <Button
-        variant="outline"
-        onClick={() => toast("Event has been created")}
-      >
+      <Button onClick={() => toast("Event has been created")} variant="outline">
         Show Toast
       </Button>
     </div>
@@ -187,7 +172,7 @@ export const Types: Story = {
     docs: {
       description: {
         story:
-          "All toast types: default, success, info, warning, error, and promise. Each type displays a distinct icon and semantic color on the icon and title.",
+          "All toast types: default, success, info, warning, error, and loading. Each type displays a distinct icon and semantic color on the icon and title.",
       },
     },
   },
@@ -195,36 +180,36 @@ export const Types: Story = {
     <div>
       <div className="flex flex-wrap gap-2">
         <Button
-          variant="outline"
           onClick={() => toast("Event has been created")}
+          variant="outline"
         >
           Default
         </Button>
         <Button
-          variant="outline"
           onClick={() => toast.success("Event has been created")}
+          variant="outline"
         >
           Success
         </Button>
         <Button
-          variant="outline"
           onClick={() =>
             toast.info("Be at the area 10 minutes before the event time")
           }
+          variant="outline"
         >
           Info
         </Button>
         <Button
-          variant="outline"
           onClick={() =>
             toast.warning("Event start time cannot be earlier than 8am")
           }
+          variant="outline"
         >
           Warning
         </Button>
         <Button
-          variant="outline"
           onClick={() => toast.error("Event has not been created")}
+          variant="outline"
         >
           Error
         </Button>
@@ -248,47 +233,43 @@ export const WithDescription: Story = {
     <div>
       <div className="flex flex-wrap gap-2">
         <Button
-          variant="outline"
           onClick={() =>
             toast("Event has been created", {
               description: "Monday, January 3rd at 6:00pm",
             })
           }
+          variant="outline"
         >
           Default
         </Button>
         <Button
-          variant="outline"
           onClick={() =>
             toast.success("You have upgraded your plan", {
               description: "You can continue using HeroUI Chat",
             })
           }
+          variant="outline"
         >
           Success
         </Button>
         <Button
-          variant="outline"
           onClick={() =>
             toast.error("Storage is full", {
-              description:
-                "Remove files to release space.",
+              description: "Remove files to release space.",
             })
           }
+          variant="outline"
         >
           Error
         </Button>
         <Button
-          variant="outline"
           onClick={() =>
-            toast.warning(
-              "Your session is about to expire due to inactivity",
-              {
-                description:
-                  "You will be automatically logged out in 5 minutes. Please save any unsaved changes before your session ends.",
-              }
-            )
+            toast.warning("Your session is about to expire due to inactivity", {
+              description:
+                "You will be automatically logged out in 5 minutes. Please save any unsaved changes before your session ends.",
+            })
           }
+          variant="outline"
         >
           Long Text
         </Button>
@@ -312,7 +293,6 @@ export const WithAction: Story = {
     <div>
       <div className="flex flex-wrap gap-2">
         <Button
-          variant="outline"
           onClick={() =>
             toast("Event has been created", {
               action: {
@@ -321,25 +301,25 @@ export const WithAction: Story = {
               },
             })
           }
+          variant="outline"
         >
           With Action
         </Button>
         <Button
-          variant="outline"
           onClick={() =>
             toast("You have been invited to join a team", {
               description: "Bob sent you an invitation to join HeroUI team",
               cancel: {
                 label: "Dismiss",
-                onClick: () => {},
+                onClick: () => undefined,
               },
             })
           }
+          variant="outline"
         >
           With Dismiss
         </Button>
         <Button
-          variant="outline"
           onClick={() =>
             toast.error("Storage is full", {
               description:
@@ -350,24 +330,25 @@ export const WithAction: Story = {
               },
             })
           }
+          variant="outline"
         >
           Destructive Action
         </Button>
         <Button
-          variant="outline"
           onClick={() =>
             toast.success("Payment processed", {
               description: "Your invoice has been sent to your email",
               action: {
                 label: "View",
-                onClick: () => {},
+                onClick: () => undefined,
               },
               cancel: {
                 label: "Dismiss",
-                onClick: () => {},
+                onClick: () => undefined,
               },
             })
           }
+          variant="outline"
         >
           Both Buttons
         </Button>
@@ -391,7 +372,6 @@ export const PromiseToast: Story = {
     <div>
       <div className="flex flex-wrap gap-2">
         <Button
-          variant="outline"
           onClick={() => {
             toast.promise(uploadFile(), {
               loading: "Uploading file...",
@@ -400,11 +380,11 @@ export const PromiseToast: Story = {
               error: "Failed to upload file",
             });
           }}
+          variant="outline"
         >
           Upload File
         </Button>
         <Button
-          variant="outline"
           onClick={() => {
             toast.promise(createEvent(), {
               loading: "Creating event...",
@@ -412,11 +392,11 @@ export const PromiseToast: Story = {
               error: (err) => err.message,
             });
           }}
+          variant="outline"
         >
           Create Event (Error)
         </Button>
         <Button
-          variant="outline"
           onClick={() => {
             toast.promise(saveData(), {
               loading: "Saving changes...",
@@ -424,11 +404,11 @@ export const PromiseToast: Story = {
               error: (err) => err.message,
             });
           }}
+          variant="outline"
         >
           Save Data (Random)
         </Button>
         <Button
-          variant="outline"
           onClick={() => {
             toast.promise(fetchUser(), {
               loading: "Loading user...",
@@ -436,6 +416,7 @@ export const PromiseToast: Story = {
               error: "Failed to fetch user",
             });
           }}
+          variant="outline"
         >
           Fetch User
         </Button>
@@ -451,7 +432,7 @@ export const ManualLoading: Story = {
     docs: {
       description: {
         story:
-          'Manually control loading state with `toast.loading()` and update the same toast by passing its `id` to `toast.success()` or `toast.error()`. The toast transitions in-place without creating a new one.',
+          "Manually control loading state with `toast.loading()` and update the same toast by passing its `id` to `toast.success()` or `toast.error()`. The toast transitions in-place without creating a new one.",
       },
     },
   },
@@ -459,7 +440,6 @@ export const ManualLoading: Story = {
     <div>
       <div className="flex flex-wrap gap-2">
         <Button
-          variant="outline"
           onClick={() => {
             const id = toast.loading("Uploading file...", {
               description: "Please wait while we upload your file",
@@ -471,11 +451,11 @@ export const ManualLoading: Story = {
               });
             }, 3000);
           }}
+          variant="outline"
         >
           Upload (Success)
         </Button>
         <Button
-          variant="outline"
           onClick={() => {
             const id = toast.loading("Processing payment...");
             setTimeout(() => {
@@ -485,11 +465,11 @@ export const ManualLoading: Story = {
               });
             }, 2500);
           }}
+          variant="outline"
         >
           Payment (Success)
         </Button>
         <Button
-          variant="outline"
           onClick={() => {
             const id = toast.loading("Saving changes...");
             setTimeout(() => {
@@ -499,6 +479,7 @@ export const ManualLoading: Story = {
               });
             }, 2000);
           }}
+          variant="outline"
         >
           Save (Error)
         </Button>
@@ -522,59 +503,56 @@ export const CustomToast: Story = {
     <div>
       <div className="flex flex-wrap gap-2">
         <Button
-          variant="outline"
           onClick={() =>
             toast.custom((t) => (
-              <div className="flex w-(--width) flex-wrap items-center gap-3 rounded-lg border border-border-muted bg-popover p-4 text-popover-foreground shadow-lg">
+              <div className="flex w-[356px] flex-wrap items-center gap-3 rounded-lg border border-border-muted bg-popover p-4 text-popover-foreground shadow-lg">
                 <UsersIcon className="size-5 shrink-0 text-muted-foreground" />
-                <div className="flex-1 min-w-0 basis-[calc(100%-2.75rem)]">
-                  <p className="text-sm font-medium">
+                <div className="min-w-0 flex-1 basis-[calc(100%-2.75rem)]">
+                  <p className="font-medium text-sm">
                     You have been invited to join a team
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     Bob sent you an invitation to join HeroUI team
                   </p>
                 </div>
                 <Button
+                  onClick={() => toast.dismiss(t)}
                   size="sm"
                   variant="secondary"
-                  onClick={() => toast.dismiss(t)}
                 >
                   Dismiss
                 </Button>
               </div>
             ))
           }
+          variant="outline"
         >
           Team Invitation
         </Button>
         <Button
-          variant="outline"
           onClick={() =>
             toast.custom((t) => (
-              <div className="flex w-(--width) flex-wrap items-center gap-3 rounded-lg border border-border-muted bg-popover p-4 text-popover-foreground shadow-lg">
-                <div className="flex-1 min-w-0 basis-full">
-                  <p className="text-sm font-medium">
-                    New deployment ready
-                  </p>
-                  <p className="text-xs text-muted-foreground">
+              <div className="flex w-[356px] flex-wrap items-center gap-3 rounded-lg border border-border-muted bg-popover p-4 text-popover-foreground shadow-lg">
+                <div className="min-w-0 flex-1 basis-full">
+                  <p className="font-medium text-sm">New deployment ready</p>
+                  <p className="text-muted-foreground text-xs">
                     v2.4.1 has been deployed to production
                   </p>
                 </div>
                 <div className="flex shrink-0 gap-2">
                   <Button
+                    onClick={() => toast.dismiss(t)}
                     size="sm"
                     variant="outline"
-                    onClick={() => toast.dismiss(t)}
                   >
                     Dismiss
                   </Button>
                   <Button
-                    size="sm"
                     onClick={() => {
                       toast.dismiss(t);
                       toast.success("Navigating to deployment...");
                     }}
+                    size="sm"
                   >
                     View
                   </Button>
@@ -582,6 +560,7 @@ export const CustomToast: Story = {
               </div>
             ))
           }
+          variant="outline"
         >
           Deployment Notice
         </Button>
@@ -592,69 +571,44 @@ export const CustomToast: Story = {
 
 // ── Position ────────────────────────────────────────────────────────────
 
+/**
+ * Helper that renders the Toaster story with a specific position.
+ * Each position renders its own Toast.Provider, so the toasts are
+ * independent across stories.
+ */
+function PositionDemo({ position }: { position: ToasterProps["position"] }) {
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <p className="text-muted-foreground text-sm">
+        Current position:{" "}
+        <code className="font-mono text-foreground">{position}</code>
+      </p>
+      <div className="flex flex-wrap justify-center gap-2">
+        <Button
+          onClick={() =>
+            toast(`Toast at ${position}`, {
+              description: "This toast appears at the configured position.",
+            })
+          }
+          variant="outline"
+        >
+          Show Toast
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 export const Position: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          "Use the `position` option to control where the toast appears. Supported positions: top-left, top-center, top-right, bottom-left, bottom-center, bottom-right.",
+          "Use the `position` prop on the `Toaster` to control where toasts appear. Supported positions: top-left, top-center, top-right, bottom-left, bottom-center, bottom-right. In this demo the Toaster is set to bottom-right (the default).",
       },
     },
   },
-  render: () => (
-    <div>
-      <div className="flex flex-wrap justify-center gap-2">
-        <Button
-          variant="outline"
-          onClick={() =>
-            toast("Event has been created", { position: "top-left" })
-          }
-        >
-          Top Left
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() =>
-            toast("Event has been created", { position: "top-center" })
-          }
-        >
-          Top Center
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() =>
-            toast("Event has been created", { position: "top-right" })
-          }
-        >
-          Top Right
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() =>
-            toast("Event has been created", { position: "bottom-left" })
-          }
-        >
-          Bottom Left
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() =>
-            toast("Event has been created", { position: "bottom-center" })
-          }
-        >
-          Bottom Center
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() =>
-            toast("Event has been created", { position: "bottom-right" })
-          }
-        >
-          Bottom Right
-        </Button>
-      </div>
-    </div>
-  ),
+  render: () => <PositionDemo position="bottom-right" />,
 };
 
 // ── Duration & Close ────────────────────────────────────────────────────
@@ -664,7 +618,7 @@ export const DurationAndClose: Story = {
     docs: {
       description: {
         story:
-          "Control how long a toast stays visible with `duration` (in ms). Set `duration: Infinity` to keep it open until the user dismisses it. Use `closeButton: true` to show an X button, or `dismissible: false` to prevent swipe/click dismissal.",
+          "Control how long a toast stays visible with `duration` (in ms). Set `duration: Infinity` to keep it open until the user dismisses it. Use `closeButton: true` to show an × button, or `dismissible: false` to prevent swipe/click dismissal.",
       },
     },
   },
@@ -672,39 +626,38 @@ export const DurationAndClose: Story = {
     <div>
       <div className="flex flex-wrap gap-2">
         <Button
-          variant="outline"
           onClick={() =>
             toast("This toast stays for 10 seconds", {
-              duration: 10000,
+              duration: 10_000,
             })
           }
+          variant="outline"
         >
           Custom Duration (10s)
         </Button>
         <Button
-          variant="outline"
           onClick={() =>
             toast("This toast won't auto-close", {
-              duration: Infinity,
+              duration: Number.POSITIVE_INFINITY,
               description: "Swipe or click to dismiss manually",
             })
           }
+          variant="outline"
         >
           Persistent
         </Button>
         <Button
-          variant="outline"
           onClick={() =>
             toast("Toast with close button", {
               closeButton: true,
-              description: "Click the X to dismiss",
+              description: "Click the × to dismiss",
             })
           }
+          variant="outline"
         >
           Close Button
         </Button>
         <Button
-          variant="outline"
           onClick={() =>
             toast.warning("Critical: this cannot be dismissed", {
               dismissible: false,
@@ -712,6 +665,7 @@ export const DurationAndClose: Story = {
               description: "Will auto-close after 5 seconds",
             })
           }
+          variant="outline"
         >
           Non-Dismissible
         </Button>

@@ -41,7 +41,11 @@ export const ui: Registry = [
   {
     name: "button",
     type: "registry:ui",
-    dependencies: ["@base-ui/react", "class-variance-authority", "lucide-react"],
+    dependencies: [
+      "@base-ui/react",
+      "class-variance-authority",
+      "lucide-react",
+    ],
     files: [{ path: "ui/button.tsx", type: "registry:ui" }],
   },
   {
@@ -177,7 +181,11 @@ export const ui: Registry = [
   {
     name: "modal",
     type: "registry:ui",
-    dependencies: ["@base-ui/react", "class-variance-authority", "lucide-react"],
+    dependencies: [
+      "@base-ui/react",
+      "class-variance-authority",
+      "lucide-react",
+    ],
     registryDependencies: ["button"],
     files: [{ path: "ui/modal.tsx", type: "registry:ui" }],
   },
@@ -260,7 +268,11 @@ export const ui: Registry = [
   {
     name: "tabs",
     type: "registry:ui",
-    dependencies: ["@base-ui/react", "class-variance-authority", "lucide-react"],
+    dependencies: [
+      "@base-ui/react",
+      "class-variance-authority",
+      "lucide-react",
+    ],
     files: [{ path: "ui/tabs.tsx", type: "registry:ui" }],
   },
   {
@@ -269,9 +281,26 @@ export const ui: Registry = [
     files: [{ path: "ui/textarea.tsx", type: "registry:ui" }],
   },
   {
+    name: "tag",
+    type: "registry:ui",
+    dependencies: [
+      "@base-ui/react",
+      "class-variance-authority",
+      "lucide-react",
+    ],
+    files: [{ path: "ui/tag.tsx", type: "registry:ui" }],
+  },
+  {
+    name: "tag-group",
+    type: "registry:ui",
+    dependencies: ["@base-ui/react", "class-variance-authority"],
+    registryDependencies: ["tag"],
+    files: [{ path: "ui/tag-group.tsx", type: "registry:ui" }],
+  },
+  {
     name: "toggle",
     type: "registry:ui",
-    dependencies: ["@base-ui/react", "class-variance-authority", "lucide-react"],
+    dependencies: ["@base-ui/react", "class-variance-authority"],
     files: [{ path: "ui/toggle.tsx", type: "registry:ui" }],
   },
   {
@@ -290,7 +319,7 @@ export const ui: Registry = [
   {
     name: "toast",
     type: "registry:ui",
-    dependencies: ["sonner", "lucide-react"],
+    dependencies: ["@base-ui/react", "lucide-react"],
     files: [{ path: "ui/toast.tsx", type: "registry:ui" }],
   },
 ];

@@ -1,11 +1,6 @@
 "use client";
 
-import * as React from "react";
-import {
-  Toaster as SonnerToaster,
-  toast,
-  type ToasterProps,
-} from "sonner";
+import { Toast } from "@base-ui/react/toast";
 import {
   CircleCheckIcon,
   InfoIcon,
@@ -14,118 +9,470 @@ import {
   TriangleAlertIcon,
   XIcon,
 } from "lucide-react";
+import { type CSSProperties, isValidElement, type ReactNode } from "react";
 
 import { cn } from "./utils";
 
 // ---------------------------------------------------------------------------
-// Theme detection
+// Types
 // ---------------------------------------------------------------------------
 
+type ToastPosition =
+  | "top-left"
+  | "top-center"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-center"
+  | "bottom-right";
+
+interface ToastAction {
+  label: ReactNode;
+  onClick: () => void;
+}
+
+interface ToastData {
+  /** Custom render function for fully custom toasts */
+  render?: (id: string) => ReactNode;
+  /** Secondary cancel/dismiss button */
+  cancel?: ToastAction;
+  /** Whether the toast can be dismissed by swiping or clicking close */
+  dismissible?: boolean;
+  /** Whether to show a close button on this specific toast */
+  closeButton?: boolean;
+}
+
+interface ToastOptions {
+  /** Pass an existing toast ID to update it in-place */
+  id?: string;
+  /** Description text shown below the title */
+  description?: ReactNode;
+  /** Duration in ms before auto-dismiss. `Infinity` keeps the toast open. */
+  duration?: number;
+  /** Primary action button */
+  action?: ToastAction;
+  /** Secondary cancel/dismiss button */
+  cancel?: ToastAction;
+  /** Whether the toast can be swiped away or closed. @default true */
+  dismissible?: boolean;
+  /** Show a close button on this specific toast */
+  closeButton?: boolean;
+  /** Callback when a toast auto-closes after its duration */
+  onAutoClose?: () => void;
+  /** Callback when a toast is manually dismissed */
+  onDismiss?: () => void;
+}
+
+// ---------------------------------------------------------------------------
+// Global toast manager
+// ---------------------------------------------------------------------------
+
+const toastManager = Toast.createToastManager();
+
+// ---------------------------------------------------------------------------
+// Imperative toast API
+// ---------------------------------------------------------------------------
+
+function createToast(
+  title: ReactNode,
+  options?: ToastOptions,
+  type?: string
+): string {
+  const {
+    id,
+    description,
+    duration,
+    action,
+    cancel,
+    dismissible = true,
+    closeButton,
+    onAutoClose,
+    onDismiss,
+  } = options ?? {};
+
+  // Resolve timeout: loading toasts don't auto-dismiss by default.
+  // When updating an existing toast (id provided), reset to 5 000 ms unless
+  // the caller set an explicit duration.
+  let resolvedTimeout: number | undefined;
+  if (duration === Number.POSITIVE_INFINITY) {
+    resolvedTimeout = 0;
+  } else if (duration != null) {
+    resolvedTimeout = duration;
+  } else if (type === "loading") {
+    resolvedTimeout = 0;
+  } else if (id != null) {
+    resolvedTimeout = 5000;
+  }
+
+  const payload = {
+    title,
+    description,
+    type: type ?? "default",
+    timeout: resolvedTimeout,
+    onClose: onAutoClose ?? onDismiss,
+    actionProps: action
+      ? { children: action.label, onClick: action.onClick }
+      : undefined,
+    data: { cancel, dismissible, closeButton } satisfies ToastData,
+  };
+
+  if (id) {
+    toastManager.update(id, payload);
+    return id;
+  }
+
+  return toastManager.add(payload);
+}
+
+// --- Main callable + attached methods ---
+
+function toastFn(title: ReactNode, options?: ToastOptions): string {
+  return createToast(title, options);
+}
+
+toastFn.success = (title: ReactNode, options?: ToastOptions) =>
+  createToast(title, options, "success");
+
+toastFn.error = (title: ReactNode, options?: ToastOptions) =>
+  createToast(title, options, "error");
+
+toastFn.warning = (title: ReactNode, options?: ToastOptions) =>
+  createToast(title, options, "warning");
+
+toastFn.info = (title: ReactNode, options?: ToastOptions) =>
+  createToast(title, options, "info");
+
+toastFn.loading = (title: ReactNode, options?: ToastOptions) =>
+  createToast(title, options, "loading");
+
 /**
- * Auto-detects light/dark theme by watching the `.dark` class on
- * `document.documentElement`. Falls back to `"light"` on the server.
+ * Create a toast that tracks a promise through loading → success / error.
+ *
+ * String shortcuts are mapped to the toast **title** (matching Sonner's API).
+ * Pass an object (`{ title, description, … }`) for richer control.
  */
-function useThemeDetection(): "light" | "dark" {
-  const getSnapshot = React.useCallback(
-    () =>
-      typeof document !== "undefined" &&
-      document.documentElement.classList.contains("dark")
-        ? ("dark" as const)
-        : ("light" as const),
-    []
-  );
-
-  const getServerSnapshot = React.useCallback(
-    () => "light" as const,
-    []
-  );
-
-  const subscribe = React.useCallback((onStoreChange: () => void) => {
-    const target = document.documentElement;
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
+toastFn.promise = <T,>(
+  promise: Promise<T>,
+  options: {
+    loading: ReactNode | Record<string, unknown>;
+    success: ReactNode | ((data: T) => ReactNode) | Record<string, unknown>;
+    error: ReactNode | ((error: Error) => ReactNode) | Record<string, unknown>;
+  }
+): Promise<T> => {
+  // Map shorthand string / ReactNode values to `{ title }` so the toast
+  // shows the text as its title (Sonner compat — Base UI defaults to
+  // `description` for string shortcuts).
+  const mapOption = (
+    opt: ReactNode | ((arg: never) => ReactNode) | Record<string, unknown>
+  ): unknown => {
+    if (typeof opt === "function") {
+      return (arg: unknown) => {
+        const result = (opt as (a: unknown) => ReactNode)(arg);
         if (
-          mutation.type === "attributes" &&
-          mutation.attributeName === "class"
+          typeof result === "object" &&
+          result !== null &&
+          !isValidElement(result)
         ) {
-          onStoreChange();
+          return result; // Already a config object
         }
-      }
-    });
+        return { title: result };
+      };
+    }
+    if (typeof opt === "object" && opt !== null && !isValidElement(opt)) {
+      return opt; // Already a config object
+    }
+    return { title: opt };
+  };
 
-    observer.observe(target, { attributes: true, attributeFilter: ["class"] });
-    return () => observer.disconnect();
-  }, []);
+  return toastManager.promise(promise, {
+    loading: mapOption(options.loading),
+    success: mapOption(options.success),
+    error: mapOption(options.error),
+  } as Parameters<typeof toastManager.promise>[1]);
+};
 
-  return React.useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+/** Close and remove a toast by its ID. */
+toastFn.dismiss = (id: string) => {
+  toastManager.close(id);
+};
+
+/** Create a fully custom toast with arbitrary JSX. */
+toastFn.custom = (
+  render: (id: string) => ReactNode,
+  options?: Pick<ToastOptions, "id" | "duration" | "dismissible">
+): string => {
+  const { id, duration, dismissible = true } = options ?? {};
+
+  const payload = {
+    timeout: duration === Number.POSITIVE_INFINITY ? 0 : duration,
+    data: { render, dismissible } satisfies ToastData,
+  };
+
+  if (id) {
+    toastManager.update(id, payload);
+    return id;
+  }
+
+  return toastManager.add(payload);
+};
+
+/** Imperative toast API — call `toast("message")` or use typed helpers. */
+const toast = toastFn;
+
+// ---------------------------------------------------------------------------
+// Icons
+// ---------------------------------------------------------------------------
+
+const TOAST_ICONS: Record<string, ReactNode> = {
+  success: <CircleCheckIcon className="size-4" />,
+  info: <InfoIcon className="size-4" />,
+  warning: <TriangleAlertIcon className="size-4" />,
+  error: <OctagonXIcon className="size-4" />,
+  loading: <Loader2Icon className="size-4 animate-spin" />,
+};
+
+// ---------------------------------------------------------------------------
+// Semantic color classes (icon + title only, matching Alert palette)
+// ---------------------------------------------------------------------------
+
+const TYPE_CLASSES: Record<string, string> = {
+  success:
+    "[&_[data-slot=toast-icon]]:text-green-600 dark:[&_[data-slot=toast-icon]]:text-green-500 [&_[data-slot=toast-title]]:text-green-600 dark:[&_[data-slot=toast-title]]:text-green-500",
+  error:
+    "[&_[data-slot=toast-icon]]:text-red-600 dark:[&_[data-slot=toast-icon]]:text-red-500 [&_[data-slot=toast-title]]:text-red-600 dark:[&_[data-slot=toast-title]]:text-red-500",
+  warning:
+    "[&_[data-slot=toast-icon]]:text-yellow-600 dark:[&_[data-slot=toast-icon]]:text-yellow-500 [&_[data-slot=toast-title]]:text-yellow-600 dark:[&_[data-slot=toast-title]]:text-yellow-500",
+  info: "[&_[data-slot=toast-icon]]:text-blue-600 dark:[&_[data-slot=toast-icon]]:text-blue-500 [&_[data-slot=toast-title]]:text-blue-600 dark:[&_[data-slot=toast-title]]:text-blue-500",
+};
+
+// ---------------------------------------------------------------------------
+// Viewport position mapping
+// ---------------------------------------------------------------------------
+
+const VIEWPORT_POSITION_CLASSES: Record<ToastPosition, string> = {
+  "top-left": "top-0 left-0",
+  "top-center": "top-0 left-1/2 -translate-x-1/2",
+  "top-right": "top-0 right-0",
+  "bottom-left": "bottom-0 left-0",
+  "bottom-center": "bottom-0 left-1/2 -translate-x-1/2",
+  "bottom-right": "bottom-0 right-0",
+};
+
+// ---------------------------------------------------------------------------
+// ToastList (internal — rendered inside Toast.Provider)
+// ---------------------------------------------------------------------------
+
+function ToastList({ closeButton }: { closeButton?: boolean }) {
+  const { toasts } = Toast.useToastManager();
+
+  return toasts.map((t) => (
+    <ToastItem closeButton={closeButton} key={t.id} toast={t} />
+  ));
+}
+
+// ---------------------------------------------------------------------------
+// ToastItem (internal)
+// ---------------------------------------------------------------------------
+
+function ToastItem({
+  toast: t,
+  closeButton: globalCloseButton,
+}: {
+  toast: ReturnType<typeof Toast.useToastManager>["toasts"][number];
+  closeButton?: boolean;
+}) {
+  const data = (t.data ?? {}) as ToastData;
+
+  // ---- Custom render ----
+  if (data.render) {
+    return (
+      <Toast.Root
+        className="pointer-events-auto w-full select-none bg-clip-padding"
+        data-slot="toast"
+        swipeDirection={data.dismissible === false ? [] : ["down", "right"]}
+        toast={t}
+      >
+        <Toast.Content data-slot="toast-content">
+          {data.render(t.id)}
+        </Toast.Content>
+      </Toast.Root>
+    );
+  }
+
+  // ---- Standard render ----
+  const icon = t.type && t.type !== "default" ? TOAST_ICONS[t.type] : undefined;
+  const typeClass = t.type ? TYPE_CLASSES[t.type] : undefined;
+  const showCloseButton = data.closeButton ?? globalCloseButton ?? true;
+  const isDismissible = data.dismissible !== false;
+
+  return (
+    <Toast.Root
+      className={cn(
+        // Layout — positioned absolutely via CSS; absolute also creates
+        // a containing block for the close button
+        "group/toast pointer-events-auto",
+        // Size — fills the viewport width
+        "w-full",
+        // Appearance
+        "select-none rounded-lg border border-border-muted bg-popover bg-clip-padding text-popover-foreground shadow-lg",
+        // Semantic type colors
+        typeClass
+      )}
+      data-slot="toast"
+      swipeDirection={isDismissible ? ["down", "right"] : []}
+      toast={t}
+    >
+      <Toast.Content
+        className={cn(
+          "flex w-full gap-2 overflow-hidden p-3",
+          // Mobile: wrap action buttons below content
+          "max-sm:flex-wrap"
+        )}
+        data-slot="toast-content"
+      >
+        {icon && (
+          <div className="mt-0.5 shrink-0" data-slot="toast-icon">
+            {icon}
+          </div>
+        )}
+
+        <div
+          className={cn(
+            "flex min-w-0 flex-1 flex-col gap-0.5",
+            // Mobile with icon: ensure text block fills the row
+            "max-sm:flex-[1_0_calc(100%-2rem)]"
+          )}
+          data-slot="toast-text"
+        >
+          {t.title != null && (
+            <Toast.Title
+              className="font-medium text-sm leading-snug"
+              data-slot="toast-title"
+            />
+          )}
+          {t.description != null && (
+            <Toast.Description
+              className="text-muted-foreground text-xs leading-snug"
+              data-slot="toast-description"
+            />
+          )}
+        </div>
+
+        {/* Action buttons */}
+        {(t.actionProps || data.cancel) && (
+          <div
+            className={cn(
+              "flex shrink-0 items-center gap-1.5",
+              // Mobile: full width row below the text
+              "max-sm:mt-1 max-sm:ml-0",
+              icon ? "max-sm:ml-6" : undefined
+            )}
+            data-slot="toast-actions"
+          >
+            {data.cancel && (
+              <button
+                className="inline-flex h-7 cursor-pointer items-center justify-center rounded-md px-2.5 font-medium text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-accent-foreground"
+                data-slot="toast-cancel"
+                onClick={() => {
+                  data.cancel?.onClick?.();
+                  toastManager.close(t.id);
+                }}
+                type="button"
+              >
+                {data.cancel.label}
+              </button>
+            )}
+            {t.actionProps && (
+              <Toast.Action
+                className="inline-flex h-7 cursor-pointer items-center justify-center rounded-md border border-border bg-background px-2.5 font-medium text-xs transition-colors hover:bg-accent hover:text-accent-foreground"
+                data-slot="toast-action"
+              />
+            )}
+          </div>
+        )}
+      </Toast.Content>
+
+      {/* Close button — round pill at the top-right corner */}
+      {showCloseButton && isDismissible && (
+        <Toast.Close
+          aria-label="Close"
+          className={cn(
+            // Position: centered on the top-right corner of the toast
+            "absolute top-0 right-0 translate-x-1/2 -translate-y-1/2",
+            // Size 20×20, circular
+            "flex size-5 items-center justify-center rounded-full border border-border p-0 shadow-sm",
+            // Colors: subtle background like ghost button
+            "bg-background text-muted-foreground",
+            "hover:bg-accent hover:text-foreground",
+            // Hidden by default, revealed on toast hover
+            "opacity-0 group-hover/toast:opacity-100",
+            // Also reveal on keyboard focus for a11y
+            "focus-visible:opacity-100",
+            // Smooth transitions for reveal + hover background
+            "cursor-pointer transition-[opacity,background-color,color]",
+            // Mobile: always visible (no hover on touch)
+            "max-sm:opacity-100"
+          )}
+          data-slot="toast-close"
+        >
+          <XIcon className="size-3" />
+        </Toast.Close>
+      )}
+    </Toast.Root>
+  );
 }
 
 // ---------------------------------------------------------------------------
 // Toaster
 // ---------------------------------------------------------------------------
 
-export interface ToasterComponentProps extends ToasterProps {}
+export interface ToasterProps {
+  /** Where toasts appear on screen. @default "bottom-right" */
+  position?: ToastPosition;
+  /** Default auto-dismiss timeout in ms. @default 5000 */
+  duration?: number;
+  /** Maximum number of visible toasts. @default 3 */
+  limit?: number;
+  /** Show a close (×) button on every toast. @default true */
+  closeButton?: boolean;
+  /** Additional CSS class for the viewport container */
+  className?: string;
+}
 
-const Toaster = ({ theme, className, ...props }: ToasterComponentProps) => {
-  const detectedTheme = useThemeDetection();
-  const resolvedTheme = theme ?? detectedTheme;
+function Toaster({
+  position = "bottom-right",
+  duration = 5000,
+  limit = 3,
+  closeButton = true,
+  className,
+}: ToasterProps) {
+  const isTop = position.startsWith("top");
 
   return (
-    <SonnerToaster
-      data-slot="toaster"
-      theme={resolvedTheme}
-      closeButton
-      className={cn("toaster group", className)}
-      icons={{
-        success: <CircleCheckIcon className="size-4" />,
-        info: <InfoIcon className="size-4" />,
-        warning: <TriangleAlertIcon className="size-4" />,
-        error: <OctagonXIcon className="size-4" />,
-        loading: <Loader2Icon className="size-4 animate-spin" />,
-        close: <XIcon className="size-3" />,
-      }}
-      style={
-        {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border-muted)",
-        } as React.CSSProperties
-      }
-      toastOptions={{
-        classNames: {
-          toast:
-            "group/toast !gap-1 !overflow-visible max-sm:!flex-wrap max-sm:[&_[data-content]]:!flex-[1_0_calc(100%-2rem)] max-sm:[&_[data-button]]:!ml-0 max-sm:[&_[data-button]]:!mt-1.5 max-sm:has-data-[icon]:[&_[data-button]]:!ml-5 max-sm:has-data-[icon]:[&_[data-button]~[data-button]]:!ml-0 has-data-[description]:[&_[data-icon]]:!self-start has-data-[description]:[&_[data-icon]]:!mt-[3px] data-[dismissible=false]:[&_[data-close-button]]:!hidden",
-          closeButton: cn(
-            // Position: centered on the top-right corner of the toast
-            "!left-auto !right-0 !top-0 !translate-x-1/2 !-translate-y-1/2 ![transform:none]",
-            // Size 20×20, circular
-            "!size-5 !rounded-full !p-0 !border !border-border !shadow-sm",
-            // Colors: subtle background like ghost button
-            "!bg-background !text-muted-foreground",
-            "hover:!bg-accent hover:!text-foreground",
-            // Hidden by default, revealed on toast hover
-            "!opacity-0 group-hover/toast:!opacity-100",
-            // Also reveal on keyboard focus for a11y
-            "focus-visible:!opacity-100",
-            // Smooth transitions for reveal + hover background
-            "!transition-[opacity,background-color,color] !cursor-pointer",
-            // Mobile: always visible (no hover on touch)
-            "max-sm:!opacity-100"
-          ),
-          success:
-            "[&_[data-icon]]:!text-green-600 dark:[&_[data-icon]]:!text-green-500 [&_[data-title]]:!text-green-600 dark:[&_[data-title]]:!text-green-500",
-          error:
-            "[&_[data-icon]]:!text-red-600 dark:[&_[data-icon]]:!text-red-500 [&_[data-title]]:!text-red-600 dark:[&_[data-title]]:!text-red-500",
-          warning:
-            "[&_[data-icon]]:!text-yellow-600 dark:[&_[data-icon]]:!text-yellow-500 [&_[data-title]]:!text-yellow-600 dark:[&_[data-title]]:!text-yellow-500",
-          info:
-            "[&_[data-icon]]:!text-blue-600 dark:[&_[data-icon]]:!text-blue-500 [&_[data-title]]:!text-blue-600 dark:[&_[data-title]]:!text-blue-500",
-        },
-      }}
-      {...props}
-    />
+    <Toast.Provider
+      limit={limit}
+      timeout={duration}
+      toastManager={toastManager}
+    >
+      <Toast.Portal>
+        <Toast.Viewport
+          className={cn(
+            "fixed z-[100] m-4 outline-none",
+            // Width: fixed on desktop, full on mobile
+            "w-(--width) max-sm:right-0 max-sm:left-0 max-sm:mx-2 max-sm:w-auto",
+            // Position-specific
+            VIEWPORT_POSITION_CLASSES[position],
+            className
+          )}
+          data-position={isTop ? "top" : "bottom"}
+          data-slot="toaster"
+          style={{ "--width": "356px" } as CSSProperties}
+        >
+          <ToastList closeButton={closeButton} />
+        </Toast.Viewport>
+      </Toast.Portal>
+    </Toast.Provider>
   );
-};
+}
 
 Toaster.displayName = "Toaster";
 
@@ -134,4 +481,4 @@ Toaster.displayName = "Toaster";
 // ---------------------------------------------------------------------------
 
 export { Toaster, toast };
-export type { ToasterProps };
+export type { ToastOptions, ToastPosition, ToastAction, ToastData };

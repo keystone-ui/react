@@ -53,22 +53,22 @@
     "./tabs": "./src/tabs.tsx",
     "./textarea": "./src/textarea.tsx",
     "./toast": "./src/toast.tsx",
+    "./tag": "./src/tag.tsx",
+    "./tag-group": "./src/tag-group.tsx",
     "./toggle": "./src/toggle.tsx",
-    "./tooltip": "./src/tooltip.tsx",
     "./toggle-group": "./src/toggle-group.tsx",
+    "./tooltip": "./src/tooltip.tsx",
     "./utils": "./src/utils.ts",
     "./styles.css": "./src/styles.css"
   },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint . --max-warnings 0",
     "clean": "rm -rf .turbo node_modules dist",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -76,7 +76,6 @@
     "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.7.0",
-    "eslint": "^9.39.2",
     "jsdom": "^27.4.0",
     "tsup": "^8.5.1",
     "typescript": "5.8.2",
@@ -95,7 +94,6 @@
     "react": "^19.2.4",
     "react-day-picker": "^9.13.1",
     "react-use-measure": "^2.1.7",
-    "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0"
   },
   "publishConfig": {
