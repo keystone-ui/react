@@ -1,0 +1,83 @@
+---
+title: Introducing Keystone UI
+description: A modern React component library built for the Tailwind CSS v4 era.
+date: 2026-02-15
+authors:
+  - name: Keystone Team
+---
+
+We're excited to announce Keystone UI -- a comprehensive React component library built from the ground up for Tailwind CSS v4 and React 19.
+
+## Why Another Component Library?
+
+The React ecosystem has matured significantly, but most component libraries were built for an older era. Keystone UI takes advantage of the latest advancements:
+
+- **Tailwind CSS v4** with CSS-first configuration and OKLCH colors
+- **React 19** with automatic ref forwarding (no more `forwardRef`)
+- **Base UI** primitives for accessibility without Radix dependency
+- **Subpath exports** for optimal tree-shaking
+
+## What's Included
+
+Keystone UI ships with **54+ production-ready components** spanning:
+
+- **Form controls** -- Input, Select, Combobox, Checkbox, Radio, Switch, and more
+- **Layout** -- Card, Separator, Resizable panels, Tabs
+- **Overlays** -- Modal, Drawer, Popover, Dropdown Menu, Tooltip
+- **Feedback** -- Alert, Badge, Toast, Progress, Spinner
+- **Data display** -- Table, Accordion, Avatar, Calendar
+
+Every component is designed with:
+- Keyboard navigation and screen reader support
+- Dark mode that works out of the box
+- Consistent design tokens across light and dark themes
+- Micro-interactions like press feedback on buttons
+
+## Architecture Decisions
+
+We made several deliberate choices:
+
+### Flat, Single-File Components
+
+Every component is a single `.tsx` file. No nested directories, no barrel files. This makes the library easy to navigate, understand, and tree-shake.
+
+### Base UI Over Radix
+
+We chose [Base UI](https://base-ui.com/) for unstyled primitives. It's maintained by the MUI team, provides excellent accessibility, and has no dependency on Radix.
+
+### OKLCH Color Space
+
+Our design tokens use OKLCH for perceptually uniform colors. This means equal changes in lightness values produce equal perceived brightness differences -- critical for maintaining contrast ratios.
+
+## Getting Started
+
+```bash
+pnpm add @keystone/ui
+```
+
+```css
+@import "tailwindcss";
+@import "@keystone/ui/base.css";
+
+/* Theme tokens go here -- install via registry or copy from docs */
+```
+
+```tsx
+import { Button } from "@keystone/ui/button";
+
+function App() {
+  return <Button>Hello Keystone</Button>;
+}
+```
+
+Check out our [installation guide](/docs/getting-started/installation) for the full setup walkthrough.
+
+## What's Next
+
+We're actively working on:
+- More component documentation and examples
+- Interactive playground for trying components
+- Figma design kit
+- CLI tool for component installation
+
+Stay tuned and [star us on GitHub](https://github.com/your-org/keystoneui) to follow along!

@@ -9,7 +9,7 @@ These are the established conventions for the `@keystone/ui` component library. 
 
 ## Theme Tokens
 
-The theme is defined in `packages/theme/src/index.css`. Key custom tokens beyond the standard shadcn set:
+Component runtime CSS (animations, transitions, hover gating) is in `packages/ui/src/base.css`. Theme tokens are consumer-owned -- defined in the consumer's CSS, not in a package file. The default token values are in `packages/ui/registry/keystone-style.json`. Key custom tokens beyond the standard shadcn set:
 
 - `--input-bg` — form control background (transparent in light, `input` at 30% in dark). Use `bg-input-bg`.
 - `--popup-ring` — subtle ring for popup containers (`border` at 10% opacity). Use `ring-popup-ring`.
@@ -301,7 +301,7 @@ Note: SVGs inside buttons also have `shrink-0` via the SVG Boilerplate rule. The
 
 When adding a new semantic token to the library:
 
-1. **Define the CSS variable** in both `:root` and `.dark` in `packages/theme/src/index.css`:
+1. **Define the CSS variable** in both `:root` and `.dark` in the consumer's theme CSS (and in `packages/ui/registry/keystone-style.json` for the default registry style):
 ```css
 :root {
   --my-token: oklch(0.5 0.1 200);
@@ -311,9 +311,9 @@ When adding a new semantic token to the library:
 }
 ```
 
-2. **Register it with Tailwind** in the `@theme` block in the same file:
+2. **Register it with Tailwind** in the `@theme inline` block:
 ```css
-@theme {
+@theme inline {
   --color-my-token: var(--my-token);
 }
 ```

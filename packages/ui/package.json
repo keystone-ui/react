@@ -61,7 +61,7 @@
     "./toggle-group": "./src/toggle-group.tsx",
     "./tooltip": "./src/tooltip.tsx",
     "./utils": "./src/utils.ts",
-    "./styles.css": "./src/styles.css"
+    "./base.css": "./src/base.css"
   },
   "scripts": {
     "build": "tsup",
@@ -85,7 +85,6 @@
   },
   "dependencies": {
     "@base-ui/react": "1.2.0",
-    "@keystone/theme": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
@@ -366,7 +365,7 @@
         "import": "./dist/utils.js",
         "require": "./dist/utils.cjs"
       },
-      "./styles.css": "./src/styles.css"
+      "./base.css": "./src/base.css"
     }
   },
   "peerDependencies": {

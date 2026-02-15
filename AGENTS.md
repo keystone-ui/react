@@ -58,7 +58,7 @@ pnpm build --filter=storybook         # Build only the Storybook docs
 pnpm dev --filter=@keystone/ui        # Watch-build the UI package
 ```
 
-Main packages: `@keystone/ui`, `@keystone/theme`, `storybook`
+Main packages: `@keystone/ui`, `storybook`
 
 ## Monorepo Structure
 
@@ -69,8 +69,8 @@ Main packages: `@keystone/ui`, `@keystone/theme`, `storybook`
 ├── packages/
 │   ├── ui/                      # @keystone/ui — main component library
 │   │   └── src/                 # Flat directory: one .tsx file per component
-│   ├── theme/                   # @keystone/theme — CSS variables, design tokens, Tailwind config
-│   │   └── src/index.css        # Theme definition (OKLCH colors, custom variants)
+│   │       └── base.css         # Required component CSS (animations, transitions, hover gating)
+│   │   └── registry/            # shadcn registry items (style + theme JSONs)
 │   └── typescript-config/       # Shared TypeScript config
 ├── turbo.json
 └── pnpm-workspace.yaml
@@ -94,7 +94,7 @@ For full conventions, see `.cursor/rules/design-tokens.mdc`.
 
 - **Tailwind CSS v4** with OKLCH color space
 - **Semantic tokens**: `primary`, `secondary`, `destructive`, `muted`, `accent`, `card`, `popover`
-- **Hover gating**: Theme overrides `hover:` variant with `@media (hover: hover)` — never embed `:hover` in arbitrary selectors
+- **Hover gating**: `base.css` overrides `hover:` variant with `@media (hover: hover)` — never embed `:hover` in arbitrary selectors
 - **Focus styles**: Two patterns — outline-based (buttons, checkboxes) and ring-based (inputs, selects). Never mix.
 - **Disabled states**: Both `disabled:` (native HTML) and `data-disabled:` (Base UI) — always include `cursor-not-allowed` and `opacity-50`
 

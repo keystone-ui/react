@@ -1,13 +1,29 @@
-@import "tailwindcss";
+---
+title: Customization
+description: Override design tokens to match your brand.
+---
 
-/* Tell Tailwind where to scan for class usage */
-@source "../../../packages/ui/src/**/*.{ts,tsx}";
-@source "../stories/**/*.{ts,tsx}";
+Keystone UI's theme is built entirely on CSS custom properties. You own the theme CSS in your project and can customize every token.
 
-@import "@keystone/ui/base.css";
+## Complete Theme Reference
 
+Below is the full theme CSS. Copy this into your `globals.css` after `@import "@keystone/ui/base.css"` and modify any values.
+
+<Callout type="info">
+  You can also generate this automatically via the [Registry CLI](/docs/getting-started/registry): `npx shadcn add https://keystoneui.io/r/keystone-style.json`
+</Callout>
+
+### Dark Mode Variant
+
+```css title="globals.css"
 @custom-variant dark (&:is(.dark *));
+```
 
+### Tailwind Registration
+
+Maps CSS variables to Tailwind utility classes:
+
+```css title="globals.css"
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -33,7 +49,11 @@
   --color-input-bg: var(--input-bg);
   --color-ring: var(--ring);
 }
+```
 
+### Light Mode Tokens
+
+```css title="globals.css"
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
@@ -60,7 +80,11 @@
   --ring: oklch(0.705 0.015 286.067);
   --skeleton-shimmer: oklch(1 0 0 / 0.06);
 }
+```
 
+### Dark Mode Tokens
+
+```css title="globals.css"
 .dark {
   --background: oklch(0.141 0.005 285.823);
   --foreground: oklch(0.985 0 0);
@@ -87,7 +111,11 @@
   --ring: oklch(0.552 0.016 285.938);
   --skeleton-shimmer: oklch(1 0 0 / 0.1);
 }
+```
 
+### Base Layer
+
+```css title="globals.css"
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -111,3 +139,47 @@
     scrollbar-color: var(--border) transparent;
   }
 }
+```
+
+<Callout type="info">
+  Always define both `:root` (light) and `.dark` (dark) values to maintain
+  proper contrast in both modes.
+</Callout>
+
+## Adding New Colors
+
+Define variables in `:root` / `.dark`, then register them in the `@theme inline` block:
+
+```css title="globals.css"
+:root {
+  --warning: oklch(0.84 0.16 84);
+  --warning-foreground: oklch(0.28 0.07 46);
+}
+
+.dark {
+  --warning: oklch(0.41 0.11 46);
+  --warning-foreground: oklch(0.99 0.02 95);
+}
+
+@theme inline {
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+}
+```
+
+Use `bg-warning text-warning-foreground` in your components.
+
+## Using OKLCH
+
+We recommend using [oklch.com](https://oklch.com/) to pick colors. OKLCH provides:
+
+- **Perceptual uniformity** -- Equal changes in L (lightness) look equally different
+- **Wide gamut** -- Access to colors outside sRGB on modern displays
+- **Intuitive** -- L (lightness 0-1), C (chroma 0-0.4), H (hue 0-360)
+
+```css
+/* OKLCH format: oklch(lightness chroma hue) */
+--primary: oklch(0.55 0.2 250); /* Medium blue */
+--primary: oklch(0.55 0.25 150); /* Vivid green */
+--primary: oklch(0.55 0.2 30); /* Warm orange */
+```

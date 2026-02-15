@@ -196,7 +196,7 @@ export const CustomCloseButton: Story = {
               Link
             </Label>
             <Input
-              defaultValue="https://keystoneui.com/docs/installation"
+              defaultValue="https://keystoneui.io/docs/installation"
               id="link"
               readOnly
             />

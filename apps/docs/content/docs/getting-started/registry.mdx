@@ -1,0 +1,91 @@
+---
+title: Registry
+description: Install Keystone UI styles and themes via the shadcn CLI.
+---
+
+Keystone UI supports the [shadcn registry](https://ui.shadcn.com/docs/registry) for distributing styles and themes via CLI. This is the fastest way to set up your project.
+
+## Quick Start
+
+```bash
+# 1. Install the package
+pnpm add @keystone/ui
+
+# 2. Install the Keystone style (generates theme CSS in your project)
+npx shadcn add https://keystoneui.io/r/keystone-style.json
+```
+
+The CLI generates the complete theme CSS in your `globals.css`: dark mode variant, Tailwind registration, color tokens, and base layer defaults.
+
+## Style vs Theme
+
+Keystone provides two registry item types:
+
+### `registry:style` -- Full setup
+
+Installs everything you need: `@import "@keystone/ui/base.css"`, `@custom-variant dark`, `@theme inline` block, default color tokens (`:root` / `.dark`), and `@layer base`.
+
+```bash
+npx shadcn add https://keystoneui.io/r/keystone-style.json
+```
+
+Use this when setting up a new project.
+
+### `registry:theme` -- Swap colors
+
+Replaces just the color token values in `:root` and `.dark`. Does not touch `base.css`, `@custom-variant`, `@theme inline`, or `@layer base`.
+
+```bash
+npx shadcn add https://keystoneui.io/r/themes/default.json
+```
+
+Use this to switch between pre-made color palettes without re-initializing.
+
+## Namespace Configuration
+
+For repeated use, configure the `@keystone` namespace in your `components.json`:
+
+```json title="components.json"
+{
+  "registries": {
+    "@keystone": "https://keystoneui.io/r/{name}.json"
+  }
+}
+```
+
+Then install by name:
+
+```bash
+npx shadcn add @keystone/keystone-style
+npx shadcn add @keystone/themes/purple
+```
+
+## Creating Your Own Theme
+
+Create a `registry:theme` JSON with your custom color values:
+
+```json title="my-theme.json"
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "my-custom-theme",
+  "type": "registry:theme",
+  "cssVars": {
+    "light": {
+      "primary": "oklch(0.55 0.2 260)",
+      "primary-foreground": "oklch(0.98 0 0)"
+    },
+    "dark": {
+      "primary": "oklch(0.75 0.15 260)",
+      "primary-foreground": "oklch(0.15 0 0)"
+    }
+  }
+}
+```
+
+Host it anywhere that serves JSON over HTTP (your own site, GitHub raw URL, etc.) and install with:
+
+```bash
+npx shadcn add https://your-site.com/r/my-theme.json
+```
+
+See the full list of available tokens in the [Customization](/docs/theming/customization) guide.

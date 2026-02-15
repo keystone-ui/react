@@ -1,0 +1,65 @@
+---
+title: Colors
+description: OKLCH-based semantic color tokens used throughout Keystone UI.
+---
+
+Keystone UI uses the [OKLCH color space](https://oklch.com/) for all color tokens. OKLCH provides perceptually uniform colors, meaning equal changes in values produce equal perceived differences -- making it ideal for design systems.
+
+## Semantic Tokens
+
+Every color token comes in a **background/foreground pair**. The background suffix is omitted:
+
+| Token | Background Class | Text Class | Purpose |
+| --- | --- | --- | --- |
+| `primary` | `bg-primary` | `text-primary-foreground` | Primary actions, CTAs |
+| `secondary` | `bg-secondary` | `text-secondary-foreground` | Secondary actions |
+| `destructive` | `bg-destructive` | `text-destructive-foreground` | Danger, delete actions |
+| `muted` | `bg-muted` | `text-muted-foreground` | Subtle backgrounds, secondary text |
+| `accent` | `bg-accent` | `text-accent-foreground` | Hover states, highlights |
+| `card` | `bg-card` | `text-card-foreground` | Card surfaces |
+| `popover` | `bg-popover` | `text-popover-foreground` | Popup surfaces |
+
+## Border Tokens
+
+| Token | Class | Purpose |
+| --- | --- | --- |
+| `border` | `border-border` | Structural borders (cards, buttons) |
+| `border-muted` | `border-border-muted` | Subtle borders (popup separators) |
+| `input` | `border-input` | Form control borders |
+| `ring` | `ring-ring` | Focus ring color |
+
+## Usage Examples
+
+```tsx
+// Primary action button
+<Button variant="default">Save</Button> // Uses bg-primary text-primary-foreground
+
+// Card with muted description
+<Card>
+  <CardTitle>Title</CardTitle>
+  <p className="text-muted-foreground">Description text</p>
+</Card>
+
+// Custom usage with tokens
+<div className="rounded-lg bg-muted p-4 text-muted-foreground">
+  Subtle info box
+</div>
+```
+
+## Light Mode Values
+
+In light mode, the palette is based on the Zinc scale:
+
+- **Background**: White (`oklch(1 0 0)`)
+- **Foreground**: Zinc-950 (`oklch(0.141 0.005 285.823)`)
+- **Primary**: Zinc-900 with Zinc-50 foreground
+- **Borders**: Zinc-200
+
+## Dark Mode Values
+
+In dark mode, the palette inverts:
+
+- **Background**: Zinc-950 (`oklch(0.141 0.005 285.823)`)
+- **Foreground**: Zinc-50 (`oklch(0.985 0 0)`)
+- **Primary**: Zinc-200 with Zinc-900 foreground
+- **Borders**: White at 10% opacity for subtlety

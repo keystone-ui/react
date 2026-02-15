@@ -173,7 +173,7 @@ Update `_registry.ts` when adding or modifying components.
 
 ## Hover Gating (`@media (hover: hover)`)
 
-The theme overrides Tailwind's built-in `hover` variant with `@media (hover: hover)` gating in `packages/theme/src/index.css`:
+The base CSS overrides Tailwind's built-in `hover` variant with `@media (hover: hover)` gating in `packages/ui/src/base.css`:
 
 ```css
 @custom-variant hover {

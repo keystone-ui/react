@@ -1,0 +1,94 @@
+---
+title: Quick Start
+description: Get up and running with Keystone UI in under 2 minutes.
+---
+
+## 1. Install
+
+```bash
+pnpm add @keystone/ui
+```
+
+## 2. Set Up CSS
+
+**Via registry (recommended):**
+
+```bash
+npx shadcn add https://keystoneui.io/r/keystone-style.json
+```
+
+**Or manually** -- add the base import and theme tokens to your CSS. See [Installation](/docs/getting-started/installation) for the full manual setup, or copy the complete token reference from [Customization](/docs/theming/customization).
+
+```css title="globals.css"
+@import "tailwindcss";
+@import "@keystone/ui/base.css";
+
+@source "../node_modules/@keystone/ui/src/**/*.{ts,tsx}";
+
+/* ... theme tokens (see Customization page) ... */
+```
+
+## 3. Use Components
+
+```tsx
+import { Button } from "@keystone/ui/button";
+import { Input } from "@keystone/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@keystone/ui/card";
+
+export default function LoginCard() {
+  return (
+    <Card className="w-[380px]">
+      <CardHeader>
+        <CardTitle>Sign In</CardTitle>
+        <CardDescription>Enter your credentials to continue.</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <Input type="email" placeholder="Email" />
+        <Input type="password" placeholder="Password" />
+        <Button className="w-full">Sign In</Button>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+## Import Pattern
+
+Every component uses subpath exports. Import only what you need:
+
+```tsx
+// Each component has its own entry point
+import { Button } from "@keystone/ui/button";
+import { Badge } from "@keystone/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@keystone/ui/tabs";
+```
+
+<Callout type="warn">
+  There is no barrel export (`@keystone/ui`). Always use the subpath import
+  pattern shown above.
+</Callout>
+
+## Dark Mode
+
+Keystone UI supports dark mode out of the box. Add the `dark` class to your `<html>` element:
+
+```html
+<html class="dark">
+  ...
+</html>
+```
+
+All components will automatically adapt to dark mode with carefully tuned colors.
+
+## What's Next?
+
+- [Theming Guide](/docs/theming) -- Customize colors and tokens
+- [Registry](/docs/getting-started/registry) -- Install and swap themes via CLI
+- [Button](/docs/components/button) -- Explore button variants and sizes
+- [All Components](/docs/components/button) -- Browse the full component library

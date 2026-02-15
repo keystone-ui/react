@@ -1,0 +1,68 @@
+---
+title: Dark Mode
+description: How dark mode works in Keystone UI and how to enable it.
+---
+
+Keystone UI has first-class dark mode support. Every component automatically adapts when dark mode is activated.
+
+## Enabling Dark Mode
+
+Add the `dark` class to your `<html>` element:
+
+```html
+<html class="dark">
+  <body>
+    <!-- All components render in dark mode -->
+  </body>
+</html>
+```
+
+## With Next.js (next-themes)
+
+The most common approach is using [next-themes](https://github.com/pacocoursey/next-themes):
+
+```bash
+pnpm add next-themes
+```
+
+```tsx title="app/layout.tsx"
+import { ThemeProvider } from "next-themes";
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+## How It Works
+
+Dark mode is activated via the `@custom-variant dark` directive in your theme CSS:
+
+```css
+@custom-variant dark (&:is(.dark *));
+```
+
+Any element inside a `.dark` ancestor receives dark styles. All CSS custom properties are redefined in the `.dark` scope with dark-appropriate values.
+
+## Dark Mode Specific Tokens
+
+Some tokens have special dark mode behavior:
+
+- **Borders** use `oklch(1 0 0 / 10%)` (white at 10% opacity) for subtlety
+- **Input backgrounds** use `oklch(1 0 0 / 5%)` for depth
+- **Secondary hover** uses `color-mix()` with white instead of black
+
+## Testing Dark Mode
+
+Toggle dark mode in the browser console:
+
+```js
+document.documentElement.classList.toggle("dark");
+```

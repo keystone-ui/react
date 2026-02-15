@@ -1,0 +1,177 @@
+/* Hover gating for touch devices.
+   Prevents "sticky hover" on touch screens where a tap triggers :hover. */
+@custom-variant hover {
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
+/* Component animation theme entries */
+@theme {
+  --animate-progress-indeterminate: progress-indeterminate 1.5s ease-in-out
+    infinite;
+  --animate-caret-blink: caret-blink 1.2s ease-out infinite;
+  --color-skeleton-shimmer: var(--skeleton-shimmer);
+  --animate-skeleton-shimmer: skeleton-shimmer 2s ease-in-out infinite;
+}
+
+@keyframes progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(200%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes caret-blink {
+  0%,
+  70%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -50% 0;
+  }
+}
+
+/* Scrollable TabsList: gradient fade via scroll-driven animations.
+   Pure CSS — no JavaScript needed for the fade effect.
+   Gracefully degrades on unsupported browsers (no fade, still scrollable). */
+
+@property --tabs-fade-left {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --tabs-fade-right {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@keyframes tabs-scroll-fade {
+  0% {
+    --tabs-fade-left: 0;
+  }
+  10%,
+  100% {
+    --tabs-fade-left: 2rem;
+  }
+  /* biome-ignore lint/suspicious/noDuplicateSelectorsKeyframeBlock: 0% is intentionally reused for left/right fade initialization */
+  0%,
+  90% {
+    --tabs-fade-right: 2rem;
+  }
+  100% {
+    --tabs-fade-right: 0;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  [data-slot="tabs-list-scroll"][data-scrollable] {
+    mask: linear-gradient(
+      to right,
+      transparent,
+      black var(--tabs-fade-left),
+      black calc(100% - var(--tabs-fade-right)),
+      transparent
+    );
+    animation: tabs-scroll-fade linear;
+    animation-timeline: scroll(self inline);
+  }
+}
+
+/* Drawer: swipe-movement transforms + open/close transitions.
+   Driven by Base UI's CSS variables and data attributes.
+   Positioning and visual styles (bg, border, rounded) are in Tailwind on the component. */
+
+/* --- Backdrop (drawer-overlay) --- */
+[data-slot="drawer-overlay"] {
+  opacity: calc(1 - var(--drawer-swipe-progress, 0));
+  transition: opacity 300ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+[data-slot="drawer-overlay"][data-starting-style] {
+  opacity: 0;
+}
+[data-slot="drawer-overlay"][data-ending-style] {
+  opacity: 0;
+  transition-duration: calc(var(--drawer-swipe-strength, 1) * 300ms);
+}
+[data-slot="drawer-overlay"][data-swiping] {
+  transition: none;
+}
+
+/* --- Popup (drawer-content) --- */
+[data-slot="drawer-content"] {
+  transition: transform 500ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+[data-slot="drawer-content"][data-swiping] {
+  transition: none;
+}
+[data-slot="drawer-content"][data-ending-style] {
+  transition-duration: calc(var(--drawer-swipe-strength, 1) * 400ms);
+}
+
+/* Right drawer */
+[data-slot="drawer-content"][data-swipe-direction="right"] {
+  transform: translateX(var(--drawer-swipe-movement-x, 0px));
+}
+[data-slot="drawer-content"][data-swipe-direction="right"][data-starting-style],
+[data-slot="drawer-content"][data-swipe-direction="right"][data-ending-style] {
+  transform: translateX(100%);
+}
+
+/* Left drawer */
+[data-slot="drawer-content"][data-swipe-direction="left"] {
+  transform: translateX(var(--drawer-swipe-movement-x, 0px));
+}
+[data-slot="drawer-content"][data-swipe-direction="left"][data-starting-style],
+[data-slot="drawer-content"][data-swipe-direction="left"][data-ending-style] {
+  transform: translateX(-100%);
+}
+
+/* Bottom drawer (swipeDirection="down") */
+[data-slot="drawer-content"][data-swipe-direction="down"] {
+  transform: translateY(var(--drawer-swipe-movement-y, 0px));
+}
+[data-slot="drawer-content"][data-swipe-direction="down"][data-starting-style],
+[data-slot="drawer-content"][data-swipe-direction="down"][data-ending-style] {
+  transform: translateY(100%);
+}
+
+/* Top drawer (swipeDirection="up") */
+[data-slot="drawer-content"][data-swipe-direction="up"] {
+  transform: translateY(var(--drawer-swipe-movement-y, 0px));
+}
+[data-slot="drawer-content"][data-swipe-direction="up"][data-starting-style],
+[data-slot="drawer-content"][data-swipe-direction="up"][data-ending-style] {
+  transform: translateY(-100%);
+}
+
+/* Hide scrollbar but keep scroll functionality */
+@layer base {
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+}

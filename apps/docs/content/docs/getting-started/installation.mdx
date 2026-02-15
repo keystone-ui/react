@@ -1,0 +1,115 @@
+---
+title: Installation
+description: Step-by-step guide to installing Keystone UI in your project.
+---
+
+## Install Package
+
+```bash tab="pnpm"
+pnpm add @keystone/ui
+```
+
+```bash tab="npm"
+npm install @keystone/ui
+```
+
+```bash tab="yarn"
+yarn add @keystone/ui
+```
+
+## Set Up CSS
+
+### Via Registry (recommended)
+
+The fastest way to configure your CSS. The CLI generates the complete theme in your project:
+
+```bash
+npx shadcn add https://keystoneui.io/r/keystone-style.json
+```
+
+This adds `@import "@keystone/ui/base.css"`, the dark mode variant, Tailwind color registration, default tokens, and base layer to your CSS file.
+
+See the [Registry guide](/docs/getting-started/registry) for more options (namespace config, swapping themes, creating your own).
+
+### Manual Setup
+
+Add the base CSS import and define your theme tokens in your main CSS file:
+
+```css title="globals.css"
+@import "tailwindcss";
+@import "@keystone/ui/base.css";
+
+@source "../node_modules/@keystone/ui/src/**/*.{ts,tsx}";
+
+/* Then add your theme tokens -- see Customization for the full reference */
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-primary: var(--primary);
+  /* ... all color mappings -- see /docs/theming/customization */
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --primary: oklch(0.21 0.006 285.885);
+  /* ... all tokens */
+}
+
+.dark {
+  --background: oklch(0.141 0.005 285.823);
+  --primary: oklch(0.92 0.004 286.32);
+  /* ... all tokens */
+}
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  body { @apply bg-background text-foreground; }
+}
+```
+
+Copy the complete token list from the [Customization](/docs/theming/customization) page.
+
+<Callout type="info">
+  The `@source` directive tells Tailwind CSS v4 where to find classes used by
+  Keystone UI components. Without it, component styles may be missing.
+</Callout>
+
+## TypeScript Configuration
+
+If you're using TypeScript, add path aliases for better IDE support:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "paths": {
+      "@keystone/ui/*": ["./node_modules/@keystone/ui/src/*"]
+    }
+  }
+}
+```
+
+## Verify Installation
+
+Create a simple component to verify everything is working:
+
+```tsx title="app/page.tsx"
+import { Button } from "@keystone/ui/button";
+
+export default function Page() {
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <Button>Hello Keystone UI</Button>
+    </div>
+  );
+}
+```
+
+If you see a styled button, you're all set!
+
+## Next Steps
+
+- [Quick Start](/docs/getting-started/quick-start) -- Build your first UI with Keystone
+- [Theming](/docs/theming) -- Customize colors and design tokens
+- [Registry](/docs/getting-started/registry) -- Install themes via CLI
+- [Components](/docs/components/button) -- Explore all available components

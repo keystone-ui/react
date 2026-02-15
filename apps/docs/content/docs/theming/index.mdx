@@ -1,0 +1,71 @@
+---
+title: Theming
+description: Understand how the Keystone UI design token system works.
+---
+
+Keystone UI uses a semantic token system built on CSS custom properties and Tailwind CSS v4. You own the theme -- it lives in your project's CSS, not in a package dependency.
+
+## Architecture
+
+The styling system has two layers:
+
+### 1. `@keystone/ui/base.css` -- Required
+
+Component runtime CSS that every project must import. Contains hover gating, animations, drawer/tabs transitions, and structural utilities. No color tokens -- works with any theme.
+
+```css title="globals.css"
+@import "tailwindcss";
+@import "@keystone/ui/base.css";
+```
+
+### 2. Theme tokens -- Consumer-owned
+
+Color variables, Tailwind registration, dark mode variant, and base layer defaults. You define these in your own CSS file. The easiest way to get started is via the [Registry CLI](/docs/getting-started/registry).
+
+A complete theme includes:
+
+- `@custom-variant dark (&:is(.dark *))` -- class-based dark mode
+- `@theme inline { ... }` -- maps CSS variables to Tailwind utilities
+- `:root { ... }` -- light mode token values
+- `.dark { ... }` -- dark mode token values
+- `@layer base { ... }` -- global defaults (border color, body background)
+
+## Getting a Theme
+
+**Via registry (recommended):**
+
+```bash
+npx shadcn add https://keystoneui.io/r/keystone-style.json
+```
+
+This generates the complete theme CSS in your project. See [Registry](/docs/getting-started/registry) for details.
+
+**Manual setup:** Copy the token blocks from the [Customization](/docs/theming/customization) page into your CSS.
+
+## Token Categories
+
+### Colors
+
+Semantic color tokens using OKLCH color space for perceptually uniform colors.
+
+[Learn more about colors](/docs/theming/colors)
+
+### Dark Mode
+
+Automatic dark mode support with carefully tuned color values.
+
+[Learn more about dark mode](/docs/theming/dark-mode)
+
+### Customization
+
+Override any token to match your brand identity.
+
+[Learn more about customization](/docs/theming/customization)
+
+## Design Principles
+
+- **Semantic over literal** -- Use `bg-primary` not `bg-zinc-900`
+- **OKLCH color space** -- Perceptually uniform for consistent contrast
+- **Background/foreground pairs** -- Every color has a matching foreground token
+- **CSS-first** -- No JavaScript theme runtime, pure CSS custom properties
+- **Consumer-owned** -- You define your theme tokens; `base.css` handles the rest
