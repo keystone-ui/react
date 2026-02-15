@@ -1,6 +1,13 @@
-import * as React from "react";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Avatar, AvatarFallback, AvatarImage } from "@keystone/ui/avatar";
+import { Badge } from "@keystone/ui/badge";
 import { Button } from "@keystone/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@keystone/ui/dropdown-menu";
 import {
   Item,
   ItemActions,
@@ -13,15 +20,7 @@ import {
   ItemSeparator,
   ItemTitle,
 } from "@keystone/ui/item";
-import { Avatar, AvatarFallback, AvatarImage } from "@keystone/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@keystone/ui/dropdown-menu";
-import { Badge } from "@keystone/ui/badge";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   BadgeCheckIcon,
   CalendarIcon,
@@ -40,6 +39,7 @@ import {
   ShieldAlertIcon,
   TagIcon,
 } from "lucide-react";
+import * as React from "react";
 
 const meta = {
   title: "Components/Item",
@@ -148,14 +148,12 @@ export const Demo: Story = {
           </ItemDescription>
         </ItemContent>
         <ItemActions>
-          <Button variant="outline" size="sm">
+          <Button size="sm" variant="outline">
             Action
           </Button>
         </ItemActions>
       </Item>
       <Item
-        variant="outline"
-        size="sm"
         render={
           <a href="#">
             <ItemMedia>
@@ -169,6 +167,8 @@ export const Demo: Story = {
             </ItemActions>
           </a>
         }
+        size="sm"
+        variant="outline"
       />
     </div>
   ),
@@ -248,7 +248,7 @@ export const Size: Story = {
           </ItemDescription>
         </ItemContent>
       </Item>
-      <Item variant="outline" size="sm">
+      <Item size="sm" variant="outline">
         <ItemMedia variant="icon">
           <InboxIcon />
         </ItemMedia>
@@ -257,7 +257,7 @@ export const Size: Story = {
           <ItemDescription>A compact size for dense layouts.</ItemDescription>
         </ItemContent>
       </Item>
-      <Item variant="outline" size="xs">
+      <Item size="xs" variant="outline">
         <ItemMedia variant="icon">
           <InboxIcon />
         </ItemMedia>
@@ -329,10 +329,10 @@ export const WithAvatar: Story = {
         </ItemContent>
         <ItemActions>
           <Button
+            aria-label="Invite"
+            className="rounded-full"
             size="icon-sm"
             variant="outline"
-            className="rounded-full"
-            aria-label="Invite"
           >
             <PlusIcon />
           </Button>
@@ -340,22 +340,22 @@ export const WithAvatar: Story = {
       </Item>
       <Item variant="outline">
         <ItemMedia>
-          <div className="*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:grayscale">
+          <div className="flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:grayscale">
             <Avatar className="hidden sm:flex">
-              <AvatarImage src="https://i.pravatar.cc/150?u=alice" alt="@alice" />
+              <AvatarImage
+                alt="@alice"
+                src="https://i.pravatar.cc/150?u=alice"
+              />
               <AvatarFallback>AL</AvatarFallback>
             </Avatar>
             <Avatar className="hidden sm:flex">
-              <AvatarImage
-                src="https://i.pravatar.cc/150?u=bob"
-                alt="@bob"
-              />
+              <AvatarImage alt="@bob" src="https://i.pravatar.cc/150?u=bob" />
               <AvatarFallback>BO</AvatarFallback>
             </Avatar>
             <Avatar>
               <AvatarImage
-                src="https://i.pravatar.cc/150?u=carol"
                 alt="@carol"
+                src="https://i.pravatar.cc/150?u=carol"
               />
               <AvatarFallback>CA</AvatarFallback>
             </Avatar>
@@ -416,31 +416,33 @@ export const Image: Story = {
           <React.Fragment key={song.title}>
             {index > 0 && <ItemSeparator />}
             <Item
+              render={
+                <a href="#">
+                  <ItemMedia variant="image">
+                    <img
+                      alt={song.title}
+                      className="object-cover grayscale"
+                      height={32}
+                      src={`https://picsum.photos/seed/${encodeURIComponent(song.title)}/64/64`}
+                      width={32}
+                    />
+                  </ItemMedia>
+                  <ItemContent>
+                    <ItemTitle className="line-clamp-1">
+                      {song.title} -{" "}
+                      <span className="text-muted-foreground">
+                        {song.album}
+                      </span>
+                    </ItemTitle>
+                    <ItemDescription>{song.artist}</ItemDescription>
+                  </ItemContent>
+                  <ItemContent className="flex-none text-center">
+                    <ItemDescription>{song.duration}</ItemDescription>
+                  </ItemContent>
+                </a>
+              }
               role="listitem"
-            render={
-              <a href="#">
-                <ItemMedia variant="image">
-                  <img
-                    src={`https://picsum.photos/seed/${encodeURIComponent(song.title)}/64/64`}
-                    alt={song.title}
-                    width={32}
-                    height={32}
-                    className="object-cover grayscale"
-                  />
-                </ItemMedia>
-                <ItemContent>
-                  <ItemTitle className="line-clamp-1">
-                    {song.title} -{" "}
-                    <span className="text-muted-foreground">{song.album}</span>
-                  </ItemTitle>
-                  <ItemDescription>{song.artist}</ItemDescription>
-                </ItemContent>
-                <ItemContent className="flex-none text-center">
-                  <ItemDescription>{song.duration}</ItemDescription>
-                </ItemContent>
-              </a>
-            }
-          />
+            />
           </React.Fragment>
         ))}
       </ItemGroup>
@@ -473,7 +475,7 @@ export const Group: Story = {
     docs: {
       description: {
         story:
-          "Use `ItemGroup` to group related items together. Adds `role=\"list\"` for accessibility and manages gap spacing.",
+          'Use `ItemGroup` to group related items together. Adds `role="list"` for accessibility and manages gap spacing.',
       },
     },
   },
@@ -485,7 +487,7 @@ export const Group: Story = {
           <Item>
             <ItemMedia>
               <Avatar>
-                <AvatarImage src={person.avatar} className="grayscale" />
+                <AvatarImage className="grayscale" src={person.avatar} />
                 <AvatarFallback>{person.username.charAt(0)}</AvatarFallback>
               </Avatar>
             </ItemMedia>
@@ -494,7 +496,7 @@ export const Group: Story = {
               <ItemDescription>{person.email}</ItemDescription>
             </ItemContent>
             <ItemActions>
-              <Button variant="ghost" size="icon" className="rounded-full">
+              <Button className="rounded-full" size="icon" variant="ghost">
                 <PlusIcon />
               </Button>
             </ItemActions>
@@ -544,11 +546,11 @@ export const Header: Story = {
           <Item key={model.name} variant="outline">
             <ItemHeader>
               <img
-                src={model.image}
                 alt={model.name}
-                width={128}
-                height={128}
                 className="aspect-square w-full rounded-sm object-cover"
+                height={128}
+                src={model.image}
+                width={128}
               />
             </ItemHeader>
             <ItemContent>
@@ -591,9 +593,8 @@ export const Link: Story = {
         }
       />
       <Item
-        variant="outline"
         render={
-          <a href="#" target="_blank" rel="noopener noreferrer">
+          <a href="#" rel="noopener noreferrer" target="_blank">
             <ItemContent>
               <ItemTitle>External resource</ItemTitle>
               <ItemDescription>
@@ -605,6 +606,7 @@ export const Link: Story = {
             </ItemActions>
           </a>
         }
+        variant="outline"
       />
     </div>
   ),
@@ -630,17 +632,15 @@ export const Dropdown: Story = {
           </Button>
         }
       />
-      <DropdownMenuContent className="w-48" align="end">
+      <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuGroup>
           {people.map((person) => (
             <DropdownMenuItem key={person.username}>
-              <Item size="xs" className="w-full p-2">
+              <Item className="w-full p-2" size="xs">
                 <ItemMedia>
                   <Avatar className="size-6.5">
-                    <AvatarImage src={person.avatar} className="grayscale" />
-                    <AvatarFallback>
-                      {person.username.charAt(0)}
-                    </AvatarFallback>
+                    <AvatarImage className="grayscale" src={person.avatar} />
+                    <AvatarFallback>{person.username.charAt(0)}</AvatarFallback>
                   </Avatar>
                 </ItemMedia>
                 <ItemContent className="gap-0">
@@ -736,7 +736,7 @@ export const Footer: Story = {
           </ItemFooter>
         </ItemContent>
         <ItemActions>
-          <Button variant="outline" size="sm">
+          <Button size="sm" variant="outline">
             View
           </Button>
         </ItemActions>
@@ -763,11 +763,7 @@ export const HeaderFooter: Story = {
           <ItemHeader>
             <GitBranchIcon className="size-3.5" />
             <span>main</span>
-            <Badge
-              className="ml-auto text-[10px] px-1.5 py-0"
-            >
-              Merged
-            </Badge>
+            <Badge className="ml-auto px-1.5 py-0 text-[10px]">Merged</Badge>
           </ItemHeader>
           <ItemTitle>feat: add dark mode toggle to navigation bar</ItemTitle>
           <ItemDescription>
@@ -777,8 +773,8 @@ export const HeaderFooter: Story = {
           <ItemFooter>
             <Avatar className="size-4">
               <AvatarImage
-                src="https://i.pravatar.cc/150?u=alice"
                 alt="alice"
+                src="https://i.pravatar.cc/150?u=alice"
               />
               <AvatarFallback>AL</AvatarFallback>
             </Avatar>
@@ -813,8 +809,8 @@ export const RichFooter: Story = {
         <ItemMedia>
           <Avatar className="size-10">
             <AvatarImage
-              src="https://api.dicebear.com/9.x/icons/svg?seed=rocket&icon=rocket"
               alt="Deploy"
+              src="https://api.dicebear.com/9.x/icons/svg?seed=rocket&icon=rocket"
             />
             <AvatarFallback>D</AvatarFallback>
           </Avatar>
@@ -834,10 +830,10 @@ export const RichFooter: Story = {
               <span>42s</span>
             </div>
             <div className="flex items-center gap-1">
-              <Button variant="ghost" size="sm" className="h-6 text-xs">
+              <Button className="h-6 text-xs" size="sm" variant="ghost">
                 Logs
               </Button>
-              <Button variant="ghost" size="sm" className="h-6 text-xs">
+              <Button className="h-6 text-xs" size="sm" variant="ghost">
                 Visit
                 <ExternalLinkIcon className="ml-1 size-3" />
               </Button>
@@ -892,7 +888,7 @@ export const GroupedFooters: Story = {
           <Item>
             <ItemMedia>
               <Avatar>
-                <AvatarImage src={commit.avatar} className="grayscale" />
+                <AvatarImage className="grayscale" src={commit.avatar} />
                 <AvatarFallback>
                   {commit.name.charAt(0).toUpperCase()}
                 </AvatarFallback>
@@ -919,7 +915,7 @@ export const GroupedFooters: Story = {
               </ItemFooter>
             </ItemContent>
             <ItemActions>
-              <Button variant="ghost" size="icon" className="size-8">
+              <Button className="size-8" size="icon" variant="ghost">
                 <MoreHorizontalIcon />
                 <span className="sr-only">More options</span>
               </Button>

@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Avatar, AvatarFallback, AvatarImage } from "@keystone/ui/avatar";
+import { Button } from "@keystone/ui/button";
 import {
   Empty,
   EmptyContent,
@@ -7,21 +8,20 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@keystone/ui/empty";
-import { Button } from "@keystone/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@keystone/ui/avatar";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@keystone/ui/input-group";
 import { Kbd } from "@keystone/ui/kbd";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  FolderCodeIcon,
-  CloudIcon,
-  BellIcon,
   ArrowUpRightIcon,
-  RefreshCcwIcon,
+  BellIcon,
+  CloudIcon,
+  FolderCodeIcon,
   PlusIcon,
+  RefreshCcwIcon,
   SearchIcon,
 } from "lucide-react";
 
@@ -112,15 +112,15 @@ export const Default: Story = {
         <Button variant="outline">Import Project</Button>
       </EmptyContent>
       <Button
-        variant="link"
         className="text-muted-foreground"
-        size="sm"
         nativeButton={false}
         render={
           <a href="#">
             Learn More <ArrowUpRightIcon />
           </a>
         }
+        size="sm"
+        variant="link"
       />
     </Empty>
   ),
@@ -149,7 +149,7 @@ export const Outline: Story = {
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button variant="outline" size="sm">
+        <Button size="sm" variant="outline">
           Upload Files
         </Button>
       </EmptyContent>
@@ -167,7 +167,7 @@ export const Background: Story = {
     },
   },
   render: () => (
-    <Empty className="bg-muted/30 h-full">
+    <Empty className="h-full bg-muted/30">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <BellIcon />
@@ -202,8 +202,8 @@ export const WithAvatar: Story = {
         <EmptyMedia variant="default">
           <Avatar className="size-12">
             <AvatarImage
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
               className="grayscale"
+              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
             />
             <AvatarFallback>LR</AvatarFallback>
           </Avatar>
@@ -234,25 +234,25 @@ export const AvatarGroup: Story = {
     <Empty>
       <EmptyHeader>
         <EmptyMedia>
-          <div className="*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:size-12 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:grayscale">
+          <div className="flex -space-x-2 *:data-[slot=avatar]:size-12 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:grayscale">
             <Avatar>
               <AvatarImage
-                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
                 alt="Alex"
+                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
               />
               <AvatarFallback>AL</AvatarFallback>
             </Avatar>
             <Avatar>
               <AvatarImage
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face"
                 alt="Sarah"
+                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face"
               />
               <AvatarFallback>SA</AvatarFallback>
             </Avatar>
             <Avatar>
               <AvatarImage
-                src="https://images.unsplash.com/photo-1599566150163-29194dcabd9c?w=80&h=80&fit=crop&crop=face"
                 alt="Jordan"
+                src="https://images.unsplash.com/photo-1599566150163-29194dcabd9c?w=80&h=80&fit=crop&crop=face"
               />
               <AvatarFallback>JO</AvatarFallback>
             </Avatar>

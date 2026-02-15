@@ -1,7 +1,12 @@
 "use client";
 
+import {
+  AnimatePresence,
+  MotionConfig,
+  motion,
+  useReducedMotion,
+} from "motion/react";
 import * as React from "react";
-import { AnimatePresence, motion, MotionConfig, useReducedMotion } from "motion/react";
 import useMeasure from "react-use-measure";
 
 import { cn } from "./utils";
@@ -29,7 +34,7 @@ interface StepperContextValue {
 }
 
 const StepperContext = React.createContext<StepperContextValue | undefined>(
-  undefined,
+  undefined
 );
 
 /**
@@ -93,7 +98,7 @@ function Stepper({ value, onValueChange, children }: StepperProps) {
       const clamped = Math.max(0, Math.min(totalSteps - 1, step));
       onValueChange(clamped);
     },
-    [totalSteps, onValueChange],
+    [totalSteps, onValueChange]
   );
 
   const goNext = React.useCallback(() => {
@@ -115,7 +120,7 @@ function Stepper({ value, onValueChange, children }: StepperProps) {
       isFirst: value === 0,
       isLast: value === totalSteps - 1,
     }),
-    [value, totalSteps, direction, goTo, goNext, goPrevious],
+    [value, totalSteps, direction, goTo, goNext, goPrevious]
   );
 
   return (
@@ -178,23 +183,23 @@ function StepperContent({ className, children }: StepperContentProps) {
       }
     >
       <motion.div
-        data-slot="stepper-content"
         animate={{ height: bounds.height > 0 ? bounds.height : "auto" }}
         className={cn("relative overflow-hidden", className)}
+        data-slot="stepper-content"
       >
         <div ref={ref}>
           <AnimatePresence
-            mode="popLayout"
-            initial={false}
             custom={customValue}
+            initial={false}
+            mode="popLayout"
           >
             <motion.div
+              animate="active"
+              custom={customValue}
+              exit="exit"
+              initial="initial"
               key={value}
               variants={variants}
-              initial="initial"
-              animate="active"
-              exit="exit"
-              custom={customValue}
             >
               {activeStep}
             </motion.div>
@@ -211,9 +216,7 @@ function StepperContent({ className, children }: StepperContentProps) {
 export interface StepperStepProps extends React.ComponentProps<"div"> {}
 
 function StepperStep({ className, ...props }: StepperStepProps) {
-  return (
-    <div data-slot="stepper-step" className={className} {...props} />
-  );
+  return <div className={className} data-slot="stepper-step" {...props} />;
 }
 
 // =============================================================================

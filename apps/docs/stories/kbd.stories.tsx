@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Kbd, KbdGroup } from "@keystone/ui/kbd";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
   title: "Components/Kbd",
@@ -59,35 +59,35 @@ export const CommonShortcuts: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground w-24">Copy</span>
+        <span className="w-24 text-muted-foreground text-sm">Copy</span>
         <KbdGroup>
           <Kbd>⌘</Kbd>
           <Kbd>C</Kbd>
         </KbdGroup>
       </div>
       <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground w-24">Paste</span>
+        <span className="w-24 text-muted-foreground text-sm">Paste</span>
         <KbdGroup>
           <Kbd>⌘</Kbd>
           <Kbd>V</Kbd>
         </KbdGroup>
       </div>
       <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground w-24">Save</span>
+        <span className="w-24 text-muted-foreground text-sm">Save</span>
         <KbdGroup>
           <Kbd>⌘</Kbd>
           <Kbd>S</Kbd>
         </KbdGroup>
       </div>
       <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground w-24">Undo</span>
+        <span className="w-24 text-muted-foreground text-sm">Undo</span>
         <KbdGroup>
           <Kbd>⌘</Kbd>
           <Kbd>Z</Kbd>
         </KbdGroup>
       </div>
       <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground w-24">Search</span>
+        <span className="w-24 text-muted-foreground text-sm">Search</span>
         <KbdGroup>
           <Kbd>⌘</Kbd>
           <Kbd>K</Kbd>
@@ -103,7 +103,7 @@ export const WindowsStyle: Story = {
   render: () => (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground w-24">Copy</span>
+        <span className="w-24 text-muted-foreground text-sm">Copy</span>
         <KbdGroup>
           <Kbd>Ctrl</Kbd>
           <span className="text-muted-foreground">+</span>
@@ -111,7 +111,7 @@ export const WindowsStyle: Story = {
         </KbdGroup>
       </div>
       <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground w-24">Paste</span>
+        <span className="w-24 text-muted-foreground text-sm">Paste</span>
         <KbdGroup>
           <Kbd>Ctrl</Kbd>
           <span className="text-muted-foreground">+</span>
@@ -167,7 +167,7 @@ export const ComplexShortcut: Story = {
   name: "Complex Shortcut",
   render: () => (
     <div className="flex items-center gap-2">
-      <span className="text-sm text-muted-foreground">Toggle terminal:</span>
+      <span className="text-muted-foreground text-sm">Toggle terminal:</span>
       <KbdGroup>
         <Kbd>⌘</Kbd>
         <Kbd>⇧</Kbd>

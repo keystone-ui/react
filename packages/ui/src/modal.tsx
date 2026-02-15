@@ -1,12 +1,11 @@
 "use client";
 
-import * as React from "react";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
-import { XIcon } from "lucide-react";
 import { cva, type VariantProps } from "class-variance-authority";
-
-import { cn } from "./utils";
+import { XIcon } from "lucide-react";
+import * as React from "react";
 import { Button } from "./button";
+import { cn } from "./utils";
 
 // =============================================================================
 // Modal (Root)
@@ -23,8 +22,8 @@ export interface ModalTriggerProps extends DialogPrimitive.Trigger.Props {}
 function ModalTrigger({ className, ...props }: ModalTriggerProps) {
   return (
     <DialogPrimitive.Trigger
-      data-slot="modal-trigger"
       className={className}
+      data-slot="modal-trigger"
       {...props}
     />
   );
@@ -47,8 +46,8 @@ export interface ModalCloseProps extends DialogPrimitive.Close.Props {}
 function ModalClose({ className, ...props }: ModalCloseProps) {
   return (
     <DialogPrimitive.Close
-      data-slot="modal-close"
       className={className}
+      data-slot="modal-close"
       {...props}
     />
   );
@@ -62,11 +61,11 @@ export interface ModalOverlayProps extends DialogPrimitive.Backdrop.Props {}
 function ModalOverlay({ className, ...props }: ModalOverlayProps) {
   return (
     <DialogPrimitive.Backdrop
-      data-slot="modal-overlay"
       className={cn(
-        "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 fixed inset-0 z-50 bg-black/50",
-        className,
+        "data-closed:fade-out-0 data-open:fade-in-0 fixed inset-0 z-50 bg-black/50 data-closed:animate-out data-open:animate-in",
+        className
       )}
+      data-slot="modal-overlay"
       {...props}
     />
   );
@@ -76,7 +75,7 @@ function ModalOverlay({ className, ...props }: ModalOverlayProps) {
 // ModalContent Variants
 // =============================================================================
 const modalContentVariants = cva(
-  "bg-background data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg p-6 shadow-lg duration-200 outline-none",
+  "data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg bg-background p-6 shadow-lg outline-none duration-200 data-closed:animate-out data-open:animate-in",
   {
     variants: {
       size: {
@@ -90,7 +89,7 @@ const modalContentVariants = cva(
     defaultVariants: {
       size: "default",
     },
-  },
+  }
 );
 
 type ModalContentVariantsProps = VariantProps<typeof modalContentVariants>;
@@ -131,9 +130,9 @@ function ModalContent({
 
   const closeButton = showCloseButton && (
     <DialogPrimitive.Close
-      data-slot="modal-close"
-      render={<Button variant="ghost" size="icon-xs" />}
       className="absolute top-4 right-4"
+      data-slot="modal-close"
+      render={<Button size="icon-xs" variant="ghost" />}
     >
       <XIcon />
       <span className="sr-only">Close</span>
@@ -142,14 +141,14 @@ function ModalContent({
 
   const popup = (
     <DialogPrimitive.Popup
-      ref={popupRef}
-      data-slot="modal-content"
       className={cn(
         modalContentVariants({ size }),
         scrollBehavior === "outside" &&
           "relative top-auto left-auto translate-x-0 translate-y-0",
-        className,
+        className
       )}
+      data-slot="modal-content"
+      ref={popupRef}
       {...(scrollBehavior === "outside" && { initialFocus: popupRef })}
       {...props}
     >
@@ -163,8 +162,8 @@ function ModalContent({
       <ModalPortal>
         <ModalOverlay />
         <div
-          data-slot="modal-scroll-wrapper"
           className="fixed inset-0 z-50 overflow-y-auto"
+          data-slot="modal-scroll-wrapper"
         >
           <div className="flex min-h-full items-center justify-center p-4">
             {popup}
@@ -190,8 +189,8 @@ export interface ModalHeaderProps extends React.ComponentProps<"div"> {}
 function ModalHeader({ className, ...props }: ModalHeaderProps) {
   return (
     <div
-      data-slot="modal-header"
       className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
+      data-slot="modal-header"
       {...props}
     />
   );
@@ -216,11 +215,11 @@ function ModalFooter({
 }: ModalFooterProps) {
   return (
     <div
-      data-slot="modal-footer"
       className={cn(
         "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
-        className,
+        className
       )}
+      data-slot="modal-footer"
       {...props}
     >
       {children}
@@ -241,8 +240,8 @@ export interface ModalTitleProps extends DialogPrimitive.Title.Props {}
 function ModalTitle({ className, ...props }: ModalTitleProps) {
   return (
     <DialogPrimitive.Title
+      className={cn("font-semibold text-lg leading-none", className)}
       data-slot="modal-title"
-      className={cn("text-lg leading-none font-semibold", className)}
       {...props}
     />
   );
@@ -257,8 +256,8 @@ export interface ModalDescriptionProps
 function ModalDescription({ className, ...props }: ModalDescriptionProps) {
   return (
     <DialogPrimitive.Description
-      data-slot="modal-description"
       className={cn("text-muted-foreground text-sm", className)}
+      data-slot="modal-description"
       {...props}
     />
   );

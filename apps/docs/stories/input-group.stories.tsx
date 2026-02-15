@@ -1,24 +1,24 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
-import { 
-  InputGroup, 
-  InputGroupAddon,
-  InputGroupInput,
-  InputGroupTextarea,
-  InputGroupButton,
-  InputGroupText,
-} from "@keystone/ui/input-group";
 import {
-  Mail as MailIcon,
-  Search as SearchIcon,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from "@keystone/ui/input-group";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import {
+  Check as CheckIcon,
+  Copy as CopyIcon,
   Eye as EyeIcon,
   EyeOff as EyeOffIcon,
-  X as XIcon,
-  Copy as CopyIcon,
-  Check as CheckIcon,
   Loader2 as LoaderIcon,
+  Mail as MailIcon,
+  Search as SearchIcon,
   SendHorizonal as SendIcon,
+  X as XIcon,
 } from "lucide-react";
+import { useState } from "react";
 
 const meta = {
   title: "Components/InputGroup",
@@ -158,17 +158,21 @@ export const PasswordToggle: Story = {
     return (
       <div className="max-w-sm">
         <InputGroup>
-          <InputGroupInput 
-            type={showPassword ? "text" : "password"} 
-            placeholder="Password" 
+          <InputGroupInput
+            placeholder="Password"
+            type={showPassword ? "text" : "password"}
           />
           <InputGroupAddon align="inline-end">
-            <InputGroupButton 
-              size="icon-xs"
-              onClick={() => setShowPassword(!showPassword)}
+            <InputGroupButton
               aria-label={showPassword ? "Hide password" : "Show password"}
+              onClick={() => setShowPassword(!showPassword)}
+              size="icon-xs"
             >
-              {showPassword ? <EyeOffIcon className="size-4" /> : <EyeIcon className="size-4" />}
+              {showPassword ? (
+                <EyeOffIcon className="size-4" />
+              ) : (
+                <EyeIcon className="size-4" />
+              )}
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>
@@ -204,9 +208,9 @@ export const SearchWithKeyboardShortcut: Story = {
         <InputGroupAddon>
           <SearchIcon className="size-4" />
         </InputGroupAddon>
-        <InputGroupInput type="search" placeholder="Search..." />
+        <InputGroupInput placeholder="Search..." type="search" />
         <InputGroupAddon align="inline-end">
-          <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded-sm border bg-muted px-1.5 font-mono text-[10px] font-medium">
+          <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded-sm border bg-muted px-1.5 font-medium font-mono text-[10px]">
             <span className="text-xs">⌘</span>K
           </kbd>
         </InputGroupAddon>
@@ -223,17 +227,17 @@ export const ClearButton: Story = {
     return (
       <div className="max-w-sm">
         <InputGroup>
-          <InputGroupInput 
-            value={value} 
+          <InputGroupInput
             onChange={(e) => setValue(e.target.value)}
-            placeholder="Type something..." 
+            placeholder="Type something..."
+            value={value}
           />
           <InputGroupAddon align="inline-end">
-            <InputGroupButton 
-              size="icon-xs"
-              onClick={() => setValue("")}
+            <InputGroupButton
               aria-label="Clear input"
               disabled={!value}
+              onClick={() => setValue("")}
+              size="icon-xs"
             >
               <XIcon className="size-4" />
             </InputGroupButton>
@@ -253,7 +257,7 @@ export const EmailInput: Story = {
         <InputGroupAddon>
           <MailIcon className="size-4" />
         </InputGroupAddon>
-        <InputGroupInput type="email" placeholder="you@example.com" />
+        <InputGroupInput placeholder="you@example.com" type="email" />
       </InputGroup>
     </div>
   ),
@@ -263,9 +267,9 @@ export const EmailInput: Story = {
 export const ButtonSizes: Story = {
   name: "Button Sizes",
   render: () => (
-    <div className="space-y-4 max-w-sm">
+    <div className="max-w-sm space-y-4">
       <div>
-        <p className="text-sm text-muted-foreground mb-2">Size: xs (default)</p>
+        <p className="mb-2 text-muted-foreground text-sm">Size: xs (default)</p>
         <InputGroup>
           <InputGroupInput placeholder="Enter value" />
           <InputGroupAddon align="inline-end">
@@ -274,7 +278,7 @@ export const ButtonSizes: Story = {
         </InputGroup>
       </div>
       <div>
-        <p className="text-sm text-muted-foreground mb-2">Size: sm</p>
+        <p className="mb-2 text-muted-foreground text-sm">Size: sm</p>
         <InputGroup>
           <InputGroupInput placeholder="Enter value" />
           <InputGroupAddon align="inline-end">
@@ -283,7 +287,7 @@ export const ButtonSizes: Story = {
         </InputGroup>
       </div>
       <div>
-        <p className="text-sm text-muted-foreground mb-2">Size: icon-xs</p>
+        <p className="mb-2 text-muted-foreground text-sm">Size: icon-xs</p>
         <InputGroup>
           <InputGroupInput placeholder="Enter value" />
           <InputGroupAddon align="inline-end">
@@ -294,7 +298,7 @@ export const ButtonSizes: Story = {
         </InputGroup>
       </div>
       <div>
-        <p className="text-sm text-muted-foreground mb-2">Size: icon-sm</p>
+        <p className="mb-2 text-muted-foreground text-sm">Size: icon-sm</p>
         <InputGroup>
           <InputGroupInput placeholder="Enter value" />
           <InputGroupAddon align="inline-end">
@@ -312,9 +316,11 @@ export const ButtonSizes: Story = {
 export const BlockLayout: Story = {
   name: "Block Layout (Vertical)",
   render: () => (
-    <div className="space-y-4 max-w-sm">
+    <div className="max-w-sm space-y-4">
       <div>
-        <p className="text-sm text-muted-foreground mb-2">Label above (block-start)</p>
+        <p className="mb-2 text-muted-foreground text-sm">
+          Label above (block-start)
+        </p>
         <InputGroup>
           <InputGroupAddon align="block-start">
             <InputGroupText>Email address</InputGroupText>
@@ -323,11 +329,13 @@ export const BlockLayout: Story = {
         </InputGroup>
       </div>
       <div>
-        <p className="text-sm text-muted-foreground mb-2">Helper below (block-end)</p>
+        <p className="mb-2 text-muted-foreground text-sm">
+          Helper below (block-end)
+        </p>
         <InputGroup>
           <InputGroupInput placeholder="Username" />
           <InputGroupAddon align="block-end">
-            <InputGroupText className="text-xs text-muted-foreground">
+            <InputGroupText className="text-muted-foreground text-xs">
               Must be 3-20 characters
             </InputGroupText>
           </InputGroupAddon>
@@ -341,7 +349,7 @@ export const BlockLayout: Story = {
 export const LoadingSpinner: Story = {
   name: "Loading Spinner",
   render: () => (
-    <div className="space-y-4 max-w-sm">
+    <div className="max-w-sm space-y-4">
       <InputGroup>
         <InputGroupInput placeholder="Searching..." />
         <InputGroupAddon align="inline-end">
@@ -357,7 +365,9 @@ export const LoadingSpinner: Story = {
       <InputGroup>
         <InputGroupInput placeholder="Saving changes..." />
         <InputGroupAddon align="inline-end">
-          <InputGroupText className="text-muted-foreground text-xs">Saving...</InputGroupText>
+          <InputGroupText className="text-muted-foreground text-xs">
+            Saving...
+          </InputGroupText>
           <LoaderIcon className="size-4 animate-spin" />
         </InputGroupAddon>
       </InputGroup>
@@ -366,7 +376,8 @@ export const LoadingSpinner: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Show a loading spinner inside the input to indicate processing or searching.",
+        story:
+          "Show a loading spinner inside the input to indicate processing or searching.",
       },
     },
   },
@@ -377,24 +388,28 @@ export const CopyToClipboard: Story = {
   name: "Copy to Clipboard",
   render: () => {
     const [isCopied, setIsCopied] = useState(false);
-    
+
     const handleCopy = () => {
       navigator.clipboard.writeText("https://example.com/api/key");
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     };
-    
+
     return (
       <div className="max-w-sm">
         <InputGroup>
-          <InputGroupInput value="https://example.com/api/key" readOnly />
+          <InputGroupInput readOnly value="https://example.com/api/key" />
           <InputGroupAddon align="inline-end">
             <InputGroupButton
-              size="icon-xs"
               aria-label="Copy to clipboard"
               onClick={handleCopy}
+              size="icon-xs"
             >
-              {isCopied ? <CheckIcon className="size-4" /> : <CopyIcon className="size-4" />}
+              {isCopied ? (
+                <CheckIcon className="size-4" />
+              ) : (
+                <CopyIcon className="size-4" />
+              )}
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>
@@ -404,7 +419,8 @@ export const CopyToClipboard: Story = {
   parameters: {
     docs: {
       description: {
-        story: "A copy button that shows visual feedback when content is copied to clipboard.",
+        story:
+          "A copy button that shows visual feedback when content is copied to clipboard.",
       },
     },
   },
@@ -417,7 +433,7 @@ export const WithSelectDropdown: Story = {
     <div className="max-w-sm">
       <InputGroup>
         <InputGroupAddon>
-          <select className="h-full border-0 bg-transparent text-sm focus:ring-0 focus:outline-none text-muted-foreground">
+          <select className="h-full border-0 bg-transparent text-muted-foreground text-sm focus:outline-none focus:ring-0">
             <option>https://</option>
             <option>http://</option>
             <option>ftp://</option>
@@ -430,7 +446,8 @@ export const WithSelectDropdown: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Combine a native select dropdown with the input for protocol or prefix selection.",
+        story:
+          "Combine a native select dropdown with the input for protocol or prefix selection.",
       },
     },
   },
@@ -444,7 +461,7 @@ export const WithTextarea: Story = {
       <InputGroup>
         <InputGroupTextarea placeholder="Write a message..." rows={3} />
         <InputGroupAddon align="inline-end">
-          <InputGroupButton size="icon-xs" aria-label="Send">
+          <InputGroupButton aria-label="Send" size="icon-xs">
             <SendIcon className="size-4" />
           </InputGroupButton>
         </InputGroupAddon>
@@ -454,7 +471,8 @@ export const WithTextarea: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Use `InputGroupTextarea` instead of `InputGroupInput` for multiline text. The container automatically expands to fit.",
+        story:
+          "Use `InputGroupTextarea` instead of `InputGroupInput` for multiline text. The container automatically expands to fit.",
       },
     },
   },

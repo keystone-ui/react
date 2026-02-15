@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@keystone/ui/resizable";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 // ---------------------------------------------------------------------------
 // Meta
@@ -60,8 +60,8 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => (
     <ResizablePanelGroup
-      orientation="horizontal"
       className="max-w-sm rounded-lg border"
+      orientation="horizontal"
     >
       <ResizablePanel defaultSize="50%">
         <div className="flex h-[200px] items-center justify-center p-6">
@@ -96,8 +96,8 @@ export const Vertical: Story = {
   name: "Vertical",
   render: () => (
     <ResizablePanelGroup
-      orientation="vertical"
       className="min-h-[200px] max-w-sm rounded-lg border"
+      orientation="vertical"
     >
       <ResizablePanel defaultSize="25%">
         <div className="flex h-full items-center justify-center p-6">
@@ -122,8 +122,8 @@ export const Handle: Story = {
   name: "Handle",
   render: () => (
     <ResizablePanelGroup
-      orientation="horizontal"
       className="min-h-[200px] max-w-md rounded-lg border md:min-w-[450px]"
+      orientation="horizontal"
     >
       <ResizablePanel defaultSize="25%">
         <div className="flex h-full items-center justify-center p-6">

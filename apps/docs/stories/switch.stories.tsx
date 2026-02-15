@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Field,
   FieldContent,
@@ -8,6 +7,7 @@ import {
   FieldTitle,
 } from "@keystone/ui/field";
 import { Switch } from "@keystone/ui/switch";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
   title: "Components/Switch",
@@ -64,7 +64,7 @@ type Story = StoryObj<typeof Switch>;
 export const Basic: Story = {
   name: "Basic",
   render: () => (
-    <Field orientation="horizontal" className="w-fit">
+    <Field className="w-fit" orientation="horizontal">
       <Switch id="airplane-mode" />
       <FieldLabel htmlFor="airplane-mode">Airplane Mode</FieldLabel>
     </Field>
@@ -83,9 +83,11 @@ export const Basic: Story = {
 export const Description: Story = {
   name: "Description",
   render: () => (
-    <Field orientation="horizontal" className="max-w-sm">
+    <Field className="max-w-sm" orientation="horizontal">
       <FieldContent>
-        <FieldLabel htmlFor="switch-focus-mode">Share across devices</FieldLabel>
+        <FieldLabel htmlFor="switch-focus-mode">
+          Share across devices
+        </FieldLabel>
         <FieldDescription>
           Focus is shared across devices, and turns off when you leave the app.
         </FieldDescription>
@@ -128,7 +130,7 @@ export const ChoiceCard: Story = {
               Receive notifications when focus mode is enabled or disabled.
             </FieldDescription>
           </FieldContent>
-          <Switch id="switch-notifications" defaultChecked />
+          <Switch defaultChecked id="switch-notifications" />
         </Field>
       </FieldLabel>
     </FieldGroup>
@@ -147,8 +149,8 @@ export const ChoiceCard: Story = {
 export const Disabled: Story = {
   name: "Disabled",
   render: () => (
-    <Field orientation="horizontal" data-disabled className="w-fit">
-      <Switch id="switch-disabled-unchecked" disabled />
+    <Field className="w-fit" data-disabled orientation="horizontal">
+      <Switch disabled id="switch-disabled-unchecked" />
       <FieldLabel htmlFor="switch-disabled-unchecked">Disabled</FieldLabel>
     </Field>
   ),
@@ -166,7 +168,7 @@ export const Disabled: Story = {
 export const Invalid: Story = {
   name: "Invalid",
   render: () => (
-    <Field orientation="horizontal" className="max-w-sm" data-invalid>
+    <Field className="max-w-sm" data-invalid orientation="horizontal">
       <FieldContent>
         <FieldLabel htmlFor="switch-terms">
           Accept terms and conditions
@@ -175,14 +177,14 @@ export const Invalid: Story = {
           You must accept the terms and conditions to continue.
         </FieldDescription>
       </FieldContent>
-      <Switch id="switch-terms" aria-invalid />
+      <Switch aria-invalid id="switch-terms" />
     </Field>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          'To show invalid styles, set `aria-invalid` on the `<Switch>` for the red border and `data-invalid` on the `<Field>` wrapper to turn the label text red. Both attributes work together to provide clear visual feedback for validation errors.',
+          "To show invalid styles, set `aria-invalid` on the `<Switch>` for the red border and `data-invalid` on the `<Field>` wrapper to turn the label text red. Both attributes work together to provide clear visual feedback for validation errors.",
       },
     },
   },

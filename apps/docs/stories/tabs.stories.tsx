@@ -1,11 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@keystone/ui/tabs";
 import { Button } from "@keystone/ui/button";
 import {
   Card,
@@ -14,6 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@keystone/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@keystone/ui/tabs";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   AppWindowIcon,
   BarChartIcon,
@@ -27,6 +21,7 @@ import {
   ShieldIcon,
   UsersIcon,
 } from "lucide-react";
+import { useState } from "react";
 
 const meta = {
   title: "Components/Tabs",
@@ -114,7 +109,7 @@ type Story = StoryObj<typeof Tabs>;
 // Basic tabs with Card content panels
 export const Default: Story = {
   render: () => (
-    <Tabs defaultValue="overview" className="w-[400px]">
+    <Tabs className="w-[400px]" defaultValue="overview">
       <TabsList>
         <TabsTrigger value="overview">Overview</TabsTrigger>
         <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -191,17 +186,17 @@ export const Line: Story = {
         <TabsTrigger value="reports">Reports</TabsTrigger>
       </TabsList>
       <TabsContent value="overview">
-        <p className="text-muted-foreground text-sm pt-2">
+        <p className="pt-2 text-muted-foreground text-sm">
           Overview content goes here.
         </p>
       </TabsContent>
       <TabsContent value="analytics">
-        <p className="text-muted-foreground text-sm pt-2">
+        <p className="pt-2 text-muted-foreground text-sm">
           Analytics content goes here.
         </p>
       </TabsContent>
       <TabsContent value="reports">
-        <p className="text-muted-foreground text-sm pt-2">
+        <p className="pt-2 text-muted-foreground text-sm">
           Reports content goes here.
         </p>
       </TabsContent>
@@ -220,7 +215,7 @@ export const Line: Story = {
 // Vertical orientation
 export const Vertical: Story = {
   render: () => (
-    <Tabs defaultValue="overview" orientation="vertical" className="w-[400px]">
+    <Tabs className="w-[400px]" defaultValue="overview" orientation="vertical">
       <TabsList>
         <TabsTrigger value="overview">Overview</TabsTrigger>
         <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -297,18 +292,18 @@ export const Disabled: Story = {
     <Tabs defaultValue="home">
       <TabsList>
         <TabsTrigger value="home">Home</TabsTrigger>
-        <TabsTrigger value="settings" disabled>
+        <TabsTrigger disabled value="settings">
           Disabled
         </TabsTrigger>
         <TabsTrigger value="notifications">Notifications</TabsTrigger>
       </TabsList>
       <TabsContent value="home">
-        <p className="text-muted-foreground text-sm pt-2">
+        <p className="pt-2 text-muted-foreground text-sm">
           Home content goes here.
         </p>
       </TabsContent>
       <TabsContent value="notifications">
-        <p className="text-muted-foreground text-sm pt-2">
+        <p className="pt-2 text-muted-foreground text-sm">
           Notifications content goes here.
         </p>
       </TabsContent>
@@ -331,47 +326,47 @@ export const Controlled: Story = {
 
     return (
       <div className="space-y-4">
-        <Tabs value={value} onValueChange={setValue}>
+        <Tabs onValueChange={setValue} value={value}>
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="reports">Reports</TabsTrigger>
           </TabsList>
           <TabsContent value="overview">
-            <p className="text-muted-foreground text-sm pt-2">
+            <p className="pt-2 text-muted-foreground text-sm">
               Overview content goes here.
             </p>
           </TabsContent>
           <TabsContent value="analytics">
-            <p className="text-muted-foreground text-sm pt-2">
+            <p className="pt-2 text-muted-foreground text-sm">
               Analytics content goes here.
             </p>
           </TabsContent>
           <TabsContent value="reports">
-            <p className="text-muted-foreground text-sm pt-2">
+            <p className="pt-2 text-muted-foreground text-sm">
               Reports content goes here.
             </p>
           </TabsContent>
         </Tabs>
         <div className="flex gap-2">
           <Button
-            variant="outline"
-            size="sm"
             onClick={() => setValue("overview")}
+            size="sm"
+            variant="outline"
           >
             Go to Overview
           </Button>
           <Button
-            variant="outline"
-            size="sm"
             onClick={() => setValue("analytics")}
+            size="sm"
+            variant="outline"
           >
             Go to Analytics
           </Button>
           <Button
-            variant="outline"
-            size="sm"
             onClick={() => setValue("reports")}
+            size="sm"
+            variant="outline"
           >
             Go to Reports
           </Button>
@@ -405,12 +400,12 @@ export const WithIcons: Story = {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="preview">
-        <p className="text-muted-foreground text-sm pt-2">
+        <p className="pt-2 text-muted-foreground text-sm">
           Preview content goes here.
         </p>
       </TabsContent>
       <TabsContent value="code">
-        <p className="text-muted-foreground text-sm pt-2">
+        <p className="pt-2 text-muted-foreground text-sm">
           Code content goes here.
         </p>
       </TabsContent>
@@ -430,7 +425,7 @@ export const WithIcons: Story = {
 export const LineVertical: Story = {
   name: "Line Vertical",
   render: () => (
-    <Tabs defaultValue="general" orientation="vertical" className="w-[400px]">
+    <Tabs className="w-[400px]" defaultValue="general" orientation="vertical">
       <TabsList variant="line">
         <TabsTrigger value="general">
           <SettingsIcon />
@@ -499,8 +494,11 @@ export const LineVertical: Story = {
 // Scrollable tabs with many items in a constrained container
 export const Scrollable: Story = {
   render: () => (
-    <div style={{ maxWidth: 480 }} className="rounded-lg border border-dashed border-border p-3">
-      <p className="text-muted-foreground mb-3 text-xs">
+    <div
+      className="rounded-lg border border-border border-dashed p-3"
+      style={{ maxWidth: 480 }}
+    >
+      <p className="mb-3 text-muted-foreground text-xs">
         Constrained to 480px &mdash; use the arrow buttons to navigate
       </p>
       <Tabs defaultValue="dashboard">
@@ -649,7 +647,7 @@ export const Scrollable: Story = {
     docs: {
       description: {
         story:
-          'Use the `scrollable` prop on `TabsList` when you have many tabs that may overflow the container. This enables horizontal scrolling with CSS scroll-driven gradient fades (Chrome 115+, gracefully degrades) and arrow buttons for navigation. On mobile, users can also swipe to scroll.',
+          "Use the `scrollable` prop on `TabsList` when you have many tabs that may overflow the container. This enables horizontal scrolling with CSS scroll-driven gradient fades (Chrome 115+, gracefully degrades) and arrow buttons for navigation. On mobile, users can also swipe to scroll.",
       },
     },
   },
@@ -664,12 +662,12 @@ export const Pill: Story = {
         <TabsTrigger value="bonus-history">Bonus History</TabsTrigger>
       </TabsList>
       <TabsContent value="all-bonuses">
-        <p className="text-muted-foreground text-sm pt-2">
+        <p className="pt-2 text-muted-foreground text-sm">
           View all available bonuses.
         </p>
       </TabsContent>
       <TabsContent value="bonus-history">
-        <p className="text-muted-foreground text-sm pt-2">
+        <p className="pt-2 text-muted-foreground text-sm">
           View your bonus history.
         </p>
       </TabsContent>
@@ -691,7 +689,7 @@ export const AnimatedIndicator: Story = {
   render: () => (
     <div className="space-y-8">
       <div className="space-y-2">
-        <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+        <p className="font-medium text-muted-foreground text-xs uppercase tracking-wider">
           Default
         </p>
         <Tabs defaultValue="overview">
@@ -705,7 +703,7 @@ export const AnimatedIndicator: Story = {
       </div>
 
       <div className="space-y-2">
-        <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+        <p className="font-medium text-muted-foreground text-xs uppercase tracking-wider">
           Pill
         </p>
         <Tabs defaultValue="overview">
@@ -719,7 +717,7 @@ export const AnimatedIndicator: Story = {
       </div>
 
       <div className="space-y-2">
-        <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+        <p className="font-medium text-muted-foreground text-xs uppercase tracking-wider">
           Line
         </p>
         <Tabs defaultValue="overview">
@@ -733,7 +731,7 @@ export const AnimatedIndicator: Story = {
       </div>
 
       <div className="space-y-2">
-        <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider">
+        <p className="font-medium text-muted-foreground text-xs uppercase tracking-wider">
           Line + Vertical
         </p>
         <Tabs defaultValue="overview" orientation="vertical">

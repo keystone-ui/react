@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Label } from "@keystone/ui/label";
 import { Input } from "@keystone/ui/input";
+import { Label } from "@keystone/ui/label";
 import { Textarea } from "@keystone/ui/textarea";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
   title: "Components/Label",
@@ -83,7 +83,7 @@ export const WithDescription: Story = {
     children: (
       <div className="space-y-1">
         <div>Username</div>
-        <p className="text-xs text-muted-foreground font-normal">
+        <p className="font-normal text-muted-foreground text-xs">
           This will be displayed on your profile
         </p>
       </div>
@@ -97,27 +97,21 @@ export const Examples: Story = {
   render: () => (
     <div className="space-y-8">
       <div className="space-y-4">
-        <h3 className="text-lg font-medium">Basic Labels</h3>
+        <h3 className="font-medium text-lg">Basic Labels</h3>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="first-name">First name</Label>
-            <Input
-              id="first-name"
-              placeholder="Enter your first name"
-            />
+            <Input id="first-name" placeholder="Enter your first name" />
           </div>
           <div className="space-y-2">
             <Label htmlFor="last-name">Last name</Label>
-            <Input
-              id="last-name"
-              placeholder="Enter your last name"
-            />
+            <Input id="last-name" placeholder="Enter your last name" />
           </div>
         </div>
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-lg font-medium">Required Fields</h3>
+        <h3 className="font-medium text-lg">Required Fields</h3>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="email-required">
@@ -135,29 +129,29 @@ export const Examples: Story = {
             </Label>
             <Input
               id="password-required"
-              type="password"
               placeholder="Enter your password"
               required
+              type="password"
             />
           </div>
         </div>
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-lg font-medium">With Descriptions</h3>
+        <h3 className="font-medium text-lg">With Descriptions</h3>
         <div className="grid gap-4">
           <div className="space-y-2">
             <Label htmlFor="bio">
               <div className="space-y-1">
                 <div>Bio</div>
-                <p className="text-xs text-muted-foreground font-normal">
+                <p className="font-normal text-muted-foreground text-xs">
                   Write a short introduction about yourself
                 </p>
               </div>
             </Label>
             <Textarea
-              id="bio"
               className="h-24"
+              id="bio"
               placeholder="I'm a software developer..."
             />
           </div>
@@ -165,18 +159,18 @@ export const Examples: Story = {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-lg font-medium">Disabled State</h3>
+        <h3 className="font-medium text-lg">Disabled State</h3>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="disabled-input">Disabled field</Label>
             <Input
+              disabled
               id="disabled-input"
               placeholder="This field is disabled"
-              disabled
             />
           </div>
         </div>
       </div>
     </div>
   ),
-}; 
+};

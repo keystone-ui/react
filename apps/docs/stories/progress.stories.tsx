@@ -1,5 +1,3 @@
-import * as React from "react";
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Progress,
   ProgressIndicator,
@@ -14,6 +12,8 @@ import {
   SliderThumb,
   SliderTrack,
 } from "@keystone/ui/slider";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import * as React from "react";
 
 const meta = {
   title: "Components/Progress",
@@ -71,7 +71,8 @@ import {
   argTypes: {
     value: {
       control: { type: "range", min: 0, max: 100, step: 1 },
-      description: "The current progress value (0-100). Set to null for indeterminate.",
+      description:
+        "The current progress value (0-100). Set to null for indeterminate.",
     },
     color: {
       control: "radio",
@@ -98,7 +99,8 @@ export const Basic: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Basic progress bar with a single `value` prop. The indicator width animates smoothly on value changes.",
+        story:
+          "Basic progress bar with a single `value` prop. The indicator width animates smoothly on value changes.",
       },
     },
   },
@@ -107,13 +109,15 @@ export const Basic: Story = {
 // Animated
 export const Animated: Story = {
   name: "Animated",
-  render: function AnimatedExample() {
+  render() {
     const [value, setValue] = React.useState(10);
 
     React.useEffect(() => {
       const interval = setInterval(() => {
         setValue((current) =>
-          current >= 100 ? 10 : Math.min(100, Math.round(current + Math.random() * 20))
+          current >= 100
+            ? 10
+            : Math.min(100, Math.round(current + Math.random() * 20))
         );
       }, 1000);
       return () => clearInterval(interval);
@@ -136,7 +140,8 @@ export const Animated: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Watch the indicator bar animate smoothly between values. Powered by a CSS `transition` on `width`.",
+        story:
+          "Watch the indicator bar animate smoothly between values. Powered by a CSS `transition` on `width`.",
       },
     },
   },
@@ -164,7 +169,8 @@ export const WithLabelAndValue: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Use `ProgressLabel` and `ProgressValue` for contextual information above the bar.",
+        story:
+          "Use `ProgressLabel` and `ProgressValue` for contextual information above the bar.",
       },
     },
   },
@@ -194,7 +200,8 @@ export const CustomValueFormat: Story = {
   parameters: {
     docs: {
       description: {
-        story: "`ProgressValue` accepts a render function for custom formatting: `(formattedValue, rawValue) => string`.",
+        story:
+          "`ProgressValue` accepts a render function for custom formatting: `(formattedValue, rawValue) => string`.",
       },
     },
   },
@@ -206,27 +213,28 @@ export const Colors: Story = {
   render: () => (
     <div className="w-full max-w-sm space-y-6">
       <div className="space-y-2">
-        <span className="text-sm font-medium">Default</span>
-        <Progress value={60} color="default" />
+        <span className="font-medium text-sm">Default</span>
+        <Progress color="default" value={60} />
       </div>
       <div className="space-y-2">
-        <span className="text-sm font-medium">Success</span>
-        <Progress value={80} color="success" />
+        <span className="font-medium text-sm">Success</span>
+        <Progress color="success" value={80} />
       </div>
       <div className="space-y-2">
-        <span className="text-sm font-medium">Warning</span>
-        <Progress value={45} color="warning" />
+        <span className="font-medium text-sm">Warning</span>
+        <Progress color="warning" value={45} />
       </div>
       <div className="space-y-2">
-        <span className="text-sm font-medium">Destructive</span>
-        <Progress value={25} color="destructive" />
+        <span className="font-medium text-sm">Destructive</span>
+        <Progress color="destructive" value={25} />
       </div>
     </div>
   ),
   parameters: {
     docs: {
       description: {
-        story: "Use the `color` prop to indicate different statuses: `default`, `success`, `warning`, or `destructive`.",
+        story:
+          "Use the `color` prop to indicate different statuses: `default`, `success`, `warning`, or `destructive`.",
       },
     },
   },
@@ -248,7 +256,8 @@ export const Indeterminate: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Pass `value={null}` for an indeterminate state with an animated sliding bar. Useful when progress cannot be determined.",
+        story:
+          "Pass `value={null}` for an indeterminate state with an animated sliding bar. Useful when progress cannot be determined.",
       },
     },
   },
@@ -257,7 +266,7 @@ export const Indeterminate: Story = {
 // Controlled
 export const Controlled: Story = {
   name: "Controlled",
-  render: function ControlledExample() {
+  render() {
     const [value, setValue] = React.useState<number | number[]>(50);
     const numericValue = Array.isArray(value) ? value[0] : value;
 
@@ -272,7 +281,7 @@ export const Controlled: Story = {
             <ProgressIndicator />
           </ProgressTrack>
         </Progress>
-        <Slider value={value} onValueChange={setValue}>
+        <Slider onValueChange={setValue} value={value}>
           <SliderControl>
             <SliderTrack>
               <SliderIndicator />
@@ -286,7 +295,8 @@ export const Controlled: Story = {
   parameters: {
     docs: {
       description: {
-        story: "A progress bar controlled by the Slider component. Drag the thumb to see the indicator animate smoothly between values.",
+        story:
+          "A progress bar controlled by the Slider component. Drag the thumb to see the indicator animate smoothly between values.",
       },
     },
   },
@@ -297,7 +307,7 @@ export const Complete: Story = {
   name: "Complete",
   render: () => (
     <div className="w-full max-w-sm space-y-2">
-      <Progress value={100} color="success">
+      <Progress color="success" value={100}>
         <div className="flex justify-between">
           <ProgressLabel>Upload complete</ProgressLabel>
           <ProgressValue />
@@ -311,7 +321,8 @@ export const Complete: Story = {
   parameters: {
     docs: {
       description: {
-        story: "When `value` reaches 100, the `data-complete` attribute is set on all sub-components.",
+        story:
+          "When `value` reaches 100, the `data-complete` attribute is set on all sub-components.",
       },
     },
   },

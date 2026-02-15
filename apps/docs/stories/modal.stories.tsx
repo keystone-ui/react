@@ -1,5 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as React from "react";
+import { Button } from "@keystone/ui/button";
+import { Checkbox } from "@keystone/ui/checkbox";
+import { Input } from "@keystone/ui/input";
+import { Label } from "@keystone/ui/label";
 import {
   Modal,
   ModalClose,
@@ -16,10 +18,8 @@ import {
   StepperStep,
   useStepper,
 } from "@keystone/ui/stepper";
-import { Button } from "@keystone/ui/button";
-import { Input } from "@keystone/ui/input";
-import { Label } from "@keystone/ui/label";
-import { Checkbox } from "@keystone/ui/checkbox";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import * as React from "react";
 
 const meta = {
   title: "Components/Modal",
@@ -103,9 +103,7 @@ export const Default: Story = {
         </ModalHeader>
         <ModalFooter>
           <Button>Confirm</Button>
-          <ModalClose render={<Button variant="outline" />}>
-            Cancel
-          </ModalClose>
+          <ModalClose render={<Button variant="outline" />}>Cancel</ModalClose>
         </ModalFooter>
       </ModalContent>
     </Modal>
@@ -163,9 +161,7 @@ export const Sizes: Story = {
 export const CustomCloseButton: Story = {
   render: () => (
     <Modal>
-      <ModalTrigger render={<Button variant="outline" />}>
-        Share
-      </ModalTrigger>
+      <ModalTrigger render={<Button variant="outline" />}>Share</ModalTrigger>
       <ModalContent className="sm:max-w-md">
         <ModalHeader>
           <ModalTitle>Share link</ModalTitle>
@@ -175,20 +171,18 @@ export const CustomCloseButton: Story = {
         </ModalHeader>
         <div className="flex items-center gap-2">
           <div className="grid flex-1 gap-2">
-            <Label htmlFor="link" className="sr-only">
+            <Label className="sr-only" htmlFor="link">
               Link
             </Label>
             <Input
-              id="link"
               defaultValue="https://keystoneui.com/docs/installation"
+              id="link"
               readOnly
             />
           </div>
         </div>
         <ModalFooter className="sm:justify-start">
-          <ModalClose render={<Button />}>
-            Close
-          </ModalClose>
+          <ModalClose render={<Button />}>Close</ModalClose>
         </ModalFooter>
       </ModalContent>
     </Modal>
@@ -288,21 +282,19 @@ export const StickyFooter: Story = {
         </ModalHeader>
         <div className="no-scrollbar -mx-6 max-h-[50vh] overflow-y-auto px-6">
           {Array.from({ length: 10 }).map((_, index) => (
-            <p key={index} className="mb-4 leading-normal">
+            <p className="mb-4 leading-normal" key={index}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-              ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-              aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-              pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-              culpa qui officia deserunt mollit anim id est laborum.
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum.
             </p>
           ))}
         </div>
         <ModalFooter>
-          <ModalClose render={<Button variant="outline" />}>
-            Close
-          </ModalClose>
+          <ModalClose render={<Button variant="outline" />}>Close</ModalClose>
         </ModalFooter>
       </ModalContent>
     </Modal>
@@ -335,14 +327,14 @@ export const ScrollableContent: Story = {
         </ModalHeader>
         <div className="no-scrollbar -mx-6 max-h-[50vh] overflow-y-auto px-6">
           {Array.from({ length: 10 }).map((_, index) => (
-            <p key={index} className="mb-4 leading-normal">
+            <p className="mb-4 leading-normal" key={index}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-              ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-              aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-              pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-              culpa qui officia deserunt mollit anim id est laborum.
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum.
             </p>
           ))}
         </div>
@@ -377,10 +369,8 @@ function SignUpFormDemo() {
   };
 
   return (
-    <Modal open={open} onOpenChange={setOpen}>
-      <ModalTrigger render={<Button />}>
-        Create Account
-      </ModalTrigger>
+    <Modal onOpenChange={setOpen} open={open}>
+      <ModalTrigger render={<Button />}>Create Account</ModalTrigger>
       <ModalContent className="sm:max-w-md">
         <ModalHeader>
           <ModalTitle>Create an account</ModalTitle>
@@ -388,7 +378,7 @@ function SignUpFormDemo() {
             Enter your details below to create your account and get started.
           </ModalDescription>
         </ModalHeader>
-        <form onSubmit={handleSubmit} className="grid gap-4">
+        <form className="grid gap-4" onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label htmlFor="first-name">First name</Label>
@@ -403,26 +393,26 @@ function SignUpFormDemo() {
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
-              type="email"
               placeholder="john@example.com"
               required
+              type="email"
             />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" required />
+            <Input id="password" required type="password" />
           </div>
           <div className="flex items-center gap-2">
             <Checkbox id="terms" required />
-            <Label htmlFor="terms" className="text-sm font-normal">
+            <Label className="font-normal text-sm" htmlFor="terms">
               I agree to the{" "}
-              <a href="#" className="text-primary underline underline-offset-4">
+              <a className="text-primary underline underline-offset-4" href="#">
                 terms and conditions
               </a>
             </Label>
           </div>
           <ModalFooter className="px-0 pt-2">
-            <Button type="submit" isLoading={isLoading} fullWidth>
+            <Button fullWidth isLoading={isLoading} type="submit">
               Create account
             </Button>
           </ModalFooter>
@@ -452,7 +442,7 @@ function ControlledDemo() {
 
   return (
     <div className="flex items-center gap-4">
-      <Modal open={open} onOpenChange={setOpen}>
+      <Modal onOpenChange={setOpen} open={open}>
         <ModalTrigger render={<Button variant="outline" />}>
           Controlled Modal
         </ModalTrigger>
@@ -520,16 +510,12 @@ export const Nested: Story = {
               </ModalDescription>
             </ModalHeader>
             <ModalFooter>
-              <ModalClose render={<Button />}>
-                Got it
-              </ModalClose>
+              <ModalClose render={<Button />}>Got it</ModalClose>
             </ModalFooter>
           </ModalContent>
         </Modal>
         <ModalFooter>
-          <ModalClose render={<Button variant="outline" />}>
-            Close
-          </ModalClose>
+          <ModalClose render={<Button variant="outline" />}>Close</ModalClose>
         </ModalFooter>
       </ModalContent>
     </Modal>
@@ -553,11 +539,11 @@ function ConfirmationDemo() {
 
   return (
     <div className="flex items-center gap-4">
-      <Modal open={open} onOpenChange={setOpen}>
+      <Modal onOpenChange={setOpen} open={open}>
         <ModalTrigger render={<Button variant="destructive" />}>
           Delete Account
         </ModalTrigger>
-        <ModalContent size="sm" showCloseButton={false}>
+        <ModalContent showCloseButton={false} size="sm">
           <ModalHeader>
             <ModalTitle>Delete account?</ModalTitle>
             <ModalDescription>
@@ -567,11 +553,11 @@ function ConfirmationDemo() {
           </ModalHeader>
           <ModalFooter>
             <Button
-              variant="destructive"
               onClick={() => {
                 setConfirmed(true);
                 setOpen(false);
               }}
+              variant="destructive"
             >
               Delete
             </Button>
@@ -609,14 +595,14 @@ function MultiStepStepIndicator() {
     <div className="flex items-center justify-center gap-1.5">
       {Array.from({ length: totalSteps }).map((_, i) => (
         <div
-          key={i}
           className={`h-1.5 rounded-full transition-all duration-300 ${
             i === value
-              ? "bg-primary w-6"
+              ? "w-6 bg-primary"
               : i < value
-                ? "bg-primary/40 w-1.5"
-                : "bg-muted w-1.5"
+                ? "w-1.5 bg-primary/40"
+                : "w-1.5 bg-muted"
           }`}
+          key={i}
         />
       ))}
     </div>
@@ -630,7 +616,7 @@ function MultiStepNav() {
       <Button onClick={isLast ? undefined : goNext}>
         {isLast ? "Get Started" : "Continue"}
       </Button>
-      <Button variant="outline" onClick={goPrevious} disabled={isFirst}>
+      <Button disabled={isFirst} onClick={goPrevious} variant="outline">
         Back
       </Button>
     </ModalFooter>
@@ -643,23 +629,25 @@ function MultiStepDemo() {
 
   return (
     <Modal
-      open={open}
       onOpenChange={(isOpen) => {
         setOpen(isOpen);
-        if (!isOpen) setStep(0);
+        if (!isOpen) {
+          setStep(0);
+        }
       }}
+      open={open}
     >
       <ModalTrigger render={<Button />}>Start Onboarding</ModalTrigger>
-      <ModalContent showCloseButton={false} className="sm:max-w-md">
-        <Stepper value={step} onValueChange={setStep}>
+      <ModalContent className="sm:max-w-md" showCloseButton={false}>
+        <Stepper onValueChange={setStep} value={step}>
           <ModalHeader className="items-center">
             <MultiStepStepIndicator />
           </ModalHeader>
           <StepperContent>
             <StepperStep>
               <div className="text-center sm:text-left">
-                <h3 className="text-lg font-semibold">Welcome aboard!</h3>
-                <p className="text-muted-foreground mt-1 text-sm">
+                <h3 className="font-semibold text-lg">Welcome aboard!</h3>
+                <p className="mt-1 text-muted-foreground text-sm">
                   Let&apos;s get your workspace set up in just a few steps.
                 </p>
               </div>
@@ -672,16 +660,16 @@ function MultiStepDemo() {
                   <Label htmlFor="ms-email">Email</Label>
                   <Input
                     id="ms-email"
-                    type="email"
                     placeholder="john@example.com"
+                    type="email"
                   />
                 </div>
               </div>
             </StepperStep>
             <StepperStep>
               <div className="text-center sm:text-left">
-                <h3 className="text-lg font-semibold">Create your workspace</h3>
-                <p className="text-muted-foreground mt-1 text-sm">
+                <h3 className="font-semibold text-lg">Create your workspace</h3>
+                <p className="mt-1 text-muted-foreground text-sm">
                   Choose a name and URL for your team workspace.
                 </p>
               </div>
@@ -698,8 +686,8 @@ function MultiStepDemo() {
             </StepperStep>
             <StepperStep>
               <div className="text-center sm:text-left">
-                <h3 className="text-lg font-semibold">Invite your team</h3>
-                <p className="text-muted-foreground mt-1 text-sm">
+                <h3 className="font-semibold text-lg">Invite your team</h3>
+                <p className="mt-1 text-muted-foreground text-sm">
                   Add team members to collaborate together.
                 </p>
               </div>
@@ -708,21 +696,21 @@ function MultiStepDemo() {
                   <Label htmlFor="ms-invite-1">Team member email</Label>
                   <Input
                     id="ms-invite-1"
-                    type="email"
                     placeholder="teammate@example.com"
+                    type="email"
                   />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="ms-invite-2">Another email (optional)</Label>
                   <Input
                     id="ms-invite-2"
-                    type="email"
                     placeholder="another@example.com"
+                    type="email"
                   />
                 </div>
                 <div className="flex items-center gap-2">
                   <Checkbox id="ms-skip" />
-                  <Label htmlFor="ms-skip" className="text-sm font-normal">
+                  <Label className="font-normal text-sm" htmlFor="ms-skip">
                     Skip for now, I&apos;ll invite later
                   </Label>
                 </div>
@@ -772,12 +760,12 @@ export const LongContent: Story = {
           <section>
             <h3 className="mb-2 font-semibold">1. Acceptance of Terms</h3>
             <p className="text-muted-foreground">
-              By accessing and using this platform, you acknowledge that you have
-              read, understood, and agree to be bound by these Terms of Service
-              and all applicable laws and regulations. If you do not agree with
-              any of these terms, you are prohibited from using or accessing this
-              site. The materials contained in this platform are protected by
-              applicable copyright and trademark law.
+              By accessing and using this platform, you acknowledge that you
+              have read, understood, and agree to be bound by these Terms of
+              Service and all applicable laws and regulations. If you do not
+              agree with any of these terms, you are prohibited from using or
+              accessing this site. The materials contained in this platform are
+              protected by applicable copyright and trademark law.
             </p>
           </section>
 
@@ -788,8 +776,8 @@ export const LongContent: Story = {
               materials on this platform for personal, non-commercial transitory
               viewing only. This is the grant of a license, not a transfer of
               title, and under this license you may not: modify or copy the
-              materials; use the materials for any commercial purpose, or for any
-              public display (commercial or non-commercial); attempt to
+              materials; use the materials for any commercial purpose, or for
+              any public display (commercial or non-commercial); attempt to
               decompile or reverse engineer any software contained on the
               platform; remove any copyright or other proprietary notations from
               the materials; or transfer the materials to another person or
@@ -840,24 +828,25 @@ export const LongContent: Story = {
             <p className="text-muted-foreground">
               Our platform may allow you to post, link, store, share and
               otherwise make available certain information, text, graphics,
-              videos, or other material. You are responsible for the content that
-              you post to the platform, including its legality, reliability, and
-              appropriateness. By posting content to the platform, you grant us
-              the right to use, modify, publicly perform, publicly display,
-              reproduce, and distribute such content on and through the platform.
+              videos, or other material. You are responsible for the content
+              that you post to the platform, including its legality,
+              reliability, and appropriateness. By posting content to the
+              platform, you grant us the right to use, modify, publicly perform,
+              publicly display, reproduce, and distribute such content on and
+              through the platform.
             </p>
           </section>
 
           <section>
             <h3 className="mb-2 font-semibold">7. Termination</h3>
             <p className="text-muted-foreground">
-              We may terminate or suspend your account immediately, without prior
-              notice or liability, for any reason whatsoever, including without
-              limitation if you breach the Terms. Upon termination, your right to
-              use the platform will immediately cease. If you wish to terminate
-              your account, you may simply discontinue using the platform. All
-              provisions of the Terms which by their nature should survive
-              termination shall survive termination, including, without
+              We may terminate or suspend your account immediately, without
+              prior notice or liability, for any reason whatsoever, including
+              without limitation if you breach the Terms. Upon termination, your
+              right to use the platform will immediately cease. If you wish to
+              terminate your account, you may simply discontinue using the
+              platform. All provisions of the Terms which by their nature should
+              survive termination shall survive termination, including, without
               limitation, ownership provisions, warranty disclaimers, indemnity
               and limitations of liability.
             </p>
@@ -907,9 +896,7 @@ export const LongContent: Story = {
 
         <ModalFooter>
           <ModalClose render={<Button />}>I Accept</ModalClose>
-          <ModalClose render={<Button variant="outline" />}>
-            Decline
-          </ModalClose>
+          <ModalClose render={<Button variant="outline" />}>Decline</ModalClose>
         </ModalFooter>
       </ModalContent>
     </Modal>
@@ -918,7 +905,7 @@ export const LongContent: Story = {
     docs: {
       description: {
         story:
-          "Long content is handled out of the box — the modal grows with its content and the viewport scrolls. This is the default `scrollBehavior` (`\"outside\"`). Ideal for long-form content like terms of service or privacy policies.",
+          'Long content is handled out of the box — the modal grows with its content and the viewport scrolls. This is the default `scrollBehavior` (`"outside"`). Ideal for long-form content like terms of service or privacy policies.',
       },
     },
   },

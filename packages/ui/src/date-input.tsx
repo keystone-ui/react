@@ -1,12 +1,12 @@
 "use client";
 
-import * as React from "react";
 import { CalendarIcon } from "lucide-react";
+import * as React from "react";
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupInput,
   InputGroupButton,
+  InputGroupInput,
 } from "./input-group";
 import { cn } from "./utils";
 
@@ -21,20 +21,20 @@ export const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
     return (
       <InputGroup>
         <InputGroupInput
-          ref={inputRef}
-          type="date"
           className={cn(
             "[&::-webkit-calendar-picker-indicator]:hidden",
             className
           )}
+          ref={inputRef}
+          type="date"
           {...props}
         />
         <InputGroupAddon align="inline-end">
           <InputGroupButton
-            type="button"
-            size="icon-xs"
             aria-label="Open date picker"
             onClick={() => inputRef.current?.showPicker()}
+            size="icon-xs"
+            type="button"
           >
             <CalendarIcon className="size-4" />
           </InputGroupButton>

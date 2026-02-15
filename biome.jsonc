@@ -1,0 +1,133 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["ultracite/biome/core", "ultracite/biome/react"],
+  "linter": {
+    "rules": {
+      "performance": {
+        // import * as React is a common pattern in React component libraries
+        "noNamespaceImport": "warn",
+        // Barrel file is the registry entry point -- intentional
+        "noBarrelFile": "off"
+      },
+      "suspicious": {
+        // Allow explicit any in utility types and complex generics
+        "noExplicitAny": "warn",
+        // Array index keys are acceptable in static/demo lists
+        "noArrayIndexKey": "warn"
+      },
+      "a11y": {
+        // Component library uses semantic roles on custom elements
+        "useSemanticElements": "warn",
+        // Components use render props that wrap interactive elements
+        "useFocusableInteractive": "warn",
+        "useAriaPropsForRole": "warn"
+      },
+      "correctness": {
+        // Render-prop patterns require nested component definitions
+        "noNestedComponentDefinitions": "warn"
+      },
+      "style": {
+        // Re-exporting imports is a valid pattern for component libraries
+        "noExportedImports": "off"
+      }
+    }
+  },
+  "overrides": [
+    {
+      // Component library: reusable primitives have legitimate a11y patterns
+      "includes": ["packages/ui/src/**"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            // Label is a standalone reusable component; control is added by consumers
+            "noLabelWithoutControl": "off",
+            // Decorative SVGs (e.g. popover arrows) don't need titles
+            "noSvgWithoutTitle": "off",
+            // Addon divs focus the input on click -- intentional UX pattern
+            "noNoninteractiveElementInteractions": "off",
+            "useKeyWithClickEvents": "off"
+          }
+        }
+      }
+    },
+    {
+      // Theme CSS: intentional duplicate keyframe selectors
+      "includes": ["packages/theme/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noDuplicateSelectorsKeyframeBlock": "off"
+          }
+        }
+      }
+    },
+    {
+      // Relax rules for Storybook stories (demo/example code)
+      "includes": ["apps/docs/**"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useValidAnchor": "off",
+            "useAnchorContent": "off",
+            "useButtonType": "off",
+            "useSemanticElements": "off",
+            "noLabelWithoutControl": "off",
+            "useFocusableInteractive": "off",
+            "useAriaPropsForRole": "off",
+            "useKeyWithClickEvents": "off",
+            "noSvgWithoutTitle": "off",
+            "noNoninteractiveElementInteractions": "off"
+          },
+          "suspicious": {
+            "noShadowRestrictedNames": "off",
+            "noAlert": "off",
+            "noEmptyBlockStatements": "off",
+            "noExplicitAny": "off"
+          },
+          "correctness": {
+            "useImageSize": "off",
+            "noNestedComponentDefinitions": "off",
+            "noInvalidPositionAtImportRule": "off"
+          },
+          "style": {
+            "noNestedTernary": "off",
+            "useDefaultSwitchClause": "off"
+          },
+          "complexity": {
+            "noUselessFragments": "off",
+            "noForEach": "off"
+          },
+          "performance": {
+            "noNamespaceImport": "off",
+            "useTopLevelRegex": "off"
+          }
+        }
+      }
+    },
+    {
+      // Relax rules for test files
+      "includes": ["**/*.test.tsx", "**/*.test.ts", "**/test/**"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noEmptyBlockStatements": "off",
+            "useAwait": "off"
+          },
+          "complexity": {
+            "noUselessFragments": "off"
+          },
+          "a11y": {
+            "useButtonType": "off",
+            "useValidAnchor": "off",
+            "useAnchorContent": "off",
+            "noLabelWithoutControl": "off",
+            "noSvgWithoutTitle": "off"
+          },
+          "performance": {
+            "noNamespaceImport": "off"
+          }
+        }
+      }
+    }
+  ]
+}

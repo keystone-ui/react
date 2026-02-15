@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@keystone/ui/button";
 import { Checkbox } from "@keystone/ui/checkbox";
 import {
@@ -15,6 +14,7 @@ import {
 import { Input } from "@keystone/ui/input";
 import { Switch } from "@keystone/ui/switch";
 import { Textarea } from "@keystone/ui/textarea";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
   title: "Components/Field",
@@ -104,17 +104,25 @@ export const Profile: Story = {
       <FieldGroup>
         <Field>
           <FieldLabel htmlFor="profile-name">Full name</FieldLabel>
-          <Input id="profile-name" autoComplete="off" placeholder="Evil Rabbit" />
-          <FieldDescription>This appears on invoices and emails.</FieldDescription>
+          <Input
+            autoComplete="off"
+            id="profile-name"
+            placeholder="Evil Rabbit"
+          />
+          <FieldDescription>
+            This appears on invoices and emails.
+          </FieldDescription>
         </Field>
         <Field>
           <FieldLabel htmlFor="profile-username">Username</FieldLabel>
-          <Input id="profile-username" autoComplete="off" aria-invalid />
+          <Input aria-invalid autoComplete="off" id="profile-username" />
           <FieldError>Choose another username.</FieldError>
         </Field>
         <Field orientation="horizontal">
           <Switch id="newsletter" />
-          <FieldLabel htmlFor="newsletter">Subscribe to the newsletter</FieldLabel>
+          <FieldLabel htmlFor="newsletter">
+            Subscribe to the newsletter
+          </FieldLabel>
         </Field>
       </FieldGroup>
     </FieldSet>
@@ -125,9 +133,11 @@ export const Profile: Story = {
 export const SwitchWithDescription: Story = {
   name: "Switch with Description",
   render: () => (
-    <Field orientation="horizontal" className="max-w-sm">
+    <Field className="max-w-sm" orientation="horizontal">
       <FieldContent>
-        <FieldLabel htmlFor="switch-focus-mode">Share across devices</FieldLabel>
+        <FieldLabel htmlFor="switch-focus-mode">
+          Share across devices
+        </FieldLabel>
         <FieldDescription>
           Focus is shared across devices, and turns off when you leave the app.
         </FieldDescription>
@@ -141,8 +151,8 @@ export const SwitchWithDescription: Story = {
 export const SwitchDisabled: Story = {
   name: "Switch Disabled",
   render: () => (
-    <Field orientation="horizontal" data-disabled className="w-fit">
-      <Switch id="switch-disabled-unchecked" disabled />
+    <Field className="w-fit" data-disabled orientation="horizontal">
+      <Switch disabled id="switch-disabled-unchecked" />
       <FieldLabel htmlFor="switch-disabled-unchecked">Disabled</FieldLabel>
     </Field>
   ),
@@ -152,14 +162,16 @@ export const SwitchDisabled: Story = {
 export const SwitchInvalid: Story = {
   name: "Switch Invalid",
   render: () => (
-    <Field orientation="horizontal" className="max-w-sm" data-invalid>
+    <Field className="max-w-sm" data-invalid orientation="horizontal">
       <FieldContent>
-        <FieldLabel htmlFor="switch-terms">Accept terms and conditions</FieldLabel>
+        <FieldLabel htmlFor="switch-terms">
+          Accept terms and conditions
+        </FieldLabel>
         <FieldDescription>
           You must accept the terms and conditions to continue.
         </FieldDescription>
       </FieldContent>
-      <Switch id="switch-terms" aria-invalid />
+      <Switch aria-invalid id="switch-terms" />
     </Field>
   ),
 };
@@ -180,7 +192,6 @@ export const SwitchSizes: Story = {
     </FieldGroup>
   ),
 };
-
 
 // Textarea Example
 export const TextareaExample: Story = {
@@ -273,7 +284,12 @@ export const ValidationError: Story = {
     <div className="w-full max-w-xs">
       <Field data-invalid>
         <FieldLabel htmlFor="email">Email</FieldLabel>
-        <Input id="email" type="email" aria-invalid defaultValue="invalid-email" />
+        <Input
+          aria-invalid
+          defaultValue="invalid-email"
+          id="email"
+          type="email"
+        />
         <FieldError>Enter a valid email address.</FieldError>
       </Field>
     </div>
@@ -287,7 +303,7 @@ export const MultipleErrors: Story = {
     <div className="w-full max-w-xs">
       <Field data-invalid>
         <FieldLabel htmlFor="password">Password</FieldLabel>
-        <Input id="password" type="password" aria-invalid defaultValue="abc" />
+        <Input aria-invalid defaultValue="abc" id="password" type="password" />
         <FieldError
           errors={[
             { message: "Must be at least 8 characters" },
@@ -301,7 +317,8 @@ export const MultipleErrors: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Use the `errors` prop to display multiple validation errors as a list. Duplicate messages are automatically deduplicated.",
+        story:
+          "Use the `errors` prop to display multiple validation errors as a list. Duplicate messages are automatically deduplicated.",
       },
     },
   },
@@ -314,9 +331,9 @@ export const Required: Story = {
     <div className="w-full max-w-xs">
       <Field>
         <FieldLabel htmlFor="required-email">
-          Email<span className="text-destructive ml-1">*</span>
+          Email<span className="ml-1 text-destructive">*</span>
         </FieldLabel>
-        <Input id="required-email" type="email" required />
+        <Input id="required-email" required type="email" />
         <FieldDescription>We&apos;ll never share your email.</FieldDescription>
       </Field>
     </div>
@@ -336,8 +353,8 @@ export const FieldGroupWithCheckboxes: Story = {
         </FieldDescription>
         <FieldGroup data-slot="checkbox-group">
           <Field orientation="horizontal">
-            <Checkbox id="push" defaultChecked disabled />
-            <FieldLabel htmlFor="push" className="font-normal">
+            <Checkbox defaultChecked disabled id="push" />
+            <FieldLabel className="font-normal" htmlFor="push">
               Push notifications
             </FieldLabel>
           </Field>
@@ -353,13 +370,13 @@ export const FieldGroupWithCheckboxes: Story = {
         <FieldGroup data-slot="checkbox-group">
           <Field orientation="horizontal">
             <Checkbox id="push-tasks" />
-            <FieldLabel htmlFor="push-tasks" className="font-normal">
+            <FieldLabel className="font-normal" htmlFor="push-tasks">
               Push notifications
             </FieldLabel>
           </Field>
           <Field orientation="horizontal">
             <Checkbox id="email-tasks" />
-            <FieldLabel htmlFor="email-tasks" className="font-normal">
+            <FieldLabel className="font-normal" htmlFor="email-tasks">
               Email notifications
             </FieldLabel>
           </Field>
@@ -381,16 +398,16 @@ export const FieldSetExample: Story = {
       <FieldGroup>
         <Field>
           <FieldLabel htmlFor="street">Street Address</FieldLabel>
-          <Input id="street" type="text" placeholder="123 Main St" />
+          <Input id="street" placeholder="123 Main St" type="text" />
         </Field>
         <div className="grid grid-cols-2 gap-4">
           <Field>
             <FieldLabel htmlFor="city">City</FieldLabel>
-            <Input id="city" type="text" placeholder="New York" />
+            <Input id="city" placeholder="New York" type="text" />
           </Field>
           <Field>
             <FieldLabel htmlFor="zip">Postal Code</FieldLabel>
-            <Input id="zip" type="text" placeholder="90502" />
+            <Input id="zip" placeholder="90502" type="text" />
           </Field>
         </div>
       </FieldGroup>
@@ -404,16 +421,18 @@ export const CheckboxExample: Story = {
   render: () => (
     <FieldGroup className="w-full max-w-xs">
       <FieldSet>
-        <FieldLegend variant="label">Show these items on the desktop</FieldLegend>
+        <FieldLegend variant="label">
+          Show these items on the desktop
+        </FieldLegend>
         <FieldDescription>
           Select the items you want to show on the desktop.
         </FieldDescription>
         <FieldGroup className="gap-3">
           <Field orientation="horizontal">
-            <Checkbox id="finder-pref-hard-disks" defaultChecked />
+            <Checkbox defaultChecked id="finder-pref-hard-disks" />
             <FieldLabel
-              htmlFor="finder-pref-hard-disks"
               className="font-normal"
+              htmlFor="finder-pref-hard-disks"
             >
               Hard disks
             </FieldLabel>
@@ -421,23 +440,23 @@ export const CheckboxExample: Story = {
           <Field orientation="horizontal">
             <Checkbox id="finder-pref-external-disks" />
             <FieldLabel
-              htmlFor="finder-pref-external-disks"
               className="font-normal"
+              htmlFor="finder-pref-external-disks"
             >
               External disks
             </FieldLabel>
           </Field>
           <Field orientation="horizontal">
             <Checkbox id="finder-pref-cds-dvds" />
-            <FieldLabel htmlFor="finder-pref-cds-dvds" className="font-normal">
+            <FieldLabel className="font-normal" htmlFor="finder-pref-cds-dvds">
               CDs, DVDs, and iPods
             </FieldLabel>
           </Field>
           <Field orientation="horizontal">
             <Checkbox id="finder-pref-connected-servers" />
             <FieldLabel
-              htmlFor="finder-pref-connected-servers"
               className="font-normal"
+              htmlFor="finder-pref-connected-servers"
             >
               Connected servers
             </FieldLabel>
@@ -446,7 +465,7 @@ export const CheckboxExample: Story = {
       </FieldSet>
       <FieldSeparator />
       <Field orientation="horizontal">
-        <Checkbox id="finder-pref-sync-folders" defaultChecked />
+        <Checkbox defaultChecked id="finder-pref-sync-folders" />
         <FieldContent>
           <FieldLabel htmlFor="finder-pref-sync-folders">
             Sync Desktop & Documents folders
@@ -513,8 +532,8 @@ export const PaymentMethod: Story = {
             </FieldDescription>
             <FieldGroup>
               <Field orientation="horizontal">
-                <Checkbox id="same-as-shipping" defaultChecked />
-                <FieldLabel htmlFor="same-as-shipping" className="font-normal">
+                <Checkbox defaultChecked id="same-as-shipping" />
+                <FieldLabel className="font-normal" htmlFor="same-as-shipping">
                   Same as shipping address
                 </FieldLabel>
               </Field>
@@ -525,16 +544,16 @@ export const PaymentMethod: Story = {
               <Field>
                 <FieldLabel htmlFor="comments">Comments</FieldLabel>
                 <Textarea
+                  className="resize-none"
                   id="comments"
                   placeholder="Add any additional comments"
-                  className="resize-none"
                 />
               </Field>
             </FieldGroup>
           </FieldSet>
           <Field orientation="horizontal">
             <Button type="submit">Submit</Button>
-            <Button variant="outline" type="button">
+            <Button type="button" variant="outline">
               Cancel
             </Button>
           </Field>
@@ -543,4 +562,3 @@ export const PaymentMethod: Story = {
     </div>
   ),
 };
-

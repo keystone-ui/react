@@ -1,9 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import {
-  NativeSelect,
-  NativeSelectOptGroup,
-  NativeSelectOption,
-} from "@keystone/ui/native-select";
 import {
   Field,
   FieldDescription,
@@ -11,6 +5,12 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@keystone/ui/field";
+import {
+  NativeSelect,
+  NativeSelectOptGroup,
+  NativeSelectOption,
+} from "@keystone/ui/native-select";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
   title: "Components/NativeSelect",
@@ -105,7 +105,9 @@ export const FieldExample: Story = {
         <NativeSelectOption value="done">Done</NativeSelectOption>
         <NativeSelectOption value="cancelled">Cancelled</NativeSelectOption>
       </NativeSelect>
-      <FieldDescription>Choose the current status of the task.</FieldDescription>
+      <FieldDescription>
+        Choose the current status of the task.
+      </FieldDescription>
     </Field>
   ),
 };

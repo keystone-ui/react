@@ -1,10 +1,8 @@
 import type { Preview } from "@storybook/react-vite";
-import { themes } from 'storybook/theming';
+import { themes } from "storybook/theming";
 import "./preview.css";
-import * as React from 'react';
-import { DocsContainer } from 'storybook/blocks';
-import { withThemeByClassName } from '@storybook/addon-themes';
-import { Toaster } from '@keystone/ui/toast';
+import { Toaster } from "@keystone/ui/toast";
+import { withThemeByClassName } from "@storybook/addon-themes";
 
 const preview: Preview = {
   parameters: {
@@ -17,15 +15,15 @@ const preview: Preview = {
     },
     docs: {
       theme: themes.dark,
-    }
+    },
   },
   decorators: [
     withThemeByClassName({
       themes: {
-        light: 'light',
-        dark: 'dark',
+        light: "light",
+        dark: "dark",
       },
-      defaultTheme: 'light',
+      defaultTheme: "light",
     }),
     (Story) => (
       <>
@@ -34,7 +32,7 @@ const preview: Preview = {
       </>
     ),
   ],
-  tags: ['autodocs']
+  tags: ["autodocs"],
 };
 
 export default preview;

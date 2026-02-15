@@ -22,10 +22,10 @@ function StepperNav() {
   const { goNext, goPrevious, goTo, isFirst, isLast } = useStepper();
   return (
     <div>
-      <button data-testid="prev" onClick={goPrevious} disabled={isFirst}>
+      <button data-testid="prev" disabled={isFirst} onClick={goPrevious}>
         Back
       </button>
-      <button data-testid="next" onClick={goNext} disabled={isLast}>
+      <button data-testid="next" disabled={isLast} onClick={goNext}>
         Next
       </button>
       <button data-testid="goto-2" onClick={() => goTo(2)}>
@@ -49,7 +49,7 @@ function TestStepper({
     onValueChange?.(v);
   };
   return (
-    <Stepper value={step} onValueChange={handleChange}>
+    <Stepper onValueChange={handleChange} value={step}>
       <StepperInfo />
       <StepperContent>
         <StepperStep>
@@ -192,7 +192,7 @@ describe("Stepper", () => {
     // Suppress console.error for the expected error
     const spy = vi.spyOn(console, "error").mockImplementation(() => {});
     expect(() => render(<StepperInfo />)).toThrow(
-      "useStepper must be used within a <Stepper> component.",
+      "useStepper must be used within a <Stepper> component."
     );
     spy.mockRestore();
   });

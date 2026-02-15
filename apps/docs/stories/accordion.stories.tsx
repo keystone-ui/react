@@ -1,6 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Plus, Settings } from "lucide-react";
-
 import {
   Accordion,
   AccordionHeader,
@@ -8,6 +5,8 @@ import {
   AccordionPanel,
   AccordionTrigger,
 } from "@keystone/ui/accordion";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Plus, Settings } from "lucide-react";
 
 // import { Button } from "@keystone/ui/button";
 
@@ -72,7 +71,8 @@ import {
       defaultValue: false,
     },
     value: {
-      description: "The controlled value of the accordion (array of item values)",
+      description:
+        "The controlled value of the accordion (array of item values)",
     },
     defaultValue: {
       description: "The default value of the accordion (array of item values)",
@@ -129,13 +129,9 @@ export const BoxVariant: Story = {
       {items.map((item) => (
         <AccordionItem key={item.id} value={item.id}>
           <AccordionHeader>
-            <AccordionTrigger>
-              {item.title}
-            </AccordionTrigger>
+            <AccordionTrigger>{item.title}</AccordionTrigger>
           </AccordionHeader>
-          <AccordionPanel>
-            {item.content}
-          </AccordionPanel>
+          <AccordionPanel>{item.content}</AccordionPanel>
         </AccordionItem>
       ))}
     </Accordion>
@@ -152,13 +148,9 @@ export const TableVariant: Story = {
       {items.map((item) => (
         <AccordionItem key={item.id} value={item.id}>
           <AccordionHeader>
-            <AccordionTrigger>
-              {item.title}
-            </AccordionTrigger>
+            <AccordionTrigger>{item.title}</AccordionTrigger>
           </AccordionHeader>
-          <AccordionPanel>
-            {item.content}
-          </AccordionPanel>
+          <AccordionPanel>{item.content}</AccordionPanel>
         </AccordionItem>
       ))}
     </Accordion>
@@ -175,13 +167,9 @@ export const UnderlineVariant: Story = {
       {items.map((item) => (
         <AccordionItem key={item.id} value={item.id}>
           <AccordionHeader>
-            <AccordionTrigger>
-              {item.title}
-            </AccordionTrigger>
+            <AccordionTrigger>{item.title}</AccordionTrigger>
           </AccordionHeader>
-          <AccordionPanel>
-            {item.content}
-          </AccordionPanel>
+          <AccordionPanel>{item.content}</AccordionPanel>
         </AccordionItem>
       ))}
     </Accordion>
@@ -198,13 +186,9 @@ export const GhostVariant: Story = {
       {items.map((item) => (
         <AccordionItem key={item.id} value={item.id}>
           <AccordionHeader>
-            <AccordionTrigger>
-              {item.title}
-            </AccordionTrigger>
+            <AccordionTrigger>{item.title}</AccordionTrigger>
           </AccordionHeader>
-          <AccordionPanel>
-            {item.content}
-          </AccordionPanel>
+          <AccordionPanel>{item.content}</AccordionPanel>
         </AccordionItem>
       ))}
     </Accordion>
@@ -221,13 +205,9 @@ export const Multiple: Story = {
       {items.map((item) => (
         <AccordionItem key={item.id} value={item.id}>
           <AccordionHeader>
-            <AccordionTrigger>
-              {item.title}
-            </AccordionTrigger>
+            <AccordionTrigger>{item.title}</AccordionTrigger>
           </AccordionHeader>
-          <AccordionPanel>
-            {item.content}
-          </AccordionPanel>
+          <AccordionPanel>{item.content}</AccordionPanel>
         </AccordionItem>
       ))}
     </Accordion>
@@ -243,8 +223,13 @@ export const WithCustomChevron: Story = {
     <Accordion {...args}>
       <AccordionItem value="item-1">
         <AccordionHeader>
-          <AccordionTrigger 
-            chevronIcon={<Plus className="size-3 shrink-0 transition-all ease-out group-data-[panel-open]:scale-110 group-data-[panel-open]:rotate-45" aria-hidden="true" />}
+          <AccordionTrigger
+            chevronIcon={
+              <Plus
+                aria-hidden="true"
+                className="size-3 shrink-0 transition-all ease-out group-data-[panel-open]:rotate-45 group-data-[panel-open]:scale-110"
+              />
+            }
           >
             Custom Chevron Icon
           </AccordionTrigger>
@@ -258,7 +243,8 @@ export const WithCustomChevron: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Use the `chevronIcon` prop to replace the default chevron icon on the right side.",
+        story:
+          "Use the `chevronIcon` prop to replace the default chevron icon on the right side.",
       },
     },
   },
@@ -275,16 +261,22 @@ export const WithCustomLayout: Story = {
         <AccordionHeader>
           <AccordionTrigger>
             <div className="flex items-start gap-4">
-              <Settings className="size-4 mt-1 shrink-0 opacity-75" aria-hidden="true" />
+              <Settings
+                aria-hidden="true"
+                className="mt-1 size-4 shrink-0 opacity-75"
+              />
               <div className="flex flex-col items-start gap-0">
                 <span className="font-semibold">Account Settings</span>
-                <span className="text-sm font-normal">Manage your preferences</span>
+                <span className="font-normal text-sm">
+                  Manage your preferences
+                </span>
               </div>
             </div>
           </AccordionTrigger>
         </AccordionHeader>
         <AccordionPanel className="ps-10.5">
-          This example shows how to create a custom layout with icons and additional content.
+          This example shows how to create a custom layout with icons and
+          additional content.
         </AccordionPanel>
       </AccordionItem>
     </Accordion>
@@ -292,7 +284,8 @@ export const WithCustomLayout: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Example of a more complex custom layout with icons and multiple text elements.",
+        story:
+          "Example of a more complex custom layout with icons and multiple text elements.",
       },
     },
   },

@@ -18,7 +18,13 @@ import {
   useComboboxAnchor,
 } from "./combobox";
 
-const frameworks = ["Next.js", "SvelteKit", "Nuxt.js", "Remix", "Astro"] as const;
+const frameworks = [
+  "Next.js",
+  "SvelteKit",
+  "Nuxt.js",
+  "Remix",
+  "Astro",
+] as const;
 
 const BasicCombobox = ({
   onValueChange,
@@ -54,7 +60,7 @@ const ComboboxWithDisabledItem = ({
       <ComboboxEmpty>No items found.</ComboboxEmpty>
       <ComboboxList>
         {(item) => (
-          <ComboboxItem key={item} value={item} disabled={item === "Remix"}>
+          <ComboboxItem disabled={item === "Remix"} key={item} value={item}>
             {item}
           </ComboboxItem>
         )}
@@ -78,7 +84,9 @@ describe("Combobox", () => {
 
     test("shows placeholder when no value selected", () => {
       render(<BasicCombobox />);
-      expect(screen.getByPlaceholderText("Select a framework")).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText("Select a framework")
+      ).toBeInTheDocument();
     });
 
     test("applies custom className to input group wrapper", () => {
@@ -104,7 +112,7 @@ describe("Combobox", () => {
     test("is disabled when disabled prop is true", () => {
       render(
         <Combobox items={frameworks}>
-          <ComboboxInput disabled data-testid="input" />
+          <ComboboxInput data-testid="input" disabled />
           <ComboboxContent>
             <ComboboxList>
               {(item) => (
@@ -309,7 +317,7 @@ describe("Combobox", () => {
           <ComboboxContent>
             <ComboboxList>
               {(group) => (
-                <ComboboxGroup key={group.value} items={group.items}>
+                <ComboboxGroup items={group.items} key={group.value}>
                   <ComboboxLabel>{group.value}</ComboboxLabel>
                   {group.items.map((item) => (
                     <ComboboxItem key={item} value={item}>
@@ -364,7 +372,7 @@ describe("Combobox", () => {
     }: {
       onValueChange?: (value: string[]) => void;
     }) => (
-      <Combobox multiple items={frameworks} onValueChange={onValueChange}>
+      <Combobox items={frameworks} multiple onValueChange={onValueChange}>
         <ComboboxInput placeholder="Select frameworks" />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
@@ -429,11 +437,11 @@ describe("Combobox", () => {
       const handleChange = vi.fn();
       render(
         <Combobox
-          items={frameworks}
           defaultValue="Next.js"
+          items={frameworks}
           onValueChange={handleChange}
         >
-          <ComboboxInput showClear placeholder="Select a framework" />
+          <ComboboxInput placeholder="Select a framework" showClear />
           <ComboboxContent>
             <ComboboxList>
               {(item) => (
@@ -447,7 +455,9 @@ describe("Combobox", () => {
       );
 
       // Select the clear button by its data-slot attribute
-      const clearButton = document.querySelector('[data-slot="combobox-clear"]') as HTMLButtonElement;
+      const clearButton = document.querySelector(
+        '[data-slot="combobox-clear"]'
+      ) as HTMLButtonElement;
       expect(clearButton).toBeInTheDocument();
       await userEvent.click(clearButton);
 
@@ -459,13 +469,13 @@ describe("Combobox", () => {
     const ChipsCombobox = () => {
       const anchor = useComboboxAnchor();
       return (
-        <Combobox multiple items={frameworks} defaultValue={["Next.js"]}>
-          <ComboboxChips ref={anchor} data-testid="chips">
+        <Combobox defaultValue={["Next.js"]} items={frameworks} multiple>
+          <ComboboxChips data-testid="chips" ref={anchor}>
             <ComboboxValue>
               {(values: string[]) => (
                 <>
                   {values.map((value) => (
-                    <ComboboxChip key={value} data-testid={`chip-${value}`}>
+                    <ComboboxChip data-testid={`chip-${value}`} key={value}>
                       {value}
                     </ComboboxChip>
                   ))}
@@ -505,7 +515,7 @@ describe("Combobox", () => {
   describe("Form Integration", () => {
     test("supports name attribute for form submission", () => {
       render(
-        <Combobox name="framework" items={frameworks} defaultValue="Next.js">
+        <Combobox defaultValue="Next.js" items={frameworks} name="framework">
           <ComboboxInput />
           <ComboboxContent>
             <ComboboxList>

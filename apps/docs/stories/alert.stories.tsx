@@ -1,18 +1,18 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Alert,
-  AlertTitle,
-  AlertDescription,
   AlertAction,
+  AlertDescription,
+  AlertTitle,
 } from "@keystone/ui/alert";
 import { Button } from "@keystone/ui/button";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  CheckCircle2Icon,
   AlertTriangleIcon,
-  XCircleIcon,
+  CheckCircle2Icon,
   InfoIcon,
   LockIcon,
   ShieldCheckIcon,
+  XCircleIcon,
 } from "lucide-react";
 
 const meta = {
@@ -132,7 +132,7 @@ export const Success: Story = {
     },
   },
   render: () => (
-    <Alert variant="success" className="max-w-md">
+    <Alert className="max-w-md" variant="success">
       <CheckCircle2Icon />
       <AlertTitle>Account updated successfully</AlertTitle>
       <AlertDescription>
@@ -152,7 +152,7 @@ export const Warning: Story = {
     },
   },
   render: () => (
-    <Alert variant="warning" className="max-w-md">
+    <Alert className="max-w-md" variant="warning">
       <AlertTriangleIcon />
       <AlertTitle>KYC Required</AlertTitle>
       <AlertDescription>
@@ -171,7 +171,7 @@ export const Error: Story = {
     },
   },
   render: () => (
-    <Alert variant="error" className="max-w-md">
+    <Alert className="max-w-md" variant="error">
       <XCircleIcon />
       <AlertTitle>Payment Failed</AlertTitle>
       <AlertDescription>
@@ -190,7 +190,7 @@ export const Info: Story = {
     },
   },
   render: () => (
-    <Alert variant="info" className="max-w-md">
+    <Alert className="max-w-md" variant="info">
       <InfoIcon />
       <AlertTitle>New Feature is Available</AlertTitle>
       <AlertDescription>
@@ -229,9 +229,7 @@ export const AllVariants: Story = {
       <Alert variant="success">
         <CheckCircle2Icon />
         <AlertTitle>256-bit SSI Encrypted</AlertTitle>
-        <AlertDescription>
-          Your payment information is secure
-        </AlertDescription>
+        <AlertDescription>Your payment information is secure</AlertDescription>
       </Alert>
       <Alert variant="info">
         <InfoIcon />
@@ -269,7 +267,9 @@ export const WithAction: Story = {
           Make sure your personal details are up to date.
         </AlertDescription>
         <AlertAction>
-          <Button variant="ghost" size="xs" className="hover:bg-current/10">Edit</Button>
+          <Button className="hover:bg-current/10" size="xs" variant="ghost">
+            Edit
+          </Button>
         </AlertAction>
       </Alert>
       <Alert variant="warning">
@@ -279,17 +279,21 @@ export const WithAction: Story = {
           Level 2 verification needed to deposit
         </AlertDescription>
         <AlertAction>
-          <Button variant="ghost" size="xs" className="hover:bg-current/10">Verify</Button>
+          <Button className="hover:bg-current/10" size="xs" variant="ghost">
+            Verify
+          </Button>
         </AlertAction>
       </Alert>
       <Alert variant="success">
         <CheckCircle2Icon />
         <AlertTitle>256-bit SSI Encrypted</AlertTitle>
-        <AlertDescription>
-          Your payment information is secure
-        </AlertDescription>
+        <AlertDescription>Your payment information is secure</AlertDescription>
         <AlertAction>
-          <Button variant="ghost" size="icon-xs" className="hover:bg-current/10">
+          <Button
+            className="hover:bg-current/10"
+            size="icon-xs"
+            variant="ghost"
+          >
             <LockIcon />
           </Button>
         </AlertAction>
@@ -301,7 +305,9 @@ export const WithAction: Story = {
           Check out our latest trading tools and analytics
         </AlertDescription>
         <AlertAction>
-          <Button variant="ghost" size="xs" className="hover:bg-current/10">Learn more</Button>
+          <Button className="hover:bg-current/10" size="xs" variant="ghost">
+            Learn more
+          </Button>
         </AlertAction>
       </Alert>
       <Alert variant="error">
@@ -311,7 +317,9 @@ export const WithAction: Story = {
           Your transaction could not be processed. Please try again
         </AlertDescription>
         <AlertAction>
-          <Button variant="ghost" size="xs" className="hover:bg-current/10">Retry</Button>
+          <Button className="hover:bg-current/10" size="xs" variant="ghost">
+            Retry
+          </Button>
         </AlertAction>
       </Alert>
     </div>

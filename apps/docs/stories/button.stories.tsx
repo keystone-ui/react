@@ -1,27 +1,27 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
-import { 
-  ArrowRight, 
-  ArrowLeft, 
-  Mail, 
-  Loader2, 
-  Bold,
-  Italic,
-  ChevronDown,
-  ThumbsUpIcon,
-  StarIcon,
-  Plus,
-} from "lucide-react";
-import { 
-  RiFacebookFill,
-  RiGithubFill,
-  RiGoogleFill,
-  RiTwitterXFill
-} from "@remixicon/react";
 import { Button, type ButtonProps } from "@keystone/ui/button";
 import { ButtonGroup } from "@keystone/ui/button-group";
 import { cn } from "@keystone/ui/utils";
+import {
+  RiFacebookFill,
+  RiGithubFill,
+  RiGoogleFill,
+  RiTwitterXFill,
+} from "@remixicon/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Bold,
+  ChevronDown,
+  Italic,
+  Loader2,
+  Mail,
+  Plus,
+  StarIcon,
+  ThumbsUpIcon,
+} from "lucide-react";
 import { useState } from "react";
+import { expect, fn, userEvent, within } from "storybook/test";
 
 // Use a cast to silence TypeScript for the meta configuration
 const meta = {
@@ -207,28 +207,28 @@ export const Large: Story = {
 export const IconButton: Story = {
   render: () => (
     <div className="flex flex-wrap gap-4">
-      <Button className="aspect-square" aria-label="Next">
+      <Button aria-label="Next" className="aspect-square">
         <ArrowRight size={16} />
       </Button>
-      
-      <Button className="aspect-square" variant="secondary" aria-label="Mail">
+
+      <Button aria-label="Mail" className="aspect-square" variant="secondary">
         <Mail size={16} />
       </Button>
-      
-      <Button className="aspect-square" variant="outline" aria-label="Bold">
+
+      <Button aria-label="Bold" className="aspect-square" variant="outline">
         <Bold size={16} />
       </Button>
-      
-      <Button className="aspect-square" variant="ghost" aria-label="Italic">
+
+      <Button aria-label="Italic" className="aspect-square" variant="ghost">
         <Italic size={16} />
       </Button>
-      
-      <Button 
-        className="aspect-square rounded-full" 
-        variant="outline" 
+
+      <Button
         aria-label="Add"
+        className="aspect-square rounded-full"
+        variant="outline"
       >
-        <Plus size={16} aria-hidden="true" />
+        <Plus aria-hidden="true" size={16} />
       </Button>
     </div>
   ),
@@ -241,15 +241,15 @@ export const WithIcon: Story = {
       <Button>
         Next <ArrowRight />
       </Button>
-      
+
       <Button variant="secondary">
         <Mail /> Email
       </Button>
-      
+
       <Button variant="outline">
         <ArrowLeft /> Previous
       </Button>
-      
+
       <Button variant="ghost">
         Settings <ChevronDown />
       </Button>
@@ -312,30 +312,30 @@ export const Loading: Story = {
         <div className="flex flex-wrap gap-4">
           {/* Text only button */}
           <Button
-            onClick={handleClick}
-            isLoading={isLoading}
             disabled={isLoading}
+            isLoading={isLoading}
+            onClick={handleClick}
           >
             Text only
           </Button>
-          
+
           {/* Button with icon on the left */}
           <Button
-            variant="secondary"
-            onClick={handleClick}
-            isLoading={isLoading}
             disabled={isLoading}
+            isLoading={isLoading}
+            onClick={handleClick}
+            variant="secondary"
           >
-            <Mail /> 
+            <Mail />
             Icon left
           </Button>
-          
+
           {/* Button with icon on the right */}
           <Button
-            variant="outline"
-            onClick={handleClick}
-            isLoading={isLoading}
             disabled={isLoading}
+            isLoading={isLoading}
+            onClick={handleClick}
+            variant="outline"
           >
             Icon right
             <ArrowRight />
@@ -360,7 +360,8 @@ export const ButtonGroups: Story = {
   parameters: {
     docs: {
       description: {
-        story: "To create a button group, use the `ButtonGroup` component. See the [ButtonGroup documentation](?path=/docs/components-buttongroup--docs) for more examples.",
+        story:
+          "To create a button group, use the `ButtonGroup` component. See the [ButtonGroup documentation](?path=/docs/components-buttongroup--docs) for more examples.",
       },
     },
   },
@@ -372,73 +373,93 @@ export const SocialButtons: Story = {
     <div className="space-y-8">
       {/* Vertical social buttons with text */}
       <div>
-        <h3 className="text-sm font-medium mb-2">Vertical with Text</h3>
-        <div className="flex flex-col gap-2 max-w-xs">
-          <Button variant="outline" size="sm">
-            <RiGoogleFill 
-              className="me-1 text-[#DB4437] dark:text-white/60" 
-              size={16} 
-              aria-hidden="true" 
+        <h3 className="mb-2 font-medium text-sm">Vertical with Text</h3>
+        <div className="flex max-w-xs flex-col gap-2">
+          <Button size="sm" variant="outline">
+            <RiGoogleFill
+              aria-hidden="true"
+              className="me-1 text-[#DB4437] dark:text-white/60"
+              size={16}
             />
             Login with Google
           </Button>
-          <Button variant="outline" size="sm">
-            <RiTwitterXFill 
-              className="me-1 text-[#14171a] dark:text-white/60" 
-              size={16} 
-              aria-hidden="true" 
+          <Button size="sm" variant="outline">
+            <RiTwitterXFill
+              aria-hidden="true"
+              className="me-1 text-[#14171a] dark:text-white/60"
+              size={16}
             />
             Login with X
           </Button>
-          <Button variant="outline" size="sm">
-            <RiFacebookFill 
-              className="me-1 text-[#1877f2] dark:text-white/60" 
-              size={16} 
-              aria-hidden="true" 
+          <Button size="sm" variant="outline">
+            <RiFacebookFill
+              aria-hidden="true"
+              className="me-1 text-[#1877f2] dark:text-white/60"
+              size={16}
             />
             Login with Facebook
           </Button>
-          <Button variant="outline" size="sm">
-            <RiGithubFill 
-              className="me-1 text-[#333333] dark:text-white/60" 
-              size={16} 
-              aria-hidden="true" 
+          <Button size="sm" variant="outline">
+            <RiGithubFill
+              aria-hidden="true"
+              className="me-1 text-[#333333] dark:text-white/60"
+              size={16}
             />
             Login with GitHub
           </Button>
         </div>
       </div>
-      
+
       {/* Horizontal social buttons with icons only */}
       <div>
-        <h3 className="text-sm font-medium mb-2">Horizontal Icons Only</h3>
+        <h3 className="mb-2 font-medium text-sm">Horizontal Icons Only</h3>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="aspect-square" aria-label="Login with Google">
-            <RiGoogleFill 
-              className="text-[#DB4437] dark:text-white/60" 
-              size={16} 
-              aria-hidden="true" 
+          <Button
+            aria-label="Login with Google"
+            className="aspect-square"
+            size="sm"
+            variant="outline"
+          >
+            <RiGoogleFill
+              aria-hidden="true"
+              className="text-[#DB4437] dark:text-white/60"
+              size={16}
             />
           </Button>
-          <Button variant="outline" size="sm" className="aspect-square" aria-label="Login with X">
-            <RiTwitterXFill 
-              className="text-[#14171a] dark:text-white/60" 
-              size={16} 
-              aria-hidden="true" 
+          <Button
+            aria-label="Login with X"
+            className="aspect-square"
+            size="sm"
+            variant="outline"
+          >
+            <RiTwitterXFill
+              aria-hidden="true"
+              className="text-[#14171a] dark:text-white/60"
+              size={16}
             />
           </Button>
-          <Button variant="outline" size="sm" className="aspect-square" aria-label="Login with Facebook">
-            <RiFacebookFill 
-              className="text-[#1877f2] dark:text-white/60" 
-              size={16} 
-              aria-hidden="true" 
+          <Button
+            aria-label="Login with Facebook"
+            className="aspect-square"
+            size="sm"
+            variant="outline"
+          >
+            <RiFacebookFill
+              aria-hidden="true"
+              className="text-[#1877f2] dark:text-white/60"
+              size={16}
             />
           </Button>
-          <Button variant="outline" size="sm" className="aspect-square" aria-label="Login with GitHub">
-            <RiGithubFill 
-              className="text-[#333333] dark:text-white/60" 
-              size={16} 
-              aria-hidden="true" 
+          <Button
+            aria-label="Login with GitHub"
+            className="aspect-square"
+            size="sm"
+            variant="outline"
+          >
+            <RiGithubFill
+              aria-hidden="true"
+              className="text-[#333333] dark:text-white/60"
+              size={16}
             />
           </Button>
         </div>
@@ -446,20 +467,28 @@ export const SocialButtons: Story = {
 
       {/* Social interaction buttons */}
       <div>
-        <h3 className="text-sm font-medium mb-2">Social Interaction Buttons</h3>
+        <h3 className="mb-2 font-medium text-sm">Social Interaction Buttons</h3>
         <div className="flex flex-wrap gap-4">
           {/* Like button with counter */}
           <Button className="py-0 pe-0" variant="outline">
-            <ThumbsUpIcon className="opacity-60 me-1" size={16} aria-hidden="true" />
+            <ThumbsUpIcon
+              aria-hidden="true"
+              className="me-1 opacity-60"
+              size={16}
+            />
             Like
-            <span className="text-muted-foreground before:bg-input relative ms-1 inline-flex h-full items-center justify-center rounded-full px-3 text-xs font-medium before:absolute before:inset-0 before:left-0 before:w-px">
+            <span className="relative ms-1 inline-flex h-full items-center justify-center rounded-full px-3 font-medium text-muted-foreground text-xs before:absolute before:inset-0 before:left-0 before:w-px before:bg-input">
               86
             </span>
           </Button>
 
           {/* Star button with counter */}
           <Button>
-            <StarIcon className="-ms-1 opacity-60" size={16} aria-hidden="true" />
+            <StarIcon
+              aria-hidden="true"
+              className="-ms-1 opacity-60"
+              size={16}
+            />
             <span className="flex items-baseline gap-2">
               Star
               <span className="text-primary-foreground/60 text-xs">729</span>
@@ -476,58 +505,54 @@ export const CustomLoading: Story = {
   render: () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    
+
     const toggleLoading = () => {
       setIsLoading(!isLoading);
     };
-    
+
     return (
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={toggleLoading}
-          >
+          <Button onClick={toggleLoading} size="sm" variant="outline">
             {isLoading ? "Stop Loading" : "Start Loading"}
           </Button>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             ← Click to toggle loading state on all buttons
           </p>
         </div>
-        
+
         <div className="flex flex-wrap gap-4">
           {/* Custom loading indicator */}
-          <Button disabled={isLoading} className="flex items-center gap-2">
+          <Button className="flex items-center gap-2" disabled={isLoading}>
             {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
             Manual loader
           </Button>
-          
+
           {/* Icon on left with loading */}
-          <Button 
-            variant="secondary" 
-            isLoading={isLoading}
+          <Button
             className="flex items-center gap-2"
+            isLoading={isLoading}
+            variant="secondary"
           >
             <Mail className="h-4 w-4" />
             With left icon
           </Button>
-          
+
           {/* Icon on right with loading */}
-          <Button 
-            variant="outline"
-            isLoading={isLoading} 
+          <Button
             className="flex items-center gap-2"
+            isLoading={isLoading}
+            variant="outline"
           >
             With right icon
-            <ArrowRight className="h-4 w-4 ml-2" />
+            <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
-          
+
           {/* Multiple icons with loading */}
-          <Button 
-            variant="destructive"
-            isLoading={isLoading}
+          <Button
             className="flex items-center gap-2"
+            isLoading={isLoading}
+            variant="destructive"
           >
             <Mail className="h-4 w-4" />
             Multiple icons
@@ -546,29 +571,33 @@ export const RoundedButtons: Story = {
       <Button className="rounded-full" size="sm">
         Default
       </Button>
-      
-      <Button className="rounded-full" variant="secondary" size="sm">
+
+      <Button className="rounded-full" size="sm" variant="secondary">
         Secondary
       </Button>
-      
-      <Button className="rounded-full" variant="destructive" size="sm">
+
+      <Button className="rounded-full" size="sm" variant="destructive">
         Destructive
       </Button>
-      
-      <Button className="rounded-full" variant="outline" size="sm">
+
+      <Button className="rounded-full" size="sm" variant="outline">
         Outline
       </Button>
-      
-      <Button className="rounded-full" variant="ghost" size="sm">
+
+      <Button className="rounded-full" size="sm" variant="ghost">
         Ghost
       </Button>
-      
-      <Button className="rounded-full" variant="link" size="sm">
+
+      <Button className="rounded-full" size="sm" variant="link">
         Link
       </Button>
-      
-      <Button className="rounded-full aspect-square" size="sm" aria-label="Icon">
-        <Plus size={16} aria-hidden="true" />
+
+      <Button
+        aria-label="Icon"
+        className="aspect-square rounded-full"
+        size="sm"
+      >
+        <Plus aria-hidden="true" size={16} />
       </Button>
     </div>
   ),

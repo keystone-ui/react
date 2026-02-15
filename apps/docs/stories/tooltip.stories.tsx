@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "@keystone/ui/button";
+import { Kbd } from "@keystone/ui/kbd";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@keystone/ui/tooltip";
-import { Button } from "@keystone/ui/button";
-import { Kbd } from "@keystone/ui/kbd";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   HomeIcon,
   InboxIcon,
@@ -101,9 +101,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: () => (
     <Tooltip>
-      <TooltipTrigger
-        render={<Button variant="outline">Hover me</Button>}
-      />
+      <TooltipTrigger render={<Button variant="outline">Hover me</Button>} />
       <TooltipContent>
         <p>Add to library</p>
       </TooltipContent>
@@ -123,7 +121,7 @@ export const Sides: Story = {
         <Tooltip key={side}>
           <TooltipTrigger
             render={
-              <Button variant="outline" className="w-fit capitalize">
+              <Button className="w-fit capitalize" variant="outline">
                 {side}
               </Button>
             }
@@ -147,7 +145,7 @@ export const WithKeyboardShortcut: Story = {
     <Tooltip>
       <TooltipTrigger
         render={
-          <Button variant="outline" size="icon-sm">
+          <Button size="icon-sm" variant="outline">
             <SaveIcon />
           </Button>
         }
@@ -172,7 +170,7 @@ export const DisabledButton: Story = {
       <TooltipTrigger
         render={
           <span className="inline-block w-fit">
-            <Button variant="outline" disabled>
+            <Button disabled variant="outline">
               Disabled
             </Button>
           </span>
@@ -206,13 +204,13 @@ export const GroupDelay: Story = {
     ),
   ],
   render: () => (
-    <TooltipProvider delay={700} closeDelay={150}>
+    <TooltipProvider closeDelay={150} delay={700}>
       <nav className="flex flex-col gap-1 rounded-lg border p-1.5">
         {sidebarItems.map(({ icon: Icon, label }) => (
           <Tooltip key={label}>
             <TooltipTrigger
               render={
-                <Button variant="ghost" size="icon-sm">
+                <Button size="icon-sm" variant="ghost">
                   <Icon />
                 </Button>
               }

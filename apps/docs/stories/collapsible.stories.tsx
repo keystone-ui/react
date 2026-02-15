@@ -1,10 +1,3 @@
-import * as React from "react";
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@keystone/ui/collapsible";
 import { Button } from "@keystone/ui/button";
 import {
   Card,
@@ -13,18 +6,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@keystone/ui/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@keystone/ui/collapsible";
 import { Field, FieldGroup, FieldLabel } from "@keystone/ui/field";
 import { Input } from "@keystone/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@keystone/ui/tabs";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  ChevronsUpDown,
   ChevronDownIcon,
   ChevronRightIcon,
-  MaximizeIcon,
-  MinimizeIcon,
+  ChevronsUpDown,
   FileIcon,
   FolderIcon,
+  MaximizeIcon,
+  MinimizeIcon,
 } from "lucide-react";
+import * as React from "react";
 
 const meta = {
   title: "Components/Collapsible",
@@ -62,7 +62,8 @@ import {
   argTypes: {
     open: {
       control: "boolean",
-      description: "Whether the collapsible panel is currently open (controlled)",
+      description:
+        "Whether the collapsible panel is currently open (controlled)",
     },
     defaultOpen: {
       control: "boolean",
@@ -88,15 +89,15 @@ export const Default: Story = {
 
     return (
       <Collapsible
-        open={isOpen}
-        onOpenChange={setIsOpen}
         className="flex w-[350px] flex-col gap-2"
+        onOpenChange={setIsOpen}
+        open={isOpen}
       >
         <div className="flex items-center justify-between gap-4 px-4">
-          <h4 className="text-sm font-semibold">Order #4189</h4>
+          <h4 className="font-semibold text-sm">Order #4189</h4>
           <CollapsibleTrigger
             render={
-              <Button variant="ghost" size="icon" className="size-8">
+              <Button className="size-8" size="icon" variant="ghost">
                 <ChevronsUpDown />
                 <span className="sr-only">Toggle details</span>
               </Button>
@@ -132,10 +133,10 @@ export const Basic: Story = {
   render: () => (
     <Card className="mx-auto w-full max-w-sm">
       <CardContent>
-        <Collapsible className="data-open:bg-muted rounded-md">
+        <Collapsible className="rounded-md data-open:bg-muted">
           <CollapsibleTrigger
             render={
-              <Button variant="ghost" className="w-full">
+              <Button className="w-full" variant="ghost">
                 Product details
                 <ChevronDownIcon className="ml-auto group-data-panel-open/button:rotate-180" />
               </Button>
@@ -172,41 +173,41 @@ export const Settings: Story = {
         </CardHeader>
         <CardContent>
           <Collapsible
-            open={isOpen}
-            onOpenChange={setIsOpen}
             className="flex items-start gap-2"
+            onOpenChange={setIsOpen}
+            open={isOpen}
           >
             <FieldGroup className="grid w-full grid-cols-2 gap-2">
               <Field>
-                <FieldLabel htmlFor="radius-tl" className="sr-only">
+                <FieldLabel className="sr-only" htmlFor="radius-tl">
                   Top Left
                 </FieldLabel>
-                <Input id="radius-tl" placeholder="0" defaultValue={0} />
+                <Input defaultValue={0} id="radius-tl" placeholder="0" />
               </Field>
               <Field>
-                <FieldLabel htmlFor="radius-tr" className="sr-only">
+                <FieldLabel className="sr-only" htmlFor="radius-tr">
                   Top Right
                 </FieldLabel>
-                <Input id="radius-tr" placeholder="0" defaultValue={0} />
+                <Input defaultValue={0} id="radius-tr" placeholder="0" />
               </Field>
               <CollapsibleContent className="col-span-full grid grid-cols-subgrid gap-2">
                 <Field>
-                  <FieldLabel htmlFor="radius-bl" className="sr-only">
+                  <FieldLabel className="sr-only" htmlFor="radius-bl">
                     Bottom Left
                   </FieldLabel>
-                  <Input id="radius-bl" placeholder="0" defaultValue={0} />
+                  <Input defaultValue={0} id="radius-bl" placeholder="0" />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="radius-br" className="sr-only">
+                  <FieldLabel className="sr-only" htmlFor="radius-br">
                     Bottom Right
                   </FieldLabel>
-                  <Input id="radius-br" placeholder="0" defaultValue={0} />
+                  <Input defaultValue={0} id="radius-br" placeholder="0" />
                 </Field>
               </CollapsibleContent>
             </FieldGroup>
             <CollapsibleTrigger
               render={
-                <Button variant="outline" size="icon">
+                <Button size="icon" variant="outline">
                   {isOpen ? <MinimizeIcon /> : <MaximizeIcon />}
                 </Button>
               }
@@ -248,11 +249,7 @@ export const FileTree: Story = {
       },
       {
         name: "lib",
-        items: [
-          { name: "utils.ts" },
-          { name: "cn.ts" },
-          { name: "api.ts" },
-        ],
+        items: [{ name: "utils.ts" }, { name: "cn.ts" }, { name: "api.ts" }],
       },
       {
         name: "hooks",
@@ -290,9 +287,9 @@ export const FileTree: Story = {
             <CollapsibleTrigger
               render={
                 <Button
-                  variant="ghost"
-                  size="sm"
                   className="group w-full justify-start transition-none hover:bg-accent hover:text-accent-foreground"
+                  size="sm"
+                  variant="ghost"
                 >
                   <ChevronRightIcon className="transition-transform group-data-panel-open:rotate-90" />
                   <FolderIcon />
@@ -310,10 +307,10 @@ export const FileTree: Story = {
       }
       return (
         <Button
+          className="w-full justify-start gap-2 text-foreground"
           key={fileItem.name}
-          variant="link"
           size="sm"
-          className="text-foreground w-full justify-start gap-2"
+          variant="link"
         >
           <FileIcon />
           <span>{fileItem.name}</span>

@@ -8,15 +8,10 @@
     "src"
   ],
   "scripts": {
-    "clean": "rm -rf .turbo node_modules",
-    "lint": "eslint .",
-    "format": "prettier --check \"**/*.{ts,tsx,md}\""
+    "clean": "rm -rf .turbo node_modules"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
     "@tailwindcss/vite": "^4.1.18",
-    "eslint": "^9.39.2",
-    "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "vite": "^7.3.1"
   },

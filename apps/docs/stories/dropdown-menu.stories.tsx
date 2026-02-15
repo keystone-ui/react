@@ -1,6 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as React from "react";
-import { useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@keystone/ui/avatar";
+import { Button } from "@keystone/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -18,8 +17,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@keystone/ui/dropdown-menu";
-import { Button } from "@keystone/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@keystone/ui/avatar";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   BellIcon,
   Building2Icon,
@@ -53,6 +51,8 @@ import {
   UserIcon,
   WalletIcon,
 } from "lucide-react";
+import * as React from "react";
+import { useState } from "react";
 
 const meta = {
   title: "Components/Dropdown Menu",
@@ -112,7 +112,7 @@ export const Default: Story = {
   render: () => (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant="outline">Open</Button>} />
-      <DropdownMenuContent className="w-40" align="start">
+      <DropdownMenuContent align="start" className="w-40">
         <DropdownMenuGroup>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuItem>
@@ -189,8 +189,7 @@ export const Basic: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "A basic dropdown menu with labels and separators.",
+        story: "A basic dropdown menu with labels and separators.",
       },
     },
   },
@@ -318,8 +317,7 @@ export const Icons: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "Combine icons with labels for quick scanning.",
+        story: "Combine icons with labels for quick scanning.",
       },
     },
   },
@@ -336,9 +334,7 @@ export const Checkboxes: Story = {
 
     return (
       <DropdownMenu>
-        <DropdownMenuTrigger
-          render={<Button variant="outline">Open</Button>}
-        />
+        <DropdownMenuTrigger render={<Button variant="outline">Open</Button>} />
         <DropdownMenuContent className="w-40">
           <DropdownMenuGroup>
             <DropdownMenuLabel>Appearance</DropdownMenuLabel>
@@ -350,8 +346,8 @@ export const Checkboxes: Story = {
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
               checked={showActivityBar}
-              onCheckedChange={setShowActivityBar}
               disabled
+              onCheckedChange={setShowActivityBar}
             >
               Activity Bar
             </DropdownMenuCheckboxItem>
@@ -369,8 +365,7 @@ export const Checkboxes: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "Use `DropdownMenuCheckboxItem` for toggles.",
+        story: "Use `DropdownMenuCheckboxItem` for toggles.",
       },
     },
   },
@@ -440,8 +435,7 @@ export const CheckboxesIcons: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "Add icons to checkbox items for richer visual context.",
+        story: "Add icons to checkbox items for richer visual context.",
       },
     },
   },
@@ -459,31 +453,29 @@ export const CheckboxesControl: Story = {
 
     return (
       <DropdownMenu>
-        <DropdownMenuTrigger
-          render={<Button variant="outline">Open</Button>}
-        />
+        <DropdownMenuTrigger render={<Button variant="outline">Open</Button>} />
         <DropdownMenuContent className="w-40">
           <DropdownMenuGroup>
             <DropdownMenuLabel>Appearance</DropdownMenuLabel>
             <DropdownMenuCheckboxItem
-              variant="control"
               checked={showStatusBar ?? false}
               onCheckedChange={setShowStatusBar}
+              variant="control"
             >
               Status Bar
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
-              variant="control"
               checked={showActivityBar}
-              onCheckedChange={setShowActivityBar}
               disabled
+              onCheckedChange={setShowActivityBar}
+              variant="control"
             >
               Activity Bar
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
-              variant="control"
               checked={showPanel}
               onCheckedChange={setShowPanel}
+              variant="control"
             >
               Panel
             </DropdownMenuCheckboxItem>
@@ -512,15 +504,13 @@ export const RadioGroup: Story = {
 
     return (
       <DropdownMenu>
-        <DropdownMenuTrigger
-          render={<Button variant="outline">Open</Button>}
-        />
+        <DropdownMenuTrigger render={<Button variant="outline">Open</Button>} />
         <DropdownMenuContent className="w-32">
           <DropdownMenuGroup>
             <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
             <DropdownMenuRadioGroup
-              value={position}
               onValueChange={setPosition}
+              value={position}
             >
               <DropdownMenuRadioItem value="top">Top</DropdownMenuRadioItem>
               <DropdownMenuRadioItem value="bottom">
@@ -536,8 +526,7 @@ export const RadioGroup: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "Use `DropdownMenuRadioGroup` for exclusive choices.",
+        story: "Use `DropdownMenuRadioGroup` for exclusive choices.",
       },
     },
   },
@@ -560,8 +549,8 @@ export const RadioIcons: Story = {
           <DropdownMenuGroup>
             <DropdownMenuLabel>Select Payment Method</DropdownMenuLabel>
             <DropdownMenuRadioGroup
-              value={paymentMethod}
               onValueChange={setPaymentMethod}
+              value={paymentMethod}
             >
               <DropdownMenuRadioItem value="card">
                 <CreditCardIcon />
@@ -584,8 +573,7 @@ export const RadioIcons: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "Show radio options with icons.",
+        story: "Show radio options with icons.",
       },
     },
   },
@@ -601,23 +589,21 @@ export const RadioControl: Story = {
 
     return (
       <DropdownMenu>
-        <DropdownMenuTrigger
-          render={<Button variant="outline">Open</Button>}
-        />
+        <DropdownMenuTrigger render={<Button variant="outline">Open</Button>} />
         <DropdownMenuContent className="w-32">
           <DropdownMenuGroup>
             <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
             <DropdownMenuRadioGroup
-              value={position}
               onValueChange={setPosition}
+              value={position}
             >
-              <DropdownMenuRadioItem variant="control" value="top">
+              <DropdownMenuRadioItem value="top" variant="control">
                 Top
               </DropdownMenuRadioItem>
-              <DropdownMenuRadioItem variant="control" value="bottom">
+              <DropdownMenuRadioItem value="bottom" variant="control">
                 Bottom
               </DropdownMenuRadioItem>
-              <DropdownMenuRadioItem variant="control" value="right">
+              <DropdownMenuRadioItem value="right" variant="control">
                 Right
               </DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
@@ -669,8 +655,7 @@ export const Destructive: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          'Use `variant="destructive"` for irreversible actions.',
+        story: 'Use `variant="destructive"` for irreversible actions.',
       },
     },
   },
@@ -684,24 +669,24 @@ function AccountMenu({ size }: { size?: "default" | "compact" }) {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button variant="ghost" size="icon" className="rounded-full">
+          <Button className="rounded-full" size="icon" variant="ghost">
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" alt="Aang" />
+              <AvatarImage alt="Aang" src="https://github.com/shadcn.png" />
               <AvatarFallback>AA</AvatarFallback>
             </Avatar>
           </Button>
         }
       />
-      <DropdownMenuContent className="w-56" align="end" size={size}>
+      <DropdownMenuContent align="end" className="w-56" size={size}>
         {/* User header */}
         <DropdownMenuGroup>
           <div className="flex items-center gap-2 px-1.5 py-1.5">
             <Avatar className="size-8">
-              <AvatarImage src="https://github.com/shadcn.png" alt="Aang" />
+              <AvatarImage alt="Aang" src="https://github.com/shadcn.png" />
               <AvatarFallback>AA</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <span className="text-sm font-medium">Aang</span>
+              <span className="font-medium text-sm">Aang</span>
               <span className="text-muted-foreground text-xs">
                 kogaion@gmail.com
               </span>
@@ -808,7 +793,11 @@ function ComplexMenu({ size }: { size?: "default" | "compact" }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={<Button variant="outline">{size === "compact" ? "Compact" : "Default"}</Button>}
+        render={
+          <Button variant="outline">
+            {size === "compact" ? "Compact" : "Default"}
+          </Button>
+        }
       />
       <DropdownMenuContent className="w-44" size={size}>
         {/* File group */}
@@ -921,8 +910,8 @@ function ComplexMenu({ size }: { size?: "default" | "compact" }) {
                 <DropdownMenuGroup>
                   <DropdownMenuLabel>Appearance</DropdownMenuLabel>
                   <DropdownMenuRadioGroup
-                    value={theme}
                     onValueChange={setTheme}
+                    value={theme}
                   >
                     <DropdownMenuRadioItem value="light">
                       <SunIcon />

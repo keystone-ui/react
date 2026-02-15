@@ -1,20 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Spinner } from "@keystone/ui/spinner";
-import { Button } from "@keystone/ui/button";
 import { Badge } from "@keystone/ui/badge";
-import {
-  Item,
-  ItemContent,
-  ItemMedia,
-  ItemTitle,
-} from "@keystone/ui/item";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-  InputGroupTextarea,
-} from "@keystone/ui/input-group";
+import { Button } from "@keystone/ui/button";
 import {
   Empty,
   EmptyContent,
@@ -23,6 +8,16 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@keystone/ui/empty";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupTextarea,
+} from "@keystone/ui/input-group";
+import { Item, ItemContent, ItemMedia, ItemTitle } from "@keystone/ui/item";
+import { Spinner } from "@keystone/ui/spinner";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ArrowUpIcon } from "lucide-react";
 
 const meta = {
@@ -116,7 +111,7 @@ export const WithButton: Story = {
     docs: {
       description: {
         story:
-          "Add a spinner to a button to indicate a loading state. Use `data-icon=\"inline-start\"` to position the spinner before the label.",
+          'Add a spinner to a button to indicate a loading state. Use `data-icon="inline-start"` to position the spinner before the label.',
       },
     },
   },
@@ -126,11 +121,11 @@ export const WithButton: Story = {
         <Spinner data-icon="inline-start" />
         Loading...
       </Button>
-      <Button variant="outline" disabled size="sm">
+      <Button disabled size="sm" variant="outline">
         <Spinner data-icon="inline-start" />
         Please wait
       </Button>
-      <Button variant="secondary" disabled size="sm">
+      <Button disabled size="sm" variant="secondary">
         <Spinner data-icon="inline-start" />
         Processing
       </Button>
@@ -143,7 +138,7 @@ export const WithBadge: Story = {
     docs: {
       description: {
         story:
-          "Add a spinner to a badge to indicate a loading state. Use `data-icon=\"inline-start\"` to position the spinner before the label.",
+          'Add a spinner to a badge to indicate a loading state. Use `data-icon="inline-start"` to position the spinner before the label.',
       },
     },
   },
@@ -177,13 +172,13 @@ export const WithInputGroup: Story = {
   render: () => (
     <div className="flex w-full max-w-md flex-col gap-4">
       <InputGroup>
-        <InputGroupInput placeholder="Send a message..." disabled />
+        <InputGroupInput disabled placeholder="Send a message..." />
         <InputGroupAddon align="inline-end">
           <Spinner />
         </InputGroupAddon>
       </InputGroup>
       <InputGroup>
-        <InputGroupTextarea placeholder="Send a message..." disabled />
+        <InputGroupTextarea disabled placeholder="Send a message..." />
         <InputGroupAddon align="block-end">
           <Spinner /> Validating...
           <InputGroupButton className="ml-auto" variant="default">
@@ -217,7 +212,7 @@ export const WithEmpty: Story = {
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button variant="outline" size="sm">
+        <Button size="sm" variant="outline">
           Cancel
         </Button>
       </EmptyContent>

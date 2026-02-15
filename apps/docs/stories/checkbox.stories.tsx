@@ -1,5 +1,3 @@
-import * as React from "react";
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Checkbox } from "@keystone/ui/checkbox";
 import {
   Field,
@@ -10,6 +8,8 @@ import {
   FieldLegend,
   FieldSet,
 } from "@keystone/ui/field";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import * as React from "react";
 
 const meta = {
   title: "Components/Checkbox",
@@ -91,9 +91,9 @@ export const Description: Story = {
     <FieldGroup className="mx-auto w-72">
       <Field orientation="horizontal">
         <Checkbox
+          defaultChecked
           id="terms-checkbox-desc"
           name="terms-checkbox-desc"
-          defaultChecked
         />
         <FieldContent>
           <FieldLabel htmlFor="terms-checkbox-desc">
@@ -121,11 +121,11 @@ export const Disabled: Story = {
   name: "Disabled",
   render: () => (
     <FieldGroup className="mx-auto w-56">
-      <Field orientation="horizontal" data-disabled>
+      <Field data-disabled orientation="horizontal">
         <Checkbox
+          disabled
           id="toggle-checkbox-disabled"
           name="toggle-checkbox-disabled"
-          disabled
         />
         <FieldLabel htmlFor="toggle-checkbox-disabled">
           Enable notifications
@@ -148,33 +148,35 @@ export const Group: Story = {
   name: "Group",
   render: () => (
     <FieldSet>
-      <FieldLegend variant="label">Show these items on the desktop:</FieldLegend>
+      <FieldLegend variant="label">
+        Show these items on the desktop:
+      </FieldLegend>
       <FieldDescription>
         Select the items you want to show on the desktop.
       </FieldDescription>
       <FieldGroup className="gap-3">
         <Field orientation="horizontal">
           <Checkbox
+            defaultChecked
             id="finder-pref-9k2-hard-disks-ljj-checkbox"
             name="finder-pref-9k2-hard-disks-ljj-checkbox"
-            defaultChecked
           />
           <FieldLabel
-            htmlFor="finder-pref-9k2-hard-disks-ljj-checkbox"
             className="font-normal"
+            htmlFor="finder-pref-9k2-hard-disks-ljj-checkbox"
           >
             Hard disks
           </FieldLabel>
         </Field>
         <Field orientation="horizontal">
           <Checkbox
+            defaultChecked
             id="finder-pref-9k2-external-disks-1yg-checkbox"
             name="finder-pref-9k2-external-disks-1yg-checkbox"
-            defaultChecked
           />
           <FieldLabel
-            htmlFor="finder-pref-9k2-external-disks-1yg-checkbox"
             className="font-normal"
+            htmlFor="finder-pref-9k2-external-disks-1yg-checkbox"
           >
             External disks
           </FieldLabel>
@@ -185,8 +187,8 @@ export const Group: Story = {
             name="finder-pref-9k2-cds-dvds-fzt-checkbox"
           />
           <FieldLabel
-            htmlFor="finder-pref-9k2-cds-dvds-fzt-checkbox"
             className="font-normal"
+            htmlFor="finder-pref-9k2-cds-dvds-fzt-checkbox"
           >
             CDs, DVDs, and iPods
           </FieldLabel>
@@ -197,8 +199,8 @@ export const Group: Story = {
             name="finder-pref-9k2-connected-servers-6l2-checkbox"
           />
           <FieldLabel
-            htmlFor="finder-pref-9k2-connected-servers-6l2-checkbox"
             className="font-normal"
+            htmlFor="finder-pref-9k2-connected-servers-6l2-checkbox"
           >
             Connected servers
           </FieldLabel>
@@ -220,11 +222,11 @@ export const Invalid: Story = {
   name: "Invalid",
   render: () => (
     <FieldGroup className="mx-auto w-56">
-      <Field orientation="horizontal" data-invalid="true">
+      <Field data-invalid="true" orientation="horizontal">
         <Checkbox
+          aria-invalid="true"
           id="terms-checkbox-invalid"
           name="terms-checkbox-invalid"
-          aria-invalid="true"
         />
         <FieldLabel htmlFor="terms-checkbox-invalid">
           Accept terms and conditions
@@ -236,7 +238,7 @@ export const Invalid: Story = {
     docs: {
       description: {
         story:
-          "To show invalid styles, set `aria-invalid=\"true\"` on the `<Checkbox>` for the red border and `data-invalid=\"true\"` on the `<Field>` wrapper to turn the label text red. Both attributes work together to provide clear visual feedback for validation errors.",
+          'To show invalid styles, set `aria-invalid="true"` on the `<Checkbox>` for the red border and `data-invalid="true"` on the `<Field>` wrapper to turn the label text red. Both attributes work together to provide clear visual feedback for validation errors.',
       },
     },
   },
@@ -245,16 +247,16 @@ export const Invalid: Story = {
 // Checked State (Controlled) Example
 export const CheckedState: Story = {
   name: "Checked State",
-  render: function CheckedStateExample() {
+  render() {
     const [checked, setChecked] = React.useState(false);
 
     return (
       <FieldGroup className="mx-auto w-64">
         <Field orientation="horizontal">
           <Checkbox
+            checked={checked}
             id="controlled-checkbox"
             name="controlled-checkbox"
-            checked={checked}
             onCheckedChange={setChecked}
           />
           <FieldLabel htmlFor="controlled-checkbox">

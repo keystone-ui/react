@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Skeleton, SkeletonGroup } from "@keystone/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@keystone/ui/card";
+import { Skeleton, SkeletonGroup } from "@keystone/ui/skeleton";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 // ---------------------------------------------------------------------------
 // Meta
@@ -181,12 +181,12 @@ export const NoAnimation: Story = {
   render: () => (
     <div className="flex w-fit items-center gap-4">
       <Skeleton
-        className="size-10 shrink-0 rounded-full"
         animationType="none"
+        className="size-10 shrink-0 rounded-full"
       />
       <div className="grid gap-2">
-        <Skeleton className="h-4 w-[150px]" animationType="none" />
-        <Skeleton className="h-4 w-[100px]" animationType="none" />
+        <Skeleton animationType="none" className="h-4 w-[150px]" />
+        <Skeleton animationType="none" className="h-4 w-[100px]" />
       </div>
     </div>
   ),
@@ -204,12 +204,12 @@ export const Shimmer: Story = {
   render: () => (
     <SkeletonGroup className="flex w-fit items-center gap-4">
       <Skeleton
-        className="size-10 shrink-0 rounded-full"
         animationType="none"
+        className="size-10 shrink-0 rounded-full"
       />
       <div className="grid gap-2">
-        <Skeleton className="h-4 w-[150px]" animationType="none" />
-        <Skeleton className="h-4 w-[100px]" animationType="none" />
+        <Skeleton animationType="none" className="h-4 w-[150px]" />
+        <Skeleton animationType="none" className="h-4 w-[100px]" />
       </div>
     </SkeletonGroup>
   ),
@@ -228,11 +228,11 @@ export const ShimmerCard: Story = {
     <SkeletonGroup className="w-full max-w-xs">
       <Card>
         <CardHeader>
-          <Skeleton className="h-4 w-2/3" animationType="none" />
-          <Skeleton className="h-4 w-1/2" animationType="none" />
+          <Skeleton animationType="none" className="h-4 w-2/3" />
+          <Skeleton animationType="none" className="h-4 w-1/2" />
         </CardHeader>
         <CardContent>
-          <Skeleton className="aspect-video w-full" animationType="none" />
+          <Skeleton animationType="none" className="aspect-video w-full" />
         </CardContent>
       </Card>
     </SkeletonGroup>

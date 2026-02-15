@@ -1,7 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as React from "react";
-import { Calendar, CalendarDayButton } from "@keystone/ui/calendar";
 import { Button } from "@keystone/ui/button";
+import { Calendar, CalendarDayButton } from "@keystone/ui/calendar";
 import { Card, CardContent, CardFooter } from "@keystone/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@keystone/ui/field";
 import {
@@ -9,9 +7,11 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@keystone/ui/input-group";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { addDays } from "date-fns";
 import { Clock2Icon } from "lucide-react";
-import { type DateRange } from "react-day-picker";
+import * as React from "react";
+import type { DateRange } from "react-day-picker";
 
 const meta = {
   title: "Components/Calendar",
@@ -63,14 +63,19 @@ type Story = StoryObj<typeof Calendar>;
 // Default
 // =============================================================================
 export const Default: Story = {
-  render: () => <Calendar mode="single" className="rounded-lg shadow-lg ring-1 ring-popup-ring" />,
+  render: () => (
+    <Calendar
+      className="rounded-lg shadow-lg ring-1 ring-popup-ring"
+      mode="single"
+    />
+  ),
 };
 
 // =============================================================================
 // Range
 // =============================================================================
 export const Range: Story = {
-  render: function RangeStory() {
+  render() {
     const [dateRange, setDateRange] = React.useState<DateRange | undefined>({
       from: new Date(new Date().getFullYear(), 0, 12),
       to: addDays(new Date(new Date().getFullYear(), 0, 12), 30),
@@ -78,12 +83,12 @@ export const Range: Story = {
 
     return (
       <Calendar
-        mode="range"
-        defaultMonth={dateRange?.from}
-        selected={dateRange}
-        onSelect={setDateRange}
-        numberOfMonths={2}
         className="rounded-lg shadow-lg ring-1 ring-popup-ring"
+        defaultMonth={dateRange?.from}
+        mode="range"
+        numberOfMonths={2}
+        onSelect={setDateRange}
+        selected={dateRange}
       />
     );
   },
@@ -103,9 +108,9 @@ export const Range: Story = {
 export const MonthAndYearSelector: Story = {
   render: () => (
     <Calendar
-      mode="single"
       captionLayout="dropdown"
       className="rounded-lg shadow-lg ring-1 ring-popup-ring"
+      mode="single"
     />
   ),
   parameters: {
@@ -122,7 +127,7 @@ export const MonthAndYearSelector: Story = {
 // Presets
 // =============================================================================
 export const Presets: Story = {
-  render: function PresetsStory() {
+  render() {
     const [date, setDate] = React.useState<Date | undefined>(
       new Date(new Date().getFullYear(), 1, 12)
     );
@@ -134,13 +139,13 @@ export const Presets: Story = {
       <Card className="mx-auto w-fit shadow-lg" size="sm">
         <CardContent>
           <Calendar
+            className="p-0 [--cell-size:--spacing(9.5)]"
+            fixedWeeks
             mode="single"
-            selected={date}
-            onSelect={setDate}
             month={currentMonth}
             onMonthChange={setCurrentMonth}
-            fixedWeeks
-            className="p-0 [--cell-size:--spacing(9.5)]"
+            onSelect={setDate}
+            selected={date}
           />
         </CardContent>
         <CardFooter className="flex w-0 min-w-full flex-wrap gap-2">
@@ -153,8 +158,6 @@ export const Presets: Story = {
           ].map((preset) => (
             <Button
               key={preset.value}
-              variant="outline"
-              size="xs"
               onClick={() => {
                 const newDate = addDays(new Date(), preset.value);
                 setDate(newDate);
@@ -162,6 +165,8 @@ export const Presets: Story = {
                   new Date(newDate.getFullYear(), newDate.getMonth(), 1)
                 );
               }}
+              size="xs"
+              variant="outline"
             >
               {preset.label}
             </Button>
@@ -184,32 +189,32 @@ export const Presets: Story = {
 // Date and Time
 // =============================================================================
 export const DateTime: Story = {
-  render: function DateTimeStory() {
+  render() {
     const [date, setDate] = React.useState<Date | undefined>(
       new Date(new Date().getFullYear(), new Date().getMonth(), 12)
     );
 
     return (
-      <Card size="sm" className="mx-auto w-fit shadow-lg">
+      <Card className="mx-auto w-fit shadow-lg" size="sm">
         <CardContent>
           <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
             className="p-0"
+            mode="single"
+            onSelect={setDate}
+            selected={date}
           />
         </CardContent>
-        <CardFooter className="bg-card border-t">
+        <CardFooter className="border-t bg-card">
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor="time-from">Start Time</FieldLabel>
               <InputGroup size="sm">
                 <InputGroupInput
-                  id="time-from"
-                  type="time"
-                  step="1"
-                  defaultValue="10:30:00"
                   className="appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                  defaultValue="10:30:00"
+                  id="time-from"
+                  step="1"
+                  type="time"
                 />
                 <InputGroupAddon>
                   <Clock2Icon className="text-muted-foreground" />
@@ -220,11 +225,11 @@ export const DateTime: Story = {
               <FieldLabel htmlFor="time-to">End Time</FieldLabel>
               <InputGroup size="sm">
                 <InputGroupInput
-                  id="time-to"
-                  type="time"
-                  step="1"
-                  defaultValue="12:30:00"
                   className="appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                  defaultValue="12:30:00"
+                  id="time-to"
+                  step="1"
+                  type="time"
                 />
                 <InputGroupAddon>
                   <Clock2Icon className="text-muted-foreground" />
@@ -250,7 +255,7 @@ export const DateTime: Story = {
 // Booked Dates
 // =============================================================================
 export const BookedDates: Story = {
-  render: function BookedDatesStory() {
+  render() {
     const [date, setDate] = React.useState<Date | undefined>(
       new Date(new Date().getFullYear(), 0, 6)
     );
@@ -261,18 +266,18 @@ export const BookedDates: Story = {
 
     return (
       <Calendar
-        mode="single"
+        className="rounded-lg shadow-lg ring-1 ring-popup-ring"
         defaultMonth={date}
-        selected={date}
-        onSelect={setDate}
         disabled={bookedDates}
+        mode="single"
         modifiers={{
           booked: bookedDates,
         }}
         modifiersClassNames={{
           booked: "[&>button]:line-through opacity-100",
         }}
-        className="rounded-lg shadow-lg ring-1 ring-popup-ring"
+        onSelect={setDate}
+        selected={date}
       />
     );
   },
@@ -290,7 +295,7 @@ export const BookedDates: Story = {
 // Custom Cell Size
 // =============================================================================
 export const CustomCellSize: Story = {
-  render: function CustomCellSizeStory() {
+  render() {
     const [range, setRange] = React.useState<DateRange | undefined>({
       from: new Date(new Date().getFullYear(), 11, 8),
       to: addDays(new Date(new Date().getFullYear(), 11, 8), 10),
@@ -299,15 +304,10 @@ export const CustomCellSize: Story = {
     return (
       <div className="flex flex-wrap items-start gap-6">
         <Calendar
-          mode="single"
           className="rounded-lg shadow-lg ring-1 ring-popup-ring [--cell-size:--spacing(9.5)]"
+          mode="single"
         />
         <Calendar
-          mode="range"
-          defaultMonth={range?.from}
-          selected={range}
-          onSelect={setRange}
-          numberOfMonths={1}
           className="rounded-lg shadow-lg ring-1 ring-popup-ring [--cell-size:--spacing(8)] md:[--cell-size:--spacing(10)]"
           components={{
             DayButton: ({ children, modifiers, day, ...props }) => {
@@ -315,19 +315,22 @@ export const CustomCellSize: Story = {
                 day.date.getDay() === 0 || day.date.getDay() === 6;
 
               return (
-                <CalendarDayButton
-                  day={day}
-                  modifiers={modifiers}
-                  {...props}
-                >
+                <CalendarDayButton day={day} modifiers={modifiers} {...props}>
                   {children}
                   {!modifiers.outside && (
-                    <span className="text-xs opacity-70">{isWeekend ? "$120" : "$100"}</span>
+                    <span className="text-xs opacity-70">
+                      {isWeekend ? "$120" : "$100"}
+                    </span>
                   )}
                 </CalendarDayButton>
               );
             },
           }}
+          defaultMonth={range?.from}
+          mode="range"
+          numberOfMonths={1}
+          onSelect={setRange}
+          selected={range}
         />
       </div>
     );
@@ -346,19 +349,19 @@ export const CustomCellSize: Story = {
 // Week Numbers
 // =============================================================================
 export const WeekNumbers: Story = {
-  render: function WeekNumbersStory() {
+  render() {
     const [date, setDate] = React.useState<Date | undefined>(
       new Date(new Date().getFullYear(), 0, 12)
     );
 
     return (
       <Calendar
-        mode="single"
-        defaultMonth={date}
-        selected={date}
-        onSelect={setDate}
-        showWeekNumber
         className="rounded-lg shadow-lg ring-1 ring-popup-ring"
+        defaultMonth={date}
+        mode="single"
+        onSelect={setDate}
+        selected={date}
+        showWeekNumber
       />
     );
   },

@@ -28,7 +28,7 @@ const BasicSelect = ({
       <SelectGroup>
         <SelectItem value="apple">Apple</SelectItem>
         <SelectItem value="banana">Banana</SelectItem>
-        <SelectItem value="cherry" disabled>
+        <SelectItem disabled value="cherry">
           Cherry
         </SelectItem>
       </SelectGroup>
@@ -68,7 +68,7 @@ describe("Select", () => {
     test("applies sm size", () => {
       render(
         <Select>
-          <SelectTrigger size="sm" data-testid="trigger">
+          <SelectTrigger data-testid="trigger" size="sm">
             <SelectValue placeholder="Select" />
           </SelectTrigger>
           <SelectContent>
@@ -316,7 +316,7 @@ describe("Select", () => {
   describe("Form Integration", () => {
     test("supports name attribute for form submission", () => {
       render(
-        <Select name="fruit" defaultValue="apple">
+        <Select defaultValue="apple" name="fruit">
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>

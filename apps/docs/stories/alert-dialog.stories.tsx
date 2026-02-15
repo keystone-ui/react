@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,11 +11,8 @@ import {
   AlertDialogTrigger,
 } from "@keystone/ui/alert-dialog";
 import { Button } from "@keystone/ui/button";
-import {
-  CircleFadingPlusIcon,
-  BluetoothIcon,
-  Trash2Icon,
-} from "lucide-react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { BluetoothIcon, CircleFadingPlusIcon, Trash2Icon } from "lucide-react";
 
 const meta = {
   title: "Components/AlertDialog",

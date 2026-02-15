@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -16,6 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@keystone/ui/dropdown-menu";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ChevronDownIcon, DotIcon } from "lucide-react";
 
 const meta = {
@@ -210,7 +210,7 @@ export const CollapsedWithDropdown: Story = {
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <Button variant="ghost" size="icon-sm">
+                <Button size="icon-sm" variant="ghost">
                   <BreadcrumbEllipsis />
                   <span className="sr-only">Toggle menu</span>
                 </Button>

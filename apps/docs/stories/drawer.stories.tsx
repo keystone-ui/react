@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as React from "react";
+import { Button } from "@keystone/ui/button";
+import { Checkbox } from "@keystone/ui/checkbox";
 import {
   Drawer,
   DrawerClose,
@@ -10,17 +10,16 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@keystone/ui/drawer";
+import { Input } from "@keystone/ui/input";
+import { RadioGroup, RadioGroupItem } from "@keystone/ui/radio-group";
 import {
   Stepper,
   StepperContent,
   StepperStep,
   useStepper,
 } from "@keystone/ui/stepper";
-import { Button } from "@keystone/ui/button";
-import { Checkbox } from "@keystone/ui/checkbox";
-import { Input } from "@keystone/ui/input";
-import { RadioGroup, RadioGroupItem } from "@keystone/ui/radio-group";
 import { Switch } from "@keystone/ui/switch";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   ArrowLeft,
   ArrowUpDown,
@@ -34,6 +33,7 @@ import {
   Plus,
   Search,
 } from "lucide-react";
+import * as React from "react";
 
 const meta = {
   title: "Components/Drawer",
@@ -144,14 +144,14 @@ export const ScrollableContent: Story = {
         </DrawerHeader>
         <div className="no-scrollbar overflow-y-auto px-4">
           {Array.from({ length: 10 }).map((_, index) => (
-            <p key={index} className="mb-4 leading-normal">
+            <p className="mb-4 leading-normal" key={index}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-              ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-              aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-              pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-              culpa qui officia deserunt mollit anim id est laborum.
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum.
             </p>
           ))}
         </div>
@@ -202,7 +202,7 @@ export const Sides: Story = {
             </DrawerHeader>
             <div className="no-scrollbar overflow-y-auto px-4">
               {Array.from({ length: 6 }).map((_, index) => (
-                <p key={index} className="mb-4 leading-normal">
+                <p className="mb-4 leading-normal" key={index}>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
                   do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                   Ut enim ad minim veniam, quis nostrud exercitation ullamco
@@ -250,36 +250,34 @@ function GoalDrawerDemo() {
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
             <DrawerTitle>Move Goal</DrawerTitle>
-            <DrawerDescription>
-              Set your daily activity goal.
-            </DrawerDescription>
+            <DrawerDescription>Set your daily activity goal.</DrawerDescription>
           </DrawerHeader>
           <div className="p-4 pb-0">
             <div className="flex items-center justify-center space-x-2">
               <Button
-                variant="outline"
-                size="icon"
                 className="h-8 w-8 shrink-0 rounded-full"
-                onClick={() => onClick(-10)}
                 disabled={goal <= 200}
+                onClick={() => onClick(-10)}
+                size="icon"
+                variant="outline"
               >
                 <Minus />
                 <span className="sr-only">Decrease</span>
               </Button>
               <div className="flex-1 text-center">
-                <div className="text-7xl font-bold tracking-tighter">
+                <div className="font-bold text-7xl tracking-tighter">
                   {goal}
                 </div>
-                <div className="text-muted-foreground text-[0.70rem] uppercase">
+                <div className="text-[0.70rem] text-muted-foreground uppercase">
                   Calories/day
                 </div>
               </div>
               <Button
-                variant="outline"
-                size="icon"
                 className="h-8 w-8 shrink-0 rounded-full"
-                onClick={() => onClick(10)}
                 disabled={goal >= 400}
+                onClick={() => onClick(10)}
+                size="icon"
+                variant="outline"
               >
                 <Plus />
                 <span className="sr-only">Increase</span>
@@ -346,15 +344,15 @@ const FILTER_CATEGORIES = [
 function FilterMenu() {
   const { goTo } = useStepper();
   return (
-    <div className="divide-border-muted divide-y">
+    <div className="divide-y divide-border-muted">
       {FILTER_CATEGORIES.map((cat) => (
         <button
+          className="flex h-12 w-full cursor-pointer items-center justify-between px-4 active:text-muted-foreground"
           key={cat.step}
           onClick={() => goTo(cat.step)}
-          className="flex h-12 w-full cursor-pointer items-center justify-between px-4 active:text-muted-foreground"
         >
-          <span className="text-sm font-medium">{cat.label}</span>
-          <ChevronRight className="text-muted-foreground size-4" />
+          <span className="font-medium text-sm">{cat.label}</span>
+          <ChevronRight className="size-4 text-muted-foreground" />
         </button>
       ))}
     </div>
@@ -367,10 +365,10 @@ function FilterSubHeader({ title }: { title: string }) {
     <DrawerHeader>
       <div className="flex items-center gap-2">
         <Button
-          variant="ghost"
-          size="icon-xs"
-          onClick={() => goTo(0)}
           className="-ml-1"
+          onClick={() => goTo(0)}
+          size="icon-xs"
+          variant="ghost"
         >
           <ArrowLeft className="size-4" />
           <span className="sr-only">Back</span>
@@ -387,10 +385,7 @@ function FilterDrawerDemo() {
 
   // Filter state
   const [dateRange, setDateRange] = React.useState("7d");
-  const [currencies, setCurrencies] = React.useState<string[]>([
-    "BTC",
-    "ETH",
-  ]);
+  const [currencies, setCurrencies] = React.useState<string[]>(["BTC", "ETH"]);
   const [txType, setTxType] = React.useState("all");
   const [applied, setApplied] = React.useState(false);
 
@@ -398,7 +393,7 @@ function FilterDrawerDemo() {
     setCurrencies((prev) =>
       prev.includes(symbol)
         ? prev.filter((c) => c !== symbol)
-        : [...prev, symbol],
+        : [...prev, symbol]
     );
   };
 
@@ -410,11 +405,13 @@ function FilterDrawerDemo() {
   return (
     <div className="flex flex-col items-center gap-4">
       <Drawer
-        open={open}
         onOpenChange={(isOpen) => {
           setOpen(isOpen);
-          if (!isOpen) setStep(0);
+          if (!isOpen) {
+            setStep(0);
+          }
         }}
+        open={open}
       >
         <DrawerTrigger render={<Button variant="outline" />}>
           <FilterIcon className="size-4" />
@@ -422,7 +419,7 @@ function FilterDrawerDemo() {
         </DrawerTrigger>
         <DrawerContent>
           <div className="mx-auto w-full max-w-sm">
-            <Stepper value={step} onValueChange={setStep}>
+            <Stepper onValueChange={setStep} value={step}>
               <StepperContent>
                 {/* Step 0: Filter Menu */}
                 <StepperStep>
@@ -431,7 +428,7 @@ function FilterDrawerDemo() {
                   </DrawerHeader>
                   <FilterMenu />
                   <DrawerFooter>
-                    <Button onClick={handleApply} className="w-full">
+                    <Button className="w-full" onClick={handleApply}>
                       Filter
                     </Button>
                   </DrawerFooter>
@@ -442,14 +439,14 @@ function FilterDrawerDemo() {
                   <FilterSubHeader title="Date" />
                   <div className="pb-4">
                     <RadioGroup
-                      value={dateRange}
+                      className="gap-0 divide-y divide-border-muted"
                       onValueChange={(value) => value && setDateRange(value)}
-                      className="divide-border-muted gap-0 divide-y"
+                      value={dateRange}
                     >
                       {DATE_RANGES.map((range) => (
                         <label
-                          key={range.value}
                           className="flex h-12 cursor-pointer items-center gap-3 px-4"
+                          key={range.value}
                         >
                           <RadioGroupItem value={range.value} />
                           <span className="text-sm">{range.label}</span>
@@ -468,11 +465,11 @@ function FilterDrawerDemo() {
                         {currencies.length} selected
                       </span>
                     </div>
-                    <div className="divide-border-muted divide-y">
+                    <div className="divide-y divide-border-muted">
                       {CURRENCIES.map((currency) => (
                         <label
-                          key={currency.symbol}
                           className="flex h-12 cursor-pointer items-center gap-3 px-4"
+                          key={currency.symbol}
                         >
                           <Checkbox
                             checked={currencies.includes(currency.symbol)}
@@ -481,7 +478,7 @@ function FilterDrawerDemo() {
                             }
                           />
                           <div className="flex items-center gap-2 text-sm">
-                            <span className="text-muted-foreground w-10 font-mono text-xs">
+                            <span className="w-10 font-mono text-muted-foreground text-xs">
                               {currency.symbol}
                             </span>
                             <span>{currency.label}</span>
@@ -497,14 +494,14 @@ function FilterDrawerDemo() {
                   <FilterSubHeader title="Transaction Type" />
                   <div className="pb-4">
                     <RadioGroup
-                      value={txType}
+                      className="gap-0 divide-y divide-border-muted"
                       onValueChange={(value) => value && setTxType(value)}
-                      className="divide-border-muted gap-0 divide-y"
+                      value={txType}
                     >
                       {TRANSACTION_TYPES.map((type) => (
                         <label
-                          key={type.value}
                           className="flex h-12 cursor-pointer items-center gap-3 px-4"
+                          key={type.value}
                         >
                           <RadioGroupItem value={type.value} />
                           <span className="text-sm">{type.label}</span>
@@ -565,21 +562,21 @@ function SortByDrawerDemo() {
           <DrawerHeader>
             <DrawerTitle className="text-center">Sort By</DrawerTitle>
           </DrawerHeader>
-          <div className="divide-border-muted divide-y">
+          <div className="divide-y divide-border-muted">
             {SORT_OPTIONS.map((option) => {
               const isSelected = selected === option.value;
               return (
                 <button
-                  key={option.value}
-                  onClick={() => setSelected(option.value)}
                   className={`flex h-12 w-full cursor-pointer items-center justify-between px-4 active:text-muted-foreground ${
                     isSelected
-                      ? "text-primary font-medium"
+                      ? "font-medium text-primary"
                       : "text-muted-foreground"
                   }`}
+                  key={option.value}
+                  onClick={() => setSelected(option.value)}
                 >
                   <span className="text-sm">{option.label}</span>
-                  {isSelected && <Check className="text-primary size-4" />}
+                  {isSelected && <Check className="size-4 text-primary" />}
                 </button>
               );
             })}
@@ -637,10 +634,10 @@ function ComplexFilterSubHeader({ title }: { title: string }) {
     <DrawerHeader>
       <div className="flex items-center gap-2">
         <Button
-          variant="ghost"
-          size="icon-xs"
-          onClick={() => goTo(0)}
           className="-ml-1"
+          onClick={() => goTo(0)}
+          size="icon-xs"
+          variant="ghost"
         >
           <ArrowLeft className="size-4" />
           <span className="sr-only">Back</span>
@@ -665,31 +662,31 @@ function ComplexFilterMenu({
     COMPLEX_SORT_OPTIONS.find((o) => o.value === sortValue)?.label ?? sortValue;
 
   return (
-    <div className="divide-border-muted divide-y">
+    <div className="divide-y divide-border-muted">
       <button
-        onClick={() => goTo(1)}
         className="flex h-12 w-full cursor-pointer items-center gap-3 px-4 active:text-muted-foreground"
+        onClick={() => goTo(1)}
       >
-        <LayoutGrid className="text-muted-foreground size-4 shrink-0" />
-        <span className="flex-1 text-left text-sm font-medium">Providers</span>
-        <ChevronRight className="text-muted-foreground size-4 shrink-0" />
+        <LayoutGrid className="size-4 shrink-0 text-muted-foreground" />
+        <span className="flex-1 text-left font-medium text-sm">Providers</span>
+        <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
       </button>
       <button
-        onClick={() => goTo(2)}
         className="flex h-12 w-full cursor-pointer items-center gap-3 px-4 active:text-muted-foreground"
+        onClick={() => goTo(2)}
       >
-        <ArrowUpDown className="text-muted-foreground size-4 shrink-0" />
-        <span className="flex-1 text-left text-sm font-medium">Sort By</span>
-        <span className="text-muted-foreground mr-1 text-xs">{sortLabel}</span>
-        <ChevronRight className="text-muted-foreground size-4 shrink-0" />
+        <ArrowUpDown className="size-4 shrink-0 text-muted-foreground" />
+        <span className="flex-1 text-left font-medium text-sm">Sort By</span>
+        <span className="mr-1 text-muted-foreground text-xs">{sortLabel}</span>
+        <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
       </button>
       <div className="flex h-12 items-center gap-3 px-4">
         {showBlocked ? (
-          <Eye className="text-muted-foreground size-4 shrink-0" />
+          <Eye className="size-4 shrink-0 text-muted-foreground" />
         ) : (
-          <EyeOff className="text-muted-foreground size-4 shrink-0" />
+          <EyeOff className="size-4 shrink-0 text-muted-foreground" />
         )}
-        <span className="flex-1 text-sm font-medium">Show Blocked</span>
+        <span className="flex-1 font-medium text-sm">Show Blocked</span>
         <Switch checked={showBlocked} onCheckedChange={onToggleBlocked} />
       </div>
     </div>
@@ -713,12 +710,12 @@ function ComplexFilterDrawerDemo() {
 
   const toggleProvider = (name: string) => {
     setSelectedProviders((prev) =>
-      prev.includes(name) ? prev.filter((p) => p !== name) : [...prev, name],
+      prev.includes(name) ? prev.filter((p) => p !== name) : [...prev, name]
     );
   };
 
   const filteredProviders = GAME_PROVIDERS.filter((p) =>
-    p.toLowerCase().includes(search.toLowerCase()),
+    p.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleApply = () => {
@@ -729,7 +726,6 @@ function ComplexFilterDrawerDemo() {
   return (
     <div className="flex flex-col items-center gap-4">
       <Drawer
-        open={open}
         onOpenChange={(isOpen) => {
           setOpen(isOpen);
           if (!isOpen) {
@@ -737,6 +733,7 @@ function ComplexFilterDrawerDemo() {
             setSearch("");
           }
         }}
+        open={open}
       >
         <DrawerTrigger render={<Button variant="outline" />}>
           <FilterIcon className="size-4" />
@@ -744,7 +741,7 @@ function ComplexFilterDrawerDemo() {
         </DrawerTrigger>
         <DrawerContent>
           <div className="mx-auto w-full max-w-sm">
-            <Stepper value={step} onValueChange={setStep}>
+            <Stepper onValueChange={setStep} value={step}>
               <StepperContent>
                 {/* Step 0: Menu */}
                 <StepperStep>
@@ -752,12 +749,12 @@ function ComplexFilterDrawerDemo() {
                     <DrawerTitle className="text-center">Filters</DrawerTitle>
                   </DrawerHeader>
                   <ComplexFilterMenu
-                    sortValue={sortValue}
-                    showBlocked={showBlocked}
                     onToggleBlocked={() => setShowBlocked((prev) => !prev)}
+                    showBlocked={showBlocked}
+                    sortValue={sortValue}
                   />
                   <DrawerFooter>
-                    <Button onClick={handleApply} className="w-full">
+                    <Button className="w-full" onClick={handleApply}>
                       Apply
                     </Button>
                   </DrawerFooter>
@@ -768,21 +765,21 @@ function ComplexFilterDrawerDemo() {
                   <ComplexFilterSubHeader title="Providers" />
                   <div className="px-4 pb-2">
                     <div className="relative">
-                      <Search className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2" />
+                      <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
                       <Input
+                        className="pl-9"
+                        onChange={(e) => setSearch(e.target.value)}
                         placeholder="Search..."
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className="pl-9"
                       />
                     </div>
                   </div>
                   <div className="no-scrollbar max-h-[50vh] overflow-y-auto">
-                    <div className="divide-border-muted divide-y">
+                    <div className="divide-y divide-border-muted">
                       {filteredProviders.map((provider) => (
                         <label
-                          key={provider}
                           className="flex h-12 cursor-pointer items-center gap-3 px-4"
+                          key={provider}
                         >
                           <Checkbox
                             checked={selectedProviders.includes(provider)}
@@ -792,14 +789,14 @@ function ComplexFilterDrawerDemo() {
                         </label>
                       ))}
                       {filteredProviders.length === 0 && (
-                        <div className="text-muted-foreground flex h-12 items-center px-4 text-sm">
+                        <div className="flex h-12 items-center px-4 text-muted-foreground text-sm">
                           No providers found.
                         </div>
                       )}
                     </div>
                   </div>
                   <DrawerFooter>
-                    <Button onClick={handleApply} className="w-full">
+                    <Button className="w-full" onClick={handleApply}>
                       Apply
                     </Button>
                   </DrawerFooter>
@@ -808,29 +805,29 @@ function ComplexFilterDrawerDemo() {
                 {/* Step 2: Sort By */}
                 <StepperStep>
                   <ComplexFilterSubHeader title="Sort By" />
-                  <div className="divide-border-muted divide-y">
+                  <div className="divide-y divide-border-muted">
                     {COMPLEX_SORT_OPTIONS.map((option) => {
                       const isSelected = sortValue === option.value;
                       return (
                         <button
-                          key={option.value}
-                          onClick={() => setSortValue(option.value)}
                           className={`flex h-12 w-full cursor-pointer items-center justify-between px-4 active:text-muted-foreground ${
                             isSelected
-                              ? "text-primary font-medium"
+                              ? "font-medium text-primary"
                               : "text-muted-foreground"
                           }`}
+                          key={option.value}
+                          onClick={() => setSortValue(option.value)}
                         >
                           <span className="text-sm">{option.label}</span>
                           {isSelected && (
-                            <Check className="text-primary size-4" />
+                            <Check className="size-4 text-primary" />
                           )}
                         </button>
                       );
                     })}
                   </div>
                   <DrawerFooter>
-                    <Button onClick={handleApply} className="w-full">
+                    <Button className="w-full" onClick={handleApply}>
                       Apply
                     </Button>
                   </DrawerFooter>
@@ -899,12 +896,12 @@ function ProvidersDrawerDemo() {
 
   const toggleProvider = (name: string) => {
     setSelected((prev) =>
-      prev.includes(name) ? prev.filter((p) => p !== name) : [...prev, name],
+      prev.includes(name) ? prev.filter((p) => p !== name) : [...prev, name]
     );
   };
 
   const filtered = ALL_PROVIDERS.filter((p) =>
-    p.toLowerCase().includes(search.toLowerCase()),
+    p.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleApply = () => {
@@ -915,11 +912,13 @@ function ProvidersDrawerDemo() {
   return (
     <div className="flex flex-col items-center gap-4">
       <Drawer
-        open={open}
         onOpenChange={(isOpen) => {
           setOpen(isOpen);
-          if (!isOpen) setSearch("");
+          if (!isOpen) {
+            setSearch("");
+          }
         }}
+        open={open}
       >
         <DrawerTrigger render={<Button variant="outline" />}>
           <LayoutGrid className="size-4" />
@@ -932,21 +931,21 @@ function ProvidersDrawerDemo() {
             </DrawerHeader>
             <div className="px-4 pb-2">
               <div className="relative">
-                <Search className="text-muted-foreground pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2" />
+                <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
+                  className="pl-9"
+                  onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search..."
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="pl-9"
                 />
               </div>
             </div>
             <div className="no-scrollbar max-h-[50vh] overflow-y-auto">
-              <div className="divide-border-muted divide-y">
+              <div className="divide-y divide-border-muted">
                 {filtered.map((provider) => (
                   <label
-                    key={provider}
                     className="flex h-12 cursor-pointer items-center gap-3 px-4"
+                    key={provider}
                   >
                     <Checkbox
                       checked={selected.includes(provider)}
@@ -956,14 +955,14 @@ function ProvidersDrawerDemo() {
                   </label>
                 ))}
                 {filtered.length === 0 && (
-                  <div className="text-muted-foreground flex h-12 items-center px-4 text-sm">
+                  <div className="flex h-12 items-center px-4 text-muted-foreground text-sm">
                     No providers found.
                   </div>
                 )}
               </div>
             </div>
             <DrawerFooter>
-              <Button onClick={handleApply} className="w-full">
+              <Button className="w-full" onClick={handleApply}>
                 Apply
               </Button>
             </DrawerFooter>

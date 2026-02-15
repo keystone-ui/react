@@ -1,4 +1,4 @@
-import * as React from "react";
+import type * as React from "react";
 
 import { cn } from "./utils";
 
@@ -21,12 +21,12 @@ function Skeleton({
 }: SkeletonProps) {
   return (
     <div
-      data-slot="skeleton"
       className={cn(
-        "bg-accent rounded-md",
+        "rounded-md bg-accent",
         animationType === "pulse" && "animate-pulse",
         className
       )}
+      data-slot="skeleton"
       {...props}
     />
   );
@@ -36,20 +36,17 @@ function Skeleton({
 // SkeletonGroup
 // ---------------------------------------------------------------------------
 
-function SkeletonGroup({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+function SkeletonGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      data-slot="skeleton-group"
       className={cn(
         "relative overflow-hidden",
-        "before:absolute before:inset-0 before:z-10 before:pointer-events-none",
+        "before:pointer-events-none before:absolute before:inset-0 before:z-10",
         "before:bg-[linear-gradient(90deg,transparent_25%,var(--skeleton-shimmer)_50%,transparent_75%)]",
-        "before:bg-[length:300%_100%] before:animate-skeleton-shimmer",
+        "before:animate-skeleton-shimmer before:bg-[length:300%_100%]",
         className
       )}
+      data-slot="skeleton-group"
       {...props}
     />
   );

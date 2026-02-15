@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch";
+import * as React from "react";
 import { cn } from "./utils";
 
 export interface SwitchProps extends SwitchPrimitive.Root.Props {
@@ -16,9 +16,6 @@ export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
   ({ className, size = "default", ...props }, ref) => {
     return (
       <SwitchPrimitive.Root
-        ref={ref}
-        data-slot="switch"
-        data-size={size}
         className={cn(
           "peer group/switch relative inline-flex shrink-0 items-center rounded-full border border-transparent transition-[background-color,border-color]",
           // Size variants
@@ -28,22 +25,24 @@ export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
           "data-checked:bg-primary data-unchecked:bg-input",
           "dark:data-unchecked:bg-input/80",
           // Focus styles - outside outline like buttons
-          "focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50",
+          "focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
           // Invalid styles
-          "aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 aria-invalid:transition-none aria-invalid:focus-visible:outline-destructive/50",
+          "aria-invalid:border-destructive aria-invalid:transition-none aria-invalid:focus-visible:outline-destructive/50 dark:aria-invalid:border-destructive/50",
           // Disabled styles
           "data-disabled:cursor-not-allowed data-disabled:opacity-50",
           // Click area extension
           "after:absolute after:-inset-x-3 after:-inset-y-2",
           className
         )}
+        data-size={size}
+        data-slot="switch"
+        ref={ref}
         {...props}
       >
         <SwitchPrimitive.Thumb
-          data-slot="switch-thumb"
           className={cn(
             "pointer-events-none block rounded-full ring-0 transition-transform",
-            "bg-background dark:data-unchecked:bg-foreground dark:data-checked:bg-primary-foreground",
+            "bg-background dark:data-checked:bg-primary-foreground dark:data-unchecked:bg-foreground",
             // Size variants for thumb
             "group-data-[size=default]/switch:size-4",
             "group-data-[size=sm]/switch:size-3",
@@ -53,6 +52,7 @@ export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
             "group-data-[size=default]/switch:data-unchecked:translate-x-0",
             "group-data-[size=sm]/switch:data-unchecked:translate-x-0"
           )}
+          data-slot="switch-thumb"
         />
       </SwitchPrimitive.Root>
     );

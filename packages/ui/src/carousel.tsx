@@ -1,13 +1,12 @@
 "use client";
 
-import * as React from "react";
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-
-import { cn } from "./utils";
+import * as React from "react";
 import { Button } from "./button";
+import { cn } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -18,7 +17,7 @@ type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
 type CarouselOptions = UseCarouselParameters[0];
 type CarouselPlugin = UseCarouselParameters[1];
 
-type CarouselProps = {
+interface CarouselProps {
   opts?: CarouselOptions;
   plugins?: CarouselPlugin;
   orientation?: "horizontal" | "vertical";
@@ -36,7 +35,7 @@ type CarouselProps = {
    * @default "1rem"
    */
   gap?: string;
-};
+}
 
 type CarouselContextProps = {
   carouselRef: ReturnType<typeof useEmblaCarousel>[0];
@@ -96,7 +95,9 @@ function Carousel({
 
   const onSelect = React.useCallback(
     (emblaApi: CarouselApi) => {
-      if (!emblaApi) return;
+      if (!emblaApi) {
+        return;
+      }
       const index = emblaApi.selectedScrollSnap();
       setSelectedIndex(index);
       setCanScrollPrev(emblaApi.canScrollPrev());
@@ -128,12 +129,16 @@ function Carousel({
   );
 
   React.useEffect(() => {
-    if (!api || !setApi) return;
+    if (!(api && setApi)) {
+      return;
+    }
     setApi(api);
   }, [api, setApi]);
 
   React.useEffect(() => {
-    if (!api) return;
+    if (!api) {
+      return;
+    }
 
     setSlideCount(api.scrollSnapList().length);
     onSelect(api);
@@ -165,14 +170,12 @@ function Carousel({
       }}
     >
       <div
-        onKeyDownCapture={handleKeyDown}
-        className={cn("group/carousel relative", className)}
-        role="region"
         aria-roledescription="carousel"
+        className={cn("group/carousel relative", className)}
         data-slot="carousel"
-        style={
-          { "--carousel-gap": gap, ...style } as React.CSSProperties
-        }
+        onKeyDownCapture={handleKeyDown}
+        role="region"
+        style={{ "--carousel-gap": gap, ...style } as React.CSSProperties}
         {...props}
       >
         {children}
@@ -202,7 +205,9 @@ function CarouselContent({
     useCarousel();
 
   const maskStyle = React.useMemo<React.CSSProperties | undefined>(() => {
-    if (!mask) return undefined;
+    if (!mask) {
+      return undefined;
+    }
     const w = "var(--carousel-mask-width, 4rem)";
     const dir = orientation === "horizontal" ? "to right" : "to bottom";
     let value: string | undefined;
@@ -215,7 +220,9 @@ function CarouselContent({
       value = `linear-gradient(${dir}, black calc(100% - ${w}), transparent)`;
     }
 
-    if (!value) return undefined;
+    if (!value) {
+      return undefined;
+    }
     return {
       maskImage: value,
       WebkitMaskImage: value,
@@ -224,9 +231,9 @@ function CarouselContent({
 
   return (
     <div
-      ref={carouselRef}
       className="overflow-hidden"
       data-slot="carousel-content"
+      ref={carouselRef}
       style={{ ...maskStyle, ...style }}
     >
       <div
@@ -234,7 +241,7 @@ function CarouselContent({
           "flex",
           orientation === "horizontal"
             ? "[margin-inline-start:calc(var(--carousel-gap)*-1)]"
-            : "[margin-top:calc(var(--carousel-gap)*-1)] flex-col",
+            : "flex-col [margin-top:calc(var(--carousel-gap)*-1)]",
           className
         )}
         {...props}
@@ -252,9 +259,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
 
   return (
     <div
-      role="group"
       aria-roledescription="slide"
-      data-slot="carousel-item"
       className={cn(
         "min-w-0 shrink-0 grow-0 basis-full",
         orientation === "horizontal"
@@ -262,6 +267,8 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
           : "[padding-top:var(--carousel-gap)]",
         className
       )}
+      data-slot="carousel-item"
+      role="group"
       {...props}
     />
   );
@@ -282,9 +289,6 @@ function CarouselPrevious({
 
   return (
     <Button
-      data-slot="carousel-previous"
-      variant={variant}
-      size={size}
       className={cn(
         "absolute z-10 touch-manipulation rounded-full",
         orientation === "horizontal"
@@ -294,8 +298,11 @@ function CarouselPrevious({
           "opacity-0 transition-opacity group-hover/carousel:opacity-100",
         className
       )}
+      data-slot="carousel-previous"
       disabled={!canScrollPrev}
       onClick={scrollPrev}
+      size={size}
+      variant={variant}
       {...props}
     >
       <ChevronLeftIcon />
@@ -319,9 +326,6 @@ function CarouselNext({
 
   return (
     <Button
-      data-slot="carousel-next"
-      variant={variant}
-      size={size}
       className={cn(
         "absolute z-10 touch-manipulation rounded-full",
         orientation === "horizontal"
@@ -331,8 +335,11 @@ function CarouselNext({
           "opacity-0 transition-opacity group-hover/carousel:opacity-100",
         className
       )}
+      data-slot="carousel-next"
       disabled={!canScrollNext}
       onClick={scrollNext}
+      size={size}
+      variant={variant}
       {...props}
     >
       <ChevronRightIcon />
@@ -345,33 +352,32 @@ function CarouselNext({
 // CarouselDots
 // ---------------------------------------------------------------------------
 
-function CarouselDots({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+function CarouselDots({ className, ...props }: React.ComponentProps<"div">) {
   const { api, selectedIndex, slideCount } = useCarousel();
 
-  if (slideCount <= 1) return null;
+  if (slideCount <= 1) {
+    return null;
+  }
 
   return (
     <div
-      data-slot="carousel-dots"
       className={cn("mt-3 flex items-center justify-center gap-1.5", className)}
+      data-slot="carousel-dots"
       {...props}
     >
       {Array.from({ length: slideCount }).map((_, index) => (
         <button
-          key={index}
-          type="button"
           aria-label={`Go to slide ${index + 1}`}
-          data-active={index === selectedIndex || undefined}
           className={cn(
             "h-2 cursor-pointer rounded-full transition-all duration-300",
             index === selectedIndex
               ? "w-4 bg-foreground"
               : "w-2 bg-foreground/25 hover:bg-foreground/50"
           )}
+          data-active={index === selectedIndex || undefined}
+          key={index}
           onClick={() => api?.scrollTo(index)}
+          type="button"
         />
       ))}
     </div>
@@ -382,21 +388,20 @@ function CarouselDots({
 // CarouselCounter
 // ---------------------------------------------------------------------------
 
-function CarouselCounter({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+function CarouselCounter({ className, ...props }: React.ComponentProps<"div">) {
   const { selectedIndex, slideCount } = useCarousel();
 
-  if (slideCount <= 1) return null;
+  if (slideCount <= 1) {
+    return null;
+  }
 
   return (
     <div
-      data-slot="carousel-counter"
       className={cn(
-        "text-muted-foreground mt-3 text-center text-sm tabular-nums",
+        "mt-3 text-center text-muted-foreground text-sm tabular-nums",
         className
       )}
+      data-slot="carousel-counter"
       {...props}
     >
       {selectedIndex + 1} / {slideCount}

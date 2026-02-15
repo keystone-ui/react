@@ -21,24 +21,25 @@ export interface DescriptionListProps extends React.ComponentProps<"dl"> {
   variant?: "default" | "card";
 }
 
-const DescriptionList = React.forwardRef<HTMLDListElement, DescriptionListProps>(
-  ({ className, size = "default", variant = "default", ...props }, ref) => {
-    return (
-      <dl
-        ref={ref}
-        data-slot="description-list"
-        data-size={size}
-        data-variant={variant}
-        className={cn(
-          "group/description-list flex w-full flex-col text-sm",
-          "data-[variant=card]:gap-1",
-          className
-        )}
-        {...props}
-      />
-    );
-  }
-);
+const DescriptionList = React.forwardRef<
+  HTMLDListElement,
+  DescriptionListProps
+>(({ className, size = "default", variant = "default", ...props }, ref) => {
+  return (
+    <dl
+      className={cn(
+        "group/description-list flex w-full flex-col text-sm",
+        "data-[variant=card]:gap-1",
+        className
+      )}
+      data-size={size}
+      data-slot="description-list"
+      data-variant={variant}
+      ref={ref}
+      {...props}
+    />
+  );
+});
 
 DescriptionList.displayName = "DescriptionList";
 
@@ -54,14 +55,14 @@ const DescriptionListItem = React.forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <div
-      ref={ref}
-      data-slot="description-list-item"
       className={cn(
         "flex w-full items-center justify-between px-3 py-2.5 group-data-[size=sm]/description-list:px-2.5 group-data-[size=sm]/description-list:py-1.5",
-        "border-b border-border last:border-0 group-data-[variant=card]/description-list:border-0",
+        "border-border border-b last:border-0 group-data-[variant=card]/description-list:border-0",
         "group-data-[variant=card]/description-list:rounded-lg group-data-[variant=card]/description-list:bg-muted/50",
         className
       )}
+      data-slot="description-list-item"
+      ref={ref}
       {...props}
     />
   );
@@ -81,9 +82,9 @@ const DescriptionListTerm = React.forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <dt
-      ref={ref}
-      data-slot="description-list-term"
       className={cn("text-muted-foreground", className)}
+      data-slot="description-list-term"
+      ref={ref}
       {...props}
     />
   );
@@ -104,9 +105,9 @@ const DescriptionListDetails = React.forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <dd
-      ref={ref}
-      data-slot="description-list-details"
       className={cn("ml-auto text-right", className)}
+      data-slot="description-list-details"
+      ref={ref}
       {...props}
     />
   );

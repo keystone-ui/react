@@ -1,15 +1,6 @@
 "use client";
 
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-  REGEXP_ONLY_DIGITS,
-  REGEXP_ONLY_DIGITS_AND_CHARS,
-} from "@keystone/ui/input-otp";
+import { Button } from "@keystone/ui/button";
 import {
   Card,
   CardContent,
@@ -18,9 +9,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@keystone/ui/card";
-import { Field, FieldDescription, FieldError, FieldLabel } from "@keystone/ui/field";
-import { Button } from "@keystone/ui/button";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@keystone/ui/field";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+  REGEXP_ONLY_DIGITS,
+  REGEXP_ONLY_DIGITS_AND_CHARS,
+} from "@keystone/ui/input-otp";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RefreshCwIcon } from "lucide-react";
+import { useState } from "react";
 
 const meta = {
   title: "Components/InputOTP",
@@ -207,8 +212,8 @@ function ControlledExample() {
     <div className="flex flex-col items-center gap-2">
       <InputOTP
         maxLength={6}
-        value={value}
         onChange={(value) => setValue(value)}
+        value={value}
       >
         <InputOTPGroup>
           <InputOTPSlot index={0} />
@@ -236,7 +241,7 @@ export const Controlled: Story = {
 
 export const Disabled: Story = {
   render: () => (
-    <InputOTP maxLength={6} disabled value="123456">
+    <InputOTP disabled maxLength={6} value="123456">
       <InputOTPGroup>
         <InputOTPSlot index={0} />
         <InputOTPSlot index={1} />
@@ -258,12 +263,12 @@ export const Invalid: Story = {
       <FieldLabel>Enter PIN</FieldLabel>
       <InputOTP maxLength={6} value="123456">
         <InputOTPGroup>
-          <InputOTPSlot index={0} aria-invalid />
-          <InputOTPSlot index={1} aria-invalid />
-          <InputOTPSlot index={2} aria-invalid />
-          <InputOTPSlot index={3} aria-invalid />
-          <InputOTPSlot index={4} aria-invalid />
-          <InputOTPSlot index={5} aria-invalid />
+          <InputOTPSlot aria-invalid index={0} />
+          <InputOTPSlot aria-invalid index={1} />
+          <InputOTPSlot aria-invalid index={2} />
+          <InputOTPSlot aria-invalid index={3} />
+          <InputOTPSlot aria-invalid index={4} />
+          <InputOTPSlot aria-invalid index={5} />
         </InputOTPGroup>
       </InputOTP>
       <FieldError>Incorrect PIN</FieldError>
@@ -273,7 +278,7 @@ export const Invalid: Story = {
 
 export const Loading: Story = {
   render: () => (
-    <InputOTP maxLength={6} isLoading value="123456">
+    <InputOTP isLoading maxLength={6} value="123456">
       <InputOTPGroup>
         <InputOTPSlot index={0} />
         <InputOTPSlot index={1} />
@@ -302,13 +307,15 @@ export const Form: Story = {
       <CardContent>
         <Field>
           <div className="flex items-center justify-between">
-            <FieldLabel htmlFor="otp-verification">Verification code</FieldLabel>
-            <Button variant="outline" size="xs">
+            <FieldLabel htmlFor="otp-verification">
+              Verification code
+            </FieldLabel>
+            <Button size="xs" variant="outline">
               <RefreshCwIcon className="size-3" />
               Resend Code
             </Button>
           </div>
-          <InputOTP maxLength={6} id="otp-verification">
+          <InputOTP id="otp-verification" maxLength={6}>
             <InputOTPGroup>
               <InputOTPSlot index={0} />
               <InputOTPSlot index={1} />
@@ -322,7 +329,10 @@ export const Form: Story = {
             </InputOTPGroup>
           </InputOTP>
           <FieldDescription>
-            <a href="#" className="hover:text-primary underline underline-offset-4 transition-colors">
+            <a
+              className="underline underline-offset-4 transition-colors hover:text-primary"
+              href="#"
+            >
               I no longer have access to this email address.
             </a>
           </FieldDescription>
@@ -330,14 +340,14 @@ export const Form: Story = {
       </CardContent>
       <CardFooter>
         <Field className="w-full">
-          <Button type="submit" className="w-full">
+          <Button className="w-full" type="submit">
             Verify
           </Button>
-          <div className="text-muted-foreground text-center text-sm">
+          <div className="text-center text-muted-foreground text-sm">
             Having trouble signing in?{" "}
             <a
+              className="underline underline-offset-4 transition-colors hover:text-primary"
               href="#"
-              className="hover:text-primary underline underline-offset-4 transition-colors"
             >
               Contact support
             </a>

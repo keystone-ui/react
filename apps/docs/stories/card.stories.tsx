@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Badge } from "@keystone/ui/badge";
+import { Button } from "@keystone/ui/button";
 import {
   Card,
   CardAction,
@@ -8,10 +9,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@keystone/ui/card";
-import { Button } from "@keystone/ui/button";
-import { Badge } from "@keystone/ui/badge";
 import { Input } from "@keystone/ui/input";
 import { Label } from "@keystone/ui/label";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
   title: "Components/Card",
@@ -128,31 +128,31 @@ export const LoginForm: Story = {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
-                type="email"
                 placeholder="m@example.com"
                 required
+                type="email"
               />
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
                 <a
-                  href="#"
                   className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  href="#"
                 >
                   Forgot your password?
                 </a>
               </div>
-              <Input id="password" type="password" required />
+              <Input id="password" required type="password" />
             </div>
           </div>
         </form>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Button type="submit" className="w-full">
+        <Button className="w-full" type="submit">
           Login
         </Button>
-        <Button variant="outline" className="w-full">
+        <Button className="w-full" variant="outline">
           Login with Google
         </Button>
       </CardFooter>
@@ -162,7 +162,7 @@ export const LoginForm: Story = {
 
 export const Small: Story = {
   render: () => (
-    <Card size="sm" className="mx-auto w-full max-w-sm">
+    <Card className="mx-auto w-full max-w-sm" size="sm">
       <CardHeader>
         <CardTitle>Small Card</CardTitle>
         <CardDescription>
@@ -176,7 +176,7 @@ export const Small: Story = {
         </p>
       </CardContent>
       <CardFooter>
-        <Button variant="outline" size="sm" className="w-full">
+        <Button className="w-full" size="sm" variant="outline">
           Action
         </Button>
       </CardFooter>
@@ -186,11 +186,11 @@ export const Small: Story = {
 
 export const WithImage: Story = {
   render: () => (
-    <Card className="mx-auto w-full max-w-sm overflow-hidden !pt-0">
+    <Card className="!pt-0 mx-auto w-full max-w-sm overflow-hidden">
       <img
-        src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=450&fit=crop"
         alt="Event cover"
         className="aspect-video w-full object-cover"
+        src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=450&fit=crop"
       />
       <CardHeader>
         <CardAction>
@@ -216,7 +216,7 @@ export const WithAction: Story = {
         <CardTitle>Notifications</CardTitle>
         <CardDescription>Manage your notification settings.</CardDescription>
         <CardAction>
-          <Button variant="outline" size="sm">
+          <Button size="sm" variant="outline">
             Settings
           </Button>
         </CardAction>

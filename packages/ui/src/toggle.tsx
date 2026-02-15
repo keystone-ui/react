@@ -1,9 +1,7 @@
 "use client";
 
-import * as React from "react";
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
-import { XIcon } from "lucide-react";
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "./utils";
 
@@ -12,49 +10,44 @@ import { cn } from "./utils";
 // ---------------------------------------------------------------------------
 
 const toggleVariants = cva(
-  "inline-flex items-center justify-center gap-1 rounded-full h-6 px-2.5 text-xs font-medium whitespace-nowrap cursor-pointer transition-colors select-none overflow-hidden shrink-0 has-[[data-slot=avatar]]:pl-1 bg-secondary text-secondary-foreground hover:bg-secondary-hover aria-pressed:bg-primary/10 aria-pressed:text-primary dark:aria-pressed:bg-primary/15 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-3 [&_svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+  "group/toggle inline-flex shrink-0 cursor-pointer select-none items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-md bg-transparent font-medium text-muted-foreground text-sm transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-pressed:bg-accent aria-pressed:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  {
+    variants: {
+      variant: {
+        default: "bg-transparent",
+        outline:
+          "border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+      },
+      size: {
+        default: "h-9 min-w-9 px-3",
+        sm: "h-8 min-w-8 px-2.5",
+        lg: "h-10 min-w-10 px-3.5",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
 );
+
+type ToggleVariantsProps = VariantProps<typeof toggleVariants>;
 
 // ---------------------------------------------------------------------------
 // Toggle
 // ---------------------------------------------------------------------------
 
-export interface ToggleProps extends TogglePrimitive.Props {}
+export interface ToggleProps
+  extends TogglePrimitive.Props,
+    ToggleVariantsProps {}
 
-function Toggle({ className, ...props }: ToggleProps) {
+function Toggle({ className, variant, size, ...props }: ToggleProps) {
   return (
     <TogglePrimitive
+      className={cn(toggleVariants({ variant, size }), className)}
       data-slot="toggle"
-      className={cn(toggleVariants(), className)}
       {...props}
     />
-  );
-}
-
-// ---------------------------------------------------------------------------
-// ToggleRemove
-// ---------------------------------------------------------------------------
-
-export interface ToggleRemoveProps
-  extends React.ComponentPropsWithRef<"button"> {}
-
-function ToggleRemove({
-  className,
-  children,
-  ...props
-}: ToggleRemoveProps) {
-  return (
-    <button
-      type="button"
-      data-slot="toggle-remove"
-      className={cn(
-        "focus-visible:border-ring focus-visible:ring-ring/50 text-current/60 hover:text-current -my-px -ms-0.5 -me-1.5 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full p-0 transition-[color,box-shadow] outline-none focus-visible:ring-[3px]",
-        className
-      )}
-      {...props}
-    >
-      {children || <XIcon size={10} aria-hidden="true" />}
-    </button>
   );
 }
 
@@ -62,4 +55,5 @@ function ToggleRemove({
 // Exports
 // ---------------------------------------------------------------------------
 
-export { Toggle, ToggleRemove, toggleVariants };
+export { Toggle, toggleVariants };
+export type { ToggleVariantsProps };

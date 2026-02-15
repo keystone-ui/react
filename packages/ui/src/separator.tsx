@@ -21,21 +21,22 @@ export const Separator = React.forwardRef<HTMLDivElement, SeparatorProps>(
     { className, orientation = "horizontal", decorative = true, ...props },
     ref
   ) => {
-    const ariaOrientation = orientation === "vertical" ? orientation : undefined;
+    const ariaOrientation =
+      orientation === "vertical" ? orientation : undefined;
     const semanticProps = decorative
       ? { role: "none" }
       : { "aria-orientation": ariaOrientation, role: "separator" };
 
     return (
       <div
-        ref={ref}
-        data-slot="separator"
-        data-orientation={orientation}
         className={cn(
-          "bg-border shrink-0",
+          "shrink-0 bg-border",
           orientation === "horizontal" ? "h-px w-full" : "h-full w-px",
           className
         )}
+        data-orientation={orientation}
+        data-slot="separator"
+        ref={ref}
         {...semanticProps}
         {...props}
       />

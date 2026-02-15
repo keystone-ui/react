@@ -6,8 +6,9 @@
       "outputs": ["dist/**", "storybook-static/**"],
       "dependsOn": ["^build"]
     },
-    "lint": {
-      "dependsOn": ["^lint"]
+    "//#check": {},
+    "//#fix": {
+      "cache": false
     },
     "dev": {
       "cache": false,
@@ -17,9 +18,7 @@
       "cache": false
     },
     "preview-storybook": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": false
     }
   }

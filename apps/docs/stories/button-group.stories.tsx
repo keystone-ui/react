@@ -1,33 +1,15 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
 import { Button } from "@keystone/ui/button";
 import { ButtonGroup } from "@keystone/ui/button-group";
-import { Input } from "@keystone/ui/input";
-import { Textarea } from "@keystone/ui/textarea";
-import { Field, FieldLabel, FieldDescription } from "@keystone/ui/field";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@keystone/ui/dropdown-menu";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-} from "@keystone/ui/select";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTitle,
-  PopoverDescription,
-} from "@keystone/ui/popover";
+import { Field, FieldDescription, FieldLabel } from "@keystone/ui/field";
+import { Input } from "@keystone/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
@@ -35,43 +17,61 @@ import {
   InputGroupInput,
 } from "@keystone/ui/input-group";
 import {
-  Bold as BoldIcon,
-  Italic as ItalicIcon,
-  Underline as UnderlineIcon,
-  Strikethrough as StrikethroughIcon,
-  ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon,
-  ChevronDown as ChevronDownIcon,
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@keystone/ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+} from "@keystone/ui/select";
+import { Textarea } from "@keystone/ui/textarea";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import {
+  AlertTriangle as AlertTriangleIcon,
+  Archive as ArchiveIcon,
   ArrowLeft as ArrowLeftIcon,
   ArrowRight as ArrowRightIcon,
-  Bot as BotIcon,
-  Archive as ArchiveIcon,
-  Flag as FlagIcon,
-  Search as SearchIcon,
-  AlertTriangle as AlertTriangleIcon,
-  Check as CheckIcon,
-  Copy as CopyIcon,
-  Share as ShareIcon,
-  Trash as TrashIcon,
-  UserRoundX as UserRoundXIcon,
-  VolumeOff as VolumeOffIcon,
   AudioLines as AudioLinesIcon,
-  Minus as MinusIcon,
-  Plus as PlusIcon,
-  Star as StarIcon,
+  Bold as BoldIcon,
+  Bot as BotIcon,
+  Check as CheckIcon,
+  ChevronDown as ChevronDownIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+  Copy as CopyIcon,
+  Ellipsis as EllipsisIcon,
+  Flag as FlagIcon,
+  GitBranch as GitBranchIcon,
   GitFork as GitForkIcon,
   GitMerge as GitMergeIcon,
   GitPullRequestArrow as GitPullRequestArrowIcon,
-  GitBranch as GitBranchIcon,
-  Image as ImageIcon,
-  Video as VideoIcon,
-  Ellipsis as EllipsisIcon,
   Globe as GlobeIcon,
-  List as ListIcon,
+  Image as ImageIcon,
+  Italic as ItalicIcon,
   LayoutGrid as LayoutGridIcon,
-  ThumbsUp as ThumbsUpIcon,
+  List as ListIcon,
+  Minus as MinusIcon,
   Pin as PinIcon,
+  Plus as PlusIcon,
+  Search as SearchIcon,
+  Share as ShareIcon,
+  Star as StarIcon,
+  Strikethrough as StrikethroughIcon,
+  ThumbsUp as ThumbsUpIcon,
+  Trash as TrashIcon,
+  Underline as UnderlineIcon,
+  UserRoundX as UserRoundXIcon,
+  Video as VideoIcon,
+  VolumeOff as VolumeOffIcon,
 } from "lucide-react";
+import { useState } from "react";
 
 const meta = {
   title: "Components/ButtonGroup",
@@ -177,7 +177,7 @@ export const NonOutlineVariants: Story = {
         <Button variant="secondary">
           <VideoIcon /> Videos
         </Button>
-        <Button variant="secondary" size="icon" aria-label="More">
+        <Button aria-label="More" size="icon" variant="secondary">
           <EllipsisIcon />
         </Button>
       </ButtonGroup>
@@ -215,14 +215,14 @@ export const Vertical: Story = {
         <Button variant="outline">Bottom</Button>
       </ButtonGroup>
       <ButtonGroup
-        orientation="vertical"
         aria-label="Quantity controls"
         className="h-fit"
+        orientation="vertical"
       >
-        <Button variant="outline" size="icon">
+        <Button size="icon" variant="outline">
           <PlusIcon />
         </Button>
-        <Button variant="outline" size="icon">
+        <Button size="icon" variant="outline">
           <MinusIcon />
         </Button>
       </ButtonGroup>
@@ -232,7 +232,7 @@ export const Vertical: Story = {
     docs: {
       description: {
         story:
-          "Set the `orientation` prop to `\"vertical\"` to stack buttons vertically. Works with both text and icon buttons.",
+          'Set the `orientation` prop to `"vertical"` to stack buttons vertically. Works with both text and icon buttons.',
       },
     },
   },
@@ -244,13 +244,13 @@ export const Sizes: Story = {
   render: () => (
     <div className="flex flex-col items-start gap-8">
       <ButtonGroup>
-        <Button variant="outline" size="sm">
+        <Button size="sm" variant="outline">
           <CopyIcon /> Copy
         </Button>
-        <Button variant="outline" size="sm">
+        <Button size="sm" variant="outline">
           <ShareIcon /> Share
         </Button>
-        <Button variant="outline" size="icon-sm" aria-label="More">
+        <Button aria-label="More" size="icon-sm" variant="outline">
           <EllipsisIcon />
         </Button>
       </ButtonGroup>
@@ -261,18 +261,18 @@ export const Sizes: Story = {
         <Button variant="outline">
           <ShareIcon /> Share
         </Button>
-        <Button variant="outline" size="icon" aria-label="More">
+        <Button aria-label="More" size="icon" variant="outline">
           <EllipsisIcon />
         </Button>
       </ButtonGroup>
       <ButtonGroup>
-        <Button variant="outline" size="lg">
+        <Button size="lg" variant="outline">
           <CopyIcon /> Copy
         </Button>
-        <Button variant="outline" size="lg">
+        <Button size="lg" variant="outline">
           <ShareIcon /> Share
         </Button>
-        <Button variant="outline" size="icon-lg" aria-label="More">
+        <Button aria-label="More" size="icon-lg" variant="outline">
           <EllipsisIcon />
         </Button>
       </ButtonGroup>
@@ -295,16 +295,16 @@ export const Toolbar: Story = {
   name: "Toolbar",
   render: () => (
     <ButtonGroup aria-label="Text formatting">
-      <Button variant="outline" size="icon" aria-label="Bold">
+      <Button aria-label="Bold" size="icon" variant="outline">
         <BoldIcon className="size-4" />
       </Button>
-      <Button variant="outline" size="icon" aria-label="Italic">
+      <Button aria-label="Italic" size="icon" variant="outline">
         <ItalicIcon className="size-4" />
       </Button>
-      <Button variant="outline" size="icon" aria-label="Underline">
+      <Button aria-label="Underline" size="icon" variant="outline">
         <UnderlineIcon className="size-4" />
       </Button>
-      <Button variant="outline" size="icon" aria-label="Strikethrough">
+      <Button aria-label="Strikethrough" size="icon" variant="outline">
         <StrikethroughIcon className="size-4" />
       </Button>
     </ButtonGroup>
@@ -325,13 +325,13 @@ export const Pagination: Story = {
   render: () => (
     <div className="flex flex-col items-start gap-8">
       <ButtonGroup>
-        <Button variant="outline" size="icon" aria-label="Previous page">
+        <Button aria-label="Previous page" size="icon" variant="outline">
           <ChevronLeftIcon className="size-4" />
         </Button>
         <Button variant="outline">1</Button>
         <Button variant="outline">2</Button>
         <Button variant="outline">3</Button>
-        <Button variant="outline" size="icon" aria-label="Next page">
+        <Button aria-label="Next page" size="icon" variant="outline">
           <ChevronRightIcon className="size-4" />
         </Button>
       </ButtonGroup>
@@ -364,8 +364,8 @@ function ActiveStateExample() {
       {options.map((option) => (
         <Button
           key={option}
-          variant={active === option.toLowerCase() ? "default" : "outline"}
           onClick={() => setActive(option.toLowerCase())}
+          variant={active === option.toLowerCase() ? "default" : "outline"}
         >
           {option}
         </Button>
@@ -381,7 +381,7 @@ export const ActiveState: Story = {
     docs: {
       description: {
         story:
-          "Indicate the active selection by toggling between `variant=\"default\"` and `variant=\"outline\"`. For a true segmented control with built-in state, consider using the Tabs component instead.",
+          'Indicate the active selection by toggling between `variant="default"` and `variant="outline"`. For a true segmented control with built-in state, consider using the Tabs component instead.',
       },
     },
   },
@@ -400,7 +400,7 @@ export const SplitButton: Story = {
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <Button size="icon" aria-label="Merge options">
+              <Button aria-label="Merge options" size="icon">
                 <ChevronDownIcon className="size-4" />
               </Button>
             }
@@ -411,7 +411,7 @@ export const SplitButton: Story = {
                 <GitMergeIcon className="size-4" />
                 <span>
                   <span className="font-medium">Create a merge commit</span>
-                  <span className="text-muted-foreground block text-xs">
+                  <span className="block text-muted-foreground text-xs">
                     All commits will be added to the base branch.
                   </span>
                 </span>
@@ -420,7 +420,7 @@ export const SplitButton: Story = {
                 <GitPullRequestArrowIcon className="size-4" />
                 <span>
                   <span className="font-medium">Squash and merge</span>
-                  <span className="text-muted-foreground block text-xs">
+                  <span className="block text-muted-foreground text-xs">
                     Commits will be combined into one commit.
                   </span>
                 </span>
@@ -429,7 +429,7 @@ export const SplitButton: Story = {
                 <GitBranchIcon className="size-4" />
                 <span>
                   <span className="font-medium">Rebase and merge</span>
-                  <span className="text-muted-foreground block text-xs">
+                  <span className="block text-muted-foreground text-xs">
                     Commits will be rebased onto the base branch.
                   </span>
                 </span>
@@ -447,7 +447,7 @@ export const SplitButton: Story = {
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <Button size="icon" variant="secondary" aria-label="More options">
+              <Button aria-label="More options" size="icon" variant="secondary">
                 <ChevronDownIcon className="size-4" />
               </Button>
             }
@@ -493,7 +493,7 @@ export const WithInput: Story = {
   render: () => (
     <ButtonGroup>
       <Input placeholder="Search..." />
-      <Button variant="outline" aria-label="Search">
+      <Button aria-label="Search" variant="outline">
         <SearchIcon className="size-4" />
       </Button>
     </ButtonGroup>
@@ -515,7 +515,7 @@ export const Nested: Story = {
     <div className="flex flex-col items-start gap-8">
       <ButtonGroup>
         <ButtonGroup>
-          <Button variant="outline" size="icon" aria-label="Go back">
+          <Button aria-label="Go back" size="icon" variant="outline">
             <ArrowLeftIcon className="size-4" />
           </Button>
         </ButtonGroup>
@@ -532,7 +532,7 @@ export const Nested: Story = {
       </ButtonGroup>
       <ButtonGroup>
         <ButtonGroup>
-          <Button variant="outline" size="icon">
+          <Button size="icon" variant="outline">
             <PlusIcon />
           </Button>
         </ButtonGroup>
@@ -585,7 +585,7 @@ export const WithDropdownMenu: Story = {
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
-              <Button variant="outline" size="icon">
+              <Button size="icon" variant="outline">
                 <ChevronDownIcon className="size-4" />
               </Button>
             }
@@ -634,8 +634,8 @@ function SelectExample() {
       <ButtonGroup>
         <Select
           items={CURRENCIES}
-          value={currency}
           onValueChange={(value) => value && setCurrency(value)}
+          value={currency}
         >
           <SelectTrigger className="font-mono">{currency}</SelectTrigger>
           <SelectContent align="start">
@@ -649,7 +649,7 @@ function SelectExample() {
             </SelectGroup>
           </SelectContent>
         </Select>
-        <Input placeholder="10.00" pattern="[0-9]*" />
+        <Input pattern="[0-9]*" placeholder="10.00" />
       </ButtonGroup>
       <ButtonGroup>
         <Button aria-label="Send" size="icon" variant="outline">
@@ -685,7 +685,7 @@ export const WithPopover: Story = {
       <Popover>
         <PopoverTrigger
           render={
-            <Button variant="outline" size="icon" aria-label="Open Popover">
+            <Button aria-label="Open Popover" size="icon" variant="outline">
               <ChevronDownIcon className="size-4" />
             </Button>
           }
@@ -698,13 +698,13 @@ export const WithPopover: Story = {
             </PopoverDescription>
           </PopoverHeader>
           <Field>
-            <FieldLabel htmlFor="task" className="sr-only">
+            <FieldLabel className="sr-only" htmlFor="task">
               Task Description
             </FieldLabel>
             <Textarea
+              className="resize-none"
               id="task"
               placeholder="I need to..."
-              className="resize-none"
             />
             <FieldDescription>
               Copilot will open a pull request for review.
@@ -730,26 +730,26 @@ function InputGroupExample() {
   return (
     <ButtonGroup className="[--radius:9999rem]">
       <ButtonGroup>
-        <Button variant="outline" size="icon">
+        <Button size="icon" variant="outline">
           <PlusIcon className="size-4" />
         </Button>
       </ButtonGroup>
       <ButtonGroup>
         <InputGroup>
           <InputGroupInput
+            disabled={voiceEnabled}
             placeholder={
               voiceEnabled ? "Record and send audio..." : "Send a message..."
             }
-            disabled={voiceEnabled}
           />
           <InputGroupAddon align="inline-end">
             <InputGroupButton
+              aria-label="Voice Mode"
+              aria-pressed={voiceEnabled}
+              className="data-[active=true]:bg-orange-100 data-[active=true]:text-orange-700 dark:data-[active=true]:bg-orange-800 dark:data-[active=true]:text-orange-100"
+              data-active={voiceEnabled}
               onClick={() => setVoiceEnabled(!voiceEnabled)}
               size="icon-xs"
-              data-active={voiceEnabled}
-              className="data-[active=true]:bg-orange-100 data-[active=true]:text-orange-700 dark:data-[active=true]:bg-orange-800 dark:data-[active=true]:text-orange-100"
-              aria-pressed={voiceEnabled}
-              aria-label="Voice Mode"
             >
               <AudioLinesIcon className="size-4" />
             </InputGroupButton>
@@ -777,9 +777,9 @@ export const WithInputGroup: Story = {
 export const AllExamples: Story = {
   name: "All Examples",
   render: () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
       <div>
-        <h3 className="text-sm font-medium mb-2">Basic</h3>
+        <h3 className="mb-2 font-medium text-sm">Basic</h3>
         <ButtonGroup>
           <Button variant="outline">
             <ListIcon /> List
@@ -791,7 +791,7 @@ export const AllExamples: Story = {
       </div>
 
       <div>
-        <h3 className="text-sm font-medium mb-2">Non-Outline Variants</h3>
+        <h3 className="mb-2 font-medium text-sm">Non-Outline Variants</h3>
         <ButtonGroup>
           <Button variant="secondary">
             <ImageIcon /> Photos
@@ -799,64 +799,64 @@ export const AllExamples: Story = {
           <Button variant="secondary">
             <VideoIcon /> Videos
           </Button>
-          <Button variant="secondary" size="icon" aria-label="More">
+          <Button aria-label="More" size="icon" variant="secondary">
             <EllipsisIcon />
           </Button>
         </ButtonGroup>
       </div>
 
       <div>
-        <h3 className="text-sm font-medium mb-2">Toolbar</h3>
+        <h3 className="mb-2 font-medium text-sm">Toolbar</h3>
         <ButtonGroup aria-label="Text formatting">
-          <Button variant="outline" size="icon" aria-label="Bold">
+          <Button aria-label="Bold" size="icon" variant="outline">
             <BoldIcon className="size-4" />
           </Button>
-          <Button variant="outline" size="icon" aria-label="Italic">
+          <Button aria-label="Italic" size="icon" variant="outline">
             <ItalicIcon className="size-4" />
           </Button>
-          <Button variant="outline" size="icon" aria-label="Underline">
+          <Button aria-label="Underline" size="icon" variant="outline">
             <UnderlineIcon className="size-4" />
           </Button>
-          <Button variant="outline" size="icon" aria-label="Strikethrough">
+          <Button aria-label="Strikethrough" size="icon" variant="outline">
             <StrikethroughIcon className="size-4" />
           </Button>
         </ButtonGroup>
       </div>
 
       <div>
-        <h3 className="text-sm font-medium mb-2">Pagination</h3>
+        <h3 className="mb-2 font-medium text-sm">Pagination</h3>
         <ButtonGroup>
-          <Button variant="outline" size="icon" aria-label="Previous page">
+          <Button aria-label="Previous page" size="icon" variant="outline">
             <ChevronLeftIcon className="size-4" />
           </Button>
           <Button variant="outline">1</Button>
           <Button variant="outline">2</Button>
           <Button variant="outline">3</Button>
-          <Button variant="outline" size="icon" aria-label="Next page">
+          <Button aria-label="Next page" size="icon" variant="outline">
             <ChevronRightIcon className="size-4" />
           </Button>
         </ButtonGroup>
       </div>
 
       <div>
-        <h3 className="text-sm font-medium mb-2">Active State</h3>
+        <h3 className="mb-2 font-medium text-sm">Active State</h3>
         <ActiveStateExample />
       </div>
 
       <div>
-        <h3 className="text-sm font-medium mb-2">Split Button</h3>
+        <h3 className="mb-2 font-medium text-sm">Split Button</h3>
         <ButtonGroup>
           <Button>
             <GitMergeIcon /> Merge pull request
           </Button>
-          <Button size="icon" aria-label="Merge options">
+          <Button aria-label="Merge options" size="icon">
             <ChevronDownIcon className="size-4" />
           </Button>
         </ButtonGroup>
       </div>
 
       <div>
-        <h3 className="text-sm font-medium mb-2">Vertical</h3>
+        <h3 className="mb-2 font-medium text-sm">Vertical</h3>
         <div className="flex items-start gap-4">
           <ButtonGroup orientation="vertical">
             <Button variant="outline">Top</Button>
@@ -864,14 +864,14 @@ export const AllExamples: Story = {
             <Button variant="outline">Bottom</Button>
           </ButtonGroup>
           <ButtonGroup
-            orientation="vertical"
             aria-label="Quantity controls"
             className="h-fit"
+            orientation="vertical"
           >
-            <Button variant="outline" size="icon">
+            <Button size="icon" variant="outline">
               <PlusIcon />
             </Button>
-            <Button variant="outline" size="icon">
+            <Button size="icon" variant="outline">
               <MinusIcon />
             </Button>
           </ButtonGroup>
@@ -879,16 +879,16 @@ export const AllExamples: Story = {
       </div>
 
       <div>
-        <h3 className="text-sm font-medium mb-2">Sizes</h3>
+        <h3 className="mb-2 font-medium text-sm">Sizes</h3>
         <div className="flex flex-col items-start gap-4">
           <ButtonGroup>
-            <Button variant="outline" size="sm">
+            <Button size="sm" variant="outline">
               <CopyIcon /> Copy
             </Button>
-            <Button variant="outline" size="sm">
+            <Button size="sm" variant="outline">
               <ShareIcon /> Share
             </Button>
-            <Button variant="outline" size="icon-sm" aria-label="More">
+            <Button aria-label="More" size="icon-sm" variant="outline">
               <EllipsisIcon />
             </Button>
           </ButtonGroup>
@@ -899,18 +899,18 @@ export const AllExamples: Story = {
             <Button variant="outline">
               <ShareIcon /> Share
             </Button>
-            <Button variant="outline" size="icon" aria-label="More">
+            <Button aria-label="More" size="icon" variant="outline">
               <EllipsisIcon />
             </Button>
           </ButtonGroup>
           <ButtonGroup>
-            <Button variant="outline" size="lg">
+            <Button size="lg" variant="outline">
               <CopyIcon /> Copy
             </Button>
-            <Button variant="outline" size="lg">
+            <Button size="lg" variant="outline">
               <ShareIcon /> Share
             </Button>
-            <Button variant="outline" size="icon-lg" aria-label="More">
+            <Button aria-label="More" size="icon-lg" variant="outline">
               <EllipsisIcon />
             </Button>
           </ButtonGroup>
@@ -918,20 +918,20 @@ export const AllExamples: Story = {
       </div>
 
       <div>
-        <h3 className="text-sm font-medium mb-2">With Input</h3>
+        <h3 className="mb-2 font-medium text-sm">With Input</h3>
         <ButtonGroup>
           <Input placeholder="Search..." />
-          <Button variant="outline" aria-label="Search">
+          <Button aria-label="Search" variant="outline">
             <SearchIcon className="size-4" />
           </Button>
         </ButtonGroup>
       </div>
 
       <div>
-        <h3 className="text-sm font-medium mb-2">Nested</h3>
+        <h3 className="mb-2 font-medium text-sm">Nested</h3>
         <ButtonGroup>
           <ButtonGroup>
-            <Button variant="outline" size="icon" aria-label="Go back">
+            <Button aria-label="Go back" size="icon" variant="outline">
               <ArrowLeftIcon className="size-4" />
             </Button>
           </ButtonGroup>
@@ -949,7 +949,7 @@ export const AllExamples: Story = {
       </div>
 
       <div>
-        <h3 className="text-sm font-medium mb-2">With Dropdown Menu</h3>
+        <h3 className="mb-2 font-medium text-sm">With Dropdown Menu</h3>
         <div className="flex flex-wrap gap-4">
           <ButtonGroup>
             <Button variant="outline">
@@ -967,7 +967,7 @@ export const AllExamples: Story = {
       </div>
 
       <div>
-        <h3 className="text-sm font-medium mb-2">With Select</h3>
+        <h3 className="mb-2 font-medium text-sm">With Select</h3>
         <SelectExample />
       </div>
     </div>

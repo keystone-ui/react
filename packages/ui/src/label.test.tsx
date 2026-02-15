@@ -1,30 +1,30 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, test } from 'vitest';
-import { Label } from './label';
+import { render, screen } from "@testing-library/react";
+import { describe, expect, test } from "vitest";
+import { Label } from "./label";
 
-describe('Label', () => {
-  test('renders correctly', () => {
+describe("Label", () => {
+  test("renders correctly", () => {
     render(<Label htmlFor="test-input">Test Label</Label>);
-    expect(screen.getByText('Test Label')).toBeInTheDocument();
+    expect(screen.getByText("Test Label")).toBeInTheDocument();
   });
 
-  test('applies custom className', () => {
+  test("applies custom className", () => {
     render(<Label className="custom-class">Custom Label</Label>);
-    const label = screen.getByText('Custom Label');
-    expect(label).toHaveClass('custom-class');
+    const label = screen.getByText("Custom Label");
+    expect(label).toHaveClass("custom-class");
   });
 
-  test('forwards htmlFor attribute', () => {
+  test("forwards htmlFor attribute", () => {
     render(<Label htmlFor="test-input">For Input</Label>);
-    const label = screen.getByText('For Input');
-    expect(label).toHaveAttribute('for', 'test-input');
+    const label = screen.getByText("For Input");
+    expect(label).toHaveAttribute("for", "test-input");
   });
 
-  test('applies correct base styles', () => {
+  test("applies correct base styles", () => {
     render(<Label>Styled Label</Label>);
-    const label = screen.getByText('Styled Label');
-    expect(label).toHaveClass('text-foreground');
-    expect(label).toHaveClass('text-sm');
-    expect(label).toHaveClass('font-medium');
+    const label = screen.getByText("Styled Label");
+    expect(label).toHaveClass("text-foreground");
+    expect(label).toHaveClass("text-sm");
+    expect(label).toHaveClass("font-medium");
   });
-}); 
+});

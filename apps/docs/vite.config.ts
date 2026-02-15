@@ -1,19 +1,19 @@
-import { defineConfig } from "vite";
+import { resolve } from "node:path";
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import tailwindcss from '@tailwindcss/vite'
-import { resolve } from 'path';
+import { defineConfig } from "vite";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss()
-  ],
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@': resolve(__dirname, './'),
-      '@keystone/ui': resolve(__dirname, '../../packages/ui/src'),
-      '@keystone/theme': resolve(__dirname, '../../packages/theme/src/index.css'),
+      "@": resolve(import.meta.dirname, "./"),
+      "@keystone/ui": resolve(import.meta.dirname, "../../packages/ui/src"),
+      "@keystone/theme": resolve(
+        import.meta.dirname,
+        "../../packages/theme/src/index.css"
+      ),
     },
-    dedupe: ['react', 'react-dom']
+    dedupe: ["react", "react-dom"],
   },
 });

@@ -1,5 +1,12 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import { Button } from "@keystone/ui/button";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@keystone/ui/field";
 import {
   Select,
   SelectContent,
@@ -10,30 +17,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@keystone/ui/select";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@keystone/ui/field";
 import { Switch } from "@keystone/ui/switch";
-import { Button } from "@keystone/ui/button";
-import { AppleIcon, BananaIcon, GrapeIcon, CherryIcon } from "lucide-react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { AppleIcon, BananaIcon, CherryIcon, GrapeIcon } from "lucide-react";
+import { useState } from "react";
 
 // Custom checkbox indicator for multiple selection
 function CheckboxIndicator() {
   return (
-    <span className="border-input bg-background group-data-selected:bg-primary group-data-selected:border-primary group-data-selected:text-primary-foreground pointer-events-none flex size-4 shrink-0 items-center justify-center rounded-[4px] border">
+    <span className="pointer-events-none flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-input bg-background group-data-selected:border-primary group-data-selected:bg-primary group-data-selected:text-primary-foreground">
       <svg
         className="size-3 opacity-0 group-data-selected:opacity-100"
         fill="none"
-        viewBox="0 0 24 24"
         stroke="currentColor"
         strokeWidth={3}
+        viewBox="0 0 24 24"
       >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+        <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </span>
   );
@@ -294,10 +294,10 @@ export const Disabled: Story = {
             <SelectGroup>
               <SelectItem value="apple">Apple</SelectItem>
               <SelectItem value="banana">Banana</SelectItem>
-              <SelectItem value="blueberry" disabled>
+              <SelectItem disabled value="blueberry">
                 Blueberry (out of stock)
               </SelectItem>
-              <SelectItem value="grapes" disabled>
+              <SelectItem disabled value="grapes">
                 Grapes (out of stock)
               </SelectItem>
               <SelectItem value="pineapple">Pineapple</SelectItem>
@@ -357,14 +357,16 @@ export const AlignItemWithTrigger: Story = {
       <FieldGroup className="w-full max-w-xs">
         <Field orientation="horizontal">
           <FieldContent>
-            <FieldLabel htmlFor="align-item">Align Item With Trigger</FieldLabel>
+            <FieldLabel htmlFor="align-item">
+              Align Item With Trigger
+            </FieldLabel>
             <FieldDescription>
               Toggle to change the popup positioning mode.
             </FieldDescription>
           </FieldContent>
           <Switch
-            id="align-item"
             checked={alignItemWithTrigger}
+            id="align-item"
             onCheckedChange={setAlignItemWithTrigger}
           />
         </Field>
@@ -527,7 +529,7 @@ export const MultipleSelection: Story = {
       <FieldGroup className="flex-row items-start">
         <Field>
           <FieldLabel>With Checkmarks</FieldLabel>
-          <Select multiple defaultValue={["javascript", "typescript"]}>
+          <Select defaultValue={["javascript", "typescript"]} multiple>
             <SelectTrigger className="w-full max-w-56">
               <SelectValue>{renderMultipleValue}</SelectValue>
             </SelectTrigger>
@@ -545,7 +547,7 @@ export const MultipleSelection: Story = {
         </Field>
         <Field>
           <FieldLabel>With Checkboxes</FieldLabel>
-          <Select multiple defaultValue={["javascript", "typescript"]}>
+          <Select defaultValue={["javascript", "typescript"]} multiple>
             <SelectTrigger className="w-full max-w-56">
               <SelectValue>{renderMultipleValue}</SelectValue>
             </SelectTrigger>
@@ -553,10 +555,10 @@ export const MultipleSelection: Story = {
               <SelectGroup>
                 {(Object.keys(languages) as Language[]).map((key) => (
                   <SelectItem
-                    key={key}
-                    value={key}
                     className="group"
                     indicator={<CheckboxIndicator />}
+                    key={key}
+                    value={key}
                   >
                     {languages[key]}
                   </SelectItem>
@@ -588,7 +590,7 @@ export const Controlled: Story = {
       <FieldGroup className="w-full max-w-xs">
         <Field>
           <FieldLabel>Fruit</FieldLabel>
-          <Select value={value} onValueChange={setValue}>
+          <Select onValueChange={setValue} value={value}>
             <SelectTrigger>
               <SelectValue placeholder="Select a fruit" />
             </SelectTrigger>
@@ -602,22 +604,16 @@ export const Controlled: Story = {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <FieldDescription>
-            Selected value: {value ?? "none"}
-          </FieldDescription>
+          <FieldDescription>Selected value: {value ?? "none"}</FieldDescription>
         </Field>
         <Field orientation="horizontal">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setValue(null)}
-          >
+          <Button onClick={() => setValue(null)} size="sm" variant="outline">
             Clear
           </Button>
           <Button
-            variant="outline"
-            size="sm"
             onClick={() => setValue("banana")}
+            size="sm"
+            variant="outline"
           >
             Set Banana
           </Button>
@@ -693,7 +689,7 @@ export const FormExample: Story = {
       <FieldGroup>
         <Field>
           <FieldLabel>Country</FieldLabel>
-          <Select name="country" defaultValue="us">
+          <Select defaultValue="us" name="country">
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -741,4 +737,3 @@ export const FormExample: Story = {
     },
   },
 };
-

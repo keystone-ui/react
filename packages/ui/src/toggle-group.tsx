@@ -1,41 +1,47 @@
 "use client";
 
-import * as React from "react";
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
 import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group";
-
+import type { VariantProps } from "class-variance-authority";
+import * as React from "react";
+import { toggleVariants } from "./toggle";
 import { cn } from "./utils";
-import { toggleVariants, ToggleRemove } from "./toggle";
 
 // ---------------------------------------------------------------------------
 // Context
 // ---------------------------------------------------------------------------
 
-const ToggleGroupContext = React.createContext<{
-  onRemove?: (value: string) => void;
-}>({});
+type ToggleGroupContextValue = VariantProps<typeof toggleVariants>;
+
+const ToggleGroupContext = React.createContext<ToggleGroupContextValue>({
+  variant: "default",
+  size: "default",
+});
 
 // ---------------------------------------------------------------------------
 // ToggleGroup
 // ---------------------------------------------------------------------------
 
-export interface ToggleGroupProps extends ToggleGroupPrimitive.Props {
-  /** Callback fired when a toggle item's remove button is clicked */
-  onRemove?: (value: string) => void;
-}
+export interface ToggleGroupProps
+  extends ToggleGroupPrimitive.Props,
+    ToggleGroupContextValue {}
 
 function ToggleGroup({
   className,
-  onRemove,
+  variant,
+  size,
   children,
   ...props
 }: ToggleGroupProps) {
-  const contextValue = React.useMemo(() => ({ onRemove }), [onRemove]);
+  const contextValue = React.useMemo(
+    () => ({ variant, size }),
+    [variant, size]
+  );
 
   return (
     <ToggleGroupPrimitive
+      className={cn("flex items-center gap-1", className)}
       data-slot="toggle-group"
-      className={cn("flex flex-wrap gap-1.5", className)}
       {...props}
     >
       <ToggleGroupContext.Provider value={contextValue}>
@@ -49,35 +55,36 @@ function ToggleGroup({
 // ToggleGroupItem
 // ---------------------------------------------------------------------------
 
-export interface ToggleGroupItemProps extends TogglePrimitive.Props {
+export interface ToggleGroupItemProps
+  extends TogglePrimitive.Props,
+    ToggleGroupContextValue {
   /** Unique value identifying this toggle within the group */
   value: string;
 }
 
 function ToggleGroupItem({
   className,
+  variant,
+  size,
   value,
   children,
   ...props
 }: ToggleGroupItemProps) {
-  const { onRemove } = React.useContext(ToggleGroupContext);
+  const context = React.useContext(ToggleGroupContext);
+  const resolvedVariant = variant ?? context.variant;
+  const resolvedSize = size ?? context.size;
 
   return (
     <TogglePrimitive
+      className={cn(
+        toggleVariants({ variant: resolvedVariant, size: resolvedSize }),
+        className
+      )}
       data-slot="toggle-group-item"
       value={value}
-      className={cn(toggleVariants(), className)}
       {...props}
     >
       {children}
-      {onRemove && (
-        <ToggleRemove
-          onClick={(e) => {
-            e.stopPropagation();
-            onRemove(value);
-          }}
-        />
-      )}
     </TogglePrimitive>
   );
 }

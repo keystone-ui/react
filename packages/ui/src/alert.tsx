@@ -1,5 +1,5 @@
-import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import * as React from "react";
 
 import { cn } from "./utils";
 
@@ -9,9 +9,9 @@ import { cn } from "./utils";
 
 const alertVariants = cva(
   [
-    "grid gap-0.5 rounded-lg border px-4 py-3 text-left text-sm w-full relative group/alert",
+    "group/alert relative grid w-full gap-0.5 rounded-lg border px-4 py-3 text-left text-sm",
     // SVG boilerplate
-    "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+    "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
     // Grid layout when an icon SVG is a direct child
     "has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2",
     // Icon spans both title + description rows
@@ -23,7 +23,7 @@ const alertVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-card text-card-foreground border-border-muted *:data-[slot=alert-description]:text-muted-foreground",
+          "border-border-muted bg-card text-card-foreground *:data-[slot=alert-description]:text-muted-foreground",
         success: [
           "bg-green-500/15 dark:bg-green-500/10",
           "border-green-500/20 dark:border-green-500/15",
@@ -70,10 +70,10 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
   ({ className, variant, ...props }, ref) => {
     return (
       <div
-        ref={ref}
-        data-slot="alert"
-        role="alert"
         className={cn(alertVariants({ variant }), className)}
+        data-slot="alert"
+        ref={ref}
+        role="alert"
         {...props}
       />
     );
@@ -92,12 +92,12 @@ const AlertTitle = React.forwardRef<HTMLDivElement, AlertTitleProps>(
   ({ className, ...props }, ref) => {
     return (
       <div
-        ref={ref}
-        data-slot="alert-title"
         className={cn(
           "font-medium group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground",
           className
         )}
+        data-slot="alert-title"
+        ref={ref}
         {...props}
       />
     );
@@ -118,12 +118,12 @@ const AlertDescription = React.forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <div
-      ref={ref}
-      data-slot="alert-description"
       className={cn(
-        "text-sm text-balance md:text-pretty group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
+        "text-balance text-sm group-has-[>svg]/alert:col-start-2 md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
         className
       )}
+      data-slot="alert-description"
+      ref={ref}
       {...props}
     />
   );
@@ -141,9 +141,9 @@ const AlertAction = React.forwardRef<HTMLDivElement, AlertActionProps>(
   ({ className, ...props }, ref) => {
     return (
       <div
-        ref={ref}
-        data-slot="alert-action"
         className={cn("absolute top-3 right-3", className)}
+        data-slot="alert-action"
+        ref={ref}
         {...props}
       />
     );

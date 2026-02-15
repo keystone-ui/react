@@ -1,16 +1,18 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
 import { ToggleGroup, ToggleGroupItem } from "@keystone/ui/toggle-group";
-import { ToggleRemove } from "@keystone/ui/toggle";
-import { Avatar, AvatarImage, AvatarFallback } from "@keystone/ui/avatar";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  NewspaperIcon,
-  GlobeIcon,
-  GamepadIcon,
-  ShoppingCartIcon,
-  XIcon,
-  CircleXIcon,
+  AlignCenterIcon,
+  AlignJustifyIcon,
+  AlignLeftIcon,
+  AlignRightIcon,
+  BoldIcon,
+  ItalicIcon,
+  ListChecksIcon,
+  ListIcon,
+  ListOrderedIcon,
+  UnderlineIcon,
 } from "lucide-react";
+import { useState } from "react";
 
 const meta = {
   title: "Components/ToggleGroup",
@@ -19,41 +21,46 @@ const meta = {
     docs: {
       description: {
         component: `
-A group of badge-shaped toggle buttons with shared selection state.
+A group of toggle buttons with shared selection state.
 
 \`\`\`tsx
 import { ToggleGroup, ToggleGroupItem } from "@keystone/ui/toggle-group";
 
-// Multi-select
-<ToggleGroup multiple defaultValue={["fitness", "parking"]}>
-  <ToggleGroupItem value="laundry">Laundry</ToggleGroupItem>
-  <ToggleGroupItem value="fitness">Fitness center</ToggleGroupItem>
-  <ToggleGroupItem value="parking">Parking</ToggleGroupItem>
+// Multiple selection
+<ToggleGroup multiple variant="outline">
+  <ToggleGroupItem value="bold" aria-label="Toggle bold">
+    <BoldIcon />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="italic" aria-label="Toggle italic">
+    <ItalicIcon />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="underline" aria-label="Toggle underline">
+    <UnderlineIcon />
+  </ToggleGroupItem>
 </ToggleGroup>
 
-// Single select
-<ToggleGroup defaultValue={["react"]}>
-  <ToggleGroupItem value="react">React</ToggleGroupItem>
-  <ToggleGroupItem value="vue">Vue</ToggleGroupItem>
-  <ToggleGroupItem value="angular">Angular</ToggleGroupItem>
-</ToggleGroup>
-
-// With removal
-<ToggleGroup onRemove={(value) => handleRemove(value)}>
-  <ToggleGroupItem value="news">News</ToggleGroupItem>
-  <ToggleGroupItem value="travel">Travel</ToggleGroupItem>
+// Single selection
+<ToggleGroup defaultValue={["left"]}>
+  <ToggleGroupItem value="left" aria-label="Align left">
+    <AlignLeftIcon />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="center" aria-label="Align center">
+    <AlignCenterIcon />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="right" aria-label="Align right">
+    <AlignRightIcon />
+  </ToggleGroupItem>
 </ToggleGroup>
 \`\`\`
 
 ## Features
 
-- Badge-shaped pill styling (rounded-full, 24px height)
+- Two variants: \`default\` and \`outline\`
+- Three sizes: \`sm\`, \`default\`, \`lg\`
 - Single or multiple selection modes
 - Controlled and uncontrolled value management
 - Keyboard navigation via Base UI ToggleGroup primitive
-- Optional remove button via \`onRemove\` callback
-- Icon and avatar support
-- Group-level disabled state
+- Group-level variant and size props cascade to items via context
 `,
       },
     },
@@ -64,33 +71,43 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // ---------------------------------------------------------------------------
-// Amenities (Multi-Select)
+// Default
 // ---------------------------------------------------------------------------
 
-export const Amenities: Story = {
-  render: () => {
-    const [selected, setSelected] = useState<string[]>(["fitness", "parking"]);
+export const Default: Story = {
+  render: () => (
+    <ToggleGroup defaultValue={["bold"]} multiple>
+      <ToggleGroupItem aria-label="Toggle bold" value="bold">
+        <BoldIcon />
+      </ToggleGroupItem>
+      <ToggleGroupItem aria-label="Toggle italic" value="italic">
+        <ItalicIcon />
+      </ToggleGroupItem>
+      <ToggleGroupItem aria-label="Toggle underline" value="underline">
+        <UnderlineIcon />
+      </ToggleGroupItem>
+    </ToggleGroup>
+  ),
+};
 
-    return (
-      <div className="flex flex-col gap-3">
-        <p className="text-sm font-semibold">Amenities</p>
-        <ToggleGroup
-          multiple
-          value={selected}
-          onValueChange={setSelected}
-        >
-          <ToggleGroupItem value="laundry">Laundry</ToggleGroupItem>
-          <ToggleGroupItem value="fitness">Fitness center</ToggleGroupItem>
-          <ToggleGroupItem value="parking">Parking</ToggleGroupItem>
-          <ToggleGroupItem value="pool">Swimming pool</ToggleGroupItem>
-          <ToggleGroupItem value="breakfast">Breakfast</ToggleGroupItem>
-        </ToggleGroup>
-        <p className="text-muted-foreground text-sm">
-          Selected: {selected.length > 0 ? selected.join(", ") : "none"}
-        </p>
-      </div>
-    );
-  },
+// ---------------------------------------------------------------------------
+// Outline
+// ---------------------------------------------------------------------------
+
+export const Outline: Story = {
+  render: () => (
+    <ToggleGroup multiple variant="outline">
+      <ToggleGroupItem aria-label="Toggle bold" value="bold">
+        <BoldIcon />
+      </ToggleGroupItem>
+      <ToggleGroupItem aria-label="Toggle italic" value="italic">
+        <ItalicIcon />
+      </ToggleGroupItem>
+      <ToggleGroupItem aria-label="Toggle underline" value="underline">
+        <UnderlineIcon />
+      </ToggleGroupItem>
+    </ToggleGroup>
+  ),
 };
 
 // ---------------------------------------------------------------------------
@@ -100,22 +117,26 @@ export const Amenities: Story = {
 export const SingleSelection: Story = {
   name: "Single Selection",
   render: () => {
-    const [selected, setSelected] = useState<string[]>(["react"]);
+    const [value, setValue] = useState<string[]>(["center"]);
 
     return (
       <div className="flex flex-col gap-3">
-        <p className="text-sm font-semibold">Framework</p>
-        <ToggleGroup
-          value={selected}
-          onValueChange={setSelected}
-        >
-          <ToggleGroupItem value="react">React</ToggleGroupItem>
-          <ToggleGroupItem value="vue">Vue</ToggleGroupItem>
-          <ToggleGroupItem value="angular">Angular</ToggleGroupItem>
-          <ToggleGroupItem value="svelte">Svelte</ToggleGroupItem>
+        <ToggleGroup onValueChange={setValue} value={value} variant="outline">
+          <ToggleGroupItem aria-label="Align left" value="left">
+            <AlignLeftIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Align center" value="center">
+            <AlignCenterIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Align right" value="right">
+            <AlignRightIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Align justify" value="justify">
+            <AlignJustifyIcon />
+          </ToggleGroupItem>
         </ToggleGroup>
         <p className="text-muted-foreground text-sm">
-          Selected: {selected.length > 0 ? selected.join(", ") : "none"}
+          Alignment: {value.length > 0 ? value[0] : "none"}
         </p>
       </div>
     );
@@ -123,259 +144,82 @@ export const SingleSelection: Story = {
 };
 
 // ---------------------------------------------------------------------------
-// With Icons
+// With Text
 // ---------------------------------------------------------------------------
 
-export const WithIcons: Story = {
-  name: "With Icons",
+export const WithText: Story = {
+  name: "With Text",
   render: () => (
-    <div className="flex flex-col gap-3">
-      <p className="text-sm font-semibold">With Icons</p>
-      <ToggleGroup defaultValue={["shopping"]}>
-        <ToggleGroupItem value="news">
-          <NewspaperIcon />
-          News
-        </ToggleGroupItem>
-        <ToggleGroupItem value="travel">
-          <GlobeIcon />
-          Travel
-        </ToggleGroupItem>
-        <ToggleGroupItem value="gaming">
-          <GamepadIcon />
-          Gaming
-        </ToggleGroupItem>
-        <ToggleGroupItem value="shopping">
-          <ShoppingCartIcon />
-          Shopping
-        </ToggleGroupItem>
-      </ToggleGroup>
-      <p className="text-muted-foreground text-sm">Tags with icons</p>
-    </div>
+    <ToggleGroup multiple variant="outline">
+      <ToggleGroupItem aria-label="Toggle bold" value="bold">
+        <BoldIcon />
+        Bold
+      </ToggleGroupItem>
+      <ToggleGroupItem aria-label="Toggle italic" value="italic">
+        <ItalicIcon />
+        Italic
+      </ToggleGroupItem>
+      <ToggleGroupItem aria-label="Toggle underline" value="underline">
+        <UnderlineIcon />
+        Underline
+      </ToggleGroupItem>
+    </ToggleGroup>
   ),
 };
 
 // ---------------------------------------------------------------------------
-// With Avatars
+// Sizes
 // ---------------------------------------------------------------------------
 
-const AVATAR_URLS = {
-  fred: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=faces",
-  michael: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=64&h=64&fit=crop&crop=faces",
-  jane: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=64&h=64&fit=crop&crop=faces",
-  alice: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=faces",
-  bob: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=faces",
-  charlie: "https://images.unsplash.com/photo-1599566150163-29194dcabd9c?w=64&h=64&fit=crop&crop=faces",
-};
-
-function SmallAvatar({ src, fallback }: { src: string; fallback: string }) {
-  return (
-    <Avatar size="xs">
-      <AvatarImage src={src} alt={fallback} />
-      <AvatarFallback>{fallback[0]}</AvatarFallback>
-    </Avatar>
-  );
-}
-
-export const WithAvatars: Story = {
-  name: "With Avatars",
+export const Sizes: Story = {
   render: () => (
-    <div className="flex flex-col gap-3">
-      <p className="text-sm font-semibold">With Avatars</p>
-      <ToggleGroup defaultValue={["jane"]}>
-        <ToggleGroupItem value="fred">
-          <SmallAvatar src={AVATAR_URLS.fred} fallback="Fred" />
-          Fred
-        </ToggleGroupItem>
-        <ToggleGroupItem value="michael">
-          <SmallAvatar src={AVATAR_URLS.michael} fallback="Michael" />
-          Michael
-        </ToggleGroupItem>
-        <ToggleGroupItem value="jane">
-          <SmallAvatar src={AVATAR_URLS.jane} fallback="Jane" />
-          Jane
-        </ToggleGroupItem>
-      </ToggleGroup>
-      <p className="text-muted-foreground text-sm">Tags with avatars</p>
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <p className="font-semibold text-sm">Small</p>
+        <ToggleGroup multiple size="sm" variant="outline">
+          <ToggleGroupItem aria-label="Toggle list" value="list">
+            <ListIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Toggle ordered list" value="ordered">
+            <ListOrderedIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Toggle checklist" value="checks">
+            <ListChecksIcon />
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <p className="font-semibold text-sm">Default</p>
+        <ToggleGroup multiple size="default" variant="outline">
+          <ToggleGroupItem aria-label="Toggle list" value="list">
+            <ListIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Toggle ordered list" value="ordered">
+            <ListOrderedIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Toggle checklist" value="checks">
+            <ListChecksIcon />
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <p className="font-semibold text-sm">Large</p>
+        <ToggleGroup multiple size="lg" variant="outline">
+          <ToggleGroupItem aria-label="Toggle list" value="list">
+            <ListIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Toggle ordered list" value="ordered">
+            <ListOrderedIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Toggle checklist" value="checks">
+            <ListChecksIcon />
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
     </div>
   ),
-};
-
-// ---------------------------------------------------------------------------
-// Default Remove Button
-// ---------------------------------------------------------------------------
-
-export const DefaultRemoveButton: Story = {
-  name: "Default Remove Button",
-  render: () => {
-    const [items, setItems] = useState(["news", "travel", "gaming", "shopping"]);
-    const labels: Record<string, string> = {
-      news: "News",
-      travel: "Travel",
-      gaming: "Gaming",
-      shopping: "Shopping",
-    };
-
-    const handleRemove = (value: string) => {
-      setItems((prev) => prev.filter((item) => item !== value));
-    };
-
-    return (
-      <div className="flex flex-col gap-3">
-        <p className="text-sm font-semibold">Default Remove Button</p>
-        <ToggleGroup
-          defaultValue={["gaming"]}
-          onRemove={handleRemove}
-        >
-          {items.map((item) => (
-            <ToggleGroupItem key={item} value={item}>
-              {labels[item]}
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
-        <p className="text-muted-foreground text-sm">Click the X to remove tags</p>
-      </div>
-    );
-  },
-};
-
-// ---------------------------------------------------------------------------
-// Custom Remove Button
-// ---------------------------------------------------------------------------
-
-export const CustomRemoveButton: Story = {
-  name: "Custom Remove Button",
-  render: () => {
-    const [items, setItems] = useState(["react", "vue", "angular", "svelte"]);
-
-    const handleRemove = (value: string) => {
-      setItems((prev) => prev.filter((item) => item !== value));
-    };
-
-    return (
-      <div className="flex flex-col gap-3">
-        <p className="text-sm font-semibold">Custom Remove Button</p>
-        <ToggleGroup className="gap-2">
-          {items.map((item) => (
-            <ToggleGroupItem
-              key={item}
-              value={item}
-              className="bg-foreground/10 text-foreground"
-            >
-              {item.charAt(0).toUpperCase() + item.slice(1)}
-              <ToggleRemove onClick={() => handleRemove(item)}>
-                <CircleXIcon size={12} aria-hidden="true" />
-              </ToggleRemove>
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
-        <p className="text-muted-foreground text-sm">Custom remove button with icon</p>
-      </div>
-    );
-  },
-};
-
-// ---------------------------------------------------------------------------
-// With List Data
-// ---------------------------------------------------------------------------
-
-interface TeamMember {
-  id: string;
-  name: string;
-  avatar: string;
-}
-
-const TEAM_MEMBERS: TeamMember[] = [
-  { id: "fred", name: "Fred", avatar: AVATAR_URLS.fred },
-  { id: "michael", name: "Michael", avatar: AVATAR_URLS.michael },
-  { id: "jane", name: "Jane", avatar: AVATAR_URLS.jane },
-  { id: "alice", name: "Alice", avatar: AVATAR_URLS.alice },
-  { id: "bob", name: "Bob", avatar: AVATAR_URLS.bob },
-  { id: "charlie", name: "Charlie", avatar: AVATAR_URLS.charlie },
-];
-
-export const WithListData: Story = {
-  name: "With List Data",
-  render: () => {
-    const [members, setMembers] = useState(TEAM_MEMBERS);
-    const [selected, setSelected] = useState<string[]>(["charlie"]);
-
-    const handleRemove = (value: string) => {
-      setMembers((prev) => prev.filter((m) => m.id !== value));
-      setSelected((prev) => prev.filter((id) => id !== value));
-    };
-
-    return (
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-3">
-          <p className="text-sm font-semibold">Team Members</p>
-          <ToggleGroup
-            multiple
-            value={selected}
-            onValueChange={setSelected}
-            onRemove={handleRemove}
-          >
-            {members.map((member) => (
-              <ToggleGroupItem key={member.id} value={member.id}>
-                <SmallAvatar src={member.avatar} fallback={member.name} />
-                {member.name}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-          <p className="text-muted-foreground text-sm">Select team members for your project</p>
-        </div>
-
-        {selected.length > 0 && (
-          <div className="flex flex-col gap-2">
-            <p className="text-muted-foreground text-sm font-medium">Selected:</p>
-            <div className="flex flex-wrap gap-1.5">
-              {selected.map((id) => {
-                const member = members.find((m) => m.id === id);
-                if (!member) return null;
-                return (
-                  <span
-                    key={id}
-                    className="bg-secondary text-secondary-foreground inline-flex h-6 items-center gap-1 rounded-full px-2.5 text-xs font-medium"
-                  >
-                    <SmallAvatar src={member.avatar} fallback={member.name} />
-                    {member.name}
-                  </span>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  },
-};
-
-// ---------------------------------------------------------------------------
-// Controlled
-// ---------------------------------------------------------------------------
-
-export const Controlled: Story = {
-  render: () => {
-    const [value, setValue] = useState<string[]>(["news", "travel"]);
-
-    return (
-      <div className="flex flex-col gap-3">
-        <p className="text-sm font-semibold">Categories (controlled)</p>
-        <ToggleGroup
-          multiple
-          value={value}
-          onValueChange={setValue}
-        >
-          <ToggleGroupItem value="news">News</ToggleGroupItem>
-          <ToggleGroupItem value="travel">Travel</ToggleGroupItem>
-          <ToggleGroupItem value="gaming">Gaming</ToggleGroupItem>
-          <ToggleGroupItem value="shopping">Shopping</ToggleGroupItem>
-        </ToggleGroup>
-        <p className="text-muted-foreground text-sm">
-          Selected: {value.length > 0 ? value.join(", ") : "none"}
-        </p>
-      </div>
-    );
-  },
 };
 
 // ---------------------------------------------------------------------------
@@ -385,27 +229,39 @@ export const Controlled: Story = {
 export const Disabled: Story = {
   render: () => (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-3">
-        <p className="text-sm font-semibold">Disabled Group</p>
-        <ToggleGroup disabled defaultValue={["travel"]}>
-          <ToggleGroupItem value="news">News</ToggleGroupItem>
-          <ToggleGroupItem value="travel">Travel</ToggleGroupItem>
-          <ToggleGroupItem value="gaming">Gaming</ToggleGroupItem>
+      <div className="flex flex-col gap-2">
+        <p className="font-semibold text-sm">Disabled Group</p>
+        <ToggleGroup defaultValue={["bold"]} disabled variant="outline">
+          <ToggleGroupItem aria-label="Toggle bold" value="bold">
+            <BoldIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Toggle italic" value="italic">
+            <ItalicIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Toggle underline" value="underline">
+            <UnderlineIcon />
+          </ToggleGroupItem>
         </ToggleGroup>
-        <p className="text-muted-foreground text-sm">Entire group is disabled</p>
+        <p className="text-muted-foreground text-sm">
+          Entire group is disabled
+        </p>
       </div>
 
-      <div className="flex flex-col gap-3">
-        <p className="text-sm font-semibold">Individual Disabled Items</p>
-        <ToggleGroup defaultValue={["gaming"]}>
-          <ToggleGroupItem value="news">News</ToggleGroupItem>
-          <ToggleGroupItem value="travel" disabled>Travel</ToggleGroupItem>
-          <ToggleGroupItem value="gaming">Gaming</ToggleGroupItem>
-          <ToggleGroupItem value="shopping" disabled>Shopping</ToggleGroupItem>
+      <div className="flex flex-col gap-2">
+        <p className="font-semibold text-sm">Individual Disabled Items</p>
+        <ToggleGroup defaultValue={["bold"]} multiple variant="outline">
+          <ToggleGroupItem aria-label="Toggle bold" value="bold">
+            <BoldIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Toggle italic" disabled value="italic">
+            <ItalicIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Toggle underline" value="underline">
+            <UnderlineIcon />
+          </ToggleGroupItem>
         </ToggleGroup>
-        <p className="text-muted-foreground text-sm">Some items are disabled</p>
+        <p className="text-muted-foreground text-sm">Italic is disabled</p>
       </div>
     </div>
   ),
 };
-

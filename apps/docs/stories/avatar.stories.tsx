@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Avatar,
   AvatarBadge,
@@ -7,6 +6,7 @@ import {
   AvatarGroupCount,
   AvatarImage,
 } from "@keystone/ui/avatar";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PlusIcon } from "lucide-react";
 
 const meta = {
@@ -85,9 +85,9 @@ export const Default: Story = {
   render: () => (
     <Avatar>
       <AvatarImage
-        src="https://github.com/shadcn.png"
         alt="@shadcn"
         className="grayscale"
+        src="https://github.com/shadcn.png"
       />
       <AvatarFallback>CN</AvatarFallback>
     </Avatar>
@@ -99,7 +99,7 @@ export const Badge: Story = {
   name: "Badge",
   render: () => (
     <Avatar>
-      <AvatarImage src="https://github.com/evilrabbit.png" alt="@evilrabbit" />
+      <AvatarImage alt="@evilrabbit" src="https://github.com/evilrabbit.png" />
       <AvatarFallback>ER</AvatarFallback>
       <AvatarBadge className="bg-green-600 dark:bg-green-800" />
     </Avatar>
@@ -119,7 +119,7 @@ export const BadgeWithIcon: Story = {
   name: "Badge with Icon",
   render: () => (
     <Avatar className="grayscale">
-      <AvatarImage src="https://github.com/pranathip.png" alt="@pranathip" />
+      <AvatarImage alt="@pranathip" src="https://github.com/pranathip.png" />
       <AvatarFallback>PP</AvatarFallback>
       <AvatarBadge>
         <PlusIcon />
@@ -141,17 +141,17 @@ export const Group: Story = {
   render: () => (
     <AvatarGroup className="grayscale">
       <Avatar>
-        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+        <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <Avatar>
-        <AvatarImage src="https://github.com/maxleiter.png" alt="@maxleiter" />
+        <AvatarImage alt="@maxleiter" src="https://github.com/maxleiter.png" />
         <AvatarFallback>LR</AvatarFallback>
       </Avatar>
       <Avatar>
         <AvatarImage
-          src="https://github.com/evilrabbit.png"
           alt="@evilrabbit"
+          src="https://github.com/evilrabbit.png"
         />
         <AvatarFallback>ER</AvatarFallback>
       </Avatar>
@@ -172,17 +172,17 @@ export const GroupWithCount: Story = {
   render: () => (
     <AvatarGroup className="grayscale">
       <Avatar>
-        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+        <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <Avatar>
-        <AvatarImage src="https://github.com/maxleiter.png" alt="@maxleiter" />
+        <AvatarImage alt="@maxleiter" src="https://github.com/maxleiter.png" />
         <AvatarFallback>LR</AvatarFallback>
       </Avatar>
       <Avatar>
         <AvatarImage
-          src="https://github.com/evilrabbit.png"
           alt="@evilrabbit"
+          src="https://github.com/evilrabbit.png"
         />
         <AvatarFallback>ER</AvatarFallback>
       </Avatar>
@@ -205,17 +205,17 @@ export const GroupWithIcon: Story = {
   render: () => (
     <AvatarGroup className="grayscale">
       <Avatar>
-        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+        <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <Avatar>
-        <AvatarImage src="https://github.com/maxleiter.png" alt="@maxleiter" />
+        <AvatarImage alt="@maxleiter" src="https://github.com/maxleiter.png" />
         <AvatarFallback>LR</AvatarFallback>
       </Avatar>
       <Avatar>
         <AvatarImage
-          src="https://github.com/evilrabbit.png"
           alt="@evilrabbit"
+          src="https://github.com/evilrabbit.png"
         />
         <AvatarFallback>ER</AvatarFallback>
       </Avatar>
@@ -239,19 +239,19 @@ export const Sizes: Story = {
   render: () => (
     <div className="flex flex-wrap items-center gap-2 grayscale">
       <Avatar size="xs">
-        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+        <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <Avatar size="sm">
-        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+        <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <Avatar>
-        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+        <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <Avatar size="lg">
-        <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+        <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
     </div>
@@ -273,36 +273,36 @@ export const Demo: Story = {
     <div className="flex flex-row flex-wrap items-center gap-6 md:gap-12">
       <Avatar>
         <AvatarImage
-          src="https://github.com/shadcn.png"
           alt="@shadcn"
           className="grayscale"
+          src="https://github.com/shadcn.png"
         />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <Avatar>
         <AvatarImage
-          src="https://github.com/evilrabbit.png"
           alt="@evilrabbit"
+          src="https://github.com/evilrabbit.png"
         />
         <AvatarFallback>ER</AvatarFallback>
         <AvatarBadge className="bg-green-600 dark:bg-green-800" />
       </Avatar>
       <AvatarGroup className="grayscale">
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <Avatar>
           <AvatarImage
-            src="https://github.com/maxleiter.png"
             alt="@maxleiter"
+            src="https://github.com/maxleiter.png"
           />
           <AvatarFallback>LR</AvatarFallback>
         </Avatar>
         <Avatar>
           <AvatarImage
-            src="https://github.com/evilrabbit.png"
             alt="@evilrabbit"
+            src="https://github.com/evilrabbit.png"
           />
           <AvatarFallback>ER</AvatarFallback>
         </Avatar>

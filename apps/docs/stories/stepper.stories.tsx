@@ -1,15 +1,15 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import { Button } from "@keystone/ui/button";
+import { Checkbox } from "@keystone/ui/checkbox";
+import { Input } from "@keystone/ui/input";
+import { Label } from "@keystone/ui/label";
 import {
   Stepper,
   StepperContent,
   StepperStep,
   useStepper,
 } from "@keystone/ui/stepper";
-import { Button } from "@keystone/ui/button";
-import { Input } from "@keystone/ui/input";
-import { Label } from "@keystone/ui/label";
-import { Checkbox } from "@keystone/ui/checkbox";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 
 const meta = {
   title: "Components/Stepper",
@@ -91,7 +91,7 @@ type Story = StoryObj<typeof Stepper>;
 function Skeleton({ width }: { width?: number }) {
   return (
     <div
-      className="bg-muted h-4 animate-pulse rounded-md"
+      className="h-4 animate-pulse rounded-md bg-muted"
       style={{ width: width ?? "100%" }}
     />
   );
@@ -105,19 +105,19 @@ function StepperNav() {
   return (
     <div className="mt-6 flex justify-between">
       <Button
-        variant="outline"
-        size="sm"
-        onClick={goPrevious}
-        disabled={isFirst}
         className="rounded-full px-5"
+        disabled={isFirst}
+        onClick={goPrevious}
+        size="sm"
+        variant="outline"
       >
         Back
       </Button>
       <Button
-        size="sm"
-        onClick={goNext}
-        disabled={isLast}
         className="rounded-full px-5"
+        disabled={isLast}
+        onClick={goNext}
+        size="sm"
       >
         Continue
       </Button>
@@ -132,10 +132,10 @@ function DefaultDemo() {
   const [step, setStep] = useState(0);
   return (
     <div className="mx-auto w-full max-w-[550px] rounded-xl border p-6 shadow-sm">
-      <Stepper value={step} onValueChange={setStep}>
+      <Stepper onValueChange={setStep} value={step}>
         <StepperContent>
           <StepperStep>
-            <h2 className="mb-2 text-base font-semibold">This is step one</h2>
+            <h2 className="mb-2 font-semibold text-base">This is step one</h2>
             <p className="text-muted-foreground text-sm">
               Usually in this step we would explain why this thing exists and
               what it does. Also, we would show a button to go to the next step.
@@ -148,7 +148,7 @@ function DefaultDemo() {
             </div>
           </StepperStep>
           <StepperStep>
-            <h2 className="mb-2 text-base font-semibold">This is step two</h2>
+            <h2 className="mb-2 font-semibold text-base">This is step two</h2>
             <p className="text-muted-foreground text-sm">
               Usually in this step we would explain why this thing exists and
               what it does. Also, we would show a button to go to the next step.
@@ -160,9 +160,7 @@ function DefaultDemo() {
             </div>
           </StepperStep>
           <StepperStep>
-            <h2 className="mb-2 text-base font-semibold">
-              This is step three
-            </h2>
+            <h2 className="mb-2 font-semibold text-base">This is step three</h2>
             <p className="text-muted-foreground text-sm">
               Usually in this step we would explain why this thing exists and
               what it does. Also, we would show a button to go to the next step.
@@ -203,14 +201,14 @@ function StepIndicator() {
     <div className="mb-4 flex items-center justify-center gap-1.5">
       {Array.from({ length: totalSteps }).map((_, i) => (
         <div
-          key={i}
           className={`h-1.5 rounded-full transition-all duration-300 ${
             i === value
-              ? "bg-primary w-6"
+              ? "w-6 bg-primary"
               : i < value
-                ? "bg-primary/40 w-1.5"
-                : "bg-muted w-1.5"
+                ? "w-1.5 bg-primary/40"
+                : "w-1.5 bg-muted"
           }`}
+          key={i}
         />
       ))}
     </div>
@@ -222,19 +220,19 @@ function StepIndicatorNav() {
   return (
     <div className="mt-6 flex justify-between">
       <Button
-        variant="outline"
-        size="sm"
-        onClick={goPrevious}
-        disabled={isFirst}
         className="rounded-full px-5"
+        disabled={isFirst}
+        onClick={goPrevious}
+        size="sm"
+        variant="outline"
       >
         Back
       </Button>
       <Button
-        size="sm"
-        onClick={goNext}
-        disabled={isLast}
         className="rounded-full px-5"
+        disabled={isLast}
+        onClick={goNext}
+        size="sm"
       >
         {isLast ? "Finish" : "Continue"}
       </Button>
@@ -246,11 +244,11 @@ function WithStepIndicatorDemo() {
   const [step, setStep] = useState(0);
   return (
     <div className="mx-auto w-full max-w-[550px] rounded-xl border p-6 shadow-sm">
-      <Stepper value={step} onValueChange={setStep}>
+      <Stepper onValueChange={setStep} value={step}>
         <StepIndicator />
         <StepperContent>
           <StepperStep>
-            <h2 className="mb-2 text-base font-semibold">
+            <h2 className="mb-2 font-semibold text-base">
               Welcome to Keystone
             </h2>
             <p className="text-muted-foreground text-sm">
@@ -264,7 +262,7 @@ function WithStepIndicatorDemo() {
             </div>
           </StepperStep>
           <StepperStep>
-            <h2 className="mb-2 text-base font-semibold">
+            <h2 className="mb-2 font-semibold text-base">
               Set up your workspace
             </h2>
             <p className="text-muted-foreground text-sm">
@@ -286,7 +284,7 @@ function WithStepIndicatorDemo() {
             </div>
           </StepperStep>
           <StepperStep>
-            <h2 className="mb-2 text-base font-semibold">
+            <h2 className="mb-2 font-semibold text-base">
               You&apos;re all set!
             </h2>
             <p className="text-muted-foreground text-sm">
@@ -296,13 +294,13 @@ function WithStepIndicatorDemo() {
             <div className="mt-4 flex flex-col gap-3">
               <div className="flex items-center gap-2">
                 <Checkbox id="email-updates" />
-                <Label htmlFor="email-updates" className="text-sm font-normal">
+                <Label className="font-normal text-sm" htmlFor="email-updates">
                   Send me product updates
                 </Label>
               </div>
               <div className="flex items-center gap-2">
-                <Checkbox id="tips" defaultChecked />
-                <Label htmlFor="tips" className="text-sm font-normal">
+                <Checkbox defaultChecked id="tips" />
+                <Label className="font-normal text-sm" htmlFor="tips">
                   Send me tips and tutorials
                 </Label>
               </div>
@@ -340,19 +338,19 @@ function ControlledDemo() {
         {[0, 1, 2].map((i) => (
           <Button
             key={i}
-            variant={step === i ? "default" : "outline"}
-            size="sm"
             onClick={() => setStep(i)}
+            size="sm"
+            variant={step === i ? "default" : "outline"}
           >
             Step {i + 1}
           </Button>
         ))}
       </div>
       <div className="mx-auto w-full max-w-[550px] rounded-xl border p-6 shadow-sm">
-        <Stepper value={step} onValueChange={setStep}>
+        <Stepper onValueChange={setStep} value={step}>
           <StepperContent>
             <StepperStep>
-              <h2 className="mb-2 text-base font-semibold">Account</h2>
+              <h2 className="mb-2 font-semibold text-base">Account</h2>
               <p className="text-muted-foreground text-sm">
                 Configure your account settings and preferences.
               </p>
@@ -362,7 +360,7 @@ function ControlledDemo() {
               </div>
             </StepperStep>
             <StepperStep>
-              <h2 className="mb-2 text-base font-semibold">Notifications</h2>
+              <h2 className="mb-2 font-semibold text-base">Notifications</h2>
               <p className="text-muted-foreground text-sm">
                 Choose how and when you want to be notified.
               </p>
@@ -374,7 +372,7 @@ function ControlledDemo() {
               </div>
             </StepperStep>
             <StepperStep>
-              <h2 className="mb-2 text-base font-semibold">Privacy</h2>
+              <h2 className="mb-2 font-semibold text-base">Privacy</h2>
               <p className="text-muted-foreground text-sm">
                 Manage your privacy and data sharing preferences.
               </p>

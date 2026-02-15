@@ -27,7 +27,7 @@ const BasicAlertDialog = ({
   onOpenChange?: (open: boolean) => void;
   size?: "default" | "sm";
 }) => (
-  <AlertDialog open={open} onOpenChange={onOpenChange}>
+  <AlertDialog onOpenChange={onOpenChange} open={open}>
     <AlertDialogTrigger render={<Button variant="outline" />}>
       Open
     </AlertDialogTrigger>
@@ -128,7 +128,7 @@ describe("AlertDialog", () => {
   test("calls onOpenChange when cancel is clicked", async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
-    render(<BasicAlertDialog open onOpenChange={onOpenChange} />);
+    render(<BasicAlertDialog onOpenChange={onOpenChange} open />);
 
     await waitFor(() => {
       expect(screen.getByRole("alertdialog")).toBeInTheDocument();
@@ -281,7 +281,7 @@ describe("AlertDialogMedia", () => {
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogMedia data-testid="media" className="custom-media">
+            <AlertDialogMedia className="custom-media" data-testid="media">
               <svg />
             </AlertDialogMedia>
             <AlertDialogTitle>Title</AlertDialogTitle>
@@ -372,9 +372,7 @@ describe("AlertDialogAction", () => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleClick}>
-              Confirm
-            </AlertDialogAction>
+            <AlertDialogAction onClick={handleClick}>Confirm</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -404,7 +402,7 @@ describe("AlertDialogAction", () => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction variant="destructive" data-testid="action">
+            <AlertDialogAction data-testid="action" variant="destructive">
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

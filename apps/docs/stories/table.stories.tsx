@@ -1,16 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@keystone/ui/table";
 import { Badge } from "@keystone/ui/badge";
 import { Button } from "@keystone/ui/button";
+import { Checkbox } from "@keystone/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,21 +8,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@keystone/ui/dropdown-menu";
-import { Checkbox } from "@keystone/ui/checkbox";
 import {
   Empty,
+  EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-  EmptyDescription,
 } from "@keystone/ui/empty";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@keystone/ui/select";
 import {
   Pagination,
   PaginationContent,
@@ -43,18 +25,36 @@ import {
   PaginationPrevious,
 } from "@keystone/ui/pagination";
 import {
-  MoreHorizontalIcon,
-  ArrowUpRightIcon,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@keystone/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@keystone/ui/table";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import {
   ArrowDownLeftIcon,
-  ShieldAlertIcon,
-  RotateCcwIcon,
-  EyeIcon,
-  CopyIcon,
-  InboxIcon,
+  ArrowUpRightIcon,
   CheckIcon,
+  CopyIcon,
+  EyeIcon,
+  InboxIcon,
   MinusIcon,
+  MoreHorizontalIcon,
+  RotateCcwIcon,
+  ShieldAlertIcon,
 } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 
 const meta = {
   title: "Components/Table",
@@ -205,9 +205,7 @@ export const Default: Story = {
             <TableCell className="font-medium">{invoice.invoice}</TableCell>
             <TableCell>{invoice.paymentStatus}</TableCell>
             <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">
-              {invoice.totalAmount}
-            </TableCell>
+            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -237,9 +235,7 @@ export const Footer: Story = {
             <TableCell className="font-medium">{invoice.invoice}</TableCell>
             <TableCell>{invoice.paymentStatus}</TableCell>
             <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">
-              {invoice.totalAmount}
-            </TableCell>
+            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -292,9 +288,7 @@ export const WithBadges: Story = {
               </Badge>
             </TableCell>
             <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">
-              {invoice.totalAmount}
-            </TableCell>
+            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -331,7 +325,7 @@ export const Actions: Story = {
               <DropdownMenu>
                 <DropdownMenuTrigger
                   render={
-                    <Button variant="ghost" size="icon-sm">
+                    <Button size="icon-sm" variant="ghost">
                       <MoreHorizontalIcon />
                       <span className="sr-only">Open menu</span>
                     </Button>
@@ -538,7 +532,7 @@ export const CryptoTransactions: Story = {
             <TableCell>
               <ActiveIndicator active={tx.active} />
             </TableCell>
-            <TableCell className="font-mono text-xs text-muted-foreground">
+            <TableCell className="font-mono text-muted-foreground text-xs">
               {tx.wallet}
             </TableCell>
             <TableCell className="text-muted-foreground">{tx.date}</TableCell>
@@ -546,7 +540,7 @@ export const CryptoTransactions: Story = {
               <DropdownMenu>
                 <DropdownMenuTrigger
                   render={
-                    <Button variant="ghost" size="icon-sm">
+                    <Button size="icon-sm" variant="ghost">
                       <MoreHorizontalIcon />
                       <span className="sr-only">Transaction actions</span>
                     </Button>
@@ -578,9 +572,7 @@ export const CryptoTransactions: Story = {
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={9}>
-            {transactions.length} transactions
-          </TableCell>
+          <TableCell colSpan={9}>{transactions.length} transactions</TableCell>
           <TableCell className="text-right">
             <span className="text-muted-foreground text-xs">Page 1 of 24</span>
           </TableCell>
@@ -597,7 +589,9 @@ export const CryptoTransactions: Story = {
 export const Compact: Story = {
   render: () => (
     <Table size="sm">
-      <TableCaption>Compact table with reduced padding and text size.</TableCaption>
+      <TableCaption>
+        Compact table with reduced padding and text size.
+      </TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">Invoice</TableHead>
@@ -611,14 +605,15 @@ export const Compact: Story = {
           <TableRow key={invoice.invoice}>
             <TableCell className="font-medium">{invoice.invoice}</TableCell>
             <TableCell>
-              <Badge size="sm" variant={statusBadgeVariant(invoice.paymentStatus)}>
+              <Badge
+                size="sm"
+                variant={statusBadgeVariant(invoice.paymentStatus)}
+              >
                 {invoice.paymentStatus}
               </Badge>
             </TableCell>
             <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">
-              {invoice.totalAmount}
-            </TableCell>
+            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -657,8 +652,8 @@ export const EmptyState: Story = {
                 </EmptyMedia>
                 <EmptyTitle>No invoices found</EmptyTitle>
                 <EmptyDescription>
-                  There are no invoices matching your filters. Try adjusting your
-                  search criteria.
+                  There are no invoices matching your filters. Try adjusting
+                  your search criteria.
                 </EmptyDescription>
               </EmptyHeader>
             </Empty>
@@ -709,10 +704,10 @@ function SelectedRowsExample() {
         <TableRow>
           <TableHead className="w-10">
             <Checkbox
+              aria-label="Select all"
               checked={allSelected}
               indeterminate={selected.size > 0 && !allSelected}
               onCheckedChange={toggleAll}
-              aria-label="Select all"
             />
           </TableHead>
           <TableHead className="w-[100px]">Invoice</TableHead>
@@ -724,14 +719,14 @@ function SelectedRowsExample() {
       <TableBody>
         {invoices.map((invoice) => (
           <TableRow
-            key={invoice.invoice}
             data-state={selected.has(invoice.invoice) ? "selected" : undefined}
+            key={invoice.invoice}
           >
             <TableCell>
               <Checkbox
+                aria-label={`Select ${invoice.invoice}`}
                 checked={selected.has(invoice.invoice)}
                 onCheckedChange={() => toggleRow(invoice.invoice)}
-                aria-label={`Select ${invoice.invoice}`}
               />
             </TableCell>
             <TableCell className="font-medium">{invoice.invoice}</TableCell>
@@ -741,9 +736,7 @@ function SelectedRowsExample() {
               </Badge>
             </TableCell>
             <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">
-              {invoice.totalAmount}
-            </TableCell>
+            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -773,13 +766,11 @@ export const StripedRows: Story = {
       </TableHeader>
       <TableBody>
         {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice} className="even:bg-muted/30">
+          <TableRow className="even:bg-muted/30" key={invoice.invoice}>
             <TableCell className="font-medium">{invoice.invoice}</TableCell>
             <TableCell>{invoice.paymentStatus}</TableCell>
             <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">
-              {invoice.totalAmount}
-            </TableCell>
+            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -808,9 +799,7 @@ export const HighlightedHeader: Story = {
             <TableCell className="font-medium">{invoice.invoice}</TableCell>
             <TableCell>{invoice.paymentStatus}</TableCell>
             <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">
-              {invoice.totalAmount}
-            </TableCell>
+            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -826,7 +815,9 @@ export const Hoverable: Story = {
   render: () => (
     <div className="flex flex-col gap-10">
       <div>
-        <p className="text-muted-foreground mb-3 text-sm font-medium">Default variant with hover</p>
+        <p className="mb-3 font-medium text-muted-foreground text-sm">
+          Default variant with hover
+        </p>
         <Table hoverable>
           <TableHeader>
             <TableRow>
@@ -851,8 +842,10 @@ export const Hoverable: Story = {
         </Table>
       </div>
       <div>
-        <p className="text-muted-foreground mb-3 text-sm font-medium">Card variant with hover</p>
-        <Table variant="card" hoverable>
+        <p className="mb-3 font-medium text-muted-foreground text-sm">
+          Card variant with hover
+        </p>
+        <Table hoverable variant="card">
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Invoice</TableHead>
@@ -885,10 +878,30 @@ export const Hoverable: Story = {
 
 const leaderboard = [
   { rank: 1, name: "Alex Dumitru", role: "UI/UX", company: "Hashgraph" },
-  { rank: 2, name: "Diana Sima", role: "Graphic Designer/Illustrator", company: "Hashgraph" },
-  { rank: 3, name: "Otilia Bejenaru", role: "Graphic Designer/Illustrator", company: "Hashgraph" },
-  { rank: 4, name: "Mihai Radu", role: "Frontend Engineer", company: "Hashgraph" },
-  { rank: 5, name: "Elena Voicu", role: "Product Manager", company: "Hashgraph" },
+  {
+    rank: 2,
+    name: "Diana Sima",
+    role: "Graphic Designer/Illustrator",
+    company: "Hashgraph",
+  },
+  {
+    rank: 3,
+    name: "Otilia Bejenaru",
+    role: "Graphic Designer/Illustrator",
+    company: "Hashgraph",
+  },
+  {
+    rank: 4,
+    name: "Mihai Radu",
+    role: "Frontend Engineer",
+    company: "Hashgraph",
+  },
+  {
+    rank: 5,
+    name: "Elena Voicu",
+    role: "Product Manager",
+    company: "Hashgraph",
+  },
 ];
 
 export const Card: Story = {
@@ -941,9 +954,7 @@ export const CardWithBadges: Story = {
               </Badge>
             </TableCell>
             <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">
-              {invoice.totalAmount}
-            </TableCell>
+            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -957,7 +968,7 @@ export const CardWithBadges: Story = {
 
 export const CardCompact: Story = {
   render: () => (
-    <Table variant="card" size="sm">
+    <Table size="sm" variant="card">
       <TableHeader>
         <TableRow>
           <TableHead className="w-16">#</TableHead>
@@ -1073,9 +1084,15 @@ const playerStatusBadgeVariant = (status: PlayerStatus) => {
   }
 };
 
-function ExchangePlayersTable({ variant, hoverable }: { variant?: "default" | "card"; hoverable?: boolean }) {
+function ExchangePlayersTable({
+  variant,
+  hoverable,
+}: {
+  variant?: "default" | "card";
+  hoverable?: boolean;
+}) {
   return (
-    <Table variant={variant} hoverable={hoverable}>
+    <Table hoverable={hoverable} variant={variant}>
       <TableHeader>
         <TableRow>
           <TableHead>Joined</TableHead>
@@ -1103,7 +1120,11 @@ function ExchangePlayersTable({ variant, hoverable }: { variant?: "default" | "c
                     </Badge>
                   ))}
                   {player.note && (
-                    <Badge size="sm" variant="outline" className="text-muted-foreground">
+                    <Badge
+                      className="text-muted-foreground"
+                      size="sm"
+                      variant="outline"
+                    >
                       {player.note}
                     </Badge>
                   )}
@@ -1113,7 +1134,7 @@ function ExchangePlayersTable({ variant, hoverable }: { variant?: "default" | "c
             <TableCell className="font-mono text-xs">
               {player.walletId}
             </TableCell>
-            <TableCell className="font-mono text-xs font-medium">
+            <TableCell className="font-medium font-mono text-xs">
               {player.balance}
             </TableCell>
             <TableCell>
@@ -1121,11 +1142,11 @@ function ExchangePlayersTable({ variant, hoverable }: { variant?: "default" | "c
                 {player.status}
               </Badge>
             </TableCell>
-            <TableCell className="text-muted-foreground text-xs max-w-[200px] truncate">
+            <TableCell className="max-w-[200px] truncate text-muted-foreground text-xs">
               {player.note || "—"}
             </TableCell>
             <TableCell className="text-right">
-              <Button variant="outline" size="xs">
+              <Button size="xs" variant="outline">
                 Details
                 <ArrowUpRightIcon className="size-3" />
               </Button>
@@ -1141,11 +1162,15 @@ export const ExchangePlayers: Story = {
   render: () => (
     <div className="flex flex-col gap-10">
       <div>
-        <p className="text-muted-foreground mb-3 text-sm font-medium">Default variant</p>
+        <p className="mb-3 font-medium text-muted-foreground text-sm">
+          Default variant
+        </p>
         <ExchangePlayersTable />
       </div>
       <div>
-        <p className="text-muted-foreground mb-3 text-sm font-medium">Card variant</p>
+        <p className="mb-3 font-medium text-muted-foreground text-sm">
+          Card variant
+        </p>
         <ExchangePlayersTable variant="card" />
       </div>
     </div>
@@ -1169,12 +1194,12 @@ function PaginatedTableExample() {
 
   const pageCount = useMemo(
     () => Math.ceil(allInvoices.length / pageSize),
-    [pageSize],
+    [pageSize]
   );
 
   const rows = useMemo(
     () => allInvoices.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize),
-    [pageIndex, pageSize],
+    [pageIndex, pageSize]
   );
 
   const canPreviousPage = pageIndex > 0;
@@ -1212,15 +1237,15 @@ function PaginatedTableExample() {
       {/* Pagination controls */}
       <div className="flex items-center justify-end gap-4 md:gap-6 lg:gap-8">
         <div className="flex items-center gap-2">
-          <p className="text-sm font-medium">Rows per page</p>
+          <p className="font-medium text-sm">Rows per page</p>
           <Select
-            value={`${pageSize}`}
             onValueChange={(value) => {
               setPageSize(Number(value));
               setPageIndex(0);
             }}
+            value={`${pageSize}`}
           >
-            <SelectTrigger size="sm" className="w-[70px]">
+            <SelectTrigger className="w-[70px]" size="sm">
               <SelectValue placeholder={`${pageSize}`} />
             </SelectTrigger>
             <SelectContent side="top">
@@ -1233,7 +1258,7 @@ function PaginatedTableExample() {
           </Select>
         </div>
 
-        <p className="text-sm font-medium">
+        <p className="font-medium text-sm">
           Page {pageIndex + 1} of {pageCount}
         </p>
 
@@ -1241,30 +1266,46 @@ function PaginatedTableExample() {
           <PaginationContent>
             <PaginationItem>
               <PaginationFirst
-                onClick={(e) => { e.preventDefault(); setPageIndex(0); }}
-                className={!canPreviousPage ? "pointer-events-none opacity-50" : ""}
                 aria-disabled={!canPreviousPage}
+                className={
+                  canPreviousPage ? "" : "pointer-events-none opacity-50"
+                }
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPageIndex(0);
+                }}
               />
             </PaginationItem>
             <PaginationItem>
               <PaginationPrevious
-                onClick={(e) => { e.preventDefault(); setPageIndex((p) => p - 1); }}
-                className={!canPreviousPage ? "pointer-events-none opacity-50" : ""}
                 aria-disabled={!canPreviousPage}
+                className={
+                  canPreviousPage ? "" : "pointer-events-none opacity-50"
+                }
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPageIndex((p) => p - 1);
+                }}
               />
             </PaginationItem>
             <PaginationItem>
               <PaginationNext
-                onClick={(e) => { e.preventDefault(); setPageIndex((p) => p + 1); }}
-                className={!canNextPage ? "pointer-events-none opacity-50" : ""}
                 aria-disabled={!canNextPage}
+                className={canNextPage ? "" : "pointer-events-none opacity-50"}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPageIndex((p) => p + 1);
+                }}
               />
             </PaginationItem>
             <PaginationItem>
               <PaginationLast
-                onClick={(e) => { e.preventDefault(); setPageIndex(pageCount - 1); }}
-                className={!canNextPage ? "pointer-events-none opacity-50" : ""}
                 aria-disabled={!canNextPage}
+                className={canNextPage ? "" : "pointer-events-none opacity-50"}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPageIndex(pageCount - 1);
+                }}
               />
             </PaginationItem>
           </PaginationContent>

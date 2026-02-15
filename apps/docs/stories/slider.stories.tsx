@@ -1,5 +1,3 @@
-import * as React from "react";
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Slider,
   SliderControl,
@@ -8,6 +6,8 @@ import {
   SliderTrack,
   SliderValue,
 } from "@keystone/ui/slider";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import * as React from "react";
 
 const meta = {
   title: "Components/Slider",
@@ -86,7 +86,8 @@ export const Basic: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Basic slider with a pill-shaped thumb. Drag or use arrow keys to change the value.",
+        story:
+          "Basic slider with a pill-shaped thumb. Drag or use arrow keys to change the value.",
       },
     },
   },
@@ -95,13 +96,15 @@ export const Basic: Story = {
 // With Label and Value
 export const WithLabelAndValue: Story = {
   name: "With Label and Value",
-  render: function LabelValueExample() {
+  render() {
     const id = React.useId();
     return (
       <div className="w-full max-w-sm">
-        <Slider defaultValue={48} aria-labelledby={id}>
+        <Slider aria-labelledby={id} defaultValue={48}>
           <div className="flex justify-between">
-            <span id={id} className="text-sm font-medium">Volume</span>
+            <span className="font-medium text-sm" id={id}>
+              Volume
+            </span>
             <SliderValue />
           </div>
           <SliderControl>
@@ -117,7 +120,8 @@ export const WithLabelAndValue: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Use `SliderValue` to display the current value. Label the slider with `aria-labelledby` referencing a visible label.",
+        story:
+          "Use `SliderValue` to display the current value. Label the slider with `aria-labelledby` referencing a visible label.",
       },
     },
   },
@@ -126,19 +130,17 @@ export const WithLabelAndValue: Story = {
 // Controlled
 export const Controlled: Story = {
   name: "Controlled",
-  render: function ControlledExample() {
+  render() {
     const [value, setValue] = React.useState<number | number[]>(50);
     const id = React.useId();
 
     return (
       <div className="w-full max-w-sm space-y-2">
-        <Slider
-          value={value}
-          onValueChange={setValue}
-          aria-labelledby={id}
-        >
+        <Slider aria-labelledby={id} onValueChange={setValue} value={value}>
           <div className="flex justify-between">
-            <span id={id} className="text-sm font-medium">Brightness</span>
+            <span className="font-medium text-sm" id={id}>
+              Brightness
+            </span>
             <SliderValue />
           </div>
           <SliderControl>
@@ -148,7 +150,7 @@ export const Controlled: Story = {
             </SliderTrack>
           </SliderControl>
         </Slider>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Current value: <code>{String(value)}</code>
         </p>
       </div>
@@ -166,13 +168,15 @@ export const Controlled: Story = {
 // Range
 export const Range: Story = {
   name: "Range",
-  render: function RangeExample() {
+  render() {
     const id = React.useId();
     return (
       <div className="w-full max-w-sm">
-        <Slider defaultValue={[25, 75]} aria-labelledby={id}>
+        <Slider aria-labelledby={id} defaultValue={[25, 75]}>
           <div className="flex justify-between">
-            <span id={id} className="text-sm font-medium">Price range</span>
+            <span className="font-medium text-sm" id={id}>
+              Price range
+            </span>
             <SliderValue>
               {(formattedValues) => formattedValues.join(" – ")}
             </SliderValue>
@@ -180,8 +184,8 @@ export const Range: Story = {
           <SliderControl>
             <SliderTrack>
               <SliderIndicator />
-              <SliderThumb index={0} aria-label="Minimum price" />
-              <SliderThumb index={1} aria-label="Maximum price" />
+              <SliderThumb aria-label="Minimum price" index={0} />
+              <SliderThumb aria-label="Maximum price" index={1} />
             </SliderTrack>
           </SliderControl>
         </Slider>
@@ -191,7 +195,8 @@ export const Range: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Pass an array to `defaultValue` and render a `SliderThumb` for each value to create a range slider.",
+        story:
+          "Pass an array to `defaultValue` and render a `SliderThumb` for each value to create a range slider.",
       },
     },
   },
@@ -224,13 +229,15 @@ export const Disabled: Story = {
 // Custom Step
 export const CustomStep: Story = {
   name: "Custom Step",
-  render: function StepExample() {
+  render() {
     const id = React.useId();
     return (
       <div className="w-full max-w-sm">
-        <Slider defaultValue={50} step={10} aria-labelledby={id}>
+        <Slider aria-labelledby={id} defaultValue={50} step={10}>
           <div className="flex justify-between">
-            <span id={id} className="text-sm font-medium">Quality</span>
+            <span className="font-medium text-sm" id={id}>
+              Quality
+            </span>
             <SliderValue>
               {(formattedValues) => `${formattedValues[0]}%`}
             </SliderValue>
@@ -248,7 +255,8 @@ export const CustomStep: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Use the `step` prop to control the granularity. This example uses `step={10}` for discrete 10% increments.",
+        story:
+          "Use the `step` prop to control the granularity. This example uses `step={10}` for discrete 10% increments.",
       },
     },
   },

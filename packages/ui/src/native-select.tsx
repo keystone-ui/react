@@ -1,16 +1,13 @@
 "use client";
 
-import * as React from "react";
 import { ChevronDownIcon } from "lucide-react";
+import type * as React from "react";
 import { cn } from "./utils";
 
 // =============================================================================
 // NativeSelect
 // =============================================================================
-export type NativeSelectProps = Omit<
-  React.ComponentProps<"select">,
-  "size"
-> & {
+export type NativeSelectProps = Omit<React.ComponentProps<"select">, "size"> & {
   /**
    * Size variant of the native select.
    * Controls the visual height (`"default"` = 40px, `"sm"` = 32px).
@@ -36,19 +33,19 @@ function NativeSelect({
         "group/native-select relative w-fit has-[select:disabled]:opacity-50",
         className
       )}
-      data-slot="native-select-wrapper"
       data-size={size}
+      data-slot="native-select-wrapper"
     >
       <select
-        data-slot="native-select"
+        className="h-10 w-full min-w-0 select-none appearance-none rounded-md border border-input bg-input-bg py-1 pr-8 pl-2.5 text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground/70 focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset disabled:pointer-events-none disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-destructive data-[size=sm]:h-8 data-[size=sm]:rounded-md data-[size=sm]:py-0.5 dark:aria-invalid:ring-destructive"
         data-size={size}
+        data-slot="native-select"
         size={htmlSize}
-        className="border-input bg-input-bg placeholder:text-muted-foreground/70 h-10 w-full min-w-0 appearance-none rounded-md border py-1 pr-8 pl-2.5 text-sm shadow-xs transition-[color,box-shadow] outline-none select-none focus:ring-1 focus:ring-inset focus:ring-ring focus:border-ring disabled:pointer-events-none disabled:cursor-not-allowed aria-invalid:ring-destructive dark:aria-invalid:ring-destructive aria-invalid:border-destructive data-[size=sm]:h-8 data-[size=sm]:rounded-md data-[size=sm]:py-0.5"
         {...props}
       />
       <ChevronDownIcon
-        className="text-muted-foreground pointer-events-none absolute top-1/2 right-2.5 shrink-0 size-4 -translate-y-1/2 select-none"
         aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 right-2.5 size-4 shrink-0 -translate-y-1/2 select-none text-muted-foreground"
         data-slot="native-select-icon"
       />
     </div>
@@ -71,8 +68,8 @@ function NativeSelectOptGroup({
 }: React.ComponentProps<"optgroup">) {
   return (
     <optgroup
-      data-slot="native-select-optgroup"
       className={cn(className)}
+      data-slot="native-select-optgroup"
       {...props}
     />
   );

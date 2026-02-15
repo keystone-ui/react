@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AspectRatio } from "@keystone/ui/aspect-ratio";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
   title: "Components/AspectRatio",
@@ -55,8 +55,8 @@ export const Default: Story = {
   },
   render: () => (
     <div className="w-full max-w-md">
-      <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg">
-        <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+      <AspectRatio className="rounded-lg bg-muted" ratio={16 / 9}>
+        <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
           16 : 9
         </div>
       </AspectRatio>
@@ -77,8 +77,8 @@ export const Square: Story = {
   },
   render: () => (
     <div className="w-full max-w-48">
-      <AspectRatio ratio={1 / 1} className="bg-muted rounded-lg">
-        <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+      <AspectRatio className="rounded-lg bg-muted" ratio={1 / 1}>
+        <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
           1 : 1
         </div>
       </AspectRatio>
@@ -97,8 +97,8 @@ export const Portrait: Story = {
   },
   render: () => (
     <div className="w-full max-w-40">
-      <AspectRatio ratio={9 / 16} className="bg-muted rounded-lg">
-        <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+      <AspectRatio className="rounded-lg bg-muted" ratio={9 / 16}>
+        <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
           9 : 16
         </div>
       </AspectRatio>

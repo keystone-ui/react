@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "@keystone/ui/button";
+import { Field, FieldLabel } from "@keystone/ui/field";
 import {
   Pagination,
   PaginationContent,
@@ -10,8 +11,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@keystone/ui/pagination";
-import { Button } from "@keystone/ui/button";
-import { Field, FieldLabel } from "@keystone/ui/field";
 import {
   Select,
   SelectContent,
@@ -20,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@keystone/ui/select";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -158,7 +158,7 @@ export const DataTable: Story = {
       <div className="flex items-center space-x-2">
         <FieldLabel htmlFor="select-rows-per-page">Rows per page</FieldLabel>
         <Select defaultValue="25">
-          <SelectTrigger className="w-20" size="sm" id="select-rows-per-page">
+          <SelectTrigger className="w-20" id="select-rows-per-page" size="sm">
             <SelectValue />
           </SelectTrigger>
           <SelectContent align="start">
@@ -171,24 +171,24 @@ export const DataTable: Story = {
           </SelectContent>
         </Select>
       </div>
-      <div className="flex items-center justify-center text-sm font-medium">
+      <div className="flex items-center justify-center font-medium text-sm">
         Page 1 of 3
       </div>
       <div className="flex items-center space-x-2">
-        <Button variant="outline" size="icon-sm" aria-label="Go to first page">
+        <Button aria-label="Go to first page" size="icon-sm" variant="outline">
           <ChevronsLeftIcon />
         </Button>
         <Button
-          variant="outline"
-          size="icon-sm"
           aria-label="Go to previous page"
+          size="icon-sm"
+          variant="outline"
         >
           <ChevronLeftIcon />
         </Button>
-        <Button variant="outline" size="icon-sm" aria-label="Go to next page">
+        <Button aria-label="Go to next page" size="icon-sm" variant="outline">
           <ChevronRightIcon />
         </Button>
-        <Button variant="outline" size="icon-sm" aria-label="Go to last page">
+        <Button aria-label="Go to last page" size="icon-sm" variant="outline">
           <ChevronsRightIcon />
         </Button>
       </div>

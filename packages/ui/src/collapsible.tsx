@@ -63,9 +63,9 @@ const Collapsible = React.forwardRef<
   CollapsibleProps
 >(({ className, ...props }, ref) => (
   <CollapsiblePrimitive.Root
-    ref={ref}
-    data-slot="collapsible"
     className={className}
+    data-slot="collapsible"
+    ref={ref}
     {...props}
   />
 ));
@@ -81,9 +81,9 @@ const CollapsibleTrigger = React.forwardRef<
   CollapsibleTriggerProps
 >(({ className, ...props }, ref) => (
   <CollapsiblePrimitive.Trigger
-    ref={ref}
-    data-slot="collapsible-trigger"
     className={className}
+    data-slot="collapsible-trigger"
+    ref={ref}
     {...props}
   />
 ));
@@ -112,9 +112,9 @@ const CollapsibleContent = React.forwardRef<
 
   return (
     <CollapsiblePrimitive.Panel
-      ref={ref}
-      data-slot="collapsible-content"
       className={cn(baseClasses, className)}
+      data-slot="collapsible-content"
+      ref={ref}
       {...props}
     />
   );

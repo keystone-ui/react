@@ -1,6 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as React from "react";
-import { useState } from "react";
+import { Button } from "@keystone/ui/button";
 import {
   Combobox,
   ComboboxChip,
@@ -27,20 +25,19 @@ import {
   FieldLabel,
 } from "@keystone/ui/field";
 import { InputGroupAddon } from "@keystone/ui/input-group";
-import { Button } from "@keystone/ui/button";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { GlobeIcon, SearchIcon } from "lucide-react";
+import * as React from "react";
+import { useState } from "react";
 import ReactCountryFlag from "react-country-flag";
+import { FaBitcoin, FaEthereum } from "react-icons/fa";
 import {
-  FaBitcoin,
-  FaEthereum,
-} from "react-icons/fa";
-import {
-  SiSolana,
   SiCardano,
-  SiPolkadot,
-  SiLitecoin,
   SiDogecoin,
+  SiLitecoin,
+  SiPolkadot,
   SiRipple,
+  SiSolana,
 } from "react-icons/si";
 
 const meta = {
@@ -159,10 +156,10 @@ export const Default: Story = {
 // =============================================================================
 // Custom Items (Object Values)
 // =============================================================================
-type Framework = {
+interface Framework {
   label: string;
   value: string;
-};
+}
 
 const frameworkObjects: Framework[] = [
   { label: "Next.js", value: "next" },
@@ -212,20 +209,20 @@ export const MultipleSelection: Story = {
       <Field>
         <FieldLabel>Frameworks</FieldLabel>
         <Combobox
-          multiple
           autoHighlight
-          items={frameworks}
           defaultValue={[frameworks[0]]}
+          items={frameworks}
+          multiple
         >
-          <ComboboxChips ref={anchor} className="w-full max-w-xs">
+          <ComboboxChips className="w-full max-w-xs" ref={anchor}>
             <ComboboxValue>
               {(values: string[]) => (
-                <React.Fragment>
+                <>
                   {values.map((value) => (
                     <ComboboxChip key={value}>{value}</ComboboxChip>
                   ))}
                   <ComboboxChipsInput placeholder="Search..." />
-                </React.Fragment>
+                </>
               )}
             </ComboboxValue>
           </ComboboxChips>
@@ -256,7 +253,7 @@ export const WithClearButton: Story = {
   render: () => (
     <Field>
       <FieldLabel>Framework</FieldLabel>
-      <Combobox items={frameworks} defaultValue={frameworks[0]}>
+      <Combobox defaultValue={frameworks[0]} items={frameworks}>
         <ComboboxInput placeholder="Select a framework" showClear />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
@@ -320,12 +317,12 @@ export const Groups: Story = {
     <Field>
       <FieldLabel>Timezone</FieldLabel>
       <Combobox items={timezones}>
-        <ComboboxInput placeholder="Select a timezone" className="w-56" />
+        <ComboboxInput className="w-56" placeholder="Select a timezone" />
         <ComboboxContent>
           <ComboboxEmpty>No timezones found.</ComboboxEmpty>
           <ComboboxList>
             {(group, index) => (
-              <ComboboxGroup key={group.value} items={group.items}>
+              <ComboboxGroup items={group.items} key={group.value}>
                 <ComboboxLabel>{group.value}</ComboboxLabel>
                 <ComboboxCollection>
                   {(item) => (
@@ -414,12 +411,12 @@ export const CustomItemsWithDescription: Story = {
           country.label
         }
       >
-        <ComboboxInput placeholder="Search countries..." className="w-64" />
+        <ComboboxInput className="w-64" placeholder="Search countries..." />
         <ComboboxContent>
           <ComboboxEmpty>No countries found.</ComboboxEmpty>
           <ComboboxList>
             {(country) => (
-              <ComboboxItem key={country.code} value={country} className="py-2">
+              <ComboboxItem className="py-2" key={country.code} value={country}>
                 <div className="flex flex-col">
                   <span className="font-medium">{country.label}</span>
                   <span className="text-muted-foreground text-xs">
@@ -452,7 +449,7 @@ export const CountriesWithFlags: Story = {
           country.label
         }
       >
-        <ComboboxInput placeholder="Search countries..." className="w-64" />
+        <ComboboxInput className="w-64" placeholder="Search countries..." />
         <ComboboxContent>
           <ComboboxEmpty>No countries found.</ComboboxEmpty>
           <ComboboxList>
@@ -460,11 +457,11 @@ export const CountriesWithFlags: Story = {
               <ComboboxItem key={country.code} value={country}>
                 <ReactCountryFlag
                   countryCode={country.code}
-                  svg
                   style={{
                     width: "1.25em",
                     height: "1.25em",
                   }}
+                  svg
                 />
                 <span>{country.label}</span>
               </ComboboxItem>
@@ -488,7 +485,7 @@ export const Invalid: Story = {
     <Field data-invalid>
       <FieldLabel>Framework</FieldLabel>
       <Combobox items={frameworks}>
-        <ComboboxInput placeholder="Select a framework" aria-invalid="true" />
+        <ComboboxInput aria-invalid="true" placeholder="Select a framework" />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
           <ComboboxList>
@@ -522,7 +519,7 @@ export const Disabled: Story = {
       <Field>
         <FieldLabel>Disabled Combobox</FieldLabel>
         <Combobox items={frameworks}>
-          <ComboboxInput placeholder="Select a framework" disabled />
+          <ComboboxInput disabled placeholder="Select a framework" />
           <ComboboxContent>
             <ComboboxEmpty>No items found.</ComboboxEmpty>
             <ComboboxList>
@@ -544,9 +541,9 @@ export const Disabled: Story = {
             <ComboboxList>
               {(item) => (
                 <ComboboxItem
+                  disabled={item === "Remix" || item === "Astro"}
                   key={item}
                   value={item}
-                  disabled={item === "Remix" || item === "Astro"}
                 >
                   {item}
                   {(item === "Remix" || item === "Astro") && " (unavailable)"}
@@ -576,7 +573,7 @@ export const AutoHighlight: Story = {
   render: () => (
     <Field>
       <FieldLabel>Framework</FieldLabel>
-      <Combobox items={frameworks} autoHighlight>
+      <Combobox autoHighlight items={frameworks}>
         <ComboboxInput placeholder="Select a framework" />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
@@ -613,15 +610,15 @@ export const Popup: Story = {
         <ComboboxTrigger
           render={
             <Button
+              className="w-64 justify-between font-normal focus-visible:border-ring focus-visible:outline-0 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-inset"
               variant="outline"
-              className="w-64 justify-between font-normal focus-visible:outline-0 focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring focus-visible:border-ring"
             >
               <ComboboxValue placeholder="Select a country" />
             </Button>
           }
         />
         <ComboboxContent>
-          <ComboboxInput showTrigger={false} placeholder="Search" />
+          <ComboboxInput placeholder="Search" showTrigger={false} />
           <ComboboxSeparator className="my-0" />
           <ComboboxEmpty>No items found.</ComboboxEmpty>
           <ComboboxList>
@@ -648,7 +645,7 @@ const cryptocurrencies = [
   {
     symbol: "BTC",
     label: "Bitcoin",
-    value: 0.00234,
+    value: 0.002_34,
     icon: FaBitcoin,
   },
   {
@@ -684,7 +681,7 @@ const cryptocurrencies = [
   {
     symbol: "DOGE",
     label: "Dogecoin",
-    value: 15420.5,
+    value: 15_420.5,
     icon: SiDogecoin,
   },
   {
@@ -709,15 +706,15 @@ export const PopupCrypto: Story = {
         <ComboboxTrigger
           render={
             <Button
+              className="w-64 justify-between font-normal focus-visible:border-ring focus-visible:outline-0 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-inset"
               variant="outline"
-              className="w-64 justify-between font-normal focus-visible:outline-0 focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring focus-visible:border-ring"
             >
               <ComboboxValue placeholder="Select cryptocurrency" />
             </Button>
           }
         />
         <ComboboxContent>
-          <ComboboxInput showTrigger={false} placeholder="Search">
+          <ComboboxInput placeholder="Search" showTrigger={false}>
             <InputGroupAddon align="inline-start">
               <SearchIcon className="size-4 text-muted-foreground" />
             </InputGroupAddon>
@@ -729,9 +726,9 @@ export const PopupCrypto: Story = {
               const Icon = item.icon;
               return (
                 <ComboboxItem
+                  className="justify-between"
                   key={item.symbol}
                   value={item}
-                  className="justify-between"
                 >
                   <span className="flex items-center gap-2">
                     <Icon className="size-4" />
@@ -771,7 +768,7 @@ export const InputGroup: Story = {
           <ComboboxEmpty>No timezones found.</ComboboxEmpty>
           <ComboboxList>
             {(group) => (
-              <ComboboxGroup key={group.value} items={group.items}>
+              <ComboboxGroup items={group.items} key={group.value}>
                 <ComboboxLabel>{group.value}</ComboboxLabel>
                 <ComboboxCollection>
                   {(item) => (
@@ -804,7 +801,7 @@ export const Controlled: Story = {
       <FieldGroup className="w-full max-w-xs">
         <Field>
           <FieldLabel>Framework</FieldLabel>
-          <Combobox items={frameworks} value={value} onValueChange={setValue}>
+          <Combobox items={frameworks} onValueChange={setValue} value={value}>
             <ComboboxInput placeholder="Select a framework" />
             <ComboboxContent>
               <ComboboxEmpty>No items found.</ComboboxEmpty>
@@ -820,13 +817,13 @@ export const Controlled: Story = {
           <FieldDescription>Selected value: {value ?? "none"}</FieldDescription>
         </Field>
         <Field orientation="horizontal">
-          <Button variant="outline" size="sm" onClick={() => setValue(null)}>
+          <Button onClick={() => setValue(null)} size="sm" variant="outline">
             Clear
           </Button>
           <Button
-            variant="outline"
-            size="sm"
             onClick={() => setValue("SvelteKit")}
+            size="sm"
+            variant="outline"
           >
             Set SvelteKit
           </Button>
@@ -861,7 +858,7 @@ export const FormExample: Story = {
       <FieldGroup>
         <Field>
           <FieldLabel>Framework</FieldLabel>
-          <Combobox name="framework" items={frameworks} defaultValue="Next.js">
+          <Combobox defaultValue="Next.js" items={frameworks} name="framework">
             <ComboboxInput placeholder="Select a framework" />
             <ComboboxContent>
               <ComboboxEmpty>No items found.</ComboboxEmpty>
@@ -925,7 +922,7 @@ export const Scrollable: Story = {
     <Field>
       <FieldLabel>Framework</FieldLabel>
       <Combobox items={allFrameworks}>
-        <ComboboxInput placeholder="Select a framework" className="w-56" />
+        <ComboboxInput className="w-56" placeholder="Select a framework" />
         <ComboboxContent>
           <ComboboxEmpty>No items found.</ComboboxEmpty>
           <ComboboxList>

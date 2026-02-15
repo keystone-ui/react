@@ -1,12 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as React from "react";
-import { Calendar } from "@keystone/ui/calendar";
 import { Button } from "@keystone/ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@keystone/ui/popover";
+import { Calendar } from "@keystone/ui/calendar";
 import { Field, FieldGroup, FieldLabel } from "@keystone/ui/field";
 import { Input } from "@keystone/ui/input";
 import {
@@ -15,10 +8,13 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@keystone/ui/input-group";
+import { Popover, PopoverContent, PopoverTrigger } from "@keystone/ui/popover";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { parseDate } from "chrono-node";
 import { addDays, format } from "date-fns";
 import { CalendarIcon, ChevronDownIcon } from "lucide-react";
-import { parseDate } from "chrono-node";
-import { type DateRange } from "react-day-picker";
+import * as React from "react";
+import type { DateRange } from "react-day-picker";
 
 // ---------------------------------------------------------------------------
 // Meta
@@ -85,20 +81,24 @@ type Story = StoryObj;
 // ---------------------------------------------------------------------------
 
 function formatDate(date: Date | undefined) {
-  if (!date) return "";
+  if (!date) {
+    return "";
+  }
   return format(date, "MMMM dd, yyyy");
 }
 
 function isValidDate(date: Date | undefined) {
-  if (!date) return false;
-  return !isNaN(date.getTime());
+  if (!date) {
+    return false;
+  }
+  return !Number.isNaN(date.getTime());
 }
 
 // =============================================================================
 // Default
 // =============================================================================
 export const Default: Story = {
-  render: function DefaultStory() {
+  render() {
     const [date, setDate] = React.useState<Date>();
 
     return (
@@ -106,21 +106,21 @@ export const Default: Story = {
         <PopoverTrigger
           render={
             <Button
-              variant="outline"
+              className="w-[212px] font-normal data-[empty=true]:text-muted-foreground [&>span]:w-full [&>span]:justify-between"
               data-empty={!date}
-              className="data-[empty=true]:text-muted-foreground w-[212px] font-normal [&>span]:w-full [&>span]:justify-between"
+              variant="outline"
             >
               {date ? format(date, "PPP") : <span>Pick a date</span>}
               <ChevronDownIcon className="text-muted-foreground" />
             </Button>
           }
         />
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent align="start" className="w-auto p-0">
           <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
             defaultMonth={date}
+            mode="single"
+            onSelect={setDate}
+            selected={date}
           />
         </PopoverContent>
       </Popover>
@@ -132,7 +132,7 @@ export const Default: Story = {
 // Basic (with label)
 // =============================================================================
 export const Basic: Story = {
-  render: function BasicStory() {
+  render() {
     const [date, setDate] = React.useState<Date>();
 
     return (
@@ -142,20 +142,20 @@ export const Basic: Story = {
           <PopoverTrigger
             render={
               <Button
-                variant="outline"
-                id="date-picker-simple"
                 className="justify-start font-normal"
+                id="date-picker-simple"
+                variant="outline"
               >
                 {date ? format(date, "PPP") : <span>Pick a date</span>}
               </Button>
             }
           />
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent align="start" className="w-auto p-0">
             <Calendar
-              mode="single"
-              selected={date}
-              onSelect={setDate}
               defaultMonth={date}
+              mode="single"
+              onSelect={setDate}
+              selected={date}
             />
           </PopoverContent>
         </Popover>
@@ -175,7 +175,7 @@ export const Basic: Story = {
 // Range
 // =============================================================================
 export const Range: Story = {
-  render: function RangeStory() {
+  render() {
     const [date, setDate] = React.useState<DateRange | undefined>({
       from: new Date(new Date().getFullYear(), 0, 20),
       to: addDays(new Date(new Date().getFullYear(), 0, 20), 20),
@@ -188,9 +188,9 @@ export const Range: Story = {
           <PopoverTrigger
             render={
               <Button
-                variant="outline"
-                id="date-picker-range"
                 className="justify-start px-2.5 font-normal"
+                id="date-picker-range"
+                variant="outline"
               >
                 <CalendarIcon data-icon="inline-start" />
                 {date?.from ? (
@@ -208,13 +208,13 @@ export const Range: Story = {
               </Button>
             }
           />
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent align="start" className="w-auto p-0">
             <Calendar
-              mode="range"
               defaultMonth={date?.from}
-              selected={date}
-              onSelect={setDate}
+              mode="range"
               numberOfMonths={2}
+              onSelect={setDate}
+              selected={date}
             />
           </PopoverContent>
         </Popover>
@@ -225,7 +225,7 @@ export const Range: Story = {
     docs: {
       description: {
         story:
-          "A date range picker using `mode=\"range\"` with two months displayed side by side.",
+          'A date range picker using `mode="range"` with two months displayed side by side.',
       },
     },
   },
@@ -235,38 +235,35 @@ export const Range: Story = {
 // Date of Birth
 // =============================================================================
 export const DateOfBirth: Story = {
-  render: function DateOfBirthStory() {
+  render() {
     const [open, setOpen] = React.useState(false);
     const [date, setDate] = React.useState<Date | undefined>(undefined);
 
     return (
       <Field className="mx-auto w-44">
         <FieldLabel htmlFor="dob">Date of birth</FieldLabel>
-        <Popover open={open} onOpenChange={setOpen}>
+        <Popover onOpenChange={setOpen} open={open}>
           <PopoverTrigger
             render={
               <Button
-                variant="outline"
-                id="dob"
                 className="justify-start font-normal"
+                id="dob"
+                variant="outline"
               >
                 {date ? date.toLocaleDateString() : "Select date"}
               </Button>
             }
           />
-          <PopoverContent
-            className="w-auto overflow-hidden p-0"
-            align="start"
-          >
+          <PopoverContent align="start" className="w-auto overflow-hidden p-0">
             <Calendar
-              mode="single"
-              selected={date}
-              defaultMonth={date}
               captionLayout="dropdown"
+              defaultMonth={date}
+              mode="single"
               onSelect={(date) => {
                 setDate(date);
                 setOpen(false);
               }}
+              selected={date}
             />
           </PopoverContent>
         </Popover>
@@ -277,7 +274,7 @@ export const DateOfBirth: Story = {
     docs: {
       description: {
         story:
-          "A date picker with `captionLayout=\"dropdown\"` for easy month and year navigation. Closes on select.",
+          'A date picker with `captionLayout="dropdown"` for easy month and year navigation. Closes on select.',
       },
     },
   },
@@ -287,7 +284,7 @@ export const DateOfBirth: Story = {
 // With Input
 // =============================================================================
 export const WithInput: Story = {
-  render: function WithInputStory() {
+  render() {
     const [open, setOpen] = React.useState(false);
     const [date, setDate] = React.useState<Date | undefined>(
       new Date("2025-06-01")
@@ -301,8 +298,6 @@ export const WithInput: Story = {
         <InputGroup>
           <InputGroupInput
             id="date-input"
-            value={value}
-            placeholder="June 01, 2025"
             onChange={(e) => {
               const parsed = new Date(e.target.value);
               setValue(e.target.value);
@@ -317,16 +312,18 @@ export const WithInput: Story = {
                 setOpen(true);
               }
             }}
+            placeholder="June 01, 2025"
+            value={value}
           />
           <InputGroupAddon align="inline-end">
-            <Popover open={open} onOpenChange={setOpen}>
+            <Popover onOpenChange={setOpen} open={open}>
               <PopoverTrigger
                 render={
                   <InputGroupButton
-                    id="date-picker-input"
-                    variant="ghost"
-                    size="icon-xs"
                     aria-label="Select date"
+                    id="date-picker-input"
+                    size="icon-xs"
+                    variant="ghost"
                   >
                     <CalendarIcon />
                     <span className="sr-only">Select date</span>
@@ -334,14 +331,13 @@ export const WithInput: Story = {
                 }
               />
               <PopoverContent
-                className="w-auto overflow-hidden p-0"
                 align="end"
                 alignOffset={-8}
+                className="w-auto overflow-hidden p-0"
                 sideOffset={10}
               >
                 <Calendar
                   mode="single"
-                  selected={date}
                   month={month}
                   onMonthChange={setMonth}
                   onSelect={(date) => {
@@ -349,6 +345,7 @@ export const WithInput: Story = {
                     setValue(formatDate(date));
                     setOpen(false);
                   }}
+                  selected={date}
                 />
               </PopoverContent>
             </Popover>
@@ -371,7 +368,7 @@ export const WithInput: Story = {
 // With Time
 // =============================================================================
 export const WithTime: Story = {
-  render: function WithTimeStory() {
+  render() {
     const [open, setOpen] = React.useState(false);
     const [date, setDate] = React.useState<Date | undefined>(undefined);
 
@@ -379,13 +376,13 @@ export const WithTime: Story = {
       <FieldGroup className="mx-auto max-w-xs flex-row">
         <Field>
           <FieldLabel htmlFor="date-picker-time">Date</FieldLabel>
-          <Popover open={open} onOpenChange={setOpen}>
+          <Popover onOpenChange={setOpen} open={open}>
             <PopoverTrigger
               render={
                 <Button
-                  variant="outline"
-                  id="date-picker-time"
                   className="w-32 font-normal [&>span]:w-full [&>span]:justify-between"
+                  id="date-picker-time"
+                  variant="outline"
                 >
                   {date ? format(date, "PPP") : "Select date"}
                   <ChevronDownIcon className="text-muted-foreground" />
@@ -393,18 +390,18 @@ export const WithTime: Story = {
               }
             />
             <PopoverContent
-              className="w-auto overflow-hidden p-0"
               align="start"
+              className="w-auto overflow-hidden p-0"
             >
               <Calendar
-                mode="single"
-                selected={date}
                 captionLayout="dropdown"
                 defaultMonth={date}
+                mode="single"
                 onSelect={(date) => {
                   setDate(date);
                   setOpen(false);
                 }}
+                selected={date}
               />
             </PopoverContent>
           </Popover>
@@ -412,11 +409,11 @@ export const WithTime: Story = {
         <Field className="w-32">
           <FieldLabel htmlFor="time-picker">Time</FieldLabel>
           <Input
-            type="time"
+            className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+            defaultValue="10:30:00"
             id="time-picker"
             step="1"
-            defaultValue="10:30:00"
-            className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+            type="time"
           />
         </Field>
       </FieldGroup>
@@ -436,7 +433,7 @@ export const WithTime: Story = {
 // Natural Language
 // =============================================================================
 export const NaturalLanguage: Story = {
-  render: function NaturalLanguageStory() {
+  render() {
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState("In 2 days");
     const [date, setDate] = React.useState<Date | undefined>(
@@ -449,8 +446,6 @@ export const NaturalLanguage: Story = {
         <InputGroup>
           <InputGroupInput
             id="date-natural"
-            value={value}
-            placeholder="Tomorrow or next week"
             onChange={(e) => {
               setValue(e.target.value);
               const parsed = parseDate(e.target.value);
@@ -464,16 +459,18 @@ export const NaturalLanguage: Story = {
                 setOpen(true);
               }
             }}
+            placeholder="Tomorrow or next week"
+            value={value}
           />
           <InputGroupAddon align="inline-end">
-            <Popover open={open} onOpenChange={setOpen}>
+            <Popover onOpenChange={setOpen} open={open}>
               <PopoverTrigger
                 render={
                   <InputGroupButton
-                    id="date-picker-natural"
-                    variant="ghost"
-                    size="icon-xs"
                     aria-label="Select date"
+                    id="date-picker-natural"
+                    size="icon-xs"
+                    variant="ghost"
                   >
                     <CalendarIcon />
                     <span className="sr-only">Select date</span>
@@ -481,26 +478,26 @@ export const NaturalLanguage: Story = {
                 }
               />
               <PopoverContent
-                className="w-auto overflow-hidden p-0"
                 align="end"
+                className="w-auto overflow-hidden p-0"
                 sideOffset={8}
               >
                 <Calendar
-                  mode="single"
-                  selected={date}
                   captionLayout="dropdown"
                   defaultMonth={date}
+                  mode="single"
                   onSelect={(date) => {
                     setDate(date);
                     setValue(formatDate(date));
                     setOpen(false);
                   }}
+                  selected={date}
                 />
               </PopoverContent>
             </Popover>
           </InputGroupAddon>
         </InputGroup>
-        <div className="text-muted-foreground px-1 text-sm">
+        <div className="px-1 text-muted-foreground text-sm">
           Your post will be published on{" "}
           <span className="font-medium">{formatDate(date)}</span>.
         </div>
@@ -521,7 +518,7 @@ export const NaturalLanguage: Story = {
 // Controlled
 // =============================================================================
 export const Controlled: Story = {
-  render: function ControlledStory() {
+  render() {
     const [date, setDate] = React.useState<Date | undefined>(new Date());
     const [open, setOpen] = React.useState(false);
 
@@ -529,44 +526,44 @@ export const Controlled: Story = {
       <div className="mx-auto flex max-w-xs flex-col gap-4">
         <Field>
           <FieldLabel htmlFor="date-controlled">Controlled Date</FieldLabel>
-          <Popover open={open} onOpenChange={setOpen}>
+          <Popover onOpenChange={setOpen} open={open}>
             <PopoverTrigger
               render={
                 <Button
-                  variant="outline"
-                  id="date-controlled"
                   className="justify-start font-normal"
+                  id="date-controlled"
+                  variant="outline"
                 >
                   <CalendarIcon data-icon="inline-start" />
                   {date ? format(date, "PPP") : "Pick a date"}
                 </Button>
               }
             />
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent align="start" className="w-auto p-0">
               <Calendar
+                defaultMonth={date}
                 mode="single"
-                selected={date}
                 onSelect={(date) => {
                   setDate(date);
                   setOpen(false);
                 }}
-                defaultMonth={date}
+                selected={date}
               />
             </PopoverContent>
           </Popover>
         </Field>
         <div className="flex gap-2">
           <Button
-            variant="outline"
-            size="sm"
             onClick={() => setDate(new Date())}
+            size="sm"
+            variant="outline"
           >
             Today
           </Button>
           <Button
-            variant="outline"
-            size="sm"
             onClick={() => setDate(undefined)}
+            size="sm"
+            variant="outline"
           >
             Clear
           </Button>
@@ -591,7 +588,7 @@ export const Controlled: Story = {
 // Date Formats
 // =============================================================================
 export const DateFormats: Story = {
-  render: function DateFormatsStory() {
+  render() {
     const [date, setDate] = React.useState<Date>(new Date(2025, 5, 1));
 
     const formats = [
@@ -611,20 +608,20 @@ export const DateFormats: Story = {
           <PopoverTrigger
             render={
               <Button
-                variant="outline"
                 className="w-fit justify-start font-normal"
+                variant="outline"
               >
                 <CalendarIcon data-icon="inline-start" />
                 {format(date, "PPP")}
               </Button>
             }
           />
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent align="start" className="w-auto p-0">
             <Calendar
-              mode="single"
-              selected={date}
-              onSelect={(d) => d && setDate(d)}
               defaultMonth={date}
+              mode="single"
+              onSelect={(d) => d && setDate(d)}
+              selected={date}
             />
           </PopoverContent>
         </Popover>
@@ -639,12 +636,12 @@ export const DateFormats: Story = {
             </thead>
             <tbody>
               {formats.map((f) => (
-                <tr key={f.label} className="border-b last:border-b-0">
-                  <td className="text-muted-foreground px-3 py-2">
+                <tr className="border-b last:border-b-0" key={f.label}>
+                  <td className="px-3 py-2 text-muted-foreground">
                     {f.example}
                   </td>
                   <td className="px-3 py-2">
-                    <code className="bg-muted rounded px-1 py-0.5 text-xs">
+                    <code className="rounded bg-muted px-1 py-0.5 text-xs">
                       {f.label}
                     </code>
                   </td>

@@ -1,18 +1,29 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Input } from "@keystone/ui/input";
+import { Button } from "@keystone/ui/button";
+import { ButtonGroup } from "@keystone/ui/button-group";
 import { DateInput } from "@keystone/ui/date-input";
-import { 
-  InputGroup, 
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@keystone/ui/field";
+import { Description } from "@keystone/ui/form";
+import { Input } from "@keystone/ui/input";
+import {
+  InputGroup,
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
 } from "@keystone/ui/input-group";
-import { Description } from "@keystone/ui/form";
-import { Field, FieldGroup, FieldLabel, FieldDescription, FieldError } from "@keystone/ui/field";
-import { Button } from "@keystone/ui/button";
-import { ButtonGroup } from "@keystone/ui/button-group";
 import { NativeSelect, NativeSelectOption } from "@keystone/ui/native-select";
-import { MailIcon, InfoIcon, Minus as MinusIcon, Plus as PlusIcon } from "lucide-react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import {
+  InfoIcon,
+  MailIcon,
+  Minus as MinusIcon,
+  Plus as PlusIcon,
+} from "lucide-react";
 import { useState } from "react";
 
 const meta = {
@@ -82,7 +93,18 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@keystone/ui/input
   argTypes: {
     type: {
       control: "select",
-      options: ["text", "email", "password", "number", "search", "tel", "url", "date", "time", "file"],
+      options: [
+        "text",
+        "email",
+        "password",
+        "number",
+        "search",
+        "tel",
+        "url",
+        "date",
+        "time",
+        "file",
+      ],
       defaultValue: "text",
       description: "The type of the input",
     },
@@ -119,8 +141,8 @@ export const FieldExample: Story = {
       <FieldLabel htmlFor="input-field-username">Username</FieldLabel>
       <Input
         id="input-field-username"
-        type="text"
         placeholder="Enter your username"
+        type="text"
       />
       <FieldDescription>
         Choose a unique username for your account.
@@ -130,7 +152,8 @@ export const FieldExample: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Use `Field`, `FieldLabel`, and `FieldDescription` to create an input with a label and description.",
+        story:
+          "Use `Field`, `FieldLabel`, and `FieldDescription` to create an input with a label and description.",
       },
     },
   },
@@ -149,8 +172,8 @@ export const FieldGroupExample: Story = {
         <FieldLabel htmlFor="fieldgroup-email">Email</FieldLabel>
         <Input
           id="fieldgroup-email"
-          type="email"
           placeholder="name@example.com"
+          type="email"
         />
         <FieldDescription>
           We&apos;ll send updates to this address.
@@ -167,7 +190,8 @@ export const FieldGroupExample: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Use `FieldGroup` to show multiple `Field` blocks and to build forms.",
+        story:
+          "Use `FieldGroup` to show multiple `Field` blocks and to build forms.",
       },
     },
   },
@@ -180,10 +204,10 @@ export const DisabledField: Story = {
     <Field data-disabled>
       <FieldLabel htmlFor="input-demo-disabled">Email</FieldLabel>
       <Input
-        id="input-demo-disabled"
-        type="email"
-        placeholder="Email"
         disabled
+        id="input-demo-disabled"
+        placeholder="Email"
+        type="email"
       />
       <FieldDescription>This field is currently disabled.</FieldDescription>
     </Field>
@@ -191,7 +215,8 @@ export const DisabledField: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Use the `disabled` prop to disable the input. To style the disabled state, add the `data-disabled` attribute to the `Field` component.",
+        story:
+          "Use the `disabled` prop to disable the input. To style the disabled state, add the `data-disabled` attribute to the `Field` component.",
       },
     },
   },
@@ -203,16 +228,15 @@ export const WithErrorField: Story = {
   render: () => (
     <Field data-invalid>
       <FieldLabel htmlFor="input-invalid">Email</FieldLabel>
-      <Input id="input-invalid" placeholder="Email" aria-invalid />
-      <FieldError>
-        This field contains validation errors.
-      </FieldError>
+      <Input aria-invalid id="input-invalid" placeholder="Email" />
+      <FieldError>This field contains validation errors.</FieldError>
     </Field>
   ),
   parameters: {
     docs: {
       description: {
-        story: "Use the `aria-invalid` prop to mark the input as invalid. Add `data-invalid` to the `Field` component to style the invalid state. Use `FieldError` for explicit error messages, or `FieldDescription` which auto-styles red when the parent Field is invalid.",
+        story:
+          "Use the `aria-invalid` prop to mark the input as invalid. Add `data-invalid` to the `Field` component to style the invalid state. Use `FieldError` for explicit error messages, or `FieldDescription` which auto-styles red when the parent Field is invalid.",
       },
     },
   },
@@ -223,14 +247,15 @@ export const InlineField: Story = {
   name: "Inline",
   render: () => (
     <Field orientation="horizontal">
-      <Input type="search" placeholder="Search..." />
+      <Input placeholder="Search..." type="search" />
       <Button>Search</Button>
     </Field>
   ),
   parameters: {
     docs: {
       description: {
-        story: "Use `Field` with `orientation=\"horizontal\"` to create an inline input. Pair with `Button` to create a search input with a button.",
+        story:
+          'Use `Field` with `orientation="horizontal"` to create an inline input. Pair with `Button` to create a search input with a button.',
       },
     },
   },
@@ -254,7 +279,8 @@ export const GridField: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Use `FieldGroup` with grid classes to create a grid layout for inputs.",
+        story:
+          "Use `FieldGroup` with grid classes to create a grid layout for inputs.",
       },
     },
   },
@@ -280,7 +306,8 @@ export const InputGroupField: Story = {
   parameters: {
     docs: {
       description: {
-        story: "To add icons, text, or buttons inside an input, use the `InputGroup` component. See the [InputGroup documentation](?path=/docs/components-inputgroup--docs) for more examples.",
+        story:
+          "To add icons, text, or buttons inside an input, use the `InputGroup` component. See the [InputGroup documentation](?path=/docs/components-inputgroup--docs) for more examples.",
       },
     },
   },
@@ -301,7 +328,8 @@ export const ButtonGroupField: Story = {
   parameters: {
     docs: {
       description: {
-        story: "To add buttons to an input, use the `ButtonGroup` component. See the [ButtonGroup documentation](?path=/docs/components-buttongroup--docs) for more examples.",
+        story:
+          "To add buttons to an input, use the `ButtonGroup` component. See the [ButtonGroup documentation](?path=/docs/components-buttongroup--docs) for more examples.",
       },
     },
   },
@@ -317,26 +345,36 @@ export const FormExample: Story = {
           <FieldLabel htmlFor="form-name">Name</FieldLabel>
           <Input
             id="form-name"
-            type="text"
             placeholder="Evil Rabbit"
             required
+            type="text"
           />
         </Field>
         <Field>
           <FieldLabel htmlFor="form-email">Email</FieldLabel>
-          <Input id="form-email" type="email" placeholder="john@example.com" required />
+          <Input
+            id="form-email"
+            placeholder="john@example.com"
+            required
+            type="email"
+          />
           <FieldDescription>
             We&apos;ll never share your email with anyone.
           </FieldDescription>
         </Field>
         <Field>
           <FieldLabel htmlFor="form-password">Password</FieldLabel>
-          <Input id="form-password" type="password" placeholder="••••••••" required />
+          <Input
+            id="form-password"
+            placeholder="••••••••"
+            required
+            type="password"
+          />
         </Field>
         <div className="grid grid-cols-2 gap-4">
           <Field>
             <FieldLabel htmlFor="form-phone">Phone</FieldLabel>
-            <Input id="form-phone" type="tel" placeholder="+1 (555) 123-4567" />
+            <Input id="form-phone" placeholder="+1 (555) 123-4567" type="tel" />
           </Field>
           <Field>
             <FieldLabel htmlFor="form-date">Date of Birth</FieldLabel>
@@ -345,7 +383,7 @@ export const FormExample: Story = {
         </div>
         <Field>
           <FieldLabel htmlFor="form-country">Country</FieldLabel>
-          <NativeSelect id="form-country" className="w-full" defaultValue="us">
+          <NativeSelect className="w-full" defaultValue="us" id="form-country">
             <NativeSelectOption value="us">United States</NativeSelectOption>
             <NativeSelectOption value="uk">United Kingdom</NativeSelectOption>
             <NativeSelectOption value="ca">Canada</NativeSelectOption>
@@ -353,7 +391,7 @@ export const FormExample: Story = {
         </Field>
         <Field>
           <FieldLabel htmlFor="form-address">Address</FieldLabel>
-          <Input id="form-address" type="text" placeholder="123 Main St" />
+          <Input id="form-address" placeholder="123 Main St" type="text" />
         </Field>
         <Field orientation="horizontal">
           <Button type="button" variant="outline">
@@ -367,7 +405,8 @@ export const FormExample: Story = {
   parameters: {
     docs: {
       description: {
-        story: "A full form example with multiple inputs, a select, and buttons.",
+        story:
+          "A full form example with multiple inputs, a select, and buttons.",
       },
     },
   },
@@ -385,11 +424,11 @@ export const IncrementDecrement: Story = {
   name: "Increment/Decrement",
   render: () => (
     <ButtonGroup>
-      <Button variant="outline" size="icon">
+      <Button size="icon" variant="outline">
         <MinusIcon className="size-4" />
       </Button>
       <Input className="w-16 text-center" defaultValue="1" />
-      <Button variant="outline" size="icon">
+      <Button size="icon" variant="outline">
         <PlusIcon className="size-4" />
       </Button>
     </ButtonGroup>
@@ -397,7 +436,8 @@ export const IncrementDecrement: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Use `ButtonGroup` to create a number stepper with increment/decrement buttons.",
+        story:
+          "Use `ButtonGroup` to create a number stepper with increment/decrement buttons.",
       },
     },
   },
@@ -407,25 +447,26 @@ export const IncrementDecrement: Story = {
 export const SubscribeForm: Story = {
   render: () => {
     const [email, setEmail] = useState("");
-    
+
     return (
-      <div className="space-y-6 max-w-md">
+      <div className="max-w-md space-y-6">
         <div>
-          <form className="flex flex-col sm:flex-row gap-2" onSubmit={(e) => e.preventDefault()}>
+          <form
+            className="flex flex-col gap-2 sm:flex-row"
+            onSubmit={(e) => e.preventDefault()}
+          >
             <div className="relative grow">
-              <MailIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
-              <Input 
-                type="email" 
-                placeholder="Enter your email" 
-                className="pl-9" 
-                value={email}
+              <MailIcon className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                className="pl-9"
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
                 required
+                type="email"
+                value={email}
               />
             </div>
-            <Button type="submit">
-              Subscribe
-            </Button>
+            <Button type="submit">Subscribe</Button>
           </form>
           <Description className="mt-1">
             Subscribe to our newsletter to receive updates
@@ -433,5 +474,5 @@ export const SubscribeForm: Story = {
         </div>
       </div>
     );
-  }
+  },
 };

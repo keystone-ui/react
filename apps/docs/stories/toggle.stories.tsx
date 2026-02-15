@@ -1,12 +1,11 @@
+import { Toggle } from "@keystone/ui/toggle";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Toggle, ToggleRemove } from "@keystone/ui/toggle";
 import {
   BoldIcon,
+  BookmarkIcon,
   ItalicIcon,
   StarIcon,
-  BookmarkIcon,
-  HeartIcon,
-  BellIcon,
+  UnderlineIcon,
 } from "lucide-react";
 
 const meta = {
@@ -16,42 +15,51 @@ const meta = {
     docs: {
       description: {
         component: `
-A badge-shaped toggle button with pressed/unpressed state.
+A two-state button that can be either on or off.
 
 \`\`\`tsx
-import { Toggle, ToggleRemove } from "@keystone/ui/toggle";
+import { Toggle } from "@keystone/ui/toggle";
 
-// Basic toggle
-<Toggle value="bold">Bold</Toggle>
-
-// With default pressed state
-<Toggle defaultPressed value="bookmark">Bookmark</Toggle>
-
-// With icon
-<Toggle value="star">
-  <StarIcon />
-  Star
+// Default toggle
+<Toggle aria-label="Toggle bold">
+  <BoldIcon />
 </Toggle>
 
-// With remove button
-<Toggle value="react">
-  React
-  <ToggleRemove onClick={() => handleRemove()} />
+// Outline variant
+<Toggle variant="outline" aria-label="Toggle italic">
+  <ItalicIcon />
+  Italic
+</Toggle>
+
+// Small size
+<Toggle size="sm" aria-label="Toggle bold">
+  <BoldIcon />
+  Bold
 </Toggle>
 \`\`\`
 
 ## Features
 
-- Badge-shaped pill styling (rounded-full, 24px height)
+- Two variants: \`default\` and \`outline\`
+- Three sizes: \`sm\`, \`default\`, \`lg\`
 - Pressed/unpressed state via \`aria-pressed\`
 - Keyboard accessible via Base UI Toggle primitive
-- Optional remove button via \`ToggleRemove\` sub-component
 - Icon support with automatic sizing
 `,
       },
     },
   },
   argTypes: {
+    variant: {
+      control: "select",
+      options: ["default", "outline"],
+      description: "The visual style of the toggle",
+    },
+    size: {
+      control: "select",
+      options: ["sm", "default", "lg"],
+      description: "The size of the toggle",
+    },
     defaultPressed: {
       control: "boolean",
       description: "Initial pressed state (uncontrolled)",
@@ -72,84 +80,86 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => (
-    <div className="flex flex-wrap items-center gap-3">
-      <Toggle value="bold">Bold</Toggle>
-      <Toggle value="italic">Italic</Toggle>
-      <Toggle defaultPressed value="underline">Underline</Toggle>
-    </div>
-  ),
-};
-
-// ---------------------------------------------------------------------------
-// States
-// ---------------------------------------------------------------------------
-
-export const States: Story = {
-  render: () => (
     <div className="flex flex-wrap items-center gap-2">
-      <Toggle value="unpressed">Unpressed</Toggle>
-      <Toggle defaultPressed value="pressed">Pressed</Toggle>
-      <Toggle disabled value="disabled">Disabled</Toggle>
-      <Toggle disabled defaultPressed value="pressed-disabled">Pressed & Disabled</Toggle>
-    </div>
-  ),
-};
-
-// ---------------------------------------------------------------------------
-// With Icon
-// ---------------------------------------------------------------------------
-
-export const WithIcon: Story = {
-  name: "With Icon",
-  render: () => (
-    <div className="flex flex-wrap items-center gap-2">
-      <Toggle value="star">
-        <StarIcon />
-        Star
+      <Toggle aria-label="Toggle bold">
+        <BoldIcon />
       </Toggle>
-      <Toggle value="bookmark">
+      <Toggle aria-label="Toggle italic">
+        <ItalicIcon />
+        Italic
+      </Toggle>
+      <Toggle aria-label="Toggle underline" defaultPressed>
+        <UnderlineIcon />
+        Underline
+      </Toggle>
+    </div>
+  ),
+};
+
+// ---------------------------------------------------------------------------
+// Outline
+// ---------------------------------------------------------------------------
+
+export const Outline: Story = {
+  render: () => (
+    <div className="flex flex-wrap items-center gap-2">
+      <Toggle aria-label="Toggle italic" variant="outline">
+        <ItalicIcon />
+        Italic
+      </Toggle>
+      <Toggle aria-label="Toggle bold" variant="outline">
+        <BoldIcon />
+        Bold
+      </Toggle>
+    </div>
+  ),
+};
+
+// ---------------------------------------------------------------------------
+// With Text
+// ---------------------------------------------------------------------------
+
+export const WithText: Story = {
+  name: "With Text",
+  render: () => (
+    <div className="flex flex-wrap items-center gap-2">
+      <Toggle aria-label="Toggle italic">
+        <ItalicIcon />
+        Italic
+      </Toggle>
+      <Toggle aria-label="Toggle bold">
+        <BoldIcon />
+        Bold
+      </Toggle>
+      <Toggle aria-label="Toggle bookmark">
         <BookmarkIcon />
         Bookmark
       </Toggle>
-      <Toggle defaultPressed value="heart">
-        <HeartIcon />
-        Favorite
-      </Toggle>
-      <Toggle value="bell">
-        <BellIcon />
-        Notify
-      </Toggle>
     </div>
   ),
 };
 
 // ---------------------------------------------------------------------------
-// With Remove
+// Sizes
 // ---------------------------------------------------------------------------
 
-export const WithRemove: Story = {
-  name: "With Remove",
-  render: () => {
-    return (
-      <div className="flex flex-wrap items-center gap-2">
-        <Toggle value="bold">
-          <BoldIcon />
-          Bold
-          <ToggleRemove onClick={() => alert("Remove Bold")} />
-        </Toggle>
-        <Toggle value="italic">
-          <ItalicIcon />
-          Italic
-          <ToggleRemove onClick={() => alert("Remove Italic")} />
-        </Toggle>
-        <Toggle defaultPressed value="star">
-          <StarIcon />
-          Star
-          <ToggleRemove onClick={() => alert("Remove Star")} />
-        </Toggle>
-      </div>
-    );
-  },
+export const Sizes: Story = {
+  render: () => (
+    <div className="flex flex-wrap items-center gap-2">
+      <Toggle aria-label="Toggle small" size="sm" variant="outline">
+        <StarIcon />
+        Small
+      </Toggle>
+      <Toggle aria-label="Toggle default" size="default" variant="outline">
+        <StarIcon />
+        Default
+      </Toggle>
+      <Toggle aria-label="Toggle large" size="lg" variant="outline">
+        <StarIcon />
+        Large
+      </Toggle>
+    </div>
+  ),
 };
 
 // ---------------------------------------------------------------------------
@@ -159,8 +169,34 @@ export const WithRemove: Story = {
 export const Disabled: Story = {
   render: () => (
     <div className="flex flex-wrap items-center gap-2">
-      <Toggle disabled value="disabled">Disabled</Toggle>
-      <Toggle disabled defaultPressed value="pressed-disabled">Pressed & Disabled</Toggle>
+      <Toggle aria-label="Toggle disabled" disabled>
+        <BoldIcon />
+        Disabled
+      </Toggle>
+      <Toggle aria-label="Toggle disabled outline" disabled variant="outline">
+        <ItalicIcon />
+        Disabled
+      </Toggle>
+    </div>
+  ),
+};
+
+// ---------------------------------------------------------------------------
+// Pressed State
+// ---------------------------------------------------------------------------
+
+export const PressedState: Story = {
+  name: "Pressed State",
+  render: () => (
+    <div className="flex flex-wrap items-center gap-2">
+      <Toggle aria-label="Toggle bookmark" defaultPressed>
+        <BookmarkIcon className="group-data-pressed/toggle:fill-current" />
+        Bookmark
+      </Toggle>
+      <Toggle aria-label="Toggle star" defaultPressed variant="outline">
+        <StarIcon className="group-data-pressed/toggle:fill-current" />
+        Starred
+      </Toggle>
     </div>
   ),
 };

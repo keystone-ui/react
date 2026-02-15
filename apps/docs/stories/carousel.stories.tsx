@@ -1,41 +1,35 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState, useCallback, useEffect, useRef } from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
-  CarouselDots,
-  CarouselCounter,
-  useCarousel,
-  type CarouselApi,
-} from "@keystone/ui/carousel";
 import { Button } from "@keystone/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@keystone/ui/card";
-import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
+import {
+  Carousel,
+  type CarouselApi,
+  CarouselContent,
+  CarouselCounter,
+  CarouselDots,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  useCarousel,
+} from "@keystone/ui/carousel";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import Autoplay from "embla-carousel-autoplay";
+import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-function SlideBox({
-  index,
-  className,
-}: {
-  index: number;
-  className?: string;
-}) {
+function SlideBox({ index, className }: { index: number; className?: string }) {
   return (
     <div
-      className={`flex aspect-video items-center justify-center rounded-xl bg-muted text-4xl font-semibold text-muted-foreground ${className ?? ""}`}
+      className={`flex aspect-video items-center justify-center rounded-xl bg-muted font-semibold text-4xl text-muted-foreground ${className ?? ""}`}
     >
       {index + 1}
     </div>
@@ -246,7 +240,7 @@ export const WithMask: Story = {
       <Carousel>
         <CarouselContent mask>
           {Array.from({ length: 8 }).map((_, i) => (
-            <CarouselItem key={i} className="basis-1/3">
+            <CarouselItem className="basis-1/3" key={i}>
               <SlideBox index={i} />
             </CarouselItem>
           ))}
@@ -283,14 +277,14 @@ export const WithIconButtons: Story = {
           ))}
         </CarouselContent>
         <CarouselPrevious
+          className="top-1/2 left-2 -translate-y-1/2"
           size="icon-xs"
           variant="secondary"
-          className="left-2 top-1/2 -translate-y-1/2"
         />
         <CarouselNext
+          className="top-1/2 right-2 -translate-y-1/2"
           size="icon-xs"
           variant="secondary"
-          className="right-2 top-1/2 -translate-y-1/2"
         />
       </Carousel>
     </div>
@@ -321,8 +315,8 @@ export const AutoHideArrows: Story = {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="left-2 top-1/2 -translate-y-1/2" />
-        <CarouselNext className="right-2 top-1/2 -translate-y-1/2" />
+        <CarouselPrevious className="top-1/2 left-2 -translate-y-1/2" />
+        <CarouselNext className="top-1/2 right-2 -translate-y-1/2" />
         <CarouselDots />
       </Carousel>
     </div>
@@ -348,7 +342,7 @@ export const MultipleSlides: Story = {
       <Carousel>
         <CarouselContent>
           {Array.from({ length: 9 }).map((_, i) => (
-            <CarouselItem key={i} className="basis-1/3">
+            <CarouselItem className="basis-1/3" key={i}>
               <SlideBox index={i} />
             </CarouselItem>
           ))}
@@ -392,11 +386,11 @@ export const MultipleSlidesWithMaskAndDots: Story = {
       <Carousel opts={{ align: "start" }}>
         <CarouselContent mask>
           {unsplashImages.map((src, i) => (
-            <CarouselItem key={i} className="basis-1/3">
+            <CarouselItem className="basis-1/3" key={i}>
               <img
-                src={src}
                 alt={`Landscape ${i + 1}`}
                 className="aspect-2/1 w-full rounded-lg object-cover"
+                src={src}
               />
             </CarouselItem>
           ))}
@@ -411,7 +405,7 @@ export const MultipleSlidesWithMaskAndDots: Story = {
     docs: {
       description: {
         story:
-          "Combining multiple visible slides (`basis-1/3`), CSS mask edge fading, and dot pagination with real images. Uses `align: \"start\"` to align slides to the left edge.",
+          'Combining multiple visible slides (`basis-1/3`), CSS mask edge fading, and dot pagination with real images. Uses `align: "start"` to align slides to the left edge.',
       },
     },
   },
@@ -427,10 +421,10 @@ export const Sizes: Story = {
       <Carousel opts={{ align: "start" }}>
         <CarouselContent>
           {Array.from({ length: 5 }).map((_, i) => (
-            <CarouselItem key={i} className="basis-1/2 lg:basis-1/3">
+            <CarouselItem className="basis-1/2 lg:basis-1/3" key={i}>
               <Card>
                 <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <span className="text-3xl font-semibold">{i + 1}</span>
+                  <span className="font-semibold text-3xl">{i + 1}</span>
                 </CardContent>
               </Card>
             </CarouselItem>
@@ -461,10 +455,10 @@ export const Spacing: Story = {
       <Carousel gap="0.25rem">
         <CarouselContent>
           {Array.from({ length: 5 }).map((_, i) => (
-            <CarouselItem key={i} className="basis-1/2 lg:basis-1/3">
+            <CarouselItem className="basis-1/2 lg:basis-1/3" key={i}>
               <Card>
                 <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <span className="text-2xl font-semibold">{i + 1}</span>
+                  <span className="font-semibold text-2xl">{i + 1}</span>
                 </CardContent>
               </Card>
             </CarouselItem>
@@ -495,10 +489,10 @@ export const Options: Story = {
       <Carousel opts={{ align: "start", loop: true }}>
         <CarouselContent>
           {Array.from({ length: 5 }).map((_, i) => (
-            <CarouselItem key={i} className="basis-1/2">
+            <CarouselItem className="basis-1/2" key={i}>
               <Card>
                 <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <span className="text-3xl font-semibold">{i + 1}</span>
+                  <span className="font-semibold text-3xl">{i + 1}</span>
                 </CardContent>
               </Card>
             </CarouselItem>
@@ -513,7 +507,7 @@ export const Options: Story = {
     docs: {
       description: {
         story:
-          "Pass Embla Carousel options via the `opts` prop. Here `align: \"start\"` aligns slides to the start edge and `loop: true` enables infinite looping. See the [Embla Carousel docs](https://www.embla-carousel.com/api/options/) for all available options.",
+          'Pass Embla Carousel options via the `opts` prop. Here `align: "start"` aligns slides to the start edge and `loop: true` enables infinite looping. See the [Embla Carousel docs](https://www.embla-carousel.com/api/options/) for all available options.',
       },
     },
   },
@@ -526,13 +520,13 @@ export const Options: Story = {
 export const Vertical: Story = {
   render: () => (
     <div className="mx-auto max-w-xs">
-      <Carousel orientation="vertical" gap="0.5rem">
+      <Carousel gap="0.5rem" orientation="vertical">
         <CarouselContent className="h-[270px]">
           {Array.from({ length: 5 }).map((_, i) => (
-            <CarouselItem key={i} className="basis-1/2">
+            <CarouselItem className="basis-1/2" key={i}>
               <Card>
                 <CardContent className="flex items-center justify-center p-6">
-                  <span className="text-3xl font-semibold">{i + 1}</span>
+                  <span className="font-semibold text-3xl">{i + 1}</span>
                 </CardContent>
               </Card>
             </CarouselItem>
@@ -563,16 +557,16 @@ function AutoplayExample() {
   return (
     <div className="mx-auto max-w-lg">
       <Carousel
-        plugins={[plugin.current]}
         onMouseEnter={plugin.current.stop}
         onMouseLeave={plugin.current.reset}
+        plugins={[plugin.current]}
       >
         <CarouselContent>
           {Array.from({ length: 5 }).map((_, i) => (
             <CarouselItem key={i}>
               <Card>
                 <CardContent className="flex aspect-video items-center justify-center p-6">
-                  <span className="text-4xl font-semibold">{i + 1}</span>
+                  <span className="font-semibold text-4xl">{i + 1}</span>
                 </CardContent>
               </Card>
             </CarouselItem>
@@ -610,7 +604,7 @@ export const WithWheelGestures: Story = {
       <Carousel plugins={[WheelGesturesPlugin()]}>
         <CarouselContent mask>
           {Array.from({ length: 8 }).map((_, i) => (
-            <CarouselItem key={i} className="basis-1/3">
+            <CarouselItem className="basis-1/3" key={i}>
               <SlideBox index={i} />
             </CarouselItem>
           ))}
@@ -639,7 +633,9 @@ function EventsExample() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    if (!api) return;
+    if (!api) {
+      return;
+    }
 
     setCount(api.scrollSnapList().length);
     setCurrent(api.selectedScrollSnap() + 1);
@@ -657,7 +653,7 @@ function EventsExample() {
             <CarouselItem key={i}>
               <Card>
                 <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <span className="text-4xl font-semibold">{i + 1}</span>
+                  <span className="font-semibold text-4xl">{i + 1}</span>
                 </CardContent>
               </Card>
             </CarouselItem>
@@ -666,7 +662,7 @@ function EventsExample() {
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
-      <div className="text-muted-foreground py-2 text-center text-sm">
+      <div className="py-2 text-center text-muted-foreground text-sm">
         Slide {current} of {count}
       </div>
     </div>
@@ -696,7 +692,7 @@ export const Controlled: Story = {
 
     return (
       <div className="mx-auto max-w-lg space-y-4">
-        <Carousel setApi={setApi} onSlideChange={setCurrent}>
+        <Carousel onSlideChange={setCurrent} setApi={setApi}>
           <CarouselContent>
             {Array.from({ length: 5 }).map((_, i) => (
               <CarouselItem key={i}>
@@ -709,9 +705,9 @@ export const Controlled: Story = {
           {Array.from({ length: 5 }).map((_, i) => (
             <Button
               key={i}
-              variant={i === current ? "default" : "outline"}
-              size="sm"
               onClick={() => api?.scrollTo(i)}
+              size="sm"
+              variant={i === current ? "default" : "outline"}
             >
               Slide {i + 1}
             </Button>
@@ -741,7 +737,9 @@ function ThumbnailsExample() {
 
   const onThumbClick = useCallback(
     (index: number) => {
-      if (!mainApi) return;
+      if (!mainApi) {
+        return;
+      }
       mainApi.scrollTo(index);
     },
     [mainApi]
@@ -750,7 +748,9 @@ function ThumbnailsExample() {
   const onMainSelect = useCallback(
     (index: number) => {
       setSelectedIndex(index);
-      if (!thumbApi) return;
+      if (!thumbApi) {
+        return;
+      }
       thumbApi.scrollTo(index);
     },
     [thumbApi]
@@ -769,12 +769,12 @@ function ThumbnailsExample() {
   return (
     <div className="mx-auto max-w-lg space-y-2">
       {/* Main carousel */}
-      <Carousel setApi={setMainApi} onSlideChange={onMainSelect}>
+      <Carousel onSlideChange={onMainSelect} setApi={setMainApi}>
         <CarouselContent>
           {slides.map((bg, i) => (
             <CarouselItem key={i}>
               <div
-                className={`flex aspect-video items-center justify-center rounded-xl text-4xl font-semibold text-muted-foreground ${bg}`}
+                className={`flex aspect-video items-center justify-center rounded-xl font-semibold text-4xl text-muted-foreground ${bg}`}
               >
                 {i + 1}
               </div>
@@ -786,16 +786,18 @@ function ThumbnailsExample() {
       </Carousel>
 
       {/* Thumbnail strip */}
-      <Carousel setApi={setThumbApi} gap="0.5rem">
+      <Carousel gap="0.5rem" setApi={setThumbApi}>
         <CarouselContent>
           {slides.map((bg, i) => (
-            <CarouselItem key={i} className="basis-1/5">
+            <CarouselItem className="basis-1/5" key={i}>
               <button
-                type="button"
-                onClick={() => onThumbClick(i)}
-                className={`flex aspect-video w-full cursor-pointer items-center justify-center rounded-lg text-sm font-medium text-muted-foreground transition-opacity ${bg} ${
-                  i === selectedIndex ? "opacity-100 ring-2 ring-ring" : "opacity-50"
+                className={`flex aspect-video w-full cursor-pointer items-center justify-center rounded-lg font-medium text-muted-foreground text-sm transition-opacity ${bg} ${
+                  i === selectedIndex
+                    ? "opacity-100 ring-2 ring-ring"
+                    : "opacity-50"
                 }`}
+                onClick={() => onThumbClick(i)}
+                type="button"
               >
                 {i + 1}
               </button>
@@ -850,7 +852,7 @@ export const Cards: Story = {
               desc: "Manage subscriptions, invoices, and payment methods.",
             },
           ].map((card, i) => (
-            <CarouselItem key={i} className="basis-[280px]">
+            <CarouselItem className="basis-[280px]" key={i}>
               <Card>
                 <CardHeader>
                   <CardTitle>{card.title}</CardTitle>

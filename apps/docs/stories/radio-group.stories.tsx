@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Field,
   FieldContent,
@@ -10,6 +9,7 @@ import {
 } from "@keystone/ui/field";
 import { Label } from "@keystone/ui/label";
 import { RadioGroup, RadioGroupItem } from "@keystone/ui/radio-group";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
   title: "Components/RadioGroup",
@@ -77,17 +77,17 @@ type Story = StoryObj<typeof RadioGroup>;
 export const Basic: Story = {
   name: "Basic",
   render: () => (
-    <RadioGroup defaultValue="comfortable" className="w-fit">
+    <RadioGroup className="w-fit" defaultValue="comfortable">
       <div className="flex items-center gap-3">
-        <RadioGroupItem value="default" id="r1" />
+        <RadioGroupItem id="r1" value="default" />
         <Label htmlFor="r1">Default</Label>
       </div>
       <div className="flex items-center gap-3">
-        <RadioGroupItem value="comfortable" id="r2" />
+        <RadioGroupItem id="r2" value="comfortable" />
         <Label htmlFor="r2">Comfortable</Label>
       </div>
       <div className="flex items-center gap-3">
-        <RadioGroupItem value="compact" id="r3" />
+        <RadioGroupItem id="r3" value="compact" />
         <Label htmlFor="r3">Compact</Label>
       </div>
     </RadioGroup>
@@ -106,17 +106,17 @@ export const Basic: Story = {
 export const Horizontal: Story = {
   name: "Horizontal",
   render: () => (
-    <RadioGroup defaultValue="comfortable" className="flex gap-6">
+    <RadioGroup className="flex gap-6" defaultValue="comfortable">
       <div className="flex items-center gap-2">
-        <RadioGroupItem value="default" id="h-r1" />
+        <RadioGroupItem id="h-r1" value="default" />
         <Label htmlFor="h-r1">Default</Label>
       </div>
       <div className="flex items-center gap-2">
-        <RadioGroupItem value="comfortable" id="h-r2" />
+        <RadioGroupItem id="h-r2" value="comfortable" />
         <Label htmlFor="h-r2">Comfortable</Label>
       </div>
       <div className="flex items-center gap-2">
-        <RadioGroupItem value="compact" id="h-r3" />
+        <RadioGroupItem id="h-r3" value="compact" />
         <Label htmlFor="h-r3">Compact</Label>
       </div>
     </RadioGroup>
@@ -135,9 +135,9 @@ export const Horizontal: Story = {
 export const Description: Story = {
   name: "Description",
   render: () => (
-    <RadioGroup defaultValue="comfortable" className="w-fit">
+    <RadioGroup className="w-fit" defaultValue="comfortable">
       <Field orientation="horizontal">
-        <RadioGroupItem value="default" id="desc-r1" />
+        <RadioGroupItem id="desc-r1" value="default" />
         <FieldContent>
           <FieldLabel htmlFor="desc-r1">Default</FieldLabel>
           <FieldDescription>
@@ -146,14 +146,14 @@ export const Description: Story = {
         </FieldContent>
       </Field>
       <Field orientation="horizontal">
-        <RadioGroupItem value="comfortable" id="desc-r2" />
+        <RadioGroupItem id="desc-r2" value="comfortable" />
         <FieldContent>
           <FieldLabel htmlFor="desc-r2">Comfortable</FieldLabel>
           <FieldDescription>More space between elements.</FieldDescription>
         </FieldContent>
       </Field>
       <Field orientation="horizontal">
-        <RadioGroupItem value="compact" id="desc-r3" />
+        <RadioGroupItem id="desc-r3" value="compact" />
         <FieldContent>
           <FieldLabel htmlFor="desc-r3">Compact</FieldLabel>
           <FieldDescription>
@@ -177,7 +177,7 @@ export const Description: Story = {
 export const ChoiceCard: Story = {
   name: "Choice Card",
   render: () => (
-    <RadioGroup defaultValue="plus" className="max-w-sm">
+    <RadioGroup className="max-w-sm" defaultValue="plus">
       <FieldLabel htmlFor="plus-plan">
         <Field orientation="horizontal">
           <FieldContent>
@@ -186,7 +186,7 @@ export const ChoiceCard: Story = {
               For individuals and small teams.
             </FieldDescription>
           </FieldContent>
-          <RadioGroupItem value="plus" id="plus-plan" />
+          <RadioGroupItem id="plus-plan" value="plus" />
         </Field>
       </FieldLabel>
       <FieldLabel htmlFor="pro-plan">
@@ -195,7 +195,7 @@ export const ChoiceCard: Story = {
             <FieldTitle>Pro</FieldTitle>
             <FieldDescription>For growing businesses.</FieldDescription>
           </FieldContent>
-          <RadioGroupItem value="pro" id="pro-plan" />
+          <RadioGroupItem id="pro-plan" value="pro" />
         </Field>
       </FieldLabel>
       <FieldLabel htmlFor="enterprise-plan">
@@ -206,7 +206,7 @@ export const ChoiceCard: Story = {
               For large teams and enterprises.
             </FieldDescription>
           </FieldContent>
-          <RadioGroupItem value="enterprise" id="enterprise-plan" />
+          <RadioGroupItem id="enterprise-plan" value="enterprise" />
         </Field>
       </FieldLabel>
     </RadioGroup>
@@ -232,20 +232,20 @@ export const Fieldset: Story = {
       </FieldDescription>
       <RadioGroup defaultValue="monthly">
         <Field orientation="horizontal">
-          <RadioGroupItem value="monthly" id="plan-monthly" />
-          <FieldLabel htmlFor="plan-monthly" className="font-normal">
+          <RadioGroupItem id="plan-monthly" value="monthly" />
+          <FieldLabel className="font-normal" htmlFor="plan-monthly">
             Monthly ($9.99/month)
           </FieldLabel>
         </Field>
         <Field orientation="horizontal">
-          <RadioGroupItem value="yearly" id="plan-yearly" />
-          <FieldLabel htmlFor="plan-yearly" className="font-normal">
+          <RadioGroupItem id="plan-yearly" value="yearly" />
+          <FieldLabel className="font-normal" htmlFor="plan-yearly">
             Yearly ($99.99/year)
           </FieldLabel>
         </Field>
         <Field orientation="horizontal">
-          <RadioGroupItem value="lifetime" id="plan-lifetime" />
-          <FieldLabel htmlFor="plan-lifetime" className="font-normal">
+          <RadioGroupItem id="plan-lifetime" value="lifetime" />
+          <FieldLabel className="font-normal" htmlFor="plan-lifetime">
             Lifetime ($299.99)
           </FieldLabel>
         </Field>
@@ -266,22 +266,22 @@ export const Fieldset: Story = {
 export const Disabled: Story = {
   name: "Disabled",
   render: () => (
-    <RadioGroup defaultValue="option2" className="w-fit">
-      <Field orientation="horizontal" data-disabled>
-        <RadioGroupItem value="option1" id="disabled-1" disabled />
-        <FieldLabel htmlFor="disabled-1" className="font-normal">
+    <RadioGroup className="w-fit" defaultValue="option2">
+      <Field data-disabled orientation="horizontal">
+        <RadioGroupItem disabled id="disabled-1" value="option1" />
+        <FieldLabel className="font-normal" htmlFor="disabled-1">
           Disabled
         </FieldLabel>
       </Field>
       <Field orientation="horizontal">
-        <RadioGroupItem value="option2" id="disabled-2" />
-        <FieldLabel htmlFor="disabled-2" className="font-normal">
+        <RadioGroupItem id="disabled-2" value="option2" />
+        <FieldLabel className="font-normal" htmlFor="disabled-2">
           Option 2
         </FieldLabel>
       </Field>
       <Field orientation="horizontal">
-        <RadioGroupItem value="option3" id="disabled-3" />
-        <FieldLabel htmlFor="disabled-3" className="font-normal">
+        <RadioGroupItem id="disabled-3" value="option3" />
+        <FieldLabel className="font-normal" htmlFor="disabled-3">
           Option 3
         </FieldLabel>
       </Field>
@@ -307,21 +307,25 @@ export const Invalid: Story = {
         Choose how you want to receive notifications.
       </FieldDescription>
       <RadioGroup defaultValue="email">
-        <Field orientation="horizontal" data-invalid="true">
-          <RadioGroupItem value="email" id="invalid-email" aria-invalid="true" />
-          <FieldLabel htmlFor="invalid-email" className="font-normal">
+        <Field data-invalid="true" orientation="horizontal">
+          <RadioGroupItem
+            aria-invalid="true"
+            id="invalid-email"
+            value="email"
+          />
+          <FieldLabel className="font-normal" htmlFor="invalid-email">
             Email only
           </FieldLabel>
         </Field>
-        <Field orientation="horizontal" data-invalid="true">
-          <RadioGroupItem value="sms" id="invalid-sms" aria-invalid="true" />
-          <FieldLabel htmlFor="invalid-sms" className="font-normal">
+        <Field data-invalid="true" orientation="horizontal">
+          <RadioGroupItem aria-invalid="true" id="invalid-sms" value="sms" />
+          <FieldLabel className="font-normal" htmlFor="invalid-sms">
             SMS only
           </FieldLabel>
         </Field>
-        <Field orientation="horizontal" data-invalid="true">
-          <RadioGroupItem value="both" id="invalid-both" aria-invalid="true" />
-          <FieldLabel htmlFor="invalid-both" className="font-normal">
+        <Field data-invalid="true" orientation="horizontal">
+          <RadioGroupItem aria-invalid="true" id="invalid-both" value="both" />
+          <FieldLabel className="font-normal" htmlFor="invalid-both">
             Both Email & SMS
           </FieldLabel>
         </Field>

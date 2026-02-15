@@ -1,22 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Badge } from "@keystone/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@keystone/ui/card";
 import {
   DescriptionList,
+  DescriptionListDetails,
   DescriptionListItem,
   DescriptionListTerm,
-  DescriptionListDetails,
 } from "@keystone/ui/description-list";
-import { Badge } from "@keystone/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@keystone/ui/card";
-import {
-  CircleCheckIcon,
-  CopyIcon,
-  ExternalLinkIcon,
-} from "lucide-react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { CircleCheckIcon, CopyIcon, ExternalLinkIcon } from "lucide-react";
 
 const meta = {
   title: "Components/DescriptionList",
@@ -136,7 +127,7 @@ export const Compact: Story = {
   render: () => (
     <div className="flex flex-col gap-10">
       <div>
-        <p className="text-muted-foreground mb-3 text-sm font-medium">
+        <p className="mb-3 font-medium text-muted-foreground text-sm">
           Default variant, small size
         </p>
         <DescriptionList size="sm">
@@ -157,10 +148,10 @@ export const Compact: Story = {
         </DescriptionList>
       </div>
       <div>
-        <p className="text-muted-foreground mb-3 text-sm font-medium">
+        <p className="mb-3 font-medium text-muted-foreground text-sm">
           Card variant, small size
         </p>
-        <DescriptionList variant="card" size="sm">
+        <DescriptionList size="sm" variant="card">
           {gameDetails.map((item) => (
             <DescriptionListItem key={item.label}>
               <DescriptionListTerm>{item.label}</DescriptionListTerm>
@@ -264,7 +255,7 @@ export const CustomValues: Story = {
       <DescriptionListItem>
         <DescriptionListTerm>Documentation</DescriptionListTerm>
         <DescriptionListDetails className="flex items-center gap-1.5">
-          <a href="#" className="text-primary underline underline-offset-4">
+          <a className="text-primary underline underline-offset-4" href="#">
             View docs
           </a>
           <ExternalLinkIcon className="size-3 text-muted-foreground" />
@@ -273,10 +264,10 @@ export const CustomValues: Story = {
       <DescriptionListItem>
         <DescriptionListTerm>Tags</DescriptionListTerm>
         <DescriptionListDetails className="flex items-center gap-1.5">
-          <Badge variant="secondary" size="sm">
+          <Badge size="sm" variant="secondary">
             DeFi
           </Badge>
-          <Badge variant="outline" size="sm">
+          <Badge size="sm" variant="outline">
             Staking
           </Badge>
         </DescriptionListDetails>

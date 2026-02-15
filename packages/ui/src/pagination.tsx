@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -6,9 +5,9 @@ import {
   ChevronsRightIcon,
   MoreHorizontalIcon,
 } from "lucide-react";
-
-import { cn } from "./utils";
+import type * as React from "react";
 import { Button } from "./button";
+import { cn } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Pagination
@@ -17,10 +16,9 @@ import { Button } from "./button";
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
     <nav
-      role="navigation"
       aria-label="pagination"
-      data-slot="pagination"
       className={cn("mx-auto flex w-full justify-center", className)}
+      data-slot="pagination"
       {...props}
     />
   );
@@ -36,8 +34,8 @@ function PaginationContent({
 }: React.ComponentProps<"ul">) {
   return (
     <ul
-      data-slot="pagination-content"
       className={cn("flex items-center gap-0.5", className)}
+      data-slot="pagination-content"
       {...props}
     />
   );
@@ -68,18 +66,18 @@ function PaginationLink({
 }: PaginationLinkProps) {
   return (
     <Button
-      variant={isActive ? "outline" : "ghost"}
-      size={size}
       className={cn(className)}
       nativeButton={false}
       render={
         <a
           aria-current={isActive ? "page" : undefined}
-          data-slot="pagination-link"
           data-active={isActive}
+          data-slot="pagination-link"
           {...props}
         />
       }
+      size={size}
+      variant={isActive ? "outline" : "ghost"}
     />
   );
 }
@@ -96,8 +94,8 @@ function PaginationPrevious({
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      size="sm"
       className={cn("pl-1.5!", className)}
+      size="sm"
       {...props}
     >
       <ChevronLeftIcon />
@@ -118,8 +116,8 @@ function PaginationNext({
   return (
     <PaginationLink
       aria-label="Go to next page"
-      size="sm"
       className={cn("pr-1.5!", className)}
+      size="sm"
       {...props}
     >
       <span className="hidden sm:block">{text}</span>
@@ -139,8 +137,8 @@ function PaginationFirst({
   return (
     <PaginationLink
       aria-label="Go to first page"
-      size="icon-sm"
       className={cn(className)}
+      size="icon-sm"
       {...props}
     >
       <ChevronsLeftIcon />
@@ -159,8 +157,8 @@ function PaginationLast({
   return (
     <PaginationLink
       aria-label="Go to last page"
-      size="icon-sm"
       className={cn(className)}
+      size="icon-sm"
       {...props}
     >
       <ChevronsRightIcon />
@@ -179,11 +177,11 @@ function PaginationEllipsis({
   return (
     <span
       aria-hidden
-      data-slot="pagination-ellipsis"
       className={cn(
         "flex size-8 items-center justify-center [&_svg:not([class*='size-'])]:size-4",
         className
       )}
+      data-slot="pagination-ellipsis"
       {...props}
     >
       <MoreHorizontalIcon />

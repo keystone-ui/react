@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import * as React from "react";
+import { Button } from "@keystone/ui/button";
+import { Field, FieldGroup, FieldLabel } from "@keystone/ui/field";
+import { Input } from "@keystone/ui/input";
 import {
   Popover,
   PopoverArrow,
@@ -10,10 +11,9 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "@keystone/ui/popover";
-import { Button } from "@keystone/ui/button";
-import { Field, FieldGroup, FieldLabel } from "@keystone/ui/field";
-import { Input } from "@keystone/ui/input";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { XIcon } from "lucide-react";
+import * as React from "react";
 
 const meta = {
   title: "Components/Popover",
@@ -98,7 +98,7 @@ export const Basic: Story = {
     <Popover>
       <PopoverTrigger
         render={
-          <Button variant="outline" className="w-fit">
+          <Button className="w-fit" variant="outline">
             Open Popover
           </Button>
         }
@@ -131,7 +131,7 @@ export const Alignments: Story = {
       <Popover>
         <PopoverTrigger
           render={
-            <Button variant="outline" size="sm">
+            <Button size="sm" variant="outline">
               Start
             </Button>
           }
@@ -143,7 +143,7 @@ export const Alignments: Story = {
       <Popover>
         <PopoverTrigger
           render={
-            <Button variant="outline" size="sm">
+            <Button size="sm" variant="outline">
               Center
             </Button>
           }
@@ -155,7 +155,7 @@ export const Alignments: Story = {
       <Popover>
         <PopoverTrigger
           render={
-            <Button variant="outline" size="sm">
+            <Button size="sm" variant="outline">
               End
             </Button>
           }
@@ -185,7 +185,7 @@ export const WithForm: Story = {
       <PopoverTrigger
         render={<Button variant="outline">Open Popover</Button>}
       />
-      <PopoverContent className="w-64" align="start">
+      <PopoverContent align="start" className="w-64">
         <PopoverHeader>
           <PopoverTitle>Dimensions</PopoverTitle>
           <PopoverDescription>
@@ -194,16 +194,16 @@ export const WithForm: Story = {
         </PopoverHeader>
         <FieldGroup className="gap-4">
           <Field orientation="horizontal">
-            <FieldLabel htmlFor="width" className="w-1/2">
+            <FieldLabel className="w-1/2" htmlFor="width">
               Width
             </FieldLabel>
-            <Input id="width" defaultValue="100%" />
+            <Input defaultValue="100%" id="width" />
           </Field>
           <Field orientation="horizontal">
-            <FieldLabel htmlFor="height" className="w-1/2">
+            <FieldLabel className="w-1/2" htmlFor="height">
               Height
             </FieldLabel>
-            <Input id="height" defaultValue="25px" />
+            <Input defaultValue="25px" id="height" />
           </Field>
         </FieldGroup>
       </PopoverContent>
@@ -237,7 +237,7 @@ export const WithClose: Story = {
           </PopoverHeader>
           <PopoverClose
             render={
-              <Button variant="ghost" size="icon-xs">
+              <Button size="icon-xs" variant="ghost">
                 <XIcon />
               </Button>
             }
@@ -265,7 +265,7 @@ export const WithArrow: Story = {
       <Popover>
         <PopoverTrigger
           render={
-            <Button variant="outline" size="sm">
+            <Button size="sm" variant="outline">
               Start
             </Button>
           }
@@ -278,7 +278,7 @@ export const WithArrow: Story = {
       <Popover>
         <PopoverTrigger
           render={
-            <Button variant="outline" size="sm">
+            <Button size="sm" variant="outline">
               Center
             </Button>
           }
@@ -291,7 +291,7 @@ export const WithArrow: Story = {
       <Popover>
         <PopoverTrigger
           render={
-            <Button variant="outline" size="sm">
+            <Button size="sm" variant="outline">
               End
             </Button>
           }
@@ -306,8 +306,7 @@ export const WithArrow: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "PopoverArrow with start, center, and end alignment.",
+        story: "PopoverArrow with start, center, and end alignment.",
       },
     },
   },
@@ -320,9 +319,9 @@ export const OpenOnHover: Story = {
   render: () => (
     <Popover>
       <PopoverTrigger
-        openOnHover
-        delay={200}
         closeDelay={0}
+        delay={200}
+        openOnHover
         render={<Button variant="outline">Hover Me</Button>}
       />
       <PopoverContent sideOffset={8}>
