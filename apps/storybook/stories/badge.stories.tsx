@@ -1,6 +1,6 @@
-import { Badge } from "@keystone/ui/badge";
-import { Spinner } from "@keystone/ui/spinner";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Badge } from "keystoneui/badge";
+import { Spinner } from "keystoneui/spinner";
 import {
   AlertCircleIcon,
   ArrowUpRightIcon,
@@ -27,7 +27,7 @@ const meta = {
 A versatile badge component with semantic variants and polymorphic rendering via a \`render\` prop.
 
 \`\`\`tsx
-import { Badge } from "@keystone/ui/badge";
+import { Badge } from "keystoneui/badge";
 
 // Default badge
 <Badge>New</Badge>

@@ -1,5 +1,5 @@
-import { Tag, TagRemove } from "@keystone/ui/tag";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Tag, TagRemove } from "keystoneui/tag";
 import {
   BellIcon,
   BoldIcon,
@@ -19,7 +19,7 @@ const meta = {
 A badge-shaped tag button with pressed/unpressed state.
 
 \`\`\`tsx
-import { Tag, TagRemove } from "@keystone/ui/tag";
+import { Tag, TagRemove } from "keystoneui/tag";
 
 // Basic tag
 <Tag value="bold">Bold</Tag>

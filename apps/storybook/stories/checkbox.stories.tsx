@@ -1,4 +1,5 @@
-import { Checkbox } from "@keystone/ui/checkbox";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Checkbox } from "keystoneui/checkbox";
 import {
   Field,
   FieldContent,
@@ -7,8 +8,7 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
-} from "@keystone/ui/field";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/field";
 import * as React from "react";
 import { expect, userEvent, within } from "storybook/test";
 
@@ -35,8 +35,8 @@ A checkbox component built on Base UI's Checkbox primitive for accessible, custo
 Pair the checkbox with \`Field\` and \`FieldLabel\` for proper layout and labeling.
 
 \`\`\`tsx
-import { Checkbox } from "@keystone/ui/checkbox";
-import { Field, FieldLabel } from "@keystone/ui/field";
+import { Checkbox } from "keystoneui/checkbox";
+import { Field, FieldLabel } from "keystoneui/field";
 
 <Field orientation="horizontal">
   <Checkbox id="terms" name="terms" />

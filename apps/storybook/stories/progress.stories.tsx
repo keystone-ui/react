@@ -1,18 +1,18 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Progress,
   ProgressIndicator,
   ProgressLabel,
   ProgressTrack,
   ProgressValue,
-} from "@keystone/ui/progress";
+} from "keystoneui/progress";
 import {
   Slider,
   SliderControl,
   SliderIndicator,
   SliderThumb,
   SliderTrack,
-} from "@keystone/ui/slider";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/slider";
 import * as React from "react";
 
 const meta = {
@@ -38,7 +38,7 @@ A progress bar component built on Base UI's Progress primitive for accessible, a
 ## Usage
 
 \`\`\`tsx
-import { Progress } from "@keystone/ui/progress";
+import { Progress } from "keystoneui/progress";
 
 <Progress value={50} />
 \`\`\`
@@ -52,7 +52,7 @@ import {
   ProgressIndicator,
   ProgressLabel,
   ProgressValue,
-} from "@keystone/ui/progress";
+} from "keystoneui/progress";
 
 <Progress value={50}>
   <div className="flex justify-between">

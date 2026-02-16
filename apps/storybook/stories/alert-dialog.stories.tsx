@@ -1,3 +1,4 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,9 +10,8 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@keystone/ui/alert-dialog";
-import { Button } from "@keystone/ui/button";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/alert-dialog";
+import { Button } from "keystoneui/button";
 import { BluetoothIcon, CircleFadingPlusIcon, Trash2Icon } from "lucide-react";
 import { expect, userEvent, within } from "storybook/test";
 
@@ -35,7 +35,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@keystone/ui/alert-dialog";
+} from "keystoneui/alert-dialog";
 
 <AlertDialog>
   <AlertDialogTrigger render={<Button variant="outline" />}>

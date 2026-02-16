@@ -1,3 +1,4 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Field,
   FieldContent,
@@ -6,10 +7,9 @@ import {
   FieldLegend,
   FieldSet,
   FieldTitle,
-} from "@keystone/ui/field";
-import { Label } from "@keystone/ui/label";
-import { RadioGroup, RadioGroupItem } from "@keystone/ui/radio-group";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/field";
+import { Label } from "keystoneui/label";
+import { RadioGroup, RadioGroupItem } from "keystoneui/radio-group";
 import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
@@ -35,8 +35,8 @@ A radio group component built on Base UI's RadioGroup and Radio primitives for a
 Use \`RadioGroup\` with \`RadioGroupItem\` and labels for proper accessibility.
 
 \`\`\`tsx
-import { RadioGroup, RadioGroupItem } from "@keystone/ui/radio-group";
-import { Label } from "@keystone/ui/label";
+import { RadioGroup, RadioGroupItem } from "keystoneui/radio-group";
+import { Label } from "keystoneui/label";
 
 <RadioGroup defaultValue="option1">
   <div className="flex items-center gap-3">

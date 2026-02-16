@@ -2,9 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "keystone",
   "type": "registry:style",
-  "dependencies": ["@keystone/ui"],
+  "dependencies": ["keystoneui"],
   "css": {
-    "@import \"@keystone/ui/base.css\"": {},
+    "@import \"keystoneui/base.css\"": {},
     "@custom-variant dark (&:is(.dark *))": {},
     "@layer base": {
       "*": {

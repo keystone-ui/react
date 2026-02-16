@@ -1,13 +1,14 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@keystone/ui/avatar";
-import { Badge } from "@keystone/ui/badge";
-import { Button } from "@keystone/ui/button";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Avatar, AvatarFallback, AvatarImage } from "keystoneui/avatar";
+import { Badge } from "keystoneui/badge";
+import { Button } from "keystoneui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@keystone/ui/dropdown-menu";
+} from "keystoneui/dropdown-menu";
 import {
   Item,
   ItemActions,
@@ -19,8 +20,7 @@ import {
   ItemMedia,
   ItemSeparator,
   ItemTitle,
-} from "@keystone/ui/item";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/item";
 import {
   BadgeCheckIcon,
   CalendarIcon,
@@ -55,7 +55,7 @@ import {
   Item, ItemMedia, ItemContent, ItemTitle,
   ItemDescription, ItemActions, ItemHeader,
   ItemFooter, ItemGroup, ItemSeparator,
-} from "@keystone/ui/item";
+} from "keystoneui/item";
 
 <Item variant="outline">
   <ItemMedia variant="icon">

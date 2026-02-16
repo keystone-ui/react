@@ -1,3 +1,4 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Slider,
   SliderControl,
@@ -5,8 +6,7 @@ import {
   SliderThumb,
   SliderTrack,
   SliderValue,
-} from "@keystone/ui/slider";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/slider";
 import * as React from "react";
 import { expect, within } from "storybook/test";
 
@@ -39,7 +39,7 @@ import {
   SliderTrack,
   SliderIndicator,
   SliderThumb,
-} from "@keystone/ui/slider";
+} from "keystoneui/slider";
 
 <Slider defaultValue={50}>
   <SliderControl>

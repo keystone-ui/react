@@ -1,5 +1,6 @@
-import { Button } from "@keystone/ui/button";
-import { Checkbox } from "@keystone/ui/checkbox";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "keystoneui/button";
+import { Checkbox } from "keystoneui/checkbox";
 import {
   Field,
   FieldContent,
@@ -10,11 +11,10 @@ import {
   FieldLegend,
   FieldSeparator,
   FieldSet,
-} from "@keystone/ui/field";
-import { Input } from "@keystone/ui/input";
-import { Switch } from "@keystone/ui/switch";
-import { Textarea } from "@keystone/ui/textarea";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/field";
+import { Input } from "keystoneui/input";
+import { Switch } from "keystoneui/switch";
+import { Textarea } from "keystoneui/textarea";
 import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
@@ -62,8 +62,8 @@ Combine labels, controls, and help text to compose accessible form fields and gr
 ## Basic Usage
 
 \`\`\`tsx
-import { Field, FieldLabel, FieldDescription } from "@keystone/ui/field";
-import { Input } from "@keystone/ui/input";
+import { Field, FieldLabel, FieldDescription } from "keystoneui/field";
+import { Input } from "keystoneui/input";
 
 <Field>
   <FieldLabel htmlFor="username">Username</FieldLabel>

@@ -10,7 +10,7 @@
     "clean": "rm -rf .turbo .next node_modules .source"
   },
   "dependencies": {
-    "@keystone/ui": "workspace:*",
+    "keystoneui": "workspace:*",
     "@types/mdx": "^2.0.13",
     "clsx": "^2.1.1",
     "fumadocs-core": "^15.5.1",
@@ -20,6 +20,7 @@
     "next": "^15.3.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "shiki": "^3.22.0",
     "tailwind-merge": "^3.4.0",
     "zod": "^4.3.6"
   },

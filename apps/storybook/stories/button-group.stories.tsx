@@ -1,5 +1,6 @@
-import { Button } from "@keystone/ui/button";
-import { ButtonGroup, ButtonGroupText } from "@keystone/ui/button-group";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "keystoneui/button";
+import { ButtonGroup, ButtonGroupText } from "keystoneui/button-group";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,15 +8,15 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@keystone/ui/dropdown-menu";
-import { Field, FieldDescription, FieldLabel } from "@keystone/ui/field";
-import { Input } from "@keystone/ui/input";
+} from "keystoneui/dropdown-menu";
+import { Field, FieldDescription, FieldLabel } from "keystoneui/field";
+import { Input } from "keystoneui/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@keystone/ui/input-group";
+} from "keystoneui/input-group";
 import {
   Popover,
   PopoverContent,
@@ -23,16 +24,15 @@ import {
   PopoverHeader,
   PopoverTitle,
   PopoverTrigger,
-} from "@keystone/ui/popover";
+} from "keystoneui/popover";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
-} from "@keystone/ui/select";
-import { Textarea } from "@keystone/ui/textarea";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/select";
+import { Textarea } from "keystoneui/textarea";
 import {
   AlertTriangle as AlertTriangleIcon,
   Archive as ArchiveIcon,
@@ -93,8 +93,8 @@ Use \`ButtonGroup\` when you want multiple elements to appear as a single unit w
 ## Basic Usage
 
 \`\`\`tsx
-import { Button } from "@keystone/ui/button";
-import { ButtonGroup } from "@keystone/ui/button-group";
+import { Button } from "keystoneui/button";
+import { ButtonGroup } from "keystoneui/button-group";
 
 <ButtonGroup>
   <Button variant="outline">Left</Button>
@@ -106,9 +106,9 @@ import { ButtonGroup } from "@keystone/ui/button-group";
 ## With Input
 
 \`\`\`tsx
-import { Button } from "@keystone/ui/button";
-import { ButtonGroup } from "@keystone/ui/button-group";
-import { Input } from "@keystone/ui/input";
+import { Button } from "keystoneui/button";
+import { ButtonGroup } from "keystoneui/button-group";
+import { Input } from "keystoneui/input";
 import { Search } from "lucide-react";
 
 <ButtonGroup>

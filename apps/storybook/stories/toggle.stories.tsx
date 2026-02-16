@@ -1,5 +1,5 @@
-import { Toggle } from "@keystone/ui/toggle";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Toggle } from "keystoneui/toggle";
 import {
   BoldIcon,
   BookmarkIcon,
@@ -19,7 +19,7 @@ const meta = {
 A two-state button that can be either on or off.
 
 \`\`\`tsx
-import { Toggle } from "@keystone/ui/toggle";
+import { Toggle } from "keystoneui/toggle";
 
 // Default toggle
 <Toggle aria-label="Toggle bold">

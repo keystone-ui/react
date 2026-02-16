@@ -1,5 +1,6 @@
-import { Button } from "@keystone/ui/button";
-import { Checkbox } from "@keystone/ui/checkbox";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "keystoneui/button";
+import { Checkbox } from "keystoneui/checkbox";
 import {
   Drawer,
   DrawerClose,
@@ -9,17 +10,16 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@keystone/ui/drawer";
-import { Input } from "@keystone/ui/input";
-import { RadioGroup, RadioGroupItem } from "@keystone/ui/radio-group";
+} from "keystoneui/drawer";
+import { Input } from "keystoneui/input";
+import { RadioGroup, RadioGroupItem } from "keystoneui/radio-group";
 import {
   Stepper,
   StepperContent,
   StepperStep,
   useStepper,
-} from "@keystone/ui/stepper";
-import { Switch } from "@keystone/ui/switch";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/stepper";
+import { Switch } from "keystoneui/switch";
 import {
   ArrowLeft,
   ArrowUpDown,
@@ -55,7 +55,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@keystone/ui/drawer";
+} from "keystoneui/drawer";
 
 <Drawer>
   <DrawerTrigger render={<Button variant="outline" />}>

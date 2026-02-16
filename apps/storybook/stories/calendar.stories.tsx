@@ -1,14 +1,14 @@
-import { Button } from "@keystone/ui/button";
-import { Calendar, CalendarDayButton } from "@keystone/ui/calendar";
-import { Card, CardContent, CardFooter } from "@keystone/ui/card";
-import { Field, FieldGroup, FieldLabel } from "@keystone/ui/field";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { addDays } from "date-fns";
+import { Button } from "keystoneui/button";
+import { Calendar, CalendarDayButton } from "keystoneui/calendar";
+import { Card, CardContent, CardFooter } from "keystoneui/card";
+import { Field, FieldGroup, FieldLabel } from "keystoneui/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@keystone/ui/input-group";
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { addDays } from "date-fns";
+} from "keystoneui/input-group";
 import { Clock2Icon } from "lucide-react";
 import * as React from "react";
 import type { DateRange } from "react-day-picker";
@@ -24,7 +24,7 @@ const meta = {
 A date calendar component built on top of [React DayPicker](https://daypicker.dev/).
 
 \`\`\`tsx
-import { Calendar } from "@keystone/ui/calendar";
+import { Calendar } from "keystoneui/calendar";
 
 <Calendar mode="single" className="rounded-lg shadow-lg ring-1 ring-popup-ring" />
 \`\`\`

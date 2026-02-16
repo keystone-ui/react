@@ -57,7 +57,7 @@ Confirm the component has a subpath export in `/packages/ui/package.json`. If it
 Create story files at `/apps/storybook/stories/[component-name].stories.tsx`:
 
 ```tsx
-import { Component, ComponentPart } from "@keystone/ui/component";
+import { Component, ComponentPart } from "keystoneui/component";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SomeIcon } from "lucide-react";
 // Only if needed:
@@ -74,7 +74,7 @@ const meta: Meta<typeof Component> = {
 Brief one-line description.
 
 \`\`\`tsx
-import { Component } from "@keystone/ui/component";
+import { Component } from "keystoneui/component";
 
 <Component>Basic usage</Component>
 \`\`\`
@@ -241,9 +241,9 @@ export const Controlled: Story = {
 ### Import Conventions
 
 ```tsx
-// Always subpath imports for @keystone/ui
-import { Button } from "@keystone/ui/button";
-import { Accordion, AccordionItem } from "@keystone/ui/accordion";
+// Always subpath imports for keystoneui
+import { Button } from "keystoneui/button";
+import { Accordion, AccordionItem } from "keystoneui/accordion";
 
 // Storybook types
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -284,7 +284,7 @@ description: Brief one-line description
 ## Import
 
 \`\`\`tsx
-import { Component } from "@keystone/ui/component";
+import { Component } from "keystoneui/component";
 \`\`\`
 
 ### Usage
@@ -329,7 +329,7 @@ Until Fumadocs is set up, focus exclusively on Storybook stories.
 Before considering documentation complete:
 
 - [ ] Read component source file — all exports, variants, and props verified
-- [ ] Imports use subpath pattern: `@keystone/ui/[component]`
+- [ ] Imports use subpath pattern: `keystoneui/[component]`
 - [ ] `title` follows `"Components/ComponentName"` pattern
 - [ ] `meta` typed correctly with `Meta<typeof Component>` or `satisfies`
 - [ ] All CVA variants have stories
@@ -348,7 +348,7 @@ Before considering documentation complete:
 ## Common Pitfalls
 
 1. **Assuming component structure** — always read the source first. Don't guess which compound parts exist.
-2. **Wrong import paths** — must be `@keystone/ui/[component]`, not `@keystone/ui` barrel import.
+2. **Wrong import paths** — must be `keystoneui/[component]`, not `keystoneui` barrel import.
 3. **Missing `as any` on args** — Storybook's type inference sometimes needs the cast on compound component stories.
 4. **Forgetting play functions** — at least the Default story should test basic interaction.
 5. **Using Radix UI imports** — Keystone UI uses `@base-ui/react`, never `@radix-ui`.

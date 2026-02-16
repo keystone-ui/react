@@ -1,11 +1,11 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Alert,
   AlertAction,
   AlertDescription,
   AlertTitle,
-} from "@keystone/ui/alert";
-import { Button } from "@keystone/ui/button";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/alert";
+import { Button } from "keystoneui/button";
 import {
   AlertTriangleIcon,
   CheckCircle2Icon,
@@ -27,7 +27,7 @@ A status message banner for displaying alerts, notifications, and status message
 Uses \`role="alert"\` for screen reader announcements — this is a system feedback component, not a content display component. For generic list rows or content blocks, use the **Item** component instead.
 
 \`\`\`tsx
-import { Alert, AlertTitle, AlertDescription, AlertAction } from "@keystone/ui/alert";
+import { Alert, AlertTitle, AlertDescription, AlertAction } from "keystoneui/alert";
 import { CheckCircle2Icon } from "lucide-react";
 
 // Basic alert

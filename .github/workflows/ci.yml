@@ -60,10 +60,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build packages
-        run: pnpm build --filter=@keystone/ui
+        run: pnpm build --filter=keystoneui
 
       - name: Run unit tests
-        run: pnpm test --filter=@keystone/ui
+        run: pnpm test --filter=keystoneui
 
   test-storybook:
     name: Storybook Tests

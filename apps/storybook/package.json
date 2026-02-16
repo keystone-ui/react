@@ -13,7 +13,7 @@
     "chromatic": "chromatic --exit-zero-on-changes --auto-accept-changes=main"
   },
   "dependencies": {
-    "@keystone/ui": "workspace:*",
+    "keystoneui": "workspace:*",
     "@remixicon/react": "^4.8.0",
     "chrono-node": "^2.9.0",
     "class-variance-authority": "^0.7.1",

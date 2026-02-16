@@ -1,12 +1,12 @@
-import { Button } from "@keystone/ui/button";
-import { Kbd } from "@keystone/ui/kbd";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "keystoneui/button";
+import { Kbd } from "keystoneui/kbd";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@keystone/ui/tooltip";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/tooltip";
 import {
   HomeIcon,
   InboxIcon,
@@ -35,7 +35,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@keystone/ui/tooltip";
+} from "keystoneui/tooltip";
 
 <Tooltip>
   <TooltipTrigger render={<Button variant="outline">Hover me</Button>} />

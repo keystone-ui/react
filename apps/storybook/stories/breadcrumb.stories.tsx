@@ -1,3 +1,4 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -6,16 +7,15 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@keystone/ui/breadcrumb";
-import { Button } from "@keystone/ui/button";
+} from "keystoneui/breadcrumb";
+import { Button } from "keystoneui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@keystone/ui/dropdown-menu";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/dropdown-menu";
 import { ChevronDownIcon, DotIcon } from "lucide-react";
 
 const meta = {
@@ -35,7 +35,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@keystone/ui/breadcrumb";
+} from "keystoneui/breadcrumb";
 
 <Breadcrumb>
   <BreadcrumbList>

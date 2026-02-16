@@ -1,12 +1,12 @@
-import { Badge } from "@keystone/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@keystone/ui/card";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Badge } from "keystoneui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "keystoneui/card";
 import {
   DescriptionList,
   DescriptionListDetails,
   DescriptionListItem,
   DescriptionListTerm,
-} from "@keystone/ui/description-list";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/description-list";
 import { CircleCheckIcon, CopyIcon, ExternalLinkIcon } from "lucide-react";
 
 const meta = {
@@ -24,7 +24,7 @@ import {
   DescriptionListItem,
   DescriptionListTerm,
   DescriptionListDetails,
-} from "@keystone/ui/description-list";
+} from "keystoneui/description-list";
 
 <DescriptionList>
   <DescriptionListItem>

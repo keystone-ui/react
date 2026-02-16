@@ -29,9 +29,6 @@ importers:
 
   apps/docs:
     dependencies:
-      '@keystone/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@types/mdx':
         specifier: ^2.0.13
         version: 2.0.13
@@ -47,6 +44,9 @@ importers:
       fumadocs-ui:
         specifier: ^15.5.1
         version: 15.8.5(@types/react-dom@19.2.3(@types/react@19.2.10))(@types/react@19.2.10)(lucide-react@0.487.0(react@19.2.4))(next@15.5.12(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(tailwindcss@4.1.18)
+      keystoneui:
+        specifier: workspace:*
+        version: link:../../packages/ui
       lucide-react:
         specifier: ^0.487.0
         version: 0.487.0(react@19.2.4)
@@ -59,6 +59,9 @@ importers:
       react-dom:
         specifier: ^19.2.4
         version: 19.2.4(react@19.2.4)
+      shiki:
+        specifier: ^3.22.0
+        version: 3.22.0
       tailwind-merge:
         specifier: ^3.4.0
         version: 3.4.0
@@ -90,9 +93,6 @@ importers:
 
   apps/storybook:
     dependencies:
-      '@keystone/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@remixicon/react':
         specifier: ^4.8.0
         version: 4.8.0(react@19.2.4)
@@ -114,6 +114,9 @@ importers:
       embla-carousel-wheel-gestures:
         specifier: ^8.1.0
         version: 8.1.0(embla-carousel@8.6.0)
+      keystoneui:
+        specifier: workspace:*
+        version: link:../../packages/ui
       lucide-react:
         specifier: ^0.487.0
         version: 0.487.0(react@19.2.4)

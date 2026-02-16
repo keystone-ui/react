@@ -1,19 +1,19 @@
-import { Button } from "@keystone/ui/button";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "keystoneui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@keystone/ui/card";
+} from "keystoneui/card";
 import {
   Tabs,
   TabsContent,
   TabsIndicator,
   TabsList,
   TabsTrigger,
-} from "@keystone/ui/tabs";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/tabs";
 import {
   AppWindowIcon,
   BarChartIcon,
@@ -45,7 +45,7 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@keystone/ui/tabs";
+} from "keystoneui/tabs";
 
 // Basic usage
 <Tabs defaultValue="overview">

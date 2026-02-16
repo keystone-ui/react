@@ -1,11 +1,11 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Accordion,
   AccordionHeader,
   AccordionItem,
   AccordionPanel,
   AccordionTrigger,
-} from "@keystone/ui/accordion";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/accordion";
 import { Plus, Settings } from "lucide-react";
 import { expect, userEvent, within } from "storybook/test";
 
@@ -25,7 +25,7 @@ import {
   AccordionHeader,
   AccordionTrigger,
   AccordionPanel 
-} from "@keystone/ui/accordion";
+} from "keystoneui/accordion";
 
 <Accordion>
   <AccordionItem value="item-1">

@@ -1,3 +1,4 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Avatar,
   AvatarBadge,
@@ -5,8 +6,7 @@ import {
   AvatarGroup,
   AvatarGroupCount,
   AvatarImage,
-} from "@keystone/ui/avatar";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/avatar";
 import { PlusIcon } from "lucide-react";
 
 const meta = {
@@ -26,7 +26,7 @@ import {
   AvatarBadge,
   AvatarGroup,
   AvatarGroupCount,
-} from "@keystone/ui/avatar";
+} from "keystoneui/avatar";
 
 // Basic avatar with image and fallback
 <Avatar>

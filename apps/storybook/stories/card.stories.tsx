@@ -1,5 +1,6 @@
-import { Badge } from "@keystone/ui/badge";
-import { Button } from "@keystone/ui/button";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Badge } from "keystoneui/badge";
+import { Button } from "keystoneui/button";
 import {
   Card,
   CardAction,
@@ -8,10 +9,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@keystone/ui/card";
-import { Input } from "@keystone/ui/input";
-import { Label } from "@keystone/ui/label";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/card";
+import { Input } from "keystoneui/input";
+import { Label } from "keystoneui/label";
 
 const meta = {
   title: "Components/Card",
@@ -31,7 +31,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@keystone/ui/card";
+} from "keystoneui/card";
 
 // Basic card
 <Card>

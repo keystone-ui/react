@@ -1,5 +1,5 @@
 {
-  "name": "@keystone/ui",
+  "name": "keystoneui",
   "version": "0.0.0",
   "sideEffects": false,
   "license": "MIT",

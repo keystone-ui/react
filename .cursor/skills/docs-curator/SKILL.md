@@ -49,7 +49,7 @@ Verify the component has a subpath export in `/packages/ui/package.json`:
 "./accordion": "./src/accordion.tsx"
 ```
 
-Stories must import via subpath: `import { Button } from "@keystone/ui/button"`.
+Stories must import via subpath: `import { Button } from "keystoneui/button"`.
 
 ## Story Quality Standards
 
@@ -70,7 +70,7 @@ const meta: Meta<typeof Component> = {
 Brief description of the component.
 
 \`\`\`tsx
-import { Component } from "@keystone/ui/component";
+import { Component } from "keystoneui/component";
 
 <Component>Basic usage</Component>
 \`\`\`
@@ -175,7 +175,7 @@ When reviewing a story file, verify:
 
 ### Accuracy
 
-- [ ] Imports use subpath pattern: `@keystone/ui/[component]`
+- [ ] Imports use subpath pattern: `keystoneui/[component]`
 - [ ] All component parts shown match the actual exports in the source `.tsx` file
 - [ ] CVA variants demonstrated match the variants defined in source
 - [ ] Props in `argTypes` match actual component props
@@ -209,7 +209,7 @@ When reviewing a story file, verify:
 
 ## Common Issues to Fix
 
-1. **Wrong import path** — using `@purposeinplay/core-v2` or other legacy paths instead of `@keystone/ui/[component]`
+1. **Wrong import path** — using `@purposeinplay/core-v2` or other legacy paths instead of `keystoneui/[component]`
 2. **Missing variant coverage** — not all CVA variants have corresponding stories
 3. **Stale component descriptions** — description mentions features that don't exist or misses new ones
 4. **Missing compound parts** — description lists parts that don't match actual exports
@@ -242,7 +242,7 @@ When presenting review findings, use this format:
 
 | # | Severity | Issue | Suggested Fix |
 |---|----------|-------|---------------|
-| 1 | High | Wrong import path | Change to `@keystone/ui/component` |
+| 1 | High | Wrong import path | Change to `keystoneui/component` |
 | 2 | Medium | Missing size variants | Add stories for sm, lg sizes |
 | 3 | Low | Description mentions removed prop | Update description text |
 

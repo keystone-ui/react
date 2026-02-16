@@ -1,20 +1,20 @@
-import { Button } from "@keystone/ui/button";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "keystoneui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@keystone/ui/card";
+} from "keystoneui/card";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@keystone/ui/collapsible";
-import { Field, FieldGroup, FieldLabel } from "@keystone/ui/field";
-import { Input } from "@keystone/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@keystone/ui/tabs";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/collapsible";
+import { Field, FieldGroup, FieldLabel } from "keystoneui/field";
+import { Input } from "keystoneui/input";
+import { Tabs, TabsList, TabsTrigger } from "keystoneui/tabs";
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -41,7 +41,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@keystone/ui/collapsible";
+} from "keystoneui/collapsible";
 
 <Collapsible>
   <CollapsibleTrigger>Toggle</CollapsibleTrigger>

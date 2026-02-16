@@ -1,5 +1,5 @@
-import { ToggleGroup, ToggleGroupItem } from "@keystone/ui/toggle-group";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ToggleGroup, ToggleGroupItem } from "keystoneui/toggle-group";
 import {
   AlignCenterIcon,
   AlignJustifyIcon,
@@ -25,7 +25,7 @@ const meta = {
 A group of toggle buttons with shared selection state.
 
 \`\`\`tsx
-import { ToggleGroup, ToggleGroupItem } from "@keystone/ui/toggle-group";
+import { ToggleGroup, ToggleGroupItem } from "keystoneui/toggle-group";
 
 // Multiple selection
 <ToggleGroup multiple variant="outline">

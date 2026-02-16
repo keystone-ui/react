@@ -1,4 +1,5 @@
-import { Button } from "@keystone/ui/button";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "keystoneui/button";
 import {
   Combobox,
   ComboboxChip,
@@ -16,16 +17,15 @@ import {
   ComboboxTrigger,
   ComboboxValue,
   useComboboxAnchor,
-} from "@keystone/ui/combobox";
+} from "keystoneui/combobox";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@keystone/ui/field";
-import { InputGroupAddon } from "@keystone/ui/input-group";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/field";
+import { InputGroupAddon } from "keystoneui/input-group";
 import { GlobeIcon, SearchIcon } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
@@ -68,7 +68,7 @@ import {
   ComboboxTrigger,
   ComboboxValue,
   useComboboxAnchor,
-} from "@keystone/ui/combobox";
+} from "keystoneui/combobox";
 
 // Basic usage
 <Combobox items={frameworks}>

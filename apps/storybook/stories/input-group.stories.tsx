@@ -1,3 +1,4 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   InputGroup,
   InputGroupAddon,
@@ -5,8 +6,7 @@ import {
   InputGroupInput,
   InputGroupText,
   InputGroupTextarea,
-} from "@keystone/ui/input-group";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/input-group";
 import {
   Check as CheckIcon,
   Copy as CopyIcon,
@@ -52,7 +52,7 @@ The InputGroup now uses an \`align\` prop instead of \`position\` + \`variant\`:
 ## Basic Usage
 
 \`\`\`tsx
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@keystone/ui/input-group";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "keystoneui/input-group";
 import { Search } from "lucide-react";
 
 <InputGroup>

@@ -49,7 +49,7 @@ For each component file in `packages/ui/src/*.tsx`, check:
 
 - [ ] Single-file — all types, contexts, sub-components, and variants in one file
 - [ ] File organization order — external imports, internal imports, types, variants, contexts, sub-components, main component, exports
-- [ ] Internal imports use relative siblings (`./utils`, `./button`) — no barrel imports, no `@keystone/ui` self-imports
+- [ ] Internal imports use relative siblings (`./utils`, `./button`) — no barrel imports, no `keystoneui` self-imports
 - [ ] Named exports at bottom of file — no default exports
 - [ ] `displayName` set on all components
 - [ ] `forwardRef` used on all components
@@ -92,7 +92,7 @@ For each component file, check:
 
 For each story file in `apps/storybook/stories/*.stories.tsx`, check:
 
-- [ ] Imports use subpath pattern — `@keystone/ui/[component]`
+- [ ] Imports use subpath pattern — `keystoneui/[component]`
 - [ ] No legacy import paths — no `@purposeinplay/core-v2`, no `@radix-ui`
 - [ ] `title` follows `"Components/ComponentName"` pattern
 - [ ] `meta` typed as `Meta<typeof Component>` or uses `satisfies`

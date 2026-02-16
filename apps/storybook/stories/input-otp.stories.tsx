@@ -1,6 +1,7 @@
 "use client";
 
-import { Button } from "@keystone/ui/button";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "keystoneui/button";
 import {
   Card,
   CardContent,
@@ -8,13 +9,13 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@keystone/ui/card";
+} from "keystoneui/card";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldLabel,
-} from "@keystone/ui/field";
+} from "keystoneui/field";
 import {
   InputOTP,
   InputOTPGroup,
@@ -22,8 +23,7 @@ import {
   InputOTPSlot,
   REGEXP_ONLY_DIGITS,
   REGEXP_ONLY_DIGITS_AND_CHARS,
-} from "@keystone/ui/input-otp";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/input-otp";
 import { RefreshCwIcon } from "lucide-react";
 import { useState } from "react";
 import { expect, within } from "storybook/test";
@@ -45,7 +45,7 @@ import {
   InputOTPSlot,
   REGEXP_ONLY_DIGITS,
   REGEXP_ONLY_DIGITS_AND_CHARS,
-} from "@keystone/ui/input-otp";
+} from "keystoneui/input-otp";
 
 // Basic 6-digit OTP input
 <InputOTP maxLength={6}>

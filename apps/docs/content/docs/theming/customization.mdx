@@ -7,23 +7,15 @@ Keystone UI's theme is built entirely on CSS custom properties. You own the them
 
 ## Complete Theme Reference
 
-Below is the full theme CSS. Copy this into your `globals.css` after `@import "@keystone/ui/base.css"` and modify any values.
+Below is the full theme CSS. Copy this into your `globals.css` after `@import "keystoneui/base.css"` and modify any values.
 
 <Callout type="info">
   You can also generate this automatically via the [Registry CLI](/docs/getting-started/registry): `npx shadcn add https://keystoneui.io/r/keystone-style.json`
 </Callout>
 
-### Dark Mode Variant
-
 ```css title="globals.css"
 @custom-variant dark (&:is(.dark *));
-```
 
-### Tailwind Registration
-
-Maps CSS variables to Tailwind utility classes:
-
-```css title="globals.css"
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -49,11 +41,7 @@ Maps CSS variables to Tailwind utility classes:
   --color-input-bg: var(--input-bg);
   --color-ring: var(--ring);
 }
-```
 
-### Light Mode Tokens
-
-```css title="globals.css"
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
@@ -80,11 +68,7 @@ Maps CSS variables to Tailwind utility classes:
   --ring: oklch(0.705 0.015 286.067);
   --skeleton-shimmer: oklch(1 0 0 / 0.06);
 }
-```
 
-### Dark Mode Tokens
-
-```css title="globals.css"
 .dark {
   --background: oklch(0.141 0.005 285.823);
   --foreground: oklch(0.985 0 0);
@@ -111,11 +95,7 @@ Maps CSS variables to Tailwind utility classes:
   --ring: oklch(0.552 0.016 285.938);
   --skeleton-shimmer: oklch(1 0 0 / 0.1);
 }
-```
 
-### Base Layer
-
-```css title="globals.css"
 @layer base {
   * {
     @apply border-border outline-ring/50;

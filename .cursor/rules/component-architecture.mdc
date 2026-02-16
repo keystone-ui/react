@@ -1,11 +1,11 @@
 ---
-description: Component architecture conventions for the @keystone/ui package. Apply when creating, editing, or reviewing UI components in packages/ui/.
+description: Component architecture conventions for the keystoneui package. Apply when creating, editing, or reviewing UI components in packages/ui/.
 globs: packages/ui/src/**/*
 alwaysApply: false
 ---
 # Component Architecture
 
-These are the structural conventions for the `@keystone/ui` component library. Follow them when creating or modifying components.
+These are the structural conventions for the `keystoneui` component library. Follow them when creating or modifying components.
 
 ## Flat Directory Structure
 
@@ -131,7 +131,7 @@ import { Label } from "./label";
 
 // Bad - no barrel imports
 import { cn } from ".";
-import { Button } from "@keystone/ui";
+import { Button } from "keystoneui";
 ```
 
 ### External (consumers of the package)
@@ -140,11 +140,11 @@ Always use subpath imports:
 
 ```tsx
 // Good
-import { Button } from "@keystone/ui/button";
-import { Accordion, AccordionItem } from "@keystone/ui/accordion";
+import { Button } from "keystoneui/button";
+import { Accordion, AccordionItem } from "keystoneui/accordion";
 
 // Bad - no barrel import
-import { Button } from "@keystone/ui";
+import { Button } from "keystoneui";
 ```
 
 ## Package Exports

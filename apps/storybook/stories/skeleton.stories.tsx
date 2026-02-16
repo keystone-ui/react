@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader } from "@keystone/ui/card";
-import { Skeleton, SkeletonGroup } from "@keystone/ui/skeleton";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Card, CardContent, CardHeader } from "keystoneui/card";
+import { Skeleton, SkeletonGroup } from "keystoneui/skeleton";
 
 // ---------------------------------------------------------------------------
 // Meta
@@ -16,7 +16,7 @@ const meta = {
 A placeholder loading component that mimics the shape of content before it loads.
 
 \`\`\`tsx
-import { Skeleton, SkeletonGroup } from "@keystone/ui/skeleton";
+import { Skeleton, SkeletonGroup } from "keystoneui/skeleton";
 
 // Basic pulse skeleton
 <Skeleton className="h-4 w-[200px]" />

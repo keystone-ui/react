@@ -5,7 +5,7 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./*"],
-      "@keystone/ui/*": ["../../packages/ui/src/*"],
+      "keystoneui/*": ["../../packages/ui/src/*"],
       "@keystone/theme/*": ["../../packages/theme/src/*"]
     },
     "strictNullChecks": true

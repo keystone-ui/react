@@ -1,3 +1,4 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Field,
   FieldContent,
@@ -5,9 +6,8 @@ import {
   FieldGroup,
   FieldLabel,
   FieldTitle,
-} from "@keystone/ui/field";
-import { Switch } from "@keystone/ui/switch";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/field";
+import { Switch } from "keystoneui/switch";
 import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
@@ -34,8 +34,8 @@ A switch component built on Base UI's Switch primitive for accessible, customiza
 Pair the switch with \`Field\` and \`FieldLabel\` for proper layout and labeling.
 
 \`\`\`tsx
-import { Switch } from "@keystone/ui/switch";
-import { Field, FieldLabel } from "@keystone/ui/field";
+import { Switch } from "keystoneui/switch";
+import { Field, FieldLabel } from "keystoneui/field";
 
 <Field orientation="horizontal">
   <Switch id="airplane-mode" />

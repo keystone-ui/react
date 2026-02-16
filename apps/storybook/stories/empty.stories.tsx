@@ -1,5 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@keystone/ui/avatar";
-import { Button } from "@keystone/ui/button";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Avatar, AvatarFallback, AvatarImage } from "keystoneui/avatar";
+import { Button } from "keystoneui/button";
 import {
   Empty,
   EmptyContent,
@@ -7,14 +8,13 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@keystone/ui/empty";
+} from "keystoneui/empty";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@keystone/ui/input-group";
-import { Kbd } from "@keystone/ui/kbd";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/input-group";
+import { Kbd } from "keystoneui/kbd";
 import {
   ArrowUpRightIcon,
   BellIcon,
@@ -42,8 +42,8 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@keystone/ui/empty";
-import { Button } from "@keystone/ui/button";
+} from "keystoneui/empty";
+import { Button } from "keystoneui/button";
 import { FolderCodeIcon } from "lucide-react";
 
 <Empty>

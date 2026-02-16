@@ -1,9 +1,9 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@keystone/ui/resizable";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/resizable";
 import { expect, within } from "storybook/test";
 
 // ---------------------------------------------------------------------------
@@ -24,7 +24,7 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "@keystone/ui/resizable";
+} from "keystoneui/resizable";
 
 <ResizablePanelGroup orientation="horizontal">
   <ResizablePanel defaultSize="50%">One</ResizablePanel>

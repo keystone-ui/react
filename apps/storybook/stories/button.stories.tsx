@@ -1,6 +1,3 @@
-import { Button, type ButtonProps } from "@keystone/ui/button";
-import { ButtonGroup } from "@keystone/ui/button-group";
-import { cn } from "@keystone/ui/utils";
 import {
   RiFacebookFill,
   RiGithubFill,
@@ -8,6 +5,9 @@ import {
   RiTwitterXFill,
 } from "@remixicon/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button, type ButtonProps } from "keystoneui/button";
+import { ButtonGroup } from "keystoneui/button-group";
+import { cn } from "keystoneui/utils";
 import {
   ArrowLeft,
   ArrowRight,
@@ -34,7 +34,7 @@ const meta = {
 A versatile button component with support for different variants, sizes, and states.
 
 \`\`\`tsx
-import { Button } from "@keystone/ui/button";
+import { Button } from "keystoneui/button";
 
 // Default button
 <Button>Click me</Button>

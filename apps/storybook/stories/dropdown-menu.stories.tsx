@@ -1,5 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@keystone/ui/avatar";
-import { Button } from "@keystone/ui/button";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Avatar, AvatarFallback, AvatarImage } from "keystoneui/avatar";
+import { Button } from "keystoneui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -16,8 +17,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@keystone/ui/dropdown-menu";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/dropdown-menu";
 import {
   BellIcon,
   Building2Icon,
@@ -73,7 +73,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@keystone/ui/dropdown-menu";
+} from "keystoneui/dropdown-menu";
 
 <DropdownMenu>
   <DropdownMenuTrigger render={<Button variant="outline">Open</Button>} />

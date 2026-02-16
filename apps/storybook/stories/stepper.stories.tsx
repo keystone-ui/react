@@ -1,14 +1,14 @@
-import { Button } from "@keystone/ui/button";
-import { Checkbox } from "@keystone/ui/checkbox";
-import { Input } from "@keystone/ui/input";
-import { Label } from "@keystone/ui/label";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Button } from "keystoneui/button";
+import { Checkbox } from "keystoneui/checkbox";
+import { Input } from "keystoneui/input";
+import { Label } from "keystoneui/label";
 import {
   Stepper,
   StepperContent,
   StepperStep,
   useStepper,
-} from "@keystone/ui/stepper";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/stepper";
 import { useState } from "react";
 import { expect, within } from "storybook/test";
 
@@ -29,7 +29,7 @@ import {
   StepperContent,
   StepperStep,
   useStepper,
-} from "@keystone/ui/stepper";
+} from "keystoneui/stepper";
 
 function MyWizard() {
   const [step, setStep] = useState(0);

@@ -1,16 +1,16 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@keystone/ui/field";
+} from "keystoneui/field";
 import {
   NativeSelect,
   NativeSelectOptGroup,
   NativeSelectOption,
-} from "@keystone/ui/native-select";
-import type { Meta, StoryObj } from "@storybook/react-vite";
+} from "keystoneui/native-select";
 import { expect, within } from "storybook/test";
 
 const meta = {
@@ -27,7 +27,7 @@ import {
   NativeSelect,
   NativeSelectOptGroup,
   NativeSelectOption,
-} from "@keystone/ui/native-select";
+} from "keystoneui/native-select";
 
 // Basic usage
 <NativeSelect>
