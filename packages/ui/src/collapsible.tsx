@@ -114,6 +114,7 @@ const CollapsibleContent = React.forwardRef<
     <CollapsiblePrimitive.Panel
       className={cn(baseClasses, className)}
       data-slot="collapsible-content"
+      keepMounted
       ref={ref}
       {...props}
     />
