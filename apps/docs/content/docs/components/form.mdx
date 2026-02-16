@@ -1,0 +1,31 @@
+---
+title: Form
+description: Form component with built-in validation integration and structured field layout.
+---
+
+## Import
+
+```tsx
+import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from "keystoneui/form";
+```
+
+## Usage
+
+```tsx
+<Form>
+  <FormField name="email">
+    <FormItem>
+      <FormLabel>Email</FormLabel>
+      <FormControl>
+        <input type="email" />
+      </FormControl>
+      <FormDescription>Enter your email address.</FormDescription>
+      <FormMessage />
+    </FormItem>
+  </FormField>
+</Form>
+```
+
+## API Reference
+
+See the source code and Storybook for full API details.

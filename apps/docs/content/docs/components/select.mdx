@@ -1,0 +1,143 @@
+---
+title: Select
+description: A dropdown select component with search, groups, and custom rendering.
+---
+
+## Import
+
+```tsx
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+  SelectGroup,
+  SelectGroupLabel,
+  SelectSeparator,
+} from "keystoneui/select";
+```
+
+## Usage
+
+```tsx
+<Select defaultValue="apple">
+  <SelectTrigger>
+    <SelectValue placeholder="Select a fruit" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="apple">Apple</SelectItem>
+    <SelectItem value="banana">Banana</SelectItem>
+    <SelectItem value="orange">Orange</SelectItem>
+  </SelectContent>
+</Select>
+```
+
+## With Groups
+
+Organize options into labeled groups:
+
+```tsx
+<Select>
+  <SelectTrigger>
+    <SelectValue placeholder="Select a food" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectGroup>
+      <SelectGroupLabel>Fruits</SelectGroupLabel>
+      <SelectItem value="apple">Apple</SelectItem>
+      <SelectItem value="banana">Banana</SelectItem>
+    </SelectGroup>
+    <SelectSeparator />
+    <SelectGroup>
+      <SelectGroupLabel>Vegetables</SelectGroupLabel>
+      <SelectItem value="carrot">Carrot</SelectItem>
+      <SelectItem value="broccoli">Broccoli</SelectItem>
+    </SelectGroup>
+  </SelectContent>
+</Select>
+```
+
+## Sizes
+
+```tsx
+<Select>
+  <SelectTrigger size="sm">
+    <SelectValue placeholder="Small" />
+  </SelectTrigger>
+  <SelectContent>...</SelectContent>
+</Select>
+
+<Select>
+  <SelectTrigger>
+    <SelectValue placeholder="Default" />
+  </SelectTrigger>
+  <SelectContent>...</SelectContent>
+</Select>
+```
+
+## Compact Items
+
+Use `size="compact"` on the content for denser item lists:
+
+```tsx
+<Select>
+  <SelectTrigger>
+    <SelectValue placeholder="Compact list" />
+  </SelectTrigger>
+  <SelectContent size="compact">
+    <SelectItem value="1">Option 1</SelectItem>
+    <SelectItem value="2">Option 2</SelectItem>
+    <SelectItem value="3">Option 3</SelectItem>
+  </SelectContent>
+</Select>
+```
+
+## Disabled
+
+```tsx
+<Select disabled>
+  <SelectTrigger>
+    <SelectValue placeholder="Disabled" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="1">Option 1</SelectItem>
+  </SelectContent>
+</Select>
+```
+
+## Disabled Items
+
+```tsx
+<SelectItem value="unavailable" disabled>
+  Unavailable Option
+</SelectItem>
+```
+
+## API Reference
+
+### Select
+
+The root component. Accepts all Base UI Select props.
+
+### SelectTrigger
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"default" \| "sm"` | `"default"` | Trigger size |
+| `className` | `string` | - | Additional CSS classes |
+
+### SelectContent
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"default" \| "compact"` | `"default"` | Item density |
+| `className` | `string` | - | Additional CSS classes |
+
+### SelectItem
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | Required | The item value |
+| `disabled` | `boolean` | `false` | Disables the item |
+| `className` | `string` | - | Additional CSS classes |

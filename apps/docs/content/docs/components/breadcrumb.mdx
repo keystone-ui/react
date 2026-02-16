@@ -1,0 +1,32 @@
+---
+title: Breadcrumb
+description: Navigation breadcrumb trail showing the user's current location within a hierarchy.
+---
+
+## Import
+
+```tsx
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from "keystoneui/breadcrumb";
+```
+
+## Usage
+
+```tsx
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/">Home</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="/docs">Docs</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>Breadcrumb</BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>
+```
+
+## API Reference
+
+See the source code and Storybook for full API details.

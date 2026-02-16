@@ -1,0 +1,94 @@
+---
+title: Input
+description: A form input field with consistent styling and focus states.
+---
+
+## Import
+
+```tsx
+import { Input } from "keystoneui/input";
+```
+
+## Usage
+
+```tsx
+<Input type="text" placeholder="Enter your name" />
+```
+
+## Types
+
+The Input supports all standard HTML input types:
+
+```tsx
+<Input type="text" placeholder="Text" />
+<Input type="email" placeholder="email@example.com" />
+<Input type="password" placeholder="Password" />
+<Input type="number" placeholder="0" />
+<Input type="search" placeholder="Search..." />
+<Input type="url" placeholder="https://" />
+```
+
+## With Label
+
+Combine with the Label component for accessible forms:
+
+```tsx
+import { Label } from "keystoneui/label";
+import { Input } from "keystoneui/input";
+
+<div className="space-y-2">
+  <Label htmlFor="email">Email</Label>
+  <Input id="email" type="email" placeholder="you@example.com" />
+</div>
+```
+
+## With Field
+
+Use the Field component for label, description, and error handling:
+
+```tsx
+import { Field, FieldLabel, FieldDescription, FieldError } from "keystoneui/field";
+import { Input } from "keystoneui/input";
+
+<Field>
+  <FieldLabel>Username</FieldLabel>
+  <Input placeholder="johndoe" />
+  <FieldDescription>Choose a unique username.</FieldDescription>
+  <FieldError>Username is already taken.</FieldError>
+</Field>
+```
+
+## Disabled
+
+```tsx
+<Input disabled placeholder="Disabled input" />
+<Input disabled value="Cannot edit this" />
+```
+
+## Invalid State
+
+Use `aria-invalid` for validation error styling:
+
+```tsx
+<Input aria-invalid placeholder="Invalid input" />
+```
+
+The input will show a red ring and border when invalid.
+
+## File Input
+
+```tsx
+<Input type="file" />
+```
+
+## API Reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `type` | `string` | `"text"` | HTML input type |
+| `placeholder` | `string` | - | Placeholder text |
+| `disabled` | `boolean` | `false` | Disables the input |
+| `aria-invalid` | `boolean` | `false` | Shows error styling |
+| `className` | `string` | - | Additional CSS classes |
+
+The Input forwards all standard HTML `<input>` props.

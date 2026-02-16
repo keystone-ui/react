@@ -1,0 +1,27 @@
+---
+title: Tabs
+description: Tabbed interface for organizing content into selectable panels.
+---
+
+## Import
+
+```tsx
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "keystoneui/tabs";
+```
+
+## Usage
+
+```tsx
+<Tabs defaultValue="tab-1">
+  <TabsList>
+    <TabsTrigger value="tab-1">Tab 1</TabsTrigger>
+    <TabsTrigger value="tab-2">Tab 2</TabsTrigger>
+  </TabsList>
+  <TabsContent value="tab-1">Content for tab 1.</TabsContent>
+  <TabsContent value="tab-2">Content for tab 2.</TabsContent>
+</Tabs>
+```
+
+## API Reference
+
+See the source code and Storybook for full API details.

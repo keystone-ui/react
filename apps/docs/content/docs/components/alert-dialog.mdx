@@ -1,0 +1,30 @@
+---
+title: AlertDialog
+description: Modal confirmation dialog for destructive or irreversible actions requiring user acknowledgement.
+---
+
+## Import
+
+```tsx
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from "keystoneui/alert-dialog";
+```
+
+## Usage
+
+```tsx
+<AlertDialog>
+  <AlertDialogTrigger>Delete item</AlertDialogTrigger>
+  <AlertDialogContent>
+    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+    <AlertDialogDescription>
+      This action cannot be undone.
+    </AlertDialogDescription>
+    <AlertDialogCancel>Cancel</AlertDialogCancel>
+    <AlertDialogAction>Delete</AlertDialogAction>
+  </AlertDialogContent>
+</AlertDialog>
+```
+
+## API Reference
+
+See the source code and Storybook for full API details.

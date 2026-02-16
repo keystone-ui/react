@@ -1,0 +1,40 @@
+---
+title: Introduction
+description: A modern React component library built with Tailwind CSS v4 and Base UI.
+---
+
+## What is Keystone UI?
+
+Keystone UI is a comprehensive React component library that provides 54+ production-ready components for building beautiful, accessible user interfaces. Every component is designed to work seamlessly with Tailwind CSS v4 and follows modern React patterns.
+
+### Key Features
+
+- **54+ Components** -- Buttons, inputs, modals, tables, and everything in between
+- **Accessible** -- Built on Base UI primitives with ARIA support, keyboard navigation, and screen reader compatibility
+- **Tailwind CSS v4** -- CSS-first configuration with OKLCH color tokens and custom variants
+- **Dark Mode** -- First-class dark mode support with automatic adaptation
+- **Tree-Shakeable** -- Subpath exports mean you only ship what you use
+- **TypeScript** -- Fully typed with comprehensive type exports
+
+### Architecture
+
+Keystone UI uses a flat, single-file component architecture. Every component is one `.tsx` file with no nested directories. Consumers import via subpath exports:
+
+```tsx
+import { Button } from "keystoneui/button";
+import { Input } from "keystoneui/input";
+import { Card, CardHeader, CardTitle, CardContent } from "keystoneui/card";
+```
+
+### Tech Stack
+
+| Technology | Purpose |
+| --- | --- |
+| [Base UI](https://base-ui.com) | Unstyled accessible primitives |
+| [Tailwind CSS v4](https://tailwindcss.com) | Utility-first styling |
+| [CVA](https://cva.style) | Variant management |
+| [Lucide React](https://lucide.dev) | Icon library |
+
+## Getting Started
+
+Ready to start building? Follow our [installation guide](/docs/getting-started/installation) to set up Keystone UI in your project.

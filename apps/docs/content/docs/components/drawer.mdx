@@ -1,0 +1,33 @@
+---
+title: Drawer
+description: Slide-out panel that emerges from screen edges for supplementary content or navigation.
+---
+
+## Import
+
+```tsx
+import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerBody, DrawerFooter } from "keystoneui/drawer";
+```
+
+## Usage
+
+```tsx
+<Drawer>
+  <DrawerTrigger>Open Drawer</DrawerTrigger>
+  <DrawerContent>
+    <DrawerHeader>
+      <DrawerTitle>Drawer Title</DrawerTitle>
+    </DrawerHeader>
+    <DrawerBody>
+      <p>Drawer content goes here.</p>
+    </DrawerBody>
+    <DrawerFooter>
+      <button>Save</button>
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>
+```
+
+## API Reference
+
+See the source code and Storybook for full API details.

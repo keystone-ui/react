@@ -1,0 +1,134 @@
+---
+title: Modal
+description: A dialog overlay for focused interactions like confirmations, forms, and detail views.
+---
+
+## Import
+
+```tsx
+import {
+  Modal,
+  ModalTrigger,
+  ModalContent,
+  ModalHeader,
+  ModalTitle,
+  ModalDescription,
+  ModalBody,
+  ModalFooter,
+  ModalClose,
+} from "keystoneui/modal";
+```
+
+## Usage
+
+```tsx
+<Modal>
+  <ModalTrigger>
+    <Button>Open Modal</Button>
+  </ModalTrigger>
+  <ModalContent>
+    <ModalHeader>
+      <ModalTitle>Modal Title</ModalTitle>
+      <ModalDescription>This is a description of the modal.</ModalDescription>
+    </ModalHeader>
+    <ModalBody>
+      <p>Your content goes here.</p>
+    </ModalBody>
+    <ModalFooter>
+      <ModalClose>
+        <Button variant="outline">Cancel</Button>
+      </ModalClose>
+      <Button>Confirm</Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
+```
+
+## Sizes
+
+The Modal supports multiple size variants:
+
+```tsx
+<ModalContent size="sm">...</ModalContent>   {/* 400px */}
+<ModalContent size="default">...</ModalContent> {/* 500px */}
+<ModalContent size="lg">...</ModalContent>   {/* 640px */}
+<ModalContent size="xl">...</ModalContent>   {/* 780px */}
+<ModalContent size="full">...</ModalContent>  {/* Full screen */}
+```
+
+## With Form
+
+A common pattern for form-based modals:
+
+```tsx
+<Modal>
+  <ModalTrigger>
+    <Button>Edit Profile</Button>
+  </ModalTrigger>
+  <ModalContent>
+    <ModalHeader>
+      <ModalTitle>Edit Profile</ModalTitle>
+      <ModalDescription>Update your profile information.</ModalDescription>
+    </ModalHeader>
+    <ModalBody className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="name">Name</Label>
+        <Input id="name" placeholder="John Doe" />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input id="email" type="email" placeholder="john@example.com" />
+      </div>
+    </ModalBody>
+    <ModalFooter>
+      <ModalClose>
+        <Button variant="outline">Cancel</Button>
+      </ModalClose>
+      <Button>Save Changes</Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
+```
+
+## Controlled
+
+Control the modal open state programmatically:
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<Modal open={open} onOpenChange={setOpen}>
+  <ModalContent>
+    <ModalHeader>
+      <ModalTitle>Controlled Modal</ModalTitle>
+    </ModalHeader>
+    <ModalBody>
+      <p>This modal is controlled externally.</p>
+    </ModalBody>
+    <ModalFooter>
+      <Button onClick={() => setOpen(false)}>Close</Button>
+    </ModalFooter>
+  </ModalContent>
+</Modal>
+```
+
+## API Reference
+
+### Modal
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+| `defaultOpen` | `boolean` | `false` | Initial open state (uncontrolled) |
+
+### ModalContent
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"sm" \| "default" \| "lg" \| "xl" \| "full"` | `"default"` | Modal width |
+| `className` | `string` | - | Additional CSS classes |
+
+### ModalClose
+
+Wraps a child element that closes the modal when clicked. No additional props.

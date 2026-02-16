@@ -1,0 +1,88 @@
+---
+title: Button
+description: A versatile button component with multiple variants, sizes, and states.
+---
+
+## Import
+
+```tsx
+import { Button } from "keystoneui/button";
+```
+
+## Usage
+
+<ComponentPreview name="button-default" />
+
+## Variants
+
+The Button component supports six visual variants:
+
+<ComponentPreview name="button-variants" />
+
+| Variant | Use Case |
+| --- | --- |
+| `default` | Primary actions, CTAs |
+| `secondary` | Secondary actions alongside a primary |
+| `destructive` | Delete, remove, or dangerous operations |
+| `outline` | Bordered button, often used for cancel |
+| `ghost` | Minimal emphasis, toolbar actions |
+| `link` | Inline text-style links with button behavior |
+
+### Link Variant
+
+<ComponentPreview name="button-link" />
+
+## Sizes
+
+<ComponentPreview name="button-sizes" />
+
+### Icon Buttons
+
+Square icon buttons across different variants:
+
+<ComponentPreview name="button-icon-buttons" />
+
+## With Icons
+
+Icons are automatically sized and positioned:
+
+<ComponentPreview name="button-with-icons" />
+
+## Loading State
+
+Click the buttons to see the interactive loading state with a spinner overlay:
+
+<ComponentPreview name="button-loading" />
+
+## Disabled
+
+<ComponentPreview name="button-disabled" />
+
+Disabled buttons show `opacity-50` and `cursor-not-allowed`, and the press animation is cancelled.
+
+## Full Width
+
+<ComponentPreview name="button-full-width" />
+
+## As Link
+
+Render a button as an anchor tag with correct semantics:
+
+<ComponentPreview name="button-as-link" />
+
+## Rounded
+
+Apply `rounded-full` for pill-shaped buttons:
+
+<ComponentPreview name="button-rounded" />
+
+## API Reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `variant` | `"default" \| "secondary" \| "destructive" \| "outline" \| "ghost" \| "link"` | `"default"` | Visual style variant |
+| `size` | `"default" \| "xs" \| "sm" \| "lg" \| "icon" \| "icon-xs" \| "icon-sm" \| "icon-lg"` | `"default"` | Size of the button |
+| `isLoading` | `boolean` | `false` | Shows loading spinner and disables button |
+| `disabled` | `boolean` | `false` | Disables the button |
+| `className` | `string` | - | Additional CSS classes |
+| `render` | `React.ReactElement` | - | Render as a different element (Base UI polymorphism) |
