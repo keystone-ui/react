@@ -18,6 +18,10 @@ export function baseOptions(): BaseLayoutProps {
         active: "nested-url",
       },
       {
+        text: "Themes",
+        url: "/themes",
+      },
+      {
         text: "Gallery",
         url: "/gallery",
       },

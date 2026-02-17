@@ -39,6 +39,13 @@
   --color-input: var(--input);
   --color-input-bg: var(--input-bg);
   --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
 }
 
 :root {
@@ -66,6 +73,7 @@
   --input-bg: transparent;
   --ring: oklch(0.705 0.015 286.067);
   --skeleton-shimmer: oklch(1 0 0 / 0.06);
+  --radius: 0.625rem;
 }
 
 .dark {

@@ -27,7 +27,8 @@
       "input": "oklch(0.92 0.004 286.32)",
       "input-bg": "transparent",
       "ring": "oklch(0.705 0.015 286.067)",
-      "skeleton-shimmer": "oklch(1 0 0 / 0.06)"
+      "skeleton-shimmer": "oklch(1 0 0 / 0.06)",
+      "radius": "0.625rem"
     },
     "dark": {
       "background": "oklch(0.141 0.005 285.823)",
@@ -53,7 +54,8 @@
       "input": "oklch(1 0 0 / 15%)",
       "input-bg": "oklch(1 0 0 / 5%)",
       "ring": "oklch(0.552 0.016 285.938)",
-      "skeleton-shimmer": "oklch(1 0 0 / 0.1)"
+      "skeleton-shimmer": "oklch(1 0 0 / 0.1)",
+      "radius": "0.625rem"
     }
   }
 }

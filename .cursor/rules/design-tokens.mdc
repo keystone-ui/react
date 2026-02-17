@@ -53,15 +53,34 @@ Do NOT mix these patterns. Do NOT use hybrid approaches (e.g., combining ring an
 
 ## Rounded Corners
 
-Use Tailwind's built-in radius scale consistently. No custom `--radius` theme token exists.
+A single `--radius` CSS variable (default `0.625rem` / 10px) drives the entire radius scale. It is a consumer-owned theme token defined in `:root`, just like colors. The derived scale is registered in `base.css` via `@theme inline`:
 
-- `rounded-sm` (4px) — small controls: Checkbox, nested InputGroupButton xs
-- `rounded-md` (6px) — form inputs: Input, Textarea, NativeSelect, InputOTPSlot, DropdownMenuSubContent
-- `rounded-lg` (8px) — containers/actions: Button, popups, TabsList, AccordionItem box
-- `rounded-xl` (12px) — large surfaces: Card
+```
+--radius-sm:  calc(var(--radius) - 4px)   → rounded-sm  (6px at default)
+--radius-md:  calc(var(--radius) - 2px)   → rounded-md  (8px at default)
+--radius-lg:  var(--radius)               → rounded-lg  (10px at default)
+--radius-xl:  calc(var(--radius) + 4px)   → rounded-xl  (14px at default)
+--radius-2xl: calc(var(--radius) + 8px)   → rounded-2xl (18px at default)
+--radius-3xl: calc(var(--radius) + 12px)  → rounded-3xl (22px at default)
+--radius-4xl: calc(var(--radius) + 16px)  → rounded-4xl (26px at default)
+```
+
+Changing `--radius` shifts the entire scale uniformly. Components use Tailwind utilities (`rounded-sm`, `rounded-md`, etc.) and never hardcode pixel values.
+
+### Semantic usage
+
+- `rounded-sm` — small controls: Checkbox, nested InputGroupButton xs, ComboboxChip
+- `rounded-md` — form inputs: Input, Textarea, NativeSelect, InputOTPSlot, DropdownMenuSubContent, popup items
+- `rounded-lg` — containers/actions: Button, popups, TabsList, AccordionItem box, Toast
+- `rounded-xl` — large surfaces: Card, Command
 - `rounded-full` — pills/circles: Badge, Avatar, Switch, pill tabs
 
-Exception: Calendar uses a scoped `--cell-radius` CSS custom property (`[--cell-radius:var(--radius-md)]`) with `rounded-(--cell-radius)` for cell radius in range selections. This is component-scoped via Tailwind's arbitrary property syntax, not a theme token.
+### Direct `var(--radius)` usage
+
+Some components use `calc(var(--radius) - Npx)` for bespoke offsets that don't match a named tier. Since `@theme inline` does not create runtime CSS variables for `--radius-sm` etc., always use `calc(var(--radius) ± offset)` when referencing the radius token directly:
+
+- Calendar: `[--cell-radius:calc(var(--radius)-2px)]` for cell radius in range selections
+- InputGroupAddon: `[&>kbd]:rounded-[calc(var(--radius)-5px)]` for nested kbd elements
 
 ## Disabled States
 
