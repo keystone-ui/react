@@ -1,4 +1,28 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Avatar, AvatarFallback, AvatarImage } from "keystoneui/avatar";
+import { Badge } from "keystoneui/badge";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "keystoneui/command";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "keystoneui/dropdown-menu";
+import { Field, FieldLabel } from "keystoneui/field";
 import {
   InputGroup,
   InputGroupAddon,
@@ -7,18 +31,29 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "keystoneui/input-group";
+import { Popover, PopoverContent, PopoverTrigger } from "keystoneui/popover";
+import { Switch } from "keystoneui/switch";
+import { Tooltip, TooltipContent, TooltipTrigger } from "keystoneui/tooltip";
 import {
+  ArrowUpIcon,
+  AtSignIcon,
+  BookOpenIcon,
   Check as CheckIcon,
+  CirclePlusIcon,
   Copy as CopyIcon,
   Eye as EyeIcon,
   EyeOff as EyeOffIcon,
+  GlobeIcon,
+  LayoutGridIcon,
   Loader2 as LoaderIcon,
   Mail as MailIcon,
+  PaperclipIcon,
+  PlusIcon,
   Search as SearchIcon,
   SendHorizonal as SendIcon,
   X as XIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
@@ -496,6 +531,345 @@ export const WithTextarea: Story = {
       description: {
         story:
           "Use `InputGroupTextarea` instead of `InputGroupInput` for multiline text. The container automatically expands to fit.",
+      },
+    },
+  },
+};
+
+// Prompt Form
+const PROMPT_MENTIONABLE = [
+  { type: "page", title: "Meeting Notes", image: "📝" },
+  { type: "page", title: "Project Dashboard", image: "📊" },
+  { type: "page", title: "Ideas & Brainstorming", image: "💡" },
+  { type: "page", title: "Calendar & Events", image: "📅" },
+  { type: "page", title: "Documentation", image: "📚" },
+  {
+    type: "user",
+    title: "shadcn",
+    image: "https://github.com/shadcn.png",
+    workspace: "Workspace",
+  },
+  {
+    type: "user",
+    title: "maxleiter",
+    image: "https://github.com/maxleiter.png",
+    workspace: "Workspace",
+  },
+  {
+    type: "user",
+    title: "evilrabbit",
+    image: "https://github.com/evilrabbit.png",
+    workspace: "Workspace",
+  },
+] as const;
+
+const PROMPT_MODELS = [
+  { name: "Auto" },
+  { name: "Agent Mode", badge: "Beta" },
+  { name: "Plan Mode" },
+] as const;
+
+function PromptMentionIcon({
+  item,
+}: {
+  item: (typeof PROMPT_MENTIONABLE)[number];
+}) {
+  return item.type === "page" ? (
+    <span className="flex size-4 items-center justify-center">
+      {item.image}
+    </span>
+  ) : (
+    <Avatar className="size-4">
+      <AvatarImage src={item.image} />
+      <AvatarFallback>{item.title[0]}</AvatarFallback>
+    </Avatar>
+  );
+}
+
+export const PromptForm: Story = {
+  name: "Prompt Form",
+  render() {
+    const [mentions, setMentions] = useState<string[]>([]);
+    const [mentionPopoverOpen, setMentionPopoverOpen] = useState(false);
+    const [modelPopoverOpen, setModelPopoverOpen] = useState(false);
+    const [selectedModel, setSelectedModel] = useState(PROMPT_MODELS[0]);
+    const [scopeMenuOpen, setScopeMenuOpen] = useState(false);
+
+    const grouped = useMemo(() => {
+      return PROMPT_MENTIONABLE.reduce(
+        (acc, item) => {
+          if (!mentions.includes(item.title)) {
+            if (!acc[item.type]) {
+              acc[item.type] = [];
+            }
+            acc[item.type].push(item);
+          }
+          return acc;
+        },
+        {} as Record<string, (typeof PROMPT_MENTIONABLE)[number][]>
+      );
+    }, [mentions]);
+
+    const hasMentions = mentions.length > 0;
+
+    return (
+      <form className="w-full max-w-lg">
+        <Field>
+          <FieldLabel className="sr-only" htmlFor="prompt-story">
+            Prompt
+          </FieldLabel>
+          <InputGroup className="rounded-xl">
+            <InputGroupTextarea
+              id="prompt-story"
+              placeholder="Ask, search, or make anything..."
+            />
+            <InputGroupAddon align="block-start" className="pt-3">
+              <Popover
+                onOpenChange={setMentionPopoverOpen}
+                open={mentionPopoverOpen}
+              >
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <PopoverTrigger
+                      render={
+                        <InputGroupButton
+                          className="transition-transform"
+                          size={hasMentions ? "icon-sm" : "sm"}
+                          variant="outline"
+                        />
+                      }
+                    >
+                      <AtSignIcon /> {!hasMentions && "Add context"}
+                    </PopoverTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    Mention a person, page, or date
+                  </TooltipContent>
+                </Tooltip>
+                <PopoverContent align="start" className="p-0">
+                  <Command>
+                    <CommandInput placeholder="Search pages..." />
+                    <CommandList>
+                      <CommandEmpty>No pages found</CommandEmpty>
+                      {Object.entries(grouped).map(([type, items]) => (
+                        <CommandGroup
+                          heading={type === "page" ? "Pages" : "Users"}
+                          key={type}
+                        >
+                          {items.map((item) => (
+                            <CommandItem
+                              className="rounded-lg"
+                              key={item.title}
+                              onSelect={(v) => {
+                                setMentions((prev) => [...prev, v]);
+                                setMentionPopoverOpen(false);
+                              }}
+                              value={item.title}
+                            >
+                              <PromptMentionIcon item={item} />
+                              {item.title}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      ))}
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <div className="no-scrollbar -m-1.5 flex gap-1 overflow-y-auto p-1.5">
+                {mentions.map((mention) => {
+                  const item = PROMPT_MENTIONABLE.find(
+                    (i) => i.title === mention
+                  );
+                  if (!item) {
+                    return null;
+                  }
+                  return (
+                    <InputGroupButton
+                      className="rounded-full pl-2!"
+                      key={mention}
+                      onClick={() =>
+                        setMentions((prev) => prev.filter((m) => m !== mention))
+                      }
+                      size="sm"
+                      variant="secondary"
+                    >
+                      <PromptMentionIcon item={item} />
+                      {item.title}
+                      <XIcon />
+                    </InputGroupButton>
+                  );
+                })}
+              </div>
+            </InputGroupAddon>
+            <InputGroupAddon align="block-end" className="gap-1">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <InputGroupButton
+                    aria-label="Attach file"
+                    className="rounded-full"
+                    size="icon-sm"
+                  >
+                    <PaperclipIcon />
+                  </InputGroupButton>
+                </TooltipTrigger>
+                <TooltipContent>Attach file</TooltipContent>
+              </Tooltip>
+              <DropdownMenu
+                onOpenChange={setModelPopoverOpen}
+                open={modelPopoverOpen}
+              >
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <DropdownMenuTrigger
+                      render={
+                        <InputGroupButton className="rounded-full" size="sm" />
+                      }
+                    >
+                      {selectedModel.name}
+                    </DropdownMenuTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent>Select AI model</TooltipContent>
+                </Tooltip>
+                <DropdownMenuContent align="start" className="w-48" side="top">
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel className="text-muted-foreground text-xs">
+                      Select Agent Mode
+                    </DropdownMenuLabel>
+                    {PROMPT_MODELS.map((model) => (
+                      <DropdownMenuCheckboxItem
+                        checked={model.name === selectedModel.name}
+                        key={model.name}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setSelectedModel(model);
+                          }
+                        }}
+                      >
+                        {model.name}
+                        {"badge" in model && model.badge && (
+                          <Badge
+                            className="ml-auto h-5 rounded-sm px-1 text-xs"
+                            variant="secondary"
+                          >
+                            {model.badge}
+                          </Badge>
+                        )}
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <DropdownMenu
+                onOpenChange={setScopeMenuOpen}
+                open={scopeMenuOpen}
+              >
+                <DropdownMenuTrigger
+                  render={
+                    <InputGroupButton className="rounded-full" size="sm" />
+                  }
+                >
+                  <GlobeIcon /> All Sources
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-72" side="top">
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem
+                      className="justify-between"
+                      onSelect={(e) => e.preventDefault()}
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <GlobeIcon className="size-4" /> Web Search
+                      </span>
+                      <Switch defaultChecked />
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem
+                      className="justify-between"
+                      onSelect={(e) => e.preventDefault()}
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <LayoutGridIcon className="size-4" /> Apps and
+                        Integrations
+                      </span>
+                      <Switch defaultChecked />
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <CirclePlusIcon /> All Sources I can access
+                    </DropdownMenuItem>
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>
+                        <Avatar className="size-4">
+                          <AvatarImage src="https://github.com/shadcn.png" />
+                          <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        shadcn
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuSubContent className="w-72 p-0">
+                        <Command>
+                          <CommandInput placeholder="Find or use knowledge in..." />
+                          <CommandList>
+                            <CommandEmpty>No knowledge found</CommandEmpty>
+                            <CommandGroup>
+                              {PROMPT_MENTIONABLE.filter(
+                                (item) => item.type === "user"
+                              ).map((user) => (
+                                <CommandItem
+                                  key={user.title}
+                                  value={user.title}
+                                >
+                                  <Avatar className="size-4">
+                                    <AvatarImage src={user.image} />
+                                    <AvatarFallback>
+                                      {user.title[0]}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  {user.title}{" "}
+                                  <span className="text-muted-foreground">
+                                    - {user.workspace}
+                                  </span>
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuSub>
+                    <DropdownMenuItem>
+                      <BookOpenIcon /> Help Center
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                      <PlusIcon /> Connect Apps
+                    </DropdownMenuItem>
+                    <DropdownMenuLabel className="text-muted-foreground text-xs">
+                      We&apos;ll only search in the sources selected here.
+                    </DropdownMenuLabel>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <InputGroupButton
+                aria-label="Send"
+                className="ml-auto rounded-full"
+                size="icon-sm"
+                variant="default"
+              >
+                <ArrowUpIcon />
+              </InputGroupButton>
+            </InputGroupAddon>
+          </InputGroup>
+        </Field>
+      </form>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A rich AI prompt form combining InputGroup with Command, Popover, DropdownMenu, Avatar, Badge, Switch, and Tooltip for a Notion-style chat interface.",
       },
     },
   },

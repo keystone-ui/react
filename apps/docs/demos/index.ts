@@ -59,6 +59,7 @@ import ButtonWithIcons from "./button/with-icons";
 
 // button-group
 import ButtonGroupDefault from "./button-group/default";
+import ButtonGroupEmailToolbar from "./button-group/email-toolbar";
 import ButtonGroupSizes from "./button-group/sizes";
 import ButtonGroupSplitButton from "./button-group/split-button";
 import ButtonGroupToolbar from "./button-group/toolbar";
@@ -75,6 +76,7 @@ import CalendarRange from "./calendar/range";
 // card
 import CardDefault from "./card/default";
 import CardLoginForm from "./card/login-form";
+import CardSocialCard from "./card/social-card";
 import CardWithAction from "./card/with-action";
 import CardWithImage from "./card/with-image";
 
@@ -90,6 +92,7 @@ import CarouselWithDots from "./carousel/with-dots";
 import CheckboxDefault from "./checkbox/default";
 import CheckboxDisabled from "./checkbox/disabled";
 import CheckboxGroup from "./checkbox/group";
+import CheckboxPillGroup from "./checkbox/pill-group";
 import CheckboxWithDescription from "./checkbox/with-description";
 
 // circular-progress
@@ -152,12 +155,14 @@ import EmptyBackground from "./empty/background";
 import EmptyDefault from "./empty/default";
 import EmptyOutline from "./empty/outline";
 import EmptyWithAvatar from "./empty/with-avatar";
-
+import EmptyWithSpinner from "./empty/with-spinner";
+import FieldCheckoutForm from "./field/checkout-form";
 // field
 import FieldDefault from "./field/default";
 import FieldFieldset from "./field/fieldset";
 import FieldGrid from "./field/grid";
 import FieldHorizontal from "./field/horizontal";
+import FieldSettingsForm from "./field/settings-form";
 import FieldValidationError from "./field/validation-error";
 import FieldWithSwitch from "./field/with-switch";
 
@@ -176,6 +181,7 @@ import InputWithField from "./input/with-field";
 import InputGroupCurrency from "./input-group/currency";
 import InputGroupDefault from "./input-group/default";
 import InputGroupPasswordToggle from "./input-group/password-toggle";
+import InputGroupPromptForm from "./input-group/prompt-form";
 import InputGroupSearch from "./input-group/search";
 import InputGroupTextPrefix from "./input-group/text-prefix";
 import InputGroupWithButton from "./input-group/with-button";
@@ -552,6 +558,10 @@ export const demos: Record<string, DemoItem> = {
     component: ButtonGroupVertical,
     file: "button-group/vertical.tsx",
   },
+  "button-group-email-toolbar": {
+    component: ButtonGroupEmailToolbar,
+    file: "button-group/email-toolbar.tsx",
+  },
   "button-group-with-input": {
     component: ButtonGroupWithInput,
     file: "button-group/with-input.tsx",
@@ -587,6 +597,10 @@ export const demos: Record<string, DemoItem> = {
   "card-login-form": {
     component: CardLoginForm,
     file: "card/login-form.tsx",
+  },
+  "card-social-card": {
+    component: CardSocialCard,
+    file: "card/social-card.tsx",
   },
   "card-with-action": {
     component: CardWithAction,
@@ -635,6 +649,10 @@ export const demos: Record<string, DemoItem> = {
   "checkbox-group": {
     component: CheckboxGroup,
     file: "checkbox/group.tsx",
+  },
+  "checkbox-pill-group": {
+    component: CheckboxPillGroup,
+    file: "checkbox/pill-group.tsx",
   },
   "checkbox-with-description": {
     component: CheckboxWithDescription,
@@ -830,8 +848,16 @@ export const demos: Record<string, DemoItem> = {
     component: EmptyWithAvatar,
     file: "empty/with-avatar.tsx",
   },
+  "empty-with-spinner": {
+    component: EmptyWithSpinner,
+    file: "empty/with-spinner.tsx",
+  },
 
   // field
+  "field-checkout-form": {
+    component: FieldCheckoutForm,
+    file: "field/checkout-form.tsx",
+  },
   "field-default": {
     component: FieldDefault,
     file: "field/default.tsx",
@@ -851,6 +877,10 @@ export const demos: Record<string, DemoItem> = {
   "field-validation-error": {
     component: FieldValidationError,
     file: "field/validation-error.tsx",
+  },
+  "field-settings-form": {
+    component: FieldSettingsForm,
+    file: "field/settings-form.tsx",
   },
   "field-with-switch": {
     component: FieldWithSwitch,
@@ -909,6 +939,10 @@ export const demos: Record<string, DemoItem> = {
   "input-group-text-prefix": {
     component: InputGroupTextPrefix,
     file: "input-group/text-prefix.tsx",
+  },
+  "input-group-prompt-form": {
+    component: InputGroupPromptForm,
+    file: "input-group/prompt-form.tsx",
   },
   "input-group-with-button": {
     component: InputGroupWithButton,

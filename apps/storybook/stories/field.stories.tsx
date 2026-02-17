@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "keystoneui/button";
+import { ButtonGroup } from "keystoneui/button-group";
 import { Checkbox } from "keystoneui/checkbox";
 import {
   Field,
@@ -11,10 +12,14 @@ import {
   FieldLegend,
   FieldSeparator,
   FieldSet,
+  FieldTitle,
 } from "keystoneui/field";
 import { Input } from "keystoneui/input";
+import { RadioGroup, RadioGroupItem } from "keystoneui/radio-group";
 import { Switch } from "keystoneui/switch";
 import { Textarea } from "keystoneui/textarea";
+import { MinusIcon, PlusIcon } from "lucide-react";
+import * as React from "react";
 import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
@@ -580,4 +585,130 @@ export const PaymentMethod: Story = {
       </form>
     </div>
   ),
+};
+
+// Settings Form with Radio Cards, Counter, and Switches
+export const SettingsForm: Story = {
+  name: "Settings Form",
+  render() {
+    const [gpuCount, setGpuCount] = React.useState(8);
+
+    const handleGpuAdjustment = React.useCallback((adjustment: number) => {
+      setGpuCount((prev) => Math.max(1, Math.min(99, prev + adjustment)));
+    }, []);
+
+    const handleGpuInputChange = React.useCallback(
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = Number.parseInt(e.target.value, 10);
+        if (!Number.isNaN(value) && value >= 1 && value <= 99) {
+          setGpuCount(value);
+        }
+      },
+      []
+    );
+
+    return (
+      <FieldSet>
+        <FieldGroup>
+          <FieldSet>
+            <FieldLegend>Compute Environment</FieldLegend>
+            <FieldDescription>
+              Select the compute environment for your cluster.
+            </FieldDescription>
+            <RadioGroup defaultValue="kubernetes">
+              <FieldLabel htmlFor="settings-kubernetes">
+                <Field orientation="horizontal">
+                  <FieldContent>
+                    <FieldTitle>Kubernetes</FieldTitle>
+                    <FieldDescription>
+                      Run GPU workloads on a K8s configured cluster. This is the
+                      default.
+                    </FieldDescription>
+                  </FieldContent>
+                  <RadioGroupItem
+                    aria-label="Kubernetes"
+                    id="settings-kubernetes"
+                    value="kubernetes"
+                  />
+                </Field>
+              </FieldLabel>
+              <FieldLabel htmlFor="settings-vm">
+                <Field orientation="horizontal">
+                  <FieldContent>
+                    <FieldTitle>Virtual Machine</FieldTitle>
+                    <FieldDescription>
+                      Access a VM configured cluster to run workloads. (Coming
+                      soon)
+                    </FieldDescription>
+                  </FieldContent>
+                  <RadioGroupItem
+                    aria-label="Virtual Machine"
+                    id="settings-vm"
+                    value="vm"
+                  />
+                </Field>
+              </FieldLabel>
+            </RadioGroup>
+          </FieldSet>
+          <FieldSeparator />
+          <Field orientation="horizontal">
+            <FieldContent>
+              <FieldLabel htmlFor="settings-gpus">Number of GPUs</FieldLabel>
+              <FieldDescription>You can add more later.</FieldDescription>
+            </FieldContent>
+            <ButtonGroup>
+              <Input
+                className="h-7 w-14! font-mono"
+                id="settings-gpus"
+                maxLength={3}
+                onChange={handleGpuInputChange}
+                size={3}
+                value={gpuCount}
+              />
+              <Button
+                aria-label="Decrement"
+                disabled={gpuCount <= 1}
+                onClick={() => handleGpuAdjustment(-1)}
+                size="icon-sm"
+                type="button"
+                variant="outline"
+              >
+                <MinusIcon />
+              </Button>
+              <Button
+                aria-label="Increment"
+                disabled={gpuCount >= 99}
+                onClick={() => handleGpuAdjustment(1)}
+                size="icon-sm"
+                type="button"
+                variant="outline"
+              >
+                <PlusIcon />
+              </Button>
+            </ButtonGroup>
+          </Field>
+          <FieldSeparator />
+          <Field orientation="horizontal">
+            <FieldContent>
+              <FieldLabel htmlFor="settings-tinting">
+                Wallpaper Tinting
+              </FieldLabel>
+              <FieldDescription>
+                Allow the wallpaper to be tinted.
+              </FieldDescription>
+            </FieldContent>
+            <Switch defaultChecked id="settings-tinting" />
+          </Field>
+        </FieldGroup>
+      </FieldSet>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A settings form composing radio card selections, a numeric counter with ButtonGroup, and a Switch toggle, separated by FieldSeparator.",
+      },
+    },
+  },
 };

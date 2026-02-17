@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Card, CardContent } from "keystoneui/card";
 import { Checkbox } from "keystoneui/checkbox";
 import {
   Field,
@@ -8,6 +9,7 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
+  FieldTitle,
 } from "keystoneui/field";
 import * as React from "react";
 import { expect, userEvent, within } from "storybook/test";
@@ -309,6 +311,64 @@ export const CheckedState: Story = {
       description: {
         story:
           "Use `defaultChecked` for uncontrolled checkboxes, or `checked` and `onCheckedChange` to control the state.",
+      },
+    },
+  },
+};
+
+// Pill Checkbox Group Example
+const pillOptions = [
+  { label: "Social Media", value: "social-media" },
+  { label: "Search Engine", value: "search-engine" },
+  { label: "Referral", value: "referral" },
+  { label: "Other", value: "other" },
+];
+
+export const PillCheckboxGroup: Story = {
+  name: "Pill Checkbox Group",
+  render: () => (
+    <Card className="py-4 shadow-none">
+      <CardContent className="px-4">
+        <form>
+          <FieldGroup>
+            <FieldSet className="gap-4">
+              <FieldLegend>How did you hear about us?</FieldLegend>
+              <FieldDescription className="line-clamp-1">
+                Select the option that best describes how you heard about us.
+              </FieldDescription>
+              <FieldGroup className="flex flex-row flex-wrap gap-2 rounded-full">
+                {pillOptions.map((option) => (
+                  <FieldLabel
+                    className="w-fit!"
+                    htmlFor={`pill-${option.value}`}
+                    key={option.value}
+                  >
+                    <Field
+                      className="gap-1.5 overflow-hidden px-3! py-1.5! transition-all duration-100 ease-linear group-has-data-checked/field-label:px-2!"
+                      orientation="horizontal"
+                    >
+                      <Checkbox
+                        className="-ml-6 -translate-x-1 rounded-full transition-all duration-100 ease-linear data-checked:ml-0 data-checked:translate-x-0"
+                        defaultChecked={option.value === "social-media"}
+                        id={`pill-${option.value}`}
+                        value={option.value}
+                      />
+                      <FieldTitle>{option.label}</FieldTitle>
+                    </Field>
+                  </FieldLabel>
+                ))}
+              </FieldGroup>
+            </FieldSet>
+          </FieldGroup>
+        </form>
+      </CardContent>
+    </Card>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Pill-style checkboxes with animated check indicator. The checkbox slides in from the left using CSS transitions on `margin-left` and `translate-x` when checked.",
       },
     },
   },

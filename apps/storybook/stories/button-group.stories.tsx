@@ -6,7 +6,12 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "keystoneui/dropdown-menu";
 import { Field, FieldDescription, FieldLabel } from "keystoneui/field";
@@ -41,10 +46,12 @@ import {
   AudioLines as AudioLinesIcon,
   Bold as BoldIcon,
   Bot as BotIcon,
+  CalendarPlus as CalendarPlusIcon,
   Check as CheckIcon,
   ChevronDown as ChevronDownIcon,
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
+  Clock as ClockIcon,
   Copy as CopyIcon,
   Ellipsis as EllipsisIcon,
   Flag as FlagIcon,
@@ -56,15 +63,20 @@ import {
   Image as ImageIcon,
   Italic as ItalicIcon,
   LayoutGrid as LayoutGridIcon,
+  ListFilter as ListFilterIcon,
   List as ListIcon,
+  MailCheck as MailCheckIcon,
   Minus as MinusIcon,
+  MoreHorizontal as MoreHorizontalIcon,
   Pin as PinIcon,
   Plus as PlusIcon,
   Search as SearchIcon,
   Share as ShareIcon,
   Star as StarIcon,
   Strikethrough as StrikethroughIcon,
+  Tag as TagIcon,
   ThumbsUp as ThumbsUpIcon,
+  Trash2 as Trash2Icon,
   Trash as TrashIcon,
   Underline as UnderlineIcon,
   UserRoundX as UserRoundXIcon,
@@ -980,4 +992,112 @@ export const AllExamples: Story = {
       </div>
     </div>
   ),
+};
+
+// Email Toolbar
+export const EmailToolbar: Story = {
+  name: "Email Toolbar",
+  render() {
+    const [label, setLabel] = useState("personal");
+
+    return (
+      <ButtonGroup>
+        <ButtonGroup className="hidden sm:flex">
+          <Button aria-label="Go Back" size="icon-sm" variant="outline">
+            <ArrowLeftIcon />
+          </Button>
+        </ButtonGroup>
+        <ButtonGroup>
+          <Button size="sm" variant="outline">
+            Archive
+          </Button>
+          <Button size="sm" variant="outline">
+            Report
+          </Button>
+        </ButtonGroup>
+        <ButtonGroup>
+          <Button size="sm" variant="outline">
+            Snooze
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  aria-label="More Options"
+                  size="icon-sm"
+                  variant="outline"
+                />
+              }
+            >
+              <MoreHorizontalIcon />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <MailCheckIcon />
+                  Mark as Read
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <ArchiveIcon />
+                  Archive
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <ClockIcon />
+                  Snooze
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <CalendarPlusIcon />
+                  Add to Calendar
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <ListFilterIcon />
+                  Add to List
+                </DropdownMenuItem>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    <TagIcon />
+                    Label As...
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuRadioGroup
+                      onValueChange={setLabel}
+                      value={label}
+                    >
+                      <DropdownMenuRadioItem value="personal">
+                        Personal
+                      </DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="work">
+                        Work
+                      </DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="other">
+                        Other
+                      </DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem variant="destructive">
+                  <Trash2Icon />
+                  Trash
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </ButtonGroup>
+      </ButtonGroup>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "An email action toolbar using nested ButtonGroups with a split dropdown containing sub-menus and radio group selection for labels.",
+      },
+    },
+  },
 };
