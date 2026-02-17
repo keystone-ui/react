@@ -11,15 +11,26 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "keystoneui/
 
 ## Usage
 
-```tsx
-<Collapsible>
-  <CollapsibleTrigger>Toggle content</CollapsibleTrigger>
-  <CollapsibleContent>
-    <p>This content can be shown or hidden.</p>
-  </CollapsibleContent>
-</Collapsible>
-```
+<ComponentPreview name="collapsible-default" />
+
+## Settings
+
+A collapsible settings panel pattern:
+
+<ComponentPreview name="collapsible-settings" />
+
+## File Tree
+
+A collapsible file tree navigation pattern:
+
+<ComponentPreview name="collapsible-file-tree" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### Collapsible
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+| `defaultOpen` | `boolean` | `false` | Initial open state (uncontrolled) |

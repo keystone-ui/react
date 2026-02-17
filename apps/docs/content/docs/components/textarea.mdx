@@ -1,6 +1,6 @@
 ---
 title: Textarea
-description: Multi-line text input field for longer-form content such as comments or descriptions.
+description: A multi-line text input for longer form content.
 ---
 
 ## Import
@@ -11,10 +11,19 @@ import { Textarea } from "keystoneui/textarea";
 
 ## Usage
 
-```tsx
-<Textarea placeholder="Enter your message..." />
-```
+<ComponentPreview name="textarea-default" />
+
+## With Field
+
+Compose with Field components for labels and descriptions:
+
+<ComponentPreview name="textarea-with-field" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |
+| `disabled` | `boolean` | `false` | Disables the textarea |
+| `rows` | `number` | - | Number of visible text rows |
+| `placeholder` | `string` | - | Placeholder text |

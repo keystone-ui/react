@@ -11,10 +11,30 @@ import { Toggle } from "keystoneui/toggle";
 
 ## Usage
 
-```tsx
-<Toggle>Bold</Toggle>
-```
+<ComponentPreview name="toggle-default" />
+
+## Outline
+
+A bordered outline variant:
+
+<ComponentPreview name="toggle-outline" />
+
+## With Text
+
+Toggle with a text label:
+
+<ComponentPreview name="toggle-with-text" />
+
+## Sizes
+
+<ComponentPreview name="toggle-sizes" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `variant` | `"default" \| "outline"` | `"default"` | Visual style variant |
+| `size` | `"default" \| "sm" \| "lg"` | `"default"` | Size of the toggle |
+| `pressed` | `boolean` | - | Controlled pressed state |
+| `onPressedChange` | `(pressed: boolean) => void` | - | Callback when pressed state changes |
+| `disabled` | `boolean` | `false` | Whether the toggle is disabled |

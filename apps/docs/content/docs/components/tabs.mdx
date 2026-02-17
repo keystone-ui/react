@@ -11,17 +11,58 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "keystoneui/tabs";
 
 ## Usage
 
-```tsx
-<Tabs defaultValue="tab-1">
-  <TabsList>
-    <TabsTrigger value="tab-1">Tab 1</TabsTrigger>
-    <TabsTrigger value="tab-2">Tab 2</TabsTrigger>
-  </TabsList>
-  <TabsContent value="tab-1">Content for tab 1.</TabsContent>
-  <TabsContent value="tab-2">Content for tab 2.</TabsContent>
-</Tabs>
-```
+<ComponentPreview name="tabs-default" />
+
+## Line Variant
+
+An underlined tab style for a more subtle appearance:
+
+<ComponentPreview name="tabs-line" />
+
+## Vertical
+
+Stack tabs vertically for sidebar-style navigation:
+
+<ComponentPreview name="tabs-vertical" />
+
+## Disabled
+
+Individual tabs can be disabled to prevent selection:
+
+<ComponentPreview name="tabs-disabled" />
+
+## With Icons
+
+Add icons alongside tab labels:
+
+<ComponentPreview name="tabs-with-icons" />
+
+## Pill Variant
+
+Rounded pill-shaped tabs:
+
+<ComponentPreview name="tabs-pill" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### Tabs
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `defaultValue` | `string` | - | Default active tab value |
+| `value` | `string` | - | Controlled active tab value |
+| `onValueChange` | `(value: string) => void` | - | Callback when active tab changes |
+
+### TabsList
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `variant` | `"default" \| "line" \| "pill"` | `"default"` | Visual style variant |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Tab list orientation |
+
+### TabsTrigger
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | - | Unique tab identifier |
+| `disabled` | `boolean` | `false` | Whether the tab is disabled |

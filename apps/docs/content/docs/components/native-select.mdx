@@ -11,14 +11,26 @@ import { NativeSelect } from "keystoneui/native-select";
 
 ## Usage
 
-```tsx
-<NativeSelect>
-  <option value="1">Option 1</option>
-  <option value="2">Option 2</option>
-  <option value="3">Option 3</option>
-</NativeSelect>
-```
+<ComponentPreview name="native-select-default" />
+
+## Groups
+
+Organize options into labeled optgroups:
+
+<ComponentPreview name="native-select-groups" />
+
+## Sizes
+
+<ComponentPreview name="native-select-sizes" />
+
+## Disabled
+
+<ComponentPreview name="native-select-disabled" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"default" \| "sm"` | `"default"` | The size variant |
+| `disabled` | `boolean` | `false` | Whether the select is disabled |
+| `className` | `string` | - | Additional CSS classes |

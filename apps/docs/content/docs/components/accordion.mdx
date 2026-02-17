@@ -6,24 +6,55 @@ description: Vertically stacked expandable and collapsible content sections for 
 ## Import
 
 ```tsx
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "keystoneui/accordion";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionPanel,
+} from "keystoneui/accordion";
 ```
 
 ## Usage
 
-```tsx
-<Accordion>
-  <AccordionItem value="item-1">
-    <AccordionTrigger>Section 1</AccordionTrigger>
-    <AccordionContent>Content for section 1.</AccordionContent>
-  </AccordionItem>
-  <AccordionItem value="item-2">
-    <AccordionTrigger>Section 2</AccordionTrigger>
-    <AccordionContent>Content for section 2.</AccordionContent>
-  </AccordionItem>
-</Accordion>
-```
+<ComponentPreview name="accordion-default" />
+
+## Variants
+
+Different visual styles for the accordion:
+
+<ComponentPreview name="accordion-variants" />
+
+## Multiple
+
+Allow multiple sections to be open simultaneously:
+
+<ComponentPreview name="accordion-multiple" />
+
+## Disabled
+
+Disable individual accordion items to prevent expansion:
+
+<ComponentPreview name="accordion-disabled" />
+
+## Custom Chevron
+
+Replace the default chevron with a custom icon:
+
+<ComponentPreview name="accordion-custom-chevron" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### Accordion
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `type` | `"single" \| "multiple"` | `"single"` | Whether one or multiple items can be open |
+| `defaultValue` | `string \| string[]` | - | Default open item(s) |
+| `collapsible` | `boolean` | `false` | Allow all items to be collapsed (single mode) |
+
+### AccordionItem
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | - | Unique identifier for the item |
+| `disabled` | `boolean` | `false` | Whether the item is disabled |

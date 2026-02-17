@@ -6,19 +6,36 @@ description: Multi-step progress indicator for guiding users through sequential 
 ## Import
 
 ```tsx
-import { Stepper, StepperItem } from "keystoneui/stepper";
+import { Stepper, StepperStep, StepperContent, useStepper } from "keystoneui/stepper";
 ```
 
 ## Usage
 
-```tsx
-<Stepper activeStep={1}>
-  <StepperItem>Account</StepperItem>
-  <StepperItem>Profile</StepperItem>
-  <StepperItem>Review</StepperItem>
-</Stepper>
-```
+<ComponentPreview name="stepper-default" />
+
+## With Indicator
+
+Show step numbers or check marks for completed steps:
+
+<ComponentPreview name="stepper-with-indicator" />
+
+## Controlled
+
+Manage the active step externally with state:
+
+<ComponentPreview name="stepper-controlled" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### Stepper
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `activeStep` | `number` | `0` | The currently active step index |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
+
+### StepperStep
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |

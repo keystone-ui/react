@@ -1,0 +1,90 @@
+---
+description: Component workflow - triggered when adding, creating, scaffolding, or modifying components, demos, stories, or MDX documentation
+globs:
+alwaysApply: false
+---
+# Component Contributing Workflow
+
+See [CONTRIBUTING.md](/CONTRIBUTING.md) for the full guide.
+
+## Adding a New Component
+
+Always start with the scaffolding command:
+
+```bash
+pnpm add:component MyComponent
+```
+
+This creates all files and updates all registries. Then follow the Storybook-first workflow:
+
+1. **Implement** the component in `packages/ui/src/{name}.tsx`
+2. **Write Storybook stories** in `apps/storybook/stories/{name}.stories.tsx` (primary dev surface)
+3. **Create Fumadocs demos** in `apps/docs/demos/{name}/` (3-6 simplified demos from stories)
+4. **Register demos** in `apps/docs/demos/index.ts`
+5. **Write MDX docs** in `apps/docs/content/docs/components/{name}.mdx` using `<ComponentPreview name="{name}-{example}" />`
+6. **LLMs.txt** updates automatically (no manual step)
+
+## Updating an Existing Component
+
+### API change (new/renamed prop, new sub-component)
+
+1. Update component source
+2. Update Storybook stories
+3. Update Fumadocs demos if user-facing
+4. Update MDX API Reference table
+5. Update `_registry.ts` if dependencies changed
+
+### Visual/styling change
+
+1. Update component source only
+2. Storybook and Fumadocs demos auto-reflect
+
+### Description/copy change
+
+1. Update MDX frontmatter or section text only
+2. LLMs.txt auto-reflects on next deploy
+
+## Demo File Pattern
+
+Every demo must follow this exact pattern:
+
+```tsx
+"use client";
+
+import { MyComponent } from "keystoneui/my-component";
+
+export default function MyComponentDefault() {
+  return <MyComponent>Content</MyComponent>;
+}
+```
+
+## Demo Registry Pattern
+
+In `apps/docs/demos/index.ts`:
+
+```tsx
+import MyComponentDefault from "./my-component/default";
+
+// In the demos record:
+"my-component-default": { component: MyComponentDefault, file: "my-component/default.tsx" },
+```
+
+## MDX Pattern
+
+In `apps/docs/content/docs/components/my-component.mdx`:
+
+```mdx
+<ComponentPreview name="my-component-default" />
+```
+
+## Key File Locations
+
+- Component: `packages/ui/src/{name}.tsx`
+- Exports: `packages/ui/package.json`
+- Build entries: `packages/ui/tsup.config.ts`
+- Registry: `packages/ui/src/_registry.ts`
+- Stories: `apps/storybook/stories/{name}.stories.tsx`
+- Demos: `apps/docs/demos/{name}/`
+- Demo registry: `apps/docs/demos/index.ts`
+- MDX docs: `apps/docs/content/docs/components/{name}.mdx`
+- Component nav: `apps/docs/content/docs/components/meta.json`

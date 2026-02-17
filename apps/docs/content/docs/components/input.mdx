@@ -11,84 +11,46 @@ import { Input } from "keystoneui/input";
 
 ## Usage
 
-```tsx
-<Input type="text" placeholder="Enter your name" />
-```
-
-## Types
-
-The Input supports all standard HTML input types:
-
-```tsx
-<Input type="text" placeholder="Text" />
-<Input type="email" placeholder="email@example.com" />
-<Input type="password" placeholder="Password" />
-<Input type="number" placeholder="0" />
-<Input type="search" placeholder="Search..." />
-<Input type="url" placeholder="https://" />
-```
-
-## With Label
-
-Combine with the Label component for accessible forms:
-
-```tsx
-import { Label } from "keystoneui/label";
-import { Input } from "keystoneui/input";
-
-<div className="space-y-2">
-  <Label htmlFor="email">Email</Label>
-  <Input id="email" type="email" placeholder="you@example.com" />
-</div>
-```
+<ComponentPreview name="input-default" />
 
 ## With Field
 
-Use the Field component for label, description, and error handling:
+Use `Field`, `FieldLabel`, and `FieldDescription` for accessible, structured form inputs:
 
-```tsx
-import { Field, FieldLabel, FieldDescription, FieldError } from "keystoneui/field";
-import { Input } from "keystoneui/input";
-
-<Field>
-  <FieldLabel>Username</FieldLabel>
-  <Input placeholder="johndoe" />
-  <FieldDescription>Choose a unique username.</FieldDescription>
-  <FieldError>Username is already taken.</FieldError>
-</Field>
-```
+<ComponentPreview name="input-with-field" />
 
 ## Disabled
 
-```tsx
-<Input disabled placeholder="Disabled input" />
-<Input disabled value="Cannot edit this" />
-```
+Use the `disabled` prop on the input and `data-disabled` on the `Field` to style the disabled state:
 
-## Invalid State
+<ComponentPreview name="input-disabled" />
 
-Use `aria-invalid` for validation error styling:
+## With Error
 
-```tsx
-<Input aria-invalid placeholder="Invalid input" />
-```
+Use `aria-invalid` on the input and `data-invalid` on the `Field` to show error styling. Use `FieldError` for the error message:
 
-The input will show a red ring and border when invalid.
+<ComponentPreview name="input-with-error" />
 
 ## File Input
 
-```tsx
-<Input type="file" />
-```
+<ComponentPreview name="input-file" />
+
+## Form Example
+
+A complete form built with `FieldGroup`, `Field`, and `Input`:
+
+<ComponentPreview name="input-form-example" />
 
 ## API Reference
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `type` | `string` | `"text"` | HTML input type |
+| `size` | `"default" \| "sm"` | `"default"` | Size variant of the input |
 | `placeholder` | `string` | - | Placeholder text |
 | `disabled` | `boolean` | `false` | Disables the input |
 | `aria-invalid` | `boolean` | `false` | Shows error styling |
+| `htmlSize` | `number` | - | Native HTML `size` attribute |
 | `className` | `string` | - | Additional CSS classes |
 
 The Input forwards all standard HTML `<input>` props.

@@ -11,22 +11,31 @@ import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "keysto
 
 ## Usage
 
-```tsx
-<InputOTP maxLength={6}>
-  <InputOTPGroup>
-    <InputOTPSlot index={0} />
-    <InputOTPSlot index={1} />
-    <InputOTPSlot index={2} />
-  </InputOTPGroup>
-  <InputOTPSeparator />
-  <InputOTPGroup>
-    <InputOTPSlot index={3} />
-    <InputOTPSlot index={4} />
-    <InputOTPSlot index={5} />
-  </InputOTPGroup>
-</InputOTP>
-```
+<ComponentPreview name="input-otp-default" />
+
+## With Separator
+
+Add visual separators between digit groups:
+
+<ComponentPreview name="input-otp-with-separator" />
+
+## Four Digits
+
+A shorter OTP input for 4-digit codes:
+
+<ComponentPreview name="input-otp-four-digits" />
+
+## Disabled
+
+<ComponentPreview name="input-otp-disabled" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### InputOTP
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `maxLength` | `number` | - | Maximum number of characters |
+| `value` | `string` | - | Controlled value |
+| `onChange` | `(value: string) => void` | - | Callback when value changes |
+| `disabled` | `boolean` | `false` | Whether the input is disabled |

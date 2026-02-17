@@ -6,15 +6,48 @@ description: Empty state placeholder with icon and message for when no content i
 ## Import
 
 ```tsx
-import { Empty } from "keystoneui/empty";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyDescription,
+  EmptyContent,
+} from "keystoneui/empty";
 ```
 
 ## Usage
 
-```tsx
-<Empty>No items found.</Empty>
-```
+<ComponentPreview name="empty-default" />
+
+## Outline
+
+An outlined empty state with a dashed border:
+
+<ComponentPreview name="empty-outline" />
+
+## With Avatar
+
+Display an avatar or icon inside the media area:
+
+<ComponentPreview name="empty-with-avatar" />
+
+## Background
+
+A filled background variant for more visual emphasis:
+
+<ComponentPreview name="empty-background" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### Empty
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |
+
+### EmptyMedia
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `variant` | `"default" \| "icon"` | `"default"` | The visual variant of the media area |

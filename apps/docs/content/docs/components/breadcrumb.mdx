@@ -6,27 +6,44 @@ description: Navigation breadcrumb trail showing the user's current location wit
 ## Import
 
 ```tsx
-import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from "keystoneui/breadcrumb";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  BreadcrumbPage,
+  BreadcrumbEllipsis,
+} from "keystoneui/breadcrumb";
 ```
 
 ## Usage
 
-```tsx
-<Breadcrumb>
-  <BreadcrumbList>
-    <BreadcrumbItem>
-      <BreadcrumbLink href="/">Home</BreadcrumbLink>
-    </BreadcrumbItem>
-    <BreadcrumbSeparator />
-    <BreadcrumbItem>
-      <BreadcrumbLink href="/docs">Docs</BreadcrumbLink>
-    </BreadcrumbItem>
-    <BreadcrumbSeparator />
-    <BreadcrumbItem>Breadcrumb</BreadcrumbItem>
-  </BreadcrumbList>
-</Breadcrumb>
-```
+<ComponentPreview name="breadcrumb-default" />
+
+## Custom Separator
+
+Use a custom separator character or icon:
+
+<ComponentPreview name="breadcrumb-custom-separator" />
+
+## Collapsed
+
+Collapse middle items with an ellipsis when the trail is long:
+
+<ComponentPreview name="breadcrumb-collapsed" />
+
+## With Dropdown
+
+Expand collapsed items into a dropdown menu:
+
+<ComponentPreview name="breadcrumb-with-dropdown" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### BreadcrumbLink
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `href` | `string` | - | The URL the breadcrumb link points to |
+| `className` | `string` | - | Additional CSS classes |

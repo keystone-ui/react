@@ -11,10 +11,32 @@ import { Slider } from "keystoneui/slider";
 
 ## Usage
 
-```tsx
-<Slider defaultValue={50} min={0} max={100} />
-```
+<ComponentPreview name="slider-default" />
+
+## With Label
+
+Display the current value alongside the slider:
+
+<ComponentPreview name="slider-with-label" />
+
+## Range
+
+A dual-thumb slider for selecting a range of values:
+
+<ComponentPreview name="slider-range" />
+
+## Disabled
+
+<ComponentPreview name="slider-disabled" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `defaultValue` | `number \| number[]` | - | Default value(s) |
+| `value` | `number \| number[]` | - | Controlled value(s) |
+| `onValueChange` | `(value: number[]) => void` | - | Callback when value changes |
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `100` | Maximum value |
+| `step` | `number` | `1` | Step increment |
+| `disabled` | `boolean` | `false` | Whether the slider is disabled |

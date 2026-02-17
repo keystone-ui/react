@@ -6,18 +6,50 @@ description: Prominent message banner for displaying important information, warn
 ## Import
 
 ```tsx
-import { Alert, AlertTitle, AlertDescription } from "keystoneui/alert";
+import { Alert, AlertTitle, AlertDescription, AlertAction } from "keystoneui/alert";
 ```
 
 ## Usage
 
-```tsx
-<Alert>
-  <AlertTitle>Heads up!</AlertTitle>
-  <AlertDescription>This is an informational alert message.</AlertDescription>
-</Alert>
-```
+<ComponentPreview name="alert-default" />
+
+## Variants
+
+The Alert supports semantic color variants for different message types:
+
+<ComponentPreview name="alert-variants" />
+
+| Variant | Use Case |
+| --- | --- |
+| `default` | General informational messages |
+| `success` | Successful operations or confirmations |
+| `warning` | Caution or attention needed |
+| `error` | Errors or critical failures |
+| `info` | Informational tips or notes |
+
+## With Action
+
+Include an action button inside the alert:
+
+<ComponentPreview name="alert-with-action" />
+
+## Without Icon
+
+Alerts without a leading icon:
+
+<ComponentPreview name="alert-without-icon" />
+
+## Custom Colors
+
+Apply custom color styling for brand-specific alerts:
+
+<ComponentPreview name="alert-custom-colors" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### Alert
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `variant` | `"default" \| "success" \| "warning" \| "error" \| "info"` | `"default"` | Semantic color variant |
+| `className` | `string` | - | Additional CSS classes |

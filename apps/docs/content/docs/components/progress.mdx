@@ -11,10 +11,36 @@ import { Progress } from "keystoneui/progress";
 
 ## Usage
 
-```tsx
-<Progress value={60} />
-```
+<ComponentPreview name="progress-default" />
+
+## Animated
+
+A smoothly animated progress bar:
+
+<ComponentPreview name="progress-animated" />
+
+## With Label
+
+Display a text label alongside the progress bar:
+
+<ComponentPreview name="progress-with-label" />
+
+## Colors
+
+Apply custom color themes to the progress indicator:
+
+<ComponentPreview name="progress-colors" />
+
+## Indeterminate
+
+An indeterminate progress bar for unknown durations:
+
+<ComponentPreview name="progress-indeterminate" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `number` | `0` | Current progress value (0-100) |
+| `max` | `number` | `100` | Maximum progress value |
+| `className` | `string` | - | Additional CSS classes |

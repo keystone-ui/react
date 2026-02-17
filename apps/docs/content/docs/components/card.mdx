@@ -6,26 +6,41 @@ description: Structured container with header, content, and footer sections for 
 ## Import
 
 ```tsx
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "keystoneui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "keystoneui/card";
 ```
 
 ## Usage
 
-```tsx
-<Card>
-  <CardHeader>
-    <CardTitle>Card Title</CardTitle>
-    <CardDescription>Card description goes here.</CardDescription>
-  </CardHeader>
-  <CardContent>
-    <p>Card content goes here.</p>
-  </CardContent>
-  <CardFooter>
-    <p>Card footer</p>
-  </CardFooter>
-</Card>
-```
+<ComponentPreview name="card-default" />
+
+## Login Form
+
+A card used as a login form with inputs and a submit button:
+
+<ComponentPreview name="card-login-form" />
+
+## With Action
+
+A card with a header action button for quick interactions:
+
+<ComponentPreview name="card-with-action" />
+
+## With Image
+
+Cards can display a hero image above the content area:
+
+<ComponentPreview name="card-with-image" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"default" \| "sm"` | `"default"` | The size variant of the card |
+| `className` | `string` | - | Additional CSS classes |

@@ -11,14 +11,38 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "keystoneui
 
 ## Usage
 
-```tsx
-<ResizablePanelGroup direction="horizontal">
-  <ResizablePanel>Panel one</ResizablePanel>
-  <ResizableHandle />
-  <ResizablePanel>Panel two</ResizablePanel>
-</ResizablePanelGroup>
-```
+<ComponentPreview name="resizable-default" />
+
+## Vertical
+
+Panels can be stacked vertically by setting `direction="vertical"`:
+
+<ComponentPreview name="resizable-vertical" />
+
+## With Handle
+
+Add a visible drag handle indicator to the resize bar:
+
+<ComponentPreview name="resizable-with-handle" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### ResizablePanelGroup
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `direction` | `"horizontal" \| "vertical"` | - | The direction of the panel group |
+
+### ResizablePanel
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `defaultSize` | `number` | - | Initial size as a percentage |
+| `minSize` | `number` | - | Minimum size as a percentage |
+| `maxSize` | `number` | - | Maximum size as a percentage |
+
+### ResizableHandle
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `withHandle` | `boolean` | `false` | Show a visible drag handle indicator |

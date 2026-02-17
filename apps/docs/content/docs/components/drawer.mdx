@@ -6,28 +6,59 @@ description: Slide-out panel that emerges from screen edges for supplementary co
 ## Import
 
 ```tsx
-import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerBody, DrawerFooter } from "keystoneui/drawer";
+import {
+  Drawer,
+  DrawerTrigger,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerBody,
+  DrawerFooter,
+} from "keystoneui/drawer";
 ```
 
 ## Usage
 
-```tsx
-<Drawer>
-  <DrawerTrigger>Open Drawer</DrawerTrigger>
-  <DrawerContent>
-    <DrawerHeader>
-      <DrawerTitle>Drawer Title</DrawerTitle>
-    </DrawerHeader>
-    <DrawerBody>
-      <p>Drawer content goes here.</p>
-    </DrawerBody>
-    <DrawerFooter>
-      <button>Save</button>
-    </DrawerFooter>
-  </DrawerContent>
-</Drawer>
-```
+<ComponentPreview name="drawer-default" />
+
+## Sides
+
+Open the drawer from different edges of the screen:
+
+<ComponentPreview name="drawer-sides" />
+
+## Scrollable
+
+A drawer with scrollable body content:
+
+<ComponentPreview name="drawer-scrollable" />
+
+## Nested
+
+Stack multiple drawers on top of each other:
+
+<ComponentPreview name="drawer-nested" />
+
+## Filter
+
+A practical filter panel drawer pattern:
+
+<ComponentPreview name="drawer-filter" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### Drawer
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+
+### DrawerContent
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `side` | `"top" \| "right" \| "bottom" \| "left"` | `"right"` | The edge the drawer slides from |
+| `className` | `string` | - | Additional CSS classes |

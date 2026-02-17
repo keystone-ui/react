@@ -1,6 +1,6 @@
 ---
 title: Switch
-description: Toggle switch for toggling between on and off states.
+description: A toggle control for boolean states with smooth animation.
 ---
 
 ## Import
@@ -11,10 +11,29 @@ import { Switch } from "keystoneui/switch";
 
 ## Usage
 
-```tsx
-<Switch>Enable notifications</Switch>
-```
+<ComponentPreview name="switch-default" />
+
+## With Description
+
+Pair with Field components for label and helper text:
+
+<ComponentPreview name="switch-with-description" />
+
+## Sizes
+
+<ComponentPreview name="switch-sizes" />
+
+## Disabled
+
+<ComponentPreview name="switch-disabled" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `checked` | `boolean` | - | Controlled checked state |
+| `defaultChecked` | `boolean` | `false` | Default state (uncontrolled) |
+| `onCheckedChange` | `(checked: boolean) => void` | - | Callback when state changes |
+| `disabled` | `boolean` | `false` | Disables the switch |
+| `size` | `"default" \| "sm"` | `"default"` | Size variant |
+| `className` | `string` | - | Additional CSS classes |

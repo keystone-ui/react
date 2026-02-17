@@ -10,16 +10,21 @@
     "clean": "rm -rf .turbo .next node_modules .source"
   },
   "dependencies": {
-    "keystoneui": "workspace:*",
     "@types/mdx": "^2.0.13",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "embla-carousel-autoplay": "^8.6.0",
     "fumadocs-core": "^15.5.1",
     "fumadocs-mdx": "^11.6.6",
     "fumadocs-ui": "^15.5.1",
+    "keystoneui": "workspace:*",
     "lucide-react": "^0.487.0",
     "next": "^15.3.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-mdx": "^3.1.1",
     "shiki": "^3.22.0",
     "tailwind-merge": "^3.4.0",
     "zod": "^4.3.6"

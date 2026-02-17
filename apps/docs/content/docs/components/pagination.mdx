@@ -6,30 +6,39 @@ description: Page navigation controls for browsing through paginated content.
 ## Import
 
 ```tsx
-import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext, PaginationLink } from "keystoneui/pagination";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationLink,
+  PaginationEllipsis,
+} from "keystoneui/pagination";
 ```
 
 ## Usage
 
-```tsx
-<Pagination>
-  <PaginationContent>
-    <PaginationItem>
-      <PaginationPrevious href="#" />
-    </PaginationItem>
-    <PaginationItem>
-      <PaginationLink href="#">1</PaginationLink>
-    </PaginationItem>
-    <PaginationItem>
-      <PaginationLink href="#">2</PaginationLink>
-    </PaginationItem>
-    <PaginationItem>
-      <PaginationNext href="#" />
-    </PaginationItem>
-  </PaginationContent>
-</Pagination>
-```
+<ComponentPreview name="pagination-default" />
+
+## Simple
+
+A minimal previous/next pagination without page numbers:
+
+<ComponentPreview name="pagination-simple" />
+
+## Data Table
+
+Pagination integrated with a data table, including per-page and total counts:
+
+<ComponentPreview name="pagination-data-table" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### PaginationLink
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `href` | `string` | - | Page URL |
+| `isActive` | `boolean` | `false` | Whether this is the current page |
+| `className` | `string` | - | Additional CSS classes |

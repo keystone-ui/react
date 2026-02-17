@@ -6,20 +6,52 @@ description: Temporary notification messages that appear briefly to provide non-
 ## Import
 
 ```tsx
-import { Toast, ToastProvider, ToastTitle, ToastDescription } from "keystoneui/toast";
+import { Toaster, toast } from "keystoneui/toast";
 ```
 
 ## Usage
 
-```tsx
-<ToastProvider>
-  <Toast>
-    <ToastTitle>Success</ToastTitle>
-    <ToastDescription>Your changes have been saved.</ToastDescription>
-  </Toast>
-</ToastProvider>
-```
+<ComponentPreview name="toast-default" />
+
+## Types
+
+Different toast types for success, error, warning, and info messages:
+
+<ComponentPreview name="toast-types" />
+
+## With Action
+
+Include action buttons inside a toast notification:
+
+<ComponentPreview name="toast-with-action" />
+
+## Promise
+
+Automatically handle loading, success, and error states for async operations:
+
+<ComponentPreview name="toast-promise" />
+
+## Position
+
+Customize where toasts appear on screen:
+
+<ComponentPreview name="toast-position" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### toast()
+
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `message` | `string` | - | The toast message |
+| `description` | `string` | - | Optional description text |
+| `action` | `ToastAction` | - | Action button configuration |
+| `position` | `ToastPosition` | `"bottom-right"` | Position on screen |
+| `duration` | `number` | `4000` | Duration in milliseconds |
+
+### Toaster
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `position` | `ToastPosition` | `"bottom-right"` | Default position for all toasts |
+| `richColors` | `boolean` | `false` | Use semantic colors for toast types |

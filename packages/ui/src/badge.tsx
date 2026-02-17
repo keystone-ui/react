@@ -74,12 +74,11 @@ function Badge({
     render,
     props: mergeProps<"span">(
       {
-        "data-slot": "badge",
         className: cn(badgeVariants({ variant, size }), className),
       },
       props
     ),
-    state: { variant },
+    state: { slot: "badge", variant },
   });
 }
 

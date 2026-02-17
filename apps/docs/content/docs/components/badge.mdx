@@ -11,10 +11,41 @@ import { Badge } from "keystoneui/badge";
 
 ## Usage
 
-```tsx
-<Badge>New</Badge>
-```
+<ComponentPreview name="badge-default" />
+
+## Variants
+
+<ComponentPreview name="badge-variants" />
+
+| Variant | Use Case |
+| --- | --- |
+| `default` | Primary emphasis badges |
+| `secondary` | Subtle secondary labels |
+| `destructive` | Error or danger indicators |
+| `outline` | Bordered minimal badges |
+| `ghost` | Low-emphasis hover-revealed badges |
+| `link` | Underlined text-style badges |
+
+## Sizes
+
+<ComponentPreview name="badge-sizes" />
+
+## With Icon
+
+Add an icon before or after the badge text:
+
+<ComponentPreview name="badge-with-icon" />
+
+## As Link
+
+Render a badge as an anchor element:
+
+<ComponentPreview name="badge-as-link" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `variant` | `"default" \| "secondary" \| "destructive" \| "outline" \| "ghost" \| "link"` | `"default"` | Visual style variant |
+| `size` | `"default" \| "sm"` | `"default"` | Size of the badge |
+| `className` | `string` | - | Additional CSS classes |

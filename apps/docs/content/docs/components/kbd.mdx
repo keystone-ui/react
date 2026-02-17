@@ -6,15 +6,41 @@ description: Inline keyboard shortcut display for showing key combinations and h
 ## Import
 
 ```tsx
-import { Kbd } from "keystoneui/kbd";
+import { Kbd, KbdGroup } from "keystoneui/kbd";
 ```
 
 ## Usage
 
-```tsx
-<Kbd>⌘K</Kbd>
-```
+<ComponentPreview name="kbd-default" />
+
+## Modifier Keys
+
+Display common modifier keys with platform-appropriate symbols:
+
+<ComponentPreview name="kbd-modifier-keys" />
+
+## Common Shortcuts
+
+Show full keyboard shortcut combinations:
+
+<ComponentPreview name="kbd-common-shortcuts" />
+
+## Group
+
+Group multiple key indicators together:
+
+<ComponentPreview name="kbd-group" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### Kbd
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |
+
+### KbdGroup
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |

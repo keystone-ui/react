@@ -58,12 +58,11 @@ function BreadcrumbLink({ className, render, ...props }: BreadcrumbLinkProps) {
     render,
     props: mergeProps<"a">(
       {
-        "data-slot": "breadcrumb-link",
         className: cn("transition-colors hover:text-foreground", className),
       },
       props
     ),
-    state: {},
+    state: { slot: "breadcrumb-link" },
   });
 }
 

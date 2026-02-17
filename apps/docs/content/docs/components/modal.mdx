@@ -21,96 +21,45 @@ import {
 
 ## Usage
 
-```tsx
-<Modal>
-  <ModalTrigger>
-    <Button>Open Modal</Button>
-  </ModalTrigger>
-  <ModalContent>
-    <ModalHeader>
-      <ModalTitle>Modal Title</ModalTitle>
-      <ModalDescription>This is a description of the modal.</ModalDescription>
-    </ModalHeader>
-    <ModalBody>
-      <p>Your content goes here.</p>
-    </ModalBody>
-    <ModalFooter>
-      <ModalClose>
-        <Button variant="outline">Cancel</Button>
-      </ModalClose>
-      <Button>Confirm</Button>
-    </ModalFooter>
-  </ModalContent>
-</Modal>
-```
+<ComponentPreview name="modal-default" />
 
 ## Sizes
 
-The Modal supports multiple size variants:
+The Modal supports multiple width presets:
 
-```tsx
-<ModalContent size="sm">...</ModalContent>   {/* 400px */}
-<ModalContent size="default">...</ModalContent> {/* 500px */}
-<ModalContent size="lg">...</ModalContent>   {/* 640px */}
-<ModalContent size="xl">...</ModalContent>   {/* 780px */}
-<ModalContent size="full">...</ModalContent>  {/* Full screen */}
-```
+<ComponentPreview name="modal-sizes" />
 
-## With Form
+| Size | Width | Use Case |
+| --- | --- | --- |
+| `sm` | 400px | Simple confirmations |
+| `default` | 500px | Standard dialogs |
+| `lg` | 640px | Forms and detail views |
+| `xl` | 780px | Complex content |
+| `full` | Full screen | Immersive experiences |
 
-A common pattern for form-based modals:
+## Scrollable
 
-```tsx
-<Modal>
-  <ModalTrigger>
-    <Button>Edit Profile</Button>
-  </ModalTrigger>
-  <ModalContent>
-    <ModalHeader>
-      <ModalTitle>Edit Profile</ModalTitle>
-      <ModalDescription>Update your profile information.</ModalDescription>
-    </ModalHeader>
-    <ModalBody className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
-        <Input id="name" placeholder="John Doe" />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" placeholder="john@example.com" />
-      </div>
-    </ModalBody>
-    <ModalFooter>
-      <ModalClose>
-        <Button variant="outline">Cancel</Button>
-      </ModalClose>
-      <Button>Save Changes</Button>
-    </ModalFooter>
-  </ModalContent>
-</Modal>
-```
+A modal with scrollable body content for long forms:
+
+<ComponentPreview name="modal-scrollable" />
+
+## Sign Up Form
+
+A practical sign-up form modal pattern:
+
+<ComponentPreview name="modal-sign-up-form" />
 
 ## Controlled
 
 Control the modal open state programmatically:
 
-```tsx
-const [open, setOpen] = useState(false);
+<ComponentPreview name="modal-controlled" />
 
-<Modal open={open} onOpenChange={setOpen}>
-  <ModalContent>
-    <ModalHeader>
-      <ModalTitle>Controlled Modal</ModalTitle>
-    </ModalHeader>
-    <ModalBody>
-      <p>This modal is controlled externally.</p>
-    </ModalBody>
-    <ModalFooter>
-      <Button onClick={() => setOpen(false)}>Close</Button>
-    </ModalFooter>
-  </ModalContent>
-</Modal>
-```
+## Nested
+
+Stack multiple modals on top of each other:
+
+<ComponentPreview name="modal-nested" />
 
 ## API Reference
 
@@ -128,7 +77,3 @@ const [open, setOpen] = useState(false);
 | --- | --- | --- | --- |
 | `size` | `"sm" \| "default" \| "lg" \| "xl" \| "full"` | `"default"` | Modal width |
 | `className` | `string` | - | Additional CSS classes |
-
-### ModalClose
-
-Wraps a child element that closes the modal when clicked. No additional props.

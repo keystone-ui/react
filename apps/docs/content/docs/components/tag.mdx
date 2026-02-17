@@ -6,15 +6,33 @@ description: Removable label element for displaying categories, filters, or sele
 ## Import
 
 ```tsx
-import { Tag } from "keystoneui/tag";
+import { Tag, TagRemove } from "keystoneui/tag";
 ```
 
 ## Usage
 
-```tsx
-<Tag>React</Tag>
-```
+<ComponentPreview name="tag-default" />
+
+## With Icon
+
+Add an icon before the tag label:
+
+<ComponentPreview name="tag-with-icon" />
+
+## With Remove
+
+Add a remove button for dismissible tags:
+
+<ComponentPreview name="tag-with-remove" />
+
+## Disabled
+
+<ComponentPreview name="tag-disabled" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `variant` | `"default" \| "secondary" \| "outline"` | `"default"` | Visual style variant |
+| `disabled` | `boolean` | `false` | Whether the tag is disabled |
+| `className` | `string` | - | Additional CSS classes |

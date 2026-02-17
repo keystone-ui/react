@@ -11,14 +11,44 @@ import { ButtonGroup } from "keystoneui/button-group";
 
 ## Usage
 
-```tsx
-<ButtonGroup>
-  <button>Left</button>
-  <button>Center</button>
-  <button>Right</button>
-</ButtonGroup>
-```
+<ComponentPreview name="button-group-default" />
+
+## Vertical
+
+Stack buttons vertically:
+
+<ComponentPreview name="button-group-vertical" />
+
+## Sizes
+
+Different size presets for the group:
+
+<ComponentPreview name="button-group-sizes" />
+
+## Toolbar
+
+A toolbar pattern with grouped action buttons:
+
+<ComponentPreview name="button-group-toolbar" />
+
+## Split Button
+
+A primary action with a dropdown for secondary options:
+
+<ComponentPreview name="button-group-split-button" />
+
+## With Input
+
+Combine buttons with an input field:
+
+<ComponentPreview name="button-group-with-input" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### ButtonGroup
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
+| `size` | `"default" \| "sm" \| "lg"` | `"default"` | Size of buttons in the group |
+| `className` | `string` | - | Additional CSS classes |

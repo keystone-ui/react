@@ -1,6 +1,6 @@
 ---
 title: Checkbox
-description: Toggleable checkbox input for selecting or deselecting boolean values.
+description: A toggle control for binary choices, supporting checked, unchecked, and indeterminate states.
 ---
 
 ## Import
@@ -11,10 +11,31 @@ import { Checkbox } from "keystoneui/checkbox";
 
 ## Usage
 
-```tsx
-<Checkbox>Accept terms and conditions</Checkbox>
-```
+<ComponentPreview name="checkbox-default" />
+
+## With Description
+
+Use Field components for labels and helper text:
+
+<ComponentPreview name="checkbox-with-description" />
+
+## Group
+
+Multiple checkboxes in a fieldset:
+
+<ComponentPreview name="checkbox-group" />
+
+## Disabled
+
+<ComponentPreview name="checkbox-disabled" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `checked` | `boolean` | - | Controlled checked state |
+| `defaultChecked` | `boolean` | `false` | Default checked state (uncontrolled) |
+| `onCheckedChange` | `(checked: boolean) => void` | - | Callback when checked state changes |
+| `disabled` | `boolean` | `false` | Disables the checkbox |
+| `indeterminate` | `boolean` | `false` | Shows indeterminate state |
+| `className` | `string` | - | Additional CSS classes |

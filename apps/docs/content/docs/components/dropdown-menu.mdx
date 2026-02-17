@@ -6,23 +6,72 @@ description: Contextual menu triggered by a button, with support for items, sepa
 ## Import
 
 ```tsx
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "keystoneui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuShortcut,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+} from "keystoneui/dropdown-menu";
 ```
 
 ## Usage
 
-```tsx
-<DropdownMenu>
-  <DropdownMenuTrigger>Options</DropdownMenuTrigger>
-  <DropdownMenuContent>
-    <DropdownMenuItem>Edit</DropdownMenuItem>
-    <DropdownMenuItem>Duplicate</DropdownMenuItem>
-    <DropdownMenuSeparator />
-    <DropdownMenuItem>Delete</DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>
-```
+<ComponentPreview name="dropdown-menu-default" />
+
+## With Icons
+
+Add icons to menu items for visual clarity:
+
+<ComponentPreview name="dropdown-menu-with-icons" />
+
+## Checkboxes
+
+Use checkbox items for toggling options:
+
+<ComponentPreview name="dropdown-menu-checkboxes" />
+
+## Radio Group
+
+Use radio items for mutually exclusive selection:
+
+<ComponentPreview name="dropdown-menu-radio-group" />
+
+## Submenu
+
+Nest menus with sub-triggers for hierarchical navigation:
+
+<ComponentPreview name="dropdown-menu-submenu" />
+
+## Shortcuts
+
+Display keyboard shortcuts alongside menu items:
+
+<ComponentPreview name="dropdown-menu-shortcuts" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### DropdownMenuContent
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `side` | `"top" \| "right" \| "bottom" \| "left"` | `"bottom"` | Preferred placement side |
+| `align` | `"start" \| "center" \| "end"` | `"start"` | Alignment along the side axis |
+| `size` | `"default" \| "compact"` | `"default"` | Item height density |
+| `className` | `string` | - | Additional CSS classes |
+
+### DropdownMenuItem
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `disabled` | `boolean` | `false` | Whether the item is disabled |
+| `className` | `string` | - | Additional CSS classes |

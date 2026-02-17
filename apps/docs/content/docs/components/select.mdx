@@ -1,6 +1,6 @@
 ---
 title: Select
-description: A dropdown select component with search, groups, and custom rendering.
+description: A dropdown control for selecting one or more options from a list.
 ---
 
 ## Import
@@ -13,131 +13,65 @@ import {
   SelectContent,
   SelectItem,
   SelectGroup,
-  SelectGroupLabel,
+  SelectLabel,
   SelectSeparator,
 } from "keystoneui/select";
 ```
 
 ## Usage
 
-```tsx
-<Select defaultValue="apple">
-  <SelectTrigger>
-    <SelectValue placeholder="Select a fruit" />
-  </SelectTrigger>
-  <SelectContent>
-    <SelectItem value="apple">Apple</SelectItem>
-    <SelectItem value="banana">Banana</SelectItem>
-    <SelectItem value="orange">Orange</SelectItem>
-  </SelectContent>
-</Select>
-```
+<ComponentPreview name="select-default" />
 
-## With Groups
+## Groups
 
 Organize options into labeled groups:
 
-```tsx
-<Select>
-  <SelectTrigger>
-    <SelectValue placeholder="Select a food" />
-  </SelectTrigger>
-  <SelectContent>
-    <SelectGroup>
-      <SelectGroupLabel>Fruits</SelectGroupLabel>
-      <SelectItem value="apple">Apple</SelectItem>
-      <SelectItem value="banana">Banana</SelectItem>
-    </SelectGroup>
-    <SelectSeparator />
-    <SelectGroup>
-      <SelectGroupLabel>Vegetables</SelectGroupLabel>
-      <SelectItem value="carrot">Carrot</SelectItem>
-      <SelectItem value="broccoli">Broccoli</SelectItem>
-    </SelectGroup>
-  </SelectContent>
-</Select>
-```
+<ComponentPreview name="select-groups" />
 
-## Sizes
+## Scrollable
 
-```tsx
-<Select>
-  <SelectTrigger size="sm">
-    <SelectValue placeholder="Small" />
-  </SelectTrigger>
-  <SelectContent>...</SelectContent>
-</Select>
+For long lists, the content scrolls automatically:
 
-<Select>
-  <SelectTrigger>
-    <SelectValue placeholder="Default" />
-  </SelectTrigger>
-  <SelectContent>...</SelectContent>
-</Select>
-```
+<ComponentPreview name="select-scrollable" />
 
-## Compact Items
+## With Icons
 
-Use `size="compact"` on the content for denser item lists:
+Add icons to select items:
 
-```tsx
-<Select>
-  <SelectTrigger>
-    <SelectValue placeholder="Compact list" />
-  </SelectTrigger>
-  <SelectContent size="compact">
-    <SelectItem value="1">Option 1</SelectItem>
-    <SelectItem value="2">Option 2</SelectItem>
-    <SelectItem value="3">Option 3</SelectItem>
-  </SelectContent>
-</Select>
-```
+<ComponentPreview name="select-with-icons" />
+
+## Multiple Selection
+
+Select multiple values:
+
+<ComponentPreview name="select-multiple" />
 
 ## Disabled
 
-```tsx
-<Select disabled>
-  <SelectTrigger>
-    <SelectValue placeholder="Disabled" />
-  </SelectTrigger>
-  <SelectContent>
-    <SelectItem value="1">Option 1</SelectItem>
-  </SelectContent>
-</Select>
-```
-
-## Disabled Items
-
-```tsx
-<SelectItem value="unavailable" disabled>
-  Unavailable Option
-</SelectItem>
-```
+<ComponentPreview name="select-disabled" />
 
 ## API Reference
 
 ### Select
 
-The root component. Accepts all Base UI Select props.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | - | Controlled selected value |
+| `defaultValue` | `string` | - | Default selected value (uncontrolled) |
+| `onValueChange` | `(value: string) => void` | - | Callback when value changes |
+| `disabled` | `boolean` | `false` | Disables the select |
+| `multiple` | `boolean` | `false` | Allow multiple selections |
 
 ### SelectTrigger
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `size` | `"default" \| "sm"` | `"default"` | Trigger size |
-| `className` | `string` | - | Additional CSS classes |
-
-### SelectContent
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `size` | `"default" \| "compact"` | `"default"` | Item density |
+| `size` | `"default" \| "sm"` | `"default"` | Size variant |
 | `className` | `string` | - | Additional CSS classes |
 
 ### SelectItem
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `value` | `string` | Required | The item value |
+| `value` | `string` | - | Item value (required) |
 | `disabled` | `boolean` | `false` | Disables the item |
-| `className` | `string` | - | Additional CSS classes |

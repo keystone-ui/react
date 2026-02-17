@@ -11,14 +11,39 @@ import { TagGroup, TagGroupItem } from "keystoneui/tag-group";
 
 ## Usage
 
-```tsx
-<TagGroup>
-  <TagGroupItem>React</TagGroupItem>
-  <TagGroupItem>TypeScript</TagGroupItem>
-  <TagGroupItem>Tailwind</TagGroupItem>
-</TagGroup>
-```
+<ComponentPreview name="tag-group-default" />
+
+## Single Selection
+
+Allow only one tag to be selected at a time:
+
+<ComponentPreview name="tag-group-single-selection" />
+
+## With Icons
+
+Display icons alongside tag labels:
+
+<ComponentPreview name="tag-group-with-icons" />
+
+## Removable
+
+Allow tags to be removed from the group:
+
+<ComponentPreview name="tag-group-removable" />
+
+## Controlled
+
+Control the selected tags externally with state:
+
+<ComponentPreview name="tag-group-controlled" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### TagGroup
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `selectionMode` | `"single" \| "multiple"` | `"multiple"` | Selection behavior |
+| `value` | `string[]` | - | Controlled selected values |
+| `onValueChange` | `(value: string[]) => void` | - | Callback when selection changes |
+| `className` | `string` | - | Additional CSS classes |

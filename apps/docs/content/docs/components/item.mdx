@@ -6,15 +6,62 @@ description: Generic list item primitive for building consistent list-based inte
 ## Import
 
 ```tsx
-import { Item } from "keystoneui/item";
+import {
+  Item,
+  ItemMedia,
+  ItemContent,
+  ItemTitle,
+  ItemDescription,
+  ItemActions,
+  ItemGroup,
+  ItemSeparator,
+} from "keystoneui/item";
 ```
 
 ## Usage
 
-```tsx
-<Item>List item content</Item>
-```
+<ComponentPreview name="item-default" />
+
+## With Description
+
+Add secondary text below the title:
+
+<ComponentPreview name="item-with-description" />
+
+## With Avatar
+
+Display an avatar or icon in the media slot:
+
+<ComponentPreview name="item-with-avatar" />
+
+## With Actions
+
+Add action buttons to the trailing edge:
+
+<ComponentPreview name="item-with-actions" />
+
+## Group
+
+Organize items into groups with labels:
+
+<ComponentPreview name="item-group" />
+
+## Link
+
+Render an item as a navigable link:
+
+<ComponentPreview name="item-link" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### Item
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |
+
+### ItemGroup
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |

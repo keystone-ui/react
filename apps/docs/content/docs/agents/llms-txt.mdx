@@ -1,0 +1,84 @@
+---
+title: LLMs.txt
+description: Enable AI assistants like Claude, Cursor, and ChatGPT to understand Keystone UI documentation.
+---
+
+We provide [LLMs.txt](https://llmstxt.org/) files to make Keystone UI documentation accessible to AI coding assistants.
+
+## Available Files
+
+**Core documentation:**
+
+- [`/llms.txt`](/llms.txt) — Quick reference index for Keystone UI documentation
+- [`/llms-full.txt`](/llms-full.txt) — Complete Keystone UI documentation
+- [`/llms-components.txt`](/llms-components.txt) — Component documentation only
+
+**Individual pages:**
+
+- Append `.mdx` to any docs path to get the plain text version
+- Example: [`/docs/components/button.mdx`](/docs/components/button.mdx) — Button component documentation
+
+## How It Works
+
+The LLMs.txt endpoints are generated on-the-fly from the same MDX documentation files that render this docs site. The processing pipeline:
+
+1. Reads the raw MDX content from disk
+2. Replaces interactive `<ComponentPreview>` tags with the actual demo source code
+3. Strips remaining UI-only component tags
+4. Wraps with metadata (title, URL, description)
+5. Returns plain text
+
+This means every code example in the LLM output is **real, executable code** — the same code that renders in the interactive previews on this site.
+
+## Usage with AI Assistants
+
+### Cursor
+
+Add Keystone UI documentation to your Cursor rules:
+
+```
+# .cursor/rules/keystoneui.mdc
+---
+description: Keystone UI component library reference
+alwaysApply: true
+---
+
+Use Keystone UI for all UI components. Reference: https://keystoneui.dev/llms-components.txt
+```
+
+Or fetch the full documentation:
+
+```bash
+curl -o .cursor/rules/keystoneui-docs.md https://keystoneui.dev/llms-full.txt
+```
+
+### Claude / ChatGPT
+
+Paste the contents of `/llms-full.txt` or `/llms-components.txt` as context, or reference individual component pages:
+
+```
+https://keystoneui.dev/docs/components/button.mdx
+```
+
+### AGENTS.md
+
+Add to your project's `AGENTS.md`:
+
+```markdown
+## UI Library
+
+This project uses Keystone UI for components.
+Documentation: https://keystoneui.dev/llms-components.txt
+
+Import pattern: `import { Button } from "keystoneui/button"`
+```
+
+## Cache Behavior
+
+All LLMs.txt endpoints are cached at the CDN level:
+
+- **Fresh for 1 hour** (`s-maxage=3600`)
+- **Stale-while-revalidate for 24 hours** (`stale-while-revalidate=86400`)
+- **Regenerated on each deployment**
+
+After a deployment, the first request regenerates the content, then the CDN serves cached versions.

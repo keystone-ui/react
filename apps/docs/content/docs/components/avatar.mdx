@@ -6,18 +6,47 @@ description: User avatar displaying a profile image with a text or icon fallback
 ## Import
 
 ```tsx
-import { Avatar, AvatarImage, AvatarFallback } from "keystoneui/avatar";
+import { Avatar, AvatarImage, AvatarFallback, AvatarGroup } from "keystoneui/avatar";
 ```
 
 ## Usage
 
-```tsx
-<Avatar>
-  <AvatarImage src="/avatar.jpg" alt="User avatar" />
-  <AvatarFallback>JD</AvatarFallback>
-</Avatar>
-```
+<ComponentPreview name="avatar-default" />
+
+## Fallback
+
+Text initials or icon shown when the image fails to load:
+
+<ComponentPreview name="avatar-fallback" />
+
+## Group
+
+Stack multiple avatars together with an overlap effect:
+
+<ComponentPreview name="avatar-group" />
+
+## Sizes
+
+<ComponentPreview name="avatar-sizes" />
+
+## With Badge
+
+Attach a status badge to the avatar corner:
+
+<ComponentPreview name="avatar-with-badge" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### Avatar
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"default" \| "sm" \| "lg" \| "xl"` | `"default"` | Size of the avatar |
+| `className` | `string` | - | Additional CSS classes |
+
+### AvatarImage
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `src` | `string` | - | Image source URL |
+| `alt` | `string` | - | Alt text for the image |

@@ -11,10 +11,38 @@ import { Calendar } from "keystoneui/calendar";
 
 ## Usage
 
-```tsx
-<Calendar />
-```
+<ComponentPreview name="calendar-default" />
+
+## Range
+
+Select a date range with start and end dates:
+
+<ComponentPreview name="calendar-range" />
+
+## Month & Year Navigation
+
+Navigate by month and year with dropdowns:
+
+<ComponentPreview name="calendar-month-year" />
+
+## Presets
+
+Quick selection with predefined date presets:
+
+<ComponentPreview name="calendar-presets" />
+
+## Booked Dates
+
+Display unavailable or booked dates:
+
+<ComponentPreview name="calendar-booked-dates" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `selected` | `Date \| DateRange` | - | Currently selected date(s) |
+| `onSelect` | `(date: Date \| DateRange) => void` | - | Callback when date is selected |
+| `mode` | `"single" \| "range" \| "multiple"` | `"single"` | Selection mode |
+| `disabled` | `Date[] \| ((date: Date) => boolean)` | - | Dates to disable |
+| `className` | `string` | - | Additional CSS classes |

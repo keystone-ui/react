@@ -6,24 +6,42 @@ description: Displays term-description pairs for presenting metadata, settings, 
 ## Import
 
 ```tsx
-import { DescriptionList, DescriptionListItem, DescriptionListTerm, DescriptionListDetails } from "keystoneui/description-list";
+import {
+  DescriptionList,
+  DescriptionListItem,
+  DescriptionListTerm,
+  DescriptionListDetails,
+} from "keystoneui/description-list";
 ```
 
 ## Usage
 
-```tsx
-<DescriptionList>
-  <DescriptionListItem>
-    <DescriptionListTerm>Name</DescriptionListTerm>
-    <DescriptionListDetails>John Doe</DescriptionListDetails>
-  </DescriptionListItem>
-  <DescriptionListItem>
-    <DescriptionListTerm>Email</DescriptionListTerm>
-    <DescriptionListDetails>john@example.com</DescriptionListDetails>
-  </DescriptionListItem>
-</DescriptionList>
-```
+<ComponentPreview name="description-list-default" />
+
+## Card Variant
+
+A variant with rounded corners and background fill on each row:
+
+<ComponentPreview name="description-list-card-variant" />
+
+## Compact
+
+A smaller, denser layout for tighter spaces:
+
+<ComponentPreview name="description-list-compact" />
+
+## In Card
+
+Embed a description list inside a Card for structured content blocks:
+
+<ComponentPreview name="description-list-in-card" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### DescriptionList
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"default" \| "sm"` | `"default"` | The size variant |
+| `variant` | `"default" \| "card"` | `"default"` | The visual variant |
+| `className` | `string` | - | Additional CSS classes |

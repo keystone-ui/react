@@ -11,12 +11,17 @@ import { AspectRatio } from "keystoneui/aspect-ratio";
 
 ## Usage
 
-```tsx
-<AspectRatio ratio={16 / 9}>
-  <img src="/image.jpg" alt="Landscape" />
-</AspectRatio>
-```
+<ComponentPreview name="aspect-ratio-default" />
+
+## Square
+
+A 1:1 aspect ratio for square content:
+
+<ComponentPreview name="aspect-ratio-square" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `ratio` | `number` | - | The desired aspect ratio expressed as width / height (e.g. `16/9`) |
+| `className` | `string` | - | Additional CSS classes |

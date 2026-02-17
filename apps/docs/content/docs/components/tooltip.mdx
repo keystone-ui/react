@@ -6,18 +6,37 @@ description: Small floating label that appears on hover to provide additional de
 ## Import
 
 ```tsx
-import { Tooltip, TooltipTrigger, TooltipContent } from "keystoneui/tooltip";
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "keystoneui/tooltip";
 ```
 
 ## Usage
 
-```tsx
-<Tooltip>
-  <TooltipTrigger>Hover me</TooltipTrigger>
-  <TooltipContent>Helpful tooltip text</TooltipContent>
-</Tooltip>
-```
+<ComponentPreview name="tooltip-default" />
+
+## Sides
+
+Position the tooltip on different sides of the trigger:
+
+<ComponentPreview name="tooltip-sides" />
+
+## With Kbd
+
+Display a keyboard shortcut inside the tooltip:
+
+<ComponentPreview name="tooltip-with-kbd" />
+
+## Disabled Button
+
+Show a tooltip on a disabled button using a wrapper element:
+
+<ComponentPreview name="tooltip-disabled-button" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### TooltipContent
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `side` | `"top" \| "right" \| "bottom" \| "left"` | `"top"` | Preferred placement side |
+| `sideOffset` | `number` | `4` | Offset from the trigger in pixels |
+| `className` | `string` | - | Additional CSS classes |

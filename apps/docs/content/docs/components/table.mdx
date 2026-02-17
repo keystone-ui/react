@@ -6,28 +6,68 @@ description: Structured data table with rows, columns, headers, and cells for di
 ## Import
 
 ```tsx
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "keystoneui/table";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableRow,
+  TableHead,
+  TableCell,
+  TableCaption,
+} from "keystoneui/table";
 ```
 
 ## Usage
 
-```tsx
-<Table>
-  <TableHeader>
-    <TableRow>
-      <TableHead>Name</TableHead>
-      <TableHead>Email</TableHead>
-    </TableRow>
-  </TableHeader>
-  <TableBody>
-    <TableRow>
-      <TableCell>John Doe</TableCell>
-      <TableCell>john@example.com</TableCell>
-    </TableRow>
-  </TableBody>
-</Table>
-```
+<ComponentPreview name="table-default" />
+
+## With Badges
+
+Use badges inside table cells for status indicators:
+
+<ComponentPreview name="table-with-badges" />
+
+## Actions
+
+Add action buttons to table rows:
+
+<ComponentPreview name="table-actions" />
+
+## Compact
+
+A denser table layout for data-heavy views:
+
+<ComponentPreview name="table-compact" />
+
+## Striped
+
+Alternating row backgrounds for improved readability:
+
+<ComponentPreview name="table-striped" />
+
+## Card
+
+Wrap the table in a card container for a bordered appearance:
+
+<ComponentPreview name="table-card" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### Table
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |
+
+### TableHead
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |
+
+### TableCell
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |

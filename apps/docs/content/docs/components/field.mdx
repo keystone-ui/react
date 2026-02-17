@@ -6,20 +6,72 @@ description: Form field wrapper that provides a label, description, and error me
 ## Import
 
 ```tsx
-import { Field, FieldLabel, FieldDescription, FieldError } from "keystoneui/field";
+import {
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+  FieldSet,
+  FieldLegend,
+  FieldGroup,
+  FieldContent,
+  FieldTitle,
+  FieldSeparator,
+} from "keystoneui/field";
 ```
 
 ## Usage
 
-```tsx
-<Field>
-  <FieldLabel>Email</FieldLabel>
-  <FieldDescription>We'll never share your email.</FieldDescription>
-  <input type="email" />
-  <FieldError>Please enter a valid email address.</FieldError>
-</Field>
-```
+<ComponentPreview name="field-default" />
+
+## Horizontal
+
+A horizontal field layout with the label beside the control:
+
+<ComponentPreview name="field-horizontal" />
+
+## Validation Error
+
+Display validation errors with destructive styling:
+
+<ComponentPreview name="field-validation-error" />
+
+## Fieldset
+
+Group related fields with a fieldset and legend:
+
+<ComponentPreview name="field-fieldset" />
+
+## Grid
+
+Arrange multiple fields in a grid layout:
+
+<ComponentPreview name="field-grid" />
+
+## With Switch
+
+Use a field to wrap a switch control with a label and description:
+
+<ComponentPreview name="field-with-switch" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### Field
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `orientation` | `"vertical" \| "horizontal"` | `"vertical"` | Layout direction of the field |
+| `className` | `string` | - | Additional CSS classes |
+
+### FieldLabel
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |
+
+### FieldError
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `show` | `boolean` | `true` | Whether to show the error message |
+| `className` | `string` | - | Additional CSS classes |

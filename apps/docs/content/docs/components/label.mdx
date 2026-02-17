@@ -1,20 +1,43 @@
 ---
 title: Label
-description: Accessible label element that associates with form controls for improved usability.
+description: An accessible label component for form controls with optional description and error messages.
 ---
 
 ## Import
 
 ```tsx
-import { Label } from "keystoneui/label";
+import { Label, Description, ErrorMessage } from "keystoneui/label";
 ```
 
 ## Usage
 
-```tsx
-<Label htmlFor="name">Name</Label>
-```
+<ComponentPreview name="label-default" />
+
+## Required
+
+Indicate required fields:
+
+<ComponentPreview name="label-required" />
+
+## With Description
+
+Add helper text below the input:
+
+<ComponentPreview name="label-with-description" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### Label
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `htmlFor` | `string` | - | ID of the associated form control |
+| `className` | `string` | - | Additional CSS classes |
+
+### Description
+
+Renders muted helper text below a form control.
+
+### ErrorMessage
+
+Renders destructive-colored error text below a form control.

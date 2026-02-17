@@ -1,23 +1,59 @@
 ---
 title: InputGroup
-description: Groups an input with adjacent buttons or icons for combined input actions.
+description: Groups an input with adjacent buttons, icons, or text add-ons for combined input actions.
 ---
 
 ## Import
 
 ```tsx
-import { InputGroup, InputGroupInput, InputGroupButton } from "keystoneui/input-group";
+import {
+  InputGroup,
+  InputGroupInput,
+  InputGroupButton,
+  InputGroupAddon,
+  InputGroupText,
+} from "keystoneui/input-group";
 ```
 
 ## Usage
 
-```tsx
-<InputGroup>
-  <InputGroupInput placeholder="Search..." />
-  <InputGroupButton>Go</InputGroupButton>
-</InputGroup>
-```
+<ComponentPreview name="input-group-default" />
+
+## Text Prefix
+
+Add a static text prefix to the input:
+
+<ComponentPreview name="input-group-text-prefix" />
+
+## With Button
+
+Attach a button to the input for form submission or actions:
+
+<ComponentPreview name="input-group-with-button" />
+
+## Password Toggle
+
+An input group with a visibility toggle for passwords:
+
+<ComponentPreview name="input-group-password-toggle" />
+
+## Search
+
+A search input with an icon and submit button:
+
+<ComponentPreview name="input-group-search" />
+
+## Currency
+
+A currency input with symbol prefix and code suffix:
+
+<ComponentPreview name="input-group-currency" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### InputGroup
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"default" \| "sm"` | `"default"` | The size variant of the group |
+| `className` | `string` | - | Additional CSS classes |

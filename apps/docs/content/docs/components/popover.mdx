@@ -6,20 +6,44 @@ description: Floating content panel anchored to a trigger element for contextual
 ## Import
 
 ```tsx
-import { Popover, PopoverTrigger, PopoverContent } from "keystoneui/popover";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTitle,
+} from "keystoneui/popover";
 ```
 
 ## Usage
 
-```tsx
-<Popover>
-  <PopoverTrigger>Open Popover</PopoverTrigger>
-  <PopoverContent>
-    <p>Popover content goes here.</p>
-  </PopoverContent>
-</Popover>
-```
+<ComponentPreview name="popover-default" />
+
+## With Form
+
+Embed a form inside a popover for inline editing:
+
+<ComponentPreview name="popover-with-form" />
+
+## Alignments
+
+Control the popover placement relative to the trigger:
+
+<ComponentPreview name="popover-alignments" />
+
+## With Arrow
+
+Add an arrow indicator pointing to the trigger:
+
+<ComponentPreview name="popover-with-arrow" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### PopoverContent
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `side` | `"top" \| "right" \| "bottom" \| "left"` | `"bottom"` | Preferred placement side |
+| `align` | `"start" \| "center" \| "end"` | `"center"` | Alignment along the side axis |
+| `sideOffset` | `number` | `4` | Offset from the trigger in pixels |
+| `className` | `string` | - | Additional CSS classes |

@@ -11,10 +11,38 @@ import { CircularProgress } from "keystoneui/circular-progress";
 
 ## Usage
 
-```tsx
-<CircularProgress value={75} />
-```
+<ComponentPreview name="circular-progress-default" />
+
+## Sizes
+
+Different size presets for various contexts:
+
+<ComponentPreview name="circular-progress-sizes" />
+
+## With Label
+
+Display a label or percentage inside the ring:
+
+<ComponentPreview name="circular-progress-with-label" />
+
+## Animated
+
+A smoothly animated circular progress:
+
+<ComponentPreview name="circular-progress-animated" />
+
+## Indeterminate
+
+A spinning indeterminate state for unknown durations:
+
+<ComponentPreview name="circular-progress-indeterminate" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `number` | `0` | Current progress value (0-100) |
+| `max` | `number` | `100` | Maximum progress value |
+| `size` | `number` | - | Diameter of the circle in pixels |
+| `strokeWidth` | `number` | - | Thickness of the progress ring |
+| `className` | `string` | - | Additional CSS classes |

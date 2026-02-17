@@ -6,23 +6,62 @@ description: Horizontally scrollable content carousel with navigation controls f
 ## Import
 
 ```tsx
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "keystoneui/carousel";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+  CarouselDots,
+} from "keystoneui/carousel";
 ```
 
 ## Usage
 
-```tsx
-<Carousel>
-  <CarouselContent>
-    <CarouselItem>Slide 1</CarouselItem>
-    <CarouselItem>Slide 2</CarouselItem>
-    <CarouselItem>Slide 3</CarouselItem>
-  </CarouselContent>
-  <CarouselPrevious />
-  <CarouselNext />
-</Carousel>
-```
+<ComponentPreview name="carousel-default" />
+
+## With Dots
+
+Add dot indicators for slide navigation:
+
+<ComponentPreview name="carousel-with-dots" />
+
+## Autoplay
+
+Automatically advance slides on a timer:
+
+<ComponentPreview name="carousel-autoplay" />
+
+## Multiple Slides
+
+Show multiple slides at once with partial peek:
+
+<ComponentPreview name="carousel-multiple-slides" />
+
+## Vertical
+
+A vertically scrolling carousel:
+
+<ComponentPreview name="carousel-vertical" />
+
+## Cards
+
+A carousel of card components:
+
+<ComponentPreview name="carousel-cards" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### Carousel
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Scroll direction |
+| `opts` | `CarouselOptions` | - | Embla Carousel options |
+| `plugins` | `CarouselPlugin[]` | - | Embla Carousel plugins |
+
+### CarouselItem
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes for sizing |

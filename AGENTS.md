@@ -58,20 +58,26 @@ pnpm build --filter=storybook         # Build only the Storybook docs
 pnpm dev --filter=keystoneui        # Watch-build the UI package
 ```
 
-Main packages: `keystoneui`, `storybook`
+Main packages: `keystoneui`, `storybook`, `docs`
 
 ## Monorepo Structure
 
 ```
 ├── apps/
-│   └── storybook/               # Storybook documentation app
-│       └── stories/             # Story files (one per component)
+│   ├── storybook/               # Storybook documentation app
+│   │   └── stories/             # Story files (one per component)
+│   └── docs/                    # Fumadocs documentation site
+│       ├── demos/               # Live demo files (one dir per component)
+│       ├── content/docs/        # MDX documentation pages
+│       └── app/                 # Next.js routes + LLMs.txt endpoints
 ├── packages/
 │   ├── ui/                      # keystoneui — main component library
 │   │   └── src/                 # Flat directory: one .tsx file per component
 │   │       └── base.css         # Required component CSS (animations, transitions, hover gating)
 │   │   └── registry/            # shadcn registry items (style + theme JSONs)
 │   └── typescript-config/       # Shared TypeScript config
+├── scripts/
+│   └── add-component.mjs        # Component scaffolding script
 ├── turbo.json
 └── pnpm-workspace.yaml
 ```
@@ -115,6 +121,33 @@ All commits must follow Conventional Commits:
 Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
 
 Example: `feat(ui): add tag-group component`
+
+## Adding a New Component
+
+Run the scaffolding command:
+
+```bash
+pnpm add:component MyComponent
+```
+
+This creates all files (component, story, demo, MDX page) and updates all registries. Then follow the **Storybook-first** workflow:
+
+1. Implement the component in `packages/ui/src/`
+2. Write Storybook stories (primary development surface)
+3. Create simplified Fumadocs demos (3-6 per component)
+4. Register demos in `apps/docs/demos/index.ts`
+5. Write MDX documentation with `<ComponentPreview>` tags
+6. LLMs.txt endpoints update automatically (no manual step)
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow, including when to update Fumadocs after component changes.
+
+## Documentation & LLMs.txt
+
+The docs site (Fumadocs) serves both interactive documentation and LLMs.txt endpoints:
+
+- **Demo files** in `apps/docs/demos/` render as live previews on the docs site AND get injected as code blocks in LLMs.txt output
+- **MDX files** in `apps/docs/content/docs/components/` use `<ComponentPreview name="X" />` tags to reference demos
+- **LLMs.txt routes**: `/llms.txt`, `/llms-full.txt`, `/llms-components.txt`, `/docs/components/{name}.mdx`
 
 ## Important Constraints
 

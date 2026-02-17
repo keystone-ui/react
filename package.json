@@ -11,6 +11,7 @@
     "test": "turbo run test",
     "check": "ultracite check",
     "fix": "ultracite fix",
+    "add:component": "node scripts/add-component.mjs",
     "prepare": "husky"
   },
   "devDependencies": {

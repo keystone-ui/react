@@ -6,25 +6,58 @@ description: Modal confirmation dialog for destructive or irreversible actions r
 ## Import
 
 ```tsx
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogAction, AlertDialogCancel } from "keystoneui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "keystoneui/alert-dialog";
 ```
 
 ## Usage
 
-```tsx
-<AlertDialog>
-  <AlertDialogTrigger>Delete item</AlertDialogTrigger>
-  <AlertDialogContent>
-    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-    <AlertDialogDescription>
-      This action cannot be undone.
-    </AlertDialogDescription>
-    <AlertDialogCancel>Cancel</AlertDialogCancel>
-    <AlertDialogAction>Delete</AlertDialogAction>
-  </AlertDialogContent>
-</AlertDialog>
-```
+<ComponentPreview name="alert-dialog-default" />
+
+## Destructive
+
+A destructive confirmation dialog with red action button:
+
+<ComponentPreview name="alert-dialog-destructive" />
+
+## Small
+
+A compact alert dialog for simpler confirmations:
+
+<ComponentPreview name="alert-dialog-small" />
+
+## With Media
+
+Include an image or illustration in the dialog:
+
+<ComponentPreview name="alert-dialog-with-media" />
 
 ## API Reference
 
-See the source code and Storybook for full API details.
+### AlertDialog
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+
+### AlertDialogAction
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |
+
+### AlertDialogCancel
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |
