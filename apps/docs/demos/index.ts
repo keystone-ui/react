@@ -113,6 +113,12 @@ import ComboboxMultiple from "./combobox/multiple";
 import ComboboxPopup from "./combobox/popup";
 import ComboboxWithClear from "./combobox/with-clear";
 
+// command
+import CommandDefault from "./command/default";
+import CommandGroups from "./command/groups";
+import CommandScrollable from "./command/scrollable";
+import CommandWithShortcuts from "./command/with-shortcuts";
+
 // date-input
 import DateInputDateOfBirth from "./date-input/date-of-birth";
 import DateInputDefault from "./date-input/default";
@@ -699,6 +705,24 @@ export const demos: Record<string, DemoItem> = {
   "combobox-with-clear": {
     component: ComboboxWithClear,
     file: "combobox/with-clear.tsx",
+  },
+
+  // command
+  "command-default": {
+    component: CommandDefault,
+    file: "command/default.tsx",
+  },
+  "command-groups": {
+    component: CommandGroups,
+    file: "command/groups.tsx",
+  },
+  "command-scrollable": {
+    component: CommandScrollable,
+    file: "command/scrollable.tsx",
+  },
+  "command-with-shortcuts": {
+    component: CommandWithShortcuts,
+    file: "command/with-shortcuts.tsx",
   },
 
   // date-input

@@ -19,6 +19,7 @@
     "switch",
     "native-select",
     "combobox",
+    "command",
     "date-input",
     "input-otp",
     "input-group",

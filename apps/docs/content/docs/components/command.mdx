@@ -1,0 +1,102 @@
+---
+title: Command
+description: A searchable command menu for quick actions, navigation, and filtering.
+---
+
+## Import
+
+```tsx
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "keystoneui/command";
+```
+
+## Usage
+
+A simple command menu in a dialog:
+
+<ComponentPreview name="command-default" />
+
+## Shortcuts
+
+Items can display keyboard shortcut labels using `CommandShortcut`:
+
+<ComponentPreview name="command-with-shortcuts" />
+
+## Groups
+
+Organize items into groups with headings and separators:
+
+<ComponentPreview name="command-groups" />
+
+## Scrollable
+
+The command list scrolls automatically when content exceeds the max height:
+
+<ComponentPreview name="command-scrollable" />
+
+## API Reference
+
+Built on top of [cmdk](https://github.com/dip/cmdk). See the cmdk documentation for the full API reference.
+
+### Command
+
+The root command menu wrapper. Handles filtering, sorting, and keyboard navigation.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | - | Controlled selected value |
+| `onValueChange` | `(value: string) => void` | - | Callback when selected value changes |
+| `filter` | `(value: string, search: string, keywords?: string[]) => number` | - | Custom filter function |
+| `shouldFilter` | `boolean` | `true` | Whether to filter and sort items |
+| `loop` | `boolean` | `false` | Whether arrow keys wrap around the list |
+
+### CommandDialog
+
+A command menu rendered inside a modal dialog.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `open` | `boolean` | - | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+| `title` | `string` | `"Command Palette"` | Accessible dialog title (sr-only) |
+| `description` | `string` | `"Search for a command to run..."` | Accessible dialog description (sr-only) |
+| `showCloseButton` | `boolean` | `false` | Whether to show a close button |
+
+### CommandInput
+
+Search input with a built-in search icon.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | - | Controlled search value |
+| `onValueChange` | `(value: string) => void` | - | Callback when search value changes |
+| `placeholder` | `string` | - | Placeholder text |
+
+### CommandItem
+
+An individual command item. Becomes active on pointer enter.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | - | Item value (inferred from text content if not provided) |
+| `onSelect` | `(value: string) => void` | - | Callback when item is selected |
+| `disabled` | `boolean` | `false` | Whether the item is disabled |
+| `keywords` | `string[]` | - | Additional keywords for filtering |
+
+### CommandGroup
+
+Groups items together with an optional heading.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `heading` | `string` | - | Group heading text |
+| `forceMount` | `boolean` | `false` | Always render regardless of filtering |

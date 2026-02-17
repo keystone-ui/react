@@ -24,6 +24,7 @@
     "./checkbox": "./src/checkbox.tsx",
     "./collapsible": "./src/collapsible.tsx",
     "./combobox": "./src/combobox.tsx",
+    "./command": "./src/command.tsx",
     "./date-input": "./src/date-input.tsx",
     "./description-list": "./src/description-list.tsx",
     "./drawer": "./src/drawer.tsx",
@@ -87,6 +88,7 @@
     "@base-ui/react": "1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
     "embla-carousel-react": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
     "input-otp": "^1.4.2",
@@ -179,6 +181,11 @@
         "types": "./dist/combobox.d.ts",
         "import": "./dist/combobox.js",
         "require": "./dist/combobox.cjs"
+      },
+      "./command": {
+        "types": "./dist/command.d.ts",
+        "import": "./dist/command.js",
+        "require": "./dist/command.cjs"
       },
       "./date-input": {
         "types": "./dist/date-input.d.ts",

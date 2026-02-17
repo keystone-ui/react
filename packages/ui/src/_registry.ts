@@ -110,6 +110,13 @@ export const ui: Registry = [
     files: [{ path: "ui/combobox.tsx", type: "registry:ui" }],
   },
   {
+    name: "command",
+    type: "registry:ui",
+    dependencies: ["cmdk", "lucide-react"],
+    registryDependencies: ["modal", "input-group"],
+    files: [{ path: "ui/command.tsx", type: "registry:ui" }],
+  },
+  {
     name: "date-input",
     type: "registry:ui",
     files: [{ path: "ui/date-input.tsx", type: "registry:ui" }],
