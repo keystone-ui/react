@@ -1,12 +1,24 @@
 "use client";
 
-import { useCallback, useMemo, useRef } from "react";
+import { converter, formatHex } from "culori";
+import { Popover, PopoverContent, PopoverTrigger } from "keystoneui/popover";
+import { useMemo } from "react";
+import {
+  type Color,
+  ColorArea,
+  ColorSlider,
+  ColorThumb,
+  parseColor,
+  SliderTrack,
+} from "react-aria-components";
 import type { SetThemeState, ThemeState } from "../hooks/use-theme-state";
 import {
   findMatchingPreset,
   type PrimaryPresetId,
   primaryPresets,
 } from "../theme-data";
+
+const toOklch = converter("oklch");
 
 interface PrimaryColorPickerProps {
   state: ThemeState;
@@ -18,10 +30,36 @@ export function PrimaryColorPicker({
   setState,
 }: PrimaryColorPickerProps) {
   const { primaryL, primaryC, primaryH } = state;
-  const trackRef = useRef<HTMLDivElement>(null);
-  const isDragging = useRef(false);
 
+  const currentColor = `oklch(${primaryL} ${primaryC} ${primaryH})`;
   const currentPreset = findMatchingPreset(primaryL, primaryC, primaryH);
+
+  const hex = useMemo(() => {
+    return (
+      formatHex({ mode: "oklch", l: primaryL, c: primaryC, h: primaryH }) ||
+      "#000000"
+    );
+  }, [primaryL, primaryC, primaryH]);
+
+  const colorValue = useMemo(() => {
+    try {
+      return parseColor(hex).toFormat("hsb");
+    } catch {
+      return parseColor("#000000").toFormat("hsb");
+    }
+  }, [hex]);
+
+  const handleColorChange = (color: Color) => {
+    const hexStr = color.toString("hex");
+    const oklchColor = toOklch(hexStr);
+    if (oklchColor) {
+      setState({
+        primaryL: Math.round(oklchColor.l * 1000) / 1000,
+        primaryC: Math.round((oklchColor.c ?? 0) * 1000) / 1000,
+        primaryH: Math.round((oklchColor.h ?? 0) * 1000) / 1000,
+      });
+    }
+  };
 
   const applyPreset = (id: PrimaryPresetId) => {
     const preset = primaryPresets[id];
@@ -32,105 +70,83 @@ export function PrimaryColorPicker({
     });
   };
 
-  const currentColor = `oklch(${primaryL} ${primaryC} ${primaryH})`;
-
-  // Hue slider gradient
-  const trackBackground = useMemo(() => {
-    const stops = Array.from({ length: 13 }, (_, i) => {
-      const h = (i / 12) * 360;
-      return `oklch(${primaryL} ${primaryC} ${h})`;
-    });
-    return `linear-gradient(to right, ${stops.join(", ")})`;
-  }, [primaryL, primaryC]);
-
-  const getHueFromPosition = useCallback(
-    (clientX: number) => {
-      if (!trackRef.current) {
-        return primaryH;
-      }
-      const rect = trackRef.current.getBoundingClientRect();
-      const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-      return Math.round(pct * 360 * 100) / 100;
-    },
-    [primaryH]
-  );
-
-  const handlePointerDown = useCallback(
-    (e: React.PointerEvent) => {
-      isDragging.current = true;
-      (e.target as HTMLElement).setPointerCapture(e.pointerId);
-      const newHue = getHueFromPosition(e.clientX);
-      setState({ primaryH: newHue });
-
-      const onMove = (ev: PointerEvent) => {
-        if (isDragging.current) {
-          setState({ primaryH: getHueFromPosition(ev.clientX) });
-        }
-      };
-      const onUp = (ev: PointerEvent) => {
-        isDragging.current = false;
-        (ev.target as HTMLElement).releasePointerCapture(ev.pointerId);
-        document.removeEventListener("pointermove", onMove);
-        document.removeEventListener("pointerup", onUp);
-      };
-      document.addEventListener("pointermove", onMove);
-      document.addEventListener("pointerup", onUp);
-    },
-    [getHueFromPosition, setState]
-  );
-
-  const thumbPct = (primaryH / 360) * 100;
-
   return (
     <div className="flex flex-col gap-2">
-      <span className="font-medium text-foreground text-xs">Primary</span>
+      <span className="font-medium text-foreground text-xs">Theme</span>
+      <Popover>
+        <PopoverTrigger className="flex h-8 cursor-pointer items-center gap-2 rounded-md border border-border bg-background px-2.5 text-foreground text-xs outline-none focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2">
+          <span
+            className="size-4 shrink-0 rounded-full border border-border"
+            style={{ backgroundColor: currentColor }}
+          />
+          <span className="text-muted-foreground">{hex.toUpperCase()}</span>
+        </PopoverTrigger>
+        <PopoverContent align="start" className="w-64 p-3">
+          <div className="flex flex-col gap-3">
+            {/* Preset swatches */}
+            <div className="flex flex-wrap gap-1.5">
+              {Object.values(primaryPresets).map((preset) => (
+                <button
+                  className="relative size-6 cursor-pointer rounded-full transition-transform hover:scale-110"
+                  key={preset.id}
+                  onClick={() => applyPreset(preset.id)}
+                  style={{ backgroundColor: preset.swatch }}
+                  title={preset.label}
+                  type="button"
+                >
+                  {currentPreset === preset.id && (
+                    <span className="absolute inset-0 rounded-full ring-2 ring-foreground ring-offset-2 ring-offset-background" />
+                  )}
+                </button>
+              ))}
+            </div>
 
-      {/* Preset swatches */}
-      <div className="flex flex-wrap gap-1.5">
-        {Object.values(primaryPresets).map((preset) => (
-          <button
-            className="relative size-6 cursor-pointer rounded-full transition-transform hover:scale-110"
-            key={preset.id}
-            onClick={() => applyPreset(preset.id)}
-            style={{ backgroundColor: preset.swatch }}
-            title={preset.label}
-            type="button"
-          >
-            {currentPreset === preset.id && (
-              <span className="absolute inset-0 rounded-full ring-2 ring-foreground ring-offset-2 ring-offset-background" />
-            )}
-          </button>
-        ))}
-      </div>
+            {/* 2D color area (saturation x brightness) */}
+            <ColorArea
+              className="h-40 w-full rounded-lg"
+              colorSpace="hsb"
+              onChange={handleColorChange}
+              style={({ defaultStyle }) => ({
+                ...defaultStyle,
+              })}
+              value={colorValue}
+              xChannel="saturation"
+              yChannel="brightness"
+            >
+              <ColorThumb
+                className="size-5 rounded-full border-2 border-white shadow-[0_0_0_1px_rgba(0,0,0,0.2)]"
+                style={({ defaultStyle }) => ({
+                  ...defaultStyle,
+                })}
+              />
+            </ColorArea>
 
-      {/* Hue slider */}
-      <div
-        aria-label="Primary hue"
-        aria-valuemax={360}
-        aria-valuemin={0}
-        aria-valuenow={Math.round(primaryH)}
-        className="relative h-5 w-full cursor-pointer touch-none rounded-full"
-        onKeyDown={(e) => {
-          const step = e.shiftKey ? 10 : 1;
-          if (e.key === "ArrowRight" || e.key === "ArrowUp") {
-            e.preventDefault();
-            setState({ primaryH: (primaryH + step) % 360 });
-          } else if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
-            e.preventDefault();
-            setState({ primaryH: (primaryH - step + 360) % 360 });
-          }
-        }}
-        onPointerDown={handlePointerDown}
-        ref={trackRef}
-        role="slider"
-        style={{ background: trackBackground }}
-        tabIndex={0}
-      >
-        <div
-          className="absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-md"
-          style={{ left: `${thumbPct}%`, backgroundColor: currentColor }}
-        />
-      </div>
+            {/* Hue slider */}
+            <ColorSlider
+              channel="hue"
+              className="w-full"
+              colorSpace="hsb"
+              onChange={handleColorChange}
+              value={colorValue}
+            >
+              <SliderTrack
+                className="h-5 w-full rounded-full"
+                style={({ defaultStyle }) => ({
+                  ...defaultStyle,
+                  background: `${defaultStyle.background}, repeating-conic-gradient(#CCC 0% 25%, white 0% 50%) 50% / 16px 16px`,
+                })}
+              >
+                <ColorThumb
+                  className="top-1/2 size-4 rounded-full border-2 border-white shadow-[0_0_0_1px_rgba(0,0,0,0.2)]"
+                  style={({ defaultStyle }) => ({
+                    ...defaultStyle,
+                  })}
+                />
+              </SliderTrack>
+            </ColorSlider>
+          </div>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }

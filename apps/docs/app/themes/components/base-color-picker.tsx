@@ -1,5 +1,6 @@
 "use client";
 
+import { Popover, PopoverContent, PopoverTrigger } from "keystoneui/popover";
 import type { SetThemeState, ThemeState } from "../hooks/use-theme-state";
 import type { BaseColorId } from "../theme-data";
 
@@ -17,25 +18,39 @@ const swatches: Array<{ id: BaseColorId; label: string; swatch: string }> = [
 ];
 
 export function BaseColorPicker({ state, setState }: BaseColorPickerProps) {
+  const currentSwatch =
+    swatches.find((s) => s.id === state.base) ?? swatches[0];
+
   return (
     <div className="flex flex-col gap-2">
-      <span className="font-medium text-foreground text-xs">Base</span>
-      <div className="flex gap-1.5">
-        {swatches.map((s) => (
-          <button
-            className="relative size-6 cursor-pointer rounded-full transition-transform hover:scale-110"
-            key={s.id}
-            onClick={() => setState({ base: s.id })}
-            style={{ backgroundColor: s.swatch }}
-            title={s.label}
-            type="button"
-          >
-            {state.base === s.id && (
-              <span className="absolute inset-0 rounded-full ring-2 ring-foreground ring-offset-2 ring-offset-background" />
-            )}
-          </button>
-        ))}
-      </div>
+      <span className="font-medium text-foreground text-xs">Base Color</span>
+      <Popover>
+        <PopoverTrigger className="flex h-8 cursor-pointer items-center gap-2 rounded-md border border-border bg-background px-2.5 text-foreground text-xs outline-none focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2">
+          <span
+            className="size-4 shrink-0 rounded-full border border-border"
+            style={{ backgroundColor: currentSwatch.swatch }}
+          />
+          <span className="text-muted-foreground">{currentSwatch.label}</span>
+        </PopoverTrigger>
+        <PopoverContent align="start" className="w-auto p-3">
+          <div className="flex gap-2">
+            {swatches.map((s) => (
+              <button
+                className="relative size-7 cursor-pointer rounded-full transition-transform hover:scale-110"
+                key={s.id}
+                onClick={() => setState({ base: s.id })}
+                style={{ backgroundColor: s.swatch }}
+                title={s.label}
+                type="button"
+              >
+                {state.base === s.id && (
+                  <span className="absolute inset-0 rounded-full ring-2 ring-foreground ring-offset-2 ring-offset-background" />
+                )}
+              </button>
+            ))}
+          </div>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }

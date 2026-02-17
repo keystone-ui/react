@@ -1,5 +1,13 @@
 "use client";
 
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "keystoneui/select";
 import { type RadiusId, radiusOptions } from "../constants";
 import type { SetThemeState, ThemeState } from "../hooks/use-theme-state";
 
@@ -12,17 +20,23 @@ export function RadiusPicker({ state, setState }: RadiusPickerProps) {
   return (
     <div className="flex flex-col gap-2">
       <span className="font-medium text-foreground text-xs">Radius</span>
-      <select
-        className="h-8 cursor-pointer rounded-md border border-border bg-background px-2 text-foreground text-xs outline-none focus:ring-2 focus:ring-ring"
-        onChange={(e) => setState({ radius: e.target.value as RadiusId })}
+      <Select
+        onValueChange={(val) => setState({ radius: val as RadiusId })}
         value={state.radius}
       >
-        {radiusOptions.map((opt) => (
-          <option key={opt.id} value={opt.id}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
+        <SelectTrigger size="sm">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {radiusOptions.map((opt) => (
+              <SelectItem key={opt.id} value={opt.id}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
     </div>
   );
 }
