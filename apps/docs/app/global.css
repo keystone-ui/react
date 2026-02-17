@@ -4,7 +4,7 @@
 @import "fumadocs-ui/css/shiki.css";
 @import "keystoneui/base.css";
 
-@source "../../packages/ui/src/**/*.{ts,tsx}";
+@source "../../../packages/ui/src/**/*.{ts,tsx}";
 @source "../demos/**/*.{ts,tsx}";
 @source "../components/**/*.{ts,tsx}";
 
@@ -93,4 +93,13 @@
   --input-bg: oklch(1 0 0 / 5%);
   --ring: oklch(0.552 0.016 285.938);
   --skeleton-shimmer: oklch(1 0 0 / 0.1);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
