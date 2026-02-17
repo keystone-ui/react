@@ -221,7 +221,7 @@ function CircularProgressValue({
         "relative font-semibold text-foreground tabular-nums",
         "group-data-[size=sm]/circular-progress:text-xs",
         "group-data-[size=default]/circular-progress:text-sm",
-        "group-data-[size=lg]/circular-progress:text-lg",
+        "group-data-[size=lg]/circular-progress:text-base",
         className
       )}
       data-slot="circular-progress-value"

@@ -119,7 +119,10 @@ export function DemoComponents() {
       <div className="flex flex-col gap-6">
         <div className="flex flex-wrap items-center gap-2">
           <Avatar>
-            <AvatarImage alt="User" src="https://github.com/shadcn.png" />
+            <AvatarImage
+              alt="User"
+              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+            />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <Avatar>

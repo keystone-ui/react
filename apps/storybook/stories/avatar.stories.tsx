@@ -30,13 +30,13 @@ import {
 
 // Basic avatar with image and fallback
 <Avatar>
-  <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+  <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face" alt="@shadcn" />
   <AvatarFallback>CN</AvatarFallback>
 </Avatar>
 
 // Avatar with status badge
 <Avatar>
-  <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+  <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face" alt="@shadcn" />
   <AvatarFallback>CN</AvatarFallback>
   <AvatarBadge className="bg-green-600 dark:bg-green-800" />
 </Avatar>
@@ -94,7 +94,7 @@ export const Default: Story = {
       <AvatarImage
         alt="@shadcn"
         className="grayscale"
-        src="https://github.com/shadcn.png"
+        src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
       />
       <AvatarFallback>CN</AvatarFallback>
     </Avatar>
@@ -106,7 +106,10 @@ export const Badge: Story = {
   name: "Badge",
   render: () => (
     <Avatar>
-      <AvatarImage alt="@evilrabbit" src="https://github.com/evilrabbit.png" />
+      <AvatarImage
+        alt="@evilrabbit"
+        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face"
+      />
       <AvatarFallback>ER</AvatarFallback>
       <AvatarBadge className="bg-green-600 dark:bg-green-800" />
     </Avatar>
@@ -126,7 +129,10 @@ export const BadgeWithIcon: Story = {
   name: "Badge with Icon",
   render: () => (
     <Avatar className="grayscale">
-      <AvatarImage alt="@pranathip" src="https://github.com/pranathip.png" />
+      <AvatarImage
+        alt="@pranathip"
+        src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face"
+      />
       <AvatarFallback>PP</AvatarFallback>
       <AvatarBadge>
         <PlusIcon />
@@ -148,17 +154,23 @@ export const Group: Story = {
   render: () => (
     <AvatarGroup className="grayscale">
       <Avatar>
-        <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
+        <AvatarImage
+          alt="@shadcn"
+          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+        />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <Avatar>
-        <AvatarImage alt="@maxleiter" src="https://github.com/maxleiter.png" />
+        <AvatarImage
+          alt="@maxleiter"
+          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face"
+        />
         <AvatarFallback>LR</AvatarFallback>
       </Avatar>
       <Avatar>
         <AvatarImage
           alt="@evilrabbit"
-          src="https://github.com/evilrabbit.png"
+          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face"
         />
         <AvatarFallback>ER</AvatarFallback>
       </Avatar>
@@ -179,17 +191,23 @@ export const GroupWithCount: Story = {
   render: () => (
     <AvatarGroup className="grayscale">
       <Avatar>
-        <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
+        <AvatarImage
+          alt="@shadcn"
+          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+        />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <Avatar>
-        <AvatarImage alt="@maxleiter" src="https://github.com/maxleiter.png" />
+        <AvatarImage
+          alt="@maxleiter"
+          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face"
+        />
         <AvatarFallback>LR</AvatarFallback>
       </Avatar>
       <Avatar>
         <AvatarImage
           alt="@evilrabbit"
-          src="https://github.com/evilrabbit.png"
+          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face"
         />
         <AvatarFallback>ER</AvatarFallback>
       </Avatar>
@@ -212,17 +230,23 @@ export const GroupWithIcon: Story = {
   render: () => (
     <AvatarGroup className="grayscale">
       <Avatar>
-        <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
+        <AvatarImage
+          alt="@shadcn"
+          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+        />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <Avatar>
-        <AvatarImage alt="@maxleiter" src="https://github.com/maxleiter.png" />
+        <AvatarImage
+          alt="@maxleiter"
+          src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face"
+        />
         <AvatarFallback>LR</AvatarFallback>
       </Avatar>
       <Avatar>
         <AvatarImage
           alt="@evilrabbit"
-          src="https://github.com/evilrabbit.png"
+          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face"
         />
         <AvatarFallback>ER</AvatarFallback>
       </Avatar>
@@ -246,19 +270,31 @@ export const Sizes: Story = {
   render: () => (
     <div className="flex flex-wrap items-center gap-2 grayscale">
       <Avatar size="xs">
-        <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
+        <AvatarImage
+          alt="@shadcn"
+          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+        />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <Avatar size="sm">
-        <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
+        <AvatarImage
+          alt="@shadcn"
+          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+        />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <Avatar>
-        <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
+        <AvatarImage
+          alt="@shadcn"
+          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+        />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <Avatar size="lg">
-        <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
+        <AvatarImage
+          alt="@shadcn"
+          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+        />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
     </div>
@@ -282,34 +318,37 @@ export const Demo: Story = {
         <AvatarImage
           alt="@shadcn"
           className="grayscale"
-          src="https://github.com/shadcn.png"
+          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
         />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <Avatar>
         <AvatarImage
           alt="@evilrabbit"
-          src="https://github.com/evilrabbit.png"
+          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face"
         />
         <AvatarFallback>ER</AvatarFallback>
         <AvatarBadge className="bg-green-600 dark:bg-green-800" />
       </Avatar>
       <AvatarGroup className="grayscale">
         <Avatar>
-          <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
+          <AvatarImage
+            alt="@shadcn"
+            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+          />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <Avatar>
           <AvatarImage
             alt="@maxleiter"
-            src="https://github.com/maxleiter.png"
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face"
           />
           <AvatarFallback>LR</AvatarFallback>
         </Avatar>
         <Avatar>
           <AvatarImage
             alt="@evilrabbit"
-            src="https://github.com/evilrabbit.png"
+            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face"
           />
           <AvatarFallback>ER</AvatarFallback>
         </Avatar>

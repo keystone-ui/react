@@ -61,19 +61,22 @@ const SAMPLE_DATA = {
     {
       type: "user",
       title: "shadcn",
-      image: "https://github.com/shadcn.png",
+      image:
+        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face",
       workspace: "Workspace",
     },
     {
       type: "user",
       title: "maxleiter",
-      image: "https://github.com/maxleiter.png",
+      image:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",
       workspace: "Workspace",
     },
     {
       type: "user",
       title: "evilrabbit",
-      image: "https://github.com/evilrabbit.png",
+      image:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face",
       workspace: "Workspace",
     },
   ],
@@ -134,10 +137,11 @@ export default function InputGroupPromptForm() {
         </FieldLabel>
         <InputGroup className="rounded-xl">
           <InputGroupTextarea
+            className="py-2!"
             id="notion-prompt"
             placeholder="Ask, search, or make anything..."
           />
-          <InputGroupAddon align="block-start" className="pt-3">
+          <InputGroupAddon align="block-start" className="px-2.5 pt-3">
             <Popover
               onOpenChange={setMentionPopoverOpen}
               open={mentionPopoverOpen}
@@ -214,7 +218,10 @@ export default function InputGroupPromptForm() {
               })}
             </div>
           </InputGroupAddon>
-          <InputGroupAddon align="block-end" className="gap-1">
+          <InputGroupAddon
+            align="block-end"
+            className="gap-1 px-2.5 pt-1.5 pb-2"
+          >
             <Tooltip>
               <TooltipTrigger asChild>
                 <InputGroupButton
@@ -308,7 +315,7 @@ export default function InputGroupPromptForm() {
                   <DropdownMenuSub>
                     <DropdownMenuSubTrigger>
                       <Avatar className="size-4">
-                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face" />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
                       shadcn

@@ -699,7 +699,10 @@ function AccountMenu({ size }: { size?: "default" | "compact" }) {
         render={
           <Button className="rounded-full" size="icon" variant="ghost">
             <Avatar>
-              <AvatarImage alt="Aang" src="https://github.com/shadcn.png" />
+              <AvatarImage
+                alt="Aang"
+                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+              />
               <AvatarFallback>AA</AvatarFallback>
             </Avatar>
           </Button>
@@ -710,7 +713,10 @@ function AccountMenu({ size }: { size?: "default" | "compact" }) {
         <DropdownMenuGroup>
           <div className="flex items-center gap-2 px-1.5 py-1.5">
             <Avatar className="size-8">
-              <AvatarImage alt="Aang" src="https://github.com/shadcn.png" />
+              <AvatarImage
+                alt="Aang"
+                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+              />
               <AvatarFallback>AA</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">

@@ -40,8 +40,8 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
           "has-[>textarea]:h-auto",
 
           // Alignment variants - adjust input padding based on addon position
-          "has-[>[data-align=inline-start]]:[&_[data-slot=input-group-control]]:pl-2",
-          "has-[>[data-align=inline-end]]:[&_[data-slot=input-group-control]]:pr-2",
+          "has-[>[data-align=inline-start]]:[&_[data-slot=input-group-control]]:pl-1.5",
+          "has-[>[data-align=inline-end]]:[&_[data-slot=input-group-control]]:pr-1.5",
           "has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&_[data-slot=input-group-control]]:pb-3",
           "has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&_[data-slot=input-group-control]]:pt-3",
 
@@ -107,7 +107,7 @@ export const InputGroupAddon = React.forwardRef<
       data-align={align}
       data-slot="input-group-addon"
       onClick={(e) => {
-        if ((e.target as HTMLElement).closest("button")) {
+        if ((e.target as HTMLElement).closest("button, select")) {
           return;
         }
         e.currentTarget.parentElement
@@ -248,7 +248,7 @@ export const InputGroupTextarea = React.forwardRef<
   return (
     <Textarea
       className={cn(
-        "flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none dark:bg-transparent",
+        "field-sizing-content min-h-10 flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none dark:bg-transparent",
         "focus:border-transparent focus:shadow-none focus:ring-0",
         className
       )}

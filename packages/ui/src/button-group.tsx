@@ -14,11 +14,12 @@ const buttonGroupVariants = cva(
     "*:focus-visible:relative *:focus-visible:z-10",
     "[&>input]:flex-1",
     // Disable pressed scale animation inside groups (looks jarring with shared borders)
-    "[&>[data-slot=button]]:active:scale-100",
+    "[&>[data-slot=button]]:active:scale-100!",
     // Strip individual button shadows — the group container owns the shadow
     "[&>[data-slot=button]]:shadow-none",
-    // Nesting: add gap between nested ButtonGroups
+    // Nesting: add gap between nested ButtonGroups, remove parent shadow
     "has-[>[data-slot=button-group]]:gap-2",
+    "has-[>[data-slot=button-group]]:shadow-none",
     // Select: handle hidden select element as last child
     "has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-lg",
     "[&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit",

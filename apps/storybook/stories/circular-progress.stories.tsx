@@ -268,7 +268,10 @@ export const WithAvatar: Story = {
         <CircularProgressTrack />
         <CircularProgressIndicator />
         <Avatar className="relative">
-          <AvatarImage alt="@shadcn" src="https://github.com/shadcn.png" />
+          <AvatarImage
+            alt="@shadcn"
+            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+          />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <span className="absolute right-0 bottom-0 z-10 inline-flex size-4 items-center justify-center rounded-full bg-green-600 font-bold text-[9px] text-white ring-2 ring-background">
@@ -281,7 +284,10 @@ export const WithAvatar: Story = {
         <CircularProgressTrack />
         <CircularProgressIndicator />
         <Avatar className="relative" size="lg">
-          <AvatarImage alt="@vercel" src="https://github.com/vercel.png" />
+          <AvatarImage
+            alt="@vercel"
+            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face"
+          />
           <AvatarFallback>VC</AvatarFallback>
         </Avatar>
         <span className="absolute right-0 bottom-0 z-10 inline-flex size-5 items-center justify-center rounded-full bg-green-600 font-bold text-[10px] text-white ring-2 ring-background">
@@ -294,7 +300,10 @@ export const WithAvatar: Story = {
         <CircularProgressTrack />
         <CircularProgressIndicator />
         <Avatar className="relative" size="lg">
-          <AvatarImage alt="@github" src="https://github.com/github.png" />
+          <AvatarImage
+            alt="@github"
+            src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=face"
+          />
           <AvatarFallback>GH</AvatarFallback>
         </Avatar>
       </CircularProgress>

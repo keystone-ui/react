@@ -49,8 +49,6 @@ import {
   CalendarPlus as CalendarPlusIcon,
   Check as CheckIcon,
   ChevronDown as ChevronDownIcon,
-  ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon,
   Clock as ClockIcon,
   Copy as CopyIcon,
   Ellipsis as EllipsisIcon,
@@ -339,42 +337,6 @@ export const Toolbar: Story = {
   },
 };
 
-// Pagination
-export const Pagination: Story = {
-  name: "Pagination",
-  render: () => (
-    <div className="flex flex-col items-start gap-8">
-      <ButtonGroup>
-        <Button aria-label="Previous page" size="icon" variant="outline">
-          <ChevronLeftIcon className="size-4" />
-        </Button>
-        <Button variant="outline">1</Button>
-        <Button variant="outline">2</Button>
-        <Button variant="outline">3</Button>
-        <Button aria-label="Next page" size="icon" variant="outline">
-          <ChevronRightIcon className="size-4" />
-        </Button>
-      </ButtonGroup>
-      <ButtonGroup>
-        <Button variant="outline">
-          <ChevronLeftIcon /> Previous
-        </Button>
-        <Button variant="outline">
-          Next <ChevronRightIcon />
-        </Button>
-      </ButtonGroup>
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Mix icon buttons with text buttons for a compact pagination control. Also works as a simple prev/next navigator.",
-      },
-    },
-  },
-};
-
 // Active State
 function ActiveStateExample() {
   const [active, setActive] = useState("day");
@@ -383,9 +345,14 @@ function ActiveStateExample() {
     <ButtonGroup aria-label="Date range">
       {options.map((option) => (
         <Button
+          className={
+            active === option.toLowerCase()
+              ? "border-primary bg-primary text-primary-foreground hover:bg-primary/90"
+              : ""
+          }
           key={option}
           onClick={() => setActive(option.toLowerCase())}
-          variant={active === option.toLowerCase() ? "default" : "outline"}
+          variant="outline"
         >
           {option}
         </Button>
@@ -427,8 +394,8 @@ export const SplitButton: Story = {
           />
           <DropdownMenuContent align="end" className="w-64">
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <GitMergeIcon className="size-4" />
+              <DropdownMenuItem className="h-auto items-start py-2">
+                <GitMergeIcon className="mt-0.5 size-4" />
                 <span>
                   <span className="font-medium">Create a merge commit</span>
                   <span className="block text-muted-foreground text-xs">
@@ -436,8 +403,8 @@ export const SplitButton: Story = {
                   </span>
                 </span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <GitPullRequestArrowIcon className="size-4" />
+              <DropdownMenuItem className="h-auto items-start py-2">
+                <GitPullRequestArrowIcon className="mt-0.5 size-4" />
                 <span>
                   <span className="font-medium">Squash and merge</span>
                   <span className="block text-muted-foreground text-xs">
@@ -445,8 +412,8 @@ export const SplitButton: Story = {
                   </span>
                 </span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <GitBranchIcon className="size-4" />
+              <DropdownMenuItem className="h-auto items-start py-2">
+                <GitBranchIcon className="mt-0.5 size-4" />
                 <span>
                   <span className="font-medium">Rebase and merge</span>
                   <span className="block text-muted-foreground text-xs">
@@ -839,21 +806,6 @@ export const AllExamples: Story = {
           </Button>
           <Button aria-label="Strikethrough" size="icon" variant="outline">
             <StrikethroughIcon className="size-4" />
-          </Button>
-        </ButtonGroup>
-      </div>
-
-      <div>
-        <h3 className="mb-2 font-medium text-sm">Pagination</h3>
-        <ButtonGroup>
-          <Button aria-label="Previous page" size="icon" variant="outline">
-            <ChevronLeftIcon className="size-4" />
-          </Button>
-          <Button variant="outline">1</Button>
-          <Button variant="outline">2</Button>
-          <Button variant="outline">3</Button>
-          <Button aria-label="Next page" size="icon" variant="outline">
-            <ChevronRightIcon className="size-4" />
           </Button>
         </ButtonGroup>
       </div>

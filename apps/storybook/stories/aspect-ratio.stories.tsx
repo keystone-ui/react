@@ -86,6 +86,26 @@ export const Square: Story = {
   ),
 };
 
+export const Wide: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A wide aspect ratio using `ratio={2 / 1}`. Useful for banner images, hero sections, and panoramic content.",
+      },
+    },
+  },
+  render: () => (
+    <div className="w-full max-w-md">
+      <AspectRatio className="rounded-lg bg-muted" ratio={2 / 1}>
+        <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
+          2 : 1
+        </div>
+      </AspectRatio>
+    </div>
+  ),
+};
+
 export const Portrait: Story = {
   parameters: {
     docs: {

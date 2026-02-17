@@ -10,7 +10,10 @@ export default function CardSocialCard() {
     <Card className="w-full max-w-xs">
       <CardHeader className="flex-row items-center gap-3">
         <Avatar size="lg">
-          <AvatarImage alt="shadcn" src="https://github.com/shadcn.png" />
+          <AvatarImage
+            alt="shadcn"
+            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+          />
           <AvatarFallback>SC</AvatarFallback>
         </Avatar>
         <div className="flex flex-1 flex-col gap-0.5">
