@@ -14,7 +14,7 @@ const buttonGroupVariants = cva(
     "*:focus-visible:relative *:focus-visible:z-10",
     "[&>input]:flex-1",
     // Disable pressed scale animation inside groups (looks jarring with shared borders)
-    "[&>[data-slot=button]]:active:scale-100!",
+    "[&_button]:active:scale-100!",
     // Strip individual button shadows — the group container owns the shadow
     "[&>[data-slot=button]]:shadow-none",
     // Nesting: add gap between nested ButtonGroups, remove parent shadow
