@@ -20,6 +20,7 @@ const buttonGroupVariants = cva(
     // Nesting: add gap between nested ButtonGroups, remove parent shadow
     "has-[>[data-slot=button-group]]:gap-2",
     "has-[>[data-slot=button-group]]:shadow-none",
+    "[&>[data-slot=button-group]]:shadow-none",
     // Select: handle hidden select element as last child
     "has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-lg",
     "[&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit",
