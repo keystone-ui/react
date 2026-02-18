@@ -29,7 +29,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <input
         className={cn(
-          "bg-input-bg text-sm",
+          "bg-input-bg text-base md:text-sm",
           "rounded-md border border-input",
           "flex w-full min-w-0 px-3 py-1 shadow-xs outline-none transition-[color,box-shadow] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
           size === "default" && "h-10",
