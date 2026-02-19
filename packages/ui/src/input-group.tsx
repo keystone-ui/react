@@ -53,6 +53,7 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
 
           className
         )}
+        data-input=""
         data-size={size}
         data-slot="input-group"
         ref={ref}

@@ -45,6 +45,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             "p-0 pr-3 text-muted-foreground/70 italic file:me-3 file:inline-flex file:h-full file:border-0 file:border-input file:border-r file:border-solid file:bg-transparent file:px-3 file:font-medium file:text-foreground file:text-sm file:not-italic",
           className
         )}
+        data-input=""
         data-size={size}
         data-slot="input"
         ref={ref}
