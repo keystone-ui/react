@@ -37,7 +37,7 @@ function SliderControl({ className, ...props }: SliderControlProps) {
   return (
     <SliderPrimitive.Control
       className={cn(
-        "flex items-center py-2",
+        "flex touch-none select-none items-center py-2",
         // Cursor
         "cursor-pointer data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
         className
