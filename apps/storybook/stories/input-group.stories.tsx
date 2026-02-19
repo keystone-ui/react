@@ -1,6 +1,20 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { countries as countryDataList } from "country-data-list";
 import { Avatar, AvatarFallback, AvatarImage } from "keystoneui/avatar";
 import { Badge } from "keystoneui/badge";
+import { Button } from "keystoneui/button";
+import { ButtonGroup } from "keystoneui/button-group";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxInput as ComboboxSearchInput,
+  ComboboxSeparator,
+  ComboboxTrigger,
+  ComboboxValue,
+} from "keystoneui/combobox";
 import {
   Command,
   CommandEmpty,
@@ -22,7 +36,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "keystoneui/dropdown-menu";
-import { Field, FieldLabel } from "keystoneui/field";
+import { Field, FieldDescription, FieldLabel } from "keystoneui/field";
 import {
   InputGroup,
   InputGroupAddon,
@@ -34,11 +48,13 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "keystoneui/popover";
 import { Switch } from "keystoneui/switch";
 import { Tooltip, TooltipContent, TooltipTrigger } from "keystoneui/tooltip";
+import parsePhoneNumber from "libphonenumber-js";
 import {
   ArrowUpIcon,
   AtSignIcon,
   BookOpenIcon,
   Check as CheckIcon,
+  ChevronDownIcon,
   CirclePlusIcon,
   Copy as CopyIcon,
   Eye as EyeIcon,
@@ -48,12 +64,14 @@ import {
   Loader2 as LoaderIcon,
   Mail as MailIcon,
   PaperclipIcon,
+  PhoneIcon,
   PlusIcon,
   Search as SearchIcon,
   SendHorizonal as SendIcon,
   X as XIcon,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { CircleFlag } from "react-circle-flags";
 import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
@@ -877,6 +895,204 @@ export const PromptForm: Story = {
       description: {
         story:
           "A rich AI prompt form combining InputGroup with Command, Popover, DropdownMenu, Avatar, Badge, Switch, and Tooltip for a Notion-style chat interface.",
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Phone Input Data
+// =============================================================================
+interface PhoneCountry {
+  code: string;
+  name: string;
+  callingCode: string;
+}
+
+const phoneCountries: PhoneCountry[] = countryDataList.all
+  .filter(
+    (c: { status: string; emoji?: string; countryCallingCodes: string[] }) =>
+      c.status === "assigned" && c.emoji && c.countryCallingCodes.length > 0
+  )
+  .map(
+    (c: { alpha2: string; name: string; countryCallingCodes: string[] }) => ({
+      code: c.alpha2.toLowerCase(),
+      name: c.name,
+      callingCode: c.countryCallingCodes[0],
+    })
+  )
+  .sort((a: PhoneCountry, b: PhoneCountry) => a.name.localeCompare(b.name));
+
+// =============================================================================
+// Phone Input (Auto-Detect)
+// =============================================================================
+function PhoneInputExample() {
+  const [value, setValue] = useState("+1");
+  const [countryCode, setCountryCode] = useState("us");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value;
+    if (!val.startsWith("+")) {
+      val = val.startsWith("00") ? `+${val.slice(2)}` : `+${val}`;
+    }
+    setValue(val);
+    try {
+      const parsed = parsePhoneNumber(val);
+      setCountryCode(parsed?.country ? parsed.country.toLowerCase() : "");
+    } catch {
+      setCountryCode("");
+    }
+  };
+
+  return (
+    <Field>
+      <FieldLabel>Phone number</FieldLabel>
+      <InputGroup className="w-64">
+        <InputGroupAddon align="inline-start">
+          {countryCode ? (
+            <CircleFlag className="size-5 shrink-0" countryCode={countryCode} />
+          ) : (
+            <GlobeIcon className="size-4 text-muted-foreground" />
+          )}
+        </InputGroupAddon>
+        <InputGroupInput
+          onChange={handleChange}
+          placeholder="Enter your number"
+          type="tel"
+          value={value}
+        />
+      </InputGroup>
+      <FieldDescription>
+        The flag updates automatically as you type a number with a country code.
+      </FieldDescription>
+    </Field>
+  );
+}
+
+export const PhoneInput: Story = {
+  name: "Phone Input",
+  render: () => <PhoneInputExample />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A phone input that auto-detects the country from the dialing code using `libphonenumber-js`. The flag is shown via `InputGroupAddon` with `react-circle-flags`.",
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Phone Input with Country Picker
+// =============================================================================
+function PhoneWithCountryPickerExample() {
+  const [value, setValue] = useState("+1");
+  const [country, setCountry] = useState<PhoneCountry>(
+    phoneCountries.find((c) => c.code === "us") ?? phoneCountries[0]
+  );
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value;
+    if (!val.startsWith("+")) {
+      val = val.startsWith("00") ? `+${val.slice(2)}` : `+${val}`;
+    }
+    setValue(val);
+    try {
+      const parsed = parsePhoneNumber(val);
+      const detectedCode = parsed?.country;
+      if (detectedCode) {
+        const detected = phoneCountries.find(
+          (c) => c.code === detectedCode.toLowerCase()
+        );
+        if (detected) {
+          setCountry(detected);
+        }
+      }
+    } catch {
+      // ignore parse errors while typing
+    }
+  };
+
+  const handleCountryChange = (selected: PhoneCountry | null) => {
+    if (selected) {
+      setCountry(selected);
+      setValue(selected.callingCode);
+    }
+  };
+
+  return (
+    <Field>
+      <FieldLabel>Phone number</FieldLabel>
+      <ButtonGroup>
+        <Combobox
+          items={phoneCountries}
+          itemToStringValue={(c: PhoneCountry) =>
+            `${c.name} (${c.callingCode})`
+          }
+          onValueChange={handleCountryChange}
+          value={country}
+        >
+          <ComboboxTrigger
+            render={
+              <Button
+                className="gap-1.5 font-normal focus-visible:border-ring focus-visible:outline-0 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-inset"
+                variant="outline"
+              >
+                <CircleFlag
+                  className="size-5 shrink-0"
+                  countryCode={country.code}
+                />
+              </Button>
+            }
+          />
+          <ComboboxContent className="w-72" side="bottom">
+            <ComboboxSearchInput
+              placeholder="Search country..."
+              showTrigger={false}
+            />
+            <ComboboxSeparator className="my-0" />
+            <ComboboxEmpty>No countries found.</ComboboxEmpty>
+            <ComboboxList>
+              {(c: PhoneCountry) => (
+                <ComboboxItem key={c.code} value={c}>
+                  <CircleFlag
+                    className="size-5 shrink-0"
+                    countryCode={c.code}
+                  />
+                  <span className="flex-1 truncate">{c.name}</span>
+                  <span className="text-muted-foreground text-xs">
+                    {c.callingCode}
+                  </span>
+                </ComboboxItem>
+              )}
+            </ComboboxList>
+          </ComboboxContent>
+        </Combobox>
+        <InputGroup>
+          <InputGroupInput
+            className="w-48"
+            onChange={handleChange}
+            placeholder="Enter your number"
+            type="tel"
+            value={value}
+          />
+        </InputGroup>
+      </ButtonGroup>
+      <FieldDescription>
+        The flag updates automatically as you type a number with a country code.
+      </FieldDescription>
+    </Field>
+  );
+}
+
+export const PhoneInputWithCountryPicker: Story = {
+  name: "Phone Input with Country Picker",
+  render: () => <PhoneWithCountryPickerExample />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A phone input with a `Combobox` country picker composed inside a `ButtonGroup`. Select a country to set the dialing code, then enter the phone number.",
       },
     },
   },
