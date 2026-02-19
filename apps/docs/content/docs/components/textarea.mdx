@@ -11,6 +11,8 @@ import { Textarea } from "keystoneui/textarea";
 
 ## Usage
 
+The textarea auto-sizes to fit its content using `field-sizing-content`. Resizing is disabled by default.
+
 <ComponentPreview name="textarea-default" />
 
 ## With Field
@@ -19,11 +21,23 @@ Compose with Field components for labels and descriptions:
 
 <ComponentPreview name="textarea-with-field" />
 
+## Character Count
+
+Track input length with a controlled value and `maxLength`:
+
+<ComponentPreview name="textarea-character-count" />
+
+## Disabled
+
+<ComponentPreview name="textarea-disabled" />
+
 ## API Reference
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `className` | `string` | - | Additional CSS classes |
 | `disabled` | `boolean` | `false` | Disables the textarea |
-| `rows` | `number` | - | Number of visible text rows |
 | `placeholder` | `string` | - | Placeholder text |
+| `maxLength` | `number` | - | Maximum character length |
+
+The Textarea auto-sizes to fit content. Pass `rows` if you need a fixed initial height. It forwards all standard HTML `<textarea>` props.

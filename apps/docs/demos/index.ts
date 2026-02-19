@@ -64,7 +64,9 @@ import ButtonGroupSizes from "./button-group/sizes";
 import ButtonGroupSplitButton from "./button-group/split-button";
 import ButtonGroupToolbar from "./button-group/toolbar";
 import ButtonGroupVertical from "./button-group/vertical";
+import ButtonGroupWithDropdownMenu from "./button-group/with-dropdown-menu";
 import ButtonGroupWithInput from "./button-group/with-input";
+import ButtonGroupWithSelect from "./button-group/with-select";
 
 // calendar
 import CalendarBookedDates from "./calendar/booked-dates";
@@ -185,6 +187,7 @@ import InputGroupPromptForm from "./input-group/prompt-form";
 import InputGroupSearch from "./input-group/search";
 import InputGroupTextPrefix from "./input-group/text-prefix";
 import InputGroupWithButton from "./input-group/with-button";
+import InputGroupWithTextarea from "./input-group/with-textarea";
 
 // input-otp
 import InputOtpDefault from "./input-otp/default";
@@ -323,7 +326,9 @@ import TagGroupSingleSelection from "./tag-group/single-selection";
 import TagGroupWithIcons from "./tag-group/with-icons";
 
 // textarea
+import TextareaCharacterCount from "./textarea/character-count";
 import TextareaDefault from "./textarea/default";
+import TextareaDisabled from "./textarea/disabled";
 import TextareaWithField from "./textarea/with-field";
 
 // toast
@@ -562,9 +567,17 @@ export const demos: Record<string, DemoItem> = {
     component: ButtonGroupEmailToolbar,
     file: "button-group/email-toolbar.tsx",
   },
+  "button-group-with-dropdown-menu": {
+    component: ButtonGroupWithDropdownMenu,
+    file: "button-group/with-dropdown-menu.tsx",
+  },
   "button-group-with-input": {
     component: ButtonGroupWithInput,
     file: "button-group/with-input.tsx",
+  },
+  "button-group-with-select": {
+    component: ButtonGroupWithSelect,
+    file: "button-group/with-select.tsx",
   },
 
   // calendar
@@ -947,6 +960,10 @@ export const demos: Record<string, DemoItem> = {
   "input-group-with-button": {
     component: InputGroupWithButton,
     file: "input-group/with-button.tsx",
+  },
+  "input-group-with-textarea": {
+    component: InputGroupWithTextarea,
+    file: "input-group/with-textarea.tsx",
   },
 
   // input-otp
@@ -1362,9 +1379,17 @@ export const demos: Record<string, DemoItem> = {
   },
 
   // textarea
+  "textarea-character-count": {
+    component: TextareaCharacterCount,
+    file: "textarea/character-count.tsx",
+  },
   "textarea-default": {
     component: TextareaDefault,
     file: "textarea/default.tsx",
+  },
+  "textarea-disabled": {
+    component: TextareaDisabled,
+    file: "textarea/disabled.tsx",
   },
   "textarea-with-field": {
     component: TextareaWithField,

@@ -147,18 +147,20 @@ export default function InputGroupPromptForm() {
               open={mentionPopoverOpen}
             >
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <PopoverTrigger
-                    render={
-                      <InputGroupButton
-                        className="transition-transform"
-                        size={hasMentions ? "icon-sm" : "sm"}
-                        variant="outline"
-                      />
-                    }
-                  >
-                    <AtSignIcon /> {!hasMentions && "Add context"}
-                  </PopoverTrigger>
+                <TooltipTrigger
+                  render={
+                    <PopoverTrigger
+                      render={
+                        <InputGroupButton
+                          className="transition-transform"
+                          size={hasMentions ? "icon-sm" : "sm"}
+                          variant="outline"
+                        />
+                      }
+                    />
+                  }
+                >
+                  <AtSignIcon /> {!hasMentions && "Add context"}
                 </TooltipTrigger>
                 <TooltipContent>Mention a person, page, or date</TooltipContent>
               </Tooltip>
@@ -223,14 +225,16 @@ export default function InputGroupPromptForm() {
             className="gap-1 px-2.5 pt-1.5 pb-2"
           >
             <Tooltip>
-              <TooltipTrigger asChild>
-                <InputGroupButton
-                  aria-label="Attach file"
-                  className="rounded-full"
-                  size="icon-sm"
-                >
-                  <PaperclipIcon />
-                </InputGroupButton>
+              <TooltipTrigger
+                render={
+                  <InputGroupButton
+                    aria-label="Attach file"
+                    className="rounded-full"
+                    size="icon-sm"
+                  />
+                }
+              >
+                <PaperclipIcon />
               </TooltipTrigger>
               <TooltipContent>Attach file</TooltipContent>
             </Tooltip>
@@ -239,14 +243,16 @@ export default function InputGroupPromptForm() {
               open={modelPopoverOpen}
             >
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <DropdownMenuTrigger
-                    render={
-                      <InputGroupButton className="rounded-full" size="sm" />
-                    }
-                  >
-                    {selectedModel.name}
-                  </DropdownMenuTrigger>
+                <TooltipTrigger
+                  render={
+                    <DropdownMenuTrigger
+                      render={
+                        <InputGroupButton className="rounded-full" size="sm" />
+                      }
+                    />
+                  }
+                >
+                  {selectedModel.name}
                 </TooltipTrigger>
                 <TooltipContent>Select AI model</TooltipContent>
               </Tooltip>
