@@ -478,18 +478,26 @@ export const SplitButton: Story = {
 export const WithInput: Story = {
   name: "With Input",
   render: () => (
-    <ButtonGroup>
-      <Input placeholder="Search..." />
-      <Button aria-label="Search" variant="outline">
-        <SearchIcon className="size-4" />
-      </Button>
-    </ButtonGroup>
+    <div className="flex flex-col items-start gap-8">
+      <ButtonGroup>
+        <Input placeholder="Search..." />
+        <Button aria-label="Search" variant="outline">
+          <SearchIcon className="size-4" />
+        </Button>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button aria-label="Search" variant="outline">
+          <SearchIcon className="size-4" />
+        </Button>
+        <Input placeholder="Search..." />
+      </ButtonGroup>
+    </div>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          "Combine an `Input` with a `Button` to create a search bar or inline form control.",
+          "Combine an `Input` with a `Button` to create a search bar or inline form control. The button can be placed on either side of the input.",
       },
     },
   },

@@ -12,6 +12,7 @@ const buttonGroupVariants = cva(
   [
     "flex w-fit items-stretch rounded-lg shadow-xs",
     "*:focus-visible:relative *:focus-visible:z-10",
+    "[&>[data-slot=input]]:focus:relative [&>[data-slot=input]]:focus:z-10",
     "[&>input]:flex-1",
     // Disable pressed scale animation inside groups (looks jarring with shared borders)
     "[&_button]:active:scale-100!",
@@ -37,14 +38,22 @@ const buttonGroupVariants = cva(
           "[&>[data-slot]~[data-slot]:not([data-slot=input])]:border-l-0",
           "*:data-[slot]:rounded-r-none",
           // Input focus fix (non-button predecessors only): keep 1px border,
-          // transparent when unfocused, negative margin to overlap preceding border
-          "[&>[data-slot]:not([data-slot=button])+[data-slot=input]]:-ml-px",
-          "[&>[data-slot]:not([data-slot=button])+[data-slot=input]]:border-l",
-          "[&>[data-slot]:not([data-slot=button])+[data-slot=input]:not(:focus)]:border-l-transparent",
-          // Input after button: remove left border (separator handles the visual)
-          "[&>[data-slot=button]+[data-slot=input]]:border-l-0",
-          // Input before button: remove right border (separator handles the visual)
-          "[&>[data-slot=input]:has(+[data-slot=button])]:border-r-0",
+          // transparent when unfocused, negative margin to overlap preceding border.
+          // Uses ~ (general sibling) instead of + because Base UI Select renders a
+          // hidden <select> between the trigger and the input, breaking adjacency.
+          "[&>[data-slot]:not([data-slot=button])~[data-slot=input]]:-ml-px",
+          "[&>[data-slot]:not([data-slot=button])~[data-slot=input]]:border-l",
+          "[&>[data-slot]:not([data-slot=button])~[data-slot=input]:not(:focus)]:border-l-transparent",
+          // Input after button: keep left border but transparent when unfocused,
+          // negative margin to overlap — so both ring layers render on focus
+          "[&>[data-slot=button]+[data-slot=input]]:-ml-px",
+          "[&>[data-slot=button]+[data-slot=input]]:border-l",
+          "[&>[data-slot=button]+[data-slot=input]:not(:focus)]:border-l-transparent",
+          // Input before button: keep right border but transparent when unfocused,
+          // negative margin to overlap — so both ring layers render on focus
+          "[&>[data-slot=input]:has(+[data-slot=button])]:-mr-px",
+          "[&>[data-slot=input]:has(+[data-slot=button])]:border-r",
+          "[&>[data-slot=input]:has(+[data-slot=button]):not(:focus)]:border-r-transparent",
           // Subtle separator between adjacent buttons and between buttons and inputs
           "[&>[data-slot=button]:has(+:is([data-slot=button],[data-slot=input]))]:border-r-0!",
           "[&>[data-slot=button]~[data-slot=button]]:before:content-['']",
@@ -84,14 +93,22 @@ const buttonGroupVariants = cva(
           "[&>[data-slot]~[data-slot]:not([data-slot=input])]:border-t-0",
           "*:data-[slot]:rounded-b-none",
           // Input focus fix (non-button predecessors only): keep 1px border,
-          // transparent when unfocused, negative margin to overlap preceding border
-          "[&>[data-slot]:not([data-slot=button])+[data-slot=input]]:-mt-px",
-          "[&>[data-slot]:not([data-slot=button])+[data-slot=input]]:border-t",
-          "[&>[data-slot]:not([data-slot=button])+[data-slot=input]:not(:focus)]:border-t-transparent",
-          // Input after button: remove top border (separator handles the visual)
-          "[&>[data-slot=button]+[data-slot=input]]:border-t-0",
-          // Input before button: remove bottom border (separator handles the visual)
-          "[&>[data-slot=input]:has(+[data-slot=button])]:border-b-0",
+          // transparent when unfocused, negative margin to overlap preceding border.
+          // Uses ~ (general sibling) instead of + because Base UI Select renders a
+          // hidden <select> between the trigger and the input, breaking adjacency.
+          "[&>[data-slot]:not([data-slot=button])~[data-slot=input]]:-mt-px",
+          "[&>[data-slot]:not([data-slot=button])~[data-slot=input]]:border-t",
+          "[&>[data-slot]:not([data-slot=button])~[data-slot=input]:not(:focus)]:border-t-transparent",
+          // Input after button: keep top border but transparent when unfocused,
+          // negative margin to overlap — so both ring layers render on focus
+          "[&>[data-slot=button]+[data-slot=input]]:-mt-px",
+          "[&>[data-slot=button]+[data-slot=input]]:border-t",
+          "[&>[data-slot=button]+[data-slot=input]:not(:focus)]:border-t-transparent",
+          // Input before button: keep bottom border but transparent when unfocused,
+          // negative margin to overlap — so both ring layers render on focus
+          "[&>[data-slot=input]:has(+[data-slot=button])]:-mb-px",
+          "[&>[data-slot=input]:has(+[data-slot=button])]:border-b",
+          "[&>[data-slot=input]:has(+[data-slot=button]):not(:focus)]:border-b-transparent",
           // Subtle separator between adjacent buttons and between buttons and inputs
           "[&>[data-slot=button]:has(+:is([data-slot=button],[data-slot=input]))]:border-b-0!",
           "[&>[data-slot=button]~[data-slot=button]]:before:content-['']",
