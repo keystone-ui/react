@@ -1035,7 +1035,7 @@ function PhoneWithCountryPickerExample() {
           <ComboboxTrigger
             render={
               <Button
-                className="gap-1.5 font-normal focus-visible:border-ring focus-visible:outline-0 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-inset"
+                className="gap-1.5 font-normal shadow-none focus-visible:border-ring focus-visible:outline-0 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-inset"
                 variant="outline"
               >
                 <CircleFlag
