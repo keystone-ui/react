@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { countries as countryDataList } from "country-data-list";
 import { Button } from "keystoneui/button";
 import {
   Combobox,
@@ -29,7 +30,7 @@ import { InputGroupAddon } from "keystoneui/input-group";
 import { GlobeIcon, SearchIcon } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
-import ReactCountryFlag from "react-country-flag";
+import { CircleFlag } from "react-circle-flags";
 import { FaBitcoin, FaEthereum } from "react-icons/fa";
 import {
   SiCardano,
@@ -375,57 +376,19 @@ export const Groups: Story = {
 // =============================================================================
 // Custom Items with Description
 // =============================================================================
-const countries = [
-  {
-    code: "ar",
-    value: "argentina",
-    label: "Argentina",
-    continent: "South America",
-  },
-  { code: "au", value: "australia", label: "Australia", continent: "Oceania" },
-  { code: "br", value: "brazil", label: "Brazil", continent: "South America" },
-  { code: "ca", value: "canada", label: "Canada", continent: "North America" },
-  { code: "cn", value: "china", label: "China", continent: "Asia" },
-  {
-    code: "co",
-    value: "colombia",
-    label: "Colombia",
-    continent: "South America",
-  },
-  { code: "eg", value: "egypt", label: "Egypt", continent: "Africa" },
-  { code: "fr", value: "france", label: "France", continent: "Europe" },
-  { code: "de", value: "germany", label: "Germany", continent: "Europe" },
-  { code: "it", value: "italy", label: "Italy", continent: "Europe" },
-  { code: "jp", value: "japan", label: "Japan", continent: "Asia" },
-  { code: "ke", value: "kenya", label: "Kenya", continent: "Africa" },
-  { code: "mx", value: "mexico", label: "Mexico", continent: "North America" },
-  {
-    code: "nz",
-    value: "new-zealand",
-    label: "New Zealand",
-    continent: "Oceania",
-  },
-  { code: "ng", value: "nigeria", label: "Nigeria", continent: "Africa" },
-  {
-    code: "za",
-    value: "south-africa",
-    label: "South Africa",
-    continent: "Africa",
-  },
-  { code: "kr", value: "south-korea", label: "South Korea", continent: "Asia" },
-  {
-    code: "gb",
-    value: "united-kingdom",
-    label: "United Kingdom",
-    continent: "Europe",
-  },
-  {
-    code: "us",
-    value: "united-states",
-    label: "United States",
-    continent: "North America",
-  },
-];
+const countries = countryDataList.all
+  .filter(
+    (c: { status: string; emoji?: string }) =>
+      c.status === "assigned" && c.emoji
+  )
+  .map((c: { alpha2: string; name: string }) => ({
+    code: c.alpha2.toLowerCase(),
+    value: c.name.toLowerCase().replace(/\s+/g, "-"),
+    label: c.name,
+  }))
+  .sort((a: { label: string }, b: { label: string }) =>
+    a.label.localeCompare(b.label)
+  );
 
 export const CustomItemsWithDescription: Story = {
   name: "Custom Items with Description",
@@ -447,7 +410,7 @@ export const CustomItemsWithDescription: Story = {
                 <div className="flex flex-col">
                   <span className="font-medium">{country.label}</span>
                   <span className="text-muted-foreground text-xs">
-                    {country.continent} ({country.code.toUpperCase()})
+                    {country.code.toUpperCase()}
                   </span>
                 </div>
               </ComboboxItem>
@@ -465,9 +428,12 @@ export const CustomItemsWithDescription: Story = {
 // =============================================================================
 // Countries with Flags
 // =============================================================================
-export const CountriesWithFlags: Story = {
-  name: "Countries with Flags",
-  render: () => (
+function CountriesWithFlagsExample() {
+  const anchor = useComboboxAnchor();
+  const [selected, setSelected] = useState<(typeof countries)[number] | null>(
+    null
+  );
+  return (
     <Field>
       <FieldLabel>Country</FieldLabel>
       <Combobox
@@ -475,20 +441,29 @@ export const CountriesWithFlags: Story = {
         itemToStringValue={(country: (typeof countries)[number]) =>
           country.label
         }
+        onValueChange={setSelected}
+        value={selected}
       >
-        <ComboboxInput className="w-64" placeholder="Search countries..." />
-        <ComboboxContent>
+        <div className="w-64" ref={anchor}>
+          <ComboboxInput placeholder="Search countries...">
+            {selected && (
+              <InputGroupAddon align="inline-start">
+                <CircleFlag
+                  className="size-5 shrink-0"
+                  countryCode={selected.code}
+                />
+              </InputGroupAddon>
+            )}
+          </ComboboxInput>
+        </div>
+        <ComboboxContent anchor={anchor}>
           <ComboboxEmpty>No countries found.</ComboboxEmpty>
           <ComboboxList>
             {(country) => (
               <ComboboxItem key={country.code} value={country}>
-                <ReactCountryFlag
+                <CircleFlag
+                  className="size-5 shrink-0"
                   countryCode={country.code}
-                  style={{
-                    width: "1.25em",
-                    height: "1.25em",
-                  }}
-                  svg
                 />
                 <span>{country.label}</span>
               </ComboboxItem>
@@ -497,11 +472,16 @@ export const CountriesWithFlags: Story = {
         </ComboboxContent>
       </Combobox>
       <FieldDescription>
-        Use <code>react-country-flag</code> to display flags alongside country
+        Use <code>react-circle-flags</code> to display flags alongside country
         names.
       </FieldDescription>
     </Field>
-  ),
+  );
+}
+
+export const CountriesWithFlags: Story = {
+  name: "Countries with Flags",
+  render: () => <CountriesWithFlagsExample />,
 };
 
 // =============================================================================
