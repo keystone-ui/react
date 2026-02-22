@@ -11,7 +11,7 @@ export const LLMS_TEXT_HEADERS = {
 
 const SITE_URL = "https://keystoneui.dev";
 const GITHUB_RAW_URL =
-  "https://raw.githubusercontent.com/your-org/keystoneui/refs/heads/main/apps/docs/content/docs";
+  "https://raw.githubusercontent.com/keystone-ui/react/refs/heads/main/apps/docs/content/docs";
 
 export function formatAbsoluteUrl(path: string): string {
   if (!path) {

@@ -5,7 +5,7 @@ export function baseOptions(): BaseLayoutProps {
     nav: {
       title: "Keystone UI",
     },
-    githubUrl: "https://github.com/your-org/keystoneui",
+    githubUrl: "https://github.com/keystone-ui/react",
     links: [
       {
         text: "Docs",

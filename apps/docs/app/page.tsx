@@ -100,7 +100,7 @@ export default function HomePage() {
             </Link>
             <a
               className="text-muted-foreground transition-colors hover:text-foreground"
-              href="https://github.com/your-org/keystoneui"
+              href="https://github.com/keystone-ui/react"
               rel="noopener noreferrer"
               target="_blank"
             >
@@ -235,7 +235,7 @@ export default function HomePage() {
             </Link>
             <a
               className="inline-flex h-12 items-center gap-2 rounded-lg border border-border bg-background px-6 font-medium transition-colors hover:bg-accent"
-              href="https://github.com/your-org/keystoneui"
+              href="https://github.com/keystone-ui/react"
               rel="noopener noreferrer"
               target="_blank"
             >
@@ -277,7 +277,7 @@ export default function HomePage() {
               </Link>
               <a
                 className="transition-colors hover:text-foreground"
-                href="https://github.com/your-org/keystoneui"
+                href="https://github.com/keystone-ui/react"
                 rel="noopener noreferrer"
                 target="_blank"
               >
