@@ -53,16 +53,19 @@ export const fontIds = [
 export type FontId = (typeof fontIds)[number];
 
 export interface FontConfig {
+  cdnUrl: string;
   id: FontId;
   label: string;
+  /** next/font/google import name (e.g. `Inter`, `DM_Sans`) */
+  nextFontImport: string;
   variable: string;
-  cdnUrl: string;
 }
 
 export const fonts: FontConfig[] = [
   {
     id: "inter",
     label: "Inter",
+    nextFontImport: "Inter",
     variable: "--font-inter",
     cdnUrl:
       "https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap",
@@ -70,6 +73,7 @@ export const fonts: FontConfig[] = [
   {
     id: "geist",
     label: "Geist",
+    nextFontImport: "Geist",
     variable: "--font-geist",
     cdnUrl:
       "https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap",
@@ -77,6 +81,7 @@ export const fonts: FontConfig[] = [
   {
     id: "dm-sans",
     label: "DM Sans",
+    nextFontImport: "DM_Sans",
     variable: "--font-dm-sans",
     cdnUrl:
       "https://fonts.googleapis.com/css2?family=DM+Sans:wght@100..900&display=swap",
@@ -84,6 +89,7 @@ export const fonts: FontConfig[] = [
   {
     id: "figtree",
     label: "Figtree",
+    nextFontImport: "Figtree",
     variable: "--font-figtree",
     cdnUrl:
       "https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap",
@@ -91,6 +97,7 @@ export const fonts: FontConfig[] = [
   {
     id: "public-sans",
     label: "Public Sans",
+    nextFontImport: "Public_Sans",
     variable: "--font-public-sans",
     cdnUrl:
       "https://fonts.googleapis.com/css2?family=Public+Sans:wght@100..900&display=swap",
@@ -98,6 +105,7 @@ export const fonts: FontConfig[] = [
   {
     id: "jetbrains-mono",
     label: "JetBrains Mono",
+    nextFontImport: "JetBrains_Mono",
     variable: "--font-jetbrains-mono",
     cdnUrl:
       "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap",

@@ -13,43 +13,47 @@
 // ---------------------------------------------------------------------------
 
 export interface BaseColorTokens {
-  "--background": string;
-  "--foreground": string;
-  "--card": string;
-  "--card-foreground": string;
-  "--popover": string;
-  "--popover-foreground": string;
-  "--secondary": string;
-  "--secondary-hover": string;
-  "--secondary-foreground": string;
-  "--muted": string;
-  "--muted-foreground": string;
   "--accent": string;
   "--accent-foreground": string;
+  "--background": string;
   "--border": string;
   "--border-muted": string;
-  "--popup-ring": string;
+  "--card": string;
+  "--card-foreground": string;
+  "--foreground": string;
   "--input": string;
   "--input-bg": string;
+  "--muted": string;
+  "--muted-foreground": string;
+  "--popover": string;
+  "--popover-foreground": string;
+  "--popup-ring": string;
   "--ring": string;
+  "--secondary": string;
+  "--secondary-foreground": string;
+  "--secondary-hover": string;
   "--skeleton-shimmer": string;
 }
 
 export interface BaseColor {
+  dark: BaseColorTokens;
   id: BaseColorId;
   label: string;
   light: BaseColorTokens;
-  dark: BaseColorTokens;
 }
 
 export interface PrimaryPreset {
+  chroma: number;
+  darkChroma: number;
+  darkHue: number;
+  /** Dark-mode OKLCH overrides (lighter variant for dark backgrounds) */
+  darkLightness: number;
+  hue: number;
   id: PrimaryPresetId;
   label: string;
+  lightness: number;
   /** Representative swatch color (light mode) */
   swatch: string;
-  lightness: number;
-  chroma: number;
-  hue: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -94,8 +98,7 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popover": "oklch(1 0 0)",
       "--popover-foreground": "oklch(0.141 0.005 285.823)",
       "--secondary": "oklch(0.967 0.001 286.375)",
-      "--secondary-hover":
-        "color-mix(in oklch, oklch(0.967 0.001 286.375) 97%, black)",
+      "--secondary-hover": "color-mix(in oklch, var(--secondary) 97%, black)",
       "--secondary-foreground": "oklch(0.21 0.006 285.885)",
       "--muted": "oklch(0.967 0.001 286.375)",
       "--muted-foreground": "oklch(0.552 0.016 285.938)",
@@ -117,8 +120,7 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popover": "oklch(0.21 0.006 285.885)",
       "--popover-foreground": "oklch(0.985 0 0)",
       "--secondary": "oklch(0.274 0.006 286.033)",
-      "--secondary-hover":
-        "color-mix(in oklch, oklch(0.274 0.006 286.033) 97%, white)",
+      "--secondary-hover": "color-mix(in oklch, var(--secondary) 97%, white)",
       "--secondary-foreground": "oklch(0.985 0 0)",
       "--muted": "oklch(0.274 0.006 286.033)",
       "--muted-foreground": "oklch(0.705 0.015 286.067)",
@@ -145,8 +147,7 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popover": "oklch(1 0 0)",
       "--popover-foreground": "oklch(0.129 0.042 264.695)",
       "--secondary": "oklch(0.968 0.007 247.896)",
-      "--secondary-hover":
-        "color-mix(in oklch, oklch(0.968 0.007 247.896) 97%, black)",
+      "--secondary-hover": "color-mix(in oklch, var(--secondary) 97%, black)",
       "--secondary-foreground": "oklch(0.208 0.042 265.755)",
       "--muted": "oklch(0.968 0.007 247.896)",
       "--muted-foreground": "oklch(0.554 0.046 257.417)",
@@ -168,8 +169,7 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popover": "oklch(0.208 0.042 265.755)",
       "--popover-foreground": "oklch(0.984 0.003 247.858)",
       "--secondary": "oklch(0.279 0.041 260.031)",
-      "--secondary-hover":
-        "color-mix(in oklch, oklch(0.279 0.041 260.031) 97%, white)",
+      "--secondary-hover": "color-mix(in oklch, var(--secondary) 97%, white)",
       "--secondary-foreground": "oklch(0.984 0.003 247.858)",
       "--muted": "oklch(0.279 0.041 260.031)",
       "--muted-foreground": "oklch(0.704 0.04 256.788)",
@@ -196,8 +196,7 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popover": "oklch(1 0 0)",
       "--popover-foreground": "oklch(0.147 0.004 49.25)",
       "--secondary": "oklch(0.97 0.001 106.424)",
-      "--secondary-hover":
-        "color-mix(in oklch, oklch(0.97 0.001 106.424) 97%, black)",
+      "--secondary-hover": "color-mix(in oklch, var(--secondary) 97%, black)",
       "--secondary-foreground": "oklch(0.216 0.006 56.043)",
       "--muted": "oklch(0.97 0.001 106.424)",
       "--muted-foreground": "oklch(0.553 0.013 58.071)",
@@ -219,8 +218,7 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popover": "oklch(0.216 0.006 56.043)",
       "--popover-foreground": "oklch(0.985 0.001 106.423)",
       "--secondary": "oklch(0.268 0.007 34.298)",
-      "--secondary-hover":
-        "color-mix(in oklch, oklch(0.268 0.007 34.298) 97%, white)",
+      "--secondary-hover": "color-mix(in oklch, var(--secondary) 97%, white)",
       "--secondary-foreground": "oklch(0.985 0.001 106.423)",
       "--muted": "oklch(0.268 0.007 34.298)",
       "--muted-foreground": "oklch(0.709 0.01 56.259)",
@@ -247,8 +245,7 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popover": "oklch(1 0 0)",
       "--popover-foreground": "oklch(0.13 0.028 261.692)",
       "--secondary": "oklch(0.967 0.003 264.542)",
-      "--secondary-hover":
-        "color-mix(in oklch, oklch(0.967 0.003 264.542) 97%, black)",
+      "--secondary-hover": "color-mix(in oklch, var(--secondary) 97%, black)",
       "--secondary-foreground": "oklch(0.21 0.034 264.665)",
       "--muted": "oklch(0.967 0.003 264.542)",
       "--muted-foreground": "oklch(0.551 0.027 264.364)",
@@ -270,8 +267,7 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popover": "oklch(0.21 0.034 264.665)",
       "--popover-foreground": "oklch(0.985 0.002 247.839)",
       "--secondary": "oklch(0.278 0.033 256.848)",
-      "--secondary-hover":
-        "color-mix(in oklch, oklch(0.278 0.033 256.848) 97%, white)",
+      "--secondary-hover": "color-mix(in oklch, var(--secondary) 97%, white)",
       "--secondary-foreground": "oklch(0.985 0.002 247.839)",
       "--muted": "oklch(0.278 0.033 256.848)",
       "--muted-foreground": "oklch(0.707 0.022 261.325)",
@@ -298,7 +294,7 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popover": "oklch(1 0 0)",
       "--popover-foreground": "oklch(0.145 0 0)",
       "--secondary": "oklch(0.97 0 0)",
-      "--secondary-hover": "color-mix(in oklch, oklch(0.97 0 0) 97%, black)",
+      "--secondary-hover": "color-mix(in oklch, var(--secondary) 97%, black)",
       "--secondary-foreground": "oklch(0.205 0 0)",
       "--muted": "oklch(0.97 0 0)",
       "--muted-foreground": "oklch(0.556 0 0)",
@@ -320,7 +316,7 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popover": "oklch(0.205 0 0)",
       "--popover-foreground": "oklch(0.985 0 0)",
       "--secondary": "oklch(0.269 0 0)",
-      "--secondary-hover": "color-mix(in oklch, oklch(0.269 0 0) 97%, white)",
+      "--secondary-hover": "color-mix(in oklch, var(--secondary) 97%, white)",
       "--secondary-foreground": "oklch(0.985 0 0)",
       "--muted": "oklch(0.269 0 0)",
       "--muted-foreground": "oklch(0.708 0 0)",
@@ -349,6 +345,9 @@ export const primaryPresets: Record<PrimaryPresetId, PrimaryPreset> = {
     lightness: 0.21,
     chroma: 0.006,
     hue: 285.885,
+    darkLightness: 0.92,
+    darkChroma: 0.004,
+    darkHue: 286.32,
   },
   blue: {
     id: "blue",
@@ -357,6 +356,9 @@ export const primaryPresets: Record<PrimaryPresetId, PrimaryPreset> = {
     lightness: 0.546,
     chroma: 0.245,
     hue: 262.881,
+    darkLightness: 0.666,
+    darkChroma: 0.245,
+    darkHue: 262.881,
   },
   green: {
     id: "green",
@@ -365,6 +367,9 @@ export const primaryPresets: Record<PrimaryPresetId, PrimaryPreset> = {
     lightness: 0.627,
     chroma: 0.194,
     hue: 149.214,
+    darkLightness: 0.747,
+    darkChroma: 0.194,
+    darkHue: 149.214,
   },
   orange: {
     id: "orange",
@@ -373,6 +378,9 @@ export const primaryPresets: Record<PrimaryPresetId, PrimaryPreset> = {
     lightness: 0.646,
     chroma: 0.222,
     hue: 41.116,
+    darkLightness: 0.766,
+    darkChroma: 0.222,
+    darkHue: 41.116,
   },
   red: {
     id: "red",
@@ -381,6 +389,9 @@ export const primaryPresets: Record<PrimaryPresetId, PrimaryPreset> = {
     lightness: 0.577,
     chroma: 0.245,
     hue: 27.325,
+    darkLightness: 0.697,
+    darkChroma: 0.245,
+    darkHue: 27.325,
   },
   rose: {
     id: "rose",
@@ -389,6 +400,9 @@ export const primaryPresets: Record<PrimaryPresetId, PrimaryPreset> = {
     lightness: 0.586,
     chroma: 0.253,
     hue: 17.585,
+    darkLightness: 0.706,
+    darkChroma: 0.253,
+    darkHue: 17.585,
   },
   violet: {
     id: "violet",
@@ -397,6 +411,9 @@ export const primaryPresets: Record<PrimaryPresetId, PrimaryPreset> = {
     lightness: 0.541,
     chroma: 0.281,
     hue: 293.009,
+    darkLightness: 0.661,
+    darkChroma: 0.281,
+    darkHue: 293.009,
   },
   emerald: {
     id: "emerald",
@@ -405,6 +422,9 @@ export const primaryPresets: Record<PrimaryPresetId, PrimaryPreset> = {
     lightness: 0.596,
     chroma: 0.145,
     hue: 163.225,
+    darkLightness: 0.716,
+    darkChroma: 0.145,
+    darkHue: 163.225,
   },
   cyan: {
     id: "cyan",
@@ -413,6 +433,9 @@ export const primaryPresets: Record<PrimaryPresetId, PrimaryPreset> = {
     lightness: 0.609,
     chroma: 0.126,
     hue: 221.723,
+    darkLightness: 0.729,
+    darkChroma: 0.126,
+    darkHue: 221.723,
   },
 };
 

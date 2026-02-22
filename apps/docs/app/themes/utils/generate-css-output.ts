@@ -4,7 +4,43 @@ import {
   baseColors,
   calculatePrimaryForeground,
   destructiveTokens,
+  findMatchingPreset,
+  primaryPresets,
 } from "../theme-data";
+
+const DEFAULT_RADIUS = "0.625rem";
+
+/**
+ * Resolve dark-mode primary OKLCH values.
+ * Uses predefined values for known presets, falls back to a
+ * lightness-bump formula for custom slider values.
+ */
+function resolveDarkPrimary(
+  lightL: number,
+  lightC: number,
+  lightH: number
+): { l: number; c: number; h: number } {
+  const presetId = findMatchingPreset(lightL, lightC, lightH);
+  if (presetId) {
+    const preset = primaryPresets[presetId];
+    return {
+      l: preset.darkLightness,
+      c: preset.darkChroma,
+      h: preset.darkHue,
+    };
+  }
+
+  const darkL =
+    lightL < 0.4
+      ? Math.min(1 - lightL + 0.13, 0.95)
+      : Math.min(lightL + 0.12, 0.95);
+
+  return {
+    l: Number(darkL.toFixed(3)),
+    c: lightC,
+    h: lightH,
+  };
+}
 
 /**
  * Generate copy-pasteable CSS that users add to their global.css.
@@ -17,23 +53,24 @@ export function generateCssOutput(state: ThemeState): string {
   const primaryValue = `oklch(${primaryL} ${primaryC} ${primaryH})`;
   const primaryFg = calculatePrimaryForeground(primaryL, primaryC, primaryH);
 
-  const darkPrimaryL = Math.min(primaryL + 0.12, 0.95);
-  const darkPrimaryValue = `oklch(${darkPrimaryL} ${primaryC} ${primaryH})`;
-  const darkPrimaryFg = calculatePrimaryForeground(
-    darkPrimaryL,
-    primaryC,
-    primaryH
-  );
+  const dark = resolveDarkPrimary(primaryL, primaryC, primaryH);
+  const darkPrimaryValue = `oklch(${dark.l} ${dark.c} ${dark.h})`;
+  const darkPrimaryFg = calculatePrimaryForeground(dark.l, dark.c, dark.h);
 
   const fontConfig = fontMap[font as keyof typeof fontMap] ?? fontMap.inter;
-  const fontSansValue = `var(${fontConfig.variable})`;
+
+  const radiusValue =
+    radius !== "default"
+      ? radiusCssMap[radius as keyof typeof radiusCssMap]
+      : DEFAULT_RADIUS;
 
   const lightVars: Record<string, string> = {
     ...baseColor.light,
     "--primary": primaryValue,
     "--primary-foreground": primaryFg,
     ...destructiveTokens.light,
-    "--font-sans": fontSansValue,
+    "--font-sans": `"${fontConfig.label}", sans-serif`,
+    "--radius": radiusValue,
   };
 
   const darkVars: Record<string, string> = {
@@ -42,12 +79,6 @@ export function generateCssOutput(state: ThemeState): string {
     "--primary-foreground": darkPrimaryFg,
     ...destructiveTokens.dark,
   };
-
-  if (radius !== "default") {
-    const radiusValue = radiusCssMap[radius as keyof typeof radiusCssMap];
-    lightVars["--radius"] = radiusValue;
-    darkVars["--radius"] = radiusValue;
-  }
 
   const indent = "  ";
   const lightBlock = Object.entries(lightVars)
@@ -60,9 +91,22 @@ export function generateCssOutput(state: ThemeState): string {
 
   return `/*
  * Keystone UI Theme
- * Add this to your global.css
- * Make sure to load the ${fontConfig.label} font in your app.
+ * Replace your global.css with this file.
+ *
+ * Font: ${fontConfig.label}
+ * - Next.js: load via next/font/google and apply the CSS variable to <html>
+ *     import { ${fontConfig.nextFontImport} } from "next/font/google";
+ *     const font = ${fontConfig.nextFontImport}({ subsets: ["latin"], variable: "${fontConfig.variable}" });
+ *     <html className={font.variable}>
+ * - Other: add to your <head>:
+ *     <link href="${fontConfig.cdnUrl}" rel="stylesheet">
  */
+
+@import "tailwindcss";
+
+@import "@keystoneui/react/base.css";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
@@ -102,7 +146,15 @@ ${lightBlock}
 }
 
 .dark {
-  color-scheme: dark;
 ${darkBlock}
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }`;
 }

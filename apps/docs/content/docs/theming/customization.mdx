@@ -40,6 +40,13 @@ Below is the full theme CSS. Copy this into your `globals.css` after `@import "@
   --color-input: var(--input);
   --color-input-bg: var(--input-bg);
   --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
 }
 
 :root {
@@ -67,6 +74,7 @@ Below is the full theme CSS. Copy this into your `globals.css` after `@import "@
   --input-bg: transparent;
   --ring: oklch(0.705 0.015 286.067);
   --skeleton-shimmer: oklch(1 0 0 / 0.06);
+  --radius: 0.625rem;
 }
 
 .dark {
@@ -163,3 +171,60 @@ We recommend using [oklch.com](https://oklch.com/) to pick colors. OKLCH provide
 --primary: oklch(0.55 0.25 150); /* Vivid green */
 --primary: oklch(0.55 0.2 30); /* Warm orange */
 ```
+
+## Fonts
+
+Keystone UI uses the `--font-sans` CSS variable for the base font family. You need to load the font and define this variable in your theme.
+
+### Next.js (recommended)
+
+Use `next/font/google` for automatic self-hosting with zero external requests:
+
+```tsx title="app/layout.tsx"
+import { Inter } from "next/font/google";
+
+const font = Inter({ subsets: ["latin"], variable: "--font-inter" });
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={font.variable}>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+Then set `--font-sans` in your `globals.css`:
+
+```css title="globals.css"
+:root {
+  --font-sans: var(--font-inter);
+}
+```
+
+### Other frameworks
+
+Add a Google Fonts link to your `<head>` and set the font family directly:
+
+```html
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+```
+
+```css title="globals.css"
+:root {
+  --font-sans: "Inter", sans-serif;
+}
+```
+
+### Available fonts
+
+The [Theme Builder](/themes) lets you preview these fonts:
+
+| Font | next/font import | CSS variable |
+| --- | --- | --- |
+| Inter | `Inter` | `--font-inter` |
+| Geist | `Geist` | `--font-geist` |
+| DM Sans | `DM_Sans` | `--font-dm-sans` |
+| Figtree | `Figtree` | `--font-figtree` |
+| Public Sans | `Public_Sans` | `--font-public-sans` |
+| JetBrains Mono | `JetBrains_Mono` | `--font-jetbrains-mono` |
