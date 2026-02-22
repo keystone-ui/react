@@ -1,5 +1,5 @@
 {
-  "name": "keystoneui",
+  "name": "@keystoneui/react",
   "version": "0.0.0",
   "sideEffects": false,
   "license": "MIT",
@@ -76,10 +76,10 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
-    "@types/react": "^19.2.10",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.2",
-    "jsdom": "^27.4.0",
+    "@vitejs/plugin-react": "^5.1.4",
+    "jsdom": "^28.1.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
@@ -92,12 +92,12 @@
     "embla-carousel-react": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
     "input-otp": "^1.4.2",
-    "lucide-react": "^0.487.0",
-    "motion": "^12.34.0",
-    "react-day-picker": "^9.13.1",
-    "react-resizable-panels": "^4.6.4",
+    "lucide-react": "^0.575.0",
+    "motion": "^12.34.3",
+    "react-day-picker": "^9.13.2",
+    "react-resizable-panels": "^4.6.5",
     "react-use-measure": "^2.1.7",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.5.0"
   },
   "publishConfig": {
     "access": "public",

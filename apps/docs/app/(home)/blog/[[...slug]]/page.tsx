@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { blogPosts } from "@/.source/index";
+import { blogPosts } from "@/.source/server";
 import { getMDXComponents } from "@/mdx-components";
 
 const MDX_EXT_RE = /\.mdx?$/;
@@ -30,9 +30,9 @@ export default async function BlogPage(props: PageProps) {
           {blogPosts.map((post) => (
             <article
               className="group rounded-xl border border-border/50 p-6 transition-colors hover:border-border hover:bg-muted/30"
-              key={post._file.path}
+              key={post.info.path}
             >
-              <Link href={`/blog/${getPostSlug(post._file.path)}`}>
+              <Link href={`/blog/${getPostSlug(post.info.path)}`}>
                 <h2 className="font-semibold text-xl group-hover:text-primary">
                   {post.title}
                 </h2>
@@ -54,7 +54,7 @@ export default async function BlogPage(props: PageProps) {
 
   // Individual blog post
   const postSlug = slug.join("/");
-  const post = blogPosts.find((p) => getPostSlug(p._file.path) === postSlug);
+  const post = blogPosts.find((p) => getPostSlug(p.info.path) === postSlug);
   if (!post) {
     notFound();
   }
@@ -84,7 +84,7 @@ export function generateStaticParams() {
   return [
     { slug: [] },
     ...blogPosts.map((post) => ({
-      slug: getPostSlug(post._file.path).split("/"),
+      slug: getPostSlug(post.info.path).split("/"),
     })),
   ];
 }
@@ -101,7 +101,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   }
 
   const postSlug = slug.join("/");
-  const post = blogPosts.find((p) => getPostSlug(p._file.path) === postSlug);
+  const post = blogPosts.find((p) => getPostSlug(p.info.path) === postSlug);
   if (!post) {
     notFound();
   }

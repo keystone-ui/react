@@ -1,4 +1,4 @@
-import type { TableOfContents } from "fumadocs-core/server";
+import type { TableOfContents } from "fumadocs-core/toc";
 import {
   DocsBody,
   DocsDescription,
@@ -14,11 +14,11 @@ import { getMDXComponents } from "@/mdx-components";
 
 // fumadocs-mdx v11 lazy file loading loses these types from PageData
 interface DocsPageData {
-  title: string;
-  description?: string;
   body: FC<MDXProps>;
-  toc: TableOfContents;
+  description?: string;
   full?: boolean;
+  title: string;
+  toc: TableOfContents;
 }
 
 interface PageProps {

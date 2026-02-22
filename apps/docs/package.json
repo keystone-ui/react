@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "clean": "rm -rf .turbo .next node_modules .source"
@@ -15,12 +15,12 @@
     "culori": "^4.0.2",
     "date-fns": "^4.1.0",
     "embla-carousel-autoplay": "^8.6.0",
-    "fumadocs-core": "^15.5.1",
-    "fumadocs-mdx": "^11.6.6",
-    "fumadocs-ui": "^15.5.1",
-    "keystoneui": "workspace:*",
-    "lucide-react": "^0.487.0",
-    "next": "^15.3.3",
+    "fumadocs-core": "^16.6.5",
+    "fumadocs-mdx": "^14.2.8",
+    "fumadocs-ui": "^16.6.5",
+    "@keystoneui/react": "workspace:*",
+    "lucide-react": "^0.575.0",
+    "next": "^16.1.6",
     "nuqs": "^2.8.8",
     "react": "^19.2.4",
     "react-aria-components": "^1.15.1",
@@ -29,17 +29,17 @@
     "remark-gfm": "^4.0.1",
     "remark-mdx": "^3.1.1",
     "shiki": "^3.22.0",
-    "tailwind-merge": "^3.4.0",
+    "tailwind-merge": "^3.5.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@tailwindcss/postcss": "^4.1.18",
+    "@tailwindcss/postcss": "^4.2.0",
     "@types/culori": "^4.0.1",
-    "@types/react": "^19.2.10",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.18",
+    "tailwindcss": "^4.2.0",
     "typescript": "^5.9.3"
   }
 }
