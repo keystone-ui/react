@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "keystoneui/button";
-import { Field, FieldLabel } from "keystoneui/field";
+import { Button } from "@keystoneui/react/button";
+import { Field, FieldLabel } from "@keystoneui/react/field";
 import {
   Pagination,
   PaginationContent,
@@ -11,7 +11,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "keystoneui/pagination";
+} from "@keystoneui/react/pagination";
 import {
   Select,
   SelectContent,
@@ -19,7 +19,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "keystoneui/select";
+} from "@keystoneui/react/select";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -48,7 +48,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "keystoneui/pagination";
+} from "@keystoneui/react/pagination";
 
 <Pagination>
   <PaginationContent>

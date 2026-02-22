@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "keystoneui/button";
-import { ButtonGroup } from "keystoneui/button-group";
+import { Button } from "@keystoneui/react/button";
+import { ButtonGroup } from "@keystoneui/react/button-group";
 import {
   Field,
   FieldContent,
@@ -12,10 +12,10 @@ import {
   FieldSeparator,
   FieldSet,
   FieldTitle,
-} from "keystoneui/field";
-import { Input } from "keystoneui/input";
-import { RadioGroup, RadioGroupItem } from "keystoneui/radio-group";
-import { Switch } from "keystoneui/switch";
+} from "@keystoneui/react/field";
+import { Input } from "@keystoneui/react/input";
+import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
+import { Switch } from "@keystoneui/react/switch";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import * as React from "react";
 

@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionTrigger,
-} from "keystoneui/accordion";
+} from "@keystoneui/react/accordion";
 import { Plus, Settings } from "lucide-react";
 import { expect, userEvent, within } from "storybook/test";
 
@@ -25,7 +25,7 @@ import {
   AccordionHeader,
   AccordionTrigger,
   AccordionPanel 
-} from "keystoneui/accordion";
+} from "@keystoneui/react/accordion";
 
 <Accordion>
   <AccordionItem value="item-1">

@@ -1,12 +1,12 @@
 "use client";
 
-import { Badge } from "keystoneui/badge";
+import { Badge } from "@keystoneui/react/badge";
 import {
   DescriptionList,
   DescriptionListDetails,
   DescriptionListItem,
   DescriptionListTerm,
-} from "keystoneui/description-list";
+} from "@keystoneui/react/description-list";
 
 export default function DescriptionListDefault() {
   return (

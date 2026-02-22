@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardContent } from "keystoneui/card";
-import { Checkbox } from "keystoneui/checkbox";
+import { Card, CardContent } from "@keystoneui/react/card";
+import { Checkbox } from "@keystoneui/react/checkbox";
 import {
   Field,
   FieldDescription,
@@ -10,7 +10,7 @@ import {
   FieldLegend,
   FieldSet,
   FieldTitle,
-} from "keystoneui/field";
+} from "@keystoneui/react/field";
 
 const options = [
   { label: "Social Media", value: "social-media" },

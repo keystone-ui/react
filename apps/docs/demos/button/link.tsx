@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import { ArrowLeft } from "lucide-react";
 
 export default function ButtonLink() {

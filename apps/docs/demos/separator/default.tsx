@@ -1,6 +1,6 @@
 "use client";
 
-import { Separator } from "keystoneui/separator";
+import { Separator } from "@keystoneui/react/separator";
 
 export default function SeparatorDefault() {
   return (

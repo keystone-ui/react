@@ -1,7 +1,7 @@
 "use client";
 
-import { Label } from "keystoneui/label";
-import { RadioGroup, RadioGroupItem } from "keystoneui/radio-group";
+import { Label } from "@keystoneui/react/label";
+import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
 
 export default function RadioGroupHorizontal() {
   return (

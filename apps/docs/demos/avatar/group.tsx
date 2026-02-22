@@ -6,7 +6,7 @@ import {
   AvatarGroup,
   AvatarGroupCount,
   AvatarImage,
-} from "keystoneui/avatar";
+} from "@keystoneui/react/avatar";
 
 export default function AvatarGroupDemo() {
   return (

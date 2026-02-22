@@ -5,12 +5,12 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "keystoneui/field";
+} from "@keystoneui/react/field";
 import {
   NativeSelect,
   NativeSelectOptGroup,
   NativeSelectOption,
-} from "keystoneui/native-select";
+} from "@keystoneui/react/native-select";
 import { expect, within } from "storybook/test";
 
 const meta = {
@@ -27,7 +27,7 @@ import {
   NativeSelect,
   NativeSelectOptGroup,
   NativeSelectOption,
-} from "keystoneui/native-select";
+} from "@keystoneui/react/native-select";
 
 // Basic usage
 <NativeSelect>

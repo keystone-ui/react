@@ -4,7 +4,7 @@ import {
   NativeSelect,
   NativeSelectOptGroup,
   NativeSelectOption,
-} from "keystoneui/native-select";
+} from "@keystoneui/react/native-select";
 
 export default function NativeSelectGroups() {
   return (

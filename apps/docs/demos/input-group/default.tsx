@@ -4,7 +4,7 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "keystoneui/input-group";
+} from "@keystoneui/react/input-group";
 import { MailIcon } from "lucide-react";
 
 export default function InputGroupDefault() {

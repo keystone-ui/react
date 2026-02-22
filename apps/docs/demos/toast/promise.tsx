@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "keystoneui/button";
-import { Toaster, toast } from "keystoneui/toast";
+import { Button } from "@keystoneui/react/button";
+import { Toaster, toast } from "@keystoneui/react/toast";
 
 const uploadFile = (): Promise<{ filename: string; size: number }> =>
   new Promise((resolve) =>

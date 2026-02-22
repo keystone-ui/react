@@ -5,14 +5,14 @@ import {
   ProgressLabel,
   ProgressTrack,
   ProgressValue,
-} from "keystoneui/progress";
+} from "@keystoneui/react/progress";
 import {
   Slider,
   SliderControl,
   SliderIndicator,
   SliderThumb,
   SliderTrack,
-} from "keystoneui/slider";
+} from "@keystoneui/react/slider";
 import * as React from "react";
 
 const meta = {
@@ -38,7 +38,7 @@ A progress bar component built on Base UI's Progress primitive for accessible, a
 ## Usage
 
 \`\`\`tsx
-import { Progress } from "keystoneui/progress";
+import { Progress } from "@keystoneui/react/progress";
 
 <Progress value={50} />
 \`\`\`
@@ -52,7 +52,7 @@ import {
   ProgressIndicator,
   ProgressLabel,
   ProgressValue,
-} from "keystoneui/progress";
+} from "@keystoneui/react/progress";
 
 <Progress value={50}>
   <div className="flex justify-between">

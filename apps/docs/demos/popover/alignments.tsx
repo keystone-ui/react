@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Popover,
   PopoverContent,
@@ -8,7 +8,7 @@ import {
   PopoverHeader,
   PopoverTitle,
   PopoverTrigger,
-} from "keystoneui/popover";
+} from "@keystoneui/react/popover";
 
 const ALIGNMENTS = ["start", "center", "end"] as const;
 

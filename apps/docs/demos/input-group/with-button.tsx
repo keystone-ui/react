@@ -5,7 +5,7 @@ import {
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "keystoneui/input-group";
+} from "@keystoneui/react/input-group";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { useState } from "react";
 

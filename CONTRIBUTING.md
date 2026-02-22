@@ -67,7 +67,7 @@ Create simplified demos in `apps/docs/demos/my-component/`. Not every Storybook 
 
 Each demo file must:
 - Start with `"use client";`
-- Import from `keystoneui/my-component`
+- Import from `@keystoneui/react/my-component`
 - Export a single default function
 
 Example:
@@ -75,7 +75,7 @@ Example:
 ```tsx
 "use client";
 
-import { MyComponent } from "keystoneui/my-component";
+import { MyComponent } from "@keystoneui/react/my-component";
 
 export default function MyComponentDefault() {
   return <MyComponent>Hello</MyComponent>;
@@ -108,7 +108,7 @@ description: A brief description of the component.
 ## Import
 
 \`\`\`tsx
-import { MyComponent } from "keystoneui/my-component";
+import { MyComponent } from "@keystoneui/react/my-component";
 \`\`\`
 
 ## Usage

@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "keystoneui/button";
-import { DateInput } from "keystoneui/date-input";
-import { Field, FieldLabel } from "keystoneui/field";
+import { Button } from "@keystoneui/react/button";
+import { DateInput } from "@keystoneui/react/date-input";
+import { Field, FieldLabel } from "@keystoneui/react/field";
 import { useState } from "react";
 
 function formatDate(date: Date): string {

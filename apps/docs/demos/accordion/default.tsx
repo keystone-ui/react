@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionTrigger,
-} from "keystoneui/accordion";
+} from "@keystoneui/react/accordion";
 
 export default function AccordionDefault() {
   return (

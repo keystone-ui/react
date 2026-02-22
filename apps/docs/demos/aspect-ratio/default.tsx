@@ -1,6 +1,6 @@
 "use client";
 
-import { AspectRatio } from "keystoneui/aspect-ratio";
+import { AspectRatio } from "@keystoneui/react/aspect-ratio";
 
 export default function AspectRatioDefault() {
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { addDays } from "date-fns";
-import { Calendar } from "keystoneui/calendar";
+import { Calendar } from "@keystoneui/react/calendar";
 import { useState } from "react";
 
 export default function CalendarRange() {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Command,
   CommandDialog,
@@ -10,7 +10,7 @@ import {
   CommandItem,
   CommandList,
   CommandShortcut,
-} from "keystoneui/command";
+} from "@keystoneui/react/command";
 import { CreditCardIcon, SettingsIcon, UserIcon } from "lucide-react";
 import * as React from "react";
 

@@ -2,7 +2,7 @@ import type { Preview } from "@storybook/react-vite";
 import { themes } from "storybook/theming";
 import "./preview.css";
 import { withThemeByClassName } from "@storybook/addon-themes";
-import { Toaster } from "keystoneui/toast";
+import { Toaster } from "@keystoneui/react/toast";
 
 const preview: Preview = {
   parameters: {

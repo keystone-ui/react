@@ -1,12 +1,12 @@
 "use client";
 
-import { Checkbox } from "keystoneui/checkbox";
+import { Checkbox } from "@keystoneui/react/checkbox";
 import {
   Field,
   FieldContent,
   FieldDescription,
   FieldLabel,
-} from "keystoneui/field";
+} from "@keystoneui/react/field";
 
 export default function CheckboxWithDescription() {
   return (

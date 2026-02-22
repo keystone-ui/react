@@ -1,7 +1,7 @@
 "use client";
 
 import { converter, formatHex } from "culori";
-import { Popover, PopoverContent, PopoverTrigger } from "keystoneui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@keystoneui/react/popover";
 import { useMemo } from "react";
 import {
   type Color,

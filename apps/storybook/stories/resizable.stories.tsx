@@ -3,7 +3,7 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "keystoneui/resizable";
+} from "@keystoneui/react/resizable";
 import { expect, within } from "storybook/test";
 
 // ---------------------------------------------------------------------------
@@ -24,7 +24,7 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "keystoneui/resizable";
+} from "@keystoneui/react/resizable";
 
 <ResizablePanelGroup orientation="horizontal">
   <ResizablePanel defaultSize="50%">One</ResizablePanel>

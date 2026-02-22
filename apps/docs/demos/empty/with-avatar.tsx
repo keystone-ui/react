@@ -1,14 +1,14 @@
 "use client";
 
-import { Avatar, AvatarFallback } from "keystoneui/avatar";
-import { Button } from "keystoneui/button";
+import { Avatar, AvatarFallback } from "@keystoneui/react/avatar";
+import { Button } from "@keystoneui/react/button";
 import {
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyTitle,
-} from "keystoneui/empty";
+} from "@keystoneui/react/empty";
 
 export default function EmptyWithAvatar() {
   return (

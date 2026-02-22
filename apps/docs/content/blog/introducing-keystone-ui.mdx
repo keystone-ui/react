@@ -52,18 +52,18 @@ Our design tokens use OKLCH for perceptually uniform colors. This means equal ch
 ## Getting Started
 
 ```bash
-pnpm add keystoneui
+pnpm add @keystoneui/react
 ```
 
 ```css
 @import "tailwindcss";
-@import "keystoneui/base.css";
+@import "@keystoneui/react/base.css";
 
 /* Theme tokens go here -- install via registry or copy from docs */
 ```
 
 ```tsx
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 
 function App() {
   return <Button>Hello Keystone</Button>;

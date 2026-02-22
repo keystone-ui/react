@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
-} from "keystoneui/field";
-import { Input } from "keystoneui/input";
+} from "@keystoneui/react/field";
+import { Input } from "@keystoneui/react/input";
 
 export default function InputFormExample() {
   return (

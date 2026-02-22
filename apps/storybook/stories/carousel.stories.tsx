@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import Autoplay from "embla-carousel-autoplay";
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "keystoneui/card";
+} from "@keystoneui/react/card";
 import {
   Carousel,
   type CarouselApi,
@@ -19,7 +19,7 @@ import {
   CarouselNext,
   CarouselPrevious,
   useCarousel,
-} from "keystoneui/carousel";
+} from "@keystoneui/react/carousel";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { expect, within } from "storybook/test";
 
@@ -59,7 +59,7 @@ import {
   CarouselNext,
   CarouselDots,
   CarouselCounter,
-} from "keystoneui/carousel";
+} from "@keystoneui/react/carousel";
 
 // Basic usage
 <Carousel>

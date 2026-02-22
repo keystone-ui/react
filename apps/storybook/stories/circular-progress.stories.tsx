@@ -1,19 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Avatar, AvatarFallback, AvatarImage } from "keystoneui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
 import {
   CircularProgress,
   CircularProgressIndicator,
   CircularProgressLabel,
   CircularProgressTrack,
   CircularProgressValue,
-} from "keystoneui/circular-progress";
+} from "@keystoneui/react/circular-progress";
 import {
   Slider,
   SliderControl,
   SliderIndicator,
   SliderThumb,
   SliderTrack,
-} from "keystoneui/slider";
+} from "@keystoneui/react/slider";
 import { FlameIcon, TrendingUpIcon, ZapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -41,7 +41,7 @@ A circular (ring/donut) progress indicator built on Base UI's Progress primitive
 ## Usage
 
 \`\`\`tsx
-import { CircularProgress } from "keystoneui/circular-progress";
+import { CircularProgress } from "@keystoneui/react/circular-progress";
 
 <CircularProgress value={40} />
 \`\`\`
@@ -55,7 +55,7 @@ import {
   CircularProgressIndicator,
   CircularProgressValue,
   CircularProgressLabel,
-} from "keystoneui/circular-progress";
+} from "@keystoneui/react/circular-progress";
 
 <CircularProgress value={65}>
   <CircularProgressTrack />

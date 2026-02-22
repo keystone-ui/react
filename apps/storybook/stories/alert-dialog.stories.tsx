@@ -10,8 +10,8 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "keystoneui/alert-dialog";
-import { Button } from "keystoneui/button";
+} from "@keystoneui/react/alert-dialog";
+import { Button } from "@keystoneui/react/button";
 import { BluetoothIcon, CircleFadingPlusIcon, Trash2Icon } from "lucide-react";
 import { expect, userEvent, within } from "storybook/test";
 
@@ -35,7 +35,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "keystoneui/alert-dialog";
+} from "@keystoneui/react/alert-dialog";
 
 <AlertDialog>
   <AlertDialogTrigger render={<Button variant="outline" />}>

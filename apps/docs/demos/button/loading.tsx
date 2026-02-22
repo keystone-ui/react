@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import { ArrowRight, Mail } from "lucide-react";
 import { useState } from "react";
 

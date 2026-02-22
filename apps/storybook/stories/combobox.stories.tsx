@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { countries as countryDataList } from "country-data-list";
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Combobox,
   ComboboxChip,
@@ -18,15 +18,15 @@ import {
   ComboboxTrigger,
   ComboboxValue,
   useComboboxAnchor,
-} from "keystoneui/combobox";
+} from "@keystoneui/react/combobox";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "keystoneui/field";
-import { InputGroupAddon } from "keystoneui/input-group";
+} from "@keystoneui/react/field";
+import { InputGroupAddon } from "@keystoneui/react/input-group";
 import { GlobeIcon, SearchIcon } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
@@ -69,7 +69,7 @@ import {
   ComboboxTrigger,
   ComboboxValue,
   useComboboxAnchor,
-} from "keystoneui/combobox";
+} from "@keystoneui/react/combobox";
 
 // Basic usage
 <Combobox items={frameworks}>

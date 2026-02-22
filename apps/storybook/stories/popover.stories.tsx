@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "keystoneui/button";
-import { Field, FieldGroup, FieldLabel } from "keystoneui/field";
-import { Input } from "keystoneui/input";
+import { Button } from "@keystoneui/react/button";
+import { Field, FieldGroup, FieldLabel } from "@keystoneui/react/field";
+import { Input } from "@keystoneui/react/input";
 import {
   Popover,
   PopoverArrow,
@@ -11,7 +11,7 @@ import {
   PopoverHeader,
   PopoverTitle,
   PopoverTrigger,
-} from "keystoneui/popover";
+} from "@keystoneui/react/popover";
 import { XIcon } from "lucide-react";
 import * as React from "react";
 import { expect, userEvent, within } from "storybook/test";
@@ -35,7 +35,7 @@ import {
   PopoverHeader,
   PopoverTitle,
   PopoverTrigger,
-} from "keystoneui/popover";
+} from "@keystoneui/react/popover";
 
 <Popover>
   <PopoverTrigger render={<Button variant="outline">Open Popover</Button>} />

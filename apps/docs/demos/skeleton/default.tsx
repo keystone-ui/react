@@ -1,6 +1,6 @@
 "use client";
 
-import { Skeleton } from "keystoneui/skeleton";
+import { Skeleton } from "@keystoneui/react/skeleton";
 
 export default function SkeletonDefault() {
   return (

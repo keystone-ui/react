@@ -6,7 +6,7 @@ import {
   ItemContent,
   ItemDescription,
   ItemTitle,
-} from "keystoneui/item";
+} from "@keystoneui/react/item";
 import { ChevronRightIcon, ExternalLinkIcon } from "lucide-react";
 
 export default function ItemLink() {

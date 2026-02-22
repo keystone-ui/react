@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Command,
   CommandDialog,
@@ -10,7 +10,7 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from "keystoneui/command";
+} from "@keystoneui/react/command";
 import {
   BellIcon,
   CalculatorIcon,
@@ -59,7 +59,7 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from "keystoneui/command";
+} from "@keystoneui/react/command";
 
 <CommandDialog open={open} onOpenChange={setOpen}>
   <Command>

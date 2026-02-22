@@ -4,8 +4,8 @@ import {
   AlertAction,
   AlertDescription,
   AlertTitle,
-} from "keystoneui/alert";
-import { Button } from "keystoneui/button";
+} from "@keystoneui/react/alert";
+import { Button } from "@keystoneui/react/button";
 import {
   AlertTriangleIcon,
   CheckCircle2Icon,
@@ -27,7 +27,7 @@ A status message banner for displaying alerts, notifications, and status message
 Uses \`role="alert"\` for screen reader announcements — this is a system feedback component, not a content display component. For generic list rows or content blocks, use the **Item** component instead.
 
 \`\`\`tsx
-import { Alert, AlertTitle, AlertDescription, AlertAction } from "keystoneui/alert";
+import { Alert, AlertTitle, AlertDescription, AlertAction } from "@keystoneui/react/alert";
 import { CheckCircle2Icon } from "lucide-react";
 
 // Basic alert

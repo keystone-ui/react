@@ -5,7 +5,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
   REGEXP_ONLY_DIGITS,
-} from "keystoneui/input-otp";
+} from "@keystoneui/react/input-otp";
 
 export default function InputOTPFourDigits() {
   return (

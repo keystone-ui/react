@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Combobox,
   ComboboxContent,
@@ -11,7 +11,7 @@ import {
   ComboboxSeparator,
   ComboboxTrigger,
   ComboboxValue,
-} from "keystoneui/combobox";
+} from "@keystoneui/react/combobox";
 
 interface Country {
   code: string;

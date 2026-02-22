@@ -6,7 +6,7 @@ import {
   CircularProgressLabel,
   CircularProgressTrack,
   CircularProgressValue,
-} from "keystoneui/circular-progress";
+} from "@keystoneui/react/circular-progress";
 
 export default function CircularProgressWithLabel() {
   return (

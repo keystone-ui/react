@@ -1,6 +1,6 @@
 "use client";
 
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "keystoneui/input-otp";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@keystoneui/react/input-otp";
 
 export default function InputOTPDefault() {
   return (

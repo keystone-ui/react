@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AspectRatio } from "keystoneui/aspect-ratio";
+import { AspectRatio } from "@keystoneui/react/aspect-ratio";
 
 const meta = {
   title: "Components/AspectRatio",
@@ -11,7 +11,7 @@ const meta = {
 A component that displays content within a desired ratio.
 
 \`\`\`tsx
-import { AspectRatio } from "keystoneui/aspect-ratio";
+import { AspectRatio } from "@keystoneui/react/aspect-ratio";
 
 <AspectRatio ratio={16 / 9}>
   <img src="..." alt="..." className="rounded-lg object-cover" />

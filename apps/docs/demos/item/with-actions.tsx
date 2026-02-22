@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Item,
   ItemActions,
@@ -8,7 +8,7 @@ import {
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "keystoneui/item";
+} from "@keystoneui/react/item";
 import { ShieldAlertIcon } from "lucide-react";
 
 export default function ItemWithActions() {

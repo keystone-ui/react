@@ -5,8 +5,8 @@ import {
   FieldContent,
   FieldDescription,
   FieldLabel,
-} from "keystoneui/field";
-import { Switch } from "keystoneui/switch";
+} from "@keystoneui/react/field";
+import { Switch } from "@keystoneui/react/switch";
 
 export default function SwitchWithDescription() {
   return (

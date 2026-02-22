@@ -6,8 +6,8 @@ import {
   FieldGroup,
   FieldLabel,
   FieldTitle,
-} from "keystoneui/field";
-import { Switch } from "keystoneui/switch";
+} from "@keystoneui/react/field";
+import { Switch } from "@keystoneui/react/switch";
 import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
@@ -34,8 +34,8 @@ A switch component built on Base UI's Switch primitive for accessible, customiza
 Pair the switch with \`Field\` and \`FieldLabel\` for proper layout and labeling.
 
 \`\`\`tsx
-import { Switch } from "keystoneui/switch";
-import { Field, FieldLabel } from "keystoneui/field";
+import { Switch } from "@keystoneui/react/switch";
+import { Field, FieldLabel } from "@keystoneui/react/field";
 
 <Field orientation="horizontal">
   <Switch id="airplane-mode" />

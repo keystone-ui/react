@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "keystoneui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@keystoneui/react/tabs";
 
 export default function TabsDefault() {
   return (

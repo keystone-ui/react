@@ -1,7 +1,7 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "keystoneui/avatar";
-import { Button } from "keystoneui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
+import { Button } from "@keystoneui/react/button";
 import {
   Item,
   ItemActions,
@@ -11,7 +11,7 @@ import {
   ItemMedia,
   ItemSeparator,
   ItemTitle,
-} from "keystoneui/item";
+} from "@keystoneui/react/item";
 import { PlusIcon } from "lucide-react";
 import { Fragment } from "react";
 

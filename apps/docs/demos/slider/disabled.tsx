@@ -6,7 +6,7 @@ import {
   SliderIndicator,
   SliderThumb,
   SliderTrack,
-} from "keystoneui/slider";
+} from "@keystoneui/react/slider";
 
 export default function SliderDisabled() {
   return (

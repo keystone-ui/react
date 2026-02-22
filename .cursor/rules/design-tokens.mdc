@@ -1,11 +1,11 @@
 ---
-description: Design token conventions for the keystoneui component library. Apply when creating or editing UI components in packages/ui/.
+description: Design token conventions for the @keystoneui/react component library. Apply when creating or editing UI components in packages/ui/.
 globs: packages/ui/src/**/*
 alwaysApply: false
 ---
 # Design Token Conventions
 
-These are the established conventions for the `keystoneui` component library. Follow them when creating or modifying components.
+These are the established conventions for the `@keystoneui/react` component library. Follow them when creating or modifying components.
 
 ## Theme Tokens
 

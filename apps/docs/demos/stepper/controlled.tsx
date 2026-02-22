@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "keystoneui/button";
-import { Stepper, StepperContent, StepperStep } from "keystoneui/stepper";
+import { Button } from "@keystoneui/react/button";
+import { Stepper, StepperContent, StepperStep } from "@keystoneui/react/stepper";
 import { useState } from "react";
 
 export default function StepperControlled() {

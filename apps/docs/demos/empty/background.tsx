@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Empty,
   EmptyContent,
@@ -8,7 +8,7 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "keystoneui/empty";
+} from "@keystoneui/react/empty";
 import { SearchIcon } from "lucide-react";
 
 export default function EmptyBackground() {

@@ -1,7 +1,7 @@
 "use client";
 
-import { Field, FieldDescription, FieldLabel } from "keystoneui/field";
-import { Input } from "keystoneui/input";
+import { Field, FieldDescription, FieldLabel } from "@keystoneui/react/field";
+import { Input } from "@keystoneui/react/input";
 
 export default function InputWithField() {
   return (

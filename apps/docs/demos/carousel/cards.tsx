@@ -7,7 +7,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "keystoneui/carousel";
+} from "@keystoneui/react/carousel";
 import { CodeIcon, ImageIcon, LayoutIcon, TypeIcon } from "lucide-react";
 
 const cards = [

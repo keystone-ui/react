@@ -10,8 +10,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "keystoneui/alert-dialog";
-import { Button } from "keystoneui/button";
+} from "@keystoneui/react/alert-dialog";
+import { Button } from "@keystoneui/react/button";
 
 export default function AlertDialogDestructive() {
   return (

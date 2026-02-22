@@ -7,7 +7,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "keystoneui/select";
+} from "@keystoneui/react/select";
 
 const languages: Record<string, string> = {
   javascript: "JavaScript",

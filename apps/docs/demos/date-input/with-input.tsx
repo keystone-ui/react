@@ -1,7 +1,7 @@
 "use client";
 
-import { DateInput } from "keystoneui/date-input";
-import { Field, FieldDescription, FieldLabel } from "keystoneui/field";
+import { DateInput } from "@keystoneui/react/date-input";
+import { Field, FieldDescription, FieldLabel } from "@keystoneui/react/field";
 
 export default function DateInputWithField() {
   return (

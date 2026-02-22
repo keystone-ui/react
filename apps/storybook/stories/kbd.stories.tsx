@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Kbd, KbdGroup } from "keystoneui/kbd";
+import { Kbd, KbdGroup } from "@keystoneui/react/kbd";
 
 const meta = {
   title: "Components/Kbd",
@@ -15,7 +15,7 @@ A component for displaying keyboard keys and shortcuts.
 ## Usage
 
 \`\`\`tsx
-import { Kbd, KbdGroup } from "keystoneui/kbd";
+import { Kbd, KbdGroup } from "@keystoneui/react/kbd";
 
 <Kbd>⌘</Kbd>
 

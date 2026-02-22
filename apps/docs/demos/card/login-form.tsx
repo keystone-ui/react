@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Card,
   CardAction,
@@ -9,9 +9,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "keystoneui/card";
-import { Input } from "keystoneui/input";
-import { Label } from "keystoneui/label";
+} from "@keystoneui/react/card";
+import { Input } from "@keystoneui/react/input";
+import { Label } from "@keystoneui/react/label";
 
 export default function CardLoginForm() {
   return (

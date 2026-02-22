@@ -1,9 +1,9 @@
 "use client";
 
-import { Alert, AlertDescription, AlertTitle } from "keystoneui/alert";
-import { Avatar, AvatarFallback, AvatarImage } from "keystoneui/avatar";
-import { Badge } from "keystoneui/badge";
-import { Button } from "keystoneui/button";
+import { Alert, AlertDescription, AlertTitle } from "@keystoneui/react/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
+import { Badge } from "@keystoneui/react/badge";
+import { Button } from "@keystoneui/react/button";
 import {
   Card,
   CardContent,
@@ -11,23 +11,23 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "keystoneui/card";
-import { Checkbox } from "keystoneui/checkbox";
-import { Field, FieldLabel } from "keystoneui/field";
-import { Input } from "keystoneui/input";
-import { Label } from "keystoneui/label";
-import { Progress } from "keystoneui/progress";
-import { RadioGroup, RadioGroupItem } from "keystoneui/radio-group";
-import { Separator } from "keystoneui/separator";
+} from "@keystoneui/react/card";
+import { Checkbox } from "@keystoneui/react/checkbox";
+import { Field, FieldLabel } from "@keystoneui/react/field";
+import { Input } from "@keystoneui/react/input";
+import { Label } from "@keystoneui/react/label";
+import { Progress } from "@keystoneui/react/progress";
+import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
+import { Separator } from "@keystoneui/react/separator";
 import {
   Slider,
   SliderControl,
   SliderIndicator,
   SliderThumb,
   SliderTrack,
-} from "keystoneui/slider";
-import { Switch } from "keystoneui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "keystoneui/tabs";
+} from "@keystoneui/react/slider";
+import { Switch } from "@keystoneui/react/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@keystoneui/react/tabs";
 import { InfoIcon, MailIcon, UserIcon } from "lucide-react";
 
 /**

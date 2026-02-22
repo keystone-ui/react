@@ -89,7 +89,7 @@ export type { ${pascal}Props };
 
 function storyTemplate(pascal, kebab) {
   return `import type { Meta, StoryObj } from "@storybook/react";
-import { ${pascal} } from "keystoneui/${kebab}";
+import { ${pascal} } from "@keystoneui/react/${kebab}";
 
 const meta: Meta<typeof ${pascal}> = {
   title: "${pascal}",
@@ -112,7 +112,7 @@ export const Default: Story = {
 function demoTemplate(pascal, kebab) {
   return `"use client";
 
-import { ${pascal} } from "keystoneui/${kebab}";
+import { ${pascal} } from "@keystoneui/react/${kebab}";
 
 export default function ${pascal}Default() {
   return <${pascal}>${pascal} component</${pascal}>;
@@ -129,7 +129,7 @@ description: TODO - Add a description for the ${pascal} component.
 ## Import
 
 \`\`\`tsx
-import { ${pascal} } from "keystoneui/${kebab}";
+import { ${pascal} } from "@keystoneui/react/${kebab}";
 \`\`\`
 
 ## Usage

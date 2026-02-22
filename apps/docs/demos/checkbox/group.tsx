@@ -1,6 +1,6 @@
 "use client";
 
-import { Checkbox } from "keystoneui/checkbox";
+import { Checkbox } from "@keystoneui/react/checkbox";
 import {
   Field,
   FieldDescription,
@@ -8,7 +8,7 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
-} from "keystoneui/field";
+} from "@keystoneui/react/field";
 
 export default function CheckboxGroup() {
   return (

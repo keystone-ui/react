@@ -1,6 +1,6 @@
 "use client";
 
-import { Progress } from "keystoneui/progress";
+import { Progress } from "@keystoneui/react/progress";
 import { useEffect, useState } from "react";
 
 export default function ProgressAnimated() {

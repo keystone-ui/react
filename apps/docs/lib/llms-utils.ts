@@ -67,7 +67,7 @@ export function generateIndexHeader(): string[] {
     "- Accessible — Built on Base UI primitives with ARIA support and keyboard navigation",
     "- Tailwind CSS v4 — CSS-first configuration with OKLCH color tokens",
     "- Dark Mode — First-class dark mode with automatic adaptation",
-    "- Tree-Shakeable — Subpath exports: `import { Button } from 'keystoneui/button'`",
+    "- Tree-Shakeable — Subpath exports: `import { Button } from '@keystoneui/react/button'`",
     "- TypeScript — Fully typed with comprehensive type exports",
     "",
     "## Available Files",

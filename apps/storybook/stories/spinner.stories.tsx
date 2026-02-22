@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Badge } from "keystoneui/badge";
-import { Button } from "keystoneui/button";
+import { Badge } from "@keystoneui/react/badge";
+import { Button } from "@keystoneui/react/button";
 import {
   Empty,
   EmptyContent,
@@ -8,16 +8,16 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "keystoneui/empty";
+} from "@keystoneui/react/empty";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
   InputGroupTextarea,
-} from "keystoneui/input-group";
-import { Item, ItemContent, ItemMedia, ItemTitle } from "keystoneui/item";
-import { Spinner } from "keystoneui/spinner";
+} from "@keystoneui/react/input-group";
+import { Item, ItemContent, ItemMedia, ItemTitle } from "@keystoneui/react/item";
+import { Spinner } from "@keystoneui/react/spinner";
 import { ArrowUpIcon } from "lucide-react";
 import { expect, within } from "storybook/test";
 
@@ -31,7 +31,7 @@ const meta = {
 A simple animated spinner component for indicating loading states.
 
 \`\`\`tsx
-import { Spinner } from "keystoneui/spinner";
+import { Spinner } from "@keystoneui/react/spinner";
 
 <Spinner />
 \`\`\`

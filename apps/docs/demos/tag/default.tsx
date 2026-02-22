@@ -1,6 +1,6 @@
 "use client";
 
-import { Tag } from "keystoneui/tag";
+import { Tag } from "@keystoneui/react/tag";
 
 export default function TagDefault() {
   return (

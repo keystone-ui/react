@@ -6,7 +6,7 @@ import {
   SliderThumb,
   SliderTrack,
   SliderValue,
-} from "keystoneui/slider";
+} from "@keystoneui/react/slider";
 import * as React from "react";
 import { expect, within } from "storybook/test";
 
@@ -39,7 +39,7 @@ import {
   SliderTrack,
   SliderIndicator,
   SliderThumb,
-} from "keystoneui/slider";
+} from "@keystoneui/react/slider";
 
 <Slider defaultValue={50}>
   <SliderControl>

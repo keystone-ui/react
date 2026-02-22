@@ -5,8 +5,8 @@ import {
   AlertAction,
   AlertDescription,
   AlertTitle,
-} from "keystoneui/alert";
-import { Button } from "keystoneui/button";
+} from "@keystoneui/react/alert";
+import { Button } from "@keystoneui/react/button";
 import { AlertTriangleIcon } from "lucide-react";
 
 export default function AlertWithAction() {

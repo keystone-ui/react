@@ -1,6 +1,6 @@
 "use client";
 
-import { Spinner } from "keystoneui/spinner";
+import { Spinner } from "@keystoneui/react/spinner";
 
 export default function SpinnerSizes() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +9,7 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from "keystoneui/dropdown-menu";
+} from "@keystoneui/react/dropdown-menu";
 import { useState } from "react";
 
 export default function DropdownMenuRadioGroupDemo() {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Drawer,
   DrawerClose,
@@ -10,7 +10,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "keystoneui/drawer";
+} from "@keystoneui/react/drawer";
 
 const DRAWER_SIDES = [
   { swipeDirection: "up", label: "Top" },

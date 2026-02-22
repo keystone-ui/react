@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { countries as countryDataList } from "country-data-list";
-import { Avatar, AvatarFallback, AvatarImage } from "keystoneui/avatar";
-import { Badge } from "keystoneui/badge";
-import { Button } from "keystoneui/button";
-import { ButtonGroup } from "keystoneui/button-group";
+import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
+import { Badge } from "@keystoneui/react/badge";
+import { Button } from "@keystoneui/react/button";
+import { ButtonGroup } from "@keystoneui/react/button-group";
 import {
   Combobox,
   ComboboxContent,
@@ -14,7 +14,7 @@ import {
   ComboboxSeparator,
   ComboboxTrigger,
   ComboboxValue,
-} from "keystoneui/combobox";
+} from "@keystoneui/react/combobox";
 import {
   Command,
   CommandEmpty,
@@ -22,7 +22,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "keystoneui/command";
+} from "@keystoneui/react/command";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -35,8 +35,8 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "keystoneui/dropdown-menu";
-import { Field, FieldDescription, FieldLabel } from "keystoneui/field";
+} from "@keystoneui/react/dropdown-menu";
+import { Field, FieldDescription, FieldLabel } from "@keystoneui/react/field";
 import {
   InputGroup,
   InputGroupAddon,
@@ -44,10 +44,10 @@ import {
   InputGroupInput,
   InputGroupText,
   InputGroupTextarea,
-} from "keystoneui/input-group";
-import { Popover, PopoverContent, PopoverTrigger } from "keystoneui/popover";
-import { Switch } from "keystoneui/switch";
-import { Tooltip, TooltipContent, TooltipTrigger } from "keystoneui/tooltip";
+} from "@keystoneui/react/input-group";
+import { Popover, PopoverContent, PopoverTrigger } from "@keystoneui/react/popover";
+import { Switch } from "@keystoneui/react/switch";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@keystoneui/react/tooltip";
 import parsePhoneNumber from "libphonenumber-js";
 import {
   ArrowUpIcon,
@@ -105,7 +105,7 @@ The InputGroup now uses an \`align\` prop instead of \`position\` + \`variant\`:
 ## Basic Usage
 
 \`\`\`tsx
-import { InputGroup, InputGroupAddon, InputGroupInput } from "keystoneui/input-group";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@keystoneui/react/input-group";
 import { Search } from "lucide-react";
 
 <InputGroup>

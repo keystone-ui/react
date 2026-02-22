@@ -4,7 +4,7 @@ import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "keystoneui/collapsible";
+} from "@keystoneui/react/collapsible";
 import { ChevronRightIcon, SettingsIcon, ShieldIcon } from "lucide-react";
 
 export default function CollapsibleSettings() {

@@ -9,13 +9,13 @@ Keystone UI uses a semantic token system built on CSS custom properties and Tail
 
 The styling system has two layers:
 
-### 1. `keystoneui/base.css` -- Required
+### 1. `@keystoneui/react/base.css` -- Required
 
 Component runtime CSS that every project must import. Contains hover gating, animations, drawer/tabs transitions, and structural utilities. No color tokens -- works with any theme.
 
 ```css title="globals.css"
 @import "tailwindcss";
-@import "keystoneui/base.css";
+@import "@keystoneui/react/base.css";
 ```
 
 ### 2. Theme tokens -- Consumer-owned

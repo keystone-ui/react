@@ -4,7 +4,7 @@
 @source "../../../packages/ui/src/**/*.{ts,tsx}";
 @source "../stories/**/*.{ts,tsx}";
 
-@import "keystoneui/base.css";
+@import "@keystoneui/react/base.css";
 
 @custom-variant dark (&:is(.dark *));
 

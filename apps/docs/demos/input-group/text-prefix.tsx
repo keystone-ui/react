@@ -5,7 +5,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
-} from "keystoneui/input-group";
+} from "@keystoneui/react/input-group";
 
 export default function InputGroupTextPrefix() {
   return (

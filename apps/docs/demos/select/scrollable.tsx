@@ -8,7 +8,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "keystoneui/select";
+} from "@keystoneui/react/select";
 
 export default function SelectScrollable() {
   return (

@@ -7,15 +7,15 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "keystoneui/breadcrumb";
-import { Button } from "keystoneui/button";
+} from "@keystoneui/react/breadcrumb";
+import { Button } from "@keystoneui/react/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "keystoneui/dropdown-menu";
+} from "@keystoneui/react/dropdown-menu";
 import { ChevronDownIcon, DotIcon } from "lucide-react";
 
 const meta = {
@@ -35,7 +35,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "keystoneui/breadcrumb";
+} from "@keystoneui/react/breadcrumb";
 
 <Breadcrumb>
   <BreadcrumbList>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Tag, TagRemove } from "keystoneui/tag";
+import { Tag, TagRemove } from "@keystoneui/react/tag";
 import { BoldIcon, ItalicIcon, StarIcon } from "lucide-react";
 
 export default function TagWithRemove() {

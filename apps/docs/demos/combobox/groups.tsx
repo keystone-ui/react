@@ -11,7 +11,7 @@ import {
   ComboboxLabel,
   ComboboxList,
   ComboboxSeparator,
-} from "keystoneui/combobox";
+} from "@keystoneui/react/combobox";
 
 const timezones = [
   {

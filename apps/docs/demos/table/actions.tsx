@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "keystoneui/table";
+} from "@keystoneui/react/table";
 import { MoreHorizontalIcon } from "lucide-react";
 
 const products = [

@@ -1,6 +1,6 @@
 "use client";
 
-import { CircularProgress } from "keystoneui/circular-progress";
+import { CircularProgress } from "@keystoneui/react/circular-progress";
 
 const SIZES = ["sm", "default", "lg"] as const;
 

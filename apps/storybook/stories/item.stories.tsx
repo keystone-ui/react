@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Avatar, AvatarFallback, AvatarImage } from "keystoneui/avatar";
-import { Badge } from "keystoneui/badge";
-import { Button } from "keystoneui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
+import { Badge } from "@keystoneui/react/badge";
+import { Button } from "@keystoneui/react/button";
 import {
   Item,
   ItemActions,
@@ -13,7 +13,7 @@ import {
   ItemMedia,
   ItemSeparator,
   ItemTitle,
-} from "keystoneui/item";
+} from "@keystoneui/react/item";
 import {
   BadgeCheckIcon,
   CalendarIcon,
@@ -47,7 +47,7 @@ import {
   Item, ItemMedia, ItemContent, ItemTitle,
   ItemDescription, ItemActions, ItemHeader,
   ItemFooter, ItemGroup, ItemSeparator,
-} from "keystoneui/item";
+} from "@keystoneui/react/item";
 
 <Item variant="outline">
   <ItemMedia variant="icon">

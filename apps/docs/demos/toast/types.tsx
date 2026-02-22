@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "keystoneui/button";
-import { Toaster, toast } from "keystoneui/toast";
+import { Button } from "@keystoneui/react/button";
+import { Toaster, toast } from "@keystoneui/react/toast";
 
 export default function ToastTypes() {
   return (

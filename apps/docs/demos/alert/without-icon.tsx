@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, AlertDescription, AlertTitle } from "keystoneui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@keystoneui/react/alert";
 
 export default function AlertWithoutIcon() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import { ArrowRight, Bold, Italic, Mail, Plus } from "lucide-react";
 
 export default function ButtonIconButtons() {

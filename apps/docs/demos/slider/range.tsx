@@ -7,7 +7,7 @@ import {
   SliderThumb,
   SliderTrack,
   SliderValue,
-} from "keystoneui/slider";
+} from "@keystoneui/react/slider";
 import { useId } from "react";
 
 export default function SliderRange() {

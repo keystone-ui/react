@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "keystoneui/button";
-import { Checkbox } from "keystoneui/checkbox";
-import { Input } from "keystoneui/input";
-import { Label } from "keystoneui/label";
+import { Button } from "@keystoneui/react/button";
+import { Checkbox } from "@keystoneui/react/checkbox";
+import { Input } from "@keystoneui/react/input";
+import { Label } from "@keystoneui/react/label";
 import {
   Modal,
   ModalContent,
@@ -12,7 +12,7 @@ import {
   ModalHeader,
   ModalTitle,
   ModalTrigger,
-} from "keystoneui/modal";
+} from "@keystoneui/react/modal";
 import { useState } from "react";
 
 export default function ModalSignUpForm() {

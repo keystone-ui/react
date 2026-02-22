@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "keystoneui/table";
+} from "@keystoneui/react/table";
 
 const invoices = [
   {

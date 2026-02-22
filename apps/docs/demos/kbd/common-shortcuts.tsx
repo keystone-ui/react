@@ -1,6 +1,6 @@
 "use client";
 
-import { Kbd, KbdGroup } from "keystoneui/kbd";
+import { Kbd, KbdGroup } from "@keystoneui/react/kbd";
 
 export default function KbdCommonShortcuts() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { TagGroup, TagGroupItem } from "keystoneui/tag-group";
+import { TagGroup, TagGroupItem } from "@keystoneui/react/tag-group";
 
 export default function TagGroupDefault() {
   return (

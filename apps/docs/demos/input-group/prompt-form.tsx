@@ -1,7 +1,7 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "keystoneui/avatar";
-import { Badge } from "keystoneui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
+import { Badge } from "@keystoneui/react/badge";
 import {
   Command,
   CommandEmpty,
@@ -9,7 +9,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "keystoneui/command";
+} from "@keystoneui/react/command";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -22,17 +22,17 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "keystoneui/dropdown-menu";
-import { Field, FieldLabel } from "keystoneui/field";
+} from "@keystoneui/react/dropdown-menu";
+import { Field, FieldLabel } from "@keystoneui/react/field";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupTextarea,
-} from "keystoneui/input-group";
-import { Popover, PopoverContent, PopoverTrigger } from "keystoneui/popover";
-import { Switch } from "keystoneui/switch";
-import { Tooltip, TooltipContent, TooltipTrigger } from "keystoneui/tooltip";
+} from "@keystoneui/react/input-group";
+import { Popover, PopoverContent, PopoverTrigger } from "@keystoneui/react/popover";
+import { Switch } from "@keystoneui/react/switch";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@keystoneui/react/tooltip";
 import {
   ArrowUpIcon,
   AtSignIcon,

@@ -5,8 +5,8 @@ import {
   FieldContent,
   FieldDescription,
   FieldLabel,
-} from "keystoneui/field";
-import { RadioGroup, RadioGroupItem } from "keystoneui/radio-group";
+} from "@keystoneui/react/field";
+import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
 
 export default function RadioGroupWithDescription() {
   return (

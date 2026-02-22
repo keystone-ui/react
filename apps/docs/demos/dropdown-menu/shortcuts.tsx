@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "keystoneui/dropdown-menu";
+} from "@keystoneui/react/dropdown-menu";
 
 export default function DropdownMenuShortcuts() {
   return (

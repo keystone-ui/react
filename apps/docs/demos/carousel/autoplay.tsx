@@ -6,7 +6,7 @@ import {
   CarouselContent,
   CarouselDots,
   CarouselItem,
-} from "keystoneui/carousel";
+} from "@keystoneui/react/carousel";
 
 export default function CarouselAutoplay() {
   return (

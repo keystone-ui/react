@@ -11,7 +11,7 @@ import {
   ComboboxList,
   ComboboxValue,
   useComboboxAnchor,
-} from "keystoneui/combobox";
+} from "@keystoneui/react/combobox";
 
 const frameworks = [
   "Next.js",

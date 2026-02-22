@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "keystoneui/button";
-import { Checkbox } from "keystoneui/checkbox";
+import { Button } from "@keystoneui/react/button";
+import { Checkbox } from "@keystoneui/react/checkbox";
 import {
   Drawer,
   DrawerContent,
@@ -9,7 +9,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "keystoneui/drawer";
+} from "@keystoneui/react/drawer";
 import { FilterIcon } from "lucide-react";
 import { useState } from "react";
 

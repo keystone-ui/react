@@ -6,7 +6,7 @@ import {
   ProgressLabel,
   ProgressTrack,
   ProgressValue,
-} from "keystoneui/progress";
+} from "@keystoneui/react/progress";
 
 export default function ProgressWithLabel() {
   return (

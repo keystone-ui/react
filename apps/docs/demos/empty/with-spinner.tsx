@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Empty,
   EmptyContent,
@@ -8,8 +8,8 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "keystoneui/empty";
-import { Spinner } from "keystoneui/spinner";
+} from "@keystoneui/react/empty";
+import { Spinner } from "@keystoneui/react/spinner";
 
 export default function EmptyWithSpinner() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Card,
   CardAction,
@@ -8,7 +8,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "keystoneui/card";
+} from "@keystoneui/react/card";
 
 export default function CardWithAction() {
   return (

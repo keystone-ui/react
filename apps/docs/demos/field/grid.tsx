@@ -1,7 +1,7 @@
 "use client";
 
-import { Field, FieldGroup, FieldLabel } from "keystoneui/field";
-import { Input } from "keystoneui/input";
+import { Field, FieldGroup, FieldLabel } from "@keystoneui/react/field";
+import { Input } from "@keystoneui/react/input";
 
 export default function FieldGrid() {
   return (

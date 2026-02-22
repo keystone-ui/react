@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "keystoneui/table";
+} from "@keystoneui/react/table";
 
 const leaderboard = [
   { rank: 1, name: "Alex Dumitru", role: "UI/UX", company: "Hashgraph" },

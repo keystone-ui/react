@@ -1,6 +1,6 @@
 "use client";
 
-import { ToggleGroup, ToggleGroupItem } from "keystoneui/toggle-group";
+import { ToggleGroup, ToggleGroupItem } from "@keystoneui/react/toggle-group";
 import { BoldIcon, ItalicIcon, UnderlineIcon } from "lucide-react";
 
 export default function ToggleGroupOutline() {

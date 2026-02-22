@@ -12,7 +12,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "keystoneui/*": ["../../packages/ui/src/*"],
+      "@keystoneui/react/*": ["../../packages/ui/src/*"],
       "@keystone/theme/*": ["../../packages/theme/src/*"],
       "fumadocs-mdx:collections/*": [".source/*"]
     },

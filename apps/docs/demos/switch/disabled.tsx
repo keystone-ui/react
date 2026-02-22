@@ -1,7 +1,7 @@
 "use client";
 
-import { Field, FieldLabel } from "keystoneui/field";
-import { Switch } from "keystoneui/switch";
+import { Field, FieldLabel } from "@keystoneui/react/field";
+import { Switch } from "@keystoneui/react/switch";
 
 export default function SwitchDisabled() {
   return (

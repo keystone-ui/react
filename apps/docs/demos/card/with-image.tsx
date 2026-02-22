@@ -1,7 +1,7 @@
 "use client";
 
-import { Badge } from "keystoneui/badge";
-import { Button } from "keystoneui/button";
+import { Badge } from "@keystoneui/react/badge";
+import { Button } from "@keystoneui/react/button";
 import {
   Card,
   CardAction,
@@ -9,7 +9,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "keystoneui/card";
+} from "@keystoneui/react/card";
 
 export default function CardWithImage() {
   return (

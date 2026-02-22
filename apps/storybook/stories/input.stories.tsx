@@ -1,23 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "keystoneui/button";
-import { ButtonGroup } from "keystoneui/button-group";
-import { DateInput } from "keystoneui/date-input";
+import { Button } from "@keystoneui/react/button";
+import { ButtonGroup } from "@keystoneui/react/button-group";
+import { DateInput } from "@keystoneui/react/date-input";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "keystoneui/field";
-import { Description } from "keystoneui/form";
-import { Input } from "keystoneui/input";
+} from "@keystoneui/react/field";
+import { Description } from "@keystoneui/react/form";
+import { Input } from "@keystoneui/react/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
-} from "keystoneui/input-group";
-import { NativeSelect, NativeSelectOption } from "keystoneui/native-select";
+} from "@keystoneui/react/input-group";
+import { NativeSelect, NativeSelectOption } from "@keystoneui/react/native-select";
 import {
   InfoIcon,
   MailIcon,
@@ -37,8 +37,8 @@ const meta = {
 A versatile input component with support for different types, states, and adornments.
 
 \`\`\`tsx
-import { Input } from "keystoneui/input";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "keystoneui/input-group";
+import { Input } from "@keystoneui/react/input";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@keystoneui/react/input-group";
 
 // Default input
 <Input placeholder="Enter your name" />

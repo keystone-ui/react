@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionTrigger,
-} from "keystoneui/accordion";
+} from "@keystoneui/react/accordion";
 import { Plus } from "lucide-react";
 
 export default function AccordionCustomChevron() {

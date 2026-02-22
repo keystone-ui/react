@@ -7,7 +7,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "keystoneui/select";
+} from "@keystoneui/react/select";
 import { type FontId, fonts } from "../constants";
 import type { SetThemeState, ThemeState } from "../hooks/use-theme-state";
 

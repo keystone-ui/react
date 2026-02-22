@@ -1,15 +1,15 @@
 "use client";
 
-import { Button } from "keystoneui/button";
-import { ButtonGroup } from "keystoneui/button-group";
-import { Input } from "keystoneui/input";
+import { Button } from "@keystoneui/react/button";
+import { ButtonGroup } from "@keystoneui/react/button-group";
+import { Input } from "@keystoneui/react/input";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
-} from "keystoneui/select";
+} from "@keystoneui/react/select";
 import { ArrowRightIcon } from "lucide-react";
 import { useState } from "react";
 

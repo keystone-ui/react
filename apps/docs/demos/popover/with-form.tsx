@@ -1,15 +1,15 @@
 "use client";
 
-import { Button } from "keystoneui/button";
-import { Input } from "keystoneui/input";
-import { Label } from "keystoneui/label";
+import { Button } from "@keystoneui/react/button";
+import { Input } from "@keystoneui/react/input";
+import { Label } from "@keystoneui/react/label";
 import {
   Popover,
   PopoverContent,
   PopoverHeader,
   PopoverTitle,
   PopoverTrigger,
-} from "keystoneui/popover";
+} from "@keystoneui/react/popover";
 
 export default function PopoverWithForm() {
   return (

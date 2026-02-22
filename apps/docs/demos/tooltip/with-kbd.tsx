@@ -1,12 +1,12 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "keystoneui/tooltip";
+} from "@keystoneui/react/tooltip";
 import { BoldIcon } from "lucide-react";
 
 export default function TooltipWithKbd() {

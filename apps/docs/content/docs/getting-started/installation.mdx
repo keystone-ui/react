@@ -6,15 +6,15 @@ description: Step-by-step guide to installing Keystone UI in your project.
 ## Install Package
 
 ```bash tab="pnpm"
-pnpm add keystoneui
+pnpm add @keystoneui/react
 ```
 
 ```bash tab="npm"
-npm install keystoneui
+npm install @keystoneui/react
 ```
 
 ```bash tab="yarn"
-yarn add keystoneui
+yarn add @keystoneui/react
 ```
 
 ## Set Up CSS
@@ -27,7 +27,7 @@ The fastest way to configure your CSS. The CLI generates the complete theme in y
 npx shadcn add https://keystoneui.io/r/keystone-style.json
 ```
 
-This adds `@import "keystoneui/base.css"`, the dark mode variant, Tailwind color registration, default tokens, and base layer to your CSS file.
+This adds `@import "@keystoneui/react/base.css"`, the dark mode variant, Tailwind color registration, default tokens, and base layer to your CSS file.
 
 See the [Registry guide](/docs/getting-started/registry) for more options (namespace config, swapping themes, creating your own).
 
@@ -37,9 +37,9 @@ Add the base CSS import and define your theme tokens in your main CSS file:
 
 ```css title="globals.css"
 @import "tailwindcss";
-@import "keystoneui/base.css";
+@import "@keystoneui/react/base.css";
 
-@source "../node_modules/keystoneui/src/**/*.{ts,tsx}";
+@source "../node_modules/@keystoneui/react/src/**/*.{ts,tsx}";
 
 /* Then add your theme tokens -- see Customization for the full reference */
 @custom-variant dark (&:is(.dark *));
@@ -83,7 +83,7 @@ If you're using TypeScript, add path aliases for better IDE support:
 {
   "compilerOptions": {
     "paths": {
-      "keystoneui/*": ["./node_modules/keystoneui/src/*"]
+      "@keystoneui/react/*": ["./node_modules/@keystoneui/react/src/*"]
     }
   }
 }
@@ -94,7 +94,7 @@ If you're using TypeScript, add path aliases for better IDE support:
 Create a simple component to verify everything is working:
 
 ```tsx title="app/page.tsx"
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 
 export default function Page() {
   return (

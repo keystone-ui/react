@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "keystoneui/button";
-import { Spinner } from "keystoneui/spinner";
+import { Button } from "@keystoneui/react/button";
+import { Spinner } from "@keystoneui/react/spinner";
 import { useState } from "react";
 
 export default function SpinnerWithButton() {

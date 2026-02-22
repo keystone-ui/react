@@ -1,6 +1,6 @@
 "use client";
 
-import { NativeSelect, NativeSelectOption } from "keystoneui/native-select";
+import { NativeSelect, NativeSelectOption } from "@keystoneui/react/native-select";
 
 export default function NativeSelectDisabled() {
   return (

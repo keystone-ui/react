@@ -1,6 +1,6 @@
 "use client";
 
-import { Item, ItemContent, ItemTitle } from "keystoneui/item";
+import { Item, ItemContent, ItemTitle } from "@keystoneui/react/item";
 
 export default function ItemDefault() {
   return (

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Field,
   FieldContent,
@@ -7,7 +7,7 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "keystoneui/field";
+} from "@keystoneui/react/field";
 import {
   Select,
   SelectContent,
@@ -17,8 +17,8 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "keystoneui/select";
-import { Switch } from "keystoneui/switch";
+} from "@keystoneui/react/select";
+import { Switch } from "@keystoneui/react/switch";
 import { AppleIcon, BananaIcon, CherryIcon, GrapeIcon } from "lucide-react";
 import { useState } from "react";
 import { expect, userEvent, within } from "storybook/test";
@@ -59,7 +59,7 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "keystoneui/select";
+} from "@keystoneui/react/select";
 
 // Basic usage
 <Select>

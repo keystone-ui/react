@@ -58,17 +58,17 @@ To make the ui library code work across all browsers, we need to compile the raw
 
 Running `pnpm build` from the root of the Turborepo will run the `build` command defined in each package's `package.json` file. Turborepo runs each `build` in parallel and caches & hashes the output to speed up future builds.
 
-For `keystoneui`, the `build` command is equivalent to the following:
+For `@keystoneui/react`, the `build` command is equivalent to the following:
 
 ```bash
 tsup src/*.tsx --format esm,cjs --dts --external react
 ```
 
-`tsup` compiles all of the components in the design system individually, into both ES Modules and CommonJS formats as well as their TypeScript types. The `package.json` for `keystoneui` then instructs the consumer to select the correct format:
+`tsup` compiles all of the components in the design system individually, into both ES Modules and CommonJS formats as well as their TypeScript types. The `package.json` for `@keystoneui/react` then instructs the consumer to select the correct format:
 
 ```json:ui/package.json
 {
-  "name": "keystoneui",
+  "name": "@keystoneui/react",
   "version": "0.0.0",
   "sideEffects": false,
   "exports":{
@@ -114,7 +114,7 @@ When adding a new file, ensure that its specifier is defined in `package.json` f
 
 ```json:ui/package.json
 {
-  "name": "keystoneui",
+  "name": "@keystoneui/react",
   "version": "0.0.0",
   "sideEffects": false,
   "exports":{
@@ -134,13 +134,13 @@ Storybook provides us with an interactive UI playground for our components. This
 
 - Use Vite to bundle stories instantly (in milliseconds)
 - Automatically find any stories inside the `stories/` folder
-- Support using module path aliases like `keystoneui` for imports
+- Support using module path aliases like `@keystoneui/react` for imports
 - Write MDX for component documentation pages
 
 For example, here's the included Story for our `Button` component:
 
 ```js:apps/storybook/stories/button.stories.mdx
-import { Button } from 'keystoneui/button';
+import { Button } from '@keystoneui/react/button';
 import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
 
 <Meta title="Components/Button" component={Button} />

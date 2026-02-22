@@ -4,7 +4,7 @@ import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
-} from "keystoneui/resizable";
+} from "@keystoneui/react/resizable";
 
 export default function ResizableVertical() {
   return (

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "keystoneui/button";
-import { ButtonGroup } from "keystoneui/button-group";
-import { Checkbox } from "keystoneui/checkbox";
+import { Button } from "@keystoneui/react/button";
+import { ButtonGroup } from "@keystoneui/react/button-group";
+import { Checkbox } from "@keystoneui/react/checkbox";
 import {
   Field,
   FieldContent,
@@ -13,11 +13,11 @@ import {
   FieldSeparator,
   FieldSet,
   FieldTitle,
-} from "keystoneui/field";
-import { Input } from "keystoneui/input";
-import { RadioGroup, RadioGroupItem } from "keystoneui/radio-group";
-import { Switch } from "keystoneui/switch";
-import { Textarea } from "keystoneui/textarea";
+} from "@keystoneui/react/field";
+import { Input } from "@keystoneui/react/input";
+import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
+import { Switch } from "@keystoneui/react/switch";
+import { Textarea } from "@keystoneui/react/textarea";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import * as React from "react";
 import { expect, userEvent, within } from "storybook/test";
@@ -67,8 +67,8 @@ Combine labels, controls, and help text to compose accessible form fields and gr
 ## Basic Usage
 
 \`\`\`tsx
-import { Field, FieldLabel, FieldDescription } from "keystoneui/field";
-import { Input } from "keystoneui/input";
+import { Field, FieldLabel, FieldDescription } from "@keystoneui/react/field";
+import { Input } from "@keystoneui/react/input";
 
 <Field>
   <FieldLabel htmlFor="username">Username</FieldLabel>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Popover, PopoverContent, PopoverTrigger } from "keystoneui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@keystoneui/react/popover";
 import type { SetThemeState, ThemeState } from "../hooks/use-theme-state";
 import type { BaseColorId } from "../theme-data";
 

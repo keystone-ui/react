@@ -1,8 +1,8 @@
 "use client";
 
-import { Description, Form, Label } from "keystoneui/form";
-import { Input } from "keystoneui/input";
-import { Textarea } from "keystoneui/textarea";
+import { Description, Form, Label } from "@keystoneui/react/form";
+import { Input } from "@keystoneui/react/input";
+import { Textarea } from "@keystoneui/react/textarea";
 
 export default function FormDefault() {
   return (

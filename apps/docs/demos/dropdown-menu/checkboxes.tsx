@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -8,7 +8,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "keystoneui/dropdown-menu";
+} from "@keystoneui/react/dropdown-menu";
 import { useState } from "react";
 
 export default function DropdownMenuCheckboxes() {

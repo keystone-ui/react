@@ -7,7 +7,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "keystoneui/carousel";
+} from "@keystoneui/react/carousel";
 
 export default function CarouselWithDots() {
   return (

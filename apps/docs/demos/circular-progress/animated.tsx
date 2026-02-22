@@ -1,6 +1,6 @@
 "use client";
 
-import { CircularProgress } from "keystoneui/circular-progress";
+import { CircularProgress } from "@keystoneui/react/circular-progress";
 import { useEffect, useState } from "react";
 
 export default function CircularProgressAnimated() {

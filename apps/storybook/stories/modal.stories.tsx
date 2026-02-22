@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "keystoneui/button";
-import { Checkbox } from "keystoneui/checkbox";
-import { Input } from "keystoneui/input";
-import { Label } from "keystoneui/label";
+import { Button } from "@keystoneui/react/button";
+import { Checkbox } from "@keystoneui/react/checkbox";
+import { Input } from "@keystoneui/react/input";
+import { Label } from "@keystoneui/react/label";
 import {
   Modal,
   ModalClose,
@@ -12,13 +12,13 @@ import {
   ModalHeader,
   ModalTitle,
   ModalTrigger,
-} from "keystoneui/modal";
+} from "@keystoneui/react/modal";
 import {
   Stepper,
   StepperContent,
   StepperStep,
   useStepper,
-} from "keystoneui/stepper";
+} from "@keystoneui/react/stepper";
 import * as React from "react";
 import { expect, userEvent, within } from "storybook/test";
 
@@ -41,7 +41,7 @@ import {
   ModalHeader,
   ModalTitle,
   ModalTrigger,
-} from "keystoneui/modal";
+} from "@keystoneui/react/modal";
 
 <Modal>
   <ModalTrigger render={<Button variant="outline" />}>

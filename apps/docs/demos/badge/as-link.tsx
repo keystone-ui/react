@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge } from "keystoneui/badge";
+import { Badge } from "@keystoneui/react/badge";
 import { ArrowUpRightIcon } from "lucide-react";
 
 export default function BadgeAsLink() {

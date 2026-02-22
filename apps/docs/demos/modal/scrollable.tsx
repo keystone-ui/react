@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Modal,
   ModalClose,
@@ -9,7 +9,7 @@ import {
   ModalHeader,
   ModalTitle,
   ModalTrigger,
-} from "keystoneui/modal";
+} from "@keystoneui/react/modal";
 
 export default function ModalScrollable() {
   return (

@@ -7,8 +7,8 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
-} from "keystoneui/field";
-import { Input } from "keystoneui/input";
+} from "@keystoneui/react/field";
+import { Input } from "@keystoneui/react/input";
 
 export default function FieldFieldSet() {
   return (

@@ -7,7 +7,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "keystoneui/select";
+} from "@keystoneui/react/select";
 import { type RadiusId, radiusOptions } from "../constants";
 import type { SetThemeState, ThemeState } from "../hooks/use-theme-state";
 

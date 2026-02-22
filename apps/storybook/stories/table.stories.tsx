@@ -1,21 +1,21 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Badge } from "keystoneui/badge";
-import { Button } from "keystoneui/button";
-import { Checkbox } from "keystoneui/checkbox";
+import { Badge } from "@keystoneui/react/badge";
+import { Button } from "@keystoneui/react/button";
+import { Checkbox } from "@keystoneui/react/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "keystoneui/dropdown-menu";
+} from "@keystoneui/react/dropdown-menu";
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "keystoneui/empty";
+} from "@keystoneui/react/empty";
 import {
   Pagination,
   PaginationContent,
@@ -24,14 +24,14 @@ import {
   PaginationLast,
   PaginationNext,
   PaginationPrevious,
-} from "keystoneui/pagination";
+} from "@keystoneui/react/pagination";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "keystoneui/select";
+} from "@keystoneui/react/select";
 import {
   Table,
   TableBody,
@@ -41,7 +41,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "keystoneui/table";
+} from "@keystoneui/react/table";
 import {
   ArrowDownLeftIcon,
   ArrowUpRightIcon,
@@ -75,7 +75,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "keystoneui/table";
+} from "@keystoneui/react/table";
 
 <Table>
   <TableCaption>A list of your recent invoices.</TableCaption>

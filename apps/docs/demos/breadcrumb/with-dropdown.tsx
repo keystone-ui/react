@@ -8,15 +8,15 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "keystoneui/breadcrumb";
-import { Button } from "keystoneui/button";
+} from "@keystoneui/react/breadcrumb";
+import { Button } from "@keystoneui/react/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "keystoneui/dropdown-menu";
+} from "@keystoneui/react/dropdown-menu";
 
 export default function BreadcrumbWithDropdown() {
   return (

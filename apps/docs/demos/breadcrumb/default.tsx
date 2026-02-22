@@ -7,7 +7,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "keystoneui/breadcrumb";
+} from "@keystoneui/react/breadcrumb";
 
 export default function BreadcrumbDefault() {
   return (

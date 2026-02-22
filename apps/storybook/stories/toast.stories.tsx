@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "keystoneui/button";
-import type { ToasterProps } from "keystoneui/toast";
-import { Toaster, toast } from "keystoneui/toast";
+import { Button } from "@keystoneui/react/button";
+import type { ToasterProps } from "@keystoneui/react/toast";
+import { Toaster, toast } from "@keystoneui/react/toast";
 import { UsersIcon } from "lucide-react";
 import { expect, userEvent, within } from "storybook/test";
 
@@ -57,7 +57,7 @@ A toast notification component built on [Base UI Toast](https://base-ui.com/reac
 The \`Toaster\` component is a provider — mount it once at the root of your app. Use the imperative \`toast()\` function to trigger notifications from anywhere.
 
 \`\`\`tsx
-import { Toaster, toast } from "keystoneui/toast";
+import { Toaster, toast } from "@keystoneui/react/toast";
 
 // 1. Mount the provider once in your layout
 <Toaster />

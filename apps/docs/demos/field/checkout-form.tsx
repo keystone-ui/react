@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "keystoneui/button";
-import { Checkbox } from "keystoneui/checkbox";
+import { Button } from "@keystoneui/react/button";
+import { Checkbox } from "@keystoneui/react/checkbox";
 import {
   Field,
   FieldDescription,
@@ -10,8 +10,8 @@ import {
   FieldLegend,
   FieldSeparator,
   FieldSet,
-} from "keystoneui/field";
-import { Input } from "keystoneui/input";
+} from "@keystoneui/react/field";
+import { Input } from "@keystoneui/react/input";
 import {
   Select,
   SelectContent,
@@ -19,8 +19,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "keystoneui/select";
-import { Textarea } from "keystoneui/textarea";
+} from "@keystoneui/react/select";
+import { Textarea } from "@keystoneui/react/textarea";
 
 export default function FieldCheckoutForm() {
   return (

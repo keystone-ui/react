@@ -9,7 +9,7 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from "keystoneui/select";
+} from "@keystoneui/react/select";
 
 export default function SelectGroups() {
   return (

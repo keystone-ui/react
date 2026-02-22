@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { parseDate } from "chrono-node";
 import { addDays, format } from "date-fns";
-import { Button } from "keystoneui/button";
-import { Calendar } from "keystoneui/calendar";
-import { Field, FieldGroup, FieldLabel } from "keystoneui/field";
-import { Input } from "keystoneui/input";
+import { Button } from "@keystoneui/react/button";
+import { Calendar } from "@keystoneui/react/calendar";
+import { Field, FieldGroup, FieldLabel } from "@keystoneui/react/field";
+import { Input } from "@keystoneui/react/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "keystoneui/input-group";
-import { Popover, PopoverContent, PopoverTrigger } from "keystoneui/popover";
+} from "@keystoneui/react/input-group";
+import { Popover, PopoverContent, PopoverTrigger } from "@keystoneui/react/popover";
 import { CalendarIcon, ChevronDownIcon } from "lucide-react";
 import * as React from "react";
 import type { DateRange } from "react-day-picker";
@@ -30,9 +30,9 @@ const meta = {
 The Date Picker is built using a composition of the \`<Popover />\` and the \`<Calendar />\` components.
 
 \`\`\`tsx
-import { Calendar } from "keystoneui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "keystoneui/popover";
-import { Button } from "keystoneui/button";
+import { Calendar } from "@keystoneui/react/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@keystoneui/react/popover";
+import { Button } from "@keystoneui/react/button";
 import { format } from "date-fns";
 
 <Popover>

@@ -1,7 +1,7 @@
 "use client";
 
-import { Input } from "keystoneui/input";
-import { Label } from "keystoneui/label";
+import { Input } from "@keystoneui/react/input";
+import { Label } from "@keystoneui/react/label";
 
 export default function LabelDefault() {
   return (

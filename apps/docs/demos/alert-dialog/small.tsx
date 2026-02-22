@@ -11,8 +11,8 @@ import {
   AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "keystoneui/alert-dialog";
-import { Button } from "keystoneui/button";
+} from "@keystoneui/react/alert-dialog";
+import { Button } from "@keystoneui/react/button";
 import { TrashIcon } from "lucide-react";
 
 export default function AlertDialogSmall() {

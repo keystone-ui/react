@@ -143,7 +143,7 @@ export default function HomePage() {
           </div>
           <div className="mt-6 text-muted-foreground text-sm">
             <code className="rounded-md bg-muted px-3 py-1.5 font-mono text-xs">
-              pnpm add keystoneui @keystone/theme
+              pnpm add @keystoneui/react
             </code>
           </div>
         </div>

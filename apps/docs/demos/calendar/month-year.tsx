@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar } from "keystoneui/calendar";
+import { Calendar } from "@keystoneui/react/calendar";
 
 export default function CalendarMonthYear() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { Skeleton, SkeletonGroup } from "keystoneui/skeleton";
+import { Skeleton, SkeletonGroup } from "@keystoneui/react/skeleton";
 
 export default function SkeletonShimmer() {
   return (

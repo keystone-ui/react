@@ -5,7 +5,7 @@ import {
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
-} from "keystoneui/input-otp";
+} from "@keystoneui/react/input-otp";
 
 export default function InputOTPWithSeparator() {
   return (

@@ -1,7 +1,7 @@
 "use client";
 
-import { Field, FieldDescription, FieldLabel } from "keystoneui/field";
-import { Textarea } from "keystoneui/textarea";
+import { Field, FieldDescription, FieldLabel } from "@keystoneui/react/field";
+import { Textarea } from "@keystoneui/react/textarea";
 
 export default function TextareaDisabled() {
   return (

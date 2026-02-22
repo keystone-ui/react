@@ -1,13 +1,13 @@
 "use client";
 
-import { Badge } from "keystoneui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "keystoneui/card";
+import { Badge } from "@keystoneui/react/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@keystoneui/react/card";
 import {
   DescriptionList,
   DescriptionListDetails,
   DescriptionListItem,
   DescriptionListTerm,
-} from "keystoneui/description-list";
+} from "@keystoneui/react/description-list";
 
 export default function DescriptionListInCard() {
   return (

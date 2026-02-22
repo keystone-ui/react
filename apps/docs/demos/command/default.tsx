@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Command,
   CommandDialog,
@@ -9,7 +9,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "keystoneui/command";
+} from "@keystoneui/react/command";
 import * as React from "react";
 
 export default function CommandDefault() {

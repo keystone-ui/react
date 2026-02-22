@@ -5,7 +5,7 @@ import {
   PaginationContent,
   PaginationItem,
   PaginationLink,
-} from "keystoneui/pagination";
+} from "@keystoneui/react/pagination";
 
 export default function PaginationSimple() {
   return (

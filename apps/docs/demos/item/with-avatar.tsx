@@ -1,13 +1,13 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "keystoneui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
 import {
   Item,
   ItemContent,
   ItemDescription,
   ItemMedia,
   ItemTitle,
-} from "keystoneui/item";
+} from "@keystoneui/react/item";
 
 export default function ItemWithAvatar() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { Badge } from "keystoneui/badge";
+import { Badge } from "@keystoneui/react/badge";
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "keystoneui/table";
+} from "@keystoneui/react/table";
 
 const invoices = [
   {

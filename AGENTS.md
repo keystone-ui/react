@@ -35,7 +35,7 @@ pnpm clean            # Remove build artifacts and node_modules
 ### Testing
 
 ```bash
-pnpm test --filter=keystoneui    # Run component unit tests (Vitest)
+pnpm test --filter=@keystoneui/react    # Run component unit tests (Vitest)
 pnpm test --filter=storybook       # Run Storybook interaction tests
 ```
 
@@ -53,12 +53,12 @@ pnpm preview-storybook   # Preview built Storybook
 Use `--filter` with the package name to target a specific workspace:
 
 ```bash
-pnpm build --filter=keystoneui      # Build only the UI package
+pnpm build --filter=@keystoneui/react      # Build only the UI package
 pnpm build --filter=storybook         # Build only the Storybook docs
-pnpm dev --filter=keystoneui        # Watch-build the UI package
+pnpm dev --filter=@keystoneui/react        # Watch-build the UI package
 ```
 
-Main packages: `keystoneui`, `storybook`, `docs`
+Main packages: `@keystoneui/react`, `storybook`, `docs`
 
 ## Monorepo Structure
 
@@ -71,7 +71,7 @@ Main packages: `keystoneui`, `storybook`, `docs`
 │       ├── content/docs/        # MDX documentation pages
 │       └── app/                 # Next.js routes + LLMs.txt endpoints
 ├── packages/
-│   ├── ui/                      # keystoneui — main component library
+│   ├── ui/                      # @keystoneui/react — main component library
 │   │   └── src/                 # Flat directory: one .tsx file per component
 │   │       └── base.css         # Required component CSS (animations, transitions, hover gating)
 │   │   └── registry/            # shadcn registry items (style + theme JSONs)
@@ -89,7 +89,7 @@ For full conventions, see `.cursor/rules/component-architecture.mdc`.
 - **Flat single-file components**: Every component is one `.tsx` file in `packages/ui/src/` — no nested folders, no barrel files
 - **Base UI primitives**: Use `@base-ui/react`, never `@radix-ui`
 - **CVA variants**: Styling via `class-variance-authority` + `clsx` + `tailwind-merge`
-- **Subpath exports**: Consumers import via `keystoneui/button`, not `keystoneui`
+- **Subpath exports**: Consumers import via `@keystoneui/react/button`, not `@keystoneui/react`
 - **`data-slot` attributes**: Every exported component part gets a `data-slot` for stable targeting
 - **Named exports**: Compound component parts exported individually at the bottom of the file
 - **Internal imports**: Relative sibling imports only (`./utils`, `./button`) — no barrel imports

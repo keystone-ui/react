@@ -51,7 +51,7 @@ Every demo must follow this exact pattern:
 ```tsx
 "use client";
 
-import { MyComponent } from "keystoneui/my-component";
+import { MyComponent } from "@keystoneui/react/my-component";
 
 export default function MyComponentDefault() {
   return <MyComponent>Content</MyComponent>;

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Avatar, AvatarFallback, AvatarImage } from "keystoneui/avatar";
-import { TagRemove } from "keystoneui/tag";
-import { TagGroup, TagGroupItem } from "keystoneui/tag-group";
+import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
+import { TagRemove } from "@keystoneui/react/tag";
+import { TagGroup, TagGroupItem } from "@keystoneui/react/tag-group";
 import {
   CircleXIcon,
   GamepadIcon,
@@ -22,7 +22,7 @@ const meta = {
 A group of badge-shaped tag buttons with shared selection state.
 
 \`\`\`tsx
-import { TagGroup, TagGroupItem } from "keystoneui/tag-group";
+import { TagGroup, TagGroupItem } from "@keystoneui/react/tag-group";
 
 // Multi-select
 <TagGroup multiple defaultValue={["fitness", "parking"]}>

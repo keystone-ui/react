@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Avatar, AvatarFallback, AvatarImage } from "keystoneui/avatar";
-import { Badge } from "keystoneui/badge";
-import { Button } from "keystoneui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
+import { Badge } from "@keystoneui/react/badge";
+import { Button } from "@keystoneui/react/button";
 import {
   Card,
   CardAction,
@@ -10,9 +10,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "keystoneui/card";
-import { Input } from "keystoneui/input";
-import { Label } from "keystoneui/label";
+} from "@keystoneui/react/card";
+import { Input } from "@keystoneui/react/input";
+import { Label } from "@keystoneui/react/label";
 import { BadgeCheckIcon } from "lucide-react";
 
 const meta = {
@@ -33,7 +33,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "keystoneui/card";
+} from "@keystoneui/react/card";
 
 // Basic card
 <Card>

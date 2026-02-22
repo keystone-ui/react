@@ -1,12 +1,12 @@
 "use client";
 
-import { Button } from "keystoneui/button";
+import { Button } from "@keystoneui/react/button";
 import {
   Stepper,
   StepperContent,
   StepperStep,
   useStepper,
-} from "keystoneui/stepper";
+} from "@keystoneui/react/stepper";
 import { useState } from "react";
 
 function StepperNav() {

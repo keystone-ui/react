@@ -1,6 +1,6 @@
 "use client";
 
-import { Toggle } from "keystoneui/toggle";
+import { Toggle } from "@keystoneui/react/toggle";
 import { BoldIcon, ItalicIcon } from "lucide-react";
 
 export default function ToggleOutline() {
