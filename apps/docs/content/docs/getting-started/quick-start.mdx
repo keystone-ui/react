@@ -3,21 +3,35 @@ title: Quick Start
 description: Get up and running with Keystone UI in under 2 minutes.
 ---
 
-## 1. Install
+## Quick Install
 
-```bash
+### 1. Install Package
+
+```bash tab="pnpm"
 pnpm add @keystoneui/react
 ```
 
-## 2. Set Up CSS
+```bash tab="npm"
+npm install @keystoneui/react
+```
 
-**Via registry (recommended):**
+```bash tab="yarn"
+yarn add @keystoneui/react
+```
+
+### 2. Set Up CSS
+
+Run the registry command to generate the complete theme in your `globals.css`:
 
 ```bash
 npx shadcn add https://keystoneui.io/r/keystone-style.json
 ```
 
-**Or manually** -- add the base import and theme tokens to your CSS. See [Installation](/docs/getting-started/installation) for the full manual setup, or copy the complete token reference from [Customization](/docs/theming/customization).
+This adds the base CSS import, dark mode variant, Tailwind color registration, default tokens, and base layer -- everything you need.
+
+### 3. Add Source Directive
+
+Add the `@source` directive to your `globals.css` so Tailwind can find component classes:
 
 ```css title="globals.css"
 @import "tailwindcss";
@@ -25,10 +39,15 @@ npx shadcn add https://keystoneui.io/r/keystone-style.json
 
 @source "../node_modules/@keystoneui/react/src/**/*.{ts,tsx}";
 
-/* ... theme tokens (see Customization page) ... */
+/* ... rest of generated theme ... */
 ```
 
-## 3. Use Components
+<Callout type="info">
+  Without the `@source` directive, Tailwind CSS v4 won't scan Keystone UI's
+  source files and component styles will be missing.
+</Callout>
+
+### 4. Use Components
 
 ```tsx
 import { Button } from "@keystoneui/react/button";
@@ -58,12 +77,147 @@ export default function LoginCard() {
 }
 ```
 
+---
+
+## Manual Setup
+
+If you prefer full control over the theme or aren't using the shadcn CLI, set up the CSS manually.
+
+### 1. Install Package
+
+```bash tab="pnpm"
+pnpm add @keystoneui/react
+```
+
+```bash tab="npm"
+npm install @keystoneui/react
+```
+
+```bash tab="yarn"
+yarn add @keystoneui/react
+```
+
+### 2. Configure CSS
+
+Add the following to your main CSS file. This is the complete default theme -- you can customize any token value.
+
+```css title="globals.css"
+@import "tailwindcss";
+@import "@keystoneui/react/base.css";
+
+@source "../node_modules/@keystoneui/react/src/**/*.{ts,tsx}";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-border-muted: var(--border-muted);
+  --color-popup-ring: var(--popup-ring);
+  --color-input: var(--input);
+  --color-input-bg: var(--input-bg);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.141 0.005 285.823);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.141 0.005 285.823);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.141 0.005 285.823);
+  --primary: oklch(0.21 0.006 285.885);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-hover: color-mix(in oklch, var(--secondary) 97%, black);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.967 0.001 286.375);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --accent: oklch(0.967 0.001 286.375);
+  --accent-foreground: oklch(0.21 0.006 285.885);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.971 0.013 17.38);
+  --border: oklch(0.92 0.004 286.32);
+  --border-muted: oklch(0.92 0.004 286.32 / 0.5);
+  --popup-ring: oklch(0.92 0.004 286.32 / 0.1);
+  --input: oklch(0.92 0.004 286.32);
+  --input-bg: transparent;
+  --ring: oklch(0.705 0.015 286.067);
+  --skeleton-shimmer: oklch(1 0 0 / 0.06);
+  --radius: 0.625rem;
+}
+
+.dark {
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.21 0.006 285.885);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.21 0.006 285.885);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.92 0.004 286.32);
+  --primary-foreground: oklch(0.21 0.006 285.885);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-hover: color-mix(in oklch, var(--secondary) 97%, white);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.971 0.013 17.38);
+  --border: oklch(1 0 0 / 10%);
+  --border-muted: oklch(1 0 0 / 5%);
+  --popup-ring: oklch(1 0 0 / 3%);
+  --input: oklch(1 0 0 / 15%);
+  --input-bg: oklch(1 0 0 / 5%);
+  --ring: oklch(0.552 0.016 285.938);
+  --skeleton-shimmer: oklch(1 0 0 / 0.1);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+```
+
+### 3. Use Components
+
+You're ready to go -- see the [example above](#4-use-components).
+
+---
+
 ## Import Pattern
 
 Every component uses subpath exports. Import only what you need:
 
 ```tsx
-// Each component has its own entry point
 import { Button } from "@keystoneui/react/button";
 import { Badge } from "@keystoneui/react/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@keystoneui/react/tabs";

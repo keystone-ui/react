@@ -3,6 +3,8 @@ title: Installation
 description: Step-by-step guide to installing Keystone UI in your project.
 ---
 
+This page covers the full installation with TypeScript configuration and verification. For a faster setup, see the [Quick Start](/docs/getting-started/quick-start).
+
 ## Install Package
 
 ```bash tab="pnpm"
@@ -21,19 +23,15 @@ yarn add @keystoneui/react
 
 ### Via Registry (recommended)
 
-The fastest way to configure your CSS. The CLI generates the complete theme in your project:
+The CLI generates the complete theme in your `globals.css`:
 
 ```bash
 npx shadcn add https://keystoneui.io/r/keystone-style.json
 ```
 
-This adds `@import "@keystoneui/react/base.css"`, the dark mode variant, Tailwind color registration, default tokens, and base layer to your CSS file.
+This adds the base CSS import, dark mode variant, Tailwind color registration, default tokens, and base layer.
 
-See the [Registry guide](/docs/getting-started/registry) for more options (namespace config, swapping themes, creating your own).
-
-### Manual Setup
-
-Add the base CSS import and define your theme tokens in your main CSS file:
+Then add the `@source` directive so Tailwind can find component classes:
 
 ```css title="globals.css"
 @import "tailwindcss";
@@ -41,34 +39,14 @@ Add the base CSS import and define your theme tokens in your main CSS file:
 
 @source "../node_modules/@keystoneui/react/src/**/*.{ts,tsx}";
 
-/* Then add your theme tokens -- see Customization for the full reference */
-@custom-variant dark (&:is(.dark *));
-
-@theme inline {
-  --color-background: var(--background);
-  --color-primary: var(--primary);
-  /* ... all color mappings -- see /docs/theming/customization */
-}
-
-:root {
-  --background: oklch(1 0 0);
-  --primary: oklch(0.21 0.006 285.885);
-  /* ... all tokens */
-}
-
-.dark {
-  --background: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.92 0.004 286.32);
-  /* ... all tokens */
-}
-
-@layer base {
-  * { @apply border-border outline-ring/50; }
-  body { @apply bg-background text-foreground; }
-}
+/* ... rest of generated theme ... */
 ```
 
-Copy the complete token list from the [Customization](/docs/theming/customization) page.
+See the [Registry guide](/docs/getting-started/registry) for namespace config, swapping themes, and creating your own.
+
+### Manual Setup
+
+If you prefer not to use the CLI, see the complete CSS block in the [Quick Start manual setup](/docs/getting-started/quick-start#manual-setup) section. Copy it into your `globals.css` and customize the token values as needed.
 
 <Callout type="info">
   The `@source` directive tells Tailwind CSS v4 where to find classes used by
