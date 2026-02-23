@@ -1,0 +1,14 @@
+{
+  "title": "Blocks",
+  "icon": "Blocks",
+  "root": true,
+  "pages": [
+    "---Authentication---",
+    "login-01",
+    "login-02",
+    "login-03",
+    "login-04",
+    "---User---",
+    "profile-dropdown-01"
+  ]
+}

@@ -1,7 +1,12 @@
 "use client";
 
 import { Badge } from "@keystoneui/react/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@keystoneui/react/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@keystoneui/react/card";
 import {
   DescriptionList,
   DescriptionListDetails,

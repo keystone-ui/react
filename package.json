@@ -13,6 +13,7 @@
     "fix": "ultracite fix",
     "add:component": "node scripts/add-component.mjs",
     "build:skills": "bash scripts/build-skills.sh",
+    "registry:build": "shadcn build -o apps/docs/public/r",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -20,6 +21,7 @@
     "@changesets/cli": "^2.29.8",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
+    "shadcn": "^3.8.5",
     "turbo": "^2.8.10",
     "ultracite": "7.2.3"
   },

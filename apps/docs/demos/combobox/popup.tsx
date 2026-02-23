@@ -15,8 +15,8 @@ import {
 
 interface Country {
   code: string;
-  value: string;
   label: string;
+  value: string;
 }
 
 const countries: Country[] = [

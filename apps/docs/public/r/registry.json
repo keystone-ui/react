@@ -1,0 +1,102 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "keystoneui",
+  "homepage": "https://keystoneui.io",
+  "items": [
+    {
+      "name": "login-01",
+      "type": "registry:block",
+      "title": "Login 01",
+      "description": "A simple login form inside a card with email and password fields.",
+      "registryDependencies": ["button", "card", "field", "input"],
+      "files": [
+        {
+          "path": "registry/default/blocks/login-01/page.tsx",
+          "type": "registry:page",
+          "target": "app/login/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/login-01/components/login-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "login-02",
+      "type": "registry:block",
+      "title": "Login 02",
+      "description": "A two-column login page with a cover image and GitHub social login.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "field", "input"],
+      "files": [
+        {
+          "path": "registry/default/blocks/login-02/page.tsx",
+          "type": "registry:page",
+          "target": "app/login/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/login-02/components/login-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "login-03",
+      "type": "registry:block",
+      "title": "Login 03",
+      "description": "A login page with a form and image side by side inside a card.",
+      "registryDependencies": ["button", "card", "field", "input"],
+      "files": [
+        {
+          "path": "registry/default/blocks/login-03/page.tsx",
+          "type": "registry:page",
+          "target": "app/login/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/login-03/components/login-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "login-04",
+      "type": "registry:block",
+      "title": "Login 04",
+      "description": "A minimal email-only login page with Apple and Google social providers.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "field", "input"],
+      "files": [
+        {
+          "path": "registry/default/blocks/login-04/page.tsx",
+          "type": "registry:page",
+          "target": "app/login/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/login-04/components/login-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "profile-dropdown-01",
+      "type": "registry:block",
+      "title": "Profile Dropdown 01",
+      "description": "A user profile dropdown with avatar, level progress, and navigation menu.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "dropdown-menu",
+        "progress",
+        "separator"
+      ],
+      "files": [
+        {
+          "path": "registry/default/blocks/profile-dropdown-01/components/profile-dropdown.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}

@@ -7,9 +7,9 @@ import { cn } from "@/lib/cn";
 
 interface ComponentPreviewContainerProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  name: string;
   description?: string;
   hideCode?: boolean;
+  name: string;
 }
 
 export function ComponentPreviewContainer({

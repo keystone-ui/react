@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "profile-dropdown-01",
+  "title": "Profile Dropdown 01",
+  "description": "A user profile dropdown with avatar, level progress, and navigation menu.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": [
+    "avatar",
+    "badge",
+    "button",
+    "dropdown-menu",
+    "progress",
+    "separator"
+  ],
+  "files": [
+    {
+      "path": "registry/default/blocks/profile-dropdown-01/components/profile-dropdown.tsx",
+      "content": "\"use client\";\n\nimport { Avatar, AvatarFallback, AvatarImage } from \"@/components/ui/avatar\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport {\n  DropdownMenu,\n  DropdownMenuContent,\n  DropdownMenuItem,\n  DropdownMenuTrigger,\n} from \"@/components/ui/dropdown-menu\";\nimport {\n  Progress,\n  ProgressIndicator,\n  ProgressTrack,\n} from \"@/components/ui/progress\";\nimport { Separator } from \"@/components/ui/separator\";\nimport {\n  ChevronRight,\n  Gift,\n  Headset,\n  LogOut,\n  Settings,\n  Star,\n  Trophy,\n  Wallet,\n} from \"lucide-react\";\n\nexport function ProfileDropdown() {\n  return (\n    <DropdownMenu>\n      <DropdownMenuTrigger asChild>\n        <Button variant=\"ghost\" className=\"relative size-10 rounded-full\">\n          <Avatar size=\"lg\">\n            <AvatarImage src=\"https://github.com/shadcn.png\" alt=\"User\" />\n            <AvatarFallback>JD</AvatarFallback>\n          </Avatar>\n        </Button>\n      </DropdownMenuTrigger>\n      <DropdownMenuContent align=\"end\" className=\"w-80 p-0\">\n        <div className=\"bg-primary/10 p-4\">\n          <div className=\"flex items-center gap-3\">\n            <Avatar size=\"lg\">\n              <AvatarImage src=\"https://github.com/shadcn.png\" alt=\"User\" />\n              <AvatarFallback>JD</AvatarFallback>\n            </Avatar>\n            <div className=\"flex-1\">\n              <div className=\"flex items-center gap-2\">\n                <span className=\"font-semibold\">John Doe</span>\n                <Badge variant=\"default\" size=\"xs\">\n                  Pro\n                </Badge>\n              </div>\n              <p className=\"text-muted-foreground text-sm\">$1,250.00</p>\n            </div>\n            <div className=\"flex flex-col items-center\">\n              <span className=\"text-muted-foreground text-xs\">Lvl</span>\n              <span className=\"font-bold text-lg\">7</span>\n            </div>\n          </div>\n        </div>\n\n        <div className=\"px-4 py-3\">\n          <div className=\"mb-1.5 flex justify-between text-xs\">\n            <span className=\"text-muted-foreground\">Level 7</span>\n            <span className=\"text-muted-foreground\">Level 8</span>\n          </div>\n          <Progress value={42}>\n            <ProgressTrack className=\"h-1.5\">\n              <ProgressIndicator />\n            </ProgressTrack>\n          </Progress>\n          <p className=\"mt-1 text-center text-muted-foreground text-xs\">\n            42% to next level\n          </p>\n        </div>\n\n        <Separator />\n\n        {[\n          { icon: Wallet, label: \"Wallet\" },\n          { icon: Trophy, label: \"Rewards\" },\n          { icon: Gift, label: \"Bonuses\" },\n          { icon: Star, label: \"Points\" },\n          { icon: Settings, label: \"Settings\" },\n          { icon: Headset, label: \"Support\" },\n        ].map(({ icon: Icon, label }) => (\n          <DropdownMenuItem\n            key={label}\n            className=\"flex cursor-pointer items-center justify-between px-4 py-3\"\n          >\n            <span className=\"flex items-center gap-3\">\n              <Icon className=\"size-4 text-muted-foreground\" />\n              {label}\n            </span>\n            <ChevronRight className=\"size-4 text-muted-foreground\" />\n          </DropdownMenuItem>\n        ))}\n\n        <Separator />\n\n        <DropdownMenuItem className=\"flex cursor-pointer items-center justify-center gap-2 px-4 py-3 text-destructive\">\n          <LogOut className=\"size-4\" />\n          Log Out\n        </DropdownMenuItem>\n      </DropdownMenuContent>\n    </DropdownMenu>\n  );\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "type": "registry:block"
+}

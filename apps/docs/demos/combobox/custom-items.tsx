@@ -10,9 +10,9 @@ import {
 } from "@keystoneui/react/combobox";
 
 interface Framework {
+  description: string;
   label: string;
   value: string;
-  description: string;
 }
 
 const frameworks: Framework[] = [

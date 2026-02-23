@@ -1,12 +1,12 @@
 "use client";
 
-import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
   CarouselContent,
   CarouselDots,
   CarouselItem,
 } from "@keystoneui/react/carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 export default function CarouselAutoplay() {
   return (

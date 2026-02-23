@@ -5,9 +5,9 @@ import { ComponentPreviewContainer } from "./component-preview-container";
 import { ComponentSource } from "./component-source";
 
 interface ComponentPreviewProps extends React.HTMLAttributes<HTMLDivElement> {
-  name: string;
   description?: string;
   hideCode?: boolean;
+  name: string;
 }
 
 export function ComponentPreview({
