@@ -12,8 +12,8 @@ import { type FontId, fonts } from "../constants";
 import type { SetThemeState, ThemeState } from "../hooks/use-theme-state";
 
 interface FontPickerProps {
-  state: ThemeState;
   setState: SetThemeState;
+  state: ThemeState;
 }
 
 export function FontPicker({ state, setState }: FontPickerProps) {

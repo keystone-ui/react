@@ -1,4 +1,5 @@
 {
   "title": "Theming",
+  "icon": "Palette",
   "pages": ["index", "colors", "dark-mode", "customization"]
 }

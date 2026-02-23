@@ -1,5 +1,5 @@
 ---
-title: Theming
+title: Overview
 description: Understand how the Keystone UI design token system works.
 ---
 
@@ -20,7 +20,7 @@ Component runtime CSS that every project must import. Contains hover gating, ani
 
 ### 2. Theme tokens -- Consumer-owned
 
-Color variables, Tailwind registration, dark mode variant, and base layer defaults. You define these in your own CSS file. The easiest way to get started is via the [Registry CLI](/docs/getting-started/registry).
+Color variables, Tailwind registration, dark mode variant, and base layer defaults. You define these in your own CSS file. The easiest way to get started is via the [Registry CLI](/docs/installation/registry).
 
 A complete theme includes:
 
@@ -35,10 +35,10 @@ A complete theme includes:
 **Via registry (recommended):**
 
 ```bash
-npx shadcn add https://keystoneui.io/r/keystone-style.json
+npx shadcn add https://keystoneui.io/r/default.json
 ```
 
-This generates the complete theme CSS in your project. See [Registry](/docs/getting-started/registry) for details.
+This generates the complete theme CSS in your project. See [Registry](/docs/installation/registry) for details.
 
 **Manual setup:** Copy the token blocks from the [Customization](/docs/theming/customization) page into your CSS.
 

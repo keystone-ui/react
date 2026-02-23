@@ -1,5 +1,7 @@
 {
   "title": "Components",
+  "icon": "Component",
+  "root": true,
   "pages": [
     "button",
     "input",

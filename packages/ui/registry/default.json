@@ -1,6 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-  "name": "keystone",
+  "name": "default",
   "type": "registry:style",
   "dependencies": ["@keystoneui/react"],
   "css": {

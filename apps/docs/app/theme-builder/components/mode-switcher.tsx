@@ -5,8 +5,8 @@ import { MoonIcon, SunIcon } from "lucide-react";
 import type { SetThemeState, ThemeState } from "../hooks/use-theme-state";
 
 interface ModeSwitcherProps {
-  state: ThemeState;
   setState: SetThemeState;
+  state: ThemeState;
 }
 
 export function ModeSwitcher({ state, setState }: ModeSwitcherProps) {

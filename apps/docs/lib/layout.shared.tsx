@@ -13,21 +13,12 @@ export function baseOptions(): BaseLayoutProps {
         active: "nested-url",
       },
       {
-        text: "Components",
-        url: "/docs/components/button",
-        active: "nested-url",
-      },
-      {
-        text: "Themes",
-        url: "/themes",
+        text: "Theme Builder",
+        url: "/theme-builder",
       },
       {
         text: "Gallery",
         url: "/gallery",
-      },
-      {
-        text: "Blog",
-        url: "/blog",
       },
       {
         text: "Changelog",

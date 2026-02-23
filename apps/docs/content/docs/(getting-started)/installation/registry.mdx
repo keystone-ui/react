@@ -12,7 +12,7 @@ Keystone UI supports the [shadcn registry](https://ui.shadcn.com/docs/registry) 
 pnpm add @keystoneui/react
 
 # 2. Install the Keystone style (generates theme CSS in your project)
-npx shadcn add https://keystoneui.io/r/keystone-style.json
+npx shadcn add https://keystoneui.io/r/default.json
 ```
 
 The CLI generates the complete theme CSS in your `globals.css`: dark mode variant, Tailwind registration, color tokens, and base layer defaults.
@@ -26,7 +26,7 @@ Keystone provides two registry item types:
 Installs everything you need: `@import "@keystoneui/react/base.css"`, `@custom-variant dark`, `@theme inline` block, default color tokens (`:root` / `.dark`), and `@layer base`.
 
 ```bash
-npx shadcn add https://keystoneui.io/r/keystone-style.json
+npx shadcn add https://keystoneui.io/r/default.json
 ```
 
 Use this when setting up a new project.
@@ -70,7 +70,7 @@ For repeated use, configure the `@keystone` namespace in your `components.json`:
 Then install by name:
 
 ```bash
-npx shadcn add @keystone/keystone-style
+npx shadcn add @keystone/default
 npx shadcn add @keystone/themes/purple
 ```
 

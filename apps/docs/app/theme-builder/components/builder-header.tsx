@@ -8,10 +8,10 @@ import type { SetThemeState, ThemeState } from "../hooks/use-theme-state";
 import { ModeSwitcher } from "./mode-switcher";
 
 interface BuilderHeaderProps {
-  state: ThemeState;
-  setState: SetThemeState;
   isCodeVisible: boolean;
   onToggleCode: () => void;
+  setState: SetThemeState;
+  state: ThemeState;
 }
 
 export function BuilderHeader({

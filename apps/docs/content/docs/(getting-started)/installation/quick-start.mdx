@@ -3,9 +3,7 @@ title: Quick Start
 description: Get up and running with Keystone UI in under 2 minutes.
 ---
 
-## Quick Install
-
-### 1. Install Package
+## Install Package
 
 ```bash tab="pnpm"
 pnpm add @keystoneui/react
@@ -19,19 +17,19 @@ npm install @keystoneui/react
 yarn add @keystoneui/react
 ```
 
-### 2. Set Up CSS
+## Set Up CSS
+
+### Via Registry (recommended)
 
 Run the registry command to generate the complete theme in your `globals.css`:
 
 ```bash
-npx shadcn add https://keystoneui.io/r/keystone-style.json
+npx shadcn add https://keystoneui.io/r/default.json
 ```
 
 This adds the base CSS import, dark mode variant, Tailwind color registration, default tokens, and base layer -- everything you need.
 
-### 3. Add Source Directive
-
-Add the `@source` directive to your `globals.css` so Tailwind can find component classes:
+Then add the `@source` directive so Tailwind can find component classes:
 
 ```css title="globals.css"
 @import "tailwindcss";
@@ -43,63 +41,16 @@ Add the `@source` directive to your `globals.css` so Tailwind can find component
 ```
 
 <Callout type="info">
-  Without the `@source` directive, Tailwind CSS v4 won't scan Keystone UI's
-  source files and component styles will be missing.
+  Keystone UI components use Tailwind utility classes directly in their source
+  files. The `@source` directive tells Tailwind CSS v4 to scan those files so it
+  generates the required classes. Without it, component styles will be missing.
 </Callout>
 
-### 4. Use Components
+See the [Registry guide](/docs/installation/registry) for namespace config, swapping themes, and creating your own.
 
-```tsx
-import { Button } from "@keystoneui/react/button";
-import { Input } from "@keystoneui/react/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@keystoneui/react/card";
+### Manual Setup
 
-export default function LoginCard() {
-  return (
-    <Card className="w-[380px]">
-      <CardHeader>
-        <CardTitle>Sign In</CardTitle>
-        <CardDescription>Enter your credentials to continue.</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <Input type="email" placeholder="Email" />
-        <Input type="password" placeholder="Password" />
-        <Button className="w-full">Sign In</Button>
-      </CardContent>
-    </Card>
-  );
-}
-```
-
----
-
-## Manual Setup
-
-If you prefer full control over the theme or aren't using the shadcn CLI, set up the CSS manually.
-
-### 1. Install Package
-
-```bash tab="pnpm"
-pnpm add @keystoneui/react
-```
-
-```bash tab="npm"
-npm install @keystoneui/react
-```
-
-```bash tab="yarn"
-yarn add @keystoneui/react
-```
-
-### 2. Configure CSS
-
-Add the following to your main CSS file. This is the complete default theme -- you can customize any token value.
+If you prefer full control over the theme or aren't using the shadcn CLI, add the following to your main CSS file. This is the complete default theme -- you can customize any token value.
 
 ```css title="globals.css"
 @import "tailwindcss";
@@ -207,11 +158,37 @@ Add the following to your main CSS file. This is the complete default theme -- y
 }
 ```
 
-### 3. Use Components
-
-You're ready to go -- see the [example above](#4-use-components).
-
 ---
+
+## Use Components
+
+```tsx
+import { Button } from "@keystoneui/react/button";
+import { Input } from "@keystoneui/react/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@keystoneui/react/card";
+
+export default function LoginCard() {
+  return (
+    <Card className="w-[380px]">
+      <CardHeader>
+        <CardTitle>Sign In</CardTitle>
+        <CardDescription>Enter your credentials to continue.</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <Input type="email" placeholder="Email" />
+        <Input type="password" placeholder="Password" />
+        <Button className="w-full">Sign In</Button>
+      </CardContent>
+    </Card>
+  );
+}
+```
 
 ## Import Pattern
 
@@ -243,6 +220,6 @@ All components will automatically adapt to dark mode with carefully tuned colors
 ## What's Next?
 
 - [Theming Guide](/docs/theming) -- Customize colors and tokens
-- [Registry](/docs/getting-started/registry) -- Install and swap themes via CLI
+- [Registry](/docs/installation/registry) -- Install and swap themes via CLI
 - [Button](/docs/components/button) -- Explore button variants and sizes
 - [All Components](/docs/components/button) -- Browse the full component library

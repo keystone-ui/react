@@ -102,6 +102,11 @@
   --skeleton-shimmer: oklch(1 0 0 / 0.1);
 }
 
+#nd-subnav {
+  background: transparent !important;
+  backdrop-filter: none !important;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

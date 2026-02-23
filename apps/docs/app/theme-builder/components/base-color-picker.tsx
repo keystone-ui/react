@@ -1,12 +1,16 @@
 "use client";
 
-import { Popover, PopoverContent, PopoverTrigger } from "@keystoneui/react/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@keystoneui/react/popover";
 import type { SetThemeState, ThemeState } from "../hooks/use-theme-state";
 import type { BaseColorId } from "../theme-data";
 
 interface BaseColorPickerProps {
-  state: ThemeState;
   setState: SetThemeState;
+  state: ThemeState;
 }
 
 const swatches: Array<{ id: BaseColorId; label: string; swatch: string }> = [

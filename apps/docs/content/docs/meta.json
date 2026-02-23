@@ -1,15 +1,5 @@
 {
   "title": "Docs",
-  "pages": [
-    "---Introduction---",
-    "index",
-    "---Getting Started---",
-    "getting-started",
-    "---Theming---",
-    "theming",
-    "---AI for Agents---",
-    "agents",
-    "---Components---",
-    "components"
-  ]
+  "root": true,
+  "pages": ["(getting-started)", "components"]
 }

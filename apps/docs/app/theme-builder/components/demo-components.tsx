@@ -27,7 +27,12 @@ import {
   SliderTrack,
 } from "@keystoneui/react/slider";
 import { Switch } from "@keystoneui/react/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@keystoneui/react/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@keystoneui/react/tabs";
 import { InfoIcon, MailIcon, UserIcon } from "lucide-react";
 
 /**

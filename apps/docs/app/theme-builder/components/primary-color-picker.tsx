@@ -1,7 +1,11 @@
 "use client";
 
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@keystoneui/react/popover";
 import { converter, formatHex } from "culori";
-import { Popover, PopoverContent, PopoverTrigger } from "@keystoneui/react/popover";
 import { useMemo } from "react";
 import {
   type Color,
@@ -21,8 +25,8 @@ import {
 const toOklch = converter("oklch");
 
 interface PrimaryColorPickerProps {
-  state: ThemeState;
   setState: SetThemeState;
+  state: ThemeState;
 }
 
 export function PrimaryColorPicker({

@@ -7,9 +7,9 @@ import type { ThemeState } from "../hooks/use-theme-state";
 import { generateCssOutput } from "../utils/generate-css-output";
 
 interface CodePanelProps {
-  state: ThemeState;
   isVisible: boolean;
   onClose: () => void;
+  state: ThemeState;
 }
 
 export function CodePanel({ state, isVisible, onClose }: CodePanelProps) {

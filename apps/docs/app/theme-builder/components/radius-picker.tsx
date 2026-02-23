@@ -12,8 +12,8 @@ import { type RadiusId, radiusOptions } from "../constants";
 import type { SetThemeState, ThemeState } from "../hooks/use-theme-state";
 
 interface RadiusPickerProps {
-  state: ThemeState;
   setState: SetThemeState;
+  state: ThemeState;
 }
 
 export function RadiusPicker({ state, setState }: RadiusPickerProps) {

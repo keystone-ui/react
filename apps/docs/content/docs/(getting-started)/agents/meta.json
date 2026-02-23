@@ -1,4 +1,5 @@
 {
   "title": "AI for Agents",
+  "icon": "Bot",
   "pages": ["llms-txt"]
 }

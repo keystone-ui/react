@@ -1,0 +1,6 @@
+{
+  "title": "Getting Started",
+  "icon": "BookOpen",
+  "root": true,
+  "pages": ["index", "installation", "theming", "agents"]
+}
