@@ -43,7 +43,7 @@ export function LoginForm({
           <Button type="submit">Login</Button>
         </Field>
         <FieldSeparator>Or continue with</FieldSeparator>
-        <Field>
+        <Field className="gap-3">
           <Button type="button" variant="outline">
             <svg
               aria-hidden="true"

@@ -86,7 +86,7 @@
       "registryDependencies": [
         "avatar",
         "badge",
-        "button",
+        "circular-progress",
         "dropdown-menu",
         "progress",
         "separator"

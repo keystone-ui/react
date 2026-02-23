@@ -51,7 +51,7 @@ function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
                 </div>
                 <Input id="password" required type="password" />
               </Field>
-              <Field>
+              <Field className="gap-3">
                 <Button type="submit">Login</Button>
                 <Button type="button" variant="outline">
                   Login with Google

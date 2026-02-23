@@ -12,7 +12,11 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import {
+  CircularProgress,
+  CircularProgressIndicator,
+  CircularProgressTrack,
+} from "@/components/ui/circular-progress";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,24 +34,37 @@ export function ProfileDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="relative size-10 rounded-full" variant="ghost">
-          <Avatar size="lg">
-            <AvatarImage alt="User" src="https://github.com/shadcn.png" />
-            <AvatarFallback>JD</AvatarFallback>
-          </Avatar>
-        </Button>
+        <button className="relative cursor-pointer" type="button">
+          <CircularProgress className="size-13" color="default" value={42}>
+            <CircularProgressTrack />
+            <CircularProgressIndicator />
+            <Avatar className="relative" size="lg">
+              <AvatarImage
+                alt="User"
+                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+              />
+              <AvatarFallback>JD</AvatarFallback>
+            </Avatar>
+            <span className="absolute right-0 bottom-0 z-10 inline-flex size-5 items-center justify-center rounded-full bg-primary font-bold text-[10px] text-primary-foreground ring-2 ring-background">
+              7
+            </span>
+          </CircularProgress>
+        </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80 p-0">
-        <div className="bg-primary/10 p-4">
+      <DropdownMenuContent align="end" className="w-80">
+        <div className="rounded-md bg-primary/10 p-4">
           <div className="flex items-center gap-3">
             <Avatar size="lg">
-              <AvatarImage alt="User" src="https://github.com/shadcn.png" />
+              <AvatarImage
+                alt="User"
+                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+              />
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <span className="font-semibold">John Doe</span>
-                <Badge size="xs" variant="default">
+                <Badge size="sm" variant="default">
                   Pro
                 </Badge>
               </div>
@@ -77,32 +94,39 @@ export function ProfileDropdown() {
 
         <Separator />
 
-        {[
-          { icon: Wallet, label: "Wallet" },
-          { icon: Trophy, label: "Rewards" },
-          { icon: Gift, label: "Bonuses" },
-          { icon: Star, label: "Points" },
-          { icon: Settings, label: "Settings" },
-          { icon: Headset, label: "Support" },
-        ].map(({ icon: Icon, label }) => (
-          <DropdownMenuItem
-            className="flex cursor-pointer items-center justify-between px-4 py-3"
-            key={label}
-          >
-            <span className="flex items-center gap-3">
-              <Icon className="size-4 text-muted-foreground" />
-              {label}
-            </span>
-            <ChevronRight className="size-4 text-muted-foreground" />
-          </DropdownMenuItem>
-        ))}
+        <div className="py-1">
+          {[
+            { icon: Wallet, label: "Wallet" },
+            { icon: Trophy, label: "Rewards" },
+            { icon: Gift, label: "Bonuses" },
+            { icon: Star, label: "Points" },
+            { icon: Settings, label: "Settings" },
+            { icon: Headset, label: "Support" },
+          ].map(({ icon: Icon, label }) => (
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center justify-between"
+              key={label}
+            >
+              <span className="flex items-center gap-3">
+                <Icon className="size-4 text-muted-foreground" />
+                {label}
+              </span>
+              <ChevronRight className="size-4 text-muted-foreground" />
+            </DropdownMenuItem>
+          ))}
+        </div>
 
         <Separator />
 
-        <DropdownMenuItem className="flex cursor-pointer items-center justify-center gap-2 px-4 py-3 text-destructive">
-          <LogOut className="size-4" />
-          Log Out
-        </DropdownMenuItem>
+        <div className="py-1">
+          <DropdownMenuItem
+            className="flex cursor-pointer items-center justify-center gap-2"
+            variant="destructive"
+          >
+            <LogOut className="size-4" />
+            Log Out
+          </DropdownMenuItem>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );

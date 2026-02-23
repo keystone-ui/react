@@ -13,7 +13,7 @@ import { GalleryVerticalEnd } from "lucide-react";
 
 function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div className={className} {...props}>
+    <div className={`flex flex-col gap-6 ${className ?? ""}`} {...props}>
       <form>
         <FieldGroup>
           <div className="flex flex-col items-center gap-2 text-center">
@@ -79,7 +79,7 @@ function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
           </Field>
         </FieldGroup>
       </form>
-      <FieldDescription className="mt-6 px-6 text-center">
+      <FieldDescription className="px-6 text-center">
         By clicking continue, you agree to our{" "}
         {/* biome-ignore lint/a11y/useValidAnchor: demo placeholder link */}
         <a className="underline underline-offset-4" href="#">
