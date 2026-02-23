@@ -2,9 +2,11 @@
 
 import {
   ChevronRight,
+  Gem,
   Gift,
   Headset,
   LogOut,
+  MailCheck,
   Settings,
   Star,
   Trophy,
@@ -33,26 +35,24 @@ import { Separator } from "@/components/ui/separator";
 export function ProfileDropdown() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="relative cursor-pointer" type="button">
-          <CircularProgress className="size-13" color="default" value={42}>
-            <CircularProgressTrack />
-            <CircularProgressIndicator />
-            <Avatar className="relative" size="lg">
-              <AvatarImage
-                alt="User"
-                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
-              />
-              <AvatarFallback>JD</AvatarFallback>
-            </Avatar>
-            <span className="absolute right-0 bottom-0 z-10 inline-flex size-5 items-center justify-center rounded-full bg-primary font-bold text-[10px] text-primary-foreground ring-2 ring-background">
-              7
-            </span>
-          </CircularProgress>
-        </button>
+      <DropdownMenuTrigger className="relative cursor-pointer">
+        <CircularProgress className="size-13" color="default" value={42}>
+          <CircularProgressTrack />
+          <CircularProgressIndicator />
+          <Avatar className="relative" size="lg">
+            <AvatarImage
+              alt="User"
+              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+            />
+            <AvatarFallback>JD</AvatarFallback>
+          </Avatar>
+          <span className="absolute right-0 bottom-0 z-10 inline-flex size-5 items-center justify-center rounded-full bg-primary font-bold text-[10px] text-primary-foreground ring-2 ring-background">
+            7
+          </span>
+        </CircularProgress>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80">
-        <div className="rounded-md bg-primary/10 p-4">
+      <DropdownMenuContent align="end" className="w-88 p-3">
+        <div className="-mx-3 -mt-3 bg-gradient-to-b from-primary/5 to-transparent p-4 pt-5">
           <div className="flex items-center gap-3">
             <Avatar size="lg">
               <AvatarImage
@@ -69,6 +69,24 @@ export function ProfileDropdown() {
                 </Badge>
               </div>
               <p className="text-muted-foreground text-sm">$1,250.00</p>
+              <div className="mt-2 flex gap-1.5">
+                <Badge
+                  className="border-primary/20 bg-primary/15 text-primary"
+                  size="sm"
+                  variant="outline"
+                >
+                  <Gem className="size-3" />
+                  VIP User
+                </Badge>
+                <Badge
+                  className="border-emerald-500/20 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
+                  size="sm"
+                  variant="outline"
+                >
+                  <MailCheck className="size-3" />
+                  Email Verified
+                </Badge>
+              </div>
             </div>
             <svg
               className="size-10 shrink-0"
@@ -149,10 +167,11 @@ export function ProfileDropdown() {
           </div>
         </div>
 
-        <div className="px-4 py-3">
+        <div className="py-2">
           <div className="mb-1.5 flex justify-between text-xs">
-            <span className="text-muted-foreground">Level 7</span>
-            <span className="text-muted-foreground">42% to next level</span>
+            <span className="font-medium">Level 7</span>
+            <span className="text-muted-foreground">42%</span>
+            <span className="font-medium">Level 8</span>
           </div>
           <Progress value={42}>
             <ProgressTrack className="h-1.5">
@@ -161,7 +180,7 @@ export function ProfileDropdown() {
           </Progress>
         </div>
 
-        <Separator />
+        <Separator className="my-2" />
 
         {[
           { icon: Wallet, label: "Wallet" },
@@ -183,10 +202,10 @@ export function ProfileDropdown() {
           </DropdownMenuItem>
         ))}
 
-        <Separator />
+        <Separator className="my-2" />
 
         <DropdownMenuItem
-          className="-mb-1 flex cursor-pointer items-center justify-center gap-2"
+          className="flex cursor-pointer items-center justify-center gap-2"
           variant="destructive"
         >
           <LogOut className="size-4" />
