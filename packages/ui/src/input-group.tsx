@@ -12,13 +12,13 @@ import { cn } from "./utils";
 // =============================================================================
 export interface InputGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
-   * Optional additional className for the input group
-   */
-  className?: string;
-  /**
    * The children of the input group
    */
   children: React.ReactNode;
+  /**
+   * Optional additional className for the input group
+   */
+  className?: string;
   /**
    * Size variant of the input group
    * @default "default"
@@ -36,8 +36,9 @@ export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
           size === "default" && "h-10",
           size === "sm" && "h-8",
 
-          // Textarea: auto-height when containing a textarea
-          "has-[>textarea]:h-auto",
+          // Textarea: auto-height, bottom-align addon so it stays anchored as textarea grows
+          "has-[>textarea]:h-auto has-[>textarea]:items-end",
+          "has-[>textarea]:[&_[data-slot=input-group-addon]]:pb-2",
 
           // Alignment variants - adjust input padding based on addon position
           "has-[>[data-align=inline-start]]:[&_[data-slot=input-group-control]]:pl-1.5",
@@ -249,7 +250,7 @@ export const InputGroupTextarea = React.forwardRef<
   return (
     <Textarea
       className={cn(
-        "field-sizing-content min-h-10 flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none dark:bg-transparent",
+        "field-sizing-content min-h-10 flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none md:py-2.5 dark:bg-transparent",
         "focus:border-transparent focus:shadow-none focus:ring-0",
         className
       )}
