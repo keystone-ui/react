@@ -26,10 +26,10 @@ import {
   TagIcon,
   Trash2Icon,
 } from "lucide-react";
-import * as React from "react";
+import { useState } from "react";
 
 export default function ButtonGroupEmailToolbar() {
-  const [label, setLabel] = React.useState("personal");
+  const [label, setLabel] = useState("personal");
 
   return (
     <ButtonGroup>

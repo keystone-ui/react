@@ -10,10 +10,10 @@ import {
   CommandItem,
   CommandList,
 } from "@keystoneui/react/command";
-import * as React from "react";
+import { useState } from "react";
 
 export default function CommandDefault() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-4">

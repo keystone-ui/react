@@ -51,7 +51,7 @@ function ProfileDropdown() {
           </CircularProgress>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-80">
+      <DropdownMenuContent align="end" className="w-80 p-3">
         <div className="rounded-md bg-primary/10 p-4">
           <div className="flex items-center gap-3">
             <Avatar size="lg">
@@ -149,7 +149,7 @@ function ProfileDropdown() {
           </div>
         </div>
 
-        <div className="px-4 py-3">
+        <div className="py-2">
           <div className="mb-1.5 flex justify-between text-xs">
             <span className="text-muted-foreground">Level 7</span>
             <span className="text-muted-foreground">42% to next level</span>
@@ -186,7 +186,7 @@ function ProfileDropdown() {
         <Separator />
 
         <DropdownMenuItem
-          className="-mb-1 flex cursor-pointer items-center justify-center gap-2"
+          className="-mb-3 flex cursor-pointer items-center justify-center gap-2"
           variant="destructive"
         >
           <LogOut className="size-4" />

@@ -17,17 +17,17 @@ import { Input } from "@keystoneui/react/input";
 import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
 import { Switch } from "@keystoneui/react/switch";
 import { MinusIcon, PlusIcon } from "lucide-react";
-import * as React from "react";
+import { type ChangeEvent, useCallback, useState } from "react";
 
 export default function FieldSettingsForm() {
-  const [gpuCount, setGpuCount] = React.useState(8);
+  const [gpuCount, setGpuCount] = useState(8);
 
-  const handleGpuAdjustment = React.useCallback((adjustment: number) => {
+  const handleGpuAdjustment = useCallback((adjustment: number) => {
     setGpuCount((prev) => Math.max(1, Math.min(99, prev + adjustment)));
   }, []);
 
-  const handleGpuInputChange = React.useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleGpuInputChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
       const value = Number.parseInt(e.target.value, 10);
       if (!Number.isNaN(value) && value >= 1 && value <= 99) {
         setGpuCount(value);

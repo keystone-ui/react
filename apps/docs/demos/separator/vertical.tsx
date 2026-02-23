@@ -1,0 +1,15 @@
+"use client";
+
+import { Separator } from "@keystoneui/react/separator";
+
+export default function SeparatorVertical() {
+  return (
+    <div className="flex h-5 items-center space-x-4 text-sm">
+      <span>Blog</span>
+      <Separator orientation="vertical" />
+      <span>Docs</span>
+      <Separator orientation="vertical" />
+      <span>Source</span>
+    </div>
+  );
+}

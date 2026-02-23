@@ -12,10 +12,10 @@ import {
   CommandShortcut,
 } from "@keystoneui/react/command";
 import { CreditCardIcon, SettingsIcon, UserIcon } from "lucide-react";
-import * as React from "react";
+import { useState } from "react";
 
 export default function CommandWithShortcuts() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-4">
