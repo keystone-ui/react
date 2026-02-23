@@ -30,7 +30,7 @@ export default function ItemLink() {
       <Item
         render={
           <a
-            href="https://keystoneui.dev"
+            href="https://keystoneui.io"
             rel="noopener noreferrer"
             target="_blank"
           >

@@ -9,7 +9,7 @@ export const LLMS_TEXT_HEADERS = {
   "Content-Type": "text/plain; charset=utf-8",
 } as const;
 
-const SITE_URL = "https://keystoneui.dev";
+const SITE_URL = "https://keystoneui.io";
 const GITHUB_RAW_URL =
   "https://raw.githubusercontent.com/keystone-ui/react/refs/heads/main/apps/docs/content/docs";
 
@@ -59,11 +59,11 @@ export function generateIndexHeader(): string[] {
     "",
     "> A modern React component library built with Tailwind CSS v4 and Base UI.",
     "",
-    "Keystone UI provides 54+ production-ready, accessible React components with dark mode support, OKLCH color tokens, and tree-shakeable subpath exports.",
+    "Keystone UI provides 50+ production-ready, accessible React components with dark mode support, OKLCH color tokens, and tree-shakeable subpath exports.",
     "",
     "**Key Features:**",
     "",
-    "- 54+ Components — Buttons, inputs, modals, tables, and everything in between",
+    "- 50+ Components — Buttons, inputs, modals, tables, and everything in between",
     "- Accessible — Built on Base UI primitives with ARIA support and keyboard navigation",
     "- Tailwind CSS v4 — CSS-first configuration with OKLCH color tokens",
     "- Dark Mode — First-class dark mode with automatic adaptation",
