@@ -25,7 +25,7 @@ const buttonVariants = cva(
         ghost:
           "bg-transparent hover:bg-accent active:bg-accent disabled:bg-transparent disabled:text-foreground/50",
         outline:
-          "border border-input bg-background shadow-xs hover:bg-accent hover:text-foreground active:bg-accent active:text-foreground disabled:border-border/50 disabled:bg-transparent disabled:text-foreground/50 aria-expanded:bg-accent aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:active:bg-input/50 dark:hover:bg-input/50",
+          "border border-input bg-background shadow-xs hover:bg-accent hover:text-foreground active:bg-accent active:text-foreground disabled:border-border/50 disabled:bg-transparent disabled:text-foreground/50 aria-expanded:bg-accent aria-expanded:text-foreground dark:border-input dark:bg-input-bg dark:active:bg-input/50 dark:hover:bg-input/50",
         link: "text-primary underline-offset-4 hover:underline active:scale-100",
       },
       size: {
@@ -58,17 +58,10 @@ type ButtonVariantsProps = VariantProps<typeof buttonVariants>;
 export interface ButtonProps
   extends ButtonPrimitive.Props,
     ButtonVariantsProps {
-  /**
-   * The visual style of the button.
-   * @default "default"
-   */
-  variant?:
-    | "default"
-    | "secondary"
-    | "destructive"
-    | "ghost"
-    | "outline"
-    | "link";
+  /** Whether the button should span the full width of its container. */
+  fullWidth?: boolean;
+  /** Shows a loading spinner and disables the button. */
+  isLoading?: boolean;
   /**
    * The size of the button.
    * @default "default"
@@ -82,10 +75,17 @@ export interface ButtonProps
     | "icon-xs"
     | "icon-sm"
     | "icon-lg";
-  /** Whether the button should span the full width of its container. */
-  fullWidth?: boolean;
-  /** Shows a loading spinner and disables the button. */
-  isLoading?: boolean;
+  /**
+   * The visual style of the button.
+   * @default "default"
+   */
+  variant?:
+    | "default"
+    | "secondary"
+    | "destructive"
+    | "ghost"
+    | "outline"
+    | "link";
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
