@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Field, FieldDescription, FieldLabel } from "@keystoneui/react/field";
 import { ToggleGroup, ToggleGroupItem } from "@keystoneui/react/toggle-group";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   AlignCenterIcon,
   AlignJustifyIcon,
@@ -59,9 +60,16 @@ import { ToggleGroup, ToggleGroupItem } from "@keystoneui/react/toggle-group";
 - Two variants: \`default\` and \`outline\`
 - Three sizes: \`sm\`, \`default\`, \`lg\`
 - Single or multiple selection modes
+- \`spacing\` prop: \`0\` (default) joins items with connected borders, \`>0\` adds a gap
+- \`orientation\` prop: \`horizontal\` (default) or \`vertical\`
 - Controlled and uncontrolled value management
 - Keyboard navigation via Base UI ToggleGroup primitive
-- Group-level variant and size props cascade to items via context
+- Group-level variant, size, spacing, and orientation props cascade to items via context
+
+## ButtonGroup vs ToggleGroup
+
+Use the **ButtonGroup** component when you want to group buttons that perform an action.
+Use the **ToggleGroup** component when you want to group buttons that toggle a state.
 `,
       },
     },
@@ -251,6 +259,154 @@ export const Sizes: Story = {
 };
 
 // ---------------------------------------------------------------------------
+// Spacing
+// ---------------------------------------------------------------------------
+
+export const Spacing: Story = {
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
+        <p className="font-semibold text-sm">Joined (spacing=0, default)</p>
+        <ToggleGroup defaultValue={["all"]} variant="outline">
+          <ToggleGroupItem value="all">All</ToggleGroupItem>
+          <ToggleGroupItem value="missed">Missed</ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <p className="font-semibold text-sm">Spaced (spacing=2)</p>
+        <ToggleGroup defaultValue={["all"]} spacing={2} variant="outline">
+          <ToggleGroupItem value="all">All</ToggleGroupItem>
+          <ToggleGroupItem value="missed">Missed</ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const missedButtons = canvas.getAllByRole("button", { name: /missed/i });
+
+    await userEvent.click(missedButtons[0]);
+    await expect(missedButtons[0]).toHaveAttribute("aria-pressed", "true");
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Use the `spacing` prop to control the gap between items. When `0` (default), items join with connected borders. Values greater than `0` add a gap using the spacing scale.",
+      },
+    },
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Text Labels
+// ---------------------------------------------------------------------------
+
+export const TextLabels: Story = {
+  name: "Text Labels",
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <ToggleGroup defaultValue={["all"]} variant="outline">
+        <ToggleGroupItem value="all">All</ToggleGroupItem>
+        <ToggleGroupItem value="missed">Missed</ToggleGroupItem>
+      </ToggleGroup>
+
+      <ToggleGroup defaultValue={["day"]} size="sm" variant="outline">
+        <ToggleGroupItem value="day">Day</ToggleGroupItem>
+        <ToggleGroupItem value="week">Week</ToggleGroupItem>
+        <ToggleGroupItem value="month">Month</ToggleGroupItem>
+        <ToggleGroupItem value="year">Year</ToggleGroupItem>
+      </ToggleGroup>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const weekButton = canvas.getByRole("button", { name: /week/i });
+
+    await userEvent.click(weekButton);
+    await expect(weekButton).toHaveAttribute("aria-pressed", "true");
+
+    const dayButton = canvas.getByRole("button", { name: /^day$/i });
+    await expect(dayButton).toHaveAttribute("aria-pressed", "false");
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Toggle groups work well with text labels for filter-style and segmented controls.",
+      },
+    },
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Vertical
+// ---------------------------------------------------------------------------
+
+export const Vertical: Story = {
+  render: () => (
+    <div className="flex gap-8">
+      <div className="flex flex-col gap-2">
+        <p className="font-semibold text-sm">Joined</p>
+        <ToggleGroup
+          defaultValue={["bold", "italic"]}
+          multiple
+          orientation="vertical"
+        >
+          <ToggleGroupItem aria-label="Toggle bold" value="bold">
+            <BoldIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Toggle italic" value="italic">
+            <ItalicIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Toggle underline" value="underline">
+            <UnderlineIcon />
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <p className="font-semibold text-sm">Spaced</p>
+        <ToggleGroup
+          defaultValue={["bold"]}
+          multiple
+          orientation="vertical"
+          spacing={1}
+        >
+          <ToggleGroupItem aria-label="Toggle bold" value="bold">
+            <BoldIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Toggle italic" value="italic">
+            <ItalicIcon />
+          </ToggleGroupItem>
+          <ToggleGroupItem aria-label="Toggle underline" value="underline">
+            <UnderlineIcon />
+          </ToggleGroupItem>
+        </ToggleGroup>
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const underlineButtons = canvas.getAllByRole("button", {
+      name: /toggle underline/i,
+    });
+
+    await userEvent.click(underlineButtons[0]);
+    await expect(underlineButtons[0]).toHaveAttribute("aria-pressed", "true");
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use `orientation="vertical"` for vertical toggle groups. Combine with `spacing` to control whether items are joined or separated.',
+      },
+    },
+  },
+};
+
+// ---------------------------------------------------------------------------
 // Disabled
 // ---------------------------------------------------------------------------
 
@@ -292,4 +448,85 @@ export const Disabled: Story = {
       </div>
     </div>
   ),
+};
+
+// ---------------------------------------------------------------------------
+// Custom
+// ---------------------------------------------------------------------------
+
+function FontWeightSelector() {
+  const [fontWeight, setFontWeight] = useState<string[]>(["normal"]);
+  const current = fontWeight[0] || "normal";
+
+  return (
+    <Field>
+      <FieldLabel>Font Weight</FieldLabel>
+      <ToggleGroup
+        onValueChange={setFontWeight}
+        size="lg"
+        spacing={2}
+        value={fontWeight}
+        variant="outline"
+      >
+        <ToggleGroupItem
+          aria-label="Light"
+          className="flex size-16 flex-col items-center justify-center rounded-xl"
+          value="light"
+        >
+          <span className="font-light text-2xl leading-none">Aa</span>
+          <span className="text-muted-foreground text-xs">Light</span>
+        </ToggleGroupItem>
+        <ToggleGroupItem
+          aria-label="Normal"
+          className="flex size-16 flex-col items-center justify-center rounded-xl"
+          value="normal"
+        >
+          <span className="font-normal text-2xl leading-none">Aa</span>
+          <span className="text-muted-foreground text-xs">Normal</span>
+        </ToggleGroupItem>
+        <ToggleGroupItem
+          aria-label="Medium"
+          className="flex size-16 flex-col items-center justify-center rounded-xl"
+          value="medium"
+        >
+          <span className="font-medium text-2xl leading-none">Aa</span>
+          <span className="text-muted-foreground text-xs">Medium</span>
+        </ToggleGroupItem>
+        <ToggleGroupItem
+          aria-label="Bold"
+          className="flex size-16 flex-col items-center justify-center rounded-xl"
+          value="bold"
+        >
+          <span className="font-bold text-2xl leading-none">Aa</span>
+          <span className="text-muted-foreground text-xs">Bold</span>
+        </ToggleGroupItem>
+      </ToggleGroup>
+      <FieldDescription>
+        Use{" "}
+        <code className="rounded-md bg-muted px-1 py-0.5 font-mono">
+          font-{current}
+        </code>{" "}
+        to set the font weight.
+      </FieldDescription>
+    </Field>
+  );
+}
+
+export const Custom: Story = {
+  render: () => <FontWeightSelector />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const boldButton = canvas.getByRole("button", { name: /bold/i });
+
+    await userEvent.click(boldButton);
+    await expect(boldButton).toHaveAttribute("aria-pressed", "true");
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Custom-styled toggle items with `spacing`, `className` overrides, and integration with the Field component for form context.",
+      },
+    },
+  },
 };

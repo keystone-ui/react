@@ -346,10 +346,14 @@ import ToggleSizes from "./toggle/sizes";
 import ToggleWithText from "./toggle/with-text";
 
 // toggle-group
+import ToggleGroupCustom from "./toggle-group/custom";
 import ToggleGroupDefault from "./toggle-group/default";
 import ToggleGroupOutline from "./toggle-group/outline";
 import ToggleGroupSingle from "./toggle-group/single";
 import ToggleGroupSizes from "./toggle-group/sizes";
+import ToggleGroupSpacing from "./toggle-group/spacing";
+import ToggleGroupTextLabels from "./toggle-group/text-labels";
+import ToggleGroupVertical from "./toggle-group/vertical";
 
 // tooltip
 import TooltipDefault from "./tooltip/default";
@@ -1442,6 +1446,10 @@ export const demos: Record<string, DemoItem> = {
   },
 
   // toggle-group
+  "toggle-group-custom": {
+    component: ToggleGroupCustom,
+    file: "toggle-group/custom.tsx",
+  },
   "toggle-group-default": {
     component: ToggleGroupDefault,
     file: "toggle-group/default.tsx",
@@ -1457,6 +1465,18 @@ export const demos: Record<string, DemoItem> = {
   "toggle-group-sizes": {
     component: ToggleGroupSizes,
     file: "toggle-group/sizes.tsx",
+  },
+  "toggle-group-spacing": {
+    component: ToggleGroupSpacing,
+    file: "toggle-group/spacing.tsx",
+  },
+  "toggle-group-text-labels": {
+    component: ToggleGroupTextLabels,
+    file: "toggle-group/text-labels.tsx",
+  },
+  "toggle-group-vertical": {
+    component: ToggleGroupVertical,
+    file: "toggle-group/vertical.tsx",
   },
 
   // tooltip

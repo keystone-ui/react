@@ -29,17 +29,49 @@ Allow only one item to be selected at a time:
 
 <ComponentPreview name="toggle-group-sizes" />
 
+## Spacing
+
+Use the `spacing` prop to control the gap between items. When `0` (default), items join together with connected borders. Values greater than `0` add a gap using the spacing scale.
+
+<ComponentPreview name="toggle-group-spacing" />
+
+## Text Labels
+
+Toggle groups work well with text labels for filter-style and segmented controls.
+
+<ComponentPreview name="toggle-group-text-labels" />
+
+## Vertical
+
+Use `orientation="vertical"` for vertical toggle groups.
+
+<ComponentPreview name="toggle-group-vertical" />
+
+## Custom
+
+Custom-styled toggle items with `spacing`, `className` overrides, and integration with the Field component for form context.
+
+<ComponentPreview name="toggle-group-custom" />
+
+## ButtonGroup vs ToggleGroup
+
+Use the **ButtonGroup** component when you want to group buttons that perform an action.
+Use the **ToggleGroup** component when you want to group buttons that toggle a state.
+
 ## API Reference
 
 ### ToggleGroup
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `type` | `"single" \| "multiple"` | `"multiple"` | Selection mode |
-| `value` | `string \| string[]` | - | Controlled selected value(s) |
-| `onValueChange` | `(value: string \| string[]) => void` | - | Callback when value changes |
 | `variant` | `"default" \| "outline"` | `"default"` | Visual style variant |
 | `size` | `"default" \| "sm" \| "lg"` | `"default"` | Size of the toggle items |
+| `spacing` | `number` | `0` | Gap between items (0 = joined with connected borders) |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
+| `multiple` | `boolean` | `false` | Allow multiple items to be selected |
+| `value` | `string[]` | - | Controlled selected value(s) |
+| `onValueChange` | `(value: string[]) => void` | - | Callback when value changes |
+| `disabled` | `boolean` | `false` | Whether the entire group is disabled |
 
 ### ToggleGroupItem
 

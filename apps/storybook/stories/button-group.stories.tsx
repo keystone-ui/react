@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@keystoneui/react/button";
 import { ButtonGroup, ButtonGroupText } from "@keystoneui/react/button-group";
 import {
@@ -38,6 +37,7 @@ import {
   SelectTrigger,
 } from "@keystoneui/react/select";
 import { Textarea } from "@keystoneui/react/textarea";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   AlertTriangle as AlertTriangleIcon,
   Archive as ArchiveIcon,
@@ -141,6 +141,11 @@ import { Search } from "lucide-react";
   <Button variant="outline" size="icon" aria-label="Italic"><ItalicIcon /></Button>
 </ButtonGroup>
 \`\`\`
+
+## ButtonGroup vs ToggleGroup
+
+Use the **ButtonGroup** component when you want to group buttons that perform an action.
+Use the **ToggleGroup** component when you want to group buttons that toggle a state.
 `,
       },
     },
@@ -332,43 +337,6 @@ export const Toolbar: Story = {
       description: {
         story:
           "Group icon-only buttons to create a compact toolbar. Add `aria-label` to each button for accessibility.",
-      },
-    },
-  },
-};
-
-// Active State
-function ActiveStateExample() {
-  const [active, setActive] = useState("day");
-  const options = ["Day", "Week", "Month", "Year"];
-  return (
-    <ButtonGroup aria-label="Date range">
-      {options.map((option) => (
-        <Button
-          className={
-            active === option.toLowerCase()
-              ? "border-primary bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground"
-              : ""
-          }
-          key={option}
-          onClick={() => setActive(option.toLowerCase())}
-          variant="outline"
-        >
-          {option}
-        </Button>
-      ))}
-    </ButtonGroup>
-  );
-}
-
-export const ActiveState: Story = {
-  name: "Active State",
-  render: () => <ActiveStateExample />,
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Indicate the active selection by toggling between `variant="default"` and `variant="outline"`. For a true segmented control with built-in state, consider using the Tabs component instead.',
       },
     },
   },
@@ -819,11 +787,6 @@ export const AllExamples: Story = {
       </div>
 
       <div>
-        <h3 className="mb-2 font-medium text-sm">Active State</h3>
-        <ActiveStateExample />
-      </div>
-
-      <div>
         <h3 className="mb-2 font-medium text-sm">Split Button</h3>
         <ButtonGroup>
           <Button>
@@ -955,103 +918,105 @@ export const AllExamples: Story = {
 };
 
 // Email Toolbar
+function EmailToolbarExample() {
+  const [label, setLabel] = useState("personal");
+
+  return (
+    <ButtonGroup>
+      <ButtonGroup className="hidden sm:flex">
+        <Button aria-label="Go Back" size="icon-sm" variant="outline">
+          <ArrowLeftIcon />
+        </Button>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button size="sm" variant="outline">
+          Archive
+        </Button>
+        <Button size="sm" variant="outline">
+          Report
+        </Button>
+      </ButtonGroup>
+      <ButtonGroup>
+        <Button size="sm" variant="outline">
+          Snooze
+        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <Button
+                aria-label="More Options"
+                size="icon-sm"
+                variant="outline"
+              />
+            }
+          >
+            <MoreHorizontalIcon />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <MailCheckIcon />
+                Mark as Read
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <ArchiveIcon />
+                Archive
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <ClockIcon />
+                Snooze
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <CalendarPlusIcon />
+                Add to Calendar
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <ListFilterIcon />
+                Add to List
+              </DropdownMenuItem>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <TagIcon />
+                  Label As...
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuRadioGroup
+                    onValueChange={setLabel}
+                    value={label}
+                  >
+                    <DropdownMenuRadioItem value="personal">
+                      Personal
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="work">
+                      Work
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="other">
+                      Other
+                    </DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem variant="destructive">
+                <Trash2Icon />
+                Trash
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </ButtonGroup>
+    </ButtonGroup>
+  );
+}
+
 export const EmailToolbar: Story = {
   name: "Email Toolbar",
-  render() {
-    const [label, setLabel] = useState("personal");
-
-    return (
-      <ButtonGroup>
-        <ButtonGroup className="hidden sm:flex">
-          <Button aria-label="Go Back" size="icon-sm" variant="outline">
-            <ArrowLeftIcon />
-          </Button>
-        </ButtonGroup>
-        <ButtonGroup>
-          <Button size="sm" variant="outline">
-            Archive
-          </Button>
-          <Button size="sm" variant="outline">
-            Report
-          </Button>
-        </ButtonGroup>
-        <ButtonGroup>
-          <Button size="sm" variant="outline">
-            Snooze
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  aria-label="More Options"
-                  size="icon-sm"
-                  variant="outline"
-                />
-              }
-            >
-              <MoreHorizontalIcon />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <MailCheckIcon />
-                  Mark as Read
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <ArchiveIcon />
-                  Archive
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <ClockIcon />
-                  Snooze
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <CalendarPlusIcon />
-                  Add to Calendar
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <ListFilterIcon />
-                  Add to List
-                </DropdownMenuItem>
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>
-                    <TagIcon />
-                    Label As...
-                  </DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent>
-                    <DropdownMenuRadioGroup
-                      onValueChange={setLabel}
-                      value={label}
-                    >
-                      <DropdownMenuRadioItem value="personal">
-                        Personal
-                      </DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="work">
-                        Work
-                      </DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="other">
-                        Other
-                      </DropdownMenuRadioItem>
-                    </DropdownMenuRadioGroup>
-                  </DropdownMenuSubContent>
-                </DropdownMenuSub>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem variant="destructive">
-                  <Trash2Icon />
-                  Trash
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </ButtonGroup>
-      </ButtonGroup>
-    );
-  },
+  render: () => <EmailToolbarExample />,
   parameters: {
     docs: {
       description: {

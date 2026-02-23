@@ -16,7 +16,7 @@ const toggleVariants = cva(
       variant: {
         default: "bg-transparent",
         outline:
-          "border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
+          "border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input-bg dark:hover:bg-input/50",
       },
       size: {
         default: "h-9 min-w-9 px-3",
@@ -41,15 +41,15 @@ export interface ToggleProps
   extends TogglePrimitive.Props,
     ToggleVariantsProps {
   /**
-   * The visual style of the toggle.
-   * @default "default"
-   */
-  variant?: "default" | "outline";
-  /**
    * The size of the toggle.
    * @default "default"
    */
   size?: "sm" | "default" | "lg";
+  /**
+   * The visual style of the toggle.
+   * @default "default"
+   */
+  variant?: "default" | "outline";
 }
 
 function Toggle({ className, variant, size, ...props }: ToggleProps) {
