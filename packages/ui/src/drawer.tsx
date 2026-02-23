@@ -85,7 +85,10 @@ function DrawerContent({ className, children, ...props }: DrawerContentProps) {
         >
           {/* Drag handle for bottom drawer */}
           <div className="mx-auto mt-4 hidden h-1 w-[50px] shrink-0 rounded-full bg-muted group-data-[swipe-direction=down]/drawer-content:block" />
-          <DrawerPrimitive.Content data-slot="drawer-inner-content">
+          <DrawerPrimitive.Content
+            className="flex min-h-0 flex-1 flex-col overflow-hidden"
+            data-slot="drawer-inner-content"
+          >
             {children}
           </DrawerPrimitive.Content>
         </DrawerPrimitive.Popup>
