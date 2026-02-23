@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@keystoneui/react/button";
 import { Checkbox } from "@keystoneui/react/checkbox";
 import {
@@ -11,7 +10,17 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@keystoneui/react/drawer";
+import { useMediaQuery } from "@keystoneui/react/hooks";
 import { Input } from "@keystoneui/react/input";
+import { Label } from "@keystoneui/react/label";
+import {
+  Modal,
+  ModalContent,
+  ModalDescription,
+  ModalHeader,
+  ModalTitle,
+  ModalTrigger,
+} from "@keystoneui/react/modal";
 import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
 import {
   Stepper,
@@ -20,6 +29,7 @@ import {
   useStepper,
 } from "@keystoneui/react/stepper";
 import { Switch } from "@keystoneui/react/switch";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   ArrowLeft,
   ArrowUpDown,
@@ -1007,6 +1017,89 @@ export const Providers: Story = {
       description: {
         story:
           "A single-level scrollable drawer with a search input and a long list of checkboxes. Demonstrates overflow handling, real-time search filtering, and multi-select within a drawer.",
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Responsive Dialog (Modal on desktop, Drawer on mobile)
+// =============================================================================
+function ProfileForm({ className }: React.ComponentProps<"form">) {
+  return (
+    <form className={`grid items-start gap-4 ${className ?? ""}`}>
+      <div className="grid gap-2">
+        <Label htmlFor="responsive-email">Email</Label>
+        <Input
+          defaultValue="user@example.com"
+          id="responsive-email"
+          type="email"
+        />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="responsive-username">Username</Label>
+        <Input defaultValue="@keystoneui" id="responsive-username" />
+      </div>
+      <Button type="submit">Save changes</Button>
+    </form>
+  );
+}
+
+function ResponsiveDialogDemo() {
+  const [open, setOpen] = React.useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  if (isDesktop) {
+    return (
+      <Modal onOpenChange={setOpen} open={open}>
+        <ModalTrigger render={<Button variant="outline" />}>
+          Edit Profile
+        </ModalTrigger>
+        <ModalContent className="sm:max-w-[425px]">
+          <ModalHeader>
+            <ModalTitle>Edit profile</ModalTitle>
+            <ModalDescription>
+              Make changes to your profile here. Click save when you&apos;re
+              done.
+            </ModalDescription>
+          </ModalHeader>
+          <ProfileForm />
+        </ModalContent>
+      </Modal>
+    );
+  }
+
+  return (
+    <Drawer onOpenChange={setOpen} open={open}>
+      <DrawerTrigger render={<Button variant="outline" />}>
+        Edit Profile
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader className="text-left">
+          <DrawerTitle>Edit profile</DrawerTitle>
+          <DrawerDescription>
+            Make changes to your profile here. Click save when you&apos;re done.
+          </DrawerDescription>
+        </DrawerHeader>
+        <ProfileForm className="px-4" />
+        <DrawerFooter className="pt-2">
+          <DrawerClose render={<Button variant="outline" />}>
+            Cancel
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
+  );
+}
+
+export const ResponsiveDialog: Story = {
+  name: "Responsive Dialog",
+  render: () => <ResponsiveDialogDemo />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Combines Modal and Drawer to create a responsive dialog. On desktop (≥768px) it renders as a centered Modal; on mobile it renders as a bottom Drawer. Uses the `useMediaQuery` hook from `@keystoneui/react/hooks` to detect the viewport width.",
       },
     },
   },

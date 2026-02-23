@@ -141,6 +141,7 @@ import DescriptionListInCard from "./description-list/in-card";
 import DrawerDefault from "./drawer/default";
 import DrawerFilter from "./drawer/filter";
 import DrawerNested from "./drawer/nested";
+import DrawerResponsive from "./drawer/responsive";
 import DrawerScrollable from "./drawer/scrollable";
 import DrawerSides from "./drawer/sides";
 
@@ -808,6 +809,10 @@ export const demos: Record<string, DemoItem> = {
   "drawer-nested": {
     component: DrawerNested,
     file: "drawer/nested.tsx",
+  },
+  "drawer-responsive": {
+    component: DrawerResponsive,
+    file: "drawer/responsive.tsx",
   },
   "drawer-scrollable": {
     component: DrawerScrollable,
