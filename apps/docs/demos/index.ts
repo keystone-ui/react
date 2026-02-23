@@ -37,13 +37,17 @@ import BadgeDefault from "./badge/default";
 import BadgeSizes from "./badge/sizes";
 import BadgeVariants from "./badge/variants";
 import BadgeWithIcon from "./badge/with-icon";
-
+// blocks
+import Login01 from "./blocks/login-01";
+import Login02 from "./blocks/login-02";
+import Login03 from "./blocks/login-03";
+import Login04 from "./blocks/login-04";
+import ProfileDropdown01 from "./blocks/profile-dropdown-01";
 // breadcrumb
 import BreadcrumbCollapsed from "./breadcrumb/collapsed";
 import BreadcrumbCustomSeparator from "./breadcrumb/custom-separator";
 import BreadcrumbDefault from "./breadcrumb/default";
 import BreadcrumbWithDropdown from "./breadcrumb/with-dropdown";
-
 // button
 import ButtonAsLink from "./button/as-link";
 import ButtonDefault from "./button/default";
@@ -56,7 +60,6 @@ import ButtonRounded from "./button/rounded";
 import ButtonSizes from "./button/sizes";
 import ButtonVariants from "./button/variants";
 import ButtonWithIcons from "./button/with-icons";
-
 // button-group
 import ButtonGroupDefault from "./button-group/default";
 import ButtonGroupEmailToolbar from "./button-group/email-toolbar";
@@ -67,21 +70,18 @@ import ButtonGroupVertical from "./button-group/vertical";
 import ButtonGroupWithDropdownMenu from "./button-group/with-dropdown-menu";
 import ButtonGroupWithInput from "./button-group/with-input";
 import ButtonGroupWithSelect from "./button-group/with-select";
-
 // calendar
 import CalendarBookedDates from "./calendar/booked-dates";
 import CalendarDefault from "./calendar/default";
 import CalendarMonthYear from "./calendar/month-year";
 import CalendarPresets from "./calendar/presets";
 import CalendarRange from "./calendar/range";
-
 // card
 import CardDefault from "./card/default";
 import CardLoginForm from "./card/login-form";
 import CardSocialCard from "./card/social-card";
 import CardWithAction from "./card/with-action";
 import CardWithImage from "./card/with-image";
-
 // carousel
 import CarouselAutoplay from "./carousel/autoplay";
 import CarouselCards from "./carousel/cards";
@@ -89,26 +89,22 @@ import CarouselDefault from "./carousel/default";
 import CarouselMultipleSlides from "./carousel/multiple-slides";
 import CarouselVertical from "./carousel/vertical";
 import CarouselWithDots from "./carousel/with-dots";
-
 // checkbox
 import CheckboxDefault from "./checkbox/default";
 import CheckboxDisabled from "./checkbox/disabled";
 import CheckboxGroup from "./checkbox/group";
 import CheckboxPillGroup from "./checkbox/pill-group";
 import CheckboxWithDescription from "./checkbox/with-description";
-
 // circular-progress
 import CircularProgressAnimated from "./circular-progress/animated";
 import CircularProgressDefault from "./circular-progress/default";
 import CircularProgressIndeterminate from "./circular-progress/indeterminate";
 import CircularProgressSizes from "./circular-progress/sizes";
 import CircularProgressWithLabel from "./circular-progress/with-label";
-
 // collapsible
 import CollapsibleDefault from "./collapsible/default";
 import CollapsibleFileTree from "./collapsible/file-tree";
 import CollapsibleSettings from "./collapsible/settings";
-
 // combobox
 import ComboboxCustomItems from "./combobox/custom-items";
 import ComboboxDefault from "./combobox/default";
@@ -117,26 +113,22 @@ import ComboboxGroups from "./combobox/groups";
 import ComboboxMultiple from "./combobox/multiple";
 import ComboboxPopup from "./combobox/popup";
 import ComboboxWithClear from "./combobox/with-clear";
-
 // command
 import CommandDefault from "./command/default";
 import CommandGroups from "./command/groups";
 import CommandScrollable from "./command/scrollable";
 import CommandWithShortcuts from "./command/with-shortcuts";
-
 // date-input
 import DateInputDateOfBirth from "./date-input/date-of-birth";
 import DateInputDefault from "./date-input/default";
 import DateInputPresets from "./date-input/presets";
 import DateInputRange from "./date-input/range";
 import DateInputWithInput from "./date-input/with-input";
-
 // description-list
 import DescriptionListCardVariant from "./description-list/card-variant";
 import DescriptionListCompact from "./description-list/compact";
 import DescriptionListDefault from "./description-list/default";
 import DescriptionListInCard from "./description-list/in-card";
-
 // drawer
 import DrawerDefault from "./drawer/default";
 import DrawerFilter from "./drawer/filter";
@@ -144,7 +136,6 @@ import DrawerNested from "./drawer/nested";
 import DrawerResponsive from "./drawer/responsive";
 import DrawerScrollable from "./drawer/scrollable";
 import DrawerSides from "./drawer/sides";
-
 // dropdown-menu
 import DropdownMenuCheckboxes from "./dropdown-menu/checkboxes";
 import DropdownMenuDefault from "./dropdown-menu/default";
@@ -152,7 +143,6 @@ import DropdownMenuRadioGroup from "./dropdown-menu/radio-group";
 import DropdownMenuShortcuts from "./dropdown-menu/shortcuts";
 import DropdownMenuSubmenu from "./dropdown-menu/submenu";
 import DropdownMenuWithIcons from "./dropdown-menu/with-icons";
-
 // empty
 import EmptyBackground from "./empty/background";
 import EmptyDefault from "./empty/default";
@@ -168,10 +158,8 @@ import FieldHorizontal from "./field/horizontal";
 import FieldSettingsForm from "./field/settings-form";
 import FieldValidationError from "./field/validation-error";
 import FieldWithSwitch from "./field/with-switch";
-
 // form
 import FormDefault from "./form/default";
-
 // input
 import InputDefault from "./input/default";
 import InputDisabled from "./input/disabled";
@@ -179,7 +167,6 @@ import InputFile from "./input/file";
 import InputFormExample from "./input/form-example";
 import InputWithError from "./input/with-error";
 import InputWithField from "./input/with-field";
-
 // input-group
 import InputGroupCurrency from "./input-group/currency";
 import InputGroupDefault from "./input-group/default";
@@ -189,13 +176,11 @@ import InputGroupSearch from "./input-group/search";
 import InputGroupTextPrefix from "./input-group/text-prefix";
 import InputGroupWithButton from "./input-group/with-button";
 import InputGroupWithTextarea from "./input-group/with-textarea";
-
 // input-otp
 import InputOtpDefault from "./input-otp/default";
 import InputOtpDisabled from "./input-otp/disabled";
 import InputOtpFourDigits from "./input-otp/four-digits";
 import InputOtpWithSeparator from "./input-otp/with-separator";
-
 // item
 import ItemDefault from "./item/default";
 import ItemGroup from "./item/group";
@@ -203,18 +188,15 @@ import ItemLink from "./item/link";
 import ItemWithActions from "./item/with-actions";
 import ItemWithAvatar from "./item/with-avatar";
 import ItemWithDescription from "./item/with-description";
-
 // kbd
 import KbdCommonShortcuts from "./kbd/common-shortcuts";
 import KbdDefault from "./kbd/default";
 import KbdGroup from "./kbd/group";
 import KbdModifierKeys from "./kbd/modifier-keys";
-
 // label
 import LabelDefault from "./label/default";
 import LabelRequired from "./label/required";
 import LabelWithDescription from "./label/with-description";
-
 // modal
 import ModalControlled from "./modal/controlled";
 import ModalDefault from "./modal/default";
@@ -222,42 +204,35 @@ import ModalNested from "./modal/nested";
 import ModalScrollable from "./modal/scrollable";
 import ModalSignUpForm from "./modal/sign-up-form";
 import ModalSizes from "./modal/sizes";
-
 // native-select
 import NativeSelectDefault from "./native-select/default";
 import NativeSelectDisabled from "./native-select/disabled";
 import NativeSelectGroups from "./native-select/groups";
 import NativeSelectSizes from "./native-select/sizes";
-
 // pagination
 import PaginationDataTable from "./pagination/data-table";
 import PaginationDefault from "./pagination/default";
 import PaginationSimple from "./pagination/simple";
-
 // popover
 import PopoverAlignments from "./popover/alignments";
 import PopoverDefault from "./popover/default";
 import PopoverWithArrow from "./popover/with-arrow";
 import PopoverWithForm from "./popover/with-form";
-
 // progress
 import ProgressAnimated from "./progress/animated";
 import ProgressColors from "./progress/colors";
 import ProgressDefault from "./progress/default";
 import ProgressIndeterminate from "./progress/indeterminate";
 import ProgressWithLabel from "./progress/with-label";
-
 // radio-group
 import RadioGroupChoiceCard from "./radio-group/choice-card";
 import RadioGroupDefault from "./radio-group/default";
 import RadioGroupHorizontal from "./radio-group/horizontal";
 import RadioGroupWithDescription from "./radio-group/with-description";
-
 // resizable
 import ResizableDefault from "./resizable/default";
 import ResizableVertical from "./resizable/vertical";
 import ResizableWithHandle from "./resizable/with-handle";
-
 // select
 import SelectDefault from "./select/default";
 import SelectDisabled from "./select/disabled";
@@ -265,38 +240,31 @@ import SelectGroups from "./select/groups";
 import SelectMultiple from "./select/multiple";
 import SelectScrollable from "./select/scrollable";
 import SelectWithIcons from "./select/with-icons";
-
 // separator
 import SeparatorDefault from "./separator/default";
-
 // skeleton
 import SkeletonCard from "./skeleton/card";
 import SkeletonDefault from "./skeleton/default";
 import SkeletonForm from "./skeleton/form";
 import SkeletonShimmer from "./skeleton/shimmer";
-
 // slider
 import SliderDefault from "./slider/default";
 import SliderDisabled from "./slider/disabled";
 import SliderRange from "./slider/range";
 import SliderWithLabel from "./slider/with-label";
-
 // spinner
 import SpinnerDefault from "./spinner/default";
 import SpinnerSizes from "./spinner/sizes";
 import SpinnerWithButton from "./spinner/with-button";
-
 // stepper
 import StepperControlled from "./stepper/controlled";
 import StepperDefault from "./stepper/default";
 import StepperWithIndicator from "./stepper/with-indicator";
-
 // switch
 import SwitchDefault from "./switch/default";
 import SwitchDisabled from "./switch/disabled";
 import SwitchSizes from "./switch/sizes";
 import SwitchWithDescription from "./switch/with-description";
-
 // table
 import TableActions from "./table/actions";
 import TableCard from "./table/card";
@@ -304,7 +272,6 @@ import TableCompact from "./table/compact";
 import TableDefault from "./table/default";
 import TableStriped from "./table/striped";
 import TableWithBadges from "./table/with-badges";
-
 // tabs
 import TabsDefault from "./tabs/default";
 import TabsDisabled from "./tabs/disabled";
@@ -312,39 +279,33 @@ import TabsLine from "./tabs/line";
 import TabsPill from "./tabs/pill";
 import TabsVertical from "./tabs/vertical";
 import TabsWithIcons from "./tabs/with-icons";
-
 // tag
 import TagDefault from "./tag/default";
 import TagDisabled from "./tag/disabled";
 import TagWithIcon from "./tag/with-icon";
 import TagWithRemove from "./tag/with-remove";
-
 // tag-group
 import TagGroupControlled from "./tag-group/controlled";
 import TagGroupDefault from "./tag-group/default";
 import TagGroupRemovable from "./tag-group/removable";
 import TagGroupSingleSelection from "./tag-group/single-selection";
 import TagGroupWithIcons from "./tag-group/with-icons";
-
 // textarea
 import TextareaCharacterCount from "./textarea/character-count";
 import TextareaDefault from "./textarea/default";
 import TextareaDisabled from "./textarea/disabled";
 import TextareaWithField from "./textarea/with-field";
-
 // toast
 import ToastDefault from "./toast/default";
 import ToastPosition from "./toast/position";
 import ToastPromise from "./toast/promise";
 import ToastTypes from "./toast/types";
 import ToastWithAction from "./toast/with-action";
-
 // toggle
 import ToggleDefault from "./toggle/default";
 import ToggleOutline from "./toggle/outline";
 import ToggleSizes from "./toggle/sizes";
 import ToggleWithText from "./toggle/with-text";
-
 // toggle-group
 import ToggleGroupCustom from "./toggle-group/custom";
 import ToggleGroupDefault from "./toggle-group/default";
@@ -354,12 +315,26 @@ import ToggleGroupSizes from "./toggle-group/sizes";
 import ToggleGroupSpacing from "./toggle-group/spacing";
 import ToggleGroupTextLabels from "./toggle-group/text-labels";
 import ToggleGroupVertical from "./toggle-group/vertical";
-
 // tooltip
 import TooltipDefault from "./tooltip/default";
 import TooltipDisabledButton from "./tooltip/disabled-button";
 import TooltipSides from "./tooltip/sides";
 import TooltipWithKbd from "./tooltip/with-kbd";
+
+// typography
+import TypographyBlockquote from "./typography/blockquote";
+import TypographyDefault from "./typography/default";
+import TypographyH1 from "./typography/h1";
+import TypographyH2 from "./typography/h2";
+import TypographyH3 from "./typography/h3";
+import TypographyH4 from "./typography/h4";
+import TypographyInlineCode from "./typography/inline-code";
+import TypographyLarge from "./typography/large";
+import TypographyLead from "./typography/lead";
+import TypographyList from "./typography/list";
+import TypographyMuted from "./typography/muted";
+import TypographyParagraph from "./typography/paragraph";
+import TypographySmall from "./typography/small";
 
 export interface DemoItem {
   component: ComponentType;
@@ -1495,6 +1470,82 @@ export const demos: Record<string, DemoItem> = {
   "tooltip-with-kbd": {
     component: TooltipWithKbd,
     file: "tooltip/with-kbd.tsx",
+  },
+
+  // typography
+  "typography-blockquote": {
+    component: TypographyBlockquote,
+    file: "typography/blockquote.tsx",
+  },
+  "typography-default": {
+    component: TypographyDefault,
+    file: "typography/default.tsx",
+  },
+  "typography-h1": {
+    component: TypographyH1,
+    file: "typography/h1.tsx",
+  },
+  "typography-h2": {
+    component: TypographyH2,
+    file: "typography/h2.tsx",
+  },
+  "typography-h3": {
+    component: TypographyH3,
+    file: "typography/h3.tsx",
+  },
+  "typography-h4": {
+    component: TypographyH4,
+    file: "typography/h4.tsx",
+  },
+  "typography-inline-code": {
+    component: TypographyInlineCode,
+    file: "typography/inline-code.tsx",
+  },
+  "typography-large": {
+    component: TypographyLarge,
+    file: "typography/large.tsx",
+  },
+  "typography-lead": {
+    component: TypographyLead,
+    file: "typography/lead.tsx",
+  },
+  "typography-list": {
+    component: TypographyList,
+    file: "typography/list.tsx",
+  },
+  "typography-muted": {
+    component: TypographyMuted,
+    file: "typography/muted.tsx",
+  },
+  "typography-paragraph": {
+    component: TypographyParagraph,
+    file: "typography/paragraph.tsx",
+  },
+  "typography-small": {
+    component: TypographySmall,
+    file: "typography/small.tsx",
+  },
+
+  // blocks
+  "block-login-01": {
+    component: Login01,
+    file: "blocks/login-01.tsx",
+  },
+  "block-login-02": {
+    component: Login02,
+    file: "blocks/login-02.tsx",
+  },
+  "block-login-03": {
+    component: Login03,
+    file: "blocks/login-03.tsx",
+  },
+  "block-login-04": {
+    component: Login04,
+    file: "blocks/login-04.tsx",
+  },
+  "block-profile-dropdown-01": {
+    component: ProfileDropdown01,
+    file: "blocks/profile-dropdown-01.tsx",
   },
 };
 
