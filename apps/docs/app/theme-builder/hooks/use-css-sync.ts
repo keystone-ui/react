@@ -66,6 +66,7 @@ export function useCssSync(state: ThemeState) {
       ...lightBase,
       "--primary": primaryValue,
       "--primary-foreground": primaryFg,
+      "--ring": primaryValue,
       ...destructiveTokens.light,
     };
 
@@ -73,6 +74,7 @@ export function useCssSync(state: ThemeState) {
       ...darkBase,
       "--primary": darkPrimaryValue,
       "--primary-foreground": darkPrimaryFg,
+      "--ring": darkPrimaryValue,
       ...destructiveTokens.dark,
     };
 

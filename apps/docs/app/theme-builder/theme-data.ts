@@ -28,7 +28,6 @@ export interface BaseColorTokens {
   "--popover": string;
   "--popover-foreground": string;
   "--popup-ring": string;
-  "--ring": string;
   "--secondary": string;
   "--secondary-foreground": string;
   "--secondary-hover": string;
@@ -109,7 +108,6 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popup-ring": "oklch(0.92 0.004 286.32 / 0.1)",
       "--input": "oklch(0.92 0.004 286.32)",
       "--input-bg": "transparent",
-      "--ring": "oklch(0.705 0.015 286.067)",
       "--skeleton-shimmer": "oklch(1 0 0 / 0.06)",
     },
     dark: {
@@ -131,7 +129,6 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popup-ring": "oklch(1 0 0 / 3%)",
       "--input": "oklch(1 0 0 / 15%)",
       "--input-bg": "oklch(1 0 0 / 5%)",
-      "--ring": "oklch(0.552 0.016 285.938)",
       "--skeleton-shimmer": "oklch(1 0 0 / 0.1)",
     },
   },
@@ -158,7 +155,6 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popup-ring": "oklch(0.929 0.013 255.508 / 0.1)",
       "--input": "oklch(0.929 0.013 255.508)",
       "--input-bg": "transparent",
-      "--ring": "oklch(0.704 0.04 256.788)",
       "--skeleton-shimmer": "oklch(1 0 0 / 0.06)",
     },
     dark: {
@@ -180,7 +176,6 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popup-ring": "oklch(1 0 0 / 3%)",
       "--input": "oklch(1 0 0 / 15%)",
       "--input-bg": "oklch(1 0 0 / 5%)",
-      "--ring": "oklch(0.554 0.046 257.417)",
       "--skeleton-shimmer": "oklch(1 0 0 / 0.1)",
     },
   },
@@ -207,7 +202,6 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popup-ring": "oklch(0.923 0.003 48.717 / 0.1)",
       "--input": "oklch(0.923 0.003 48.717)",
       "--input-bg": "transparent",
-      "--ring": "oklch(0.709 0.01 56.259)",
       "--skeleton-shimmer": "oklch(1 0 0 / 0.06)",
     },
     dark: {
@@ -229,7 +223,6 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popup-ring": "oklch(1 0 0 / 3%)",
       "--input": "oklch(1 0 0 / 15%)",
       "--input-bg": "oklch(1 0 0 / 5%)",
-      "--ring": "oklch(0.553 0.013 58.071)",
       "--skeleton-shimmer": "oklch(1 0 0 / 0.1)",
     },
   },
@@ -256,7 +249,6 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popup-ring": "oklch(0.928 0.006 264.531 / 0.1)",
       "--input": "oklch(0.928 0.006 264.531)",
       "--input-bg": "transparent",
-      "--ring": "oklch(0.707 0.022 261.325)",
       "--skeleton-shimmer": "oklch(1 0 0 / 0.06)",
     },
     dark: {
@@ -278,7 +270,6 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popup-ring": "oklch(1 0 0 / 3%)",
       "--input": "oklch(1 0 0 / 15%)",
       "--input-bg": "oklch(1 0 0 / 5%)",
-      "--ring": "oklch(0.551 0.027 264.364)",
       "--skeleton-shimmer": "oklch(1 0 0 / 0.1)",
     },
   },
@@ -305,7 +296,6 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popup-ring": "oklch(0.922 0 0 / 0.1)",
       "--input": "oklch(0.922 0 0)",
       "--input-bg": "transparent",
-      "--ring": "oklch(0.708 0 0)",
       "--skeleton-shimmer": "oklch(1 0 0 / 0.06)",
     },
     dark: {
@@ -327,7 +317,6 @@ export const baseColors: Record<BaseColorId, BaseColor> = {
       "--popup-ring": "oklch(1 0 0 / 3%)",
       "--input": "oklch(1 0 0 / 15%)",
       "--input-bg": "oklch(1 0 0 / 5%)",
-      "--ring": "oklch(0.556 0 0)",
       "--skeleton-shimmer": "oklch(1 0 0 / 0.1)",
     },
   },

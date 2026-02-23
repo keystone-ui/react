@@ -64,7 +64,7 @@
   --popup-ring: oklch(0.92 0.004 286.32 / 0.1);
   --input: oklch(0.92 0.004 286.32);
   --input-bg: transparent;
-  --ring: oklch(0.705 0.015 286.067);
+  --ring: oklch(0.21 0.006 285.885);
   --skeleton-shimmer: oklch(1 0 0 / 0.06);
   --radius: 0.625rem;
 }
@@ -92,7 +92,7 @@
   --popup-ring: oklch(1 0 0 / 3%);
   --input: oklch(1 0 0 / 15%);
   --input-bg: oklch(1 0 0 / 5%);
-  --ring: oklch(0.552 0.016 285.938);
+  --ring: oklch(0.92 0.004 286.32);
   --skeleton-shimmer: oklch(1 0 0 / 0.1);
 }
 
@@ -115,7 +115,7 @@
     border-radius: 5px;
   }
   pre {
-    scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
+    scrollbar-width: thin;
   }
 }

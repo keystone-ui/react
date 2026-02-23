@@ -68,6 +68,7 @@ export function generateCssOutput(state: ThemeState): string {
     ...baseColor.light,
     "--primary": primaryValue,
     "--primary-foreground": primaryFg,
+    "--ring": primaryValue,
     ...destructiveTokens.light,
     "--font-sans": `"${fontConfig.label}", sans-serif`,
     "--radius": radiusValue,
@@ -77,6 +78,7 @@ export function generateCssOutput(state: ThemeState): string {
     ...baseColor.dark,
     "--primary": darkPrimaryValue,
     "--primary-foreground": darkPrimaryFg,
+    "--ring": darkPrimaryValue,
     ...destructiveTokens.dark,
   };
 
