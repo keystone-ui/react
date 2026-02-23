@@ -58,8 +58,9 @@ export default defineConfig((options) => ({
     "src/hooks/index.ts",
     "src/utils.ts",
   ],
-  format: ["cjs", "esm"],
+  format: ["esm"],
   dts: true,
+  clean: true,
   external: ["react"],
   ...options,
 }));

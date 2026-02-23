@@ -1,6 +1,7 @@
 {
   "name": "@keystoneui/react",
   "version": "0.0.0",
+  "type": "module",
   "sideEffects": false,
   "license": "MIT",
   "files": [
@@ -105,278 +106,223 @@
     "exports": {
       "./accordion": {
         "types": "./dist/accordion.d.ts",
-        "import": "./dist/accordion.js",
-        "require": "./dist/accordion.cjs"
+        "default": "./dist/accordion.js"
       },
       "./alert-dialog": {
         "types": "./dist/alert-dialog.d.ts",
-        "import": "./dist/alert-dialog.js",
-        "require": "./dist/alert-dialog.cjs"
+        "default": "./dist/alert-dialog.js"
       },
       "./aspect-ratio": {
         "types": "./dist/aspect-ratio.d.ts",
-        "import": "./dist/aspect-ratio.js",
-        "require": "./dist/aspect-ratio.cjs"
+        "default": "./dist/aspect-ratio.js"
       },
       "./avatar": {
         "types": "./dist/avatar.d.ts",
-        "import": "./dist/avatar.js",
-        "require": "./dist/avatar.cjs"
+        "default": "./dist/avatar.js"
       },
       "./badge": {
         "types": "./dist/badge.d.ts",
-        "import": "./dist/badge.js",
-        "require": "./dist/badge.cjs"
+        "default": "./dist/badge.js"
       },
       "./breadcrumb": {
         "types": "./dist/breadcrumb.d.ts",
-        "import": "./dist/breadcrumb.js",
-        "require": "./dist/breadcrumb.cjs"
+        "default": "./dist/breadcrumb.js"
       },
       "./button": {
         "types": "./dist/button.d.ts",
-        "import": "./dist/button.js",
-        "require": "./dist/button.cjs"
+        "default": "./dist/button.js"
       },
       "./button-group": {
         "types": "./dist/button-group.d.ts",
-        "import": "./dist/button-group.js",
-        "require": "./dist/button-group.cjs"
+        "default": "./dist/button-group.js"
       },
       "./calendar": {
         "types": "./dist/calendar.d.ts",
-        "import": "./dist/calendar.js",
-        "require": "./dist/calendar.cjs"
+        "default": "./dist/calendar.js"
       },
       "./carousel": {
         "types": "./dist/carousel.d.ts",
-        "import": "./dist/carousel.js",
-        "require": "./dist/carousel.cjs"
+        "default": "./dist/carousel.js"
       },
       "./circular-progress": {
         "types": "./dist/circular-progress.d.ts",
-        "import": "./dist/circular-progress.js",
-        "require": "./dist/circular-progress.cjs"
+        "default": "./dist/circular-progress.js"
       },
       "./alert": {
         "types": "./dist/alert.d.ts",
-        "import": "./dist/alert.js",
-        "require": "./dist/alert.cjs"
+        "default": "./dist/alert.js"
       },
       "./card": {
         "types": "./dist/card.d.ts",
-        "import": "./dist/card.js",
-        "require": "./dist/card.cjs"
+        "default": "./dist/card.js"
       },
       "./checkbox": {
         "types": "./dist/checkbox.d.ts",
-        "import": "./dist/checkbox.js",
-        "require": "./dist/checkbox.cjs"
+        "default": "./dist/checkbox.js"
       },
       "./collapsible": {
         "types": "./dist/collapsible.d.ts",
-        "import": "./dist/collapsible.js",
-        "require": "./dist/collapsible.cjs"
+        "default": "./dist/collapsible.js"
       },
       "./combobox": {
         "types": "./dist/combobox.d.ts",
-        "import": "./dist/combobox.js",
-        "require": "./dist/combobox.cjs"
+        "default": "./dist/combobox.js"
       },
       "./command": {
         "types": "./dist/command.d.ts",
-        "import": "./dist/command.js",
-        "require": "./dist/command.cjs"
+        "default": "./dist/command.js"
       },
       "./date-input": {
         "types": "./dist/date-input.d.ts",
-        "import": "./dist/date-input.js",
-        "require": "./dist/date-input.cjs"
+        "default": "./dist/date-input.js"
       },
       "./description-list": {
         "types": "./dist/description-list.d.ts",
-        "import": "./dist/description-list.js",
-        "require": "./dist/description-list.cjs"
+        "default": "./dist/description-list.js"
       },
       "./drawer": {
         "types": "./dist/drawer.d.ts",
-        "import": "./dist/drawer.js",
-        "require": "./dist/drawer.cjs"
+        "default": "./dist/drawer.js"
       },
       "./empty": {
         "types": "./dist/empty.d.ts",
-        "import": "./dist/empty.js",
-        "require": "./dist/empty.cjs"
+        "default": "./dist/empty.js"
       },
       "./dropdown-menu": {
         "types": "./dist/dropdown-menu.d.ts",
-        "import": "./dist/dropdown-menu.js",
-        "require": "./dist/dropdown-menu.cjs"
+        "default": "./dist/dropdown-menu.js"
       },
       "./field": {
         "types": "./dist/field.d.ts",
-        "import": "./dist/field.js",
-        "require": "./dist/field.cjs"
+        "default": "./dist/field.js"
       },
       "./form": {
         "types": "./dist/form.d.ts",
-        "import": "./dist/form.js",
-        "require": "./dist/form.cjs"
+        "default": "./dist/form.js"
       },
       "./item": {
         "types": "./dist/item.d.ts",
-        "import": "./dist/item.js",
-        "require": "./dist/item.cjs"
+        "default": "./dist/item.js"
       },
       "./input": {
         "types": "./dist/input.d.ts",
-        "import": "./dist/input.js",
-        "require": "./dist/input.cjs"
+        "default": "./dist/input.js"
       },
       "./input-group": {
         "types": "./dist/input-group.d.ts",
-        "import": "./dist/input-group.js",
-        "require": "./dist/input-group.cjs"
+        "default": "./dist/input-group.js"
       },
       "./input-otp": {
         "types": "./dist/input-otp.d.ts",
-        "import": "./dist/input-otp.js",
-        "require": "./dist/input-otp.cjs"
+        "default": "./dist/input-otp.js"
       },
       "./kbd": {
         "types": "./dist/kbd.d.ts",
-        "import": "./dist/kbd.js",
-        "require": "./dist/kbd.cjs"
+        "default": "./dist/kbd.js"
       },
       "./popover": {
         "types": "./dist/popover.d.ts",
-        "import": "./dist/popover.js",
-        "require": "./dist/popover.cjs"
+        "default": "./dist/popover.js"
       },
       "./progress": {
         "types": "./dist/progress.d.ts",
-        "import": "./dist/progress.js",
-        "require": "./dist/progress.cjs"
+        "default": "./dist/progress.js"
       },
       "./label": {
         "types": "./dist/label.d.ts",
-        "import": "./dist/label.js",
-        "require": "./dist/label.cjs"
+        "default": "./dist/label.js"
       },
       "./modal": {
         "types": "./dist/modal.d.ts",
-        "import": "./dist/modal.js",
-        "require": "./dist/modal.cjs"
+        "default": "./dist/modal.js"
       },
       "./native-select": {
         "types": "./dist/native-select.d.ts",
-        "import": "./dist/native-select.js",
-        "require": "./dist/native-select.cjs"
+        "default": "./dist/native-select.js"
       },
       "./pagination": {
         "types": "./dist/pagination.d.ts",
-        "import": "./dist/pagination.js",
-        "require": "./dist/pagination.cjs"
+        "default": "./dist/pagination.js"
       },
       "./radio-group": {
         "types": "./dist/radio-group.d.ts",
-        "import": "./dist/radio-group.js",
-        "require": "./dist/radio-group.cjs"
+        "default": "./dist/radio-group.js"
       },
       "./resizable": {
         "types": "./dist/resizable.d.ts",
-        "import": "./dist/resizable.js",
-        "require": "./dist/resizable.cjs"
+        "default": "./dist/resizable.js"
       },
       "./select": {
         "types": "./dist/select.d.ts",
-        "import": "./dist/select.js",
-        "require": "./dist/select.cjs"
+        "default": "./dist/select.js"
       },
       "./separator": {
         "types": "./dist/separator.d.ts",
-        "import": "./dist/separator.js",
-        "require": "./dist/separator.cjs"
+        "default": "./dist/separator.js"
       },
       "./skeleton": {
         "types": "./dist/skeleton.d.ts",
-        "import": "./dist/skeleton.js",
-        "require": "./dist/skeleton.cjs"
+        "default": "./dist/skeleton.js"
       },
       "./slider": {
         "types": "./dist/slider.d.ts",
-        "import": "./dist/slider.js",
-        "require": "./dist/slider.cjs"
+        "default": "./dist/slider.js"
       },
       "./spinner": {
         "types": "./dist/spinner.d.ts",
-        "import": "./dist/spinner.js",
-        "require": "./dist/spinner.cjs"
+        "default": "./dist/spinner.js"
       },
       "./stepper": {
         "types": "./dist/stepper.d.ts",
-        "import": "./dist/stepper.js",
-        "require": "./dist/stepper.cjs"
+        "default": "./dist/stepper.js"
       },
       "./switch": {
         "types": "./dist/switch.d.ts",
-        "import": "./dist/switch.js",
-        "require": "./dist/switch.cjs"
+        "default": "./dist/switch.js"
       },
       "./table": {
         "types": "./dist/table.d.ts",
-        "import": "./dist/table.js",
-        "require": "./dist/table.cjs"
+        "default": "./dist/table.js"
       },
       "./tabs": {
         "types": "./dist/tabs.d.ts",
-        "import": "./dist/tabs.js",
-        "require": "./dist/tabs.cjs"
+        "default": "./dist/tabs.js"
       },
       "./textarea": {
         "types": "./dist/textarea.d.ts",
-        "import": "./dist/textarea.js",
-        "require": "./dist/textarea.cjs"
+        "default": "./dist/textarea.js"
       },
       "./toast": {
         "types": "./dist/toast.d.ts",
-        "import": "./dist/toast.js",
-        "require": "./dist/toast.cjs"
+        "default": "./dist/toast.js"
       },
       "./tag": {
         "types": "./dist/tag.d.ts",
-        "import": "./dist/tag.js",
-        "require": "./dist/tag.cjs"
+        "default": "./dist/tag.js"
       },
       "./tag-group": {
         "types": "./dist/tag-group.d.ts",
-        "import": "./dist/tag-group.js",
-        "require": "./dist/tag-group.cjs"
+        "default": "./dist/tag-group.js"
       },
       "./toggle": {
         "types": "./dist/toggle.d.ts",
-        "import": "./dist/toggle.js",
-        "require": "./dist/toggle.cjs"
+        "default": "./dist/toggle.js"
       },
       "./toggle-group": {
         "types": "./dist/toggle-group.d.ts",
-        "import": "./dist/toggle-group.js",
-        "require": "./dist/toggle-group.cjs"
+        "default": "./dist/toggle-group.js"
       },
       "./tooltip": {
         "types": "./dist/tooltip.d.ts",
-        "import": "./dist/tooltip.js",
-        "require": "./dist/tooltip.cjs"
+        "default": "./dist/tooltip.js"
       },
       "./hooks": {
         "types": "./dist/hooks/index.d.ts",
-        "import": "./dist/hooks/index.js",
-        "require": "./dist/hooks/index.cjs"
+        "default": "./dist/hooks/index.js"
       },
       "./utils": {
         "types": "./dist/utils.d.ts",
-        "import": "./dist/utils.js",
-        "require": "./dist/utils.cjs"
+        "default": "./dist/utils.js"
       },
       "./base.css": "./src/base.css"
     }

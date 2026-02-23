@@ -16,7 +16,7 @@
  *   - Fumadocs demo + registry entry + MDX page
  */
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
@@ -44,13 +44,17 @@ function toPascalCase(str) {
 
 function validate(kebab) {
   if (!/^[a-z][a-z0-9-]*$/.test(kebab)) {
-    console.error(`Error: Invalid component name "${kebab}". Use letters, numbers, and hyphens only.`);
+    console.error(
+      `Error: Invalid component name "${kebab}". Use letters, numbers, and hyphens only.`
+    );
     process.exit(1);
   }
 
   const componentPath = join(UI_DIR, "src", `${kebab}.tsx`);
   if (existsSync(componentPath)) {
-    console.error(`Error: Component "${kebab}" already exists at ${componentPath}`);
+    console.error(
+      `Error: Component "${kebab}" already exists at ${componentPath}`
+    );
     process.exit(1);
   }
 }
@@ -152,11 +156,19 @@ function addPackageJsonExport(kebab) {
   const pkg = JSON.parse(readFileSync(pkgPath, "utf-8"));
 
   if (pkg.exports[`./${kebab}`]) {
-    console.log(`  ⊘ package.json export already exists`);
+    console.log("  ⊘ package.json export already exists");
     return;
   }
 
   pkg.exports[`./${kebab}`] = `./src/${kebab}.tsx`;
+
+  if (pkg.publishConfig?.exports) {
+    pkg.publishConfig.exports[`./${kebab}`] = {
+      types: `./dist/${kebab}.d.ts`,
+      default: `./dist/${kebab}.js`,
+    };
+  }
+
   writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
   console.log(`  ✓ packages/ui/package.json — added export "./${kebab}"`);
 }
@@ -167,7 +179,7 @@ function addTsupEntry(kebab) {
 
   const entry = `"src/${kebab}.tsx"`;
   if (content.includes(entry)) {
-    console.log(`  ⊘ tsup.config.ts entry already exists`);
+    console.log("  ⊘ tsup.config.ts entry already exists");
     return;
   }
 
@@ -177,7 +189,7 @@ function addTsupEntry(kebab) {
     `$1\n    ${entry},\n  ]`
   );
   writeFileSync(tsupPath, content);
-  console.log(`  ✓ packages/ui/tsup.config.ts — added entry`);
+  console.log("  ✓ packages/ui/tsup.config.ts — added entry");
 }
 
 function addRegistryEntry(kebab) {
@@ -185,7 +197,7 @@ function addRegistryEntry(kebab) {
   let content = readFileSync(registryPath, "utf-8");
 
   if (content.includes(`name: "${kebab}"`)) {
-    console.log(`  ⊘ _registry.ts entry already exists`);
+    console.log("  ⊘ _registry.ts entry already exists");
     return;
   }
 
@@ -199,7 +211,7 @@ function addRegistryEntry(kebab) {
   // Insert before the closing ];
   content = content.replace(/\n];/, `\n${entry}\n];`);
   writeFileSync(registryPath, content);
-  console.log(`  ✓ packages/ui/src/_registry.ts — added entry`);
+  console.log("  ✓ packages/ui/src/_registry.ts — added entry");
 }
 
 function addDemoRegistryEntry(pascal, kebab) {
@@ -210,7 +222,7 @@ function addDemoRegistryEntry(pascal, kebab) {
   const importLine = `import ${importName} from "./${kebab}/default";`;
 
   if (content.includes(importLine)) {
-    console.log(`  ⊘ demos/index.ts entry already exists`);
+    console.log("  ⊘ demos/index.ts entry already exists");
     return;
   }
 
@@ -228,7 +240,7 @@ function addDemoRegistryEntry(pascal, kebab) {
   content = content.replace(/\n};/, `\n${entry}\n};`);
 
   writeFileSync(indexPath, content);
-  console.log(`  ✓ apps/docs/demos/index.ts — added import + entry`);
+  console.log("  ✓ apps/docs/demos/index.ts — added import + entry");
 }
 
 function addToComponentsMetaJson(kebab) {
@@ -243,7 +255,9 @@ function addToComponentsMetaJson(kebab) {
   // Add before the last entry
   meta.pages.push(kebab);
   writeFileSync(metaPath, JSON.stringify(meta, null, 2) + "\n");
-  console.log(`  ✓ apps/docs/content/docs/components/meta.json — added "${kebab}"`);
+  console.log(
+    `  ✓ apps/docs/content/docs/components/meta.json — added "${kebab}"`
+  );
 }
 
 // --- Main ---
