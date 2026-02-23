@@ -34,9 +34,9 @@ describe("Card", () => {
     expect(screen.getByTestId("card")).toHaveClass("custom-class");
   });
 
-  it("defaults to size 'default'", () => {
+  it("defaults to size 'md'", () => {
     render(<Card data-testid="card">Content</Card>);
-    expect(screen.getByTestId("card")).toHaveAttribute("data-size", "default");
+    expect(screen.getByTestId("card")).toHaveAttribute("data-size", "md");
   });
 
   it("applies size 'sm' via data-size attribute", () => {
@@ -46,6 +46,15 @@ describe("Card", () => {
       </Card>
     );
     expect(screen.getByTestId("card")).toHaveAttribute("data-size", "sm");
+  });
+
+  it("applies size 'xs' via data-size attribute", () => {
+    render(
+      <Card data-testid="card" size="xs">
+        Content
+      </Card>
+    );
+    expect(screen.getByTestId("card")).toHaveAttribute("data-size", "xs");
   });
 
   it("forwards additional props", () => {

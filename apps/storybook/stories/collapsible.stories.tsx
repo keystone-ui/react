@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@keystoneui/react/button";
 import {
   Card,
@@ -15,6 +14,7 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@keystoneui/react/field";
 import { Input } from "@keystoneui/react/input";
 import { Tabs, TabsList, TabsTrigger } from "@keystoneui/react/tabs";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -178,7 +178,7 @@ export const Settings: Story = {
     const [isOpen, setIsOpen] = React.useState(false);
 
     return (
-      <Card className="mx-auto w-full max-w-xs" size="sm">
+      <Card className="mx-auto w-full max-w-xs" size="xs">
         <CardHeader>
           <CardTitle>Radius</CardTitle>
           <CardDescription>
@@ -333,7 +333,7 @@ export const FileTree: Story = {
     };
 
     return (
-      <Card className="mx-auto w-full max-w-[16rem] gap-2" size="sm">
+      <Card className="mx-auto w-full max-w-[16rem] gap-2" size="xs">
         <CardHeader>
           <Tabs defaultValue="explorer">
             <TabsList className="w-full">

@@ -1,5 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { addDays } from "date-fns";
 import { Button } from "@keystoneui/react/button";
 import { Calendar, CalendarDayButton } from "@keystoneui/react/calendar";
 import { Card, CardContent, CardFooter } from "@keystoneui/react/card";
@@ -9,6 +7,8 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@keystoneui/react/input-group";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { addDays } from "date-fns";
 import { Clock2Icon } from "lucide-react";
 import * as React from "react";
 import type { DateRange } from "react-day-picker";
@@ -142,7 +142,7 @@ export const Presets: Story = {
     );
 
     return (
-      <Card className="mx-auto w-fit shadow-lg" size="sm">
+      <Card className="mx-auto w-fit shadow-lg" size="xs">
         <CardContent>
           <Calendar
             className="p-0 [--cell-size:--spacing(9.5)]"
@@ -201,7 +201,7 @@ export const DateTime: Story = {
     );
 
     return (
-      <Card className="mx-auto w-fit shadow-lg" size="sm">
+      <Card className="mx-auto w-fit shadow-lg" size="xs">
         <CardContent>
           <Calendar
             className="p-0"

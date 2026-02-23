@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
 import { Badge } from "@keystoneui/react/badge";
 import { Button } from "@keystoneui/react/button";
@@ -13,6 +12,7 @@ import {
 } from "@keystoneui/react/card";
 import { Input } from "@keystoneui/react/input";
 import { Label } from "@keystoneui/react/label";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BadgeCheckIcon } from "lucide-react";
 
 const meta = {
@@ -66,13 +66,20 @@ import {
     <CardTitle>Compact Card</CardTitle>
   </CardHeader>
 </Card>
+
+// Extra small size variant
+<Card size="xs">
+  <CardHeader>
+    <CardTitle>Extra Compact Card</CardTitle>
+  </CardHeader>
+</Card>
 \`\`\`
 
 ## Features
 
 - Flexible composition with header, content, and footer sections
 - Support for header actions via CardAction
-- Size variants: \`default\` and \`sm\` for compact layouts
+- Size variants: \`md\` (default, 24px), \`sm\` (16px), and \`xs\` (12px)
 - Automatic border radius handling for images
 - Muted footer background with top border
 - Responsive padding based on size variant
@@ -83,7 +90,7 @@ import {
   argTypes: {
     size: {
       control: "select",
-      options: ["default", "sm"],
+      options: ["md", "sm", "xs"],
       description: "The size variant of the card",
     },
   },
@@ -176,17 +183,36 @@ export const Small: Story = {
       <CardHeader>
         <CardTitle>Small Card</CardTitle>
         <CardDescription>
-          This card uses the small size variant.
+          This card uses the small size variant with 16px padding.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <p>
-          The card component supports a size prop that can be set to
-          &quot;sm&quot; for a more compact appearance.
-        </p>
+        <p>Card content goes here. You can put any content inside the card.</p>
       </CardContent>
       <CardFooter>
         <Button className="w-full" size="sm" variant="outline">
+          Action
+        </Button>
+      </CardFooter>
+    </Card>
+  ),
+};
+
+export const ExtraSmall: Story = {
+  name: "Extra Small",
+  render: () => (
+    <Card className="mx-auto w-full max-w-sm" size="xs">
+      <CardHeader>
+        <CardTitle>Extra Small Card</CardTitle>
+        <CardDescription>
+          This card uses the extra small size variant with 12px padding.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p>Card content goes here. You can put any content inside the card.</p>
+      </CardContent>
+      <CardFooter>
+        <Button className="w-full" size="xs" variant="outline">
           Action
         </Button>
       </CardFooter>

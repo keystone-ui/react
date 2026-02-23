@@ -13,7 +13,7 @@ export default function CalendarPresets() {
   );
 
   return (
-    <Card className="w-fit shadow-lg" size="sm">
+    <Card className="w-fit shadow-lg" size="xs">
       <CardContent>
         <Calendar
           className="p-0 [--cell-size:--spacing(9.5)]"
