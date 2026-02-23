@@ -1,0 +1,48 @@
+---
+title: AGENTS.md
+description: Download Keystone UI documentation for AI coding agents directly into your project.
+---
+
+Add a Keystone UI reference file to your project so AI assistants automatically know how to use your components.
+
+## Download
+
+```bash
+curl -o AGENTS.md https://keystoneui.io/agents-md
+```
+
+This downloads a markdown file into your project root that any AI assistant can read.
+
+## What's in the File
+
+The generated `AGENTS.md` contains:
+
+- **Package declaration** — tells the AI this project uses Keystone UI
+- **Import patterns** — subpath imports for all components
+- **Full component list** — every available component with its import path
+- **Theming reference** — semantic tokens, OKLCH color space, dark mode
+- **CSS setup** — how to configure Tailwind CSS v4 with Keystone UI
+- **Key constraints** — Base UI (not Radix), lucide-react for icons, etc.
+
+## How It Works
+
+The file is dynamically generated from the same component registry that powers the docs site. It always reflects the latest set of available components.
+
+## When to Use This
+
+**Best for:** Projects that want AI context without installing skills or pointing to external URLs.
+
+- Works with any AI tool that reads project files
+- No internet access needed after download
+- One file, no dependencies
+- Update anytime by re-running the curl command
+
+## Compared to Other Options
+
+| Feature | AGENTS.md | [Agent Skills](/docs/agents/skills) | [LLMs.txt](/docs/agents/llms-txt) |
+|---|---|---|---|
+| Install method | `curl` one file | `curl` or `npx skills add` | Point to URL |
+| Works offline | Yes | Partially (scripts need network) | No |
+| Live updates | Re-run curl | Re-install skill | Always current |
+| Depth | Overview + component list | Full guide + scripts | Full documentation |
+| Best for | Quick setup | Power users | Any AI tool |

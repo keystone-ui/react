@@ -12,6 +12,7 @@
     "check": "ultracite check",
     "fix": "ultracite fix",
     "add:component": "node scripts/add-component.mjs",
+    "build:skills": "bash scripts/build-skills.sh",
     "prepare": "husky"
   },
   "devDependencies": {

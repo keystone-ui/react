@@ -1,0 +1,70 @@
+---
+title: Agent Skills
+description: Install Keystone UI knowledge directly into your AI assistant.
+---
+
+Agent Skills give your AI assistant comprehensive knowledge of Keystone UI components, patterns, and best practices.
+
+## Installation
+
+```bash
+curl -fsSL https://keystoneui.io/install | bash -s keystoneui-react
+```
+
+Or using the skills package:
+
+```bash
+npx skills add keystone-ui/react
+```
+
+Supports Claude Code, Cursor, OpenCode, Codex, and Gemini CLI.
+
+## Usage
+
+Skills are automatically discovered by your AI assistant, or call it directly using `/keystoneui-react` command.
+
+Simply ask your AI assistant to:
+
+- Build components using Keystone UI
+- Create pages with Keystone UI components
+- Customize themes and styles
+- Access component documentation
+
+## What's Included
+
+- Keystone UI installation guide
+- All 50+ components with import paths and usage patterns
+- Complete theming reference (OKLCH tokens, light/dark mode, radius scale)
+- Design principles and composition patterns
+- Utility scripts for fetching live documentation and source code
+
+## Scripts
+
+The skill includes 5 utility scripts your AI agent can run for deeper lookups:
+
+| Script | What it does |
+|---|---|
+| `list_components.mjs` | Lists all available components |
+| `get_component_docs.mjs` | Fetches full MDX documentation for one or more components |
+| `get_source.mjs` | Fetches the TSX source code of a component |
+| `get_theme.mjs` | Fetches theme variables (light/dark OKLCH tokens) |
+| `get_docs.mjs` | Fetches non-component documentation pages |
+
+## Structure
+
+```
+skills/keystoneui-react/
+├── SKILL.md              # Main skill documentation
+├── LICENSE.txt            # MIT license
+└── scripts/              # Utility scripts
+    ├── list_components.mjs
+    ├── get_component_docs.mjs
+    ├── get_source.mjs
+    ├── get_theme.mjs
+    └── get_docs.mjs
+```
+
+## Related
+
+- [LLMs.txt](/docs/agents/llms-txt) — Static text files for AI assistants
+- [AGENTS.md](/docs/agents/agents-md) — Download documentation into your project
