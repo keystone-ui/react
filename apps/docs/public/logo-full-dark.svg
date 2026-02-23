@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="30 15 840 205">
+  <defs>
+    <linearGradient id="card-top" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00E1FF" />
+      <stop offset="50%" stop-color="#0072F5" />
+      <stop offset="100%" stop-color="#9750DD" />
+    </linearGradient>
+    <linearGradient id="card-left" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#005BC4" />
+      <stop offset="100%" stop-color="#00357A" />
+    </linearGradient>
+    <linearGradient id="card-right" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7828C8" />
+      <stop offset="100%" stop-color="#4B1280" />
+    </linearGradient>
+    <linearGradient id="base-top" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b" />
+      <stop offset="100%" stop-color="#09090b" />
+    </linearGradient>
+    <linearGradient id="base-left" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3f3f46" />
+      <stop offset="100%" stop-color="#18181b" />
+    </linearGradient>
+    <linearGradient id="base-right" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#27272a" />
+      <stop offset="100%" stop-color="#000000" />
+    </linearGradient>
+    <filter id="shadowGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="16" />
+    </filter>
+  </defs>
+
+  <!-- BACKGROUND COMPLETELY REMOVED FOR NAVBAR TRANSPARENCY -->
+
+  <g transform="translate(48, 28) scale(0.39)">
+    <g stroke="#09090b" stroke-width="12" stroke-linejoin="round">
+      <polygon points="256,108 412,186 256,264 100,186" fill="url(#base-top)" />
+      <polygon points="100,186 256,264 256,470 208,446" fill="url(#base-left)" />
+      <polygon points="412,186 256,264 256,470 304,446" fill="url(#base-right)" />
+    </g>
+    <polygon points="256,44 412,122 256,200 100,122" fill="url(#card-top)" opacity="0.6" filter="url(#shadowGlow)" transform="translate(0, 24)" />
+    <g stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linejoin="round">
+      <polygon points="256,44 412,122 256,200 100,122" fill="url(#card-top)" />
+      <polygon points="100,122 256,200 256,216 100,138" fill="url(#card-left)" />
+      <polygon points="412,122 256,200 256,216 412,138" fill="url(#card-right)" />
+    </g>
+    <g fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linejoin="round">
+      <polygon points="147,122 256,67 279,79 170,134" />
+      <polygon points="248,110 295,87 365,122 318,145" />
+      <polygon points="186,142 233,118 303,153 256,177" />
+    </g>
+  </g>
+
+  <!-- LOWERCASE TYPOGRAPHY -->
+  <text x="264" y="174" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif" font-size="132" font-weight="800" letter-spacing="-0.04em" fill="#09090b">keystone</text>
+</svg>
