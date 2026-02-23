@@ -46,6 +46,12 @@ Then add the `@source` directive so Tailwind can find component classes:
   generates the required classes. Without it, component styles will be missing.
 </Callout>
 
+<Callout type="warn">
+  The `@source` path is relative to your CSS file. If your project uses a `src/`
+  directory (e.g. `src/app/globals.css`), adjust the path to go up two levels:
+  `@source "../../node_modules/@keystoneui/react/src/**/*.{ts,tsx}";`
+</Callout>
+
 See the [Registry guide](/docs/installation/registry) for namespace config, swapping themes, and creating your own.
 
 ### Manual Setup
