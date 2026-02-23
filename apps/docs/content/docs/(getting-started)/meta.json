@@ -2,5 +2,13 @@
   "title": "Getting Started",
   "icon": "BookOpen",
   "root": true,
-  "pages": ["index", "installation", "theming", "agents"]
+  "pages": [
+    "index",
+    "---Installation---",
+    "...installation",
+    "---Theming---",
+    "...theming",
+    "---AI for Agents---",
+    "...agents"
+  ]
 }

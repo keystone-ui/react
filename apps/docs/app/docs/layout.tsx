@@ -20,7 +20,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           transform: (tab) => ({
             ...tab,
             title: (
-              <span className="inline-flex items-center gap-2">
+              <span className="inline-flex items-center gap-2 [&_svg]:size-4">
                 {tab.icon}
                 {tab.title}
               </span>

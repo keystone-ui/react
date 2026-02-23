@@ -61,6 +61,7 @@
     "./toggle": "./src/toggle.tsx",
     "./toggle-group": "./src/toggle-group.tsx",
     "./tooltip": "./src/tooltip.tsx",
+    "./hooks": "./src/hooks/index.ts",
     "./utils": "./src/utils.ts",
     "./base.css": "./src/base.css"
   },
@@ -366,6 +367,11 @@
         "types": "./dist/tooltip.d.ts",
         "import": "./dist/tooltip.js",
         "require": "./dist/tooltip.cjs"
+      },
+      "./hooks": {
+        "types": "./dist/hooks/index.d.ts",
+        "import": "./dist/hooks/index.js",
+        "require": "./dist/hooks/index.cjs"
       },
       "./utils": {
         "types": "./dist/utils.d.ts",

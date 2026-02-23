@@ -67,49 +67,6 @@ const components = [
 export default function HomePage() {
   return (
     <main>
-      {/* Navigation */}
-      <header className="sticky top-0 z-50 border-border/50 border-b bg-background/80 backdrop-blur-lg">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <Link className="font-bold text-xl tracking-tight" href="/">
-            Keystone UI
-          </Link>
-          <nav className="hidden items-center gap-6 text-sm md:flex">
-            <Link
-              className="text-muted-foreground transition-colors hover:text-foreground"
-              href="/docs"
-            >
-              Docs
-            </Link>
-            <Link
-              className="text-muted-foreground transition-colors hover:text-foreground"
-              href="/gallery"
-            >
-              Components
-            </Link>
-            <Link
-              className="text-muted-foreground transition-colors hover:text-foreground"
-              href="/blog"
-            >
-              Blog
-            </Link>
-            <Link
-              className="text-muted-foreground transition-colors hover:text-foreground"
-              href="/changelog"
-            >
-              Changelog
-            </Link>
-            <a
-              className="text-muted-foreground transition-colors hover:text-foreground"
-              href="https://github.com/keystone-ui/react"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <Github className="size-5" />
-            </a>
-          </nav>
-        </div>
-      </header>
-
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,oklch(0.8_0.05_260/0.15),transparent_70%)]" />
@@ -265,15 +222,21 @@ export default function HomePage() {
               </Link>
               <Link
                 className="transition-colors hover:text-foreground"
-                href="/gallery"
+                href="/theme-builder"
               >
-                Components
+                Theme Builder
               </Link>
               <Link
                 className="transition-colors hover:text-foreground"
-                href="/blog"
+                href="/gallery"
               >
-                Blog
+                Gallery
+              </Link>
+              <Link
+                className="transition-colors hover:text-foreground"
+                href="/changelog"
+              >
+                Changelog
               </Link>
               <a
                 className="transition-colors hover:text-foreground"

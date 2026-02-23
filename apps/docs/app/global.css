@@ -102,9 +102,12 @@
   --skeleton-shimmer: oklch(1 0 0 / 0.1);
 }
 
+:root {
+  --color-fd-background: var(--background);
+}
+
 #nd-subnav {
-  background: transparent !important;
-  backdrop-filter: none !important;
+  z-index: 50 !important;
 }
 
 @layer base {

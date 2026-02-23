@@ -55,6 +55,7 @@ export default defineConfig((options) => ({
     "src/toggle.tsx",
     "src/toggle-group.tsx",
     "src/tooltip.tsx",
+    "src/hooks/index.ts",
     "src/utils.ts",
   ],
   format: ["cjs", "esm"],
