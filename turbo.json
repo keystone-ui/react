@@ -24,6 +24,10 @@
     "preview-storybook": {
       "dependsOn": ["^build"],
       "cache": false
+    },
+    "deploy:cf": {
+      "dependsOn": ["^build"],
+      "cache": false
     }
   }
 }

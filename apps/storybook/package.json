@@ -10,9 +10,11 @@
     "clean": "rm -rf .turbo && rm -rf node_modules",
     "test": "vitest",
     "test-storybook": "vitest --project=storybook",
-    "chromatic": "chromatic --exit-zero-on-changes --auto-accept-changes=main"
+    "chromatic": "chromatic --exit-zero-on-changes --auto-accept-changes=main",
+    "deploy:cf": "wrangler pages deploy storybook-static --project-name=keystoneui-storybook"
   },
   "dependencies": {
+    "@keystoneui/react": "workspace:*",
     "@remixicon/react": "^4.9.0",
     "chrono-node": "^2.9.0",
     "class-variance-authority": "^0.7.1",
@@ -21,7 +23,6 @@
     "date-fns": "^4.1.0",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
-    "@keystoneui/react": "workspace:*",
     "libphonenumber-js": "^1.12.37",
     "lucide-react": "^0.575.0",
     "react": "^19.2.4",
@@ -54,6 +55,7 @@
     "storybook": "^10.2.10",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "wrangler": "^4.68.0"
   }
 }
