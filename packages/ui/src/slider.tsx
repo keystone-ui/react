@@ -85,14 +85,16 @@ function SliderThumb({ className, ...props }: SliderThumbProps) {
     <SliderPrimitive.Thumb
       className={cn(
         // Horizontal pill / capsule shape (20x13), centered on track
-        "h-[0.8125rem] w-[1.25rem] -translate-y-1/2 rounded-full bg-background",
+        "h-[0.8125rem] w-[1.25rem] -translate-y-1/2 rounded-full bg-background dark:bg-white",
         // Soft elevated shadow
-        "shadow-[0_0_0_1px_rgba(0,0,0,0.03),0_1px_3px_rgba(0,0,0,0.08)]",
+        "shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.08)]",
+        // Hover ring
+        "hover:ring-2 hover:ring-ring/20",
         // Focus ring
         "focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
-        // Active state: slightly grow + slightly deeper shadow (NOT left — must stay instant)
-        "transition-[transform,box-shadow] duration-150",
-        "data-[dragging]:scale-105 data-[dragging]:shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_2px_6px_rgba(0,0,0,0.12)]",
+        // Active state: slightly grow + slightly deeper shadow
+        "transition-[transform,box-shadow,ring-color] duration-150",
+        "data-[dragging]:scale-105 data-[dragging]:shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_2px_6px_rgba(0,0,0,0.12)] data-[dragging]:ring-2 data-[dragging]:ring-ring/20",
         // Disabled
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         // Reduced motion
