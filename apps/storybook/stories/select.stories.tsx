@@ -153,11 +153,10 @@ export const Default: Story = {
     const trigger = canvas.getByRole("combobox");
     await expect(trigger).toBeVisible();
 
-    // Open the select
     await userEvent.click(trigger);
 
-    // Verify items are visible
-    const apple = await canvas.findByText("Apple");
+    const body = within(document.body);
+    const apple = await body.findByText("Apple");
     await expect(apple).toBeVisible();
   },
 };

@@ -130,11 +130,10 @@ export const Default: Story = {
     const trigger = canvas.getByRole("button", { name: /open/i });
     await expect(trigger).toBeVisible();
 
-    // Open the menu
     await userEvent.click(trigger);
 
-    // Verify menu items are visible
-    const profile = await canvas.findByText("Profile");
+    const body = within(document.body);
+    const profile = await body.findByText("Profile");
     await expect(profile).toBeVisible();
   },
   render: () => (

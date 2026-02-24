@@ -131,8 +131,8 @@ export const Default: Story = {
     const nav = canvas.getByRole("navigation");
     await expect(nav).toBeInTheDocument();
 
-    const nextLink = canvas.getByRole("link", { name: /next/i });
-    await expect(nextLink).toBeInTheDocument();
+    const nextButton = canvas.getByLabelText("Go to next page");
+    await expect(nextButton).toBeInTheDocument();
   },
 };
 

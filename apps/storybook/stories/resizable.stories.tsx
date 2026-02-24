@@ -89,8 +89,9 @@ export const Default: Story = {
     </ResizablePanelGroup>
   ),
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const panelGroup = canvas.getByRole("group");
+    const panelGroup = canvasElement.querySelector(
+      "[data-slot='resizable-panel-group']"
+    );
     await expect(panelGroup).toBeInTheDocument();
   },
 };

@@ -94,6 +94,9 @@ jobs:
       - name: Build packages
         run: pnpm build --filter=storybook^...
 
+      - name: Warm Vite dependency optimization cache
+        run: pnpm test --filter=storybook || true
+
       - name: Run Storybook interaction tests
         run: pnpm test --filter=storybook
 
