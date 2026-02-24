@@ -4,6 +4,716 @@
   "homepage": "https://keystoneui.io",
   "items": [
     {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "description": "Vertically stacked expandable and collapsible content sections for organizing dense information.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "files": [
+        {
+          "path": "packages/ui/src/accordion.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "aspect-ratio",
+      "type": "registry:ui",
+      "title": "Aspect Ratio",
+      "description": "Constrains content to a consistent width-to-height ratio for images, videos, or embeds.",
+      "files": [
+        {
+          "path": "packages/ui/src/aspect-ratio.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "alert-dialog",
+      "type": "registry:ui",
+      "title": "Alert Dialog",
+      "description": "Modal confirmation dialog for destructive or irreversible actions requiring user acknowledgement.",
+      "dependencies": ["@base-ui/react"],
+      "registryDependencies": ["button"],
+      "files": [
+        {
+          "path": "packages/ui/src/alert-dialog.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "avatar",
+      "type": "registry:ui",
+      "title": "Avatar",
+      "description": "User avatar displaying a profile image with a text or icon fallback.",
+      "dependencies": ["@base-ui/react"],
+      "files": [
+        {
+          "path": "packages/ui/src/avatar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "Small status indicator or count label for highlighting categories, statuses, or counts.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "files": [
+        {
+          "path": "packages/ui/src/badge.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:ui",
+      "title": "Breadcrumb",
+      "description": "Navigation breadcrumb trail showing the user's current location within a hierarchy.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "files": [
+        {
+          "path": "packages/ui/src/breadcrumb.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "A versatile button component with multiple variants, sizes, and states.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "button-group",
+      "type": "registry:ui",
+      "title": "Button Group",
+      "description": "Groups related buttons together with consistent spacing and connected styling.",
+      "dependencies": ["class-variance-authority"],
+      "registryDependencies": ["button", "separator"],
+      "files": [
+        {
+          "path": "packages/ui/src/button-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "calendar",
+      "type": "registry:ui",
+      "title": "Calendar",
+      "description": "Interactive date calendar for browsing and selecting dates by month.",
+      "dependencies": ["react-day-picker", "lucide-react"],
+      "registryDependencies": ["button", "native-select"],
+      "files": [
+        {
+          "path": "packages/ui/src/calendar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "carousel",
+      "type": "registry:ui",
+      "title": "Carousel",
+      "description": "Horizontally scrollable content carousel with navigation controls for browsing items.",
+      "dependencies": [
+        "embla-carousel-react",
+        "embla-carousel-wheel-gestures",
+        "lucide-react"
+      ],
+      "registryDependencies": ["button"],
+      "files": [
+        {
+          "path": "packages/ui/src/carousel.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "description": "Prominent message banner for displaying important information, warnings, or errors to users.",
+      "dependencies": ["class-variance-authority"],
+      "files": [
+        {
+          "path": "packages/ui/src/alert.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "Structured container with header, content, and footer sections for grouping related information.",
+      "files": [
+        {
+          "path": "packages/ui/src/card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "circular-progress",
+      "type": "registry:ui",
+      "title": "Circular Progress",
+      "description": "Circular progress indicator for showing completion percentage in a ring format.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "files": [
+        {
+          "path": "packages/ui/src/circular-progress.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "A toggle control for binary choices, supporting checked, unchecked, and indeterminate states.",
+      "dependencies": ["@base-ui/react"],
+      "files": [
+        {
+          "path": "packages/ui/src/checkbox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:ui",
+      "title": "Collapsible",
+      "description": "Single expandable content section that toggles between collapsed and expanded states.",
+      "dependencies": ["@base-ui/react"],
+      "files": [
+        {
+          "path": "packages/ui/src/collapsible.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "combobox",
+      "type": "registry:ui",
+      "title": "Combobox",
+      "description": "Searchable dropdown with autocomplete for filtering and selecting from a list of options.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": ["button", "input-group"],
+      "files": [
+        {
+          "path": "packages/ui/src/combobox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "command",
+      "type": "registry:ui",
+      "title": "Command",
+      "description": "A searchable command menu for quick actions, navigation, and filtering.",
+      "dependencies": ["cmdk", "lucide-react"],
+      "registryDependencies": ["modal", "input-group"],
+      "files": [
+        {
+          "path": "packages/ui/src/command.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "date-input",
+      "type": "registry:ui",
+      "title": "Date Input",
+      "description": "Date picker input field for selecting dates with keyboard and calendar support.",
+      "files": [
+        {
+          "path": "packages/ui/src/date-input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "description-list",
+      "type": "registry:ui",
+      "title": "Description List",
+      "description": "Displays term-description pairs for presenting metadata, settings, or key-value information.",
+      "files": [
+        {
+          "path": "packages/ui/src/description-list.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "drawer",
+      "type": "registry:ui",
+      "title": "Drawer",
+      "description": "Slide-out panel that emerges from screen edges for supplementary content or navigation.",
+      "dependencies": ["@base-ui/react"],
+      "files": [
+        {
+          "path": "packages/ui/src/drawer.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "empty",
+      "type": "registry:ui",
+      "title": "Empty",
+      "description": "Empty state placeholder with icon and message for when no content is available.",
+      "dependencies": ["class-variance-authority"],
+      "files": [
+        {
+          "path": "packages/ui/src/empty.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "Dropdown Menu",
+      "description": "Contextual menu triggered by a button, with support for items, separators, and sub-menus.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": ["checkbox"],
+      "files": [
+        {
+          "path": "packages/ui/src/dropdown-menu.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "Field",
+      "description": "Form field wrapper that provides a label, description, and error message around a form control.",
+      "registryDependencies": ["label", "separator"],
+      "files": [
+        {
+          "path": "packages/ui/src/field.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "form",
+      "type": "registry:ui",
+      "title": "Form",
+      "description": "A form wrapper component that provides consistent layout and validation support.",
+      "registryDependencies": ["label"],
+      "files": [
+        {
+          "path": "packages/ui/src/form.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "item",
+      "type": "registry:ui",
+      "title": "Item",
+      "description": "Generic list item primitive for building consistent list-based interfaces.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "files": [
+        {
+          "path": "packages/ui/src/item.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "A form input field with consistent styling and focus states.",
+      "files": [
+        {
+          "path": "packages/ui/src/input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input-group",
+      "type": "registry:ui",
+      "title": "Input Group",
+      "description": "Groups an input with adjacent buttons, icons, or text add-ons for combined input actions.",
+      "registryDependencies": ["button"],
+      "files": [
+        {
+          "path": "packages/ui/src/input-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input-otp",
+      "type": "registry:ui",
+      "title": "Input OTP",
+      "description": "One-time password input with individual digit slots for verification codes.",
+      "dependencies": ["input-otp"],
+      "files": [
+        {
+          "path": "packages/ui/src/input-otp.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "Inline keyboard shortcut display for showing key combinations and hotkeys.",
+      "files": [
+        {
+          "path": "packages/ui/src/kbd.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "Label",
+      "description": "An accessible label component for form controls with optional description and error messages.",
+      "dependencies": ["@base-ui/react"],
+      "files": [
+        {
+          "path": "packages/ui/src/label.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "modal",
+      "type": "registry:ui",
+      "title": "Modal",
+      "description": "A dialog overlay for focused interactions like confirmations, forms, and detail views.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": ["button"],
+      "files": [
+        {
+          "path": "packages/ui/src/modal.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "native-select",
+      "type": "registry:ui",
+      "title": "Native Select",
+      "description": "Native browser select dropdown for simple selection scenarios with optimal mobile support.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "packages/ui/src/native-select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "description": "Page navigation controls for browsing through paginated content.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button"],
+      "files": [
+        {
+          "path": "packages/ui/src/pagination.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Floating content panel anchored to a trigger element for contextual information or controls.",
+      "dependencies": ["@base-ui/react"],
+      "files": [
+        {
+          "path": "packages/ui/src/popover.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "description": "Linear progress bar for visualizing completion or loading progress.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "files": [
+        {
+          "path": "packages/ui/src/progress.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:ui",
+      "title": "Radio Group",
+      "description": "A set of mutually exclusive options where only one can be selected at a time.",
+      "dependencies": ["@base-ui/react"],
+      "files": [
+        {
+          "path": "packages/ui/src/radio-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "resizable",
+      "type": "registry:ui",
+      "title": "Resizable",
+      "description": "Resizable panel layout that allows users to adjust the size of content areas by dragging handles.",
+      "dependencies": ["react-resizable-panels"],
+      "files": [
+        {
+          "path": "packages/ui/src/resizable.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "A dropdown control for selecting one or more options from a list.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "files": [
+        {
+          "path": "packages/ui/src/select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "Range slider input for selecting a numeric value within a defined range.",
+      "dependencies": ["@base-ui/react"],
+      "files": [
+        {
+          "path": "packages/ui/src/slider.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "description": "Visual divider for separating content sections horizontally or vertically.",
+      "files": [
+        {
+          "path": "packages/ui/src/separator.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "Animated placeholder shapes for previewing content layout while data is loading.",
+      "files": [
+        {
+          "path": "packages/ui/src/skeleton.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "spinner",
+      "type": "registry:ui",
+      "title": "Spinner",
+      "description": "Animated loading spinner for indicating indeterminate loading states.",
+      "dependencies": ["lucide-react"],
+      "files": [
+        {
+          "path": "packages/ui/src/spinner.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "stepper",
+      "type": "registry:ui",
+      "title": "Stepper",
+      "description": "Multi-step progress indicator for guiding users through sequential workflows.",
+      "dependencies": ["motion", "react-use-measure"],
+      "files": [
+        {
+          "path": "packages/ui/src/stepper.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "A toggle control for boolean states with smooth animation.",
+      "dependencies": ["@base-ui/react"],
+      "files": [
+        {
+          "path": "packages/ui/src/switch.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "Structured data table with rows, columns, headers, and cells for displaying tabular data.",
+      "files": [
+        {
+          "path": "packages/ui/src/table.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Tabbed interface for organizing content into selectable panels.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/tabs.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "A multi-line text input for longer form content.",
+      "files": [
+        {
+          "path": "packages/ui/src/textarea.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tag",
+      "type": "registry:ui",
+      "title": "Tag",
+      "description": "Removable label element for displaying categories, filters, or selections.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/tag.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tag-group",
+      "type": "registry:ui",
+      "title": "Tag Group",
+      "description": "Managed group of tags with add and remove capabilities for multi-value selection.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["tag"],
+      "files": [
+        {
+          "path": "packages/ui/src/tag-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toggle",
+      "type": "registry:ui",
+      "title": "Toggle",
+      "description": "Two-state toggle button that switches between pressed and unpressed states.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "files": [
+        {
+          "path": "packages/ui/src/toggle.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group",
+      "type": "registry:ui",
+      "title": "Toggle Group",
+      "description": "Group of toggle buttons where one or multiple options can be selected.",
+      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "registryDependencies": ["toggle"],
+      "files": [
+        {
+          "path": "packages/ui/src/toggle-group.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Small floating label that appears on hover to provide additional descriptive text.",
+      "dependencies": ["@base-ui/react"],
+      "files": [
+        {
+          "path": "packages/ui/src/tooltip.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast",
+      "description": "Temporary notification messages that appear briefly to provide non-intrusive feedback.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "files": [
+        {
+          "path": "packages/ui/src/toast.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "signin-01",
       "type": "registry:block",
       "title": "Sign in 01",

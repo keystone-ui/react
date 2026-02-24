@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag",
+  "title": "Tag",
+  "description": "Removable label element for displaying categories, filters, or selections.",
+  "dependencies": [
+    "@base-ui/react",
+    "class-variance-authority",
+    "lucide-react"
+  ],
+  "files": [
+    {
+      "path": "packages/ui/src/tag.tsx",
+      "content": "\"use client\";\n\nimport { Toggle as TogglePrimitive } from \"@base-ui/react/toggle\";\nimport { cva } from \"class-variance-authority\";\nimport { XIcon } from \"lucide-react\";\nimport type * as React from \"react\";\n\nimport { cn } from \"./utils\";\n\n// ---------------------------------------------------------------------------\n// Variants\n// ---------------------------------------------------------------------------\n\nconst tagVariants = cva(\n  \"inline-flex h-6 shrink-0 cursor-pointer select-none items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full bg-secondary px-2.5 font-medium text-secondary-foreground text-xs transition-colors hover:bg-secondary-hover focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 has-[[data-slot=avatar]]:pl-1 aria-pressed:bg-primary/10 aria-pressed:text-primary dark:aria-pressed:bg-primary/15 [&_svg:not([class*='size-'])]:size-3 [&_svg]:pointer-events-none [&_svg]:shrink-0\"\n);\n\n// ---------------------------------------------------------------------------\n// Tag\n// ---------------------------------------------------------------------------\n\nexport interface TagProps extends TogglePrimitive.Props {}\n\nfunction Tag({ className, ...props }: TagProps) {\n  return (\n    <TogglePrimitive\n      className={cn(tagVariants(), className)}\n      data-slot=\"tag\"\n      {...props}\n    />\n  );\n}\n\n// ---------------------------------------------------------------------------\n// TagRemove\n// ---------------------------------------------------------------------------\n\nexport interface TagRemoveProps extends React.ComponentPropsWithRef<\"button\"> {}\n\nfunction TagRemove({ className, children, ...props }: TagRemoveProps) {\n  return (\n    <button\n      className={cn(\n        \"-my-px -ms-0.5 -me-1.5 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full p-0 text-current/60 outline-none transition-[color,box-shadow] hover:text-current focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2\",\n        className\n      )}\n      data-slot=\"tag-remove\"\n      type=\"button\"\n      {...props}\n    >\n      {children || <XIcon aria-hidden=\"true\" size={10} />}\n    </button>\n  );\n}\n\n// ---------------------------------------------------------------------------\n// Exports\n// ---------------------------------------------------------------------------\n\nexport { Tag, TagRemove, tagVariants };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

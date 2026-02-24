@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-input",
+  "title": "Date Input",
+  "description": "Date picker input field for selecting dates with keyboard and calendar support.",
+  "files": [
+    {
+      "path": "packages/ui/src/date-input.tsx",
+      "content": "\"use client\";\n\nimport { CalendarIcon } from \"lucide-react\";\nimport * as React from \"react\";\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupButton,\n  InputGroupInput,\n} from \"./input-group\";\nimport { cn } from \"./utils\";\n\nexport interface DateInputProps\n  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> {}\n\nexport const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(\n  ({ className, ...props }, ref) => {\n    const innerRef = React.useRef<HTMLInputElement>(null);\n    const inputRef = (ref as React.RefObject<HTMLInputElement>) || innerRef;\n\n    return (\n      <InputGroup>\n        <InputGroupInput\n          className={cn(\n            \"[&::-webkit-calendar-picker-indicator]:hidden\",\n            className\n          )}\n          ref={inputRef}\n          type=\"date\"\n          {...props}\n        />\n        <InputGroupAddon align=\"inline-end\">\n          <InputGroupButton\n            aria-label=\"Open date picker\"\n            onClick={() => inputRef.current?.showPicker()}\n            size=\"icon-xs\"\n            type=\"button\"\n          >\n            <CalendarIcon className=\"size-4\" />\n          </InputGroupButton>\n        </InputGroupAddon>\n      </InputGroup>\n    );\n  }\n);\n\nDateInput.displayName = \"DateInput\";\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

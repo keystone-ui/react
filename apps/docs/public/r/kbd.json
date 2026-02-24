@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd",
+  "title": "Kbd",
+  "description": "Inline keyboard shortcut display for showing key combinations and hotkeys.",
+  "files": [
+    {
+      "path": "packages/ui/src/kbd.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { cn } from \"./utils\";\n\n// =============================================================================\n// Kbd\n// =============================================================================\nexport interface KbdProps extends React.ComponentProps<\"kbd\"> {\n  /**\n   * Optional additional className for the kbd\n   */\n  className?: string;\n}\n\nexport const Kbd = React.forwardRef<HTMLElement, KbdProps>(\n  ({ className, ...props }, ref) => {\n    return (\n      <kbd\n        className={cn(\n          \"pointer-events-none inline-flex h-5 w-fit min-w-5 select-none items-center justify-center gap-1 rounded-sm border bg-muted px-1.5 font-medium font-sans text-muted-foreground text-xs\",\n          \"[&_svg:not([class*='size-'])]:size-3\",\n          // Tooltip context styling\n          \"[[data-slot=tooltip-content]_&]:border-transparent [[data-slot=tooltip-content]_&]:bg-background/20 [[data-slot=tooltip-content]_&]:text-background\",\n          \"dark:[[data-slot=tooltip-content]_&]:bg-background/10\",\n          className\n        )}\n        data-slot=\"kbd\"\n        ref={ref}\n        {...props}\n      />\n    );\n  }\n);\nKbd.displayName = \"Kbd\";\n\n// =============================================================================\n// KbdGroup\n// =============================================================================\nexport interface KbdGroupProps extends React.ComponentProps<\"div\"> {\n  /**\n   * Optional additional className for the kbd group\n   */\n  className?: string;\n}\n\nexport const KbdGroup = React.forwardRef<HTMLDivElement, KbdGroupProps>(\n  ({ className, ...props }, ref) => {\n    return (\n      <div\n        className={cn(\"inline-flex items-center gap-1\", className)}\n        data-slot=\"kbd-group\"\n        ref={ref}\n        {...props}\n      />\n    );\n  }\n);\nKbdGroup.displayName = \"KbdGroup\";\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

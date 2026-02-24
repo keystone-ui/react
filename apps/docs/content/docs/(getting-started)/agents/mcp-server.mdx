@@ -1,0 +1,206 @@
+---
+title: MCP Server
+description: Use the Keystone UI MCP server to let AI assistants browse, search, and install components.
+---
+
+The Keystone UI MCP server allows AI assistants to interact with your component registry. You can browse available components, search for specific ones, view full source code, and install them directly into your project using natural language.
+
+For example, you can ask an AI assistant to "Add a button and card from Keystone UI" or "Show me all available form components".
+
+## Quick Start
+
+Run the init command for your AI client:
+
+```bash tab="Cursor"
+npx @keystoneui/mcp init --client cursor
+```
+
+```bash tab="Claude Code"
+npx @keystoneui/mcp init --client claude
+```
+
+```bash tab="VS Code"
+npx @keystoneui/mcp init --client vscode
+```
+
+```bash tab="OpenCode"
+npx @keystoneui/mcp init --client opencode
+```
+
+```bash tab="Codex"
+npx @keystoneui/mcp init --client codex
+```
+
+This writes the correct MCP config file for your editor. Restart your editor, then try these prompts:
+
+- Show me all available Keystone UI components
+- Add the button, card, and input components to my project
+- Create a sign-in form using Keystone UI components
+
+<Callout type="info">
+  For Cursor, enable the MCP server in **Cursor Settings > MCP Servers** after running the init command.
+</Callout>
+
+---
+
+## What is MCP?
+
+[Model Context Protocol (MCP)](https://modelcontextprotocol.io) is an open protocol that enables AI assistants to connect to external tools and data sources. With the Keystone UI MCP server, your AI assistant can:
+
+- **Browse Components** -- List all 53+ UI components and blocks with descriptions
+- **Search by Name or Keyword** -- Fuzzy search across components and blocks
+- **View Full Source Code** -- Inspect component implementations, dependencies, and registry dependencies
+- **Get Install Commands** -- Generate `npx shadcn add` commands for any component
+- **Access Theme Info** -- View CSS setup, OKLCH color tokens, radius scale, and dark mode configuration
+- **Run an Audit** -- Verify your project is correctly configured for Keystone UI
+
+---
+
+## How It Works
+
+The MCP server runs locally on your machine as a background process managed by your editor.
+
+1. **Editor Spawns Process** -- Your editor reads the MCP config and runs `npx @keystoneui/mcp`
+2. **Natural Language** -- You describe what you need to the AI assistant
+3. **AI Calls Tools** -- The assistant picks the right MCP tool (search, view, install, etc.)
+4. **Registry Fetch** -- The tool fetches component data from `keystoneui.io/r/` and returns it to the assistant
+
+No server infrastructure is needed -- the MCP server fetches static JSON files from the registry and runs fuzzy search locally.
+
+---
+
+## Available Tools
+
+The MCP server exposes 6 tools that AI assistants can call:
+
+| Tool | Input | Description |
+|---|---|---|
+| `list_components` | `limit?`, `offset?`, `type?` | Paginated list of all components and blocks |
+| `search_components` | `query`, `limit?`, `type?` | Fuzzy search by name, description, or keywords |
+| `view_component` | `names[]` | Full source code, dependencies, and metadata for up to 5 components |
+| `get_add_command` | `names[]` | Generates `npx shadcn@latest add` commands with registry URLs |
+| `get_theme_info` | -- | CSS setup, OKLCH color tokens, radius scale, dark mode |
+| `audit_checklist` | -- | Post-install verification checklist |
+
+---
+
+## Configuration
+
+If you prefer to configure manually instead of using `npx @keystoneui/mcp init`, add the config for your editor:
+
+### Cursor
+
+```json title=".cursor/mcp.json"
+{
+  "mcpServers": {
+    "keystoneui": {
+      "command": "npx",
+      "args": ["@keystoneui/mcp@latest"]
+    }
+  }
+}
+```
+
+After adding the configuration, enable the Keystone UI MCP server in **Cursor Settings**.
+
+### Claude Code
+
+```json title=".mcp.json"
+{
+  "mcpServers": {
+    "keystoneui": {
+      "command": "npx",
+      "args": ["@keystoneui/mcp@latest"]
+    }
+  }
+}
+```
+
+After adding the configuration, restart Claude Code and run `/mcp` to verify the server is connected.
+
+### VS Code
+
+```json title=".vscode/mcp.json"
+{
+  "servers": {
+    "keystoneui": {
+      "command": "npx",
+      "args": ["@keystoneui/mcp@latest"]
+    }
+  }
+}
+```
+
+After adding the configuration, open `.vscode/mcp.json` and click **Start** next to the keystoneui server.
+
+### Codex
+
+<Callout type="warn">
+  The CLI cannot automatically write to `~/.codex/config.toml`. Add the configuration manually.
+</Callout>
+
+```toml title="~/.codex/config.toml"
+[mcp_servers.keystoneui]
+command = "npx"
+args = ["@keystoneui/mcp@latest"]
+```
+
+After adding the configuration, restart Codex.
+
+---
+
+## Example Prompts
+
+### Browse and Search
+
+- Show me all available Keystone UI components
+- What form components does Keystone UI have?
+- Find me a date picker component
+
+### Install Components
+
+- Add the button and card components to my project
+- Install all the form-related components from Keystone UI
+- Set up a modal with an alert dialog
+
+### Build with Components
+
+- Create a sign-in form using Keystone UI
+- Build a settings page with tabs, inputs, and a switch
+- Add a dropdown menu with checkable items
+
+### Theme and Setup
+
+- How do I set up Keystone UI CSS?
+- Show me the Keystone UI color tokens
+- Run an audit to check my Keystone UI setup
+
+---
+
+## Troubleshooting
+
+### MCP Server Not Showing
+
+1. Verify the config file exists in the right location for your editor
+2. Restart your editor after adding the configuration
+3. For Cursor: check **Settings > MCP Servers** and enable the server
+
+### No Tools Available
+
+1. Clear the npx cache: `npx clear-npx-cache`
+2. Re-enable the MCP server in your editor settings
+3. For Cursor: check **View > Output** and select `MCP: project-*` in the dropdown
+
+### Components Not Loading
+
+1. Verify you have internet access (the MCP server fetches from `keystoneui.io`)
+2. Check if `https://keystoneui.io/r/registry.json` is accessible
+3. Restart the MCP server by disabling and re-enabling it
+
+---
+
+## Related
+
+- [LLMs.txt](/docs/agents/llms-txt) -- Static text files for AI assistants
+- [Agent Skills](/docs/agents/skills) -- Install Keystone UI knowledge into your AI assistant
+- [AGENTS.md](/docs/agents/agents-md) -- Download documentation into your project

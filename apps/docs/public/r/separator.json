@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "separator",
+  "title": "Separator",
+  "description": "Visual divider for separating content sections horizontally or vertically.",
+  "files": [
+    {
+      "path": "packages/ui/src/separator.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { cn } from \"./utils\";\n\nexport interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {\n  /**\n   * Whether the separator is decorative (not announced by screen readers)\n   * @default true\n   */\n  decorative?: boolean;\n  /**\n   * The orientation of the separator\n   * @default \"horizontal\"\n   */\n  orientation?: \"horizontal\" | \"vertical\";\n}\n\nexport const Separator = React.forwardRef<HTMLDivElement, SeparatorProps>(\n  (\n    { className, orientation = \"horizontal\", decorative = true, ...props },\n    ref\n  ) => {\n    const ariaOrientation =\n      orientation === \"vertical\" ? orientation : undefined;\n    const semanticProps = decorative\n      ? { role: \"none\" }\n      : { \"aria-orientation\": ariaOrientation, role: \"separator\" };\n\n    return (\n      <div\n        className={cn(\n          \"shrink-0 bg-border\",\n          orientation === \"horizontal\" ? \"h-px w-full\" : \"h-full w-px\",\n          className\n        )}\n        data-orientation={orientation}\n        data-slot=\"separator\"\n        ref={ref}\n        {...semanticProps}\n        {...props}\n      />\n    );\n  }\n);\n\nSeparator.displayName = \"Separator\";\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

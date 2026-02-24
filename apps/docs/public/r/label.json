@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "label",
+  "title": "Label",
+  "description": "An accessible label component for form controls with optional description and error messages.",
+  "dependencies": ["@base-ui/react"],
+  "files": [
+    {
+      "path": "packages/ui/src/label.tsx",
+      "content": "\"use client\";\n\nimport React from \"react\";\nimport { cn } from \"./utils\";\n\nexport interface LabelProps\n  extends React.LabelHTMLAttributes<HTMLLabelElement> {\n  /**\n   * Optional additional className for the label\n   */\n  className?: string;\n}\n\nexport const Label = React.forwardRef<HTMLLabelElement, LabelProps>(\n  ({ className, ...props }, ref) => {\n    return (\n      <label\n        className={cn(\n          \"select-none font-medium text-foreground text-sm leading-4\",\n          \"peer-disabled:cursor-not-allowed peer-disabled:opacity-50\",\n          className\n        )}\n        ref={ref}\n        {...props}\n      />\n    );\n  }\n);\n\nLabel.displayName = \"Label\";\n\nexport interface DescriptionProps\n  extends React.HTMLAttributes<HTMLParagraphElement> {\n  /**\n   * Optional additional className for the description\n   */\n  className?: string;\n}\n\nexport const Description = React.forwardRef<\n  HTMLParagraphElement,\n  DescriptionProps\n>(({ className, ...props }, ref) => {\n  return (\n    <p\n      className={cn(\"text-[13px] text-muted-foreground\", className)}\n      ref={ref}\n      {...props}\n    />\n  );\n});\n\nDescription.displayName = \"Description\";\n\nexport interface ErrorMessageProps\n  extends React.HTMLAttributes<HTMLParagraphElement> {\n  /**\n   * Optional additional className for the error message\n   */\n  className?: string;\n}\n\nexport const ErrorMessage = React.forwardRef<\n  HTMLParagraphElement,\n  ErrorMessageProps\n>(({ className, ...props }, ref) => {\n  return (\n    <p\n      className={cn(\"text-[13px] text-destructive\", className)}\n      ref={ref}\n      {...props}\n    />\n  );\n});\n\nErrorMessage.displayName = \"ErrorMessage\";\n\nexport interface FormProps extends React.HTMLAttributes<HTMLDivElement> {\n  /**\n   * Optional additional className for the form container\n   */\n  className?: string;\n}\n\nexport const Form = React.forwardRef<HTMLDivElement, FormProps>(\n  ({ className, ...props }, ref) => {\n    return (\n      <div\n        className={cn(\"grid w-full max-w-sm items-center gap-1.5\", className)}\n        ref={ref}\n        {...props}\n      />\n    );\n  }\n);\n\nForm.displayName = \"Form\";\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag-group",
+  "title": "Tag Group",
+  "description": "Managed group of tags with add and remove capabilities for multi-value selection.",
+  "dependencies": ["@base-ui/react", "class-variance-authority"],
+  "registryDependencies": ["tag"],
+  "files": [
+    {
+      "path": "packages/ui/src/tag-group.tsx",
+      "content": "\"use client\";\n\nimport { Toggle as TogglePrimitive } from \"@base-ui/react/toggle\";\nimport { ToggleGroup as ToggleGroupPrimitive } from \"@base-ui/react/toggle-group\";\nimport * as React from \"react\";\nimport { TagRemove, tagVariants } from \"./tag\";\nimport { cn } from \"./utils\";\n\n// ---------------------------------------------------------------------------\n// Context\n// ---------------------------------------------------------------------------\n\nconst TagGroupContext = React.createContext<{\n  onRemove?: (value: string) => void;\n}>({});\n\n// ---------------------------------------------------------------------------\n// TagGroup\n// ---------------------------------------------------------------------------\n\nexport interface TagGroupProps extends ToggleGroupPrimitive.Props {\n  /** Callback fired when a tag item's remove button is clicked */\n  onRemove?: (value: string) => void;\n}\n\nfunction TagGroup({ className, onRemove, children, ...props }: TagGroupProps) {\n  const contextValue = React.useMemo(() => ({ onRemove }), [onRemove]);\n\n  return (\n    <ToggleGroupPrimitive\n      className={cn(\"flex flex-wrap gap-1.5\", className)}\n      data-slot=\"tag-group\"\n      {...props}\n    >\n      <TagGroupContext.Provider value={contextValue}>\n        {children}\n      </TagGroupContext.Provider>\n    </ToggleGroupPrimitive>\n  );\n}\n\n// ---------------------------------------------------------------------------\n// TagGroupItem\n// ---------------------------------------------------------------------------\n\nexport interface TagGroupItemProps extends TogglePrimitive.Props {\n  /** Unique value identifying this tag within the group */\n  value: string;\n}\n\nfunction TagGroupItem({\n  className,\n  value,\n  children,\n  ...props\n}: TagGroupItemProps) {\n  const { onRemove } = React.useContext(TagGroupContext);\n\n  return (\n    <TogglePrimitive\n      className={cn(tagVariants(), className)}\n      data-slot=\"tag-group-item\"\n      value={value}\n      {...props}\n    >\n      {children}\n      {onRemove && (\n        <TagRemove\n          onClick={(e) => {\n            e.stopPropagation();\n            onRemove(value);\n          }}\n        />\n      )}\n    </TogglePrimitive>\n  );\n}\n\n// ---------------------------------------------------------------------------\n// Exports\n// ---------------------------------------------------------------------------\n\nexport { TagGroup, TagGroupItem };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

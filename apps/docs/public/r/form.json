@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form",
+  "title": "Form",
+  "description": "A form wrapper component that provides consistent layout and validation support.",
+  "registryDependencies": ["label"],
+  "files": [
+    {
+      "path": "packages/ui/src/form.tsx",
+      "content": "export type {\n  DescriptionProps,\n  ErrorMessageProps,\n  FormProps,\n  LabelProps,\n} from \"./label\";\nexport { Description, ErrorMessage, Form, Label } from \"./label\";\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -13,7 +13,8 @@
     "fix": "ultracite fix",
     "add:component": "node scripts/add-component.mjs",
     "build:skills": "bash scripts/build-skills.sh",
-    "registry:build": "shadcn build -o apps/docs/public/r",
+    "registry:sync": "node scripts/sync-registry.mjs",
+    "registry:build": "node scripts/sync-registry.mjs && shadcn build -o apps/docs/public/r",
     "prepare": "husky"
   },
   "devDependencies": {

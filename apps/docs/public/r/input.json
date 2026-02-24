@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input",
+  "title": "Input",
+  "description": "A form input field with consistent styling and focus states.",
+  "files": [
+    {
+      "path": "packages/ui/src/input.tsx",
+      "content": "\"use client\";\n\nimport React from \"react\";\nimport { cn } from \"./utils\";\n\nexport interface InputProps\n  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, \"size\"> {\n  /**\n   * Optional additional className for the input\n   */\n  className?: string;\n  /**\n   * The native HTML `size` attribute for the `<input>` element.\n   * Sets the visible width of the input in average character widths.\n   * Use this instead of `size` when you need the native HTML behavior.\n   * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#size\n   */\n  htmlSize?: number;\n  /**\n   * Size variant of the input.\n   * Controls the visual height of the input (`\"default\"` = 40px, `\"sm\"` = 32px).\n   * @default \"default\"\n   */\n  size?: \"sm\" | \"default\";\n}\n\nexport const Input = React.forwardRef<HTMLInputElement, InputProps>(\n  ({ className, type = \"text\", size = \"default\", htmlSize, ...props }, ref) => {\n    return (\n      <input\n        className={cn(\n          \"bg-input-bg text-base md:text-sm\",\n          \"rounded-md border border-input\",\n          \"flex w-full min-w-0 px-3 py-1 shadow-xs outline-none transition-[color,box-shadow] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50\",\n          size === \"default\" && \"h-10\",\n          size === \"sm\" && \"h-8\",\n          \"placeholder:text-muted-foreground/70\",\n          // Focus styles\n          \"focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset\",\n          \"aria-invalid:border-destructive aria-invalid:ring-destructive dark:aria-invalid:ring-destructive\",\n          // Special styling for different input types\n          type === \"search\" &&\n            \"[&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none\",\n          type === \"file\" &&\n            \"p-0 pr-3 text-muted-foreground/70 italic file:me-3 file:inline-flex file:h-full file:border-0 file:border-input file:border-r file:border-solid file:bg-transparent file:px-3 file:font-medium file:text-foreground file:text-sm file:not-italic\",\n          className\n        )}\n        data-input=\"\"\n        data-size={size}\n        data-slot=\"input\"\n        ref={ref}\n        size={htmlSize}\n        type={type}\n        {...props}\n      />\n    );\n  }\n);\n\nInput.displayName = \"Input\";\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

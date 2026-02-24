@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "title": "Skeleton",
+  "description": "Animated placeholder shapes for previewing content layout while data is loading.",
+  "files": [
+    {
+      "path": "packages/ui/src/skeleton.tsx",
+      "content": "import type * as React from \"react\";\n\nimport { cn } from \"./utils\";\n\n// ---------------------------------------------------------------------------\n// Types\n// ---------------------------------------------------------------------------\n\ninterface SkeletonProps extends React.ComponentProps<\"div\"> {\n  /**\n   * The animation style of the skeleton.\n   * @default \"pulse\"\n   */\n  animationType?: \"pulse\" | \"none\";\n}\n\n// ---------------------------------------------------------------------------\n// Skeleton\n// ---------------------------------------------------------------------------\n\nfunction Skeleton({\n  className,\n  animationType = \"pulse\",\n  ...props\n}: SkeletonProps) {\n  return (\n    <div\n      className={cn(\n        \"rounded-md bg-accent\",\n        animationType === \"pulse\" && \"animate-pulse\",\n        className\n      )}\n      data-slot=\"skeleton\"\n      {...props}\n    />\n  );\n}\n\n// ---------------------------------------------------------------------------\n// SkeletonGroup\n// ---------------------------------------------------------------------------\n\nfunction SkeletonGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      className={cn(\n        \"relative overflow-hidden\",\n        \"before:pointer-events-none before:absolute before:inset-0 before:z-10\",\n        \"before:bg-[linear-gradient(90deg,transparent_25%,var(--skeleton-shimmer)_50%,transparent_75%)]\",\n        \"before:animate-skeleton-shimmer before:bg-[length:300%_100%]\",\n        className\n      )}\n      data-slot=\"skeleton-group\"\n      {...props}\n    />\n  );\n}\n\n// ---------------------------------------------------------------------------\n// Exports\n// ---------------------------------------------------------------------------\n\nexport { Skeleton, SkeletonGroup };\nexport type { SkeletonProps };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

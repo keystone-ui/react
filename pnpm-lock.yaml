@@ -248,6 +248,31 @@ importers:
         specifier: ^4.0.18
         version: 4.0.18(@types/node@22.16.5)(@vitest/browser-playwright@4.0.18)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@1.8.0))(lightningcss@1.31.1)(msw@2.12.10(@types/node@22.16.5)(typescript@5.9.3))(yaml@2.8.2)
 
+  packages/keystoneui-mcp:
+    dependencies:
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.12.1
+        version: 1.26.0(zod@3.25.76)
+      fuzzysort:
+        specifier: ^3.1.0
+        version: 3.1.0
+      zod:
+        specifier: ^3.25.36
+        version: 3.25.76
+    devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.15.0
+        version: 22.16.5
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.1(jiti@2.6.1)(postcss@8.5.6)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   packages/typescript-config: {}
 
   packages/ui:
@@ -9146,7 +9171,6 @@ snapshots:
   '@types/node@22.16.5':
     dependencies:
       undici-types: 6.21.0
-    optional: true
 
   '@types/react-dom@19.2.3(@types/react@19.2.14)':
     dependencies:
@@ -12662,8 +12686,7 @@ snapshots:
       jsonc-parser: 3.3.1
       nypm: 0.6.5
 
-  undici-types@6.21.0:
-    optional: true
+  undici-types@6.21.0: {}
 
   undici@7.22.0: {}
 

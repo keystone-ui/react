@@ -1,0 +1,32 @@
+{
+  "name": "@keystoneui/mcp",
+  "version": "0.1.0",
+  "description": "MCP server for Keystone UI — lets AI agents discover, search, and view components.",
+  "type": "module",
+  "bin": {
+    "keystoneui-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "fuzzysort": "^3.1.0",
+    "zod": "^3.25.36"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^22.15.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT"
+}

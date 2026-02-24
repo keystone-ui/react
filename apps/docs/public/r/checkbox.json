@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox",
+  "title": "Checkbox",
+  "description": "A toggle control for binary choices, supporting checked, unchecked, and indeterminate states.",
+  "dependencies": ["@base-ui/react"],
+  "files": [
+    {
+      "path": "packages/ui/src/checkbox.tsx",
+      "content": "\"use client\";\n\nimport { Checkbox as CheckboxPrimitive } from \"@base-ui/react/checkbox\";\nimport { CheckIcon } from \"lucide-react\";\nimport { cn } from \"./utils\";\n\nfunction Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {\n  return (\n    <CheckboxPrimitive.Root\n      className={cn(\n        // Base styles\n        \"peer relative flex size-4 shrink-0 items-center justify-center rounded-sm border\",\n        \"border-input bg-input-bg\",\n        // Smooth color transitions\n        \"transition-colors duration-150\",\n        // Click area extension\n        \"after:absolute after:-inset-x-3 after:-inset-y-2\",\n        // Checked state\n        \"data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary\",\n        // Focus styles - outside border like buttons\n        \"focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2\",\n        // Invalid styles - border change always, outline only on focus, no transition\n        \"aria-invalid:border-destructive aria-invalid:transition-none dark:aria-invalid:border-destructive/50\",\n        \"aria-invalid:focus-visible:outline-destructive/50\",\n        \"aria-invalid:data-checked:border-destructive aria-invalid:data-checked:bg-destructive aria-invalid:data-checked:text-destructive-foreground\",\n        // Disabled styles\n        \"disabled:cursor-not-allowed disabled:opacity-50 group-has-disabled/field:opacity-50\",\n        // Reduced motion\n        \"motion-reduce:transition-none\",\n        className\n      )}\n      data-slot=\"checkbox\"\n      {...props}\n    >\n      <CheckboxPrimitive.Indicator\n        className={cn(\n          \"grid place-content-center text-current [&>svg]:size-3.5\",\n          // Micro-animation: scale + opacity transition\n          \"transition-[transform,opacity] duration-150\",\n          // Enter: animate from small + transparent\n          \"data-[starting-style]:scale-50 data-[starting-style]:opacity-0\",\n          // Exit: animate to small + transparent\n          \"data-[ending-style]:scale-50 data-[ending-style]:opacity-0\",\n          // Hide when unchecked (after exit transition completes)\n          \"data-[unchecked]:hidden\",\n          // Reduced motion\n          \"motion-reduce:transition-none\"\n        )}\n        data-slot=\"checkbox-indicator\"\n        keepMounted\n      >\n        <CheckIcon />\n      </CheckboxPrimitive.Indicator>\n    </CheckboxPrimitive.Root>\n  );\n}\n\nexport { Checkbox };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

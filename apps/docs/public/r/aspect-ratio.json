@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "aspect-ratio",
+  "title": "Aspect Ratio",
+  "description": "Constrains content to a consistent width-to-height ratio for images, videos, or embeds.",
+  "files": [
+    {
+      "path": "packages/ui/src/aspect-ratio.tsx",
+      "content": "import { cn } from \"./utils\";\n\ninterface AspectRatioProps extends React.ComponentProps<\"div\"> {\n  /** The desired aspect ratio expressed as width / height (e.g. 16/9). */\n  ratio: number;\n}\n\nfunction AspectRatio({ ratio, className, ...props }: AspectRatioProps) {\n  return (\n    <div\n      className={cn(\"relative aspect-(--ratio)\", className)}\n      data-slot=\"aspect-ratio\"\n      style={{ \"--ratio\": ratio } as React.CSSProperties}\n      {...props}\n    />\n  );\n}\n\nexport { AspectRatio };\nexport type { AspectRatioProps };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
