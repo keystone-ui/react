@@ -1,5 +1,6 @@
 {
   "name": "@keystoneui/mcp",
+  "private": true,
   "version": "0.1.0",
   "description": "MCP server for Keystone UI — lets AI agents discover, search, and view components.",
   "type": "module",
