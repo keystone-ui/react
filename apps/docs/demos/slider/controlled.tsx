@@ -11,7 +11,7 @@ import {
 import { useId, useState } from "react";
 
 export default function SliderControlled() {
-  const [value, setValue] = useState<number | number[]>(50);
+  const [value, setValue] = useState<number | readonly number[]>(50);
   const id = useId();
 
   return (

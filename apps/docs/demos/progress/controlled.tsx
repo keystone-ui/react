@@ -17,7 +17,7 @@ import {
 import { useState } from "react";
 
 export default function ProgressControlled() {
-  const [value, setValue] = useState<number | number[]>(50);
+  const [value, setValue] = useState<number | readonly number[]>(50);
   const numericValue = Array.isArray(value) ? value[0] : value;
 
   return (

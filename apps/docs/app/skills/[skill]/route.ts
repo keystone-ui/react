@@ -34,7 +34,7 @@ export async function GET(
     try {
       const tarBuffer = await readFile(tarFilePath);
 
-      return new NextResponse(tarBuffer, {
+      return new NextResponse(tarBuffer as unknown as BodyInit, {
         headers: {
           "Cache-Control":
             "public, s-maxage=3600, stale-while-revalidate=86400",

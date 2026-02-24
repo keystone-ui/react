@@ -16,7 +16,7 @@ import {
 import { useState } from "react";
 
 export default function CircularProgressControlled() {
-  const [value, setValue] = useState<number | number[]>(50);
+  const [value, setValue] = useState<number | readonly number[]>(50);
   const numericValue = Array.isArray(value) ? value[0] : value;
 
   return (
