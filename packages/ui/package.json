@@ -1,12 +1,15 @@
 {
   "name": "@keystoneui/react",
-  "version": "0.0.0",
+  "version": "0.1.0-beta.0",
   "type": "module",
   "sideEffects": false,
   "license": "MIT",
   "files": [
     "dist",
-    "src"
+    "src",
+    "!src/**/*.test.tsx",
+    "!src/**/*.test.ts",
+    "!src/test"
   ],
   "exports": {
     "./accordion": "./src/accordion.tsx",

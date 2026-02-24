@@ -1,0 +1,11 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "docs": "0.0.0",
+    "storybook": "0.0.0",
+    "@repo/typescript-config": "0.0.0",
+    "@keystoneui/react": "0.0.0"
+  },
+  "changesets": ["initial-beta-release"]
+}

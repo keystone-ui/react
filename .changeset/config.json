@@ -6,5 +6,5 @@
   "linked": [],
   "access": "public",
   "updateInternalDependencies": "patch",
-  "ignore": ["storybook"]
+  "ignore": ["storybook", "docs"]
 }
