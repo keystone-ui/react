@@ -18,7 +18,20 @@ export function getAppDir(): string {
   }
 
   const cwd = process.cwd();
-  cached = existsSync(join(cwd, "demos")) ? cwd : join(cwd, "apps", "docs");
+  const directPath = join(cwd, "demos");
+  const monorepoPath = join(cwd, "apps", "docs", "demos");
+
+  console.log(`[getAppDir] cwd=${cwd}`);
+  console.log(
+    `[getAppDir] direct demos: ${directPath} exists=${existsSync(directPath)}`
+  );
+  console.log(
+    `[getAppDir] monorepo demos: ${monorepoPath} exists=${existsSync(monorepoPath)}`
+  );
+
+  cached = existsSync(directPath) ? cwd : join(cwd, "apps", "docs");
+
+  console.log(`[getAppDir] resolved=${cached}`);
 
   return cached;
 }
