@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@keystoneui/react/button";
 import { ButtonGroup } from "@keystoneui/react/button-group";
 import { Checkbox } from "@keystoneui/react/checkbox";
@@ -18,6 +17,7 @@ import { Input } from "@keystoneui/react/input";
 import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
 import { Switch } from "@keystoneui/react/switch";
 import { Textarea } from "@keystoneui/react/textarea";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import * as React from "react";
 import { expect, userEvent, within } from "storybook/test";
@@ -658,11 +658,11 @@ export const SettingsForm: Story = {
             </FieldContent>
             <ButtonGroup>
               <Input
-                className="h-7 w-14! font-mono"
+                className="h-8 w-10! flex-none text-center font-mono"
+                htmlSize={2}
                 id="settings-gpus"
                 maxLength={3}
                 onChange={handleGpuInputChange}
-                size={3}
                 value={gpuCount}
               />
               <Button

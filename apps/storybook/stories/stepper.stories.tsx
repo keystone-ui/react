@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@keystoneui/react/button";
 import { Checkbox } from "@keystoneui/react/checkbox";
 import { Input } from "@keystoneui/react/input";
@@ -9,6 +8,7 @@ import {
   StepperStep,
   useStepper,
 } from "@keystoneui/react/stepper";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, within } from "storybook/test";
 

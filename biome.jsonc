@@ -82,12 +82,15 @@
             "noShadowRestrictedNames": "off",
             "noAlert": "off",
             "noEmptyBlockStatements": "off",
-            "noExplicitAny": "off"
+            "noExplicitAny": "off",
+            "noArrayIndexKey": "off"
           },
           "correctness": {
             "useImageSize": "off",
             "noNestedComponentDefinitions": "off",
-            "noInvalidPositionAtImportRule": "off"
+            "noInvalidPositionAtImportRule": "off",
+            // Hooks in render() is a standard Storybook pattern for interactive stories
+            "useHookAtTopLevel": "off"
           },
           "style": {
             "noNestedTernary": "off",

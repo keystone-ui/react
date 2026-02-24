@@ -1,8 +1,8 @@
 import type { Preview } from "@storybook/react-vite";
 import { themes } from "storybook/theming";
 import "./preview.css";
-import { withThemeByClassName } from "@storybook/addon-themes";
 import { Toaster } from "@keystoneui/react/toast";
+import { withThemeByClassName } from "@storybook/addon-themes";
 
 const preview: Preview = {
   parameters: {

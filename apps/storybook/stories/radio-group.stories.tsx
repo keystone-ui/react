@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Field,
   FieldContent,
@@ -10,6 +9,7 @@ import {
 } from "@keystoneui/react/field";
 import { Label } from "@keystoneui/react/label";
 import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 
 const meta = {

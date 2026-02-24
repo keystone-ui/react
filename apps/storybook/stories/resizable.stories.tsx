@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@keystoneui/react/resizable";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 
 // ---------------------------------------------------------------------------

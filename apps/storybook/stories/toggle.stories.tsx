@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Toggle } from "@keystoneui/react/toggle";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   BoldIcon,
   BookmarkIcon,

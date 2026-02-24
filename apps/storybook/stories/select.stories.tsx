@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@keystoneui/react/button";
 import {
   Field,
@@ -19,6 +18,7 @@ import {
   SelectValue,
 } from "@keystoneui/react/select";
 import { Switch } from "@keystoneui/react/switch";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AppleIcon, BananaIcon, CherryIcon, GrapeIcon } from "lucide-react";
 import { useState } from "react";
 import { expect, userEvent, within } from "storybook/test";

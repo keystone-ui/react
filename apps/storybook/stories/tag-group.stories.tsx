@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
 import { TagRemove } from "@keystoneui/react/tag";
 import { TagGroup, TagGroupItem } from "@keystoneui/react/tag-group";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   CircleXIcon,
   GamepadIcon,
@@ -288,9 +288,9 @@ export const CustomRemoveButton: Story = {
 // ---------------------------------------------------------------------------
 
 interface TeamMember {
+  avatar: string;
   id: string;
   name: string;
-  avatar: string;
 }
 
 const TEAM_MEMBERS: TeamMember[] = [

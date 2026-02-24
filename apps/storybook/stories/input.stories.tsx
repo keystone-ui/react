@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@keystoneui/react/button";
 import { ButtonGroup } from "@keystoneui/react/button-group";
 import { DateInput } from "@keystoneui/react/date-input";
@@ -17,7 +16,11 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "@keystoneui/react/input-group";
-import { NativeSelect, NativeSelectOption } from "@keystoneui/react/native-select";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@keystoneui/react/native-select";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   InfoIcon,
   MailIcon,

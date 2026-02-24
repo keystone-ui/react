@@ -1,5 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { countries as countryDataList } from "country-data-list";
 import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
 import { Badge } from "@keystoneui/react/badge";
 import { Button } from "@keystoneui/react/button";
@@ -45,9 +43,19 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@keystoneui/react/input-group";
-import { Popover, PopoverContent, PopoverTrigger } from "@keystoneui/react/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@keystoneui/react/popover";
 import { Switch } from "@keystoneui/react/switch";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@keystoneui/react/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@keystoneui/react/tooltip";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { countries as countryDataList } from "country-data-list";
 import parsePhoneNumber from "libphonenumber-js";
 import {
   ArrowUpIcon,
@@ -904,9 +912,9 @@ export const PromptForm: Story = {
 // Phone Input Data
 // =============================================================================
 interface PhoneCountry {
+  callingCode: string;
   code: string;
   name: string;
-  callingCode: string;
 }
 
 const phoneCountries: PhoneCountry[] = countryDataList.all

@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@keystoneui/react/button";
 import {
   Command,
@@ -11,6 +10,7 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@keystoneui/react/command";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   BellIcon,
   CalculatorIcon,

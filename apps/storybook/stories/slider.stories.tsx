@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Slider,
   SliderControl,
@@ -7,6 +6,7 @@ import {
   SliderTrack,
   SliderValue,
 } from "@keystoneui/react/slider";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
 import { expect, within } from "storybook/test";
 

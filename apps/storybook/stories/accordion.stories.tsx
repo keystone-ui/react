@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Accordion,
   AccordionHeader,
@@ -6,6 +5,7 @@ import {
   AccordionPanel,
   AccordionTrigger,
 } from "@keystoneui/react/accordion";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Plus, Settings } from "lucide-react";
 import { expect, userEvent, within } from "storybook/test";
 

@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Field,
   FieldDescription,
@@ -11,6 +10,7 @@ import {
   NativeSelectOptGroup,
   NativeSelectOption,
 } from "@keystoneui/react/native-select";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 
 const meta = {

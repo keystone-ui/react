@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@keystoneui/react/button";
 import { Field, FieldLabel } from "@keystoneui/react/field";
 import {
@@ -20,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@keystoneui/react/select";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,

@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Progress,
   ProgressIndicator,
@@ -13,6 +12,7 @@ import {
   SliderThumb,
   SliderTrack,
 } from "@keystoneui/react/slider";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
 
 const meta = {

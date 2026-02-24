@@ -1,12 +1,17 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Badge } from "@keystoneui/react/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@keystoneui/react/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@keystoneui/react/card";
 import {
   DescriptionList,
   DescriptionListDetails,
   DescriptionListItem,
   DescriptionListTerm,
 } from "@keystoneui/react/description-list";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CircleCheckIcon, CopyIcon, ExternalLinkIcon } from "lucide-react";
 
 const meta = {

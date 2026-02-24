@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@keystoneui/react/button";
 import { Field, FieldGroup, FieldLabel } from "@keystoneui/react/field";
 import { Input } from "@keystoneui/react/input";
@@ -12,6 +11,7 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "@keystoneui/react/popover";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { XIcon } from "lucide-react";
 import * as React from "react";
 import { expect, userEvent, within } from "storybook/test";

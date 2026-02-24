@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Badge } from "@keystoneui/react/badge";
 import { Button } from "@keystoneui/react/button";
 import { Checkbox } from "@keystoneui/react/checkbox";
@@ -42,6 +41,7 @@ import {
   TableHeader,
   TableRow,
 } from "@keystoneui/react/table";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   ArrowDownLeftIcon,
   ArrowUpRightIcon,
@@ -365,14 +365,14 @@ type TransactionType = "Deposit" | "Withdrawal";
 type TransactionStatus = "Completed" | "Pending" | "Failed";
 
 interface Transaction {
-  id: string;
-  type: TransactionType;
-  asset: string;
-  amount: string;
-  status: TransactionStatus;
-  p95: number | null;
   active: boolean;
+  amount: string;
+  asset: string;
   date: string;
+  id: string;
+  p95: number | null;
+  status: TransactionStatus;
+  type: TransactionType;
   wallet: string;
 }
 
@@ -1008,14 +1008,14 @@ type PlayerTier = "VIP" | "Basic" | "Pro";
 type PlayerStatus = "Active" | "Pending" | "Suspended";
 
 interface Player {
-  id: string;
-  email: string;
-  tags: PlayerTier[];
-  joined: string;
-  walletId: string;
   balance: string;
-  status: PlayerStatus;
+  email: string;
+  id: string;
+  joined: string;
   note: string;
+  status: PlayerStatus;
+  tags: PlayerTier[];
+  walletId: string;
 }
 
 const players: Player[] = [

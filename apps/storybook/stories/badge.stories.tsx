@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Badge } from "@keystoneui/react/badge";
 import { Spinner } from "@keystoneui/react/spinner";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   AlertCircleIcon,
   ArrowUpRightIcon,

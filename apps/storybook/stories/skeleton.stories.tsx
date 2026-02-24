@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Card, CardContent, CardHeader } from "@keystoneui/react/card";
 import { Skeleton, SkeletonGroup } from "@keystoneui/react/skeleton";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 // ---------------------------------------------------------------------------
 // Meta

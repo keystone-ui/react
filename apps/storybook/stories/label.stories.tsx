@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Input } from "@keystoneui/react/input";
 import { Label } from "@keystoneui/react/label";
 import { Textarea } from "@keystoneui/react/textarea";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
   title: "Components/Label",

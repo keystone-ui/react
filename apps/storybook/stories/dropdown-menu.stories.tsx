@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
 import { Button } from "@keystoneui/react/button";
 import {
@@ -18,6 +17,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@keystoneui/react/dropdown-menu";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   BellIcon,
   Building2Icon,

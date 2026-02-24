@@ -8,7 +8,10 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(import.meta.dirname, "./"),
-      "@keystoneui/react": resolve(import.meta.dirname, "../../packages/ui/src"),
+      "@keystoneui/react": resolve(
+        import.meta.dirname,
+        "../../packages/ui/src"
+      ),
     },
     dedupe: ["react", "react-dom"],
   },

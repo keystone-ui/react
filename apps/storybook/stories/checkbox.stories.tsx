@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Card, CardContent } from "@keystoneui/react/card";
 import { Checkbox } from "@keystoneui/react/checkbox";
 import {
@@ -11,6 +10,7 @@ import {
   FieldSet,
   FieldTitle,
 } from "@keystoneui/react/field";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
 import { expect, userEvent, within } from "storybook/test";
 

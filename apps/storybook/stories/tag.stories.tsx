@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Tag, TagRemove } from "@keystoneui/react/tag";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   BellIcon,
   BoldIcon,

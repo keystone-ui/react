@@ -1,5 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { countries as countryDataList } from "country-data-list";
 import { Button } from "@keystoneui/react/button";
 import {
   Combobox,
@@ -27,6 +25,8 @@ import {
   FieldLabel,
 } from "@keystoneui/react/field";
 import { InputGroupAddon } from "@keystoneui/react/input-group";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { countries as countryDataList } from "country-data-list";
 import { GlobeIcon, SearchIcon } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";

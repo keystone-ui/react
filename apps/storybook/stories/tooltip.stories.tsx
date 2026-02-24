@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@keystoneui/react/button";
 import { Kbd } from "@keystoneui/react/kbd";
 import {
@@ -7,6 +6,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@keystoneui/react/tooltip";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   HomeIcon,
   InboxIcon,

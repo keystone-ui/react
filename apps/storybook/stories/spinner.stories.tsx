@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Badge } from "@keystoneui/react/badge";
 import { Button } from "@keystoneui/react/button";
 import {
@@ -16,8 +15,14 @@ import {
   InputGroupInput,
   InputGroupTextarea,
 } from "@keystoneui/react/input-group";
-import { Item, ItemContent, ItemMedia, ItemTitle } from "@keystoneui/react/item";
+import {
+  Item,
+  ItemContent,
+  ItemMedia,
+  ItemTitle,
+} from "@keystoneui/react/item";
 import { Spinner } from "@keystoneui/react/spinner";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ArrowUpIcon } from "lucide-react";
 import { expect, within } from "storybook/test";
 

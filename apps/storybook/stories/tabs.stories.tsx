@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Button } from "@keystoneui/react/button";
 import {
   Card,
@@ -14,6 +13,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@keystoneui/react/tabs";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   AppWindowIcon,
   BarChartIcon,

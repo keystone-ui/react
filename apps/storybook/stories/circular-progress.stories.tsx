@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
 import {
   CircularProgress,
@@ -14,6 +13,7 @@ import {
   SliderThumb,
   SliderTrack,
 } from "@keystoneui/react/slider";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FlameIcon, TrendingUpIcon, ZapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 

@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Field,
   FieldContent,
@@ -8,6 +7,7 @@ import {
   FieldTitle,
 } from "@keystoneui/react/field";
 import { Switch } from "@keystoneui/react/switch";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
