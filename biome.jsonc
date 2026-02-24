@@ -131,6 +131,35 @@
           }
         }
       }
+    },
+    {
+      // Build/utility scripts have different conventions than app code
+      "includes": ["scripts/**", "skills/**"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "useTopLevelRegex": "off"
+          },
+          "style": {
+            "useTemplate": "off",
+            "useFilenamingConvention": "off"
+          },
+          "suspicious": {
+            "noAssignInExpressions": "off"
+          }
+        }
+      }
+    },
+    {
+      // Next.js config requires async for redirects/rewrites
+      "includes": ["apps/docs/next.config.mjs"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
     }
   ]
 }
