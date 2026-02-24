@@ -101,17 +101,17 @@ export interface ModalContentProps
   extends DialogPrimitive.Popup.Props,
     ModalContentVariantsProps {
   /**
-   * Whether to show the close button in the top-right corner.
-   * @default true
-   */
-  showCloseButton?: boolean;
-  /**
    * Where scrolling happens when content exceeds the viewport.
    * - `"outside"` — the entire viewport scrolls, modal grows to fit (default)
    * - `"inside"` — content scrolls within the modal
    * @default "outside"
    */
   scrollBehavior?: "inside" | "outside";
+  /**
+   * Whether to show the close button in the top-right corner.
+   * @default true
+   */
+  showCloseButton?: boolean;
 }
 
 function ModalContent({

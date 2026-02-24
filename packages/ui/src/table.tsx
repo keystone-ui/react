@@ -9,6 +9,11 @@ import { cn } from "./utils";
 
 export interface TableProps extends React.ComponentProps<"table"> {
   /**
+   * Whether rows show a hover highlight
+   * @default false
+   */
+  hoverable?: boolean;
+  /**
    * The size variant of the table
    * @default "default"
    */
@@ -20,11 +25,6 @@ export interface TableProps extends React.ComponentProps<"table"> {
    * @default "default"
    */
   variant?: "default" | "card";
-  /**
-   * Whether rows show a hover highlight
-   * @default false
-   */
-  hoverable?: boolean;
 }
 
 const Table = React.forwardRef<HTMLTableElement, TableProps>(

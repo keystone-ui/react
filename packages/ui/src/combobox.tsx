@@ -71,19 +71,19 @@ function ComboboxClear({ className, ...props }: ComboboxClearProps) {
 // =============================================================================
 export interface ComboboxInputProps extends ComboboxPrimitive.Input.Props {
   /**
-   * Show the dropdown trigger button
-   * @default true
+   * Children to render inside the input group (e.g., InputGroupAddon)
    */
-  showTrigger?: boolean;
+  children?: React.ReactNode;
   /**
    * Show the clear button when a value is selected
    * @default false
    */
   showClear?: boolean;
   /**
-   * Children to render inside the input group (e.g., InputGroupAddon)
+   * Show the dropdown trigger button
+   * @default true
    */
-  children?: React.ReactNode;
+  showTrigger?: boolean;
 }
 
 function ComboboxInput({
@@ -123,16 +123,6 @@ function ComboboxInput({
 // =============================================================================
 export interface ComboboxContentProps extends ComboboxPrimitive.Popup.Props {
   /**
-   * Side of the trigger to position the popup
-   * @default "bottom"
-   */
-  side?: "top" | "bottom" | "left" | "right" | "inline-start" | "inline-end";
-  /**
-   * Offset from the trigger
-   * @default 6
-   */
-  sideOffset?: number;
-  /**
    * Alignment of the content
    * @default "start"
    */
@@ -146,6 +136,16 @@ export interface ComboboxContentProps extends ComboboxPrimitive.Popup.Props {
    * Custom anchor element (used for chips mode)
    */
   anchor?: React.RefObject<HTMLElement | null>;
+  /**
+   * Side of the trigger to position the popup
+   * @default "bottom"
+   */
+  side?: "top" | "bottom" | "left" | "right" | "inline-start" | "inline-end";
+  /**
+   * Offset from the trigger
+   * @default 6
+   */
+  sideOffset?: number;
   /**
    * Size of the menu items
    * @default "default"

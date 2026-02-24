@@ -31,31 +31,31 @@ interface ToastAction {
 }
 
 interface ToastData {
-  /** Custom render function for fully custom toasts */
-  render?: (id: string) => ReactNode;
   /** Secondary cancel/dismiss button */
   cancel?: ToastAction;
-  /** Whether the toast can be dismissed by swiping or clicking close */
-  dismissible?: boolean;
   /** Whether to show a close button on this specific toast */
   closeButton?: boolean;
+  /** Whether the toast can be dismissed by swiping or clicking close */
+  dismissible?: boolean;
+  /** Custom render function for fully custom toasts */
+  render?: (id: string) => ReactNode;
 }
 
 interface ToastOptions {
-  /** Pass an existing toast ID to update it in-place */
-  id?: string;
-  /** Description text shown below the title */
-  description?: ReactNode;
-  /** Duration in ms before auto-dismiss. `Infinity` keeps the toast open. */
-  duration?: number;
   /** Primary action button */
   action?: ToastAction;
   /** Secondary cancel/dismiss button */
   cancel?: ToastAction;
-  /** Whether the toast can be swiped away or closed. @default true */
-  dismissible?: boolean;
   /** Show a close button on this specific toast */
   closeButton?: boolean;
+  /** Description text shown below the title */
+  description?: ReactNode;
+  /** Whether the toast can be swiped away or closed. @default true */
+  dismissible?: boolean;
+  /** Duration in ms before auto-dismiss. `Infinity` keeps the toast open. */
+  duration?: number;
+  /** Pass an existing toast ID to update it in-place */
+  id?: string;
   /** Callback when a toast auto-closes after its duration */
   onAutoClose?: () => void;
   /** Callback when a toast is manually dismissed */
@@ -509,16 +509,16 @@ function ToastItem({
 // ---------------------------------------------------------------------------
 
 export interface ToasterProps {
-  /** Where toasts appear on screen. @default "bottom-right" */
-  position?: ToastPosition;
+  /** Additional CSS class for the viewport container */
+  className?: string;
+  /** Show a close (×) button on every toast. @default true */
+  closeButton?: boolean;
   /** Default auto-dismiss timeout in ms. @default 5000 */
   duration?: number;
   /** Maximum number of visible toasts. @default 3 */
   limit?: number;
-  /** Show a close (×) button on every toast. @default true */
-  closeButton?: boolean;
-  /** Additional CSS class for the viewport container */
-  className?: string;
+  /** Where toasts appear on screen. @default "bottom-right" */
+  position?: ToastPosition;
 }
 
 function Toaster({

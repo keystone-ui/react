@@ -15,22 +15,22 @@ import { cn } from "./utils";
 // Stepper Context
 // =============================================================================
 interface StepperContextValue {
-  /** Current step index (0-based). */
-  value: number;
-  /** Total number of steps. */
-  totalSteps: number;
   /** Direction of the last transition: +1 forward, -1 backward. */
   direction: number;
-  /** Navigate to a specific step index. */
-  goTo: (step: number) => void;
   /** Navigate to the next step. */
   goNext: () => void;
   /** Navigate to the previous step. */
   goPrevious: () => void;
+  /** Navigate to a specific step index. */
+  goTo: (step: number) => void;
   /** Whether the current step is the first step. */
   isFirst: boolean;
   /** Whether the current step is the last step. */
   isLast: boolean;
+  /** Total number of steps. */
+  totalSteps: number;
+  /** Current step index (0-based). */
+  value: number;
 }
 
 const StepperContext = React.createContext<StepperContextValue | undefined>(
@@ -54,11 +54,11 @@ function useStepper(): StepperContextValue {
 // Stepper (Root)
 // =============================================================================
 export interface StepperProps {
-  /** Current step index (0-based). */
-  value: number;
+  children: React.ReactNode;
   /** Callback when the step changes. */
   onValueChange: (value: number) => void;
-  children: React.ReactNode;
+  /** Current step index (0-based). */
+  value: number;
 }
 
 function Stepper({ value, onValueChange, children }: StepperProps) {
@@ -152,8 +152,8 @@ const reducedMotionVariants = {
 };
 
 export interface StepperContentProps {
-  className?: string;
   children: React.ReactNode;
+  className?: string;
 }
 
 function StepperContent({ className, children }: StepperContentProps) {

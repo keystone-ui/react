@@ -18,12 +18,6 @@ type CarouselOptions = UseCarouselParameters[0];
 type CarouselPlugin = UseCarouselParameters[1];
 
 interface CarouselProps {
-  opts?: CarouselOptions;
-  plugins?: CarouselPlugin;
-  orientation?: "horizontal" | "vertical";
-  setApi?: (api: CarouselApi) => void;
-  /** Callback fired with the selected snap index when the active slide changes */
-  onSlideChange?: (index: number) => void;
   /**
    * When true, prev/next buttons are hidden by default and revealed on hover.
    * Arrow components read this from context and apply the appropriate classes.
@@ -35,6 +29,12 @@ interface CarouselProps {
    * @default "1rem"
    */
   gap?: string;
+  /** Callback fired with the selected snap index when the active slide changes */
+  onSlideChange?: (index: number) => void;
+  opts?: CarouselOptions;
+  orientation?: "horizontal" | "vertical";
+  plugins?: CarouselPlugin;
+  setApi?: (api: CarouselApi) => void;
 }
 
 type CarouselContextProps = {

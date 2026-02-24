@@ -45,6 +45,11 @@ interface BadgeProps
   extends useRender.ComponentProps<"span">,
     VariantProps<typeof badgeVariants> {
   /**
+   * The size of the badge.
+   * @default "default"
+   */
+  size?: "default" | "sm";
+  /**
    * The visual style of the badge.
    * @default "default"
    */
@@ -55,11 +60,6 @@ interface BadgeProps
     | "outline"
     | "ghost"
     | "link";
-  /**
-   * The size of the badge.
-   * @default "default"
-   */
-  size?: "default" | "sm";
 }
 
 function Badge({

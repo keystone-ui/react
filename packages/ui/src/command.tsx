@@ -37,11 +37,11 @@ function Command({
 // =============================================================================
 export interface CommandDialogProps
   extends Omit<React.ComponentProps<typeof Modal>, "children"> {
-  title?: string;
-  description?: string;
-  className?: string;
-  showCloseButton?: boolean;
   children: React.ReactNode;
+  className?: string;
+  description?: string;
+  showCloseButton?: boolean;
+  title?: string;
 }
 
 function CommandDialog({

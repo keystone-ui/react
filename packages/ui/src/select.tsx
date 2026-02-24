@@ -82,6 +82,21 @@ function SelectTrigger({
 // =============================================================================
 export interface SelectContentProps extends SelectPrimitive.Popup.Props {
   /**
+   * Alignment of the content
+   * @default "center"
+   */
+  align?: "start" | "center" | "end";
+  /**
+   * Whether to align the selected item with the trigger
+   * @default false
+   */
+  alignItemWithTrigger?: boolean;
+  /**
+   * Offset along the alignment axis
+   * @default 0
+   */
+  alignOffset?: number;
+  /**
    * Side of the trigger to position the popup
    * @default "bottom"
    */
@@ -91,21 +106,6 @@ export interface SelectContentProps extends SelectPrimitive.Popup.Props {
    * @default 4
    */
   sideOffset?: number;
-  /**
-   * Alignment of the content
-   * @default "center"
-   */
-  align?: "start" | "center" | "end";
-  /**
-   * Offset along the alignment axis
-   * @default 0
-   */
-  alignOffset?: number;
-  /**
-   * Whether to align the selected item with the trigger
-   * @default false
-   */
-  alignItemWithTrigger?: boolean;
   /**
    * Size of the menu items
    * @default "default"

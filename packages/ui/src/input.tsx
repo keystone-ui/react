@@ -10,18 +10,18 @@ export interface InputProps
    */
   className?: string;
   /**
-   * Size variant of the input.
-   * Controls the visual height of the input (`"default"` = 40px, `"sm"` = 32px).
-   * @default "default"
-   */
-  size?: "sm" | "default";
-  /**
    * The native HTML `size` attribute for the `<input>` element.
    * Sets the visible width of the input in average character widths.
    * Use this instead of `size` when you need the native HTML behavior.
    * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#size
    */
   htmlSize?: number;
+  /**
+   * Size variant of the input.
+   * Controls the visual height of the input (`"default"` = 40px, `"sm"` = 32px).
+   * @default "default"
+   */
+  size?: "sm" | "default";
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(

@@ -44,9 +44,9 @@ const circularProgressVariants = cva("", {
 // ---------------------------------------------------------------------------
 
 interface CircularProgressContextValue {
-  value: number | null;
-  min: number;
   max: number;
+  min: number;
+  value: number | null;
 }
 
 const CircularProgressContext = createContext<CircularProgressContextValue>({
