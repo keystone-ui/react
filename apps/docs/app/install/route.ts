@@ -1,15 +1,13 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-import { getAppDir } from "@/lib/resolve-app-dir";
-
 const SITE_URL = "https://keystoneui.io";
 
 export const revalidate = false;
 
 export async function GET() {
   try {
-    const scriptPath = join(getAppDir(), "skills", "install.sh");
+    const scriptPath = join(process.cwd(), "skills", "install.sh");
     let script = await readFile(scriptPath, "utf-8");
 
     script = script.replace(/\{\{BASE_URL\}\}/g, SITE_URL);
