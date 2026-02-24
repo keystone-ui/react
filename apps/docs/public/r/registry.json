@@ -4,75 +4,168 @@
   "homepage": "https://keystoneui.io",
   "items": [
     {
-      "name": "login-01",
+      "name": "signin-01",
       "type": "registry:block",
-      "title": "Login 01",
-      "description": "A simple login form inside a card with email and password fields.",
+      "title": "Sign in 01",
+      "description": "A simple sign-in form inside a card with email and password fields.",
       "registryDependencies": ["button", "card", "field", "input"],
       "files": [
         {
-          "path": "registry/default/blocks/login-01/page.tsx",
+          "path": "registry/default/blocks/signin-01/page.tsx",
           "type": "registry:page",
-          "target": "app/login/page.tsx"
+          "target": "app/signin/page.tsx"
         },
         {
-          "path": "registry/default/blocks/login-01/components/login-form.tsx",
+          "path": "registry/default/blocks/signin-01/components/signin-form.tsx",
           "type": "registry:component"
         }
       ]
     },
     {
-      "name": "login-02",
+      "name": "signin-02",
       "type": "registry:block",
-      "title": "Login 02",
-      "description": "A two-column login page with a cover image and GitHub social login.",
+      "title": "Sign in 02",
+      "description": "A two-column sign-in page with a cover image and GitHub social login.",
       "dependencies": ["lucide-react"],
       "registryDependencies": ["button", "field", "input"],
       "files": [
         {
-          "path": "registry/default/blocks/login-02/page.tsx",
+          "path": "registry/default/blocks/signin-02/page.tsx",
           "type": "registry:page",
-          "target": "app/login/page.tsx"
+          "target": "app/signin/page.tsx"
         },
         {
-          "path": "registry/default/blocks/login-02/components/login-form.tsx",
+          "path": "registry/default/blocks/signin-02/components/signin-form.tsx",
           "type": "registry:component"
         }
       ]
     },
     {
-      "name": "login-03",
+      "name": "signin-03",
       "type": "registry:block",
-      "title": "Login 03",
-      "description": "A login page with a form and image side by side inside a card.",
+      "title": "Sign in 03",
+      "description": "A sign-in page with a form and image side by side inside a card.",
       "registryDependencies": ["button", "card", "field", "input"],
       "files": [
         {
-          "path": "registry/default/blocks/login-03/page.tsx",
+          "path": "registry/default/blocks/signin-03/page.tsx",
           "type": "registry:page",
-          "target": "app/login/page.tsx"
+          "target": "app/signin/page.tsx"
         },
         {
-          "path": "registry/default/blocks/login-03/components/login-form.tsx",
+          "path": "registry/default/blocks/signin-03/components/signin-form.tsx",
           "type": "registry:component"
         }
       ]
     },
     {
-      "name": "login-04",
+      "name": "signin-04",
       "type": "registry:block",
-      "title": "Login 04",
-      "description": "A minimal email-only login page with Apple and Google social providers.",
+      "title": "Sign in 04",
+      "description": "A minimal email-only sign-in page with Apple and Google social providers.",
       "dependencies": ["lucide-react"],
       "registryDependencies": ["button", "field", "input"],
       "files": [
         {
-          "path": "registry/default/blocks/login-04/page.tsx",
+          "path": "registry/default/blocks/signin-04/page.tsx",
           "type": "registry:page",
-          "target": "app/login/page.tsx"
+          "target": "app/signin/page.tsx"
         },
         {
-          "path": "registry/default/blocks/login-04/components/login-form.tsx",
+          "path": "registry/default/blocks/signin-04/components/signin-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "signup-01",
+      "type": "registry:block",
+      "title": "Signup 01",
+      "description": "A simple signup form inside a card with name, email, and password fields.",
+      "registryDependencies": ["button", "card", "field", "input"],
+      "files": [
+        {
+          "path": "registry/default/blocks/signup-01/page.tsx",
+          "type": "registry:page",
+          "target": "app/signup/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/signup-01/components/signup-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "signup-02",
+      "type": "registry:block",
+      "title": "Signup 02",
+      "description": "A two-column signup page with a cover image and GitHub social login.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "field", "input"],
+      "files": [
+        {
+          "path": "registry/default/blocks/signup-02/page.tsx",
+          "type": "registry:page",
+          "target": "app/signup/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/signup-02/components/signup-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "signup-03",
+      "type": "registry:block",
+      "title": "Signup 03",
+      "description": "A signup page with a card form and side-by-side password fields.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "card", "field", "input"],
+      "files": [
+        {
+          "path": "registry/default/blocks/signup-03/page.tsx",
+          "type": "registry:page",
+          "target": "app/signup/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/signup-03/components/signup-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "signup-04",
+      "type": "registry:block",
+      "title": "Signup 04",
+      "description": "A signup page with a form and image side by side inside a card.",
+      "registryDependencies": ["button", "card", "field", "input"],
+      "files": [
+        {
+          "path": "registry/default/blocks/signup-04/page.tsx",
+          "type": "registry:page",
+          "target": "app/signup/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/signup-04/components/signup-form.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "signup-05",
+      "type": "registry:block",
+      "title": "Signup 05",
+      "description": "A minimal email-only signup page with Apple and Google social providers.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "field", "input"],
+      "files": [
+        {
+          "path": "registry/default/blocks/signup-05/page.tsx",
+          "type": "registry:page",
+          "target": "app/signup/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/signup-05/components/signup-form.tsx",
           "type": "registry:component"
         }
       ]
@@ -86,7 +179,7 @@
       "registryDependencies": [
         "avatar",
         "badge",
-        "circular-progress",
+        "button",
         "dropdown-menu",
         "progress",
         "separator"

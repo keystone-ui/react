@@ -46,12 +46,17 @@ import BadgeStats from "./badge/stats";
 import BadgeVariants from "./badge/variants";
 import BadgeWithIcon from "./badge/with-icon";
 import BadgeWithSpinner from "./badge/with-spinner";
-// blocks
-import Login01 from "./blocks/login-01";
-import Login02 from "./blocks/login-02";
-import Login03 from "./blocks/login-03";
-import Login04 from "./blocks/login-04";
 import ProfileDropdown01 from "./blocks/profile-dropdown-01";
+// blocks
+import Signin01 from "./blocks/signin-01";
+import Signin02 from "./blocks/signin-02";
+import Signin03 from "./blocks/signin-03";
+import Signin04 from "./blocks/signin-04";
+import Signup01 from "./blocks/signup-01";
+import Signup02 from "./blocks/signup-02";
+import Signup03 from "./blocks/signup-03";
+import Signup04 from "./blocks/signup-04";
+import Signup05 from "./blocks/signup-05";
 // breadcrumb
 import BreadcrumbCollapsed from "./breadcrumb/collapsed";
 import BreadcrumbCustomSeparator from "./breadcrumb/custom-separator";
@@ -2187,25 +2192,45 @@ export const demos: Record<string, DemoItem> = {
   },
 
   // blocks
-  "block-login-01": {
-    component: Login01,
-    file: "blocks/login-01.tsx",
+  "block-signin-01": {
+    component: Signin01,
+    file: "blocks/signin-01.tsx",
   },
-  "block-login-02": {
-    component: Login02,
-    file: "blocks/login-02.tsx",
+  "block-signin-02": {
+    component: Signin02,
+    file: "blocks/signin-02.tsx",
   },
-  "block-login-03": {
-    component: Login03,
-    file: "blocks/login-03.tsx",
+  "block-signin-03": {
+    component: Signin03,
+    file: "blocks/signin-03.tsx",
   },
-  "block-login-04": {
-    component: Login04,
-    file: "blocks/login-04.tsx",
+  "block-signin-04": {
+    component: Signin04,
+    file: "blocks/signin-04.tsx",
   },
   "block-profile-dropdown-01": {
     component: ProfileDropdown01,
     file: "blocks/profile-dropdown-01.tsx",
+  },
+  "block-signup-01": {
+    component: Signup01,
+    file: "blocks/signup-01.tsx",
+  },
+  "block-signup-02": {
+    component: Signup02,
+    file: "blocks/signup-02.tsx",
+  },
+  "block-signup-03": {
+    component: Signup03,
+    file: "blocks/signup-03.tsx",
+  },
+  "block-signup-04": {
+    component: Signup04,
+    file: "blocks/signup-04.tsx",
+  },
+  "block-signup-05": {
+    component: Signup05,
+    file: "blocks/signup-05.tsx",
   },
 };
 

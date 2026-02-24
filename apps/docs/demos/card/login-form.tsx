@@ -17,9 +17,9 @@ export default function CardLoginForm() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle>Login to your account</CardTitle>
+        <CardTitle>Sign in to your account</CardTitle>
         <CardDescription>
-          Enter your email below to login to your account
+          Enter your email below to sign in to your account
         </CardDescription>
         <CardAction>
           <Button variant="link">Sign Up</Button>
@@ -54,10 +54,10 @@ export default function CardLoginForm() {
       </CardContent>
       <CardFooter className="flex-col gap-2">
         <Button className="w-full" type="submit">
-          Login
+          Sign in
         </Button>
         <Button className="w-full" variant="outline">
-          Login with Google
+          Sign in with Google
         </Button>
       </CardFooter>
     </Card>

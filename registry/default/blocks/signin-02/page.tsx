@@ -1,8 +1,8 @@
 import { GalleryVerticalEnd } from "lucide-react";
 
-import { LoginForm } from "@/components/login-form";
+import { SignInForm } from "@/components/signin-form";
 
-export default function LoginPage() {
+export default function SignInPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -17,13 +17,13 @@ export default function LoginPage() {
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            <LoginForm />
+            <SignInForm />
           </div>
         </div>
       </div>
       <div className="relative hidden bg-muted lg:block">
         <img
-          alt="Login cover"
+          alt="Cover"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
           height={800}
           src="https://images.unsplash.com/photo-1555421689-d68471e189f2?w=1200&q=80"

@@ -1,24 +1,25 @@
-"use client";
-
-import { Button } from "@keystoneui/react/button";
+import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from "@keystoneui/react/field";
-import { Input } from "@keystoneui/react/input";
-import { GalleryVerticalEnd } from "lucide-react";
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
-function LoginForm({ className, ...props }: React.ComponentProps<"form">) {
+export function SignInForm({
+  className,
+  ...props
+}: React.ComponentProps<"form">) {
   return (
-    <form className={className} {...props}>
+    <form className={cn("flex flex-col gap-6", className)} {...props}>
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
-          <h1 className="font-bold text-2xl">Login to your account</h1>
+          <h1 className="font-bold text-2xl">Sign in to your account</h1>
           <p className="text-balance text-muted-foreground text-sm">
-            Enter your email below to login to your account
+            Enter your email below to sign in to your account
           </p>
         </div>
         <Field>
@@ -39,7 +40,7 @@ function LoginForm({ className, ...props }: React.ComponentProps<"form">) {
           <Input id="password" required type="password" />
         </Field>
         <Field>
-          <Button type="submit">Login</Button>
+          <Button type="submit">Sign in</Button>
         </Field>
         <FieldSeparator>Or continue with</FieldSeparator>
         <Field className="gap-3">
@@ -54,7 +55,7 @@ function LoginForm({ className, ...props }: React.ComponentProps<"form">) {
                 fill="currentColor"
               />
             </svg>
-            Login with GitHub
+            Sign in with GitHub
           </Button>
           <FieldDescription className="text-center">
             Don&apos;t have an account?{" "}
@@ -66,38 +67,5 @@ function LoginForm({ className, ...props }: React.ComponentProps<"form">) {
         </Field>
       </FieldGroup>
     </form>
-  );
-}
-
-export default function Login02() {
-  return (
-    <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="flex flex-col gap-4 p-6 md:p-10">
-        <div className="flex justify-center gap-2 md:justify-start">
-          {/* biome-ignore lint/a11y/useValidAnchor: demo placeholder link */}
-          <a className="flex items-center gap-2 font-medium" href="#">
-            <div className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-              <GalleryVerticalEnd className="size-4" />
-            </div>
-            Acme Inc.
-          </a>
-        </div>
-        <div className="flex flex-1 items-center justify-center">
-          <div className="w-full max-w-xs">
-            <LoginForm />
-          </div>
-        </div>
-      </div>
-      <div className="relative hidden bg-muted lg:block">
-        {/* biome-ignore lint/performance/noImgElement: demo block */}
-        <img
-          alt="Login cover"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-          height={800}
-          src="https://images.unsplash.com/photo-1555421689-d68471e189f2?w=1200&q=80"
-          width={1200}
-        />
-      </div>
-    </div>
   );
 }

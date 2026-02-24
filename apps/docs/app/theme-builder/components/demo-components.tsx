@@ -263,12 +263,12 @@ export function DemoComponents() {
         </AvatarGroup>
       </div>
 
-      {/* card.stories — LoginForm */}
+      {/* card.stories — SignInForm */}
       <Card className="mb-4 break-inside-avoid">
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Sign in to your account</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your email below to sign in to your account
           </CardDescription>
           <CardAction>
             <Button variant="link">Sign Up</Button>
@@ -278,31 +278,31 @@ export function DemoComponents() {
           <form>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="demo-login-email">Email</Label>
+                <Label htmlFor="demo-signin-email">Email</Label>
                 <Input
-                  id="demo-login-email"
+                  id="demo-signin-email"
                   placeholder="m@example.com"
                   type="email"
                 />
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="demo-login-password">Password</Label>
+                  <Label htmlFor="demo-signin-password">Password</Label>
                   <span className="ml-auto inline-block cursor-pointer text-sm underline-offset-4 hover:underline">
                     Forgot your password?
                   </span>
                 </div>
-                <Input id="demo-login-password" type="password" />
+                <Input id="demo-signin-password" type="password" />
               </div>
             </div>
           </form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
           <Button className="w-full" type="submit">
-            Login
+            Sign in
           </Button>
           <Button className="w-full" variant="outline">
-            Login with Google
+            Sign in with Google
           </Button>
         </CardFooter>
       </Card>
@@ -598,11 +598,11 @@ export function DemoComponents() {
               </FieldContent>
               <ButtonGroup>
                 <Input
-                  className="h-7 w-14! font-mono"
+                  className="h-8 w-10! flex-none text-center font-mono"
+                  htmlSize={2}
                   id="demo-gpus"
                   maxLength={3}
                   onChange={handleGpuInputChange}
-                  size={3}
                   value={gpuCount}
                 />
                 <Button

@@ -3,11 +3,17 @@
   "icon": "Blocks",
   "root": true,
   "pages": [
-    "---Authentication---",
-    "login-01",
-    "login-02",
-    "login-03",
-    "login-04",
+    "---Sign in---",
+    "signin-01",
+    "signin-02",
+    "signin-03",
+    "signin-04",
+    "---Signup---",
+    "signup-01",
+    "signup-02",
+    "signup-03",
+    "signup-04",
+    "signup-05",
     "---User---",
     "profile-dropdown-01"
   ]

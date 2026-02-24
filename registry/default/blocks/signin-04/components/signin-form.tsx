@@ -1,19 +1,21 @@
-"use client";
-
-import { Button } from "@keystoneui/react/button";
+import { GalleryVerticalEnd } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from "@keystoneui/react/field";
-import { Input } from "@keystoneui/react/input";
-import { GalleryVerticalEnd } from "lucide-react";
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
-function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+export function SignInForm({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
   return (
-    <div className={`flex flex-col gap-6 ${className ?? ""}`} {...props}>
+    <div className={cn("flex flex-col gap-6", className)} {...props}>
       <form>
         <FieldGroup>
           <div className="flex flex-col items-center gap-2 text-center">
@@ -46,7 +48,7 @@ function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
             />
           </Field>
           <Field>
-            <Button type="submit">Login</Button>
+            <Button type="submit">Sign in</Button>
           </Field>
           <FieldSeparator>Or</FieldSeparator>
           <Field className="grid gap-4 sm:grid-cols-2">
@@ -91,16 +93,6 @@ function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
         </a>
         .
       </FieldDescription>
-    </div>
-  );
-}
-
-export default function Login04() {
-  return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <LoginForm />
-      </div>
     </div>
   );
 }

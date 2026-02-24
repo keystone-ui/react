@@ -1,21 +1,19 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+"use client";
+
+import { Button } from "@keystoneui/react/button";
+import { Card, CardContent } from "@keystoneui/react/card";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+} from "@keystoneui/react/field";
+import { Input } from "@keystoneui/react/input";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+function SignInForm({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={`flex flex-col gap-6 ${className ?? ""}`} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form className="p-6 md:p-8">
@@ -23,7 +21,7 @@ export function LoginForm({
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="font-bold text-2xl">Welcome back</h1>
                 <p className="text-balance text-muted-foreground">
-                  Login to your Acme Inc account
+                  Sign in to your Acme Inc account
                 </p>
               </div>
               <Field>
@@ -49,7 +47,7 @@ export function LoginForm({
                 <Input id="password" required type="password" />
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit">Sign in</Button>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
@@ -66,7 +64,7 @@ export function LoginForm({
                       fill="currentColor"
                     />
                   </svg>
-                  <span className="sr-only">Login with Apple</span>
+                  <span className="sr-only">Sign in with Apple</span>
                 </Button>
                 <Button type="button" variant="outline">
                   <svg
@@ -79,7 +77,7 @@ export function LoginForm({
                       fill="currentColor"
                     />
                   </svg>
-                  <span className="sr-only">Login with Google</span>
+                  <span className="sr-only">Sign in with Google</span>
                 </Button>
                 <Button type="button" variant="outline">
                   <svg
@@ -92,7 +90,7 @@ export function LoginForm({
                       fill="currentColor"
                     />
                   </svg>
-                  <span className="sr-only">Login with Meta</span>
+                  <span className="sr-only">Sign in with Meta</span>
                 </Button>
               </Field>
               <FieldDescription className="text-center">
@@ -105,8 +103,9 @@ export function LoginForm({
             </FieldGroup>
           </form>
           <div className="relative hidden bg-muted md:block">
+            {/* biome-ignore lint/performance/noImgElement: demo block */}
             <img
-              alt="Login cover"
+              alt="Cover"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
               height={800}
               src="https://images.unsplash.com/photo-1555421689-d68471e189f2?w=1200&q=80"
@@ -127,6 +126,16 @@ export function LoginForm({
         </a>
         .
       </FieldDescription>
+    </div>
+  );
+}
+
+export default function Signin03() {
+  return (
+    <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
+      <div className="w-full max-w-sm md:max-w-4xl">
+        <SignInForm />
+      </div>
     </div>
   );
 }

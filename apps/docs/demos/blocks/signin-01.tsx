@@ -16,14 +16,14 @@ import {
 } from "@keystoneui/react/field";
 import { Input } from "@keystoneui/react/input";
 
-function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+function SignInForm({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div className={className} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Sign in to your account</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your email below to sign in to your account
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -52,9 +52,9 @@ function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
                 <Input id="password" required type="password" />
               </Field>
               <Field className="gap-3">
-                <Button type="submit">Login</Button>
+                <Button type="submit">Sign in</Button>
                 <Button type="button" variant="outline">
-                  Login with Google
+                  Sign in with Google
                 </Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account?{" "}
@@ -72,11 +72,11 @@ function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-export default function Login01() {
+export default function Signin01() {
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
-        <LoginForm />
+        <SignInForm />
       </div>
     </div>
   );
