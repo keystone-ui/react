@@ -46,20 +46,22 @@ jobs:
       - name: Deploy to production
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
-          pnpm exec wrangler pages deploy apps/storybook/storybook-static \
+          pnpm exec wrangler pages deploy storybook-static \
             --project-name=keystoneui-storybook \
             --branch=main
+        working-directory: apps/storybook
 
       - name: Deploy preview
         if: github.event_name == 'pull_request'
         id: preview
         run: |
-          DEPLOY_OUTPUT=$(pnpm exec wrangler pages deploy apps/storybook/storybook-static \
+          DEPLOY_OUTPUT=$(pnpm exec wrangler pages deploy storybook-static \
             --project-name=keystoneui-storybook \
             --branch="pr-${{ github.event.pull_request.number }}" 2>&1)
           echo "$DEPLOY_OUTPUT"
           PREVIEW_URL=$(echo "$DEPLOY_OUTPUT" | grep -oP 'https://[^\s]+\.pages\.dev' | head -1)
           echo "url=$PREVIEW_URL" >> "$GITHUB_OUTPUT"
+        working-directory: apps/storybook
 
       - name: Comment preview URL on PR
         if: github.event_name == 'pull_request' && steps.preview.outputs.url
