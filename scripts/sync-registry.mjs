@@ -16,7 +16,7 @@
  *   - registry.json                       (merged: UI components + blocks)
  */
 
-import { readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
@@ -35,22 +35,16 @@ function parseRegistryTs() {
     const block = match[0];
     const name = match[1];
 
-    const depsMatch = block.match(
-      /dependencies:\s*\[([\s\S]*?)\]/
-    );
+    const depsMatch = block.match(/dependencies:\s*\[([\s\S]*?)\]/);
     const deps = depsMatch
-      ? depsMatch[1]
-          .match(/"([^"]+)"/g)
-          ?.map((s) => s.replace(/"/g, "")) ?? []
+      ? (depsMatch[1].match(/"([^"]+)"/g)?.map((s) => s.replace(/"/g, "")) ??
+        [])
       : [];
 
-    const regDepsMatch = block.match(
-      /registryDependencies:\s*\[([\s\S]*?)\]/
-    );
+    const regDepsMatch = block.match(/registryDependencies:\s*\[([\s\S]*?)\]/);
     const regDeps = regDepsMatch
-      ? regDepsMatch[1]
-          .match(/"([^"]+)"/g)
-          ?.map((s) => s.replace(/"/g, "")) ?? []
+      ? (regDepsMatch[1].match(/"([^"]+)"/g)?.map((s) => s.replace(/"/g, "")) ??
+        [])
       : [];
 
     entries.push({ name, dependencies: deps, registryDependencies: regDeps });
