@@ -3,6 +3,7 @@ import { join } from "node:path";
 
 import { getDemo } from "@/demos";
 import { formatLLMHeader, type Page } from "@/lib/llms-utils";
+import { getAppDir } from "@/lib/resolve-app-dir";
 
 const CONTENT_DIR = "content/docs";
 const DEMOS_DIR = "demos";
@@ -14,7 +15,7 @@ function normalizePagePath(pagePath: string): string {
 async function getRawMDXContent(pagePath: string): Promise<string> {
   try {
     const normalizedPath = normalizePagePath(pagePath);
-    const filePath = join(process.cwd(), CONTENT_DIR, normalizedPath);
+    const filePath = join(getAppDir(), CONTENT_DIR, normalizedPath);
     const content = await readFile(filePath, "utf-8");
 
     return content.trim() ? content : "";
@@ -52,7 +53,7 @@ async function replaceComponentPreviews(content: string): Promise<string> {
       }
 
       try {
-        const filePath = join(process.cwd(), DEMOS_DIR, demo.file);
+        const filePath = join(getAppDir(), DEMOS_DIR, demo.file);
         const code = await readFile(filePath, "utf-8");
 
         return {

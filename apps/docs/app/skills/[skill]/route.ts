@@ -3,10 +3,18 @@ import { join } from "node:path";
 
 import { NextResponse } from "next/server";
 
+import { getAppDir } from "@/lib/resolve-app-dir";
+
+// To add a new skill: add the name here, place the tarball in public/skills/,
+// and it will be pre-rendered on the next build via generateStaticParams.
 const VALID_SKILLS = ["keystoneui-react"];
 const TAR_GZ_SUFFIX = /\.tar\.gz$/;
 
 export const revalidate = false;
+
+export function generateStaticParams() {
+  return VALID_SKILLS.map((skill) => ({ skill: `${skill}.tar.gz` }));
+}
 
 export async function GET(
   _: Request,
@@ -25,7 +33,7 @@ export async function GET(
     }
 
     const tarFilePath = join(
-      process.cwd(),
+      getAppDir(),
       "public",
       "skills",
       `${skillName}.tar.gz`

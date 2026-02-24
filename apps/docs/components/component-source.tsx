@@ -5,6 +5,7 @@ import { highlight } from "fumadocs-core/highlight";
 import { CodeBlock, Pre } from "fumadocs-ui/components/codeblock";
 
 import { getDemo } from "@/demos";
+import { getAppDir } from "@/lib/resolve-app-dir";
 
 interface ComponentSourceProps {
   name: string;
@@ -17,7 +18,7 @@ export async function ComponentSource({ name }: ComponentSourceProps) {
     return null;
   }
 
-  const filePath = join(process.cwd(), "demos", demo.file);
+  const filePath = join(getAppDir(), "demos", demo.file);
   let code: string;
 
   try {
