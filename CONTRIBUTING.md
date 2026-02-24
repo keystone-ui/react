@@ -170,6 +170,104 @@ pnpm build --filter=docs        # Build docs (verifies types + LLMs.txt)
 pnpm add:component <Name>       # Scaffold a new component
 ```
 
+## Release Workflow
+
+The library uses [Changesets](https://github.com/changesets/changesets) in **pre-release mode** to publish beta versions to npm. The package is published as `@keystoneui/react` and consumers install with `pnpm add @keystoneui/react@beta`.
+
+### How it works
+
+```mermaid
+flowchart TD
+    A[Write code and commit] --> B{Does this change affect\nwhat npm consumers get?}
+    B -->|No: docs, CI, tests, stories| C[Push to main]
+    B -->|Yes: component changes,\nnew features, bug fixes| D["Run: pnpm changeset"]
+    D --> E["Run: pnpm version-packages"]
+    E --> F["Commit version bump"]
+    F --> C
+    C --> G[GitHub Actions runs]
+    G --> H{Unpublished version?}
+    H -->|Yes| I["Publishes @keystoneui/react@beta"]
+    H -->|No| J[Nothing to publish]
+```
+
+### When you need a changeset
+
+Create a changeset for any change that affects what consumers of `@keystoneui/react` receive:
+
+- New component added
+- Bug fix in a component
+- Changed API, props, or behavior
+- Styling changes that affect consumers
+- Updated dependencies in `packages/ui/package.json`
+
+### When you do NOT need a changeset
+
+Skip the changeset for anything internal to the repo:
+
+- Storybook stories
+- CI workflow changes
+- Documentation (docs app, README)
+- Test additions or fixes
+- Dev tooling changes
+
+Commits without a changeset push to GitHub but do not trigger an npm publish. The `@beta` tag on npm stays at the previous version until you explicitly publish.
+
+### Publishing a new beta version
+
+```bash
+# 1. Create a changeset (select @keystoneui/react, pick bump type, write summary)
+pnpm changeset
+
+# 2. Apply the version bump (increments beta counter)
+pnpm version-packages
+
+# 3. Commit the version bump
+git add .
+git commit -m "chore: version packages"
+
+# 4. Push to main (GitHub Actions publishes to npm automatically)
+git push origin main
+```
+
+### Version progression
+
+In pre-release mode, each publish increments the beta counter regardless of bump type:
+
+| Cycle | Version |
+|-------|---------|
+| Initial | `0.1.0-beta.0` |
+| After 1st changeset | `0.1.0-beta.1` |
+| After 2nd changeset | `0.1.0-beta.2` |
+
+The bump type (patch, minor, major) is remembered by changesets and applied when you exit beta.
+
+### Batching changes
+
+You do not need a changeset for every commit. Multiple commits can be batched into a single publish:
+
+```
+commit: fix button focus ring         # no changeset yet
+commit: add new Kbd component          # no changeset yet
+commit: fix select portal issue        # no changeset yet
+pnpm changeset                         # describe all changes at once
+pnpm version-packages                  # bumps to next beta
+commit + push                          # publishes everything in one version
+```
+
+### Exiting beta (stable release)
+
+When the library is ready for a stable `1.0.0` (or `0.1.0`) release:
+
+```bash
+pnpm changeset pre exit     # exit pre-release mode
+pnpm changeset              # create a changeset for the stable release
+pnpm version-packages       # bumps to stable version (e.g. 0.1.0)
+git add . && git commit -m "chore: release stable version"
+git push origin main        # publishes to @latest tag
+```
+
+After this, `pnpm add @keystoneui/react` (without `@beta`) installs the stable version.
+
 ## LLMs.txt Endpoints
 
 These are generated automatically from MDX + demo files:
