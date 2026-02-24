@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Component Gallery",
-  description: "Browse all 54+ Keystone UI components.",
+  description: "Browse all 50+ Keystone UI components.",
 };
 
 const categories = [
@@ -317,7 +317,7 @@ export default function GalleryPage() {
         Component Gallery
       </h1>
       <p className="mb-12 text-lg text-muted-foreground">
-        Browse all 54+ Keystone UI components organized by category.
+        Browse all 50+ Keystone UI components organized by category.
       </p>
 
       <div className="space-y-16">

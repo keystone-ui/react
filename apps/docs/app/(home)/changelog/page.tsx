@@ -13,7 +13,7 @@ const releases = [
       {
         type: "added" as const,
         items: [
-          "Initial release with 54+ components",
+          "Initial release with 50+ components",
           "Tailwind CSS v4 theme with OKLCH color tokens",
           "Dark mode support",
           "Full TypeScript support with type exports",

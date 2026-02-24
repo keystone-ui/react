@@ -73,14 +73,14 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-7xl px-6 py-24 text-center sm:py-32 lg:py-40">
           <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-muted/50 px-4 py-1.5 text-muted-foreground text-sm">
             <span className="inline-block size-2 rounded-full bg-green-500" />
-            54+ components available
+            50+ components available
           </div>
           <h1 className="mx-auto max-w-4xl font-bold text-4xl tracking-tight sm:text-6xl lg:text-7xl">
             Beautiful, accessible React components
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl">
             A modern component library built with Tailwind CSS v4 and Base UI.
-            Ship polished interfaces faster with 54+ production-ready
+            Ship polished interfaces faster with 50+ production-ready
             components.
           </p>
           <div className="mt-10 flex items-center justify-center gap-4">
@@ -142,7 +142,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-6 py-24">
           <div className="text-center">
             <h2 className="font-bold text-3xl tracking-tight">
-              54+ components ready to use
+              50+ components ready to use
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">
               From buttons to complex data tables -- every component you need,
