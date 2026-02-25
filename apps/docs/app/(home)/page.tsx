@@ -83,16 +83,16 @@ export default function HomePage() {
             Ship polished interfaces faster with 50+ production-ready
             components.
           </p>
-          <div className="mt-10 flex items-center justify-center gap-4">
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
-              className="inline-flex h-12 items-center gap-2 rounded-lg bg-primary px-6 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 font-medium text-primary-foreground transition-colors hover:bg-primary/90 sm:w-auto"
               href="/docs/installation/quick-start"
             >
               Get Started
               <ArrowRight className="size-4" />
             </Link>
             <Link
-              className="inline-flex h-12 items-center gap-2 rounded-lg border border-border bg-background px-6 font-medium transition-colors hover:bg-accent"
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-border bg-background px-6 font-medium transition-colors hover:bg-accent sm:w-auto"
               href="/gallery"
             >
               Browse Components
