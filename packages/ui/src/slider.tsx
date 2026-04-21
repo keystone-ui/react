@@ -95,10 +95,8 @@ function SliderThumb({ className, ...props }: SliderThumbProps) {
         // Active state: slightly grow + slightly deeper shadow
         "transition-[transform,box-shadow,ring-color] duration-150",
         "data-[dragging]:scale-105 data-[dragging]:shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_2px_6px_rgba(0,0,0,0.12)] data-[dragging]:ring-2 data-[dragging]:ring-ring/20",
-        // Disabled
+        // Disabled (reduced motion handled globally by base.css)
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-        // Reduced motion
-        "motion-reduce:transition-none",
         className
       )}
       data-slot="slider-thumb"

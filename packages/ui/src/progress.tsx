@@ -97,12 +97,10 @@ function ProgressIndicator({ className, ...props }: ProgressIndicatorProps) {
     <ProgressPrimitive.Indicator
       className={cn(
         "h-full rounded-full bg-[var(--progress-indicator)]",
-        // Smooth width animation
+        // Smooth width animation (reduced motion handled globally by base.css)
         "transition-[width] duration-500 ease-out",
         // Indeterminate: animated sliding bar
         "data-[indeterminate]:w-1/3 data-[indeterminate]:animate-progress-indeterminate",
-        // Reduced motion
-        "motion-reduce:transition-none motion-reduce:data-[indeterminate]:animate-none",
         className
       )}
       data-slot="progress-indicator"

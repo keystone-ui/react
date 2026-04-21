@@ -284,14 +284,13 @@ const AccordionPanel = React.forwardRef<
 
     const baseClasses = cn(
       "overflow-hidden text-muted-foreground text-sm",
-      // CSS transition on height — smoothly cancellable mid-animation
+      // CSS transition on height — smoothly cancellable mid-animation.
+      // Reduced motion is handled globally by base.css.
       "h-[var(--accordion-panel-height)] transition-[height] duration-200 ease-out",
       // Enter: start from 0 height
       "data-[starting-style]:h-0",
       // Exit: collapse to 0 height
-      "data-[ending-style]:h-0",
-      // Respect reduced motion
-      "motion-reduce:transition-none"
+      "data-[ending-style]:h-0"
     );
 
     const innerClasses = cn(

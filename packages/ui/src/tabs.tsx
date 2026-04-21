@@ -231,10 +231,8 @@ function TabsIndicator({ className, ...props }: TabsIndicatorProps) {
       className={cn(
         // Positioning via Base UI CSS custom properties
         "absolute top-[var(--active-tab-top)] left-[var(--active-tab-left)] h-[var(--active-tab-height)] w-[var(--active-tab-width)]",
-        // Sliding animation
+        // Sliding animation (reduced motion handled globally by base.css)
         "transition-[top,right,bottom,left,width,height] duration-200 ease-out",
-        // Reduced motion
-        "motion-reduce:transition-none",
         // Default variant: pill/card sliding behind active tab
         "group-data-[variant=default]/tabs-list:rounded-md group-data-[variant=default]/tabs-list:bg-background group-data-[variant=default]/tabs-list:shadow-sm",
         "group-data-[variant=default]/tabs-list:group-data-[shape=pill]/tabs-list:rounded-full",

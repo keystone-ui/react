@@ -25,8 +25,6 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
         "aria-invalid:data-checked:border-destructive aria-invalid:data-checked:bg-destructive aria-invalid:data-checked:text-destructive-foreground",
         // Disabled styles
         "disabled:cursor-not-allowed disabled:opacity-50 group-has-disabled/field:opacity-50",
-        // Reduced motion
-        "motion-reduce:transition-none",
         className
       )}
       data-slot="checkbox"
@@ -42,9 +40,7 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
           // Exit: animate to small + transparent
           "data-[ending-style]:scale-50 data-[ending-style]:opacity-0",
           // Hide when unchecked (after exit transition completes)
-          "data-[unchecked]:hidden",
-          // Reduced motion
-          "motion-reduce:transition-none"
+          "data-[unchecked]:hidden"
         )}
         data-slot="checkbox-indicator"
         keepMounted

@@ -100,14 +100,13 @@ const CollapsibleContent = React.forwardRef<
 >(({ className, ...props }, ref) => {
   const baseClasses = cn(
     "overflow-hidden",
-    // CSS transition on height — smoothly cancellable mid-animation
+    // CSS transition on height — smoothly cancellable mid-animation.
+    // Reduced motion is handled globally by base.css.
     "h-[var(--collapsible-panel-height)] transition-[height] duration-200 ease-out",
     // Enter: start from 0 height
     "data-[starting-style]:h-0",
     // Exit: collapse to 0 height
-    "data-[ending-style]:h-0",
-    // Respect reduced motion
-    "motion-reduce:transition-none"
+    "data-[ending-style]:h-0"
   );
 
   return (

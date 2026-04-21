@@ -189,8 +189,6 @@ function CircularProgressIndicator({
         className={cn(
           "fill-none stroke-[var(--progress-indicator)]",
           "transition-[stroke-dashoffset] duration-500 ease-out",
-          "motion-reduce:transition-none",
-          value === null && "motion-reduce:animate-none",
           className
         )}
         cx={VIEW_BOX_SIZE / 2}
