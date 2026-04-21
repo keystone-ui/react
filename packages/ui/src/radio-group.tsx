@@ -37,8 +37,6 @@ function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
         "aria-invalid:data-checked:border-destructive aria-invalid:data-checked:bg-destructive aria-invalid:data-checked:text-destructive-foreground",
         // Disabled styles
         "disabled:cursor-not-allowed disabled:opacity-50 group-has-disabled/field:opacity-50",
-        // Reduced motion
-        "motion-reduce:transition-none",
         className
       )}
       data-slot="radio-group-item"
@@ -48,12 +46,10 @@ function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
         className={cn(
           // Micro-animation: scale + opacity transition
           "transition-[transform,opacity] duration-150",
-          // Hidden when unchecked
-          "data-[unchecked]:scale-0 data-[unchecked]:opacity-0",
+          // Hidden when unchecked — start from scale(0.5), never scale(0)
+          "data-[unchecked]:scale-50 data-[unchecked]:opacity-0",
           // Visible when checked
-          "data-[checked]:scale-100 data-[checked]:opacity-100",
-          // Reduced motion
-          "motion-reduce:transition-none"
+          "data-[checked]:scale-100 data-[checked]:opacity-100"
         )}
         data-slot="radio-group-indicator"
         keepMounted

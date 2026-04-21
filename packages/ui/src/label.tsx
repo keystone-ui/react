@@ -75,14 +75,44 @@ export const ErrorMessage = React.forwardRef<
 
 ErrorMessage.displayName = "ErrorMessage";
 
-export interface FormProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {
   /**
    * Optional additional className for the form container
    */
   className?: string;
 }
 
-export const Form = React.forwardRef<HTMLDivElement, FormProps>(
+/**
+ * Semantic `<form>` wrapper. Inputs nested inside submit on Enter.
+ * Pass `onSubmit` to handle submission; remember to call `event.preventDefault()`.
+ */
+export const Form = React.forwardRef<HTMLFormElement, FormProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <form
+        className={cn("grid w-full max-w-sm items-center gap-1.5", className)}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+
+Form.displayName = "Form";
+
+export interface FieldGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+  /**
+   * Optional additional className for the field group container
+   */
+  className?: string;
+}
+
+/**
+ * Non-semantic `<div>` wrapper with the same grid layout as `Form`.
+ * Use when you need the layout without the `<form>` element
+ * (e.g. inside an existing form, or for non-submittable field groups).
+ */
+export const FieldGroup = React.forwardRef<HTMLDivElement, FieldGroupProps>(
   ({ className, ...props }, ref) => {
     return (
       <div
@@ -94,4 +124,4 @@ export const Form = React.forwardRef<HTMLDivElement, FormProps>(
   }
 );
 
-Form.displayName = "Form";
+FieldGroup.displayName = "FieldGroup";
