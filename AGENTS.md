@@ -153,7 +153,7 @@ The docs site (Fumadocs) serves both interactive documentation and LLMs.txt endp
 
 - **No Radix UI** — use `@base-ui/react` for all primitives
 - **No barrel files** — each component file is its own entry point
-- **No `transition-all`** — always specify exact transition properties (exception: Button, which uses `active:scale-[0.98]`)
+- **No `transition-all`** — always specify exact transition properties. Button uses `transition-[transform,background-color,color,border-color,box-shadow,outline-color]` with an explicit 160ms `ease-out`; use that as a template for other interactive primitives.
 - **No raw color values** in component base styles — always use semantic tokens (exception: Badge color variants)
 - **Explicit `cursor-pointer`** on all interactive elements — Tailwind v4 changed the default
 - **Update `_registry.ts`**, `package.json` exports, and `tsup.config.ts` entryPoints when adding new components

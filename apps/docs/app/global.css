@@ -117,4 +117,9 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Leave room under the sticky docs nav when jumping to anchored headings. */
+  article [id] {
+    scroll-margin-top: 5rem;
+  }
 }
