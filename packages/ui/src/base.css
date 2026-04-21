@@ -15,6 +15,28 @@
   --animate-caret-blink: caret-blink 1.2s ease-out infinite;
   --color-skeleton-shimmer: var(--skeleton-shimmer);
   --animate-skeleton-shimmer: skeleton-shimmer 2s ease-in-out infinite;
+
+  /* Motion tokens — strong custom curves, preferred over CSS defaults.
+     Use via `ease-[var(--ease-out)]` / `duration-[var(--duration-base)]`
+     or reference directly in raw CSS. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --duration-fast: 125ms;
+  --duration-base: 180ms;
+  --duration-slow: 250ms;
+  --duration-drawer: 400ms;
+
+  /* Z-index scale — named layers to avoid arbitrary z-50/z-100 sprawl.
+     Consumers may reference via `z-[var(--z-popover)]` etc. */
+  --z-dropdown: 40;
+  --z-sticky: 50;
+  --z-popover: 60;
+  --z-drawer: 70;
+  --z-modal: 80;
+  --z-tooltip: 90;
+  --z-toast: 100;
 }
 
 /* Radius scale — derived from a single --radius base token.
@@ -178,6 +200,165 @@
   transform: translateY(-100%);
 }
 
+/* =========================================================================
+   Surface popups — Popover / Tooltip / DropdownMenu / Select / Combobox.
+   Use Base UI's [data-starting-style] / [data-ending-style] attributes to
+   drive interruptible CSS transitions (keyframes restart on retrigger).
+   Origin-aware scale relies on each surface's `origin-(--transform-origin)`
+   Tailwind class on the Popup (Base UI sets the var on the Positioner).
+   ========================================================================= */
+
+[data-slot="popover-content"],
+[data-slot="dropdown-menu-content"],
+[data-slot="dropdown-menu-sub-content"],
+[data-slot="select-content"],
+[data-slot="combobox-content"] {
+  transition:
+    opacity var(--duration-base) var(--ease-out),
+    scale var(--duration-base) var(--ease-out),
+    translate var(--duration-base) var(--ease-out);
+}
+
+[data-slot="popover-content"][data-starting-style],
+[data-slot="popover-content"][data-ending-style],
+[data-slot="dropdown-menu-content"][data-starting-style],
+[data-slot="dropdown-menu-content"][data-ending-style],
+[data-slot="dropdown-menu-sub-content"][data-starting-style],
+[data-slot="dropdown-menu-sub-content"][data-ending-style],
+[data-slot="select-content"][data-starting-style],
+[data-slot="select-content"][data-ending-style],
+[data-slot="combobox-content"][data-starting-style],
+[data-slot="combobox-content"][data-ending-style] {
+  opacity: 0;
+  scale: 0.96;
+}
+
+/* Side-aware initial slide (small translate toward the trigger). */
+[data-slot="popover-content"][data-side="bottom"][data-starting-style],
+[data-slot="popover-content"][data-side="bottom"][data-ending-style],
+[data-slot="dropdown-menu-content"][data-side="bottom"][data-starting-style],
+[data-slot="dropdown-menu-content"][data-side="bottom"][data-ending-style],
+[data-slot="select-content"][data-side="bottom"][data-starting-style],
+[data-slot="select-content"][data-side="bottom"][data-ending-style],
+[data-slot="combobox-content"][data-side="bottom"][data-starting-style],
+[data-slot="combobox-content"][data-side="bottom"][data-ending-style] {
+  translate: 0 -4px;
+}
+[data-slot="popover-content"][data-side="top"][data-starting-style],
+[data-slot="popover-content"][data-side="top"][data-ending-style],
+[data-slot="dropdown-menu-content"][data-side="top"][data-starting-style],
+[data-slot="dropdown-menu-content"][data-side="top"][data-ending-style],
+[data-slot="select-content"][data-side="top"][data-starting-style],
+[data-slot="select-content"][data-side="top"][data-ending-style],
+[data-slot="combobox-content"][data-side="top"][data-starting-style],
+[data-slot="combobox-content"][data-side="top"][data-ending-style] {
+  translate: 0 4px;
+}
+[data-slot="popover-content"][data-side="left"][data-starting-style],
+[data-slot="popover-content"][data-side="left"][data-ending-style],
+[data-slot="dropdown-menu-content"][data-side="left"][data-starting-style],
+[data-slot="dropdown-menu-content"][data-side="left"][data-ending-style],
+[data-slot="select-content"][data-side="left"][data-starting-style],
+[data-slot="select-content"][data-side="left"][data-ending-style],
+[data-slot="combobox-content"][data-side="left"][data-starting-style],
+[data-slot="combobox-content"][data-side="left"][data-ending-style] {
+  translate: 4px 0;
+}
+[data-slot="popover-content"][data-side="right"][data-starting-style],
+[data-slot="popover-content"][data-side="right"][data-ending-style],
+[data-slot="dropdown-menu-content"][data-side="right"][data-starting-style],
+[data-slot="dropdown-menu-content"][data-side="right"][data-ending-style],
+[data-slot="select-content"][data-side="right"][data-starting-style],
+[data-slot="select-content"][data-side="right"][data-ending-style],
+[data-slot="combobox-content"][data-side="right"][data-starting-style],
+[data-slot="combobox-content"][data-side="right"][data-ending-style] {
+  translate: -4px 0;
+}
+
+/* Asymmetric exit: exit is shorter than enter (Emil's principle). */
+[data-slot="popover-content"][data-ending-style],
+[data-slot="dropdown-menu-content"][data-ending-style],
+[data-slot="dropdown-menu-sub-content"][data-ending-style],
+[data-slot="select-content"][data-ending-style],
+[data-slot="combobox-content"][data-ending-style] {
+  transition-duration: 120ms;
+}
+
+/* Select in alignItemWithTrigger mode: skip the slide to keep the item
+   visually anchored to the trigger (scroll position matters). */
+[data-slot="select-content"][data-align-trigger="true"][data-starting-style],
+[data-slot="select-content"][data-align-trigger="true"][data-ending-style] {
+  scale: 1;
+  translate: 0 0;
+}
+
+/* Tooltip — faster than other popups (Emil: 125-200ms). */
+[data-slot="tooltip-content"] {
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    scale var(--duration-fast) var(--ease-out),
+    translate var(--duration-fast) var(--ease-out);
+}
+[data-slot="tooltip-content"][data-starting-style],
+[data-slot="tooltip-content"][data-ending-style] {
+  opacity: 0;
+  scale: 0.96;
+}
+[data-slot="tooltip-content"][data-side="bottom"][data-starting-style],
+[data-slot="tooltip-content"][data-side="bottom"][data-ending-style] {
+  translate: 0 -2px;
+}
+[data-slot="tooltip-content"][data-side="top"][data-starting-style],
+[data-slot="tooltip-content"][data-side="top"][data-ending-style] {
+  translate: 0 2px;
+}
+[data-slot="tooltip-content"][data-side="left"][data-starting-style],
+[data-slot="tooltip-content"][data-side="left"][data-ending-style] {
+  translate: 2px 0;
+}
+[data-slot="tooltip-content"][data-side="right"][data-starting-style],
+[data-slot="tooltip-content"][data-side="right"][data-ending-style] {
+  translate: -2px 0;
+}
+[data-slot="tooltip-content"][data-ending-style] {
+  transition-duration: 100ms;
+}
+
+/* =========================================================================
+   Modal + AlertDialog. Modals stay anchored at viewport center —
+   transform-origin: center (the Emil-recommended exception). Only
+   opacity + scale animate; overlay fade is decoupled and shorter.
+   ========================================================================= */
+
+[data-slot="modal-overlay"],
+[data-slot="alert-dialog-overlay"] {
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+[data-slot="modal-overlay"][data-starting-style],
+[data-slot="modal-overlay"][data-ending-style],
+[data-slot="alert-dialog-overlay"][data-starting-style],
+[data-slot="alert-dialog-overlay"][data-ending-style] {
+  opacity: 0;
+}
+
+[data-slot="modal-content"],
+[data-slot="alert-dialog-content"] {
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    scale var(--duration-slow) var(--ease-out);
+}
+[data-slot="modal-content"][data-starting-style],
+[data-slot="modal-content"][data-ending-style],
+[data-slot="alert-dialog-content"][data-starting-style],
+[data-slot="alert-dialog-content"][data-ending-style] {
+  opacity: 0;
+  scale: 0.96;
+}
+[data-slot="modal-content"][data-ending-style],
+[data-slot="alert-dialog-content"][data-ending-style] {
+  transition-duration: 150ms;
+}
+
 /* Hide scrollbar but keep scroll functionality */
 @layer base {
   .no-scrollbar {
@@ -186,5 +367,19 @@
   }
   .no-scrollbar::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
+  }
+}
+
+/* Reduced motion — kill movement and looping animations, keep instantaneous
+   opacity/color transitions so state changes remain legible. One central
+   rule beats per-component `motion-reduce:` utilities. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

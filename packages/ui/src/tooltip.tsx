@@ -9,7 +9,7 @@ import { cn } from "./utils";
 // =============================================================================
 export interface TooltipProviderProps extends TooltipPrimitive.Provider.Props {}
 
-function TooltipProvider({ delay = 0, ...props }: TooltipProviderProps) {
+function TooltipProvider({ delay = 500, ...props }: TooltipProviderProps) {
   return (
     <TooltipPrimitive.Provider
       data-slot="tooltip-provider"
@@ -88,13 +88,7 @@ function TooltipContent({
         <TooltipPrimitive.Popup
           className={cn(
             "bg-foreground text-background",
-            "data-closed:animate-out data-open:animate-in",
-            "data-open:fade-in-0 data-closed:fade-out-0",
-            "data-open:zoom-in-95 data-closed:zoom-out-95",
-            "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2",
-            "data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-            "data-[side=inline-start]:slide-in-from-right-2 data-[side=inline-end]:slide-in-from-left-2",
-            "z-50 w-fit max-w-xs origin-(--transform-origin) rounded-md px-3 py-1.5 text-xs",
+            "z-[var(--z-tooltip)] w-fit max-w-xs origin-(--transform-origin) rounded-md px-3 py-1.5 text-xs",
             className
           )}
           data-slot="tooltip-content"

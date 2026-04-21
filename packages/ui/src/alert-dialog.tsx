@@ -45,10 +45,7 @@ export interface AlertDialogOverlayProps
 function AlertDialogOverlay({ className, ...props }: AlertDialogOverlayProps) {
   return (
     <AlertDialogPrimitive.Backdrop
-      className={cn(
-        "data-closed:fade-out-0 data-open:fade-in-0 fixed inset-0 z-50 bg-black/50 data-closed:animate-out data-open:animate-in",
-        className
-      )}
+      className={cn("fixed inset-0 z-[var(--z-modal)] bg-black/50", className)}
       data-slot="alert-dialog-overlay"
       {...props}
     />
@@ -79,7 +76,7 @@ function AlertDialogContent({
       <AlertDialogOverlay />
       <AlertDialogPrimitive.Popup
         className={cn(
-          "data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 group/alert-dialog-content fixed top-[50%] left-[50%] z-50 grid w-full -translate-x-[50%] -translate-y-[50%] gap-4 rounded-xl bg-background p-4 shadow-lg outline-none duration-200 data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-closed:animate-out data-open:animate-in data-[size=default]:sm:max-w-sm",
+          "group/alert-dialog-content fixed top-[50%] left-[50%] z-[var(--z-modal)] grid w-full -translate-x-[50%] -translate-y-[50%] gap-4 rounded-xl bg-background p-4 shadow-lg outline-none data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm",
           className
         )}
         data-size={size}
