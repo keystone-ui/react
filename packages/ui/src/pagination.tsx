@@ -66,7 +66,7 @@ function PaginationLink({
 }: PaginationLinkProps) {
   return (
     <Button
-      className={cn(className)}
+      className={cn("tabular-nums", className)}
       nativeButton={false}
       render={
         <a

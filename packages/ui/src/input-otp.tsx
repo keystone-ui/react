@@ -37,7 +37,12 @@ const InputOTP = React.forwardRef<OTPInputElement, InputOTPProps>(
     return (
       <div className="inline-flex items-center gap-2">
         <OTPInput
-          className={cn("disabled:cursor-not-allowed", className)}
+          className={cn(
+            // 16px on mobile to prevent iOS zoom when the hidden input takes focus
+            "text-base md:text-sm",
+            "disabled:cursor-not-allowed",
+            className
+          )}
           containerClassName={cn(
             "cn-input-otp flex items-center has-disabled:opacity-50",
             containerClassName
@@ -99,7 +104,7 @@ export const InputOTPSlot = React.forwardRef<HTMLDivElement, InputOTPSlotProps>(
       <div
         className={cn(
           // Base styles matching Input component
-          "bg-input-bg text-sm",
+          "bg-input-bg text-sm tabular-nums",
           "relative flex h-10 w-10 items-center justify-center",
           "border border-input shadow-xs",
           "outline-none transition-[color,box-shadow]",

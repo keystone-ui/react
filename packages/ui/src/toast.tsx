@@ -72,6 +72,33 @@ const toastManager = Toast.createToastManager();
 // Imperative toast API
 // ---------------------------------------------------------------------------
 
+const WHITESPACE_RE = /\s+/;
+
+function nodeToText(n: ReactNode): string {
+  if (typeof n === "string") {
+    return n;
+  }
+  if (typeof n === "number") {
+    return String(n);
+  }
+  return "";
+}
+
+/**
+ * Content-length-aware default timeout: a three-word toast dismisses faster
+ * than a forty-word one. Reading speed ≈ 250 WPM (~240 ms/word) + a fixed
+ * grace window, clamped to [3000ms, 10000ms]. Explicit `duration` always wins.
+ */
+function readingTimeMs(nodes: ReactNode[]): number {
+  const text = nodes.map(nodeToText).join(" ");
+  const words = text.trim().split(WHITESPACE_RE).filter(Boolean).length;
+  const MIN = 3000;
+  const MAX = 10_000;
+  const GRACE = 2000;
+  const MS_PER_WORD = 240;
+  return Math.min(MAX, Math.max(MIN, GRACE + words * MS_PER_WORD));
+}
+
 function createToast(
   title: ReactNode,
   options?: ToastOptions,
@@ -90,8 +117,8 @@ function createToast(
   } = options ?? {};
 
   // Resolve timeout: loading toasts don't auto-dismiss by default.
-  // When updating an existing toast (id provided), reset to 5 000 ms unless
-  // the caller set an explicit duration.
+  // When updating an existing toast (id provided), reset to a content-aware
+  // timeout unless the caller set an explicit duration.
   let resolvedTimeout: number | undefined;
   if (duration === Number.POSITIVE_INFINITY) {
     resolvedTimeout = 0;
@@ -100,7 +127,7 @@ function createToast(
   } else if (type === "loading") {
     resolvedTimeout = 0;
   } else if (id != null) {
-    resolvedTimeout = 5000;
+    resolvedTimeout = readingTimeMs([title, description]);
   }
 
   const payload = {
@@ -483,6 +510,8 @@ function ToastItem({
             "absolute top-0 right-0 translate-x-1/2 -translate-y-1/2",
             // Size 20×20, circular
             "flex size-5 items-center justify-center rounded-full border border-border p-0 shadow-sm",
+            // 44px tap target via invisible pseudo — keeps visual size small
+            "relative before:absolute before:-inset-3 before:content-['']",
             // Colors: subtle background like ghost button
             "bg-background text-muted-foreground",
             "hover:bg-accent hover:text-foreground",
@@ -491,7 +520,7 @@ function ToastItem({
             // Also reveal on keyboard focus for a11y
             "focus-visible:opacity-100",
             // Smooth transitions for reveal + hover background
-            "cursor-pointer transition-[opacity,background-color,color]",
+            "cursor-pointer transition-[opacity,background-color,color] duration-150 ease-out",
             // Mobile: always visible (no hover on touch)
             "max-sm:opacity-100"
           )}
@@ -539,9 +568,11 @@ function Toaster({
       <Toast.Portal>
         <Toast.Viewport
           className={cn(
-            "fixed z-[100] m-4 outline-none",
+            "fixed z-[var(--z-toast)] m-4 outline-none",
             // Width: fixed on desktop, full on mobile
             "w-(--width) max-sm:right-0 max-sm:left-0 max-sm:mx-2 max-sm:w-auto",
+            // Respect device safe areas (notch, home bar)
+            "pt-[env(safe-area-inset-top)] pr-[env(safe-area-inset-right)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)]",
             // Position-specific
             VIEWPORT_POSITION_CLASSES[position],
             className

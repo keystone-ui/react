@@ -12,7 +12,7 @@ import { cn } from "./utils";
 // ---------------------------------------------------------------------------
 
 const buttonVariants = cva(
-  "relative z-0 inline-flex shrink-0 cursor-pointer select-none items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-lg font-medium text-sm transition-all focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "relative z-0 inline-flex shrink-0 cursor-pointer touch-manipulation select-none items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-lg font-medium text-sm transition-[transform,background-color,color,border-color,box-shadow,outline-color] duration-[160ms] ease-out focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -96,6 +96,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       size = "default",
       isLoading = false,
       disabled,
+      type = "button",
       children,
       ...props
     },
@@ -114,6 +115,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         data-slot="button"
         disabled={isDisabled}
         ref={ref}
+        type={type}
         {...props}
       >
         <span

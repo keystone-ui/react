@@ -17,7 +17,7 @@ export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
     return (
       <SwitchPrimitive.Root
         className={cn(
-          "peer group/switch relative inline-flex shrink-0 items-center rounded-full border border-transparent transition-[background-color,border-color]",
+          "peer group/switch relative inline-flex shrink-0 cursor-pointer touch-manipulation items-center rounded-full border border-transparent transition-[background-color,border-color]",
           // Size variants
           "data-[size=default]:h-4.5 data-[size=default]:w-8",
           "data-[size=sm]:h-3.5 data-[size=sm]:w-6",
