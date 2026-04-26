@@ -51,7 +51,11 @@ function ThemeBuilderInner() {
 export default function ThemeBuilderPage() {
   return (
     <NuqsAdapter>
-      <Suspense>
+      <Suspense
+        fallback={
+          <div className="min-h-0 flex-1 rounded-xl border border-border bg-muted/20" />
+        }
+      >
         <ThemeBuilderInner />
       </Suspense>
     </NuqsAdapter>

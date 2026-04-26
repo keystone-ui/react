@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 import { THEME_PREVIEW_ID } from "../constants";
 import { useCssSync } from "../hooks/use-css-sync";
 import type { ThemeState } from "../hooks/use-theme-state";
@@ -13,13 +11,7 @@ interface PreviewContainerProps {
 }
 
 export function PreviewContainer({ state }: PreviewContainerProps) {
-  const [mounted, setMounted] = useState(false);
-
   useCssSync(state);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   return (
     <div
@@ -32,7 +24,7 @@ export function PreviewContainer({ state }: PreviewContainerProps) {
         fontFamily: "var(--font-sans, var(--font-inter)), sans-serif",
       }}
     >
-      {mounted ? <DemoComponents /> : null}
+      <DemoComponents />
     </div>
   );
 }
