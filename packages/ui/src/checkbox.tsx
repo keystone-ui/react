@@ -13,8 +13,8 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
         "border-input bg-input-bg",
         // Smooth color transitions
         "transition-colors duration-150",
-        // Click area extension
-        "after:absolute after:-inset-x-3 after:-inset-y-2",
+        // Click area extension — bumped toward AAA touch target (~36×24)
+        "after:absolute after:-inset-x-4 after:-inset-y-3",
         // Checked state
         "data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary",
         // Focus styles - outside border like buttons

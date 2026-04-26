@@ -250,14 +250,14 @@ const AccordionTrigger = React.forwardRef<
         {chevronIcon ? (
           <span
             aria-hidden="true"
-            className="flex shrink-0 items-center justify-center transition-transform ease-out group-data-[panel-open]:rotate-180"
+            className="flex shrink-0 items-center justify-center transition-transform duration-200 ease-out group-data-[panel-open]:rotate-180"
           >
             {chevronIcon}
           </span>
         ) : (
           <ChevronDown
             aria-hidden="true"
-            className="size-3 shrink-0 opacity-75 transition-transform ease-out group-data-[panel-open]:rotate-180"
+            className="size-3 shrink-0 opacity-75 transition-transform duration-200 ease-out group-data-[panel-open]:rotate-180"
           />
         )}
       </AccordionPrimitive.Trigger>

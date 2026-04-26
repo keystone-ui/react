@@ -230,7 +230,7 @@
 [data-slot="combobox-content"][data-starting-style],
 [data-slot="combobox-content"][data-ending-style] {
   opacity: 0;
-  scale: 0.96;
+  scale: 0.95;
 }
 
 /* Side-aware initial slide (small translate toward the trigger). */
@@ -302,7 +302,7 @@
 [data-slot="tooltip-content"][data-starting-style],
 [data-slot="tooltip-content"][data-ending-style] {
   opacity: 0;
-  scale: 0.96;
+  scale: 0.95;
 }
 [data-slot="tooltip-content"][data-side="bottom"][data-starting-style],
 [data-slot="tooltip-content"][data-side="bottom"][data-ending-style] {
@@ -352,11 +352,16 @@
 [data-slot="alert-dialog-content"][data-starting-style],
 [data-slot="alert-dialog-content"][data-ending-style] {
   opacity: 0;
-  scale: 0.96;
+  scale: 0.95;
 }
 [data-slot="modal-content"][data-ending-style],
 [data-slot="alert-dialog-content"][data-ending-style] {
   transition-duration: 150ms;
+}
+/* Overlay exits faster than it enters — backdrop shouldn't linger past content. */
+[data-slot="modal-overlay"][data-ending-style],
+[data-slot="alert-dialog-overlay"][data-ending-style] {
+  transition-duration: 100ms;
 }
 
 /* Hide scrollbar but keep scroll functionality */

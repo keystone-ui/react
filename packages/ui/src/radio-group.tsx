@@ -24,8 +24,8 @@ function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
         "border-input bg-input-bg text-primary",
         // Smooth color transitions
         "transition-colors duration-150",
-        // Click area extension
-        "after:absolute after:-inset-x-3 after:-inset-y-2",
+        // Click area extension — bumped toward AAA touch target
+        "after:absolute after:-inset-x-4 after:-inset-y-3",
         // Checked state - primary bg with white indicator
         "data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground",
         // Focus styles - outside border like buttons/checkbox
