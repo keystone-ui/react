@@ -1,0 +1,53 @@
+---
+title: Selection Bar
+description: Floating bulk-action toolbar that appears when items are selected in a list or table.
+---
+
+## Import
+
+```tsx
+import {
+  SelectionBar,
+  SelectionBarClose,
+  SelectionBarGroup,
+  SelectionBarLabel,
+  SelectionBarBullet,
+  SelectionBarLink,
+  SelectionBarSeparator,
+  SelectionBarButton,
+} from "@keystoneui/react/selection-bar";
+```
+
+## Usage
+
+<ComponentPreview name="selection-bar-default" />
+
+## With Bulk Actions
+
+Compose with [Dropdown Menu](/docs/components/dropdown-menu) triggers for grouped bulk operations. A `tone` prop sets semantic colors on the trailing action buttons.
+
+<ComponentPreview name="selection-bar-with-bulk-actions" />
+
+## Tones
+
+`SelectionBarButton` accepts `tone="default"`, `tone="success"`, or `tone="destructive"`.
+
+<ComponentPreview name="selection-bar-tones" />
+
+## API Reference
+
+### SelectionBar
+
+| Prop       | Type                       | Default  | Description                                                                |
+| ---------- | -------------------------- | -------- | -------------------------------------------------------------------------- |
+| `open`     | `boolean`                  | —        | Whether the bar is visible. Drives the 200ms enter/exit animation.         |
+| `position` | `"fixed" \| "inline"`      | `"fixed"`| `fixed` anchors to the viewport bottom; `inline` lets the consumer place it. |
+
+### SelectionBarButton
+
+| Prop    | Type                                       | Default     | Description                                       |
+| ------- | ------------------------------------------ | ----------- | ------------------------------------------------- |
+| `tone`  | `"default" \| "success" \| "destructive"` | `"default"` | Semantic color treatment for hover and text.      |
+| `shape` | `"text" \| "icon"`                         | `"text"`    | Use `icon` for square icon-only triggers.         |
+
+Pass to a `DropdownMenuTrigger` via `render={<SelectionBarButton />}` to combine selection-bar styling with menu behavior.

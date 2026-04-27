@@ -57,6 +57,7 @@ import Signup02 from "./blocks/signup-02";
 import Signup03 from "./blocks/signup-03";
 import Signup04 from "./blocks/signup-04";
 import Signup05 from "./blocks/signup-05";
+import Tickets01 from "./blocks/tickets-01";
 // breadcrumb
 import BreadcrumbCollapsed from "./breadcrumb/collapsed";
 import BreadcrumbCustomSeparator from "./breadcrumb/custom-separator";
@@ -349,6 +350,10 @@ import SelectMultiple from "./select/multiple";
 import SelectScrollable from "./select/scrollable";
 import SelectSizes from "./select/sizes";
 import SelectWithIcons from "./select/with-icons";
+// selection-bar
+import SelectionBarDefault from "./selection-bar/default";
+import SelectionBarTones from "./selection-bar/tones";
+import SelectionBarWithBulkActions from "./selection-bar/with-bulk-actions";
 // separator
 import SeparatorDefault from "./separator/default";
 import SeparatorVertical from "./separator/vertical";
@@ -458,7 +463,6 @@ import TooltipDisabledButton from "./tooltip/disabled-button";
 import TooltipGroupDelay from "./tooltip/group-delay";
 import TooltipSides from "./tooltip/sides";
 import TooltipWithKbd from "./tooltip/with-kbd";
-
 // typography
 import TypographyBlockquote from "./typography/blockquote";
 import TypographyDefault from "./typography/default";
@@ -2236,6 +2240,22 @@ export const demos: Record<string, DemoItem> = {
   "block-signup-05": {
     component: Signup05,
     file: "blocks/signup-05.tsx",
+  },
+  "block-tickets-01": {
+    component: Tickets01,
+    file: "blocks/tickets-01/index.tsx",
+  },
+  "selection-bar-default": {
+    component: SelectionBarDefault,
+    file: "selection-bar/default.tsx",
+  },
+  "selection-bar-tones": {
+    component: SelectionBarTones,
+    file: "selection-bar/tones.tsx",
+  },
+  "selection-bar-with-bulk-actions": {
+    component: SelectionBarWithBulkActions,
+    file: "selection-bar/with-bulk-actions.tsx",
   },
 };
 

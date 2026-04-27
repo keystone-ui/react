@@ -64,6 +64,7 @@
     "---Utilities---",
     "kbd",
     "item",
-    "typography"
+    "typography",
+    "selection-bar"
   ]
 }

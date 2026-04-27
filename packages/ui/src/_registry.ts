@@ -341,4 +341,11 @@ export const ui: Registry = [
     dependencies: ["@base-ui/react", "lucide-react"],
     files: [{ path: "ui/toast.tsx", type: "registry:ui" }],
   },
+  {
+    name: "selection-bar",
+    type: "registry:ui",
+    dependencies: ["class-variance-authority", "lucide-react"],
+    registryDependencies: ["button"],
+    files: [{ path: "ui/selection-bar.tsx", type: "registry:ui" }],
+  },
 ];

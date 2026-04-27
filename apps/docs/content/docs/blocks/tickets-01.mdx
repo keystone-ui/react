@@ -1,0 +1,40 @@
+---
+title: Tickets 01
+description: A sortable, filterable tickets table with inline cell editing, a new-ticket modal, and a floating bulk-edit action bar.
+---
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/tickets-01.json
+```
+
+<BlockPreview name="block-tickets-01" />
+
+## Features
+
+- Sticky-header table with 3-state column sort and column visibility toggle
+- Row checkbox selection with indeterminate header state
+- Inline cell editing — `Input` for the Subject, `DropdownMenu` for all enum cells (Status, Priority, Assignee, Category, Channel, Health)
+- New-ticket `Modal` with required Subject validation and Status / Priority / Category / Channel / Assignee selectors
+- Floating `SelectionBar` for bulk Change Status / Assign / Priority / Health / Channel / Export CSV / Delete (with `AlertDialog` confirmation)
+- Drag-to-reorder rows when sort preset is "Manual" (`@dnd-kit/*`)
+- Mobile toolbar collapses Sort / Status / Columns / View into a single `Drawer` + `Stepper` filters panel
+
+## Components Used
+
+- [Selection Bar](/docs/components/selection-bar)
+- [Table](/docs/components/table)
+- [Checkbox](/docs/components/checkbox)
+- [Dropdown Menu](/docs/components/dropdown-menu)
+- [Drawer](/docs/components/drawer)
+- [Stepper](/docs/components/stepper)
+- [Radio Group](/docs/components/radio-group)
+- [Modal](/docs/components/modal)
+- [Alert Dialog](/docs/components/alert-dialog)
+- [Field](/docs/components/field)
+- [Input](/docs/components/input)
+- [Input Group](/docs/components/input-group)
+- [Select](/docs/components/select)
+- [Toggle Group](/docs/components/toggle-group)
+- [Avatar](/docs/components/avatar)
+- [Badge](/docs/components/badge)
+- [Button](/docs/components/button)

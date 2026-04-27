@@ -57,6 +57,7 @@ export default defineConfig((options) => ({
     "src/tooltip.tsx",
     "src/hooks/index.ts",
     "src/utils.ts",
+    "src/selection-bar.tsx",
   ],
   format: ["esm"],
   dts: true,

@@ -67,7 +67,8 @@
     "./tooltip": "./src/tooltip.tsx",
     "./hooks": "./src/hooks/index.ts",
     "./utils": "./src/utils.ts",
-    "./base.css": "./src/base.css"
+    "./base.css": "./src/base.css",
+    "./selection-bar": "./src/selection-bar.tsx"
   },
   "scripts": {
     "build": "tsup",
@@ -327,7 +328,11 @@
         "types": "./dist/utils.d.ts",
         "default": "./dist/utils.js"
       },
-      "./base.css": "./src/base.css"
+      "./base.css": "./src/base.css",
+      "./selection-bar": {
+        "types": "./dist/selection-bar.d.ts",
+        "default": "./dist/selection-bar.js"
+      }
     }
   },
   "peerDependencies": {
