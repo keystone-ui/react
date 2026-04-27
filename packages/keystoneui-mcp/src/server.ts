@@ -4,6 +4,7 @@ import { loadProjectConfig } from "./config.js";
 import {
   auditChecklistTool,
   getAddCommandTool,
+  getExamplesTool,
   getThemeInfoTool,
   listComponentsTool,
   searchComponentsTool,
@@ -107,6 +108,21 @@ server.tool(
     content: [
       { type: "text", text: await getAddCommandTool(config, { names }) },
     ],
+  })
+);
+
+server.tool(
+  "get_examples",
+  "Fetch live demo files for a Keystone UI component or block. Returns the TSX source for every example/demo associated with the name (e.g. button, signin-01, tickets-01). Use after view_component to see real-world usage patterns.",
+  {
+    name: z
+      .string()
+      .describe(
+        'Component or block name (e.g. "button", "signin-01", "tickets-01")'
+      ),
+  },
+  async ({ name }) => ({
+    content: [{ type: "text", text: await getExamplesTool(config, { name }) }],
   })
 );
 

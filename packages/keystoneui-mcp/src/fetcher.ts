@@ -30,6 +30,23 @@ export function fetchItem(
   return fetchJson<RegistryItem>(`${registryUrl}/${name}.json`);
 }
 
+export interface DemoFile {
+  content: string;
+  path: string;
+}
+
+export interface DemoBundle {
+  files: DemoFile[];
+  name: string;
+}
+
+export function fetchExamples(
+  registryUrl: string,
+  name: string
+): Promise<DemoBundle> {
+  return fetchJson<DemoBundle>(`${registryUrl}/demos/${name}`);
+}
+
 export function clearCache(): void {
   cache.clear();
 }

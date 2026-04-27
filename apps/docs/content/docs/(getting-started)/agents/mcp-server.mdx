@@ -47,9 +47,10 @@ This writes the correct MCP config file for your editor. Restart your editor, th
 
 [Model Context Protocol (MCP)](https://modelcontextprotocol.io) is an open protocol that enables AI assistants to connect to external tools and data sources. With the Keystone UI MCP server, your AI assistant can:
 
-- **Browse Components** -- List all 53+ UI components and blocks with descriptions
+- **Browse Components** -- List all 54+ UI components and blocks with descriptions
 - **Search by Name or Keyword** -- Fuzzy search across components and blocks
 - **View Full Source Code** -- Inspect component implementations, dependencies, and registry dependencies
+- **Fetch Live Examples** -- Pull demo TSX files for any component or block to see real usage
 - **Get Install Commands** -- Generate `npx shadcn add` commands for any component
 - **Access Theme Info** -- View CSS setup, OKLCH color tokens, radius scale, and dark mode configuration
 - **Run an Audit** -- Verify your project is correctly configured for Keystone UI
@@ -71,13 +72,14 @@ No server infrastructure is needed -- the MCP server fetches static JSON files f
 
 ## Available Tools
 
-The MCP server exposes 6 tools that AI assistants can call:
+The MCP server exposes 7 tools that AI assistants can call:
 
 | Tool | Input | Description |
 |---|---|---|
 | `list_components` | `limit?`, `offset?`, `type?` | Paginated list of all components and blocks |
 | `search_components` | `query`, `limit?`, `type?` | Fuzzy search by name, description, or keywords |
 | `view_component` | `names[]` | Full source code, dependencies, and metadata for up to 5 components |
+| `get_examples` | `name` | Live demo TSX files for a component or block (e.g. `button`, `tickets-01`) |
 | `get_add_command` | `names[]` | Generates `npx shadcn@latest add` commands with registry URLs |
 | `get_theme_info` | -- | CSS setup, OKLCH color tokens, radius scale, dark mode |
 | `audit_checklist` | -- | Post-install verification checklist |

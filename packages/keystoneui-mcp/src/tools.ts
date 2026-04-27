@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { ProjectConfig } from "./config.js";
-import { fetchItem, fetchManifest } from "./fetcher.js";
+import { fetchExamples, fetchItem, fetchManifest } from "./fetcher.js";
 import { listItems, searchItems } from "./search.js";
 import type { RegistryItem } from "./types.js";
 
@@ -154,6 +154,43 @@ export function getAddCommandTool(
   }
 
   return lines.join("\n");
+}
+
+export const getExamplesSchema = z.object({
+  name: z
+    .string()
+    .describe(
+      'Component or block name to fetch examples for (e.g. "button" or "tickets-01")'
+    ),
+});
+
+export async function getExamplesTool(
+  config: ProjectConfig,
+  input: z.infer<typeof getExamplesSchema>
+) {
+  try {
+    const bundle = await fetchExamples(config.registry.url, input.name);
+
+    if (!bundle.files.length) {
+      return `**${input.name}**: no example files found.`;
+    }
+
+    const sections = [
+      `# ${input.name} examples`,
+      `${bundle.files.length} file${bundle.files.length === 1 ? "" : "s"}:`,
+      "",
+    ];
+
+    for (const file of bundle.files) {
+      const ext = file.path.includes(".") ? file.path.split(".").pop() : "tsx";
+      sections.push(`### ${file.path}`);
+      sections.push(`\`\`\`${ext}\n${file.content}\n\`\`\``);
+    }
+
+    return sections.join("\n\n");
+  } catch {
+    return `**${input.name}**: examples not found in registry.`;
+  }
 }
 
 export function getThemeInfoTool(config: ProjectConfig) {
