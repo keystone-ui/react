@@ -6,11 +6,22 @@ A modern React component library built with [Base UI](https://base-ui.com), [Tai
 
 | Package | Description |
 | --- | --- |
-| [`@keystoneui/react`](packages/ui) | Core component library — 50+ accessible, themeable components |
+| [`@keystoneui/react`](packages/ui) | Core component library — 54+ accessible, themeable components |
 | [`docs`](apps/docs) | Documentation site built with Fumadocs (Next.js) |
 | [`storybook`](apps/storybook) | Component development and visual testing with Storybook |
 
 For full documentation, visit [keystoneui.io](https://keystoneui.io).
+
+## AI for Agents
+
+Keystone UI is built to be consumed by AI coding assistants as a first-class concern. Every documented surface has a working implementation:
+
+- **MCP Server** (`@keystoneui/mcp`) — 7 tools for component discovery, source inspection, demo fetching, install commands, theme info, and post-install audit. Works with Claude Code, Cursor, VS Code Copilot, OpenCode, Codex.
+- **Agent Skill** (`skills/keystoneui-react/`) — modular SKILL.md plus `mcp.md`, `cli.md`, `customization.md`, and a `rules/` directory (styling, forms, composition, icons, base-vs-radix). Includes evals (`evals/evals.json`) and an OpenAI assistant interface (`agents/openai.yml`).
+- **LLMs.txt endpoints** — three dynamic routes generated from MDX, never stale: `/llms.txt`, `/llms-full.txt`, `/llms-components.txt`.
+- **AGENTS.md** — repo-root file with development conventions; also served at `/agents-md`.
+
+See [`/docs/agents`](https://keystoneui.io/docs/agents) for setup instructions per AI client.
 
 ## Quick Start
 

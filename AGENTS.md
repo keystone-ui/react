@@ -41,6 +41,8 @@ pnpm test --filter=storybook       # Run Storybook interaction tests
 
 ### Release & Versioning
 
+Create a changeset for any user-visible change to `@keystoneui/react` (new component, API change, behavior change, breaking change) **before** opening the PR. `pnpm changeset` is interactive and will prompt for the bump type and summary. Skip changesets only for docs-only, internal-tooling, or test-only changes.
+
 ```bash
 pnpm changeset           # Create a changeset for versioning
 pnpm version-packages    # Apply changesets to bump versions
