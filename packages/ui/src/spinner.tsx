@@ -1,4 +1,4 @@
-import { Loader2Icon } from "lucide-react";
+import { LoaderCircle as Loader2Icon } from "lucide-react";
 import type * as React from "react";
 
 import { cn } from "./utils";

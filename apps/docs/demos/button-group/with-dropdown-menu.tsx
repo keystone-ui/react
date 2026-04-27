@@ -10,13 +10,13 @@ import {
   DropdownMenuTrigger,
 } from "@keystoneui/react/dropdown-menu";
 import {
-  AlertTriangleIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  GitForkIcon,
-  StarIcon,
-  UserRoundXIcon,
-  VolumeOffIcon,
+  TriangleAlert as AlertTriangleIcon,
+  Check as CheckIcon,
+  ChevronDown as ChevronDownIcon,
+  GitFork as GitForkIcon,
+  Star as StarIcon,
+  UserRoundX as UserRoundXIcon,
+  VolumeOff as VolumeOffIcon,
 } from "lucide-react";
 
 export default function ButtonGroupWithDropdownMenu() {

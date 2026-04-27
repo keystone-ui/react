@@ -2,7 +2,7 @@
 
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
 import { cva } from "class-variance-authority";
-import { XIcon } from "lucide-react";
+import { X as XIcon } from "lucide-react";
 import type * as React from "react";
 
 import { cn } from "./utils";

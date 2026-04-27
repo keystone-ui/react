@@ -112,9 +112,8 @@ function TooltipContent({
   );
 }
 
+export type { TooltipRootProps as TooltipProps } from "@base-ui/react/tooltip";
 // =============================================================================
 // Exports
 // =============================================================================
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
-
-export type { TooltipRootProps as TooltipProps } from "@base-ui/react/tooltip";
+export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };

@@ -120,47 +120,41 @@ const AccordionLeadingIconContext = React.createContext<boolean>(false);
 // Accordion (root)
 // ---------------------------------------------------------------------------
 
-const Accordion = React.forwardRef<
-  React.ComponentRef<typeof AccordionPrimitive.Root>,
-  AccordionProps
->(
-  (
-    {
-      className: classNameProp,
-      variant = "underline",
-      defaultValue,
-      value,
-      onValueChange,
-      hiddenUntilFound,
-      multiple,
-      disabled,
-      orientation,
-      ...props
-    },
-    ref
-  ) => {
-    const baseClasses = cn("flex w-full flex-col justify-center");
+const Accordion = ({
+  className: classNameProp,
+  variant = "underline",
+  defaultValue,
+  value,
+  onValueChange,
+  hiddenUntilFound,
+  multiple,
+  disabled,
+  orientation,
+  ref,
+  ...props
+}: AccordionProps &
+  React.RefAttributes<React.ComponentRef<typeof AccordionPrimitive.Root>>) => {
+  const baseClasses = cn("flex w-full flex-col justify-center");
 
-    return (
-      <AccordionVariantContext.Provider value={variant}>
-        <AccordionLeadingIconContext.Provider value={false}>
-          <AccordionPrimitive.Root
-            className={cn(baseClasses, classNameProp)}
-            defaultValue={defaultValue}
-            disabled={disabled}
-            hiddenUntilFound={hiddenUntilFound}
-            multiple={multiple}
-            onValueChange={onValueChange}
-            orientation={orientation}
-            ref={ref}
-            value={value}
-            {...props}
-          />
-        </AccordionLeadingIconContext.Provider>
-      </AccordionVariantContext.Provider>
-    );
-  }
-);
+  return (
+    <AccordionVariantContext.Provider value={variant}>
+      <AccordionLeadingIconContext.Provider value={false}>
+        <AccordionPrimitive.Root
+          className={cn(baseClasses, classNameProp)}
+          defaultValue={defaultValue}
+          disabled={disabled}
+          hiddenUntilFound={hiddenUntilFound}
+          multiple={multiple}
+          onValueChange={onValueChange}
+          orientation={orientation}
+          ref={ref}
+          value={value}
+          {...props}
+        />
+      </AccordionLeadingIconContext.Provider>
+    </AccordionVariantContext.Provider>
+  );
+};
 
 Accordion.displayName = "Accordion";
 
@@ -168,10 +162,13 @@ Accordion.displayName = "Accordion";
 // AccordionItem
 // ---------------------------------------------------------------------------
 
-const AccordionItem = React.forwardRef<
-  React.ComponentRef<typeof AccordionPrimitive.Item>,
-  AccordionItemProps
->(({ className: classNameProp, variant: variantProp, ...props }, ref) => {
+const AccordionItem = ({
+  className: classNameProp,
+  variant: variantProp,
+  ref,
+  ...props
+}: AccordionItemProps &
+  React.RefAttributes<React.ComponentRef<typeof AccordionPrimitive.Item>>) => {
   const contextVariant = React.useContext(AccordionVariantContext);
   const variant = variantProp ?? contextVariant;
 
@@ -194,7 +191,7 @@ const AccordionItem = React.forwardRef<
       {...props}
     />
   );
-});
+};
 
 AccordionItem.displayName = "AccordionItem";
 
@@ -202,12 +199,16 @@ AccordionItem.displayName = "AccordionItem";
 // AccordionHeader
 // ---------------------------------------------------------------------------
 
-const AccordionHeader = React.forwardRef<
-  React.ComponentRef<typeof AccordionPrimitive.Header>,
-  AccordionHeaderProps
->(({ className, ...props }, ref) => (
+const AccordionHeader = ({
+  className,
+  ref,
+  ...props
+}: AccordionHeaderProps &
+  React.RefAttributes<
+    React.ComponentRef<typeof AccordionPrimitive.Header>
+  >) => (
   <AccordionPrimitive.Header className={cn(className)} ref={ref} {...props} />
-));
+);
 
 AccordionHeader.displayName = "AccordionHeader";
 
@@ -215,55 +216,51 @@ AccordionHeader.displayName = "AccordionHeader";
 // AccordionTrigger
 // ---------------------------------------------------------------------------
 
-const AccordionTrigger = React.forwardRef<
-  React.ComponentRef<typeof AccordionPrimitive.Trigger>,
-  AccordionTriggerProps
->(
-  (
-    {
-      className: classNameProp,
-      children,
-      variant: variantProp,
-      chevronIcon,
-      ...props
-    },
-    ref
-  ) => {
-    const contextVariant = React.useContext(AccordionVariantContext);
-    const variant = variantProp ?? contextVariant;
+const AccordionTrigger = ({
+  className: classNameProp,
+  children,
+  variant: variantProp,
+  chevronIcon,
+  ref,
+  ...props
+}: AccordionTriggerProps &
+  React.RefAttributes<
+    React.ComponentRef<typeof AccordionPrimitive.Trigger>
+  >) => {
+  const contextVariant = React.useContext(AccordionVariantContext);
+  const variant = variantProp ?? contextVariant;
 
-    const baseClasses = cn(
-      "group flex w-full cursor-pointer items-center justify-between gap-4 py-2.5 text-left font-semibold text-sm",
-      "focus:ring-0 focus:ring-offset-0",
-      "focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
-      variant === "box" && ["px-3", "rounded-lg"],
-      variant === "table" && "px-3"
-    );
+  const baseClasses = cn(
+    "group flex w-full cursor-pointer items-center justify-between gap-4 py-2.5 text-left font-semibold text-sm",
+    "focus:ring-0 focus:ring-offset-0",
+    "focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
+    variant === "box" && ["px-3", "rounded-lg"],
+    variant === "table" && "px-3"
+  );
 
-    return (
-      <AccordionPrimitive.Trigger
-        className={cn(baseClasses, classNameProp)}
-        ref={ref}
-        {...props}
-      >
-        {children}
-        {chevronIcon ? (
-          <span
-            aria-hidden="true"
-            className="flex shrink-0 items-center justify-center transition-transform duration-200 ease-out group-data-[panel-open]:rotate-180"
-          >
-            {chevronIcon}
-          </span>
-        ) : (
-          <ChevronDown
-            aria-hidden="true"
-            className="size-3 shrink-0 opacity-75 transition-transform duration-200 ease-out group-data-[panel-open]:rotate-180"
-          />
-        )}
-      </AccordionPrimitive.Trigger>
-    );
-  }
-);
+  return (
+    <AccordionPrimitive.Trigger
+      className={cn(baseClasses, classNameProp)}
+      ref={ref}
+      {...props}
+    >
+      {children}
+      {chevronIcon ? (
+        <span
+          aria-hidden="true"
+          className="flex shrink-0 items-center justify-center transition-transform duration-200 ease-out group-data-[panel-open]:rotate-180"
+        >
+          {chevronIcon}
+        </span>
+      ) : (
+        <ChevronDown
+          aria-hidden="true"
+          className="size-3 shrink-0 opacity-75 transition-transform duration-200 ease-out group-data-[panel-open]:rotate-180"
+        />
+      )}
+    </AccordionPrimitive.Trigger>
+  );
+};
 
 AccordionTrigger.displayName = "AccordionTrigger";
 
@@ -271,45 +268,44 @@ AccordionTrigger.displayName = "AccordionTrigger";
 // AccordionPanel
 // ---------------------------------------------------------------------------
 
-const AccordionPanel = React.forwardRef<
-  React.ComponentRef<typeof AccordionPrimitive.Panel>,
-  AccordionPanelProps
->(
-  (
-    { className: classNameProp, children, variant: variantProp, ...props },
-    ref
-  ) => {
-    const contextVariant = React.useContext(AccordionVariantContext);
-    const variant = variantProp ?? contextVariant;
+const AccordionPanel = ({
+  className: classNameProp,
+  children,
+  variant: variantProp,
+  ref,
+  ...props
+}: AccordionPanelProps &
+  React.RefAttributes<React.ComponentRef<typeof AccordionPrimitive.Panel>>) => {
+  const contextVariant = React.useContext(AccordionVariantContext);
+  const variant = variantProp ?? contextVariant;
 
-    const baseClasses = cn(
-      "overflow-hidden text-muted-foreground text-sm",
-      // CSS transition on height — smoothly cancellable mid-animation.
-      // Reduced motion is handled globally by base.css.
-      "h-[var(--accordion-panel-height)] transition-[height] duration-200 ease-out",
-      // Enter: start from 0 height
-      "data-[starting-style]:h-0",
-      // Exit: collapse to 0 height
-      "data-[ending-style]:h-0"
-    );
+  const baseClasses = cn(
+    "overflow-hidden text-muted-foreground text-sm",
+    // CSS transition on height — smoothly cancellable mid-animation.
+    // Reduced motion is handled globally by base.css.
+    "h-[var(--accordion-panel-height)] transition-[height] duration-200 ease-out",
+    // Enter: start from 0 height
+    "data-[starting-style]:h-0",
+    // Exit: collapse to 0 height
+    "data-[ending-style]:h-0"
+  );
 
-    const innerClasses = cn(
-      "pb-3",
-      (variant === "box" || variant === "table") && "px-3"
-    );
+  const innerClasses = cn(
+    "pb-3",
+    (variant === "box" || variant === "table") && "px-3"
+  );
 
-    return (
-      <AccordionPrimitive.Panel
-        className={cn(baseClasses, classNameProp)}
-        keepMounted
-        ref={ref}
-        {...props}
-      >
-        <div className={innerClasses}>{children}</div>
-      </AccordionPrimitive.Panel>
-    );
-  }
-);
+  return (
+    <AccordionPrimitive.Panel
+      className={cn(baseClasses, classNameProp)}
+      keepMounted
+      ref={ref}
+      {...props}
+    >
+      <div className={innerClasses}>{children}</div>
+    </AccordionPrimitive.Panel>
+  );
+};
 
 AccordionPanel.displayName = "AccordionPanel";
 
@@ -319,10 +315,10 @@ AccordionPanel.displayName = "AccordionPanel";
 
 export {
   Accordion,
-  AccordionItem,
   AccordionHeader,
-  AccordionTrigger,
-  AccordionPanel,
-  AccordionVariantContext,
+  AccordionItem,
   AccordionLeadingIconContext,
+  AccordionPanel,
+  AccordionTrigger,
+  AccordionVariantContext,
 };

@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@keystoneui/react/table";
-import { MoreHorizontalIcon } from "lucide-react";
+import { Ellipsis as MoreHorizontalIcon } from "lucide-react";
 
 const products = [
   { name: "Wireless Mouse", price: "$29.99" },

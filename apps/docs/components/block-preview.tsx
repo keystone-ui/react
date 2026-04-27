@@ -9,12 +9,12 @@ import {
 import { Separator } from "@keystoneui/react/separator";
 import { ToggleGroup, ToggleGroupItem } from "@keystoneui/react/toggle-group";
 import {
-  ChevronDownIcon,
-  ExternalLinkIcon,
-  MonitorIcon,
-  RotateCwIcon,
-  SmartphoneIcon,
-  TabletIcon,
+  ChevronDown as ChevronDownIcon,
+  ExternalLink as ExternalLinkIcon,
+  Monitor as MonitorIcon,
+  RotateCw as RotateCwIcon,
+  Smartphone as SmartphoneIcon,
+  Tablet as TabletIcon,
 } from "lucide-react";
 import { useRef, useState } from "react";
 import type { PanelImperativeHandle } from "react-resizable-panels";

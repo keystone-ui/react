@@ -7,14 +7,14 @@ import {
   TabsTrigger,
 } from "@keystoneui/react/tabs";
 import {
-  BarChartIcon,
-  GlobeIcon,
-  LayoutDashboardIcon,
-  MailIcon,
-  MessageSquareIcon,
-  SettingsIcon,
-  ShieldIcon,
-  UsersIcon,
+  ChartNoAxesColumnIncreasing as BarChartIcon,
+  Globe as GlobeIcon,
+  LayoutDashboard as LayoutDashboardIcon,
+  Mail as MailIcon,
+  MessageSquare as MessageSquareIcon,
+  Settings as SettingsIcon,
+  Shield as ShieldIcon,
+  Users as UsersIcon,
 } from "lucide-react";
 
 export default function TabsScrollable() {

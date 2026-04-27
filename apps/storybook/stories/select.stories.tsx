@@ -19,7 +19,12 @@ import {
 } from "@keystoneui/react/select";
 import { Switch } from "@keystoneui/react/switch";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { AppleIcon, BananaIcon, CherryIcon, GrapeIcon } from "lucide-react";
+import {
+  Apple as AppleIcon,
+  Banana as BananaIcon,
+  Cherry as CherryIcon,
+  Grape as GrapeIcon,
+} from "lucide-react";
 import { useState } from "react";
 import { expect, userEvent, within } from "storybook/test";
 
@@ -545,53 +550,51 @@ function renderMultipleValue(value: Language[]) {
 
 export const MultipleSelection: Story = {
   name: "Multiple Selection",
-  render: () => {
-    return (
-      <FieldGroup className="flex-row items-start">
-        <Field>
-          <FieldLabel>With Checkmarks</FieldLabel>
-          <Select defaultValue={["javascript", "typescript"]} multiple>
-            <SelectTrigger className="w-full max-w-56">
-              <SelectValue>{renderMultipleValue}</SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {(Object.keys(languages) as Language[]).map((key) => (
-                  <SelectItem key={key} value={key}>
-                    {languages[key]}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <FieldDescription>Default indicator style.</FieldDescription>
-        </Field>
-        <Field>
-          <FieldLabel>With Checkboxes</FieldLabel>
-          <Select defaultValue={["javascript", "typescript"]} multiple>
-            <SelectTrigger className="w-full max-w-56">
-              <SelectValue>{renderMultipleValue}</SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {(Object.keys(languages) as Language[]).map((key) => (
-                  <SelectItem
-                    className="group"
-                    indicator={<CheckboxIndicator />}
-                    key={key}
-                    value={key}
-                  >
-                    {languages[key]}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <FieldDescription>Checkbox indicator style.</FieldDescription>
-        </Field>
-      </FieldGroup>
-    );
-  },
+  render: () => (
+    <FieldGroup className="flex-row items-start">
+      <Field>
+        <FieldLabel>With Checkmarks</FieldLabel>
+        <Select defaultValue={["javascript", "typescript"]} multiple>
+          <SelectTrigger className="w-full max-w-56">
+            <SelectValue>{renderMultipleValue}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {(Object.keys(languages) as Language[]).map((key) => (
+                <SelectItem key={key} value={key}>
+                  {languages[key]}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        <FieldDescription>Default indicator style.</FieldDescription>
+      </Field>
+      <Field>
+        <FieldLabel>With Checkboxes</FieldLabel>
+        <Select defaultValue={["javascript", "typescript"]} multiple>
+          <SelectTrigger className="w-full max-w-56">
+            <SelectValue>{renderMultipleValue}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {(Object.keys(languages) as Language[]).map((key) => (
+                <SelectItem
+                  className="group"
+                  indicator={<CheckboxIndicator />}
+                  key={key}
+                  value={key}
+                >
+                  {languages[key]}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+        <FieldDescription>Checkbox indicator style.</FieldDescription>
+      </Field>
+    </FieldGroup>
+  ),
   parameters: {
     docs: {
       description: {

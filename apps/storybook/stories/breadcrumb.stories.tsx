@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@keystoneui/react/dropdown-menu";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ChevronDownIcon, DotIcon } from "lucide-react";
+import { ChevronDown as ChevronDownIcon, Dot as DotIcon } from "lucide-react";
 
 const meta = {
   title: "Components/Breadcrumb",

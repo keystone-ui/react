@@ -6,7 +6,7 @@ import {
   InputGroupButton,
   InputGroupTextarea,
 } from "@keystoneui/react/input-group";
-import { SendHorizonalIcon } from "lucide-react";
+import { SendHorizontal as SendHorizonalIcon } from "lucide-react";
 
 export default function InputGroupWithTextarea() {
   return (

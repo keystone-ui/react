@@ -1,7 +1,11 @@
 "use client";
 
 import { ToggleGroup, ToggleGroupItem } from "@keystoneui/react/toggle-group";
-import { BoldIcon, ItalicIcon, UnderlineIcon } from "lucide-react";
+import {
+  Bold as BoldIcon,
+  Italic as ItalicIcon,
+  Underline as UnderlineIcon,
+} from "lucide-react";
 
 export default function ToggleGroupVertical() {
   return (

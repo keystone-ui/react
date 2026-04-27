@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import type React from "react";
 import { cn } from "./utils";
 
 export interface LabelProps
@@ -11,20 +11,20 @@ export interface LabelProps
   className?: string;
 }
 
-export const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <label
-        className={cn(
-          "select-none font-medium text-foreground text-sm leading-4",
-          "peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
-          className
-        )}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
+export const Label = ({
+  className,
+  ref,
+  ...props
+}: LabelProps & React.RefAttributes<HTMLLabelElement>) => (
+  <label
+    className={cn(
+      "select-none font-medium text-foreground text-sm leading-4",
+      "peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
+      className
+    )}
+    ref={ref}
+    {...props}
+  />
 );
 
 Label.displayName = "Label";
@@ -37,18 +37,17 @@ export interface DescriptionProps
   className?: string;
 }
 
-export const Description = React.forwardRef<
-  HTMLParagraphElement,
-  DescriptionProps
->(({ className, ...props }, ref) => {
-  return (
-    <p
-      className={cn("text-[13px] text-muted-foreground", className)}
-      ref={ref}
-      {...props}
-    />
-  );
-});
+export const Description = ({
+  className,
+  ref,
+  ...props
+}: DescriptionProps & React.RefAttributes<HTMLParagraphElement>) => (
+  <p
+    className={cn("text-[13px] text-muted-foreground", className)}
+    ref={ref}
+    {...props}
+  />
+);
 
 Description.displayName = "Description";
 
@@ -60,18 +59,17 @@ export interface ErrorMessageProps
   className?: string;
 }
 
-export const ErrorMessage = React.forwardRef<
-  HTMLParagraphElement,
-  ErrorMessageProps
->(({ className, ...props }, ref) => {
-  return (
-    <p
-      className={cn("text-[13px] text-destructive", className)}
-      ref={ref}
-      {...props}
-    />
-  );
-});
+export const ErrorMessage = ({
+  className,
+  ref,
+  ...props
+}: ErrorMessageProps & React.RefAttributes<HTMLParagraphElement>) => (
+  <p
+    className={cn("text-[13px] text-destructive", className)}
+    ref={ref}
+    {...props}
+  />
+);
 
 ErrorMessage.displayName = "ErrorMessage";
 
@@ -86,16 +84,16 @@ export interface FormProps extends React.FormHTMLAttributes<HTMLFormElement> {
  * Semantic `<form>` wrapper. Inputs nested inside submit on Enter.
  * Pass `onSubmit` to handle submission; remember to call `event.preventDefault()`.
  */
-export const Form = React.forwardRef<HTMLFormElement, FormProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <form
-        className={cn("grid w-full max-w-sm items-center gap-1.5", className)}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
+export const Form = ({
+  className,
+  ref,
+  ...props
+}: FormProps & React.RefAttributes<HTMLFormElement>) => (
+  <form
+    className={cn("grid w-full max-w-sm items-center gap-1.5", className)}
+    ref={ref}
+    {...props}
+  />
 );
 
 Form.displayName = "Form";
@@ -112,16 +110,16 @@ export interface FieldGroupProps extends React.HTMLAttributes<HTMLDivElement> {
  * Use when you need the layout without the `<form>` element
  * (e.g. inside an existing form, or for non-submittable field groups).
  */
-export const FieldGroup = React.forwardRef<HTMLDivElement, FieldGroupProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <div
-        className={cn("grid w-full max-w-sm items-center gap-1.5", className)}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
+export const FieldGroup = ({
+  className,
+  ref,
+  ...props
+}: FieldGroupProps & React.RefAttributes<HTMLDivElement>) => (
+  <div
+    className={cn("grid w-full max-w-sm items-center gap-1.5", className)}
+    ref={ref}
+    {...props}
+  />
 );
 
 FieldGroup.displayName = "FieldGroup";

@@ -7,7 +7,7 @@ import {
   AvatarImage,
 } from "@keystoneui/react/avatar";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { PlusIcon } from "lucide-react";
+import { Plus as PlusIcon } from "lucide-react";
 
 const meta = {
   title: "Components/Avatar",

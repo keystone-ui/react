@@ -12,7 +12,7 @@ import {
   PopoverTrigger,
 } from "@keystoneui/react/popover";
 import { Textarea } from "@keystoneui/react/textarea";
-import { BotIcon, ChevronDownIcon } from "lucide-react";
+import { Bot as BotIcon, ChevronDown as ChevronDownIcon } from "lucide-react";
 
 export default function ButtonGroupWithPopover() {
   return (

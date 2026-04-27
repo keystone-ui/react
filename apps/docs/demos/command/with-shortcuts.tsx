@@ -11,7 +11,11 @@ import {
   CommandList,
   CommandShortcut,
 } from "@keystoneui/react/command";
-import { CreditCardIcon, SettingsIcon, UserIcon } from "lucide-react";
+import {
+  CreditCard as CreditCardIcon,
+  Settings as SettingsIcon,
+  User as UserIcon,
+} from "lucide-react";
 import { useState } from "react";
 
 export default function CommandWithShortcuts() {

@@ -10,7 +10,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@keystoneui/react/drawer";
-import { FilterIcon } from "lucide-react";
+import { Funnel as FilterIcon } from "lucide-react";
 import { useState } from "react";
 
 const CATEGORIES = [

@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@keystoneui/react/tooltip";
-import { BoldIcon } from "lucide-react";
+import { Bold as BoldIcon } from "lucide-react";
 
 export default function TooltipWithKbd() {
   return (

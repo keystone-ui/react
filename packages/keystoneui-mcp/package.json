@@ -16,15 +16,15 @@
     "clean": "rm -rf dist node_modules"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "fuzzysort": "^3.1.0",
-    "zod": "^3.25.36"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^22.15.0",
+    "@types/node": "^25.6.0",
     "tsup": "^8.5.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "publishConfig": {
     "access": "public"

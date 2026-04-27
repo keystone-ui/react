@@ -19,11 +19,11 @@ import {
 } from "@keystoneui/react/input-group";
 import { ToggleGroup, ToggleGroupItem } from "@keystoneui/react/toggle-group";
 import {
-  ArrowUpDownIcon,
-  KanbanIcon,
-  SearchIcon,
-  SlidersHorizontalIcon,
-  TableIcon,
+  ArrowUpDown as ArrowUpDownIcon,
+  Kanban as KanbanIcon,
+  Search as SearchIcon,
+  SlidersHorizontal as SlidersHorizontalIcon,
+  Table as TableIcon,
 } from "lucide-react";
 
 import { statusLabels, type TicketStatus } from "./mock-tickets";

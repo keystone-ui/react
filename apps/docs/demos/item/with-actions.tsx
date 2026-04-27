@@ -9,7 +9,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@keystoneui/react/item";
-import { ShieldAlertIcon } from "lucide-react";
+import { ShieldAlert as ShieldAlertIcon } from "lucide-react";
 
 export default function ItemWithActions() {
   return (

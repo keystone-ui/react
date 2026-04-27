@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
 } from "@keystoneui/react/popover";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function DatePickerControlled() {

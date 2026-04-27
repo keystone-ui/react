@@ -8,7 +8,11 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@keystoneui/react/empty";
-import { BookOpenIcon, FileTextIcon, VideoIcon } from "lucide-react";
+import {
+  BookOpen as BookOpenIcon,
+  FileText as FileTextIcon,
+  Video as VideoIcon,
+} from "lucide-react";
 
 export default function EmptyWithList() {
   return (

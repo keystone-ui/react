@@ -14,7 +14,11 @@ import {
   SliderTrack,
 } from "@keystoneui/react/slider";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { FlameIcon, TrendingUpIcon, ZapIcon } from "lucide-react";
+import {
+  Flame as FlameIcon,
+  TrendingUp as TrendingUpIcon,
+  Zap as ZapIcon,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 
 const meta = {

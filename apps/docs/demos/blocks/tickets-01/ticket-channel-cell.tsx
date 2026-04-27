@@ -1,7 +1,11 @@
 "use client";
 
 import { cn } from "@keystoneui/react/utils";
-import { HashIcon, MailIcon, MessageSquareIcon } from "lucide-react";
+import {
+  Hash as HashIcon,
+  Mail as MailIcon,
+  MessageSquare as MessageSquareIcon,
+} from "lucide-react";
 
 import { channelLabels, type TicketChannel } from "./mock-tickets";
 

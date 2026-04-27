@@ -23,7 +23,7 @@ import {
 } from "@keystoneui/react/item";
 import { Spinner } from "@keystoneui/react/spinner";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ArrowUpIcon } from "lucide-react";
+import { ArrowUp as ArrowUpIcon } from "lucide-react";
 import { expect, within } from "storybook/test";
 
 const meta = {

@@ -12,10 +12,10 @@ import {
   ItemTitle,
 } from "@keystoneui/react/item";
 import {
-  BellIcon,
-  CheckCircle2Icon,
-  MessageSquareIcon,
-  PackageIcon,
+  Bell as BellIcon,
+  CircleCheck as CheckCircle2Icon,
+  MessageSquare as MessageSquareIcon,
+  Package as PackageIcon,
 } from "lucide-react";
 
 const notifications = [

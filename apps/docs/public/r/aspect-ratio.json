@@ -6,7 +6,7 @@
   "files": [
     {
       "path": "packages/ui/src/aspect-ratio.tsx",
-      "content": "import { cn } from \"./utils\";\n\ninterface AspectRatioProps extends React.ComponentProps<\"div\"> {\n  /** The desired aspect ratio expressed as width / height (e.g. 16/9). */\n  ratio: number;\n}\n\nfunction AspectRatio({ ratio, className, ...props }: AspectRatioProps) {\n  return (\n    <div\n      className={cn(\"relative aspect-(--ratio)\", className)}\n      data-slot=\"aspect-ratio\"\n      style={{ \"--ratio\": ratio } as React.CSSProperties}\n      {...props}\n    />\n  );\n}\n\nexport { AspectRatio };\nexport type { AspectRatioProps };\n",
+      "content": "import { cn } from \"./utils\";\n\ninterface AspectRatioProps extends React.ComponentProps<\"div\"> {\n  /** The desired aspect ratio expressed as width / height (e.g. 16/9). */\n  ratio: number;\n}\n\nfunction AspectRatio({ ratio, className, ...props }: AspectRatioProps) {\n  return (\n    <div\n      className={cn(\"relative aspect-(--ratio)\", className)}\n      data-slot=\"aspect-ratio\"\n      style={{ \"--ratio\": ratio } as React.CSSProperties}\n      {...props}\n    />\n  );\n}\n\nexport type { AspectRatioProps };\nexport { AspectRatio };\n",
       "type": "registry:ui"
     }
   ],

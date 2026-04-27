@@ -11,7 +11,7 @@ import {
   ItemSeparator,
   ItemTitle,
 } from "@keystoneui/react/item";
-import { ClockIcon, FileTextIcon } from "lucide-react";
+import { Clock as ClockIcon, FileText as FileTextIcon } from "lucide-react";
 
 const activities = [
   {

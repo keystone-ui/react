@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDownIcon } from "lucide-react";
+import { ChevronDown as ChevronDownIcon } from "lucide-react";
 import type * as React from "react";
 import { cn } from "./utils";
 

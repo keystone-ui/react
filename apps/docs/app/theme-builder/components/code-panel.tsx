@@ -1,6 +1,10 @@
 "use client";
 
-import { CheckIcon, ClipboardIcon, XIcon } from "lucide-react";
+import {
+  Check as CheckIcon,
+  Clipboard as ClipboardIcon,
+  X as XIcon,
+} from "lucide-react";
 import { useDeferredValue, useState } from "react";
 
 import type { ThemeState } from "../hooks/use-theme-state";

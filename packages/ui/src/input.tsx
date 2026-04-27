@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import type React from "react";
 import { cn } from "./utils";
 
 export interface InputProps
@@ -24,37 +24,42 @@ export interface InputProps
   size?: "sm" | "default";
 }
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type = "text", size = "default", htmlSize, ...props }, ref) => {
-    return (
-      <input
-        className={cn(
-          "bg-input-bg text-base md:text-sm",
-          "rounded-md border border-input",
-          "flex w-full min-w-0 px-3 py-1 shadow-xs outline-none transition-[color,box-shadow] duration-150 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-          size === "default" && "h-10",
-          size === "sm" && "h-8",
-          "placeholder:text-muted-foreground/70",
-          // Focus styles
-          "focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset",
-          "aria-invalid:border-destructive aria-invalid:ring-destructive aria-invalid:transition-none dark:aria-invalid:ring-destructive",
-          // Special styling for different input types
-          type === "search" &&
-            "[&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none",
-          type === "file" &&
-            "p-0 pr-3 text-muted-foreground/70 italic file:me-3 file:inline-flex file:h-full file:border-0 file:border-input file:border-r file:border-solid file:bg-transparent file:px-3 file:font-medium file:text-foreground file:text-sm file:not-italic",
-          className
-        )}
-        data-input=""
-        data-size={size}
-        data-slot="input"
-        ref={ref}
-        size={htmlSize}
-        type={type}
-        {...props}
-      />
-    );
-  }
-);
+export const Input = ({
+  className,
+  type = "text",
+  size = "default",
+  htmlSize,
+  ref,
+  ...props
+}: InputProps & React.RefAttributes<HTMLInputElement>) => {
+  return (
+    <input
+      className={cn(
+        "bg-input-bg text-base md:text-sm",
+        "rounded-md border border-input",
+        "flex w-full min-w-0 px-3 py-1 shadow-xs outline-none transition-[color,box-shadow] duration-150 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+        size === "default" && "h-10",
+        size === "sm" && "h-8",
+        "placeholder:text-muted-foreground/70",
+        // Focus styles
+        "focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset",
+        "aria-invalid:border-destructive aria-invalid:ring-destructive aria-invalid:transition-none dark:aria-invalid:ring-destructive",
+        // Special styling for different input types
+        type === "search" &&
+          "[&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none",
+        type === "file" &&
+          "p-0 pr-3 text-muted-foreground/70 italic file:me-3 file:inline-flex file:h-full file:border-0 file:border-input file:border-r file:border-solid file:bg-transparent file:px-3 file:font-medium file:text-foreground file:text-sm file:not-italic",
+        className
+      )}
+      data-input=""
+      data-size={size}
+      data-slot="input"
+      ref={ref}
+      size={htmlSize}
+      type={type}
+      {...props}
+    />
+  );
+};
 
 Input.displayName = "Input";

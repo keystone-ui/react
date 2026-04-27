@@ -9,7 +9,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@keystoneui/react/select";
-import { AppleIcon, BananaIcon, CherryIcon, GrapeIcon } from "lucide-react";
+import {
+  Apple as AppleIcon,
+  Banana as BananaIcon,
+  Cherry as CherryIcon,
+  Grape as GrapeIcon,
+} from "lucide-react";
 
 export default function SelectWithIcons() {
   return (

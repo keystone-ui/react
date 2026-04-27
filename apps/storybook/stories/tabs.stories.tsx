@@ -15,17 +15,17 @@ import {
 } from "@keystoneui/react/tabs";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  AppWindowIcon,
-  BarChartIcon,
-  CodeIcon,
-  FileTextIcon,
-  GlobeIcon,
-  LayoutDashboardIcon,
-  MailIcon,
-  MessageSquareIcon,
-  SettingsIcon,
-  ShieldIcon,
-  UsersIcon,
+  AppWindow as AppWindowIcon,
+  ChartNoAxesColumnIncreasing as BarChartIcon,
+  Code as CodeIcon,
+  FileText as FileTextIcon,
+  Globe as GlobeIcon,
+  LayoutDashboard as LayoutDashboardIcon,
+  Mail as MailIcon,
+  MessageSquare as MessageSquareIcon,
+  Settings as SettingsIcon,
+  Shield as ShieldIcon,
+  Users as UsersIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { expect, userEvent, within } from "storybook/test";

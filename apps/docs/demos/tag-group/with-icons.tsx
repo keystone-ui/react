@@ -2,10 +2,10 @@
 
 import { TagGroup, TagGroupItem } from "@keystoneui/react/tag-group";
 import {
-  GamepadIcon,
-  GlobeIcon,
-  NewspaperIcon,
-  ShoppingCartIcon,
+  Gamepad as GamepadIcon,
+  Globe as GlobeIcon,
+  Newspaper as NewspaperIcon,
+  ShoppingCart as ShoppingCartIcon,
 } from "lucide-react";
 
 export default function TagGroupWithIcons() {

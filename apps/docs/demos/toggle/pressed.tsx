@@ -1,7 +1,7 @@
 "use client";
 
 import { Toggle } from "@keystoneui/react/toggle";
-import { BookmarkIcon, StarIcon } from "lucide-react";
+import { Bookmark as BookmarkIcon, Star as StarIcon } from "lucide-react";
 
 export default function TogglePressed() {
   return (

@@ -32,7 +32,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@keystoneui/react/select";
-import { PlusIcon, TicketIcon, XIcon } from "lucide-react";
+import {
+  Plus as PlusIcon,
+  Ticket as TicketIcon,
+  X as XIcon,
+} from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
 
 import {

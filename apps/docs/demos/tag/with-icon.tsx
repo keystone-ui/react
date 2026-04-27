@@ -1,7 +1,12 @@
 "use client";
 
 import { Tag } from "@keystoneui/react/tag";
-import { BellIcon, BookmarkIcon, HeartIcon, StarIcon } from "lucide-react";
+import {
+  Bell as BellIcon,
+  Bookmark as BookmarkIcon,
+  Heart as HeartIcon,
+  Star as StarIcon,
+} from "lucide-react";
 
 export default function TagWithIcon() {
   return (

@@ -2,7 +2,7 @@
 
 import { Button } from "@keystoneui/react/button";
 import { ButtonGroup } from "@keystoneui/react/button-group";
-import { LayoutGridIcon, ListIcon } from "lucide-react";
+import { LayoutGrid as LayoutGridIcon, List as ListIcon } from "lucide-react";
 
 export default function ButtonGroupDefault() {
   return (

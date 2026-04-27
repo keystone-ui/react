@@ -1,7 +1,11 @@
 "use client";
 
 import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox";
-import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
+import {
+  Check as CheckIcon,
+  ChevronDown as ChevronDownIcon,
+  X as XIcon,
+} from "lucide-react";
 import * as React from "react";
 import { Button } from "./button";
 import {
@@ -329,23 +333,23 @@ export interface ComboboxChipsProps
   extends React.ComponentPropsWithRef<typeof ComboboxPrimitive.Chips>,
     ComboboxPrimitive.Chips.Props {}
 
-const ComboboxChips = React.forwardRef<HTMLDivElement, ComboboxChipsProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <ComboboxPrimitive.Chips
-        className={cn(
-          "flex min-h-10 flex-wrap items-center gap-1 rounded-md border border-input bg-input-bg bg-clip-padding px-2.5 py-1 text-sm shadow-xs transition-colors",
-          "focus-within:border-ring focus-within:ring-1 focus-within:ring-ring/50",
-          "has-aria-invalid:border-destructive has-aria-invalid:ring-1 has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40",
-          "has-data-[slot=combobox-chip]:px-1",
-          className
-        )}
-        data-slot="combobox-chips"
-        ref={ref}
-        {...props}
-      />
-    );
-  }
+const ComboboxChips = ({
+  className,
+  ref,
+  ...props
+}: ComboboxChipsProps & React.RefAttributes<HTMLDivElement>) => (
+  <ComboboxPrimitive.Chips
+    className={cn(
+      "flex min-h-10 flex-wrap items-center gap-1 rounded-md border border-input bg-input-bg bg-clip-padding px-2.5 py-1 text-sm shadow-xs transition-colors",
+      "focus-within:border-ring focus-within:ring-1 focus-within:ring-ring/50",
+      "has-aria-invalid:border-destructive has-aria-invalid:ring-1 has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40",
+      "has-data-[slot=combobox-chip]:px-1",
+      className
+    )}
+    data-slot="combobox-chips"
+    ref={ref}
+    {...props}
+  />
 );
 ComboboxChips.displayName = "ComboboxChips";
 
@@ -414,6 +418,7 @@ function useComboboxAnchor() {
   return React.useRef<HTMLDivElement | null>(null);
 }
 
+export type { ComboboxRootProps as ComboboxProps } from "@base-ui/react/combobox";
 // =============================================================================
 // Exports
 // =============================================================================
@@ -436,5 +441,3 @@ export {
   ComboboxValue,
   useComboboxAnchor,
 };
-
-export type { ComboboxRootProps as ComboboxProps } from "@base-ui/react/combobox";

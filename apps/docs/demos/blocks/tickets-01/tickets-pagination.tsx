@@ -11,10 +11,10 @@ import {
   SelectValue,
 } from "@keystoneui/react/select";
 import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronsLeftIcon,
-  ChevronsRightIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+  ChevronsLeft as ChevronsLeftIcon,
+  ChevronsRight as ChevronsRightIcon,
 } from "lucide-react";
 import { useId } from "react";
 

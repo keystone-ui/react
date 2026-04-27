@@ -16,7 +16,7 @@ import {
 import { Input } from "@keystoneui/react/input";
 import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
 import { Switch } from "@keystoneui/react/switch";
-import { MinusIcon, PlusIcon } from "lucide-react";
+import { Minus as MinusIcon, Plus as PlusIcon } from "lucide-react";
 import { type ChangeEvent, useCallback, useState } from "react";
 
 export default function FieldSettingsForm() {

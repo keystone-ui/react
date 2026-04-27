@@ -2,7 +2,10 @@
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { ChevronRightIcon, MoreHorizontalIcon } from "lucide-react";
+import {
+  ChevronRight as ChevronRightIcon,
+  Ellipsis as MoreHorizontalIcon,
+} from "lucide-react";
 import type * as React from "react";
 
 import { cn } from "./utils";
@@ -131,13 +134,13 @@ function BreadcrumbEllipsis({
 // Exports
 // ---------------------------------------------------------------------------
 
+export type { BreadcrumbLinkProps };
 export {
   Breadcrumb,
-  BreadcrumbList,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
+  BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-  BreadcrumbEllipsis,
 };
-export type { BreadcrumbLinkProps };

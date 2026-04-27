@@ -13,7 +13,7 @@ import {
   InputGroupInput,
 } from "@keystoneui/react/input-group";
 import { Kbd } from "@keystoneui/react/kbd";
-import { SearchIcon } from "lucide-react";
+import { Search as SearchIcon } from "lucide-react";
 
 export default function EmptyWithSearch() {
   return (

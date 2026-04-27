@@ -1,7 +1,7 @@
 "use client";
 
 import { Toggle } from "@keystoneui/react/toggle";
-import { StarIcon } from "lucide-react";
+import { Star as StarIcon } from "lucide-react";
 
 export default function ToggleSizes() {
   return (

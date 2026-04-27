@@ -1,9 +1,9 @@
 import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronsLeftIcon,
-  ChevronsRightIcon,
-  MoreHorizontalIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+  ChevronsLeft as ChevronsLeftIcon,
+  ChevronsRight as ChevronsRightIcon,
+  Ellipsis as MoreHorizontalIcon,
 } from "lucide-react";
 import type * as React from "react";
 import { Button } from "./button";

@@ -16,5 +16,5 @@ function AspectRatio({ ratio, className, ...props }: AspectRatioProps) {
   );
 }
 
-export { AspectRatio };
 export type { AspectRatioProps };
+export { AspectRatio };

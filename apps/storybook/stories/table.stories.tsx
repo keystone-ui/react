@@ -43,16 +43,16 @@ import {
 } from "@keystoneui/react/table";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  ArrowDownLeftIcon,
-  ArrowUpRightIcon,
-  CheckIcon,
-  CopyIcon,
-  EyeIcon,
-  InboxIcon,
-  MinusIcon,
-  MoreHorizontalIcon,
-  RotateCcwIcon,
-  ShieldAlertIcon,
+  ArrowDownLeft as ArrowDownLeftIcon,
+  ArrowUpRight as ArrowUpRightIcon,
+  Check as CheckIcon,
+  Copy as CopyIcon,
+  Eye as EyeIcon,
+  Inbox as InboxIcon,
+  Minus as MinusIcon,
+  Ellipsis as MoreHorizontalIcon,
+  RotateCcw as RotateCcwIcon,
+  ShieldAlert as ShieldAlertIcon,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -467,9 +467,8 @@ const transactions: Transaction[] = [
   },
 ];
 
-const txTypeBadgeVariant = (type: TransactionType) => {
-  return type === "Deposit" ? ("secondary" as const) : ("outline" as const);
-};
+const txTypeBadgeVariant = (type: TransactionType) =>
+  type === "Deposit" ? ("secondary" as const) : ("outline" as const);
 
 const txStatusBadgeVariant = (status: TransactionStatus) => {
   switch (status) {
@@ -532,10 +531,10 @@ export const CryptoTransactions: Story = {
               </Badge>
             </TableCell>
             <TableCell className="font-mono text-xs">
-              {tx.p95 !== null ? (
-                `${tx.p95} ms`
-              ) : (
+              {tx.p95 === null ? (
                 <MinusIcon className="size-4 text-muted-foreground/50" />
+              ) : (
+                `${tx.p95} ms`
               )}
             </TableCell>
             <TableCell>

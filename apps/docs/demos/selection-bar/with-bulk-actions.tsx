@@ -17,7 +17,10 @@ import {
   SelectionBarLink,
   SelectionBarSeparator,
 } from "@keystoneui/react/selection-bar";
-import { FileSpreadsheetIcon, TrashIcon } from "lucide-react";
+import {
+  FileSpreadsheet as FileSpreadsheetIcon,
+  Trash as TrashIcon,
+} from "lucide-react";
 import { useState } from "react";
 
 const TOTAL_ROWS = 20;

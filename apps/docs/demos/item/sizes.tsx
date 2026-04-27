@@ -7,7 +7,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@keystoneui/react/item";
-import { InboxIcon } from "lucide-react";
+import { Inbox as InboxIcon } from "lucide-react";
 
 export default function ItemSizes() {
   return (

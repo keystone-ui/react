@@ -9,7 +9,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@keystoneui/react/empty";
-import { FileIcon, PlusIcon } from "lucide-react";
+import { File as FileIcon, Plus as PlusIcon } from "lucide-react";
 
 export default function EmptyOutline() {
   return (

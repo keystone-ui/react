@@ -17,7 +17,11 @@ import {
   StepperStep,
   useStepper,
 } from "@keystoneui/react/stepper";
-import { ArrowLeftIcon, ChevronRightIcon, FilterIcon } from "lucide-react";
+import {
+  ArrowLeft as ArrowLeftIcon,
+  ChevronRight as ChevronRightIcon,
+  Funnel as FilterIcon,
+} from "lucide-react";
 import { useState } from "react";
 
 import { statusLabels } from "./mock-tickets";

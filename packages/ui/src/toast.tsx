@@ -2,12 +2,12 @@
 
 import { Toast } from "@base-ui/react/toast";
 import {
-  CircleCheckIcon,
-  InfoIcon,
-  Loader2Icon,
-  OctagonXIcon,
-  TriangleAlertIcon,
-  XIcon,
+  CircleCheck as CircleCheckIcon,
+  Info as InfoIcon,
+  LoaderCircle as Loader2Icon,
+  OctagonX as OctagonXIcon,
+  TriangleAlert as TriangleAlertIcon,
+  X as XIcon,
 } from "lucide-react";
 import { type CSSProperties, isValidElement, type ReactNode } from "react";
 
@@ -594,5 +594,5 @@ Toaster.displayName = "Toaster";
 // Exports
 // ---------------------------------------------------------------------------
 
+export type { ToastAction, ToastData, ToastOptions, ToastPosition };
 export { Toaster, toast };
-export type { ToastOptions, ToastPosition, ToastAction, ToastData };

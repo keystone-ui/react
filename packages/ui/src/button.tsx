@@ -2,8 +2,8 @@
 
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cva, type VariantProps } from "class-variance-authority";
-import { LoaderCircleIcon } from "lucide-react";
-import * as React from "react";
+import { LoaderCircle as LoaderCircleIcon } from "lucide-react";
+import type * as React from "react";
 
 import { cn } from "./utils";
 
@@ -88,59 +88,55 @@ export interface ButtonProps
     | "link";
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      className,
-      variant = "default",
-      size = "default",
-      isLoading = false,
-      disabled,
-      type = "button",
-      children,
-      ...props
-    },
-    ref
-  ) => {
-    const isDisabled = isLoading || disabled;
+const Button = ({
+  className,
+  variant = "default",
+  size = "default",
+  isLoading = false,
+  disabled,
+  type = "button",
+  children,
+  ref,
+  ...props
+}: ButtonProps & React.RefAttributes<HTMLButtonElement>) => {
+  const isDisabled = isLoading || disabled;
 
-    return (
-      <ButtonPrimitive
+  return (
+    <ButtonPrimitive
+      className={cn(
+        buttonVariants({ variant, size }),
+        isLoading && "relative",
+        className
+      )}
+      data-loading={isLoading || undefined}
+      data-slot="button"
+      disabled={isDisabled}
+      ref={ref}
+      type={type}
+      {...props}
+    >
+      <span
         className={cn(
-          buttonVariants({ variant, size }),
-          isLoading && "relative",
-          className
+          "inline-flex items-center justify-center gap-2",
+          isLoading ? "invisible" : "visible"
         )}
-        data-loading={isLoading || undefined}
-        data-slot="button"
-        disabled={isDisabled}
-        ref={ref}
-        type={type}
-        {...props}
       >
-        <span
-          className={cn(
-            "inline-flex items-center justify-center gap-2",
-            isLoading ? "invisible" : "visible"
-          )}
-        >
-          {children}
-        </span>
-        {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <LoaderCircleIcon
-              aria-hidden="true"
-              className="animate-spin"
-              size={16}
-            />
-          </div>
-        )}
-      </ButtonPrimitive>
-    );
-  }
-);
+        {children}
+      </span>
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <LoaderCircleIcon
+            aria-hidden="true"
+            className="animate-spin"
+            size={16}
+          />
+        </div>
+      )}
+    </ButtonPrimitive>
+  );
+};
 
 Button.displayName = "Button";
 
-export { Button, buttonVariants };
 export type { ButtonVariantsProps };
+export { Button, buttonVariants };

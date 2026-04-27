@@ -2,7 +2,7 @@
 
 import { Button } from "@keystoneui/react/button";
 import { Toaster, toast } from "@keystoneui/react/toast";
-import { UsersIcon } from "lucide-react";
+import { Users as UsersIcon } from "lucide-react";
 
 export default function ToastCustom() {
   return (

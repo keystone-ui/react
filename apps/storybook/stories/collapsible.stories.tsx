@@ -16,13 +16,13 @@ import { Input } from "@keystoneui/react/input";
 import { Tabs, TabsList, TabsTrigger } from "@keystoneui/react/tabs";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  ChevronDownIcon,
-  ChevronRightIcon,
+  ChevronDown as ChevronDownIcon,
+  ChevronRight as ChevronRightIcon,
   ChevronsUpDown,
-  FileIcon,
-  FolderIcon,
-  MaximizeIcon,
-  MinimizeIcon,
+  File as FileIcon,
+  Folder as FolderIcon,
+  Maximize as MaximizeIcon,
+  Minimize as MinimizeIcon,
 } from "lucide-react";
 import * as React from "react";
 import { expect, userEvent, within } from "storybook/test";

@@ -12,7 +12,7 @@ import {
   PopoverTrigger,
 } from "@keystoneui/react/popover";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { XIcon } from "lucide-react";
+import { X as XIcon } from "lucide-react";
 import * as React from "react";
 import { expect, userEvent, within } from "storybook/test";
 

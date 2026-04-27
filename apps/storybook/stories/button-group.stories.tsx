@@ -39,7 +39,7 @@ import {
 import { Textarea } from "@keystoneui/react/textarea";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  AlertTriangle as AlertTriangleIcon,
+  TriangleAlert as AlertTriangleIcon,
   Archive as ArchiveIcon,
   ArrowLeft as ArrowLeftIcon,
   ArrowRight as ArrowRightIcon,
@@ -65,7 +65,7 @@ import {
   List as ListIcon,
   MailCheck as MailCheckIcon,
   Minus as MinusIcon,
-  MoreHorizontal as MoreHorizontalIcon,
+  Ellipsis as MoreHorizontalIcon,
   Pin as PinIcon,
   Plus as PlusIcon,
   Search as SearchIcon,

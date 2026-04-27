@@ -5,7 +5,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@keystoneui/react/input-group";
-import { SearchIcon } from "lucide-react";
+import { Search as SearchIcon } from "lucide-react";
 
 export default function InputWithIcon() {
   return (

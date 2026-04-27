@@ -86,5 +86,5 @@ function Badge({
 // Exports
 // ---------------------------------------------------------------------------
 
-export { Badge, badgeVariants };
 export type { BadgeProps };
+export { Badge, badgeVariants };

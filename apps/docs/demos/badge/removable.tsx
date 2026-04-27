@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@keystoneui/react/badge";
-import { XIcon } from "lucide-react";
+import { X as XIcon } from "lucide-react";
 import { useState } from "react";
 
 const initialTags = ["React", "TypeScript", "Tailwind", "Next.js"];

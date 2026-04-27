@@ -12,7 +12,7 @@ import {
   ItemSeparator,
   ItemTitle,
 } from "@keystoneui/react/item";
-import { PlusIcon } from "lucide-react";
+import { Plus as PlusIcon } from "lucide-react";
 import { Fragment } from "react";
 
 const people = [

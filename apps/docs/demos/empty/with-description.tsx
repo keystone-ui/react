@@ -9,7 +9,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@keystoneui/react/empty";
-import { BellIcon } from "lucide-react";
+import { Bell as BellIcon } from "lucide-react";
 
 export default function EmptyWithDescription() {
   return (

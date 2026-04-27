@@ -6,7 +6,7 @@ import {
   InputGroupInput,
   InputGroupText,
 } from "@keystoneui/react/input-group";
-import { PhoneIcon } from "lucide-react";
+import { Phone as PhoneIcon } from "lucide-react";
 
 export default function InputGroupPhoneInput() {
   return (

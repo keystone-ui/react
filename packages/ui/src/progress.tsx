@@ -143,9 +143,9 @@ function ProgressValue({ className, ...props }: ProgressValueProps) {
 
 export {
   Progress,
-  ProgressTrack,
   ProgressIndicator,
   ProgressLabel,
+  ProgressTrack,
   ProgressValue,
   progressVariants,
 };

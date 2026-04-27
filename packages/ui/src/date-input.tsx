@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import * as React from "react";
 import {
   InputGroup,
@@ -13,35 +13,37 @@ import { cn } from "./utils";
 export interface DateInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "size"> {}
 
-export const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
-  ({ className, ...props }, ref) => {
-    const innerRef = React.useRef<HTMLInputElement>(null);
-    const inputRef = (ref as React.RefObject<HTMLInputElement>) || innerRef;
+export const DateInput = ({
+  className,
+  ref,
+  ...props
+}: DateInputProps & React.RefAttributes<HTMLInputElement>) => {
+  const innerRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = (ref as React.RefObject<HTMLInputElement>) || innerRef;
 
-    return (
-      <InputGroup>
-        <InputGroupInput
-          className={cn(
-            "[&::-webkit-calendar-picker-indicator]:hidden",
-            className
-          )}
-          ref={inputRef}
-          type="date"
-          {...props}
-        />
-        <InputGroupAddon align="inline-end">
-          <InputGroupButton
-            aria-label="Open date picker"
-            onClick={() => inputRef.current?.showPicker()}
-            size="icon-xs"
-            type="button"
-          >
-            <CalendarIcon className="size-4" />
-          </InputGroupButton>
-        </InputGroupAddon>
-      </InputGroup>
-    );
-  }
-);
+  return (
+    <InputGroup>
+      <InputGroupInput
+        className={cn(
+          "[&::-webkit-calendar-picker-indicator]:hidden",
+          className
+        )}
+        ref={inputRef}
+        type="date"
+        {...props}
+      />
+      <InputGroupAddon align="inline-end">
+        <InputGroupButton
+          aria-label="Open date picker"
+          onClick={() => inputRef.current?.showPicker()}
+          size="icon-xs"
+          type="button"
+        >
+          <CalendarIcon className="size-4" />
+        </InputGroupButton>
+      </InputGroupAddon>
+    </InputGroup>
+  );
+};
 
 DateInput.displayName = "DateInput";

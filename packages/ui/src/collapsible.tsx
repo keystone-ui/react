@@ -1,7 +1,7 @@
 "use client";
 
 import { Collapsible as CollapsiblePrimitive } from "@base-ui/react/collapsible";
-import * as React from "react";
+import type * as React from "react";
 
 import { cn } from "./utils";
 
@@ -58,17 +58,21 @@ export type CollapsibleContentProps = CollapsiblePanelBaseProps & {
 // Collapsible (root)
 // ---------------------------------------------------------------------------
 
-const Collapsible = React.forwardRef<
-  React.ComponentRef<typeof CollapsiblePrimitive.Root>,
-  CollapsibleProps
->(({ className, ...props }, ref) => (
+const Collapsible = ({
+  className,
+  ref,
+  ...props
+}: CollapsibleProps &
+  React.RefAttributes<
+    React.ComponentRef<typeof CollapsiblePrimitive.Root>
+  >) => (
   <CollapsiblePrimitive.Root
     className={className}
     data-slot="collapsible"
     ref={ref}
     {...props}
   />
-));
+);
 
 Collapsible.displayName = "Collapsible";
 
@@ -76,17 +80,21 @@ Collapsible.displayName = "Collapsible";
 // CollapsibleTrigger
 // ---------------------------------------------------------------------------
 
-const CollapsibleTrigger = React.forwardRef<
-  React.ComponentRef<typeof CollapsiblePrimitive.Trigger>,
-  CollapsibleTriggerProps
->(({ className, ...props }, ref) => (
+const CollapsibleTrigger = ({
+  className,
+  ref,
+  ...props
+}: CollapsibleTriggerProps &
+  React.RefAttributes<
+    React.ComponentRef<typeof CollapsiblePrimitive.Trigger>
+  >) => (
   <CollapsiblePrimitive.Trigger
     className={className}
     data-slot="collapsible-trigger"
     ref={ref}
     {...props}
   />
-));
+);
 
 CollapsibleTrigger.displayName = "CollapsibleTrigger";
 
@@ -94,10 +102,14 @@ CollapsibleTrigger.displayName = "CollapsibleTrigger";
 // CollapsibleContent
 // ---------------------------------------------------------------------------
 
-const CollapsibleContent = React.forwardRef<
-  React.ComponentRef<typeof CollapsiblePrimitive.Panel>,
-  CollapsibleContentProps
->(({ className, ...props }, ref) => {
+const CollapsibleContent = ({
+  className,
+  ref,
+  ...props
+}: CollapsibleContentProps &
+  React.RefAttributes<
+    React.ComponentRef<typeof CollapsiblePrimitive.Panel>
+  >) => {
   const baseClasses = cn(
     "overflow-hidden",
     // CSS transition on height — smoothly cancellable mid-animation.
@@ -118,7 +130,7 @@ const CollapsibleContent = React.forwardRef<
       {...props}
     />
   );
-});
+};
 
 CollapsibleContent.displayName = "CollapsibleContent";
 
@@ -126,4 +138,4 @@ CollapsibleContent.displayName = "CollapsibleContent";
 // Exports
 // ---------------------------------------------------------------------------
 
-export { Collapsible, CollapsibleTrigger, CollapsibleContent };
+export { Collapsible, CollapsibleContent, CollapsibleTrigger };

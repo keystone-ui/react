@@ -6,7 +6,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@keystoneui/react/input-group";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { Eye as EyeIcon, EyeOff as EyeOffIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function InputGroupPasswordToggle() {

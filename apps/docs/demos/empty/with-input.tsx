@@ -10,7 +10,7 @@ import {
   EmptyTitle,
 } from "@keystoneui/react/empty";
 import { InputGroup, InputGroupInput } from "@keystoneui/react/input-group";
-import { LinkIcon } from "lucide-react";
+import { Link as LinkIcon } from "lucide-react";
 
 export default function EmptyWithInput() {
   return (

@@ -2,7 +2,7 @@ import { Button } from "@keystoneui/react/button";
 import type { ToasterProps } from "@keystoneui/react/toast";
 import { Toaster, toast } from "@keystoneui/react/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { UsersIcon } from "lucide-react";
+import { Users as UsersIcon } from "lucide-react";
 import { expect, userEvent, within } from "storybook/test";
 
 // ---------------------------------------------------------------------------

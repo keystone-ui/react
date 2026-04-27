@@ -60,9 +60,9 @@ export function generateCssOutput(state: ThemeState): string {
   const fontConfig = fontMap[font as keyof typeof fontMap] ?? fontMap.inter;
 
   const radiusValue =
-    radius !== "default"
-      ? radiusCssMap[radius as keyof typeof radiusCssMap]
-      : DEFAULT_RADIUS;
+    radius === "default"
+      ? DEFAULT_RADIUS
+      : radiusCssMap[radius as keyof typeof radiusCssMap];
 
   const lightVars: Record<string, string> = {
     ...baseColor.light,

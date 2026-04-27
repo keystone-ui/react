@@ -24,7 +24,7 @@ import {
   REGEXP_ONLY_DIGITS_AND_CHARS,
 } from "@keystoneui/react/input-otp";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RefreshCwIcon } from "lucide-react";
+import { RefreshCw as RefreshCwIcon } from "lucide-react";
 import { useState } from "react";
 import { expect, within } from "storybook/test";
 

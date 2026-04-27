@@ -18,7 +18,7 @@ import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
 import { Switch } from "@keystoneui/react/switch";
 import { Textarea } from "@keystoneui/react/textarea";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { MinusIcon, PlusIcon } from "lucide-react";
+import { Minus as MinusIcon, Plus as PlusIcon } from "lucide-react";
 import * as React from "react";
 import { expect, userEvent, within } from "storybook/test";
 

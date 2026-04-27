@@ -1,11 +1,11 @@
 import { Toggle } from "@keystoneui/react/toggle";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  BoldIcon,
-  BookmarkIcon,
-  ItalicIcon,
-  StarIcon,
-  UnderlineIcon,
+  Bold as BoldIcon,
+  Bookmark as BookmarkIcon,
+  Italic as ItalicIcon,
+  Star as StarIcon,
+  Underline as UnderlineIcon,
 } from "lucide-react";
 import { expect, userEvent, within } from "storybook/test";
 

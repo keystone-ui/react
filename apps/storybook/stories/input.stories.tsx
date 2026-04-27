@@ -22,8 +22,8 @@ import {
 } from "@keystoneui/react/native-select";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  InfoIcon,
-  MailIcon,
+  Info as InfoIcon,
+  Mail as MailIcon,
   Minus as MinusIcon,
   Plus as PlusIcon,
 } from "lucide-react";

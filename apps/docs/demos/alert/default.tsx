@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert, AlertDescription, AlertTitle } from "@keystoneui/react/alert";
-import { InfoIcon } from "lucide-react";
+import { Info as InfoIcon } from "lucide-react";
 
 export default function AlertDefault() {
   return (

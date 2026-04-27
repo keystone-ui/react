@@ -6,7 +6,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@keystoneui/react/tabs";
-import { AppWindowIcon, CodeIcon } from "lucide-react";
+import { AppWindow as AppWindowIcon, Code as CodeIcon } from "lucide-react";
 
 export default function TabsWithIcons() {
   return (

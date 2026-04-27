@@ -7,7 +7,10 @@ import {
   ItemDescription,
   ItemTitle,
 } from "@keystoneui/react/item";
-import { ChevronRightIcon, ExternalLinkIcon } from "lucide-react";
+import {
+  ChevronRight as ChevronRightIcon,
+  ExternalLink as ExternalLinkIcon,
+} from "lucide-react";
 
 export default function ItemLink() {
   return (

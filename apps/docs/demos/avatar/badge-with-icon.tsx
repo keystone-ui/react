@@ -6,7 +6,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@keystoneui/react/avatar";
-import { PlusIcon } from "lucide-react";
+import { Plus as PlusIcon } from "lucide-react";
 
 export default function AvatarBadgeWithIcon() {
   return (

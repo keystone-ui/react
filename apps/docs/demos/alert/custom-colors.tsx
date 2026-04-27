@@ -1,7 +1,11 @@
 "use client";
 
 import { Alert, AlertDescription, AlertTitle } from "@keystoneui/react/alert";
-import { AlertTriangleIcon, InfoIcon, ShieldCheckIcon } from "lucide-react";
+import {
+  TriangleAlert as AlertTriangleIcon,
+  Info as InfoIcon,
+  ShieldCheck as ShieldCheckIcon,
+} from "lucide-react";
 
 export default function AlertCustomColors() {
   return (

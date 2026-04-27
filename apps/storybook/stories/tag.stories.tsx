@@ -1,12 +1,12 @@
 import { Tag, TagRemove } from "@keystoneui/react/tag";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  BellIcon,
-  BoldIcon,
-  BookmarkIcon,
-  HeartIcon,
-  ItalicIcon,
-  StarIcon,
+  Bell as BellIcon,
+  Bold as BoldIcon,
+  Bookmark as BookmarkIcon,
+  Heart as HeartIcon,
+  Italic as ItalicIcon,
+  Star as StarIcon,
 } from "lucide-react";
 
 const meta = {
@@ -138,27 +138,25 @@ export const WithIcon: Story = {
 
 export const WithRemove: Story = {
   name: "With Remove",
-  render: () => {
-    return (
-      <div className="flex flex-wrap items-center gap-2">
-        <Tag value="bold">
-          <BoldIcon />
-          Bold
-          <TagRemove onClick={() => alert("Remove Bold")} />
-        </Tag>
-        <Tag value="italic">
-          <ItalicIcon />
-          Italic
-          <TagRemove onClick={() => alert("Remove Italic")} />
-        </Tag>
-        <Tag defaultPressed value="star">
-          <StarIcon />
-          Star
-          <TagRemove onClick={() => alert("Remove Star")} />
-        </Tag>
-      </div>
-    );
-  },
+  render: () => (
+    <div className="flex flex-wrap items-center gap-2">
+      <Tag value="bold">
+        <BoldIcon />
+        Bold
+        <TagRemove onClick={() => alert("Remove Bold")} />
+      </Tag>
+      <Tag value="italic">
+        <ItalicIcon />
+        Italic
+        <TagRemove onClick={() => alert("Remove Italic")} />
+      </Tag>
+      <Tag defaultPressed value="star">
+        <StarIcon />
+        Star
+        <TagRemove onClick={() => alert("Remove Star")} />
+      </Tag>
+    </div>
+  ),
 };
 
 // ---------------------------------------------------------------------------

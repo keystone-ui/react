@@ -1,7 +1,11 @@
 "use client";
 
 import { Toggle } from "@keystoneui/react/toggle";
-import { BoldIcon, ItalicIcon, UnderlineIcon } from "lucide-react";
+import {
+  Bold as BoldIcon,
+  Italic as ItalicIcon,
+  Underline as UnderlineIcon,
+} from "lucide-react";
 
 export default function ToggleDefault() {
   return (

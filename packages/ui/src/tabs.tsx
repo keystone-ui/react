@@ -2,7 +2,10 @@
 
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs";
 import { cva, type VariantProps } from "class-variance-authority";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import {
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+} from "lucide-react";
 import * as React from "react";
 import { cn } from "./utils";
 
@@ -268,9 +271,9 @@ function TabsContent({ className, ...props }: TabsContentProps) {
 
 export {
   Tabs,
+  TabsContent,
+  TabsIndicator,
   TabsList,
   TabsTrigger,
-  TabsIndicator,
-  TabsContent,
   tabsListVariants,
 };

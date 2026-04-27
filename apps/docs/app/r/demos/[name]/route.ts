@@ -17,10 +17,7 @@ export async function GET(
   const { name } = await params;
 
   if (!isValidDemoName(name)) {
-    return NextResponse.json(
-      { error: "Invalid name", name },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Invalid name", name }, { status: 400 });
   }
 
   const demosRoot = join(process.cwd(), "demos");

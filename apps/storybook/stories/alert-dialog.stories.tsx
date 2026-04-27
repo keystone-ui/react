@@ -12,7 +12,11 @@ import {
 } from "@keystoneui/react/alert-dialog";
 import { Button } from "@keystoneui/react/button";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { BluetoothIcon, CircleFadingPlusIcon, Trash2Icon } from "lucide-react";
+import {
+  Bluetooth as BluetoothIcon,
+  CircleFadingPlus as CircleFadingPlusIcon,
+  Trash2 as Trash2Icon,
+} from "lucide-react";
 import { expect, userEvent, within } from "storybook/test";
 
 const meta = {

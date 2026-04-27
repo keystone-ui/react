@@ -63,4 +63,4 @@ function ResizableHandle({
 // Exports
 // =============================================================================
 
-export { ResizablePanelGroup, ResizablePanel, ResizableHandle };
+export { ResizableHandle, ResizablePanel, ResizablePanelGroup };

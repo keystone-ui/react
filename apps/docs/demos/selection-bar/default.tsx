@@ -9,7 +9,7 @@ import {
   SelectionBarLabel,
   SelectionBarSeparator,
 } from "@keystoneui/react/selection-bar";
-import { TrashIcon } from "lucide-react";
+import { Trash as TrashIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function SelectionBarDefault() {

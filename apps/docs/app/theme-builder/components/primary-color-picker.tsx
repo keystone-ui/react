@@ -38,12 +38,12 @@ export function PrimaryColorPicker({
   const currentColor = `oklch(${primaryL} ${primaryC} ${primaryH})`;
   const currentPreset = findMatchingPreset(primaryL, primaryC, primaryH);
 
-  const hex = useMemo(() => {
-    return (
+  const hex = useMemo(
+    () =>
       formatHex({ mode: "oklch", l: primaryL, c: primaryC, h: primaryH }) ||
-      "#000000"
-    );
-  }, [primaryL, primaryC, primaryH]);
+      "#000000",
+    [primaryL, primaryC, primaryH]
+  );
 
   const colorValue = useMemo(() => {
     try {

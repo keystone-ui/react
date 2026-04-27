@@ -19,14 +19,14 @@ import {
   DropdownMenuTrigger,
 } from "@keystoneui/react/dropdown-menu";
 import {
-  CreditCardIcon,
-  LogOutIcon,
-  MonitorIcon,
-  MoonIcon,
-  PaletteIcon,
-  SettingsIcon,
-  SunIcon,
-  UserIcon,
+  CreditCard as CreditCardIcon,
+  LogOut as LogOutIcon,
+  Monitor as MonitorIcon,
+  Moon as MoonIcon,
+  Palette as PaletteIcon,
+  Settings as SettingsIcon,
+  Sun as SunIcon,
+  User as UserIcon,
 } from "lucide-react";
 import { useState } from "react";
 

@@ -17,7 +17,7 @@ import {
   StepperStep,
   useStepper,
 } from "@keystoneui/react/stepper";
-import { ArrowLeft, ChevronRight, FilterIcon } from "lucide-react";
+import { ArrowLeft, ChevronRight, Funnel as FilterIcon } from "lucide-react";
 import { useState } from "react";
 
 const DATE_RANGES = [

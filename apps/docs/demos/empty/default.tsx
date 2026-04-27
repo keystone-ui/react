@@ -9,7 +9,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@keystoneui/react/empty";
-import { InboxIcon } from "lucide-react";
+import { Inbox as InboxIcon } from "lucide-react";
 
 export default function EmptyDefault() {
   return (

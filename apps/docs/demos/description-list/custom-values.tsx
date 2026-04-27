@@ -7,7 +7,11 @@ import {
   DescriptionListItem,
   DescriptionListTerm,
 } from "@keystoneui/react/description-list";
-import { CircleCheckIcon, CopyIcon, ExternalLinkIcon } from "lucide-react";
+import {
+  CircleCheck as CircleCheckIcon,
+  Copy as CopyIcon,
+  ExternalLink as ExternalLinkIcon,
+} from "lucide-react";
 
 export default function DescriptionListCustomValues() {
   return (

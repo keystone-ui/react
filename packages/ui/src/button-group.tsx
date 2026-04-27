@@ -1,7 +1,7 @@
 "use client";
 
 import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
+import type * as React from "react";
 
 import { cn } from "./utils";
 
@@ -108,19 +108,20 @@ export interface ButtonGroupProps
   orientation?: "horizontal" | "vertical";
 }
 
-const ButtonGroup = React.forwardRef<HTMLDivElement, ButtonGroupProps>(
-  ({ className, orientation = "horizontal", ...props }, ref) => {
-    return (
-      <div
-        className={cn(buttonGroupVariants({ orientation }), className)}
-        data-orientation={orientation}
-        data-slot="button-group"
-        ref={ref}
-        role="group"
-        {...props}
-      />
-    );
-  }
+const ButtonGroup = ({
+  className,
+  orientation = "horizontal",
+  ref,
+  ...props
+}: ButtonGroupProps & React.RefAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(buttonGroupVariants({ orientation }), className)}
+    data-orientation={orientation}
+    data-slot="button-group"
+    ref={ref}
+    role="group"
+    {...props}
+  />
 );
 ButtonGroup.displayName = "ButtonGroup";
 
@@ -130,21 +131,21 @@ ButtonGroup.displayName = "ButtonGroup";
 export interface ButtonGroupTextProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
-const ButtonGroupText = React.forwardRef<HTMLDivElement, ButtonGroupTextProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <div
-        className={cn(
-          "flex items-center gap-2 rounded-md border border-border bg-muted px-4 font-medium text-sm shadow-xs",
-          "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-          className
-        )}
-        data-slot="button-group-text"
-        ref={ref}
-        {...props}
-      />
-    );
-  }
+const ButtonGroupText = ({
+  className,
+  ref,
+  ...props
+}: ButtonGroupTextProps & React.RefAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      "flex items-center gap-2 rounded-md border border-border bg-muted px-4 font-medium text-sm shadow-xs",
+      "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+      className
+    )}
+    data-slot="button-group-text"
+    ref={ref}
+    {...props}
+  />
 );
 ButtonGroupText.displayName = "ButtonGroupText";
 

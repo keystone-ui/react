@@ -1,7 +1,11 @@
 "use client";
 
 import { Menu as MenuPrimitive } from "@base-ui/react/menu";
-import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
+import {
+  Check as CheckIcon,
+  ChevronRight as ChevronRightIcon,
+  Circle as CircleIcon,
+} from "lucide-react";
 import type * as React from "react";
 import { Checkbox } from "./checkbox";
 import { cn, POPUP_ITEM_HEIGHT } from "./utils";
@@ -467,25 +471,24 @@ function DropdownMenuShortcut({
   );
 }
 
+export type { MenuRootProps as DropdownMenuProps } from "@base-ui/react/menu";
 // =============================================================================
 // Exports
 // =============================================================================
 export {
   DropdownMenu,
-  DropdownMenuPortal,
-  DropdownMenuTrigger,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuLabel,
   DropdownMenuItem,
-  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuSub,
-  DropdownMenuSubTrigger,
   DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
 };
-
-export type { MenuRootProps as DropdownMenuProps } from "@base-ui/react/menu";

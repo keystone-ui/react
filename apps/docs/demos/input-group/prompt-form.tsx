@@ -42,15 +42,15 @@ import {
   TooltipTrigger,
 } from "@keystoneui/react/tooltip";
 import {
-  ArrowUpIcon,
-  AtSignIcon,
-  BookOpenIcon,
-  CirclePlusIcon,
-  GlobeIcon,
-  LayoutGridIcon,
-  PaperclipIcon,
-  PlusIcon,
-  XIcon,
+  ArrowUp as ArrowUpIcon,
+  AtSign as AtSignIcon,
+  BookOpen as BookOpenIcon,
+  CirclePlus as CirclePlusIcon,
+  Globe as GlobeIcon,
+  LayoutGrid as LayoutGridIcon,
+  Paperclip as PaperclipIcon,
+  Plus as PlusIcon,
+  X as XIcon,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -119,21 +119,23 @@ export default function InputGroupPromptForm() {
   const [selectedModel, setSelectedModel] = useState(SAMPLE_DATA.models[0]);
   const [scopeMenuOpen, setScopeMenuOpen] = useState(false);
 
-  const grouped = useMemo(() => {
-    return SAMPLE_DATA.mentionable.reduce(
-      (acc, item) => {
-        const isAvailable = !mentions.includes(item.title);
-        if (isAvailable) {
-          if (!acc[item.type]) {
-            acc[item.type] = [];
+  const grouped = useMemo(
+    () =>
+      SAMPLE_DATA.mentionable.reduce(
+        (acc, item) => {
+          const isAvailable = !mentions.includes(item.title);
+          if (isAvailable) {
+            if (!acc[item.type]) {
+              acc[item.type] = [];
+            }
+            acc[item.type].push(item);
           }
-          acc[item.type].push(item);
-        }
-        return acc;
-      },
-      {} as Record<string, typeof SAMPLE_DATA.mentionable>
-    );
-  }, [mentions]);
+          return acc;
+        },
+        {} as Record<string, typeof SAMPLE_DATA.mentionable>
+      ),
+    [mentions]
+  );
 
   const hasMentions = mentions.length > 0;
 

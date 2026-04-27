@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@keystoneui/react/button";
-import { ArrowRight, Loader2, Mail } from "lucide-react";
+import { ArrowRight, LoaderCircle as Loader2, Mail } from "lucide-react";
 import { useState } from "react";
 
 export default function ButtonCustomLoading() {

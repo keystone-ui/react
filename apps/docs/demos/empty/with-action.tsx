@@ -9,7 +9,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@keystoneui/react/empty";
-import { FolderCodeIcon } from "lucide-react";
+import { FolderCode as FolderCodeIcon } from "lucide-react";
 
 export default function EmptyWithAction() {
   return (

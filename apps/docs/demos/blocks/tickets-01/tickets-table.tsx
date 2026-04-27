@@ -40,18 +40,18 @@ import {
 } from "@keystoneui/react/table";
 import { cn } from "@keystoneui/react/utils";
 import {
-  ArrowDownIcon,
-  ArrowUpDownIcon,
-  ArrowUpIcon,
-  ChevronsUpDownIcon,
-  ExternalLinkIcon,
-  GripVerticalIcon,
-  HashIcon,
-  MailIcon,
-  MessageSquareIcon,
-  MinusIcon,
-  TagIcon,
-  TriangleAlertIcon,
+  ArrowDown as ArrowDownIcon,
+  ArrowUpDown as ArrowUpDownIcon,
+  ArrowUp as ArrowUpIcon,
+  ChevronsUpDown as ChevronsUpDownIcon,
+  ExternalLink as ExternalLinkIcon,
+  GripVertical as GripVerticalIcon,
+  Hash as HashIcon,
+  Mail as MailIcon,
+  MessageSquare as MessageSquareIcon,
+  Minus as MinusIcon,
+  Tag as TagIcon,
+  TriangleAlert as TriangleAlertIcon,
 } from "lucide-react";
 import { useId, useMemo } from "react";
 

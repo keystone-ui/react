@@ -5,7 +5,11 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@keystoneui/react/collapsible";
-import { ChevronRightIcon, FileIcon, FolderIcon } from "lucide-react";
+import {
+  ChevronRight as ChevronRightIcon,
+  File as FileIcon,
+  Folder as FolderIcon,
+} from "lucide-react";
 
 function File({ name }: { name: string }) {
   return (

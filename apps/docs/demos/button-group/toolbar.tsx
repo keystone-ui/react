@@ -3,10 +3,10 @@
 import { Button } from "@keystoneui/react/button";
 import { ButtonGroup } from "@keystoneui/react/button-group";
 import {
-  BoldIcon,
-  ItalicIcon,
-  StrikethroughIcon,
-  UnderlineIcon,
+  Bold as BoldIcon,
+  Italic as ItalicIcon,
+  Strikethrough as StrikethroughIcon,
+  Underline as UnderlineIcon,
 } from "lucide-react";
 
 export default function ButtonGroupToolbar() {

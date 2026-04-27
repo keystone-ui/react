@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from "@keystoneui/react/alert-dialog";
 import { Button } from "@keystoneui/react/button";
-import { BluetoothIcon } from "lucide-react";
+import { Bluetooth as BluetoothIcon } from "lucide-react";
 
 export default function AlertDialogSmallWithMedia() {
   return (

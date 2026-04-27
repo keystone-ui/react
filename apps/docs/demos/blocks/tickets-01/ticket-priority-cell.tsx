@@ -2,10 +2,10 @@
 
 import { cn } from "@keystoneui/react/utils";
 import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  CircleDashedIcon,
-  MinusIcon,
+  ArrowDown as ArrowDownIcon,
+  ArrowUp as ArrowUpIcon,
+  CircleDashed as CircleDashedIcon,
+  Minus as MinusIcon,
 } from "lucide-react";
 
 import { priorityLabels, type TicketPriority } from "./mock-tickets";

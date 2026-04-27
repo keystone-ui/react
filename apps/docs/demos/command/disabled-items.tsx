@@ -11,10 +11,10 @@ import {
   CommandList,
 } from "@keystoneui/react/command";
 import {
-  CalculatorIcon,
-  CalendarIcon,
-  SettingsIcon,
-  SmileIcon,
+  Calculator as CalculatorIcon,
+  Calendar as CalendarIcon,
+  Settings as SettingsIcon,
+  Smile as SmileIcon,
 } from "lucide-react";
 import { useState } from "react";
 

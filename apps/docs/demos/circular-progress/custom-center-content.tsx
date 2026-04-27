@@ -5,7 +5,11 @@ import {
   CircularProgressIndicator,
   CircularProgressTrack,
 } from "@keystoneui/react/circular-progress";
-import { FlameIcon, TrendingUpIcon, ZapIcon } from "lucide-react";
+import {
+  Flame as FlameIcon,
+  TrendingUp as TrendingUpIcon,
+  Zap as ZapIcon,
+} from "lucide-react";
 
 export default function CircularProgressCustomCenterContent() {
   return (

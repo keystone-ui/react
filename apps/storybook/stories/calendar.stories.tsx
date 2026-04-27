@@ -9,7 +9,7 @@ import {
 } from "@keystoneui/react/input-group";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { addDays } from "date-fns";
-import { Clock2Icon } from "lucide-react";
+import { Clock2 as Clock2Icon } from "lucide-react";
 import * as React from "react";
 import type { DateRange } from "react-day-picker";
 import { expect, within } from "storybook/test";

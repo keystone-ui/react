@@ -16,7 +16,10 @@ import {
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { parseDate } from "chrono-node";
 import { addDays, format } from "date-fns";
-import { CalendarIcon, ChevronDownIcon } from "lucide-react";
+import {
+  Calendar as CalendarIcon,
+  ChevronDown as ChevronDownIcon,
+} from "lucide-react";
 import * as React from "react";
 import type { DateRange } from "react-day-picker";
 import { expect, userEvent, within } from "storybook/test";

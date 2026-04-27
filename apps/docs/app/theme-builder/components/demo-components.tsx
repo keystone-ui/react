@@ -83,20 +83,20 @@ import {
 import { Switch } from "@keystoneui/react/switch";
 import { Textarea } from "@keystoneui/react/textarea";
 import {
-  BadgeCheckIcon,
-  BathIcon,
-  BedIcon,
-  CheckIcon,
-  CopyIcon,
-  FlameIcon,
-  InfoIcon,
-  LandPlotIcon,
-  MinusIcon,
-  PlusIcon,
-  RefreshCwIcon,
-  SearchIcon,
-  TrendingUpIcon,
-  ZapIcon,
+  BadgeCheck as BadgeCheckIcon,
+  Bath as BathIcon,
+  Bed as BedIcon,
+  Check as CheckIcon,
+  Copy as CopyIcon,
+  Flame as FlameIcon,
+  Info as InfoIcon,
+  LandPlot as LandPlotIcon,
+  Minus as MinusIcon,
+  Plus as PlusIcon,
+  RefreshCw as RefreshCwIcon,
+  Search as SearchIcon,
+  TrendingUp as TrendingUpIcon,
+  Zap as ZapIcon,
 } from "lucide-react";
 import { useCallback, useId, useState } from "react";
 

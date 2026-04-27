@@ -24,12 +24,12 @@ import {
   SelectionBarSeparator,
 } from "@keystoneui/react/selection-bar";
 import {
-  ChevronDownIcon,
-  DownloadIcon,
-  FileSpreadsheetIcon,
-  MoreHorizontalIcon,
-  PlusIcon,
-  TrashIcon,
+  ChevronDown as ChevronDownIcon,
+  Download as DownloadIcon,
+  FileSpreadsheet as FileSpreadsheetIcon,
+  Ellipsis as MoreHorizontalIcon,
+  Plus as PlusIcon,
+  Trash as TrashIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 

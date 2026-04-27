@@ -2,10 +2,10 @@
 
 import { Badge } from "@keystoneui/react/badge";
 import {
-  AlertCircleIcon,
-  CalendarIcon,
-  CheckIcon,
-  UsersIcon,
+  CircleAlert as AlertCircleIcon,
+  Calendar as CalendarIcon,
+  Check as CheckIcon,
+  Users as UsersIcon,
 } from "lucide-react";
 
 export default function BadgeStats() {

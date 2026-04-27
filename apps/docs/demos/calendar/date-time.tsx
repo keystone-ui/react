@@ -8,7 +8,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@keystoneui/react/input-group";
-import { Clock2Icon } from "lucide-react";
+import { Clock2 as Clock2Icon } from "lucide-react";
 import { useState } from "react";
 
 export default function CalendarDateTime() {

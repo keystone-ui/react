@@ -21,10 +21,10 @@ import {
 } from "@keystoneui/react/select";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronsLeftIcon,
-  ChevronsRightIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+  ChevronsLeft as ChevronsLeftIcon,
+  ChevronsRight as ChevronsRightIcon,
 } from "lucide-react";
 import { expect, within } from "storybook/test";
 

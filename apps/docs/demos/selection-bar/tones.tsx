@@ -8,7 +8,11 @@ import {
   SelectionBarLabel,
   SelectionBarSeparator,
 } from "@keystoneui/react/selection-bar";
-import { CheckIcon, FileSpreadsheetIcon, TrashIcon } from "lucide-react";
+import {
+  Check as CheckIcon,
+  FileSpreadsheet as FileSpreadsheetIcon,
+  Trash as TrashIcon,
+} from "lucide-react";
 
 export default function SelectionBarTones() {
   return (

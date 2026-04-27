@@ -2,16 +2,16 @@ import { Field, FieldDescription, FieldLabel } from "@keystoneui/react/field";
 import { ToggleGroup, ToggleGroupItem } from "@keystoneui/react/toggle-group";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  AlignCenterIcon,
-  AlignJustifyIcon,
-  AlignLeftIcon,
-  AlignRightIcon,
-  BoldIcon,
-  ItalicIcon,
-  ListChecksIcon,
-  ListIcon,
-  ListOrderedIcon,
-  UnderlineIcon,
+  TextAlignCenter as AlignCenterIcon,
+  TextAlignJustify as AlignJustifyIcon,
+  TextAlignStart as AlignLeftIcon,
+  TextAlignEnd as AlignRightIcon,
+  Bold as BoldIcon,
+  Italic as ItalicIcon,
+  ListChecks as ListChecksIcon,
+  List as ListIcon,
+  ListOrdered as ListOrderedIcon,
+  Underline as UnderlineIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { expect, userEvent, within } from "storybook/test";

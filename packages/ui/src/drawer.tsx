@@ -1,6 +1,6 @@
 "use client";
 
-import { DrawerPreview as DrawerPrimitive } from "@base-ui/react/drawer";
+import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer";
 import type * as React from "react";
 
 import { cn } from "./utils";
@@ -195,13 +195,13 @@ function DrawerDescription({ className, ...props }: DrawerDescriptionProps) {
 // =============================================================================
 export {
   Drawer,
-  DrawerPortal,
-  DrawerOverlay,
-  DrawerTrigger,
   DrawerClose,
   DrawerContent,
-  DrawerHeader,
-  DrawerFooter,
-  DrawerTitle,
   DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerPortal,
+  DrawerTitle,
+  DrawerTrigger,
 };

@@ -16,7 +16,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@keystoneui/react/input-otp";
-import { RefreshCwIcon } from "lucide-react";
+import { RefreshCw as RefreshCwIcon } from "lucide-react";
 
 export default function InputOTPForm() {
   return (

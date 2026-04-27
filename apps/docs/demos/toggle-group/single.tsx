@@ -2,10 +2,10 @@
 
 import { ToggleGroup, ToggleGroupItem } from "@keystoneui/react/toggle-group";
 import {
-  AlignCenterIcon,
-  AlignJustifyIcon,
-  AlignLeftIcon,
-  AlignRightIcon,
+  TextAlignCenter as AlignCenterIcon,
+  TextAlignJustify as AlignJustifyIcon,
+  TextAlignStart as AlignLeftIcon,
+  TextAlignEnd as AlignRightIcon,
 } from "lucide-react";
 import { useState } from "react";
 

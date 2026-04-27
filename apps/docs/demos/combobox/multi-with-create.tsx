@@ -12,7 +12,7 @@ import {
   ComboboxValue,
   useComboboxAnchor,
 } from "@keystoneui/react/combobox";
-import { PlusIcon } from "lucide-react";
+import { Plus as PlusIcon } from "lucide-react";
 import { Fragment, useState } from "react";
 
 const INITIAL_FRAMEWORKS = [

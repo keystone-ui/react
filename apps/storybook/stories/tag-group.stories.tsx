@@ -3,12 +3,12 @@ import { TagRemove } from "@keystoneui/react/tag";
 import { TagGroup, TagGroupItem } from "@keystoneui/react/tag-group";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  CircleXIcon,
-  GamepadIcon,
-  GlobeIcon,
-  NewspaperIcon,
-  ShoppingCartIcon,
-  XIcon,
+  CircleX as CircleXIcon,
+  Gamepad as GamepadIcon,
+  Globe as GlobeIcon,
+  Newspaper as NewspaperIcon,
+  ShoppingCart as ShoppingCartIcon,
+  X as XIcon,
 } from "lucide-react";
 import { useState } from "react";
 

@@ -2,18 +2,18 @@ import { Badge } from "@keystoneui/react/badge";
 import { Spinner } from "@keystoneui/react/spinner";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  AlertCircleIcon,
-  ArrowUpRightIcon,
-  BadgeCheckIcon,
-  BathIcon,
-  BedIcon,
-  BookmarkIcon,
-  CalendarIcon,
-  CheckIcon,
-  InfoIcon,
-  LandPlotIcon,
-  UsersIcon,
-  XIcon,
+  CircleAlert as AlertCircleIcon,
+  ArrowUpRight as ArrowUpRightIcon,
+  BadgeCheck as BadgeCheckIcon,
+  Bath as BathIcon,
+  Bed as BedIcon,
+  Bookmark as BookmarkIcon,
+  Calendar as CalendarIcon,
+  Check as CheckIcon,
+  Info as InfoIcon,
+  LandPlot as LandPlotIcon,
+  Users as UsersIcon,
+  X as XIcon,
 } from "lucide-react";
 import { expect, within } from "storybook/test";
 

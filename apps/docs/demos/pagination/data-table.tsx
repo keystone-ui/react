@@ -2,10 +2,10 @@
 
 import { Button } from "@keystoneui/react/button";
 import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  ChevronsLeftIcon,
-  ChevronsRightIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+  ChevronsLeft as ChevronsLeftIcon,
+  ChevronsRight as ChevronsRightIcon,
 } from "lucide-react";
 
 export default function PaginationDataTable() {

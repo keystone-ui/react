@@ -1,6 +1,6 @@
 "use client";
 
-import { CodeIcon, ShareIcon } from "lucide-react";
+import { Code as CodeIcon, Share as ShareIcon } from "lucide-react";
 import Link from "next/link";
 
 import type { SetThemeState, ThemeState } from "../hooks/use-theme-state";

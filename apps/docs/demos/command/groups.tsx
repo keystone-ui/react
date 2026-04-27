@@ -13,12 +13,12 @@ import {
   CommandShortcut,
 } from "@keystoneui/react/command";
 import {
-  CalculatorIcon,
-  CalendarIcon,
-  CreditCardIcon,
-  SettingsIcon,
-  SmileIcon,
-  UserIcon,
+  Calculator as CalculatorIcon,
+  Calendar as CalendarIcon,
+  CreditCard as CreditCardIcon,
+  Settings as SettingsIcon,
+  Smile as SmileIcon,
+  User as UserIcon,
 } from "lucide-react";
 import { useState } from "react";
 

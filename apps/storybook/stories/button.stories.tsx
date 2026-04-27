@@ -14,11 +14,11 @@ import {
   Bold,
   ChevronDown,
   Italic,
-  Loader2,
+  LoaderCircle as Loader2,
   Mail,
   Plus,
-  StarIcon,
-  ThumbsUpIcon,
+  Star as StarIcon,
+  ThumbsUp as ThumbsUpIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { expect, fn, userEvent, within } from "storybook/test";

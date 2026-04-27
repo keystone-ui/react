@@ -9,7 +9,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@keystoneui/react/dropdown-menu";
-import { PencilIcon, ShareIcon, TrashIcon } from "lucide-react";
+import {
+  Pencil as PencilIcon,
+  Share as ShareIcon,
+  Trash as TrashIcon,
+} from "lucide-react";
 
 export default function DropdownMenuDestructive() {
   return (

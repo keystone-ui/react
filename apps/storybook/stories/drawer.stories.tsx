@@ -41,7 +41,7 @@ import {
   ExternalLink,
   Eye,
   EyeOff,
-  Filter as FilterIcon,
+  Funnel as FilterIcon,
   LayoutGrid,
   Minus,
   Plus,

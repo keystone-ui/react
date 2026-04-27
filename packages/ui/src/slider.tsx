@@ -126,8 +126,8 @@ function SliderValue({ className, ...props }: SliderValueProps) {
 export {
   Slider,
   SliderControl,
-  SliderTrack,
   SliderIndicator,
   SliderThumb,
+  SliderTrack,
   SliderValue,
 };

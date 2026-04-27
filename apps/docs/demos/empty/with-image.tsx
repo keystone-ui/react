@@ -9,7 +9,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@keystoneui/react/empty";
-import { CloudIcon } from "lucide-react";
+import { Cloud as CloudIcon } from "lucide-react";
 
 export default function EmptyWithImage() {
   return (

@@ -58,24 +58,24 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { countries as countryDataList } from "country-data-list";
 import parsePhoneNumber from "libphonenumber-js";
 import {
-  ArrowUpIcon,
-  AtSignIcon,
-  BookOpenIcon,
+  ArrowUp as ArrowUpIcon,
+  AtSign as AtSignIcon,
+  BookOpen as BookOpenIcon,
   Check as CheckIcon,
-  ChevronDownIcon,
-  CirclePlusIcon,
+  ChevronDown as ChevronDownIcon,
+  CirclePlus as CirclePlusIcon,
   Copy as CopyIcon,
   Eye as EyeIcon,
   EyeOff as EyeOffIcon,
-  GlobeIcon,
-  LayoutGridIcon,
-  Loader2 as LoaderIcon,
+  Globe as GlobeIcon,
+  LayoutGrid as LayoutGridIcon,
+  LoaderCircle as LoaderIcon,
   Mail as MailIcon,
-  PaperclipIcon,
-  PhoneIcon,
-  PlusIcon,
+  Paperclip as PaperclipIcon,
+  Phone as PhoneIcon,
+  Plus as PlusIcon,
   Search as SearchIcon,
-  SendHorizonal as SendIcon,
+  SendHorizontal as SendIcon,
   X as XIcon,
 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -624,20 +624,22 @@ export const PromptForm: Story = {
     const [selectedModel, setSelectedModel] = useState(PROMPT_MODELS[0]);
     const [scopeMenuOpen, setScopeMenuOpen] = useState(false);
 
-    const grouped = useMemo(() => {
-      return PROMPT_MENTIONABLE.reduce(
-        (acc, item) => {
-          if (!mentions.includes(item.title)) {
-            if (!acc[item.type]) {
-              acc[item.type] = [];
+    const grouped = useMemo(
+      () =>
+        PROMPT_MENTIONABLE.reduce(
+          (acc, item) => {
+            if (!mentions.includes(item.title)) {
+              if (!acc[item.type]) {
+                acc[item.type] = [];
+              }
+              acc[item.type].push(item);
             }
-            acc[item.type].push(item);
-          }
-          return acc;
-        },
-        {} as Record<string, (typeof PROMPT_MENTIONABLE)[number][]>
-      );
-    }, [mentions]);
+            return acc;
+          },
+          {} as Record<string, (typeof PROMPT_MENTIONABLE)[number][]>
+        ),
+      [mentions]
+    );
 
     const hasMentions = mentions.length > 0;
 

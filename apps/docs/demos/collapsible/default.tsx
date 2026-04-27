@@ -5,7 +5,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@keystoneui/react/collapsible";
-import { ChevronsUpDownIcon } from "lucide-react";
+import { ChevronsUpDown as ChevronsUpDownIcon } from "lucide-react";
 
 export default function CollapsibleDefault() {
   return (

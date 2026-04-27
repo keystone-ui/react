@@ -2,10 +2,10 @@
 
 import { Badge } from "@keystoneui/react/badge";
 import {
-  BadgeCheckIcon,
-  BookmarkIcon,
-  CheckIcon,
-  InfoIcon,
+  BadgeCheck as BadgeCheckIcon,
+  Bookmark as BookmarkIcon,
+  Check as CheckIcon,
+  Info as InfoIcon,
 } from "lucide-react";
 
 export default function BadgeWithIcon() {

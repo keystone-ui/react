@@ -10,7 +10,11 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@keystoneui/react/item";
-import { CalendarIcon, PackageIcon, TagIcon } from "lucide-react";
+import {
+  Calendar as CalendarIcon,
+  Package as PackageIcon,
+  Tag as TagIcon,
+} from "lucide-react";
 
 export default function ItemWithFooter() {
   return (

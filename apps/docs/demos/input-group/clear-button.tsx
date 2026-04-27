@@ -6,7 +6,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@keystoneui/react/input-group";
-import { XIcon } from "lucide-react";
+import { X as XIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function InputGroupClearButton() {

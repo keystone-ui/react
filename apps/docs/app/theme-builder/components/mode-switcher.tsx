@@ -1,6 +1,6 @@
 "use client";
 
-import { MoonIcon, SunIcon } from "lucide-react";
+import { Moon as MoonIcon, Sun as SunIcon } from "lucide-react";
 
 import type { SetThemeState, ThemeState } from "../hooks/use-theme-state";
 

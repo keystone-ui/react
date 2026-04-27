@@ -7,12 +7,12 @@ import {
 import { Button } from "@keystoneui/react/button";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  AlertTriangleIcon,
-  CheckCircle2Icon,
-  InfoIcon,
-  LockIcon,
-  ShieldCheckIcon,
-  XCircleIcon,
+  TriangleAlert as AlertTriangleIcon,
+  CircleCheck as CheckCircle2Icon,
+  Info as InfoIcon,
+  Lock as LockIcon,
+  ShieldCheck as ShieldCheckIcon,
+  CircleX as XCircleIcon,
 } from "lucide-react";
 
 const meta = {
@@ -28,7 +28,7 @@ Uses \`role="alert"\` for screen reader announcements — this is a system feedb
 
 \`\`\`tsx
 import { Alert, AlertTitle, AlertDescription, AlertAction } from "@keystoneui/react/alert";
-import { CheckCircle2Icon } from "lucide-react";
+import { CircleCheck as CheckCircle2Icon } from "lucide-react";
 
 // Basic alert
 <Alert variant="success">

@@ -9,10 +9,10 @@ import {
   DropdownMenuTrigger,
 } from "@keystoneui/react/dropdown-menu";
 import {
-  CreditCardIcon,
-  LogOutIcon,
-  SettingsIcon,
-  UserIcon,
+  CreditCard as CreditCardIcon,
+  LogOut as LogOutIcon,
+  Settings as SettingsIcon,
+  User as UserIcon,
 } from "lucide-react";
 
 export default function DropdownMenuWithIcons() {

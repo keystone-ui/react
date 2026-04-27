@@ -1,5 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
+import type * as React from "react";
 
 import { cn } from "./utils";
 
@@ -72,18 +72,19 @@ export interface AlertProps
   variant?: "default" | "success" | "warning" | "error" | "info";
 }
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
-  ({ className, variant, ...props }, ref) => {
-    return (
-      <div
-        className={cn(alertVariants({ variant }), className)}
-        data-slot="alert"
-        ref={ref}
-        role="alert"
-        {...props}
-      />
-    );
-  }
+const Alert = ({
+  className,
+  variant,
+  ref,
+  ...props
+}: AlertProps & React.RefAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(alertVariants({ variant }), className)}
+    data-slot="alert"
+    ref={ref}
+    role="alert"
+    {...props}
+  />
 );
 
 Alert.displayName = "Alert";
@@ -94,20 +95,20 @@ Alert.displayName = "Alert";
 
 export interface AlertTitleProps extends React.ComponentProps<"div"> {}
 
-const AlertTitle = React.forwardRef<HTMLDivElement, AlertTitleProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <div
-        className={cn(
-          "font-medium group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground",
-          className
-        )}
-        data-slot="alert-title"
-        ref={ref}
-        {...props}
-      />
-    );
-  }
+const AlertTitle = ({
+  className,
+  ref,
+  ...props
+}: AlertTitleProps & React.RefAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      "font-medium group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground",
+      className
+    )}
+    data-slot="alert-title"
+    ref={ref}
+    {...props}
+  />
 );
 
 AlertTitle.displayName = "AlertTitle";
@@ -118,22 +119,21 @@ AlertTitle.displayName = "AlertTitle";
 
 export interface AlertDescriptionProps extends React.ComponentProps<"div"> {}
 
-const AlertDescription = React.forwardRef<
-  HTMLDivElement,
-  AlertDescriptionProps
->(({ className, ...props }, ref) => {
-  return (
-    <div
-      className={cn(
-        "text-balance text-sm group-has-[>svg]/alert:col-start-2 md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
-        className
-      )}
-      data-slot="alert-description"
-      ref={ref}
-      {...props}
-    />
-  );
-});
+const AlertDescription = ({
+  className,
+  ref,
+  ...props
+}: AlertDescriptionProps & React.RefAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      "text-balance text-sm group-has-[>svg]/alert:col-start-2 md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
+      className
+    )}
+    data-slot="alert-description"
+    ref={ref}
+    {...props}
+  />
+);
 
 AlertDescription.displayName = "AlertDescription";
 
@@ -143,17 +143,17 @@ AlertDescription.displayName = "AlertDescription";
 
 export interface AlertActionProps extends React.ComponentProps<"div"> {}
 
-const AlertAction = React.forwardRef<HTMLDivElement, AlertActionProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <div
-        className={cn("absolute top-3 right-3", className)}
-        data-slot="alert-action"
-        ref={ref}
-        {...props}
-      />
-    );
-  }
+const AlertAction = ({
+  className,
+  ref,
+  ...props
+}: AlertActionProps & React.RefAttributes<HTMLDivElement>) => (
+  <div
+    className={cn("absolute top-3 right-3", className)}
+    data-slot="alert-action"
+    ref={ref}
+    {...props}
+  />
 );
 
 AlertAction.displayName = "AlertAction";
@@ -162,4 +162,4 @@ AlertAction.displayName = "AlertAction";
 // Exports
 // ---------------------------------------------------------------------------
 
-export { Alert, AlertTitle, AlertDescription, AlertAction, alertVariants };
+export { Alert, AlertAction, AlertDescription, AlertTitle, alertVariants };

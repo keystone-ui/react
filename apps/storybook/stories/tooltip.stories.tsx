@@ -8,11 +8,11 @@ import {
 } from "@keystoneui/react/tooltip";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  HomeIcon,
-  InboxIcon,
-  SaveIcon,
-  SearchIcon,
-  SettingsIcon,
+  House as HomeIcon,
+  Inbox as InboxIcon,
+  Save as SaveIcon,
+  Search as SearchIcon,
+  Settings as SettingsIcon,
 } from "lucide-react";
 import { expect, userEvent, within } from "storybook/test";
 

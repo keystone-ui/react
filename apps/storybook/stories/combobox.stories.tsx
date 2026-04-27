@@ -27,7 +27,11 @@ import {
 import { InputGroupAddon } from "@keystoneui/react/input-group";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { countries as countryDataList } from "country-data-list";
-import { GlobeIcon, PlusIcon, SearchIcon } from "lucide-react";
+import {
+  Globe as GlobeIcon,
+  Plus as PlusIcon,
+  Search as SearchIcon,
+} from "lucide-react";
 import * as React from "react";
 import { Fragment, useState } from "react";
 import { CircleFlag } from "react-circle-flags";

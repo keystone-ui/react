@@ -10,7 +10,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@keystoneui/react/empty";
-import { PlusIcon } from "lucide-react";
+import { Plus as PlusIcon } from "lucide-react";
 
 export default function EmptyWithForm() {
   return (

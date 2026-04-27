@@ -10,7 +10,7 @@ import {
   PopoverTrigger,
 } from "@keystoneui/react/popover";
 import { format } from "date-fns";
-import { ChevronDownIcon } from "lucide-react";
+import { ChevronDown as ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function DatePickerWithTime() {

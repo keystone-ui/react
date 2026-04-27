@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
 } from "@keystoneui/react/popover";
 import { addDays, addWeeks, format, nextMonday } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 
 const presets = [

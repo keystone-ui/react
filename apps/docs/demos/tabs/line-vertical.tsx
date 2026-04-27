@@ -6,7 +6,11 @@ import {
   TabsList,
   TabsTrigger,
 } from "@keystoneui/react/tabs";
-import { BarChartIcon, FileTextIcon, SettingsIcon } from "lucide-react";
+import {
+  ChartNoAxesColumnIncreasing as BarChartIcon,
+  FileText as FileTextIcon,
+  Settings as SettingsIcon,
+} from "lucide-react";
 
 export default function TabsLineVertical() {
   return (

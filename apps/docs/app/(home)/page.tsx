@@ -1,7 +1,7 @@
 import {
   Accessibility,
   ArrowRight,
-  Github,
+  Code as Github,
   Moon,
   Paintbrush,
   Puzzle,

@@ -1,7 +1,7 @@
 "use client";
 
 import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
+import type * as React from "react";
 import { Button } from "./button";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
@@ -26,46 +26,50 @@ export interface InputGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: "sm" | "default";
 }
 
-export const InputGroup = React.forwardRef<HTMLDivElement, InputGroupProps>(
-  ({ className, children, size = "default", ...props }, ref) => {
-    return (
-      <div
-        className={cn(
-          "group/input-group relative flex w-full items-center rounded-md border border-input bg-input-bg shadow-xs outline-none transition-[color,box-shadow]",
-          "min-w-0",
-          size === "default" && "h-10",
-          size === "sm" && "h-8",
+export const InputGroup = ({
+  className,
+  children,
+  size = "default",
+  ref,
+  ...props
+}: InputGroupProps & React.RefAttributes<HTMLDivElement>) => {
+  return (
+    <div
+      className={cn(
+        "group/input-group relative flex w-full items-center rounded-md border border-input bg-input-bg shadow-xs outline-none transition-[color,box-shadow]",
+        "min-w-0",
+        size === "default" && "h-10",
+        size === "sm" && "h-8",
 
-          // Textarea: auto-height, bottom-align addon so it stays anchored as textarea grows
-          "has-[>textarea]:h-auto has-[>textarea]:items-end",
-          "has-[>textarea]:[&_[data-slot=input-group-addon]]:pb-2",
+        // Textarea: auto-height, bottom-align addon so it stays anchored as textarea grows
+        "has-[>textarea]:h-auto has-[>textarea]:items-end",
+        "has-[>textarea]:[&_[data-slot=input-group-addon]]:pb-2",
 
-          // Alignment variants - adjust input padding based on addon position
-          "has-[>[data-align=inline-start]]:[&_[data-slot=input-group-control]]:pl-1.5",
-          "has-[>[data-align=inline-end]]:[&_[data-slot=input-group-control]]:pr-1.5",
-          "has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&_[data-slot=input-group-control]]:pb-3",
-          "has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&_[data-slot=input-group-control]]:pt-3",
+        // Alignment variants - adjust input padding based on addon position
+        "has-[>[data-align=inline-start]]:[&_[data-slot=input-group-control]]:pl-1.5",
+        "has-[>[data-align=inline-end]]:[&_[data-slot=input-group-control]]:pr-1.5",
+        "has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&_[data-slot=input-group-control]]:pb-3",
+        "has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&_[data-slot=input-group-control]]:pt-3",
 
-          // Focus state
-          "has-[[data-slot=input-group-control]:focus]:border-ring has-[[data-slot=input-group-control]:focus]:ring-1 has-[[data-slot=input-group-control]:focus]:ring-ring has-[[data-slot=input-group-control]:focus]:ring-inset",
+        // Focus state
+        "has-[[data-slot=input-group-control]:focus]:border-ring has-[[data-slot=input-group-control]:focus]:ring-1 has-[[data-slot=input-group-control]:focus]:ring-ring has-[[data-slot=input-group-control]:focus]:ring-inset",
 
-          // Error state
-          "has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-1 has-[[data-slot][aria-invalid=true]]:ring-destructive has-[[data-slot][aria-invalid=true]]:ring-inset",
+        // Error state
+        "has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-1 has-[[data-slot][aria-invalid=true]]:ring-destructive has-[[data-slot][aria-invalid=true]]:ring-inset",
 
-          className
-        )}
-        data-input=""
-        data-size={size}
-        data-slot="input-group"
-        ref={ref}
-        role="group"
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  }
-);
+        className
+      )}
+      data-input=""
+      data-size={size}
+      data-slot="input-group"
+      ref={ref}
+      role="group"
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};
 InputGroup.displayName = "InputGroup";
 
 // =============================================================================
@@ -99,31 +103,32 @@ export interface InputGroupAddonProps
   children: React.ReactNode;
 }
 
-export const InputGroupAddon = React.forwardRef<
-  HTMLDivElement,
-  InputGroupAddonProps
->(({ className, align = "inline-start", children, ...props }, ref) => {
-  return (
-    <div
-      className={cn(inputGroupAddonVariants({ align }), className)}
-      data-align={align}
-      data-slot="input-group-addon"
-      onClick={(e) => {
-        if ((e.target as HTMLElement).closest("button, select")) {
-          return;
-        }
-        e.currentTarget.parentElement
-          ?.querySelector<HTMLInputElement>("[data-slot=input-group-control]")
-          ?.focus();
-      }}
-      ref={ref}
-      role="group"
-      {...props}
-    >
-      {children}
-    </div>
-  );
-});
+export const InputGroupAddon = ({
+  className,
+  align = "inline-start",
+  children,
+  ref,
+  ...props
+}: InputGroupAddonProps & React.RefAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(inputGroupAddonVariants({ align }), className)}
+    data-align={align}
+    data-slot="input-group-addon"
+    onClick={(e) => {
+      if ((e.target as HTMLElement).closest("button, select")) {
+        return;
+      }
+      e.currentTarget.parentElement
+        ?.querySelector<HTMLInputElement>("[data-slot=input-group-control]")
+        ?.focus();
+    }}
+    ref={ref}
+    role="group"
+    {...props}
+  >
+    {children}
+  </div>
+);
 InputGroupAddon.displayName = "InputGroupAddon";
 
 // =============================================================================
@@ -167,25 +172,22 @@ export interface InputGroupButtonProps
     | "link";
 }
 
-export const InputGroupButton = React.forwardRef<
-  HTMLButtonElement,
-  InputGroupButtonProps
->(
-  (
-    { className, type = "button", variant = "ghost", size = "xs", ...props },
-    ref
-  ) => {
-    return (
-      <Button
-        className={cn(inputGroupButtonVariants({ size }), className)}
-        data-size={size}
-        ref={ref}
-        type={type}
-        variant={variant}
-        {...props}
-      />
-    );
-  }
+export const InputGroupButton = ({
+  className,
+  type = "button",
+  variant = "ghost",
+  size = "xs",
+  ref,
+  ...props
+}: InputGroupButtonProps & React.RefAttributes<HTMLButtonElement>) => (
+  <Button
+    className={cn(inputGroupButtonVariants({ size }), className)}
+    data-size={size}
+    ref={ref}
+    type={type}
+    variant={variant}
+    {...props}
+  />
 );
 InputGroupButton.displayName = "InputGroupButton";
 
@@ -195,21 +197,20 @@ InputGroupButton.displayName = "InputGroupButton";
 export interface InputGroupTextProps
   extends React.HTMLAttributes<HTMLSpanElement> {}
 
-export const InputGroupText = React.forwardRef<
-  HTMLSpanElement,
-  InputGroupTextProps
->(({ className, ...props }, ref) => {
-  return (
-    <span
-      className={cn(
-        "flex items-center gap-2 text-muted-foreground text-sm [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-        className
-      )}
-      ref={ref}
-      {...props}
-    />
-  );
-});
+export const InputGroupText = ({
+  className,
+  ref,
+  ...props
+}: InputGroupTextProps & React.RefAttributes<HTMLSpanElement>) => (
+  <span
+    className={cn(
+      "flex items-center gap-2 text-muted-foreground text-sm [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+      className
+    )}
+    ref={ref}
+    {...props}
+  />
+);
 InputGroupText.displayName = "InputGroupText";
 
 // =============================================================================
@@ -218,23 +219,22 @@ InputGroupText.displayName = "InputGroupText";
 export interface InputGroupInputProps
   extends React.ComponentProps<typeof Input> {}
 
-export const InputGroupInput = React.forwardRef<
-  HTMLInputElement,
-  InputGroupInputProps
->(({ className, ...props }, ref) => {
-  return (
-    <Input
-      className={cn(
-        "flex-1 rounded-none border-0 bg-transparent shadow-none dark:bg-transparent",
-        "focus:border-transparent focus:shadow-none focus:ring-0",
-        className
-      )}
-      data-slot="input-group-control"
-      ref={ref}
-      {...props}
-    />
-  );
-});
+export const InputGroupInput = ({
+  className,
+  ref,
+  ...props
+}: InputGroupInputProps & React.RefAttributes<HTMLInputElement>) => (
+  <Input
+    className={cn(
+      "flex-1 rounded-none border-0 bg-transparent shadow-none dark:bg-transparent",
+      "focus:border-transparent focus:shadow-none focus:ring-0",
+      className
+    )}
+    data-slot="input-group-control"
+    ref={ref}
+    {...props}
+  />
+);
 InputGroupInput.displayName = "InputGroupInput";
 
 // =============================================================================
@@ -243,23 +243,22 @@ InputGroupInput.displayName = "InputGroupInput";
 export interface InputGroupTextareaProps
   extends React.ComponentProps<typeof Textarea> {}
 
-export const InputGroupTextarea = React.forwardRef<
-  HTMLTextAreaElement,
-  InputGroupTextareaProps
->(({ className, ...props }, ref) => {
-  return (
-    <Textarea
-      className={cn(
-        "field-sizing-content min-h-10 flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none md:py-2.5 dark:bg-transparent",
-        "focus:border-transparent focus:shadow-none focus:ring-0",
-        className
-      )}
-      data-slot="input-group-control"
-      ref={ref}
-      {...props}
-    />
-  );
-});
+export const InputGroupTextarea = ({
+  className,
+  ref,
+  ...props
+}: InputGroupTextareaProps & React.RefAttributes<HTMLTextAreaElement>) => (
+  <Textarea
+    className={cn(
+      "field-sizing-content min-h-10 flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none md:py-2.5 dark:bg-transparent",
+      "focus:border-transparent focus:shadow-none focus:ring-0",
+      className
+    )}
+    data-slot="input-group-control"
+    ref={ref}
+    {...props}
+  />
+);
 InputGroupTextarea.displayName = "InputGroupTextarea";
 
 // Export variants for external use

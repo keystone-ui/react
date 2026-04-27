@@ -2,7 +2,7 @@
 
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { cva, type VariantProps } from "class-variance-authority";
-import { XIcon } from "lucide-react";
+import { X as XIcon } from "lucide-react";
 import * as React from "react";
 import { Button } from "./button";
 import { cn } from "./utils";
@@ -260,21 +260,20 @@ function ModalDescription({ className, ...props }: ModalDescriptionProps) {
   );
 }
 
+export type { ModalContentVariantsProps };
 // =============================================================================
 // Exports
 // =============================================================================
 export {
   Modal,
-  ModalTrigger,
-  ModalPortal,
-  ModalOverlay,
   ModalClose,
   ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalTitle,
   ModalDescription,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  ModalPortal,
+  ModalTitle,
+  ModalTrigger,
   modalContentVariants,
 };
-
-export type { ModalContentVariantsProps };

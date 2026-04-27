@@ -2,10 +2,10 @@
 
 import { Alert, AlertDescription, AlertTitle } from "@keystoneui/react/alert";
 import {
-  AlertTriangleIcon,
-  CheckCircle2Icon,
-  InfoIcon,
-  XCircleIcon,
+  TriangleAlert as AlertTriangleIcon,
+  CircleCheck as CheckCircle2Icon,
+  Info as InfoIcon,
+  CircleX as XCircleIcon,
 } from "lucide-react";
 
 export default function AlertVariants() {

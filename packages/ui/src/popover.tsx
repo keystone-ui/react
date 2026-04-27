@@ -183,18 +183,17 @@ function PopoverArrowSvg(props: React.ComponentProps<"svg">) {
   );
 }
 
+export type { PopoverRootProps as PopoverProps } from "@base-ui/react/popover";
 // =============================================================================
 // Exports
 // =============================================================================
 export {
   Popover,
-  PopoverTrigger,
+  PopoverArrow,
+  PopoverClose,
   PopoverContent,
+  PopoverDescription,
   PopoverHeader,
   PopoverTitle,
-  PopoverDescription,
-  PopoverClose,
-  PopoverArrow,
+  PopoverTrigger,
 };
-
-export type { PopoverRootProps as PopoverProps } from "@base-ui/react/popover";

@@ -16,13 +16,13 @@ import {
 import { Kbd } from "@keystoneui/react/kbd";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  ArrowUpRightIcon,
-  BellIcon,
-  CloudIcon,
-  FolderCodeIcon,
-  PlusIcon,
-  RefreshCcwIcon,
-  SearchIcon,
+  ArrowUpRight as ArrowUpRightIcon,
+  Bell as BellIcon,
+  Cloud as CloudIcon,
+  FolderCode as FolderCodeIcon,
+  Plus as PlusIcon,
+  RefreshCcw as RefreshCcwIcon,
+  Search as SearchIcon,
 } from "lucide-react";
 
 const meta = {
@@ -44,7 +44,7 @@ import {
   EmptyTitle,
 } from "@keystoneui/react/empty";
 import { Button } from "@keystoneui/react/button";
-import { FolderCodeIcon } from "lucide-react";
+import { FolderCode as FolderCodeIcon } from "lucide-react";
 
 <Empty>
   <EmptyHeader>

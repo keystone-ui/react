@@ -7,7 +7,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@keystoneui/react/tooltip";
-import { HomeIcon, InboxIcon, SearchIcon, SettingsIcon } from "lucide-react";
+import {
+  House as HomeIcon,
+  Inbox as InboxIcon,
+  Search as SearchIcon,
+  Settings as SettingsIcon,
+} from "lucide-react";
 
 const sidebarItems = [
   { icon: HomeIcon, label: "Home" },

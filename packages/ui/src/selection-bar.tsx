@@ -1,7 +1,7 @@
 "use client";
 
 import { cva, type VariantProps } from "class-variance-authority";
-import { XIcon } from "lucide-react";
+import { X as XIcon } from "lucide-react";
 import * as React from "react";
 
 import { Button, type ButtonProps } from "./button";
@@ -219,21 +219,22 @@ interface SelectionBarButtonProps
   tone?: SelectionBarButtonTone;
 }
 
-const SelectionBarButton = React.forwardRef<
-  HTMLButtonElement,
-  SelectionBarButtonProps
->(({ className, shape = "text", tone = "default", ...props }, ref) => {
-  return (
-    <Button
-      className={cn(selectionBarButtonVariants({ shape, tone }), className)}
-      data-slot="selection-bar-button"
-      ref={ref}
-      size={shape === "icon" ? "icon-sm" : "sm"}
-      variant="ghost"
-      {...props}
-    />
-  );
-});
+const SelectionBarButton = ({
+  className,
+  shape = "text",
+  tone = "default",
+  ref,
+  ...props
+}: SelectionBarButtonProps & React.RefAttributes<HTMLButtonElement>) => (
+  <Button
+    className={cn(selectionBarButtonVariants({ shape, tone }), className)}
+    data-slot="selection-bar-button"
+    ref={ref}
+    size={shape === "icon" ? "icon-sm" : "sm"}
+    variant="ghost"
+    {...props}
+  />
+);
 
 SelectionBarButton.displayName = "SelectionBarButton";
 
@@ -258,6 +259,11 @@ function SelectionBarClose({
   );
 }
 
+export type {
+  SelectionBarButtonProps,
+  SelectionBarCloseProps,
+  SelectionBarProps,
+};
 export {
   SelectionBar,
   SelectionBarBullet,
@@ -268,9 +274,4 @@ export {
   SelectionBarLink,
   SelectionBarSeparator,
   selectionBarButtonVariants,
-};
-export type {
-  SelectionBarButtonProps,
-  SelectionBarCloseProps,
-  SelectionBarProps,
 };

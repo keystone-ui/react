@@ -5,7 +5,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@keystoneui/react/input-group";
-import { LoaderIcon } from "lucide-react";
+import { Loader as LoaderIcon } from "lucide-react";
 
 export default function InputGroupLoadingSpinner() {
   return (

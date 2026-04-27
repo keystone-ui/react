@@ -12,7 +12,11 @@ import {
   DescriptionListTerm,
 } from "@keystoneui/react/description-list";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { CircleCheckIcon, CopyIcon, ExternalLinkIcon } from "lucide-react";
+import {
+  CircleCheck as CircleCheckIcon,
+  Copy as CopyIcon,
+  ExternalLink as ExternalLinkIcon,
+} from "lucide-react";
 
 const meta = {
   title: "Components/DescriptionList",

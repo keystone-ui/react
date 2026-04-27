@@ -13,7 +13,7 @@ import {
 import { Input } from "@keystoneui/react/input";
 import { Label } from "@keystoneui/react/label";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { BadgeCheckIcon } from "lucide-react";
+import { BadgeCheck as BadgeCheckIcon } from "lucide-react";
 
 const meta = {
   title: "Components/Card",

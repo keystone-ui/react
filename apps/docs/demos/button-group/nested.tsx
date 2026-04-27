@@ -2,7 +2,11 @@
 
 import { Button } from "@keystoneui/react/button";
 import { ButtonGroup } from "@keystoneui/react/button-group";
-import { ArchiveIcon, ArrowLeftIcon, FlagIcon } from "lucide-react";
+import {
+  Archive as ArchiveIcon,
+  ArrowLeft as ArrowLeftIcon,
+  Flag as FlagIcon,
+} from "lucide-react";
 
 export default function ButtonGroupNested() {
   return (

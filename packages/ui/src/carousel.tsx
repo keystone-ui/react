@@ -3,7 +3,10 @@
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import {
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+} from "lucide-react";
 import * as React from "react";
 import { Button } from "./button";
 import { cn } from "./utils";
@@ -206,7 +209,7 @@ function CarouselContent({
 
   const maskStyle = React.useMemo<React.CSSProperties | undefined>(() => {
     if (!mask) {
-      return undefined;
+      return;
     }
     const w = "var(--carousel-mask-width, 4rem)";
     const dir = orientation === "horizontal" ? "to right" : "to bottom";
@@ -221,7 +224,7 @@ function CarouselContent({
     }
 
     if (!value) {
-      return undefined;
+      return;
     }
     return {
       maskImage: value,
@@ -414,15 +417,15 @@ function CarouselCounter({ className, ...props }: React.ComponentProps<"div">) {
 // ---------------------------------------------------------------------------
 
 export {
+  Carousel,
   type CarouselApi,
+  CarouselContent,
+  CarouselCounter,
+  CarouselDots,
+  CarouselItem,
+  CarouselNext,
   type CarouselOptions,
   type CarouselPlugin,
-  Carousel,
-  CarouselContent,
-  CarouselItem,
   CarouselPrevious,
-  CarouselNext,
-  CarouselDots,
-  CarouselCounter,
   useCarousel,
 };

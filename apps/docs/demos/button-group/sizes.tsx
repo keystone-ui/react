@@ -2,7 +2,11 @@
 
 import { Button } from "@keystoneui/react/button";
 import { ButtonGroup } from "@keystoneui/react/button-group";
-import { CopyIcon, EllipsisIcon, ShareIcon } from "lucide-react";
+import {
+  Copy as CopyIcon,
+  Ellipsis as EllipsisIcon,
+  Share as ShareIcon,
+} from "lucide-react";
 
 export default function ButtonGroupSizes() {
   return (

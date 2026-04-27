@@ -11,11 +11,11 @@ import {
   ItemTitle,
 } from "@keystoneui/react/item";
 import {
-  ChevronRightIcon,
-  GlobeIcon,
-  LockIcon,
-  PaletteIcon,
-  UserIcon,
+  ChevronRight as ChevronRightIcon,
+  Globe as GlobeIcon,
+  Lock as LockIcon,
+  Palette as PaletteIcon,
+  User as UserIcon,
 } from "lucide-react";
 
 const settings = [

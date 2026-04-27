@@ -2,7 +2,7 @@
 
 import { Button } from "@keystoneui/react/button";
 import { ButtonGroup } from "@keystoneui/react/button-group";
-import { MinusIcon, PlusIcon } from "lucide-react";
+import { Minus as MinusIcon, Plus as PlusIcon } from "lucide-react";
 
 export default function ButtonGroupVertical() {
   return (

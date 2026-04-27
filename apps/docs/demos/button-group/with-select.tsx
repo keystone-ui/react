@@ -10,7 +10,7 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@keystoneui/react/select";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRight as ArrowRightIcon } from "lucide-react";
 import { useState } from "react";
 
 const CURRENCIES = [

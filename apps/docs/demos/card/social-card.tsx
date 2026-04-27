@@ -3,7 +3,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
 import { Button } from "@keystoneui/react/button";
 import { Card, CardContent, CardHeader } from "@keystoneui/react/card";
-import { BadgeCheckIcon } from "lucide-react";
+import { BadgeCheck as BadgeCheckIcon } from "lucide-react";
 
 export default function CardSocialCard() {
   return (

@@ -8,7 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@keystoneui/react/breadcrumb";
-import { DotIcon } from "lucide-react";
+import { Dot as DotIcon } from "lucide-react";
 
 export default function BreadcrumbCustomSeparator() {
   return (

@@ -60,5 +60,5 @@ function SkeletonGroup({ className, ...props }: React.ComponentProps<"div">) {
 // Exports
 // ---------------------------------------------------------------------------
 
-export { Skeleton, SkeletonGroup };
 export type { SkeletonProps };
+export { Skeleton, SkeletonGroup };

@@ -167,14 +167,14 @@ function CircularProgressIndicator({
   const { value, min, max } = useContext(CircularProgressContext);
 
   const normalizedValue =
-    value !== null
-      ? Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100))
-      : null;
+    value === null
+      ? null
+      : Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100));
 
   const strokeDashoffset =
-    normalizedValue !== null
-      ? CIRCUMFERENCE - (normalizedValue / 100) * CIRCUMFERENCE
-      : CIRCUMFERENCE * 0.75;
+    normalizedValue === null
+      ? CIRCUMFERENCE * 0.75
+      : CIRCUMFERENCE - (normalizedValue / 100) * CIRCUMFERENCE;
 
   return (
     <svg
@@ -257,9 +257,9 @@ function CircularProgressLabel({
 
 export {
   CircularProgress,
-  CircularProgressTrack,
   CircularProgressIndicator,
-  CircularProgressValue,
   CircularProgressLabel,
+  CircularProgressTrack,
+  CircularProgressValue,
   circularProgressVariants,
 };

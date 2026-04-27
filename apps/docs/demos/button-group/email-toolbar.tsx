@@ -16,15 +16,15 @@ import {
   DropdownMenuTrigger,
 } from "@keystoneui/react/dropdown-menu";
 import {
-  ArchiveIcon,
-  ArrowLeftIcon,
-  CalendarPlusIcon,
-  ClockIcon,
-  ListFilterIcon,
-  MailCheckIcon,
-  MoreHorizontalIcon,
-  TagIcon,
-  Trash2Icon,
+  Archive as ArchiveIcon,
+  ArrowLeft as ArrowLeftIcon,
+  CalendarPlus as CalendarPlusIcon,
+  Clock as ClockIcon,
+  ListFilter as ListFilterIcon,
+  MailCheck as MailCheckIcon,
+  Ellipsis as MoreHorizontalIcon,
+  Tag as TagIcon,
+  Trash2 as Trash2Icon,
 } from "lucide-react";
 import { useState } from "react";
 

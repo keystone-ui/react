@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from "@keystoneui/react/alert-dialog";
 import { Button } from "@keystoneui/react/button";
-import { TriangleAlertIcon } from "lucide-react";
+import { TriangleAlert as TriangleAlertIcon } from "lucide-react";
 
 export default function AlertDialogWithMedia() {
   return (

@@ -15,21 +15,21 @@ import {
 } from "@keystoneui/react/item";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  BadgeCheckIcon,
-  CalendarIcon,
-  CheckCircle2Icon,
-  ChevronRightIcon,
-  ClockIcon,
-  ExternalLinkIcon,
-  FileTextIcon,
-  GitBranchIcon,
-  InboxIcon,
-  MessageSquareIcon,
-  MoreHorizontalIcon,
-  PackageIcon,
-  PlusIcon,
-  ShieldAlertIcon,
-  TagIcon,
+  BadgeCheck as BadgeCheckIcon,
+  Calendar as CalendarIcon,
+  CircleCheck as CheckCircle2Icon,
+  ChevronRight as ChevronRightIcon,
+  Clock as ClockIcon,
+  ExternalLink as ExternalLinkIcon,
+  FileText as FileTextIcon,
+  GitBranch as GitBranchIcon,
+  Inbox as InboxIcon,
+  MessageSquare as MessageSquareIcon,
+  Ellipsis as MoreHorizontalIcon,
+  Package as PackageIcon,
+  Plus as PlusIcon,
+  ShieldAlert as ShieldAlertIcon,
+  Tag as TagIcon,
 } from "lucide-react";
 import * as React from "react";
 
