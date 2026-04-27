@@ -33,8 +33,6 @@ export function BlockPreview({
     );
   }
 
-  const Component = demo.component;
-
   return (
     <BlockPreviewContainer
       className={className}
@@ -42,7 +40,6 @@ export function BlockPreview({
       name={name}
       {...props}
     >
-      <Component />
       {demo.file && <ComponentSource name={name} />}
     </BlockPreviewContainer>
   );

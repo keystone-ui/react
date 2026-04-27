@@ -34,6 +34,7 @@
     "react": "^19.2.4",
     "react-aria-components": "^1.15.1",
     "react-dom": "^19.2.4",
+    "react-resizable-panels": "^4.6.5",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
     "remark-mdx": "^3.1.1",
