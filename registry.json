@@ -938,6 +938,7 @@
         "field",
         "input",
         "input-group",
+        "label",
         "modal",
         "radio-group",
         "select",
@@ -966,6 +967,10 @@
         },
         {
           "path": "registry/default/blocks/tickets-01/components/tickets-filters-drawer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/tickets-pagination.tsx",
           "type": "registry:component"
         },
         {
