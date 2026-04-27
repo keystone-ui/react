@@ -26,7 +26,7 @@ import {
   Grape as GrapeIcon,
 } from "lucide-react";
 import { useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 
 // Custom checkbox indicator for multiple selection
 function CheckboxIndicator() {
@@ -160,9 +160,18 @@ export const Default: Story = {
 
     await userEvent.click(trigger);
 
+    // Wait until the popup is mounted *and* fully revealed (past enter
+    // animation). Chromatic CI runners are slower than dev, so a fixed
+    // setTimeout(500) was racing the animation and the popup item was
+    // still at opacity:0 when toBeVisible() ran.
     const body = within(document.body);
-    const apple = await body.findByText("Apple");
-    await expect(apple).toBeVisible();
+    await waitFor(
+      async () => {
+        const apple = await body.findByText("Apple");
+        await expect(apple).toBeVisible();
+      },
+      { timeout: 5000 }
+    );
   },
 };
 

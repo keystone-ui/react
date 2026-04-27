@@ -53,7 +53,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 import { useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 
 const meta = {
   title: "Components/Dropdown Menu",
@@ -132,9 +132,18 @@ export const Default: Story = {
 
     await userEvent.click(trigger);
 
+    // Wait until the popup is mounted *and* fully revealed (past enter
+    // animation). Chromatic CI runners are slower than dev, so a fixed
+    // setTimeout(500) was racing the animation and the popup item was
+    // still at opacity:0 when toBeVisible() ran.
     const body = within(document.body);
-    const profile = await body.findByText("Profile");
-    await expect(profile).toBeVisible();
+    await waitFor(
+      async () => {
+        const profile = await body.findByText("Profile");
+        await expect(profile).toBeVisible();
+      },
+      { timeout: 5000 }
+    );
   },
   render: () => (
     <DropdownMenu>
