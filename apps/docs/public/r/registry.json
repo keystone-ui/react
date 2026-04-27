@@ -714,6 +714,20 @@
       ]
     },
     {
+      "name": "selection-bar",
+      "type": "registry:ui",
+      "title": "Selection Bar",
+      "description": "Floating bulk-action toolbar that appears when items are selected in a list or table.",
+      "dependencies": ["class-variance-authority", "lucide-react"],
+      "registryDependencies": ["button"],
+      "files": [
+        {
+          "path": "packages/ui/src/selection-bar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "signin-01",
       "type": "registry:block",
       "title": "Sign in 01",
@@ -897,6 +911,103 @@
       "files": [
         {
           "path": "registry/default/blocks/profile-dropdown-01/components/profile-dropdown.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "tickets-01",
+      "type": "registry:block",
+      "title": "Tickets 01",
+      "description": "Sortable, filterable tickets table with inline cell editing, drag-to-reorder rows, a new-ticket modal, and a floating bulk-edit action bar.",
+      "dependencies": [
+        "lucide-react",
+        "@dnd-kit/core",
+        "@dnd-kit/modifiers",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities"
+      ],
+      "registryDependencies": [
+        "alert-dialog",
+        "avatar",
+        "badge",
+        "button",
+        "checkbox",
+        "combobox",
+        "drawer",
+        "dropdown-menu",
+        "field",
+        "input",
+        "input-group",
+        "label",
+        "modal",
+        "radio-group",
+        "select",
+        "selection-bar",
+        "stepper",
+        "table",
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "registry/default/blocks/tickets-01/page.tsx",
+          "type": "registry:page",
+          "target": "app/tickets/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/tickets-page.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/tickets-table.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/tickets-toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/tickets-filters-drawer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/tickets-pagination.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/ticket-detail-drawer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/new-ticket-modal.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/delete-tickets-dialog.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/use-cell-editing.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/ticket-priority-cell.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/ticket-status-badge.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/ticket-health-badge.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/ticket-channel-cell.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/mock-tickets.ts",
           "type": "registry:component"
         }
       ]
