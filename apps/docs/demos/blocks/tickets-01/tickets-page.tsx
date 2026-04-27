@@ -31,7 +31,7 @@ import {
   PlusIcon,
   TrashIcon,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { DeleteTicketsDialog } from "./delete-tickets-dialog";
 import {
@@ -49,6 +49,7 @@ import {
   ticketAssignees,
 } from "./mock-tickets";
 import { NewTicketModal } from "./new-ticket-modal";
+import { TicketsPagination } from "./tickets-pagination";
 import {
   type SortState,
   type TicketColumnId,
@@ -156,6 +157,8 @@ export function TicketsPage() {
   const [isCreateOpen, setCreateOpen] = useState(false);
   const [isDeleteOpen, setDeleteOpen] = useState(false);
   const [nextTicketSeq, setNextTicketSeq] = useState(initialTickets.length + 1);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   const visibleTickets = useMemo(() => {
     let result = tickets;
@@ -178,6 +181,35 @@ export function TicketsPage() {
     return result;
   }, [tickets, statusFilter, searchQuery, sortPreset, columnSort]);
 
+  const pageCount = Math.max(1, Math.ceil(visibleTickets.length / pageSize));
+  const paginatedTickets = useMemo(
+    () =>
+      visibleTickets.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize),
+    [visibleTickets, pageIndex, pageSize]
+  );
+
+  // Clamp page when the dataset shrinks beneath the current page (e.g. delete or filter).
+  useEffect(() => {
+    if (pageIndex >= pageCount) {
+      setPageIndex(pageCount - 1);
+    }
+  }, [pageCount, pageIndex]);
+
+  const handleSearchChange = (next: string) => {
+    setSearchQuery(next);
+    setPageIndex(0);
+  };
+
+  const handleStatusFilterChange = (next: StatusFilter) => {
+    setStatusFilter(next);
+    setPageIndex(0);
+  };
+
+  const handlePageSizeChange = (next: number) => {
+    setPageSize(next);
+    setPageIndex(0);
+  };
+
   const handleToggleRow = (id: string, checked: boolean) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
@@ -194,11 +226,11 @@ export function TicketsPage() {
     setSelectedIds((prev) => {
       const next = new Set(prev);
       if (checked) {
-        for (const t of visibleTickets) {
+        for (const t of paginatedTickets) {
           next.add(t.id);
         }
       } else {
-        for (const t of visibleTickets) {
+        for (const t of paginatedTickets) {
           next.delete(t.id);
         }
       }
@@ -207,6 +239,10 @@ export function TicketsPage() {
   };
 
   const handleClearSelection = () => setSelectedIds(new Set());
+
+  const handleSelectAllFiltered = () => {
+    setSelectedIds(new Set(visibleTickets.map((t) => t.id)));
+  };
 
   const handleUpdateTicket = (id: string, patch: Partial<Ticket>) => {
     setTickets((prev) =>
@@ -298,9 +334,9 @@ export function TicketsPage() {
         </header>
 
         <TicketsToolbar
-          onSearchChange={setSearchQuery}
+          onSearchChange={handleSearchChange}
           onSortPresetChange={setSortPreset}
-          onStatusFilterChange={setStatusFilter}
+          onStatusFilterChange={handleStatusFilterChange}
           onToggleColumn={toggleColumn}
           onViewChange={setView}
           searchQuery={searchQuery}
@@ -311,19 +347,29 @@ export function TicketsPage() {
         />
 
         {view === "table" ? (
-          <TicketsTable
-            assigneeOptions={ticketAssignees}
-            dragEnabled={sortPreset === "manual" && columnSort === null}
-            onReorder={handleReorder}
-            onSortChange={setColumnSort}
-            onToggleAllVisible={handleToggleAllVisible}
-            onToggleRow={handleToggleRow}
-            onUpdateTicket={handleUpdateTicket}
-            selectedIds={selectedIds}
-            sort={columnSort}
-            tickets={visibleTickets}
-            visibleColumns={visibleColumns}
-          />
+          <>
+            <TicketsTable
+              assigneeOptions={ticketAssignees}
+              dragEnabled={sortPreset === "manual" && columnSort === null}
+              onReorder={handleReorder}
+              onSortChange={setColumnSort}
+              onToggleAllVisible={handleToggleAllVisible}
+              onToggleRow={handleToggleRow}
+              onUpdateTicket={handleUpdateTicket}
+              selectedIds={selectedIds}
+              sort={columnSort}
+              tickets={paginatedTickets}
+              visibleColumns={visibleColumns}
+            />
+            <TicketsPagination
+              onPageIndexChange={setPageIndex}
+              onPageSizeChange={handlePageSizeChange}
+              pageIndex={pageIndex}
+              pageSize={pageSize}
+              selectedCount={selectedCount}
+              totalCount={visibleTickets.length}
+            />
+          </>
         ) : (
           <div className="flex h-[420px] items-center justify-center rounded-xl border border-border border-dashed bg-muted/20 text-muted-foreground text-sm">
             Kanban view coming soon — switch back to Table view to see tickets.
@@ -341,7 +387,7 @@ export function TicketsPage() {
           {showSelectAllVisibleAction ? (
             <>
               <SelectionBarBullet />
-              <SelectionBarLink onClick={() => handleToggleAllVisible(true)}>
+              <SelectionBarLink onClick={handleSelectAllFiltered}>
                 Select all {visibleTickets.length}
               </SelectionBarLink>
             </>

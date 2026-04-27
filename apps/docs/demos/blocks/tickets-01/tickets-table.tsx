@@ -325,14 +325,11 @@ export function TicketsTable({
         onDragEnd={handleDragEnd}
         sensors={sensors}
       >
-        <Table className="border-separate border-spacing-0">
+        <Table hoverable>
           <TableHeader className="bg-muted/40">
-            <TableRow className="border-b">
-              <TableHead
-                aria-hidden="true"
-                className="w-8 border-border border-b"
-              />
-              <TableHead className="w-10 border-border border-b px-3">
+            <TableRow>
+              <TableHead aria-hidden="true" className="w-8" />
+              <TableHead className="w-10 px-3">
                 <SelectAllCheckbox
                   checked={allVisibleSelected}
                   indeterminate={someVisibleSelected}
@@ -342,7 +339,6 @@ export function TicketsTable({
               {visibleColumnDefs.map((column) => (
                 <TableHead
                   className={cn(
-                    "border-border border-b",
                     column.width,
                     column.responsive && "hidden lg:table-cell"
                   )}
@@ -449,7 +445,7 @@ function DraggableRow({
 
   return (
     <TableRow
-      className="relative z-0 hover:bg-muted/40 data-[dragging=true]:z-10 data-[state=selected]:bg-muted/60 data-[dragging=true]:opacity-80"
+      className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
       data-dragging={isDragging || undefined}
       data-state={isSelected ? "selected" : undefined}
       ref={setNodeRef}
