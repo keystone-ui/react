@@ -801,7 +801,7 @@ function AssigneeDisplay({ assignee }: { assignee?: TicketAssignee }) {
 
   return (
     <span className="inline-flex items-center gap-2 text-sm">
-      <Avatar className="size-5" size="xs">
+      <Avatar className="size-5">
         {assignee.avatarUrl ? (
           <AvatarImage alt={assignee.name} src={assignee.avatarUrl} />
         ) : null}
