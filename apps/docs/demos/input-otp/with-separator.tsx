@@ -7,22 +7,24 @@ import {
   InputOTPSlot,
 } from "@keystoneui/react/input-otp";
 
+const OTP_LENGTH = 6;
+
 export default function InputOTPWithSeparator() {
   return (
-    <InputOTP maxLength={6}>
+    <InputOTP length={OTP_LENGTH}>
       <InputOTPGroup>
-        <InputOTPSlot index={0} />
-        <InputOTPSlot index={1} />
+        <InputOTPSlot aria-label={`Character 1 of ${OTP_LENGTH}`} />
+        <InputOTPSlot aria-label={`Character 2 of ${OTP_LENGTH}`} />
       </InputOTPGroup>
       <InputOTPSeparator />
       <InputOTPGroup>
-        <InputOTPSlot index={2} />
-        <InputOTPSlot index={3} />
+        <InputOTPSlot aria-label={`Character 3 of ${OTP_LENGTH}`} />
+        <InputOTPSlot aria-label={`Character 4 of ${OTP_LENGTH}`} />
       </InputOTPGroup>
       <InputOTPSeparator />
       <InputOTPGroup>
-        <InputOTPSlot index={4} />
-        <InputOTPSlot index={5} />
+        <InputOTPSlot aria-label={`Character 5 of ${OTP_LENGTH}`} />
+        <InputOTPSlot aria-label={`Character 6 of ${OTP_LENGTH}`} />
       </InputOTPGroup>
     </InputOTP>
   );

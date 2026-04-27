@@ -8,9 +8,9 @@ import {
 
 const OTP_LENGTH = 6;
 
-export default function InputOTPDefault() {
+export default function InputOTPMasked() {
   return (
-    <InputOTP length={OTP_LENGTH}>
+    <InputOTP length={OTP_LENGTH} mask>
       <InputOTPGroup>
         {Array.from({ length: OTP_LENGTH }, (_, index) => (
           <InputOTPSlot

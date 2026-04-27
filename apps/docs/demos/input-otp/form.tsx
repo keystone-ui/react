@@ -39,17 +39,17 @@ export default function InputOTPForm() {
               Resend Code
             </Button>
           </div>
-          <InputOTP id="otp-verification" maxLength={6}>
+          <InputOTP id="otp-verification" length={6}>
             <InputOTPGroup>
-              <InputOTPSlot index={0} />
-              <InputOTPSlot index={1} />
-              <InputOTPSlot index={2} />
+              <InputOTPSlot aria-label="Character 1 of 6" />
+              <InputOTPSlot aria-label="Character 2 of 6" />
+              <InputOTPSlot aria-label="Character 3 of 6" />
             </InputOTPGroup>
             <InputOTPSeparator />
             <InputOTPGroup>
-              <InputOTPSlot index={3} />
-              <InputOTPSlot index={4} />
-              <InputOTPSlot index={5} />
+              <InputOTPSlot aria-label="Character 4 of 6" />
+              <InputOTPSlot aria-label="Character 5 of 6" />
+              <InputOTPSlot aria-label="Character 6 of 6" />
             </InputOTPGroup>
           </InputOTP>
           <FieldDescription>

@@ -4,17 +4,20 @@ import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-  REGEXP_ONLY_DIGITS,
 } from "@keystoneui/react/input-otp";
+
+const OTP_LENGTH = 4;
 
 export default function InputOTPFourDigits() {
   return (
-    <InputOTP maxLength={4} pattern={REGEXP_ONLY_DIGITS}>
+    <InputOTP length={OTP_LENGTH}>
       <InputOTPGroup>
-        <InputOTPSlot index={0} />
-        <InputOTPSlot index={1} />
-        <InputOTPSlot index={2} />
-        <InputOTPSlot index={3} />
+        {Array.from({ length: OTP_LENGTH }, (_, index) => (
+          <InputOTPSlot
+            aria-label={`Character ${index + 1} of ${OTP_LENGTH}`}
+            key={index}
+          />
+        ))}
       </InputOTPGroup>
     </InputOTP>
   );

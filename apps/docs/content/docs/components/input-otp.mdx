@@ -6,16 +6,27 @@ description: One-time password input with individual digit slots for verificatio
 ## Import
 
 ```tsx
-import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "@keystoneui/react/input-otp";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@keystoneui/react/input-otp";
 ```
 
 ## Usage
 
 <ComponentPreview name="input-otp-default" />
 
+## With Label
+
+Pair the input with a native `<label>` and an `aria-describedby` description for accessibility:
+
+<ComponentPreview name="input-otp-with-label" />
+
 ## With Separator
 
-Add visual separators between digit groups:
+Group slots with visual separators for codes presented as `123-456`:
 
 <ComponentPreview name="input-otp-with-separator" />
 
@@ -25,25 +36,47 @@ A shorter OTP input for 4-digit codes:
 
 <ComponentPreview name="input-otp-four-digits" />
 
+## Alphanumeric
+
+Use `validationType="alphanumeric"` for recovery, backup, or invite codes that mix letters and numbers:
+
+<ComponentPreview name="input-otp-alphanumeric" />
+
+## Masked
+
+Set `mask` to obscure entered characters on shared screens:
+
+<ComponentPreview name="input-otp-masked" />
+
+## Placeholder Hints
+
+`InputOTPSlot` renders a real `<input>`, so native `placeholder` props and CSS work as usual:
+
+<ComponentPreview name="input-otp-placeholder" />
+
+## Custom Sanitization
+
+Set `validationType="none"` together with `sanitizeValue` to apply custom rules. Use `onValueInvalid` to react to rejected characters:
+
+<ComponentPreview name="input-otp-custom-sanitization" />
+
+## Auto Submit
+
+Pass `autoSubmit` to submit the owning form automatically once all slots are filled. Use `onValueComplete` if you need to react to completion without submitting:
+
+<ComponentPreview name="input-otp-auto-submit" />
+
 ## Disabled
 
 <ComponentPreview name="input-otp-disabled" />
 
-## Alphanumeric
-
-OTP input accepting letters and numbers:
-
-<ComponentPreview name="input-otp-alphanumeric" />
-
 ## Loading
 
-OTP with loading/verification state:
+OTP with a loading/verification state:
 
 <ComponentPreview name="input-otp-loading" />
 
 ## Form
-
-OTP used in a verification form:
 
 <ComponentPreview name="input-otp-form" />
 
@@ -51,9 +84,34 @@ OTP used in a verification form:
 
 ### InputOTP
 
+Powered by Base UI's [`OTPField`](https://base-ui.com/react/components/otp-field) preview primitive.
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `maxLength` | `number` | - | Maximum number of characters |
-| `value` | `string` | - | Controlled value |
-| `onChange` | `(value: string) => void` | - | Callback when value changes |
-| `disabled` | `boolean` | `false` | Whether the input is disabled |
+| `length` | `number` | – | Required. Number of OTP input slots. |
+| `value` | `string` | – | Controlled OTP value. |
+| `defaultValue` | `string` | – | Uncontrolled initial value. |
+| `onValueChange` | `(value, eventDetails) => void` | – | Fires whenever the value changes. |
+| `onValueComplete` | `(value, eventDetails) => void` | – | Fires once all slots are filled. |
+| `onValueInvalid` | `(value, eventDetails) => void` | – | Fires when entered text is rejected by sanitization. |
+| `validationType` | `"numeric" \| "alpha" \| "alphanumeric" \| "none"` | `"numeric"` | Built-in validation. Use `"none"` together with `sanitizeValue` for custom rules. |
+| `sanitizeValue` | `(value: string) => string` | – | Custom sanitizer (only used when `validationType="none"`). |
+| `mask` | `boolean` | `false` | Mask entered characters. |
+| `inputMode` | `"none" \| "text" \| "tel" \| "url" \| "email" \| "numeric" \| "decimal" \| "search"` | – | Virtual keyboard hint. |
+| `autoComplete` | `string` | `"one-time-code"` | Applied to the first slot and the hidden validation input. |
+| `autoSubmit` | `boolean` | `false` | Submit the owning form once the value is complete. |
+| `name` | `string` | – | Field name for form submission. |
+| `form` | `string` | – | Associates the hidden input with a `<form id>`. |
+| `disabled` | `boolean` | `false` | Disable the input. |
+| `readOnly` | `boolean` | `false` | Prevent user edits. |
+| `required` | `boolean` | `false` | Mark as required. |
+| `isLoading` | `boolean` | `false` | Show a spinner and disable the input while verifying. |
+| `id` | `string` | – | The id of the first slot. Subsequent slots derive ids from it (`{id}-2`, `{id}-3`, …). |
+
+### InputOTPSlot
+
+Renders a single character `<input>`. Standard input props (including `placeholder`, `aria-label`, `type`) are supported. Each slot should expose its position via `aria-label="Character N of M"` so assistive technology can announce the focused slot.
+
+### InputOTPSeparator
+
+A decorative separator (rendered as `OTPField.Separator` with `role="separator"`). Defaults to a minus icon; pass `children` to customize.

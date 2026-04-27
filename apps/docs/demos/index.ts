@@ -259,11 +259,16 @@ import InputGroupWithButton from "./input-group/with-button";
 import InputGroupWithTextarea from "./input-group/with-textarea";
 // input-otp
 import InputOtpAlphanumeric from "./input-otp/alphanumeric";
+import InputOtpAutoSubmit from "./input-otp/auto-submit";
+import InputOtpCustomSanitization from "./input-otp/custom-sanitization";
 import InputOtpDefault from "./input-otp/default";
 import InputOtpDisabled from "./input-otp/disabled";
 import InputOtpForm from "./input-otp/form";
 import InputOtpFourDigits from "./input-otp/four-digits";
 import InputOtpLoading from "./input-otp/loading";
+import InputOtpMasked from "./input-otp/masked";
+import InputOtpPlaceholder from "./input-otp/placeholder";
+import InputOtpWithLabel from "./input-otp/with-label";
 import InputOtpWithSeparator from "./input-otp/with-separator";
 // item
 import ItemActivityFeed from "./item/activity-feed";
@@ -1398,6 +1403,14 @@ export const demos: Record<string, DemoItem> = {
     component: InputOtpAlphanumeric,
     file: "input-otp/alphanumeric.tsx",
   },
+  "input-otp-auto-submit": {
+    component: InputOtpAutoSubmit,
+    file: "input-otp/auto-submit.tsx",
+  },
+  "input-otp-custom-sanitization": {
+    component: InputOtpCustomSanitization,
+    file: "input-otp/custom-sanitization.tsx",
+  },
   "input-otp-default": {
     component: InputOtpDefault,
     file: "input-otp/default.tsx",
@@ -1417,6 +1430,18 @@ export const demos: Record<string, DemoItem> = {
   "input-otp-loading": {
     component: InputOtpLoading,
     file: "input-otp/loading.tsx",
+  },
+  "input-otp-masked": {
+    component: InputOtpMasked,
+    file: "input-otp/masked.tsx",
+  },
+  "input-otp-placeholder": {
+    component: InputOtpPlaceholder,
+    file: "input-otp/placeholder.tsx",
+  },
+  "input-otp-with-label": {
+    component: InputOtpWithLabel,
+    file: "input-otp/with-label.tsx",
   },
   "input-otp-with-separator": {
     component: InputOtpWithSeparator,
