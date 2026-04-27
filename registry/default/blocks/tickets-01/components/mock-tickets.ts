@@ -23,8 +23,19 @@ export interface Ticket {
   priority: TicketPriority;
   status: TicketStatus;
   subject: string;
+  tags?: string[];
   ticketNumber: string;
 }
+
+/** Seed tag pool used by the detail-drawer combobox before any ticket has tags. */
+export const SEED_TAGS = [
+  "billing",
+  "regression",
+  "customer",
+  "p0",
+  "follow-up",
+  "needs-review",
+];
 
 export const ticketAssignees: TicketAssignee[] = [
   { name: "Jason Duong" },
@@ -115,6 +126,7 @@ export const initialTickets: Ticket[] = [
     category: "technical",
     channel: "email",
     health: "warning",
+    tags: ["customer", "follow-up"],
   },
   {
     id: "t-002",

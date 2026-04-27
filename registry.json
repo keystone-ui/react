@@ -933,6 +933,7 @@
         "badge",
         "button",
         "checkbox",
+        "combobox",
         "drawer",
         "dropdown-menu",
         "field",
@@ -971,6 +972,10 @@
         },
         {
           "path": "registry/default/blocks/tickets-01/components/tickets-pagination.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/tickets-01/components/ticket-detail-drawer.tsx",
           "type": "registry:component"
         },
         {

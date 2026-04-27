@@ -16,6 +16,7 @@ import {
   healthLabels,
   initialTickets,
   priorityLabels,
+  SEED_TAGS,
   statusLabels,
   type Ticket,
   type TicketAssignee,
@@ -26,6 +27,7 @@ import {
   ticketAssignees,
 } from "@/components/mock-tickets";
 import { NewTicketModal } from "@/components/new-ticket-modal";
+import { TicketDetailDrawer } from "@/components/ticket-detail-drawer";
 import { TicketsPagination } from "@/components/tickets-pagination";
 import {
   type SortState,
@@ -158,6 +160,7 @@ export function TicketsPage() {
   const [nextTicketSeq, setNextTicketSeq] = useState(initialTickets.length + 1);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [openedTicketId, setOpenedTicketId] = useState<string | null>(null);
 
   const visibleTickets = useMemo(() => {
     let result = tickets;
@@ -185,6 +188,14 @@ export function TicketsPage() {
     () =>
       visibleTickets.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize),
     [visibleTickets, pageIndex, pageSize]
+  );
+
+  const availableTags = useMemo(
+    () =>
+      Array.from(
+        new Set([...SEED_TAGS, ...tickets.flatMap((t) => t.tags ?? [])])
+      ).sort(),
+    [tickets]
   );
 
   // Clamp page when the dataset shrinks beneath the current page (e.g. delete or filter).
@@ -350,6 +361,7 @@ export function TicketsPage() {
             <TicketsTable
               assigneeOptions={ticketAssignees}
               dragEnabled={sortPreset === "manual" && columnSort === null}
+              onOpenTicket={setOpenedTicketId}
               onReorder={handleReorder}
               onSortChange={setColumnSort}
               onToggleAllVisible={handleToggleAllVisible}
@@ -530,6 +542,18 @@ export function TicketsPage() {
         onConfirm={handleConfirmDelete}
         onOpenChange={setDeleteOpen}
         open={isDeleteOpen}
+      />
+
+      <TicketDetailDrawer
+        assigneeOptions={ticketAssignees}
+        availableTags={availableTags}
+        onClose={() => setOpenedTicketId(null)}
+        onSave={handleUpdateTicket}
+        ticket={
+          openedTicketId
+            ? (tickets.find((t) => t.id === openedTicketId) ?? null)
+            : null
+        }
       />
     </div>
   );

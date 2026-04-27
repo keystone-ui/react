@@ -18,6 +18,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Avatar, AvatarFallback, AvatarImage } from "@keystoneui/react/avatar";
+import { Button } from "@keystoneui/react/button";
 import { Checkbox } from "@keystoneui/react/checkbox";
 import {
   DropdownMenu,
@@ -43,6 +44,7 @@ import {
   ArrowUpDownIcon,
   ArrowUpIcon,
   ChevronsUpDownIcon,
+  ExternalLinkIcon,
   GripVerticalIcon,
   HashIcon,
   MailIcon,
@@ -210,6 +212,7 @@ interface TicketsTableProps {
   assigneeOptions: TicketAssignee[];
   /** When false, drag handles render dimmed and listeners are not attached. */
   dragEnabled: boolean;
+  onOpenTicket: (id: string) => void;
   onReorder: (activeId: string, overId: string) => void;
   onSortChange: (next: SortState | null) => void;
   onToggleAllVisible: (checked: boolean) => void;
@@ -225,6 +228,7 @@ export function TicketsTable({
   tickets,
   assigneeOptions,
   dragEnabled,
+  onOpenTicket,
   onReorder,
   selectedIds,
   onToggleRow,
@@ -309,6 +313,7 @@ export function TicketsTable({
             assigneeOptions,
             editing,
             onCommitSubject: () => handleSubjectCommit(ticket.id),
+            onOpenTicket,
             onUpdateTicket,
           })}
         </TableCell>
@@ -445,7 +450,7 @@ function DraggableRow({
 
   return (
     <TableRow
-      className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
+      className="group/row relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
       data-dragging={isDragging || undefined}
       data-state={isSelected ? "selected" : undefined}
       ref={setNodeRef}
@@ -510,6 +515,7 @@ function renderCell({
   assigneeOptions,
   editing,
   onCommitSubject,
+  onOpenTicket,
   onUpdateTicket,
 }: {
   ticket: Ticket;
@@ -517,6 +523,7 @@ function renderCell({
   assigneeOptions: TicketAssignee[];
   editing: ReturnType<typeof useCellEditing>;
   onCommitSubject: () => void;
+  onOpenTicket: (id: string) => void;
   onUpdateTicket: (id: string, patch: Partial<Ticket>) => void;
 }) {
   switch (columnId) {
@@ -529,37 +536,51 @@ function renderCell({
 
     case "subject": {
       const isEditing = editing.isEditing(ticket.id, "subject");
-      return isEditing ? (
-        <Input
-          autoFocus
-          className="h-8"
-          onBlur={onCommitSubject}
-          onChange={(event) => editing.setDraftValue(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              event.preventDefault();
-              onCommitSubject();
-            } else if (event.key === "Escape") {
-              event.preventDefault();
-              editing.cancel();
+      if (isEditing) {
+        return (
+          <Input
+            autoFocus
+            className="h-8"
+            onBlur={onCommitSubject}
+            onChange={(event) => editing.setDraftValue(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                onCommitSubject();
+              } else if (event.key === "Escape") {
+                event.preventDefault();
+                editing.cancel();
+              }
+            }}
+            size="sm"
+            value={editing.draftValue}
+          />
+        );
+      }
+      return (
+        <div className="flex items-center justify-between gap-2">
+          <button
+            className="min-w-0 flex-1 cursor-text truncate rounded-md py-1 text-left text-sm hover:bg-muted/60"
+            onClick={() =>
+              editing.startEdit(
+                { rowId: ticket.id, columnId: "subject" },
+                ticket.subject
+              )
             }
-          }}
-          size="sm"
-          value={editing.draftValue}
-        />
-      ) : (
-        <button
-          className="block w-full cursor-text truncate rounded-md py-1 text-left text-sm hover:bg-muted/60"
-          onClick={() =>
-            editing.startEdit(
-              { rowId: ticket.id, columnId: "subject" },
-              ticket.subject
-            )
-          }
-          type="button"
-        >
-          {ticket.subject}
-        </button>
+            type="button"
+          >
+            {ticket.subject}
+          </button>
+          <Button
+            className="shrink-0 opacity-0 transition-opacity focus-visible:opacity-100 group-hover/row:opacity-100"
+            onClick={() => onOpenTicket(ticket.id)}
+            size="sm"
+            variant="outline"
+          >
+            <ExternalLinkIcon className="size-3.5" />
+            Open
+          </Button>
+        </div>
       );
     }
 
