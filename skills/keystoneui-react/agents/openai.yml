@@ -1,0 +1,5 @@
+interface:
+  display_name: "Keystone UI"
+  short_description: "Manages Keystone UI React components — installing, theming, composing, and writing forms with @keystoneui/react (Tailwind v4 + Base UI)."
+  icon_small: "../assets/keystoneui-small.svg"
+  icon_large: "../assets/keystoneui.svg"

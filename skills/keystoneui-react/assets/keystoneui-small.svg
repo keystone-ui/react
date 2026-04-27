@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="1" />
+    </pattern>
+    <linearGradient id="card-top" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00E1FF" />
+      <stop offset="50%" stop-color="#0072F5" />
+      <stop offset="100%" stop-color="#9750DD" />
+    </linearGradient>
+    <linearGradient id="card-left" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#005BC4" />
+      <stop offset="100%" stop-color="#00357A" />
+    </linearGradient>
+    <linearGradient id="card-right" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7828C8" />
+      <stop offset="100%" stop-color="#4B1280" />
+    </linearGradient>
+    <linearGradient id="base-top" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#e2e8f0" />
+    </linearGradient>
+    <linearGradient id="base-left" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e2e8f0" />
+      <stop offset="100%" stop-color="#cbd5e1" />
+    </linearGradient>
+    <linearGradient id="base-right" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#cbd5e1" />
+      <stop offset="100%" stop-color="#94a3b8" />
+    </linearGradient>
+    <filter id="shadowGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="16" />
+    </filter>
+    <filter id="baseShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="32" flood-color="#000000" flood-opacity="0.06" />
+    </filter>
+  </defs>
+
+  <!-- Background Maintained -->
+  <rect width="512" height="512" rx="128" fill="#ffffff" />
+  <rect width="512" height="512" rx="128" fill="url(#grid)" />
+
+  <!-- Base Keystone -->
+  <g stroke="#ffffff" stroke-width="12" stroke-linejoin="round" filter="url(#baseShadow)">
+    <polygon points="256,108 412,186 256,264 100,186" fill="url(#base-top)" />
+    <polygon points="100,186 256,264 256,470 208,446" fill="url(#base-left)" />
+    <polygon points="412,186 256,264 256,470 304,446" fill="url(#base-right)" />
+  </g>
+
+  <!-- Ambient Lighting -->
+  <polygon points="256,44 412,122 256,200 100,122" fill="url(#card-top)" opacity="0.45" filter="url(#shadowGlow)" transform="translate(0, 24)" />
+
+  <!-- Floating UI Card -->
+  <g stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linejoin="round">
+    <polygon points="256,44 412,122 256,200 100,122" fill="url(#card-top)" />
+    <polygon points="100,122 256,200 256,216 100,138" fill="url(#card-left)" />
+    <polygon points="412,122 256,200 256,216 412,138" fill="url(#card-right)" />
+  </g>
+
+  <!-- 'K' Wireframe Skeleton -->
+  <g fill="rgba(255,255,255,0.3)" stroke="rgba(255,255,255,0.95)" stroke-width="2" stroke-linejoin="round">
+    <polygon points="147,122 256,67 279,79 170,134" />
+    <polygon points="248,110 295,87 365,122 318,145" />
+    <polygon points="186,142 233,118 303,153 256,177" />
+  </g>
+</svg>

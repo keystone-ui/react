@@ -1,0 +1,52 @@
+{
+  "skill_name": "keystoneui-react",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Build a sign-in form using Keystone UI with email, password, and a submit button. Show validation feedback when the email is invalid.",
+      "expected_output": "A React component using Form (or <form>) + FieldGroup + Field + FieldLabel + FieldError, with aria-invalid on the input, subpath imports, and semantic tokens.",
+      "files": [],
+      "expectations": [
+        "Imports Form from '@keystoneui/react/form' OR uses a plain <form> element",
+        "Imports Field, FieldGroup, FieldLabel, FieldError (or FieldDescription) from '@keystoneui/react/field' — not '@keystoneui/react'",
+        "Imports Input from '@keystoneui/react/input' and Button from '@keystoneui/react/button'",
+        "Wraps fields in FieldGroup, not a div with space-y-*",
+        "Uses Field as the row wrapper with FieldLabel inside",
+        "Validation uses aria-invalid on the Input control + FieldError or ErrorMessage for the message — NOT data-invalid on Field",
+        "Uses semantic tokens (bg-primary, text-muted-foreground) — never raw colors like text-red-500",
+        "Subpath imports only — never imports from '@keystoneui/react' directly"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a confirm-delete dialog using Keystone UI. It should have a title, description, Cancel button (outlined), and Delete button (destructive). Use a custom Button as the trigger.",
+      "expected_output": "A Modal with ModalTrigger using render prop (not asChild), a required ModalTitle for accessibility, and proper compound parts.",
+      "files": [],
+      "expectations": [
+        "Imports Modal, ModalTrigger, ModalContent, ModalHeader, ModalTitle, ModalDescription, ModalFooter, ModalClose from '@keystoneui/react/modal'",
+        "ModalTrigger uses the render prop: render={<Button />} — NEVER asChild={true}",
+        "Includes ModalTitle (visible or with className='sr-only') for accessibility",
+        "Cancel button uses variant='secondary' or variant='outline'",
+        "Delete button uses variant='destructive'",
+        "Uses lucide-react for any icons (no @iconify, no @remixicon in app code)",
+        "No sizing classes on icons inside Button (no size-4, w-4, h-4)",
+        "No manual z-index on ModalContent — overlay components manage their own stacking"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Build a dashboard with 4 stat cards in a grid. Each card has a title, a large number, a status badge showing a percentage change, and a skeleton loading state. Use Keystone UI.",
+      "expected_output": "Cards using full Card composition (CardHeader/CardTitle/CardDescription/CardContent), Badge for status, Skeleton for loading, gap-* spacing, semantic colors.",
+      "files": [],
+      "expectations": [
+        "Imports Card, CardHeader, CardTitle, CardDescription, CardContent from '@keystoneui/react/card' — uses full composition, not dumping content into CardContent",
+        "Uses Badge from '@keystoneui/react/badge' for the percentage change — not a custom styled span",
+        "Uses Skeleton from '@keystoneui/react/skeleton' for loading placeholders — not a custom animate-pulse div",
+        "Uses gap-* (gap-4, gap-6) for spacing — never space-y-* / space-x-*",
+        "Uses size-* when width and height are equal (size-10) — not w-10 h-10",
+        "Uses semantic tokens (text-muted-foreground, text-destructive) — never raw colors like text-red-600 or text-emerald-500",
+        "No manual dark: color overrides — semantic tokens already adapt"
+      ]
+    }
+  ]
+}

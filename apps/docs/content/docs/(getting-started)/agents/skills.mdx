@@ -11,10 +11,10 @@ Agent Skills give your AI assistant comprehensive knowledge of Keystone UI compo
 curl -fsSL https://keystoneui.io/install | bash -s keystoneui-react
 ```
 
-Or using the skills package:
+Or using the [skills.sh](https://skills.sh/) package manager:
 
 ```bash
-npx skills add keystone-ui/react
+npx skills add keystone-ui/react@keystoneui-react
 ```
 
 Supports Claude Code, Cursor, OpenCode, Codex, and Gemini CLI.
@@ -32,11 +32,45 @@ Simply ask your AI assistant to:
 
 ## What's Included
 
-- Keystone UI installation guide
-- All 50+ components with import paths and usage patterns
-- Complete theming reference (OKLCH tokens, light/dark mode, radius scale)
-- Design principles and composition patterns
-- Utility scripts for fetching live documentation and source code
+The skill is organized into a slim entry point plus modular topic files. Your AI assistant pulls the section it needs rather than loading one giant guide.
+
+- Identity, install, key patterns, and component-selection table in `SKILL.md`
+- MCP server setup and tool reference (`mcp.md`)
+- CLI install paths and bundled scripts (`cli.md`)
+- Theming deep-dive (`customization.md`)
+- Topic-specific rules with do/don't code pairs in `rules/`
+
+## Structure
+
+```
+skills/keystoneui-react/
+├── SKILL.md              # Entry point: identity, install, principles, key patterns
+├── mcp.md                # MCP setup + 6 tools reference
+├── cli.md                # shadcn add + npm package + bundled scripts
+├── customization.md      # CSS setup, OKLCH tokens, radius scale, motion/layering
+├── rules/
+│   ├── styling.md        # Semantic colors, layout, hover gating, focus, transitions, z-scale
+│   ├── forms.md          # Form, FieldGroup, Field, InputGroup, ToggleGroup, validation
+│   ├── composition.md    # render prop, compound parts, group items, Modal title, data-slot
+│   ├── icons.md          # lucide-react, no sizing classes, pass as components
+│   └── base-vs-radix.md  # render vs asChild, data-attributes, animation patterns
+├── agents/
+│   └── openai.yml        # OpenAI assistant interface metadata
+├── evals/
+│   └── evals.json        # Skill evaluation prompts and expected behaviors
+├── assets/               # Brand icons referenced by agents/openai.yml
+├── scripts/              # Utility scripts for shell-based lookups
+│   ├── list_components.mjs
+│   ├── get_component_docs.mjs
+│   ├── get_source.mjs
+│   ├── get_theme.mjs
+│   └── get_docs.mjs
+└── LICENSE.txt
+```
+
+## Evals
+
+`evals/evals.json` contains a small set of prompts with expected behaviors (e.g. "build a sign-in form" → must use subpath imports, FieldGroup + Field, `aria-invalid` on the control + `FieldError`). Use them to measure skill regressions when components or conventions evolve.
 
 ## Scripts
 
@@ -50,21 +84,8 @@ The skill includes 5 utility scripts your AI agent can run for deeper lookups:
 | `get_theme.mjs` | Fetches theme variables (light/dark OKLCH tokens) |
 | `get_docs.mjs` | Fetches non-component documentation pages |
 
-## Structure
-
-```
-skills/keystoneui-react/
-├── SKILL.md              # Main skill documentation
-├── LICENSE.txt            # MIT license
-└── scripts/              # Utility scripts
-    ├── list_components.mjs
-    ├── get_component_docs.mjs
-    ├── get_source.mjs
-    ├── get_theme.mjs
-    └── get_docs.mjs
-```
-
 ## Related
 
 - [LLMs.txt](/docs/agents/llms-txt) — Static text files for AI assistants
+- [MCP Server](/docs/agents/mcp-server) — Real-time component lookup over MCP
 - [AGENTS.md](/docs/agents/agents-md) — Download documentation into your project

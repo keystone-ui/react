@@ -1,372 +1,174 @@
 ---
 name: keystoneui-react
 description: "Keystone UI React component library (Tailwind CSS v4 + Base UI). Use when working with Keystone UI components, installing Keystone UI, customizing themes, or accessing component documentation. Keywords: Keystone UI, keystoneui, @keystoneui/react, Base UI, Tailwind v4."
+user-invocable: true
 metadata:
   author: keystoneui
-  version: "1.0.0"
+  version: "2.0.0"
 ---
 
-# Keystone UI React Development Guide
+# Keystone UI
 
-Keystone UI is a production-ready React component library built on **Tailwind CSS v4** and **Base UI** (`@base-ui/react`), providing 50+ accessible, customizable components with OKLCH color tokens and dark mode support.
-
----
+A production-ready React component library built on **Tailwind CSS v4** and **Base UI** (`@base-ui/react`), with 50+ accessible components, OKLCH semantic tokens, and dark mode.
 
 ## Core Principles
 
-- **Subpath imports** — Always import from `@keystoneui/react/{component}`, never from `@keystoneui/react`
-- **Tailwind CSS v4** — CSS-first configuration with OKLCH color space
-- **Base UI primitives** — Built on `@base-ui/react`, NOT Radix UI
-- **CVA variants** — Styling via `class-variance-authority` + `tailwind-merge`
-- **Named exports** — Components export named parts (e.g., `Card`, `CardHeader`, `CardTitle`)
-- **`data-slot` attributes** — Every component part has a stable `data-slot` for CSS targeting
-
----
+1. **Subpath imports only** — `@keystoneui/react/button`, never `@keystoneui/react`. There is no barrel.
+2. **Base UI, not Radix** — primitives come from `@base-ui/react`. The slot pattern is `render`, not `asChild`. → [rules/base-vs-radix.md](./rules/base-vs-radix.md)
+3. **Semantic tokens** — `bg-primary`, `text-muted-foreground`, never raw colors.
+4. **Compose, don't reinvent** — use existing components and their compound parts before writing custom markup.
+5. **`data-slot` is the public API** — every part has a stable `data-slot` for styling targets.
 
 ## Installation
 
+Two paths reach the same library — pick one. See [cli.md](./cli.md) for both.
+
 ```bash
-npm i @keystoneui/react
-# or
+# As an npm dependency
 pnpm add @keystoneui/react
+
+# Or vendor source via shadcn-compatible registry
+npx shadcn@latest add https://keystoneui.io/r/button.json
 ```
 
-### CSS Setup
-
-Add to your global CSS file (order matters):
+CSS setup (order matters):
 
 ```css
 @import "tailwindcss";
 @import "@keystoneui/react/base.css";
 ```
 
-Then configure your theme tokens (see Theming section below).
+Then define theme tokens — see [customization.md](./customization.md).
 
-### shadcn Registry (Alternative)
+## Critical Rules
 
-```bash
-npx shadcn add https://keystoneui.io/r/default.json
-```
+These are always enforced. Each links to a file with code pairs.
 
----
+### Styling → [rules/styling.md](./rules/styling.md)
 
-## Import Pattern
+- **Semantic colors only.** `bg-primary`, `text-muted-foreground` — never raw Tailwind colors.
+- **Built-in variants before custom styles.** `<Button variant="outline">`, not `className="border ..."`.
+- **`className` for layout, not styling.** Don't override component colors or typography.
+- **No `space-x-*` / `space-y-*`.** Use `flex` + `gap-*`.
+- **Use `size-*` when width and height are equal.** `size-10`, not `w-10 h-10`.
+- **Two focus patterns — never mix.** Outline-based (buttons, checkboxes) or ring-based (inputs, selects).
+- **No `transition-all`.** Specify exact properties. (Button is the documented exception.)
+- **Hover gating.** `[&>a]:hover:bg-muted`, not `[&>a:hover]:bg-muted` — the second form bypasses `@media (hover: hover)`.
+- **No manual `z-index` on overlay components.** Use the `--z-*` scale; library components manage stacking.
+- **Both `disabled:` and `data-disabled:`.** Always include `cursor-not-allowed` and `opacity-50`.
 
-Always use subpath imports:
+### Forms → [rules/forms.md](./rules/forms.md)
+
+- **Two patterns ship.** Lightweight: `Form`/`Label`/`Description`/`ErrorMessage` from `/form`. Rich: `Field`/`FieldLabel`/`FieldDescription`/`FieldError` from `/field`. Pick one per form.
+- **`<Form>` renders a `<form>` element.** Use `onSubmit` directly.
+- **`InputGroup` requires `InputGroupInput`/`InputGroupTextarea`.** Never raw `Input` inside `InputGroup`.
+- **Buttons inside inputs use `InputGroupAddon`** (and optionally `InputGroupButton`).
+- **Option sets (2–7 choices) use `ToggleGroup`.** Don't loop `Button` with manual active state.
+- **`FieldSet` + `FieldLegend` for grouped checkboxes/radios.** `FieldLegend` accepts `variant="label"` for inline forms.
+- **Validation: `aria-invalid` on the control + `FieldError` (or `ErrorMessage`).** Don't use `data-invalid` on `Field` — it doesn't style anything in Keystone UI.
+- **Disabled: `disabled` on the control; optionally `data-disabled` on `Field`** to dim the `FieldLabel` via the `group/field` selector.
+
+### Composition → [rules/composition.md](./rules/composition.md)
+
+- **Use `render`, not `asChild`.** Base UI's slot pattern.
+- **Items always inside their group.** `SelectItem` → `SelectContent`, `TabsTrigger` → `TabsList`, `DropdownMenuItem` → `DropdownMenuContent`.
+- **`Modal`, `Drawer`, `AlertDialog` need a title.** Use `className="sr-only"` to hide it visually.
+- **Use full Card composition.** `CardHeader`/`CardTitle`/`CardDescription`/`CardContent`/`CardFooter`.
+- **`Button` has no `isLoading` prop.** Compose with `Spinner` + `disabled`.
+- **`data-slot` is stable.** Use it for consumer overrides; don't override slot values when extending.
+
+### Icons → [rules/icons.md](./rules/icons.md)
+
+- **`lucide-react` for all icons.** No `@iconify/react`, `@remixicon/react` (in app code), or other libraries.
+- **No sizing classes on icons inside components.** Components handle icon sizing via SVG boilerplate.
+- **Pass icons as components, not string keys.** `icon={Check}`, not `icon="check"`.
+
+### Base UI vs Radix → [rules/base-vs-radix.md](./rules/base-vs-radix.md)
+
+- **Never import `@radix-ui/*`.** Use Keystone UI's wrappers, which use `@base-ui/react`.
+- **`render` instead of `asChild`.** `<ModalTrigger render={<Button />}>Open</ModalTrigger>`.
+- **`data-open` / `data-closed` / `data-checked`** instead of Radix-style `data-state="open"`.
+
+## Key Patterns
 
 ```tsx
-import { Button } from "@keystoneui/react/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@keystoneui/react/card";
-import { Input } from "@keystoneui/react/input";
-import { Modal, ModalTrigger, ModalContent } from "@keystoneui/react/modal";
+// Subpath import — every part comes from the same path
+import { Modal, ModalTrigger, ModalContent, ModalTitle } from "@keystoneui/react/modal";
+
+// Form: Form (real <form>) + FieldGroup + Field, controls inside Field
+// Form from "/form"; Field & friends from "/field"
+<Form onSubmit={handleSubmit}>
+  <FieldGroup>
+    <Field>
+      <FieldLabel htmlFor="email">Email</FieldLabel>
+      <Input id="email" name="email" type="email" />
+    </Field>
+  </FieldGroup>
+  <Button type="submit">Sign in</Button>
+</Form>
+
+// Validation: aria-invalid on the control + FieldError for the message
+<Field>
+  <FieldLabel>Email</FieldLabel>
+  <Input aria-invalid />
+  <FieldError>Invalid email.</FieldError>
+</Field>
+
+// Custom trigger: render prop, not asChild
+<ModalTrigger render={<Button variant="secondary" />}>Open</ModalTrigger>
+
+// Spacing: gap, not space-y
+<div className="flex flex-col gap-4">...</div>
+
+// Status: Badge or semantic tokens, not raw colors
+<Badge variant="secondary">+20.1%</Badge>
+
+// Loading: compose, no isLoading prop
+<Button disabled={isPending}>
+  {isPending && <Spinner />}
+  {isPending ? "Saving..." : "Save"}
+</Button>
 ```
 
-**Never** use barrel imports:
+## Component Selection
 
-```tsx
-// WRONG — this does not exist
-import { Button } from "@keystoneui/react";
-```
-
----
+| Need | Use |
+|---|---|
+| Action / button | `Button` (variants: `default`, `secondary`, `outline`, `ghost`, `destructive`, `link`) |
+| Form layout | `Form` + `FieldGroup` + `Field` |
+| Text input | `Input`, `Textarea`, `InputGroup` (with addons), `InputOTP` |
+| Choice (one of many) | `Select`, `Combobox` (searchable), `RadioGroup`, `NativeSelect` |
+| Choice (toggle) | `ToggleGroup` (2–5 options), `Switch` (boolean), `Checkbox` |
+| Date / time | `DateInput`, `Calendar` |
+| Overlays | `Modal`, `Drawer`, `AlertDialog`, `Popover`, `Tooltip` |
+| Menus | `DropdownMenu`, `Command` (palette) |
+| Navigation | `Tabs`, `Breadcrumb`, `Pagination`, `Stepper` |
+| Data display | `Table`, `Card`, `DescriptionList`, `Avatar`, `Badge`, `Tag`, `TagGroup` |
+| Feedback | `Toast`, `Alert`, `Progress`, `CircularProgress`, `Skeleton`, `Spinner`, `Empty` |
+| Layout | `Card`, `Separator`, `Resizable`, `Accordion`, `Collapsible`, `AspectRatio`, `Carousel` |
+| Bulk-action bar | `SelectionBar` |
 
 ## Component List
 
-All 54 components with their import paths:
+54 components, all importable from `@keystoneui/react/{kebab-case-name}`:
 
-| Component | Import Path |
-|---|---|
-| Accordion | `@keystoneui/react/accordion` |
-| Alert | `@keystoneui/react/alert` |
-| AlertDialog | `@keystoneui/react/alert-dialog` |
-| AspectRatio | `@keystoneui/react/aspect-ratio` |
-| Avatar | `@keystoneui/react/avatar` |
-| Badge | `@keystoneui/react/badge` |
-| Breadcrumb | `@keystoneui/react/breadcrumb` |
-| Button | `@keystoneui/react/button` |
-| ButtonGroup | `@keystoneui/react/button-group` |
-| Calendar | `@keystoneui/react/calendar` |
-| Card | `@keystoneui/react/card` |
-| Carousel | `@keystoneui/react/carousel` |
-| Checkbox | `@keystoneui/react/checkbox` |
-| CircularProgress | `@keystoneui/react/circular-progress` |
-| Collapsible | `@keystoneui/react/collapsible` |
-| Combobox | `@keystoneui/react/combobox` |
-| Command | `@keystoneui/react/command` |
-| DateInput | `@keystoneui/react/date-input` |
-| DescriptionList | `@keystoneui/react/description-list` |
-| Drawer | `@keystoneui/react/drawer` |
-| DropdownMenu | `@keystoneui/react/dropdown-menu` |
-| Empty | `@keystoneui/react/empty` |
-| Field | `@keystoneui/react/field` |
-| Form | `@keystoneui/react/form` |
-| Input | `@keystoneui/react/input` |
-| InputGroup | `@keystoneui/react/input-group` |
-| InputOTP | `@keystoneui/react/input-otp` |
-| Item | `@keystoneui/react/item` |
-| Kbd | `@keystoneui/react/kbd` |
-| Label | `@keystoneui/react/label` |
-| Modal | `@keystoneui/react/modal` |
-| NativeSelect | `@keystoneui/react/native-select` |
-| Pagination | `@keystoneui/react/pagination` |
-| Popover | `@keystoneui/react/popover` |
-| Progress | `@keystoneui/react/progress` |
-| RadioGroup | `@keystoneui/react/radio-group` |
-| Resizable | `@keystoneui/react/resizable` |
-| Select | `@keystoneui/react/select` |
-| SelectionBar | `@keystoneui/react/selection-bar` |
-| Separator | `@keystoneui/react/separator` |
-| Skeleton | `@keystoneui/react/skeleton` |
-| Slider | `@keystoneui/react/slider` |
-| Spinner | `@keystoneui/react/spinner` |
-| Stepper | `@keystoneui/react/stepper` |
-| Switch | `@keystoneui/react/switch` |
-| Table | `@keystoneui/react/table` |
-| Tabs | `@keystoneui/react/tabs` |
-| Tag | `@keystoneui/react/tag` |
-| TagGroup | `@keystoneui/react/tag-group` |
-| Textarea | `@keystoneui/react/textarea` |
-| Toast | `@keystoneui/react/toast` |
-| Toggle | `@keystoneui/react/toggle` |
-| ToggleGroup | `@keystoneui/react/toggle-group` |
-| Tooltip | `@keystoneui/react/tooltip` |
+`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `button-group`, `calendar`, `card`, `carousel`, `checkbox`, `circular-progress`, `collapsible`, `combobox`, `command`, `date-input`, `description-list`, `drawer`, `dropdown-menu`, `empty`, `field`, `form`, `input`, `input-group`, `input-otp`, `item`, `kbd`, `label`, `modal`, `native-select`, `pagination`, `popover`, `progress`, `radio-group`, `resizable`, `select`, `selection-bar`, `separator`, `skeleton`, `slider`, `spinner`, `stepper`, `switch`, `table`, `tabs`, `tag`, `tag-group`, `textarea`, `toast`, `toggle`, `toggle-group`, `tooltip`.
 
----
+## Workflow
 
-## Component Architecture
+1. **Discover** — use MCP `search_components` / `list_components`, or `node scripts/list_components.mjs`.
+2. **Inspect** — `view_component` (MCP), `node scripts/get_component_docs.mjs <name>`, or fetch `https://keystoneui.io/docs/components/<name>.mdx` directly. **Always read the docs before implementing complex components.**
+3. **Install** — `npx shadcn@latest add <url>` (vendored source) or `pnpm add @keystoneui/react` (npm dependency). See [cli.md](./cli.md).
+4. **Theme** — define semantic tokens in your CSS. See [customization.md](./customization.md).
+5. **Verify** — run MCP `audit_checklist` after first install to catch missing CSS imports or tokens.
 
-### Named Exports (Not Default)
+## Detailed References
 
-Components export named parts at the bottom of each file:
-
-```tsx
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@keystoneui/react/card";
-
-<Card>
-  <CardHeader>
-    <CardTitle>Title</CardTitle>
-    <CardDescription>Description</CardDescription>
-  </CardHeader>
-  <CardContent>Content here</CardContent>
-  <CardFooter>Footer actions</CardFooter>
-</Card>
-```
-
-### `data-slot` for Styling
-
-Every component part has a `data-slot` attribute for stable CSS targeting:
-
-```css
-[data-slot="card-title"] { font-size: 1.25rem; }
-[data-slot="button"] { min-width: 100px; }
-```
-
-### Icons
-
-Use `lucide-react` for all icons:
-
-```tsx
-import { ChevronDown } from "lucide-react";
-```
-
----
-
-## Theming
-
-Keystone UI uses CSS custom properties with OKLCH color space. Define tokens in your CSS:
-
-### Light Mode Tokens
-
-```css
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.141 0.005 285.823);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.21 0.006 285.885);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.21 0.006 285.885);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.971 0.013 17.38);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.705 0.015 286.067);
-  --radius: 0.625rem;
-}
-```
-
-### Dark Mode Tokens
-
-```css
-.dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.92 0.004 286.32);
-  --primary-foreground: oklch(0.21 0.006 285.885);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.971 0.013 17.38);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.552 0.016 285.938);
-  --radius: 0.625rem;
-}
-```
-
-### Color Naming Convention
-
-- Without suffix = background (e.g., `bg-primary`)
-- With `-foreground` = text color (e.g., `text-primary-foreground`)
-
-### Radius Scale
-
-A single `--radius` variable drives the entire scale:
-
-| Utility | Formula | Default |
-|---|---|---|
-| `rounded-sm` | `--radius - 4px` | 6px |
-| `rounded-md` | `--radius - 2px` | 8px |
-| `rounded-lg` | `--radius` | 10px |
-| `rounded-xl` | `--radius + 4px` | 14px |
-| `rounded-2xl` | `--radius + 8px` | 18px |
-
-### Dark Mode
-
-Toggle dark mode by adding the `dark` class to a parent element:
-
-```html
-<html class="dark">
-```
-
----
-
-## Accessing Documentation & Source Code
-
-For detailed per-component documentation (props, examples, anatomy), use the bundled scripts:
-
-### Using Scripts
-
-```bash
-# List all available components
-node scripts/list_components.mjs
-
-# Get component documentation (MDX with examples)
-node scripts/get_component_docs.mjs button
-node scripts/get_component_docs.mjs button card select
-
-# Get component source code (TSX)
-node scripts/get_source.mjs button
-node scripts/get_source.mjs button accordion card
-
-# Get theme variables
-node scripts/get_theme.mjs
-
-# Get non-component docs (guides, theming)
-node scripts/get_docs.mjs /docs/theming
-node scripts/get_docs.mjs /docs/installation/quick-start
-```
-
-### Direct MDX URLs
-
-Component docs: `https://keystoneui.io/docs/components/{component-name}.mdx`
-
-Examples:
-
-- Button: `https://keystoneui.io/docs/components/button.mdx`
-- Modal: `https://keystoneui.io/docs/components/modal.mdx`
-- Select: `https://keystoneui.io/docs/components/select.mdx`
-
-Getting started guides: `https://keystoneui.io/docs/{topic}.mdx`
-
-**Always fetch component docs before implementing complex components.** The MDX docs include complete examples, props, anatomy, and API references.
-
----
-
-## Common Patterns
-
-### Form with Validation
-
-`Form` renders a `<form>` element and accepts `onSubmit` plus any standard form attribute. Use `FieldGroup` when you need the same vertical spacing without `<form>` semantics (e.g. inside an existing form).
-
-```tsx
-import { Button } from "@keystoneui/react/button";
-import { Field, FieldLabel, FieldMessage } from "@keystoneui/react/field";
-import { Form } from "@keystoneui/react/form";
-import { Input } from "@keystoneui/react/input";
-
-<Form onSubmit={(e) => { e.preventDefault(); /* ... */ }}>
-  <Field>
-    <FieldLabel>Email</FieldLabel>
-    <Input type="email" placeholder="name@example.com" />
-    <FieldMessage>We'll never share your email.</FieldMessage>
-  </Field>
-  <Button type="submit">Submit</Button>
-</Form>
-```
-
-### Modal Dialog
-
-```tsx
-import { Button } from "@keystoneui/react/button";
-import { Modal, ModalTrigger, ModalContent, ModalHeader, ModalTitle, ModalDescription, ModalFooter, ModalClose } from "@keystoneui/react/modal";
-
-<Modal>
-  <ModalTrigger render={<Button />}>Open Modal</ModalTrigger>
-  <ModalContent>
-    <ModalHeader>
-      <ModalTitle>Confirm Action</ModalTitle>
-      <ModalDescription>This cannot be undone.</ModalDescription>
-    </ModalHeader>
-    <ModalFooter>
-      <ModalClose render={<Button variant="secondary" />}>Cancel</ModalClose>
-      <Button>Confirm</Button>
-    </ModalFooter>
-  </ModalContent>
-</Modal>
-```
-
-### Dropdown Menu
-
-```tsx
-import { Button } from "@keystoneui/react/button";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@keystoneui/react/dropdown-menu";
-
-<DropdownMenu>
-  <DropdownMenuTrigger render={<Button variant="secondary" />}>
-    Options
-  </DropdownMenuTrigger>
-  <DropdownMenuContent>
-    <DropdownMenuItem>Edit</DropdownMenuItem>
-    <DropdownMenuItem>Duplicate</DropdownMenuItem>
-    <DropdownMenuSeparator />
-    <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>
-```
-
----
-
-## Key Constraints
-
-- **No Radix UI** — use `@base-ui/react` for all primitives
-- **Subpath imports only** — `@keystoneui/react/button`, never `@keystoneui/react`
-- **No `transition-all`** — specify exact transition properties
-- **No raw color values** — use semantic tokens (`bg-primary`, `text-muted-foreground`)
-- **Explicit `cursor-pointer`** on interactive elements (Tailwind v4 changed the default)
-- **`lucide-react`** for all icons
+- [mcp.md](./mcp.md) — MCP setup, the 6 tools, and recommended workflow
+- [cli.md](./cli.md) — `npx shadcn@latest add`, npm package install, bundled scripts, direct MDX URLs
+- [customization.md](./customization.md) — CSS setup, light/dark tokens, color naming, radius scale, motion/layering, adding new tokens
+- [rules/styling.md](./rules/styling.md) — semantic colors, layout, hover gating, focus, transitions, z-scale
+- [rules/forms.md](./rules/forms.md) — `Form`, `FieldGroup`, `Field`, `InputGroup`, `ToggleGroup`, `FieldSet`, validation
+- [rules/composition.md](./rules/composition.md) — `render`, compound parts, group items, Modal title, Card composition, `data-slot`
+- [rules/icons.md](./rules/icons.md) — lucide-react, no sizing classes, pass as components
+- [rules/base-vs-radix.md](./rules/base-vs-radix.md) — `render` vs `asChild`, attribute semantics, animation attributes
