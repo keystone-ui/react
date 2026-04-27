@@ -1,0 +1,377 @@
+---
+name: design-tokens
+description: Design token conventions for the @keystoneui/react component library. Apply when creating or editing UI components in packages/ui/.
+globs: packages/ui/src/**/*
+alwaysApply: false
+---
+# Design Token Conventions
+
+These are the established conventions for the `@keystoneui/react` component library. Follow them when creating or modifying components.
+
+## Theme Tokens
+
+Component runtime CSS (animations, transitions, hover gating) is in `packages/ui/src/base.css`. Theme tokens are consumer-owned -- defined in the consumer's CSS, not in a package file. The default token values are in `packages/ui/registry/default.json`. Key custom tokens beyond the standard shadcn set:
+
+- `--input-bg` — form control background (transparent in light, `input` at 30% in dark). Use `bg-input-bg`.
+- `--popup-ring` — subtle ring for popup containers (`border` at 10% opacity). Use `ring-popup-ring`.
+
+## Borders
+
+- `border-input` — form controls (Input, Textarea, Select, NativeSelect, Checkbox, Radio, Switch, ComboboxChips, InputGroup)
+- `border-border` — structural borders (AccordionItem, Button outline, Badge default, Avatar, Card)
+
+These resolve to the same color, but the semantic distinction matters for maintainability.
+
+## Backgrounds
+
+- `bg-input-bg` — form control background. Handles light (transparent) and dark (input/30) automatically. Do NOT use `bg-transparent dark:bg-input/30`.
+- `bg-input/80` — Switch unchecked track only. Intentionally more opaque than form controls.
+
+## Rings
+
+- `ring-popup-ring` — popup container rings (DropdownMenu, Select, Combobox, Popover popups, Card). Do NOT use `ring-border/10` or `ring-foreground/10`.
+
+## Separators
+
+- `bg-border` — standalone Separator component (structural, full-contrast)
+- `bg-border-muted` — popup separators inside DropdownMenu, Select, Combobox, Popover (subtle, lower contrast)
+
+## Focus Styles
+
+Two patterns exist, each for a different control type:
+
+### Outline-based (buttons, checkboxes, radios, switches, accordion triggers, tab triggers)
+```
+focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/50
+```
+
+### Ring-based (text inputs, textareas, selects, native selects — inset ring within bordered controls)
+```
+focus:ring-1 focus:ring-inset focus:ring-ring focus:border-ring
+```
+
+Do NOT mix these patterns. Do NOT use hybrid approaches (e.g., combining ring and outline).
+
+## Rounded Corners
+
+A single `--radius` CSS variable (default `0.625rem` / 10px) drives the entire radius scale. It is a consumer-owned theme token defined in `:root`, just like colors. The derived scale is registered in `base.css` via `@theme inline`:
+
+```
+--radius-sm:  calc(var(--radius) - 4px)   → rounded-sm  (6px at default)
+--radius-md:  calc(var(--radius) - 2px)   → rounded-md  (8px at default)
+--radius-lg:  var(--radius)               → rounded-lg  (10px at default)
+--radius-xl:  calc(var(--radius) + 4px)   → rounded-xl  (14px at default)
+--radius-2xl: calc(var(--radius) + 8px)   → rounded-2xl (18px at default)
+--radius-3xl: calc(var(--radius) + 12px)  → rounded-3xl (22px at default)
+--radius-4xl: calc(var(--radius) + 16px)  → rounded-4xl (26px at default)
+```
+
+Changing `--radius` shifts the entire scale uniformly. Components use Tailwind utilities (`rounded-sm`, `rounded-md`, etc.) and never hardcode pixel values.
+
+### Semantic usage
+
+- `rounded-sm` — small controls: Checkbox, nested InputGroupButton xs, ComboboxChip
+- `rounded-md` — form inputs: Input, Textarea, NativeSelect, InputOTPSlot, DropdownMenuSubContent, popup items
+- `rounded-lg` — containers/actions: Button, popups, TabsList, AccordionItem box, Toast
+- `rounded-xl` — large surfaces: Card, Command
+- `rounded-full` — pills/circles: Badge, Avatar, Switch, pill tabs
+
+### Direct `var(--radius)` usage
+
+Some components use `calc(var(--radius) - Npx)` for bespoke offsets that don't match a named tier. Since `@theme inline` does not create runtime CSS variables for `--radius-sm` etc., always use `calc(var(--radius) ± offset)` when referencing the radius token directly:
+
+- Calendar: `[--cell-radius:calc(var(--radius)-2px)]` for cell radius in range selections
+- InputGroupAddon: `[&>kbd]:rounded-[calc(var(--radius)-5px)]` for nested kbd elements
+
+## Disabled States
+
+- `disabled:` — native HTML disabled (Input, Textarea, Button, Checkbox, Radio, Select, NativeSelect, Tabs)
+- `data-disabled:` — Base UI data attribute (DropdownMenuItem, ComboboxItem, SelectItem)
+- Both patterns must always include `cursor-not-allowed` and `opacity-50`
+
+## SVG Boilerplate
+
+Every interactive component applies three SVG utilities together:
+```
+[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4
+```
+
+- `pointer-events-none` — prevents SVGs from intercepting clicks
+- `shrink-0` — prevents SVGs from shrinking in flex layouts
+- `size-4` with escape hatch — default size that consumers can override via `size-*` classes
+
+Do NOT use `[&_svg]:size-4` which forces size on all SVGs with no override. Always include all three utilities together.
+
+## Shared Constants
+
+Import from `packages/ui/src/utils.ts`:
+
+- `POPUP_ITEM_HEIGHT` — shared height class for popup list items in DropdownMenu, Select, and Combobox
+
+### Popup Item Height Scale
+
+All popup item components (DropdownMenuItem, SelectItem, ComboboxItem, and their variants) use the `POPUP_ITEM_HEIGHT` constant to ensure consistent sizing:
+
+```
+h-9 [[data-size=compact]_&]:h-8
+```
+
+| Size | Height | Pixels | When to use |
+|---|---|---|---|
+| `default` | `h-9` | 36px | Standard menus and dropdowns — comfortable touch targets |
+| `compact` | `h-8` | 32px | Dense lists with many items — set `size="compact"` on the Content component |
+
+The `size` prop is available on `DropdownMenuContent`, `SelectContent`, and `ComboboxContent`:
+
+```tsx
+// Default (36px items)
+<DropdownMenuContent>...</DropdownMenuContent>
+
+// Compact (32px items)
+<DropdownMenuContent size="compact">...</DropdownMenuContent>
+```
+
+The compact size activates via `data-size="compact"` on the content container, which the `POPUP_ITEM_HEIGHT` class detects using Tailwind's `[[data-size=compact]_&]:` descendant selector. Always use the shared constant — never hardcode `h-9` or `h-8` on popup items directly.
+
+## Popup Patterns
+
+For popup container styling, animations, item heights, and separator conventions, see `.cursor/rules/popup-patterns.mdc`.
+
+The Accordion uses its own custom animations (not the shared popup pattern): `data-[open]:animate-accordion-down data-[closed]:animate-accordion-up`.
+
+## Transition Properties
+
+Different transition properties for different control types:
+
+- `transition-[color,box-shadow]` — form controls (Input, Textarea, Select, NativeSelect, InputGroup, InputOTP)
+- `transition-[color,background-color,border-color,box-shadow]` — TabsTrigger (text, bg, border, and shadow all change on active)
+- `transition-[background-color,border-color]` — Switch (bg and border change on checked/invalid)
+- `transition-transform` — icon rotations (Select chevron, Accordion chevron). Paired with `duration-150 ease-out`.
+- `transition-colors` — ComboboxChips
+- `transition-none` — applied on `aria-invalid` states for Checkbox, Radio, Switch to prevent flash on validation
+
+Do NOT use `transition-all` unless the component has `active:scale` press feedback (see below). Always specify the exact properties that transition. Do NOT use `transition-colors` for controls that also transition box-shadow.
+
+Exception: Button uses `transition-all` because it combines color, background, border, and transform (`active:scale-[0.98]`) transitions. Listing all properties individually would be fragile.
+
+## Shadows
+
+Three shadow tiers:
+
+- `shadow-xs` — form controls (Input, Textarea, Select, NativeSelect, ComboboxChips, InputGroup, InputOTP)
+- `shadow-lg` — popup containers (SelectContent, ComboboxContent, DropdownMenuContent, PopoverContent)
+- `shadow-sm` — TabsTrigger active state (default variant only)
+
+## Error/Invalid States
+
+Two `aria-invalid` patterns, matching the focus style of the control:
+
+### Ring-based controls (Input, Textarea, Select, NativeSelect, InputOTP)
+```
+aria-invalid:ring-destructive dark:aria-invalid:ring-destructive aria-invalid:border-destructive
+```
+
+### Outline-based controls (Checkbox, Radio, Switch)
+```
+aria-invalid:border-destructive dark:aria-invalid:border-destructive/50
+aria-invalid:transition-none
+aria-invalid:focus-visible:outline-destructive/50
+```
+
+### Buttons
+Buttons use a ring-based invalid pattern (from shadcn) for form error indication:
+```
+aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive
+```
+
+### Checked + invalid
+When checked and invalid, both Checkbox and Radio switch to destructive styling:
+```
+aria-invalid:data-checked:bg-destructive aria-invalid:data-checked:border-destructive aria-invalid:data-checked:text-destructive-foreground
+```
+
+## Control Height Scale
+
+Standard heights used across components:
+
+- `h-4` — Badge xs
+- `h-5` — Badge default, Kbd
+- `h-6` — Badge sm, Button xs, InputGroupButton xs, SelectScrollButton
+- `h-8` — Button sm, TabsTrigger, InputGroupButton sm, popup items (compact)
+- `h-9` — SelectTrigger sm, popup items (standard via `POPUP_ITEM_HEIGHT`)
+- `h-10` — Button/Input/SelectTrigger/NativeSelect/InputOTP default, ComboboxChips min-h
+- `h-12` — Button lg
+
+Use `size-*` (not `h-*`) for square controls: Checkbox (`size-4`), Radio (`size-4`), Button icon-xs (`size-6`), Button icon-sm (`size-8`), Button icon (`size-10`), Button icon-lg (`size-12`).
+
+## `data-slot` Pattern
+
+### Why `data-slot`
+
+Every exported component part gets a `data-slot` attribute. These are stable, semantic identifiers that act as a public "parts API" for compound components. Unlike Tailwind classes (which change with styling decisions) or DOM structure (which is an implementation detail), `data-slot` values are intentional API that won't break when internals are refactored.
+
+### Naming convention
+
+Follow `[component]-[part]` kebab-case naming:
+```
+data-slot="select-trigger"
+data-slot="dropdown-menu-item"
+data-slot="combobox-chips-input"
+```
+
+Root-level components use the component name alone (e.g., `data-slot="card"`, `data-slot="button"`).
+
+### Use cases
+
+**Parent-aware layout** via `has-data-[slot=...]` — a parent adjusts its own styles based on which children are present:
+```
+// Card removes bottom padding when a footer exists
+has-data-[slot=card-footer]:pb-0
+
+// CardHeader switches to a two-column grid when an action is present
+has-data-[slot=card-action]:grid-cols-[1fr_auto]
+```
+
+**Parent-to-child styling** via `*:data-[slot=...]` — a parent styles a child part without the child needing to know:
+```
+// SelectTrigger truncates and lays out the value text
+*:data-[slot=select-value]:line-clamp-1
+*:data-[slot=select-value]:flex
+*:data-[slot=select-value]:items-center
+
+// AvatarGroup adds ring spacing to each avatar
+*:data-[slot=avatar]:ring-2
+*:data-[slot=avatar]:ring-background
+```
+
+**Consumer customization** — consumers can target specific parts for overrides without depending on class names or DOM nesting:
+```css
+[data-slot="card-title"] { font-size: 1.25rem; }
+```
+
+### Mandate
+
+Always assign a `data-slot` to every exported component part.
+
+## `data-size` and Group Naming
+
+### Size variants
+Size variants are communicated via `data-size` attributes rather than separate class props:
+- Values: `default`, `sm`, `lg`, `compact`
+- Styled via `data-[size=sm]:` selectors on the element itself
+
+### Group naming
+Parent-child styling relationships use Tailwind's named group pattern:
+- Parent: `group/card`, `group/input-group`, `group/tabs-list`, etc.
+- Child selectors: `group-data-[size=sm]/card:`, `group-has-disabled/field:`, `group-data-[variant=line]/tabs-list:`
+
+The group name always matches the component's `data-slot` value (e.g., `group/card` pairs with `data-slot="card"`).
+
+## Text Colors
+
+- `text-foreground` — primary text (headings, labels, active states)
+- `text-muted-foreground` — secondary text (descriptions, helper text, inactive icons, popup labels)
+- `text-muted-foreground/70` — placeholder text convention
+- `text-destructive` — error messages and destructive variant text
+- `text-popover-foreground` — popup container text (set on the popup root)
+- `text-card-foreground` — card container text (set on the card root)
+
+Do NOT use raw color values (e.g., `text-gray-500`) in component base styles. Always use semantic tokens.
+
+Exception: Badge color variants intentionally use raw Tailwind colors (`bg-red-500/15`, `text-red-700`) because each variant maps to a distinct hue that cannot be represented by a single semantic token.
+
+## Press Feedback
+
+Buttons apply a micro-scale press animation:
+```
+active:scale-[0.98] disabled:active:scale-100
+```
+
+- `active:scale-[0.98]` gives subtle tactile feedback on click
+- `disabled:active:scale-100` cancels the animation when disabled
+- Only used on `Button` — popup items and other clickable elements do NOT have press feedback
+
+This is the reason Button uses `transition-all` (see Transition Properties above).
+
+## Cursor Handling
+
+Tailwind v4 changed `cursor: pointer` to `cursor: default` for buttons. We handle this with **explicit `cursor-pointer`** on each interactive component rather than a global CSS base rule.
+
+Components that need `cursor-pointer`:
+- Button (`cursor-pointer` in CVA base)
+- TabsTrigger, popup items, scroll buttons
+
+Components that need `cursor-not-allowed`:
+- Disabled variants (`disabled:cursor-not-allowed`)
+- Data-disabled variants (`data-disabled:cursor-not-allowed`)
+
+Do NOT rely on browser defaults for cursor behavior. Always set it explicitly.
+
+## Button `shrink-0`
+
+Buttons include `shrink-0` on the root element to prevent them from shrinking in flex containers. This is a defensive CSS practice — without it, a button inside `flex` could collapse when sibling content is larger.
+
+```
+inline-flex shrink-0 items-center justify-center ...
+```
+
+Note: SVGs inside buttons also have `shrink-0` via the SVG Boilerplate rule. The root-level `shrink-0` is separate and applies to the button element itself.
+
+## Adding New Theme Tokens
+
+When adding a new semantic token to the library:
+
+1. **Define the CSS variable** in both `:root` and `.dark` in the consumer's theme CSS (and in `packages/ui/registry/default.json` for the default registry style):
+```css
+:root {
+  --my-token: oklch(0.5 0.1 200);
+}
+.dark {
+  --my-token: oklch(0.3 0.1 200);
+}
+```
+
+2. **Register it with Tailwind** in the `@theme inline` block:
+```css
+@theme inline {
+  --color-my-token: var(--my-token);
+}
+```
+
+3. **Use it in components** via Tailwind utilities:
+```
+bg-my-token text-my-token border-my-token
+```
+
+Follow the `background` / `foreground` naming convention described below.
+
+## Color Naming Convention
+
+We use a simple `background` and `foreground` convention for colors. The `background` variable is used for the background color of the component and the `foreground` variable is used for the text color.
+
+The `background` suffix is **omitted** when the variable is used for the background color. Given the following CSS variables:
+
+```css
+--primary: oklch(0.205 0 0);
+--primary-foreground: oklch(0.985 0 0);
+```
+
+The background color of the following component will be `var(--primary)` and the foreground color will be `var(--primary-foreground)`:
+
+```tsx
+<div className="bg-primary text-primary-foreground">Hello</div>
+```
+
+This pattern applies to every color pair in the theme:
+
+| Token | Background class | Text class |
+|---|---|---|
+| `--primary` | `bg-primary` | `text-primary-foreground` |
+| `--secondary` | `bg-secondary` | `text-secondary-foreground` |
+| `--destructive` | `bg-destructive` | `text-destructive-foreground` |
+| `--muted` | `bg-muted` | `text-muted-foreground` |
+| `--accent` | `bg-accent` | `text-accent-foreground` |
+| `--card` | `bg-card` | `text-card-foreground` |
+| `--popover` | `bg-popover` | `text-popover-foreground` |
+
+When adding new color pairs, always follow this convention: `--name` for background, `--name-foreground` for text.

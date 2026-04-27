@@ -1,0 +1,191 @@
+---
+name: component-architecture
+description: Component architecture conventions for the @keystoneui/react package. Apply when creating, editing, or reviewing UI components in packages/ui/.
+globs: packages/ui/src/**/*
+alwaysApply: false
+---
+# Component Architecture
+
+These are the structural conventions for the `@keystoneui/react` component library. Follow them when creating or modifying components.
+
+## Flat Directory Structure
+
+The `packages/ui/src/` directory is completely flat. Every component is a single `.tsx` file at the root of `src/`:
+
+```
+packages/ui/src/
+  accordion.tsx
+  alert.tsx
+  alert-dialog.tsx
+  ...
+  utils.ts
+  _registry.ts
+  styles.css
+  test/
+    setup.ts
+```
+
+The `test/` subdirectory is the only exception to the flat structure — it contains shared test infrastructure (e.g., `setup.ts`).
+
+## Single-File Components
+
+Every compound component, no matter how large, lives in a single `.tsx` file. Types, contexts, sub-components, and variants are all co-located in the same file.
+
+### File Organization Within a Component
+
+```tsx
+"use client";
+
+// 1. External imports
+import * as React from "react";
+import { SomePrimitive } from "@base-ui/react/some-primitive";
+import { cva, type VariantProps } from "class-variance-authority";
+
+// 2. Internal imports (sibling files only, no barrel)
+import { cn } from "./utils";
+
+// 3. Types
+type MyComponentProps = { ... };
+
+// 4. Variants (if using CVA)
+const myComponentVariants = cva(...);
+
+// 5. Contexts (if compound component)
+const MyComponentContext = React.createContext<...>(...);
+
+// 6. Sub-components (private, not exported)
+// ... or exported if they are part of the public API
+
+// 7. Main component (React 19 — refs pass through props automatically, no forwardRef needed)
+function MyComponent({ ref, className, ...props }: MyComponentProps) { ... }
+
+// 8. Exports (named, at the bottom)
+export { MyComponent, MySubComponent };
+export type { MyComponentProps };
+```
+
+**Note on `forwardRef`**: This project targets React 19+, where `forwardRef` is deprecated. Refs are forwarded automatically through props. Do NOT use `React.forwardRef` — accept `ref` as a regular prop instead. Setting `displayName` is optional since function declarations already provide a name for DevTools.
+
+## No Barrel Files
+
+There is no `index.ts` barrel file. Each component file is its own entry point.
+
+## Import Pattern
+
+### Internal (within packages/ui/src)
+
+Always use relative sibling imports:
+
+```tsx
+// Good
+import { cn } from "./utils";
+import { Button } from "./button";
+import { Label } from "./label";
+
+// Bad - no barrel imports
+import { cn } from ".";
+import { Button } from "@keystoneui/react";
+```
+
+### External (consumers of the package)
+
+Always use subpath imports:
+
+```tsx
+// Good
+import { Button } from "@keystoneui/react/button";
+import { Accordion, AccordionItem } from "@keystoneui/react/accordion";
+
+// Bad - no barrel import
+import { Button } from "@keystoneui/react";
+```
+
+## Package Exports
+
+Every component has a corresponding subpath export in `package.json`:
+
+```json
+{
+  "exports": {
+    "./button": "./src/button.tsx",
+    "./accordion": "./src/accordion.tsx"
+  }
+}
+```
+
+When adding a new component, you must also add its export entry.
+
+## Registry
+
+The `_registry.ts` file declares metadata for each component following the shadcn schema:
+- `dependencies`: NPM packages the component requires
+- `registryDependencies`: Other components in this registry the component depends on
+- `files`: The file path for the component
+
+Update `_registry.ts` when adding or modifying components.
+
+## Hover Gating (`@media (hover: hover)`)
+
+The base CSS overrides Tailwind's built-in `hover` variant with `@media (hover: hover)` gating in `packages/ui/src/base.css`:
+
+```css
+@custom-variant hover {
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+```
+
+This ensures hover styles only apply on devices that actually support hover (mouse/trackpad), preventing "sticky hover" on touch devices where a tap triggers `:hover` and it stays active.
+
+### What this means in practice
+
+- All `hover:` prefixed utilities (e.g., `hover:bg-primary/90`, `hover:text-foreground`) are automatically gated. No manual wrapping needed.
+- Compound variants like `dark:hover:bg-input/50` work correctly — the media query wraps the hover selector.
+- Child/descendant selectors using the `hover` variant (e.g., `[a]:hover:bg-muted`) are also gated.
+
+### Arbitrary selectors: always split `:hover` into the variant
+
+Do NOT embed `:hover` inside arbitrary selectors — it bypasses the media query gating. Instead, split the selector and the `hover` variant so gating applies.
+
+```tsx
+// Good — hover variant is separate, gets @media (hover: hover) gating
+"[&>a]:hover:text-primary"
+"hover:bg-primary/90"
+"[a]:hover:bg-muted"
+
+// Bad — :hover baked into arbitrary selector, bypasses gating entirely
+"[&>a:hover]:text-primary"
+"[&>div:hover]:bg-muted"
+```
+
+The difference: `[&>a]:hover:text-primary` composes two variants (`[&>a]` + `hover`), so Tailwind applies the `hover` override. The result is `@media (hover: hover) { & > a:hover { ... } }` — same selector, but properly gated.
+
+### Components affected by hover gating
+
+Interactive elements with background/opacity hover changes (all automatically handled by the theme variant):
+
+- **Button** — all variant hover backgrounds (`hover:bg-primary/90`, `hover:bg-accent`, etc.)
+- **Badge** — ghost variant (`hover:bg-muted`), link variants, anchor variants (`[a]:hover:bg-*`)
+- **TabsTrigger** — text color change (`hover:text-foreground`)
+- **ComboboxChipRemove** — opacity change (`hover:opacity-100`)
+- **CalendarDayButton** — inherits Button hover + `dark:hover:text-foreground`
+- **Item** — link hover (`[a]:hover:bg-muted`)
+
+## No Radix UI
+
+Do not use `@radix-ui` packages. Use `@base-ui/react` as the primitive library.
+
+## Test Files
+
+Test files are co-located as siblings: `button.test.tsx` next to `button.tsx`.
+
+## Adding a New Component
+
+1. Create `src/my-component.tsx` with all types, variants, contexts, and sub-components in one file
+2. Add `"./my-component": "./src/my-component.tsx"` to `package.json` exports
+3. Add the entry to `tsup.config.ts` entryPoints
+4. Add the entry to `_registry.ts`
+5. Create `apps/storybook/stories/my-component.stories.tsx` for documentation
