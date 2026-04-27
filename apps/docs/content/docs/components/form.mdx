@@ -6,7 +6,7 @@ description: A form wrapper component that provides consistent layout and valida
 ## Import
 
 ```tsx
-import { Form, Label, Description, ErrorMessage } from "@keystoneui/react/form";
+import { Form, FieldGroup, Label, Description, ErrorMessage } from "@keystoneui/react/form";
 ```
 
 ## Usage
@@ -19,11 +19,47 @@ Form with validation feedback:
 
 <ComponentPreview name="form-with-validation" />
 
+## Submission
+
+`Form` is a real `<form>` element, so it accepts `onSubmit` and any standard form attribute. Nested inputs submit on Enter without extra wiring.
+
+```tsx
+<Form
+  onSubmit={(e) => {
+    e.preventDefault();
+    // handle submit
+  }}
+>
+  {/* fields */}
+  <Button type="submit">Save</Button>
+</Form>
+```
+
+## FieldGroup
+
+When you need the same vertical layout but not the `<form>` semantics — for example a group of fields nested inside an existing `<form>`, or a non-submittable settings panel — use `FieldGroup`. It renders a `<div>` with the same spacing as `Form`.
+
+```tsx
+<form onSubmit={handleSubmit}>
+  <FieldGroup>
+    {/* fields */}
+  </FieldGroup>
+  <FieldGroup>
+    {/* a second group */}
+  </FieldGroup>
+  <Button type="submit">Save</Button>
+</form>
+```
+
 ## API Reference
 
 ### Form
 
-Wraps a native `<form>` element with consistent styling. Accepts all standard form attributes.
+Renders a `<form>` element with consistent vertical spacing between children. Accepts all `FormHTMLAttributes<HTMLFormElement>`, including `onSubmit`.
+
+### FieldGroup
+
+Layout-only `<div>` wrapper that provides the same spacing as `Form` without form semantics. Use inside an existing `<form>`, or for groups of fields that don't submit.
 
 ### Label
 

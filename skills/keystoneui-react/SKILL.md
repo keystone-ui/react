@@ -72,7 +72,7 @@ import { Button } from "@keystoneui/react";
 
 ## Component List
 
-All 53 components with their import paths:
+All 54 components with their import paths:
 
 | Component | Import Path |
 |---|---|
@@ -114,6 +114,7 @@ All 53 components with their import paths:
 | RadioGroup | `@keystoneui/react/radio-group` |
 | Resizable | `@keystoneui/react/resizable` |
 | Select | `@keystoneui/react/select` |
+| SelectionBar | `@keystoneui/react/selection-bar` |
 | Separator | `@keystoneui/react/separator` |
 | Skeleton | `@keystoneui/react/skeleton` |
 | Slider | `@keystoneui/react/slider` |
@@ -301,19 +302,22 @@ Getting started guides: `https://keystoneui.io/docs/{topic}.mdx`
 
 ### Form with Validation
 
+`Form` renders a `<form>` element and accepts `onSubmit` plus any standard form attribute. Use `FieldGroup` when you need the same vertical spacing without `<form>` semantics (e.g. inside an existing form).
+
 ```tsx
 import { Button } from "@keystoneui/react/button";
 import { Field, FieldLabel, FieldMessage } from "@keystoneui/react/field";
+import { Form } from "@keystoneui/react/form";
 import { Input } from "@keystoneui/react/input";
 
-<form>
+<Form onSubmit={(e) => { e.preventDefault(); /* ... */ }}>
   <Field>
     <FieldLabel>Email</FieldLabel>
     <Input type="email" placeholder="name@example.com" />
     <FieldMessage>We'll never share your email.</FieldMessage>
   </Field>
   <Button type="submit">Submit</Button>
-</form>
+</Form>
 ```
 
 ### Modal Dialog
