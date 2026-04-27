@@ -30,13 +30,16 @@
 
   /* Z-index scale — named layers to avoid arbitrary z-50/z-100 sprawl.
      Consumers may reference via `z-[var(--z-popover)]` etc. */
-  --z-dropdown: 40;
-  --z-sticky: 50;
+  --z-sticky: 30;
+  --z-drawer: 40;
+  --z-modal: 50;
+  /* Portaled popups (DropdownMenu, Select, Popover, Combobox, Tooltip) sit
+     above modals and drawers — when triggered from inside a Modal they must
+     overlay the dialog, not hide behind it. */
+  --z-dropdown: 60;
   --z-popover: 60;
-  --z-drawer: 70;
-  --z-modal: 80;
-  --z-tooltip: 90;
-  --z-toast: 100;
+  --z-tooltip: 70;
+  --z-toast: 80;
 }
 
 /* Radius scale — derived from a single --radius base token.
