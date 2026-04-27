@@ -12,7 +12,13 @@ export default function TooltipDisabledButton() {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger>
+        {/*
+          TooltipTrigger renders as a <span> so the disabled <button> nested
+          inside isn't wrapped in another <button>. The span also still
+          receives pointer events while the inner button is disabled, so the
+          tooltip can open.
+        */}
+        <TooltipTrigger render={<span />}>
           <Button disabled variant="outline">
             Disabled Button
           </Button>
