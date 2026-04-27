@@ -179,6 +179,7 @@ import DescriptionListOrderSummary from "./description-list/order-summary";
 import DrawerComplexFilter from "./drawer/complex-filter";
 import DrawerDefault from "./drawer/default";
 import DrawerFilter from "./drawer/filter";
+import DrawerFloating from "./drawer/floating";
 import DrawerNested from "./drawer/nested";
 import DrawerResponsive from "./drawer/responsive";
 import DrawerScrollable from "./drawer/scrollable";
@@ -1089,6 +1090,10 @@ export const demos: Record<string, DemoItem> = {
   "drawer-filter": {
     component: DrawerFilter,
     file: "drawer/filter.tsx",
+  },
+  "drawer-floating": {
+    component: DrawerFloating,
+    file: "drawer/floating.tsx",
   },
   "drawer-nested": {
     component: DrawerNested,

@@ -1,3 +1,5 @@
+import { Avatar, AvatarFallback } from "@keystoneui/react/avatar";
+import { Badge } from "@keystoneui/react/badge";
 import { Button } from "@keystoneui/react/button";
 import { Checkbox } from "@keystoneui/react/checkbox";
 import {
@@ -22,6 +24,7 @@ import {
   ModalTrigger,
 } from "@keystoneui/react/modal";
 import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
+import { Separator } from "@keystoneui/react/separator";
 import {
   Stepper,
   StepperContent,
@@ -35,6 +38,7 @@ import {
   ArrowUpDown,
   Check,
   ChevronRight,
+  ExternalLink,
   Eye,
   EyeOff,
   Filter as FilterIcon,
@@ -1100,6 +1104,263 @@ export const ResponsiveDialog: Story = {
       description: {
         story:
           "Combines Modal and Drawer to create a responsive dialog. On desktop (≥768px) it renders as a centered Modal; on mobile it renders as a bottom Drawer. Uses the `useMediaQuery` hook from `@keystoneui/react/hooks` to detect the viewport width.",
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Floating (inspector / detail panel)
+// =============================================================================
+interface FloatingCustomer {
+  company: string;
+  email: string;
+  id: string;
+  initials: string;
+  language: string;
+  location: string;
+  name: string;
+  owner: string;
+  phone: string;
+  responseTime: string;
+  source: string;
+  status: "At risk" | "Healthy" | "Paused";
+  summary: string;
+}
+
+const FLOATING_CUSTOMERS: FloatingCustomer[] = [
+  {
+    id: "marcus-lind",
+    name: "Marcus Lind",
+    company: "Polar Banking",
+    email: "marcus@polarbanking.fi",
+    initials: "ML",
+    owner: "Devon Reed",
+    status: "At risk",
+    source: "Executive expansion motion",
+    responseTime: "Slow response",
+    phone: "(817) 517-2317",
+    location: "Nordics",
+    language: "English, Swedish",
+    summary:
+      "Stakeholders are hesitant to renew until audit exports and multilingual queue governance are stabilized.",
+  },
+  {
+    id: "alia-hassan",
+    name: "Alia Hassan",
+    company: "Northwind Logistics",
+    email: "alia@northwind.co",
+    initials: "AH",
+    owner: "Priya Patel",
+    status: "Healthy",
+    source: "Inbound trial",
+    responseTime: "Within SLA",
+    phone: "(206) 555-0114",
+    location: "Pacific Northwest",
+    language: "English",
+    summary:
+      "Recently expanded to a second region. CSAT trending up after the Q1 onboarding revamp.",
+  },
+  {
+    id: "tomas-vega",
+    name: "Tomas Vega",
+    company: "Ferro Studio",
+    email: "tomas@ferrostudio.es",
+    initials: "TV",
+    owner: "Jordan Liu",
+    status: "Paused",
+    source: "Reactivation",
+    responseTime: "Within SLA",
+    phone: "(34) 91 555 0102",
+    location: "Iberia",
+    language: "English, Spanish",
+    summary:
+      "Paused billing during a reorg. Champion confirmed expected restart next quarter.",
+  },
+];
+
+const FLOATING_STATUS_VARIANT: Record<
+  FloatingCustomer["status"],
+  "destructive" | "default" | "secondary"
+> = {
+  "At risk": "destructive",
+  Healthy: "default",
+  Paused: "secondary",
+};
+
+function FloatingDrawerDemo() {
+  const [active, setActive] = React.useState<FloatingCustomer | null>(null);
+
+  return (
+    <>
+      <div className="flex w-full max-w-md flex-col gap-1 rounded-md border bg-background p-1">
+        {FLOATING_CUSTOMERS.map((customer) => (
+          <button
+            className="flex items-center gap-3 rounded-sm px-2 py-2 text-left transition-colors hover:bg-muted/60 focus-visible:bg-muted/60 focus-visible:outline-none"
+            key={customer.id}
+            onClick={() => setActive(customer)}
+            type="button"
+          >
+            <Avatar size="sm">
+              <AvatarFallback>{customer.initials}</AvatarFallback>
+            </Avatar>
+            <div className="flex min-w-0 flex-1 flex-col">
+              <span className="truncate font-medium text-sm">
+                {customer.name}
+              </span>
+              <span className="truncate text-muted-foreground text-xs">
+                {customer.company} · {customer.email}
+              </span>
+            </div>
+            <Badge variant={FLOATING_STATUS_VARIANT[customer.status]}>
+              {customer.status}
+            </Badge>
+          </button>
+        ))}
+      </div>
+
+      <Drawer
+        onOpenChange={(open) => {
+          if (!open) {
+            setActive(null);
+          }
+        }}
+        open={active !== null}
+        swipeDirection="right"
+      >
+        <DrawerContent variant="floating">
+          {active && (
+            <>
+              <div className="flex items-center gap-3 border-b p-4">
+                <Avatar size="lg">
+                  <AvatarFallback>{active.initials}</AvatarFallback>
+                </Avatar>
+                <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                  <DrawerTitle className="truncate">{active.name}</DrawerTitle>
+                  <span className="truncate text-muted-foreground text-xs">
+                    {active.company} · {active.email}
+                  </span>
+                </div>
+                <Button size="sm" variant="outline">
+                  <ExternalLink className="size-3.5" />
+                  Visit site
+                </Button>
+              </div>
+
+              <div className="no-scrollbar flex flex-col gap-5 overflow-y-auto p-4">
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline">Owner · {active.owner}</Badge>
+                  <Badge variant={FLOATING_STATUS_VARIANT[active.status]}>
+                    {active.status}
+                  </Badge>
+                  <Badge variant="secondary">{active.responseTime}</Badge>
+                </div>
+
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {active.summary}
+                </p>
+
+                <Separator />
+
+                <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
+                  <div className="flex flex-col gap-0.5">
+                    <dt className="text-muted-foreground text-xs">Source</dt>
+                    <dd>{active.source}</dd>
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <dt className="text-muted-foreground text-xs">Phone</dt>
+                    <dd>{active.phone}</dd>
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <dt className="text-muted-foreground text-xs">Location</dt>
+                    <dd>{active.location}</dd>
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <dt className="text-muted-foreground text-xs">Language</dt>
+                    <dd>{active.language}</dd>
+                  </div>
+                </dl>
+              </div>
+            </>
+          )}
+        </DrawerContent>
+      </Drawer>
+    </>
+  );
+}
+
+export const Floating: Story = {
+  render: () => <FloatingDrawerDemo />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The `floating` variant detaches the drawer from the viewport edge on `md+` breakpoints — small inset on the outer side + top + bottom, all four corners rounded, soft shadow, and a slightly wider default. Use it for inspector / detail panels where the user benefits from glancing back at the underlying list. Only applies to `left` and `right` directions; mobile and top/bottom drawers stay flush.",
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Floating vs Flush (visual comparison)
+// =============================================================================
+function FlushVsFloatingTriggers() {
+  return (
+    <div className="flex flex-wrap gap-2">
+      <Drawer swipeDirection="right">
+        <DrawerTrigger render={<Button variant="outline" />}>
+          Right · flush (default)
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>Flush drawer</DrawerTitle>
+            <DrawerDescription>
+              Slides to the viewport edge. Only the inner two corners are
+              rounded; no shadow.
+            </DrawerDescription>
+          </DrawerHeader>
+        </DrawerContent>
+      </Drawer>
+
+      <Drawer swipeDirection="right">
+        <DrawerTrigger render={<Button variant="outline" />}>
+          Right · floating
+        </DrawerTrigger>
+        <DrawerContent variant="floating">
+          <DrawerHeader>
+            <DrawerTitle>Floating drawer</DrawerTitle>
+            <DrawerDescription>
+              Detached from the viewport edge with shadow, all four corners
+              rounded, and a slightly wider default. Only at md+ — mobile stays
+              flush.
+            </DrawerDescription>
+          </DrawerHeader>
+        </DrawerContent>
+      </Drawer>
+
+      <Drawer swipeDirection="left">
+        <DrawerTrigger render={<Button variant="outline" />}>
+          Left · floating
+        </DrawerTrigger>
+        <DrawerContent variant="floating">
+          <DrawerHeader>
+            <DrawerTitle>Floating left</DrawerTitle>
+            <DrawerDescription>Mirrored on the left side.</DrawerDescription>
+          </DrawerHeader>
+        </DrawerContent>
+      </Drawer>
+    </div>
+  );
+}
+
+export const FloatingVsFlush: Story = {
+  name: "Floating vs Flush",
+  render: () => <FlushVsFloatingTriggers />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Side-by-side comparison of the `flush` (default) and `floating` variants. Useful for visual regression — open each and compare the corner treatment, inset, and shadow.",
       },
     },
   },

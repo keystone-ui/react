@@ -29,6 +29,16 @@ Open the drawer from different edges of the screen:
 
 <ComponentPreview name="drawer-sides" />
 
+## Floating
+
+Pass `variant="floating"` on `DrawerContent` to detach a side drawer from the viewport edge on `md+` breakpoints. The drawer gets a small inset on the outer side + top + bottom, all four corners rounded, a soft shadow, and a slightly wider default — making it feel like a layer above the page rather than part of the chrome.
+
+Use this for inspector / detail panels where the user benefits from glancing back at the underlying list (e.g. clicking a row to inspect it). For forms or focus-heavy dialogs, prefer the [Responsive](#responsive) Modal+Drawer pattern instead.
+
+The variant has no effect on `top` / `bottom` directions or below the `md` breakpoint — those always render flush.
+
+<ComponentPreview name="drawer-floating" />
+
 ## Scrollable
 
 A drawer with scrollable body content:
@@ -79,4 +89,5 @@ Complex filter drawer with multiple controls:
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `side` | `"top" \| "right" \| "bottom" \| "left"` | `"right"` | The edge the drawer slides from |
+| `variant` | `"flush" \| "floating"` | `"flush"` | Visual style for `left` / `right` drawers at `md+`. `floating` detaches from the edge with a gap, full radius, and shadow. No effect on `top` / `bottom` or below `md`. |
 | `className` | `string` | - | Additional CSS classes |

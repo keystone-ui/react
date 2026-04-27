@@ -57,9 +57,32 @@ function DrawerOverlay({ className, ...props }: DrawerOverlayProps) {
 // =============================================================================
 // DrawerContent
 // =============================================================================
-export interface DrawerContentProps extends DrawerPrimitive.Popup.Props {}
+export type DrawerVariant = "flush" | "floating";
 
-function DrawerContent({ className, children, ...props }: DrawerContentProps) {
+export interface DrawerContentProps extends DrawerPrimitive.Popup.Props {
+  /**
+   * Visual style for side drawers (`left` / `right`) on `md+` viewports.
+   *
+   * - `flush` (default): edges to the viewport, only the inner corners rounded.
+   *   Use for navigation drawers and any drawer that should feel attached to
+   *   the viewport edge.
+   * - `floating`: inset gap on the outer side + top + bottom, all four corners
+   *   rounded, soft shadow, slightly wider default. Use for inspector / detail
+   *   panels where the user benefits from seeing the underlying list/page
+   *   through the visible backdrop.
+   *
+   * Has no effect for `top` / `bottom` directions or below the `md` breakpoint —
+   * those always render flush.
+   */
+  variant?: DrawerVariant;
+}
+
+function DrawerContent({
+  className,
+  children,
+  variant = "flush",
+  ...props
+}: DrawerContentProps) {
   return (
     <DrawerPortal>
       <DrawerOverlay />
@@ -78,9 +101,15 @@ function DrawerContent({ className, children, ...props }: DrawerContentProps) {
             "data-[swipe-direction=left]:inset-y-0 data-[swipe-direction=left]:left-0 data-[swipe-direction=left]:w-3/4 data-[swipe-direction=left]:rounded-r-xl data-[swipe-direction=left]:border-r data-[swipe-direction=left]:pl-[env(safe-area-inset-left)] data-[swipe-direction=left]:sm:max-w-sm",
             // Right (swipeDirection="right")
             "data-[swipe-direction=right]:inset-y-0 data-[swipe-direction=right]:right-0 data-[swipe-direction=right]:w-3/4 data-[swipe-direction=right]:rounded-l-xl data-[swipe-direction=right]:border-l data-[swipe-direction=right]:pr-[env(safe-area-inset-right)] data-[swipe-direction=right]:sm:max-w-sm",
+            // Floating variant — overrides for side drawers at md+ only.
+            // Right + floating: detach from right edge, all four corners rounded, full border (the always-on `border-l` already covers the inner edge), shadow, wider cap.
+            "data-[variant=floating]:data-[swipe-direction=right]:md:top-3 data-[variant=floating]:data-[swipe-direction=right]:md:right-3 data-[variant=floating]:data-[swipe-direction=right]:md:bottom-3 data-[variant=floating]:data-[swipe-direction=right]:md:max-w-md data-[variant=floating]:data-[swipe-direction=right]:md:rounded-xl data-[variant=floating]:data-[swipe-direction=right]:md:border data-[variant=floating]:data-[swipe-direction=right]:md:shadow-lg",
+            // Left + floating: same, mirrored.
+            "data-[variant=floating]:data-[swipe-direction=left]:md:top-3 data-[variant=floating]:data-[swipe-direction=left]:md:bottom-3 data-[variant=floating]:data-[swipe-direction=left]:md:left-3 data-[variant=floating]:data-[swipe-direction=left]:md:max-w-md data-[variant=floating]:data-[swipe-direction=left]:md:rounded-xl data-[variant=floating]:data-[swipe-direction=left]:md:border data-[variant=floating]:data-[swipe-direction=left]:md:shadow-lg",
             className
           )}
           data-slot="drawer-content"
+          data-variant={variant}
           {...props}
         >
           {/* Drag handle for bottom drawer */}

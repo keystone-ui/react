@@ -200,6 +200,20 @@
   transform: translateY(-100%);
 }
 
+/* Floating side drawers at md+ — start fully off-screen accounting for the
+   12px inset (matches `right-3` / `left-3` Tailwind classes). Without this,
+   `translateX(100%)` leaves a 12px sliver on-screen at the start of the slide. */
+@media (min-width: 768px) {
+  [data-slot="drawer-content"][data-variant="floating"][data-swipe-direction="right"][data-starting-style],
+  [data-slot="drawer-content"][data-variant="floating"][data-swipe-direction="right"][data-ending-style] {
+    transform: translateX(calc(100% + 0.75rem));
+  }
+  [data-slot="drawer-content"][data-variant="floating"][data-swipe-direction="left"][data-starting-style],
+  [data-slot="drawer-content"][data-variant="floating"][data-swipe-direction="left"][data-ending-style] {
+    transform: translateX(calc(-100% - 0.75rem));
+  }
+}
+
 /* =========================================================================
    Surface popups — Popover / Tooltip / DropdownMenu / Select / Combobox.
    Use Base UI's [data-starting-style] / [data-ending-style] attributes to
