@@ -149,6 +149,7 @@ import ComboboxDefault from "./combobox/default";
 import ComboboxDisabled from "./combobox/disabled";
 import ComboboxFormExample from "./combobox/form-example";
 import ComboboxGroups from "./combobox/groups";
+import ComboboxMultiWithCreate from "./combobox/multi-with-create";
 import ComboboxMultiple from "./combobox/multiple";
 import ComboboxPopup from "./combobox/popup";
 import ComboboxScrollable from "./combobox/scrollable";
@@ -982,6 +983,10 @@ export const demos: Record<string, DemoItem> = {
   "combobox-multiple": {
     component: ComboboxMultiple,
     file: "combobox/multiple.tsx",
+  },
+  "combobox-multi-with-create": {
+    component: ComboboxMultiWithCreate,
+    file: "combobox/multi-with-create.tsx",
   },
   "combobox-popup": {
     component: ComboboxPopup,

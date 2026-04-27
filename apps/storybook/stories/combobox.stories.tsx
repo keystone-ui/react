@@ -27,9 +27,9 @@ import {
 import { InputGroupAddon } from "@keystoneui/react/input-group";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { countries as countryDataList } from "country-data-list";
-import { GlobeIcon, SearchIcon } from "lucide-react";
+import { GlobeIcon, PlusIcon, SearchIcon } from "lucide-react";
 import * as React from "react";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { CircleFlag } from "react-circle-flags";
 import { FaBitcoin, FaEthereum } from "react-icons/fa";
 import {
@@ -267,6 +267,89 @@ export const MultipleSelection: Story = {
         </Combobox>
         <FieldDescription>
           Use <code>multiple</code> with chips for multi-select behavior.
+        </FieldDescription>
+      </Field>
+    );
+  },
+};
+
+// =============================================================================
+// Multiple Selection With Create
+// =============================================================================
+export const MultipleSelectionWithCreate: Story = {
+  name: "Multiple Selection With Create",
+  render: () => {
+    const [pool, setPool] = useState<string[]>([...frameworks]);
+    const [selected, setSelected] = useState<string[]>([frameworks[0]]);
+    const [inputValue, setInputValue] = useState("");
+    const anchor = useComboboxAnchor();
+
+    const trimmed = inputValue.trim();
+    const lower = trimmed.toLowerCase();
+    const exactMatch = pool.some((p) => p.toLowerCase() === lower);
+    const items = trimmed && !exactMatch ? [...pool, trimmed] : pool;
+
+    return (
+      <Field>
+        <FieldLabel>Frameworks</FieldLabel>
+        <Combobox
+          inputValue={inputValue}
+          items={items}
+          multiple
+          onInputValueChange={setInputValue}
+          onValueChange={(next) => {
+            const list = next as string[];
+            setSelected(list);
+            const additions = list.filter((tag) => !pool.includes(tag));
+            if (additions.length > 0) {
+              setPool((prev) => Array.from(new Set([...prev, ...additions])));
+            }
+            setInputValue("");
+          }}
+          value={selected}
+        >
+          <ComboboxChips className="w-full max-w-xs" ref={anchor}>
+            <ComboboxValue>
+              {(values: string[]) => (
+                <>
+                  {values.map((value) => (
+                    <ComboboxChip key={value}>{value}</ComboboxChip>
+                  ))}
+                  <ComboboxChipsInput
+                    placeholder={
+                      values.length === 0 ? "Select or type to create…" : ""
+                    }
+                  />
+                </>
+              )}
+            </ComboboxValue>
+          </ComboboxChips>
+          <ComboboxContent anchor={anchor}>
+            <ComboboxList>
+              {(item: string) => {
+                const isCreate = !pool.includes(item);
+                return (
+                  <Fragment key={item}>
+                    {isCreate && <ComboboxSeparator className="first:hidden" />}
+                    <ComboboxItem value={item}>
+                      {isCreate ? (
+                        <span className="inline-flex items-center gap-1.5">
+                          <PlusIcon className="size-3.5" />
+                          Add &quot;{item}&quot;
+                        </span>
+                      ) : (
+                        item
+                      )}
+                    </ComboboxItem>
+                  </Fragment>
+                );
+              }}
+            </ComboboxList>
+          </ComboboxContent>
+        </Combobox>
+        <FieldDescription>
+          Type a value that doesn&apos;t match any existing item to expose an{" "}
+          <code>Add &quot;X&quot;</code> row, separated from the list.
         </FieldDescription>
       </Field>
     );
