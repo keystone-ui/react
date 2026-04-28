@@ -5,7 +5,21 @@
     "docs": "0.0.0",
     "storybook": "0.0.0",
     "@repo/typescript-config": "0.0.0",
-    "@keystoneui/react": "0.0.0"
+    "@keystoneui/react": "0.0.0",
+    "@keystoneui/mcp": "0.1.0"
   },
-  "changesets": ["initial-beta-release"]
+  "changesets": [
+    "button-and-touch-polish",
+    "drawer-floating-variant",
+    "drop-redundant-motion-reduce",
+    "form-renders-form-element",
+    "initial-beta-release",
+    "mcp-get-examples-tool",
+    "motion-and-touch-polish",
+    "popover-no-max-height",
+    "portaled-popups-z-order",
+    "selection-bar-and-thin-scrollbar",
+    "surface-popup-motion-and-layering-tokens",
+    "upgrade-2026-04"
+  ]
 }

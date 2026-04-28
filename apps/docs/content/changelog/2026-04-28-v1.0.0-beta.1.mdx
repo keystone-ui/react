@@ -1,0 +1,104 @@
+---
+version: "1.0.0-beta.1"
+date: "2026-04-28"
+description: "What's coming in the next beta"
+excerpt: "Stack upgrade, SelectionBar, floating drawers, motion + layering tokens, Form-as-form, InputOTP on Base UI."
+---
+
+Everything currently merged to `main` but not yet published to npm. Will ship
+together as the next `0.1.0-beta.x` bump when `changeset version` runs.
+
+<ComponentPreview name="input-otp-default" />
+
+<ChangeTag variant="removed" />
+
+- **Breaking: `<Form>` now renders a real `<form>` element.** Accepts `onSubmit`
+  and any `FormHTMLAttributes<HTMLFormElement>`. Consumers wrapping `<Form>` in
+  their own `<form>` should remove the wrapper.
+
+<ChangeTag variant="added" />
+
+- **`<FieldGroup>`** export from `@keystoneui/react/form` — a layout-only
+  `<div>` with the same vertical spacing the old `<Form>` used to provide. Use
+  it when you want grouping without a real form element.
+- **`<SelectionBar>`** primitive — bulk-action bar that surfaces when one or
+  more items are selected. Imported via `@keystoneui/react/selection-bar`.
+- **`<DrawerContent variant="floating">`** — insets the drawer from the
+  viewport edges for a card-like floating treatment. Default behavior unchanged.
+- **Motion + layering tokens** in `base.css`:
+  - Duration: `--duration-fast`, `--duration-base`, `--duration-slow`,
+    `--duration-drawer`
+  - Easing: `--ease-out`, `--ease-in-out`, `--ease-drawer`
+  - Z-index: `--z-sticky`, `--z-drawer` (40), `--z-modal` (50),
+    `--z-dropdown`, `--z-popover` (60), `--z-tooltip` (70), `--z-toast` (80)
+- **Global `scrollbar-width: thin`** in `base.css` so app-level scrollable
+  surfaces match the popup look without per-component overrides.
+- **`tickets-01` block** with pagination, lean Table primitive usage,
+  row-hover Open button, detail drawer, and tags — surfaces the new
+  `SelectionBar` for bulk actions.
+- **Surface popup animations** via `data-starting-style` /
+  `data-ending-style` for tighter Base UI alignment (DropdownMenu, Select,
+  Combobox, Popover).
+- **Iframe-based block preview** in the docs site, with drag-resize and a
+  toolbar.
+- **Combobox multi-select-with-create** docs example.
+- **`get_examples` MCP tool** — agents can call
+  `get_examples({ name: "button" })` (or any block name like `tickets-01`) to
+  pull live demo TSX. Brings the MCP server to 7 tools.
+
+<ChangeTag variant="changed" />
+
+- **React 19 ref-as-prop migration.** Primitives no longer use
+  `React.forwardRef` — `ref` is a regular prop. Consumers reading prop types
+  via `React.ComponentProps<typeof Foo>` will see `ref` typed as
+  `React.RefAttributes<T>`. Most callers need no change.
+- **`InputOTP`** now wraps Base UI's `OTPField` primitive (preview), bringing
+  it in line with the rest of the library's Base UI foundations.
+- **`@base-ui/react` 1.2 → 1.4.** Drawer is stable; new optional `Label` /
+  `InputGroup` parts on Combobox / Select / Slider / Autocomplete; many bug
+  fixes upstream.
+- **`lucide-react` 0.575 → 1.11.** The `*Icon` suffix was dropped from default
+  exports — imports rewritten as aliases throughout the codebase. Brand icons
+  removed; `Github` replaced with `Code` in the docs home.
+- **Tooling bumps:** `shadcn` CLI 3 → 4, `vite` 7 → 8, `typescript` 5.9 → 6,
+  `next` 16.1 → 16.2, `motion` 12.34 → 12.38, `react-day-picker` 9.13 → 9.14,
+  `react-resizable-panels` 4.6 → 4.10, `react-aria-components` 1.15 → 1.17,
+  `chromatic` 15 → 16, `vitest` 4.0 → 4.1, `storybook` 10.2 → 10.3,
+  `jsdom` 28 → 29, `zod` 3 → 4 (mcp), `tailwindcss` 4.2.0 → 4.2.4, `biome`
+  2.4.4 → 2.4.13, `ultracite` 7.2 → 7.6.
+- **Motion tightening.** Modal, AlertDialog, Popover, Dropdown, Select,
+  Combobox, and Tooltip now scale from **0.95** (was 0.96). Modal and
+  AlertDialog overlays exit at **100ms** (was 125ms). Accordion chevron,
+  Switch root + thumb, and Input get explicit duration tokens.
+- **Input** picks up `aria-invalid:transition-none` so validation flips don't
+  crossfade through the focus transition.
+- **Badge** `<a>` link variants crossfade their hover via
+  `[a]:transition-colors` instead of snapping.
+- **AAA-leaning touch targets** — Checkbox, Switch, RadioGroupItem, Toast,
+  Drawer dismiss, and InputOTP slot hit areas extended to `-inset-x-4
+  -inset-y-3` (visual unchanged).
+- **`Button`** uses an explicit transition list (`transform`,
+  `background-color`, `color`, `border-color`, `box-shadow`, `outline-color`)
+  instead of `transition-all`, and defaults to `type="button"` to prevent
+  accidental form submission inside `<form>`.
+- **`RadioGroupItem`** indicator scales from **0.5** (was 0) for a smoother
+  checked-state animation.
+- **Toast** and **Drawer** pick up safe-area-inset polish for mobile.
+
+<ChangeTag variant="fixed" />
+
+- **Portaled popups z-order.** DropdownMenu, Select, Combobox, and Popover now
+  sit at `z=60` — above modal (`50`) and drawer (`40`), below tooltip (`70`)
+  and toast (`80`). Previously a Select inside a Modal could be visually
+  trapped under the modal overlay.
+- **`PopoverContent` no longer caps height.** The `max-height` constraint is
+  gone; consumers control sizing via `className`. Aligns with the existing
+  `overflow-auto`.
+- Storybook `Default` play functions for `DropdownMenu` and `Select` —
+  intermittent CI failures gone.
+- Two Base UI 1.4 button-composition warnings silenced in the docs demos.
+- `window.Image` mocked in the test environment so `@base-ui/react` 1.4's
+  `Avatar` no longer trips on the missing browser global.
+- Removed redundant `motion-reduce:` utilities from per-component class lists.
+  `prefers-reduced-motion` is handled centrally in `base.css`; behavior
+  unchanged for end users.

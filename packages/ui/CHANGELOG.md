@@ -1,5 +1,104 @@
 # @keystoneui/react
 
+## 1.0.0-beta.1
+
+### Major Changes
+
+- 2b62a48: **Breaking: `<Form>` now renders a real `<form>` element.**
+
+  Previously `<Form>` rendered a `<div>` and required a separate `<form>` wrapper for submission. It now is the form: accepts `onSubmit` and any `FormHTMLAttributes<HTMLFormElement>`, and Enter-to-submit works without extra wiring.
+
+  To restore the old layout-only behavior (a `<div>` with the same vertical spacing), use the new `<FieldGroup>` export from `@keystoneui/react/form`:
+
+  ```tsx
+  // Before
+  <Form>
+    <Label>...</Label>
+    <Input />
+  </Form>
+
+  // After (real form)
+  <Form onSubmit={handleSubmit}>
+    <Label>...</Label>
+    <Input name="email" />
+  </Form>
+
+  // After (layout-only div, equivalent to the old <Form>)
+  <FieldGroup>
+    <Label>...</Label>
+    <Input />
+  </FieldGroup>
+  ```
+
+  Also: RadioGroupItem indicator now scales from 0.5 (was 0) for a smoother checked-state animation.
+
+  Migration: any consumer wrapping `<Form>` in their own `<form>` should remove the wrapper or switch to `<FieldGroup>`.
+
+### Minor Changes
+
+- 2b62a48: Add `variant="floating"` to side drawers.
+
+  `<DrawerContent variant="floating">` insets the drawer from the viewport edges, giving it a card-like floating treatment instead of edge-anchored. Default behavior unchanged.
+
+- 2b62a48: Add `SelectionBar` primitive and a global thin scrollbar.
+  - New `SelectionBar` component — bulk-action bar that surfaces when one or more items are selected (e.g. tickets, rows, list items). Imported via `@keystoneui/react/selection-bar`.
+  - `base.css` now ships a global `scrollbar-width: thin` style so app-level scrollable surfaces match the popup look without per-component overrides.
+
+- 2b62a48: Surface popup animations + new motion and layering tokens.
+  - Surface popups (DropdownMenu, Select, Combobox, Popover) now animate via `data-starting-style` / `data-ending-style` for tighter Base UI alignment.
+  - New CSS tokens in `base.css`:
+    - **Duration:** `--duration-fast`, `--duration-base`, `--duration-slow`, `--duration-drawer`
+    - **Easing:** `--ease-out`, `--ease-in-out`, `--ease-drawer`
+    - **Z-index:** `--z-sticky`, `--z-drawer` (40), `--z-modal` (50), `--z-dropdown`, `--z-popover` (60), `--z-tooltip` (70), `--z-toast` (80)
+  - Use these tokens in app code instead of hard-coded durations or z-index values. Library overlay components manage their own stacking.
+
+- 11dc9b5: Upgrade dependencies to latest stable + modernize React 19 patterns.
+
+  **Public API change (minor):** primitives no longer use `React.forwardRef` —
+  `ref` is now a regular prop in keeping with React 19. Consumers that read
+  the component prop type via `React.ComponentProps<typeof Foo>` will see
+  `ref` as a regular prop (typed as `React.RefAttributes<T>`). Most callers
+  need no change.
+
+  **Headline upstream bumps:**
+  - `@base-ui/react` 1.2 → 1.4 (Drawer is stable; new optional Label/InputGroup
+    parts on Combobox/Select/Slider/Autocomplete; many bug fixes)
+  - `lucide-react` 0.575 → 1.11 (`*Icon` suffix dropped from default exports;
+    imports rewritten as aliases throughout the codebase; brand icons removed,
+    `Github` replaced with `Code` in the docs home)
+  - `shadcn` CLI 3 → 4, `vite` 7 → 8, `typescript` 5.9 → 6, `next` 16.1 → 16.2,
+    `motion` 12.34 → 12.38, `react-day-picker` 9.13 → 9.14,
+    `react-resizable-panels` 4.6 → 4.10, `react-aria-components` 1.15 → 1.17,
+    `chromatic` 15 → 16, `vitest` 4.0 → 4.1, `storybook` 10.2 → 10.3,
+    `jsdom` 28 → 29, `zod` 3 → 4 (mcp), Tailwind 4.2.0 → 4.2.4, biome 2.4.4 →
+    2.4.13, ultracite 7.2 → 7.6.
+
+  **Tooling note:** TS 6 deprecates `baseUrl`. The shared `typescript-config`
+  sets `ignoreDeprecations: "6.0"` to silence the warning while keeping
+  `apps/docs`'s path-alias setup working. Revisit when TS 7 lands.
+
+### Patch Changes
+
+- 2b62a48: Touch-target and a11y polish across primitives.
+  - `Button` now has an explicit transition list (`transform`, `background-color`, `color`, `border-color`, `box-shadow`, `outline-color`) instead of `transition-all`, and defaults to `type="button"` to prevent accidental form submission inside `<form>`.
+  - AAA-leaning touch-target extension on Toast, Drawer dismiss, InputOTP slot, and other primitives — visual unchanged, hit area larger.
+  - Safe-area-inset polish for Toast and Drawer on mobile.
+
+- 2b62a48: Drop redundant `motion-reduce:` utilities from per-component class lists. `prefers-reduced-motion` is now handled centrally in `base.css`, so primitives no longer need to opt-in individually. Behavior unchanged for end users.
+- 23a3421: Motion and touch polish across primitives:
+  - Modal/AlertDialog/Popover/Dropdown/Select/Combobox/Tooltip now scale from 0.95 (was 0.96), exact match to Emil's "scale-from-0" principle.
+  - Modal and AlertDialog overlays now exit at 100ms (was 125ms) so the backdrop doesn't linger past content.
+  - Accordion chevron picks up an explicit `duration-200 ease-out` to match its sibling panel.
+  - Switch root + thumb get explicit `duration-150` (was inheriting Tailwind defaults).
+  - Input gets explicit `duration-150` and `aria-invalid:transition-none` so validation flips don't crossfade through the focus transition.
+  - Badge's `<a>` link variants now crossfade their hover via `[a]:transition-colors` instead of snapping.
+  - Checkbox / Switch / RadioGroupItem hit-area extension bumped from `-inset-x-3 -inset-y-2` to `-inset-x-4 -inset-y-3` for AAA-leaning touch targets without changing the visual.
+
+- 2b62a48: Remove `max-height` constraint from `PopoverContent`. Popovers can now hold arbitrarily long content — consumers control sizing explicitly via `className` if they need it. Aligns with the existing `overflow-auto` on `PopoverContent`.
+- 2b62a48: Fix portaled popups (DropdownMenu, Select, Combobox, Popover) so they sit above modals and drawers.
+
+  Previously a Select inside a Modal could be visually trapped under the modal overlay. Popups now sit at `z=60`, above modal (`50`) and drawer (`40`), below tooltip (`70`) and toast (`80`).
+
 ## 0.1.0-beta.0
 
 ### Minor Changes
