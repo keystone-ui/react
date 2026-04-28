@@ -1,12 +1,8 @@
 ---
-date: "2026-04-28"
-description: "What's coming in the next release"
-excerpt: "2 changes queued for the next release."
+"@keystoneui/react": minor
 ---
 
-## Minor changes
-
-### Add `secondary` variant to `Toggle` and `ToggleGroup`.
+Add `secondary` variant to `Toggle` and `ToggleGroup`.
 
 Filled `bg-secondary` background when unpressed, inverts to `bg-foreground` / `text-background` when pressed. Useful for segmented-control patterns where unpressed items should still read as part of a control rather than empty space — without depending on consumer overrides for selection contrast. Existing `default` and `outline` variants are unchanged.
 
@@ -19,9 +15,3 @@ Filled `bg-secondary` background when unpressed, inverts to `bg-foreground` / `t
 ```
 
 Works in both joined (`spacing=0`, default) and spaced (`spacing>0`) modes. Consumer `aria-pressed:bg-*` overrides on individual items still win via tailwind-merge — useful for semantic colouring (status, risk).
-
-## Patch changes
-
-### Fix `Button` `fullWidth` prop.
-
-The prop was declared on `ButtonProps` and present in the CVA variant map, but was never destructured or passed to `buttonVariants(...)`. As a result `<Button fullWidth>` did not actually apply `w-full` and the boolean leaked onto the underlying DOM element, triggering React's "unknown prop" warning. Now wired through correctly — `<Button fullWidth>` produces a full-width button and no longer warns.

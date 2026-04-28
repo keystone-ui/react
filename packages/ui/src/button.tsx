@@ -92,6 +92,7 @@ const Button = ({
   className,
   variant = "default",
   size = "default",
+  fullWidth,
   isLoading = false,
   disabled,
   type = "button",
@@ -104,7 +105,7 @@ const Button = ({
   return (
     <ButtonPrimitive
       className={cn(
-        buttonVariants({ variant, size }),
+        buttonVariants({ variant, size, fullWidth }),
         isLoading && "relative",
         className
       )}

@@ -135,7 +135,9 @@ function BettingPanel({ className, ...props }: React.ComponentProps<"div">) {
               </Select>
             </Field>
 
-            <Button className="mt-2 w-full">Place Bet</Button>
+            <Button className="mt-2" fullWidth>
+              Place Bet
+            </Button>
           </FieldGroup>
         </CardContent>
       </Card>

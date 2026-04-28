@@ -140,7 +140,9 @@ export function BettingPanel({
               </div>
             </div>
 
-            <Button className="mt-2 w-full">Place Bet</Button>
+            <Button className="mt-2" fullWidth>
+              Place Bet
+            </Button>
           </div>
         </CardContent>
       </Card>

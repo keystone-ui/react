@@ -134,7 +134,7 @@ export function BettingPanel({
               </Select>
             </Field>
 
-            <Button className="w-full">Place Bet</Button>
+            <Button fullWidth>Place Bet</Button>
           </div>
         </CardContent>
       </Card>
