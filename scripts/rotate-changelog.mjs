@@ -15,12 +15,7 @@
  * alongside the version-bump diff before committing.
  */
 
-import {
-  existsSync,
-  readFileSync,
-  renameSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
@@ -66,9 +61,7 @@ const dateLineIdx = fmLines.findIndex((l) => /^date:\s/.test(l));
 const versionLineIdx = fmLines.findIndex((l) => /^version:\s/.test(l));
 
 if (versionLineIdx !== -1) {
-  fail(
-    `${UNRELEASED} already has a version field — was it already rotated?`
-  );
+  fail(`${UNRELEASED} already has a version field — was it already rotated?`);
 }
 
 if (dateLineIdx === -1) {
@@ -93,7 +86,9 @@ No changes merged since v${pkgVersion}.
 `;
 writeFileSync(UNRELEASED, stub);
 
-console.log(`✓ rotated changelog`);
-console.log(`  ${UNRELEASED.replace(`${ROOT}/`, "")} → ${target.replace(`${ROOT}/`, "")}`);
+console.log("✓ rotated changelog");
+console.log(
+  `  ${UNRELEASED.replace(`${ROOT}/`, "")} → ${target.replace(`${ROOT}/`, "")}`
+);
 console.log(`  fresh stub at ${UNRELEASED.replace(`${ROOT}/`, "")}`);
-console.log(`  review with: git status apps/docs/content/changelog/`);
+console.log("  review with: git status apps/docs/content/changelog/");
