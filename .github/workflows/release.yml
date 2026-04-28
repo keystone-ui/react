@@ -4,30 +4,50 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   release:
     name: Release
+    if: github.repository_owner == 'keystone-ui'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9.15.0
 
-      - name: Setup Node.js 20.x
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Lint & format
+        run: pnpm check
+
+      - name: Build package
+        run: pnpm build --filter=@keystoneui/react
+
+      - name: Unit tests
+        run: pnpm test --filter=@keystoneui/react
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
@@ -37,3 +57,70 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub releases
+        if: steps.changesets.outputs.published == 'true'
+        uses: actions/github-script@v7
+        env:
+          PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
+        with:
+          script: |
+            const fs = require("node:fs");
+            const path = require("node:path");
+
+            const packages = JSON.parse(process.env.PACKAGES ?? "[]");
+            if (!packages.length) {
+              core.notice("No packages published, skipping release creation.");
+              return;
+            }
+
+            const changelogPath = path.join(
+              process.env.GITHUB_WORKSPACE,
+              "packages/ui/CHANGELOG.md"
+            );
+            const changelog = fs.existsSync(changelogPath)
+              ? fs.readFileSync(changelogPath, "utf8")
+              : "";
+
+            function extractSection(version) {
+              const lines = changelog.split("\n");
+              const start = lines.findIndex(
+                (line) => line.trim() === `## ${version}`
+              );
+              if (start === -1) return null;
+              let end = lines.length;
+              for (let i = start + 1; i < lines.length; i++) {
+                if (lines[i].startsWith("## ")) {
+                  end = i;
+                  break;
+                }
+              }
+              return lines.slice(start + 1, end).join("\n").trim();
+            }
+
+            for (const pkg of packages) {
+              const tag = `${pkg.name}@${pkg.version}`;
+              const section = extractSection(pkg.version);
+              const body =
+                section ||
+                `${tag} published via Changesets. See [CHANGELOG.md](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/packages/ui/CHANGELOG.md).`;
+
+              try {
+                await github.rest.repos.createRelease({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  tag_name: tag,
+                  name: `${pkg.name} v${pkg.version}`,
+                  body,
+                  draft: false,
+                  prerelease: pkg.version.includes("-"),
+                });
+                core.info(`Created release for ${tag}`);
+              } catch (error) {
+                if (error.status === 422) {
+                  core.warning(`Release for ${tag} already exists. Skipping.`);
+                } else {
+                  throw error;
+                }
+              }
+            }
