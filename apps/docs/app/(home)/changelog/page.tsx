@@ -31,7 +31,14 @@ export default function ChangelogPage() {
     if (a.version && !b.version) {
       return 1;
     }
-    return toDate(b.date).getTime() - toDate(a.date).getTime();
+    const dateDiff = toDate(b.date).getTime() - toDate(a.date).getTime();
+    if (dateDiff !== 0) {
+      return dateDiff;
+    }
+    if (a.version && b.version) {
+      return b.version.localeCompare(a.version, undefined, { numeric: true });
+    }
+    return 0;
   });
 
   return (
