@@ -10,7 +10,7 @@ import {
 
 export default function SliderDefault() {
   return (
-    <Slider defaultValue={25}>
+    <Slider className="max-w-sm" defaultValue={25}>
       <SliderControl>
         <SliderTrack>
           <SliderIndicator />

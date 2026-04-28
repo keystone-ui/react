@@ -12,7 +12,7 @@ import { Input } from "@keystoneui/react/input";
 
 export default function FieldFieldSet() {
   return (
-    <FieldSet>
+    <FieldSet className="w-full max-w-md">
       <FieldLegend>Address Information</FieldLegend>
       <FieldDescription>
         We need your address to deliver your order.

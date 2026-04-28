@@ -14,7 +14,7 @@ export default function SliderRange() {
   const id = useId();
 
   return (
-    <Slider aria-labelledby={id} defaultValue={[25, 75]}>
+    <Slider aria-labelledby={id} className="max-w-sm" defaultValue={[25, 75]}>
       <div className="flex justify-between">
         <span className="font-medium text-sm" id={id}>
           Price range

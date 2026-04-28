@@ -5,7 +5,7 @@ import { Label } from "@keystoneui/react/label";
 
 export default function LabelRequired() {
   return (
-    <div className="space-y-2">
+    <div className="w-full max-w-xs space-y-2">
       <Label htmlFor="password">
         Password <span className="text-destructive">*</span>
       </Label>

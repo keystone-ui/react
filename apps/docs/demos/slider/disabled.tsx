@@ -10,7 +10,7 @@ import {
 
 export default function SliderDisabled() {
   return (
-    <Slider defaultValue={40} disabled>
+    <Slider className="max-w-sm" defaultValue={40} disabled>
       <SliderControl>
         <SliderTrack>
           <SliderIndicator />

@@ -10,7 +10,7 @@ import { Switch } from "@keystoneui/react/switch";
 
 export default function FieldWithSwitch() {
   return (
-    <Field orientation="horizontal">
+    <Field className="max-w-xs" orientation="horizontal">
       <FieldContent>
         <FieldLabel htmlFor="field-switch">Share across devices</FieldLabel>
         <FieldDescription>

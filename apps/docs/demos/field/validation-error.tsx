@@ -5,7 +5,7 @@ import { Input } from "@keystoneui/react/input";
 
 export default function FieldValidationError() {
   return (
-    <Field data-invalid>
+    <Field className="max-w-xs" data-invalid>
       <FieldLabel htmlFor="field-email">Email</FieldLabel>
       <Input
         aria-invalid

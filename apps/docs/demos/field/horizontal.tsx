@@ -5,7 +5,7 @@ import { Input } from "@keystoneui/react/input";
 
 export default function FieldHorizontal() {
   return (
-    <Field orientation="horizontal">
+    <Field className="max-w-xs" orientation="horizontal">
       <FieldLabel htmlFor="horizontal-name">Name</FieldLabel>
       <Input id="horizontal-name" placeholder="Evil Rabbit" />
     </Field>

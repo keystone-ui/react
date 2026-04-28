@@ -37,7 +37,7 @@ export default function FieldSettingsForm() {
   );
 
   return (
-    <FieldSet>
+    <FieldSet className="w-full max-w-md">
       <FieldGroup>
         <FieldSet>
           <FieldLegend>Compute Environment</FieldLegend>

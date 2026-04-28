@@ -14,7 +14,7 @@ export default function SliderWithLabel() {
   const id = useId();
 
   return (
-    <Slider aria-labelledby={id} defaultValue={48}>
+    <Slider aria-labelledby={id} className="max-w-sm" defaultValue={48}>
       <div className="flex justify-between">
         <span className="font-medium text-sm" id={id}>
           Volume

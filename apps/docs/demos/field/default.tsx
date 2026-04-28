@@ -5,7 +5,7 @@ import { Input } from "@keystoneui/react/input";
 
 export default function FieldDefault() {
   return (
-    <Field>
+    <Field className="max-w-xs">
       <FieldLabel htmlFor="field-username">Username</FieldLabel>
       <Input id="field-username" placeholder="Enter your username" />
       <FieldDescription>
