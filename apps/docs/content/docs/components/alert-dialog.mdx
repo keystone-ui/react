@@ -23,6 +23,21 @@ import {
 
 <ComponentPreview name="alert-dialog-default" />
 
+## Composition
+
+```text
+AlertDialog
+├── AlertDialogTrigger
+└── AlertDialogContent
+    ├── AlertDialogHeader
+    │   ├── AlertDialogTitle
+    │   └── AlertDialogDescription
+    ├── AlertDialogMedia
+    └── AlertDialogFooter
+        ├── AlertDialogAction
+        └── AlertDialogCancel
+```
+
 ## Destructive
 
 A destructive confirmation dialog with red action button:

@@ -28,6 +28,25 @@ import {
 
 <ComponentPreview name="dropdown-menu-default" />
 
+## Composition
+
+```text
+DropdownMenu
+├── DropdownMenuTrigger
+└── DropdownMenuContent
+    ├── DropdownMenuLabel
+    ├── DropdownMenuGroup
+    │   ├── DropdownMenuItem
+    │   │   └── DropdownMenuShortcut
+    │   ├── DropdownMenuCheckboxItem
+    │   └── DropdownMenuRadioGroup
+    │       └── DropdownMenuRadioItem
+    ├── DropdownMenuSeparator
+    └── DropdownMenuSub
+        ├── DropdownMenuSubTrigger
+        └── DropdownMenuSubContent
+```
+
 ## With Icons
 
 Add icons to menu items for visual clarity:

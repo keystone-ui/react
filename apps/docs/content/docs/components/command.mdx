@@ -25,6 +25,20 @@ A simple command menu in a dialog:
 
 <ComponentPreview name="command-default" />
 
+## Composition
+
+```text
+CommandDialog
+└── Command
+    ├── CommandInput
+    └── CommandList
+        ├── CommandEmpty
+        ├── CommandGroup
+        │   └── CommandItem
+        │       └── CommandShortcut
+        └── CommandSeparator
+```
+
 ## Shortcuts
 
 Items can display keyboard shortcut labels using `CommandShortcut`:

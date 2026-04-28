@@ -14,7 +14,6 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerDescription,
-  DrawerBody,
   DrawerFooter,
 } from "@keystoneui/react/drawer";
 ```
@@ -22,6 +21,19 @@ import {
 ## Usage
 
 <ComponentPreview name="drawer-default" />
+
+## Composition
+
+```text
+Drawer
+├── DrawerTrigger
+└── DrawerContent
+    ├── DrawerHeader
+    │   ├── DrawerTitle
+    │   └── DrawerDescription
+    └── DrawerFooter
+        └── DrawerClose
+```
 
 ## Sides
 

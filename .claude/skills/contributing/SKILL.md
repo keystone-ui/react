@@ -22,7 +22,7 @@ This creates all files and updates all registries. Then follow the Storybook-fir
 2. **Write Storybook stories** in `apps/storybook/stories/{name}.stories.tsx` (primary dev surface)
 3. **Create Fumadocs demos** in `apps/docs/demos/{name}/` (3-6 simplified demos from stories)
 4. **Register demos** in `apps/docs/demos/index.ts`
-5. **Write MDX docs** in `apps/docs/content/docs/components/{name}.mdx` using `<ComponentPreview name="{name}-{example}" />`
+5. **Write MDX docs** in `apps/docs/content/docs/components/{name}.mdx` using `<ComponentPreview name="{name}-{example}" />`. For compound components (≥2 exported parts that nest), include a `## Composition` ASCII tree after `## Usage` — see [Composition tree](#composition-tree) below.
 6. **LLMs.txt** updates automatically (no manual step)
 7. **Sync the AI agent surface** — see [Sync the AI Agent Surface](#sync-the-ai-agent-surface) below
 
@@ -34,8 +34,9 @@ This creates all files and updates all registries. Then follow the Storybook-fir
 2. Update Storybook stories
 3. Update Fumadocs demos if user-facing
 4. Update MDX API Reference table
-5. Update `_registry.ts` if dependencies changed
-6. Sync the AI agent surface (below) — *if the change affects rules, conventions, or the public API the skill teaches*
+5. **If a sub-component was added/removed/renamed**: update the `## Composition` ASCII tree in the MDX
+6. Update `_registry.ts` if dependencies changed
+7. Sync the AI agent surface (below) — *if the change affects rules, conventions, or the public API the skill teaches*
 
 ### Visual/styling change
 
@@ -121,6 +122,28 @@ In `apps/docs/content/docs/components/my-component.mdx`:
 ```mdx
 <ComponentPreview name="my-component-default" />
 ```
+
+## Composition tree
+
+For compound components (≥2 exported parts that nest), insert a `## Composition` section after `## Usage` with an ASCII tree showing the canonical nesting. Mirrors shadcn/ui's pattern — flows through `llms-full.txt` automatically since it's plain markdown. Skip for single-piece components (Button, Badge, Input, Spinner, etc.).
+
+```mdx
+## Composition
+
+\`\`\`text
+MyComponent
+└── MyComponentItem
+    ├── MyComponentTrigger
+    └── MyComponentContent
+\`\`\`
+```
+
+Authoring rules:
+- Use box-drawing characters (`├──`, `└──`, `│`) — copy from an existing MDX if unsure.
+- Indent two spaces per level.
+- Order children top-to-bottom in the order they appear in the canonical default demo.
+- Show one branch per repeating part (don't list two `MyComponentItem`s).
+- Include conventional non-exported nodes when they appear in the standard demo (e.g. `Icon` under `Alert`).
 
 ## Key File Locations
 

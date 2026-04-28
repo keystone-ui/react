@@ -6,12 +6,25 @@ description: Native browser select dropdown for simple selection scenarios with 
 ## Import
 
 ```tsx
-import { NativeSelect } from "@keystoneui/react/native-select";
+import {
+  NativeSelect,
+  NativeSelectOption,
+  NativeSelectOptGroup,
+} from "@keystoneui/react/native-select";
 ```
 
 ## Usage
 
 <ComponentPreview name="native-select-default" />
+
+## Composition
+
+```text
+NativeSelect
+├── NativeSelectOptGroup
+│   └── NativeSelectOption
+└── NativeSelectOption
+```
 
 ## Groups
 

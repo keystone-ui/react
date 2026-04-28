@@ -115,6 +115,14 @@ import { MyComponent } from "@keystoneui/react/my-component";
 
 <ComponentPreview name="my-component-default" />
 
+## Composition
+
+\`\`\`text
+MyComponent
+├── MyComponentHeader
+└── MyComponentContent
+\`\`\`
+
 ## Variants
 
 <ComponentPreview name="my-component-variants" />
@@ -138,7 +146,7 @@ No manual step. The LLMs.txt pipeline reads MDX pages and replaces `<ComponentPr
 |-------------|-----------|-------|-----|
 | **New prop or variant** | Add/update story | Add demo if user-facing | Update API Reference table |
 | **Prop renamed or removed** | Update stories | Update affected demos | Update API Reference table |
-| **New sub-component** | Add stories | Add demo if useful | Add to Import section |
+| **New sub-component** | Add stories | Add demo if useful | Add to Import section AND update Composition tree |
 | **Visual/styling change** | Auto-reflects | Auto-reflects | No change needed |
 | **Bug fix** | Add regression story | No change needed | No change needed |
 | **Description change** | N/A | N/A | Update MDX frontmatter |
@@ -160,6 +168,11 @@ No manual step. The LLMs.txt pipeline reads MDX pages and replaces `<ComponentPr
 3. Create a demo showing the sub-component in use
 4. Register the demo in `apps/docs/demos/index.ts`
 5. Update the MDX Import section and add a `<ComponentPreview>` for the new demo
+6. Update the `## Composition` ASCII tree in the MDX so agents see the new nesting
+
+### Composition section (compound components)
+
+For compound components (≥2 exported parts that nest), include a `## Composition` section after `## Usage` with an ASCII tree of the parts. The tree mirrors what shadcn/ui ships and helps both human readers and LLMs see required nesting at a glance — the section flows through `llms-full.txt` automatically. Use box-drawing characters (`├──`, `└──`, `│`) and indent two spaces per level. Skip for single-piece components (Button, Badge, Input, Spinner, etc.).
 
 ## Development Commands
 

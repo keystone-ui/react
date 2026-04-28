@@ -6,12 +6,30 @@ description: Range slider input for selecting a numeric value within a defined r
 ## Import
 
 ```tsx
-import { Slider } from "@keystoneui/react/slider";
+import {
+  Slider,
+  SliderControl,
+  SliderTrack,
+  SliderIndicator,
+  SliderThumb,
+  SliderValue,
+} from "@keystoneui/react/slider";
 ```
 
 ## Usage
 
 <ComponentPreview name="slider-default" />
+
+## Composition
+
+```text
+Slider
+└── SliderControl
+    └── SliderTrack
+        ├── SliderIndicator
+        ├── SliderThumb
+        └── SliderValue
+```
 
 ## With Label
 

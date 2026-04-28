@@ -13,7 +13,6 @@ import {
   ModalHeader,
   ModalTitle,
   ModalDescription,
-  ModalBody,
   ModalFooter,
   ModalClose,
 } from "@keystoneui/react/modal";
@@ -22,6 +21,19 @@ import {
 ## Usage
 
 <ComponentPreview name="modal-default" />
+
+## Composition
+
+```text
+Modal
+├── ModalTrigger
+└── ModalContent
+    ├── ModalHeader
+    │   ├── ModalTitle
+    │   └── ModalDescription
+    └── ModalFooter
+        └── ModalClose
+```
 
 ## Sizes
 

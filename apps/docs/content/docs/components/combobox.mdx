@@ -11,6 +11,7 @@ import {
   ComboboxTrigger,
   ComboboxContent,
   ComboboxInput,
+  ComboboxList,
   ComboboxItem,
   ComboboxGroup,
   ComboboxLabel,
@@ -23,6 +24,21 @@ import {
 ## Usage
 
 <ComponentPreview name="combobox-default" />
+
+## Composition
+
+```text
+Combobox
+├── ComboboxInput
+├── ComboboxClear
+└── ComboboxContent
+    ├── ComboboxEmpty
+    └── ComboboxList
+        ├── ComboboxGroup
+        │   ├── ComboboxLabel
+        │   └── ComboboxItem
+        └── ComboboxSeparator
+```
 
 ## Custom Items
 

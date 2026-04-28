@@ -9,6 +9,7 @@ description: Vertically stacked expandable and collapsible content sections for 
 import {
   Accordion,
   AccordionItem,
+  AccordionHeader,
   AccordionTrigger,
   AccordionPanel,
 } from "@keystoneui/react/accordion";
@@ -17,6 +18,16 @@ import {
 ## Usage
 
 <ComponentPreview name="accordion-default" />
+
+## Composition
+
+```text
+Accordion
+└── AccordionItem
+    ├── AccordionHeader
+    │   └── AccordionTrigger
+    └── AccordionPanel
+```
 
 ## Variants
 

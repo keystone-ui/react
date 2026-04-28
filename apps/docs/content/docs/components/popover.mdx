@@ -12,12 +12,28 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTitle,
+  PopoverDescription,
+  PopoverArrow,
+  PopoverClose,
 } from "@keystoneui/react/popover";
 ```
 
 ## Usage
 
 <ComponentPreview name="popover-default" />
+
+## Composition
+
+```text
+Popover
+├── PopoverTrigger
+└── PopoverContent
+    ├── PopoverHeader
+    │   ├── PopoverTitle
+    │   └── PopoverDescription
+    ├── PopoverArrow
+    └── PopoverClose
+```
 
 ## With Form
 
