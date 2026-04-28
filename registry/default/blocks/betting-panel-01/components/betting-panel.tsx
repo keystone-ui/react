@@ -94,6 +94,7 @@ export function BettingPanel({
               <ToggleGroup
                 className="w-full"
                 onValueChange={setRisk}
+                size="lg"
                 spacing={2}
                 value={risk}
                 variant="secondary"
