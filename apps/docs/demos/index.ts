@@ -46,6 +46,10 @@ import BadgeStats from "./badge/stats";
 import BadgeVariants from "./badge/variants";
 import BadgeWithIcon from "./badge/with-icon";
 import BadgeWithSpinner from "./badge/with-spinner";
+import BettingPanel01 from "./blocks/betting-panel-01";
+import BettingPanel02 from "./blocks/betting-panel-02";
+import BettingPanel03 from "./blocks/betting-panel-03";
+import BettingPanel04 from "./blocks/betting-panel-04";
 import ProfileDropdown01 from "./blocks/profile-dropdown-01";
 // blocks
 import Signin01 from "./blocks/signin-01";
@@ -451,6 +455,7 @@ import ToggleDefault from "./toggle/default";
 import ToggleDisabled from "./toggle/disabled";
 import ToggleOutline from "./toggle/outline";
 import TogglePressed from "./toggle/pressed";
+import ToggleSecondary from "./toggle/secondary";
 import ToggleSizes from "./toggle/sizes";
 import ToggleWithText from "./toggle/with-text";
 // toggle-group
@@ -458,6 +463,7 @@ import ToggleGroupCustom from "./toggle-group/custom";
 import ToggleGroupDefault from "./toggle-group/default";
 import ToggleGroupDisabled from "./toggle-group/disabled";
 import ToggleGroupOutline from "./toggle-group/outline";
+import ToggleGroupSecondary from "./toggle-group/secondary";
 import ToggleGroupSingle from "./toggle-group/single";
 import ToggleGroupSizes from "./toggle-group/sizes";
 import ToggleGroupSpacing from "./toggle-group/spacing";
@@ -2107,6 +2113,10 @@ export const demos: Record<string, DemoItem> = {
     component: TogglePressed,
     file: "toggle/pressed.tsx",
   },
+  "toggle-secondary": {
+    component: ToggleSecondary,
+    file: "toggle/secondary.tsx",
+  },
   "toggle-sizes": {
     component: ToggleSizes,
     file: "toggle/sizes.tsx",
@@ -2132,6 +2142,10 @@ export const demos: Record<string, DemoItem> = {
   "toggle-group-outline": {
     component: ToggleGroupOutline,
     file: "toggle-group/outline.tsx",
+  },
+  "toggle-group-secondary": {
+    component: ToggleGroupSecondary,
+    file: "toggle-group/secondary.tsx",
   },
   "toggle-group-single": {
     component: ToggleGroupSingle,
@@ -2274,6 +2288,22 @@ export const demos: Record<string, DemoItem> = {
   "block-tickets-01": {
     component: Tickets01,
     file: "blocks/tickets-01/index.tsx",
+  },
+  "block-betting-panel-01": {
+    component: BettingPanel01,
+    file: "blocks/betting-panel-01.tsx",
+  },
+  "block-betting-panel-02": {
+    component: BettingPanel02,
+    file: "blocks/betting-panel-02.tsx",
+  },
+  "block-betting-panel-03": {
+    component: BettingPanel03,
+    file: "blocks/betting-panel-03.tsx",
+  },
+  "block-betting-panel-04": {
+    component: BettingPanel04,
+    file: "blocks/betting-panel-04.tsx",
   },
   "selection-bar-default": {
     component: SelectionBarDefault,

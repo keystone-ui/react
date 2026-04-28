@@ -19,6 +19,12 @@ A bordered outline variant:
 
 <ComponentPreview name="toggle-outline" />
 
+## Secondary
+
+Filled when unpressed (uses `bg-secondary`) and inverted to `bg-foreground` when pressed. Useful when an unpressed toggle would otherwise read as empty space — e.g., a 3-pill segmented control where only one is selected.
+
+<ComponentPreview name="toggle-secondary" />
+
 ## With Text
 
 Toggle with a text label:
@@ -45,7 +51,7 @@ Toggle in pressed state:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `variant` | `"default" \| "outline"` | `"default"` | Visual style variant |
+| `variant` | `"default" \| "outline" \| "secondary"` | `"default"` | Visual style variant |
 | `size` | `"default" \| "sm" \| "lg"` | `"default"` | Size of the toggle |
 | `pressed` | `boolean` | - | Controlled pressed state |
 | `onPressedChange` | `(pressed: boolean) => void` | - | Callback when pressed state changes |

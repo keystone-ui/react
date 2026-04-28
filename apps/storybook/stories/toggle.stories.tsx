@@ -32,6 +32,12 @@ import { Toggle } from "@keystoneui/react/toggle";
   Italic
 </Toggle>
 
+// Secondary variant — filled even when unpressed
+<Toggle variant="secondary" aria-label="Toggle italic">
+  <ItalicIcon />
+  Italic
+</Toggle>
+
 // Small size
 <Toggle size="sm" aria-label="Toggle bold">
   <BoldIcon />
@@ -41,7 +47,7 @@ import { Toggle } from "@keystoneui/react/toggle";
 
 ## Features
 
-- Two variants: \`default\` and \`outline\`
+- Three variants: \`default\`, \`outline\`, and \`secondary\` (filled when unpressed)
 - Three sizes: \`sm\`, \`default\`, \`lg\`
 - Pressed/unpressed state via \`aria-pressed\`
 - Keyboard accessible via Base UI Toggle primitive
@@ -53,7 +59,7 @@ import { Toggle } from "@keystoneui/react/toggle";
   argTypes: {
     variant: {
       control: "select",
-      options: ["default", "outline"],
+      options: ["default", "outline", "secondary"],
       description: "The visual style of the toggle",
     },
     size: {
@@ -121,6 +127,25 @@ export const Outline: Story = {
         Italic
       </Toggle>
       <Toggle aria-label="Toggle bold" variant="outline">
+        <BoldIcon />
+        Bold
+      </Toggle>
+    </div>
+  ),
+};
+
+// ---------------------------------------------------------------------------
+// Secondary
+// ---------------------------------------------------------------------------
+
+export const Secondary: Story = {
+  render: () => (
+    <div className="flex flex-wrap items-center gap-2">
+      <Toggle aria-label="Toggle italic" variant="secondary">
+        <ItalicIcon />
+        Italic
+      </Toggle>
+      <Toggle aria-label="Toggle bold" defaultPressed variant="secondary">
         <BoldIcon />
         Bold
       </Toggle>

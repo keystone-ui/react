@@ -19,6 +19,12 @@ Outline variant for the toggle group:
 
 <ComponentPreview name="toggle-group-outline" />
 
+## Secondary
+
+Filled background when unpressed (uses `bg-secondary`) and inverts to `bg-foreground` when pressed. Best for segmented-control patterns where unpressed items should still read as part of a control rather than empty space.
+
+<ComponentPreview name="toggle-group-secondary" />
+
 ## Single Selection
 
 Allow only one item to be selected at a time:
@@ -70,7 +76,7 @@ Disabled toggle group:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `variant` | `"default" \| "outline"` | `"default"` | Visual style variant |
+| `variant` | `"default" \| "outline" \| "secondary"` | `"default"` | Visual style variant |
 | `size` | `"default" \| "sm" \| "lg"` | `"default"` | Size of the toggle items |
 | `spacing` | `number` | `0` | Gap between items (0 = joined with connected borders) |
 | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |

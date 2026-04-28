@@ -1011,6 +1011,78 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "betting-panel-01",
+      "type": "registry:block",
+      "title": "Betting Panel 01",
+      "description": "A betting panel with inline ½ / 2× multipliers inside the bet amount field and risk-level toggles.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input-group",
+        "select",
+        "tabs",
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "registry/default/blocks/betting-panel-01/components/betting-panel.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "betting-panel-02",
+      "type": "registry:block",
+      "title": "Betting Panel 02",
+      "description": "A slider-based betting panel with a gradient risk slider for visual feedback on the chosen risk level.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "card", "slider", "tabs"],
+      "files": [
+        {
+          "path": "registry/default/blocks/betting-panel-02/components/betting-panel.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "betting-panel-03",
+      "type": "registry:block",
+      "title": "Betting Panel 03",
+      "description": "A betting panel with quick-pick preset amounts for rapid bet placement.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input-group",
+        "select",
+        "tabs",
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "registry/default/blocks/betting-panel-03/components/betting-panel.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "betting-panel-04",
+      "type": "registry:block",
+      "title": "Betting Panel 04",
+      "description": "A stepper-based betting panel with circular +/− controls for bet amount and rows.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "card", "tabs", "toggle-group"],
+      "files": [
+        {
+          "path": "registry/default/blocks/betting-panel-04/components/betting-panel.tsx",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }

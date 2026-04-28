@@ -50,7 +50,7 @@ export interface ToggleGroupProps
    * The visual style applied to all items in the group.
    * @default "default"
    */
-  variant?: "default" | "outline";
+  variant?: "default" | "outline" | "secondary";
 }
 
 function ToggleGroup({

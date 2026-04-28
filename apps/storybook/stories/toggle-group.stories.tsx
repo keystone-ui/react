@@ -57,7 +57,7 @@ import { ToggleGroup, ToggleGroupItem } from "@keystoneui/react/toggle-group";
 
 ## Features
 
-- Two variants: \`default\` and \`outline\`
+- Three variants: \`default\`, \`outline\`, and \`secondary\` (filled when unpressed)
 - Three sizes: \`sm\`, \`default\`, \`lg\`
 - Single or multiple selection modes
 - \`spacing\` prop: \`0\` (default) joins items with connected borders, \`>0\` adds a gap
@@ -77,7 +77,7 @@ Use the **ToggleGroup** component when you want to group buttons that toggle a s
   argTypes: {
     variant: {
       control: "select",
-      options: ["default", "outline"],
+      options: ["default", "outline", "secondary"],
       description: "The visual style applied to all items",
     },
     size: {
@@ -141,6 +141,26 @@ export const Outline: Story = {
       </ToggleGroupItem>
       <ToggleGroupItem aria-label="Toggle underline" value="underline">
         <UnderlineIcon />
+      </ToggleGroupItem>
+    </ToggleGroup>
+  ),
+};
+
+// ---------------------------------------------------------------------------
+// Secondary
+// ---------------------------------------------------------------------------
+
+export const Secondary: Story = {
+  render: () => (
+    <ToggleGroup defaultValue={["medium"]} spacing={2} variant="secondary">
+      <ToggleGroupItem className="px-6" value="low">
+        Low
+      </ToggleGroupItem>
+      <ToggleGroupItem className="px-6" value="medium">
+        Medium
+      </ToggleGroupItem>
+      <ToggleGroupItem className="px-6" value="high">
+        High
       </ToggleGroupItem>
     </ToggleGroup>
   ),
