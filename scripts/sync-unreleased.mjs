@@ -19,22 +19,14 @@
  * resurrect in Unreleased.
  */
 
-import {
-  existsSync,
-  readFileSync,
-  readdirSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
 const CHANGESET_DIR = join(ROOT, ".changeset");
 const PRE_JSON = join(CHANGESET_DIR, "pre.json");
 const UI_PKG = join(ROOT, "packages/ui/package.json");
-const UNRELEASED = join(
-  ROOT,
-  "apps/docs/content/changelog/unreleased.mdx"
-);
+const UNRELEASED = join(ROOT, "apps/docs/content/changelog/unreleased.mdx");
 
 const IGNORED_FILES = new Set(["README.md"]);
 const FRONTMATTER_RE = /^---\n([\s\S]*?)\n---\n?([\s\S]*)$/;
@@ -145,7 +137,9 @@ ${body}`;
 writeFileSync(UNRELEASED, output);
 
 if (empty) {
-  console.log("✓ synced unreleased.mdx (empty stub — no unconsumed changesets)");
+  console.log(
+    "✓ synced unreleased.mdx (empty stub — no unconsumed changesets)"
+  );
 } else {
   console.log(
     `✓ synced unreleased.mdx (${total} change${total === 1 ? "" : "s"} from ${unconsumed.length} changeset${unconsumed.length === 1 ? "" : "s"})`
