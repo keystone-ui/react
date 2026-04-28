@@ -1,2 +1,15 @@
 #!/bin/sh
 npx lint-staged
+
+# Auto-sync the docs changelog Unreleased entry whenever a `.changeset/*.md`
+# file is being committed — keeps apps/docs/content/changelog/unreleased.mdx
+# in lockstep with .changeset/*.md without manual edits.
+#
+# Skipped if the user is also staging an `unreleased.mdx` edit themselves
+# (lets you hand-curate one specific release without the hook clobbering it).
+if git diff --cached --name-only | grep -qE '^\.changeset/.+\.md$'; then
+  if ! git diff --cached --name-only | grep -qx 'apps/docs/content/changelog/unreleased.mdx'; then
+    node scripts/sync-unreleased.mjs && \
+      git add apps/docs/content/changelog/unreleased.mdx
+  fi
+fi

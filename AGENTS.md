@@ -41,14 +41,22 @@ pnpm test --filter=@keystoneui/storybook       # Run Storybook interaction tests
 
 ### Release & Versioning
 
-Create a changeset for any user-visible change to `@keystoneui/react` (new component, API change, behavior change, breaking change) **before** opening the PR. `pnpm changeset` is interactive and will prompt for the bump type and summary. Skip changesets only for docs-only, internal-tooling, or test-only changes.
+Create a changeset for any user-visible change to `@keystoneui/react` or `@keystoneui/mcp` (new component, API change, behavior change, breaking change). `pnpm changeset` is interactive and prompts for the bump type and summary. Skip changesets for docs-only, internal-tooling, story-only, or test-only changes.
 
 ```bash
-pnpm changeset           # Create a changeset for versioning
-pnpm version-packages    # Bump versions + rotate apps/docs changelog (run from repo root)
-pnpm release             # Build and publish packages
+pnpm changeset           # Create a changeset (interactive)
+pnpm sync-unreleased     # Manually regenerate apps/docs Unreleased entry from changesets
+pnpm version-packages    # Bump versions + sync + rotate apps/docs changelog (run from repo root)
+pnpm release             # Build and publish — CI runs this; you don't normally invoke it locally
 pnpm preview-storybook   # Preview built Storybook
 ```
+
+The docs site `Unreleased` section (`apps/docs/content/changelog/unreleased.mdx`) is **auto-generated** from `.changeset/*.md` by `scripts/sync-unreleased.mjs`:
+- The pre-commit hook regenerates and re-stages it whenever a changeset .md is committed.
+- `pnpm version-packages` regenerates it before rotation, so the dated mdx inherits real content.
+- Hand-editing is allowed only when staged alongside the changeset (the hook detects this and skips auto-sync).
+
+Full release flow (the `/release` skill wraps all of this): see [CONTRIBUTING.md → Release Workflow](CONTRIBUTING.md#release-workflow).
 
 ### Package-Specific Commands
 
