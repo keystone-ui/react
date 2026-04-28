@@ -6,7 +6,7 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version && node scripts/rotate-changelog.mjs",
-    "release": "turbo run build --filter=storybook^... && changeset publish",
+    "release": "turbo run build --filter=@keystoneui/storybook^... && changeset publish",
     "preview-storybook": "turbo run preview-storybook",
     "test": "turbo run test",
     "check": "ultracite check",

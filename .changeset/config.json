@@ -7,5 +7,5 @@
   "linked": [],
   "access": "public",
   "updateInternalDependencies": "patch",
-  "ignore": ["storybook", "docs"]
+  "ignore": ["@keystoneui/storybook", "@keystoneui/docs"]
 }

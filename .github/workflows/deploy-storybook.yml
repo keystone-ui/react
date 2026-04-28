@@ -38,10 +38,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build dependency packages
-        run: pnpm build --filter=storybook^...
+        run: pnpm build --filter=@keystoneui/storybook^...
 
       - name: Build Storybook
-        run: pnpm build --filter=storybook
+        run: pnpm build --filter=@keystoneui/storybook
 
       - name: Deploy to production
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'

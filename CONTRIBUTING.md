@@ -59,7 +59,7 @@ Write comprehensive stories covering:
 - Composition patterns
 - Edge cases
 
-Run Storybook: `pnpm dev --filter=storybook`
+Run Storybook: `pnpm dev --filter=@keystoneui/storybook`
 
 ### 4. Create Fumadocs demos
 
@@ -164,9 +164,9 @@ No manual step. The LLMs.txt pipeline reads MDX pages and replaces `<ComponentPr
 ## Development Commands
 
 ```bash
-pnpm dev --filter=storybook    # Storybook dev server (port 6006)
-pnpm dev --filter=docs          # Fumadocs dev server (port 3000)
-pnpm build --filter=docs        # Build docs (verifies types + LLMs.txt)
+pnpm dev --filter=@keystoneui/storybook    # Storybook dev server (port 6006)
+pnpm dev --filter=@keystoneui/docs          # Fumadocs dev server (port 3000)
+pnpm build --filter=@keystoneui/docs        # Build docs (verifies types + LLMs.txt)
 pnpm add:component <Name>       # Scaffold a new component
 ```
 

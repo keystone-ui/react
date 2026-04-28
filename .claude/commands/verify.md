@@ -39,8 +39,8 @@ Targeted by what changed:
 
 - If `ROOT_CONFIG_CHANGED` or (`UI_CHANGED` and `STORIES_CHANGED`) or (`UI_CHANGED` and `DOCS_CHANGED`) or `MCP_CHANGED`: `pnpm build`
 - Else if `UI_CHANGED`: `pnpm build --filter=@keystoneui/react`
-- Else if `STORIES_CHANGED`: `pnpm build --filter=storybook`
-- Else if `DOCS_CHANGED`: `pnpm build --filter=docs`
+- Else if `STORIES_CHANGED`: `pnpm build --filter=@keystoneui/storybook`
+- Else if `DOCS_CHANGED`: `pnpm build --filter=@keystoneui/docs`
 
 Use `run_in_background: true` + `Monitor` — turbo builds can take a couple of minutes. Watch for the final turbo summary line (`Tasks: X successful, Y total`) to decide pass/fail.
 
@@ -55,7 +55,7 @@ Vitest jsdom suite (`packages/ui/vitest.config.ts`). Same streaming pattern as b
 ## 4. Storybook interaction tests — only if `UI_CHANGED` or `STORIES_CHANGED` or `ROOT_CONFIG_CHANGED`
 
 ```
-pnpm test --filter=storybook
+pnpm test --filter=@keystoneui/storybook
 ```
 
 Vitest with `@vitest/browser-playwright` headless Chromium (`apps/storybook/vitest.config.ts`). On a cold cache the first run can be slow — give it generous time before declaring failure. CI does a warm run (`|| true`) before the real run; if the first run fails on what looks like cache-warming output, retry once before counting it against the fix budget.

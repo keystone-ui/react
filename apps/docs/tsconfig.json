@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript-config/react-app.json",
+  "extends": "@keystoneui/typescript-config/react-app.json",
   "include": [
     "next-env.d.ts",
     "**/*.ts",

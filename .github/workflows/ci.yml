@@ -92,13 +92,13 @@ jobs:
         working-directory: apps/storybook
 
       - name: Build packages
-        run: pnpm build --filter=storybook^...
+        run: pnpm build --filter=@keystoneui/storybook^...
 
       - name: Warm Vite dependency optimization cache
-        run: pnpm test --filter=storybook || true
+        run: pnpm test --filter=@keystoneui/storybook || true
 
       - name: Run Storybook interaction tests
-        run: pnpm test --filter=storybook
+        run: pnpm test --filter=@keystoneui/storybook
 
   chromatic:
     name: Visual Regression
@@ -125,7 +125,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build Storybook
-        run: pnpm build --filter=storybook
+        run: pnpm build --filter=@keystoneui/storybook
 
       - name: Run Chromatic
         uses: chromaui/action@latest

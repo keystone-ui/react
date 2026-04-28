@@ -313,7 +313,7 @@ console.log(`
 Done! Next steps:
 
   1. Implement the component in packages/ui/src/${kebab}.tsx
-  2. Develop with Storybook:  pnpm dev --filter=storybook
+  2. Develop with Storybook:  pnpm dev --filter=@keystoneui/storybook
   3. Add more stories in apps/storybook/stories/${kebab}.stories.tsx
   4. Create additional demos in apps/docs/demos/${kebab}/
   5. Update the MDX docs in apps/docs/content/docs/components/${kebab}.mdx

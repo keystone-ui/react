@@ -40,7 +40,7 @@ The package is in **changesets pre-release mode** (tag `beta`). Bumps produce `0
 
 4. **Sanity-build the docs.** Confirms the new MDX file passes the Zod schema in `apps/docs/source.config.ts`:
    ```
-   pnpm build --filter=docs
+   pnpm build --filter=@keystoneui/docs
    ```
 
 5. **Commit and PR.** A single commit named `chore: version packages` is the convention. Open a PR and merge once review is happy. Do not publish from the local machine.
@@ -53,7 +53,7 @@ After the version-bump PR lands on `main`:
 pnpm release
 ```
 
-This is `turbo run build --filter=storybook^... && changeset publish`. It builds everything `storybook` depends on (which transitively includes `@keystoneui/react`) and publishes packages whose versions don't yet exist on npm. Idempotent — re-running after a successful publish is a no-op.
+This is `turbo run build --filter=@keystoneui/storybook^... && changeset publish`. It builds everything `@keystoneui/storybook` depends on (which transitively includes `@keystoneui/react`) and publishes packages whose versions don't yet exist on npm. Idempotent — re-running after a successful publish is a no-op.
 
 ## Exiting pre-release mode
 

@@ -79,7 +79,7 @@ Three surfaces drift if not maintained explicitly. Run through this checklist af
 ### Validation
 
 - `pnpm --filter @keystoneui/mcp build` — confirms MCP changes compile.
-- `pnpm --filter docs build` (or `tsc --noEmit`) — confirms docs MDX/routes are valid.
+- `pnpm --filter @keystoneui/docs build` (or `tsc --noEmit`) — confirms docs MDX/routes are valid.
 - `pnpm registry:build` — refreshes `apps/docs/public/r/*.json`.
 - `pnpm build:skills` — re-tarballs `skills/keystoneui-react/` and `skills/{others}` for `keystoneui.io/skills/{name}.tar.gz`.
 

@@ -1,5 +1,5 @@
 {
-  "name": "storybook",
+  "name": "@keystoneui/storybook",
   "version": "0.0.0",
   "type": "module",
   "private": true,
@@ -35,7 +35,7 @@
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@keystoneui/typescript-config": "workspace:*",
     "@storybook/addon-docs": "^10.3.5",
     "@storybook/addon-links": "^10.3.5",
     "@storybook/addon-onboarding": "^10.3.5",
