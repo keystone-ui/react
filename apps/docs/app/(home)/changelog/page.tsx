@@ -24,9 +24,15 @@ function toDate(value: string | Date) {
 }
 
 export default function ChangelogPage() {
-  const entries = [...changelog].sort(
-    (a, b) => toDate(b.date).getTime() - toDate(a.date).getTime()
-  );
+  const entries = [...changelog].sort((a, b) => {
+    if (!a.version && b.version) {
+      return -1;
+    }
+    if (a.version && !b.version) {
+      return 1;
+    }
+    return toDate(b.date).getTime() - toDate(a.date).getTime();
+  });
 
   return (
     <main className="py-16">
