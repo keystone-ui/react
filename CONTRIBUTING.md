@@ -174,6 +174,8 @@ pnpm add:component <Name>       # Scaffold a new component
 
 The library uses [Changesets](https://github.com/changesets/changesets) in **pre-release mode** to publish beta versions to npm. The package is published as `@keystoneui/react` and consumers install with `pnpm add @keystoneui/react@beta`.
 
+> `pnpm version-packages` runs `changeset version` **and then** rotates `apps/docs/content/changelog/unreleased.mdx` into a versioned, dated file (`<date>-v<version>.mdx`) and creates a fresh empty stub. Always run it from the repo root. Never use raw `pnpm changeset version` — the docs site `/changelog` will drift out of sync with `packages/ui/CHANGELOG.md`. Inside Claude Code, `/release` wraps the full two-phase flow.
+
 ### How it works
 
 ```mermaid
@@ -218,7 +220,7 @@ Commits without a changeset push to GitHub but do not trigger an npm publish. Th
 # 1. Create a changeset (select @keystoneui/react, pick bump type, write summary)
 pnpm changeset
 
-# 2. Apply the version bump (increments beta counter)
+# 2. Apply the version bump (increments beta counter + rotates apps/docs changelog)
 pnpm version-packages
 
 # 3. Commit the version bump

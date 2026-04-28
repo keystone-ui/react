@@ -19,4 +19,15 @@ export const blogPosts = defineCollections({
   }),
 });
 
+export const changelog = defineCollections({
+  type: "doc",
+  dir: "content/changelog",
+  schema: z.object({
+    version: z.string().optional(),
+    date: z.string().date().or(z.date()),
+    description: z.string(),
+    excerpt: z.string().optional(),
+  }),
+});
+
 export default defineConfig();

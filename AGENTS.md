@@ -45,7 +45,7 @@ Create a changeset for any user-visible change to `@keystoneui/react` (new compo
 
 ```bash
 pnpm changeset           # Create a changeset for versioning
-pnpm version-packages    # Apply changesets to bump versions
+pnpm version-packages    # Bump versions + rotate apps/docs changelog (run from repo root)
 pnpm release             # Build and publish packages
 pnpm preview-storybook   # Preview built Storybook
 ```
