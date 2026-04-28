@@ -33,7 +33,10 @@ export async function ComponentSource({ name }: ComponentSourceProps) {
   const highlighted = await highlight(code.trimEnd(), { lang: "tsx" });
 
   return (
-    <CodeBlock keepBackground={false}>
+    <CodeBlock
+      className="my-0 rounded-none border-transparent"
+      keepBackground={false}
+    >
       <Pre>{highlighted}</Pre>
     </CodeBlock>
   );
