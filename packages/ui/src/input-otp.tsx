@@ -54,7 +54,7 @@ export const InputOTPGroup = ({
   ...props
 }: InputOTPGroupProps & React.RefAttributes<HTMLDivElement>) => (
   <div
-    className={cn("flex items-center", className)}
+    className={cn("flex items-center gap-2", className)}
     data-slot="input-otp-group"
     ref={ref}
     {...props}
@@ -71,13 +71,9 @@ export const InputOTPSlot = ({ className, ...props }: InputOTPSlotProps) => (
       // 16px on mobile to prevent iOS zoom when the slot input takes focus
       "bg-input-bg text-center text-base tabular-nums md:text-sm",
       "relative h-10 w-10 outline-none transition-[color,box-shadow]",
-      "border border-input shadow-xs",
-      // Negative margin to overlap borders with the previous slot
-      "[&:not(:first-child)]:-ml-px",
-      // Round the corners of the first and last slot
-      "first:rounded-l-md last:rounded-r-md",
-      // Focus ring matching the Input component (z-10 keeps it above neighbors)
-      "focus:z-10 focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset",
+      "rounded-md border border-input shadow-xs",
+      // Focus ring matching the Input component
+      "focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset",
       // Invalid states — `aria-invalid` for keystone Field, `data-[invalid]` from Base UI Field.Root
       "aria-invalid:border-destructive aria-invalid:ring-destructive",
       "data-[invalid]:border-destructive data-[invalid]:ring-destructive",
