@@ -22,7 +22,7 @@ export interface SelectGroupProps extends SelectPrimitive.Group.Props {}
 function SelectGroup({ className, ...props }: SelectGroupProps) {
   return (
     <SelectPrimitive.Group
-      className={cn("scroll-my-1 p-1", className)}
+      className={cn("scroll-my-1 px-1", className)}
       data-slot="select-group"
       {...props}
     />
@@ -199,7 +199,7 @@ function SelectItem({
   return (
     <SelectPrimitive.Item
       className={cn(
-        `relative flex focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground ${POPUP_ITEM_HEIGHT} w-full cursor-pointer select-none items-center gap-1.5 rounded-md text-sm outline-hidden data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2`,
+        `relative flex focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:*:text-accent-foreground ${POPUP_ITEM_HEIGHT} w-full cursor-pointer select-none items-center gap-1.5 rounded-md text-sm outline-hidden data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2`,
         showDefaultIndicator ? "pr-8 pl-1.5" : "px-2",
         className
       )}

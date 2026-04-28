@@ -173,7 +173,7 @@ function DropdownMenuItem({
       className={cn(
         "focus:bg-accent focus:text-accent-foreground",
         "data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:*:[svg]:text-destructive",
-        "not-data-[variant=destructive]:focus:**:text-accent-foreground",
+        "not-data-[variant=destructive]:focus:*:text-accent-foreground",
         `group/dropdown-menu-item relative flex ${POPUP_ITEM_HEIGHT} cursor-pointer select-none items-center gap-1.5 rounded-md px-1.5 text-sm outline-hidden`,
         "data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-[inset]:pl-8 data-disabled:opacity-50",
         "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
@@ -218,7 +218,7 @@ function DropdownMenuSubTrigger({
     <MenuPrimitive.SubmenuTrigger
       className={cn(
         "focus:bg-accent focus:text-accent-foreground data-open:bg-accent data-open:text-accent-foreground",
-        "not-data-[variant=destructive]:focus:**:text-accent-foreground",
+        "not-data-[variant=destructive]:focus:*:text-accent-foreground",
         "data-popup-open:bg-accent data-popup-open:text-accent-foreground",
         `flex ${POPUP_ITEM_HEIGHT} cursor-pointer select-none items-center gap-1.5 rounded-md px-1.5 text-sm outline-hidden data-[inset]:pl-8`,
         "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
@@ -321,7 +321,7 @@ function DropdownMenuCheckboxItem({
       checked={checked}
       className={cn(
         "focus:bg-accent focus:text-accent-foreground",
-        variant === "indicator" && "focus:**:text-accent-foreground",
+        variant === "indicator" && "focus:*:text-accent-foreground",
         `relative flex ${POPUP_ITEM_HEIGHT} cursor-pointer select-none items-center gap-1.5 rounded-md text-sm outline-hidden`,
         variant === "indicator" ? "pr-8 pl-1.5" : "px-1.5",
         "data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
@@ -391,7 +391,7 @@ function DropdownMenuRadioItem({
     <MenuPrimitive.RadioItem
       className={cn(
         "focus:bg-accent focus:text-accent-foreground",
-        variant === "indicator" && "focus:**:text-accent-foreground",
+        variant === "indicator" && "focus:*:text-accent-foreground",
         `relative flex ${POPUP_ITEM_HEIGHT} cursor-pointer select-none items-center gap-1.5 rounded-md text-sm outline-hidden`,
         variant === "indicator" ? "pr-8 pl-1.5" : "px-1.5",
         "data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
