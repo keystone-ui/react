@@ -10,6 +10,7 @@
   },
   "changesets": [
     "button-and-touch-polish",
+    "button-fullwidth-fix",
     "drawer-floating-variant",
     "drop-redundant-motion-reduce",
     "form-renders-form-element",
@@ -20,6 +21,7 @@
     "portaled-popups-z-order",
     "selection-bar-and-thin-scrollbar",
     "surface-popup-motion-and-layering-tokens",
+    "toggle-secondary-variant",
     "upgrade-2026-04"
   ]
 }
