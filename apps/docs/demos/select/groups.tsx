@@ -11,9 +11,18 @@ import {
   SelectValue,
 } from "@keystoneui/react/select";
 
+const foods: Record<string, string> = {
+  apple: "Apple",
+  banana: "Banana",
+  blueberry: "Blueberry",
+  carrot: "Carrot",
+  broccoli: "Broccoli",
+  spinach: "Spinach",
+};
+
 export default function SelectGroups() {
   return (
-    <Select>
+    <Select items={foods}>
       <SelectTrigger className="w-48">
         <SelectValue placeholder="Select a food" />
       </SelectTrigger>

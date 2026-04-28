@@ -1,6 +1,9 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, test, vi } from "vitest";
+
+const RAW_RO_VALUE = /^ro$/;
+
 import {
   Select,
   SelectContent,
@@ -146,10 +149,97 @@ describe("Select", () => {
       expect(handleChange).toHaveBeenCalledWith("apple", expect.anything());
     });
 
-    test("displays selected value in trigger", async () => {
-      render(<BasicSelect defaultValue="banana" />);
-      // Without items prop, displays raw value. With items prop, displays label.
-      expect(screen.getByText("banana")).toBeInTheDocument();
+    test("with items prop (object form), trigger displays the matching label", () => {
+      render(
+        <Select
+          defaultValue="banana"
+          items={{ apple: "Apple", banana: "Banana", cherry: "Cherry" }}
+        >
+          <SelectTrigger data-testid="trigger">
+            <SelectValue placeholder="Select a fruit" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="apple">Apple</SelectItem>
+            <SelectItem value="banana">Banana</SelectItem>
+            <SelectItem value="cherry">Cherry</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+      expect(screen.getByTestId("trigger")).toHaveTextContent("Banana");
+    });
+
+    test("with items prop (array form), trigger displays the matching label", () => {
+      render(
+        <Select
+          defaultValue="ro"
+          items={[
+            { value: "us", label: "United States" },
+            { value: "ro", label: "Romania" },
+            { value: "uk", label: "United Kingdom" },
+          ]}
+        >
+          <SelectTrigger data-testid="trigger">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="us">United States</SelectItem>
+            <SelectItem value="ro">Romania</SelectItem>
+            <SelectItem value="uk">United Kingdom</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+      expect(screen.getByTestId("trigger")).toHaveTextContent("Romania");
+      expect(screen.getByTestId("trigger")).not.toHaveTextContent(RAW_RO_VALUE);
+    });
+
+    test("with SelectValue render-function child, trigger renders the mapped label", () => {
+      const labels: Record<string, string> = {
+        us: "United States",
+        ro: "Romania",
+      };
+      render(
+        <Select defaultValue="ro">
+          <SelectTrigger data-testid="trigger">
+            <SelectValue>
+              {(value: string) => labels[value] ?? value}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="us">United States</SelectItem>
+            <SelectItem value="ro">Romania</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+      expect(screen.getByTestId("trigger")).toHaveTextContent("Romania");
+    });
+
+    test("after click selection with items prop, trigger displays the label not the value", async () => {
+      render(
+        <Select items={{ us: "United States", ro: "Romania" }}>
+          <SelectTrigger data-testid="trigger">
+            <SelectValue placeholder="Select a country" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="us">United States</SelectItem>
+            <SelectItem value="ro">Romania</SelectItem>
+          </SelectContent>
+        </Select>
+      );
+
+      await userEvent.click(screen.getByRole("combobox"));
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole("option", { name: "Romania" })
+        ).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByRole("option", { name: "Romania" }));
+
+      await waitFor(() => {
+        expect(screen.getByTestId("trigger")).toHaveTextContent("Romania");
+      });
+      expect(screen.getByTestId("trigger")).not.toHaveTextContent(RAW_RO_VALUE);
     });
 
     test("does not select disabled item", async () => {

@@ -66,8 +66,8 @@ import {
   SelectValue,
 } from "@keystoneui/react/select";
 
-// Basic usage
-<Select>
+// Basic usage. Pass \`items\` so \`SelectValue\` renders the label, not the raw value, in the trigger.
+<Select items={{ apple: "Apple", banana: "Banana", blueberry: "Blueberry" }}>
   <SelectTrigger className="w-48">
     <SelectValue placeholder="Select a fruit" />
   </SelectTrigger>
@@ -136,7 +136,15 @@ export const Default: Story = {
   render: () => (
     <Field>
       <FieldLabel>Fruit</FieldLabel>
-      <Select>
+      <Select
+        items={{
+          apple: "Apple",
+          banana: "Banana",
+          blueberry: "Blueberry",
+          grapes: "Grapes",
+          pineapple: "Pineapple",
+        }}
+      >
         <SelectTrigger className="w-full max-w-48">
           <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>
@@ -181,7 +189,16 @@ export const Groups: Story = {
     <FieldGroup className="flex-row items-start">
       <Field>
         <FieldLabel>With Labels</FieldLabel>
-        <Select>
+        <Select
+          items={{
+            apple: "Apple",
+            banana: "Banana",
+            blueberry: "Blueberry",
+            carrot: "Carrot",
+            broccoli: "Broccoli",
+            spinach: "Spinach",
+          }}
+        >
           <SelectTrigger className="w-full max-w-48">
             <SelectValue placeholder="Select a food" />
           </SelectTrigger>
@@ -204,7 +221,16 @@ export const Groups: Story = {
       </Field>
       <Field>
         <FieldLabel>Without Labels</FieldLabel>
-        <Select>
+        <Select
+          items={{
+            apple: "Apple",
+            banana: "Banana",
+            blueberry: "Blueberry",
+            carrot: "Carrot",
+            broccoli: "Broccoli",
+            spinach: "Spinach",
+          }}
+        >
           <SelectTrigger className="w-full max-w-48">
             <SelectValue placeholder="Select a food" />
           </SelectTrigger>
@@ -238,7 +264,37 @@ export const Groups: Story = {
 // Scrollable list
 export const Scrollable: Story = {
   render: () => (
-    <Select>
+    <Select
+      items={{
+        est: "Eastern Standard Time",
+        cst: "Central Standard Time",
+        mst: "Mountain Standard Time",
+        pst: "Pacific Standard Time",
+        akst: "Alaska Standard Time",
+        hst: "Hawaii Standard Time",
+        gmt: "Greenwich Mean Time",
+        cet: "Central European Time",
+        eet: "Eastern European Time",
+        west: "Western European Summer Time",
+        cat: "Central Africa Time",
+        eat: "East Africa Time",
+        msk: "Moscow Time",
+        ist: "India Standard Time",
+        cst_china: "China Standard Time",
+        jst: "Japan Standard Time",
+        kst: "Korea Standard Time",
+        ist_indonesia: "Indonesia Central Standard Time",
+        awst: "Australian Western Standard Time",
+        acst: "Australian Central Standard Time",
+        aest: "Australian Eastern Standard Time",
+        nzst: "New Zealand Standard Time",
+        fjt: "Fiji Time",
+        art: "Argentina Time",
+        bot: "Bolivia Time",
+        brt: "Brasilia Time",
+        clt: "Chile Standard Time",
+      }}
+    >
       <SelectTrigger className="w-full max-w-64">
         <SelectValue placeholder="Select a timezone" />
       </SelectTrigger>
@@ -306,7 +362,10 @@ export const Disabled: Story = {
     <FieldGroup className="w-full max-w-48">
       <Field>
         <FieldLabel>Disabled Select</FieldLabel>
-        <Select disabled>
+        <Select
+          disabled
+          items={{ apple: "Apple", banana: "Banana", blueberry: "Blueberry" }}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Select a fruit" />
           </SelectTrigger>
@@ -321,7 +380,15 @@ export const Disabled: Story = {
       </Field>
       <Field>
         <FieldLabel>Disabled Items</FieldLabel>
-        <Select>
+        <Select
+          items={{
+            apple: "Apple",
+            banana: "Banana",
+            blueberry: "Blueberry (out of stock)",
+            grapes: "Grapes (out of stock)",
+            pineapple: "Pineapple",
+          }}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Select a fruit" />
           </SelectTrigger>
@@ -357,7 +424,9 @@ export const Invalid: Story = {
   render: () => (
     <Field data-invalid>
       <FieldLabel>Fruit</FieldLabel>
-      <Select>
+      <Select
+        items={{ apple: "Apple", banana: "Banana", blueberry: "Blueberry" }}
+      >
         <SelectTrigger aria-invalid className="w-full max-w-48">
           <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>
@@ -406,7 +475,16 @@ export const AlignItemWithTrigger: Story = {
           />
         </Field>
         <Field>
-          <Select defaultValue="banana">
+          <Select
+            defaultValue="banana"
+            items={{
+              apple: "Apple",
+              banana: "Banana",
+              blueberry: "Blueberry",
+              grapes: "Grapes",
+              pineapple: "Pineapple",
+            }}
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -440,7 +518,10 @@ export const Sizes: Story = {
     <FieldGroup className="flex-row items-end">
       <Field>
         <FieldLabel>Default</FieldLabel>
-        <Select defaultValue="apple">
+        <Select
+          defaultValue="apple"
+          items={{ apple: "Apple", banana: "Banana", blueberry: "Blueberry" }}
+        >
           <SelectTrigger size="default">
             <SelectValue />
           </SelectTrigger>
@@ -455,7 +536,10 @@ export const Sizes: Story = {
       </Field>
       <Field>
         <FieldLabel>Small</FieldLabel>
-        <Select defaultValue="apple">
+        <Select
+          defaultValue="apple"
+          items={{ apple: "Apple", banana: "Banana", blueberry: "Blueberry" }}
+        >
           <SelectTrigger size="sm">
             <SelectValue />
           </SelectTrigger>
@@ -486,7 +570,16 @@ export const CompactItems: Story = {
     <div className="flex items-start gap-8">
       <div className="flex flex-col items-center gap-2">
         <span className="text-muted-foreground text-xs">Default (36px)</span>
-        <Select defaultValue="apple">
+        <Select
+          defaultValue="apple"
+          items={{
+            apple: "Apple",
+            banana: "Banana",
+            blueberry: "Blueberry",
+            grape: "Grape",
+            pineapple: "Pineapple",
+          }}
+        >
           <SelectTrigger className="w-40">
             <SelectValue />
           </SelectTrigger>
@@ -503,7 +596,16 @@ export const CompactItems: Story = {
       </div>
       <div className="flex flex-col items-center gap-2">
         <span className="text-muted-foreground text-xs">Compact (32px)</span>
-        <Select defaultValue="apple">
+        <Select
+          defaultValue="apple"
+          items={{
+            apple: "Apple",
+            banana: "Banana",
+            blueberry: "Blueberry",
+            grape: "Grape",
+            pineapple: "Pineapple",
+          }}
+        >
           <SelectTrigger className="w-40">
             <SelectValue />
           </SelectTrigger>
@@ -623,7 +725,17 @@ export const Controlled: Story = {
       <FieldGroup className="w-full max-w-xs">
         <Field>
           <FieldLabel>Fruit</FieldLabel>
-          <Select onValueChange={setValue} value={value}>
+          <Select
+            items={{
+              apple: "Apple",
+              banana: "Banana",
+              blueberry: "Blueberry",
+              grapes: "Grapes",
+              pineapple: "Pineapple",
+            }}
+            onValueChange={setValue}
+            value={value}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select a fruit" />
             </SelectTrigger>
@@ -668,7 +780,34 @@ export const Controlled: Story = {
 export const WithIcons: Story = {
   name: "With Icons",
   render: () => (
-    <Select>
+    <Select
+      items={{
+        apple: (
+          <>
+            <AppleIcon className="size-4" />
+            Apple
+          </>
+        ),
+        banana: (
+          <>
+            <BananaIcon className="size-4" />
+            Banana
+          </>
+        ),
+        cherry: (
+          <>
+            <CherryIcon className="size-4" />
+            Cherry
+          </>
+        ),
+        grapes: (
+          <>
+            <GrapeIcon className="size-4" />
+            Grapes
+          </>
+        ),
+      }}
+    >
       <SelectTrigger className="w-full max-w-48">
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
@@ -722,7 +861,16 @@ export const FormExample: Story = {
       <FieldGroup>
         <Field>
           <FieldLabel>Country</FieldLabel>
-          <Select defaultValue="us" name="country">
+          <Select
+            defaultValue="us"
+            items={{
+              us: "United States",
+              ca: "Canada",
+              uk: "United Kingdom",
+              au: "Australia",
+            }}
+            name="country"
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -738,7 +886,15 @@ export const FormExample: Story = {
         </Field>
         <Field>
           <FieldLabel>State</FieldLabel>
-          <Select name="state">
+          <Select
+            items={{
+              ca: "California",
+              ny: "New York",
+              tx: "Texas",
+              fl: "Florida",
+            }}
+            name="state"
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select a state" />
             </SelectTrigger>

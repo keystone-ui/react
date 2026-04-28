@@ -9,12 +9,18 @@ import {
   SelectValue,
 } from "@keystoneui/react/select";
 
+const fruits: Record<string, string> = {
+  apple: "Apple",
+  banana: "Banana",
+  blueberry: "Blueberry",
+};
+
 export default function SelectSizes() {
   return (
     <div className="flex items-end gap-4">
       <div className="flex flex-col gap-1.5">
         <span className="text-muted-foreground text-xs">Default</span>
-        <Select defaultValue="apple">
+        <Select defaultValue="apple" items={fruits}>
           <SelectTrigger size="default">
             <SelectValue />
           </SelectTrigger>
@@ -29,7 +35,7 @@ export default function SelectSizes() {
       </div>
       <div className="flex flex-col gap-1.5">
         <span className="text-muted-foreground text-xs">Small</span>
-        <Select defaultValue="apple">
+        <Select defaultValue="apple" items={fruits}>
           <SelectTrigger size="sm">
             <SelectValue />
           </SelectTrigger>

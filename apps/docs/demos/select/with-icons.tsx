@@ -15,32 +15,49 @@ import {
   Cherry as CherryIcon,
   Grape as GrapeIcon,
 } from "lucide-react";
+import type { ReactNode } from "react";
+
+const fruits: Record<string, ReactNode> = {
+  apple: (
+    <>
+      <AppleIcon className="size-4" />
+      Apple
+    </>
+  ),
+  banana: (
+    <>
+      <BananaIcon className="size-4" />
+      Banana
+    </>
+  ),
+  cherry: (
+    <>
+      <CherryIcon className="size-4" />
+      Cherry
+    </>
+  ),
+  grapes: (
+    <>
+      <GrapeIcon className="size-4" />
+      Grapes
+    </>
+  ),
+};
 
 export default function SelectWithIcons() {
   return (
-    <Select>
+    <Select items={fruits}>
       <SelectTrigger className="w-48">
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Fruits</SelectLabel>
-          <SelectItem value="apple">
-            <AppleIcon className="size-4" />
-            Apple
-          </SelectItem>
-          <SelectItem value="banana">
-            <BananaIcon className="size-4" />
-            Banana
-          </SelectItem>
-          <SelectItem value="cherry">
-            <CherryIcon className="size-4" />
-            Cherry
-          </SelectItem>
-          <SelectItem value="grapes">
-            <GrapeIcon className="size-4" />
-            Grapes
-          </SelectItem>
+          {Object.entries(fruits).map(([value, label]) => (
+            <SelectItem key={value} value={value}>
+              {label}
+            </SelectItem>
+          ))}
         </SelectGroup>
       </SelectContent>
     </Select>

@@ -10,9 +10,37 @@ import {
   SelectValue,
 } from "@keystoneui/react/select";
 
+const timezones: Record<string, string> = {
+  est: "Eastern Standard Time",
+  cst: "Central Standard Time",
+  mst: "Mountain Standard Time",
+  pst: "Pacific Standard Time",
+  akst: "Alaska Standard Time",
+  hst: "Hawaii Standard Time",
+  gmt: "Greenwich Mean Time",
+  cet: "Central European Time",
+  eet: "Eastern European Time",
+  west: "Western European Summer Time",
+  cat: "Central Africa Time",
+  eat: "East Africa Time",
+  msk: "Moscow Time",
+  ist: "India Standard Time",
+  cst_china: "China Standard Time",
+  jst: "Japan Standard Time",
+  kst: "Korea Standard Time",
+  awst: "Australian Western Standard Time",
+  acst: "Australian Central Standard Time",
+  aest: "Australian Eastern Standard Time",
+  nzst: "New Zealand Standard Time",
+  art: "Argentina Time",
+  bot: "Bolivia Time",
+  brt: "Brasilia Time",
+  clt: "Chile Standard Time",
+};
+
 export default function SelectScrollable() {
   return (
-    <Select>
+    <Select items={timezones}>
       <SelectTrigger className="w-64">
         <SelectValue placeholder="Select a timezone" />
       </SelectTrigger>

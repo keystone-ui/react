@@ -11,6 +11,20 @@ import {
   SelectValue,
 } from "@keystoneui/react/select";
 
+const countries: Record<string, string> = {
+  us: "United States",
+  ca: "Canada",
+  uk: "United Kingdom",
+  au: "Australia",
+};
+
+const states: Record<string, string> = {
+  ca: "California",
+  ny: "New York",
+  tx: "Texas",
+  fl: "Florida",
+};
+
 export default function SelectFormExample() {
   return (
     <form
@@ -22,32 +36,34 @@ export default function SelectFormExample() {
       <FieldGroup>
         <Field>
           <FieldLabel>Country</FieldLabel>
-          <Select defaultValue="us" name="country">
+          <Select defaultValue="us" items={countries} name="country">
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="us">United States</SelectItem>
-                <SelectItem value="ca">Canada</SelectItem>
-                <SelectItem value="uk">United Kingdom</SelectItem>
-                <SelectItem value="au">Australia</SelectItem>
+                {Object.entries(countries).map(([value, label]) => (
+                  <SelectItem key={value} value={value}>
+                    {label}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
         </Field>
         <Field>
           <FieldLabel>State</FieldLabel>
-          <Select name="state">
+          <Select items={states} name="state">
             <SelectTrigger>
               <SelectValue placeholder="Select a state" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="ca">California</SelectItem>
-                <SelectItem value="ny">New York</SelectItem>
-                <SelectItem value="tx">Texas</SelectItem>
-                <SelectItem value="fl">Florida</SelectItem>
+                {Object.entries(states).map(([value, label]) => (
+                  <SelectItem key={value} value={value}>
+                    {label}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>

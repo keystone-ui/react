@@ -17,6 +17,14 @@ import {
 } from "@keystoneui/react/select";
 import { useState } from "react";
 
+const fruits: Record<string, string> = {
+  apple: "Apple",
+  banana: "Banana",
+  blueberry: "Blueberry",
+  grapes: "Grapes",
+  pineapple: "Pineapple",
+};
+
 export default function SelectControlled() {
   const [value, setValue] = useState<string | null>(null);
 
@@ -24,17 +32,17 @@ export default function SelectControlled() {
     <FieldGroup className="w-full max-w-xs">
       <Field>
         <FieldLabel>Fruit</FieldLabel>
-        <Select onValueChange={setValue} value={value}>
+        <Select items={fruits} onValueChange={setValue} value={value}>
           <SelectTrigger>
             <SelectValue placeholder="Select a fruit" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="apple">Apple</SelectItem>
-              <SelectItem value="banana">Banana</SelectItem>
-              <SelectItem value="blueberry">Blueberry</SelectItem>
-              <SelectItem value="grapes">Grapes</SelectItem>
-              <SelectItem value="pineapple">Pineapple</SelectItem>
+              {Object.entries(fruits).map(([v, label]) => (
+                <SelectItem key={v} value={v}>
+                  {label}
+                </SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>

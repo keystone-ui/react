@@ -9,12 +9,25 @@ import {
   SelectValue,
 } from "@keystoneui/react/select";
 
+const disabledSelectFruits: Record<string, string> = {
+  apple: "Apple",
+  banana: "Banana",
+};
+
+const disabledItemFruits: Record<string, string> = {
+  apple: "Apple",
+  banana: "Banana",
+  blueberry: "Blueberry (out of stock)",
+  grapes: "Grapes (out of stock)",
+  pineapple: "Pineapple",
+};
+
 export default function SelectDisabled() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
         <span className="text-muted-foreground text-sm">Disabled select</span>
-        <Select disabled>
+        <Select disabled items={disabledSelectFruits}>
           <SelectTrigger className="w-48">
             <SelectValue placeholder="Select a fruit" />
           </SelectTrigger>
@@ -28,7 +41,7 @@ export default function SelectDisabled() {
       </div>
       <div className="flex flex-col gap-1.5">
         <span className="text-muted-foreground text-sm">Disabled items</span>
-        <Select>
+        <Select items={disabledItemFruits}>
           <SelectTrigger className="w-48">
             <SelectValue placeholder="Select a fruit" />
           </SelectTrigger>

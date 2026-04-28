@@ -22,6 +22,34 @@ import {
 
 <ComponentPreview name="select-default" />
 
+## Displaying labels in the trigger
+
+`SelectValue` renders the selected option's `value` by default (e.g. `"us"`).
+To show the label (e.g. `"United States"`) instead, pass an `items` map to
+`Select` so it can resolve value → label:
+
+```tsx
+const countries = { us: "United States", ca: "Canada", uk: "United Kingdom" };
+
+<Select items={countries} defaultValue="us">
+  <SelectTrigger>
+    <SelectValue />
+  </SelectTrigger>
+  <SelectContent>
+    {Object.entries(countries).map(([value, label]) => (
+      <SelectItem key={value} value={value}>{label}</SelectItem>
+    ))}
+  </SelectContent>
+</Select>
+```
+
+For dynamic or computed display, pass a render function as `SelectValue`'s
+child. This is the pattern used by `<ComponentPreview name="select-multiple" />`:
+
+```tsx
+<SelectValue>{(value) => labels[value] ?? "Select…"}</SelectValue>
+```
+
 ## Groups
 
 Organize options into labeled groups:
@@ -79,6 +107,7 @@ Select used in a form context:
 | `onValueChange` | `(value: string) => void` | - | Callback when value changes |
 | `disabled` | `boolean` | `false` | Disables the select |
 | `multiple` | `boolean` | `false` | Allow multiple selections |
+| `items` | `Record<string, ReactNode>` \| `Array<{ value, label }>` | - | Value → label mapping for `SelectValue` to render in the trigger |
 
 ### SelectTrigger
 

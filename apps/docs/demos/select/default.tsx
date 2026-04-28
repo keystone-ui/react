@@ -9,19 +9,27 @@ import {
   SelectValue,
 } from "@keystoneui/react/select";
 
+const fruits: Record<string, string> = {
+  apple: "Apple",
+  banana: "Banana",
+  blueberry: "Blueberry",
+  grapes: "Grapes",
+  pineapple: "Pineapple",
+};
+
 export default function SelectDefault() {
   return (
-    <Select>
+    <Select items={fruits}>
       <SelectTrigger className="w-48">
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectItem value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
-          <SelectItem value="blueberry">Blueberry</SelectItem>
-          <SelectItem value="grapes">Grapes</SelectItem>
-          <SelectItem value="pineapple">Pineapple</SelectItem>
+          {Object.entries(fruits).map(([value, label]) => (
+            <SelectItem key={value} value={value}>
+              {label}
+            </SelectItem>
+          ))}
         </SelectGroup>
       </SelectContent>
     </Select>
