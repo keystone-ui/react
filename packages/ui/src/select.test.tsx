@@ -141,10 +141,10 @@ describe("Select", () => {
       await userEvent.click(trigger);
 
       await waitFor(() => {
-        expect(screen.getByText("Apple")).toBeInTheDocument();
+        expect(screen.getByRole("listbox")).toBeInTheDocument();
       });
 
-      await userEvent.click(screen.getByText("Apple"));
+      await userEvent.click(screen.getByRole("option", { name: "Apple" }));
 
       expect(handleChange).toHaveBeenCalledWith("apple", expect.anything());
     });
@@ -250,10 +250,10 @@ describe("Select", () => {
       await userEvent.click(trigger);
 
       await waitFor(() => {
-        expect(screen.getByText("Cherry")).toBeInTheDocument();
+        expect(screen.getByRole("listbox")).toBeInTheDocument();
       });
 
-      await userEvent.click(screen.getByText("Cherry"));
+      await userEvent.click(screen.getByRole("option", { name: "Cherry" }));
 
       // Disabled item should not trigger change
       expect(handleChange).not.toHaveBeenCalled();
@@ -383,17 +383,17 @@ describe("Select", () => {
       await userEvent.click(screen.getByRole("combobox"));
 
       await waitFor(() => {
-        expect(screen.getByText("Apple")).toBeInTheDocument();
+        expect(screen.getByRole("listbox")).toBeInTheDocument();
       });
 
-      await userEvent.click(screen.getByText("Apple"));
+      await userEvent.click(screen.getByRole("option", { name: "Apple" }));
 
       // Multiple select keeps popup open
       await waitFor(() => {
         expect(screen.getByRole("listbox")).toBeInTheDocument();
       });
 
-      await userEvent.click(screen.getByText("Banana"));
+      await userEvent.click(screen.getByRole("option", { name: "Banana" }));
 
       // Should have called with array containing both values
       expect(handleChange).toHaveBeenLastCalledWith(
