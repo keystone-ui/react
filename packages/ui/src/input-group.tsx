@@ -155,18 +155,30 @@ const inputGroupButtonVariants = cva(
         // tier smaller than the group, anchored to the input frame via the
         // addon's negative margin). Block addons: 32px toolbar height.
         // Icon-only when the only direct child is an svg.
-        auto:
-          "rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4" +
-          "group-data-[size=default]/input-group:h-8 group-data-[size=default]/input-group:gap-1.5 group-data-[size=default]/input-group:px-2.5" +
-          "group-data-[size=sm]/input-group:h-6 group-data-[size=sm]/input-group:gap-1 group-data-[size=sm]/input-group:px-2" +
-          // sm-group auto matches existing xs proportions: 14px icon
-          "group-data-[size=sm]/input-group:[&>svg:not([class*='size-'])]:size-3.5" +
-          "has-[>svg:only-child]:p-0" +
-          "group-data-[size=default]/input-group:has-[>svg:only-child]:size-8" +
-          "group-data-[size=sm]/input-group:has-[>svg:only-child]:size-6" +
-          "group-data-[align=block-end]/input-group-addon:h-8 group-data-[align=block-start]/input-group-addon:h-8" +
-          "group-data-[align=block-end]/input-group-addon:px-2.5 group-data-[align=block-start]/input-group-addon:px-2.5" +
-          "group-data-[align=block-end]/input-group-addon:has-[>svg:only-child]:size-8 group-data-[align=block-start]/input-group-addon:has-[>svg:only-child]:size-8",
+        auto: [
+          "rounded-[calc(var(--radius)-5px)]",
+          "[&>svg:not([class*='size-'])]:size-4",
+          // Default group (40px) — 32px button (4px inset)
+          "group-data-[size=default]/input-group:h-8",
+          "group-data-[size=default]/input-group:gap-1.5",
+          "group-data-[size=default]/input-group:px-2.5",
+          // Sm group (32px) — 24px button (4px inset), 14px icon (matches xs)
+          "group-data-[size=sm]/input-group:h-6",
+          "group-data-[size=sm]/input-group:gap-1",
+          "group-data-[size=sm]/input-group:px-2",
+          "group-data-[size=sm]/input-group:[&>svg:not([class*='size-'])]:size-3.5",
+          // Icon-only (only direct child is svg): square + p-0
+          "has-[>svg:only-child]:p-0",
+          "group-data-[size=default]/input-group:has-[>svg:only-child]:size-8",
+          "group-data-[size=sm]/input-group:has-[>svg:only-child]:size-6",
+          // Block addons: 32px toolbar height regardless of group size
+          "group-data-[align=block-start]/input-group-addon:h-8",
+          "group-data-[align=block-end]/input-group-addon:h-8",
+          "group-data-[align=block-start]/input-group-addon:px-2.5",
+          "group-data-[align=block-end]/input-group-addon:px-2.5",
+          "group-data-[align=block-start]/input-group-addon:has-[>svg:only-child]:size-8",
+          "group-data-[align=block-end]/input-group-addon:has-[>svg:only-child]:size-8",
+        ].join(" "),
         xs: "h-6 gap-1 rounded-sm px-2 has-[>svg]:px-2 [&>svg:not([class*='size-'])]:size-3.5",
         sm: "h-8 gap-1.5 rounded-md px-2.5 has-[>svg]:px-2.5",
         "icon-xs": "size-6 rounded-sm p-0 has-[>svg]:p-0",

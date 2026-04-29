@@ -245,8 +245,12 @@ export const WithStakeButtons: Story = {
         </InputGroupAddon>
         <InputGroupInput placeholder="0.00" type="number" />
         <InputGroupAddon align="inline-end">
-          <InputGroupButton variant="secondary">½</InputGroupButton>
-          <InputGroupButton variant="secondary">2×</InputGroupButton>
+          <InputGroupButton size="xs" variant="secondary">
+            ½
+          </InputGroupButton>
+          <InputGroupButton size="xs" variant="secondary">
+            2×
+          </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>
     </div>
