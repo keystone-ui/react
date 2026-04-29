@@ -258,6 +258,7 @@ import InputGroupPhoneInput from "./input-group/phone-input";
 import InputGroupPromptForm from "./input-group/prompt-form";
 import InputGroupSearch from "./input-group/search";
 import InputGroupSmallSize from "./input-group/small-size";
+import InputGroupStakeButtons from "./input-group/stake-buttons";
 import InputGroupTextPrefix from "./input-group/text-prefix";
 import InputGroupTextSuffix from "./input-group/text-suffix";
 import InputGroupWithButton from "./input-group/with-button";
@@ -1391,6 +1392,10 @@ export const demos: Record<string, DemoItem> = {
   "input-group-small-size": {
     component: InputGroupSmallSize,
     file: "input-group/small-size.tsx",
+  },
+  "input-group-stake-buttons": {
+    component: InputGroupStakeButtons,
+    file: "input-group/stake-buttons.tsx",
   },
   "input-group-text-prefix": {
     component: InputGroupTextPrefix,

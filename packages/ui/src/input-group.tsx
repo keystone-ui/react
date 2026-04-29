@@ -178,6 +178,14 @@ const inputGroupButtonVariants = cva(
           "group-data-[align=block-end]/input-group-addon:px-2.5",
           "group-data-[align=block-start]/input-group-addon:has-[>svg:only-child]:size-8",
           "group-data-[align=block-end]/input-group-addon:has-[>svg:only-child]:size-8",
+          // Multi-button addon (sibling buttons present): compact 24px chips
+          // so two/three buttons fit cleanly without extending past the input
+          // frame. Stays out of block-addon scope (toolbars handle their own sizing).
+          "group-has-[>button~button]/input-group-addon:h-6",
+          "group-has-[>button~button]/input-group-addon:gap-1",
+          "group-has-[>button~button]/input-group-addon:px-2",
+          "group-has-[>button~button]/input-group-addon:[&>svg:not([class*='size-'])]:size-3.5",
+          "group-has-[>button~button]/input-group-addon:has-[>svg:only-child]:size-6",
         ].join(" "),
         xs: "h-6 gap-1 rounded-sm px-2 has-[>svg]:px-2 [&>svg:not([class*='size-'])]:size-3.5",
         sm: "h-8 gap-1.5 rounded-md px-2.5 has-[>svg]:px-2.5",
