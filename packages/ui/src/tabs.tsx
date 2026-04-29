@@ -239,7 +239,7 @@ function TabsIndicator({ className, ...props }: TabsIndicatorProps) {
         // Default variant: pill/card sliding behind active tab
         "group-data-[variant=default]/tabs-list:rounded-md group-data-[variant=default]/tabs-list:bg-background group-data-[variant=default]/tabs-list:shadow-sm",
         "group-data-[variant=default]/tabs-list:group-data-[shape=pill]/tabs-list:rounded-full",
-        "dark:group-data-[variant=default]/tabs-list:border dark:group-data-[variant=default]/tabs-list:border-input dark:group-data-[variant=default]/tabs-list:bg-input-bg",
+        "dark:group-data-[variant=default]/tabs-list:bg-input-bg",
         // Line variant (horizontal): 2px bar at bottom
         "group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:top-auto group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:bottom-0 group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:h-0.5",
         "group-data-[variant=line]/tabs-list:bg-foreground",
