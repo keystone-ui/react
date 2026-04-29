@@ -15,12 +15,14 @@
     "drop-redundant-motion-reduce",
     "form-renders-form-element",
     "initial-beta-release",
+    "input-group-auto-fit",
     "mcp-get-examples-tool",
     "motion-and-touch-polish",
     "popover-no-max-height",
     "portaled-popups-z-order",
     "selection-bar-and-thin-scrollbar",
     "surface-popup-motion-and-layering-tokens",
+    "tabs-dark-active-border",
     "toggle-secondary-variant",
     "upgrade-2026-04"
   ]
