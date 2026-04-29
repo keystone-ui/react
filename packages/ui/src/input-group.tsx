@@ -1,11 +1,20 @@
 "use client";
 
 import { cva, type VariantProps } from "class-variance-authority";
-import type * as React from "react";
+import * as React from "react";
 import { Button } from "./button";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
 import { cn } from "./utils";
+
+// =============================================================================
+// InputGroupContext
+// =============================================================================
+type InputGroupSize = "sm" | "default";
+
+const InputGroupContext = React.createContext<{ size: InputGroupSize }>({
+  size: "default",
+});
 
 // =============================================================================
 // InputGroup
@@ -33,41 +42,44 @@ export const InputGroup = ({
   ref,
   ...props
 }: InputGroupProps & React.RefAttributes<HTMLDivElement>) => {
+  const contextValue = React.useMemo(() => ({ size }), [size]);
   return (
-    <div
-      className={cn(
-        "group/input-group relative flex w-full items-center rounded-md border border-input bg-input-bg shadow-xs outline-none transition-[color,box-shadow]",
-        "min-w-0",
-        size === "default" && "h-10",
-        size === "sm" && "h-8",
+    <InputGroupContext.Provider value={contextValue}>
+      <div
+        className={cn(
+          "group/input-group relative flex w-full items-center rounded-md border border-input bg-input-bg shadow-xs outline-none transition-[color,box-shadow]",
+          "min-w-0",
+          size === "default" && "h-10",
+          size === "sm" && "h-8",
 
-        // Textarea: auto-height, bottom-align addon so it stays anchored as textarea grows
-        "has-[>textarea]:h-auto has-[>textarea]:items-end",
-        "has-[>textarea]:[&_[data-slot=input-group-addon]]:pb-2",
+          // Textarea: auto-height, bottom-align addon so it stays anchored as textarea grows
+          "has-[>textarea]:h-auto has-[>textarea]:items-end",
+          "has-[>textarea]:[&_[data-slot=input-group-addon]]:pb-2",
 
-        // Alignment variants - adjust input padding based on addon position
-        "has-[>[data-align=inline-start]]:[&_[data-slot=input-group-control]]:pl-1.5",
-        "has-[>[data-align=inline-end]]:[&_[data-slot=input-group-control]]:pr-1.5",
-        "has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&_[data-slot=input-group-control]]:pb-3",
-        "has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&_[data-slot=input-group-control]]:pt-3",
+          // Alignment variants - adjust input padding based on addon position
+          "has-[>[data-align=inline-start]]:[&_[data-slot=input-group-control]]:pl-1.5",
+          "has-[>[data-align=inline-end]]:[&_[data-slot=input-group-control]]:pr-1.5",
+          "has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&_[data-slot=input-group-control]]:pb-3",
+          "has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&_[data-slot=input-group-control]]:pt-3",
 
-        // Focus state
-        "has-[[data-slot=input-group-control]:focus]:border-ring has-[[data-slot=input-group-control]:focus]:ring-1 has-[[data-slot=input-group-control]:focus]:ring-ring has-[[data-slot=input-group-control]:focus]:ring-inset",
+          // Focus state
+          "has-[[data-slot=input-group-control]:focus]:border-ring has-[[data-slot=input-group-control]:focus]:ring-1 has-[[data-slot=input-group-control]:focus]:ring-ring has-[[data-slot=input-group-control]:focus]:ring-inset",
 
-        // Error state
-        "has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-1 has-[[data-slot][aria-invalid=true]]:ring-destructive has-[[data-slot][aria-invalid=true]]:ring-inset",
+          // Error state
+          "has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-1 has-[[data-slot][aria-invalid=true]]:ring-destructive has-[[data-slot][aria-invalid=true]]:ring-inset",
 
-        className
-      )}
-      data-input=""
-      data-size={size}
-      data-slot="input-group"
-      ref={ref}
-      role="group"
-      {...props}
-    >
-      {children}
-    </div>
+          className
+        )}
+        data-input=""
+        data-size={size}
+        data-slot="input-group"
+        ref={ref}
+        role="group"
+        {...props}
+      >
+        {children}
+      </div>
+    </InputGroupContext.Provider>
   );
 };
 InputGroup.displayName = "InputGroup";
@@ -76,7 +88,7 @@ InputGroup.displayName = "InputGroup";
 // InputGroupAddon
 // =============================================================================
 const inputGroupAddonVariants = cva(
-  "flex h-auto cursor-text select-none items-center justify-center gap-2 py-1.5 text-muted-foreground text-sm group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "group/input-group-addon flex h-auto cursor-text select-none items-center justify-center gap-1 py-1.5 text-muted-foreground text-sm group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       align: {
@@ -139,6 +151,22 @@ const inputGroupButtonVariants = cva(
   {
     variants: {
       size: {
+        // Auto-fit the parent InputGroup with a 4px inset all around (one
+        // tier smaller than the group, anchored to the input frame via the
+        // addon's negative margin). Block addons: 32px toolbar height.
+        // Icon-only when the only direct child is an svg.
+        auto:
+          "rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4" +
+          "group-data-[size=default]/input-group:h-8 group-data-[size=default]/input-group:gap-1.5 group-data-[size=default]/input-group:px-2.5" +
+          "group-data-[size=sm]/input-group:h-6 group-data-[size=sm]/input-group:gap-1 group-data-[size=sm]/input-group:px-2" +
+          // sm-group auto matches existing xs proportions: 14px icon
+          "group-data-[size=sm]/input-group:[&>svg:not([class*='size-'])]:size-3.5" +
+          "has-[>svg:only-child]:p-0" +
+          "group-data-[size=default]/input-group:has-[>svg:only-child]:size-8" +
+          "group-data-[size=sm]/input-group:has-[>svg:only-child]:size-6" +
+          "group-data-[align=block-end]/input-group-addon:h-8 group-data-[align=block-start]/input-group-addon:h-8" +
+          "group-data-[align=block-end]/input-group-addon:px-2.5 group-data-[align=block-start]/input-group-addon:px-2.5" +
+          "group-data-[align=block-end]/input-group-addon:has-[>svg:only-child]:size-8 group-data-[align=block-start]/input-group-addon:has-[>svg:only-child]:size-8",
         xs: "h-6 gap-1 rounded-sm px-2 has-[>svg]:px-2 [&>svg:not([class*='size-'])]:size-3.5",
         sm: "h-8 gap-1.5 rounded-md px-2.5 has-[>svg]:px-2.5",
         "icon-xs": "size-6 rounded-sm p-0 has-[>svg]:p-0",
@@ -146,7 +174,7 @@ const inputGroupButtonVariants = cva(
       },
     },
     defaultVariants: {
-      size: "xs",
+      size: "auto",
     },
   }
 );
@@ -176,7 +204,7 @@ export const InputGroupButton = ({
   className,
   type = "button",
   variant = "ghost",
-  size = "xs",
+  size = "auto",
   ref,
   ...props
 }: InputGroupButtonProps & React.RefAttributes<HTMLButtonElement>) => (
@@ -221,20 +249,25 @@ export interface InputGroupInputProps
 
 export const InputGroupInput = ({
   className,
+  size,
   ref,
   ...props
-}: InputGroupInputProps & React.RefAttributes<HTMLInputElement>) => (
-  <Input
-    className={cn(
-      "flex-1 rounded-none border-0 bg-transparent shadow-none dark:bg-transparent",
-      "focus:border-transparent focus:shadow-none focus:ring-0",
-      className
-    )}
-    data-slot="input-group-control"
-    ref={ref}
-    {...props}
-  />
-);
+}: InputGroupInputProps & React.RefAttributes<HTMLInputElement>) => {
+  const { size: groupSize } = React.useContext(InputGroupContext);
+  return (
+    <Input
+      className={cn(
+        "flex-1 rounded-none border-0 bg-transparent shadow-none dark:bg-transparent",
+        "focus:border-transparent focus:shadow-none focus:ring-0",
+        className
+      )}
+      data-slot="input-group-control"
+      ref={ref}
+      size={size ?? groupSize}
+      {...props}
+    />
+  );
+};
 InputGroupInput.displayName = "InputGroupInput";
 
 // =============================================================================

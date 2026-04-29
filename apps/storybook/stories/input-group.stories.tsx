@@ -225,13 +225,40 @@ export const WithButton: Story = {
       <InputGroup>
         <InputGroupInput placeholder="Enter code" />
         <InputGroupAddon align="inline-end">
-          <InputGroupButton size="icon-xs">
+          <InputGroupButton>
             <CopyIcon className="size-4" />
           </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>
     </div>
   ),
+};
+
+// With Stake Buttons (EUR + secondary buttons)
+export const WithStakeButtons: Story = {
+  name: "With Stake Buttons",
+  render: () => (
+    <div className="max-w-sm">
+      <InputGroup>
+        <InputGroupAddon align="inline-start">
+          <CircleFlag className="size-5 shrink-0" countryCode="eu" />
+        </InputGroupAddon>
+        <InputGroupInput placeholder="0.00" type="number" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton variant="secondary">½</InputGroupButton>
+          <InputGroupButton variant="secondary">2×</InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Two `secondary` `InputGroupButton`s for quick stake adjustments (halve, double) paired with a EUR flag from `react-circle-flags` in the start addon.",
+      },
+    },
+  },
 };
 
 // Password Toggle
@@ -250,7 +277,6 @@ export const PasswordToggle: Story = {
             <InputGroupButton
               aria-label={showPassword ? "Hide password" : "Show password"}
               onClick={() => setShowPassword(!showPassword)}
-              size="icon-xs"
             >
               {showPassword ? (
                 <EyeOffIcon className="size-4" />
@@ -321,7 +347,6 @@ export const ClearButton: Story = {
               aria-label="Clear input"
               disabled={!value}
               onClick={() => setValue("")}
-              size="icon-xs"
             >
               <XIcon className="size-4" />
             </InputGroupButton>
@@ -345,6 +370,71 @@ export const EmailInput: Story = {
       </InputGroup>
     </div>
   ),
+};
+
+// Small Size InputGroup
+export const SmallSize: Story = {
+  name: "Small Size",
+  render: () => (
+    <div className="max-w-sm space-y-4">
+      <div>
+        <p className="mb-2 text-muted-foreground text-sm">
+          Default group + auto button
+        </p>
+        <InputGroup>
+          <InputGroupInput placeholder="Enter code" />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton>
+              <CopyIcon className="size-4" />
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+      <div>
+        <p className="mb-2 text-muted-foreground text-sm">
+          Small group + auto button (24×24)
+        </p>
+        <InputGroup size="sm">
+          <InputGroupInput placeholder="Enter code" />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton>
+              <CopyIcon className="size-4" />
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+      <div>
+        <p className="mb-2 text-muted-foreground text-sm">
+          Small group + auto button with text
+        </p>
+        <InputGroup size="sm">
+          <InputGroupInput placeholder="Enter value" />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton>Copy</InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+      <div>
+        <p className="mb-2 text-muted-foreground text-sm">
+          Small group + leading icon addon
+        </p>
+        <InputGroup size="sm">
+          <InputGroupAddon>
+            <SearchIcon className="size-4" />
+          </InputGroupAddon>
+          <InputGroupInput placeholder="Search..." />
+        </InputGroup>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`<InputGroup size="sm">` renders a 32px-tall group. `InputGroupButton` with the default `auto` size pairs as a 24px button with a 4px inset.',
+      },
+    },
+  },
 };
 
 // Button Sizes

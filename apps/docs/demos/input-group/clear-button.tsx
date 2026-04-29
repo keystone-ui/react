@@ -24,7 +24,6 @@ export default function InputGroupClearButton() {
           aria-label="Clear input"
           disabled={!value}
           onClick={() => setValue("")}
-          size="icon-xs"
         >
           <XIcon className="size-4" />
         </InputGroupButton>

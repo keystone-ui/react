@@ -22,7 +22,6 @@ export default function InputGroupPasswordToggle() {
         <InputGroupButton
           aria-label={showPassword ? "Hide password" : "Show password"}
           onClick={() => setShowPassword(!showPassword)}
-          size="icon-xs"
         >
           {showPassword ? (
             <EyeOffIcon className="size-4" />

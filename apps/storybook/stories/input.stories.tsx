@@ -150,6 +150,30 @@ export const Default: Story = {
   },
 };
 
+// Sizes
+export const Sizes: Story = {
+  render: () => (
+    <div className="flex w-full max-w-sm flex-col gap-4">
+      <Field>
+        <FieldLabel htmlFor="input-size-default">Default (40px)</FieldLabel>
+        <Input id="input-size-default" placeholder="Enter text" />
+      </Field>
+      <Field>
+        <FieldLabel htmlFor="input-size-sm">Small (32px)</FieldLabel>
+        <Input id="input-size-sm" placeholder="Enter text" size="sm" />
+      </Field>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "`Input` ships two sizes: `default` (40px) and `sm` (32px). The `sm` size is for compact form rows tucked into cards or footers — see the calendar time-picker pattern. `InputGroup` mirrors the same two sizes.",
+      },
+    },
+  },
+};
+
 // Input with Field components
 export const FieldExample: Story = {
   name: "Field",

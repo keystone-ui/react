@@ -1,12 +1,8 @@
 ---
-date: "2026-04-29"
-description: "What's coming in the next release"
-excerpt: "1 change queued for the next release."
+"@keystoneui/react": minor
 ---
 
-## Minor changes
-
-### `InputGroup`: auto-fit `InputGroupButton` and `InputGroupInput` to the parent group's size.
+`InputGroup`: auto-fit `InputGroupButton` and `InputGroupInput` to the parent group's size.
 
 `InputGroupButton` gains a new `auto` size variant (now the default) that pairs the button to the parent `InputGroup` automatically — 32×32 inside a `default` group, 24×24 inside a `size="sm"` group, with a 4px inset all around. Icon-only buttons (only direct child is an `<svg>`) render square automatically. Buttons inside `block-start`/`block-end` toolbars fall back to a 32px height regardless of group size.
 

@@ -31,6 +31,12 @@ InputGroup
 └── InputGroupText
 ```
 
+## Small Size
+
+`<InputGroup size="sm">` renders a 32px-tall group. `InputGroupButton` with the default `auto` size auto-pairs to a 24×24 button (4px inset). The `size` prop on `InputGroupInput` is forwarded from the parent group, so the inner `<Input>` matches the group height automatically.
+
+<ComponentPreview name="input-group-small-size" />
+
 ## Text Prefix
 
 Add a static text prefix to the input:
@@ -115,5 +121,24 @@ Input with text suffix:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `size` | `"default" \| "sm"` | `"default"` | The size variant of the group |
+| `size` | `"default" \| "sm"` | `"default"` | Group height: `default` is 40px, `sm` is 32px. The inner `InputGroupInput` and any `auto`-sized `InputGroupButton` adapt automatically. |
 | `className` | `string` | - | Additional CSS classes |
+
+### InputGroupAddon
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `align` | `"inline-start" \| "inline-end" \| "block-start" \| "block-end"` | `"inline-start"` | Where the addon sits relative to the input. Inline addons sit beside the input on the same row; block addons stack above or below as toolbars (the group becomes `flex-col`). |
+
+### InputGroupInput
+
+Inherits all props from `Input`. The `size` prop is automatically inherited from the parent `InputGroup` — pass it explicitly only to override.
+
+### InputGroupButton
+
+Inherits all props from `Button` except `size`, which is replaced.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"auto" \| "xs" \| "sm" \| "icon-xs" \| "icon-sm"` | `"auto"` | `auto` reads the parent `InputGroup` size and renders one tier smaller (4px inset all around): 32px button in a default group, 24px in an sm group. Buttons inside `block-start`/`block-end` addons fall back to a 32px toolbar height. Icon-only is auto-detected when the only direct child is an `<svg>`. The fixed sizes are escape hatches for cases where you want extra-compact chips. |
+| `variant` | `"default" \| "destructive" \| "outline" \| "secondary" \| "ghost" \| "link"` | `"ghost"` | Visual style of the underlying `Button`. |

@@ -22,11 +22,7 @@ export default function InputGroupWithButton() {
     <InputGroup>
       <InputGroupInput readOnly value="https://example.com/api/key" />
       <InputGroupAddon align="inline-end">
-        <InputGroupButton
-          aria-label="Copy to clipboard"
-          onClick={handleCopy}
-          size="icon-xs"
-        >
+        <InputGroupButton aria-label="Copy to clipboard" onClick={handleCopy}>
           {copied ? (
             <CheckIcon className="size-4" />
           ) : (
