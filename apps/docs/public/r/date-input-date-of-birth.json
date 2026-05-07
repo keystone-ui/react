@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-input-date-of-birth",
+  "title": "Date Input Date Of Birth",
+  "description": "Date Input example: Date Of Birth.",
+  "registryDependencies": [
+    "date-input",
+    "field"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/date-input/date-of-birth.tsx",
+      "content": "\"use client\";\n\nimport { DateInput } from \"@keystoneui/react/date-input\";\nimport { Field, FieldDescription, FieldLabel } from \"@keystoneui/react/field\";\n\nexport default function DateInputDateOfBirth() {\n  return (\n    <Field>\n      <FieldLabel htmlFor=\"dob\">Date of Birth</FieldLabel>\n      <DateInput id=\"dob\" max=\"2010-12-31\" min=\"1900-01-01\" />\n      <FieldDescription>\n        You must be at least 16 years old to create an account.\n      </FieldDescription>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

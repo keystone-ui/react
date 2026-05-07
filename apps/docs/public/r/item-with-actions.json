@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "item-with-actions",
+  "title": "Item With Actions",
+  "description": "Item example: With Actions.",
+  "registryDependencies": [
+    "button",
+    "item"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/item/with-actions.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Item,\n  ItemActions,\n  ItemContent,\n  ItemDescription,\n  ItemMedia,\n  ItemTitle,\n} from \"@keystoneui/react/item\";\nimport { ShieldAlert as ShieldAlertIcon } from \"lucide-react\";\n\nexport default function ItemWithActions() {\n  return (\n    <Item className=\"max-w-lg\" variant=\"outline\">\n      <ItemMedia variant=\"icon\">\n        <ShieldAlertIcon />\n      </ItemMedia>\n      <ItemContent>\n        <ItemTitle>Security Alert</ItemTitle>\n        <ItemDescription>\n          New login detected from unknown device.\n        </ItemDescription>\n      </ItemContent>\n      <ItemActions>\n        <Button size=\"sm\" variant=\"outline\">\n          Review\n        </Button>\n      </ItemActions>\n    </Item>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

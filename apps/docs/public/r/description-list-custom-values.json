@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "description-list-custom-values",
+  "title": "Description List Custom Values",
+  "description": "Description List example: Custom Values.",
+  "registryDependencies": [
+    "badge",
+    "description-list"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/description-list/custom-values.tsx",
+      "content": "\"use client\";\n\nimport { Badge } from \"@keystoneui/react/badge\";\nimport {\n  DescriptionList,\n  DescriptionListDetails,\n  DescriptionListItem,\n  DescriptionListTerm,\n} from \"@keystoneui/react/description-list\";\nimport {\n  CircleCheck as CircleCheckIcon,\n  Copy as CopyIcon,\n  ExternalLink as ExternalLinkIcon,\n} from \"lucide-react\";\n\nexport default function DescriptionListCustomValues() {\n  return (\n    <DescriptionList variant=\"card\">\n      <DescriptionListItem>\n        <DescriptionListTerm>Status</DescriptionListTerm>\n        <DescriptionListDetails>\n          <Badge variant=\"secondary\">\n            <CircleCheckIcon className=\"size-3\" />\n            Active\n          </Badge>\n        </DescriptionListDetails>\n      </DescriptionListItem>\n      <DescriptionListItem>\n        <DescriptionListTerm>Contract</DescriptionListTerm>\n        <DescriptionListDetails className=\"flex items-center gap-1.5 font-mono text-xs\">\n          0x71C...9eF2\n          <CopyIcon className=\"size-3 text-muted-foreground\" />\n        </DescriptionListDetails>\n      </DescriptionListItem>\n      <DescriptionListItem>\n        <DescriptionListTerm>Documentation</DescriptionListTerm>\n        <DescriptionListDetails className=\"flex items-center gap-1.5\">\n          <a\n            className=\"text-primary underline underline-offset-4\"\n            href=\"https://example.com\"\n          >\n            View docs\n          </a>\n          <ExternalLinkIcon className=\"size-3 text-muted-foreground\" />\n        </DescriptionListDetails>\n      </DescriptionListItem>\n      <DescriptionListItem>\n        <DescriptionListTerm>Tags</DescriptionListTerm>\n        <DescriptionListDetails className=\"flex items-center gap-1.5\">\n          <Badge size=\"sm\" variant=\"secondary\">\n            DeFi\n          </Badge>\n          <Badge size=\"sm\" variant=\"outline\">\n            Staking\n          </Badge>\n        </DescriptionListDetails>\n      </DescriptionListItem>\n    </DescriptionList>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

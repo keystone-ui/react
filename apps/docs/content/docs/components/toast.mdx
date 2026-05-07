@@ -13,47 +13,102 @@ import { Toaster, toast } from "@keystoneui/react/toast";
 
 <ComponentPreview name="toast-default" />
 
-## Types
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/toast.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="toast-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Composition
+
+`Toaster` is the rendering surface — mount it once at the root of your app (typically in your root layout). `toast` is an imperative API: call `toast.success(...)`, `toast.error(...)`, etc. from anywhere in your app to enqueue a toast for the mounted `Toaster` to render.
+
+```tsx
+// app/layout.tsx
+<Toaster />
+
+// anywhere else
+toast.success("Saved");
+toast.error("Something went wrong");
+```
+
+## Examples
+
+### Types
 
 Different toast types for success, error, warning, and info messages:
 
 <ComponentPreview name="toast-types" />
 
-## With Action
+
+### With Action
 
 Include action buttons inside a toast notification:
 
 <ComponentPreview name="toast-with-action" />
 
-## Promise
+
+### Promise
 
 Automatically handle loading, success, and error states for async operations:
 
 <ComponentPreview name="toast-promise" />
 
-## Position
+
+### Position
 
 Customize where toasts appear on screen:
 
 <ComponentPreview name="toast-position" />
 
-## With Description
+
+### With Description
 
 Toast with title and description:
 
 <ComponentPreview name="toast-with-description" />
 
-## Custom
+
+### Custom
 
 Custom styled toast:
 
 <ComponentPreview name="toast-custom" />
 
-## Duration
+
+### Duration
 
 Toast with custom duration and close:
 
 <ComponentPreview name="toast-duration" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

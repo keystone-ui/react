@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio-group-disabled",
+  "title": "Radio Group Disabled",
+  "description": "Radio Group example: Disabled.",
+  "registryDependencies": [
+    "field",
+    "radio-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/radio-group/disabled.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldLabel } from \"@keystoneui/react/field\";\nimport { RadioGroup, RadioGroupItem } from \"@keystoneui/react/radio-group\";\n\nexport default function RadioGroupDisabled() {\n  return (\n    <RadioGroup className=\"w-fit\" defaultValue=\"option2\">\n      <Field data-disabled orientation=\"horizontal\">\n        <RadioGroupItem disabled id=\"disabled-1\" value=\"option1\" />\n        <FieldLabel className=\"font-normal\" htmlFor=\"disabled-1\">\n          Disabled\n        </FieldLabel>\n      </Field>\n      <Field orientation=\"horizontal\">\n        <RadioGroupItem id=\"disabled-2\" value=\"option2\" />\n        <FieldLabel className=\"font-normal\" htmlFor=\"disabled-2\">\n          Option 2\n        </FieldLabel>\n      </Field>\n      <Field orientation=\"horizontal\">\n        <RadioGroupItem id=\"disabled-3\" value=\"option3\" />\n        <FieldLabel className=\"font-normal\" htmlFor=\"disabled-3\">\n          Option 3\n        </FieldLabel>\n      </Field>\n    </RadioGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

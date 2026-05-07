@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "command-default",
+  "title": "Command Default",
+  "description": "Command example: Default.",
+  "registryDependencies": [
+    "button",
+    "command"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/command/default.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Command,\n  CommandDialog,\n  CommandEmpty,\n  CommandGroup,\n  CommandInput,\n  CommandItem,\n  CommandList,\n} from \"@keystoneui/react/command\";\nimport { useState } from \"react\";\n\nexport default function CommandDefault() {\n  const [open, setOpen] = useState(false);\n\n  return (\n    <div className=\"flex flex-col gap-4\">\n      <Button className=\"w-fit\" onClick={() => setOpen(true)} variant=\"outline\">\n        Open Menu\n      </Button>\n      <CommandDialog onOpenChange={setOpen} open={open}>\n        <Command>\n          <CommandInput placeholder=\"Type a command or search...\" />\n          <CommandList>\n            <CommandEmpty>No results found.</CommandEmpty>\n            <CommandGroup heading=\"Suggestions\">\n              <CommandItem>Calendar</CommandItem>\n              <CommandItem>Search Emoji</CommandItem>\n              <CommandItem>Calculator</CommandItem>\n            </CommandGroup>\n          </CommandList>\n        </Command>\n      </CommandDialog>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

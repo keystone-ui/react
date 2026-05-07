@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs-animated-indicator",
+  "title": "Tabs Animated Indicator",
+  "description": "Tabs example: Animated Indicator.",
+  "registryDependencies": [
+    "tabs"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tabs/animated-indicator.tsx",
+      "content": "\"use client\";\n\nimport { Tabs, TabsList, TabsTrigger } from \"@keystoneui/react/tabs\";\n\nexport default function TabsAnimatedIndicator() {\n  return (\n    <div className=\"space-y-8\">\n      <div className=\"space-y-2\">\n        <p className=\"font-medium text-muted-foreground text-xs uppercase tracking-wider\">\n          Default\n        </p>\n        <Tabs defaultValue=\"overview\">\n          <TabsList>\n            <TabsTrigger value=\"overview\">Overview</TabsTrigger>\n            <TabsTrigger value=\"analytics\">Analytics</TabsTrigger>\n            <TabsTrigger value=\"reports\">Reports</TabsTrigger>\n            <TabsTrigger value=\"settings\">Settings</TabsTrigger>\n          </TabsList>\n        </Tabs>\n      </div>\n\n      <div className=\"space-y-2\">\n        <p className=\"font-medium text-muted-foreground text-xs uppercase tracking-wider\">\n          Pill\n        </p>\n        <Tabs defaultValue=\"overview\">\n          <TabsList shape=\"pill\">\n            <TabsTrigger value=\"overview\">Overview</TabsTrigger>\n            <TabsTrigger value=\"analytics\">Analytics</TabsTrigger>\n            <TabsTrigger value=\"reports\">Reports</TabsTrigger>\n            <TabsTrigger value=\"settings\">Settings</TabsTrigger>\n          </TabsList>\n        </Tabs>\n      </div>\n\n      <div className=\"space-y-2\">\n        <p className=\"font-medium text-muted-foreground text-xs uppercase tracking-wider\">\n          Line\n        </p>\n        <Tabs defaultValue=\"overview\">\n          <TabsList variant=\"line\">\n            <TabsTrigger value=\"overview\">Overview</TabsTrigger>\n            <TabsTrigger value=\"analytics\">Analytics</TabsTrigger>\n            <TabsTrigger value=\"reports\">Reports</TabsTrigger>\n            <TabsTrigger value=\"settings\">Settings</TabsTrigger>\n          </TabsList>\n        </Tabs>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

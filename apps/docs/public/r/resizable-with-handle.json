@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "resizable-with-handle",
+  "title": "Resizable With Handle",
+  "description": "Resizable example: With Handle.",
+  "registryDependencies": [
+    "resizable"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/resizable/with-handle.tsx",
+      "content": "\"use client\";\n\nimport {\n  ResizableHandle,\n  ResizablePanel,\n  ResizablePanelGroup,\n} from \"@keystoneui/react/resizable\";\n\nexport default function ResizableWithHandle() {\n  return (\n    <ResizablePanelGroup\n      className=\"max-w-md rounded-lg border\"\n      orientation=\"horizontal\"\n    >\n      <ResizablePanel defaultSize={30}>\n        <div className=\"flex h-32 items-center justify-center p-4\">\n          <span className=\"font-semibold text-sm\">Sidebar</span>\n        </div>\n      </ResizablePanel>\n      <ResizableHandle withHandle />\n      <ResizablePanel defaultSize={70}>\n        <div className=\"flex h-32 items-center justify-center p-4\">\n          <span className=\"font-semibold text-sm\">Content</span>\n        </div>\n      </ResizablePanel>\n    </ResizablePanelGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

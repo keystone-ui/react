@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress-colors",
+  "title": "Progress Colors",
+  "description": "Progress example: Colors.",
+  "registryDependencies": [
+    "progress"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/progress/colors.tsx",
+      "content": "\"use client\";\n\nimport {\n  Progress,\n  ProgressIndicator,\n  ProgressLabel,\n  ProgressTrack,\n  ProgressValue,\n} from \"@keystoneui/react/progress\";\n\nconst COLORS = [\n  { color: \"default\", label: \"Default\", value: 70 },\n  { color: \"success\", label: \"Success\", value: 100 },\n  { color: \"warning\", label: \"Warning\", value: 45 },\n  { color: \"destructive\", label: \"Destructive\", value: 25 },\n] as const;\n\nexport default function ProgressColors() {\n  return (\n    <div className=\"grid w-full max-w-md gap-6\">\n      {COLORS.map((item) => (\n        <Progress color={item.color} key={item.color} value={item.value}>\n          <div className=\"flex items-center justify-between\">\n            <ProgressLabel>{item.label}</ProgressLabel>\n            <ProgressValue />\n          </div>\n          <ProgressTrack>\n            <ProgressIndicator />\n          </ProgressTrack>\n        </Progress>\n      ))}\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

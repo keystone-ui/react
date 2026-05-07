@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "command-disabled-items",
+  "title": "Command Disabled Items",
+  "description": "Command example: Disabled Items.",
+  "registryDependencies": [
+    "button",
+    "command"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/command/disabled-items.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Command,\n  CommandDialog,\n  CommandEmpty,\n  CommandGroup,\n  CommandInput,\n  CommandItem,\n  CommandList,\n} from \"@keystoneui/react/command\";\nimport {\n  Calculator as CalculatorIcon,\n  Calendar as CalendarIcon,\n  Settings as SettingsIcon,\n  Smile as SmileIcon,\n} from \"lucide-react\";\nimport { useState } from \"react\";\n\nexport default function CommandDisabledItems() {\n  const [open, setOpen] = useState(false);\n\n  return (\n    <div>\n      <Button className=\"w-fit\" onClick={() => setOpen(true)} variant=\"outline\">\n        Open Menu\n      </Button>\n      <CommandDialog onOpenChange={setOpen} open={open}>\n        <Command>\n          <CommandInput placeholder=\"Type a command or search...\" />\n          <CommandList>\n            <CommandEmpty>No results found.</CommandEmpty>\n            <CommandGroup heading=\"Actions\">\n              <CommandItem>\n                <CalendarIcon />\n                <span>Calendar</span>\n              </CommandItem>\n              <CommandItem disabled>\n                <SmileIcon />\n                <span>Search Emoji (Coming Soon)</span>\n              </CommandItem>\n              <CommandItem>\n                <CalculatorIcon />\n                <span>Calculator</span>\n              </CommandItem>\n              <CommandItem disabled>\n                <SettingsIcon />\n                <span>Advanced Settings (Locked)</span>\n              </CommandItem>\n            </CommandGroup>\n          </CommandList>\n        </Command>\n      </CommandDialog>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

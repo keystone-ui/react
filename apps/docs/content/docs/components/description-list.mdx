@@ -18,6 +18,36 @@ import {
 
 <ComponentPreview name="description-list-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/description-list.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="description-list-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -27,35 +57,45 @@ DescriptionList
     └── DescriptionListDetails
 ```
 
-## Card Variant
+## Examples
+
+### Card Variant
 
 A variant with rounded corners and background fill on each row:
 
 <ComponentPreview name="description-list-card-variant" />
 
-## Compact
+
+### Compact
 
 A smaller, denser layout for tighter spaces:
 
 <ComponentPreview name="description-list-compact" />
 
-## In Card
+
+### In Card
 
 Embed a description list inside a Card for structured content blocks:
 
 <ComponentPreview name="description-list-in-card" />
 
-## Custom Values
+
+### Custom Values
 
 Description list with custom value rendering:
 
 <ComponentPreview name="description-list-custom-values" />
 
-## Order Summary
+
+### Order Summary
 
 Order summary using description list:
 
 <ComponentPreview name="description-list-order-summary" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

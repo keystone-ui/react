@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "combobox-form-example",
+  "title": "Combobox Form Example",
+  "description": "Combobox example: Form Example.",
+  "registryDependencies": [
+    "button",
+    "combobox",
+    "field"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/combobox/form-example.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Combobox,\n  ComboboxContent,\n  ComboboxEmpty,\n  ComboboxInput,\n  ComboboxItem,\n  ComboboxList,\n} from \"@keystoneui/react/combobox\";\nimport { Field, FieldLabel } from \"@keystoneui/react/field\";\n\nconst frameworks = [\n  \"Next.js\",\n  \"SvelteKit\",\n  \"Nuxt.js\",\n  \"Remix\",\n  \"Astro\",\n] as const;\n\nexport default function ComboboxFormExample() {\n  return (\n    <form\n      className=\"w-full max-w-sm space-y-4\"\n      onSubmit={(e) => {\n        e.preventDefault();\n      }}\n    >\n      <Field>\n        <FieldLabel>Framework</FieldLabel>\n        <Combobox defaultValue=\"Next.js\" items={frameworks} name=\"framework\">\n          <ComboboxInput placeholder=\"Select a framework\" />\n          <ComboboxContent>\n            <ComboboxEmpty>No items found.</ComboboxEmpty>\n            <ComboboxList>\n              {(item) => (\n                <ComboboxItem key={item} value={item}>\n                  {item}\n                </ComboboxItem>\n              )}\n            </ComboboxList>\n          </ComboboxContent>\n        </Combobox>\n      </Field>\n      <div className=\"flex gap-2\">\n        <Button type=\"reset\" variant=\"outline\">\n          Reset\n        </Button>\n        <Button type=\"submit\">Submit</Button>\n      </div>\n    </form>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

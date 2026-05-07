@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-group-disabled",
+  "title": "Toggle Group Disabled",
+  "description": "Toggle Group example: Disabled.",
+  "registryDependencies": [
+    "toggle-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/toggle-group/disabled.tsx",
+      "content": "\"use client\";\n\nimport { ToggleGroup, ToggleGroupItem } from \"@keystoneui/react/toggle-group\";\nimport {\n  Bold as BoldIcon,\n  Italic as ItalicIcon,\n  Underline as UnderlineIcon,\n} from \"lucide-react\";\n\nexport default function ToggleGroupDisabled() {\n  return (\n    <div className=\"flex flex-col gap-6\">\n      <div className=\"flex flex-col gap-2\">\n        <p className=\"font-semibold text-sm\">Disabled Group</p>\n        <ToggleGroup defaultValue={[\"bold\"]} disabled variant=\"outline\">\n          <ToggleGroupItem aria-label=\"Toggle bold\" value=\"bold\">\n            <BoldIcon />\n          </ToggleGroupItem>\n          <ToggleGroupItem aria-label=\"Toggle italic\" value=\"italic\">\n            <ItalicIcon />\n          </ToggleGroupItem>\n          <ToggleGroupItem aria-label=\"Toggle underline\" value=\"underline\">\n            <UnderlineIcon />\n          </ToggleGroupItem>\n        </ToggleGroup>\n      </div>\n\n      <div className=\"flex flex-col gap-2\">\n        <p className=\"font-semibold text-sm\">Individual Disabled Items</p>\n        <ToggleGroup defaultValue={[\"bold\"]} multiple variant=\"outline\">\n          <ToggleGroupItem aria-label=\"Toggle bold\" value=\"bold\">\n            <BoldIcon />\n          </ToggleGroupItem>\n          <ToggleGroupItem aria-label=\"Toggle italic\" disabled value=\"italic\">\n            <ItalicIcon />\n          </ToggleGroupItem>\n          <ToggleGroupItem aria-label=\"Toggle underline\" value=\"underline\">\n            <UnderlineIcon />\n          </ToggleGroupItem>\n        </ToggleGroup>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "item-with-footer",
+  "title": "Item With Footer",
+  "description": "Item example: With Footer.",
+  "registryDependencies": [
+    "button",
+    "item"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/item/with-footer.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Item,\n  ItemActions,\n  ItemContent,\n  ItemDescription,\n  ItemFooter,\n  ItemMedia,\n  ItemTitle,\n} from \"@keystoneui/react/item\";\nimport {\n  Calendar as CalendarIcon,\n  Package as PackageIcon,\n  Tag as TagIcon,\n} from \"lucide-react\";\n\nexport default function ItemWithFooter() {\n  return (\n    <Item className=\"max-w-lg\" variant=\"outline\">\n      <ItemMedia variant=\"icon\">\n        <PackageIcon />\n      </ItemMedia>\n      <ItemContent>\n        <ItemTitle>v2.4.0 Released</ItemTitle>\n        <ItemDescription>\n          New features include dark mode support, improved accessibility, and\n          performance optimizations.\n        </ItemDescription>\n        <ItemFooter>\n          <CalendarIcon />\n          <span>Released Feb 8, 2026</span>\n          <span className=\"text-border\">|</span>\n          <TagIcon />\n          <span>stable</span>\n        </ItemFooter>\n      </ItemContent>\n      <ItemActions>\n        <Button size=\"sm\" variant=\"outline\">\n          View\n        </Button>\n      </ItemActions>\n    </Item>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

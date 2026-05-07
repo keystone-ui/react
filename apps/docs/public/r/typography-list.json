@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "typography-list",
+  "title": "Typography List",
+  "description": "Typography example: List.",
+  "files": [
+    {
+      "path": "apps/docs/demos/typography/list.tsx",
+      "content": "\"use client\";\n\nexport default function TypographyList() {\n  return (\n    <ul className=\"my-6 ml-6 list-disc *:mt-2\">\n      <li>Semantic color tokens for intent, not appearance</li>\n      <li>Spacing scales that enforce visual rhythm</li>\n      <li>Typography presets for consistent hierarchy</li>\n    </ul>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

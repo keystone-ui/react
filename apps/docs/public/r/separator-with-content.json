@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "separator-with-content",
+  "title": "Separator With Content",
+  "description": "Separator example: With Content.",
+  "registryDependencies": [
+    "separator"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/separator/with-content.tsx",
+      "content": "\"use client\";\n\nimport { Separator } from \"@keystoneui/react/separator\";\n\nexport default function SeparatorWithContent() {\n  return (\n    <div className=\"w-full max-w-sm space-y-4\">\n      <div className=\"flex items-center gap-4\">\n        <Separator className=\"flex-1\" />\n        <span className=\"text-muted-foreground text-xs uppercase\">or</span>\n        <Separator className=\"flex-1\" />\n      </div>\n      <div className=\"flex items-center gap-4\">\n        <Separator className=\"flex-1\" />\n        <span className=\"text-muted-foreground text-sm\">\n          Continue with email\n        </span>\n        <Separator className=\"flex-1\" />\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

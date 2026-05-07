@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "label-default",
+  "title": "Label Default",
+  "description": "Label example: Default.",
+  "registryDependencies": [
+    "input",
+    "label"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/label/default.tsx",
+      "content": "\"use client\";\n\nimport { Input } from \"@keystoneui/react/input\";\nimport { Label } from \"@keystoneui/react/label\";\n\nexport default function LabelDefault() {\n  return (\n    <div className=\"w-full max-w-xs space-y-2\">\n      <Label htmlFor=\"email\">Email</Label>\n      <Input id=\"email\" placeholder=\"Enter your email\" type=\"email\" />\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -3,8 +3,12 @@
   "name": "alert-dialog",
   "title": "Alert Dialog",
   "description": "Modal confirmation dialog for destructive or irreversible actions requiring user acknowledgement.",
-  "dependencies": ["@base-ui/react"],
-  "registryDependencies": ["button"],
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
   "files": [
     {
       "path": "packages/ui/src/alert-dialog.tsx",

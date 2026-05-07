@@ -13,59 +13,112 @@ import { CircularProgress } from "@keystoneui/react/circular-progress";
 
 <ComponentPreview name="circular-progress-default" />
 
-## Sizes
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/circular-progress.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="circular-progress-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Examples
+
+### Sizes
 
 Different size presets for various contexts:
 
 <ComponentPreview name="circular-progress-sizes" />
 
-## With Label
+
+### With Label
 
 Display a label or percentage inside the ring:
 
 <ComponentPreview name="circular-progress-with-label" />
 
-## Animated
+
+### Animated
 
 A smoothly animated circular progress:
 
 <ComponentPreview name="circular-progress-animated" />
 
-## Indeterminate
+
+### Indeterminate
 
 A spinning indeterminate state for unknown durations:
 
 <ComponentPreview name="circular-progress-indeterminate" />
 
-## Colors
+
+### Colors
 
 Different color variants:
 
 <ComponentPreview name="circular-progress-colors" />
 
-## With Avatar
+
+### With Avatar
 
 Circular progress wrapping an avatar:
 
 <ComponentPreview name="circular-progress-with-avatar" />
 
-## Custom Center Content
+
+### Custom Center Content
 
 Custom content in the center of the ring:
 
 <ComponentPreview name="circular-progress-custom-center-content" />
 
-## Controlled
+
+### Controlled
 
 Interactive controlled progress:
 
 <ComponentPreview name="circular-progress-controlled" />
 
-## Complete
+
+### Complete
 
 Completed progress state:
 
 <ComponentPreview name="circular-progress-complete" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Profile Dropdown 01](/docs/blocks/profile-dropdown-01) — A user profile dropdown with avatar, level progress, and navigation menu.
+
+{/* backlinks:end */}
 
 ## API Reference
 

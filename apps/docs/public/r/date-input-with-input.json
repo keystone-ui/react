@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-input-with-input",
+  "title": "Date Input With Input",
+  "description": "Date Input example: With Input.",
+  "registryDependencies": [
+    "date-input",
+    "field"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/date-input/with-input.tsx",
+      "content": "\"use client\";\n\nimport { DateInput } from \"@keystoneui/react/date-input\";\nimport { Field, FieldDescription, FieldLabel } from \"@keystoneui/react/field\";\n\nexport default function DateInputWithField() {\n  return (\n    <Field>\n      <FieldLabel htmlFor=\"date-event\">Event Date</FieldLabel>\n      <DateInput id=\"date-event\" />\n      <FieldDescription>Select the date for your event.</FieldDescription>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

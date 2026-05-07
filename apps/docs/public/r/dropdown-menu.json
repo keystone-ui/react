@@ -3,8 +3,13 @@
   "name": "dropdown-menu",
   "title": "Dropdown Menu",
   "description": "Contextual menu triggered by a button, with support for items, separators, and sub-menus.",
-  "dependencies": ["@base-ui/react", "lucide-react"],
-  "registryDependencies": ["checkbox"],
+  "dependencies": [
+    "@base-ui/react",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "checkbox"
+  ],
   "files": [
     {
       "path": "packages/ui/src/dropdown-menu.tsx",

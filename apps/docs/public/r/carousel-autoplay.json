@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "carousel-autoplay",
+  "title": "Carousel Autoplay",
+  "description": "Carousel example: Autoplay.",
+  "registryDependencies": [
+    "carousel"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/carousel/autoplay.tsx",
+      "content": "\"use client\";\n\nimport {\n  Carousel,\n  CarouselContent,\n  CarouselDots,\n  CarouselItem,\n} from \"@keystoneui/react/carousel\";\nimport Autoplay from \"embla-carousel-autoplay\";\n\nexport default function CarouselAutoplay() {\n  return (\n    <Carousel className=\"max-w-sm\" plugins={[Autoplay({ delay: 3000 })]}>\n      <CarouselContent>\n        {Array.from({ length: 5 }).map((_, i) => (\n          // biome-ignore lint/suspicious/noArrayIndexKey: static demo list\n          <CarouselItem key={`slide-${i}`}>\n            <div className=\"flex aspect-video items-center justify-center rounded-lg border bg-muted\">\n              <span className=\"font-semibold text-3xl\">{i + 1}</span>\n            </div>\n          </CarouselItem>\n        ))}\n      </CarouselContent>\n      <CarouselDots className=\"mt-4\" />\n    </Carousel>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

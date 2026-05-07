@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-with-button",
+  "title": "Input With Button",
+  "description": "Input example: With Button.",
+  "registryDependencies": [
+    "button",
+    "button-group",
+    "input"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input/with-button.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { ButtonGroup } from \"@keystoneui/react/button-group\";\nimport { Input } from \"@keystoneui/react/input\";\n\nexport default function InputWithButton() {\n  return (\n    <ButtonGroup className=\"max-w-sm\">\n      <Input placeholder=\"Type to search...\" />\n      <Button variant=\"outline\">Search</Button>\n    </ButtonGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

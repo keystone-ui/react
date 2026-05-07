@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-group-with-popover",
+  "title": "Button Group With Popover",
+  "description": "Button Group example: With Popover.",
+  "registryDependencies": [
+    "button",
+    "button-group",
+    "field",
+    "popover",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/button-group/with-popover.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { ButtonGroup } from \"@keystoneui/react/button-group\";\nimport { Field, FieldDescription, FieldLabel } from \"@keystoneui/react/field\";\nimport {\n  Popover,\n  PopoverContent,\n  PopoverDescription,\n  PopoverHeader,\n  PopoverTitle,\n  PopoverTrigger,\n} from \"@keystoneui/react/popover\";\nimport { Textarea } from \"@keystoneui/react/textarea\";\nimport { Bot as BotIcon, ChevronDown as ChevronDownIcon } from \"lucide-react\";\n\nexport default function ButtonGroupWithPopover() {\n  return (\n    <ButtonGroup>\n      <Button variant=\"outline\">\n        <BotIcon />\n        Copilot\n      </Button>\n      <Popover>\n        <PopoverTrigger\n          render={\n            <Button aria-label=\"Open Popover\" size=\"icon\" variant=\"outline\">\n              <ChevronDownIcon />\n            </Button>\n          }\n        />\n        <PopoverContent align=\"end\" className=\"rounded-xl text-sm\">\n          <PopoverHeader>\n            <PopoverTitle>Start a new task with Copilot</PopoverTitle>\n            <PopoverDescription>\n              Describe your task in natural language.\n            </PopoverDescription>\n          </PopoverHeader>\n          <Field>\n            <FieldLabel className=\"sr-only\" htmlFor=\"task\">\n              Task Description\n            </FieldLabel>\n            <Textarea\n              className=\"resize-none\"\n              id=\"task\"\n              placeholder=\"I need to...\"\n            />\n            <FieldDescription>\n              Copilot will open a pull request for review.\n            </FieldDescription>\n          </Field>\n        </PopoverContent>\n      </Popover>\n    </ButtonGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

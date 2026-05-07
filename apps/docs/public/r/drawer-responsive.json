@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "drawer-responsive",
+  "title": "Drawer Responsive",
+  "description": "Drawer example: Responsive.",
+  "registryDependencies": [
+    "button",
+    "drawer",
+    "input",
+    "label",
+    "modal"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/drawer/responsive.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Drawer,\n  DrawerClose,\n  DrawerContent,\n  DrawerDescription,\n  DrawerFooter,\n  DrawerHeader,\n  DrawerTitle,\n  DrawerTrigger,\n} from \"@keystoneui/react/drawer\";\nimport { useMediaQuery } from \"@keystoneui/react/hooks\";\nimport { Input } from \"@keystoneui/react/input\";\nimport { Label } from \"@keystoneui/react/label\";\nimport {\n  Modal,\n  ModalContent,\n  ModalDescription,\n  ModalHeader,\n  ModalTitle,\n  ModalTrigger,\n} from \"@keystoneui/react/modal\";\nimport { useState } from \"react\";\n\nfunction ProfileForm({ className }: React.ComponentProps<\"form\">) {\n  return (\n    <form className={`grid items-start gap-4 ${className ?? \"\"}`}>\n      <div className=\"grid gap-2\">\n        <Label htmlFor=\"responsive-email\">Email</Label>\n        <Input\n          defaultValue=\"user@example.com\"\n          id=\"responsive-email\"\n          type=\"email\"\n        />\n      </div>\n      <div className=\"grid gap-2\">\n        <Label htmlFor=\"responsive-username\">Username</Label>\n        <Input defaultValue=\"@keystoneui\" id=\"responsive-username\" />\n      </div>\n      <Button type=\"submit\">Save changes</Button>\n    </form>\n  );\n}\n\nexport default function DrawerResponsive() {\n  const [open, setOpen] = useState(false);\n  const isDesktop = useMediaQuery(\"(min-width: 768px)\");\n\n  if (isDesktop) {\n    return (\n      <Modal onOpenChange={setOpen} open={open}>\n        <ModalTrigger render={<Button variant=\"outline\" />}>\n          Edit Profile\n        </ModalTrigger>\n        <ModalContent className=\"sm:max-w-[425px]\">\n          <ModalHeader>\n            <ModalTitle>Edit profile</ModalTitle>\n            <ModalDescription>\n              Make changes to your profile here. Click save when you&apos;re\n              done.\n            </ModalDescription>\n          </ModalHeader>\n          <ProfileForm />\n        </ModalContent>\n      </Modal>\n    );\n  }\n\n  return (\n    <Drawer onOpenChange={setOpen} open={open}>\n      <DrawerTrigger render={<Button variant=\"outline\" />}>\n        Edit Profile\n      </DrawerTrigger>\n      <DrawerContent>\n        <DrawerHeader className=\"text-left\">\n          <DrawerTitle>Edit profile</DrawerTitle>\n          <DrawerDescription>\n            Make changes to your profile here. Click save when you&apos;re done.\n          </DrawerDescription>\n        </DrawerHeader>\n        <ProfileForm className=\"px-4\" />\n        <DrawerFooter className=\"pt-2\">\n          <DrawerClose render={<Button variant=\"outline\" />}>\n            Cancel\n          </DrawerClose>\n        </DrawerFooter>\n      </DrawerContent>\n    </Drawer>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

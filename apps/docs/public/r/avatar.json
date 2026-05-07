@@ -3,7 +3,9 @@
   "name": "avatar",
   "title": "Avatar",
   "description": "User avatar displaying a profile image with a text or icon fallback.",
-  "dependencies": ["@base-ui/react"],
+  "dependencies": [
+    "@base-ui/react"
+  ],
   "files": [
     {
       "path": "packages/ui/src/avatar.tsx",

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "select-multiple",
+  "title": "Select Multiple",
+  "description": "Select example: Multiple.",
+  "registryDependencies": [
+    "select"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/select/multiple.tsx",
+      "content": "\"use client\";\n\nimport {\n  Select,\n  SelectContent,\n  SelectGroup,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"@keystoneui/react/select\";\n\nconst languages: Record<string, string> = {\n  javascript: \"JavaScript\",\n  typescript: \"TypeScript\",\n  python: \"Python\",\n  java: \"Java\",\n  csharp: \"C#\",\n  rust: \"Rust\",\n  go: \"Go\",\n  swift: \"Swift\",\n};\n\nfunction renderValue(value: string[]) {\n  if (value.length === 0) {\n    return \"Select languages…\";\n  }\n  const first = languages[value[0]];\n  return value.length > 1 ? `${first} (+${value.length - 1} more)` : first;\n}\n\nexport default function SelectMultiple() {\n  return (\n    <Select defaultValue={[\"javascript\", \"typescript\"]} multiple>\n      <SelectTrigger className=\"w-56\">\n        <SelectValue>{renderValue}</SelectValue>\n      </SelectTrigger>\n      <SelectContent>\n        <SelectGroup>\n          {Object.entries(languages).map(([key, label]) => (\n            <SelectItem key={key} value={key}>\n              {label}\n            </SelectItem>\n          ))}\n        </SelectGroup>\n      </SelectContent>\n    </Select>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

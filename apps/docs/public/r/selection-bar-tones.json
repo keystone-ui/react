@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "selection-bar-tones",
+  "title": "Selection Bar Tones",
+  "description": "Selection Bar example: Tones.",
+  "registryDependencies": [
+    "selection-bar"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/selection-bar/tones.tsx",
+      "content": "\"use client\";\n\nimport {\n  SelectionBar,\n  SelectionBarButton,\n  SelectionBarClose,\n  SelectionBarGroup,\n  SelectionBarLabel,\n  SelectionBarSeparator,\n} from \"@keystoneui/react/selection-bar\";\nimport {\n  Check as CheckIcon,\n  FileSpreadsheet as FileSpreadsheetIcon,\n  Trash as TrashIcon,\n} from \"lucide-react\";\n\nexport default function SelectionBarTones() {\n  return (\n    <div className=\"flex min-h-[220px] flex-col items-center justify-end gap-4 pb-4\">\n      <SelectionBar open position=\"inline\">\n        <SelectionBarClose />\n        <SelectionBarGroup>\n          <SelectionBarLabel>5 selected</SelectionBarLabel>\n        </SelectionBarGroup>\n        <SelectionBarButton>\n          <CheckIcon />\n          Approve\n        </SelectionBarButton>\n        <SelectionBarSeparator />\n        <SelectionBarButton tone=\"success\">\n          <FileSpreadsheetIcon />\n          Export\n        </SelectionBarButton>\n        <SelectionBarButton tone=\"destructive\">\n          <TrashIcon />\n          Delete\n        </SelectionBarButton>\n      </SelectionBar>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

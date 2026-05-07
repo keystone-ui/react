@@ -13,6 +13,36 @@ import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
 
 <ComponentPreview name="radio-group-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/radio-group.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="radio-group-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -20,33 +50,52 @@ RadioGroup
 └── RadioGroupItem
 ```
 
-## Horizontal
+## Examples
+
+### Horizontal
 
 <ComponentPreview name="radio-group-horizontal" />
 
-## With Descriptions
+
+### With Descriptions
 
 Add descriptions to each option:
 
 <ComponentPreview name="radio-group-with-description" />
 
-## Choice Card
+
+### Choice Card
 
 Card-style selection for prominent choices:
 
 <ComponentPreview name="radio-group-choice-card" />
 
-## Disabled
+
+### Disabled
 
 Disabled radio group:
 
 <ComponentPreview name="radio-group-disabled" />
 
-## Fieldset
+
+### Fieldset
 
 Radio group inside a fieldset:
 
 <ComponentPreview name="radio-group-fieldset" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Tickets 01](/docs/blocks/tickets-01) — A sortable, filterable tickets table with inline cell editing, a new-ticket modal, and a floating bulk-edit action bar.
+
+{/* backlinks:end */}
 
 ## API Reference
 

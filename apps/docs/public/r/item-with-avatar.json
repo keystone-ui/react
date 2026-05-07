@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "item-with-avatar",
+  "title": "Item With Avatar",
+  "description": "Item example: With Avatar.",
+  "registryDependencies": [
+    "avatar",
+    "item"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/item/with-avatar.tsx",
+      "content": "\"use client\";\n\nimport { Avatar, AvatarFallback, AvatarImage } from \"@keystoneui/react/avatar\";\nimport {\n  Item,\n  ItemContent,\n  ItemDescription,\n  ItemMedia,\n  ItemTitle,\n} from \"@keystoneui/react/item\";\n\nexport default function ItemWithAvatar() {\n  return (\n    <Item className=\"max-w-md\" variant=\"outline\">\n      <ItemMedia>\n        <Avatar>\n          <AvatarImage src=\"https://i.pravatar.cc/150?u=alice\" />\n          <AvatarFallback>AL</AvatarFallback>\n        </Avatar>\n      </ItemMedia>\n      <ItemContent>\n        <ItemTitle>Alice</ItemTitle>\n        <ItemDescription>Last seen 5 minutes ago</ItemDescription>\n      </ItemContent>\n    </Item>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

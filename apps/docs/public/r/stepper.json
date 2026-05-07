@@ -3,7 +3,10 @@
   "name": "stepper",
   "title": "Stepper",
   "description": "Multi-step progress indicator for guiding users through sequential workflows.",
-  "dependencies": ["motion", "react-use-measure"],
+  "dependencies": [
+    "motion",
+    "react-use-measure"
+  ],
   "files": [
     {
       "path": "packages/ui/src/stepper.tsx",

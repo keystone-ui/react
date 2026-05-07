@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-otp-disabled",
+  "title": "Input Otp Disabled",
+  "description": "Input Otp example: Disabled.",
+  "registryDependencies": [
+    "input-otp"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-otp/disabled.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputOTP,\n  InputOTPGroup,\n  InputOTPSeparator,\n  InputOTPSlot,\n} from \"@keystoneui/react/input-otp\";\n\nconst OTP_LENGTH = 6;\n\nexport default function InputOTPDisabled() {\n  return (\n    <InputOTP disabled length={OTP_LENGTH} value=\"123456\">\n      <InputOTPGroup>\n        <InputOTPSlot aria-label={`Character 1 of ${OTP_LENGTH}`} />\n        <InputOTPSlot aria-label={`Character 2 of ${OTP_LENGTH}`} />\n        <InputOTPSlot aria-label={`Character 3 of ${OTP_LENGTH}`} />\n      </InputOTPGroup>\n      <InputOTPSeparator />\n      <InputOTPGroup>\n        <InputOTPSlot aria-label={`Character 4 of ${OTP_LENGTH}`} />\n        <InputOTPSlot aria-label={`Character 5 of ${OTP_LENGTH}`} />\n        <InputOTPSlot aria-label={`Character 6 of ${OTP_LENGTH}`} />\n      </InputOTPGroup>\n    </InputOTP>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

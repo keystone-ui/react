@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-secondary",
+  "title": "Toggle Secondary",
+  "description": "Toggle example: Secondary.",
+  "registryDependencies": [
+    "toggle"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/toggle/secondary.tsx",
+      "content": "\"use client\";\n\nimport { Toggle } from \"@keystoneui/react/toggle\";\nimport {\n  Bold as BoldIcon,\n  Italic as ItalicIcon,\n  Underline as UnderlineIcon,\n} from \"lucide-react\";\n\nexport default function ToggleSecondary() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-2\">\n      <Toggle aria-label=\"Toggle bold\" variant=\"secondary\">\n        <BoldIcon />\n        Bold\n      </Toggle>\n      <Toggle aria-label=\"Toggle italic\" defaultPressed variant=\"secondary\">\n        <ItalicIcon />\n        Italic\n      </Toggle>\n      <Toggle aria-label=\"Toggle underline\" variant=\"secondary\">\n        <UnderlineIcon />\n        Underline\n      </Toggle>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

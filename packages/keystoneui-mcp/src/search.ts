@@ -6,21 +6,37 @@ export interface SearchResult {
   score: number;
 }
 
+function applyFilters(
+  items: RegistryItem[],
+  type: string | undefined,
+  category: string | undefined
+): RegistryItem[] {
+  let filtered = items;
+  if (type) {
+    filtered = filtered.filter((i) => i.type === `registry:${type}`);
+  }
+  if (category) {
+    filtered = filtered.filter((i) => i.categories?.includes(category));
+  }
+  return filtered;
+}
+
 export function searchItems(
   manifest: RegistryManifest,
   query: string,
-  opts: { limit?: number; offset?: number; type?: string } = {}
+  opts: {
+    category?: string;
+    limit?: number;
+    offset?: number;
+    type?: string;
+  } = {}
 ): { results: SearchResult[]; total: number } {
-  const { limit = 20, offset = 0, type } = opts;
-
-  let items = manifest.items;
-  if (type) {
-    items = items.filter((i) => i.type === `registry:${type}`);
-  }
+  const { limit = 20, offset = 0, type, category } = opts;
+  const items = applyFilters(manifest.items, type, category);
 
   const targets = items.map((item) => ({
     item,
-    searchable: `${item.name} ${item.title ?? ""} ${item.description ?? ""}`,
+    searchable: `${item.name} ${item.title ?? ""} ${item.description ?? ""} ${(item.categories ?? []).join(" ")}`,
   }));
 
   const results = fuzzysort
@@ -38,14 +54,15 @@ export function searchItems(
 
 export function listItems(
   manifest: RegistryManifest,
-  opts: { limit?: number; offset?: number; type?: string } = {}
+  opts: {
+    category?: string;
+    limit?: number;
+    offset?: number;
+    type?: string;
+  } = {}
 ): { items: RegistryItem[]; total: number } {
-  const { limit = 20, offset = 0, type } = opts;
-
-  let items = manifest.items;
-  if (type) {
-    items = items.filter((i) => i.type === `registry:${type}`);
-  }
+  const { limit = 20, offset = 0, type, category } = opts;
+  const items = applyFilters(manifest.items, type, category);
 
   return {
     items: items.slice(offset, offset + limit),

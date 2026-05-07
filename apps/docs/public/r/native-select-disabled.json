@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "native-select-disabled",
+  "title": "Native Select Disabled",
+  "description": "Native Select example: Disabled.",
+  "registryDependencies": [
+    "native-select"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/native-select/disabled.tsx",
+      "content": "\"use client\";\n\nimport {\n  NativeSelect,\n  NativeSelectOption,\n} from \"@keystoneui/react/native-select\";\n\nexport default function NativeSelectDisabled() {\n  return (\n    <NativeSelect disabled>\n      <NativeSelectOption value=\"\">Disabled</NativeSelectOption>\n      <NativeSelectOption value=\"apple\">Apple</NativeSelectOption>\n      <NativeSelectOption value=\"banana\">Banana</NativeSelectOption>\n      <NativeSelectOption value=\"blueberry\">Blueberry</NativeSelectOption>\n    </NativeSelect>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

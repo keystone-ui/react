@@ -3,7 +3,9 @@
   "name": "form",
   "title": "Form",
   "description": "A form wrapper component that provides consistent layout and validation support.",
-  "registryDependencies": ["label"],
+  "registryDependencies": [
+    "label"
+  ],
   "files": [
     {
       "path": "packages/ui/src/form.tsx",

@@ -20,6 +20,36 @@ import {
 
 <ComponentPreview name="slider-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/slider.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="slider-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -31,33 +61,52 @@ Slider
         └── SliderValue
 ```
 
-## With Label
+## Examples
+
+### With Label
 
 Display the current value alongside the slider:
 
 <ComponentPreview name="slider-with-label" />
 
-## Range
+
+### Range
 
 A dual-thumb slider for selecting a range of values:
 
 <ComponentPreview name="slider-range" />
 
-## Disabled
+
+### Disabled
 
 <ComponentPreview name="slider-disabled" />
 
-## Controlled
+
+### Controlled
 
 Controlled slider with value display:
 
 <ComponentPreview name="slider-controlled" />
 
-## Custom Step
+
+### Custom Step
 
 Slider with custom step values:
 
 <ComponentPreview name="slider-custom-step" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Betting Panel 02](/docs/blocks/betting-panel-02) — A slider-based betting panel with a gradient risk slider for visual feedback on the chosen risk level.
+
+{/* backlinks:end */}
 
 ## API Reference
 

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd-special-keys",
+  "title": "Kbd Special Keys",
+  "description": "Kbd example: Special Keys.",
+  "registryDependencies": [
+    "kbd"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/kbd/special-keys.tsx",
+      "content": "\"use client\";\n\nimport { Kbd } from \"@keystoneui/react/kbd\";\n\nexport default function KbdSpecialKeys() {\n  return (\n    <div className=\"flex flex-wrap gap-2\">\n      <Kbd>Enter</Kbd>\n      <Kbd>Tab</Kbd>\n      <Kbd>Esc</Kbd>\n      <Kbd>Space</Kbd>\n      <Kbd>Backspace</Kbd>\n      <Kbd>Delete</Kbd>\n      <Kbd>↑</Kbd>\n      <Kbd>↓</Kbd>\n      <Kbd>←</Kbd>\n      <Kbd>→</Kbd>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

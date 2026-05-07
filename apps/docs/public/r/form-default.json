@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "form-default",
+  "title": "Form Default",
+  "description": "Form example: Default.",
+  "registryDependencies": [
+    "form",
+    "input",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/form/default.tsx",
+      "content": "\"use client\";\n\nimport { Description, Form, Label } from \"@keystoneui/react/form\";\nimport { Input } from \"@keystoneui/react/input\";\nimport { Textarea } from \"@keystoneui/react/textarea\";\n\nexport default function FormDefault() {\n  return (\n    <Form>\n      <div className=\"space-y-1.5\">\n        <Label htmlFor=\"name\">Name</Label>\n        <Input id=\"name\" placeholder=\"Your name\" />\n      </div>\n      <div className=\"space-y-1.5\">\n        <Label htmlFor=\"email\">Email</Label>\n        <Input id=\"email\" placeholder=\"you@example.com\" type=\"email\" />\n        <Description>We won't share your email with anyone.</Description>\n      </div>\n      <div className=\"space-y-1.5\">\n        <Label htmlFor=\"message\">Message</Label>\n        <Textarea id=\"message\" placeholder=\"Type your message here...\" />\n      </div>\n    </Form>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

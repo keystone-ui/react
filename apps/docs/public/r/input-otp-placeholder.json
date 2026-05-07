@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-otp-placeholder",
+  "title": "Input Otp Placeholder",
+  "description": "Input Otp example: Placeholder.",
+  "registryDependencies": [
+    "input-otp"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-otp/placeholder.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputOTP,\n  InputOTPGroup,\n  InputOTPSlot,\n} from \"@keystoneui/react/input-otp\";\n\nconst OTP_LENGTH = 6;\n\nexport default function InputOTPPlaceholder() {\n  return (\n    <InputOTP length={OTP_LENGTH}>\n      <InputOTPGroup>\n        {Array.from({ length: OTP_LENGTH }, (_, index) => (\n          <InputOTPSlot\n            aria-label={`Character ${index + 1} of ${OTP_LENGTH}`}\n            className=\"placeholder:text-muted-foreground/60 focus:placeholder:text-transparent\"\n            key={index}\n            placeholder=\"•\"\n          />\n        ))}\n      </InputOTPGroup>\n    </InputOTP>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,4 +1,5 @@
 export interface RegistryItem {
+  categories?: string[];
   dependencies?: string[];
   description?: string;
   files?: RegistryFile[];

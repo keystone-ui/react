@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "circular-progress-default",
+  "title": "Circular Progress Default",
+  "description": "Circular Progress example: Default.",
+  "registryDependencies": [
+    "circular-progress"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/circular-progress/default.tsx",
+      "content": "\"use client\";\n\nimport { CircularProgress } from \"@keystoneui/react/circular-progress\";\n\nexport default function CircularProgressDefault() {\n  return <CircularProgress value={65} />;\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

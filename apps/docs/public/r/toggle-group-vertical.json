@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-group-vertical",
+  "title": "Toggle Group Vertical",
+  "description": "Toggle Group example: Vertical.",
+  "registryDependencies": [
+    "toggle-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/toggle-group/vertical.tsx",
+      "content": "\"use client\";\n\nimport { ToggleGroup, ToggleGroupItem } from \"@keystoneui/react/toggle-group\";\nimport {\n  Bold as BoldIcon,\n  Italic as ItalicIcon,\n  Underline as UnderlineIcon,\n} from \"lucide-react\";\n\nexport default function ToggleGroupVertical() {\n  return (\n    <ToggleGroup\n      defaultValue={[\"bold\", \"italic\"]}\n      multiple\n      orientation=\"vertical\"\n      spacing={1}\n    >\n      <ToggleGroupItem aria-label=\"Toggle bold\" value=\"bold\">\n        <BoldIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem aria-label=\"Toggle italic\" value=\"italic\">\n        <ItalicIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem aria-label=\"Toggle underline\" value=\"underline\">\n        <UnderlineIcon />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

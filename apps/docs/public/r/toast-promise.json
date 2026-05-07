@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toast-promise",
+  "title": "Toast Promise",
+  "description": "Toast example: Promise.",
+  "registryDependencies": [
+    "button",
+    "toast"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/toast/promise.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { Toaster, toast } from \"@keystoneui/react/toast\";\n\nconst uploadFile = (): Promise<{ filename: string; size: number }> =>\n  new Promise((resolve) =>\n    setTimeout(() => resolve({ filename: \"document.pdf\", size: 1024 }), 2000)\n  );\n\nconst saveData = (): Promise<{ count: number }> =>\n  new Promise((resolve, reject) =>\n    setTimeout(() => {\n      if (Math.random() > 0.5) {\n        resolve({ count: 42 });\n      } else {\n        reject(new Error(\"Failed to save data\"));\n      }\n    }, 2000)\n  );\n\nexport default function ToastPromise() {\n  return (\n    <div>\n      <div className=\"flex flex-wrap gap-2\">\n        <Button\n          onClick={() => {\n            toast.promise(uploadFile(), {\n              loading: \"Uploading file...\",\n              success: (data) =>\n                `File ${data.filename} uploaded (${data.size}KB)`,\n              error: \"Failed to upload file\",\n            });\n          }}\n          variant=\"outline\"\n        >\n          Upload File\n        </Button>\n        <Button\n          onClick={() => {\n            toast.promise(saveData(), {\n              loading: \"Saving changes...\",\n              success: (data) => `Saved ${data.count} items`,\n              error: (err) => err.message,\n            });\n          }}\n          variant=\"outline\"\n        >\n          Save Data (Random)\n        </Button>\n      </div>\n      <Toaster />\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

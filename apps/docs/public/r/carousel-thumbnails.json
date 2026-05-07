@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "carousel-thumbnails",
+  "title": "Carousel Thumbnails",
+  "description": "Carousel example: Thumbnails.",
+  "registryDependencies": [
+    "carousel"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/carousel/thumbnails.tsx",
+      "content": "\"use client\";\n\nimport {\n  Carousel,\n  type CarouselApi,\n  CarouselContent,\n  CarouselItem,\n  CarouselNext,\n  CarouselPrevious,\n} from \"@keystoneui/react/carousel\";\nimport { useCallback, useState } from \"react\";\n\nconst slides = [\n  \"bg-rose-100 dark:bg-rose-900/30\",\n  \"bg-sky-100 dark:bg-sky-900/30\",\n  \"bg-amber-100 dark:bg-amber-900/30\",\n  \"bg-emerald-100 dark:bg-emerald-900/30\",\n  \"bg-violet-100 dark:bg-violet-900/30\",\n];\n\nexport default function CarouselThumbnails() {\n  const [mainApi, setMainApi] = useState<CarouselApi>();\n  const [thumbApi, setThumbApi] = useState<CarouselApi>();\n  const [selectedIndex, setSelectedIndex] = useState(0);\n\n  const onThumbClick = useCallback(\n    (index: number) => mainApi?.scrollTo(index),\n    [mainApi]\n  );\n\n  const onMainSelect = useCallback(\n    (index: number) => {\n      setSelectedIndex(index);\n      thumbApi?.scrollTo(index);\n    },\n    [thumbApi]\n  );\n\n  return (\n    <div className=\"mx-auto max-w-sm space-y-2\">\n      <Carousel onSlideChange={onMainSelect} setApi={setMainApi}>\n        <CarouselContent>\n          {slides.map((bg, i) => (\n            // biome-ignore lint/suspicious/noArrayIndexKey: static list\n            <CarouselItem key={`main-${i}`}>\n              <div\n                className={`flex aspect-video items-center justify-center rounded-xl font-semibold text-4xl text-muted-foreground ${bg}`}\n              >\n                {i + 1}\n              </div>\n            </CarouselItem>\n          ))}\n        </CarouselContent>\n        <CarouselPrevious />\n        <CarouselNext />\n      </Carousel>\n\n      <Carousel gap=\"0.5rem\" setApi={setThumbApi}>\n        <CarouselContent>\n          {slides.map((bg, i) => (\n            // biome-ignore lint/suspicious/noArrayIndexKey: static list\n            <CarouselItem className=\"basis-1/5\" key={`thumb-${i}`}>\n              <button\n                className={`flex aspect-video w-full cursor-pointer items-center justify-center rounded-lg font-medium text-muted-foreground text-sm transition-opacity ${bg} ${\n                  i === selectedIndex\n                    ? \"opacity-100 ring-2 ring-ring\"\n                    : \"opacity-50\"\n                }`}\n                onClick={() => onThumbClick(i)}\n                type=\"button\"\n              >\n                {i + 1}\n              </button>\n            </CarouselItem>\n          ))}\n        </CarouselContent>\n      </Carousel>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

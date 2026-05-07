@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag-group-removable",
+  "title": "Tag Group Removable",
+  "description": "Tag Group example: Removable.",
+  "registryDependencies": [
+    "tag-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tag-group/removable.tsx",
+      "content": "\"use client\";\n\nimport { TagGroup, TagGroupItem } from \"@keystoneui/react/tag-group\";\nimport { useState } from \"react\";\n\nexport default function TagGroupRemovable() {\n  const [items, setItems] = useState([\"news\", \"travel\", \"gaming\", \"shopping\"]);\n  const labels: Record<string, string> = {\n    news: \"News\",\n    travel: \"Travel\",\n    gaming: \"Gaming\",\n    shopping: \"Shopping\",\n  };\n\n  const handleRemove = (value: string) => {\n    setItems((prev) => prev.filter((item) => item !== value));\n  };\n\n  return (\n    <div className=\"flex flex-col gap-3\">\n      <TagGroup defaultValue={[\"gaming\"]} onRemove={handleRemove}>\n        {items.map((item) => (\n          <TagGroupItem key={item} value={item}>\n            {labels[item]}\n          </TagGroupItem>\n        ))}\n      </TagGroup>\n      <p className=\"text-muted-foreground text-sm\">\n        Click the X to remove tags\n      </p>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

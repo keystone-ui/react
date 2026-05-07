@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "field-multiple-errors",
+  "title": "Field Multiple Errors",
+  "description": "Field example: Multiple Errors.",
+  "registryDependencies": [
+    "field",
+    "input"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/field/multiple-errors.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldError, FieldLabel } from \"@keystoneui/react/field\";\nimport { Input } from \"@keystoneui/react/input\";\n\nexport default function FieldMultipleErrors() {\n  return (\n    <div className=\"w-full max-w-xs\">\n      <Field data-invalid>\n        <FieldLabel htmlFor=\"password\">Password</FieldLabel>\n        <Input aria-invalid defaultValue=\"abc\" id=\"password\" type=\"password\" />\n        <FieldError\n          errors={[\n            { message: \"Must be at least 8 characters\" },\n            { message: \"Must contain a number\" },\n            { message: \"Must contain a special character\" },\n          ]}\n        />\n      </Field>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

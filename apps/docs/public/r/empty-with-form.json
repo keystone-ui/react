@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-with-form",
+  "title": "Empty With Form",
+  "description": "Empty example: With Form.",
+  "registryDependencies": [
+    "avatar",
+    "button",
+    "empty"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/empty/with-form.tsx",
+      "content": "\"use client\";\n\nimport { Avatar, AvatarFallback, AvatarImage } from \"@keystoneui/react/avatar\";\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Empty,\n  EmptyContent,\n  EmptyDescription,\n  EmptyHeader,\n  EmptyMedia,\n  EmptyTitle,\n} from \"@keystoneui/react/empty\";\nimport { Plus as PlusIcon } from \"lucide-react\";\n\nexport default function EmptyWithForm() {\n  return (\n    <Empty className=\"max-w-md\">\n      <EmptyHeader>\n        <EmptyMedia>\n          <div className=\"flex -space-x-2 *:data-[slot=avatar]:size-12 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background *:data-[slot=avatar]:grayscale\">\n            <Avatar>\n              <AvatarImage\n                alt=\"Alex\"\n                src=\"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face\"\n              />\n              <AvatarFallback>AL</AvatarFallback>\n            </Avatar>\n            <Avatar>\n              <AvatarImage\n                alt=\"Sarah\"\n                src=\"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face\"\n              />\n              <AvatarFallback>SA</AvatarFallback>\n            </Avatar>\n            <Avatar>\n              <AvatarImage\n                alt=\"Jordan\"\n                src=\"https://images.unsplash.com/photo-1599566150163-29194dcabd9c?w=80&h=80&fit=crop&crop=face\"\n              />\n              <AvatarFallback>JO</AvatarFallback>\n            </Avatar>\n          </div>\n        </EmptyMedia>\n        <EmptyTitle>No Team Members</EmptyTitle>\n        <EmptyDescription>\n          Invite your team to collaborate on this project.\n        </EmptyDescription>\n      </EmptyHeader>\n      <EmptyContent>\n        <Button size=\"sm\">\n          <PlusIcon />\n          Invite Members\n        </Button>\n      </EmptyContent>\n    </Empty>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

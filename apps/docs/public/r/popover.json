@@ -3,7 +3,9 @@
   "name": "popover",
   "title": "Popover",
   "description": "Floating content panel anchored to a trigger element for contextual information or controls.",
-  "dependencies": ["@base-ui/react"],
+  "dependencies": [
+    "@base-ui/react"
+  ],
   "files": [
     {
       "path": "packages/ui/src/popover.tsx",

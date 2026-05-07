@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-group-stake-buttons",
+  "title": "Input Group Stake Buttons",
+  "description": "Input Group example: Stake Buttons.",
+  "registryDependencies": [
+    "input-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-group/stake-buttons.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupButton,\n  InputGroupInput,\n} from \"@keystoneui/react/input-group\";\nimport { Euro as EuroIcon } from \"lucide-react\";\n\nexport default function InputGroupStakeButtons() {\n  return (\n    <InputGroup className=\"max-w-sm\">\n      <InputGroupAddon>\n        <EuroIcon />\n      </InputGroupAddon>\n      <InputGroupInput placeholder=\"0.00\" type=\"number\" />\n      <InputGroupAddon align=\"inline-end\">\n        <InputGroupButton variant=\"secondary\">½</InputGroupButton>\n        <InputGroupButton variant=\"secondary\">2×</InputGroupButton>\n      </InputGroupAddon>\n    </InputGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

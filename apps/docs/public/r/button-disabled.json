@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-disabled",
+  "title": "Button Disabled",
+  "description": "Button example: Disabled.",
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/button/disabled.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\n\nexport default function ButtonDisabled() {\n  return (\n    <div className=\"flex flex-wrap gap-4\">\n      <Button disabled>Disabled</Button>\n      <Button disabled variant=\"secondary\">\n        Secondary\n      </Button>\n      <Button disabled variant=\"destructive\">\n        Destructive\n      </Button>\n      <Button disabled variant=\"outline\">\n        Outline\n      </Button>\n      <Button disabled variant=\"ghost\">\n        Ghost\n      </Button>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

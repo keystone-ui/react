@@ -22,6 +22,36 @@ import {
 
 <ComponentPreview name="drawer-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/drawer.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="drawer-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -35,13 +65,16 @@ Drawer
         └── DrawerClose
 ```
 
-## Sides
+## Examples
+
+### Sides
 
 Open the drawer from different edges of the screen:
 
 <ComponentPreview name="drawer-sides" />
 
-## Floating
+
+### Floating
 
 Pass `variant="floating"` on `DrawerContent` to detach a side drawer from the viewport edge on `md+` breakpoints. The drawer gets a small inset on the outer side + top + bottom, all four corners rounded, a soft shadow, and a slightly wider default — making it feel like a layer above the page rather than part of the chrome.
 
@@ -51,41 +84,60 @@ The variant has no effect on `top` / `bottom` directions or below the `md` break
 
 <ComponentPreview name="drawer-floating" />
 
-## Scrollable
+
+### Scrollable
 
 A drawer with scrollable body content:
 
 <ComponentPreview name="drawer-scrollable" />
 
-## Nested
+
+### Nested
 
 Stack multiple drawers on top of each other:
 
 <ComponentPreview name="drawer-nested" />
 
-## Responsive
+
+### Responsive
 
 Combine Modal and Drawer to create a responsive dialog. On desktop it renders as a centered Modal; on mobile it slides up as a Drawer. Uses the `useMediaQuery` hook to detect the viewport width.
 
 <ComponentPreview name="drawer-responsive" />
 
-## Filter
+
+### Filter
 
 A practical filter panel drawer pattern:
 
 <ComponentPreview name="drawer-filter" />
 
-## Sort By
+
+### Sort By
 
 Sort-by drawer for mobile interfaces:
 
 <ComponentPreview name="drawer-sort-by" />
 
-## Complex Filter
+
+### Complex Filter
 
 Complex filter drawer with multiple controls:
 
 <ComponentPreview name="drawer-complex-filter" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Tickets 01](/docs/blocks/tickets-01) — A sortable, filterable tickets table with inline cell editing, a new-ticket modal, and a floating bulk-edit action bar.
+
+{/* backlinks:end */}
 
 ## API Reference
 

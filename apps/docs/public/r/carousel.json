@@ -8,7 +8,9 @@
     "embla-carousel-wheel-gestures",
     "lucide-react"
   ],
-  "registryDependencies": ["button"],
+  "registryDependencies": [
+    "button"
+  ],
   "files": [
     {
       "path": "packages/ui/src/carousel.tsx",

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "breadcrumb-with-dropdown",
+  "title": "Breadcrumb With Dropdown",
+  "description": "Breadcrumb example: With Dropdown.",
+  "registryDependencies": [
+    "breadcrumb",
+    "button",
+    "dropdown-menu"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/breadcrumb/with-dropdown.tsx",
+      "content": "\"use client\";\n\nimport {\n  Breadcrumb,\n  BreadcrumbEllipsis,\n  BreadcrumbItem,\n  BreadcrumbLink,\n  BreadcrumbList,\n  BreadcrumbPage,\n  BreadcrumbSeparator,\n} from \"@keystoneui/react/breadcrumb\";\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  DropdownMenu,\n  DropdownMenuContent,\n  DropdownMenuGroup,\n  DropdownMenuItem,\n  DropdownMenuTrigger,\n} from \"@keystoneui/react/dropdown-menu\";\n\nexport default function BreadcrumbWithDropdown() {\n  return (\n    <Breadcrumb>\n      <BreadcrumbList>\n        <BreadcrumbItem>\n          <BreadcrumbLink href=\"#\">Home</BreadcrumbLink>\n        </BreadcrumbItem>\n        <BreadcrumbSeparator />\n        <BreadcrumbItem>\n          <DropdownMenu>\n            <DropdownMenuTrigger\n              render={\n                <Button size=\"icon-sm\" variant=\"ghost\">\n                  <BreadcrumbEllipsis />\n                  <span className=\"sr-only\">Toggle menu</span>\n                </Button>\n              }\n            />\n            <DropdownMenuContent align=\"start\" size=\"compact\">\n              <DropdownMenuGroup>\n                <DropdownMenuItem>Documentation</DropdownMenuItem>\n                <DropdownMenuItem>Themes</DropdownMenuItem>\n                <DropdownMenuItem>GitHub</DropdownMenuItem>\n              </DropdownMenuGroup>\n            </DropdownMenuContent>\n          </DropdownMenu>\n        </BreadcrumbItem>\n        <BreadcrumbSeparator />\n        <BreadcrumbItem>\n          <BreadcrumbLink href=\"#\">Components</BreadcrumbLink>\n        </BreadcrumbItem>\n        <BreadcrumbSeparator />\n        <BreadcrumbItem>\n          <BreadcrumbPage>Breadcrumb</BreadcrumbPage>\n        </BreadcrumbItem>\n      </BreadcrumbList>\n    </Breadcrumb>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

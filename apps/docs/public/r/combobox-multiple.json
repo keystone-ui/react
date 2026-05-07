@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "combobox-multiple",
+  "title": "Combobox Multiple",
+  "description": "Combobox example: Multiple.",
+  "registryDependencies": [
+    "combobox"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/combobox/multiple.tsx",
+      "content": "\"use client\";\n\nimport {\n  Combobox,\n  ComboboxChip,\n  ComboboxChips,\n  ComboboxChipsInput,\n  ComboboxContent,\n  ComboboxEmpty,\n  ComboboxItem,\n  ComboboxList,\n  ComboboxValue,\n  useComboboxAnchor,\n} from \"@keystoneui/react/combobox\";\n\nconst frameworks = [\n  \"Next.js\",\n  \"SvelteKit\",\n  \"Nuxt.js\",\n  \"Remix\",\n  \"Astro\",\n] as const;\n\nexport default function ComboboxMultiple() {\n  const anchor = useComboboxAnchor();\n\n  return (\n    <Combobox\n      autoHighlight\n      defaultValue={[frameworks[0]]}\n      items={frameworks}\n      multiple\n    >\n      <ComboboxChips className=\"w-full max-w-xs\" ref={anchor}>\n        <ComboboxValue>\n          {(values: string[]) => (\n            <>\n              {values.map((value) => (\n                <ComboboxChip key={value}>{value}</ComboboxChip>\n              ))}\n              <ComboboxChipsInput placeholder=\"Search...\" />\n            </>\n          )}\n        </ComboboxValue>\n      </ComboboxChips>\n      <ComboboxContent anchor={anchor}>\n        <ComboboxEmpty>No items found.</ComboboxEmpty>\n        <ComboboxList>\n          {(item) => (\n            <ComboboxItem key={item} value={item}>\n              {item}\n            </ComboboxItem>\n          )}\n        </ComboboxList>\n      </ComboboxContent>\n    </Combobox>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

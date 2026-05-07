@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "carousel-default",
+  "title": "Carousel Default",
+  "description": "Carousel example: Default.",
+  "registryDependencies": [
+    "carousel"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/carousel/default.tsx",
+      "content": "\"use client\";\n\nimport {\n  Carousel,\n  CarouselContent,\n  CarouselItem,\n  CarouselNext,\n  CarouselPrevious,\n} from \"@keystoneui/react/carousel\";\n\nexport default function CarouselDefault() {\n  return (\n    <Carousel className=\"mx-12 max-w-sm\">\n      <CarouselContent>\n        {Array.from({ length: 5 }).map((_, i) => (\n          // biome-ignore lint/suspicious/noArrayIndexKey: static demo list\n          <CarouselItem key={`slide-${i}`}>\n            <div className=\"flex aspect-video items-center justify-center rounded-lg border bg-muted\">\n              <span className=\"font-semibold text-3xl\">{i + 1}</span>\n            </div>\n          </CarouselItem>\n        ))}\n      </CarouselContent>\n      <CarouselPrevious />\n      <CarouselNext />\n    </Carousel>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

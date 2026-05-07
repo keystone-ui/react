@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "card-with-action",
+  "title": "Card With Action",
+  "description": "Card example: With Action.",
+  "registryDependencies": [
+    "button",
+    "card"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/card/with-action.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Card,\n  CardAction,\n  CardContent,\n  CardDescription,\n  CardHeader,\n  CardTitle,\n} from \"@keystoneui/react/card\";\n\nexport default function CardWithAction() {\n  return (\n    <Card className=\"w-full max-w-sm\">\n      <CardHeader>\n        <CardTitle>Notifications</CardTitle>\n        <CardDescription>Manage your notification settings.</CardDescription>\n        <CardAction>\n          <Button size=\"sm\" variant=\"outline\">\n            Settings\n          </Button>\n        </CardAction>\n      </CardHeader>\n      <CardContent>\n        <p>\n          Configure how you receive notifications. You can enable or disable\n          different types of alerts.\n        </p>\n      </CardContent>\n    </Card>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

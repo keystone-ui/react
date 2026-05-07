@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd-modifier-keys",
+  "title": "Kbd Modifier Keys",
+  "description": "Kbd example: Modifier Keys.",
+  "registryDependencies": [
+    "kbd"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/kbd/modifier-keys.tsx",
+      "content": "\"use client\";\n\nimport { Kbd, KbdGroup } from \"@keystoneui/react/kbd\";\n\nexport default function KbdModifierKeys() {\n  return (\n    <div className=\"flex flex-col gap-4\">\n      <div className=\"flex items-center gap-2\">\n        <span className=\"w-24 text-muted-foreground text-sm\">Copy</span>\n        <KbdGroup>\n          <Kbd>⌘</Kbd>\n          <Kbd>C</Kbd>\n        </KbdGroup>\n      </div>\n      <div className=\"flex items-center gap-2\">\n        <span className=\"w-24 text-muted-foreground text-sm\">Paste</span>\n        <KbdGroup>\n          <Kbd>⌘</Kbd>\n          <Kbd>V</Kbd>\n        </KbdGroup>\n      </div>\n      <div className=\"flex items-center gap-2\">\n        <span className=\"w-24 text-muted-foreground text-sm\">Undo</span>\n        <KbdGroup>\n          <Kbd>⌘</Kbd>\n          <Kbd>Z</Kbd>\n        </KbdGroup>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

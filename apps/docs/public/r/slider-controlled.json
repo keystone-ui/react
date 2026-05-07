@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slider-controlled",
+  "title": "Slider Controlled",
+  "description": "Slider example: Controlled.",
+  "registryDependencies": [
+    "slider"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/slider/controlled.tsx",
+      "content": "\"use client\";\n\nimport {\n  Slider,\n  SliderControl,\n  SliderIndicator,\n  SliderThumb,\n  SliderTrack,\n  SliderValue,\n} from \"@keystoneui/react/slider\";\nimport { useId, useState } from \"react\";\n\nexport default function SliderControlled() {\n  const [value, setValue] = useState<number | readonly number[]>(50);\n  const id = useId();\n\n  return (\n    <div className=\"w-full max-w-sm space-y-2\">\n      <Slider aria-labelledby={id} onValueChange={setValue} value={value}>\n        <div className=\"flex justify-between\">\n          <span className=\"font-medium text-sm\" id={id}>\n            Brightness\n          </span>\n          <SliderValue />\n        </div>\n        <SliderControl>\n          <SliderTrack>\n            <SliderIndicator />\n            <SliderThumb />\n          </SliderTrack>\n        </SliderControl>\n      </Slider>\n      <p className=\"text-muted-foreground text-sm\">\n        Current value: <code>{String(value)}</code>\n      </p>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

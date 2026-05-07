@@ -13,7 +13,39 @@ import { Badge } from "@keystoneui/react/badge";
 
 <ComponentPreview name="badge-default" />
 
-## Variants
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/badge.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="badge-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Examples
+
+### Variants
 
 <ComponentPreview name="badge-variants" />
 
@@ -26,45 +58,66 @@ import { Badge } from "@keystoneui/react/badge";
 | `ghost` | Low-emphasis hover-revealed badges |
 | `link` | Underlined text-style badges |
 
-## Sizes
+
+### Sizes
 
 <ComponentPreview name="badge-sizes" />
 
-## With Icon
+
+### With Icon
 
 Add an icon before or after the badge text:
 
 <ComponentPreview name="badge-with-icon" />
 
-## As Link
+
+### As Link
 
 Render a badge as an anchor element:
 
 <ComponentPreview name="badge-as-link" />
 
-## With Spinner
+
+### With Spinner
 
 A badge with a loading spinner:
 
 <ComponentPreview name="badge-with-spinner" />
 
-## Removable
+
+### Removable
 
 Badges with a remove button:
 
 <ComponentPreview name="badge-removable" />
 
-## Custom Colors
+
+### Custom Colors
 
 Badges with custom color styling:
 
 <ComponentPreview name="badge-custom-colors" />
 
-## Stats
+
+### Stats
 
 Badges used for displaying statistics:
 
 <ComponentPreview name="badge-stats" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Profile Dropdown 01](/docs/blocks/profile-dropdown-01) — A user profile dropdown with avatar, level progress, and navigation menu.
+- [Tickets 01](/docs/blocks/tickets-01) — A sortable, filterable tickets table with inline cell editing, a new-ticket modal, and a floating bulk-edit action bar.
+
+{/* backlinks:end */}
 
 ## API Reference
 

@@ -3,7 +3,9 @@
   "name": "empty",
   "title": "Empty",
   "description": "Empty state placeholder with icon and message for when no content is available.",
-  "dependencies": ["class-variance-authority"],
+  "dependencies": [
+    "class-variance-authority"
+  ],
   "files": [
     {
       "path": "packages/ui/src/empty.tsx",

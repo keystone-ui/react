@@ -3,7 +3,9 @@
   "name": "checkbox",
   "title": "Checkbox",
   "description": "A toggle control for binary choices, supporting checked, unchecked, and indeterminate states.",
-  "dependencies": ["@base-ui/react"],
+  "dependencies": [
+    "@base-ui/react"
+  ],
   "files": [
     {
       "path": "packages/ui/src/checkbox.tsx",

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-custom-loading",
+  "title": "Button Custom Loading",
+  "description": "Button example: Custom Loading.",
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/button/custom-loading.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { ArrowRight, LoaderCircle as Loader2, Mail } from \"lucide-react\";\nimport { useState } from \"react\";\n\nexport default function ButtonCustomLoading() {\n  const [isLoading, setIsLoading] = useState(false);\n\n  const toggleLoading = () => setIsLoading(!isLoading);\n\n  return (\n    <div className=\"flex flex-col gap-4\">\n      <div className=\"flex items-center gap-2\">\n        <Button onClick={toggleLoading} size=\"sm\" variant=\"outline\">\n          {isLoading ? \"Stop Loading\" : \"Start Loading\"}\n        </Button>\n      </div>\n      <div className=\"flex flex-wrap gap-4\">\n        <Button disabled={isLoading}>\n          {isLoading && <Loader2 className=\"h-4 w-4 animate-spin\" />}\n          Manual loader\n        </Button>\n        <Button isLoading={isLoading} variant=\"secondary\">\n          <Mail />\n          With left icon\n        </Button>\n        <Button isLoading={isLoading} variant=\"outline\">\n          With right icon\n          <ArrowRight />\n        </Button>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

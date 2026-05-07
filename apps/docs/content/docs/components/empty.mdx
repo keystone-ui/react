@@ -20,6 +20,36 @@ import {
 
 <ComponentPreview name="empty-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/empty.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="empty-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -31,71 +61,87 @@ Empty
 └── EmptyContent
 ```
 
-## Outline
+## Examples
+
+### Outline
 
 An outlined empty state with a dashed border:
 
 <ComponentPreview name="empty-outline" />
 
-## With Avatar
+
+### With Avatar
 
 Display an avatar or icon inside the media area:
 
 <ComponentPreview name="empty-with-avatar" />
 
-## Background
+
+### Background
 
 A filled background variant for more visual emphasis:
 
 <ComponentPreview name="empty-background" />
 
-## With Spinner
+
+### With Spinner
 
 Use a Spinner inside EmptyMedia for loading/processing states:
 
 <ComponentPreview name="empty-with-spinner" />
 
-## With Action
+
+### With Action
 
 Empty state with action buttons:
 
 <ComponentPreview name="empty-with-action" />
 
-## With Description
+
+### With Description
 
 Empty state with descriptive text:
 
 <ComponentPreview name="empty-with-description" />
 
-## With Image
+
+### With Image
 
 Empty state with an image placeholder:
 
 <ComponentPreview name="empty-with-image" />
 
-## With Form
+
+### With Form
 
 Empty state containing a form:
 
 <ComponentPreview name="empty-with-form" />
 
-## With Search
+
+### With Search
 
 Empty state with search input:
 
 <ComponentPreview name="empty-with-search" />
 
-## With Input
+
+### With Input
 
 Empty state with an input field:
 
 <ComponentPreview name="empty-with-input" />
 
-## With List
+
+### With List
 
 Empty state with a list of suggestions:
 
 <ComponentPreview name="empty-with-list" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

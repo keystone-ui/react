@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pagination-data-table",
+  "title": "Pagination Data Table",
+  "description": "Pagination example: Data Table.",
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/pagination/data-table.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  ChevronLeft as ChevronLeftIcon,\n  ChevronRight as ChevronRightIcon,\n  ChevronsLeft as ChevronsLeftIcon,\n  ChevronsRight as ChevronsRightIcon,\n} from \"lucide-react\";\n\nexport default function PaginationDataTable() {\n  return (\n    <div className=\"flex items-center justify-end space-x-4 md:space-x-6 lg:space-x-8\">\n      <div className=\"flex items-center justify-center font-medium text-sm\">\n        Page 1 of 3\n      </div>\n      <div className=\"flex items-center space-x-2\">\n        <Button aria-label=\"Go to first page\" size=\"icon-sm\" variant=\"outline\">\n          <ChevronsLeftIcon />\n        </Button>\n        <Button\n          aria-label=\"Go to previous page\"\n          size=\"icon-sm\"\n          variant=\"outline\"\n        >\n          <ChevronLeftIcon />\n        </Button>\n        <Button aria-label=\"Go to next page\" size=\"icon-sm\" variant=\"outline\">\n          <ChevronRightIcon />\n        </Button>\n        <Button aria-label=\"Go to last page\" size=\"icon-sm\" variant=\"outline\">\n          <ChevronsRightIcon />\n        </Button>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "modal-nested",
+  "title": "Modal Nested",
+  "description": "Modal example: Nested.",
+  "registryDependencies": [
+    "button",
+    "modal"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/modal/nested.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Modal,\n  ModalClose,\n  ModalContent,\n  ModalDescription,\n  ModalFooter,\n  ModalHeader,\n  ModalTitle,\n  ModalTrigger,\n} from \"@keystoneui/react/modal\";\n\nexport default function ModalNested() {\n  return (\n    <Modal>\n      <ModalTrigger render={<Button variant=\"outline\" />}>\n        Open Parent\n      </ModalTrigger>\n      <ModalContent>\n        <ModalHeader>\n          <ModalTitle>Parent Modal</ModalTitle>\n          <ModalDescription>\n            This is the parent modal. You can open a nested modal from here.\n          </ModalDescription>\n        </ModalHeader>\n        <Modal>\n          <ModalTrigger render={<Button variant=\"secondary\" />}>\n            Open Nested Modal\n          </ModalTrigger>\n          <ModalContent size=\"sm\">\n            <ModalHeader>\n              <ModalTitle>Nested Modal</ModalTitle>\n              <ModalDescription>\n                This is a nested modal. Closing this will return focus to the\n                parent modal.\n              </ModalDescription>\n            </ModalHeader>\n            <ModalFooter>\n              <ModalClose render={<Button />}>Got it</ModalClose>\n            </ModalFooter>\n          </ModalContent>\n        </Modal>\n        <ModalFooter>\n          <ModalClose render={<Button variant=\"outline\" />}>Close</ModalClose>\n        </ModalFooter>\n      </ModalContent>\n    </Modal>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "circular-progress-colors",
+  "title": "Circular Progress Colors",
+  "description": "Circular Progress example: Colors.",
+  "registryDependencies": [
+    "circular-progress"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/circular-progress/colors.tsx",
+      "content": "\"use client\";\n\nimport { CircularProgress } from \"@keystoneui/react/circular-progress\";\n\nexport default function CircularProgressColors() {\n  return (\n    <div className=\"flex items-center gap-6\">\n      <CircularProgress color=\"default\" value={60} />\n      <CircularProgress color=\"success\" value={80} />\n      <CircularProgress color=\"warning\" value={45} />\n      <CircularProgress color=\"destructive\" value={25} />\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

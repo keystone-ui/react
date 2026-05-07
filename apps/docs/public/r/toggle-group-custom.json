@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-group-custom",
+  "title": "Toggle Group Custom",
+  "description": "Toggle Group example: Custom.",
+  "registryDependencies": [
+    "field",
+    "toggle-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/toggle-group/custom.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldDescription, FieldLabel } from \"@keystoneui/react/field\";\nimport { ToggleGroup, ToggleGroupItem } from \"@keystoneui/react/toggle-group\";\nimport { useState } from \"react\";\n\nexport default function ToggleGroupCustom() {\n  const [fontWeight, setFontWeight] = useState<string[]>([\"normal\"]);\n  const current = fontWeight[0] || \"normal\";\n\n  return (\n    <Field>\n      <FieldLabel>Font Weight</FieldLabel>\n      <ToggleGroup\n        onValueChange={setFontWeight}\n        size=\"lg\"\n        spacing={2}\n        value={fontWeight}\n        variant=\"outline\"\n      >\n        <ToggleGroupItem\n          aria-label=\"Light\"\n          className=\"flex size-16 flex-col items-center justify-center rounded-xl\"\n          value=\"light\"\n        >\n          <span className=\"font-light text-2xl leading-none\">Aa</span>\n          <span className=\"text-muted-foreground text-xs\">Light</span>\n        </ToggleGroupItem>\n        <ToggleGroupItem\n          aria-label=\"Normal\"\n          className=\"flex size-16 flex-col items-center justify-center rounded-xl\"\n          value=\"normal\"\n        >\n          <span className=\"font-normal text-2xl leading-none\">Aa</span>\n          <span className=\"text-muted-foreground text-xs\">Normal</span>\n        </ToggleGroupItem>\n        <ToggleGroupItem\n          aria-label=\"Medium\"\n          className=\"flex size-16 flex-col items-center justify-center rounded-xl\"\n          value=\"medium\"\n        >\n          <span className=\"font-medium text-2xl leading-none\">Aa</span>\n          <span className=\"text-muted-foreground text-xs\">Medium</span>\n        </ToggleGroupItem>\n        <ToggleGroupItem\n          aria-label=\"Bold\"\n          className=\"flex size-16 flex-col items-center justify-center rounded-xl\"\n          value=\"bold\"\n        >\n          <span className=\"font-bold text-2xl leading-none\">Aa</span>\n          <span className=\"text-muted-foreground text-xs\">Bold</span>\n        </ToggleGroupItem>\n      </ToggleGroup>\n      <FieldDescription>\n        Use{\" \"}\n        <code className=\"rounded-md bg-muted px-1 py-0.5 font-mono\">\n          font-{current}\n        </code>{\" \"}\n        to set the font weight.\n      </FieldDescription>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

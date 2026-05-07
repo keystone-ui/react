@@ -15,27 +15,66 @@ The textarea auto-sizes to fit its content using `field-sizing-content`. Resizin
 
 <ComponentPreview name="textarea-default" />
 
-## With Field
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/textarea.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="textarea-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Examples
+
+### With Field
 
 Compose with Field components for labels and descriptions:
 
 <ComponentPreview name="textarea-with-field" />
 
-## Character Count
+
+### Character Count
 
 Track input length with a controlled value and `maxLength`:
 
 <ComponentPreview name="textarea-character-count" />
 
-## Disabled
+
+### Disabled
 
 <ComponentPreview name="textarea-disabled" />
 
-## With Error
+
+### With Error
 
 Textarea with error state:
 
 <ComponentPreview name="textarea-with-error" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

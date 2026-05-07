@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag-group-default",
+  "title": "Tag Group Default",
+  "description": "Tag Group example: Default.",
+  "registryDependencies": [
+    "tag-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tag-group/default.tsx",
+      "content": "\"use client\";\n\nimport { TagGroup, TagGroupItem } from \"@keystoneui/react/tag-group\";\n\nexport default function TagGroupDefault() {\n  return (\n    <TagGroup defaultValue={[\"fitness\", \"parking\"]} multiple>\n      <TagGroupItem value=\"laundry\">Laundry</TagGroupItem>\n      <TagGroupItem value=\"fitness\">Fitness center</TagGroupItem>\n      <TagGroupItem value=\"parking\">Parking</TagGroupItem>\n      <TagGroupItem value=\"pool\">Swimming pool</TagGroupItem>\n      <TagGroupItem value=\"breakfast\">Breakfast</TagGroupItem>\n    </TagGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

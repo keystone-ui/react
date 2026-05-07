@@ -13,6 +13,36 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@keystoneui
 
 <ComponentPreview name="collapsible-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/collapsible.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="collapsible-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -21,17 +51,24 @@ Collapsible
 └── CollapsibleContent
 ```
 
-## Settings
+## Examples
+
+### Settings
 
 A collapsible settings panel pattern:
 
 <ComponentPreview name="collapsible-settings" />
 
-## File Tree
+
+### File Tree
 
 A collapsible file tree navigation pattern:
 
 <ComponentPreview name="collapsible-file-tree" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-group-text-labels",
+  "title": "Toggle Group Text Labels",
+  "description": "Toggle Group example: Text Labels.",
+  "registryDependencies": [
+    "toggle-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/toggle-group/text-labels.tsx",
+      "content": "\"use client\";\n\nimport { ToggleGroup, ToggleGroupItem } from \"@keystoneui/react/toggle-group\";\n\nexport default function ToggleGroupTextLabels() {\n  return (\n    <ToggleGroup defaultValue={[\"day\"]} size=\"sm\" variant=\"outline\">\n      <ToggleGroupItem value=\"day\">Day</ToggleGroupItem>\n      <ToggleGroupItem value=\"week\">Week</ToggleGroupItem>\n      <ToggleGroupItem value=\"month\">Month</ToggleGroupItem>\n      <ToggleGroupItem value=\"year\">Year</ToggleGroupItem>\n    </ToggleGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

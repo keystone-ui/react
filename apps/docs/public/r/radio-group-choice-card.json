@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio-group-choice-card",
+  "title": "Radio Group Choice Card",
+  "description": "Radio Group example: Choice Card.",
+  "registryDependencies": [
+    "field",
+    "radio-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/radio-group/choice-card.tsx",
+      "content": "\"use client\";\n\nimport {\n  Field,\n  FieldContent,\n  FieldDescription,\n  FieldLabel,\n  FieldTitle,\n} from \"@keystoneui/react/field\";\nimport { RadioGroup, RadioGroupItem } from \"@keystoneui/react/radio-group\";\n\nexport default function RadioGroupChoiceCard() {\n  return (\n    <RadioGroup className=\"max-w-sm\" defaultValue=\"plus\">\n      <FieldLabel htmlFor=\"plus-plan\">\n        <Field orientation=\"horizontal\">\n          <FieldContent>\n            <FieldTitle>Plus</FieldTitle>\n            <FieldDescription>\n              For individuals and small teams.\n            </FieldDescription>\n          </FieldContent>\n          <RadioGroupItem id=\"plus-plan\" value=\"plus\" />\n        </Field>\n      </FieldLabel>\n      <FieldLabel htmlFor=\"pro-plan\">\n        <Field orientation=\"horizontal\">\n          <FieldContent>\n            <FieldTitle>Pro</FieldTitle>\n            <FieldDescription>For growing businesses.</FieldDescription>\n          </FieldContent>\n          <RadioGroupItem id=\"pro-plan\" value=\"pro\" />\n        </Field>\n      </FieldLabel>\n      <FieldLabel htmlFor=\"enterprise-plan\">\n        <Field orientation=\"horizontal\">\n          <FieldContent>\n            <FieldTitle>Enterprise</FieldTitle>\n            <FieldDescription>\n              For large teams and enterprises.\n            </FieldDescription>\n          </FieldContent>\n          <RadioGroupItem id=\"enterprise-plan\" value=\"enterprise\" />\n        </Field>\n      </FieldLabel>\n    </RadioGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

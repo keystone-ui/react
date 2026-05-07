@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-group-secondary",
+  "title": "Toggle Group Secondary",
+  "description": "Toggle Group example: Secondary.",
+  "registryDependencies": [
+    "toggle-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/toggle-group/secondary.tsx",
+      "content": "\"use client\";\n\nimport { ToggleGroup, ToggleGroupItem } from \"@keystoneui/react/toggle-group\";\n\nexport default function ToggleGroupSecondary() {\n  return (\n    <div className=\"flex flex-col gap-6\">\n      <div className=\"flex flex-col gap-2\">\n        <p className=\"font-semibold text-sm\">Joined (spacing=0)</p>\n        <ToggleGroup defaultValue={[\"medium\"]} variant=\"secondary\">\n          <ToggleGroupItem className=\"px-6\" value=\"low\">\n            Low\n          </ToggleGroupItem>\n          <ToggleGroupItem className=\"px-6\" value=\"medium\">\n            Medium\n          </ToggleGroupItem>\n          <ToggleGroupItem className=\"px-6\" value=\"high\">\n            High\n          </ToggleGroupItem>\n        </ToggleGroup>\n      </div>\n      <div className=\"flex flex-col gap-2\">\n        <p className=\"font-semibold text-sm\">Spaced (spacing=2)</p>\n        <ToggleGroup defaultValue={[\"medium\"]} spacing={2} variant=\"secondary\">\n          <ToggleGroupItem className=\"px-6\" value=\"low\">\n            Low\n          </ToggleGroupItem>\n          <ToggleGroupItem className=\"px-6\" value=\"medium\">\n            Medium\n          </ToggleGroupItem>\n          <ToggleGroupItem className=\"px-6\" value=\"high\">\n            High\n          </ToggleGroupItem>\n        </ToggleGroup>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "description-list-card-variant",
+  "title": "Description List Card Variant",
+  "description": "Description List example: Card Variant.",
+  "registryDependencies": [
+    "badge",
+    "description-list"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/description-list/card-variant.tsx",
+      "content": "\"use client\";\n\nimport { Badge } from \"@keystoneui/react/badge\";\nimport {\n  DescriptionList,\n  DescriptionListDetails,\n  DescriptionListItem,\n  DescriptionListTerm,\n} from \"@keystoneui/react/description-list\";\n\nexport default function DescriptionListCardVariant() {\n  return (\n    <DescriptionList variant=\"card\">\n      <DescriptionListItem>\n        <DescriptionListTerm>Provider</DescriptionListTerm>\n        <DescriptionListDetails>Netent</DescriptionListDetails>\n      </DescriptionListItem>\n      <DescriptionListItem>\n        <DescriptionListTerm>Game</DescriptionListTerm>\n        <DescriptionListDetails>Fruit Ninja</DescriptionListDetails>\n      </DescriptionListItem>\n      <DescriptionListItem>\n        <DescriptionListTerm>Current Players</DescriptionListTerm>\n        <DescriptionListDetails>24</DescriptionListDetails>\n      </DescriptionListItem>\n      <DescriptionListItem>\n        <DescriptionListTerm>Genre</DescriptionListTerm>\n        <DescriptionListDetails>\n          <Badge variant=\"default\">Action</Badge>\n        </DescriptionListDetails>\n      </DescriptionListItem>\n    </DescriptionList>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag-disabled",
+  "title": "Tag Disabled",
+  "description": "Tag example: Disabled.",
+  "registryDependencies": [
+    "tag"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tag/disabled.tsx",
+      "content": "\"use client\";\n\nimport { Tag } from \"@keystoneui/react/tag\";\n\nexport default function TagDisabled() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-2\">\n      <Tag disabled value=\"disabled\">\n        Disabled\n      </Tag>\n      <Tag defaultPressed disabled value=\"pressed-disabled\">\n        Pressed & Disabled\n      </Tag>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

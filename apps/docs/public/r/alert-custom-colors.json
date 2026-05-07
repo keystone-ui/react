@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "alert-custom-colors",
+  "title": "Alert Custom Colors",
+  "description": "Alert example: Custom Colors.",
+  "registryDependencies": [
+    "alert"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/alert/custom-colors.tsx",
+      "content": "\"use client\";\n\nimport { Alert, AlertDescription, AlertTitle } from \"@keystoneui/react/alert\";\nimport {\n  TriangleAlert as AlertTriangleIcon,\n  Info as InfoIcon,\n  ShieldCheck as ShieldCheckIcon,\n} from \"lucide-react\";\n\nexport default function AlertCustomColors() {\n  return (\n    <div className=\"grid w-full max-w-lg gap-4\">\n      <Alert className=\"border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50\">\n        <AlertTriangleIcon />\n        <AlertTitle>Your subscription will expire in 3 days.</AlertTitle>\n        <AlertDescription>\n          Renew now to avoid service interruption.\n        </AlertDescription>\n      </Alert>\n      <Alert className=\"border-purple-200 bg-purple-50 text-purple-900 dark:border-purple-900 dark:bg-purple-950 dark:text-purple-50\">\n        <ShieldCheckIcon />\n        <AlertTitle>Two-factor authentication enabled</AlertTitle>\n        <AlertDescription>\n          Your account is protected with an additional layer of security.\n        </AlertDescription>\n      </Alert>\n      <Alert className=\"border-teal-200 bg-teal-50 text-teal-900 dark:border-teal-900 dark:bg-teal-950 dark:text-teal-50\">\n        <InfoIcon />\n        <AlertTitle>Custom teal alert</AlertTitle>\n        <AlertDescription>\n          Any Tailwind color can be used to create custom alert styles.\n        </AlertDescription>\n      </Alert>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

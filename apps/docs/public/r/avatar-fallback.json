@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "avatar-fallback",
+  "title": "Avatar Fallback",
+  "description": "Avatar example: Fallback.",
+  "registryDependencies": [
+    "avatar"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/avatar/fallback.tsx",
+      "content": "\"use client\";\n\nimport { Avatar, AvatarFallback, AvatarImage } from \"@keystoneui/react/avatar\";\n\nexport default function AvatarFallbackDemo() {\n  return (\n    <div className=\"flex items-center gap-4\">\n      <Avatar>\n        <AvatarImage alt=\"Broken\" src=\"/broken-image.jpg\" />\n        <AvatarFallback>CN</AvatarFallback>\n      </Avatar>\n      <Avatar>\n        <AvatarFallback>AB</AvatarFallback>\n      </Avatar>\n      <Avatar>\n        <AvatarFallback>JD</AvatarFallback>\n      </Avatar>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

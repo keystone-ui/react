@@ -29,7 +29,7 @@ export const server = new McpServer(
 
 server.tool(
   "list_components",
-  "List all available Keystone UI components and blocks with pagination. Returns name, description, and dependency info for each item.",
+  "List all available Keystone UI components, blocks, and named examples with pagination. Returns name, description, categories, and dependency info for each item.",
   {
     limit: z
       .number()
@@ -39,15 +39,28 @@ server.tool(
       .describe("Maximum number of items to return"),
     offset: z.number().min(0).default(0).describe("Number of items to skip"),
     type: z
-      .enum(["ui", "block"])
+      .enum(["ui", "block", "example"])
       .optional()
-      .describe("Filter by item type: 'ui' for components, 'block' for blocks"),
+      .describe(
+        "Filter by item type: 'ui' for components, 'block' for full-page blocks, 'example' for named demo variants like 'table-with-pagination'"
+      ),
+    category: z
+      .string()
+      .optional()
+      .describe(
+        "Filter by category (e.g. 'authentication', 'login', 'signup', 'navigation', 'data', 'betting'). Currently only block items carry categories."
+      ),
   },
-  async ({ limit, offset, type }) => ({
+  async ({ limit, offset, type, category }) => ({
     content: [
       {
         type: "text",
-        text: await listComponentsTool(config, { limit, offset, type }),
+        text: await listComponentsTool(config, {
+          limit,
+          offset,
+          type,
+          category,
+        }),
       },
     ],
   })
@@ -55,7 +68,7 @@ server.tool(
 
 server.tool(
   "search_components",
-  "Fuzzy search Keystone UI components by name, description, or keywords. Good for finding components when you're not sure of the exact name.",
+  "Fuzzy search components, blocks, and named examples (e.g., `table-with-pagination`, `card-with-image`). Categories (e.g. 'authentication', 'login') participate in fuzzy matching. Use when the exact name isn't known; pair with `view_component` or `get_examples` to see code.",
   {
     query: z.string().describe("Search query (name, description, or keywords)"),
     limit: z
@@ -64,13 +77,29 @@ server.tool(
       .max(50)
       .default(10)
       .describe("Maximum number of results"),
-    type: z.enum(["ui", "block"]).optional().describe("Filter by item type"),
+    type: z
+      .enum(["ui", "block", "example"])
+      .optional()
+      .describe(
+        "Filter by item type: 'ui' for components, 'block' for full-page blocks, 'example' for named demo variants"
+      ),
+    category: z
+      .string()
+      .optional()
+      .describe(
+        "Filter by category (e.g. 'authentication', 'login'). Currently only block items carry categories."
+      ),
   },
-  async ({ query, limit, type }) => ({
+  async ({ query, limit, type, category }) => ({
     content: [
       {
         type: "text",
-        text: await searchComponentsTool(config, { query, limit, type }),
+        text: await searchComponentsTool(config, {
+          query,
+          limit,
+          type,
+          category,
+        }),
       },
     ],
   })

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge-stats",
+  "title": "Badge Stats",
+  "description": "Badge example: Stats.",
+  "registryDependencies": [
+    "badge"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/badge/stats.tsx",
+      "content": "\"use client\";\n\nimport { Badge } from \"@keystoneui/react/badge\";\nimport {\n  CircleAlert as AlertCircleIcon,\n  Calendar as CalendarIcon,\n  Check as CheckIcon,\n  Users as UsersIcon,\n} from \"lucide-react\";\n\nexport default function BadgeStats() {\n  return (\n    <div className=\"flex flex-wrap gap-3\">\n      <Badge className=\"border-transparent bg-blue-500/15 text-blue-700 dark:text-blue-400\">\n        <UsersIcon />\n        128 users\n      </Badge>\n      <Badge className=\"border-transparent bg-green-500/15 text-green-700 dark:bg-green-500/10 dark:text-green-400\">\n        <CheckIcon />\n        87% complete\n      </Badge>\n      <Badge className=\"border-transparent bg-amber-400/20 text-amber-700 dark:bg-amber-400/10 dark:text-amber-400\">\n        <CalendarIcon />3 days left\n      </Badge>\n      <Badge className=\"border-transparent bg-red-500/15 text-red-700 dark:bg-red-500/10 dark:text-red-400\">\n        <AlertCircleIcon />2 issues\n      </Badge>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

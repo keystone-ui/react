@@ -13,6 +13,36 @@ import { Alert, AlertTitle, AlertDescription, AlertAction } from "@keystoneui/re
 
 <ComponentPreview name="alert-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/alert.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="alert-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -23,7 +53,9 @@ Alert
 └── AlertAction
 ```
 
-## Variants
+## Examples
+
+### Variants
 
 The Alert supports semantic color variants for different message types:
 
@@ -37,23 +69,30 @@ The Alert supports semantic color variants for different message types:
 | `error` | Errors or critical failures |
 | `info` | Informational tips or notes |
 
-## With Action
+
+### With Action
 
 Include an action button inside the alert:
 
 <ComponentPreview name="alert-with-action" />
 
-## Without Icon
+
+### Without Icon
 
 Alerts without a leading icon:
 
 <ComponentPreview name="alert-without-icon" />
 
-## Custom Colors
+
+### Custom Colors
 
 Apply custom color styling for brand-specific alerts:
 
 <ComponentPreview name="alert-custom-colors" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

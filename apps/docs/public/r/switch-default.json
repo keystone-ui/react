@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "switch-default",
+  "title": "Switch Default",
+  "description": "Switch example: Default.",
+  "registryDependencies": [
+    "field",
+    "switch"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/switch/default.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldLabel } from \"@keystoneui/react/field\";\nimport { Switch } from \"@keystoneui/react/switch\";\n\nexport default function SwitchDefault() {\n  return (\n    <Field className=\"w-fit\" orientation=\"horizontal\">\n      <Switch id=\"airplane-mode\" />\n      <FieldLabel htmlFor=\"airplane-mode\">Airplane Mode</FieldLabel>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

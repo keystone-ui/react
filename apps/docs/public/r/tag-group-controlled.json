@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag-group-controlled",
+  "title": "Tag Group Controlled",
+  "description": "Tag Group example: Controlled.",
+  "registryDependencies": [
+    "tag-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tag-group/controlled.tsx",
+      "content": "\"use client\";\n\nimport { TagGroup, TagGroupItem } from \"@keystoneui/react/tag-group\";\nimport { useState } from \"react\";\n\nexport default function TagGroupControlled() {\n  const [value, setValue] = useState<string[]>([\"news\", \"travel\"]);\n\n  return (\n    <div className=\"flex flex-col gap-3\">\n      <TagGroup multiple onValueChange={setValue} value={value}>\n        <TagGroupItem value=\"news\">News</TagGroupItem>\n        <TagGroupItem value=\"travel\">Travel</TagGroupItem>\n        <TagGroupItem value=\"gaming\">Gaming</TagGroupItem>\n        <TagGroupItem value=\"shopping\">Shopping</TagGroupItem>\n      </TagGroup>\n      <p className=\"text-muted-foreground text-sm\">\n        Selected: {value.length > 0 ? value.join(\", \") : \"none\"}\n      </p>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spinner-default",
+  "title": "Spinner Default",
+  "description": "Spinner example: Default.",
+  "registryDependencies": [
+    "spinner"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/spinner/default.tsx",
+      "content": "\"use client\";\n\nimport { Spinner } from \"@keystoneui/react/spinner\";\n\nexport default function SpinnerDefault() {\n  return <Spinner />;\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

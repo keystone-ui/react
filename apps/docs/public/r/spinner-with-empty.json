@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spinner-with-empty",
+  "title": "Spinner With Empty",
+  "description": "Spinner example: With Empty.",
+  "registryDependencies": [
+    "button",
+    "empty",
+    "spinner"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/spinner/with-empty.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Empty,\n  EmptyContent,\n  EmptyDescription,\n  EmptyHeader,\n  EmptyMedia,\n  EmptyTitle,\n} from \"@keystoneui/react/empty\";\nimport { Spinner } from \"@keystoneui/react/spinner\";\n\nexport default function SpinnerWithEmpty() {\n  return (\n    <Empty className=\"max-w-md\">\n      <EmptyHeader>\n        <EmptyMedia variant=\"icon\">\n          <Spinner />\n        </EmptyMedia>\n        <EmptyTitle>Processing your request</EmptyTitle>\n        <EmptyDescription>\n          Please wait while we process your request. Do not refresh the page.\n        </EmptyDescription>\n      </EmptyHeader>\n      <EmptyContent>\n        <Button size=\"sm\" variant=\"outline\">\n          Cancel\n        </Button>\n      </EmptyContent>\n    </Empty>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

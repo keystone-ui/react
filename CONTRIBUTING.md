@@ -138,6 +138,28 @@ MyComponent
 
 No manual step. The LLMs.txt pipeline reads MDX pages and replaces `<ComponentPreview>` tags with actual demo source code. After deployment, the endpoints at `/llms.txt`, `/llms-full.txt`, `/llms-components.txt`, and `/docs/components/my-component.mdx` are updated automatically.
 
+### 8. Stories ↔ demos parity (lint)
+
+Stories and demos are intentionally separate surfaces — stories are the dev sandbox + interaction test bed; demos are the docs render + registry-installable source. They enumerate variants differently (stories per-variant, demos sometimes consolidate). When you add a new story or demo variant, run `pnpm lint:stories-demos`. If it flags the new variant as story-only or demo-only:
+
+- If the divergence is intentional (per-variant `Secondary`/`Destructive` story vs consolidated `variants.tsx` demo, dev-only fixture like `CryptoTransactions`, etc.), add it to `scripts/stories-demos-allowlist.json` with a one-line rationale.
+- Otherwise, author the missing counterpart on the other surface.
+
+The lint is also wired into `pnpm lint:docs` so CI catches drift on every PR.
+
+## Adding a New Block
+
+Blocks are full-page or feature-level compositions (sign-in pages, data tables, etc.). Unlike components, there is no `pnpm add:block` scaffolder yet — block items in `registry.json` are hand-maintained. Brief workflow:
+
+1. Author source under `apps/docs/demos/blocks/<name>{.tsx,/}` and register the demo in `apps/docs/demos/index.ts` as `block-<name>`.
+2. Add the registry entry by hand-editing `registry.json`. **The `categories: [...]` field is required** — at least one of `authentication`, `login`, `signup` (mirrors shadcn), `navigation`, `data`, `betting`, or a new single-word lowercase string. `pnpm sync:registry` warns when missing.
+3. Files within the block must be tagged with per-file types: `registry:page` (with `target`) for the entry, `registry:component` for everything else.
+4. Author MDX at `apps/docs/content/docs/blocks/<name>.mdx` following `apps/docs/content/docs/blocks/_block-template.mdx`. The lint at `pnpm lint:docs` enforces install fence + `<BlockPreview>` + `## Components Used`.
+5. Run `pnpm docs:backlinks` to refresh the auto-injected `## Related Blocks` sections in component MDX, then `pnpm registry:build`.
+6. Add the block to the Block Selection table in `skills/keystoneui-react/SKILL.md` so consumer agents can discover it.
+
+See `.claude/skills/contributing/SKILL.md` → "Adding a New Block" for the full per-step checklist and the current category taxonomy.
+
 ## Updating an Existing Component
 
 ### When to update Fumadocs

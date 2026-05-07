@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs-disabled",
+  "title": "Tabs Disabled",
+  "description": "Tabs example: Disabled.",
+  "registryDependencies": [
+    "tabs"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tabs/disabled.tsx",
+      "content": "\"use client\";\n\nimport {\n  Tabs,\n  TabsContent,\n  TabsList,\n  TabsTrigger,\n} from \"@keystoneui/react/tabs\";\n\nexport default function TabsDisabled() {\n  return (\n    <Tabs defaultValue=\"home\">\n      <TabsList>\n        <TabsTrigger value=\"home\">Home</TabsTrigger>\n        <TabsTrigger disabled value=\"settings\">\n          Disabled\n        </TabsTrigger>\n        <TabsTrigger value=\"notifications\">Notifications</TabsTrigger>\n      </TabsList>\n      <TabsContent value=\"home\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          Home content goes here.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"notifications\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          Notifications content goes here.\n        </p>\n      </TabsContent>\n    </Tabs>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

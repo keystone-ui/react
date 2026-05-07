@@ -3,7 +3,9 @@
   "name": "input-group",
   "title": "Input Group",
   "description": "Groups an input with adjacent buttons, icons, or text add-ons for combined input actions.",
-  "registryDependencies": ["button"],
+  "registryDependencies": [
+    "button"
+  ],
   "files": [
     {
       "path": "packages/ui/src/input-group.tsx",

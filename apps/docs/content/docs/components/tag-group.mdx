@@ -13,6 +13,36 @@ import { TagGroup, TagGroupItem } from "@keystoneui/react/tag-group";
 
 <ComponentPreview name="tag-group-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/tag-group.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="tag-group-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -20,41 +50,52 @@ TagGroup
 └── TagGroupItem
 ```
 
-## Single Selection
+## Examples
+
+### Single Selection
 
 Allow only one tag to be selected at a time:
 
 <ComponentPreview name="tag-group-single-selection" />
 
-## With Icons
+
+### With Icons
 
 Display icons alongside tag labels:
 
 <ComponentPreview name="tag-group-with-icons" />
 
-## Removable
+
+### Removable
 
 Allow tags to be removed from the group:
 
 <ComponentPreview name="tag-group-removable" />
 
-## Controlled
+
+### Controlled
 
 Control the selected tags externally with state:
 
 <ComponentPreview name="tag-group-controlled" />
 
-## With Avatars
+
+### With Avatars
 
 Tag group with avatar icons:
 
 <ComponentPreview name="tag-group-with-avatars" />
 
-## Disabled
+
+### Disabled
 
 Disabled tag group:
 
 <ComponentPreview name="tag-group-disabled" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

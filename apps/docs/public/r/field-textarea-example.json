@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "field-textarea-example",
+  "title": "Field Textarea Example",
+  "description": "Field example: Textarea Example.",
+  "registryDependencies": [
+    "field",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/field/textarea-example.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldDescription, FieldLabel } from \"@keystoneui/react/field\";\nimport { Textarea } from \"@keystoneui/react/textarea\";\n\nexport default function FieldTextareaExample() {\n  return (\n    <div className=\"w-full max-w-xs\">\n      <Field>\n        <FieldLabel htmlFor=\"feedback\">Feedback</FieldLabel>\n        <Textarea\n          id=\"feedback\"\n          placeholder=\"Your feedback helps us improve...\"\n          rows={4}\n        />\n        <FieldDescription>\n          Share your thoughts about our service.\n        </FieldDescription>\n      </Field>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

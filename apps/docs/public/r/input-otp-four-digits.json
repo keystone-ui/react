@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-otp-four-digits",
+  "title": "Input Otp Four Digits",
+  "description": "Input Otp example: Four Digits.",
+  "registryDependencies": [
+    "input-otp"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-otp/four-digits.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputOTP,\n  InputOTPGroup,\n  InputOTPSlot,\n} from \"@keystoneui/react/input-otp\";\n\nconst OTP_LENGTH = 4;\n\nexport default function InputOTPFourDigits() {\n  return (\n    <InputOTP length={OTP_LENGTH}>\n      <InputOTPGroup>\n        {Array.from({ length: OTP_LENGTH }, (_, index) => (\n          <InputOTPSlot\n            aria-label={`Character ${index + 1} of ${OTP_LENGTH}`}\n            key={index}\n          />\n        ))}\n      </InputOTPGroup>\n    </InputOTP>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

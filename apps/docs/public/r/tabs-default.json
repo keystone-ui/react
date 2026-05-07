@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs-default",
+  "title": "Tabs Default",
+  "description": "Tabs example: Default.",
+  "registryDependencies": [
+    "tabs"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tabs/default.tsx",
+      "content": "\"use client\";\n\nimport {\n  Tabs,\n  TabsContent,\n  TabsList,\n  TabsTrigger,\n} from \"@keystoneui/react/tabs\";\n\nexport default function TabsDefault() {\n  return (\n    <Tabs className=\"w-[400px]\" defaultValue=\"overview\">\n      <TabsList>\n        <TabsTrigger value=\"overview\">Overview</TabsTrigger>\n        <TabsTrigger value=\"analytics\">Analytics</TabsTrigger>\n        <TabsTrigger value=\"reports\">Reports</TabsTrigger>\n        <TabsTrigger value=\"settings\">Settings</TabsTrigger>\n      </TabsList>\n      <TabsContent value=\"overview\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          View your key metrics and recent project activity. Track progress\n          across all your active projects.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"analytics\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          Track performance and user engagement metrics. Monitor trends and\n          identify growth opportunities.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"reports\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          Generate and download your detailed reports. Export data in multiple\n          formats for analysis.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"settings\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          Manage your account preferences and options. Customize your experience\n          to fit your needs.\n        </p>\n      </TabsContent>\n    </Tabs>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "description-list-order-summary",
+  "title": "Description List Order Summary",
+  "description": "Description List example: Order Summary.",
+  "registryDependencies": [
+    "card",
+    "description-list"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/description-list/order-summary.tsx",
+      "content": "\"use client\";\n\nimport {\n  Card,\n  CardContent,\n  CardHeader,\n  CardTitle,\n} from \"@keystoneui/react/card\";\nimport {\n  DescriptionList,\n  DescriptionListDetails,\n  DescriptionListItem,\n  DescriptionListTerm,\n} from \"@keystoneui/react/description-list\";\n\nconst orderItems = [\n  { label: \"Subtotal\", value: \"$1,250.00\" },\n  { label: \"Shipping\", value: \"$12.50\" },\n  { label: \"Tax\", value: \"$125.00\" },\n];\n\nexport default function DescriptionListOrderSummary() {\n  return (\n    <Card className=\"max-w-sm\">\n      <CardHeader>\n        <CardTitle>Order Summary</CardTitle>\n      </CardHeader>\n      <CardContent>\n        <DescriptionList>\n          {orderItems.map((item) => (\n            <DescriptionListItem key={item.label}>\n              <DescriptionListTerm>{item.label}</DescriptionListTerm>\n              <DescriptionListDetails>{item.value}</DescriptionListDetails>\n            </DescriptionListItem>\n          ))}\n          <DescriptionListItem className=\"font-medium\">\n            <DescriptionListTerm className=\"text-foreground\">\n              Total\n            </DescriptionListTerm>\n            <DescriptionListDetails>$1,387.50</DescriptionListDetails>\n          </DescriptionListItem>\n        </DescriptionList>\n      </CardContent>\n    </Card>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

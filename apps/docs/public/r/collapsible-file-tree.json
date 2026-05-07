@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "collapsible-file-tree",
+  "title": "Collapsible File Tree",
+  "description": "Collapsible example: File Tree.",
+  "registryDependencies": [
+    "collapsible"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/collapsible/file-tree.tsx",
+      "content": "\"use client\";\n\nimport {\n  Collapsible,\n  CollapsibleContent,\n  CollapsibleTrigger,\n} from \"@keystoneui/react/collapsible\";\nimport {\n  ChevronRight as ChevronRightIcon,\n  File as FileIcon,\n  Folder as FolderIcon,\n} from \"lucide-react\";\n\nfunction File({ name }: { name: string }) {\n  return (\n    <div className=\"flex items-center gap-2 rounded-md py-1 pr-2 pl-6 text-muted-foreground text-sm hover:bg-muted hover:text-foreground\">\n      <FileIcon className=\"size-4 shrink-0\" />\n      {name}\n    </div>\n  );\n}\n\nfunction Folder({\n  children,\n  defaultOpen,\n  name,\n}: {\n  children: React.ReactNode;\n  defaultOpen?: boolean;\n  name: string;\n}) {\n  return (\n    <Collapsible defaultOpen={defaultOpen}>\n      <CollapsibleTrigger className=\"group flex w-full items-center gap-2 rounded-md py-1 pr-2 pl-2 font-medium text-sm hover:bg-muted\">\n        <ChevronRightIcon className=\"size-4 shrink-0 transition-transform group-data-[panel-open]:rotate-90\" />\n        <FolderIcon className=\"size-4 shrink-0\" />\n        {name}\n      </CollapsibleTrigger>\n      <CollapsibleContent>\n        <div className=\"ml-4 border-l pl-2\">{children}</div>\n      </CollapsibleContent>\n    </Collapsible>\n  );\n}\n\nexport default function CollapsibleFileTree() {\n  return (\n    <div className=\"w-full max-w-sm rounded-md border p-2\">\n      <Folder defaultOpen name=\"src\">\n        <Folder defaultOpen name=\"components\">\n          <File name=\"button.tsx\" />\n          <File name=\"input.tsx\" />\n          <File name=\"dialog.tsx\" />\n        </Folder>\n        <Folder name=\"utils\">\n          <File name=\"cn.ts\" />\n          <File name=\"helpers.ts\" />\n        </Folder>\n        <File name=\"app.tsx\" />\n        <File name=\"index.ts\" />\n      </Folder>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

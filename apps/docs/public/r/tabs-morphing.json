@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs-morphing",
+  "title": "Tabs Morphing",
+  "description": "Tabs example: Morphing.",
+  "registryDependencies": [
+    "tabs"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tabs/morphing.tsx",
+      "content": "\"use client\";\n\nimport {\n  Tabs,\n  TabsContent,\n  TabsList,\n  TabsTrigger,\n  TabsTriggerLabel,\n} from \"@keystoneui/react/tabs\";\nimport {\n  House as HomeIcon,\n  Inbox as InboxIcon,\n  MessageSquare as MessageSquareIcon,\n  Mic as MicIcon,\n  Search as SearchIcon,\n} from \"lucide-react\";\n\nexport default function TabsMorphing() {\n  return (\n    <Tabs defaultValue=\"meetings\">\n      <TabsList morphing>\n        <TabsTrigger value=\"home\">\n          <HomeIcon />\n          <TabsTriggerLabel>Home</TabsTriggerLabel>\n        </TabsTrigger>\n        <TabsTrigger value=\"chat\">\n          <MessageSquareIcon />\n          <TabsTriggerLabel>Chat</TabsTriggerLabel>\n        </TabsTrigger>\n        <TabsTrigger value=\"meetings\">\n          <MicIcon />\n          <TabsTriggerLabel>Meetings</TabsTriggerLabel>\n        </TabsTrigger>\n        <TabsTrigger value=\"inbox\">\n          <InboxIcon />\n          <TabsTriggerLabel>Inbox</TabsTriggerLabel>\n        </TabsTrigger>\n        <TabsTrigger value=\"search\">\n          <SearchIcon />\n          <TabsTriggerLabel>Search</TabsTriggerLabel>\n        </TabsTrigger>\n      </TabsList>\n      <TabsContent value=\"home\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          Home content goes here.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"chat\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          Chat content goes here.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"meetings\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          Meetings content goes here.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"inbox\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          Inbox content goes here.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"search\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          Search content goes here.\n        </p>\n      </TabsContent>\n    </Tabs>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

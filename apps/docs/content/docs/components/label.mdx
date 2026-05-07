@@ -13,17 +13,67 @@ import { Label, Description, ErrorMessage } from "@keystoneui/react/label";
 
 <ComponentPreview name="label-default" />
 
-## Required
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/label.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="label-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Composition
+
+`Label`, `Description`, and `ErrorMessage` are siblings, not nested. Place them alongside a control inside a parent wrapper (typically `Field` from `@keystoneui/react/field`, or a custom `<div>`):
+
+```tsx
+<Field>
+  <Label htmlFor="email">Email</Label>
+  <Input id="email" />
+  <Description>We'll never share your email.</Description>
+  <ErrorMessage>Invalid email address.</ErrorMessage>
+</Field>
+```
+
+## Examples
+
+### Required
 
 Indicate required fields:
 
 <ComponentPreview name="label-required" />
 
-## With Description
+
+### With Description
 
 Add helper text below the input:
 
 <ComponentPreview name="label-with-description" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

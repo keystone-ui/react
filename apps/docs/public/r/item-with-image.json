@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "item-with-image",
+  "title": "Item With Image",
+  "description": "Item example: With Image.",
+  "registryDependencies": [
+    "item"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/item/with-image.tsx",
+      "content": "\"use client\";\n\nimport {\n  Item,\n  ItemContent,\n  ItemDescription,\n  ItemMedia,\n  ItemTitle,\n} from \"@keystoneui/react/item\";\n\nexport default function ItemWithImage() {\n  return (\n    <Item className=\"max-w-md\" variant=\"outline\">\n      <ItemMedia variant=\"image\">\n        {/* biome-ignore lint/performance/noImgElement: demo uses plain img for simplicity */}\n        <img\n          alt=\"Album cover\"\n          className=\"object-cover\"\n          height={40}\n          src=\"https://picsum.photos/seed/music/80/80\"\n          width={40}\n        />\n      </ItemMedia>\n      <ItemContent>\n        <ItemTitle>Midnight City Lights</ItemTitle>\n        <ItemDescription>Neon Dreams — Electric Nights</ItemDescription>\n      </ItemContent>\n    </Item>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

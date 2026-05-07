@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-selected-rows",
+  "title": "Table Selected Rows",
+  "description": "Table example: Selected Rows.",
+  "registryDependencies": [
+    "badge",
+    "checkbox",
+    "table"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/table/selected-rows.tsx",
+      "content": "\"use client\";\n\nimport { Badge } from \"@keystoneui/react/badge\";\nimport { Checkbox } from \"@keystoneui/react/checkbox\";\nimport {\n  Table,\n  TableBody,\n  TableCaption,\n  TableCell,\n  TableHead,\n  TableHeader,\n  TableRow,\n} from \"@keystoneui/react/table\";\nimport { useState } from \"react\";\n\nconst invoices = [\n  {\n    invoice: \"INV001\",\n    status: \"Paid\",\n    method: \"Credit Card\",\n    amount: \"$250.00\",\n  },\n  { invoice: \"INV002\", status: \"Pending\", method: \"PayPal\", amount: \"$150.00\" },\n  {\n    invoice: \"INV003\",\n    status: \"Unpaid\",\n    method: \"Bank Transfer\",\n    amount: \"$350.00\",\n  },\n  {\n    invoice: \"INV004\",\n    status: \"Paid\",\n    method: \"Credit Card\",\n    amount: \"$450.00\",\n  },\n  { invoice: \"INV005\", status: \"Paid\", method: \"PayPal\", amount: \"$550.00\" },\n];\n\nconst statusVariant = (status: string) => {\n  switch (status) {\n    case \"Paid\":\n      return \"secondary\" as const;\n    case \"Pending\":\n      return \"outline\" as const;\n    case \"Unpaid\":\n      return \"destructive\" as const;\n    default:\n      return \"secondary\" as const;\n  }\n};\n\nexport default function TableSelectedRows() {\n  const [selected, setSelected] = useState<Set<string>>(new Set([\"INV001\"]));\n\n  const toggleRow = (id: string) => {\n    setSelected((prev) => {\n      const next = new Set(prev);\n      if (next.has(id)) {\n        next.delete(id);\n      } else {\n        next.add(id);\n      }\n      return next;\n    });\n  };\n\n  const toggleAll = () => {\n    if (selected.size === invoices.length) {\n      setSelected(new Set());\n    } else {\n      setSelected(new Set(invoices.map((i) => i.invoice)));\n    }\n  };\n\n  const allSelected = selected.size === invoices.length;\n\n  return (\n    <Table>\n      <TableCaption>\n        {selected.size} of {invoices.length} row(s) selected.\n      </TableCaption>\n      <TableHeader>\n        <TableRow>\n          <TableHead className=\"w-10\">\n            <Checkbox\n              aria-label=\"Select all\"\n              checked={allSelected}\n              indeterminate={selected.size > 0 && !allSelected}\n              onCheckedChange={toggleAll}\n            />\n          </TableHead>\n          <TableHead className=\"w-[100px]\">Invoice</TableHead>\n          <TableHead>Status</TableHead>\n          <TableHead>Method</TableHead>\n          <TableHead className=\"text-right\">Amount</TableHead>\n        </TableRow>\n      </TableHeader>\n      <TableBody>\n        {invoices.map((invoice) => (\n          <TableRow\n            data-state={selected.has(invoice.invoice) ? \"selected\" : undefined}\n            key={invoice.invoice}\n          >\n            <TableCell>\n              <Checkbox\n                aria-label={`Select ${invoice.invoice}`}\n                checked={selected.has(invoice.invoice)}\n                onCheckedChange={() => toggleRow(invoice.invoice)}\n              />\n            </TableCell>\n            <TableCell className=\"font-medium\">{invoice.invoice}</TableCell>\n            <TableCell>\n              <Badge variant={statusVariant(invoice.status)}>\n                {invoice.status}\n              </Badge>\n            </TableCell>\n            <TableCell>{invoice.method}</TableCell>\n            <TableCell className=\"text-right\">{invoice.amount}</TableCell>\n          </TableRow>\n        ))}\n      </TableBody>\n    </Table>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

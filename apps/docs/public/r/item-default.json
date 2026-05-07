@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "item-default",
+  "title": "Item Default",
+  "description": "Item example: Default.",
+  "registryDependencies": [
+    "item"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/item/default.tsx",
+      "content": "\"use client\";\n\nimport { Item, ItemContent, ItemTitle } from \"@keystoneui/react/item\";\n\nexport default function ItemDefault() {\n  return (\n    <Item className=\"max-w-md\" variant=\"outline\">\n      <ItemContent>\n        <ItemTitle>Basic Item</ItemTitle>\n      </ItemContent>\n    </Item>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

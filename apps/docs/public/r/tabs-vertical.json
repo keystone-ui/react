@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs-vertical",
+  "title": "Tabs Vertical",
+  "description": "Tabs example: Vertical.",
+  "registryDependencies": [
+    "tabs"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tabs/vertical.tsx",
+      "content": "\"use client\";\n\nimport {\n  Tabs,\n  TabsContent,\n  TabsList,\n  TabsTrigger,\n} from \"@keystoneui/react/tabs\";\n\nexport default function TabsVertical() {\n  return (\n    <Tabs className=\"w-[400px]\" defaultValue=\"overview\" orientation=\"vertical\">\n      <TabsList>\n        <TabsTrigger value=\"overview\">Overview</TabsTrigger>\n        <TabsTrigger value=\"analytics\">Analytics</TabsTrigger>\n        <TabsTrigger value=\"reports\">Reports</TabsTrigger>\n        <TabsTrigger value=\"settings\">Settings</TabsTrigger>\n      </TabsList>\n      <TabsContent value=\"overview\">\n        <p className=\"text-muted-foreground text-sm\">\n          View your key metrics and recent project activity.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"analytics\">\n        <p className=\"text-muted-foreground text-sm\">\n          Track performance and user engagement metrics.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"reports\">\n        <p className=\"text-muted-foreground text-sm\">\n          Generate and download your detailed reports.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"settings\">\n        <p className=\"text-muted-foreground text-sm\">\n          Manage your account preferences and options.\n        </p>\n      </TabsContent>\n    </Tabs>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

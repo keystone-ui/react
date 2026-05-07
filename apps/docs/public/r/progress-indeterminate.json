@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress-indeterminate",
+  "title": "Progress Indeterminate",
+  "description": "Progress example: Indeterminate.",
+  "registryDependencies": [
+    "progress"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/progress/indeterminate.tsx",
+      "content": "\"use client\";\n\nimport { Progress } from \"@keystoneui/react/progress\";\n\nexport default function ProgressIndeterminate() {\n  return <Progress className=\"max-w-md\" value={null} />;\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

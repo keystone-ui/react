@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs-with-icons",
+  "title": "Tabs With Icons",
+  "description": "Tabs example: With Icons.",
+  "registryDependencies": [
+    "tabs"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tabs/with-icons.tsx",
+      "content": "\"use client\";\n\nimport {\n  Tabs,\n  TabsContent,\n  TabsList,\n  TabsTrigger,\n} from \"@keystoneui/react/tabs\";\nimport { AppWindow as AppWindowIcon, Code as CodeIcon } from \"lucide-react\";\n\nexport default function TabsWithIcons() {\n  return (\n    <Tabs defaultValue=\"preview\">\n      <TabsList>\n        <TabsTrigger value=\"preview\">\n          <AppWindowIcon />\n          Preview\n        </TabsTrigger>\n        <TabsTrigger value=\"code\">\n          <CodeIcon />\n          Code\n        </TabsTrigger>\n      </TabsList>\n      <TabsContent value=\"preview\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          Preview content goes here.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"code\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          Code content goes here.\n        </p>\n      </TabsContent>\n    </Tabs>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

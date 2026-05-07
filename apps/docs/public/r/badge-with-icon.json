@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge-with-icon",
+  "title": "Badge With Icon",
+  "description": "Badge example: With Icon.",
+  "registryDependencies": [
+    "badge"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/badge/with-icon.tsx",
+      "content": "\"use client\";\n\nimport { Badge } from \"@keystoneui/react/badge\";\nimport {\n  BadgeCheck as BadgeCheckIcon,\n  Bookmark as BookmarkIcon,\n  Check as CheckIcon,\n  Info as InfoIcon,\n} from \"lucide-react\";\n\nexport default function BadgeWithIcon() {\n  return (\n    <div className=\"flex flex-wrap gap-2\">\n      <Badge variant=\"secondary\">\n        <BadgeCheckIcon data-icon=\"inline-start\" />\n        Verified\n      </Badge>\n      <Badge variant=\"outline\">\n        Bookmark\n        <BookmarkIcon data-icon=\"inline-end\" />\n      </Badge>\n      <Badge variant=\"outline\">\n        <CheckIcon aria-hidden=\"true\" className=\"text-emerald-500\" />\n        Completed\n      </Badge>\n      <Badge variant=\"outline\">\n        <InfoIcon aria-hidden=\"true\" className=\"text-blue-500\" />\n        Information\n      </Badge>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

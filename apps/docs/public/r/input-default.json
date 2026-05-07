@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-default",
+  "title": "Input Default",
+  "description": "Input example: Default.",
+  "registryDependencies": [
+    "input"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input/default.tsx",
+      "content": "\"use client\";\n\nimport { Input } from \"@keystoneui/react/input\";\n\nexport default function InputDefault() {\n  return <Input placeholder=\"Enter text\" />;\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

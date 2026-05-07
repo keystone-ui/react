@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "avatar-group-with-count",
+  "title": "Avatar Group With Count",
+  "description": "Avatar example: Group With Count.",
+  "registryDependencies": [
+    "avatar"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/avatar/group-with-count.tsx",
+      "content": "\"use client\";\n\nimport {\n  Avatar,\n  AvatarFallback,\n  AvatarGroup,\n  AvatarGroupCount,\n  AvatarImage,\n} from \"@keystoneui/react/avatar\";\n\nexport default function AvatarGroupWithCount() {\n  return (\n    <AvatarGroup>\n      <Avatar>\n        <AvatarImage\n          alt=\"@shadcn\"\n          src=\"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face\"\n        />\n        <AvatarFallback>CN</AvatarFallback>\n      </Avatar>\n      <Avatar>\n        <AvatarImage\n          alt=\"@maxleiter\"\n          src=\"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face\"\n        />\n        <AvatarFallback>ML</AvatarFallback>\n      </Avatar>\n      <Avatar>\n        <AvatarImage\n          alt=\"@evilrabbit\"\n          src=\"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face\"\n        />\n        <AvatarFallback>ER</AvatarFallback>\n      </Avatar>\n      <AvatarGroupCount>+3</AvatarGroupCount>\n    </AvatarGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

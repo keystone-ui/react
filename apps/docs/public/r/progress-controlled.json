@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress-controlled",
+  "title": "Progress Controlled",
+  "description": "Progress example: Controlled.",
+  "registryDependencies": [
+    "progress",
+    "slider"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/progress/controlled.tsx",
+      "content": "\"use client\";\n\nimport {\n  Progress,\n  ProgressIndicator,\n  ProgressLabel,\n  ProgressTrack,\n  ProgressValue,\n} from \"@keystoneui/react/progress\";\nimport {\n  Slider,\n  SliderControl,\n  SliderIndicator,\n  SliderThumb,\n  SliderTrack,\n} from \"@keystoneui/react/slider\";\nimport { useState } from \"react\";\n\nexport default function ProgressControlled() {\n  const [value, setValue] = useState<number | readonly number[]>(50);\n  const numericValue = Array.isArray(value) ? value[0] : value;\n\n  return (\n    <div className=\"flex w-full max-w-sm flex-col gap-4\">\n      <Progress value={numericValue}>\n        <div className=\"flex justify-between\">\n          <ProgressLabel>Progress</ProgressLabel>\n          <ProgressValue />\n        </div>\n        <ProgressTrack>\n          <ProgressIndicator />\n        </ProgressTrack>\n      </Progress>\n      <Slider onValueChange={setValue} value={value}>\n        <SliderControl>\n          <SliderTrack>\n            <SliderIndicator />\n            <SliderThumb aria-label=\"Progress value\" />\n          </SliderTrack>\n        </SliderControl>\n      </Slider>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

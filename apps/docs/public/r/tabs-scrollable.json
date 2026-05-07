@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs-scrollable",
+  "title": "Tabs Scrollable",
+  "description": "Tabs example: Scrollable.",
+  "registryDependencies": [
+    "tabs"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tabs/scrollable.tsx",
+      "content": "\"use client\";\n\nimport {\n  Tabs,\n  TabsContent,\n  TabsList,\n  TabsTrigger,\n} from \"@keystoneui/react/tabs\";\nimport {\n  ChartNoAxesColumnIncreasing as BarChartIcon,\n  Globe as GlobeIcon,\n  LayoutDashboard as LayoutDashboardIcon,\n  Mail as MailIcon,\n  MessageSquare as MessageSquareIcon,\n  Settings as SettingsIcon,\n  Shield as ShieldIcon,\n  Users as UsersIcon,\n} from \"lucide-react\";\n\nexport default function TabsScrollable() {\n  return (\n    <div style={{ maxWidth: 480 }}>\n      <Tabs defaultValue=\"dashboard\">\n        <TabsList scrollable>\n          <TabsTrigger value=\"dashboard\">\n            <LayoutDashboardIcon />\n            Dashboard\n          </TabsTrigger>\n          <TabsTrigger value=\"analytics\">\n            <BarChartIcon />\n            Analytics\n          </TabsTrigger>\n          <TabsTrigger value=\"users\">\n            <UsersIcon />\n            Users\n          </TabsTrigger>\n          <TabsTrigger value=\"messages\">\n            <MessageSquareIcon />\n            Messages\n          </TabsTrigger>\n          <TabsTrigger value=\"email\">\n            <MailIcon />\n            Email\n          </TabsTrigger>\n          <TabsTrigger value=\"security\">\n            <ShieldIcon />\n            Security\n          </TabsTrigger>\n          <TabsTrigger value=\"domains\">\n            <GlobeIcon />\n            Domains\n          </TabsTrigger>\n          <TabsTrigger value=\"settings\">\n            <SettingsIcon />\n            Settings\n          </TabsTrigger>\n        </TabsList>\n        <TabsContent value=\"dashboard\">\n          <p className=\"pt-2 text-muted-foreground text-sm\">\n            Your project overview and key metrics at a glance.\n          </p>\n        </TabsContent>\n        <TabsContent value=\"analytics\">\n          <p className=\"pt-2 text-muted-foreground text-sm\">\n            Track performance and engagement metrics.\n          </p>\n        </TabsContent>\n      </Tabs>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

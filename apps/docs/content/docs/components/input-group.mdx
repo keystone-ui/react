@@ -20,6 +20,36 @@ import {
 
 <ComponentPreview name="input-group-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/input-group.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="input-group-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -31,95 +61,126 @@ InputGroup
 └── InputGroupText
 ```
 
-## Small Size
+## Examples
+
+### Small Size
 
 `<InputGroup size="sm">` renders a 32px-tall group. `InputGroupButton` with the default `auto` size auto-pairs to a 24×24 button (4px inset). The `size` prop on `InputGroupInput` is forwarded from the parent group, so the inner `<Input>` matches the group height automatically.
 
 <ComponentPreview name="input-group-small-size" />
 
-## Text Prefix
+
+### Text Prefix
 
 Add a static text prefix to the input:
 
 <ComponentPreview name="input-group-text-prefix" />
 
-## With Button
+
+### With Button
 
 Attach a button to the input for form submission or actions:
 
 <ComponentPreview name="input-group-with-button" />
 
-## Password Toggle
+
+### Password Toggle
 
 An input group with a visibility toggle for passwords:
 
 <ComponentPreview name="input-group-password-toggle" />
 
-## Search
+
+### Search
 
 A search input with an icon and submit button:
 
 <ComponentPreview name="input-group-search" />
 
-## Currency
+
+### Currency
 
 A currency input with symbol prefix and code suffix:
 
 <ComponentPreview name="input-group-currency" />
 
-## Stake Buttons
+
+### Stake Buttons
 
 Multiple `InputGroupButton`s in a single addon — useful for quick numeric adjustments like betting stakes or trade sizes. The `auto` size automatically compresses to compact 24px chips when an addon contains more than one button, so the cluster fits cleanly inside the input frame without an explicit `size` prop.
 
 <ComponentPreview name="input-group-stake-buttons" />
 
-## With Textarea
+
+### With Textarea
 
 Use `InputGroupTextarea` instead of `InputGroupInput` for multiline text. The container automatically expands to fit:
 
 <ComponentPreview name="input-group-with-textarea" />
 
-## Prompt Form
+
+### Prompt Form
 
 A rich AI prompt form combining InputGroup with Command, Popover, DropdownMenu, Avatar, Badge, Switch, and Tooltip:
 
 <ComponentPreview name="input-group-prompt-form" />
 
-## Email Input
+
+### Email Input
 
 Email input with icon addon:
 
 <ComponentPreview name="input-group-email-input" />
 
-## Copy to Clipboard
+
+### Copy to Clipboard
 
 Input with copy-to-clipboard button:
 
 <ComponentPreview name="input-group-copy-to-clipboard" />
 
-## Phone Input
+
+### Phone Input
 
 Phone number input with country code:
 
 <ComponentPreview name="input-group-phone-input" />
 
-## Loading Spinner
+
+### Loading Spinner
 
 Input with loading spinner addon:
 
 <ComponentPreview name="input-group-loading-spinner" />
 
-## Clear Button
+
+### Clear Button
 
 Input with a clear button:
 
 <ComponentPreview name="input-group-clear-button" />
 
-## Text Suffix
+
+### Text Suffix
 
 Input with text suffix:
 
 <ComponentPreview name="input-group-text-suffix" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Betting Panel 01](/docs/blocks/betting-panel-01) — A betting panel with inline ½ / 2× multipliers inside the bet amount field and risk-level toggles.
+- [Betting Panel 03](/docs/blocks/betting-panel-03) — A betting panel with quick-pick preset amounts for rapid bet placement.
+- [Tickets 01](/docs/blocks/tickets-01) — A sortable, filterable tickets table with inline cell editing, a new-ticket modal, and a floating bulk-edit action bar.
+
+{/* backlinks:end */}
 
 ## API Reference
 

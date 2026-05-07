@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton-card",
+  "title": "Skeleton Card",
+  "description": "Skeleton example: Card.",
+  "registryDependencies": [
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/skeleton/card.tsx",
+      "content": "\"use client\";\n\nimport { Skeleton } from \"@keystoneui/react/skeleton\";\n\nexport default function SkeletonCard() {\n  return (\n    <div className=\"w-full max-w-sm space-y-5 rounded-xl border p-4\">\n      <Skeleton className=\"h-[125px] w-full rounded-lg\" />\n      <div className=\"space-y-2\">\n        <Skeleton className=\"h-4 w-3/4\" />\n        <Skeleton className=\"h-4 w-1/2\" />\n      </div>\n      <div className=\"flex items-center gap-3\">\n        <Skeleton className=\"size-10 rounded-full\" />\n        <div className=\"space-y-1.5\">\n          <Skeleton className=\"h-3 w-24\" />\n          <Skeleton className=\"h-3 w-16\" />\n        </div>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

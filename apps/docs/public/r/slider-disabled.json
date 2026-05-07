@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slider-disabled",
+  "title": "Slider Disabled",
+  "description": "Slider example: Disabled.",
+  "registryDependencies": [
+    "slider"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/slider/disabled.tsx",
+      "content": "\"use client\";\n\nimport {\n  Slider,\n  SliderControl,\n  SliderIndicator,\n  SliderThumb,\n  SliderTrack,\n} from \"@keystoneui/react/slider\";\n\nexport default function SliderDisabled() {\n  return (\n    <Slider className=\"max-w-sm\" defaultValue={40} disabled>\n      <SliderControl>\n        <SliderTrack>\n          <SliderIndicator />\n          <SliderThumb aria-label=\"Disabled slider\" />\n        </SliderTrack>\n      </SliderControl>\n    </Slider>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress-default",
+  "title": "Progress Default",
+  "description": "Progress example: Default.",
+  "registryDependencies": [
+    "progress"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/progress/default.tsx",
+      "content": "\"use client\";\n\nimport { Progress } from \"@keystoneui/react/progress\";\n\nexport default function ProgressDefault() {\n  return <Progress className=\"max-w-md\" value={60} />;\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

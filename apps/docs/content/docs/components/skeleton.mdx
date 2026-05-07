@@ -13,41 +13,82 @@ import { Skeleton } from "@keystoneui/react/skeleton";
 
 <ComponentPreview name="skeleton-default" />
 
-## Card
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/skeleton.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="skeleton-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Examples
+
+### Card
 
 A skeleton placeholder mimicking a card layout:
 
 <ComponentPreview name="skeleton-card" />
 
-## Form
+
+### Form
 
 A skeleton placeholder mimicking a form layout:
 
 <ComponentPreview name="skeleton-form" />
 
-## Shimmer
+
+### Shimmer
 
 A shimmer animation variant for a more dynamic loading effect:
 
 <ComponentPreview name="skeleton-shimmer" />
 
-## Text
+
+### Text
 
 Text/paragraph skeleton:
 
 <ComponentPreview name="skeleton-text" />
 
-## Table
+
+### Table
 
 Table skeleton loading state:
 
 <ComponentPreview name="skeleton-table" />
 
-## No Animation
+
+### No Animation
 
 Static skeleton without animation:
 
 <ComponentPreview name="skeleton-no-animation" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

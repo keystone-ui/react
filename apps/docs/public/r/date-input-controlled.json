@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-input-controlled",
+  "title": "Date Input Controlled",
+  "description": "Date Input example: Controlled.",
+  "registryDependencies": [
+    "button",
+    "calendar",
+    "field",
+    "popover"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/date-input/controlled.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { Calendar } from \"@keystoneui/react/calendar\";\nimport { Field, FieldLabel } from \"@keystoneui/react/field\";\nimport {\n  Popover,\n  PopoverContent,\n  PopoverTrigger,\n} from \"@keystoneui/react/popover\";\nimport { format } from \"date-fns\";\nimport { Calendar as CalendarIcon } from \"lucide-react\";\nimport { useState } from \"react\";\n\nexport default function DatePickerControlled() {\n  const [date, setDate] = useState<Date | undefined>(new Date());\n  const [open, setOpen] = useState(false);\n\n  return (\n    <div className=\"flex max-w-xs flex-col gap-4\">\n      <Field>\n        <FieldLabel htmlFor=\"date-controlled\">Controlled Date</FieldLabel>\n        <Popover onOpenChange={setOpen} open={open}>\n          <PopoverTrigger\n            render={\n              <Button\n                className=\"justify-start font-normal\"\n                id=\"date-controlled\"\n                variant=\"outline\"\n              >\n                <CalendarIcon data-icon=\"inline-start\" />\n                {date ? format(date, \"PPP\") : \"Pick a date\"}\n              </Button>\n            }\n          />\n          <PopoverContent align=\"start\" className=\"w-auto p-0\">\n            <Calendar\n              defaultMonth={date}\n              mode=\"single\"\n              onSelect={(d) => {\n                setDate(d);\n                setOpen(false);\n              }}\n              selected={date}\n            />\n          </PopoverContent>\n        </Popover>\n      </Field>\n      <div className=\"flex gap-2\">\n        <Button onClick={() => setDate(new Date())} size=\"sm\" variant=\"outline\">\n          Today\n        </Button>\n        <Button onClick={() => setDate(undefined)} size=\"sm\" variant=\"outline\">\n          Clear\n        </Button>\n      </div>\n      <p className=\"text-muted-foreground text-sm\">\n        Selected: {date ? format(date, \"yyyy-MM-dd\") : \"none\"}\n      </p>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

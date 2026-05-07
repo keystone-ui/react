@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "modal-controlled",
+  "title": "Modal Controlled",
+  "description": "Modal example: Controlled.",
+  "registryDependencies": [
+    "button",
+    "modal"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/modal/controlled.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Modal,\n  ModalClose,\n  ModalContent,\n  ModalDescription,\n  ModalFooter,\n  ModalHeader,\n  ModalTitle,\n  ModalTrigger,\n} from \"@keystoneui/react/modal\";\nimport { useState } from \"react\";\n\nexport default function ModalControlled() {\n  const [open, setOpen] = useState(false);\n\n  return (\n    <div className=\"flex items-center gap-4\">\n      <Modal onOpenChange={setOpen} open={open}>\n        <ModalTrigger render={<Button variant=\"outline\" />}>\n          Controlled Modal\n        </ModalTrigger>\n        <ModalContent>\n          <ModalHeader>\n            <ModalTitle>Controlled Modal</ModalTitle>\n            <ModalDescription>\n              This modal&apos;s state is controlled externally. The open state\n              is: <strong>{open ? \"open\" : \"closed\"}</strong>.\n            </ModalDescription>\n          </ModalHeader>\n          <ModalFooter>\n            <Button onClick={() => setOpen(false)}>Done</Button>\n            <ModalClose render={<Button variant=\"outline\" />}>\n              Cancel\n            </ModalClose>\n          </ModalFooter>\n        </ModalContent>\n      </Modal>\n      <p className=\"text-muted-foreground text-sm\">\n        State: <code>{open ? \"open\" : \"closed\"}</code>\n      </p>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

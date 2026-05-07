@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "avatar-with-badge",
+  "title": "Avatar With Badge",
+  "description": "Avatar example: With Badge.",
+  "registryDependencies": [
+    "avatar"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/avatar/with-badge.tsx",
+      "content": "\"use client\";\n\nimport {\n  Avatar,\n  AvatarBadge,\n  AvatarFallback,\n  AvatarImage,\n} from \"@keystoneui/react/avatar\";\nimport { Plus as PlusIcon } from \"lucide-react\";\n\nexport default function AvatarWithBadge() {\n  return (\n    <div className=\"flex items-center gap-4\">\n      <Avatar>\n        <AvatarImage\n          alt=\"@evilrabbit\"\n          src=\"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face\"\n        />\n        <AvatarFallback>ER</AvatarFallback>\n        <AvatarBadge className=\"bg-green-600 dark:bg-green-800\" />\n      </Avatar>\n      <Avatar>\n        <AvatarImage\n          alt=\"@pranathip\"\n          src=\"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face\"\n        />\n        <AvatarFallback>PP</AvatarFallback>\n        <AvatarBadge>\n          <PlusIcon />\n        </AvatarBadge>\n      </Avatar>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

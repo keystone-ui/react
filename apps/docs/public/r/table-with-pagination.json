@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-with-pagination",
+  "title": "Table With Pagination",
+  "description": "Table example: With Pagination.",
+  "registryDependencies": [
+    "badge",
+    "pagination",
+    "table"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/table/with-pagination.tsx",
+      "content": "\"use client\";\n\nimport { Badge } from \"@keystoneui/react/badge\";\nimport {\n  Pagination,\n  PaginationContent,\n  PaginationItem,\n  PaginationNext,\n  PaginationPrevious,\n} from \"@keystoneui/react/pagination\";\nimport {\n  Table,\n  TableBody,\n  TableCell,\n  TableHead,\n  TableHeader,\n  TableRow,\n} from \"@keystoneui/react/table\";\nimport { useMemo, useState } from \"react\";\n\nconst allInvoices = Array.from({ length: 20 }, (_, i) => ({\n  invoice: `INV${String(i + 1).padStart(3, \"0\")}`,\n  status: ([\"Paid\", \"Pending\", \"Unpaid\"] as const)[i % 3],\n  amount: `$${((i + 1) * 75).toFixed(2)}`,\n  method: ([\"Credit Card\", \"PayPal\", \"Bank Transfer\"] as const)[i % 3],\n}));\n\nconst PAGE_SIZE = 5;\n\nconst statusVariant = (status: string) => {\n  switch (status) {\n    case \"Paid\":\n      return \"secondary\" as const;\n    case \"Pending\":\n      return \"outline\" as const;\n    case \"Unpaid\":\n      return \"destructive\" as const;\n    default:\n      return \"secondary\" as const;\n  }\n};\n\nexport default function TableWithPagination() {\n  const [page, setPage] = useState(0);\n  const pageCount = Math.ceil(allInvoices.length / PAGE_SIZE);\n\n  const rows = useMemo(\n    () => allInvoices.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE),\n    [page]\n  );\n\n  return (\n    <div className=\"flex flex-col gap-4\">\n      <Table hoverable>\n        <TableHeader>\n          <TableRow>\n            <TableHead className=\"w-[100px]\">Invoice</TableHead>\n            <TableHead>Status</TableHead>\n            <TableHead>Method</TableHead>\n            <TableHead className=\"text-right\">Amount</TableHead>\n          </TableRow>\n        </TableHeader>\n        <TableBody>\n          {rows.map((invoice) => (\n            <TableRow key={invoice.invoice}>\n              <TableCell className=\"font-medium\">{invoice.invoice}</TableCell>\n              <TableCell>\n                <Badge variant={statusVariant(invoice.status)}>\n                  {invoice.status}\n                </Badge>\n              </TableCell>\n              <TableCell>{invoice.method}</TableCell>\n              <TableCell className=\"text-right\">{invoice.amount}</TableCell>\n            </TableRow>\n          ))}\n        </TableBody>\n      </Table>\n\n      <div className=\"flex items-center justify-between\">\n        <p className=\"text-muted-foreground text-sm\">\n          Page {page + 1} of {pageCount}\n        </p>\n        <Pagination className=\"mx-0 w-auto\">\n          <PaginationContent>\n            <PaginationItem>\n              <PaginationPrevious\n                className={page === 0 ? \"pointer-events-none opacity-50\" : \"\"}\n                onClick={(e) => {\n                  e.preventDefault();\n                  setPage((p) => p - 1);\n                }}\n              />\n            </PaginationItem>\n            <PaginationItem>\n              <PaginationNext\n                className={\n                  page >= pageCount - 1 ? \"pointer-events-none opacity-50\" : \"\"\n                }\n                onClick={(e) => {\n                  e.preventDefault();\n                  setPage((p) => p + 1);\n                }}\n              />\n            </PaginationItem>\n          </PaginationContent>\n        </Pagination>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

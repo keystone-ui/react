@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox-default",
+  "title": "Checkbox Default",
+  "description": "Checkbox example: Default.",
+  "registryDependencies": [
+    "checkbox",
+    "field"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/checkbox/default.tsx",
+      "content": "\"use client\";\n\nimport { Checkbox } from \"@keystoneui/react/checkbox\";\nimport { Field, FieldLabel } from \"@keystoneui/react/field\";\n\nexport default function CheckboxDefault() {\n  return (\n    <Field orientation=\"horizontal\">\n      <Checkbox id=\"terms\" name=\"terms\" />\n      <FieldLabel htmlFor=\"terms\">Accept terms and conditions</FieldLabel>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

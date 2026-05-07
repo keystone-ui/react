@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tooltip-sides",
+  "title": "Tooltip Sides",
+  "description": "Tooltip example: Sides.",
+  "registryDependencies": [
+    "button",
+    "tooltip"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tooltip/sides.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipProvider,\n  TooltipTrigger,\n} from \"@keystoneui/react/tooltip\";\n\nconst SIDES = [\"top\", \"right\", \"bottom\", \"left\"] as const;\n\nexport default function TooltipSides() {\n  return (\n    <TooltipProvider>\n      <div className=\"flex flex-wrap gap-2\">\n        {SIDES.map((side) => (\n          <Tooltip key={side}>\n            <TooltipTrigger render={<Button variant=\"outline\" />}>\n              {side}\n            </TooltipTrigger>\n            <TooltipContent side={side}>\n              <p>Tooltip on {side}</p>\n            </TooltipContent>\n          </Tooltip>\n        ))}\n      </div>\n    </TooltipProvider>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "combobox-popup",
+  "title": "Combobox Popup",
+  "description": "Combobox example: Popup.",
+  "registryDependencies": [
+    "button",
+    "combobox"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/combobox/popup.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Combobox,\n  ComboboxContent,\n  ComboboxEmpty,\n  ComboboxInput,\n  ComboboxItem,\n  ComboboxList,\n  ComboboxSeparator,\n  ComboboxTrigger,\n  ComboboxValue,\n} from \"@keystoneui/react/combobox\";\n\ninterface Country {\n  code: string;\n  label: string;\n  value: string;\n}\n\nconst countries: Country[] = [\n  { code: \"us\", value: \"united-states\", label: \"United States\" },\n  { code: \"gb\", value: \"united-kingdom\", label: \"United Kingdom\" },\n  { code: \"ca\", value: \"canada\", label: \"Canada\" },\n  { code: \"de\", value: \"germany\", label: \"Germany\" },\n  { code: \"fr\", value: \"france\", label: \"France\" },\n  { code: \"jp\", value: \"japan\", label: \"Japan\" },\n  { code: \"au\", value: \"australia\", label: \"Australia\" },\n  { code: \"br\", value: \"brazil\", label: \"Brazil\" },\n];\n\nexport default function ComboboxPopup() {\n  return (\n    <Combobox\n      items={countries}\n      itemToStringValue={(country: Country) => country.label}\n    >\n      <ComboboxTrigger\n        render={\n          <Button\n            className=\"w-64 justify-between font-normal focus-visible:border-ring focus-visible:outline-0 focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-inset\"\n            variant=\"outline\"\n          >\n            <ComboboxValue placeholder=\"Select a country\" />\n          </Button>\n        }\n      />\n      <ComboboxContent>\n        <ComboboxInput placeholder=\"Search\" showTrigger={false} />\n        <ComboboxSeparator className=\"my-0\" />\n        <ComboboxEmpty>No countries found.</ComboboxEmpty>\n        <ComboboxList>\n          {(item) => (\n            <ComboboxItem key={item.code} value={item}>\n              {item.label}\n            </ComboboxItem>\n          )}\n        </ComboboxList>\n      </ComboboxContent>\n    </Combobox>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

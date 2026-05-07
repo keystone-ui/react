@@ -13,27 +13,73 @@ import { Tag, TagRemove } from "@keystoneui/react/tag";
 
 <ComponentPreview name="tag-default" />
 
-## With Icon
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/tag.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="tag-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Composition
+
+```text
+Tag
+└── TagRemove
+```
+
+## Examples
+
+### With Icon
 
 Add an icon before the tag label:
 
 <ComponentPreview name="tag-with-icon" />
 
-## With Remove
+
+### With Remove
 
 Add a remove button for dismissible tags:
 
 <ComponentPreview name="tag-with-remove" />
 
-## Disabled
+
+### Disabled
 
 <ComponentPreview name="tag-disabled" />
 
-## States
+
+### States
 
 Tag in various pressed/unpressed states:
 
 <ComponentPreview name="tag-states" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

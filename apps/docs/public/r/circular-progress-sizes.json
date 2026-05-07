@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "circular-progress-sizes",
+  "title": "Circular Progress Sizes",
+  "description": "Circular Progress example: Sizes.",
+  "registryDependencies": [
+    "circular-progress"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/circular-progress/sizes.tsx",
+      "content": "\"use client\";\n\nimport { CircularProgress } from \"@keystoneui/react/circular-progress\";\n\nconst SIZES = [\"sm\", \"default\", \"lg\"] as const;\n\nexport default function CircularProgressSizes() {\n  return (\n    <div className=\"flex items-center gap-6\">\n      {SIZES.map((size) => (\n        <CircularProgress key={size} size={size} value={65} />\n      ))}\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

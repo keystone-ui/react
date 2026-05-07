@@ -9,6 +9,9 @@ function formatItemSummary(item: RegistryItem): string {
   if (item.description) {
     parts.push(item.description);
   }
+  if (item.categories?.length) {
+    parts.push(`Categories: ${item.categories.join(", ")}`);
+  }
   if (item.dependencies?.length) {
     parts.push(`Dependencies: ${item.dependencies.join(", ")}`);
   }
@@ -45,9 +48,17 @@ export const listComponentsSchema = z.object({
     .describe("Maximum number of items to return"),
   offset: z.number().min(0).default(0).describe("Number of items to skip"),
   type: z
-    .enum(["ui", "block"])
+    .enum(["ui", "block", "example"])
     .optional()
-    .describe("Filter by item type: 'ui' for components, 'block' for blocks"),
+    .describe(
+      "Filter by item type: 'ui' for components, 'block' for full-page blocks, 'example' for named demo variants like 'table-with-pagination'"
+    ),
+  category: z
+    .string()
+    .optional()
+    .describe(
+      "Filter by category (e.g. 'authentication', 'login', 'signup', 'navigation', 'data', 'betting'). Currently only block items carry categories."
+    ),
 });
 
 export async function listComponentsTool(
@@ -74,7 +85,18 @@ export const searchComponentsSchema = z.object({
     .max(50)
     .default(10)
     .describe("Maximum number of results"),
-  type: z.enum(["ui", "block"]).optional().describe("Filter by item type"),
+  type: z
+    .enum(["ui", "block", "example"])
+    .optional()
+    .describe(
+      "Filter by item type: 'ui' for components, 'block' for full-page blocks, 'example' for named demo variants"
+    ),
+  category: z
+    .string()
+    .optional()
+    .describe(
+      "Filter by category (e.g. 'authentication', 'login'). Currently only block items carry categories."
+    ),
 });
 
 export async function searchComponentsTool(
@@ -85,6 +107,7 @@ export async function searchComponentsTool(
   const { results, total } = searchItems(manifest, input.query, {
     limit: input.limit,
     type: input.type,
+    category: input.category,
   });
 
   if (results.length === 0) {

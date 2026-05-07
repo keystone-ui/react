@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag-group-single-selection",
+  "title": "Tag Group Single Selection",
+  "description": "Tag Group example: Single Selection.",
+  "registryDependencies": [
+    "tag-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tag-group/single-selection.tsx",
+      "content": "\"use client\";\n\nimport { TagGroup, TagGroupItem } from \"@keystoneui/react/tag-group\";\nimport { useState } from \"react\";\n\nexport default function TagGroupSingleSelection() {\n  const [selected, setSelected] = useState<string[]>([\"react\"]);\n\n  return (\n    <div className=\"flex flex-col gap-3\">\n      <TagGroup onValueChange={setSelected} value={selected}>\n        <TagGroupItem value=\"react\">React</TagGroupItem>\n        <TagGroupItem value=\"vue\">Vue</TagGroupItem>\n        <TagGroupItem value=\"angular\">Angular</TagGroupItem>\n        <TagGroupItem value=\"svelte\">Svelte</TagGroupItem>\n      </TagGroup>\n      <p className=\"text-muted-foreground text-sm\">\n        Selected: {selected.length > 0 ? selected.join(\", \") : \"none\"}\n      </p>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

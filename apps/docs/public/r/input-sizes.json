@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-sizes",
+  "title": "Input Sizes",
+  "description": "Input example: Sizes.",
+  "registryDependencies": [
+    "input"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input/sizes.tsx",
+      "content": "\"use client\";\n\nimport { Input } from \"@keystoneui/react/input\";\n\nexport default function InputSizes() {\n  return (\n    <div className=\"flex max-w-sm flex-col gap-4\">\n      <Input placeholder=\"Default size (40px)\" size=\"default\" />\n      <Input placeholder=\"Small size (32px)\" size=\"sm\" />\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "circular-progress-custom-center-content",
+  "title": "Circular Progress Custom Center Content",
+  "description": "Circular Progress example: Custom Center Content.",
+  "registryDependencies": [
+    "circular-progress"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/circular-progress/custom-center-content.tsx",
+      "content": "\"use client\";\n\nimport {\n  CircularProgress,\n  CircularProgressIndicator,\n  CircularProgressTrack,\n} from \"@keystoneui/react/circular-progress\";\nimport {\n  Flame as FlameIcon,\n  TrendingUp as TrendingUpIcon,\n  Zap as ZapIcon,\n} from \"lucide-react\";\n\nexport default function CircularProgressCustomCenterContent() {\n  return (\n    <div className=\"flex items-center gap-6\">\n      <CircularProgress color=\"success\" size=\"lg\" value={85}>\n        <CircularProgressTrack />\n        <CircularProgressIndicator />\n        <div className=\"relative flex flex-col items-center\">\n          <TrendingUpIcon className=\"size-6 text-foreground\" />\n          <span className=\"text-muted-foreground text-xs\">Growth</span>\n        </div>\n      </CircularProgress>\n      <CircularProgress color=\"destructive\" size=\"lg\" value={92}>\n        <CircularProgressTrack />\n        <CircularProgressIndicator />\n        <div className=\"relative flex flex-col items-center\">\n          <FlameIcon className=\"size-6 text-foreground\" />\n          <span className=\"text-muted-foreground text-xs\">CPU</span>\n        </div>\n      </CircularProgress>\n      <CircularProgress color=\"warning\" size=\"lg\" value={60}>\n        <CircularProgressTrack />\n        <CircularProgressIndicator />\n        <div className=\"relative flex flex-col items-center\">\n          <ZapIcon className=\"size-6 text-foreground\" />\n          <span className=\"text-muted-foreground text-xs\">Energy</span>\n        </div>\n      </CircularProgress>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

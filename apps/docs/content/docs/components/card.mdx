@@ -20,6 +20,36 @@ import {
 
 <ComponentPreview name="card-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/card.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="card-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -32,35 +62,62 @@ Card
 └── CardFooter
 ```
 
-## Login Form
+## Examples
+
+### Login Form
 
 A card used as a login form with inputs and a submit button:
 
 <ComponentPreview name="card-login-form" />
 
-## With Action
+
+### With Action
 
 A card with a header action button for quick interactions:
 
 <ComponentPreview name="card-with-action" />
 
-## With Image
+
+### With Image
 
 Cards can display a hero image above the content area:
 
 <ComponentPreview name="card-with-image" />
 
-## Social Card
+
+### Social Card
 
 A Twitter/X-style profile card with avatar, verified badge, bio, and follower counts:
 
 <ComponentPreview name="card-social-card" />
 
-## Small
+
+### Small
 
 A compact card variant:
 
 <ComponentPreview name="card-small" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Betting Panel 01](/docs/blocks/betting-panel-01) — A betting panel with inline ½ / 2× multipliers inside the bet amount field and risk-level toggles.
+- [Betting Panel 02](/docs/blocks/betting-panel-02) — A slider-based betting panel with a gradient risk slider for visual feedback on the chosen risk level.
+- [Betting Panel 03](/docs/blocks/betting-panel-03) — A betting panel with quick-pick preset amounts for rapid bet placement.
+- [Betting Panel 04](/docs/blocks/betting-panel-04) — A stepper-based betting panel with circular +/− controls for bet amount and rows.
+- [Sign in 01](/docs/blocks/signin-01) — A simple sign-in form inside a card with email and password fields.
+- [Sign in 03](/docs/blocks/signin-03) — A sign-in page with a form and image side by side inside a card.
+- [Signup 01](/docs/blocks/signup-01) — A simple signup form inside a card with name, email, and password fields.
+- [Signup 03](/docs/blocks/signup-03) — A signup page with a card form and side-by-side password fields.
+- [Signup 04](/docs/blocks/signup-04) — A signup page with a form and image side by side inside a card.
+
+{/* backlinks:end */}
 
 ## API Reference
 

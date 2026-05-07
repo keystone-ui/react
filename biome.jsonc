@@ -1,6 +1,13 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["ultracite/biome/core", "ultracite/biome/react"],
+  "files": {
+    "includes": [
+      "!apps/docs/public/r",
+      "!registry.json",
+      "!.claude/settings.local.json"
+    ]
+  },
   "linter": {
     "rules": {
       "performance": {

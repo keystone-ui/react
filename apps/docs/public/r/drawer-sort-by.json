@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "drawer-sort-by",
+  "title": "Drawer Sort By",
+  "description": "Drawer example: Sort By.",
+  "registryDependencies": [
+    "button",
+    "drawer"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/drawer/sort-by.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Drawer,\n  DrawerContent,\n  DrawerHeader,\n  DrawerTitle,\n  DrawerTrigger,\n} from \"@keystoneui/react/drawer\";\nimport { ArrowUpDown, Check } from \"lucide-react\";\nimport { useState } from \"react\";\n\nconst SORT_OPTIONS = [\n  { label: \"Newest\", value: \"newest\" },\n  { label: \"Oldest\", value: \"oldest\" },\n  { label: \"Price: High to Low\", value: \"price-desc\" },\n  { label: \"Price: Low to High\", value: \"price-asc\" },\n];\n\nexport default function DrawerSortBy() {\n  const [selected, setSelected] = useState(\"newest\");\n\n  return (\n    <Drawer>\n      <DrawerTrigger render={<Button variant=\"outline\" />}>\n        <ArrowUpDown className=\"size-4\" />\n        Sort By\n      </DrawerTrigger>\n      <DrawerContent>\n        <div className=\"mx-auto w-full max-w-sm\">\n          <DrawerHeader>\n            <DrawerTitle className=\"text-center\">Sort By</DrawerTitle>\n          </DrawerHeader>\n          <div className=\"divide-y divide-border-muted\">\n            {SORT_OPTIONS.map((option) => {\n              const isSelected = selected === option.value;\n              return (\n                <button\n                  className={`flex h-12 w-full cursor-pointer items-center justify-between px-4 active:text-muted-foreground ${\n                    isSelected\n                      ? \"font-medium text-primary\"\n                      : \"text-muted-foreground\"\n                  }`}\n                  key={option.value}\n                  onClick={() => setSelected(option.value)}\n                  type=\"button\"\n                >\n                  <span className=\"text-sm\">{option.label}</span>\n                  {isSelected && <Check className=\"size-4 text-primary\" />}\n                </button>\n              );\n            })}\n          </div>\n          <div className=\"p-4\" />\n        </div>\n      </DrawerContent>\n    </Drawer>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

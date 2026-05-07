@@ -21,7 +21,7 @@ function toKebabCase(name) {
 
 async function fetchComponentDocs(component) {
   const kebabName = toKebabCase(component);
-  const url = `${SITE_URL}/docs/components/${kebabName}.mdx`;
+  const url = `${SITE_URL}/llms.mdx/docs/components/${kebabName}`;
 
   try {
     const response = await fetch(url, {

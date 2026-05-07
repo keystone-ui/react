@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dropdown-menu-complex",
+  "title": "Dropdown Menu Complex",
+  "description": "Dropdown Menu example: Complex.",
+  "registryDependencies": [
+    "button",
+    "dropdown-menu"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/dropdown-menu/complex.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  DropdownMenu,\n  DropdownMenuCheckboxItem,\n  DropdownMenuContent,\n  DropdownMenuGroup,\n  DropdownMenuItem,\n  DropdownMenuLabel,\n  DropdownMenuPortal,\n  DropdownMenuRadioGroup,\n  DropdownMenuRadioItem,\n  DropdownMenuSeparator,\n  DropdownMenuShortcut,\n  DropdownMenuSub,\n  DropdownMenuSubContent,\n  DropdownMenuSubTrigger,\n  DropdownMenuTrigger,\n} from \"@keystoneui/react/dropdown-menu\";\nimport {\n  CreditCard as CreditCardIcon,\n  LogOut as LogOutIcon,\n  Monitor as MonitorIcon,\n  Moon as MoonIcon,\n  Palette as PaletteIcon,\n  Settings as SettingsIcon,\n  Sun as SunIcon,\n  User as UserIcon,\n} from \"lucide-react\";\nimport { useState } from \"react\";\n\nexport default function DropdownMenuComplex() {\n  const [showSidebar, setShowSidebar] = useState(true);\n  const [theme, setTheme] = useState(\"light\");\n\n  return (\n    <DropdownMenu>\n      <DropdownMenuTrigger render={<Button variant=\"outline\">Open</Button>} />\n      <DropdownMenuContent className=\"w-48\">\n        <DropdownMenuGroup>\n          <DropdownMenuLabel>Account</DropdownMenuLabel>\n          <DropdownMenuItem>\n            <UserIcon />\n            Profile\n            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>\n          </DropdownMenuItem>\n          <DropdownMenuItem>\n            <CreditCardIcon />\n            Billing\n          </DropdownMenuItem>\n          <DropdownMenuItem>\n            <SettingsIcon />\n            Settings\n          </DropdownMenuItem>\n        </DropdownMenuGroup>\n        <DropdownMenuSeparator />\n        <DropdownMenuGroup>\n          <DropdownMenuLabel>View</DropdownMenuLabel>\n          <DropdownMenuCheckboxItem\n            checked={showSidebar}\n            onCheckedChange={setShowSidebar}\n          >\n            Show Sidebar\n          </DropdownMenuCheckboxItem>\n          <DropdownMenuSub>\n            <DropdownMenuSubTrigger>\n              <PaletteIcon />\n              Theme\n            </DropdownMenuSubTrigger>\n            <DropdownMenuPortal>\n              <DropdownMenuSubContent>\n                <DropdownMenuRadioGroup onValueChange={setTheme} value={theme}>\n                  <DropdownMenuRadioItem value=\"light\">\n                    <SunIcon />\n                    Light\n                  </DropdownMenuRadioItem>\n                  <DropdownMenuRadioItem value=\"dark\">\n                    <MoonIcon />\n                    Dark\n                  </DropdownMenuRadioItem>\n                  <DropdownMenuRadioItem value=\"system\">\n                    <MonitorIcon />\n                    System\n                  </DropdownMenuRadioItem>\n                </DropdownMenuRadioGroup>\n              </DropdownMenuSubContent>\n            </DropdownMenuPortal>\n          </DropdownMenuSub>\n        </DropdownMenuGroup>\n        <DropdownMenuSeparator />\n        <DropdownMenuGroup>\n          <DropdownMenuItem variant=\"destructive\">\n            <LogOutIcon />\n            Sign Out\n            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>\n          </DropdownMenuItem>\n        </DropdownMenuGroup>\n      </DropdownMenuContent>\n    </DropdownMenu>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

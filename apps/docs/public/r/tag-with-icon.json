@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag-with-icon",
+  "title": "Tag With Icon",
+  "description": "Tag example: With Icon.",
+  "registryDependencies": [
+    "tag"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tag/with-icon.tsx",
+      "content": "\"use client\";\n\nimport { Tag } from \"@keystoneui/react/tag\";\nimport {\n  Bell as BellIcon,\n  Bookmark as BookmarkIcon,\n  Heart as HeartIcon,\n  Star as StarIcon,\n} from \"lucide-react\";\n\nexport default function TagWithIcon() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-2\">\n      <Tag value=\"star\">\n        <StarIcon />\n        Star\n      </Tag>\n      <Tag value=\"bookmark\">\n        <BookmarkIcon />\n        Bookmark\n      </Tag>\n      <Tag defaultPressed value=\"heart\">\n        <HeartIcon />\n        Favorite\n      </Tag>\n      <Tag value=\"bell\">\n        <BellIcon />\n        Notify\n      </Tag>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

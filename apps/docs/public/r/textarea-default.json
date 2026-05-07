@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea-default",
+  "title": "Textarea Default",
+  "description": "Textarea example: Default.",
+  "registryDependencies": [
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/textarea/default.tsx",
+      "content": "\"use client\";\n\nimport { Textarea } from \"@keystoneui/react/textarea\";\n\nexport default function TextareaDefault() {\n  return <Textarea placeholder=\"Type your message here.\" />;\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

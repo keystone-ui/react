@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton-no-animation",
+  "title": "Skeleton No Animation",
+  "description": "Skeleton example: No Animation.",
+  "registryDependencies": [
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/skeleton/no-animation.tsx",
+      "content": "\"use client\";\n\nimport { Skeleton } from \"@keystoneui/react/skeleton\";\n\nexport default function SkeletonNoAnimation() {\n  return (\n    <div className=\"flex items-center gap-4\">\n      <Skeleton\n        animationType=\"none\"\n        className=\"size-10 shrink-0 rounded-full\"\n      />\n      <div className=\"grid gap-2\">\n        <Skeleton animationType=\"none\" className=\"h-4 w-[150px]\" />\n        <Skeleton animationType=\"none\" className=\"h-4 w-[100px]\" />\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

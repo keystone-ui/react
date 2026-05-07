@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "circular-progress-animated",
+  "title": "Circular Progress Animated",
+  "description": "Circular Progress example: Animated.",
+  "registryDependencies": [
+    "circular-progress"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/circular-progress/animated.tsx",
+      "content": "\"use client\";\n\nimport { CircularProgress } from \"@keystoneui/react/circular-progress\";\nimport { useEffect, useState } from \"react\";\n\nexport default function CircularProgressAnimated() {\n  const [value, setValue] = useState(0);\n\n  useEffect(() => {\n    const interval = setInterval(() => {\n      setValue((prev) => {\n        if (prev >= 100) {\n          return 0;\n        }\n        return prev + 1;\n      });\n    }, 50);\n    return () => clearInterval(interval);\n  }, []);\n\n  return <CircularProgress size=\"lg\" value={value} />;\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-group-split-button",
+  "title": "Button Group Split Button",
+  "description": "Button Group example: Split Button.",
+  "registryDependencies": [
+    "button",
+    "button-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/button-group/split-button.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { ButtonGroup } from \"@keystoneui/react/button-group\";\nimport {\n  ChevronDown as ChevronDownIcon,\n  GitMerge as GitMergeIcon,\n} from \"lucide-react\";\n\nexport default function ButtonGroupSplitButton() {\n  return (\n    <ButtonGroup>\n      <Button>\n        <GitMergeIcon /> Merge pull request\n      </Button>\n      <Button aria-label=\"Merge options\" size=\"icon\">\n        <ChevronDownIcon />\n      </Button>\n    </ButtonGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

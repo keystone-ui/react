@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "calendar-range",
+  "title": "Calendar Range",
+  "description": "Calendar example: Range.",
+  "registryDependencies": [
+    "calendar"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/calendar/range.tsx",
+      "content": "\"use client\";\n\nimport { Calendar } from \"@keystoneui/react/calendar\";\nimport { addDays } from \"date-fns\";\nimport { useState } from \"react\";\n\nexport default function CalendarRange() {\n  const startDate = new Date(new Date().getFullYear(), 0, 12);\n\n  const [dateRange, setDateRange] = useState({\n    from: startDate,\n    to: addDays(startDate, 30),\n  });\n\n  return (\n    <Calendar\n      className=\"rounded-lg shadow-lg ring-1 ring-popup-ring\"\n      defaultMonth={dateRange.from}\n      mode=\"range\"\n      numberOfMonths={2}\n      onSelect={(range: unknown) => {\n        if (range && typeof range === \"object\" && \"from\" in range) {\n          setDateRange(range as { from: Date; to: Date });\n        }\n      }}\n      selected={dateRange}\n    />\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

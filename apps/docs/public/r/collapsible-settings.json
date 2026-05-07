@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "collapsible-settings",
+  "title": "Collapsible Settings",
+  "description": "Collapsible example: Settings.",
+  "registryDependencies": [
+    "collapsible"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/collapsible/settings.tsx",
+      "content": "\"use client\";\n\nimport {\n  Collapsible,\n  CollapsibleContent,\n  CollapsibleTrigger,\n} from \"@keystoneui/react/collapsible\";\nimport {\n  ChevronRight as ChevronRightIcon,\n  Settings as SettingsIcon,\n  Shield as ShieldIcon,\n} from \"lucide-react\";\n\nexport default function CollapsibleSettings() {\n  return (\n    <div className=\"w-full max-w-sm space-y-2\">\n      <Collapsible defaultOpen>\n        <CollapsibleTrigger className=\"group flex w-full items-center gap-2 rounded-md px-3 py-2 font-medium text-sm hover:bg-muted\">\n          <ChevronRightIcon className=\"size-4 transition-transform group-data-[panel-open]:rotate-90\" />\n          <SettingsIcon className=\"size-4\" />\n          General Settings\n        </CollapsibleTrigger>\n        <CollapsibleContent>\n          <div className=\"ml-10 space-y-1 py-1\">\n            <div className=\"rounded-md px-3 py-1.5 text-muted-foreground text-sm hover:bg-muted hover:text-foreground\">\n              Profile\n            </div>\n            <div className=\"rounded-md px-3 py-1.5 text-muted-foreground text-sm hover:bg-muted hover:text-foreground\">\n              Notifications\n            </div>\n            <div className=\"rounded-md px-3 py-1.5 text-muted-foreground text-sm hover:bg-muted hover:text-foreground\">\n              Appearance\n            </div>\n          </div>\n        </CollapsibleContent>\n      </Collapsible>\n      <Collapsible>\n        <CollapsibleTrigger className=\"group flex w-full items-center gap-2 rounded-md px-3 py-2 font-medium text-sm hover:bg-muted\">\n          <ChevronRightIcon className=\"size-4 transition-transform group-data-[panel-open]:rotate-90\" />\n          <ShieldIcon className=\"size-4\" />\n          Security\n        </CollapsibleTrigger>\n        <CollapsibleContent>\n          <div className=\"ml-10 space-y-1 py-1\">\n            <div className=\"rounded-md px-3 py-1.5 text-muted-foreground text-sm hover:bg-muted hover:text-foreground\">\n              Password\n            </div>\n            <div className=\"rounded-md px-3 py-1.5 text-muted-foreground text-sm hover:bg-muted hover:text-foreground\">\n              Two-Factor Auth\n            </div>\n          </div>\n        </CollapsibleContent>\n      </Collapsible>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

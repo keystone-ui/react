@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd-group",
+  "title": "Kbd Group",
+  "description": "Kbd example: Group.",
+  "registryDependencies": [
+    "kbd"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/kbd/group.tsx",
+      "content": "\"use client\";\n\nimport { Kbd, KbdGroup } from \"@keystoneui/react/kbd\";\n\nexport default function KbdGroupDemo() {\n  return (\n    <div className=\"flex flex-wrap gap-4\">\n      <KbdGroup>\n        <Kbd>⌘</Kbd>\n        <Kbd>⇧</Kbd>\n        <Kbd>⌥</Kbd>\n        <Kbd>⌃</Kbd>\n      </KbdGroup>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

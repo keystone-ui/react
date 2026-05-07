@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-icon-buttons",
+  "title": "Button Icon Buttons",
+  "description": "Button example: Icon Buttons.",
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/button/icon-buttons.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { ArrowRight, Bold, Italic, Mail, Plus } from \"lucide-react\";\n\nexport default function ButtonIconButtons() {\n  return (\n    <div className=\"flex flex-wrap gap-4\">\n      <Button aria-label=\"Next\" className=\"aspect-square\">\n        <ArrowRight size={16} />\n      </Button>\n      <Button aria-label=\"Mail\" className=\"aspect-square\" variant=\"secondary\">\n        <Mail size={16} />\n      </Button>\n      <Button aria-label=\"Bold\" className=\"aspect-square\" variant=\"outline\">\n        <Bold size={16} />\n      </Button>\n      <Button aria-label=\"Italic\" className=\"aspect-square\" variant=\"ghost\">\n        <Italic size={16} />\n      </Button>\n      <Button\n        aria-label=\"Add\"\n        className=\"aspect-square rounded-full\"\n        variant=\"outline\"\n      >\n        <Plus aria-hidden=\"true\" size={16} />\n      </Button>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

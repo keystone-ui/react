@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-group-phone-input",
+  "title": "Input Group Phone Input",
+  "description": "Input Group example: Phone Input.",
+  "registryDependencies": [
+    "input-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-group/phone-input.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupInput,\n  InputGroupText,\n} from \"@keystoneui/react/input-group\";\nimport { Phone as PhoneIcon } from \"lucide-react\";\n\nexport default function InputGroupPhoneInput() {\n  return (\n    <InputGroup className=\"max-w-sm\">\n      <InputGroupAddon>\n        <PhoneIcon className=\"size-4\" />\n      </InputGroupAddon>\n      <InputGroupAddon>\n        <InputGroupText>+1</InputGroupText>\n      </InputGroupAddon>\n      <InputGroupInput placeholder=\"(555) 123-4567\" type=\"tel\" />\n    </InputGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

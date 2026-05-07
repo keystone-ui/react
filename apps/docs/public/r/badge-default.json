@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge-default",
+  "title": "Badge Default",
+  "description": "Badge example: Default.",
+  "registryDependencies": [
+    "badge"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/badge/default.tsx",
+      "content": "\"use client\";\n\nimport { Badge } from \"@keystoneui/react/badge\";\n\nexport default function BadgeDefault() {\n  return <Badge>Badge</Badge>;\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

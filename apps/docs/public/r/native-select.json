@@ -3,7 +3,9 @@
   "name": "native-select",
   "title": "Native Select",
   "description": "Native browser select dropdown for simple selection scenarios with optimal mobile support.",
-  "dependencies": ["lucide-react"],
+  "dependencies": [
+    "lucide-react"
+  ],
   "files": [
     {
       "path": "packages/ui/src/native-select.tsx",

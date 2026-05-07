@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-with-description",
+  "title": "Empty With Description",
+  "description": "Empty example: With Description.",
+  "registryDependencies": [
+    "button",
+    "empty"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/empty/with-description.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Empty,\n  EmptyContent,\n  EmptyDescription,\n  EmptyHeader,\n  EmptyMedia,\n  EmptyTitle,\n} from \"@keystoneui/react/empty\";\nimport { Bell as BellIcon } from \"lucide-react\";\n\nexport default function EmptyWithDescription() {\n  return (\n    <Empty className=\"max-w-md\">\n      <EmptyHeader>\n        <EmptyMedia variant=\"icon\">\n          <BellIcon />\n        </EmptyMedia>\n        <EmptyTitle>No Notifications</EmptyTitle>\n        <EmptyDescription className=\"max-w-xs text-pretty\">\n          You&apos;re all caught up. New notifications will appear here when\n          there&apos;s activity on your account or projects.\n        </EmptyDescription>\n      </EmptyHeader>\n      <EmptyContent>\n        <Button size=\"sm\" variant=\"outline\">\n          Notification Settings\n        </Button>\n      </EmptyContent>\n    </Empty>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

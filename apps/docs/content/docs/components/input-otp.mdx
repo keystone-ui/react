@@ -18,6 +18,36 @@ import {
 
 <ComponentPreview name="input-otp-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/input-otp.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="input-otp-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -27,67 +57,83 @@ InputOTP
     └── InputOTPSeparator
 ```
 
-## With Label
+## Examples
+
+### With Label
 
 Pair the input with a native `<label>` and an `aria-describedby` description for accessibility:
 
 <ComponentPreview name="input-otp-with-label" />
 
-## With Separator
+
+### With Separator
 
 Group slots with visual separators for codes presented as `123-456`:
 
 <ComponentPreview name="input-otp-with-separator" />
 
-## Four Digits
+
+### Four Digits
 
 A shorter OTP input for 4-digit codes:
 
 <ComponentPreview name="input-otp-four-digits" />
 
-## Alphanumeric
+
+### Alphanumeric
 
 Use `validationType="alphanumeric"` for recovery, backup, or invite codes that mix letters and numbers:
 
 <ComponentPreview name="input-otp-alphanumeric" />
 
-## Masked
+
+### Masked
 
 Set `mask` to obscure entered characters on shared screens:
 
 <ComponentPreview name="input-otp-masked" />
 
-## Placeholder Hints
+
+### Placeholder Hints
 
 `InputOTPSlot` renders a real `<input>`, so native `placeholder` props and CSS work as usual:
 
 <ComponentPreview name="input-otp-placeholder" />
 
-## Custom Sanitization
+
+### Custom Sanitization
 
 Set `validationType="none"` together with `sanitizeValue` to apply custom rules. Use `onValueInvalid` to react to rejected characters:
 
 <ComponentPreview name="input-otp-custom-sanitization" />
 
-## Auto Submit
+
+### Auto Submit
 
 Pass `autoSubmit` to submit the owning form automatically once all slots are filled. Use `onValueComplete` if you need to react to completion without submitting:
 
 <ComponentPreview name="input-otp-auto-submit" />
 
-## Disabled
+
+### Disabled
 
 <ComponentPreview name="input-otp-disabled" />
 
-## Loading
+
+### Loading
 
 OTP with a loading/verification state:
 
 <ComponentPreview name="input-otp-loading" />
 
-## Form
+
+### Form
 
 <ComponentPreview name="input-otp-form" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

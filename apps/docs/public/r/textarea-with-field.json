@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea-with-field",
+  "title": "Textarea With Field",
+  "description": "Textarea example: With Field.",
+  "registryDependencies": [
+    "field",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/textarea/with-field.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldDescription, FieldLabel } from \"@keystoneui/react/field\";\nimport { Textarea } from \"@keystoneui/react/textarea\";\n\nexport default function TextareaWithField() {\n  return (\n    <Field>\n      <FieldLabel htmlFor=\"bio\">Bio</FieldLabel>\n      <Textarea id=\"bio\" placeholder=\"Tell us about yourself...\" />\n      <FieldDescription>\n        Write a short introduction about yourself.\n      </FieldDescription>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

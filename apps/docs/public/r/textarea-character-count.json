@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea-character-count",
+  "title": "Textarea Character Count",
+  "description": "Textarea example: Character Count.",
+  "registryDependencies": [
+    "field",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/textarea/character-count.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldDescription, FieldLabel } from \"@keystoneui/react/field\";\nimport { Textarea } from \"@keystoneui/react/textarea\";\nimport { useState } from \"react\";\n\nconst MAX_LENGTH = 200;\n\nexport default function TextareaCharacterCount() {\n  const [value, setValue] = useState(\"\");\n\n  return (\n    <Field>\n      <FieldLabel htmlFor=\"textarea-char-count\">Bio</FieldLabel>\n      <Textarea\n        id=\"textarea-char-count\"\n        maxLength={MAX_LENGTH}\n        onChange={(e) => setValue(e.target.value)}\n        placeholder=\"Tell us about yourself...\"\n        value={value}\n      />\n      <FieldDescription>\n        {value.length}/{MAX_LENGTH} characters\n      </FieldDescription>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

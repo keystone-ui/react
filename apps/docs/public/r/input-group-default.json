@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-group-default",
+  "title": "Input Group Default",
+  "description": "Input Group example: Default.",
+  "registryDependencies": [
+    "input-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-group/default.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupInput,\n} from \"@keystoneui/react/input-group\";\nimport { Mail as MailIcon } from \"lucide-react\";\n\nexport default function InputGroupDefault() {\n  return (\n    <InputGroup>\n      <InputGroupAddon>\n        <MailIcon className=\"size-4\" />\n      </InputGroupAddon>\n      <InputGroupInput placeholder=\"you@example.com\" type=\"email\" />\n    </InputGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

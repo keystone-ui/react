@@ -25,6 +25,36 @@ A simple command menu in a dialog:
 
 <ComponentPreview name="command-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/command.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="command-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -39,35 +69,45 @@ CommandDialog
         └── CommandSeparator
 ```
 
-## Shortcuts
+## Examples
+
+### Shortcuts
 
 Items can display keyboard shortcut labels using `CommandShortcut`:
 
 <ComponentPreview name="command-with-shortcuts" />
 
-## Groups
+
+### Groups
 
 Organize items into groups with headings and separators:
 
 <ComponentPreview name="command-groups" />
 
-## Scrollable
+
+### Scrollable
 
 The command list scrolls automatically when content exceeds the max height:
 
 <ComponentPreview name="command-scrollable" />
 
-## Keyboard Trigger
+
+### Keyboard Trigger
 
 Command palette triggered by keyboard shortcut:
 
 <ComponentPreview name="command-keyboard-trigger" />
 
-## Disabled Items
+
+### Disabled Items
 
 Command menu with disabled items:
 
 <ComponentPreview name="command-disabled-items" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

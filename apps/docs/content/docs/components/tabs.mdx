@@ -19,6 +19,36 @@ import {
 
 <ComponentPreview name="tabs-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/tabs.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="tabs-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -30,31 +60,37 @@ Tabs
 └── TabsContent
 ```
 
-## Line Variant
+## Examples
+
+### Line Variant
 
 An underlined tab style for a more subtle appearance:
 
 <ComponentPreview name="tabs-line" />
 
-## Vertical
+
+### Vertical
 
 Stack tabs vertically for sidebar-style navigation:
 
 <ComponentPreview name="tabs-vertical" />
 
-## Disabled
+
+### Disabled
 
 Individual tabs can be disabled to prevent selection:
 
 <ComponentPreview name="tabs-disabled" />
 
-## With Icons
+
+### With Icons
 
 Add icons alongside tab labels:
 
 <ComponentPreview name="tabs-with-icons" />
 
-## Morphing
+
+### Morphing
 
 Collapse inactive triggers to icon-only and reveal the label only on the active
 tab. Set `morphing` on `TabsList` and wrap each trigger's text in
@@ -71,29 +107,49 @@ bar stretches and slides to match the active trigger's expanded width.
 
 <ComponentPreview name="tabs-morphing-line" />
 
-## Pill Variant
+
+### Pill Variant
 
 Rounded pill-shaped tabs:
 
 <ComponentPreview name="tabs-pill" />
 
-## Scrollable
+
+### Scrollable
 
 Horizontally scrollable tabs:
 
 <ComponentPreview name="tabs-scrollable" />
 
-## Animated Indicator
+
+### Animated Indicator
 
 Tabs with animated sliding indicator:
 
 <ComponentPreview name="tabs-animated-indicator" />
 
-## Line Vertical
+
+### Line Vertical
 
 Vertical tabs with line variant:
 
 <ComponentPreview name="tabs-line-vertical" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Betting Panel 01](/docs/blocks/betting-panel-01) — A betting panel with inline ½ / 2× multipliers inside the bet amount field and risk-level toggles.
+- [Betting Panel 02](/docs/blocks/betting-panel-02) — A slider-based betting panel with a gradient risk slider for visual feedback on the chosen risk level.
+- [Betting Panel 03](/docs/blocks/betting-panel-03) — A betting panel with quick-pick preset amounts for rapid bet placement.
+- [Betting Panel 04](/docs/blocks/betting-panel-04) — A stepper-based betting panel with circular +/− controls for bet amount and rows.
+
+{/* backlinks:end */}
 
 ## API Reference
 

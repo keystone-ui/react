@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-group-nested",
+  "title": "Button Group Nested",
+  "description": "Button Group example: Nested.",
+  "registryDependencies": [
+    "button",
+    "button-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/button-group/nested.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { ButtonGroup } from \"@keystoneui/react/button-group\";\nimport {\n  Archive as ArchiveIcon,\n  ArrowLeft as ArrowLeftIcon,\n  Flag as FlagIcon,\n} from \"lucide-react\";\n\nexport default function ButtonGroupNested() {\n  return (\n    <ButtonGroup>\n      <ButtonGroup>\n        <Button aria-label=\"Go back\" size=\"icon\" variant=\"outline\">\n          <ArrowLeftIcon />\n        </Button>\n      </ButtonGroup>\n      <ButtonGroup>\n        <Button variant=\"outline\">\n          <ArchiveIcon />\n          Archive\n        </Button>\n        <Button variant=\"outline\">\n          <FlagIcon />\n          Report\n        </Button>\n      </ButtonGroup>\n    </ButtonGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-types",
+  "title": "Input Types",
+  "description": "Input example: Types.",
+  "registryDependencies": [
+    "field",
+    "input"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input/types.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldLabel } from \"@keystoneui/react/field\";\nimport { Input } from \"@keystoneui/react/input\";\n\nexport default function InputTypes() {\n  return (\n    <div className=\"flex max-w-sm flex-col gap-4\">\n      <Field>\n        <FieldLabel htmlFor=\"type-email\">Email</FieldLabel>\n        <Input id=\"type-email\" placeholder=\"name@example.com\" type=\"email\" />\n      </Field>\n      <Field>\n        <FieldLabel htmlFor=\"type-number\">Number</FieldLabel>\n        <Input id=\"type-number\" placeholder=\"0\" type=\"number\" />\n      </Field>\n      <Field>\n        <FieldLabel htmlFor=\"type-tel\">Phone</FieldLabel>\n        <Input id=\"type-tel\" placeholder=\"+1 (555) 123-4567\" type=\"tel\" />\n      </Field>\n      <Field>\n        <FieldLabel htmlFor=\"type-url\">URL</FieldLabel>\n        <Input id=\"type-url\" placeholder=\"https://example.com\" type=\"url\" />\n      </Field>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

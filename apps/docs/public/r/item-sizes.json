@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "item-sizes",
+  "title": "Item Sizes",
+  "description": "Item example: Sizes.",
+  "registryDependencies": [
+    "item"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/item/sizes.tsx",
+      "content": "\"use client\";\n\nimport {\n  Item,\n  ItemContent,\n  ItemDescription,\n  ItemMedia,\n  ItemTitle,\n} from \"@keystoneui/react/item\";\nimport { Inbox as InboxIcon } from \"lucide-react\";\n\nexport default function ItemSizes() {\n  return (\n    <div className=\"flex max-w-md flex-col gap-4\">\n      <Item variant=\"outline\">\n        <ItemMedia variant=\"icon\">\n          <InboxIcon />\n        </ItemMedia>\n        <ItemContent>\n          <ItemTitle>Default Size</ItemTitle>\n          <ItemDescription>Standard size for most use cases.</ItemDescription>\n        </ItemContent>\n      </Item>\n      <Item size=\"sm\" variant=\"outline\">\n        <ItemMedia variant=\"icon\">\n          <InboxIcon />\n        </ItemMedia>\n        <ItemContent>\n          <ItemTitle>Small Size</ItemTitle>\n          <ItemDescription>Compact size for dense layouts.</ItemDescription>\n        </ItemContent>\n      </Item>\n      <Item size=\"xs\" variant=\"outline\">\n        <ItemMedia variant=\"icon\">\n          <InboxIcon />\n        </ItemMedia>\n        <ItemContent>\n          <ItemTitle>Extra Small Size</ItemTitle>\n          <ItemDescription>The most compact size available.</ItemDescription>\n        </ItemContent>\n      </Item>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

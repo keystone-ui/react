@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-otp-form",
+  "title": "Input Otp Form",
+  "description": "Input Otp example: Form.",
+  "registryDependencies": [
+    "button",
+    "card",
+    "field",
+    "input-otp"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-otp/form.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardFooter,\n  CardHeader,\n  CardTitle,\n} from \"@keystoneui/react/card\";\nimport { Field, FieldDescription, FieldLabel } from \"@keystoneui/react/field\";\nimport {\n  InputOTP,\n  InputOTPGroup,\n  InputOTPSeparator,\n  InputOTPSlot,\n} from \"@keystoneui/react/input-otp\";\nimport { RefreshCw as RefreshCwIcon } from \"lucide-react\";\n\nexport default function InputOTPForm() {\n  return (\n    <Card className=\"mx-auto max-w-md\">\n      <CardHeader>\n        <CardTitle>Verify your login</CardTitle>\n        <CardDescription>\n          Enter the verification code we sent to{\" \"}\n          <span className=\"font-medium\">m@example.com</span>.\n        </CardDescription>\n      </CardHeader>\n      <CardContent>\n        <Field>\n          <div className=\"flex items-center justify-between\">\n            <FieldLabel htmlFor=\"otp-verification\">\n              Verification code\n            </FieldLabel>\n            <Button size=\"xs\" variant=\"outline\">\n              <RefreshCwIcon className=\"size-3\" />\n              Resend Code\n            </Button>\n          </div>\n          <InputOTP id=\"otp-verification\" length={6}>\n            <InputOTPGroup>\n              <InputOTPSlot aria-label=\"Character 1 of 6\" />\n              <InputOTPSlot aria-label=\"Character 2 of 6\" />\n              <InputOTPSlot aria-label=\"Character 3 of 6\" />\n            </InputOTPGroup>\n            <InputOTPSeparator />\n            <InputOTPGroup>\n              <InputOTPSlot aria-label=\"Character 4 of 6\" />\n              <InputOTPSlot aria-label=\"Character 5 of 6\" />\n              <InputOTPSlot aria-label=\"Character 6 of 6\" />\n            </InputOTPGroup>\n          </InputOTP>\n          <FieldDescription>\n            <a\n              className=\"underline underline-offset-4 transition-colors hover:text-primary\"\n              href=\"/support/email-recovery\"\n            >\n              I no longer have access to this email address.\n            </a>\n          </FieldDescription>\n        </Field>\n      </CardContent>\n      <CardFooter>\n        <Field className=\"w-full\">\n          <Button className=\"w-full\" type=\"submit\">\n            Verify\n          </Button>\n          <div className=\"text-center text-muted-foreground text-sm\">\n            Having trouble?{\" \"}\n            <a\n              className=\"underline underline-offset-4 transition-colors hover:text-primary\"\n              href=\"/support\"\n            >\n              Contact support\n            </a>\n          </div>\n        </Field>\n      </CardFooter>\n    </Card>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

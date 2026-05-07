@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "native-select-form-example",
+  "title": "Native Select Form Example",
+  "description": "Native Select example: Form Example.",
+  "registryDependencies": [
+    "field",
+    "native-select"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/native-select/form-example.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldGroup, FieldLabel } from \"@keystoneui/react/field\";\nimport {\n  NativeSelect,\n  NativeSelectOption,\n} from \"@keystoneui/react/native-select\";\n\nexport default function NativeSelectFormExample() {\n  return (\n    <form\n      className=\"w-full max-w-sm\"\n      onSubmit={(e) => {\n        e.preventDefault();\n      }}\n    >\n      <FieldGroup>\n        <Field>\n          <FieldLabel htmlFor=\"form-status\">Status</FieldLabel>\n          <NativeSelect id=\"form-status\" name=\"status\">\n            <NativeSelectOption value=\"\">Select status</NativeSelectOption>\n            <NativeSelectOption value=\"todo\">Todo</NativeSelectOption>\n            <NativeSelectOption value=\"in-progress\">\n              In Progress\n            </NativeSelectOption>\n            <NativeSelectOption value=\"done\">Done</NativeSelectOption>\n          </NativeSelect>\n        </Field>\n        <Field>\n          <FieldLabel htmlFor=\"form-priority\">Priority</FieldLabel>\n          <NativeSelect id=\"form-priority\" name=\"priority\">\n            <NativeSelectOption value=\"\">Select priority</NativeSelectOption>\n            <NativeSelectOption value=\"low\">Low</NativeSelectOption>\n            <NativeSelectOption value=\"medium\">Medium</NativeSelectOption>\n            <NativeSelectOption value=\"high\">High</NativeSelectOption>\n            <NativeSelectOption value=\"urgent\">Urgent</NativeSelectOption>\n          </NativeSelect>\n        </Field>\n      </FieldGroup>\n    </form>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

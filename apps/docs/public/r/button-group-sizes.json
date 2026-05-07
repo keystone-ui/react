@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-group-sizes",
+  "title": "Button Group Sizes",
+  "description": "Button Group example: Sizes.",
+  "registryDependencies": [
+    "button",
+    "button-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/button-group/sizes.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { ButtonGroup } from \"@keystoneui/react/button-group\";\nimport {\n  Copy as CopyIcon,\n  Ellipsis as EllipsisIcon,\n  Share as ShareIcon,\n} from \"lucide-react\";\n\nexport default function ButtonGroupSizes() {\n  return (\n    <div className=\"flex flex-col items-start gap-6\">\n      <ButtonGroup>\n        <Button size=\"sm\" variant=\"outline\">\n          <CopyIcon /> Copy\n        </Button>\n        <Button size=\"sm\" variant=\"outline\">\n          <ShareIcon /> Share\n        </Button>\n        <Button aria-label=\"More\" size=\"icon-sm\" variant=\"outline\">\n          <EllipsisIcon />\n        </Button>\n      </ButtonGroup>\n      <ButtonGroup>\n        <Button variant=\"outline\">\n          <CopyIcon /> Copy\n        </Button>\n        <Button variant=\"outline\">\n          <ShareIcon /> Share\n        </Button>\n        <Button aria-label=\"More\" size=\"icon\" variant=\"outline\">\n          <EllipsisIcon />\n        </Button>\n      </ButtonGroup>\n      <ButtonGroup>\n        <Button size=\"lg\" variant=\"outline\">\n          <CopyIcon /> Copy\n        </Button>\n        <Button size=\"lg\" variant=\"outline\">\n          <ShareIcon /> Share\n        </Button>\n        <Button aria-label=\"More\" size=\"icon-lg\" variant=\"outline\">\n          <EllipsisIcon />\n        </Button>\n      </ButtonGroup>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

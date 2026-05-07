@@ -1,10 +1,11 @@
 ---
 name: keystoneui-react
-description: "Keystone UI React component library (Tailwind CSS v4 + Base UI). Use when working with Keystone UI components, installing Keystone UI, customizing themes, or accessing component documentation. Keywords: Keystone UI, keystoneui, @keystoneui/react, Base UI, Tailwind v4."
-user-invocable: true
+description: Manages Keystone UI components and projects — adding, searching, fixing, debugging, styling, and composing UI built on Tailwind CSS v4 + Base UI. Provides project context, component docs, and usage examples. Applies when working with Keystone UI, @keystoneui/react, components.json with @keystoneui/* registries, or any project with @keystoneui/react in its dependencies. Also triggers for "keystoneui add", "find a Keystone UI example", or "switch to Keystone UI".
+user-invocable: false
+allowed-tools: Bash(node packages/keystoneui-mcp/dist/index.js *), Bash(node scripts/*.mjs *), Bash(npx shadcn@latest add https://keystoneui.io/r/*)
 metadata:
   author: keystoneui
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # Keystone UI
@@ -148,6 +149,20 @@ import { Modal, ModalTrigger, ModalContent, ModalTitle } from "@keystoneui/react
 | Layout | `Card`, `Separator`, `Resizable`, `Accordion`, `Collapsible`, `AspectRatio`, `Carousel` |
 | Bulk-action bar | `SelectionBar` |
 
+## Block Selection
+
+Blocks are full-page or feature-level compositions, not primitives. **If the user asks for a complete page or feature, check blocks before composing from primitives** — installing a block is faster and yields a more cohesive result.
+
+| User asks for… | Block(s) to consider | Category |
+|---|---|---|
+| Sign-in form / login page | `signin-01`, `signin-02`, `signin-03`, `signin-04` | `authentication`, `login` |
+| Signup / registration page | `signup-01`, `signup-02`, `signup-03`, `signup-04`, `signup-05` | `authentication`, `signup` |
+| Profile dropdown / user menu | `profile-dropdown-01` | `navigation` |
+| Tickets / CRM / data management table | `tickets-01` | `data` |
+| Betting panel / wager UI | `betting-panel-01`, `betting-panel-02`, `betting-panel-03`, `betting-panel-04` | `betting` |
+
+Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or via the unified CLI: `keystoneui blocks` to list, `keystoneui blocks --category authentication` to filter, `keystoneui blocks <name>` to view source. The `--category` flag works on `list` and `search` too.
+
 ## Component List
 
 54 components, all importable from `@keystoneui/react/{kebab-case-name}`:
@@ -156,11 +171,29 @@ import { Modal, ModalTrigger, ModalContent, ModalTitle } from "@keystoneui/react
 
 ## Workflow
 
-1. **Discover** — use MCP `search_components` / `list_components`, or `node scripts/list_components.mjs`.
-2. **Inspect** — `view_component` (MCP), `node scripts/get_component_docs.mjs <name>`, or fetch `https://keystoneui.io/docs/components/<name>.mdx` directly. **Always read the docs before implementing complex components.**
-3. **Install** — `npx shadcn@latest add <url>` (vendored source) or `pnpm add @keystoneui/react` (npm dependency). See [cli.md](./cli.md).
-4. **Theme** — define semantic tokens in your CSS. See [customization.md](./customization.md).
-5. **Verify** — run MCP `audit_checklist` after first install to catch missing CSS imports or tokens.
+1. **Discover** — use MCP `search_components` / `list_components`, the `keystoneui search`/`keystoneui list` CLI verbs, or `node scripts/list_components.mjs`.
+2. **Find an example** — for "X with Y" patterns (e.g., "table with pagination", "card with image"), check `apps/docs/demos/<component>/<variant>.tsx` directly. These are real, working compositions authored by the team — examples include `apps/docs/demos/table/with-pagination.tsx`, `apps/docs/demos/card/with-image.tsx`. Via MCP, the equivalent is `get_examples({ name: "<component>" })` which returns all demos for the component as a bundle.
+3. **Find a block** — for full-page or multi-component patterns (e.g., "sign-in page", "tickets table with bulk actions"), check `apps/docs/demos/blocks/<name>.tsx` and the docs at `apps/docs/content/docs/blocks/<name>.mdx`. Existing categories: Sign in (`signin-01..04`), Signup (`signup-01..05`), User (`profile-dropdown-01`), CRM (`tickets-01`), Betting (`betting-panel-01..04`). Via MCP, use `list_components({ type: "block" })` or `search_components({ query: "...", type: "block" })`. **Always try a block before composing a page from primitives.**
+4. **Inspect** — `view_component` (MCP), `node scripts/get_component_docs.mjs <name>`, or fetch `https://keystoneui.io/llms.mdx/docs/components/<name>` directly (the `/llms.mdx/...` route returns MDX with `<ComponentPreview>` tags resolved to inline TSX source — single round-trip). **Always read the docs before implementing complex components.**
+5. **Install** — `npx shadcn@latest add <url>` (vendored source) or `pnpm add @keystoneui/react` (npm dependency). See [cli.md](./cli.md).
+6. **Theme** — define semantic tokens in your CSS. See [customization.md](./customization.md).
+7. **Verify** — run MCP `audit_checklist` after first install to catch missing CSS imports or tokens.
+
+## Local Sources of Truth
+
+Before reaching for the docs site, these directories in the repo are authoritative:
+
+- **`apps/docs/demos/<component>/`** — per-component example variants (e.g., `table/with-pagination.tsx`, `card/with-image.tsx`). Resolved by `<ComponentPreview name="<component>-<variant>" />` tags in MDX.
+- **`apps/docs/demos/blocks/`** — full-page block compositions (`signin-01.tsx`, `tickets-01.tsx`, `profile-dropdown-01.tsx`, …).
+- **`apps/docs/content/docs/components/`** — per-component MDX docs.
+- **`apps/docs/content/docs/blocks/`** — per-block MDX docs with install commands and components-used cross-links.
+- **`packages/ui/src/`** — the component source. Read for prop semantics; consult demos for usage patterns.
+
+For LLM-friendly fetched content, use:
+
+- `https://keystoneui.io/llms.mdx/docs/components/<name>` — per-component MDX with `<ComponentPreview>` resolved inline as `tsx` blocks.
+- `https://keystoneui.io/llms.mdx/docs/blocks/<name>` — same for blocks.
+- `https://keystoneui.io/llms-components.txt` — every component in a single document.
 
 ## Detailed References
 

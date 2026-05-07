@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio-group-horizontal",
+  "title": "Radio Group Horizontal",
+  "description": "Radio Group example: Horizontal.",
+  "registryDependencies": [
+    "label",
+    "radio-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/radio-group/horizontal.tsx",
+      "content": "\"use client\";\n\nimport { Label } from \"@keystoneui/react/label\";\nimport { RadioGroup, RadioGroupItem } from \"@keystoneui/react/radio-group\";\n\nexport default function RadioGroupHorizontal() {\n  return (\n    <RadioGroup className=\"flex gap-6\" defaultValue=\"comfortable\">\n      <div className=\"flex items-center gap-2\">\n        <RadioGroupItem id=\"h-r1\" value=\"default\" />\n        <Label htmlFor=\"h-r1\">Default</Label>\n      </div>\n      <div className=\"flex items-center gap-2\">\n        <RadioGroupItem id=\"h-r2\" value=\"comfortable\" />\n        <Label htmlFor=\"h-r2\">Comfortable</Label>\n      </div>\n      <div className=\"flex items-center gap-2\">\n        <RadioGroupItem id=\"h-r3\" value=\"compact\" />\n        <Label htmlFor=\"h-r3\">Compact</Label>\n      </div>\n    </RadioGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

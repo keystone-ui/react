@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "native-select-groups",
+  "title": "Native Select Groups",
+  "description": "Native Select example: Groups.",
+  "registryDependencies": [
+    "native-select"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/native-select/groups.tsx",
+      "content": "\"use client\";\n\nimport {\n  NativeSelect,\n  NativeSelectOptGroup,\n  NativeSelectOption,\n} from \"@keystoneui/react/native-select\";\n\nexport default function NativeSelectGroups() {\n  return (\n    <NativeSelect>\n      <NativeSelectOption value=\"\">Select department</NativeSelectOption>\n      <NativeSelectOptGroup label=\"Engineering\">\n        <NativeSelectOption value=\"frontend\">Frontend</NativeSelectOption>\n        <NativeSelectOption value=\"backend\">Backend</NativeSelectOption>\n        <NativeSelectOption value=\"devops\">DevOps</NativeSelectOption>\n      </NativeSelectOptGroup>\n      <NativeSelectOptGroup label=\"Sales\">\n        <NativeSelectOption value=\"sales-rep\">Sales Rep</NativeSelectOption>\n        <NativeSelectOption value=\"account-manager\">\n          Account Manager\n        </NativeSelectOption>\n      </NativeSelectOptGroup>\n      <NativeSelectOptGroup label=\"Operations\">\n        <NativeSelectOption value=\"support\">\n          Customer Support\n        </NativeSelectOption>\n        <NativeSelectOption value=\"product-manager\">\n          Product Manager\n        </NativeSelectOption>\n      </NativeSelectOptGroup>\n    </NativeSelect>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "combobox-multi-with-create",
+  "title": "Combobox Multi With Create",
+  "description": "Combobox example: Multi With Create.",
+  "registryDependencies": [
+    "combobox"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/combobox/multi-with-create.tsx",
+      "content": "\"use client\";\n\nimport {\n  Combobox,\n  ComboboxChip,\n  ComboboxChips,\n  ComboboxChipsInput,\n  ComboboxContent,\n  ComboboxItem,\n  ComboboxList,\n  ComboboxSeparator,\n  ComboboxValue,\n  useComboboxAnchor,\n} from \"@keystoneui/react/combobox\";\nimport { Plus as PlusIcon } from \"lucide-react\";\nimport { Fragment, useState } from \"react\";\n\nconst INITIAL_FRAMEWORKS = [\n  \"Next.js\",\n  \"SvelteKit\",\n  \"Nuxt.js\",\n  \"Remix\",\n  \"Astro\",\n];\n\nexport default function ComboboxMultiWithCreate() {\n  const [pool, setPool] = useState<string[]>(INITIAL_FRAMEWORKS);\n  const [selected, setSelected] = useState<string[]>([\"Next.js\"]);\n  const [inputValue, setInputValue] = useState(\"\");\n  const anchor = useComboboxAnchor();\n\n  const trimmed = inputValue.trim();\n  const lower = trimmed.toLowerCase();\n  const exactMatch = pool.some((p) => p.toLowerCase() === lower);\n  const items = trimmed && !exactMatch ? [...pool, trimmed] : pool;\n\n  return (\n    <Combobox\n      inputValue={inputValue}\n      items={items}\n      multiple\n      onInputValueChange={setInputValue}\n      onValueChange={(next) => {\n        const list = next as string[];\n        setSelected(list);\n        // Persist any newly created values back to the pool so they appear as\n        // existing options on subsequent searches.\n        const additions = list.filter((tag) => !pool.includes(tag));\n        if (additions.length > 0) {\n          setPool((prev) => Array.from(new Set([...prev, ...additions])));\n        }\n        setInputValue(\"\");\n      }}\n      value={selected}\n    >\n      <ComboboxChips className=\"w-full max-w-sm\" ref={anchor}>\n        <ComboboxValue>\n          {(values: string[]) => (\n            <>\n              {values.map((value) => (\n                <ComboboxChip key={value}>{value}</ComboboxChip>\n              ))}\n              <ComboboxChipsInput\n                placeholder={\n                  values.length === 0 ? \"Select or type to create…\" : \"\"\n                }\n              />\n            </>\n          )}\n        </ComboboxValue>\n      </ComboboxChips>\n      <ComboboxContent anchor={anchor}>\n        <ComboboxList>\n          {(item: string) => {\n            const isCreate = !pool.includes(item);\n            return (\n              <Fragment key={item}>\n                {isCreate && <ComboboxSeparator className=\"first:hidden\" />}\n                <ComboboxItem value={item}>\n                  {isCreate ? (\n                    <span className=\"inline-flex items-center gap-1.5\">\n                      <PlusIcon className=\"size-3.5\" />\n                      Add &quot;{item}&quot;\n                    </span>\n                  ) : (\n                    item\n                  )}\n                </ComboboxItem>\n              </Fragment>\n            );\n          }}\n        </ComboboxList>\n      </ComboboxContent>\n    </Combobox>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

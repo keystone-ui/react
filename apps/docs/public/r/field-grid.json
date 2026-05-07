@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "field-grid",
+  "title": "Field Grid",
+  "description": "Field example: Grid.",
+  "registryDependencies": [
+    "field",
+    "input"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/field/grid.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldGroup, FieldLabel } from \"@keystoneui/react/field\";\nimport { Input } from \"@keystoneui/react/input\";\n\nexport default function FieldGrid() {\n  return (\n    <FieldGroup className=\"grid max-w-md grid-cols-2\">\n      <Field>\n        <FieldLabel htmlFor=\"first-name\">First Name</FieldLabel>\n        <Input id=\"first-name\" placeholder=\"Jordan\" />\n      </Field>\n      <Field>\n        <FieldLabel htmlFor=\"last-name\">Last Name</FieldLabel>\n        <Input id=\"last-name\" placeholder=\"Lee\" />\n      </Field>\n    </FieldGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

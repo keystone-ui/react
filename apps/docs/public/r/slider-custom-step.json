@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slider-custom-step",
+  "title": "Slider Custom Step",
+  "description": "Slider example: Custom Step.",
+  "registryDependencies": [
+    "slider"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/slider/custom-step.tsx",
+      "content": "\"use client\";\n\nimport {\n  Slider,\n  SliderControl,\n  SliderIndicator,\n  SliderThumb,\n  SliderTrack,\n  SliderValue,\n} from \"@keystoneui/react/slider\";\nimport { useId } from \"react\";\n\nexport default function SliderCustomStep() {\n  const id = useId();\n\n  return (\n    <div className=\"w-full max-w-sm\">\n      <Slider aria-labelledby={id} defaultValue={50} step={10}>\n        <div className=\"flex justify-between\">\n          <span className=\"font-medium text-sm\" id={id}>\n            Quality\n          </span>\n          <SliderValue>\n            {(formattedValues) => `${formattedValues[0]}%`}\n          </SliderValue>\n        </div>\n        <SliderControl>\n          <SliderTrack>\n            <SliderIndicator />\n            <SliderThumb />\n          </SliderTrack>\n        </SliderControl>\n      </Slider>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

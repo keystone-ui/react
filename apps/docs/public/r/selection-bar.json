@@ -3,8 +3,13 @@
   "name": "selection-bar",
   "title": "Selection Bar",
   "description": "Floating bulk-action toolbar that appears when items are selected in a list or table.",
-  "dependencies": ["class-variance-authority", "lucide-react"],
-  "registryDependencies": ["button"],
+  "dependencies": [
+    "class-variance-authority",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
   "files": [
     {
       "path": "packages/ui/src/selection-bar.tsx",

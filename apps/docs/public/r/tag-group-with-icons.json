@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag-group-with-icons",
+  "title": "Tag Group With Icons",
+  "description": "Tag Group example: With Icons.",
+  "registryDependencies": [
+    "tag-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tag-group/with-icons.tsx",
+      "content": "\"use client\";\n\nimport { TagGroup, TagGroupItem } from \"@keystoneui/react/tag-group\";\nimport {\n  Gamepad as GamepadIcon,\n  Globe as GlobeIcon,\n  Newspaper as NewspaperIcon,\n  ShoppingCart as ShoppingCartIcon,\n} from \"lucide-react\";\n\nexport default function TagGroupWithIcons() {\n  return (\n    <TagGroup defaultValue={[\"shopping\"]}>\n      <TagGroupItem value=\"news\">\n        <NewspaperIcon />\n        News\n      </TagGroupItem>\n      <TagGroupItem value=\"travel\">\n        <GlobeIcon />\n        Travel\n      </TagGroupItem>\n      <TagGroupItem value=\"gaming\">\n        <GamepadIcon />\n        Gaming\n      </TagGroupItem>\n      <TagGroupItem value=\"shopping\">\n        <ShoppingCartIcon />\n        Shopping\n      </TagGroupItem>\n    </TagGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "item-with-icon",
+  "title": "Item With Icon",
+  "description": "Item example: With Icon.",
+  "registryDependencies": [
+    "item"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/item/with-icon.tsx",
+      "content": "\"use client\";\n\nimport {\n  Item,\n  ItemContent,\n  ItemDescription,\n  ItemMedia,\n  ItemTitle,\n} from \"@keystoneui/react/item\";\nimport { ShieldAlert as ShieldAlertIcon } from \"lucide-react\";\n\nexport default function ItemWithIcon() {\n  return (\n    <Item className=\"max-w-md\" variant=\"outline\">\n      <ItemMedia variant=\"icon\">\n        <ShieldAlertIcon />\n      </ItemMedia>\n      <ItemContent>\n        <ItemTitle>Security Alert</ItemTitle>\n        <ItemDescription>\n          New login detected from unknown device.\n        </ItemDescription>\n      </ItemContent>\n    </Item>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

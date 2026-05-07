@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "carousel-cards",
+  "title": "Carousel Cards",
+  "description": "Carousel example: Cards.",
+  "registryDependencies": [
+    "carousel"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/carousel/cards.tsx",
+      "content": "\"use client\";\n\nimport {\n  Carousel,\n  CarouselContent,\n  CarouselDots,\n  CarouselItem,\n  CarouselNext,\n  CarouselPrevious,\n} from \"@keystoneui/react/carousel\";\nimport {\n  Code as CodeIcon,\n  Image as ImageIcon,\n  PanelsTopLeft as LayoutIcon,\n  Type as TypeIcon,\n} from \"lucide-react\";\n\nconst cards = [\n  {\n    title: \"Design\",\n    description: \"Create beautiful interfaces with ease.\",\n    icon: LayoutIcon,\n  },\n  {\n    title: \"Typography\",\n    description: \"Choose from a wide range of fonts.\",\n    icon: TypeIcon,\n  },\n  {\n    title: \"Media\",\n    description: \"Embed images and videos seamlessly.\",\n    icon: ImageIcon,\n  },\n  {\n    title: \"Code\",\n    description: \"Add syntax-highlighted code blocks.\",\n    icon: CodeIcon,\n  },\n];\n\nexport default function CarouselCards() {\n  return (\n    <Carousel className=\"mx-12 max-w-sm\">\n      <CarouselContent>\n        {cards.map((card) => (\n          <CarouselItem key={card.title}>\n            <div className=\"flex flex-col gap-2 rounded-lg border p-6\">\n              <card.icon className=\"size-8 text-muted-foreground\" />\n              <h3 className=\"font-semibold text-lg\">{card.title}</h3>\n              <p className=\"text-muted-foreground text-sm\">\n                {card.description}\n              </p>\n            </div>\n          </CarouselItem>\n        ))}\n      </CarouselContent>\n      <CarouselPrevious />\n      <CarouselNext />\n      <CarouselDots className=\"mt-4\" />\n    </Carousel>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

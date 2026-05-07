@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-with-label",
+  "title": "Input With Label",
+  "description": "Input example: With Label.",
+  "registryDependencies": [
+    "field",
+    "input"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input/with-label.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldDescription, FieldLabel } from \"@keystoneui/react/field\";\nimport { Input } from \"@keystoneui/react/input\";\n\nexport default function InputWithLabel() {\n  return (\n    <Field className=\"max-w-sm\">\n      <FieldLabel htmlFor=\"username\">Username</FieldLabel>\n      <Input id=\"username\" placeholder=\"Enter your username\" />\n      <FieldDescription>\n        Choose a unique username for your account.\n      </FieldDescription>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

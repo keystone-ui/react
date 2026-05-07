@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tooltip-disabled-button",
+  "title": "Tooltip Disabled Button",
+  "description": "Tooltip example: Disabled Button.",
+  "registryDependencies": [
+    "button",
+    "tooltip"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tooltip/disabled-button.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipProvider,\n  TooltipTrigger,\n} from \"@keystoneui/react/tooltip\";\n\nexport default function TooltipDisabledButton() {\n  return (\n    <TooltipProvider>\n      <Tooltip>\n        {/*\n          TooltipTrigger renders as a <span> so the disabled <button> nested\n          inside isn't wrapped in another <button>. The span also still\n          receives pointer events while the inner button is disabled, so the\n          tooltip can open.\n        */}\n        <TooltipTrigger render={<span />}>\n          <Button disabled variant=\"outline\">\n            Disabled Button\n          </Button>\n        </TooltipTrigger>\n        <TooltipContent>\n          <p>You don&apos;t have permission to perform this action.</p>\n        </TooltipContent>\n      </Tooltip>\n    </TooltipProvider>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

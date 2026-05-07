@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox-controlled",
+  "title": "Checkbox Controlled",
+  "description": "Checkbox example: Controlled.",
+  "registryDependencies": [
+    "checkbox",
+    "field"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/checkbox/controlled.tsx",
+      "content": "\"use client\";\n\nimport { Checkbox } from \"@keystoneui/react/checkbox\";\nimport { Field, FieldLabel } from \"@keystoneui/react/field\";\nimport { useState } from \"react\";\n\nexport default function CheckboxControlled() {\n  const [checked, setChecked] = useState(false);\n\n  return (\n    <div className=\"space-y-2\">\n      <Field orientation=\"horizontal\">\n        <Checkbox\n          checked={checked}\n          id=\"controlled-checkbox\"\n          name=\"controlled-checkbox\"\n          onCheckedChange={setChecked}\n        />\n        <FieldLabel htmlFor=\"controlled-checkbox\">\n          {checked ? \"Checked\" : \"Unchecked\"}\n        </FieldLabel>\n      </Field>\n      <p className=\"text-muted-foreground text-sm\">\n        Current state: <code>{String(checked)}</code>\n      </p>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

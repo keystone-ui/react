@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "collapsible-default",
+  "title": "Collapsible Default",
+  "description": "Collapsible example: Default.",
+  "registryDependencies": [
+    "collapsible"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/collapsible/default.tsx",
+      "content": "\"use client\";\n\nimport {\n  Collapsible,\n  CollapsibleContent,\n  CollapsibleTrigger,\n} from \"@keystoneui/react/collapsible\";\nimport { ChevronsUpDown as ChevronsUpDownIcon } from \"lucide-react\";\n\nexport default function CollapsibleDefault() {\n  return (\n    <Collapsible className=\"w-full max-w-sm\">\n      <CollapsibleTrigger className=\"flex w-full items-center justify-between rounded-md border px-4 py-2 font-medium text-sm\">\n        3 items\n        <ChevronsUpDownIcon className=\"size-4\" />\n      </CollapsibleTrigger>\n      <CollapsibleContent>\n        <div className=\"mt-2 space-y-2\">\n          <div className=\"rounded-md border px-4 py-2 text-sm\">Item 1</div>\n          <div className=\"rounded-md border px-4 py-2 text-sm\">Item 2</div>\n          <div className=\"rounded-md border px-4 py-2 text-sm\">Item 3</div>\n        </div>\n      </CollapsibleContent>\n    </Collapsible>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

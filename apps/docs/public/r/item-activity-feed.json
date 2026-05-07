@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "item-activity-feed",
+  "title": "Item Activity Feed",
+  "description": "Item example: Activity Feed.",
+  "registryDependencies": [
+    "avatar",
+    "item"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/item/activity-feed.tsx",
+      "content": "\"use client\";\n\nimport { Avatar, AvatarFallback, AvatarImage } from \"@keystoneui/react/avatar\";\nimport {\n  Item,\n  ItemContent,\n  ItemDescription,\n  ItemFooter,\n  ItemGroup,\n  ItemMedia,\n  ItemSeparator,\n  ItemTitle,\n} from \"@keystoneui/react/item\";\nimport { Clock as ClockIcon, FileText as FileTextIcon } from \"lucide-react\";\n\nconst activities = [\n  {\n    name: \"Alice\",\n    avatar: \"https://i.pravatar.cc/150?u=alice\",\n    message: \"Refactored the button component for better accessibility.\",\n    time: \"2 hours ago\",\n    files: \"4 files changed\",\n  },\n  {\n    name: \"Bob\",\n    avatar: \"https://i.pravatar.cc/150?u=bob\",\n    message: \"Updated documentation for the new API endpoints.\",\n    time: \"5 hours ago\",\n    files: \"2 files changed\",\n  },\n  {\n    name: \"Carol\",\n    avatar: \"https://i.pravatar.cc/150?u=carol\",\n    message: \"Deployed the latest build to production.\",\n    time: \"1 day ago\",\n    files: \"8 files changed\",\n  },\n];\n\nexport default function ItemActivityFeed() {\n  return (\n    <ItemGroup className=\"max-w-lg\">\n      {activities.map((activity, index) => (\n        <div key={activity.name}>\n          {index > 0 && <ItemSeparator />}\n          <Item>\n            <ItemMedia>\n              <Avatar>\n                <AvatarImage className=\"grayscale\" src={activity.avatar} />\n                <AvatarFallback>{activity.name[0]}</AvatarFallback>\n              </Avatar>\n            </ItemMedia>\n            <ItemContent>\n              <ItemTitle>{activity.name}</ItemTitle>\n              <ItemDescription>{activity.message}</ItemDescription>\n              <ItemFooter>\n                <ClockIcon />\n                <span>{activity.time}</span>\n                <span className=\"text-border\">|</span>\n                <FileTextIcon />\n                <span>{activity.files}</span>\n              </ItemFooter>\n            </ItemContent>\n          </Item>\n        </div>\n      ))}\n    </ItemGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

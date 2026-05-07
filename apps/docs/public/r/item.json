@@ -3,7 +3,10 @@
   "name": "item",
   "title": "Item",
   "description": "Generic list item primitive for building consistent list-based interfaces.",
-  "dependencies": ["@base-ui/react", "class-variance-authority"],
+  "dependencies": [
+    "@base-ui/react",
+    "class-variance-authority"
+  ],
   "files": [
     {
       "path": "packages/ui/src/item.tsx",

@@ -3,7 +3,10 @@
   "name": "select",
   "title": "Select",
   "description": "A dropdown control for selecting one or more options from a list.",
-  "dependencies": ["@base-ui/react", "lucide-react"],
+  "dependencies": [
+    "@base-ui/react",
+    "lucide-react"
+  ],
   "files": [
     {
       "path": "packages/ui/src/select.tsx",

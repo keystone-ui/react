@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "typography-small",
+  "title": "Typography Small",
+  "description": "Typography example: Small.",
+  "files": [
+    {
+      "path": "apps/docs/demos/typography/small.tsx",
+      "content": "\"use client\";\n\nexport default function TypographySmall() {\n  return (\n    <small className=\"font-medium text-sm leading-none\">Email address</small>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

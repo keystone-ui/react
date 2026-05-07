@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge-as-link",
+  "title": "Badge As Link",
+  "description": "Badge example: As Link.",
+  "registryDependencies": [
+    "badge"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/badge/as-link.tsx",
+      "content": "\"use client\";\n\nimport { Badge } from \"@keystoneui/react/badge\";\nimport { ArrowUpRight as ArrowUpRightIcon } from \"lucide-react\";\n\nexport default function BadgeAsLink() {\n  return (\n    <div className=\"flex flex-wrap gap-2\">\n      <Badge\n        render={\n          // biome-ignore lint/a11y/useAnchorContent: children injected via Base UI render prop\n          <a aria-label=\"Open link\" href=\"#link\" />\n        }\n      >\n        Open Link\n        <ArrowUpRightIcon data-icon=\"inline-end\" />\n      </Badge>\n      <Badge\n        render={\n          // biome-ignore lint/a11y/useAnchorContent: children injected via Base UI render prop\n          <a aria-label=\"Secondary link\" href=\"#link\" />\n        }\n        variant=\"secondary\"\n      >\n        Secondary Link\n        <ArrowUpRightIcon data-icon=\"inline-end\" />\n      </Badge>\n      <Badge\n        render={\n          // biome-ignore lint/a11y/useAnchorContent: children injected via Base UI render prop\n          <a aria-label=\"Outline link\" href=\"#link\" />\n        }\n        variant=\"outline\"\n      >\n        Outline Link\n        <ArrowUpRightIcon data-icon=\"inline-end\" />\n      </Badge>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

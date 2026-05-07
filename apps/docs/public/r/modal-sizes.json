@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "modal-sizes",
+  "title": "Modal Sizes",
+  "description": "Modal example: Sizes.",
+  "registryDependencies": [
+    "button",
+    "modal"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/modal/sizes.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Modal,\n  ModalClose,\n  ModalContent,\n  ModalDescription,\n  ModalFooter,\n  ModalHeader,\n  ModalTitle,\n  ModalTrigger,\n} from \"@keystoneui/react/modal\";\n\nconst MODAL_SIZES = [\"sm\", \"default\", \"lg\", \"xl\", \"full\"] as const;\n\nexport default function ModalSizes() {\n  return (\n    <div className=\"flex flex-wrap gap-2\">\n      {MODAL_SIZES.map((size) => (\n        <Modal key={size}>\n          <ModalTrigger render={<Button variant=\"outline\" />}>\n            {size}\n          </ModalTrigger>\n          <ModalContent size={size}>\n            <ModalHeader>\n              <ModalTitle>Size: {size}</ModalTitle>\n              <ModalDescription>\n                This modal uses the <code>{size}</code> size variant.\n              </ModalDescription>\n            </ModalHeader>\n            <div className=\"text-muted-foreground text-sm\">\n              The content area adjusts to the max-width defined by the size\n              variant.\n            </div>\n            <ModalFooter>\n              <ModalClose render={<Button variant=\"outline\" />}>\n                Close\n              </ModalClose>\n            </ModalFooter>\n          </ModalContent>\n        </Modal>\n      ))}\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

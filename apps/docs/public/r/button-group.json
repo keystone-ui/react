@@ -3,8 +3,13 @@
   "name": "button-group",
   "title": "Button Group",
   "description": "Groups related buttons together with consistent spacing and connected styling.",
-  "dependencies": ["class-variance-authority"],
-  "registryDependencies": ["button", "separator"],
+  "dependencies": [
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "button",
+    "separator"
+  ],
   "files": [
     {
       "path": "packages/ui/src/button-group.tsx",

@@ -5,11 +5,44 @@ description: Examples of utility classes for styling headings, paragraphs, lists
 
 Keystone UI does not ship any typography styles by default. This page shows how you can use Tailwind CSS utility classes to style your text.
 
-## Demo
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/typography.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="typography-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Examples
+
+### Demo
 
 <ComponentPreview name="typography-default" />
 
-## H1
+
+### H1
 
 ```tsx
 <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-balance">
@@ -19,7 +52,8 @@ Keystone UI does not ship any typography styles by default. This page shows how 
 
 <ComponentPreview name="typography-h1" />
 
-## H2
+
+### H2
 
 ```tsx
 <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
@@ -29,7 +63,8 @@ Keystone UI does not ship any typography styles by default. This page shows how 
 
 <ComponentPreview name="typography-h2" />
 
-## H3
+
+### H3
 
 ```tsx
 <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
@@ -39,7 +74,8 @@ Keystone UI does not ship any typography styles by default. This page shows how 
 
 <ComponentPreview name="typography-h3" />
 
-## H4
+
+### H4
 
 ```tsx
 <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
@@ -49,7 +85,8 @@ Keystone UI does not ship any typography styles by default. This page shows how 
 
 <ComponentPreview name="typography-h4" />
 
-## Paragraph
+
+### Paragraph
 
 ```tsx
 <p className="leading-7 not-first:mt-6">
@@ -59,7 +96,8 @@ Keystone UI does not ship any typography styles by default. This page shows how 
 
 <ComponentPreview name="typography-paragraph" />
 
-## Blockquote
+
+### Blockquote
 
 ```tsx
 <blockquote className="mt-6 border-l-2 pl-6 italic">
@@ -69,7 +107,8 @@ Keystone UI does not ship any typography styles by default. This page shows how 
 
 <ComponentPreview name="typography-blockquote" />
 
-## List
+
+### List
 
 ```tsx
 <ul className="my-6 ml-6 list-disc *:mt-2">
@@ -79,7 +118,8 @@ Keystone UI does not ship any typography styles by default. This page shows how 
 
 <ComponentPreview name="typography-list" />
 
-## Inline Code
+
+### Inline Code
 
 ```tsx
 <code className="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
@@ -89,7 +129,8 @@ Keystone UI does not ship any typography styles by default. This page shows how 
 
 <ComponentPreview name="typography-inline-code" />
 
-## Lead
+
+### Lead
 
 ```tsx
 <p className="text-muted-foreground text-xl">
@@ -99,7 +140,8 @@ Keystone UI does not ship any typography styles by default. This page shows how 
 
 <ComponentPreview name="typography-lead" />
 
-## Large
+
+### Large
 
 ```tsx
 <div className="text-lg font-semibold">...</div>
@@ -107,7 +149,8 @@ Keystone UI does not ship any typography styles by default. This page shows how 
 
 <ComponentPreview name="typography-large" />
 
-## Small
+
+### Small
 
 ```tsx
 <small className="text-sm leading-none font-medium">...</small>
@@ -115,7 +158,8 @@ Keystone UI does not ship any typography styles by default. This page shows how 
 
 <ComponentPreview name="typography-small" />
 
-## Muted
+
+### Muted
 
 ```tsx
 <p className="text-muted-foreground text-sm">...</p>

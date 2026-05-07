@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-disabled",
+  "title": "Input Disabled",
+  "description": "Input example: Disabled.",
+  "registryDependencies": [
+    "field",
+    "input"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input/disabled.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldDescription, FieldLabel } from \"@keystoneui/react/field\";\nimport { Input } from \"@keystoneui/react/input\";\n\nexport default function InputDisabled() {\n  return (\n    <Field data-disabled>\n      <FieldLabel htmlFor=\"input-disabled\">Email</FieldLabel>\n      <Input disabled id=\"input-disabled\" placeholder=\"Email\" type=\"email\" />\n      <FieldDescription>This field is currently disabled.</FieldDescription>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

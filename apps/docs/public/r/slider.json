@@ -3,7 +3,9 @@
   "name": "slider",
   "title": "Slider",
   "description": "Range slider input for selecting a numeric value within a defined range.",
-  "dependencies": ["@base-ui/react"],
+  "dependencies": [
+    "@base-ui/react"
+  ],
   "files": [
     {
       "path": "packages/ui/src/slider.tsx",

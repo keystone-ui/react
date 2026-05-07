@@ -22,6 +22,36 @@ import {
 
 <ComponentPreview name="table-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/table.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="table-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -38,65 +68,89 @@ Table
         └── TableCell
 ```
 
-## With Badges
+## Examples
+
+### With Badges
 
 Use badges inside table cells for status indicators:
 
 <ComponentPreview name="table-with-badges" />
 
-## Actions
+
+### Actions
 
 Add action buttons to table rows:
 
 <ComponentPreview name="table-actions" />
 
-## Compact
+
+### Compact
 
 A denser table layout for data-heavy views:
 
 <ComponentPreview name="table-compact" />
 
-## Striped
+
+### Striped
 
 Alternating row backgrounds for improved readability:
 
 <ComponentPreview name="table-striped" />
 
-## Card
+
+### Card
 
 Wrap the table in a card container for a bordered appearance:
 
 <ComponentPreview name="table-card" />
 
-## Footer
+
+### Footer
 
 Table with a footer row:
 
 <ComponentPreview name="table-footer" />
 
-## Empty State
+
+### Empty State
 
 Table with empty state:
 
 <ComponentPreview name="table-empty-state" />
 
-## Selected Rows
+
+### Selected Rows
 
 Table with row selection:
 
 <ComponentPreview name="table-selected-rows" />
 
-## Hoverable
+
+### Hoverable
 
 Table with hoverable rows:
 
 <ComponentPreview name="table-hoverable" />
 
-## With Pagination
+
+### With Pagination
 
 Table with pagination:
 
 <ComponentPreview name="table-with-pagination" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Tickets 01](/docs/blocks/tickets-01) — A sortable, filterable tickets table with inline cell editing, a new-ticket modal, and a floating bulk-edit action bar.
+
+{/* backlinks:end */}
 
 ## API Reference
 

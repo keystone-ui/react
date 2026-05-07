@@ -3,8 +3,12 @@
   "name": "pagination",
   "title": "Pagination",
   "description": "Page navigation controls for browsing through paginated content.",
-  "dependencies": ["lucide-react"],
-  "registryDependencies": ["button"],
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button"
+  ],
   "files": [
     {
       "path": "packages/ui/src/pagination.tsx",

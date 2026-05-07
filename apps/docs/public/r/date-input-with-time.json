@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-input-with-time",
+  "title": "Date Input With Time",
+  "description": "Date Input example: With Time.",
+  "registryDependencies": [
+    "button",
+    "calendar",
+    "field",
+    "input",
+    "popover"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/date-input/with-time.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { Calendar } from \"@keystoneui/react/calendar\";\nimport { Field, FieldGroup, FieldLabel } from \"@keystoneui/react/field\";\nimport { Input } from \"@keystoneui/react/input\";\nimport {\n  Popover,\n  PopoverContent,\n  PopoverTrigger,\n} from \"@keystoneui/react/popover\";\nimport { format } from \"date-fns\";\nimport { ChevronDown as ChevronDownIcon } from \"lucide-react\";\nimport { useState } from \"react\";\n\nexport default function DatePickerWithTime() {\n  const [open, setOpen] = useState(false);\n  const [date, setDate] = useState<Date | undefined>(undefined);\n\n  return (\n    <FieldGroup className=\"max-w-xs flex-row\">\n      <Field>\n        <FieldLabel htmlFor=\"date-time-picker\">Date</FieldLabel>\n        <Popover onOpenChange={setOpen} open={open}>\n          <PopoverTrigger\n            render={\n              <Button\n                className=\"w-36 font-normal [&>span]:w-full [&>span]:justify-between\"\n                id=\"date-time-picker\"\n                variant=\"outline\"\n              >\n                {date ? format(date, \"PPP\") : \"Select date\"}\n                <ChevronDownIcon className=\"text-muted-foreground\" />\n              </Button>\n            }\n          />\n          <PopoverContent align=\"start\" className=\"w-auto overflow-hidden p-0\">\n            <Calendar\n              captionLayout=\"dropdown\"\n              defaultMonth={date}\n              mode=\"single\"\n              onSelect={(d) => {\n                setDate(d);\n                setOpen(false);\n              }}\n              selected={date}\n            />\n          </PopoverContent>\n        </Popover>\n      </Field>\n      <Field className=\"w-32\">\n        <FieldLabel htmlFor=\"time-picker\">Time</FieldLabel>\n        <Input\n          className=\"appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none\"\n          defaultValue=\"10:30:00\"\n          id=\"time-picker\"\n          step=\"1\"\n          type=\"time\"\n        />\n      </Field>\n    </FieldGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-with-icon",
+  "title": "Input With Icon",
+  "description": "Input example: With Icon.",
+  "registryDependencies": [
+    "input-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input/with-icon.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupInput,\n} from \"@keystoneui/react/input-group\";\nimport { Search as SearchIcon } from \"lucide-react\";\n\nexport default function InputWithIcon() {\n  return (\n    <InputGroup className=\"max-w-sm\">\n      <InputGroupAddon>\n        <SearchIcon className=\"size-4\" />\n      </InputGroupAddon>\n      <InputGroupInput placeholder=\"Search...\" />\n    </InputGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

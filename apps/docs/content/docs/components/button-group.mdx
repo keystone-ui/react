@@ -13,53 +13,35 @@ import { ButtonGroup } from "@keystoneui/react/button-group";
 
 <ComponentPreview name="button-group-default" />
 
-## Vertical
+## Installation
 
-Stack buttons vertically:
+<CodeBlockTabs items={["CLI", "Manual"]}>
 
-<ComponentPreview name="button-group-vertical" />
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/button-group.json
+```
 
-## Sizes
+<div tab="Manual">
 
-Different size presets for the group:
+<Steps>
 
-<ComponentPreview name="button-group-sizes" />
+<Step>Install dependencies.</Step>
 
-## Toolbar
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
 
-A toolbar pattern with grouped action buttons:
+<Step>Copy the source.</Step>
 
-<ComponentPreview name="button-group-toolbar" />
+<ComponentSource name="button-group-default" />
 
-## Split Button
+<Step>Update import paths to match your project.</Step>
 
-A primary action with a dropdown for secondary options:
+</Steps>
 
-<ComponentPreview name="button-group-split-button" />
+</div>
 
-## With Input
-
-Combine buttons with an input field:
-
-<ComponentPreview name="button-group-with-input" />
-
-## With Select
-
-Combine a Select with an Input and action button for inline composite controls:
-
-<ComponentPreview name="button-group-with-select" />
-
-## With Dropdown Menu
-
-Pair buttons with a DropdownMenu trigger for split-action patterns like GitHub-style repo actions:
-
-<ComponentPreview name="button-group-with-dropdown-menu" />
-
-## Email Toolbar
-
-An email action toolbar using nested ButtonGroups with dropdown menus and sub-menus:
-
-<ComponentPreview name="button-group-email-toolbar" />
+</CodeBlockTabs>
 
 ## Accessibility
 
@@ -77,17 +59,80 @@ The ButtonGroup component has the `role` attribute set to `group`. Use `aria-lab
 Use the **ButtonGroup** component when you want to group buttons that perform an action.
 Use the **ToggleGroup** component when you want to group buttons that toggle a state.
 
-## Nested
+## Examples
+
+### Vertical
+
+Stack buttons vertically:
+
+<ComponentPreview name="button-group-vertical" />
+
+
+### Sizes
+
+Different size presets for the group:
+
+<ComponentPreview name="button-group-sizes" />
+
+
+### Toolbar
+
+A toolbar pattern with grouped action buttons:
+
+<ComponentPreview name="button-group-toolbar" />
+
+
+### Split Button
+
+A primary action with a dropdown for secondary options:
+
+<ComponentPreview name="button-group-split-button" />
+
+
+### With Input
+
+Combine buttons with an input field:
+
+<ComponentPreview name="button-group-with-input" />
+
+
+### With Select
+
+Combine a Select with an Input and action button for inline composite controls:
+
+<ComponentPreview name="button-group-with-select" />
+
+
+### With Dropdown Menu
+
+Pair buttons with a DropdownMenu trigger for split-action patterns like GitHub-style repo actions:
+
+<ComponentPreview name="button-group-with-dropdown-menu" />
+
+
+### Email Toolbar
+
+An email action toolbar using nested ButtonGroups with dropdown menus and sub-menus:
+
+<ComponentPreview name="button-group-email-toolbar" />
+
+
+### Nested
 
 Nested button groups:
 
 <ComponentPreview name="button-group-nested" />
 
-## With Popover
+
+### With Popover
 
 Button group with a popover trigger:
 
 <ComponentPreview name="button-group-with-popover" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

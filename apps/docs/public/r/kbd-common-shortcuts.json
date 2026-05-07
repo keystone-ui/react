@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd-common-shortcuts",
+  "title": "Kbd Common Shortcuts",
+  "description": "Kbd example: Common Shortcuts.",
+  "registryDependencies": [
+    "kbd"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/kbd/common-shortcuts.tsx",
+      "content": "\"use client\";\n\nimport { Kbd, KbdGroup } from \"@keystoneui/react/kbd\";\n\nexport default function KbdCommonShortcuts() {\n  return (\n    <div className=\"flex flex-col gap-4\">\n      <div className=\"flex items-center gap-2\">\n        <span className=\"w-24 text-muted-foreground text-sm\">Save</span>\n        <KbdGroup>\n          <Kbd>⌘</Kbd>\n          <Kbd>S</Kbd>\n        </KbdGroup>\n      </div>\n      <div className=\"flex items-center gap-2\">\n        <span className=\"w-24 text-muted-foreground text-sm\">Search</span>\n        <KbdGroup>\n          <Kbd>⌘</Kbd>\n          <Kbd>K</Kbd>\n        </KbdGroup>\n      </div>\n      <div className=\"flex items-center gap-2\">\n        <span className=\"w-24 text-muted-foreground text-sm\">Terminal</span>\n        <KbdGroup>\n          <Kbd>⌘</Kbd>\n          <Kbd>⇧</Kbd>\n          <Kbd>`</Kbd>\n        </KbdGroup>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

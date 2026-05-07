@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tooltip-group-delay",
+  "title": "Tooltip Group Delay",
+  "description": "Tooltip example: Group Delay.",
+  "registryDependencies": [
+    "button",
+    "tooltip"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tooltip/group-delay.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipProvider,\n  TooltipTrigger,\n} from \"@keystoneui/react/tooltip\";\nimport {\n  House as HomeIcon,\n  Inbox as InboxIcon,\n  Search as SearchIcon,\n  Settings as SettingsIcon,\n} from \"lucide-react\";\n\nconst sidebarItems = [\n  { icon: HomeIcon, label: \"Home\" },\n  { icon: SearchIcon, label: \"Search\" },\n  { icon: InboxIcon, label: \"Inbox\" },\n  { icon: SettingsIcon, label: \"Settings\" },\n];\n\nexport default function TooltipGroupDelay() {\n  return (\n    <TooltipProvider closeDelay={150} delay={700}>\n      <nav className=\"flex flex-col gap-1 rounded-lg border p-1.5\">\n        {sidebarItems.map(({ icon: Icon, label }) => (\n          <Tooltip key={label}>\n            <TooltipTrigger\n              render={\n                <Button size=\"icon-sm\" variant=\"ghost\">\n                  <Icon />\n                </Button>\n              }\n            />\n            <TooltipContent side=\"right\">{label}</TooltipContent>\n          </Tooltip>\n        ))}\n      </nav>\n    </TooltipProvider>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

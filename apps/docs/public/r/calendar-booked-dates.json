@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "calendar-booked-dates",
+  "title": "Calendar Booked Dates",
+  "description": "Calendar example: Booked Dates.",
+  "registryDependencies": [
+    "calendar"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/calendar/booked-dates.tsx",
+      "content": "\"use client\";\n\nimport { Calendar } from \"@keystoneui/react/calendar\";\nimport { useState } from \"react\";\n\nexport default function CalendarBookedDates() {\n  const [date, setDate] = useState<Date | undefined>(\n    new Date(new Date().getFullYear(), 0, 6)\n  );\n\n  const bookedDates = Array.from(\n    { length: 15 },\n    (_, i) => new Date(new Date().getFullYear(), 0, 12 + i)\n  );\n\n  return (\n    <Calendar\n      className=\"rounded-lg shadow-lg ring-1 ring-popup-ring\"\n      defaultMonth={date}\n      disabled={bookedDates}\n      mode=\"single\"\n      modifiers={{\n        booked: bookedDates,\n      }}\n      modifiersClassNames={{\n        booked: \"[&>button]:line-through opacity-100\",\n      }}\n      onSelect={setDate}\n      selected={date}\n    />\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

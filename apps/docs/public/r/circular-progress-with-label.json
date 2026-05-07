@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "circular-progress-with-label",
+  "title": "Circular Progress With Label",
+  "description": "Circular Progress example: With Label.",
+  "registryDependencies": [
+    "circular-progress"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/circular-progress/with-label.tsx",
+      "content": "\"use client\";\n\nimport {\n  CircularProgress,\n  CircularProgressIndicator,\n  CircularProgressLabel,\n  CircularProgressTrack,\n  CircularProgressValue,\n} from \"@keystoneui/react/circular-progress\";\n\nexport default function CircularProgressWithLabel() {\n  return (\n    <div className=\"flex items-center gap-6\">\n      <CircularProgress size=\"lg\" value={72}>\n        <CircularProgressTrack />\n        <CircularProgressIndicator />\n        <div className=\"flex flex-col items-center\">\n          <CircularProgressValue />\n          <CircularProgressLabel>Done</CircularProgressLabel>\n        </div>\n      </CircularProgress>\n      <CircularProgress color=\"success\" size=\"lg\" value={100}>\n        <CircularProgressTrack />\n        <CircularProgressIndicator />\n        <div className=\"flex flex-col items-center\">\n          <CircularProgressValue />\n          <CircularProgressLabel>Complete</CircularProgressLabel>\n        </div>\n      </CircularProgress>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

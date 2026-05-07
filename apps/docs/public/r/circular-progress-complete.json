@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "circular-progress-complete",
+  "title": "Circular Progress Complete",
+  "description": "Circular Progress example: Complete.",
+  "registryDependencies": [
+    "circular-progress"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/circular-progress/complete.tsx",
+      "content": "\"use client\";\n\nimport {\n  CircularProgress,\n  CircularProgressIndicator,\n  CircularProgressLabel,\n  CircularProgressTrack,\n  CircularProgressValue,\n} from \"@keystoneui/react/circular-progress\";\n\nexport default function CircularProgressComplete() {\n  return (\n    <CircularProgress color=\"success\" size=\"lg\" value={100}>\n      <CircularProgressTrack />\n      <CircularProgressIndicator />\n      <div className=\"flex flex-col items-center\">\n        <CircularProgressValue />\n        <CircularProgressLabel>Done</CircularProgressLabel>\n      </div>\n    </CircularProgress>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

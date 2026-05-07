@@ -13,6 +13,36 @@ import { Form, FieldGroup, Label, Description, ErrorMessage } from "@keystoneui/
 
 <ComponentPreview name="form-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/form.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="form-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -21,12 +51,6 @@ Form
 ├── Description
 └── ErrorMessage
 ```
-
-## With Validation
-
-Form with validation feedback:
-
-<ComponentPreview name="form-with-validation" />
 
 ## Submission
 
@@ -60,24 +84,65 @@ When you need the same vertical layout but not the `<form>` semantics — for ex
 </form>
 ```
 
+## Examples
+
+### With Validation
+
+Form with validation feedback:
+
+<ComponentPreview name="form-with-validation" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
 ## API Reference
 
 ### Form
 
-Renders a `<form>` element with consistent vertical spacing between children. Accepts all `FormHTMLAttributes<HTMLFormElement>`, including `onSubmit`.
+Renders a `<form>` element with consistent vertical spacing between children. Accepts all `FormHTMLAttributes<HTMLFormElement>`.
+
+| Prop        | Type                                   | Default | Description                                              |
+| ----------- | -------------------------------------- | ------- | -------------------------------------------------------- |
+| `onSubmit`  | `FormEventHandler<HTMLFormElement>`    | -       | Submission handler. Call `event.preventDefault()` first. |
+| `className` | `string`                               | -       | Additional CSS classes.                                  |
+| `children`  | `ReactNode`                            | -       | Form fields and controls.                                |
 
 ### FieldGroup
 
 Layout-only `<div>` wrapper that provides the same spacing as `Form` without form semantics. Use inside an existing `<form>`, or for groups of fields that don't submit.
 
+| Prop        | Type                            | Default | Description             |
+| ----------- | ------------------------------- | ------- | ----------------------- |
+| `className` | `string`                        | -       | Additional CSS classes. |
+| `children`  | `ReactNode`                     | -       | Grouped fields.         |
+
+Also accepts all `HTMLAttributes<HTMLDivElement>`.
+
 ### Label
 
-Renders an accessible `<label>` element. See [Label](/docs/components/label) for full API.
+Renders an accessible `<label>` element. See [Label](/docs/components/label) for the full API.
+
+| Prop        | Type        | Default | Description                                                            |
+| ----------- | ----------- | ------- | ---------------------------------------------------------------------- |
+| `htmlFor`   | `string`    | -       | ID of the associated control. Required for accessibility.              |
+| `className` | `string`    | -       | Additional CSS classes.                                                |
+| `children`  | `ReactNode` | -       | Label text.                                                            |
 
 ### Description
 
 Renders muted helper text for form fields.
 
+| Prop        | Type        | Default | Description             |
+| ----------- | ----------- | ------- | ----------------------- |
+| `className` | `string`    | -       | Additional CSS classes. |
+| `children`  | `ReactNode` | -       | Helper text.            |
+
 ### ErrorMessage
 
-Renders destructive-colored validation error text.
+Renders destructive-colored validation error text. Pair with `aria-invalid` on the control.
+
+| Prop        | Type        | Default | Description             |
+| ----------- | ----------- | ------- | ----------------------- |
+| `className` | `string`    | -       | Additional CSS classes. |
+| `children`  | `ReactNode` | -       | Error message text.     |

@@ -3,7 +3,9 @@
   "name": "collapsible",
   "title": "Collapsible",
   "description": "Single expandable content section that toggles between collapsed and expanded states.",
-  "dependencies": ["@base-ui/react"],
+  "dependencies": [
+    "@base-ui/react"
+  ],
   "files": [
     {
       "path": "packages/ui/src/collapsible.tsx",

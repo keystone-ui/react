@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs-line-vertical",
+  "title": "Tabs Line Vertical",
+  "description": "Tabs example: Line Vertical.",
+  "registryDependencies": [
+    "tabs"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tabs/line-vertical.tsx",
+      "content": "\"use client\";\n\nimport {\n  Tabs,\n  TabsContent,\n  TabsList,\n  TabsTrigger,\n} from \"@keystoneui/react/tabs\";\nimport {\n  ChartNoAxesColumnIncreasing as BarChartIcon,\n  FileText as FileTextIcon,\n  Settings as SettingsIcon,\n} from \"lucide-react\";\n\nexport default function TabsLineVertical() {\n  return (\n    <Tabs className=\"w-[400px]\" defaultValue=\"general\" orientation=\"vertical\">\n      <TabsList variant=\"line\">\n        <TabsTrigger value=\"general\">\n          <SettingsIcon />\n          General\n        </TabsTrigger>\n        <TabsTrigger value=\"analytics\">\n          <BarChartIcon />\n          Analytics\n        </TabsTrigger>\n        <TabsTrigger value=\"reports\">\n          <FileTextIcon />\n          Reports\n        </TabsTrigger>\n      </TabsList>\n      <TabsContent value=\"general\">\n        <p className=\"text-muted-foreground text-sm\">\n          Configure your general application preferences.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"analytics\">\n        <p className=\"text-muted-foreground text-sm\">\n          View your usage analytics and statistics.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"reports\">\n        <p className=\"text-muted-foreground text-sm\">\n          Generate and export detailed reports.\n        </p>\n      </TabsContent>\n    </Tabs>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

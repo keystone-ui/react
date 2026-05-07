@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "modal-default",
+  "title": "Modal Default",
+  "description": "Modal example: Default.",
+  "registryDependencies": [
+    "button",
+    "modal"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/modal/default.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Modal,\n  ModalClose,\n  ModalContent,\n  ModalDescription,\n  ModalFooter,\n  ModalHeader,\n  ModalTitle,\n  ModalTrigger,\n} from \"@keystoneui/react/modal\";\n\nexport default function ModalDefault() {\n  return (\n    <Modal>\n      <ModalTrigger render={<Button variant=\"outline\" />}>\n        Open Modal\n      </ModalTrigger>\n      <ModalContent>\n        <ModalHeader>\n          <ModalTitle>Are you absolutely sure?</ModalTitle>\n          <ModalDescription>\n            This action cannot be undone. This will permanently delete your\n            account and remove your data from our servers.\n          </ModalDescription>\n        </ModalHeader>\n        <ModalFooter>\n          <Button>Confirm</Button>\n          <ModalClose render={<Button variant=\"outline\" />}>Cancel</ModalClose>\n        </ModalFooter>\n      </ModalContent>\n    </Modal>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

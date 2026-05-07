@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "combobox-controlled",
+  "title": "Combobox Controlled",
+  "description": "Combobox example: Controlled.",
+  "registryDependencies": [
+    "button",
+    "combobox"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/combobox/controlled.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Combobox,\n  ComboboxContent,\n  ComboboxEmpty,\n  ComboboxInput,\n  ComboboxItem,\n  ComboboxList,\n} from \"@keystoneui/react/combobox\";\nimport { useState } from \"react\";\n\nconst frameworks = [\n  \"Next.js\",\n  \"SvelteKit\",\n  \"Nuxt.js\",\n  \"Remix\",\n  \"Astro\",\n] as const;\n\nexport default function ComboboxControlled() {\n  const [value, setValue] = useState<string | null>(null);\n\n  return (\n    <div className=\"w-full max-w-xs space-y-3\">\n      <Combobox items={frameworks} onValueChange={setValue} value={value}>\n        <ComboboxInput placeholder=\"Select a framework\" />\n        <ComboboxContent>\n          <ComboboxEmpty>No items found.</ComboboxEmpty>\n          <ComboboxList>\n            {(item) => (\n              <ComboboxItem key={item} value={item}>\n                {item}\n              </ComboboxItem>\n            )}\n          </ComboboxList>\n        </ComboboxContent>\n      </Combobox>\n      <p className=\"text-muted-foreground text-sm\">\n        Selected: {value ?? \"none\"}\n      </p>\n      <div className=\"flex gap-2\">\n        <Button onClick={() => setValue(null)} size=\"sm\" variant=\"outline\">\n          Clear\n        </Button>\n        <Button\n          onClick={() => setValue(\"SvelteKit\")}\n          size=\"sm\"\n          variant=\"outline\"\n        >\n          Set SvelteKit\n        </Button>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

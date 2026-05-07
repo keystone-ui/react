@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "command-keyboard-trigger",
+  "title": "Command Keyboard Trigger",
+  "description": "Command example: Keyboard Trigger.",
+  "registryDependencies": [
+    "button",
+    "command"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/command/keyboard-trigger.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Command,\n  CommandDialog,\n  CommandEmpty,\n  CommandGroup,\n  CommandInput,\n  CommandItem,\n  CommandList,\n  CommandSeparator,\n  CommandShortcut,\n} from \"@keystoneui/react/command\";\nimport {\n  Calculator as CalculatorIcon,\n  Calendar as CalendarIcon,\n  CreditCard as CreditCardIcon,\n  Settings as SettingsIcon,\n  Smile as SmileIcon,\n  User as UserIcon,\n} from \"lucide-react\";\nimport { useEffect, useState } from \"react\";\n\nexport default function CommandKeyboardTrigger() {\n  const [open, setOpen] = useState(false);\n\n  useEffect(() => {\n    const down = (e: KeyboardEvent) => {\n      if (e.key === \"k\" && (e.metaKey || e.ctrlKey)) {\n        e.preventDefault();\n        setOpen((prev) => !prev);\n      }\n    };\n    document.addEventListener(\"keydown\", down);\n    return () => document.removeEventListener(\"keydown\", down);\n  }, []);\n\n  return (\n    <div className=\"flex flex-col gap-4\">\n      <p className=\"text-muted-foreground text-sm\">\n        Press{\" \"}\n        <kbd className=\"inline-flex h-5 items-center gap-1 rounded border bg-muted px-1.5 font-medium font-mono text-[10px] text-muted-foreground\">\n          <span className=\"text-xs\">⌘</span>K\n        </kbd>{\" \"}\n        to open the command menu\n      </p>\n      <Button className=\"w-fit\" onClick={() => setOpen(true)} variant=\"outline\">\n        Or Click Here\n      </Button>\n      <CommandDialog onOpenChange={setOpen} open={open}>\n        <Command>\n          <CommandInput placeholder=\"Type a command or search...\" />\n          <CommandList>\n            <CommandEmpty>No results found.</CommandEmpty>\n            <CommandGroup heading=\"Suggestions\">\n              <CommandItem>\n                <CalendarIcon />\n                <span>Calendar</span>\n              </CommandItem>\n              <CommandItem>\n                <SmileIcon />\n                <span>Search Emoji</span>\n              </CommandItem>\n              <CommandItem>\n                <CalculatorIcon />\n                <span>Calculator</span>\n              </CommandItem>\n            </CommandGroup>\n            <CommandSeparator />\n            <CommandGroup heading=\"Settings\">\n              <CommandItem>\n                <UserIcon />\n                <span>Profile</span>\n                <CommandShortcut>⌘P</CommandShortcut>\n              </CommandItem>\n              <CommandItem>\n                <CreditCardIcon />\n                <span>Billing</span>\n                <CommandShortcut>⌘B</CommandShortcut>\n              </CommandItem>\n              <CommandItem>\n                <SettingsIcon />\n                <span>Settings</span>\n                <CommandShortcut>⌘S</CommandShortcut>\n              </CommandItem>\n            </CommandGroup>\n          </CommandList>\n        </Command>\n      </CommandDialog>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

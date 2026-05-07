@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea-disabled",
+  "title": "Textarea Disabled",
+  "description": "Textarea example: Disabled.",
+  "registryDependencies": [
+    "field",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/textarea/disabled.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldDescription, FieldLabel } from \"@keystoneui/react/field\";\nimport { Textarea } from \"@keystoneui/react/textarea\";\n\nexport default function TextareaDisabled() {\n  return (\n    <Field data-disabled>\n      <FieldLabel htmlFor=\"textarea-disabled\">Message</FieldLabel>\n      <Textarea\n        disabled\n        id=\"textarea-disabled\"\n        placeholder=\"Type your message here.\"\n      />\n      <FieldDescription>This field is currently disabled.</FieldDescription>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

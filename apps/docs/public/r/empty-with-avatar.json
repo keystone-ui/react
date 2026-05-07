@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-with-avatar",
+  "title": "Empty With Avatar",
+  "description": "Empty example: With Avatar.",
+  "registryDependencies": [
+    "avatar",
+    "button",
+    "empty"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/empty/with-avatar.tsx",
+      "content": "\"use client\";\n\nimport { Avatar, AvatarFallback } from \"@keystoneui/react/avatar\";\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Empty,\n  EmptyContent,\n  EmptyDescription,\n  EmptyHeader,\n  EmptyTitle,\n} from \"@keystoneui/react/empty\";\n\nexport default function EmptyWithAvatar() {\n  return (\n    <Empty className=\"max-w-md\">\n      <EmptyHeader>\n        <Avatar className=\"mb-2 size-16\">\n          <AvatarFallback className=\"text-lg\">JD</AvatarFallback>\n        </Avatar>\n        <EmptyTitle>Welcome, John!</EmptyTitle>\n        <EmptyDescription>\n          You don&apos;t have any projects yet. Create your first project to get\n          started.\n        </EmptyDescription>\n      </EmptyHeader>\n      <EmptyContent>\n        <Button size=\"sm\">Get Started</Button>\n      </EmptyContent>\n    </Empty>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

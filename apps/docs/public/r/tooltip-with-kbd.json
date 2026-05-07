@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tooltip-with-kbd",
+  "title": "Tooltip With Kbd",
+  "description": "Tooltip example: With Kbd.",
+  "registryDependencies": [
+    "button",
+    "tooltip"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tooltip/with-kbd.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipProvider,\n  TooltipTrigger,\n} from \"@keystoneui/react/tooltip\";\nimport { Bold as BoldIcon } from \"lucide-react\";\n\nexport default function TooltipWithKbd() {\n  return (\n    <TooltipProvider>\n      <Tooltip>\n        <TooltipTrigger render={<Button size=\"icon\" variant=\"outline\" />}>\n          <BoldIcon />\n        </TooltipTrigger>\n        <TooltipContent>\n          <p className=\"flex items-center gap-1.5\">\n            Bold\n            <kbd className=\"rounded bg-background/20 px-1.5 py-0.5 font-mono text-[10px]\">\n              ⌘B\n            </kbd>\n          </p>\n        </TooltipContent>\n      </Tooltip>\n    </TooltipProvider>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

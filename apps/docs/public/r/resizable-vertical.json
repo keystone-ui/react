@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "resizable-vertical",
+  "title": "Resizable Vertical",
+  "description": "Resizable example: Vertical.",
+  "registryDependencies": [
+    "resizable"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/resizable/vertical.tsx",
+      "content": "\"use client\";\n\nimport {\n  ResizableHandle,\n  ResizablePanel,\n  ResizablePanelGroup,\n} from \"@keystoneui/react/resizable\";\n\nexport default function ResizableVertical() {\n  return (\n    <ResizablePanelGroup\n      className=\"max-w-md rounded-lg border\"\n      orientation=\"vertical\"\n    >\n      <ResizablePanel defaultSize={40}>\n        <div className=\"flex h-24 items-center justify-center p-4\">\n          <span className=\"font-semibold text-sm\">Top</span>\n        </div>\n      </ResizablePanel>\n      <ResizableHandle />\n      <ResizablePanel defaultSize={60}>\n        <div className=\"flex h-24 items-center justify-center p-4\">\n          <span className=\"font-semibold text-sm\">Bottom</span>\n        </div>\n      </ResizablePanel>\n    </ResizablePanelGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

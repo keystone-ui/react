@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag-states",
+  "title": "Tag States",
+  "description": "Tag example: States.",
+  "registryDependencies": [
+    "tag"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tag/states.tsx",
+      "content": "\"use client\";\n\nimport { Tag } from \"@keystoneui/react/tag\";\n\nexport default function TagStates() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-2\">\n      <Tag value=\"unpressed\">Unpressed</Tag>\n      <Tag defaultPressed value=\"pressed\">\n        Pressed\n      </Tag>\n      <Tag disabled value=\"disabled\">\n        Disabled\n      </Tag>\n      <Tag defaultPressed disabled value=\"pressed-disabled\">\n        Pressed & Disabled\n      </Tag>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

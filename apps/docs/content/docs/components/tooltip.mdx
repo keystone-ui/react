@@ -13,6 +13,36 @@ import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@keyst
 
 <ComponentPreview name="tooltip-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/tooltip.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="tooltip-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -22,29 +52,38 @@ TooltipProvider
     └── TooltipContent
 ```
 
-## Sides
+## Examples
+
+### Sides
 
 Position the tooltip on different sides of the trigger:
 
 <ComponentPreview name="tooltip-sides" />
 
-## With Kbd
+
+### With Kbd
 
 Display a keyboard shortcut inside the tooltip:
 
 <ComponentPreview name="tooltip-with-kbd" />
 
-## Disabled Button
+
+### Disabled Button
 
 Show a tooltip on a disabled button using a wrapper element:
 
 <ComponentPreview name="tooltip-disabled-button" />
 
-## Group Delay
+
+### Group Delay
 
 Tooltip group with shared delay:
 
 <ComponentPreview name="tooltip-group-delay" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

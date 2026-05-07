@@ -13,35 +13,82 @@ import { Kbd, KbdGroup } from "@keystoneui/react/kbd";
 
 <ComponentPreview name="kbd-default" />
 
-## Modifier Keys
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/kbd.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="kbd-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Composition
+
+```text
+KbdGroup
+└── Kbd
+```
+
+## Examples
+
+### Modifier Keys
 
 Display common modifier keys with platform-appropriate symbols:
 
 <ComponentPreview name="kbd-modifier-keys" />
 
-## Common Shortcuts
+
+### Common Shortcuts
 
 Show full keyboard shortcut combinations:
 
 <ComponentPreview name="kbd-common-shortcuts" />
 
-## Group
+
+### Group
 
 Group multiple key indicators together:
 
 <ComponentPreview name="kbd-group" />
 
-## Special Keys
+
+### Special Keys
 
 Special keys like Enter, Backspace, Tab:
 
 <ComponentPreview name="kbd-special-keys" />
 
-## Function Keys
+
+### Function Keys
 
 Function keys F1-F12:
 
 <ComponentPreview name="kbd-function-keys" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

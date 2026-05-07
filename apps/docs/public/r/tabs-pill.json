@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs-pill",
+  "title": "Tabs Pill",
+  "description": "Tabs example: Pill.",
+  "registryDependencies": [
+    "tabs"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tabs/pill.tsx",
+      "content": "\"use client\";\n\nimport {\n  Tabs,\n  TabsContent,\n  TabsList,\n  TabsTrigger,\n} from \"@keystoneui/react/tabs\";\n\nexport default function TabsPill() {\n  return (\n    <Tabs defaultValue=\"all-bonuses\">\n      <TabsList shape=\"pill\">\n        <TabsTrigger value=\"all-bonuses\">All Bonuses</TabsTrigger>\n        <TabsTrigger value=\"bonus-history\">Bonus History</TabsTrigger>\n      </TabsList>\n      <TabsContent value=\"all-bonuses\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          View all available bonuses.\n        </p>\n      </TabsContent>\n      <TabsContent value=\"bonus-history\">\n        <p className=\"pt-2 text-muted-foreground text-sm\">\n          View your bonus history.\n        </p>\n      </TabsContent>\n    </Tabs>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

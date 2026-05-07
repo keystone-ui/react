@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "typography-h4",
+  "title": "Typography H4",
+  "description": "Typography example: H4.",
+  "files": [
+    {
+      "path": "apps/docs/demos/typography/h4.tsx",
+      "content": "\"use client\";\n\nexport default function TypographyH4() {\n  return (\n    <h4 className=\"scroll-m-20 font-semibold text-xl tracking-tight\">\n      Utility classes keep styles co-located\n    </h4>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

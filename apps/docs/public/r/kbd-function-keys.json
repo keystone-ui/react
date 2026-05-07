@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd-function-keys",
+  "title": "Kbd Function Keys",
+  "description": "Kbd example: Function Keys.",
+  "registryDependencies": [
+    "kbd"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/kbd/function-keys.tsx",
+      "content": "\"use client\";\n\nimport { Kbd } from \"@keystoneui/react/kbd\";\n\nexport default function KbdFunctionKeys() {\n  return (\n    <div className=\"flex flex-wrap gap-2\">\n      <Kbd>F1</Kbd>\n      <Kbd>F2</Kbd>\n      <Kbd>F3</Kbd>\n      <Kbd>F4</Kbd>\n      <Kbd>F5</Kbd>\n      <Kbd>F6</Kbd>\n      <Kbd>F7</Kbd>\n      <Kbd>F8</Kbd>\n      <Kbd>F9</Kbd>\n      <Kbd>F10</Kbd>\n      <Kbd>F11</Kbd>\n      <Kbd>F12</Kbd>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

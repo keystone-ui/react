@@ -109,5 +109,8 @@
       "type": "registry:component"
     }
   ],
+  "categories": [
+    "data"
+  ],
   "type": "registry:block"
 }

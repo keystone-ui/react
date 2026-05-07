@@ -13,6 +13,36 @@ import { ToggleGroup, ToggleGroupItem } from "@keystoneui/react/toggle-group";
 
 <ComponentPreview name="toggle-group-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/toggle-group.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="toggle-group-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -20,62 +50,88 @@ ToggleGroup
 └── ToggleGroupItem
 ```
 
-## Outline
-
-Outline variant for the toggle group:
-
-<ComponentPreview name="toggle-group-outline" />
-
-## Secondary
-
-Filled background when unpressed (uses `bg-secondary`) and inverts to `bg-foreground` when pressed. Best for segmented-control patterns where unpressed items should still read as part of a control rather than empty space.
-
-<ComponentPreview name="toggle-group-secondary" />
-
-## Single Selection
-
-Allow only one item to be selected at a time:
-
-<ComponentPreview name="toggle-group-single" />
-
-## Sizes
-
-<ComponentPreview name="toggle-group-sizes" />
-
-## Spacing
-
-Use the `spacing` prop to control the gap between items. When `0` (default), items join together with connected borders. Values greater than `0` add a gap using the spacing scale.
-
-<ComponentPreview name="toggle-group-spacing" />
-
-## Text Labels
-
-Toggle groups work well with text labels for filter-style and segmented controls.
-
-<ComponentPreview name="toggle-group-text-labels" />
-
-## Vertical
-
-Use `orientation="vertical"` for vertical toggle groups.
-
-<ComponentPreview name="toggle-group-vertical" />
-
-## Custom
-
-Custom-styled toggle items with `spacing`, `className` overrides, and integration with the Field component for form context.
-
-<ComponentPreview name="toggle-group-custom" />
-
 ## ButtonGroup vs ToggleGroup
 
 Use the **ButtonGroup** component when you want to group buttons that perform an action.
 Use the **ToggleGroup** component when you want to group buttons that toggle a state.
 
-## Disabled
+## Examples
+
+### Outline
+
+Outline variant for the toggle group:
+
+<ComponentPreview name="toggle-group-outline" />
+
+
+### Secondary
+
+Filled background when unpressed (uses `bg-secondary`) and inverts to `bg-foreground` when pressed. Best for segmented-control patterns where unpressed items should still read as part of a control rather than empty space.
+
+<ComponentPreview name="toggle-group-secondary" />
+
+
+### Single Selection
+
+Allow only one item to be selected at a time:
+
+<ComponentPreview name="toggle-group-single" />
+
+
+### Sizes
+
+<ComponentPreview name="toggle-group-sizes" />
+
+
+### Spacing
+
+Use the `spacing` prop to control the gap between items. When `0` (default), items join together with connected borders. Values greater than `0` add a gap using the spacing scale.
+
+<ComponentPreview name="toggle-group-spacing" />
+
+
+### Text Labels
+
+Toggle groups work well with text labels for filter-style and segmented controls.
+
+<ComponentPreview name="toggle-group-text-labels" />
+
+
+### Vertical
+
+Use `orientation="vertical"` for vertical toggle groups.
+
+<ComponentPreview name="toggle-group-vertical" />
+
+
+### Custom
+
+Custom-styled toggle items with `spacing`, `className` overrides, and integration with the Field component for form context.
+
+<ComponentPreview name="toggle-group-custom" />
+
+
+### Disabled
 
 Disabled toggle group:
 
 <ComponentPreview name="toggle-group-disabled" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Betting Panel 01](/docs/blocks/betting-panel-01) — A betting panel with inline ½ / 2× multipliers inside the bet amount field and risk-level toggles.
+- [Betting Panel 03](/docs/blocks/betting-panel-03) — A betting panel with quick-pick preset amounts for rapid bet placement.
+- [Betting Panel 04](/docs/blocks/betting-panel-04) — A stepper-based betting panel with circular +/− controls for bet amount and rows.
+- [Tickets 01](/docs/blocks/tickets-01) — A sortable, filterable tickets table with inline cell editing, a new-ticket modal, and a floating bulk-edit action bar.
+
+{/* backlinks:end */}
 
 ## API Reference
 

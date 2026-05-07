@@ -13,39 +13,80 @@ import { Toggle } from "@keystoneui/react/toggle";
 
 <ComponentPreview name="toggle-default" />
 
-## Outline
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/toggle.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="toggle-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Examples
+
+### Outline
 
 A bordered outline variant:
 
 <ComponentPreview name="toggle-outline" />
 
-## Secondary
+
+### Secondary
 
 Filled when unpressed (uses `bg-secondary`) and inverted to `bg-foreground` when pressed. Useful when an unpressed toggle would otherwise read as empty space — e.g., a 3-pill segmented control where only one is selected.
 
 <ComponentPreview name="toggle-secondary" />
 
-## With Text
+
+### With Text
 
 Toggle with a text label:
 
 <ComponentPreview name="toggle-with-text" />
 
-## Sizes
+
+### Sizes
 
 <ComponentPreview name="toggle-sizes" />
 
-## Disabled
+
+### Disabled
 
 Disabled toggle button:
 
 <ComponentPreview name="toggle-disabled" />
 
-## Pressed
+
+### Pressed
 
 Toggle in pressed state:
 
 <ComponentPreview name="toggle-pressed" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "calendar-date-time",
+  "title": "Calendar Date Time",
+  "description": "Calendar example: Date Time.",
+  "registryDependencies": [
+    "calendar",
+    "card",
+    "field",
+    "input-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/calendar/date-time.tsx",
+      "content": "\"use client\";\n\nimport { Calendar } from \"@keystoneui/react/calendar\";\nimport { Card, CardContent, CardFooter } from \"@keystoneui/react/card\";\nimport { Field, FieldGroup, FieldLabel } from \"@keystoneui/react/field\";\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupInput,\n} from \"@keystoneui/react/input-group\";\nimport { Clock2 as Clock2Icon } from \"lucide-react\";\nimport { useState } from \"react\";\n\nexport default function CalendarDateTime() {\n  const [date, setDate] = useState<Date | undefined>(\n    new Date(new Date().getFullYear(), new Date().getMonth(), 12)\n  );\n\n  return (\n    <Card className=\"mx-auto w-fit shadow-lg\" size=\"xs\">\n      <CardContent>\n        <Calendar\n          className=\"p-0\"\n          mode=\"single\"\n          onSelect={setDate}\n          selected={date}\n        />\n      </CardContent>\n      <CardFooter className=\"border-t bg-card\">\n        <FieldGroup>\n          <Field>\n            <FieldLabel htmlFor=\"time-from\">Start Time</FieldLabel>\n            <InputGroup size=\"sm\">\n              <InputGroupInput\n                className=\"appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none\"\n                defaultValue=\"10:30:00\"\n                id=\"time-from\"\n                step=\"1\"\n                type=\"time\"\n              />\n              <InputGroupAddon>\n                <Clock2Icon className=\"text-muted-foreground\" />\n              </InputGroupAddon>\n            </InputGroup>\n          </Field>\n          <Field>\n            <FieldLabel htmlFor=\"time-to\">End Time</FieldLabel>\n            <InputGroup size=\"sm\">\n              <InputGroupInput\n                className=\"appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none\"\n                defaultValue=\"12:30:00\"\n                id=\"time-to\"\n                step=\"1\"\n                type=\"time\"\n              />\n              <InputGroupAddon>\n                <Clock2Icon className=\"text-muted-foreground\" />\n              </InputGroupAddon>\n            </InputGroup>\n          </Field>\n        </FieldGroup>\n      </CardFooter>\n    </Card>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

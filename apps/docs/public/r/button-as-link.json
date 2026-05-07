@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-as-link",
+  "title": "Button As Link",
+  "description": "Button example: As Link.",
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/button/as-link.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\n\nexport default function ButtonAsLink() {\n  return (\n    <Button\n      nativeButton={false}\n      render={\n        // biome-ignore lint/a11y/useAnchorContent: content provided by Button children\n        <a href=\"https://example.com\" rel=\"noopener\" target=\"_blank\" />\n      }\n    >\n      Link Button\n    </Button>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

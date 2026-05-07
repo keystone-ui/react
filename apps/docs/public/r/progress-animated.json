@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress-animated",
+  "title": "Progress Animated",
+  "description": "Progress example: Animated.",
+  "registryDependencies": [
+    "progress"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/progress/animated.tsx",
+      "content": "\"use client\";\n\nimport { Progress } from \"@keystoneui/react/progress\";\nimport { useEffect, useState } from \"react\";\n\nexport default function ProgressAnimated() {\n  const [value, setValue] = useState(0);\n\n  useEffect(() => {\n    const interval = setInterval(() => {\n      setValue((prev) => {\n        if (prev >= 100) {\n          return 0;\n        }\n        return prev + 1;\n      });\n    }, 50);\n    return () => clearInterval(interval);\n  }, []);\n\n  return <Progress className=\"max-w-md\" value={value} />;\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

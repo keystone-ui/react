@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-background",
+  "title": "Empty Background",
+  "description": "Empty example: Background.",
+  "registryDependencies": [
+    "button",
+    "empty"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/empty/background.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Empty,\n  EmptyContent,\n  EmptyDescription,\n  EmptyHeader,\n  EmptyMedia,\n  EmptyTitle,\n} from \"@keystoneui/react/empty\";\nimport { Search as SearchIcon } from \"lucide-react\";\n\nexport default function EmptyBackground() {\n  return (\n    <Empty className=\"max-w-md rounded-xl border bg-muted/50\">\n      <EmptyHeader>\n        <EmptyMedia variant=\"icon\">\n          <SearchIcon />\n        </EmptyMedia>\n        <EmptyTitle>No results found</EmptyTitle>\n        <EmptyDescription>\n          We couldn&apos;t find anything matching your search. Try adjusting\n          your filters or search terms.\n        </EmptyDescription>\n      </EmptyHeader>\n      <EmptyContent>\n        <Button size=\"sm\" variant=\"outline\">\n          Clear Filters\n        </Button>\n      </EmptyContent>\n    </Empty>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

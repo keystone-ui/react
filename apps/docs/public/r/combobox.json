@@ -3,8 +3,14 @@
   "name": "combobox",
   "title": "Combobox",
   "description": "Searchable dropdown with autocomplete for filtering and selecting from a list of options.",
-  "dependencies": ["@base-ui/react", "lucide-react"],
-  "registryDependencies": ["button", "input-group"],
+  "dependencies": [
+    "@base-ui/react",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "input-group"
+  ],
   "files": [
     {
       "path": "packages/ui/src/combobox.tsx",

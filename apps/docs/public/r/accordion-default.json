@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "accordion-default",
+  "title": "Accordion Default",
+  "description": "Accordion example: Default.",
+  "registryDependencies": [
+    "accordion"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/accordion/default.tsx",
+      "content": "\"use client\";\n\nimport {\n  Accordion,\n  AccordionHeader,\n  AccordionItem,\n  AccordionPanel,\n  AccordionTrigger,\n} from \"@keystoneui/react/accordion\";\n\nexport default function AccordionDefault() {\n  return (\n    <Accordion variant=\"box\">\n      <AccordionItem value=\"1\">\n        <AccordionHeader>\n          <AccordionTrigger>What makes our UI different?</AccordionTrigger>\n        </AccordionHeader>\n        <AccordionPanel>\n          Our UI focuses on developer experience and performance. Built with\n          TypeScript, it offers excellent type safety, follows accessibility\n          standards, and provides comprehensive documentation with regular\n          updates.\n        </AccordionPanel>\n      </AccordionItem>\n      <AccordionItem value=\"2\">\n        <AccordionHeader>\n          <AccordionTrigger>\n            How can I customize the components?\n          </AccordionTrigger>\n        </AccordionHeader>\n        <AccordionPanel>\n          Use our CSS variables for global styling, or className and style props\n          for component-specific changes. We support CSS modules, Tailwind, and\n          dark mode out of the box.\n        </AccordionPanel>\n      </AccordionItem>\n      <AccordionItem value=\"3\">\n        <AccordionHeader>\n          <AccordionTrigger>Is it optimized for performance?</AccordionTrigger>\n        </AccordionHeader>\n        <AccordionPanel>\n          Yes, with tree-shaking, code splitting, and minimal runtime overhead.\n          Most components are under 5KB gzipped.\n        </AccordionPanel>\n      </AccordionItem>\n    </Accordion>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

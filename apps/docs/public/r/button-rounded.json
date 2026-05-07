@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-rounded",
+  "title": "Button Rounded",
+  "description": "Button example: Rounded.",
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/button/rounded.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { Plus } from \"lucide-react\";\n\nexport default function ButtonRounded() {\n  return (\n    <div className=\"flex flex-wrap gap-4\">\n      <Button className=\"rounded-full\" size=\"sm\">\n        Default\n      </Button>\n      <Button className=\"rounded-full\" size=\"sm\" variant=\"secondary\">\n        Secondary\n      </Button>\n      <Button className=\"rounded-full\" size=\"sm\" variant=\"destructive\">\n        Destructive\n      </Button>\n      <Button className=\"rounded-full\" size=\"sm\" variant=\"outline\">\n        Outline\n      </Button>\n      <Button className=\"rounded-full\" size=\"sm\" variant=\"ghost\">\n        Ghost\n      </Button>\n      <Button className=\"rounded-full\" size=\"sm\" variant=\"link\">\n        Link\n      </Button>\n      <Button\n        aria-label=\"Icon\"\n        className=\"aspect-square rounded-full\"\n        size=\"sm\"\n      >\n        <Plus aria-hidden=\"true\" size={16} />\n      </Button>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

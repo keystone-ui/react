@@ -7,7 +7,7 @@
     "changeset": "changeset",
     "sync-unreleased": "node scripts/sync-unreleased.mjs",
     "version-packages": "node scripts/sync-unreleased.mjs && changeset version && node scripts/rotate-changelog.mjs",
-    "release": "turbo run build --filter=@keystoneui/storybook^... && changeset publish",
+    "release": "turbo run build --filter=@keystoneui/storybook^... --filter=@keystoneui/mcp && changeset publish",
     "preview-storybook": "turbo run preview-storybook",
     "test": "turbo run test",
     "check": "ultracite check",
@@ -16,6 +16,10 @@
     "build:skills": "bash scripts/build-skills.sh",
     "registry:sync": "node scripts/sync-registry.mjs",
     "registry:build": "node scripts/sync-registry.mjs && shadcn build -o apps/docs/public/r",
+    "lint:docs": "node scripts/lint-component-mdx.mjs && node scripts/lint-block-mdx.mjs && node scripts/lint-stories-vs-demos.mjs",
+    "lint:stories-demos": "node scripts/lint-stories-vs-demos.mjs",
+    "docs:migrate": "node scripts/migrate-component-mdx.mjs",
+    "docs:backlinks": "node scripts/generate-block-backlinks.mjs",
     "prepare": "husky"
   },
   "devDependencies": {

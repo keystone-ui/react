@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dropdown-menu-account",
+  "title": "Dropdown Menu Account",
+  "description": "Dropdown Menu example: Account.",
+  "registryDependencies": [
+    "avatar",
+    "button",
+    "dropdown-menu"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/dropdown-menu/account.tsx",
+      "content": "\"use client\";\n\nimport { Avatar, AvatarFallback, AvatarImage } from \"@keystoneui/react/avatar\";\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  DropdownMenu,\n  DropdownMenuContent,\n  DropdownMenuGroup,\n  DropdownMenuItem,\n  DropdownMenuSeparator,\n  DropdownMenuTrigger,\n} from \"@keystoneui/react/dropdown-menu\";\nimport {\n  CreditCard as CreditCardIcon,\n  Keyboard as KeyboardIcon,\n  LogOut as LogOutIcon,\n  Settings as SettingsIcon,\n  User as UserIcon,\n} from \"lucide-react\";\n\nexport default function DropdownMenuAccount() {\n  return (\n    <DropdownMenu>\n      <DropdownMenuTrigger\n        render={\n          <Button className=\"rounded-full\" size=\"icon\" variant=\"ghost\">\n            <Avatar>\n              <AvatarImage\n                alt=\"User\"\n                src=\"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face\"\n              />\n              <AvatarFallback>JD</AvatarFallback>\n            </Avatar>\n          </Button>\n        }\n      />\n      <DropdownMenuContent align=\"end\" className=\"w-56\">\n        <DropdownMenuGroup>\n          <div className=\"flex items-center gap-2 px-1.5 py-1.5\">\n            <Avatar className=\"size-8\">\n              <AvatarImage\n                alt=\"User\"\n                src=\"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face\"\n              />\n              <AvatarFallback>JD</AvatarFallback>\n            </Avatar>\n            <div className=\"flex flex-col\">\n              <span className=\"font-medium text-sm\">John Doe</span>\n              <span className=\"text-muted-foreground text-xs\">\n                john@example.com\n              </span>\n            </div>\n          </div>\n        </DropdownMenuGroup>\n        <DropdownMenuSeparator />\n        <DropdownMenuGroup>\n          <DropdownMenuItem>\n            <UserIcon />\n            Profile\n          </DropdownMenuItem>\n          <DropdownMenuItem>\n            <CreditCardIcon />\n            Billing\n          </DropdownMenuItem>\n          <DropdownMenuItem>\n            <SettingsIcon />\n            Settings\n          </DropdownMenuItem>\n          <DropdownMenuItem>\n            <KeyboardIcon />\n            Keyboard Shortcuts\n          </DropdownMenuItem>\n        </DropdownMenuGroup>\n        <DropdownMenuSeparator />\n        <DropdownMenuGroup>\n          <DropdownMenuItem>\n            <LogOutIcon />\n            Log Out\n          </DropdownMenuItem>\n        </DropdownMenuGroup>\n      </DropdownMenuContent>\n    </DropdownMenu>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -17,6 +17,36 @@ import {
 
 <ComponentPreview name="native-select-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/native-select.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="native-select-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -26,31 +56,41 @@ NativeSelect
 └── NativeSelectOption
 ```
 
-## Groups
+## Examples
+
+### Groups
 
 Organize options into labeled optgroups:
 
 <ComponentPreview name="native-select-groups" />
 
-## Sizes
+
+### Sizes
 
 <ComponentPreview name="native-select-sizes" />
 
-## Disabled
+
+### Disabled
 
 <ComponentPreview name="native-select-disabled" />
 
-## Invalid
+
+### Invalid
 
 Native select with error state:
 
 <ComponentPreview name="native-select-invalid" />
 
-## Form Example
+
+### Form Example
 
 Native select in a form context:
 
 <ComponentPreview name="native-select-form-example" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

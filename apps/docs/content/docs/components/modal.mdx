@@ -22,6 +22,36 @@ import {
 
 <ComponentPreview name="modal-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/modal.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="modal-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -35,7 +65,9 @@ Modal
         └── ModalClose
 ```
 
-## Sizes
+## Examples
+
+### Sizes
 
 The Modal supports multiple width presets:
 
@@ -49,53 +81,74 @@ The Modal supports multiple width presets:
 | `xl` | 780px | Complex content |
 | `full` | Full screen | Immersive experiences |
 
-## Scrollable
+
+### Scrollable
 
 A modal with scrollable body content for long forms:
 
 <ComponentPreview name="modal-scrollable" />
 
-## Sign Up Form
+
+### Sign Up Form
 
 A practical sign-up form modal pattern:
 
 <ComponentPreview name="modal-sign-up-form" />
 
-## Controlled
+
+### Controlled
 
 Control the modal open state programmatically:
 
 <ComponentPreview name="modal-controlled" />
 
-## Nested
+
+### Nested
 
 Stack multiple modals on top of each other:
 
 <ComponentPreview name="modal-nested" />
 
-## Sticky Footer
+
+### Sticky Footer
 
 Modal with a sticky footer:
 
 <ComponentPreview name="modal-sticky-footer" />
 
-## Confirmation
+
+### Confirmation
 
 Confirmation dialog modal:
 
 <ComponentPreview name="modal-confirmation" />
 
-## Multi Step
+
+### Multi Step
 
 Multi-step wizard modal:
 
 <ComponentPreview name="modal-multi-step" />
 
-## Long Content
+
+### Long Content
 
 Modal with long scrollable content:
 
 <ComponentPreview name="modal-long-content" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Tickets 01](/docs/blocks/tickets-01) — A sortable, filterable tickets table with inline cell editing, a new-ticket modal, and a floating bulk-edit action bar.
+
+{/* backlinks:end */}
 
 ## API Reference
 

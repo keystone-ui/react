@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "separator-vertical",
+  "title": "Separator Vertical",
+  "description": "Separator example: Vertical.",
+  "registryDependencies": [
+    "separator"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/separator/vertical.tsx",
+      "content": "\"use client\";\n\nimport { Separator } from \"@keystoneui/react/separator\";\n\nexport default function SeparatorVertical() {\n  return (\n    <div className=\"flex h-5 items-center space-x-4 text-sm\">\n      <span>Blog</span>\n      <Separator orientation=\"vertical\" />\n      <span>Docs</span>\n      <Separator orientation=\"vertical\" />\n      <span>Source</span>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

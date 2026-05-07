@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "field-required",
+  "title": "Field Required",
+  "description": "Field example: Required.",
+  "registryDependencies": [
+    "field",
+    "input"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/field/required.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldDescription, FieldLabel } from \"@keystoneui/react/field\";\nimport { Input } from \"@keystoneui/react/input\";\n\nexport default function FieldRequired() {\n  return (\n    <div className=\"w-full max-w-xs\">\n      <Field>\n        <FieldLabel htmlFor=\"required-email\">\n          Email<span className=\"ml-1 text-destructive\">*</span>\n        </FieldLabel>\n        <Input id=\"required-email\" required type=\"email\" />\n        <FieldDescription>We&apos;ll never share your email.</FieldDescription>\n      </Field>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

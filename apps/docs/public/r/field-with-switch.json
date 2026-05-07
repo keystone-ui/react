@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "field-with-switch",
+  "title": "Field With Switch",
+  "description": "Field example: With Switch.",
+  "registryDependencies": [
+    "field",
+    "switch"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/field/with-switch.tsx",
+      "content": "\"use client\";\n\nimport {\n  Field,\n  FieldContent,\n  FieldDescription,\n  FieldLabel,\n} from \"@keystoneui/react/field\";\nimport { Switch } from \"@keystoneui/react/switch\";\n\nexport default function FieldWithSwitch() {\n  return (\n    <Field className=\"max-w-xs\" orientation=\"horizontal\">\n      <FieldContent>\n        <FieldLabel htmlFor=\"field-switch\">Share across devices</FieldLabel>\n        <FieldDescription>\n          Focus is shared across devices, and turns off when you leave the app.\n        </FieldDescription>\n      </FieldContent>\n      <Switch id=\"field-switch\" />\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -3,8 +3,13 @@
   "name": "toggle-group",
   "title": "Toggle Group",
   "description": "Group of toggle buttons where one or multiple options can be selected.",
-  "dependencies": ["@base-ui/react", "class-variance-authority"],
-  "registryDependencies": ["toggle"],
+  "dependencies": [
+    "@base-ui/react",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "toggle"
+  ],
   "files": [
     {
       "path": "packages/ui/src/toggle-group.tsx",

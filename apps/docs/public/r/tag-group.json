@@ -3,8 +3,13 @@
   "name": "tag-group",
   "title": "Tag Group",
   "description": "Managed group of tags with add and remove capabilities for multi-value selection.",
-  "dependencies": ["@base-ui/react", "class-variance-authority"],
-  "registryDependencies": ["tag"],
+  "dependencies": [
+    "@base-ui/react",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "tag"
+  ],
   "files": [
     {
       "path": "packages/ui/src/tag-group.tsx",

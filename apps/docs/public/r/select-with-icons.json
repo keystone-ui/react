@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "select-with-icons",
+  "title": "Select With Icons",
+  "description": "Select example: With Icons.",
+  "registryDependencies": [
+    "select"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/select/with-icons.tsx",
+      "content": "\"use client\";\n\nimport {\n  Select,\n  SelectContent,\n  SelectGroup,\n  SelectItem,\n  SelectLabel,\n  SelectTrigger,\n  SelectValue,\n} from \"@keystoneui/react/select\";\nimport {\n  Apple as AppleIcon,\n  Banana as BananaIcon,\n  Cherry as CherryIcon,\n  Grape as GrapeIcon,\n} from \"lucide-react\";\nimport type { ReactNode } from \"react\";\n\nconst fruits: Record<string, ReactNode> = {\n  apple: (\n    <>\n      <AppleIcon className=\"size-4\" />\n      Apple\n    </>\n  ),\n  banana: (\n    <>\n      <BananaIcon className=\"size-4\" />\n      Banana\n    </>\n  ),\n  cherry: (\n    <>\n      <CherryIcon className=\"size-4\" />\n      Cherry\n    </>\n  ),\n  grapes: (\n    <>\n      <GrapeIcon className=\"size-4\" />\n      Grapes\n    </>\n  ),\n};\n\nexport default function SelectWithIcons() {\n  return (\n    <Select items={fruits}>\n      <SelectTrigger className=\"w-48\">\n        <SelectValue placeholder=\"Select a fruit\" />\n      </SelectTrigger>\n      <SelectContent>\n        <SelectGroup>\n          <SelectLabel>Fruits</SelectLabel>\n          {Object.entries(fruits).map(([value, label]) => (\n            <SelectItem key={value} value={value}>\n              {label}\n            </SelectItem>\n          ))}\n        </SelectGroup>\n      </SelectContent>\n    </Select>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

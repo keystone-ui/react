@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag-group-with-avatars",
+  "title": "Tag Group With Avatars",
+  "description": "Tag Group example: With Avatars.",
+  "registryDependencies": [
+    "avatar",
+    "tag-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tag-group/with-avatars.tsx",
+      "content": "\"use client\";\n\nimport { Avatar, AvatarFallback, AvatarImage } from \"@keystoneui/react/avatar\";\nimport { TagGroup, TagGroupItem } from \"@keystoneui/react/tag-group\";\n\nconst people = [\n  {\n    id: \"fred\",\n    name: \"Fred\",\n    avatar:\n      \"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=faces\",\n  },\n  {\n    id: \"michael\",\n    name: \"Michael\",\n    avatar:\n      \"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=64&h=64&fit=crop&crop=faces\",\n  },\n  {\n    id: \"jane\",\n    name: \"Jane\",\n    avatar:\n      \"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=64&h=64&fit=crop&crop=faces\",\n  },\n];\n\nexport default function TagGroupWithAvatars() {\n  return (\n    <TagGroup defaultValue={[\"jane\"]}>\n      {people.map((person) => (\n        <TagGroupItem key={person.id} value={person.id}>\n          <Avatar size=\"xs\">\n            <AvatarImage alt={person.name} src={person.avatar} />\n            <AvatarFallback>{person.name[0]}</AvatarFallback>\n          </Avatar>\n          {person.name}\n        </TagGroupItem>\n      ))}\n    </TagGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

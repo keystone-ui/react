@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "aspect-ratio-default",
+  "title": "Aspect Ratio Default",
+  "description": "Aspect Ratio example: Default.",
+  "registryDependencies": [
+    "aspect-ratio"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/aspect-ratio/default.tsx",
+      "content": "\"use client\";\n\nimport { AspectRatio } from \"@keystoneui/react/aspect-ratio\";\n\nexport default function AspectRatioDefault() {\n  return (\n    <div className=\"max-w-md overflow-hidden rounded-lg border\">\n      <AspectRatio ratio={16 / 9}>\n        <div className=\"flex h-full w-full items-center justify-center bg-muted text-muted-foreground\">\n          16 : 9\n        </div>\n      </AspectRatio>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

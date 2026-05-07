@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-group-sizes",
+  "title": "Toggle Group Sizes",
+  "description": "Toggle Group example: Sizes.",
+  "registryDependencies": [
+    "toggle-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/toggle-group/sizes.tsx",
+      "content": "\"use client\";\n\nimport { ToggleGroup, ToggleGroupItem } from \"@keystoneui/react/toggle-group\";\nimport {\n  ListChecks as ListChecksIcon,\n  List as ListIcon,\n  ListOrdered as ListOrderedIcon,\n} from \"lucide-react\";\n\nexport default function ToggleGroupSizes() {\n  return (\n    <div className=\"flex flex-col gap-4\">\n      <div className=\"flex flex-col gap-2\">\n        <p className=\"font-semibold text-sm\">Small</p>\n        <ToggleGroup multiple size=\"sm\" variant=\"outline\">\n          <ToggleGroupItem aria-label=\"Toggle list\" value=\"list\">\n            <ListIcon />\n          </ToggleGroupItem>\n          <ToggleGroupItem aria-label=\"Toggle ordered list\" value=\"ordered\">\n            <ListOrderedIcon />\n          </ToggleGroupItem>\n          <ToggleGroupItem aria-label=\"Toggle checklist\" value=\"checks\">\n            <ListChecksIcon />\n          </ToggleGroupItem>\n        </ToggleGroup>\n      </div>\n      <div className=\"flex flex-col gap-2\">\n        <p className=\"font-semibold text-sm\">Default</p>\n        <ToggleGroup multiple size=\"default\" variant=\"outline\">\n          <ToggleGroupItem aria-label=\"Toggle list\" value=\"list\">\n            <ListIcon />\n          </ToggleGroupItem>\n          <ToggleGroupItem aria-label=\"Toggle ordered list\" value=\"ordered\">\n            <ListOrderedIcon />\n          </ToggleGroupItem>\n          <ToggleGroupItem aria-label=\"Toggle checklist\" value=\"checks\">\n            <ListChecksIcon />\n          </ToggleGroupItem>\n        </ToggleGroup>\n      </div>\n      <div className=\"flex flex-col gap-2\">\n        <p className=\"font-semibold text-sm\">Large</p>\n        <ToggleGroup multiple size=\"lg\" variant=\"outline\">\n          <ToggleGroupItem aria-label=\"Toggle list\" value=\"list\">\n            <ListIcon />\n          </ToggleGroupItem>\n          <ToggleGroupItem aria-label=\"Toggle ordered list\" value=\"ordered\">\n            <ListOrderedIcon />\n          </ToggleGroupItem>\n          <ToggleGroupItem aria-label=\"Toggle checklist\" value=\"checks\">\n            <ListChecksIcon />\n          </ToggleGroupItem>\n        </ToggleGroup>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

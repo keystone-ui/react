@@ -22,6 +22,36 @@ import {
 
 <ComponentPreview name="selection-bar-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/selection-bar.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="selection-bar-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -35,17 +65,33 @@ SelectionBar
 └── SelectionBarSeparator
 ```
 
-## With Bulk Actions
+## Examples
+
+### With Bulk Actions
 
 Compose with [Dropdown Menu](/docs/components/dropdown-menu) triggers for grouped bulk operations. A `tone` prop sets semantic colors on the trailing action buttons.
 
 <ComponentPreview name="selection-bar-with-bulk-actions" />
 
-## Tones
+
+### Tones
 
 `SelectionBarButton` accepts `tone="default"`, `tone="success"`, or `tone="destructive"`.
 
 <ComponentPreview name="selection-bar-tones" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Tickets 01](/docs/blocks/tickets-01) — A sortable, filterable tickets table with inline cell editing, a new-ticket modal, and a floating bulk-edit action bar.
+
+{/* backlinks:end */}
 
 ## API Reference
 

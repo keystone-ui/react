@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "item-group",
+  "title": "Item Group",
+  "description": "Item example: Group.",
+  "registryDependencies": [
+    "avatar",
+    "button",
+    "item"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/item/group.tsx",
+      "content": "\"use client\";\n\nimport { Avatar, AvatarFallback, AvatarImage } from \"@keystoneui/react/avatar\";\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Item,\n  ItemActions,\n  ItemContent,\n  ItemDescription,\n  ItemGroup,\n  ItemMedia,\n  ItemSeparator,\n  ItemTitle,\n} from \"@keystoneui/react/item\";\nimport { Plus as PlusIcon } from \"lucide-react\";\nimport { Fragment } from \"react\";\n\nconst people = [\n  {\n    username: \"alice\",\n    avatar: \"https://i.pravatar.cc/150?u=alice\",\n    email: \"alice@example.com\",\n  },\n  {\n    username: \"bob\",\n    avatar: \"https://i.pravatar.cc/150?u=bob\",\n    email: \"bob@example.com\",\n  },\n  {\n    username: \"carol\",\n    avatar: \"https://i.pravatar.cc/150?u=carol\",\n    email: \"carol@example.com\",\n  },\n];\n\nexport default function ItemGroupDemo() {\n  return (\n    <ItemGroup className=\"max-w-sm\">\n      {people.map((person, index) => (\n        <Fragment key={person.username}>\n          {index > 0 && <ItemSeparator />}\n          <Item>\n            <ItemMedia>\n              <Avatar>\n                <AvatarImage src={person.avatar} />\n                <AvatarFallback>\n                  {person.username.charAt(0).toUpperCase()}\n                </AvatarFallback>\n              </Avatar>\n            </ItemMedia>\n            <ItemContent>\n              <ItemTitle>{person.username}</ItemTitle>\n              <ItemDescription>{person.email}</ItemDescription>\n            </ItemContent>\n            <ItemActions>\n              <Button className=\"rounded-full\" size=\"icon\" variant=\"ghost\">\n                <PlusIcon />\n              </Button>\n            </ItemActions>\n          </Item>\n        </Fragment>\n      ))}\n    </ItemGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

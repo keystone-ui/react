@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slider-default",
+  "title": "Slider Default",
+  "description": "Slider example: Default.",
+  "registryDependencies": [
+    "slider"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/slider/default.tsx",
+      "content": "\"use client\";\n\nimport {\n  Slider,\n  SliderControl,\n  SliderIndicator,\n  SliderThumb,\n  SliderTrack,\n} from \"@keystoneui/react/slider\";\n\nexport default function SliderDefault() {\n  return (\n    <Slider className=\"max-w-sm\" defaultValue={25}>\n      <SliderControl>\n        <SliderTrack>\n          <SliderIndicator />\n          <SliderThumb aria-label=\"Volume\" />\n        </SliderTrack>\n      </SliderControl>\n    </Slider>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

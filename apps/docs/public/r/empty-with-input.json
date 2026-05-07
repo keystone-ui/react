@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-with-input",
+  "title": "Empty With Input",
+  "description": "Empty example: With Input.",
+  "registryDependencies": [
+    "button",
+    "empty",
+    "input-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/empty/with-input.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Empty,\n  EmptyContent,\n  EmptyDescription,\n  EmptyHeader,\n  EmptyMedia,\n  EmptyTitle,\n} from \"@keystoneui/react/empty\";\nimport { InputGroup, InputGroupInput } from \"@keystoneui/react/input-group\";\nimport { Link as LinkIcon } from \"lucide-react\";\n\nexport default function EmptyWithInput() {\n  return (\n    <Empty className=\"max-w-md\">\n      <EmptyHeader>\n        <EmptyMedia variant=\"icon\">\n          <LinkIcon />\n        </EmptyMedia>\n        <EmptyTitle>No Links Added</EmptyTitle>\n        <EmptyDescription>\n          Add your first link to start building your collection.\n        </EmptyDescription>\n      </EmptyHeader>\n      <EmptyContent>\n        <InputGroup className=\"sm:w-3/4\">\n          <InputGroupInput placeholder=\"https://example.com\" />\n        </InputGroup>\n        <Button size=\"sm\">Add Link</Button>\n      </EmptyContent>\n    </Empty>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

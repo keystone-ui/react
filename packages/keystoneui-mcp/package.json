@@ -1,19 +1,34 @@
 {
   "name": "@keystoneui/mcp",
-  "private": true,
   "version": "0.2.0-beta.0",
-  "description": "MCP server for Keystone UI — lets AI agents discover, search, and view components.",
+  "description": "MCP server and CLI for Keystone UI — lets AI agents and shell users discover, search, view, and install components, blocks, and named examples.",
   "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "keystoneui",
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "shadcn",
+    "registry",
+    "components",
+    "react",
+    "tailwindcss",
+    "base-ui"
+  ],
   "bin": {
-    "keystoneui-mcp": "./dist/index.js"
+    "keystoneui-mcp": "./dist/index.js",
+    "keystoneui": "./dist/index.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "clean": "rm -rf dist node_modules"
+    "clean": "rm -rf dist node_modules",
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
@@ -28,6 +43,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "license": "MIT"
+  }
 }

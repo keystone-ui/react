@@ -23,6 +23,36 @@ import {
 
 <ComponentPreview name="alert-dialog-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/alert-dialog.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="alert-dialog-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -38,29 +68,47 @@ AlertDialog
         └── AlertDialogCancel
 ```
 
-## Destructive
+## Examples
+
+### Destructive
 
 A destructive confirmation dialog with red action button:
 
 <ComponentPreview name="alert-dialog-destructive" />
 
-## Small
+
+### Small
 
 A compact alert dialog for simpler confirmations:
 
 <ComponentPreview name="alert-dialog-small" />
 
-## With Media
+
+### With Media
 
 Include an image or illustration in the dialog:
 
 <ComponentPreview name="alert-dialog-with-media" />
 
-## Small With Media
+
+### Small With Media
 
 A compact alert dialog with an icon or media element:
 
 <ComponentPreview name="alert-dialog-small-with-media" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Tickets 01](/docs/blocks/tickets-01) — A sortable, filterable tickets table with inline cell editing, a new-ticket modal, and a floating bulk-edit action bar.
+
+{/* backlinks:end */}
 
 ## API Reference
 

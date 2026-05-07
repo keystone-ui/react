@@ -13,25 +13,64 @@ import { Switch } from "@keystoneui/react/switch";
 
 <ComponentPreview name="switch-default" />
 
-## With Description
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/switch.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="switch-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Examples
+
+### With Description
 
 Pair with Field components for label and helper text:
 
 <ComponentPreview name="switch-with-description" />
 
-## Sizes
+
+### Sizes
 
 <ComponentPreview name="switch-sizes" />
 
-## Disabled
+
+### Disabled
 
 <ComponentPreview name="switch-disabled" />
 
-## Choice Card
+
+### Choice Card
 
 Switch in a choice card layout:
 
 <ComponentPreview name="switch-choice-card" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

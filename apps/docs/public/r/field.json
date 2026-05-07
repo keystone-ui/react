@@ -3,7 +3,10 @@
   "name": "field",
   "title": "Field",
   "description": "Form field wrapper that provides a label, description, and error message around a form control.",
-  "registryDependencies": ["label", "separator"],
+  "registryDependencies": [
+    "label",
+    "separator"
+  ],
   "files": [
     {
       "path": "packages/ui/src/field.tsx",

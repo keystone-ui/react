@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "select-form-example",
+  "title": "Select Form Example",
+  "description": "Select example: Form Example.",
+  "registryDependencies": [
+    "button",
+    "field",
+    "select"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/select/form-example.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { Field, FieldGroup, FieldLabel } from \"@keystoneui/react/field\";\nimport {\n  Select,\n  SelectContent,\n  SelectGroup,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"@keystoneui/react/select\";\n\nconst countries: Record<string, string> = {\n  us: \"United States\",\n  ca: \"Canada\",\n  uk: \"United Kingdom\",\n  au: \"Australia\",\n};\n\nconst states: Record<string, string> = {\n  ca: \"California\",\n  ny: \"New York\",\n  tx: \"Texas\",\n  fl: \"Florida\",\n};\n\nexport default function SelectFormExample() {\n  return (\n    <form\n      className=\"w-full max-w-sm\"\n      onSubmit={(e) => {\n        e.preventDefault();\n      }}\n    >\n      <FieldGroup>\n        <Field>\n          <FieldLabel>Country</FieldLabel>\n          <Select defaultValue=\"us\" items={countries} name=\"country\">\n            <SelectTrigger>\n              <SelectValue />\n            </SelectTrigger>\n            <SelectContent>\n              <SelectGroup>\n                {Object.entries(countries).map(([value, label]) => (\n                  <SelectItem key={value} value={value}>\n                    {label}\n                  </SelectItem>\n                ))}\n              </SelectGroup>\n            </SelectContent>\n          </Select>\n        </Field>\n        <Field>\n          <FieldLabel>State</FieldLabel>\n          <Select items={states} name=\"state\">\n            <SelectTrigger>\n              <SelectValue placeholder=\"Select a state\" />\n            </SelectTrigger>\n            <SelectContent>\n              <SelectGroup>\n                {Object.entries(states).map(([value, label]) => (\n                  <SelectItem key={value} value={value}>\n                    {label}\n                  </SelectItem>\n                ))}\n              </SelectGroup>\n            </SelectContent>\n          </Select>\n        </Field>\n        <Field orientation=\"horizontal\">\n          <Button type=\"reset\" variant=\"outline\">\n            Reset\n          </Button>\n          <Button type=\"submit\">Submit</Button>\n        </Field>\n      </FieldGroup>\n    </form>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "field-with-checkbox",
+  "title": "Field With Checkbox",
+  "description": "Field example: With Checkbox.",
+  "registryDependencies": [
+    "checkbox",
+    "field"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/field/with-checkbox.tsx",
+      "content": "\"use client\";\n\nimport { Checkbox } from \"@keystoneui/react/checkbox\";\nimport {\n  Field,\n  FieldDescription,\n  FieldGroup,\n  FieldLabel,\n  FieldLegend,\n  FieldSet,\n} from \"@keystoneui/react/field\";\n\nexport default function FieldWithCheckbox() {\n  return (\n    <FieldGroup className=\"w-full max-w-xs\">\n      <FieldSet>\n        <FieldLegend variant=\"label\">\n          Show these items on the desktop\n        </FieldLegend>\n        <FieldDescription>\n          Select the items you want to show on the desktop.\n        </FieldDescription>\n        <FieldGroup className=\"gap-3\">\n          <Field orientation=\"horizontal\">\n            <Checkbox defaultChecked id=\"hard-disks\" />\n            <FieldLabel className=\"font-normal\" htmlFor=\"hard-disks\">\n              Hard disks\n            </FieldLabel>\n          </Field>\n          <Field orientation=\"horizontal\">\n            <Checkbox id=\"external-disks\" />\n            <FieldLabel className=\"font-normal\" htmlFor=\"external-disks\">\n              External disks\n            </FieldLabel>\n          </Field>\n          <Field orientation=\"horizontal\">\n            <Checkbox id=\"cds-dvds\" />\n            <FieldLabel className=\"font-normal\" htmlFor=\"cds-dvds\">\n              CDs, DVDs, and iPods\n            </FieldLabel>\n          </Field>\n          <Field orientation=\"horizontal\">\n            <Checkbox id=\"connected-servers\" />\n            <FieldLabel className=\"font-normal\" htmlFor=\"connected-servers\">\n              Connected servers\n            </FieldLabel>\n          </Field>\n        </FieldGroup>\n      </FieldSet>\n    </FieldGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

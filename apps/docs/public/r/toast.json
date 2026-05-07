@@ -3,7 +3,10 @@
   "name": "toast",
   "title": "Toast",
   "description": "Temporary notification messages that appear briefly to provide non-intrusive feedback.",
-  "dependencies": ["@base-ui/react", "lucide-react"],
+  "dependencies": [
+    "@base-ui/react",
+    "lucide-react"
+  ],
   "files": [
     {
       "path": "packages/ui/src/toast.tsx",

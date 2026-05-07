@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "resizable-collapsible",
+  "title": "Resizable Collapsible",
+  "description": "Resizable example: Collapsible.",
+  "registryDependencies": [
+    "resizable"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/resizable/collapsible.tsx",
+      "content": "\"use client\";\n\nimport {\n  ResizableHandle,\n  ResizablePanel,\n  ResizablePanelGroup,\n} from \"@keystoneui/react/resizable\";\n\nexport default function ResizableCollapsible() {\n  return (\n    <ResizablePanelGroup\n      className=\"max-w-md rounded-lg border\"\n      orientation=\"horizontal\"\n    >\n      <ResizablePanel\n        collapsedSize={0}\n        collapsible\n        defaultSize={25}\n        minSize={15}\n      >\n        <div className=\"flex h-32 items-center justify-center p-4\">\n          <span className=\"font-semibold text-sm\">Sidebar</span>\n        </div>\n      </ResizablePanel>\n      <ResizableHandle withHandle />\n      <ResizablePanel defaultSize={75}>\n        <div className=\"flex h-32 items-center justify-center p-4\">\n          <span className=\"font-semibold text-sm\">Content</span>\n        </div>\n      </ResizablePanel>\n    </ResizablePanelGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

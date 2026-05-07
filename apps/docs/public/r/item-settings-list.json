@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "item-settings-list",
+  "title": "Item Settings List",
+  "description": "Item example: Settings List.",
+  "registryDependencies": [
+    "item"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/item/settings-list.tsx",
+      "content": "\"use client\";\n\nimport {\n  Item,\n  ItemActions,\n  ItemContent,\n  ItemDescription,\n  ItemGroup,\n  ItemMedia,\n  ItemSeparator,\n  ItemTitle,\n} from \"@keystoneui/react/item\";\nimport {\n  ChevronRight as ChevronRightIcon,\n  Globe as GlobeIcon,\n  Lock as LockIcon,\n  Palette as PaletteIcon,\n  User as UserIcon,\n} from \"lucide-react\";\n\nconst settings = [\n  {\n    icon: UserIcon,\n    title: \"Account\",\n    description: \"Manage your profile and preferences.\",\n  },\n  {\n    icon: LockIcon,\n    title: \"Security\",\n    description: \"Password, two-factor authentication, and sessions.\",\n  },\n  {\n    icon: PaletteIcon,\n    title: \"Appearance\",\n    description: \"Theme, colors, and display settings.\",\n  },\n  {\n    icon: GlobeIcon,\n    title: \"Language & Region\",\n    description: \"Language, timezone, and date format.\",\n  },\n];\n\nexport default function ItemSettingsList() {\n  return (\n    <ItemGroup className=\"max-w-md\">\n      {settings.map((setting, index) => (\n        <div key={setting.title}>\n          {index > 0 && <ItemSeparator />}\n          <Item\n            render={\n              <a href=\"/settings\">\n                <ItemMedia variant=\"icon\">\n                  <setting.icon />\n                </ItemMedia>\n                <ItemContent>\n                  <ItemTitle>{setting.title}</ItemTitle>\n                  <ItemDescription>{setting.description}</ItemDescription>\n                </ItemContent>\n                <ItemActions>\n                  <ChevronRightIcon className=\"size-4\" />\n                </ItemActions>\n              </a>\n            }\n          />\n        </div>\n      ))}\n    </ItemGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

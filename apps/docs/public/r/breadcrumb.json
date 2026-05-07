@@ -3,7 +3,10 @@
   "name": "breadcrumb",
   "title": "Breadcrumb",
   "description": "Navigation breadcrumb trail showing the user's current location within a hierarchy.",
-  "dependencies": ["@base-ui/react", "lucide-react"],
+  "dependencies": [
+    "@base-ui/react",
+    "lucide-react"
+  ],
   "files": [
     {
       "path": "packages/ui/src/breadcrumb.tsx",

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "popover-with-arrow",
+  "title": "Popover With Arrow",
+  "description": "Popover example: With Arrow.",
+  "registryDependencies": [
+    "button",
+    "popover"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/popover/with-arrow.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Popover,\n  PopoverArrow,\n  PopoverContent,\n  PopoverDescription,\n  PopoverHeader,\n  PopoverTitle,\n  PopoverTrigger,\n} from \"@keystoneui/react/popover\";\n\nexport default function PopoverWithArrow() {\n  return (\n    <Popover>\n      <PopoverTrigger render={<Button variant=\"outline\" />}>\n        With Arrow\n      </PopoverTrigger>\n      <PopoverContent>\n        <PopoverArrow />\n        <PopoverHeader>\n          <PopoverTitle>Popover with Arrow</PopoverTitle>\n          <PopoverDescription>\n            This popover includes an arrow pointer that connects to the trigger\n            element.\n          </PopoverDescription>\n        </PopoverHeader>\n      </PopoverContent>\n    </Popover>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

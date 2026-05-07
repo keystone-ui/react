@@ -13,41 +13,82 @@ import { Calendar } from "@keystoneui/react/calendar";
 
 <ComponentPreview name="calendar-default" />
 
-## Range
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/calendar.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="calendar-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Examples
+
+### Range
 
 Select a date range with start and end dates:
 
 <ComponentPreview name="calendar-range" />
 
-## Month & Year Navigation
+
+### Month & Year Navigation
 
 Navigate by month and year with dropdowns:
 
 <ComponentPreview name="calendar-month-year" />
 
-## Presets
+
+### Presets
 
 Quick selection with predefined date presets:
 
 <ComponentPreview name="calendar-presets" />
 
-## Booked Dates
+
+### Booked Dates
 
 Display unavailable or booked dates:
 
 <ComponentPreview name="calendar-booked-dates" />
 
-## Date Time
+
+### Date Time
 
 Calendar with time selection:
 
 <ComponentPreview name="calendar-date-time" />
 
-## Week Numbers
+
+### Week Numbers
 
 Calendar displaying week numbers:
 
 <ComponentPreview name="calendar-week-numbers" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

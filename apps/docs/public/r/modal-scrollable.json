@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "modal-scrollable",
+  "title": "Modal Scrollable",
+  "description": "Modal example: Scrollable.",
+  "registryDependencies": [
+    "button",
+    "modal"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/modal/scrollable.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Modal,\n  ModalClose,\n  ModalContent,\n  ModalDescription,\n  ModalHeader,\n  ModalTitle,\n  ModalTrigger,\n} from \"@keystoneui/react/modal\";\n\nexport default function ModalScrollable() {\n  return (\n    <Modal>\n      <ModalTrigger render={<Button variant=\"outline\" />}>\n        Scrollable Content\n      </ModalTrigger>\n      <ModalContent scrollBehavior=\"inside\">\n        <ModalHeader>\n          <ModalTitle>Scrollable Content</ModalTitle>\n          <ModalDescription>\n            This modal scrolls content internally while the header stays fixed.\n          </ModalDescription>\n        </ModalHeader>\n        <div className=\"no-scrollbar -mx-6 max-h-[50vh] overflow-y-auto px-6\">\n          {Array.from({ length: 10 }).map((_, index) => (\n            // biome-ignore lint/suspicious/noArrayIndexKey: static demo content\n            <p className=\"mb-4 leading-normal\" key={`paragraph-${index}`}>\n              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do\n              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut\n              enim ad minim veniam, quis nostrud exercitation ullamco laboris\n              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in\n              reprehenderit in voluptate velit esse cillum dolore eu fugiat\n              nulla pariatur.\n            </p>\n          ))}\n        </div>\n        <div className=\"flex justify-end\">\n          <ModalClose render={<Button variant=\"outline\" />}>Close</ModalClose>\n        </div>\n      </ModalContent>\n    </Modal>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

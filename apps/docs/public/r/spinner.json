@@ -3,7 +3,9 @@
   "name": "spinner",
   "title": "Spinner",
   "description": "Animated loading spinner for indicating indeterminate loading states.",
-  "dependencies": ["lucide-react"],
+  "dependencies": [
+    "lucide-react"
+  ],
   "files": [
     {
       "path": "packages/ui/src/spinner.tsx",

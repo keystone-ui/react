@@ -24,6 +24,36 @@ import {
 
 <ComponentPreview name="field-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/field.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="field-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -36,77 +66,114 @@ FieldSet
         └── FieldError
 ```
 
-## Horizontal
+## Examples
+
+### Horizontal
 
 A horizontal field layout with the label beside the control:
 
 <ComponentPreview name="field-horizontal" />
 
-## Validation Error
+
+### Validation Error
 
 Display validation errors with destructive styling:
 
 <ComponentPreview name="field-validation-error" />
 
-## Fieldset
+
+### Fieldset
 
 Group related fields with a fieldset and legend:
 
 <ComponentPreview name="field-fieldset" />
 
-## Grid
+
+### Grid
 
 Arrange multiple fields in a grid layout:
 
 <ComponentPreview name="field-grid" />
 
-## With Switch
+
+### With Switch
 
 Use a field to wrap a switch control with a label and description:
 
 <ComponentPreview name="field-with-switch" />
 
-## Settings Form
+
+### Settings Form
 
 A settings form composing radio card selections, a numeric counter, and Switch toggles:
 
 <ComponentPreview name="field-settings-form" />
 
-## Checkout Form
+
+### Checkout Form
 
 A complete payment checkout form with card fields, Select dropdowns, and billing address:
 
 <ComponentPreview name="field-checkout-form" />
 
-## Textarea
+
+### Textarea
 
 Field with a textarea control:
 
 <ComponentPreview name="field-textarea-example" />
 
-## Multiple Errors
+
+### Multiple Errors
 
 Field displaying multiple validation errors:
 
 <ComponentPreview name="field-multiple-errors" />
 
-## Required
+
+### Required
 
 Required field with indicator:
 
 <ComponentPreview name="field-required" />
 
-## With Checkbox
+
+### With Checkbox
 
 Field with checkbox controls:
 
 <ComponentPreview name="field-with-checkbox" />
 
-## Payment Method
+
+### Payment Method
 
 Payment method selection using fields:
 
 <ComponentPreview name="field-payment-method" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Betting Panel 01](/docs/blocks/betting-panel-01) — A betting panel with inline ½ / 2× multipliers inside the bet amount field and risk-level toggles.
+- [Betting Panel 03](/docs/blocks/betting-panel-03) — A betting panel with quick-pick preset amounts for rapid bet placement.
+- [Sign in 01](/docs/blocks/signin-01) — A simple sign-in form inside a card with email and password fields.
+- [Sign in 02](/docs/blocks/signin-02) — A two-column sign-in page with a cover image and GitHub social login.
+- [Sign in 03](/docs/blocks/signin-03) — A sign-in page with a form and image side by side inside a card.
+- [Sign in 04](/docs/blocks/signin-04) — A minimal email-only sign-in page with Apple and Google social providers.
+- [Signup 01](/docs/blocks/signup-01) — A simple signup form inside a card with name, email, and password fields.
+- [Signup 02](/docs/blocks/signup-02) — A two-column signup page with a cover image and GitHub social login.
+- [Signup 03](/docs/blocks/signup-03) — A signup page with a card form and side-by-side password fields.
+- [Signup 04](/docs/blocks/signup-04) — A signup page with a form and image side by side inside a card.
+- [Signup 05](/docs/blocks/signup-05) — A minimal email-only signup page with Apple and Google social providers.
+- [Tickets 01](/docs/blocks/tickets-01) — A sortable, filterable tickets table with inline cell editing, a new-ticket modal, and a floating bulk-edit action bar.
+
+{/* backlinks:end */}
 
 ## API Reference
 

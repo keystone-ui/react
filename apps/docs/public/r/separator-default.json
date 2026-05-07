@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "separator-default",
+  "title": "Separator Default",
+  "description": "Separator example: Default.",
+  "registryDependencies": [
+    "separator"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/separator/default.tsx",
+      "content": "\"use client\";\n\nimport { Separator } from \"@keystoneui/react/separator\";\n\nexport default function SeparatorDefault() {\n  return (\n    <div className=\"space-y-6\">\n      <div>\n        <h4 className=\"mb-1 font-medium text-sm leading-none\">\n          Horizontal Separator\n        </h4>\n        <p className=\"text-muted-foreground text-sm\">\n          Content above the separator.\n        </p>\n        <Separator className=\"my-4\" />\n        <p className=\"text-muted-foreground text-sm\">\n          Content below the separator.\n        </p>\n      </div>\n      <div>\n        <h4 className=\"mb-3 font-medium text-sm leading-none\">\n          Vertical Separator\n        </h4>\n        <div className=\"flex h-5 items-center space-x-4 text-sm\">\n          <span>Blog</span>\n          <Separator orientation=\"vertical\" />\n          <span>Docs</span>\n          <Separator orientation=\"vertical\" />\n          <span>Source</span>\n        </div>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

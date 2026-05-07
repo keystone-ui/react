@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "label-with-description",
+  "title": "Label With Description",
+  "description": "Label example: With Description.",
+  "registryDependencies": [
+    "input",
+    "label"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/label/with-description.tsx",
+      "content": "\"use client\";\n\nimport { Input } from \"@keystoneui/react/input\";\nimport { Description, Label } from \"@keystoneui/react/label\";\n\nexport default function LabelWithDescription() {\n  return (\n    <div className=\"w-full max-w-xs space-y-2\">\n      <div className=\"space-y-1\">\n        <Label htmlFor=\"username\">Username</Label>\n        <Description>This will be displayed on your profile.</Description>\n      </div>\n      <Input id=\"username\" placeholder=\"Enter a username\" />\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

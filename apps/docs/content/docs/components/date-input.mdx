@@ -13,47 +13,89 @@ import { DateInput } from "@keystoneui/react/date-input";
 
 <ComponentPreview name="date-input-default" />
 
-## Range
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/date-input.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="date-input-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Examples
+
+### Range
 
 Select a date range with start and end values:
 
 <ComponentPreview name="date-input-range" />
 
-## With Input
+
+### With Input
 
 Combine a date picker with a text input for manual entry:
 
 <ComponentPreview name="date-input-with-input" />
 
-## Presets
+
+### Presets
 
 Quick date selection with predefined options like "Today" or "Last 7 days":
 
 <ComponentPreview name="date-input-presets" />
 
-## Date of Birth
+
+### Date of Birth
 
 A date picker configured for selecting a date of birth with month/year navigation:
 
 <ComponentPreview name="date-input-date-of-birth" />
 
-## With Time
+
+### With Time
 
 Date picker with time selection:
 
 <ComponentPreview name="date-input-with-time" />
 
-## Natural Language
+
+### Natural Language
 
 Date input with natural language hints:
 
 <ComponentPreview name="date-input-natural-language" />
 
-## Controlled
+
+### Controlled
 
 Controlled date picker:
 
 <ComponentPreview name="date-input-controlled" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

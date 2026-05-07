@@ -1,0 +1,109 @@
+---
+title: ComponentName
+description: One-sentence description of what the component does.
+---
+
+{/*
+
+This file is a reference template, not a published page. It documents the
+canonical structure every component MDX in this directory should follow.
+
+The codemod at `scripts/migrate-component-mdx.mjs` enforces the mechanical
+parts of this layout (Installation block, ## Examples wrapping, ## RTL stub).
+The lint at `scripts/lint-component-mdx.mjs` blocks CI when a component MDX
+violates this structure.
+
+Sections marked OPTIONAL are skipped when not applicable. Everything else is
+required.
+
+*/}
+
+<ComponentPreview name="component-default" />
+
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/component-name.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="component-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Usage
+
+```tsx
+import { Component, SubComponent } from "@keystoneui/react/component-name";
+```
+
+```tsx
+<Component>
+  <SubComponent>...</SubComponent>
+</Component>
+```
+
+## Composition
+
+{/* OPTIONAL: only for compound components. Show the part anatomy as a tree. */}
+
+```text
+Component
+├── SubComponent
+└── AnotherPart
+```
+
+## Examples
+
+### Variant 1
+
+One-sentence description of what this variant demonstrates.
+
+<ComponentPreview name="component-variant-1" />
+
+### Variant 2
+
+One-sentence description.
+
+<ComponentPreview name="component-variant-2" />
+
+## RTL
+
+{/* OPTIONAL: only when the component has non-trivial RTL behavior worth demonstrating. */}
+
+Brief paragraph explaining RTL behavior, linking to the [RTL guide](/docs/rtl).
+
+<ComponentPreview name="component-rtl" direction="rtl" />
+
+## API Reference
+
+### Component
+
+| Prop        | Type     | Default | Description |
+| ----------- | -------- | ------- | ----------- |
+| `className` | `string` | -       | -           |
+
+### SubComponent
+
+| Prop        | Type     | Default | Description |
+| ----------- | -------- | ------- | ----------- |
+| `className` | `string` | -       | -           |

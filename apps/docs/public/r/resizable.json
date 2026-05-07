@@ -3,7 +3,9 @@
   "name": "resizable",
   "title": "Resizable",
   "description": "Resizable panel layout that allows users to adjust the size of content areas by dragging handles.",
-  "dependencies": ["react-resizable-panels"],
+  "dependencies": [
+    "react-resizable-panels"
+  ],
   "files": [
     {
       "path": "packages/ui/src/resizable.tsx",

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "carousel-sizes",
+  "title": "Carousel Sizes",
+  "description": "Carousel example: Sizes.",
+  "registryDependencies": [
+    "carousel"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/carousel/sizes.tsx",
+      "content": "\"use client\";\n\nimport {\n  Carousel,\n  CarouselContent,\n  CarouselItem,\n  CarouselNext,\n  CarouselPrevious,\n} from \"@keystoneui/react/carousel\";\n\nexport default function CarouselSizes() {\n  return (\n    <Carousel className=\"mx-12 max-w-sm\" opts={{ align: \"start\" }}>\n      <CarouselContent>\n        {Array.from({ length: 8 }).map((_, i) => (\n          // biome-ignore lint/suspicious/noArrayIndexKey: static list\n          <CarouselItem className=\"basis-1/2 lg:basis-1/3\" key={`slide-${i}`}>\n            <div className=\"flex aspect-square items-center justify-center rounded-lg border bg-muted\">\n              <span className=\"font-semibold text-2xl\">{i + 1}</span>\n            </div>\n          </CarouselItem>\n        ))}\n      </CarouselContent>\n      <CarouselPrevious />\n      <CarouselNext />\n    </Carousel>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "accordion-variants",
+  "title": "Accordion Variants",
+  "description": "Accordion example: Variants.",
+  "registryDependencies": [
+    "accordion"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/accordion/variants.tsx",
+      "content": "\"use client\";\n\nimport {\n  Accordion,\n  AccordionHeader,\n  AccordionItem,\n  AccordionPanel,\n  AccordionTrigger,\n} from \"@keystoneui/react/accordion\";\n\nconst items = [\n  {\n    id: \"1\",\n    title: \"First item\",\n    content: \"Content for the first accordion item.\",\n  },\n  {\n    id: \"2\",\n    title: \"Second item\",\n    content: \"Content for the second accordion item.\",\n  },\n  {\n    id: \"3\",\n    title: \"Third item\",\n    content: \"Content for the third accordion item.\",\n  },\n];\n\nexport default function AccordionVariants() {\n  return (\n    <div className=\"flex flex-col gap-8\">\n      <div className=\"space-y-2\">\n        <p className=\"font-medium text-muted-foreground text-xs uppercase tracking-wider\">\n          Box\n        </p>\n        <Accordion variant=\"box\">\n          {items.map((item) => (\n            <AccordionItem key={item.id} value={item.id}>\n              <AccordionHeader>\n                <AccordionTrigger>{item.title}</AccordionTrigger>\n              </AccordionHeader>\n              <AccordionPanel>{item.content}</AccordionPanel>\n            </AccordionItem>\n          ))}\n        </Accordion>\n      </div>\n      <div className=\"space-y-2\">\n        <p className=\"font-medium text-muted-foreground text-xs uppercase tracking-wider\">\n          Underline\n        </p>\n        <Accordion variant=\"underline\">\n          {items.map((item) => (\n            <AccordionItem key={item.id} value={item.id}>\n              <AccordionHeader>\n                <AccordionTrigger>{item.title}</AccordionTrigger>\n              </AccordionHeader>\n              <AccordionPanel>{item.content}</AccordionPanel>\n            </AccordionItem>\n          ))}\n        </Accordion>\n      </div>\n      <div className=\"space-y-2\">\n        <p className=\"font-medium text-muted-foreground text-xs uppercase tracking-wider\">\n          Ghost\n        </p>\n        <Accordion variant=\"ghost\">\n          {items.map((item) => (\n            <AccordionItem key={item.id} value={item.id}>\n              <AccordionHeader>\n                <AccordionTrigger>{item.title}</AccordionTrigger>\n              </AccordionHeader>\n              <AccordionPanel>{item.content}</AccordionPanel>\n            </AccordionItem>\n          ))}\n        </Accordion>\n      </div>\n      <div className=\"space-y-2\">\n        <p className=\"font-medium text-muted-foreground text-xs uppercase tracking-wider\">\n          Table\n        </p>\n        <Accordion variant=\"table\">\n          {items.map((item) => (\n            <AccordionItem key={item.id} value={item.id}>\n              <AccordionHeader>\n                <AccordionTrigger>{item.title}</AccordionTrigger>\n              </AccordionHeader>\n              <AccordionPanel>{item.content}</AccordionPanel>\n            </AccordionItem>\n          ))}\n        </Accordion>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

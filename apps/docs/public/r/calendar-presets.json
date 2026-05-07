@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "calendar-presets",
+  "title": "Calendar Presets",
+  "description": "Calendar example: Presets.",
+  "registryDependencies": [
+    "button",
+    "calendar",
+    "card"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/calendar/presets.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { Calendar } from \"@keystoneui/react/calendar\";\nimport { Card, CardContent, CardFooter } from \"@keystoneui/react/card\";\nimport { addDays } from \"date-fns\";\nimport { useState } from \"react\";\n\nexport default function CalendarPresets() {\n  const [date, setDate] = useState<Date | undefined>(new Date());\n  const [currentMonth, setCurrentMonth] = useState<Date>(\n    new Date(new Date().getFullYear(), new Date().getMonth(), 1)\n  );\n\n  return (\n    <Card className=\"w-fit shadow-lg\" size=\"xs\">\n      <CardContent>\n        <Calendar\n          className=\"p-0 [--cell-size:--spacing(9.5)]\"\n          fixedWeeks\n          mode=\"single\"\n          month={currentMonth}\n          onMonthChange={setCurrentMonth}\n          onSelect={setDate}\n          selected={date}\n        />\n      </CardContent>\n      <CardFooter className=\"flex w-0 min-w-full flex-wrap gap-2\">\n        {[\n          { label: \"Today\", value: 0 },\n          { label: \"Tomorrow\", value: 1 },\n          { label: \"In 3 days\", value: 3 },\n          { label: \"In a week\", value: 7 },\n          { label: \"In 2 weeks\", value: 14 },\n        ].map((preset) => (\n          <Button\n            key={preset.value}\n            onClick={() => {\n              const newDate = addDays(new Date(), preset.value);\n              setDate(newDate);\n              setCurrentMonth(\n                new Date(newDate.getFullYear(), newDate.getMonth(), 1)\n              );\n            }}\n            size=\"xs\"\n            variant=\"outline\"\n          >\n            {preset.label}\n          </Button>\n        ))}\n      </CardFooter>\n    </Card>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

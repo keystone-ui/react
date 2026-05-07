@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "slider-range",
+  "title": "Slider Range",
+  "description": "Slider example: Range.",
+  "registryDependencies": [
+    "slider"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/slider/range.tsx",
+      "content": "\"use client\";\n\nimport {\n  Slider,\n  SliderControl,\n  SliderIndicator,\n  SliderThumb,\n  SliderTrack,\n  SliderValue,\n} from \"@keystoneui/react/slider\";\nimport { useId } from \"react\";\n\nexport default function SliderRange() {\n  const id = useId();\n\n  return (\n    <Slider aria-labelledby={id} className=\"max-w-sm\" defaultValue={[25, 75]}>\n      <div className=\"flex justify-between\">\n        <span className=\"font-medium text-sm\" id={id}>\n          Price range\n        </span>\n        <SliderValue>\n          {(formattedValues) => formattedValues.join(\" – \")}\n        </SliderValue>\n      </div>\n      <SliderControl>\n        <SliderTrack>\n          <SliderIndicator />\n          <SliderThumb aria-label=\"Minimum price\" index={0} />\n          <SliderThumb aria-label=\"Maximum price\" index={1} />\n        </SliderTrack>\n      </SliderControl>\n    </Slider>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -3,7 +3,9 @@
   "name": "label",
   "title": "Label",
   "description": "An accessible label component for form controls with optional description and error messages.",
-  "dependencies": ["@base-ui/react"],
+  "dependencies": [
+    "@base-ui/react"
+  ],
   "files": [
     {
       "path": "packages/ui/src/label.tsx",

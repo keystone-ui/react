@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "card-social-card",
+  "title": "Card Social Card",
+  "description": "Card example: Social Card.",
+  "registryDependencies": [
+    "avatar",
+    "button",
+    "card"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/card/social-card.tsx",
+      "content": "\"use client\";\n\nimport { Avatar, AvatarFallback, AvatarImage } from \"@keystoneui/react/avatar\";\nimport { Button } from \"@keystoneui/react/button\";\nimport { Card, CardContent, CardHeader } from \"@keystoneui/react/card\";\nimport { BadgeCheck as BadgeCheckIcon } from \"lucide-react\";\n\nexport default function CardSocialCard() {\n  return (\n    <Card className=\"w-full max-w-xs\">\n      <CardHeader className=\"flex-row items-center gap-3\">\n        <Avatar size=\"lg\">\n          <AvatarImage\n            alt=\"shadcn\"\n            src=\"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face\"\n          />\n          <AvatarFallback>SC</AvatarFallback>\n        </Avatar>\n        <div className=\"flex flex-1 flex-col gap-0.5\">\n          <div className=\"flex items-center gap-1 font-semibold text-sm leading-tight\">\n            shadcn\n            <BadgeCheckIcon className=\"size-4 fill-blue-500 text-white\" />\n          </div>\n          <p className=\"text-muted-foreground text-xs\">@shadcn</p>\n        </div>\n        <Button size=\"sm\">Follow</Button>\n      </CardHeader>\n      <CardContent className=\"space-y-3\">\n        <p className=\"text-sm leading-relaxed\">\n          Building open source tools for the web. Creator of shadcn/ui and\n          taxonomy.\n        </p>\n        <div className=\"flex gap-4 text-sm\">\n          <span>\n            <span className=\"font-semibold\">4</span>{\" \"}\n            <span className=\"text-muted-foreground\">Following</span>\n          </span>\n          <span>\n            <span className=\"font-semibold\">97.1K</span>{\" \"}\n            <span className=\"text-muted-foreground\">Followers</span>\n          </span>\n        </div>\n      </CardContent>\n    </Card>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

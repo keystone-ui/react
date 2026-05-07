@@ -3,7 +3,9 @@
   "name": "drawer",
   "title": "Drawer",
   "description": "Slide-out panel that emerges from screen edges for supplementary content or navigation.",
-  "dependencies": ["@base-ui/react"],
+  "dependencies": [
+    "@base-ui/react"
+  ],
   "files": [
     {
       "path": "packages/ui/src/drawer.tsx",

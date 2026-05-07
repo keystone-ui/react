@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-group-currency",
+  "title": "Input Group Currency",
+  "description": "Input Group example: Currency.",
+  "registryDependencies": [
+    "input-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-group/currency.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupInput,\n  InputGroupText,\n} from \"@keystoneui/react/input-group\";\n\nexport default function InputGroupCurrency() {\n  return (\n    <InputGroup>\n      <InputGroupAddon>\n        <InputGroupText>$</InputGroupText>\n      </InputGroupAddon>\n      <InputGroupInput placeholder=\"0.00\" type=\"number\" />\n      <InputGroupAddon align=\"inline-end\">\n        <InputGroupText>USD</InputGroupText>\n      </InputGroupAddon>\n    </InputGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

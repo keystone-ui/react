@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-group-with-input",
+  "title": "Button Group With Input",
+  "description": "Button Group example: With Input.",
+  "registryDependencies": [
+    "button",
+    "button-group",
+    "input"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/button-group/with-input.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { ButtonGroup } from \"@keystoneui/react/button-group\";\nimport { Input } from \"@keystoneui/react/input\";\nimport { Search as SearchIcon } from \"lucide-react\";\n\nexport default function ButtonGroupWithInput() {\n  return (\n    <ButtonGroup>\n      <Input placeholder=\"Search...\" />\n      <Button aria-label=\"Search\" variant=\"outline\">\n        <SearchIcon />\n      </Button>\n    </ButtonGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,7 +1,18 @@
-import { init } from "./init.js";
+import { isCliVerb, runCli } from "./cli.js";
 
-if (process.argv[2] === "init") {
-  await init();
+const verbCandidate = process.argv[2];
+
+if (
+  verbCandidate === "--help" ||
+  verbCandidate === "-h" ||
+  verbCandidate === "help"
+) {
+  await runCli(process.argv.slice(2));
+  process.exit();
+}
+
+if (isCliVerb(verbCandidate)) {
+  await runCli(process.argv.slice(2));
   process.exit();
 }
 

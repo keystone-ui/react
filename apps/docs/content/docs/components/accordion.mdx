@@ -19,6 +19,36 @@ import {
 
 <ComponentPreview name="accordion-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/accordion.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="accordion-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -29,29 +59,38 @@ Accordion
     └── AccordionPanel
 ```
 
-## Variants
+## Examples
+
+### Variants
 
 Different visual styles for the accordion:
 
 <ComponentPreview name="accordion-variants" />
 
-## Multiple
+
+### Multiple
 
 Allow multiple sections to be open simultaneously:
 
 <ComponentPreview name="accordion-multiple" />
 
-## Disabled
+
+### Disabled
 
 Disable individual accordion items to prevent expansion:
 
 <ComponentPreview name="accordion-disabled" />
 
-## Custom Chevron
+
+### Custom Chevron
 
 Replace the default chevron with a custom icon:
 
 <ComponentPreview name="accordion-custom-chevron" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

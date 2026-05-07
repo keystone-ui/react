@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox-pill-group",
+  "title": "Checkbox Pill Group",
+  "description": "Checkbox example: Pill Group.",
+  "registryDependencies": [
+    "card",
+    "checkbox",
+    "field"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/checkbox/pill-group.tsx",
+      "content": "\"use client\";\n\nimport { Card, CardContent } from \"@keystoneui/react/card\";\nimport { Checkbox } from \"@keystoneui/react/checkbox\";\nimport {\n  Field,\n  FieldDescription,\n  FieldGroup,\n  FieldLabel,\n  FieldLegend,\n  FieldSet,\n  FieldTitle,\n} from \"@keystoneui/react/field\";\n\nconst options = [\n  { label: \"Social Media\", value: \"social-media\" },\n  { label: \"Search Engine\", value: \"search-engine\" },\n  { label: \"Referral\", value: \"referral\" },\n  { label: \"Other\", value: \"other\" },\n];\n\nexport default function CheckboxPillGroup() {\n  return (\n    <Card className=\"py-4 shadow-none\">\n      <CardContent className=\"px-4\">\n        <form>\n          <FieldGroup>\n            <FieldSet className=\"gap-4\">\n              <FieldLegend>How did you hear about us?</FieldLegend>\n              <FieldDescription className=\"line-clamp-1\">\n                Select the option that best describes how you heard about us.\n              </FieldDescription>\n              <FieldGroup className=\"flex flex-row flex-wrap gap-2 rounded-full\">\n                {options.map((option) => (\n                  <FieldLabel\n                    className=\"w-fit!\"\n                    htmlFor={option.value}\n                    key={option.value}\n                  >\n                    <Field\n                      className=\"gap-1.5 overflow-hidden px-3! py-1.5! transition-all duration-100 ease-linear group-has-data-checked/field-label:px-2!\"\n                      orientation=\"horizontal\"\n                    >\n                      <Checkbox\n                        className=\"-ml-6 -translate-x-1 rounded-full transition-all duration-100 ease-linear data-checked:ml-0 data-checked:translate-x-0\"\n                        defaultChecked={option.value === \"social-media\"}\n                        id={option.value}\n                        value={option.value}\n                      />\n                      <FieldTitle>{option.label}</FieldTitle>\n                    </Field>\n                  </FieldLabel>\n                ))}\n              </FieldGroup>\n            </FieldSet>\n          </FieldGroup>\n        </form>\n      </CardContent>\n    </Card>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "alert-dialog-small",
+  "title": "Alert Dialog Small",
+  "description": "Alert Dialog example: Small.",
+  "registryDependencies": [
+    "alert-dialog",
+    "button"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/alert-dialog/small.tsx",
+      "content": "\"use client\";\n\nimport {\n  AlertDialog,\n  AlertDialogAction,\n  AlertDialogCancel,\n  AlertDialogContent,\n  AlertDialogDescription,\n  AlertDialogFooter,\n  AlertDialogHeader,\n  AlertDialogMedia,\n  AlertDialogTitle,\n  AlertDialogTrigger,\n} from \"@keystoneui/react/alert-dialog\";\nimport { Button } from \"@keystoneui/react/button\";\nimport { Trash as TrashIcon } from \"lucide-react\";\n\nexport default function AlertDialogSmall() {\n  return (\n    <AlertDialog>\n      <AlertDialogTrigger render={<Button variant=\"outline\" />}>\n        Delete Item\n      </AlertDialogTrigger>\n      <AlertDialogContent size=\"sm\">\n        <AlertDialogHeader>\n          <AlertDialogMedia>\n            <TrashIcon />\n          </AlertDialogMedia>\n          <AlertDialogTitle>Delete this item?</AlertDialogTitle>\n          <AlertDialogDescription>\n            This action cannot be undone.\n          </AlertDialogDescription>\n        </AlertDialogHeader>\n        <AlertDialogFooter>\n          <AlertDialogAction variant=\"destructive\">Delete</AlertDialogAction>\n          <AlertDialogCancel>Cancel</AlertDialogCancel>\n        </AlertDialogFooter>\n      </AlertDialogContent>\n    </AlertDialog>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "calendar-week-numbers",
+  "title": "Calendar Week Numbers",
+  "description": "Calendar example: Week Numbers.",
+  "registryDependencies": [
+    "calendar"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/calendar/week-numbers.tsx",
+      "content": "\"use client\";\n\nimport { Calendar } from \"@keystoneui/react/calendar\";\nimport { useState } from \"react\";\n\nexport default function CalendarWeekNumbers() {\n  const [date, setDate] = useState<Date | undefined>(\n    new Date(new Date().getFullYear(), 0, 12)\n  );\n\n  return (\n    <Calendar\n      className=\"rounded-lg shadow-lg ring-1 ring-popup-ring\"\n      defaultMonth={date}\n      mode=\"single\"\n      onSelect={setDate}\n      selected={date}\n      showWeekNumber\n    />\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "select-sizes",
+  "title": "Select Sizes",
+  "description": "Select example: Sizes.",
+  "registryDependencies": [
+    "select"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/select/sizes.tsx",
+      "content": "\"use client\";\n\nimport {\n  Select,\n  SelectContent,\n  SelectGroup,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"@keystoneui/react/select\";\n\nconst fruits: Record<string, string> = {\n  apple: \"Apple\",\n  banana: \"Banana\",\n  blueberry: \"Blueberry\",\n};\n\nexport default function SelectSizes() {\n  return (\n    <div className=\"flex items-end gap-4\">\n      <div className=\"flex flex-col gap-1.5\">\n        <span className=\"text-muted-foreground text-xs\">Default</span>\n        <Select defaultValue=\"apple\" items={fruits}>\n          <SelectTrigger size=\"default\">\n            <SelectValue />\n          </SelectTrigger>\n          <SelectContent>\n            <SelectGroup>\n              <SelectItem value=\"apple\">Apple</SelectItem>\n              <SelectItem value=\"banana\">Banana</SelectItem>\n              <SelectItem value=\"blueberry\">Blueberry</SelectItem>\n            </SelectGroup>\n          </SelectContent>\n        </Select>\n      </div>\n      <div className=\"flex flex-col gap-1.5\">\n        <span className=\"text-muted-foreground text-xs\">Small</span>\n        <Select defaultValue=\"apple\" items={fruits}>\n          <SelectTrigger size=\"sm\">\n            <SelectValue />\n          </SelectTrigger>\n          <SelectContent>\n            <SelectGroup>\n              <SelectItem value=\"apple\">Apple</SelectItem>\n              <SelectItem value=\"banana\">Banana</SelectItem>\n              <SelectItem value=\"blueberry\">Blueberry</SelectItem>\n            </SelectGroup>\n          </SelectContent>\n        </Select>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

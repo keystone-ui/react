@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "item-notification-list",
+  "title": "Item Notification List",
+  "description": "Item example: Notification List.",
+  "registryDependencies": [
+    "badge",
+    "item"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/item/notification-list.tsx",
+      "content": "\"use client\";\n\nimport { Badge } from \"@keystoneui/react/badge\";\nimport {\n  Item,\n  ItemActions,\n  ItemContent,\n  ItemDescription,\n  ItemGroup,\n  ItemMedia,\n  ItemSeparator,\n  ItemTitle,\n} from \"@keystoneui/react/item\";\nimport {\n  Bell as BellIcon,\n  CircleCheck as CheckCircle2Icon,\n  MessageSquare as MessageSquareIcon,\n  Package as PackageIcon,\n} from \"lucide-react\";\n\nconst notifications = [\n  {\n    icon: MessageSquareIcon,\n    title: \"New comment on your post\",\n    description: 'Alice commented: \"Great work on the new feature!\"',\n    time: \"2m ago\",\n    unread: true,\n  },\n  {\n    icon: PackageIcon,\n    title: \"Deployment successful\",\n    description: \"v2.4.0 deployed to production with 0 errors.\",\n    time: \"1h ago\",\n    unread: true,\n  },\n  {\n    icon: CheckCircle2Icon,\n    title: \"Review approved\",\n    description: \"Bob approved your pull request #142.\",\n    time: \"3h ago\",\n    unread: false,\n  },\n  {\n    icon: BellIcon,\n    title: \"Reminder\",\n    description: \"Team standup meeting in 15 minutes.\",\n    time: \"5h ago\",\n    unread: false,\n  },\n];\n\nexport default function ItemNotificationList() {\n  return (\n    <ItemGroup className=\"max-w-md\">\n      {notifications.map((notification, index) => (\n        <div key={notification.title}>\n          {index > 0 && <ItemSeparator />}\n          <Item>\n            <ItemMedia variant=\"icon\">\n              <notification.icon />\n            </ItemMedia>\n            <ItemContent>\n              <ItemTitle>{notification.title}</ItemTitle>\n              <ItemDescription>{notification.description}</ItemDescription>\n            </ItemContent>\n            <ItemActions>\n              {notification.unread ? (\n                <Badge variant=\"default\">New</Badge>\n              ) : (\n                <span className=\"text-muted-foreground text-xs\">\n                  {notification.time}\n                </span>\n              )}\n            </ItemActions>\n          </Item>\n        </div>\n      ))}\n    </ItemGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

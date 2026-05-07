@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "typography-inline-code",
+  "title": "Typography Inline Code",
+  "description": "Typography example: Inline Code.",
+  "files": [
+    {
+      "path": "apps/docs/demos/typography/inline-code.tsx",
+      "content": "\"use client\";\n\nexport default function TypographyInlineCode() {\n  return (\n    <code className=\"relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono font-semibold text-sm\">\n      @keystoneui/react\n    </code>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

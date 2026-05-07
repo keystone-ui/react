@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "alert-without-icon",
+  "title": "Alert Without Icon",
+  "description": "Alert example: Without Icon.",
+  "registryDependencies": [
+    "alert"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/alert/without-icon.tsx",
+      "content": "\"use client\";\n\nimport { Alert, AlertDescription, AlertTitle } from \"@keystoneui/react/alert\";\n\nexport default function AlertWithoutIcon() {\n  return (\n    <div className=\"grid w-full max-w-lg gap-4\">\n      <Alert>\n        <AlertTitle>Default alert without icon</AlertTitle>\n        <AlertDescription>\n          The layout adapts to a single column when no icon is present.\n        </AlertDescription>\n      </Alert>\n      <Alert variant=\"info\">\n        <AlertTitle>Did you know?</AlertTitle>\n        <AlertDescription>\n          You can use alerts without icons for simpler messages.\n        </AlertDescription>\n      </Alert>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

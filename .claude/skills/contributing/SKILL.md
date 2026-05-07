@@ -26,6 +26,36 @@ This creates all files and updates all registries. Then follow the Storybook-fir
 6. **LLMs.txt** updates automatically (no manual step)
 7. **Sync the AI agent surface** — see [Sync the AI Agent Surface](#sync-the-ai-agent-surface) below
 
+## Adding a New Block
+
+Blocks are full-page compositions, hand-registered (no `pnpm add:block` scaffolder yet). Workflow:
+
+1. **Author the source** under `apps/docs/demos/blocks/<name>.tsx` (single-file) or `apps/docs/demos/blocks/<name>/` (multi-file with `index.tsx` re-export).
+2. **Register the demo** in `apps/docs/demos/index.ts` as `"block-<name>": { component: ..., file: "blocks/<name>.tsx" }`. The `block-<name>` key is what `<BlockPreview name="block-<name>">` resolves against.
+3. **Add the registry entry** by hand-editing `registry.json`. The block item must include:
+   - `name`, `type: "registry:block"`, `title`, `description`
+   - `dependencies` (npm packages) and `registryDependencies` (other registry items)
+   - `files[]` with **per-file types**: `registry:page` (with `target: "app/<slug>/page.tsx"`) for the page entry; `registry:component` for everything else
+   - **`categories: [...]`** — see the taxonomy below. `pnpm sync:registry` warns if missing.
+4. **Write the MDX** at `apps/docs/content/docs/blocks/<name>.mdx`. Required structure: install bash fence, `<BlockPreview name="block-<name>">`, `## Components Used` with links to `/docs/components/<primitive>`. The lint at `pnpm lint:docs` blocks merge if any of these are missing or malformed. See `apps/docs/content/docs/blocks/_block-template.mdx`.
+5. **Regenerate backlinks** with `pnpm docs:backlinks` — this auto-injects `## Related Blocks` into every component MDX referenced under `## Components Used` (idempotent, fenced).
+6. **Rebuild the registry** with `pnpm registry:build`.
+
+### Block category taxonomy
+
+Every block must carry at least one category. Current values in use:
+
+| Category | Used by | Mirrors shadcn? |
+|---|---|---|
+| `authentication` | sign-in + sign-up blocks | ✅ |
+| `login` | `signin-0X` (alongside `authentication`) | ✅ |
+| `signup` | `signup-0X` (alongside `authentication`) | ✅ |
+| `navigation` | `profile-dropdown-01` | new |
+| `data` | `tickets-01` | new |
+| `betting` | `betting-panel-0X` | new |
+
+When adding a new category, prefer single-word lowercase strings that mirror shadcn naming where any overlap exists (`/Users/vladsuciu/dev/ui/apps/v4/registry.json` is the reference). Document the new category in this table and in `AGENTS.md` → "Block Authoring".
+
 ## Updating an Existing Component
 
 ### API change (new/renamed prop, new sub-component)
@@ -76,6 +106,9 @@ Three surfaces drift if not maintained explicitly. Run through this checklist af
 | New popup behavior (height, animation, z-stack) | `skills/keystoneui-react/rules/composition.md` AND `.claude/skills/popup-patterns/SKILL.md`. |
 | New install path or CLI flow | `skills/keystoneui-react/cli.md` AND `apps/docs/content/docs/(getting-started)/agents/skills.mdx`. |
 | New MCP tool | `packages/keystoneui-mcp/src/{server,tools,fetcher}.ts` AND `skills/keystoneui-react/mcp.md` AND `apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx`. |
+| New block | Follow [Adding a New Block](#adding-a-new-block) above; then add the block to the **Block Selection** table in `skills/keystoneui-react/SKILL.md`, run `pnpm docs:backlinks` and `pnpm registry:build`. |
+| New block category | `AGENTS.md` "Block Authoring" taxonomy AND the table in [Adding a New Block](#adding-a-new-block) above AND the **Block Selection** table in `skills/keystoneui-react/SKILL.md`. |
+| New story or demo variant | Run `pnpm lint:stories-demos`. If the lint flags it as story-only or demo-only and that's intentional (per-variant story vs consolidated `variants.tsx` demo, dev-only fixture, etc.), add the entry to `scripts/stories-demos-allowlist.json` with a one-line rationale in the `_notes` block. Otherwise author the missing counterpart on the other surface. |
 
 ### Validation
 

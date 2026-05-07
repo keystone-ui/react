@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge-with-spinner",
+  "title": "Badge With Spinner",
+  "description": "Badge example: With Spinner.",
+  "registryDependencies": [
+    "badge",
+    "spinner"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/badge/with-spinner.tsx",
+      "content": "\"use client\";\n\nimport { Badge } from \"@keystoneui/react/badge\";\nimport { Spinner } from \"@keystoneui/react/spinner\";\n\nexport default function BadgeWithSpinner() {\n  return (\n    <div className=\"flex flex-wrap gap-2\">\n      <Badge variant=\"destructive\">\n        <Spinner data-icon=\"inline-start\" />\n        Deleting\n      </Badge>\n      <Badge variant=\"secondary\">\n        Generating\n        <Spinner data-icon=\"inline-end\" />\n      </Badge>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

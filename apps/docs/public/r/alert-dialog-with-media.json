@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "alert-dialog-with-media",
+  "title": "Alert Dialog With Media",
+  "description": "Alert Dialog example: With Media.",
+  "registryDependencies": [
+    "alert-dialog",
+    "button"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/alert-dialog/with-media.tsx",
+      "content": "\"use client\";\n\nimport {\n  AlertDialog,\n  AlertDialogAction,\n  AlertDialogCancel,\n  AlertDialogContent,\n  AlertDialogDescription,\n  AlertDialogFooter,\n  AlertDialogHeader,\n  AlertDialogMedia,\n  AlertDialogTitle,\n  AlertDialogTrigger,\n} from \"@keystoneui/react/alert-dialog\";\nimport { Button } from \"@keystoneui/react/button\";\nimport { TriangleAlert as TriangleAlertIcon } from \"lucide-react\";\n\nexport default function AlertDialogWithMedia() {\n  return (\n    <AlertDialog>\n      <AlertDialogTrigger render={<Button variant=\"outline\" />}>\n        Unsaved Changes\n      </AlertDialogTrigger>\n      <AlertDialogContent>\n        <AlertDialogHeader>\n          <AlertDialogMedia>\n            <TriangleAlertIcon />\n          </AlertDialogMedia>\n          <AlertDialogTitle>Unsaved changes</AlertDialogTitle>\n          <AlertDialogDescription>\n            You have unsaved changes that will be lost if you leave this page.\n            Do you want to save before leaving?\n          </AlertDialogDescription>\n        </AlertDialogHeader>\n        <AlertDialogFooter>\n          <AlertDialogAction>Save Changes</AlertDialogAction>\n          <AlertDialogCancel>Discard</AlertDialogCancel>\n        </AlertDialogFooter>\n      </AlertDialogContent>\n    </AlertDialog>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

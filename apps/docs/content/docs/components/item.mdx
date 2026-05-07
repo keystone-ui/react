@@ -22,6 +22,36 @@ import {
 
 <ComponentPreview name="item-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/item.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="item-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -37,83 +67,101 @@ ItemGroup
 └── ItemSeparator
 ```
 
-## With Description
+## Examples
+
+### With Description
 
 Add secondary text below the title:
 
 <ComponentPreview name="item-with-description" />
 
-## With Avatar
+
+### With Avatar
 
 Display an avatar or icon in the media slot:
 
 <ComponentPreview name="item-with-avatar" />
 
-## With Actions
+
+### With Actions
 
 Add action buttons to the trailing edge:
 
 <ComponentPreview name="item-with-actions" />
 
-## Group
+
+### Group
 
 Organize items into groups with labels:
 
 <ComponentPreview name="item-group" />
 
-## Link
+
+### Link
 
 Render an item as a navigable link:
 
 <ComponentPreview name="item-link" />
 
-## With Icon
+
+### With Icon
 
 Item with a leading icon:
 
 <ComponentPreview name="item-with-icon" />
 
-## With Image
+
+### With Image
 
 Item with a thumbnail image:
 
 <ComponentPreview name="item-with-image" />
 
-## Sizes
+
+### Sizes
 
 Item in different sizes:
 
 <ComponentPreview name="item-sizes" />
 
-## With Footer
+
+### With Footer
 
 Item with footer content:
 
 <ComponentPreview name="item-with-footer" />
 
-## With Separator
+
+### With Separator
 
 Items with separators:
 
 <ComponentPreview name="item-with-separator" />
 
-## Activity Feed
+
+### Activity Feed
 
 Activity feed using Items:
 
 <ComponentPreview name="item-activity-feed" />
 
-## Notification List
+
+### Notification List
 
 Notification list using Items:
 
 <ComponentPreview name="item-notification-list" />
 
-## Settings List
+
+### Settings List
 
 Settings page using Items:
 
 <ComponentPreview name="item-settings-list" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

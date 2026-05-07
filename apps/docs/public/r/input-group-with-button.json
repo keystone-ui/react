@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-group-with-button",
+  "title": "Input Group With Button",
+  "description": "Input Group example: With Button.",
+  "registryDependencies": [
+    "input-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-group/with-button.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupButton,\n  InputGroupInput,\n} from \"@keystoneui/react/input-group\";\nimport { Check as CheckIcon, Copy as CopyIcon } from \"lucide-react\";\nimport { useState } from \"react\";\n\nexport default function InputGroupWithButton() {\n  const [copied, setCopied] = useState(false);\n\n  const handleCopy = () => {\n    navigator.clipboard.writeText(\"https://example.com/api/key\");\n    setCopied(true);\n    setTimeout(() => setCopied(false), 2000);\n  };\n\n  return (\n    <InputGroup>\n      <InputGroupInput readOnly value=\"https://example.com/api/key\" />\n      <InputGroupAddon align=\"inline-end\">\n        <InputGroupButton aria-label=\"Copy to clipboard\" onClick={handleCopy}>\n          {copied ? (\n            <CheckIcon className=\"size-4\" />\n          ) : (\n            <CopyIcon className=\"size-4\" />\n          )}\n        </InputGroupButton>\n      </InputGroupAddon>\n    </InputGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

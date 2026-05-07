@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "combobox-scrollable",
+  "title": "Combobox Scrollable",
+  "description": "Combobox example: Scrollable.",
+  "registryDependencies": [
+    "combobox"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/combobox/scrollable.tsx",
+      "content": "\"use client\";\n\nimport {\n  Combobox,\n  ComboboxContent,\n  ComboboxEmpty,\n  ComboboxInput,\n  ComboboxItem,\n  ComboboxList,\n} from \"@keystoneui/react/combobox\";\n\nconst frameworks = [\n  \"Next.js\",\n  \"SvelteKit\",\n  \"Nuxt.js\",\n  \"Remix\",\n  \"Astro\",\n  \"Gatsby\",\n  \"Vite\",\n  \"Create React App\",\n  \"Angular\",\n  \"Vue CLI\",\n  \"Ember.js\",\n  \"Meteor\",\n  \"Blitz.js\",\n  \"RedwoodJS\",\n  \"Fresh\",\n  \"Qwik\",\n  \"SolidStart\",\n  \"Analog\",\n  \"Elder.js\",\n  \"Sapper\",\n] as const;\n\nexport default function ComboboxScrollable() {\n  return (\n    <Combobox items={frameworks}>\n      <ComboboxInput className=\"w-56\" placeholder=\"Select a framework\" />\n      <ComboboxContent>\n        <ComboboxEmpty>No items found.</ComboboxEmpty>\n        <ComboboxList>\n          {(item) => (\n            <ComboboxItem key={item} value={item}>\n              {item}\n            </ComboboxItem>\n          )}\n        </ComboboxList>\n      </ComboboxContent>\n    </Combobox>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

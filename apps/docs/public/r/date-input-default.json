@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-input-default",
+  "title": "Date Input Default",
+  "description": "Date Input example: Default.",
+  "registryDependencies": [
+    "date-input"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/date-input/default.tsx",
+      "content": "\"use client\";\n\nimport { DateInput } from \"@keystoneui/react/date-input\";\n\nexport default function DateInputDefault() {\n  return <DateInput />;\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

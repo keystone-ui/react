@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "carousel-spacing",
+  "title": "Carousel Spacing",
+  "description": "Carousel example: Spacing.",
+  "registryDependencies": [
+    "carousel"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/carousel/spacing.tsx",
+      "content": "\"use client\";\n\nimport {\n  Carousel,\n  CarouselContent,\n  CarouselItem,\n  CarouselNext,\n  CarouselPrevious,\n} from \"@keystoneui/react/carousel\";\n\nexport default function CarouselSpacing() {\n  return (\n    <Carousel\n      className=\"mx-12 max-w-sm\"\n      gap=\"0.25rem\"\n      opts={{ align: \"start\" }}\n    >\n      <CarouselContent>\n        {Array.from({ length: 8 }).map((_, i) => (\n          // biome-ignore lint/suspicious/noArrayIndexKey: static list\n          <CarouselItem className=\"basis-1/3\" key={`slide-${i}`}>\n            <div className=\"flex aspect-square items-center justify-center rounded-lg border bg-muted\">\n              <span className=\"font-semibold text-2xl\">{i + 1}</span>\n            </div>\n          </CarouselItem>\n        ))}\n      </CarouselContent>\n      <CarouselPrevious />\n      <CarouselNext />\n    </Carousel>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

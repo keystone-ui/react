@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-input-presets",
+  "title": "Date Input Presets",
+  "description": "Date Input example: Presets.",
+  "registryDependencies": [
+    "button",
+    "date-input",
+    "field"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/date-input/presets.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { DateInput } from \"@keystoneui/react/date-input\";\nimport { Field, FieldLabel } from \"@keystoneui/react/field\";\nimport { useState } from \"react\";\n\nfunction formatDate(date: Date): string {\n  return date.toISOString().split(\"T\")[0];\n}\n\nfunction addDays(date: Date, days: number): Date {\n  const result = new Date(date);\n  result.setDate(result.getDate() + days);\n  return result;\n}\n\nexport default function DateInputPresets() {\n  const [value, setValue] = useState(\"\");\n\n  return (\n    <div className=\"flex flex-col gap-3\">\n      <Field>\n        <FieldLabel htmlFor=\"date-presets\">Date</FieldLabel>\n        <DateInput\n          id=\"date-presets\"\n          onChange={(e) => setValue(e.target.value)}\n          value={value}\n        />\n      </Field>\n      <div className=\"flex flex-wrap gap-2\">\n        {[\n          { label: \"Today\", days: 0 },\n          { label: \"Tomorrow\", days: 1 },\n          { label: \"In a week\", days: 7 },\n          { label: \"In 2 weeks\", days: 14 },\n        ].map((preset) => (\n          <Button\n            key={preset.days}\n            onClick={() =>\n              setValue(formatDate(addDays(new Date(), preset.days)))\n            }\n            size=\"xs\"\n            variant=\"outline\"\n          >\n            {preset.label}\n          </Button>\n        ))}\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

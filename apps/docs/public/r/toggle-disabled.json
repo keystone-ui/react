@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-disabled",
+  "title": "Toggle Disabled",
+  "description": "Toggle example: Disabled.",
+  "registryDependencies": [
+    "toggle"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/toggle/disabled.tsx",
+      "content": "\"use client\";\n\nimport { Toggle } from \"@keystoneui/react/toggle\";\nimport { Bold as BoldIcon, Italic as ItalicIcon } from \"lucide-react\";\n\nexport default function ToggleDisabled() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-2\">\n      <Toggle aria-label=\"Toggle disabled\" disabled>\n        <BoldIcon />\n        Disabled\n      </Toggle>\n      <Toggle aria-label=\"Toggle disabled outline\" disabled variant=\"outline\">\n        <ItalicIcon />\n        Disabled\n      </Toggle>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

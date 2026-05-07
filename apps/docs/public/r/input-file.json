@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-file",
+  "title": "Input File",
+  "description": "Input example: File.",
+  "registryDependencies": [
+    "input"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input/file.tsx",
+      "content": "\"use client\";\n\nimport { Input } from \"@keystoneui/react/input\";\n\nexport default function InputFile() {\n  return <Input type=\"file\" />;\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -13,6 +13,36 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@keystoneu
 
 <ComponentPreview name="resizable-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/resizable.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="resizable-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -21,35 +51,45 @@ ResizablePanelGroup
 └── ResizableHandle
 ```
 
-## Vertical
+## Examples
+
+### Vertical
 
 Panels can be stacked vertically by setting `direction="vertical"`:
 
 <ComponentPreview name="resizable-vertical" />
 
-## With Handle
+
+### With Handle
 
 Add a visible drag handle indicator to the resize bar:
 
 <ComponentPreview name="resizable-with-handle" />
 
-## Nested
+
+### Nested
 
 Nested resizable panels:
 
 <ComponentPreview name="resizable-nested" />
 
-## Collapsible
+
+### Collapsible
 
 Collapsible resizable panel:
 
 <ComponentPreview name="resizable-collapsible" />
 
-## Complex Layout
+
+### Complex Layout
 
 Complex layout with multiple panels:
 
 <ComponentPreview name="resizable-complex-layout" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

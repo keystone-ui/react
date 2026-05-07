@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton-form",
+  "title": "Skeleton Form",
+  "description": "Skeleton example: Form.",
+  "registryDependencies": [
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/skeleton/form.tsx",
+      "content": "\"use client\";\n\nimport { Skeleton } from \"@keystoneui/react/skeleton\";\n\nexport default function SkeletonForm() {\n  return (\n    <div className=\"w-full max-w-sm space-y-6 rounded-xl border p-6\">\n      <div className=\"space-y-2\">\n        <Skeleton className=\"h-4 w-16\" />\n        <Skeleton className=\"h-10 w-full rounded-md\" />\n      </div>\n      <div className=\"space-y-2\">\n        <Skeleton className=\"h-4 w-12\" />\n        <Skeleton className=\"h-10 w-full rounded-md\" />\n      </div>\n      <div className=\"space-y-2\">\n        <Skeleton className=\"h-4 w-20\" />\n        <Skeleton className=\"h-24 w-full rounded-md\" />\n      </div>\n      <div className=\"flex justify-end gap-2\">\n        <Skeleton className=\"h-9 w-20 rounded-md\" />\n        <Skeleton className=\"h-9 w-20 rounded-md\" />\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

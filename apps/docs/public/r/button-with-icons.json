@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-with-icons",
+  "title": "Button With Icons",
+  "description": "Button example: With Icons.",
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/button/with-icons.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { ArrowLeft, ArrowRight, ChevronDown, Mail } from \"lucide-react\";\n\nexport default function ButtonWithIcons() {\n  return (\n    <div className=\"flex flex-wrap gap-4\">\n      <Button>\n        Next <ArrowRight />\n      </Button>\n      <Button variant=\"secondary\">\n        <Mail /> Email\n      </Button>\n      <Button variant=\"outline\">\n        <ArrowLeft /> Previous\n      </Button>\n      <Button variant=\"ghost\">\n        Settings <ChevronDown />\n      </Button>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "field-horizontal",
+  "title": "Field Horizontal",
+  "description": "Field example: Horizontal.",
+  "registryDependencies": [
+    "field",
+    "input"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/field/horizontal.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldLabel } from \"@keystoneui/react/field\";\nimport { Input } from \"@keystoneui/react/input\";\n\nexport default function FieldHorizontal() {\n  return (\n    <Field className=\"max-w-xs\" orientation=\"horizontal\">\n      <FieldLabel htmlFor=\"horizontal-name\">Name</FieldLabel>\n      <Input id=\"horizontal-name\" placeholder=\"Evil Rabbit\" />\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

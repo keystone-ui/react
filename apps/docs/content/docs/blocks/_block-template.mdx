@@ -1,0 +1,51 @@
+---
+title: Block Name 01
+description: One-paragraph description of what the block does and when to reach for it.
+---
+
+{/*
+
+This file is a reference template, not a published page. Block MDX uses a
+different shape than component MDX: the install command lives at the top
+(no <CodeBlockTabs> here — blocks are install-only), the preview comes
+right after, and the body is short.
+
+Required sections:
+1. Frontmatter (title, description)
+2. ```bash install command — first non-frontmatter content
+3. <BlockPreview name="block-<name>" />
+4. ## Components Used — bullet list of links to /docs/components/<name>
+
+Optional:
+- ## Features — bullet list of capabilities
+- ## Composition — top-level layout tree, useful for blocks > 200 LOC
+
+*/}
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/block-name-01.json
+```
+
+<BlockPreview name="block-block-name-01" />
+
+## Features
+
+- Capability 1
+- Capability 2
+
+## Components Used
+
+- [Component A](/docs/components/a)
+- [Component B](/docs/components/b)
+
+## Composition
+
+```text
+Block
+├── Header
+│   ├── Logo
+│   └── Nav
+└── Content
+    ├── Sidebar
+    └── Main
+```

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-empty-state",
+  "title": "Table Empty State",
+  "description": "Table example: Empty State.",
+  "registryDependencies": [
+    "empty",
+    "table"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/table/empty-state.tsx",
+      "content": "\"use client\";\n\nimport {\n  Empty,\n  EmptyDescription,\n  EmptyHeader,\n  EmptyMedia,\n  EmptyTitle,\n} from \"@keystoneui/react/empty\";\nimport {\n  Table,\n  TableBody,\n  TableCell,\n  TableHead,\n  TableHeader,\n  TableRow,\n} from \"@keystoneui/react/table\";\nimport { Inbox as InboxIcon } from \"lucide-react\";\n\nexport default function TableEmptyState() {\n  return (\n    <Table>\n      <TableHeader>\n        <TableRow>\n          <TableHead className=\"w-[100px]\">Invoice</TableHead>\n          <TableHead>Status</TableHead>\n          <TableHead>Method</TableHead>\n          <TableHead className=\"text-right\">Amount</TableHead>\n        </TableRow>\n      </TableHeader>\n      <TableBody>\n        <TableRow className=\"hover:bg-transparent\">\n          <TableCell colSpan={4}>\n            <Empty className=\"py-10\">\n              <EmptyHeader>\n                <EmptyMedia variant=\"icon\">\n                  <InboxIcon />\n                </EmptyMedia>\n                <EmptyTitle>No invoices found</EmptyTitle>\n                <EmptyDescription>\n                  There are no invoices matching your filters.\n                </EmptyDescription>\n              </EmptyHeader>\n            </Empty>\n          </TableCell>\n        </TableRow>\n      </TableBody>\n    </Table>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

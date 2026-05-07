@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-input-range",
+  "title": "Date Input Range",
+  "description": "Date Input example: Range.",
+  "registryDependencies": [
+    "date-input",
+    "field"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/date-input/range.tsx",
+      "content": "\"use client\";\n\nimport { DateInput } from \"@keystoneui/react/date-input\";\nimport { Field, FieldGroup, FieldLabel } from \"@keystoneui/react/field\";\n\nexport default function DateInputRange() {\n  return (\n    <FieldGroup className=\"flex-row items-end\">\n      <Field>\n        <FieldLabel htmlFor=\"date-from\">From</FieldLabel>\n        <DateInput id=\"date-from\" />\n      </Field>\n      <Field>\n        <FieldLabel htmlFor=\"date-to\">To</FieldLabel>\n        <DateInput id=\"date-to\" />\n      </Field>\n    </FieldGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

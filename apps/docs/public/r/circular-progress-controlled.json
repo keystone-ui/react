@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "circular-progress-controlled",
+  "title": "Circular Progress Controlled",
+  "description": "Circular Progress example: Controlled.",
+  "registryDependencies": [
+    "circular-progress",
+    "slider"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/circular-progress/controlled.tsx",
+      "content": "\"use client\";\n\nimport {\n  CircularProgress,\n  CircularProgressIndicator,\n  CircularProgressTrack,\n  CircularProgressValue,\n} from \"@keystoneui/react/circular-progress\";\nimport {\n  Slider,\n  SliderControl,\n  SliderIndicator,\n  SliderThumb,\n  SliderTrack,\n} from \"@keystoneui/react/slider\";\nimport { useState } from \"react\";\n\nexport default function CircularProgressControlled() {\n  const [value, setValue] = useState<number | readonly number[]>(50);\n  const numericValue = Array.isArray(value) ? value[0] : value;\n\n  return (\n    <div className=\"flex w-full max-w-sm flex-col items-center gap-6\">\n      <CircularProgress color=\"success\" size=\"lg\" value={numericValue}>\n        <CircularProgressTrack />\n        <CircularProgressIndicator />\n        <CircularProgressValue />\n      </CircularProgress>\n      <Slider className=\"w-full\" onValueChange={setValue} value={value}>\n        <SliderControl>\n          <SliderTrack>\n            <SliderIndicator />\n            <SliderThumb aria-label=\"Progress value\" />\n          </SliderTrack>\n        </SliderControl>\n      </Slider>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

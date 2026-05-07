@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag-with-remove",
+  "title": "Tag With Remove",
+  "description": "Tag example: With Remove.",
+  "registryDependencies": [
+    "tag"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tag/with-remove.tsx",
+      "content": "\"use client\";\n\nimport { Tag, TagRemove } from \"@keystoneui/react/tag\";\nimport {\n  Bold as BoldIcon,\n  Italic as ItalicIcon,\n  Star as StarIcon,\n} from \"lucide-react\";\n\nexport default function TagWithRemove() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-2\">\n      <Tag value=\"bold\">\n        <BoldIcon />\n        Bold\n        <TagRemove />\n      </Tag>\n      <Tag value=\"italic\">\n        <ItalicIcon />\n        Italic\n        <TagRemove />\n      </Tag>\n      <Tag defaultPressed value=\"star\">\n        <StarIcon />\n        Star\n        <TagRemove />\n      </Tag>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

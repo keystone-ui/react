@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-outline",
+  "title": "Empty Outline",
+  "description": "Empty example: Outline.",
+  "registryDependencies": [
+    "button",
+    "empty"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/empty/outline.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Empty,\n  EmptyContent,\n  EmptyDescription,\n  EmptyHeader,\n  EmptyMedia,\n  EmptyTitle,\n} from \"@keystoneui/react/empty\";\nimport { File as FileIcon, Plus as PlusIcon } from \"lucide-react\";\n\nexport default function EmptyOutline() {\n  return (\n    <Empty className=\"max-w-md border\">\n      <EmptyHeader>\n        <EmptyMedia variant=\"icon\">\n          <FileIcon />\n        </EmptyMedia>\n        <EmptyTitle>No documents</EmptyTitle>\n        <EmptyDescription>\n          You haven&apos;t created any documents yet. Get started by creating\n          your first one.\n        </EmptyDescription>\n      </EmptyHeader>\n      <EmptyContent>\n        <Button size=\"sm\">\n          <PlusIcon />\n          Create Document\n        </Button>\n      </EmptyContent>\n    </Empty>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

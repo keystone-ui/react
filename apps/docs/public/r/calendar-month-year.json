@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "calendar-month-year",
+  "title": "Calendar Month Year",
+  "description": "Calendar example: Month Year.",
+  "registryDependencies": [
+    "calendar"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/calendar/month-year.tsx",
+      "content": "\"use client\";\n\nimport { Calendar } from \"@keystoneui/react/calendar\";\n\nexport default function CalendarMonthYear() {\n  return (\n    <Calendar\n      captionLayout=\"dropdown\"\n      className=\"rounded-lg shadow-lg ring-1 ring-popup-ring\"\n      mode=\"single\"\n    />\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

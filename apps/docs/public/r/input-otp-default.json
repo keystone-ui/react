@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-otp-default",
+  "title": "Input Otp Default",
+  "description": "Input Otp example: Default.",
+  "registryDependencies": [
+    "input-otp"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-otp/default.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputOTP,\n  InputOTPGroup,\n  InputOTPSlot,\n} from \"@keystoneui/react/input-otp\";\n\nconst OTP_LENGTH = 6;\n\nexport default function InputOTPDefault() {\n  return (\n    <InputOTP length={OTP_LENGTH}>\n      <InputOTPGroup>\n        {Array.from({ length: OTP_LENGTH }, (_, index) => (\n          <InputOTPSlot\n            aria-label={`Character ${index + 1} of ${OTP_LENGTH}`}\n            key={index}\n          />\n        ))}\n      </InputOTPGroup>\n    </InputOTP>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

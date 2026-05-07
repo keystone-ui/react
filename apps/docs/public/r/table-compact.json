@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-compact",
+  "title": "Table Compact",
+  "description": "Table example: Compact.",
+  "registryDependencies": [
+    "table"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/table/compact.tsx",
+      "content": "\"use client\";\n\nimport {\n  Table,\n  TableBody,\n  TableCaption,\n  TableCell,\n  TableFooter,\n  TableHead,\n  TableHeader,\n  TableRow,\n} from \"@keystoneui/react/table\";\n\nconst invoices = [\n  {\n    invoice: \"INV001\",\n    status: \"Paid\",\n    method: \"Credit Card\",\n    amount: \"$250.00\",\n  },\n  { invoice: \"INV002\", status: \"Pending\", method: \"PayPal\", amount: \"$150.00\" },\n  {\n    invoice: \"INV003\",\n    status: \"Unpaid\",\n    method: \"Bank Transfer\",\n    amount: \"$350.00\",\n  },\n  {\n    invoice: \"INV004\",\n    status: \"Paid\",\n    method: \"Credit Card\",\n    amount: \"$450.00\",\n  },\n  { invoice: \"INV005\", status: \"Paid\", method: \"PayPal\", amount: \"$550.00\" },\n];\n\nexport default function TableCompact() {\n  return (\n    <Table size=\"sm\">\n      <TableCaption>\n        Compact table with reduced padding and text size.\n      </TableCaption>\n      <TableHeader>\n        <TableRow>\n          <TableHead className=\"w-[100px]\">Invoice</TableHead>\n          <TableHead>Status</TableHead>\n          <TableHead>Method</TableHead>\n          <TableHead className=\"text-right\">Amount</TableHead>\n        </TableRow>\n      </TableHeader>\n      <TableBody>\n        {invoices.map((invoice) => (\n          <TableRow key={invoice.invoice}>\n            <TableCell className=\"font-medium\">{invoice.invoice}</TableCell>\n            <TableCell>{invoice.status}</TableCell>\n            <TableCell>{invoice.method}</TableCell>\n            <TableCell className=\"text-right\">{invoice.amount}</TableCell>\n          </TableRow>\n        ))}\n      </TableBody>\n      <TableFooter>\n        <TableRow>\n          <TableCell colSpan={3}>Total</TableCell>\n          <TableCell className=\"text-right\">$1,750.00</TableCell>\n        </TableRow>\n      </TableFooter>\n    </Table>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

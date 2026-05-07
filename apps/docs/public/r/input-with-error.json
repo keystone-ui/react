@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-with-error",
+  "title": "Input With Error",
+  "description": "Input example: With Error.",
+  "registryDependencies": [
+    "field",
+    "input"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input/with-error.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldError, FieldLabel } from \"@keystoneui/react/field\";\nimport { Input } from \"@keystoneui/react/input\";\n\nexport default function InputWithError() {\n  return (\n    <Field data-invalid>\n      <FieldLabel htmlFor=\"input-invalid\">Email</FieldLabel>\n      <Input aria-invalid id=\"input-invalid\" placeholder=\"Email\" />\n      <FieldError>This field contains validation errors.</FieldError>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

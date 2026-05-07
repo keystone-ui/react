@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea-with-error",
+  "title": "Textarea With Error",
+  "description": "Textarea example: With Error.",
+  "registryDependencies": [
+    "field",
+    "textarea"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/textarea/with-error.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldError, FieldLabel } from \"@keystoneui/react/field\";\nimport { Textarea } from \"@keystoneui/react/textarea\";\n\nexport default function TextareaWithError() {\n  return (\n    <Field data-invalid>\n      <FieldLabel htmlFor=\"textarea-error\">Message</FieldLabel>\n      <Textarea\n        aria-invalid\n        id=\"textarea-error\"\n        placeholder=\"Enter your message\"\n      />\n      <FieldError>This field contains validation errors.</FieldError>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

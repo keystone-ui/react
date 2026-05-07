@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag-group-disabled",
+  "title": "Tag Group Disabled",
+  "description": "Tag Group example: Disabled.",
+  "registryDependencies": [
+    "tag-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tag-group/disabled.tsx",
+      "content": "\"use client\";\n\nimport { TagGroup, TagGroupItem } from \"@keystoneui/react/tag-group\";\n\nexport default function TagGroupDisabled() {\n  return (\n    <div className=\"flex flex-col gap-6\">\n      <div className=\"flex flex-col gap-2\">\n        <p className=\"font-semibold text-sm\">Disabled Group</p>\n        <TagGroup defaultValue={[\"travel\"]} disabled>\n          <TagGroupItem value=\"news\">News</TagGroupItem>\n          <TagGroupItem value=\"travel\">Travel</TagGroupItem>\n          <TagGroupItem value=\"gaming\">Gaming</TagGroupItem>\n        </TagGroup>\n      </div>\n\n      <div className=\"flex flex-col gap-2\">\n        <p className=\"font-semibold text-sm\">Individual Disabled Items</p>\n        <TagGroup defaultValue={[\"gaming\"]}>\n          <TagGroupItem value=\"news\">News</TagGroupItem>\n          <TagGroupItem disabled value=\"travel\">\n            Travel\n          </TagGroupItem>\n          <TagGroupItem value=\"gaming\">Gaming</TagGroupItem>\n          <TagGroupItem disabled value=\"shopping\">\n            Shopping\n          </TagGroupItem>\n        </TagGroup>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

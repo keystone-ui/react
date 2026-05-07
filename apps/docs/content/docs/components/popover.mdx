@@ -22,6 +22,36 @@ import {
 
 <ComponentPreview name="popover-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/popover.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="popover-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -35,29 +65,38 @@ Popover
     └── PopoverClose
 ```
 
-## With Form
+## Examples
+
+### With Form
 
 Embed a form inside a popover for inline editing:
 
 <ComponentPreview name="popover-with-form" />
 
-## Alignments
+
+### Alignments
 
 Control the popover placement relative to the trigger:
 
 <ComponentPreview name="popover-alignments" />
 
-## With Arrow
+
+### With Arrow
 
 Add an arrow indicator pointing to the trigger:
 
 <ComponentPreview name="popover-with-arrow" />
 
-## Open on Hover
+
+### Open on Hover
 
 Popover that opens on hover:
 
 <ComponentPreview name="popover-open-on-hover" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

@@ -25,6 +25,36 @@ import {
 
 <ComponentPreview name="combobox-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/combobox.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="combobox-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -40,77 +70,94 @@ Combobox
         └── ComboboxSeparator
 ```
 
-## Custom Items
+## Examples
+
+### Custom Items
 
 Render rich item content with icons, avatars, or descriptions:
 
 <ComponentPreview name="combobox-custom-items" />
 
-## Multiple Selection
+
+### Multiple Selection
 
 Enable multi-select with chips display:
 
 <ComponentPreview name="combobox-multiple" />
 
-## Multiple Selection With Create
+
+### Multiple Selection With Create
 
 Multi-select chips combobox that lets the user create a new value when their typed input doesn't match any existing item — exposes an "Add &quot;X&quot;" row separated from the existing list.
 
 <ComponentPreview name="combobox-multi-with-create" />
 
-## With Clear Button
+
+### With Clear Button
 
 Add a clear button to reset the selection:
 
 <ComponentPreview name="combobox-with-clear" />
 
-## Groups
+
+### Groups
 
 Organize items into labeled groups:
 
 <ComponentPreview name="combobox-groups" />
 
-## Disabled
+
+### Disabled
 
 Disable the entire combobox or individual items:
 
 <ComponentPreview name="combobox-disabled" />
 
-## Popup
+
+### Popup
 
 Customize the popup alignment and behavior:
 
 <ComponentPreview name="combobox-popup" />
 
-## Countries
+
+### Countries
 
 Country selector with flags:
 
 <ComponentPreview name="combobox-countries" />
 
-## Scrollable
+
+### Scrollable
 
 Combobox with a long scrollable list:
 
 <ComponentPreview name="combobox-scrollable" />
 
-## Compact Items
+
+### Compact Items
 
 Combobox with compact item styling:
 
 <ComponentPreview name="combobox-compact-items" />
 
-## Controlled
+
+### Controlled
 
 Controlled combobox with external state:
 
 <ComponentPreview name="combobox-controlled" />
 
-## Form Example
+
+### Form Example
 
 Combobox used within a form:
 
 <ComponentPreview name="combobox-form-example" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

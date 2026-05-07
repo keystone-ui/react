@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "alert-variants",
+  "title": "Alert Variants",
+  "description": "Alert example: Variants.",
+  "registryDependencies": [
+    "alert"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/alert/variants.tsx",
+      "content": "\"use client\";\n\nimport { Alert, AlertDescription, AlertTitle } from \"@keystoneui/react/alert\";\nimport {\n  TriangleAlert as AlertTriangleIcon,\n  CircleCheck as CheckCircle2Icon,\n  Info as InfoIcon,\n  CircleX as XCircleIcon,\n} from \"lucide-react\";\n\nexport default function AlertVariants() {\n  return (\n    <div className=\"grid w-full max-w-lg gap-4\">\n      <Alert variant=\"success\">\n        <CheckCircle2Icon />\n        <AlertTitle>Account updated successfully</AlertTitle>\n        <AlertDescription>\n          Your profile information has been saved.\n        </AlertDescription>\n      </Alert>\n      <Alert variant=\"warning\">\n        <AlertTriangleIcon />\n        <AlertTitle>KYC Required</AlertTitle>\n        <AlertDescription>\n          Level 2 verification needed to deposit.\n        </AlertDescription>\n      </Alert>\n      <Alert variant=\"error\">\n        <XCircleIcon />\n        <AlertTitle>Payment Failed</AlertTitle>\n        <AlertDescription>\n          Your transaction could not be processed.\n        </AlertDescription>\n      </Alert>\n      <Alert variant=\"info\">\n        <InfoIcon />\n        <AlertTitle>New Feature Available</AlertTitle>\n        <AlertDescription>Check out our latest trading tools.</AlertDescription>\n      </Alert>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

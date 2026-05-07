@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-group-small-size",
+  "title": "Input Group Small Size",
+  "description": "Input Group example: Small Size.",
+  "registryDependencies": [
+    "input-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-group/small-size.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupButton,\n  InputGroupInput,\n} from \"@keystoneui/react/input-group\";\nimport { Copy as CopyIcon, Search as SearchIcon } from \"lucide-react\";\n\nexport default function InputGroupSmallSize() {\n  return (\n    <div className=\"flex w-full max-w-sm flex-col gap-3\">\n      <InputGroup size=\"sm\">\n        <InputGroupAddon>\n          <SearchIcon />\n        </InputGroupAddon>\n        <InputGroupInput placeholder=\"Search...\" />\n      </InputGroup>\n      <InputGroup size=\"sm\">\n        <InputGroupInput placeholder=\"Enter code\" />\n        <InputGroupAddon align=\"inline-end\">\n          <InputGroupButton>\n            <CopyIcon />\n          </InputGroupButton>\n        </InputGroupAddon>\n      </InputGroup>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

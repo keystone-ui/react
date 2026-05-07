@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "circular-progress-with-avatar",
+  "title": "Circular Progress With Avatar",
+  "description": "Circular Progress example: With Avatar.",
+  "registryDependencies": [
+    "avatar",
+    "circular-progress"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/circular-progress/with-avatar.tsx",
+      "content": "\"use client\";\n\nimport { Avatar, AvatarFallback, AvatarImage } from \"@keystoneui/react/avatar\";\nimport {\n  CircularProgress,\n  CircularProgressIndicator,\n  CircularProgressTrack,\n} from \"@keystoneui/react/circular-progress\";\n\nexport default function CircularProgressWithAvatar() {\n  return (\n    <div className=\"flex items-center gap-6\">\n      <CircularProgress className=\"size-11\" color=\"success\" value={75}>\n        <CircularProgressTrack />\n        <CircularProgressIndicator />\n        <Avatar className=\"relative\">\n          <AvatarImage\n            alt=\"User\"\n            src=\"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face\"\n          />\n          <AvatarFallback>CN</AvatarFallback>\n        </Avatar>\n      </CircularProgress>\n      <CircularProgress color=\"warning\" value={60}>\n        <CircularProgressTrack />\n        <CircularProgressIndicator />\n        <Avatar className=\"relative\" size=\"lg\">\n          <AvatarImage\n            alt=\"User\"\n            src=\"https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=face\"\n          />\n          <AvatarFallback>GH</AvatarFallback>\n        </Avatar>\n      </CircularProgress>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "select-default",
+  "title": "Select Default",
+  "description": "Select example: Default.",
+  "registryDependencies": [
+    "select"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/select/default.tsx",
+      "content": "\"use client\";\n\nimport {\n  Select,\n  SelectContent,\n  SelectGroup,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"@keystoneui/react/select\";\n\nconst fruits: Record<string, string> = {\n  apple: \"Apple\",\n  banana: \"Banana\",\n  blueberry: \"Blueberry\",\n  grapes: \"Grapes\",\n  pineapple: \"Pineapple\",\n};\n\nexport default function SelectDefault() {\n  return (\n    <Select items={fruits}>\n      <SelectTrigger className=\"w-48\">\n        <SelectValue placeholder=\"Select a fruit\" />\n      </SelectTrigger>\n      <SelectContent>\n        <SelectGroup>\n          {Object.entries(fruits).map(([value, label]) => (\n            <SelectItem key={value} value={value}>\n              {label}\n            </SelectItem>\n          ))}\n        </SelectGroup>\n      </SelectContent>\n    </Select>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -13,17 +13,63 @@ import { Separator } from "@keystoneui/react/separator";
 
 <ComponentPreview name="separator-default" />
 
-## Vertical
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/separator.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="separator-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Examples
+
+### Vertical
 
 Vertical separator between inline items:
 
 <ComponentPreview name="separator-vertical" />
 
-## With Content
+
+### With Content
 
 Separator with text content in the middle:
 
 <ComponentPreview name="separator-with-content" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Profile Dropdown 01](/docs/blocks/profile-dropdown-01) — A user profile dropdown with avatar, level progress, and navigation menu.
+
+{/* backlinks:end */}
 
 ## API Reference
 

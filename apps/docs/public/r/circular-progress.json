@@ -3,7 +3,10 @@
   "name": "circular-progress",
   "title": "Circular Progress",
   "description": "Circular progress indicator for showing completion percentage in a ring format.",
-  "dependencies": ["@base-ui/react", "class-variance-authority"],
+  "dependencies": [
+    "@base-ui/react",
+    "class-variance-authority"
+  ],
   "files": [
     {
       "path": "packages/ui/src/circular-progress.tsx",

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-group-single",
+  "title": "Toggle Group Single",
+  "description": "Toggle Group example: Single.",
+  "registryDependencies": [
+    "toggle-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/toggle-group/single.tsx",
+      "content": "\"use client\";\n\nimport { ToggleGroup, ToggleGroupItem } from \"@keystoneui/react/toggle-group\";\nimport {\n  TextAlignCenter as AlignCenterIcon,\n  TextAlignJustify as AlignJustifyIcon,\n  TextAlignStart as AlignLeftIcon,\n  TextAlignEnd as AlignRightIcon,\n} from \"lucide-react\";\nimport { useState } from \"react\";\n\nexport default function ToggleGroupSingle() {\n  const [value, setValue] = useState<string[]>([\"center\"]);\n\n  return (\n    <div className=\"flex flex-col gap-3\">\n      <ToggleGroup onValueChange={setValue} value={value} variant=\"outline\">\n        <ToggleGroupItem aria-label=\"Align left\" value=\"left\">\n          <AlignLeftIcon />\n        </ToggleGroupItem>\n        <ToggleGroupItem aria-label=\"Align center\" value=\"center\">\n          <AlignCenterIcon />\n        </ToggleGroupItem>\n        <ToggleGroupItem aria-label=\"Align right\" value=\"right\">\n          <AlignRightIcon />\n        </ToggleGroupItem>\n        <ToggleGroupItem aria-label=\"Align justify\" value=\"justify\">\n          <AlignJustifyIcon />\n        </ToggleGroupItem>\n      </ToggleGroup>\n      <p className=\"text-muted-foreground text-sm\">\n        Alignment: {value.length > 0 ? value[0] : \"none\"}\n      </p>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

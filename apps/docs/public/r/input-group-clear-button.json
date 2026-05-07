@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-group-clear-button",
+  "title": "Input Group Clear Button",
+  "description": "Input Group example: Clear Button.",
+  "registryDependencies": [
+    "input-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-group/clear-button.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupButton,\n  InputGroupInput,\n} from \"@keystoneui/react/input-group\";\nimport { X as XIcon } from \"lucide-react\";\nimport { useState } from \"react\";\n\nexport default function InputGroupClearButton() {\n  const [value, setValue] = useState(\"Click to clear\");\n\n  return (\n    <InputGroup className=\"max-w-sm\">\n      <InputGroupInput\n        onChange={(e) => setValue(e.target.value)}\n        placeholder=\"Type something...\"\n        value={value}\n      />\n      <InputGroupAddon align=\"inline-end\">\n        <InputGroupButton\n          aria-label=\"Clear input\"\n          disabled={!value}\n          onClick={() => setValue(\"\")}\n        >\n          <XIcon className=\"size-4\" />\n        </InputGroupButton>\n      </InputGroupAddon>\n    </InputGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

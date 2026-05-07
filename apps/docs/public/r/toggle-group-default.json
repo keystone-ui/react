@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-group-default",
+  "title": "Toggle Group Default",
+  "description": "Toggle Group example: Default.",
+  "registryDependencies": [
+    "toggle-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/toggle-group/default.tsx",
+      "content": "\"use client\";\n\nimport { ToggleGroup, ToggleGroupItem } from \"@keystoneui/react/toggle-group\";\nimport {\n  Bold as BoldIcon,\n  Italic as ItalicIcon,\n  Underline as UnderlineIcon,\n} from \"lucide-react\";\n\nexport default function ToggleGroupDefault() {\n  return (\n    <ToggleGroup defaultValue={[\"bold\"]} multiple>\n      <ToggleGroupItem aria-label=\"Toggle bold\" value=\"bold\">\n        <BoldIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem aria-label=\"Toggle italic\" value=\"italic\">\n        <ItalicIcon />\n      </ToggleGroupItem>\n      <ToggleGroupItem aria-label=\"Toggle underline\" value=\"underline\">\n        <UnderlineIcon />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

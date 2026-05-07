@@ -21,6 +21,36 @@ import {
 
 <ComponentPreview name="breadcrumb-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/breadcrumb.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="breadcrumb-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -33,29 +63,38 @@ Breadcrumb
     └── BreadcrumbEllipsis
 ```
 
-## Custom Separator
+## Examples
+
+### Custom Separator
 
 Use a custom separator character or icon:
 
 <ComponentPreview name="breadcrumb-custom-separator" />
 
-## Collapsed
+
+### Collapsed
 
 Collapse middle items with an ellipsis when the trail is long:
 
 <ComponentPreview name="breadcrumb-collapsed" />
 
-## With Dropdown
+
+### With Dropdown
 
 Expand collapsed items into a dropdown menu:
 
 <ComponentPreview name="breadcrumb-with-dropdown" />
 
-## Link Component
+
+### Link Component
 
 Using a custom link component for routing integration:
 
 <ComponentPreview name="breadcrumb-link-component" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

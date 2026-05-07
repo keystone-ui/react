@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spinner-with-button",
+  "title": "Spinner With Button",
+  "description": "Spinner example: With Button.",
+  "registryDependencies": [
+    "button",
+    "spinner"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/spinner/with-button.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { Spinner } from \"@keystoneui/react/spinner\";\nimport { useState } from \"react\";\n\nexport default function SpinnerWithButton() {\n  const [loading, setLoading] = useState(false);\n\n  const handleClick = () => {\n    setLoading(true);\n    setTimeout(() => setLoading(false), 2000);\n  };\n\n  return (\n    <div className=\"flex items-center gap-4\">\n      <Button disabled={loading} onClick={handleClick}>\n        {loading && <Spinner />}\n        {loading ? \"Processing...\" : \"Submit\"}\n      </Button>\n      <Button disabled variant=\"outline\">\n        <Spinner />\n        Loading...\n      </Button>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

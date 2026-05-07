@@ -8,7 +8,10 @@
       "type": "registry:ui",
       "title": "Accordion",
       "description": "Vertically stacked expandable and collapsible content sections for organizing dense information.",
-      "dependencies": ["@base-ui/react", "lucide-react"],
+      "dependencies": [
+        "@base-ui/react",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/accordion.tsx",
@@ -33,8 +36,12 @@
       "type": "registry:ui",
       "title": "Alert Dialog",
       "description": "Modal confirmation dialog for destructive or irreversible actions requiring user acknowledgement.",
-      "dependencies": ["@base-ui/react"],
-      "registryDependencies": ["button"],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
       "files": [
         {
           "path": "packages/ui/src/alert-dialog.tsx",
@@ -47,7 +54,9 @@
       "type": "registry:ui",
       "title": "Avatar",
       "description": "User avatar displaying a profile image with a text or icon fallback.",
-      "dependencies": ["@base-ui/react"],
+      "dependencies": [
+        "@base-ui/react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/avatar.tsx",
@@ -60,7 +69,10 @@
       "type": "registry:ui",
       "title": "Badge",
       "description": "Small status indicator or count label for highlighting categories, statuses, or counts.",
-      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
       "files": [
         {
           "path": "packages/ui/src/badge.tsx",
@@ -73,7 +85,10 @@
       "type": "registry:ui",
       "title": "Breadcrumb",
       "description": "Navigation breadcrumb trail showing the user's current location within a hierarchy.",
-      "dependencies": ["@base-ui/react", "lucide-react"],
+      "dependencies": [
+        "@base-ui/react",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/breadcrumb.tsx",
@@ -103,8 +118,13 @@
       "type": "registry:ui",
       "title": "Button Group",
       "description": "Groups related buttons together with consistent spacing and connected styling.",
-      "dependencies": ["class-variance-authority"],
-      "registryDependencies": ["button", "separator"],
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "button",
+        "separator"
+      ],
       "files": [
         {
           "path": "packages/ui/src/button-group.tsx",
@@ -117,8 +137,14 @@
       "type": "registry:ui",
       "title": "Calendar",
       "description": "Interactive date calendar for browsing and selecting dates by month.",
-      "dependencies": ["react-day-picker", "lucide-react"],
-      "registryDependencies": ["button", "native-select"],
+      "dependencies": [
+        "react-day-picker",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "native-select"
+      ],
       "files": [
         {
           "path": "packages/ui/src/calendar.tsx",
@@ -136,7 +162,9 @@
         "embla-carousel-wheel-gestures",
         "lucide-react"
       ],
-      "registryDependencies": ["button"],
+      "registryDependencies": [
+        "button"
+      ],
       "files": [
         {
           "path": "packages/ui/src/carousel.tsx",
@@ -149,7 +177,9 @@
       "type": "registry:ui",
       "title": "Alert",
       "description": "Prominent message banner for displaying important information, warnings, or errors to users.",
-      "dependencies": ["class-variance-authority"],
+      "dependencies": [
+        "class-variance-authority"
+      ],
       "files": [
         {
           "path": "packages/ui/src/alert.tsx",
@@ -174,7 +204,10 @@
       "type": "registry:ui",
       "title": "Circular Progress",
       "description": "Circular progress indicator for showing completion percentage in a ring format.",
-      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
       "files": [
         {
           "path": "packages/ui/src/circular-progress.tsx",
@@ -187,7 +220,9 @@
       "type": "registry:ui",
       "title": "Checkbox",
       "description": "A toggle control for binary choices, supporting checked, unchecked, and indeterminate states.",
-      "dependencies": ["@base-ui/react"],
+      "dependencies": [
+        "@base-ui/react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/checkbox.tsx",
@@ -200,7 +235,9 @@
       "type": "registry:ui",
       "title": "Collapsible",
       "description": "Single expandable content section that toggles between collapsed and expanded states.",
-      "dependencies": ["@base-ui/react"],
+      "dependencies": [
+        "@base-ui/react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/collapsible.tsx",
@@ -213,8 +250,14 @@
       "type": "registry:ui",
       "title": "Combobox",
       "description": "Searchable dropdown with autocomplete for filtering and selecting from a list of options.",
-      "dependencies": ["@base-ui/react", "lucide-react"],
-      "registryDependencies": ["button", "input-group"],
+      "dependencies": [
+        "@base-ui/react",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "input-group"
+      ],
       "files": [
         {
           "path": "packages/ui/src/combobox.tsx",
@@ -227,8 +270,14 @@
       "type": "registry:ui",
       "title": "Command",
       "description": "A searchable command menu for quick actions, navigation, and filtering.",
-      "dependencies": ["cmdk", "lucide-react"],
-      "registryDependencies": ["modal", "input-group"],
+      "dependencies": [
+        "cmdk",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "modal",
+        "input-group"
+      ],
       "files": [
         {
           "path": "packages/ui/src/command.tsx",
@@ -265,7 +314,9 @@
       "type": "registry:ui",
       "title": "Drawer",
       "description": "Slide-out panel that emerges from screen edges for supplementary content or navigation.",
-      "dependencies": ["@base-ui/react"],
+      "dependencies": [
+        "@base-ui/react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/drawer.tsx",
@@ -278,7 +329,9 @@
       "type": "registry:ui",
       "title": "Empty",
       "description": "Empty state placeholder with icon and message for when no content is available.",
-      "dependencies": ["class-variance-authority"],
+      "dependencies": [
+        "class-variance-authority"
+      ],
       "files": [
         {
           "path": "packages/ui/src/empty.tsx",
@@ -291,8 +344,13 @@
       "type": "registry:ui",
       "title": "Dropdown Menu",
       "description": "Contextual menu triggered by a button, with support for items, separators, and sub-menus.",
-      "dependencies": ["@base-ui/react", "lucide-react"],
-      "registryDependencies": ["checkbox"],
+      "dependencies": [
+        "@base-ui/react",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "checkbox"
+      ],
       "files": [
         {
           "path": "packages/ui/src/dropdown-menu.tsx",
@@ -305,7 +363,10 @@
       "type": "registry:ui",
       "title": "Field",
       "description": "Form field wrapper that provides a label, description, and error message around a form control.",
-      "registryDependencies": ["label", "separator"],
+      "registryDependencies": [
+        "label",
+        "separator"
+      ],
       "files": [
         {
           "path": "packages/ui/src/field.tsx",
@@ -318,7 +379,9 @@
       "type": "registry:ui",
       "title": "Form",
       "description": "A form wrapper component that provides consistent layout and validation support.",
-      "registryDependencies": ["label"],
+      "registryDependencies": [
+        "label"
+      ],
       "files": [
         {
           "path": "packages/ui/src/form.tsx",
@@ -331,7 +394,10 @@
       "type": "registry:ui",
       "title": "Item",
       "description": "Generic list item primitive for building consistent list-based interfaces.",
-      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
       "files": [
         {
           "path": "packages/ui/src/item.tsx",
@@ -356,7 +422,9 @@
       "type": "registry:ui",
       "title": "Input Group",
       "description": "Groups an input with adjacent buttons, icons, or text add-ons for combined input actions.",
-      "registryDependencies": ["button"],
+      "registryDependencies": [
+        "button"
+      ],
       "files": [
         {
           "path": "packages/ui/src/input-group.tsx",
@@ -369,7 +437,9 @@
       "type": "registry:ui",
       "title": "Input OTP",
       "description": "One-time password input with individual digit slots for verification codes.",
-      "dependencies": ["input-otp"],
+      "dependencies": [
+        "input-otp"
+      ],
       "files": [
         {
           "path": "packages/ui/src/input-otp.tsx",
@@ -394,7 +464,9 @@
       "type": "registry:ui",
       "title": "Label",
       "description": "An accessible label component for form controls with optional description and error messages.",
-      "dependencies": ["@base-ui/react"],
+      "dependencies": [
+        "@base-ui/react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/label.tsx",
@@ -412,7 +484,9 @@
         "class-variance-authority",
         "lucide-react"
       ],
-      "registryDependencies": ["button"],
+      "registryDependencies": [
+        "button"
+      ],
       "files": [
         {
           "path": "packages/ui/src/modal.tsx",
@@ -425,7 +499,9 @@
       "type": "registry:ui",
       "title": "Native Select",
       "description": "Native browser select dropdown for simple selection scenarios with optimal mobile support.",
-      "dependencies": ["lucide-react"],
+      "dependencies": [
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/native-select.tsx",
@@ -438,8 +514,12 @@
       "type": "registry:ui",
       "title": "Pagination",
       "description": "Page navigation controls for browsing through paginated content.",
-      "dependencies": ["lucide-react"],
-      "registryDependencies": ["button"],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
       "files": [
         {
           "path": "packages/ui/src/pagination.tsx",
@@ -452,7 +532,9 @@
       "type": "registry:ui",
       "title": "Popover",
       "description": "Floating content panel anchored to a trigger element for contextual information or controls.",
-      "dependencies": ["@base-ui/react"],
+      "dependencies": [
+        "@base-ui/react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/popover.tsx",
@@ -465,7 +547,10 @@
       "type": "registry:ui",
       "title": "Progress",
       "description": "Linear progress bar for visualizing completion or loading progress.",
-      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
       "files": [
         {
           "path": "packages/ui/src/progress.tsx",
@@ -478,7 +563,9 @@
       "type": "registry:ui",
       "title": "Radio Group",
       "description": "A set of mutually exclusive options where only one can be selected at a time.",
-      "dependencies": ["@base-ui/react"],
+      "dependencies": [
+        "@base-ui/react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/radio-group.tsx",
@@ -491,7 +578,9 @@
       "type": "registry:ui",
       "title": "Resizable",
       "description": "Resizable panel layout that allows users to adjust the size of content areas by dragging handles.",
-      "dependencies": ["react-resizable-panels"],
+      "dependencies": [
+        "react-resizable-panels"
+      ],
       "files": [
         {
           "path": "packages/ui/src/resizable.tsx",
@@ -504,7 +593,10 @@
       "type": "registry:ui",
       "title": "Select",
       "description": "A dropdown control for selecting one or more options from a list.",
-      "dependencies": ["@base-ui/react", "lucide-react"],
+      "dependencies": [
+        "@base-ui/react",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/select.tsx",
@@ -517,7 +609,9 @@
       "type": "registry:ui",
       "title": "Slider",
       "description": "Range slider input for selecting a numeric value within a defined range.",
-      "dependencies": ["@base-ui/react"],
+      "dependencies": [
+        "@base-ui/react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/slider.tsx",
@@ -554,7 +648,9 @@
       "type": "registry:ui",
       "title": "Spinner",
       "description": "Animated loading spinner for indicating indeterminate loading states.",
-      "dependencies": ["lucide-react"],
+      "dependencies": [
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/spinner.tsx",
@@ -567,7 +663,10 @@
       "type": "registry:ui",
       "title": "Stepper",
       "description": "Multi-step progress indicator for guiding users through sequential workflows.",
-      "dependencies": ["motion", "react-use-measure"],
+      "dependencies": [
+        "motion",
+        "react-use-measure"
+      ],
       "files": [
         {
           "path": "packages/ui/src/stepper.tsx",
@@ -580,7 +679,9 @@
       "type": "registry:ui",
       "title": "Switch",
       "description": "A toggle control for boolean states with smooth animation.",
-      "dependencies": ["@base-ui/react"],
+      "dependencies": [
+        "@base-ui/react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/switch.tsx",
@@ -608,7 +709,8 @@
       "dependencies": [
         "@base-ui/react",
         "class-variance-authority",
-        "lucide-react"
+        "lucide-react",
+        "motion"
       ],
       "files": [
         {
@@ -651,8 +753,13 @@
       "type": "registry:ui",
       "title": "Tag Group",
       "description": "Managed group of tags with add and remove capabilities for multi-value selection.",
-      "dependencies": ["@base-ui/react", "class-variance-authority"],
-      "registryDependencies": ["tag"],
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "tag"
+      ],
       "files": [
         {
           "path": "packages/ui/src/tag-group.tsx",
@@ -665,7 +772,10 @@
       "type": "registry:ui",
       "title": "Toggle",
       "description": "Two-state toggle button that switches between pressed and unpressed states.",
-      "dependencies": ["@base-ui/react", "class-variance-authority"],
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
       "files": [
         {
           "path": "packages/ui/src/toggle.tsx",
@@ -678,8 +788,13 @@
       "type": "registry:ui",
       "title": "Toggle Group",
       "description": "Group of toggle buttons where one or multiple options can be selected.",
-      "dependencies": ["@base-ui/react", "class-variance-authority"],
-      "registryDependencies": ["toggle"],
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "toggle"
+      ],
       "files": [
         {
           "path": "packages/ui/src/toggle-group.tsx",
@@ -692,7 +807,9 @@
       "type": "registry:ui",
       "title": "Tooltip",
       "description": "Small floating label that appears on hover to provide additional descriptive text.",
-      "dependencies": ["@base-ui/react"],
+      "dependencies": [
+        "@base-ui/react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/tooltip.tsx",
@@ -705,7 +822,10 @@
       "type": "registry:ui",
       "title": "Toast",
       "description": "Temporary notification messages that appear briefly to provide non-intrusive feedback.",
-      "dependencies": ["@base-ui/react", "lucide-react"],
+      "dependencies": [
+        "@base-ui/react",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/toast.tsx",
@@ -718,8 +838,13 @@
       "type": "registry:ui",
       "title": "Selection Bar",
       "description": "Floating bulk-action toolbar that appears when items are selected in a list or table.",
-      "dependencies": ["class-variance-authority", "lucide-react"],
-      "registryDependencies": ["button"],
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
       "files": [
         {
           "path": "packages/ui/src/selection-bar.tsx",
@@ -732,7 +857,12 @@
       "type": "registry:block",
       "title": "Sign in 01",
       "description": "A simple sign-in form inside a card with email and password fields.",
-      "registryDependencies": ["button", "card", "field", "input"],
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/signin-01/page.tsx",
@@ -743,6 +873,10 @@
           "path": "registry/default/blocks/signin-01/components/signin-form.tsx",
           "type": "registry:component"
         }
+      ],
+      "categories": [
+        "authentication",
+        "login"
       ]
     },
     {
@@ -750,8 +884,14 @@
       "type": "registry:block",
       "title": "Sign in 02",
       "description": "A two-column sign-in page with a cover image and GitHub social login.",
-      "dependencies": ["lucide-react"],
-      "registryDependencies": ["button", "field", "input"],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "field",
+        "input"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/signin-02/page.tsx",
@@ -762,6 +902,10 @@
           "path": "registry/default/blocks/signin-02/components/signin-form.tsx",
           "type": "registry:component"
         }
+      ],
+      "categories": [
+        "authentication",
+        "login"
       ]
     },
     {
@@ -769,7 +913,12 @@
       "type": "registry:block",
       "title": "Sign in 03",
       "description": "A sign-in page with a form and image side by side inside a card.",
-      "registryDependencies": ["button", "card", "field", "input"],
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/signin-03/page.tsx",
@@ -780,6 +929,10 @@
           "path": "registry/default/blocks/signin-03/components/signin-form.tsx",
           "type": "registry:component"
         }
+      ],
+      "categories": [
+        "authentication",
+        "login"
       ]
     },
     {
@@ -787,8 +940,14 @@
       "type": "registry:block",
       "title": "Sign in 04",
       "description": "A minimal email-only sign-in page with Apple and Google social providers.",
-      "dependencies": ["lucide-react"],
-      "registryDependencies": ["button", "field", "input"],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "field",
+        "input"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/signin-04/page.tsx",
@@ -799,6 +958,10 @@
           "path": "registry/default/blocks/signin-04/components/signin-form.tsx",
           "type": "registry:component"
         }
+      ],
+      "categories": [
+        "authentication",
+        "login"
       ]
     },
     {
@@ -806,7 +969,12 @@
       "type": "registry:block",
       "title": "Signup 01",
       "description": "A simple signup form inside a card with name, email, and password fields.",
-      "registryDependencies": ["button", "card", "field", "input"],
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/signup-01/page.tsx",
@@ -817,6 +985,10 @@
           "path": "registry/default/blocks/signup-01/components/signup-form.tsx",
           "type": "registry:component"
         }
+      ],
+      "categories": [
+        "authentication",
+        "signup"
       ]
     },
     {
@@ -824,8 +996,14 @@
       "type": "registry:block",
       "title": "Signup 02",
       "description": "A two-column signup page with a cover image and GitHub social login.",
-      "dependencies": ["lucide-react"],
-      "registryDependencies": ["button", "field", "input"],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "field",
+        "input"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/signup-02/page.tsx",
@@ -836,6 +1014,10 @@
           "path": "registry/default/blocks/signup-02/components/signup-form.tsx",
           "type": "registry:component"
         }
+      ],
+      "categories": [
+        "authentication",
+        "signup"
       ]
     },
     {
@@ -843,8 +1025,15 @@
       "type": "registry:block",
       "title": "Signup 03",
       "description": "A signup page with a card form and side-by-side password fields.",
-      "dependencies": ["lucide-react"],
-      "registryDependencies": ["button", "card", "field", "input"],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/signup-03/page.tsx",
@@ -855,6 +1044,10 @@
           "path": "registry/default/blocks/signup-03/components/signup-form.tsx",
           "type": "registry:component"
         }
+      ],
+      "categories": [
+        "authentication",
+        "signup"
       ]
     },
     {
@@ -862,7 +1055,12 @@
       "type": "registry:block",
       "title": "Signup 04",
       "description": "A signup page with a form and image side by side inside a card.",
-      "registryDependencies": ["button", "card", "field", "input"],
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/signup-04/page.tsx",
@@ -873,6 +1071,10 @@
           "path": "registry/default/blocks/signup-04/components/signup-form.tsx",
           "type": "registry:component"
         }
+      ],
+      "categories": [
+        "authentication",
+        "signup"
       ]
     },
     {
@@ -880,8 +1082,14 @@
       "type": "registry:block",
       "title": "Signup 05",
       "description": "A minimal email-only signup page with Apple and Google social providers.",
-      "dependencies": ["lucide-react"],
-      "registryDependencies": ["button", "field", "input"],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "field",
+        "input"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/signup-05/page.tsx",
@@ -892,6 +1100,10 @@
           "path": "registry/default/blocks/signup-05/components/signup-form.tsx",
           "type": "registry:component"
         }
+      ],
+      "categories": [
+        "authentication",
+        "signup"
       ]
     },
     {
@@ -899,7 +1111,9 @@
       "type": "registry:block",
       "title": "Profile Dropdown 01",
       "description": "A user profile dropdown with avatar, level progress, and navigation menu.",
-      "dependencies": ["lucide-react"],
+      "dependencies": [
+        "lucide-react"
+      ],
       "registryDependencies": [
         "avatar",
         "badge",
@@ -913,6 +1127,9 @@
           "path": "registry/default/blocks/profile-dropdown-01/components/profile-dropdown.tsx",
           "type": "registry:component"
         }
+      ],
+      "categories": [
+        "navigation"
       ]
     },
     {
@@ -1010,6 +1227,9 @@
           "path": "registry/default/blocks/tickets-01/components/mock-tickets.ts",
           "type": "registry:component"
         }
+      ],
+      "categories": [
+        "data"
       ]
     },
     {
@@ -1017,7 +1237,9 @@
       "type": "registry:block",
       "title": "Betting Panel 01",
       "description": "A betting panel with inline ½ / 2× multipliers inside the bet amount field and risk-level toggles.",
-      "dependencies": ["lucide-react"],
+      "dependencies": [
+        "lucide-react"
+      ],
       "registryDependencies": [
         "button",
         "card",
@@ -1032,6 +1254,9 @@
           "path": "registry/default/blocks/betting-panel-01/components/betting-panel.tsx",
           "type": "registry:component"
         }
+      ],
+      "categories": [
+        "betting"
       ]
     },
     {
@@ -1039,13 +1264,23 @@
       "type": "registry:block",
       "title": "Betting Panel 02",
       "description": "A slider-based betting panel with a gradient risk slider for visual feedback on the chosen risk level.",
-      "dependencies": ["lucide-react"],
-      "registryDependencies": ["button", "card", "slider", "tabs"],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "slider",
+        "tabs"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/betting-panel-02/components/betting-panel.tsx",
           "type": "registry:component"
         }
+      ],
+      "categories": [
+        "betting"
       ]
     },
     {
@@ -1053,7 +1288,9 @@
       "type": "registry:block",
       "title": "Betting Panel 03",
       "description": "A betting panel with quick-pick preset amounts for rapid bet placement.",
-      "dependencies": ["lucide-react"],
+      "dependencies": [
+        "lucide-react"
+      ],
       "registryDependencies": [
         "button",
         "card",
@@ -1068,6 +1305,9 @@
           "path": "registry/default/blocks/betting-panel-03/components/betting-panel.tsx",
           "type": "registry:component"
         }
+      ],
+      "categories": [
+        "betting"
       ]
     },
     {
@@ -1075,12 +1315,6504 @@
       "type": "registry:block",
       "title": "Betting Panel 04",
       "description": "A stepper-based betting panel with circular +/− controls for bet amount and rows.",
-      "dependencies": ["lucide-react"],
-      "registryDependencies": ["button", "card", "tabs", "toggle-group"],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "tabs",
+        "toggle-group"
+      ],
       "files": [
         {
           "path": "registry/default/blocks/betting-panel-04/components/betting-panel.tsx",
           "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "betting"
+      ]
+    },
+    {
+      "name": "accordion-custom-chevron",
+      "type": "registry:example",
+      "title": "Accordion Custom Chevron",
+      "description": "Accordion example: Custom Chevron.",
+      "registryDependencies": [
+        "accordion"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/accordion/custom-chevron.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "accordion-default",
+      "type": "registry:example",
+      "title": "Accordion Default",
+      "description": "Accordion example: Default.",
+      "registryDependencies": [
+        "accordion"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/accordion/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "accordion-disabled",
+      "type": "registry:example",
+      "title": "Accordion Disabled",
+      "description": "Accordion example: Disabled.",
+      "registryDependencies": [
+        "accordion"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/accordion/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "accordion-multiple",
+      "type": "registry:example",
+      "title": "Accordion Multiple",
+      "description": "Accordion example: Multiple.",
+      "registryDependencies": [
+        "accordion"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/accordion/multiple.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "accordion-variants",
+      "type": "registry:example",
+      "title": "Accordion Variants",
+      "description": "Accordion example: Variants.",
+      "registryDependencies": [
+        "accordion"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/accordion/variants.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "alert-custom-colors",
+      "type": "registry:example",
+      "title": "Alert Custom Colors",
+      "description": "Alert example: Custom Colors.",
+      "registryDependencies": [
+        "alert"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/alert/custom-colors.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "alert-default",
+      "type": "registry:example",
+      "title": "Alert Default",
+      "description": "Alert example: Default.",
+      "registryDependencies": [
+        "alert"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/alert/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "alert-variants",
+      "type": "registry:example",
+      "title": "Alert Variants",
+      "description": "Alert example: Variants.",
+      "registryDependencies": [
+        "alert"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/alert/variants.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "alert-with-action",
+      "type": "registry:example",
+      "title": "Alert With Action",
+      "description": "Alert example: With Action.",
+      "registryDependencies": [
+        "alert",
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/alert/with-action.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "alert-without-icon",
+      "type": "registry:example",
+      "title": "Alert Without Icon",
+      "description": "Alert example: Without Icon.",
+      "registryDependencies": [
+        "alert"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/alert/without-icon.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "alert-dialog-default",
+      "type": "registry:example",
+      "title": "Alert Dialog Default",
+      "description": "Alert Dialog example: Default.",
+      "registryDependencies": [
+        "alert-dialog",
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/alert-dialog/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "alert-dialog-destructive",
+      "type": "registry:example",
+      "title": "Alert Dialog Destructive",
+      "description": "Alert Dialog example: Destructive.",
+      "registryDependencies": [
+        "alert-dialog",
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/alert-dialog/destructive.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "alert-dialog-small-with-media",
+      "type": "registry:example",
+      "title": "Alert Dialog Small With Media",
+      "description": "Alert Dialog example: Small With Media.",
+      "registryDependencies": [
+        "alert-dialog",
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/alert-dialog/small-with-media.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "alert-dialog-small",
+      "type": "registry:example",
+      "title": "Alert Dialog Small",
+      "description": "Alert Dialog example: Small.",
+      "registryDependencies": [
+        "alert-dialog",
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/alert-dialog/small.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "alert-dialog-with-media",
+      "type": "registry:example",
+      "title": "Alert Dialog With Media",
+      "description": "Alert Dialog example: With Media.",
+      "registryDependencies": [
+        "alert-dialog",
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/alert-dialog/with-media.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "aspect-ratio-default",
+      "type": "registry:example",
+      "title": "Aspect Ratio Default",
+      "description": "Aspect Ratio example: Default.",
+      "registryDependencies": [
+        "aspect-ratio"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/aspect-ratio/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "aspect-ratio-portrait",
+      "type": "registry:example",
+      "title": "Aspect Ratio Portrait",
+      "description": "Aspect Ratio example: Portrait.",
+      "registryDependencies": [
+        "aspect-ratio"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/aspect-ratio/portrait.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "aspect-ratio-square",
+      "type": "registry:example",
+      "title": "Aspect Ratio Square",
+      "description": "Aspect Ratio example: Square.",
+      "registryDependencies": [
+        "aspect-ratio"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/aspect-ratio/square.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "aspect-ratio-wide",
+      "type": "registry:example",
+      "title": "Aspect Ratio Wide",
+      "description": "Aspect Ratio example: Wide.",
+      "registryDependencies": [
+        "aspect-ratio"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/aspect-ratio/wide.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "avatar-badge-with-icon",
+      "type": "registry:example",
+      "title": "Avatar Badge With Icon",
+      "description": "Avatar example: Badge With Icon.",
+      "registryDependencies": [
+        "avatar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/avatar/badge-with-icon.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "avatar-default",
+      "type": "registry:example",
+      "title": "Avatar Default",
+      "description": "Avatar example: Default.",
+      "registryDependencies": [
+        "avatar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/avatar/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "avatar-fallback",
+      "type": "registry:example",
+      "title": "Avatar Fallback",
+      "description": "Avatar example: Fallback.",
+      "registryDependencies": [
+        "avatar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/avatar/fallback.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "avatar-group-with-count",
+      "type": "registry:example",
+      "title": "Avatar Group With Count",
+      "description": "Avatar example: Group With Count.",
+      "registryDependencies": [
+        "avatar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/avatar/group-with-count.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "avatar-group",
+      "type": "registry:example",
+      "title": "Avatar Group",
+      "description": "Avatar example: Group.",
+      "registryDependencies": [
+        "avatar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/avatar/group.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "avatar-sizes",
+      "type": "registry:example",
+      "title": "Avatar Sizes",
+      "description": "Avatar example: Sizes.",
+      "registryDependencies": [
+        "avatar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/avatar/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "avatar-with-badge",
+      "type": "registry:example",
+      "title": "Avatar With Badge",
+      "description": "Avatar example: With Badge.",
+      "registryDependencies": [
+        "avatar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/avatar/with-badge.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "badge-as-link",
+      "type": "registry:example",
+      "title": "Badge As Link",
+      "description": "Badge example: As Link.",
+      "registryDependencies": [
+        "badge"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/badge/as-link.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "badge-custom-colors",
+      "type": "registry:example",
+      "title": "Badge Custom Colors",
+      "description": "Badge example: Custom Colors.",
+      "registryDependencies": [
+        "badge"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/badge/custom-colors.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "badge-default",
+      "type": "registry:example",
+      "title": "Badge Default",
+      "description": "Badge example: Default.",
+      "registryDependencies": [
+        "badge"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/badge/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "badge-removable",
+      "type": "registry:example",
+      "title": "Badge Removable",
+      "description": "Badge example: Removable.",
+      "registryDependencies": [
+        "badge"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/badge/removable.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "badge-sizes",
+      "type": "registry:example",
+      "title": "Badge Sizes",
+      "description": "Badge example: Sizes.",
+      "registryDependencies": [
+        "badge"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/badge/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "badge-stats",
+      "type": "registry:example",
+      "title": "Badge Stats",
+      "description": "Badge example: Stats.",
+      "registryDependencies": [
+        "badge"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/badge/stats.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "badge-variants",
+      "type": "registry:example",
+      "title": "Badge Variants",
+      "description": "Badge example: Variants.",
+      "registryDependencies": [
+        "badge"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/badge/variants.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "badge-with-icon",
+      "type": "registry:example",
+      "title": "Badge With Icon",
+      "description": "Badge example: With Icon.",
+      "registryDependencies": [
+        "badge"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/badge/with-icon.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "badge-with-spinner",
+      "type": "registry:example",
+      "title": "Badge With Spinner",
+      "description": "Badge example: With Spinner.",
+      "registryDependencies": [
+        "badge",
+        "spinner"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/badge/with-spinner.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "breadcrumb-collapsed",
+      "type": "registry:example",
+      "title": "Breadcrumb Collapsed",
+      "description": "Breadcrumb example: Collapsed.",
+      "registryDependencies": [
+        "breadcrumb"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/breadcrumb/collapsed.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "breadcrumb-custom-separator",
+      "type": "registry:example",
+      "title": "Breadcrumb Custom Separator",
+      "description": "Breadcrumb example: Custom Separator.",
+      "registryDependencies": [
+        "breadcrumb"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/breadcrumb/custom-separator.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "breadcrumb-default",
+      "type": "registry:example",
+      "title": "Breadcrumb Default",
+      "description": "Breadcrumb example: Default.",
+      "registryDependencies": [
+        "breadcrumb"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/breadcrumb/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "breadcrumb-link-component",
+      "type": "registry:example",
+      "title": "Breadcrumb Link Component",
+      "description": "Breadcrumb example: Link Component.",
+      "registryDependencies": [
+        "breadcrumb"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/breadcrumb/link-component.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "breadcrumb-with-dropdown",
+      "type": "registry:example",
+      "title": "Breadcrumb With Dropdown",
+      "description": "Breadcrumb example: With Dropdown.",
+      "registryDependencies": [
+        "breadcrumb",
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/breadcrumb/with-dropdown.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-as-link",
+      "type": "registry:example",
+      "title": "Button As Link",
+      "description": "Button example: As Link.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button/as-link.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-custom-loading",
+      "type": "registry:example",
+      "title": "Button Custom Loading",
+      "description": "Button example: Custom Loading.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button/custom-loading.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-default",
+      "type": "registry:example",
+      "title": "Button Default",
+      "description": "Button example: Default.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-disabled",
+      "type": "registry:example",
+      "title": "Button Disabled",
+      "description": "Button example: Disabled.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-full-width",
+      "type": "registry:example",
+      "title": "Button Full Width",
+      "description": "Button example: Full Width.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button/full-width.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-icon-buttons",
+      "type": "registry:example",
+      "title": "Button Icon Buttons",
+      "description": "Button example: Icon Buttons.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button/icon-buttons.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-link",
+      "type": "registry:example",
+      "title": "Button Link",
+      "description": "Button example: Link.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button/link.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-loading",
+      "type": "registry:example",
+      "title": "Button Loading",
+      "description": "Button example: Loading.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button/loading.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-rounded",
+      "type": "registry:example",
+      "title": "Button Rounded",
+      "description": "Button example: Rounded.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button/rounded.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-sizes",
+      "type": "registry:example",
+      "title": "Button Sizes",
+      "description": "Button example: Sizes.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-social-buttons",
+      "type": "registry:example",
+      "title": "Button Social Buttons",
+      "description": "Button example: Social Buttons.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button/social-buttons.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-variants",
+      "type": "registry:example",
+      "title": "Button Variants",
+      "description": "Button example: Variants.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button/variants.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-with-icons",
+      "type": "registry:example",
+      "title": "Button With Icons",
+      "description": "Button example: With Icons.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button/with-icons.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-group-default",
+      "type": "registry:example",
+      "title": "Button Group Default",
+      "description": "Button Group example: Default.",
+      "registryDependencies": [
+        "button",
+        "button-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button-group/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-group-email-toolbar",
+      "type": "registry:example",
+      "title": "Button Group Email Toolbar",
+      "description": "Button Group example: Email Toolbar.",
+      "registryDependencies": [
+        "button",
+        "button-group",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button-group/email-toolbar.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-group-nested",
+      "type": "registry:example",
+      "title": "Button Group Nested",
+      "description": "Button Group example: Nested.",
+      "registryDependencies": [
+        "button",
+        "button-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button-group/nested.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-group-sizes",
+      "type": "registry:example",
+      "title": "Button Group Sizes",
+      "description": "Button Group example: Sizes.",
+      "registryDependencies": [
+        "button",
+        "button-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button-group/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-group-split-button",
+      "type": "registry:example",
+      "title": "Button Group Split Button",
+      "description": "Button Group example: Split Button.",
+      "registryDependencies": [
+        "button",
+        "button-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button-group/split-button.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-group-toolbar",
+      "type": "registry:example",
+      "title": "Button Group Toolbar",
+      "description": "Button Group example: Toolbar.",
+      "registryDependencies": [
+        "button",
+        "button-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button-group/toolbar.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-group-vertical",
+      "type": "registry:example",
+      "title": "Button Group Vertical",
+      "description": "Button Group example: Vertical.",
+      "registryDependencies": [
+        "button",
+        "button-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button-group/vertical.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-group-with-dropdown-menu",
+      "type": "registry:example",
+      "title": "Button Group With Dropdown Menu",
+      "description": "Button Group example: With Dropdown Menu.",
+      "registryDependencies": [
+        "button",
+        "button-group",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button-group/with-dropdown-menu.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-group-with-input",
+      "type": "registry:example",
+      "title": "Button Group With Input",
+      "description": "Button Group example: With Input.",
+      "registryDependencies": [
+        "button",
+        "button-group",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button-group/with-input.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-group-with-popover",
+      "type": "registry:example",
+      "title": "Button Group With Popover",
+      "description": "Button Group example: With Popover.",
+      "registryDependencies": [
+        "button",
+        "button-group",
+        "field",
+        "popover",
+        "textarea"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button-group/with-popover.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "button-group-with-select",
+      "type": "registry:example",
+      "title": "Button Group With Select",
+      "description": "Button Group example: With Select.",
+      "registryDependencies": [
+        "button",
+        "button-group",
+        "input",
+        "select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/button-group/with-select.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "calendar-booked-dates",
+      "type": "registry:example",
+      "title": "Calendar Booked Dates",
+      "description": "Calendar example: Booked Dates.",
+      "registryDependencies": [
+        "calendar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/calendar/booked-dates.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "calendar-date-time",
+      "type": "registry:example",
+      "title": "Calendar Date Time",
+      "description": "Calendar example: Date Time.",
+      "registryDependencies": [
+        "calendar",
+        "card",
+        "field",
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/calendar/date-time.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "calendar-default",
+      "type": "registry:example",
+      "title": "Calendar Default",
+      "description": "Calendar example: Default.",
+      "registryDependencies": [
+        "calendar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/calendar/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "calendar-month-year",
+      "type": "registry:example",
+      "title": "Calendar Month Year",
+      "description": "Calendar example: Month Year.",
+      "registryDependencies": [
+        "calendar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/calendar/month-year.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "calendar-presets",
+      "type": "registry:example",
+      "title": "Calendar Presets",
+      "description": "Calendar example: Presets.",
+      "registryDependencies": [
+        "button",
+        "calendar",
+        "card"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/calendar/presets.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "calendar-range",
+      "type": "registry:example",
+      "title": "Calendar Range",
+      "description": "Calendar example: Range.",
+      "registryDependencies": [
+        "calendar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/calendar/range.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "calendar-week-numbers",
+      "type": "registry:example",
+      "title": "Calendar Week Numbers",
+      "description": "Calendar example: Week Numbers.",
+      "registryDependencies": [
+        "calendar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/calendar/week-numbers.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "card-default",
+      "type": "registry:example",
+      "title": "Card Default",
+      "description": "Card example: Default.",
+      "registryDependencies": [
+        "button",
+        "card"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/card/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "card-login-form",
+      "type": "registry:example",
+      "title": "Card Login Form",
+      "description": "Card example: Login Form.",
+      "registryDependencies": [
+        "button",
+        "card",
+        "input",
+        "label"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/card/login-form.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "card-small",
+      "type": "registry:example",
+      "title": "Card Small",
+      "description": "Card example: Small.",
+      "registryDependencies": [
+        "button",
+        "card"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/card/small.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "card-social-card",
+      "type": "registry:example",
+      "title": "Card Social Card",
+      "description": "Card example: Social Card.",
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "card"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/card/social-card.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "card-with-action",
+      "type": "registry:example",
+      "title": "Card With Action",
+      "description": "Card example: With Action.",
+      "registryDependencies": [
+        "button",
+        "card"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/card/with-action.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "card-with-image",
+      "type": "registry:example",
+      "title": "Card With Image",
+      "description": "Card example: With Image.",
+      "registryDependencies": [
+        "badge",
+        "button",
+        "card"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/card/with-image.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "carousel-autoplay",
+      "type": "registry:example",
+      "title": "Carousel Autoplay",
+      "description": "Carousel example: Autoplay.",
+      "registryDependencies": [
+        "carousel"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/carousel/autoplay.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "carousel-cards",
+      "type": "registry:example",
+      "title": "Carousel Cards",
+      "description": "Carousel example: Cards.",
+      "registryDependencies": [
+        "carousel"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/carousel/cards.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "carousel-controlled",
+      "type": "registry:example",
+      "title": "Carousel Controlled",
+      "description": "Carousel example: Controlled.",
+      "registryDependencies": [
+        "button",
+        "carousel"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/carousel/controlled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "carousel-default",
+      "type": "registry:example",
+      "title": "Carousel Default",
+      "description": "Carousel example: Default.",
+      "registryDependencies": [
+        "carousel"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/carousel/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "carousel-multiple-slides",
+      "type": "registry:example",
+      "title": "Carousel Multiple Slides",
+      "description": "Carousel example: Multiple Slides.",
+      "registryDependencies": [
+        "carousel"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/carousel/multiple-slides.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "carousel-sizes",
+      "type": "registry:example",
+      "title": "Carousel Sizes",
+      "description": "Carousel example: Sizes.",
+      "registryDependencies": [
+        "carousel"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/carousel/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "carousel-spacing",
+      "type": "registry:example",
+      "title": "Carousel Spacing",
+      "description": "Carousel example: Spacing.",
+      "registryDependencies": [
+        "carousel"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/carousel/spacing.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "carousel-thumbnails",
+      "type": "registry:example",
+      "title": "Carousel Thumbnails",
+      "description": "Carousel example: Thumbnails.",
+      "registryDependencies": [
+        "carousel"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/carousel/thumbnails.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "carousel-vertical",
+      "type": "registry:example",
+      "title": "Carousel Vertical",
+      "description": "Carousel example: Vertical.",
+      "registryDependencies": [
+        "carousel"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/carousel/vertical.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "carousel-with-counter",
+      "type": "registry:example",
+      "title": "Carousel With Counter",
+      "description": "Carousel example: With Counter.",
+      "registryDependencies": [
+        "carousel"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/carousel/with-counter.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "carousel-with-dots",
+      "type": "registry:example",
+      "title": "Carousel With Dots",
+      "description": "Carousel example: With Dots.",
+      "registryDependencies": [
+        "carousel"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/carousel/with-dots.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "carousel-with-mask",
+      "type": "registry:example",
+      "title": "Carousel With Mask",
+      "description": "Carousel example: With Mask.",
+      "registryDependencies": [
+        "carousel"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/carousel/with-mask.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "checkbox-controlled",
+      "type": "registry:example",
+      "title": "Checkbox Controlled",
+      "description": "Checkbox example: Controlled.",
+      "registryDependencies": [
+        "checkbox",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/checkbox/controlled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "checkbox-default",
+      "type": "registry:example",
+      "title": "Checkbox Default",
+      "description": "Checkbox example: Default.",
+      "registryDependencies": [
+        "checkbox",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/checkbox/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "checkbox-disabled",
+      "type": "registry:example",
+      "title": "Checkbox Disabled",
+      "description": "Checkbox example: Disabled.",
+      "registryDependencies": [
+        "checkbox",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/checkbox/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "checkbox-group",
+      "type": "registry:example",
+      "title": "Checkbox Group",
+      "description": "Checkbox example: Group.",
+      "registryDependencies": [
+        "checkbox",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/checkbox/group.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "checkbox-pill-group",
+      "type": "registry:example",
+      "title": "Checkbox Pill Group",
+      "description": "Checkbox example: Pill Group.",
+      "registryDependencies": [
+        "card",
+        "checkbox",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/checkbox/pill-group.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "checkbox-with-description",
+      "type": "registry:example",
+      "title": "Checkbox With Description",
+      "description": "Checkbox example: With Description.",
+      "registryDependencies": [
+        "checkbox",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/checkbox/with-description.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "circular-progress-animated",
+      "type": "registry:example",
+      "title": "Circular Progress Animated",
+      "description": "Circular Progress example: Animated.",
+      "registryDependencies": [
+        "circular-progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/circular-progress/animated.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "circular-progress-colors",
+      "type": "registry:example",
+      "title": "Circular Progress Colors",
+      "description": "Circular Progress example: Colors.",
+      "registryDependencies": [
+        "circular-progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/circular-progress/colors.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "circular-progress-complete",
+      "type": "registry:example",
+      "title": "Circular Progress Complete",
+      "description": "Circular Progress example: Complete.",
+      "registryDependencies": [
+        "circular-progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/circular-progress/complete.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "circular-progress-controlled",
+      "type": "registry:example",
+      "title": "Circular Progress Controlled",
+      "description": "Circular Progress example: Controlled.",
+      "registryDependencies": [
+        "circular-progress",
+        "slider"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/circular-progress/controlled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "circular-progress-custom-center-content",
+      "type": "registry:example",
+      "title": "Circular Progress Custom Center Content",
+      "description": "Circular Progress example: Custom Center Content.",
+      "registryDependencies": [
+        "circular-progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/circular-progress/custom-center-content.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "circular-progress-default",
+      "type": "registry:example",
+      "title": "Circular Progress Default",
+      "description": "Circular Progress example: Default.",
+      "registryDependencies": [
+        "circular-progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/circular-progress/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "circular-progress-indeterminate",
+      "type": "registry:example",
+      "title": "Circular Progress Indeterminate",
+      "description": "Circular Progress example: Indeterminate.",
+      "registryDependencies": [
+        "circular-progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/circular-progress/indeterminate.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "circular-progress-sizes",
+      "type": "registry:example",
+      "title": "Circular Progress Sizes",
+      "description": "Circular Progress example: Sizes.",
+      "registryDependencies": [
+        "circular-progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/circular-progress/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "circular-progress-with-avatar",
+      "type": "registry:example",
+      "title": "Circular Progress With Avatar",
+      "description": "Circular Progress example: With Avatar.",
+      "registryDependencies": [
+        "avatar",
+        "circular-progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/circular-progress/with-avatar.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "circular-progress-with-label",
+      "type": "registry:example",
+      "title": "Circular Progress With Label",
+      "description": "Circular Progress example: With Label.",
+      "registryDependencies": [
+        "circular-progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/circular-progress/with-label.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "collapsible-default",
+      "type": "registry:example",
+      "title": "Collapsible Default",
+      "description": "Collapsible example: Default.",
+      "registryDependencies": [
+        "collapsible"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/collapsible/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "collapsible-file-tree",
+      "type": "registry:example",
+      "title": "Collapsible File Tree",
+      "description": "Collapsible example: File Tree.",
+      "registryDependencies": [
+        "collapsible"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/collapsible/file-tree.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "collapsible-settings",
+      "type": "registry:example",
+      "title": "Collapsible Settings",
+      "description": "Collapsible example: Settings.",
+      "registryDependencies": [
+        "collapsible"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/collapsible/settings.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "combobox-compact-items",
+      "type": "registry:example",
+      "title": "Combobox Compact Items",
+      "description": "Combobox example: Compact Items.",
+      "registryDependencies": [
+        "combobox"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/combobox/compact-items.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "combobox-controlled",
+      "type": "registry:example",
+      "title": "Combobox Controlled",
+      "description": "Combobox example: Controlled.",
+      "registryDependencies": [
+        "button",
+        "combobox"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/combobox/controlled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "combobox-countries",
+      "type": "registry:example",
+      "title": "Combobox Countries",
+      "description": "Combobox example: Countries.",
+      "registryDependencies": [
+        "combobox"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/combobox/countries.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "combobox-custom-items",
+      "type": "registry:example",
+      "title": "Combobox Custom Items",
+      "description": "Combobox example: Custom Items.",
+      "registryDependencies": [
+        "combobox"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/combobox/custom-items.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "combobox-default",
+      "type": "registry:example",
+      "title": "Combobox Default",
+      "description": "Combobox example: Default.",
+      "registryDependencies": [
+        "combobox"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/combobox/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "combobox-disabled",
+      "type": "registry:example",
+      "title": "Combobox Disabled",
+      "description": "Combobox example: Disabled.",
+      "registryDependencies": [
+        "combobox"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/combobox/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "combobox-form-example",
+      "type": "registry:example",
+      "title": "Combobox Form Example",
+      "description": "Combobox example: Form Example.",
+      "registryDependencies": [
+        "button",
+        "combobox",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/combobox/form-example.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "combobox-groups",
+      "type": "registry:example",
+      "title": "Combobox Groups",
+      "description": "Combobox example: Groups.",
+      "registryDependencies": [
+        "combobox"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/combobox/groups.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "combobox-multi-with-create",
+      "type": "registry:example",
+      "title": "Combobox Multi With Create",
+      "description": "Combobox example: Multi With Create.",
+      "registryDependencies": [
+        "combobox"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/combobox/multi-with-create.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "combobox-multiple",
+      "type": "registry:example",
+      "title": "Combobox Multiple",
+      "description": "Combobox example: Multiple.",
+      "registryDependencies": [
+        "combobox"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/combobox/multiple.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "combobox-popup",
+      "type": "registry:example",
+      "title": "Combobox Popup",
+      "description": "Combobox example: Popup.",
+      "registryDependencies": [
+        "button",
+        "combobox"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/combobox/popup.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "combobox-scrollable",
+      "type": "registry:example",
+      "title": "Combobox Scrollable",
+      "description": "Combobox example: Scrollable.",
+      "registryDependencies": [
+        "combobox"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/combobox/scrollable.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "combobox-with-clear",
+      "type": "registry:example",
+      "title": "Combobox With Clear",
+      "description": "Combobox example: With Clear.",
+      "registryDependencies": [
+        "combobox"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/combobox/with-clear.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "command-default",
+      "type": "registry:example",
+      "title": "Command Default",
+      "description": "Command example: Default.",
+      "registryDependencies": [
+        "button",
+        "command"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/command/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "command-disabled-items",
+      "type": "registry:example",
+      "title": "Command Disabled Items",
+      "description": "Command example: Disabled Items.",
+      "registryDependencies": [
+        "button",
+        "command"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/command/disabled-items.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "command-groups",
+      "type": "registry:example",
+      "title": "Command Groups",
+      "description": "Command example: Groups.",
+      "registryDependencies": [
+        "button",
+        "command"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/command/groups.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "command-keyboard-trigger",
+      "type": "registry:example",
+      "title": "Command Keyboard Trigger",
+      "description": "Command example: Keyboard Trigger.",
+      "registryDependencies": [
+        "button",
+        "command"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/command/keyboard-trigger.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "command-scrollable",
+      "type": "registry:example",
+      "title": "Command Scrollable",
+      "description": "Command example: Scrollable.",
+      "registryDependencies": [
+        "button",
+        "command"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/command/scrollable.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "command-with-shortcuts",
+      "type": "registry:example",
+      "title": "Command With Shortcuts",
+      "description": "Command example: With Shortcuts.",
+      "registryDependencies": [
+        "button",
+        "command"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/command/with-shortcuts.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "date-input-controlled",
+      "type": "registry:example",
+      "title": "Date Input Controlled",
+      "description": "Date Input example: Controlled.",
+      "registryDependencies": [
+        "button",
+        "calendar",
+        "field",
+        "popover"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-input/controlled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "date-input-date-of-birth",
+      "type": "registry:example",
+      "title": "Date Input Date Of Birth",
+      "description": "Date Input example: Date Of Birth.",
+      "registryDependencies": [
+        "date-input",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-input/date-of-birth.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "date-input-default",
+      "type": "registry:example",
+      "title": "Date Input Default",
+      "description": "Date Input example: Default.",
+      "registryDependencies": [
+        "date-input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-input/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "date-input-natural-language",
+      "type": "registry:example",
+      "title": "Date Input Natural Language",
+      "description": "Date Input example: Natural Language.",
+      "registryDependencies": [
+        "button",
+        "calendar",
+        "field",
+        "popover"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-input/natural-language.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "date-input-presets",
+      "type": "registry:example",
+      "title": "Date Input Presets",
+      "description": "Date Input example: Presets.",
+      "registryDependencies": [
+        "button",
+        "date-input",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-input/presets.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "date-input-range",
+      "type": "registry:example",
+      "title": "Date Input Range",
+      "description": "Date Input example: Range.",
+      "registryDependencies": [
+        "date-input",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-input/range.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "date-input-with-input",
+      "type": "registry:example",
+      "title": "Date Input With Input",
+      "description": "Date Input example: With Input.",
+      "registryDependencies": [
+        "date-input",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-input/with-input.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "date-input-with-time",
+      "type": "registry:example",
+      "title": "Date Input With Time",
+      "description": "Date Input example: With Time.",
+      "registryDependencies": [
+        "button",
+        "calendar",
+        "field",
+        "input",
+        "popover"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-input/with-time.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "description-list-card-variant",
+      "type": "registry:example",
+      "title": "Description List Card Variant",
+      "description": "Description List example: Card Variant.",
+      "registryDependencies": [
+        "badge",
+        "description-list"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/description-list/card-variant.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "description-list-compact",
+      "type": "registry:example",
+      "title": "Description List Compact",
+      "description": "Description List example: Compact.",
+      "registryDependencies": [
+        "badge",
+        "description-list"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/description-list/compact.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "description-list-custom-values",
+      "type": "registry:example",
+      "title": "Description List Custom Values",
+      "description": "Description List example: Custom Values.",
+      "registryDependencies": [
+        "badge",
+        "description-list"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/description-list/custom-values.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "description-list-default",
+      "type": "registry:example",
+      "title": "Description List Default",
+      "description": "Description List example: Default.",
+      "registryDependencies": [
+        "badge",
+        "description-list"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/description-list/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "description-list-in-card",
+      "type": "registry:example",
+      "title": "Description List In Card",
+      "description": "Description List example: In Card.",
+      "registryDependencies": [
+        "badge",
+        "card",
+        "description-list"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/description-list/in-card.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "description-list-order-summary",
+      "type": "registry:example",
+      "title": "Description List Order Summary",
+      "description": "Description List example: Order Summary.",
+      "registryDependencies": [
+        "card",
+        "description-list"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/description-list/order-summary.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "drawer-complex-filter",
+      "type": "registry:example",
+      "title": "Drawer Complex Filter",
+      "description": "Drawer example: Complex Filter.",
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "drawer",
+        "radio-group",
+        "stepper"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/drawer/complex-filter.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "drawer-default",
+      "type": "registry:example",
+      "title": "Drawer Default",
+      "description": "Drawer example: Default.",
+      "registryDependencies": [
+        "button",
+        "drawer"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/drawer/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "drawer-filter",
+      "type": "registry:example",
+      "title": "Drawer Filter",
+      "description": "Drawer example: Filter.",
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "drawer"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/drawer/filter.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "drawer-floating",
+      "type": "registry:example",
+      "title": "Drawer Floating",
+      "description": "Drawer example: Floating.",
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "drawer",
+        "separator"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/drawer/floating.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "drawer-nested",
+      "type": "registry:example",
+      "title": "Drawer Nested",
+      "description": "Drawer example: Nested.",
+      "registryDependencies": [
+        "button",
+        "drawer"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/drawer/nested.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "drawer-responsive",
+      "type": "registry:example",
+      "title": "Drawer Responsive",
+      "description": "Drawer example: Responsive.",
+      "registryDependencies": [
+        "button",
+        "drawer",
+        "input",
+        "label",
+        "modal"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/drawer/responsive.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "drawer-scrollable",
+      "type": "registry:example",
+      "title": "Drawer Scrollable",
+      "description": "Drawer example: Scrollable.",
+      "registryDependencies": [
+        "button",
+        "drawer"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/drawer/scrollable.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "drawer-sides",
+      "type": "registry:example",
+      "title": "Drawer Sides",
+      "description": "Drawer example: Sides.",
+      "registryDependencies": [
+        "button",
+        "drawer"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/drawer/sides.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "drawer-sort-by",
+      "type": "registry:example",
+      "title": "Drawer Sort By",
+      "description": "Drawer example: Sort By.",
+      "registryDependencies": [
+        "button",
+        "drawer"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/drawer/sort-by.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu-account",
+      "type": "registry:example",
+      "title": "Dropdown Menu Account",
+      "description": "Dropdown Menu example: Account.",
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/dropdown-menu/account.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu-checkboxes",
+      "type": "registry:example",
+      "title": "Dropdown Menu Checkboxes",
+      "description": "Dropdown Menu example: Checkboxes.",
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/dropdown-menu/checkboxes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu-complex",
+      "type": "registry:example",
+      "title": "Dropdown Menu Complex",
+      "description": "Dropdown Menu example: Complex.",
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/dropdown-menu/complex.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu-default",
+      "type": "registry:example",
+      "title": "Dropdown Menu Default",
+      "description": "Dropdown Menu example: Default.",
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/dropdown-menu/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu-destructive",
+      "type": "registry:example",
+      "title": "Dropdown Menu Destructive",
+      "description": "Dropdown Menu example: Destructive.",
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/dropdown-menu/destructive.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu-radio-group",
+      "type": "registry:example",
+      "title": "Dropdown Menu Radio Group",
+      "description": "Dropdown Menu example: Radio Group.",
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/dropdown-menu/radio-group.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu-shortcuts",
+      "type": "registry:example",
+      "title": "Dropdown Menu Shortcuts",
+      "description": "Dropdown Menu example: Shortcuts.",
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/dropdown-menu/shortcuts.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu-submenu",
+      "type": "registry:example",
+      "title": "Dropdown Menu Submenu",
+      "description": "Dropdown Menu example: Submenu.",
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/dropdown-menu/submenu.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu-with-icons",
+      "type": "registry:example",
+      "title": "Dropdown Menu With Icons",
+      "description": "Dropdown Menu example: With Icons.",
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/dropdown-menu/with-icons.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "empty-background",
+      "type": "registry:example",
+      "title": "Empty Background",
+      "description": "Empty example: Background.",
+      "registryDependencies": [
+        "button",
+        "empty"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/empty/background.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "empty-default",
+      "type": "registry:example",
+      "title": "Empty Default",
+      "description": "Empty example: Default.",
+      "registryDependencies": [
+        "button",
+        "empty"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/empty/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "empty-outline",
+      "type": "registry:example",
+      "title": "Empty Outline",
+      "description": "Empty example: Outline.",
+      "registryDependencies": [
+        "button",
+        "empty"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/empty/outline.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "empty-with-action",
+      "type": "registry:example",
+      "title": "Empty With Action",
+      "description": "Empty example: With Action.",
+      "registryDependencies": [
+        "button",
+        "empty"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/empty/with-action.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "empty-with-avatar",
+      "type": "registry:example",
+      "title": "Empty With Avatar",
+      "description": "Empty example: With Avatar.",
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "empty"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/empty/with-avatar.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "empty-with-description",
+      "type": "registry:example",
+      "title": "Empty With Description",
+      "description": "Empty example: With Description.",
+      "registryDependencies": [
+        "button",
+        "empty"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/empty/with-description.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "empty-with-form",
+      "type": "registry:example",
+      "title": "Empty With Form",
+      "description": "Empty example: With Form.",
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "empty"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/empty/with-form.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "empty-with-image",
+      "type": "registry:example",
+      "title": "Empty With Image",
+      "description": "Empty example: With Image.",
+      "registryDependencies": [
+        "button",
+        "empty"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/empty/with-image.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "empty-with-input",
+      "type": "registry:example",
+      "title": "Empty With Input",
+      "description": "Empty example: With Input.",
+      "registryDependencies": [
+        "button",
+        "empty",
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/empty/with-input.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "empty-with-list",
+      "type": "registry:example",
+      "title": "Empty With List",
+      "description": "Empty example: With List.",
+      "registryDependencies": [
+        "button",
+        "empty"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/empty/with-list.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "empty-with-search",
+      "type": "registry:example",
+      "title": "Empty With Search",
+      "description": "Empty example: With Search.",
+      "registryDependencies": [
+        "empty",
+        "input-group",
+        "kbd"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/empty/with-search.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "empty-with-spinner",
+      "type": "registry:example",
+      "title": "Empty With Spinner",
+      "description": "Empty example: With Spinner.",
+      "registryDependencies": [
+        "button",
+        "empty",
+        "spinner"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/empty/with-spinner.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "field-checkout-form",
+      "type": "registry:example",
+      "title": "Field Checkout Form",
+      "description": "Field example: Checkout Form.",
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "field",
+        "input",
+        "select",
+        "textarea"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/field/checkout-form.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "field-default",
+      "type": "registry:example",
+      "title": "Field Default",
+      "description": "Field example: Default.",
+      "registryDependencies": [
+        "field",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/field/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "field-fieldset",
+      "type": "registry:example",
+      "title": "Field Fieldset",
+      "description": "Field example: Fieldset.",
+      "registryDependencies": [
+        "field",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/field/fieldset.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "field-grid",
+      "type": "registry:example",
+      "title": "Field Grid",
+      "description": "Field example: Grid.",
+      "registryDependencies": [
+        "field",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/field/grid.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "field-horizontal",
+      "type": "registry:example",
+      "title": "Field Horizontal",
+      "description": "Field example: Horizontal.",
+      "registryDependencies": [
+        "field",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/field/horizontal.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "field-multiple-errors",
+      "type": "registry:example",
+      "title": "Field Multiple Errors",
+      "description": "Field example: Multiple Errors.",
+      "registryDependencies": [
+        "field",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/field/multiple-errors.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "field-payment-method",
+      "type": "registry:example",
+      "title": "Field Payment Method",
+      "description": "Field example: Payment Method.",
+      "registryDependencies": [
+        "button",
+        "field",
+        "input",
+        "radio-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/field/payment-method.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "field-required",
+      "type": "registry:example",
+      "title": "Field Required",
+      "description": "Field example: Required.",
+      "registryDependencies": [
+        "field",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/field/required.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "field-settings-form",
+      "type": "registry:example",
+      "title": "Field Settings Form",
+      "description": "Field example: Settings Form.",
+      "registryDependencies": [
+        "button",
+        "button-group",
+        "field",
+        "input",
+        "radio-group",
+        "switch"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/field/settings-form.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "field-textarea-example",
+      "type": "registry:example",
+      "title": "Field Textarea Example",
+      "description": "Field example: Textarea Example.",
+      "registryDependencies": [
+        "field",
+        "textarea"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/field/textarea-example.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "field-validation-error",
+      "type": "registry:example",
+      "title": "Field Validation Error",
+      "description": "Field example: Validation Error.",
+      "registryDependencies": [
+        "field",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/field/validation-error.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "field-with-checkbox",
+      "type": "registry:example",
+      "title": "Field With Checkbox",
+      "description": "Field example: With Checkbox.",
+      "registryDependencies": [
+        "checkbox",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/field/with-checkbox.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "field-with-switch",
+      "type": "registry:example",
+      "title": "Field With Switch",
+      "description": "Field example: With Switch.",
+      "registryDependencies": [
+        "field",
+        "switch"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/field/with-switch.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "form-default",
+      "type": "registry:example",
+      "title": "Form Default",
+      "description": "Form example: Default.",
+      "registryDependencies": [
+        "form",
+        "input",
+        "textarea"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/form/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "form-with-validation",
+      "type": "registry:example",
+      "title": "Form With Validation",
+      "description": "Form example: With Validation.",
+      "registryDependencies": [
+        "button",
+        "form",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/form/with-validation.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-default",
+      "type": "registry:example",
+      "title": "Input Default",
+      "description": "Input example: Default.",
+      "registryDependencies": [
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-disabled",
+      "type": "registry:example",
+      "title": "Input Disabled",
+      "description": "Input example: Disabled.",
+      "registryDependencies": [
+        "field",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-file",
+      "type": "registry:example",
+      "title": "Input File",
+      "description": "Input example: File.",
+      "registryDependencies": [
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input/file.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-form-example",
+      "type": "registry:example",
+      "title": "Input Form Example",
+      "description": "Input example: Form Example.",
+      "registryDependencies": [
+        "button",
+        "field",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input/form-example.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-sizes",
+      "type": "registry:example",
+      "title": "Input Sizes",
+      "description": "Input example: Sizes.",
+      "registryDependencies": [
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-types",
+      "type": "registry:example",
+      "title": "Input Types",
+      "description": "Input example: Types.",
+      "registryDependencies": [
+        "field",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input/types.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-with-button",
+      "type": "registry:example",
+      "title": "Input With Button",
+      "description": "Input example: With Button.",
+      "registryDependencies": [
+        "button",
+        "button-group",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input/with-button.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-with-error",
+      "type": "registry:example",
+      "title": "Input With Error",
+      "description": "Input example: With Error.",
+      "registryDependencies": [
+        "field",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input/with-error.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-with-field",
+      "type": "registry:example",
+      "title": "Input With Field",
+      "description": "Input example: With Field.",
+      "registryDependencies": [
+        "field",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input/with-field.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-with-helper-text",
+      "type": "registry:example",
+      "title": "Input With Helper Text",
+      "description": "Input example: With Helper Text.",
+      "registryDependencies": [
+        "field",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input/with-helper-text.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-with-icon",
+      "type": "registry:example",
+      "title": "Input With Icon",
+      "description": "Input example: With Icon.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input/with-icon.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-with-label",
+      "type": "registry:example",
+      "title": "Input With Label",
+      "description": "Input example: With Label.",
+      "registryDependencies": [
+        "field",
+        "input"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input/with-label.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-with-password-toggle",
+      "type": "registry:example",
+      "title": "Input With Password Toggle",
+      "description": "Input example: With Password Toggle.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input/with-password-toggle.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-with-prefix",
+      "type": "registry:example",
+      "title": "Input With Prefix",
+      "description": "Input example: With Prefix.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input/with-prefix.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-clear-button",
+      "type": "registry:example",
+      "title": "Input Group Clear Button",
+      "description": "Input Group example: Clear Button.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/clear-button.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-copy-to-clipboard",
+      "type": "registry:example",
+      "title": "Input Group Copy To Clipboard",
+      "description": "Input Group example: Copy To Clipboard.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/copy-to-clipboard.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-currency",
+      "type": "registry:example",
+      "title": "Input Group Currency",
+      "description": "Input Group example: Currency.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/currency.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-default",
+      "type": "registry:example",
+      "title": "Input Group Default",
+      "description": "Input Group example: Default.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-email-input",
+      "type": "registry:example",
+      "title": "Input Group Email Input",
+      "description": "Input Group example: Email Input.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/email-input.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-loading-spinner",
+      "type": "registry:example",
+      "title": "Input Group Loading Spinner",
+      "description": "Input Group example: Loading Spinner.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/loading-spinner.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-password-toggle",
+      "type": "registry:example",
+      "title": "Input Group Password Toggle",
+      "description": "Input Group example: Password Toggle.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/password-toggle.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-phone-input",
+      "type": "registry:example",
+      "title": "Input Group Phone Input",
+      "description": "Input Group example: Phone Input.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/phone-input.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-prompt-form",
+      "type": "registry:example",
+      "title": "Input Group Prompt Form",
+      "description": "Input Group example: Prompt Form.",
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "command",
+        "dropdown-menu",
+        "field",
+        "input-group",
+        "popover",
+        "switch",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/prompt-form.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-search",
+      "type": "registry:example",
+      "title": "Input Group Search",
+      "description": "Input Group example: Search.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/search.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-small-size",
+      "type": "registry:example",
+      "title": "Input Group Small Size",
+      "description": "Input Group example: Small Size.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/small-size.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-stake-buttons",
+      "type": "registry:example",
+      "title": "Input Group Stake Buttons",
+      "description": "Input Group example: Stake Buttons.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/stake-buttons.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-text-prefix",
+      "type": "registry:example",
+      "title": "Input Group Text Prefix",
+      "description": "Input Group example: Text Prefix.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/text-prefix.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-text-suffix",
+      "type": "registry:example",
+      "title": "Input Group Text Suffix",
+      "description": "Input Group example: Text Suffix.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/text-suffix.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-with-button",
+      "type": "registry:example",
+      "title": "Input Group With Button",
+      "description": "Input Group example: With Button.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/with-button.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-group-with-textarea",
+      "type": "registry:example",
+      "title": "Input Group With Textarea",
+      "description": "Input Group example: With Textarea.",
+      "registryDependencies": [
+        "input-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-group/with-textarea.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-otp-alphanumeric",
+      "type": "registry:example",
+      "title": "Input Otp Alphanumeric",
+      "description": "Input Otp example: Alphanumeric.",
+      "registryDependencies": [
+        "input-otp"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-otp/alphanumeric.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-otp-auto-submit",
+      "type": "registry:example",
+      "title": "Input Otp Auto Submit",
+      "description": "Input Otp example: Auto Submit.",
+      "registryDependencies": [
+        "button",
+        "input-otp"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-otp/auto-submit.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-otp-custom-sanitization",
+      "type": "registry:example",
+      "title": "Input Otp Custom Sanitization",
+      "description": "Input Otp example: Custom Sanitization.",
+      "registryDependencies": [
+        "input-otp"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-otp/custom-sanitization.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-otp-default",
+      "type": "registry:example",
+      "title": "Input Otp Default",
+      "description": "Input Otp example: Default.",
+      "registryDependencies": [
+        "input-otp"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-otp/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-otp-disabled",
+      "type": "registry:example",
+      "title": "Input Otp Disabled",
+      "description": "Input Otp example: Disabled.",
+      "registryDependencies": [
+        "input-otp"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-otp/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-otp-form",
+      "type": "registry:example",
+      "title": "Input Otp Form",
+      "description": "Input Otp example: Form.",
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input-otp"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-otp/form.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-otp-four-digits",
+      "type": "registry:example",
+      "title": "Input Otp Four Digits",
+      "description": "Input Otp example: Four Digits.",
+      "registryDependencies": [
+        "input-otp"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-otp/four-digits.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-otp-loading",
+      "type": "registry:example",
+      "title": "Input Otp Loading",
+      "description": "Input Otp example: Loading.",
+      "registryDependencies": [
+        "input-otp"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-otp/loading.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-otp-masked",
+      "type": "registry:example",
+      "title": "Input Otp Masked",
+      "description": "Input Otp example: Masked.",
+      "registryDependencies": [
+        "input-otp"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-otp/masked.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-otp-placeholder",
+      "type": "registry:example",
+      "title": "Input Otp Placeholder",
+      "description": "Input Otp example: Placeholder.",
+      "registryDependencies": [
+        "input-otp"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-otp/placeholder.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-otp-with-label",
+      "type": "registry:example",
+      "title": "Input Otp With Label",
+      "description": "Input Otp example: With Label.",
+      "registryDependencies": [
+        "input-otp"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-otp/with-label.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "input-otp-with-separator",
+      "type": "registry:example",
+      "title": "Input Otp With Separator",
+      "description": "Input Otp example: With Separator.",
+      "registryDependencies": [
+        "input-otp"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/input-otp/with-separator.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "item-activity-feed",
+      "type": "registry:example",
+      "title": "Item Activity Feed",
+      "description": "Item example: Activity Feed.",
+      "registryDependencies": [
+        "avatar",
+        "item"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/item/activity-feed.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "item-default",
+      "type": "registry:example",
+      "title": "Item Default",
+      "description": "Item example: Default.",
+      "registryDependencies": [
+        "item"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/item/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "item-group",
+      "type": "registry:example",
+      "title": "Item Group",
+      "description": "Item example: Group.",
+      "registryDependencies": [
+        "avatar",
+        "button",
+        "item"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/item/group.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "item-link",
+      "type": "registry:example",
+      "title": "Item Link",
+      "description": "Item example: Link.",
+      "registryDependencies": [
+        "item"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/item/link.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "item-notification-list",
+      "type": "registry:example",
+      "title": "Item Notification List",
+      "description": "Item example: Notification List.",
+      "registryDependencies": [
+        "badge",
+        "item"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/item/notification-list.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "item-settings-list",
+      "type": "registry:example",
+      "title": "Item Settings List",
+      "description": "Item example: Settings List.",
+      "registryDependencies": [
+        "item"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/item/settings-list.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "item-sizes",
+      "type": "registry:example",
+      "title": "Item Sizes",
+      "description": "Item example: Sizes.",
+      "registryDependencies": [
+        "item"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/item/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "item-with-actions",
+      "type": "registry:example",
+      "title": "Item With Actions",
+      "description": "Item example: With Actions.",
+      "registryDependencies": [
+        "button",
+        "item"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/item/with-actions.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "item-with-avatar",
+      "type": "registry:example",
+      "title": "Item With Avatar",
+      "description": "Item example: With Avatar.",
+      "registryDependencies": [
+        "avatar",
+        "item"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/item/with-avatar.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "item-with-description",
+      "type": "registry:example",
+      "title": "Item With Description",
+      "description": "Item example: With Description.",
+      "registryDependencies": [
+        "item"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/item/with-description.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "item-with-footer",
+      "type": "registry:example",
+      "title": "Item With Footer",
+      "description": "Item example: With Footer.",
+      "registryDependencies": [
+        "button",
+        "item"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/item/with-footer.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "item-with-icon",
+      "type": "registry:example",
+      "title": "Item With Icon",
+      "description": "Item example: With Icon.",
+      "registryDependencies": [
+        "item"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/item/with-icon.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "item-with-image",
+      "type": "registry:example",
+      "title": "Item With Image",
+      "description": "Item example: With Image.",
+      "registryDependencies": [
+        "item"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/item/with-image.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "item-with-separator",
+      "type": "registry:example",
+      "title": "Item With Separator",
+      "description": "Item example: With Separator.",
+      "registryDependencies": [
+        "item"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/item/with-separator.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "kbd-common-shortcuts",
+      "type": "registry:example",
+      "title": "Kbd Common Shortcuts",
+      "description": "Kbd example: Common Shortcuts.",
+      "registryDependencies": [
+        "kbd"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/kbd/common-shortcuts.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "kbd-default",
+      "type": "registry:example",
+      "title": "Kbd Default",
+      "description": "Kbd example: Default.",
+      "registryDependencies": [
+        "kbd"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/kbd/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "kbd-function-keys",
+      "type": "registry:example",
+      "title": "Kbd Function Keys",
+      "description": "Kbd example: Function Keys.",
+      "registryDependencies": [
+        "kbd"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/kbd/function-keys.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "kbd-group",
+      "type": "registry:example",
+      "title": "Kbd Group",
+      "description": "Kbd example: Group.",
+      "registryDependencies": [
+        "kbd"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/kbd/group.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "kbd-modifier-keys",
+      "type": "registry:example",
+      "title": "Kbd Modifier Keys",
+      "description": "Kbd example: Modifier Keys.",
+      "registryDependencies": [
+        "kbd"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/kbd/modifier-keys.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "kbd-special-keys",
+      "type": "registry:example",
+      "title": "Kbd Special Keys",
+      "description": "Kbd example: Special Keys.",
+      "registryDependencies": [
+        "kbd"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/kbd/special-keys.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "label-default",
+      "type": "registry:example",
+      "title": "Label Default",
+      "description": "Label example: Default.",
+      "registryDependencies": [
+        "input",
+        "label"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/label/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "label-required",
+      "type": "registry:example",
+      "title": "Label Required",
+      "description": "Label example: Required.",
+      "registryDependencies": [
+        "input",
+        "label"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/label/required.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "label-with-description",
+      "type": "registry:example",
+      "title": "Label With Description",
+      "description": "Label example: With Description.",
+      "registryDependencies": [
+        "input",
+        "label"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/label/with-description.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "modal-confirmation",
+      "type": "registry:example",
+      "title": "Modal Confirmation",
+      "description": "Modal example: Confirmation.",
+      "registryDependencies": [
+        "button",
+        "modal"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/modal/confirmation.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "modal-controlled",
+      "type": "registry:example",
+      "title": "Modal Controlled",
+      "description": "Modal example: Controlled.",
+      "registryDependencies": [
+        "button",
+        "modal"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/modal/controlled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "modal-default",
+      "type": "registry:example",
+      "title": "Modal Default",
+      "description": "Modal example: Default.",
+      "registryDependencies": [
+        "button",
+        "modal"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/modal/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "modal-long-content",
+      "type": "registry:example",
+      "title": "Modal Long Content",
+      "description": "Modal example: Long Content.",
+      "registryDependencies": [
+        "button",
+        "modal"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/modal/long-content.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "modal-multi-step",
+      "type": "registry:example",
+      "title": "Modal Multi Step",
+      "description": "Modal example: Multi Step.",
+      "registryDependencies": [
+        "button",
+        "input",
+        "label",
+        "modal",
+        "stepper"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/modal/multi-step.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "modal-nested",
+      "type": "registry:example",
+      "title": "Modal Nested",
+      "description": "Modal example: Nested.",
+      "registryDependencies": [
+        "button",
+        "modal"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/modal/nested.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "modal-scrollable",
+      "type": "registry:example",
+      "title": "Modal Scrollable",
+      "description": "Modal example: Scrollable.",
+      "registryDependencies": [
+        "button",
+        "modal"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/modal/scrollable.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "modal-sign-up-form",
+      "type": "registry:example",
+      "title": "Modal Sign Up Form",
+      "description": "Modal example: Sign Up Form.",
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "input",
+        "label",
+        "modal"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/modal/sign-up-form.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "modal-sizes",
+      "type": "registry:example",
+      "title": "Modal Sizes",
+      "description": "Modal example: Sizes.",
+      "registryDependencies": [
+        "button",
+        "modal"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/modal/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "modal-sticky-footer",
+      "type": "registry:example",
+      "title": "Modal Sticky Footer",
+      "description": "Modal example: Sticky Footer.",
+      "registryDependencies": [
+        "button",
+        "modal"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/modal/sticky-footer.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "native-select-default",
+      "type": "registry:example",
+      "title": "Native Select Default",
+      "description": "Native Select example: Default.",
+      "registryDependencies": [
+        "native-select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/native-select/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "native-select-disabled",
+      "type": "registry:example",
+      "title": "Native Select Disabled",
+      "description": "Native Select example: Disabled.",
+      "registryDependencies": [
+        "native-select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/native-select/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "native-select-form-example",
+      "type": "registry:example",
+      "title": "Native Select Form Example",
+      "description": "Native Select example: Form Example.",
+      "registryDependencies": [
+        "field",
+        "native-select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/native-select/form-example.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "native-select-groups",
+      "type": "registry:example",
+      "title": "Native Select Groups",
+      "description": "Native Select example: Groups.",
+      "registryDependencies": [
+        "native-select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/native-select/groups.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "native-select-invalid",
+      "type": "registry:example",
+      "title": "Native Select Invalid",
+      "description": "Native Select example: Invalid.",
+      "registryDependencies": [
+        "field",
+        "native-select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/native-select/invalid.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "native-select-sizes",
+      "type": "registry:example",
+      "title": "Native Select Sizes",
+      "description": "Native Select example: Sizes.",
+      "registryDependencies": [
+        "native-select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/native-select/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "pagination-data-table",
+      "type": "registry:example",
+      "title": "Pagination Data Table",
+      "description": "Pagination example: Data Table.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/pagination/data-table.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "pagination-default",
+      "type": "registry:example",
+      "title": "Pagination Default",
+      "description": "Pagination example: Default.",
+      "registryDependencies": [
+        "pagination"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/pagination/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "pagination-simple",
+      "type": "registry:example",
+      "title": "Pagination Simple",
+      "description": "Pagination example: Simple.",
+      "registryDependencies": [
+        "pagination"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/pagination/simple.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "popover-alignments",
+      "type": "registry:example",
+      "title": "Popover Alignments",
+      "description": "Popover example: Alignments.",
+      "registryDependencies": [
+        "button",
+        "popover"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/popover/alignments.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "popover-default",
+      "type": "registry:example",
+      "title": "Popover Default",
+      "description": "Popover example: Default.",
+      "registryDependencies": [
+        "button",
+        "popover"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/popover/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "popover-open-on-hover",
+      "type": "registry:example",
+      "title": "Popover Open On Hover",
+      "description": "Popover example: Open On Hover.",
+      "registryDependencies": [
+        "button",
+        "popover"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/popover/open-on-hover.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "popover-with-arrow",
+      "type": "registry:example",
+      "title": "Popover With Arrow",
+      "description": "Popover example: With Arrow.",
+      "registryDependencies": [
+        "button",
+        "popover"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/popover/with-arrow.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "popover-with-form",
+      "type": "registry:example",
+      "title": "Popover With Form",
+      "description": "Popover example: With Form.",
+      "registryDependencies": [
+        "button",
+        "input",
+        "label",
+        "popover"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/popover/with-form.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "progress-animated",
+      "type": "registry:example",
+      "title": "Progress Animated",
+      "description": "Progress example: Animated.",
+      "registryDependencies": [
+        "progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/progress/animated.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "progress-colors",
+      "type": "registry:example",
+      "title": "Progress Colors",
+      "description": "Progress example: Colors.",
+      "registryDependencies": [
+        "progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/progress/colors.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "progress-complete",
+      "type": "registry:example",
+      "title": "Progress Complete",
+      "description": "Progress example: Complete.",
+      "registryDependencies": [
+        "progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/progress/complete.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "progress-controlled",
+      "type": "registry:example",
+      "title": "Progress Controlled",
+      "description": "Progress example: Controlled.",
+      "registryDependencies": [
+        "progress",
+        "slider"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/progress/controlled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "progress-default",
+      "type": "registry:example",
+      "title": "Progress Default",
+      "description": "Progress example: Default.",
+      "registryDependencies": [
+        "progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/progress/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "progress-indeterminate",
+      "type": "registry:example",
+      "title": "Progress Indeterminate",
+      "description": "Progress example: Indeterminate.",
+      "registryDependencies": [
+        "progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/progress/indeterminate.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "progress-with-label",
+      "type": "registry:example",
+      "title": "Progress With Label",
+      "description": "Progress example: With Label.",
+      "registryDependencies": [
+        "progress"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/progress/with-label.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "radio-group-choice-card",
+      "type": "registry:example",
+      "title": "Radio Group Choice Card",
+      "description": "Radio Group example: Choice Card.",
+      "registryDependencies": [
+        "field",
+        "radio-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/radio-group/choice-card.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "radio-group-default",
+      "type": "registry:example",
+      "title": "Radio Group Default",
+      "description": "Radio Group example: Default.",
+      "registryDependencies": [
+        "label",
+        "radio-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/radio-group/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "radio-group-disabled",
+      "type": "registry:example",
+      "title": "Radio Group Disabled",
+      "description": "Radio Group example: Disabled.",
+      "registryDependencies": [
+        "field",
+        "radio-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/radio-group/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "radio-group-fieldset",
+      "type": "registry:example",
+      "title": "Radio Group Fieldset",
+      "description": "Radio Group example: Fieldset.",
+      "registryDependencies": [
+        "field",
+        "radio-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/radio-group/fieldset.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "radio-group-horizontal",
+      "type": "registry:example",
+      "title": "Radio Group Horizontal",
+      "description": "Radio Group example: Horizontal.",
+      "registryDependencies": [
+        "label",
+        "radio-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/radio-group/horizontal.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "radio-group-with-description",
+      "type": "registry:example",
+      "title": "Radio Group With Description",
+      "description": "Radio Group example: With Description.",
+      "registryDependencies": [
+        "field",
+        "radio-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/radio-group/with-description.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "resizable-collapsible",
+      "type": "registry:example",
+      "title": "Resizable Collapsible",
+      "description": "Resizable example: Collapsible.",
+      "registryDependencies": [
+        "resizable"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/resizable/collapsible.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "resizable-complex-layout",
+      "type": "registry:example",
+      "title": "Resizable Complex Layout",
+      "description": "Resizable example: Complex Layout.",
+      "registryDependencies": [
+        "resizable"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/resizable/complex-layout.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "resizable-default",
+      "type": "registry:example",
+      "title": "Resizable Default",
+      "description": "Resizable example: Default.",
+      "registryDependencies": [
+        "resizable"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/resizable/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "resizable-nested",
+      "type": "registry:example",
+      "title": "Resizable Nested",
+      "description": "Resizable example: Nested.",
+      "registryDependencies": [
+        "resizable"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/resizable/nested.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "resizable-vertical",
+      "type": "registry:example",
+      "title": "Resizable Vertical",
+      "description": "Resizable example: Vertical.",
+      "registryDependencies": [
+        "resizable"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/resizable/vertical.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "resizable-with-handle",
+      "type": "registry:example",
+      "title": "Resizable With Handle",
+      "description": "Resizable example: With Handle.",
+      "registryDependencies": [
+        "resizable"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/resizable/with-handle.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "select-controlled",
+      "type": "registry:example",
+      "title": "Select Controlled",
+      "description": "Select example: Controlled.",
+      "registryDependencies": [
+        "button",
+        "field",
+        "select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/select/controlled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "select-default",
+      "type": "registry:example",
+      "title": "Select Default",
+      "description": "Select example: Default.",
+      "registryDependencies": [
+        "select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/select/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "select-disabled",
+      "type": "registry:example",
+      "title": "Select Disabled",
+      "description": "Select example: Disabled.",
+      "registryDependencies": [
+        "select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/select/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "select-form-example",
+      "type": "registry:example",
+      "title": "Select Form Example",
+      "description": "Select example: Form Example.",
+      "registryDependencies": [
+        "button",
+        "field",
+        "select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/select/form-example.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "select-groups",
+      "type": "registry:example",
+      "title": "Select Groups",
+      "description": "Select example: Groups.",
+      "registryDependencies": [
+        "select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/select/groups.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "select-multiple",
+      "type": "registry:example",
+      "title": "Select Multiple",
+      "description": "Select example: Multiple.",
+      "registryDependencies": [
+        "select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/select/multiple.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "select-scrollable",
+      "type": "registry:example",
+      "title": "Select Scrollable",
+      "description": "Select example: Scrollable.",
+      "registryDependencies": [
+        "select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/select/scrollable.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "select-sizes",
+      "type": "registry:example",
+      "title": "Select Sizes",
+      "description": "Select example: Sizes.",
+      "registryDependencies": [
+        "select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/select/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "select-with-icons",
+      "type": "registry:example",
+      "title": "Select With Icons",
+      "description": "Select example: With Icons.",
+      "registryDependencies": [
+        "select"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/select/with-icons.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "selection-bar-default",
+      "type": "registry:example",
+      "title": "Selection Bar Default",
+      "description": "Selection Bar example: Default.",
+      "registryDependencies": [
+        "button",
+        "selection-bar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/selection-bar/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "selection-bar-tones",
+      "type": "registry:example",
+      "title": "Selection Bar Tones",
+      "description": "Selection Bar example: Tones.",
+      "registryDependencies": [
+        "selection-bar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/selection-bar/tones.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "selection-bar-with-bulk-actions",
+      "type": "registry:example",
+      "title": "Selection Bar With Bulk Actions",
+      "description": "Selection Bar example: With Bulk Actions.",
+      "registryDependencies": [
+        "dropdown-menu",
+        "selection-bar"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/selection-bar/with-bulk-actions.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "separator-default",
+      "type": "registry:example",
+      "title": "Separator Default",
+      "description": "Separator example: Default.",
+      "registryDependencies": [
+        "separator"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/separator/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "separator-vertical",
+      "type": "registry:example",
+      "title": "Separator Vertical",
+      "description": "Separator example: Vertical.",
+      "registryDependencies": [
+        "separator"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/separator/vertical.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "separator-with-content",
+      "type": "registry:example",
+      "title": "Separator With Content",
+      "description": "Separator example: With Content.",
+      "registryDependencies": [
+        "separator"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/separator/with-content.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "skeleton-card",
+      "type": "registry:example",
+      "title": "Skeleton Card",
+      "description": "Skeleton example: Card.",
+      "registryDependencies": [
+        "skeleton"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/skeleton/card.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "skeleton-default",
+      "type": "registry:example",
+      "title": "Skeleton Default",
+      "description": "Skeleton example: Default.",
+      "registryDependencies": [
+        "skeleton"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/skeleton/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "skeleton-form",
+      "type": "registry:example",
+      "title": "Skeleton Form",
+      "description": "Skeleton example: Form.",
+      "registryDependencies": [
+        "skeleton"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/skeleton/form.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "skeleton-no-animation",
+      "type": "registry:example",
+      "title": "Skeleton No Animation",
+      "description": "Skeleton example: No Animation.",
+      "registryDependencies": [
+        "skeleton"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/skeleton/no-animation.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "skeleton-shimmer",
+      "type": "registry:example",
+      "title": "Skeleton Shimmer",
+      "description": "Skeleton example: Shimmer.",
+      "registryDependencies": [
+        "skeleton"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/skeleton/shimmer.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "skeleton-table",
+      "type": "registry:example",
+      "title": "Skeleton Table",
+      "description": "Skeleton example: Table.",
+      "registryDependencies": [
+        "skeleton"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/skeleton/table.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "skeleton-text",
+      "type": "registry:example",
+      "title": "Skeleton Text",
+      "description": "Skeleton example: Text.",
+      "registryDependencies": [
+        "skeleton"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/skeleton/text.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "slider-controlled",
+      "type": "registry:example",
+      "title": "Slider Controlled",
+      "description": "Slider example: Controlled.",
+      "registryDependencies": [
+        "slider"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/slider/controlled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "slider-custom-step",
+      "type": "registry:example",
+      "title": "Slider Custom Step",
+      "description": "Slider example: Custom Step.",
+      "registryDependencies": [
+        "slider"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/slider/custom-step.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "slider-default",
+      "type": "registry:example",
+      "title": "Slider Default",
+      "description": "Slider example: Default.",
+      "registryDependencies": [
+        "slider"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/slider/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "slider-disabled",
+      "type": "registry:example",
+      "title": "Slider Disabled",
+      "description": "Slider example: Disabled.",
+      "registryDependencies": [
+        "slider"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/slider/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "slider-range",
+      "type": "registry:example",
+      "title": "Slider Range",
+      "description": "Slider example: Range.",
+      "registryDependencies": [
+        "slider"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/slider/range.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "slider-with-label",
+      "type": "registry:example",
+      "title": "Slider With Label",
+      "description": "Slider example: With Label.",
+      "registryDependencies": [
+        "slider"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/slider/with-label.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "spinner-default",
+      "type": "registry:example",
+      "title": "Spinner Default",
+      "description": "Spinner example: Default.",
+      "registryDependencies": [
+        "spinner"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/spinner/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "spinner-sizes",
+      "type": "registry:example",
+      "title": "Spinner Sizes",
+      "description": "Spinner example: Sizes.",
+      "registryDependencies": [
+        "spinner"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/spinner/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "spinner-with-badge",
+      "type": "registry:example",
+      "title": "Spinner With Badge",
+      "description": "Spinner example: With Badge.",
+      "registryDependencies": [
+        "badge",
+        "spinner"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/spinner/with-badge.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "spinner-with-button",
+      "type": "registry:example",
+      "title": "Spinner With Button",
+      "description": "Spinner example: With Button.",
+      "registryDependencies": [
+        "button",
+        "spinner"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/spinner/with-button.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "spinner-with-empty",
+      "type": "registry:example",
+      "title": "Spinner With Empty",
+      "description": "Spinner example: With Empty.",
+      "registryDependencies": [
+        "button",
+        "empty",
+        "spinner"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/spinner/with-empty.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "stepper-controlled",
+      "type": "registry:example",
+      "title": "Stepper Controlled",
+      "description": "Stepper example: Controlled.",
+      "registryDependencies": [
+        "button",
+        "stepper"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/stepper/controlled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "stepper-default",
+      "type": "registry:example",
+      "title": "Stepper Default",
+      "description": "Stepper example: Default.",
+      "registryDependencies": [
+        "button",
+        "stepper"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/stepper/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "stepper-with-indicator",
+      "type": "registry:example",
+      "title": "Stepper With Indicator",
+      "description": "Stepper example: With Indicator.",
+      "registryDependencies": [
+        "button",
+        "stepper"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/stepper/with-indicator.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "switch-choice-card",
+      "type": "registry:example",
+      "title": "Switch Choice Card",
+      "description": "Switch example: Choice Card.",
+      "registryDependencies": [
+        "field",
+        "switch"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/switch/choice-card.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "switch-default",
+      "type": "registry:example",
+      "title": "Switch Default",
+      "description": "Switch example: Default.",
+      "registryDependencies": [
+        "field",
+        "switch"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/switch/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "switch-disabled",
+      "type": "registry:example",
+      "title": "Switch Disabled",
+      "description": "Switch example: Disabled.",
+      "registryDependencies": [
+        "field",
+        "switch"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/switch/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "switch-sizes",
+      "type": "registry:example",
+      "title": "Switch Sizes",
+      "description": "Switch example: Sizes.",
+      "registryDependencies": [
+        "field",
+        "switch"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/switch/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "switch-with-description",
+      "type": "registry:example",
+      "title": "Switch With Description",
+      "description": "Switch example: With Description.",
+      "registryDependencies": [
+        "field",
+        "switch"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/switch/with-description.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-actions",
+      "type": "registry:example",
+      "title": "Table Actions",
+      "description": "Table example: Actions.",
+      "registryDependencies": [
+        "button",
+        "table"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table/actions.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-card",
+      "type": "registry:example",
+      "title": "Table Card",
+      "description": "Table example: Card.",
+      "registryDependencies": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table/card.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-compact",
+      "type": "registry:example",
+      "title": "Table Compact",
+      "description": "Table example: Compact.",
+      "registryDependencies": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table/compact.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-default",
+      "type": "registry:example",
+      "title": "Table Default",
+      "description": "Table example: Default.",
+      "registryDependencies": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-empty-state",
+      "type": "registry:example",
+      "title": "Table Empty State",
+      "description": "Table example: Empty State.",
+      "registryDependencies": [
+        "empty",
+        "table"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table/empty-state.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-footer",
+      "type": "registry:example",
+      "title": "Table Footer",
+      "description": "Table example: Footer.",
+      "registryDependencies": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table/footer.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-hoverable",
+      "type": "registry:example",
+      "title": "Table Hoverable",
+      "description": "Table example: Hoverable.",
+      "registryDependencies": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table/hoverable.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-selected-rows",
+      "type": "registry:example",
+      "title": "Table Selected Rows",
+      "description": "Table example: Selected Rows.",
+      "registryDependencies": [
+        "badge",
+        "checkbox",
+        "table"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table/selected-rows.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-striped",
+      "type": "registry:example",
+      "title": "Table Striped",
+      "description": "Table example: Striped.",
+      "registryDependencies": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table/striped.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-with-badges",
+      "type": "registry:example",
+      "title": "Table With Badges",
+      "description": "Table example: With Badges.",
+      "registryDependencies": [
+        "badge",
+        "table"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table/with-badges.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-with-pagination",
+      "type": "registry:example",
+      "title": "Table With Pagination",
+      "description": "Table example: With Pagination.",
+      "registryDependencies": [
+        "badge",
+        "pagination",
+        "table"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table/with-pagination.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tabs-animated-indicator",
+      "type": "registry:example",
+      "title": "Tabs Animated Indicator",
+      "description": "Tabs example: Animated Indicator.",
+      "registryDependencies": [
+        "tabs"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tabs/animated-indicator.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tabs-default",
+      "type": "registry:example",
+      "title": "Tabs Default",
+      "description": "Tabs example: Default.",
+      "registryDependencies": [
+        "tabs"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tabs/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tabs-disabled",
+      "type": "registry:example",
+      "title": "Tabs Disabled",
+      "description": "Tabs example: Disabled.",
+      "registryDependencies": [
+        "tabs"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tabs/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tabs-line-vertical",
+      "type": "registry:example",
+      "title": "Tabs Line Vertical",
+      "description": "Tabs example: Line Vertical.",
+      "registryDependencies": [
+        "tabs"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tabs/line-vertical.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tabs-line",
+      "type": "registry:example",
+      "title": "Tabs Line",
+      "description": "Tabs example: Line.",
+      "registryDependencies": [
+        "tabs"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tabs/line.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tabs-morphing-line",
+      "type": "registry:example",
+      "title": "Tabs Morphing Line",
+      "description": "Tabs example: Morphing Line.",
+      "registryDependencies": [
+        "tabs"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tabs/morphing-line.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tabs-morphing",
+      "type": "registry:example",
+      "title": "Tabs Morphing",
+      "description": "Tabs example: Morphing.",
+      "registryDependencies": [
+        "tabs"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tabs/morphing.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tabs-pill",
+      "type": "registry:example",
+      "title": "Tabs Pill",
+      "description": "Tabs example: Pill.",
+      "registryDependencies": [
+        "tabs"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tabs/pill.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tabs-scrollable",
+      "type": "registry:example",
+      "title": "Tabs Scrollable",
+      "description": "Tabs example: Scrollable.",
+      "registryDependencies": [
+        "tabs"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tabs/scrollable.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tabs-vertical",
+      "type": "registry:example",
+      "title": "Tabs Vertical",
+      "description": "Tabs example: Vertical.",
+      "registryDependencies": [
+        "tabs"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tabs/vertical.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tabs-with-icons",
+      "type": "registry:example",
+      "title": "Tabs With Icons",
+      "description": "Tabs example: With Icons.",
+      "registryDependencies": [
+        "tabs"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tabs/with-icons.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tag-default",
+      "type": "registry:example",
+      "title": "Tag Default",
+      "description": "Tag example: Default.",
+      "registryDependencies": [
+        "tag"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tag/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tag-disabled",
+      "type": "registry:example",
+      "title": "Tag Disabled",
+      "description": "Tag example: Disabled.",
+      "registryDependencies": [
+        "tag"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tag/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tag-states",
+      "type": "registry:example",
+      "title": "Tag States",
+      "description": "Tag example: States.",
+      "registryDependencies": [
+        "tag"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tag/states.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tag-with-icon",
+      "type": "registry:example",
+      "title": "Tag With Icon",
+      "description": "Tag example: With Icon.",
+      "registryDependencies": [
+        "tag"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tag/with-icon.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tag-with-remove",
+      "type": "registry:example",
+      "title": "Tag With Remove",
+      "description": "Tag example: With Remove.",
+      "registryDependencies": [
+        "tag"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tag/with-remove.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tag-group-controlled",
+      "type": "registry:example",
+      "title": "Tag Group Controlled",
+      "description": "Tag Group example: Controlled.",
+      "registryDependencies": [
+        "tag-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tag-group/controlled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tag-group-default",
+      "type": "registry:example",
+      "title": "Tag Group Default",
+      "description": "Tag Group example: Default.",
+      "registryDependencies": [
+        "tag-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tag-group/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tag-group-disabled",
+      "type": "registry:example",
+      "title": "Tag Group Disabled",
+      "description": "Tag Group example: Disabled.",
+      "registryDependencies": [
+        "tag-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tag-group/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tag-group-removable",
+      "type": "registry:example",
+      "title": "Tag Group Removable",
+      "description": "Tag Group example: Removable.",
+      "registryDependencies": [
+        "tag-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tag-group/removable.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tag-group-single-selection",
+      "type": "registry:example",
+      "title": "Tag Group Single Selection",
+      "description": "Tag Group example: Single Selection.",
+      "registryDependencies": [
+        "tag-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tag-group/single-selection.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tag-group-with-avatars",
+      "type": "registry:example",
+      "title": "Tag Group With Avatars",
+      "description": "Tag Group example: With Avatars.",
+      "registryDependencies": [
+        "avatar",
+        "tag-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tag-group/with-avatars.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tag-group-with-icons",
+      "type": "registry:example",
+      "title": "Tag Group With Icons",
+      "description": "Tag Group example: With Icons.",
+      "registryDependencies": [
+        "tag-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tag-group/with-icons.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "textarea-character-count",
+      "type": "registry:example",
+      "title": "Textarea Character Count",
+      "description": "Textarea example: Character Count.",
+      "registryDependencies": [
+        "field",
+        "textarea"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/textarea/character-count.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "textarea-default",
+      "type": "registry:example",
+      "title": "Textarea Default",
+      "description": "Textarea example: Default.",
+      "registryDependencies": [
+        "textarea"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/textarea/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "textarea-disabled",
+      "type": "registry:example",
+      "title": "Textarea Disabled",
+      "description": "Textarea example: Disabled.",
+      "registryDependencies": [
+        "field",
+        "textarea"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/textarea/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "textarea-with-error",
+      "type": "registry:example",
+      "title": "Textarea With Error",
+      "description": "Textarea example: With Error.",
+      "registryDependencies": [
+        "field",
+        "textarea"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/textarea/with-error.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "textarea-with-field",
+      "type": "registry:example",
+      "title": "Textarea With Field",
+      "description": "Textarea example: With Field.",
+      "registryDependencies": [
+        "field",
+        "textarea"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/textarea/with-field.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toast-custom",
+      "type": "registry:example",
+      "title": "Toast Custom",
+      "description": "Toast example: Custom.",
+      "registryDependencies": [
+        "button",
+        "toast"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toast/custom.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toast-default",
+      "type": "registry:example",
+      "title": "Toast Default",
+      "description": "Toast example: Default.",
+      "registryDependencies": [
+        "button",
+        "toast"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toast/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toast-duration",
+      "type": "registry:example",
+      "title": "Toast Duration",
+      "description": "Toast example: Duration.",
+      "registryDependencies": [
+        "button",
+        "toast"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toast/duration.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toast-position",
+      "type": "registry:example",
+      "title": "Toast Position",
+      "description": "Toast example: Position.",
+      "registryDependencies": [
+        "button",
+        "toast"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toast/position.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toast-promise",
+      "type": "registry:example",
+      "title": "Toast Promise",
+      "description": "Toast example: Promise.",
+      "registryDependencies": [
+        "button",
+        "toast"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toast/promise.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toast-types",
+      "type": "registry:example",
+      "title": "Toast Types",
+      "description": "Toast example: Types.",
+      "registryDependencies": [
+        "button",
+        "toast"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toast/types.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toast-with-action",
+      "type": "registry:example",
+      "title": "Toast With Action",
+      "description": "Toast example: With Action.",
+      "registryDependencies": [
+        "button",
+        "toast"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toast/with-action.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toast-with-description",
+      "type": "registry:example",
+      "title": "Toast With Description",
+      "description": "Toast example: With Description.",
+      "registryDependencies": [
+        "button",
+        "toast"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toast/with-description.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-default",
+      "type": "registry:example",
+      "title": "Toggle Default",
+      "description": "Toggle example: Default.",
+      "registryDependencies": [
+        "toggle"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-disabled",
+      "type": "registry:example",
+      "title": "Toggle Disabled",
+      "description": "Toggle example: Disabled.",
+      "registryDependencies": [
+        "toggle"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-outline",
+      "type": "registry:example",
+      "title": "Toggle Outline",
+      "description": "Toggle example: Outline.",
+      "registryDependencies": [
+        "toggle"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle/outline.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-pressed",
+      "type": "registry:example",
+      "title": "Toggle Pressed",
+      "description": "Toggle example: Pressed.",
+      "registryDependencies": [
+        "toggle"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle/pressed.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-secondary",
+      "type": "registry:example",
+      "title": "Toggle Secondary",
+      "description": "Toggle example: Secondary.",
+      "registryDependencies": [
+        "toggle"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle/secondary.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-sizes",
+      "type": "registry:example",
+      "title": "Toggle Sizes",
+      "description": "Toggle example: Sizes.",
+      "registryDependencies": [
+        "toggle"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-with-text",
+      "type": "registry:example",
+      "title": "Toggle With Text",
+      "description": "Toggle example: With Text.",
+      "registryDependencies": [
+        "toggle"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle/with-text.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group-custom",
+      "type": "registry:example",
+      "title": "Toggle Group Custom",
+      "description": "Toggle Group example: Custom.",
+      "registryDependencies": [
+        "field",
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle-group/custom.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group-default",
+      "type": "registry:example",
+      "title": "Toggle Group Default",
+      "description": "Toggle Group example: Default.",
+      "registryDependencies": [
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle-group/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group-disabled",
+      "type": "registry:example",
+      "title": "Toggle Group Disabled",
+      "description": "Toggle Group example: Disabled.",
+      "registryDependencies": [
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle-group/disabled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group-outline",
+      "type": "registry:example",
+      "title": "Toggle Group Outline",
+      "description": "Toggle Group example: Outline.",
+      "registryDependencies": [
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle-group/outline.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group-secondary",
+      "type": "registry:example",
+      "title": "Toggle Group Secondary",
+      "description": "Toggle Group example: Secondary.",
+      "registryDependencies": [
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle-group/secondary.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group-single",
+      "type": "registry:example",
+      "title": "Toggle Group Single",
+      "description": "Toggle Group example: Single.",
+      "registryDependencies": [
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle-group/single.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group-sizes",
+      "type": "registry:example",
+      "title": "Toggle Group Sizes",
+      "description": "Toggle Group example: Sizes.",
+      "registryDependencies": [
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle-group/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group-spacing",
+      "type": "registry:example",
+      "title": "Toggle Group Spacing",
+      "description": "Toggle Group example: Spacing.",
+      "registryDependencies": [
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle-group/spacing.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group-text-labels",
+      "type": "registry:example",
+      "title": "Toggle Group Text Labels",
+      "description": "Toggle Group example: Text Labels.",
+      "registryDependencies": [
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle-group/text-labels.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "toggle-group-vertical",
+      "type": "registry:example",
+      "title": "Toggle Group Vertical",
+      "description": "Toggle Group example: Vertical.",
+      "registryDependencies": [
+        "toggle-group"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/toggle-group/vertical.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tooltip-default",
+      "type": "registry:example",
+      "title": "Tooltip Default",
+      "description": "Tooltip example: Default.",
+      "registryDependencies": [
+        "button",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tooltip/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tooltip-disabled-button",
+      "type": "registry:example",
+      "title": "Tooltip Disabled Button",
+      "description": "Tooltip example: Disabled Button.",
+      "registryDependencies": [
+        "button",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tooltip/disabled-button.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tooltip-group-delay",
+      "type": "registry:example",
+      "title": "Tooltip Group Delay",
+      "description": "Tooltip example: Group Delay.",
+      "registryDependencies": [
+        "button",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tooltip/group-delay.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tooltip-sides",
+      "type": "registry:example",
+      "title": "Tooltip Sides",
+      "description": "Tooltip example: Sides.",
+      "registryDependencies": [
+        "button",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tooltip/sides.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "tooltip-with-kbd",
+      "type": "registry:example",
+      "title": "Tooltip With Kbd",
+      "description": "Tooltip example: With Kbd.",
+      "registryDependencies": [
+        "button",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tooltip/with-kbd.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "typography-blockquote",
+      "type": "registry:example",
+      "title": "Typography Blockquote",
+      "description": "Typography example: Blockquote.",
+      "files": [
+        {
+          "path": "apps/docs/demos/typography/blockquote.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "typography-default",
+      "type": "registry:example",
+      "title": "Typography Default",
+      "description": "Typography example: Default.",
+      "files": [
+        {
+          "path": "apps/docs/demos/typography/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "typography-h1",
+      "type": "registry:example",
+      "title": "Typography H1",
+      "description": "Typography example: H1.",
+      "files": [
+        {
+          "path": "apps/docs/demos/typography/h1.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "typography-h2",
+      "type": "registry:example",
+      "title": "Typography H2",
+      "description": "Typography example: H2.",
+      "files": [
+        {
+          "path": "apps/docs/demos/typography/h2.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "typography-h3",
+      "type": "registry:example",
+      "title": "Typography H3",
+      "description": "Typography example: H3.",
+      "files": [
+        {
+          "path": "apps/docs/demos/typography/h3.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "typography-h4",
+      "type": "registry:example",
+      "title": "Typography H4",
+      "description": "Typography example: H4.",
+      "files": [
+        {
+          "path": "apps/docs/demos/typography/h4.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "typography-inline-code",
+      "type": "registry:example",
+      "title": "Typography Inline Code",
+      "description": "Typography example: Inline Code.",
+      "files": [
+        {
+          "path": "apps/docs/demos/typography/inline-code.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "typography-large",
+      "type": "registry:example",
+      "title": "Typography Large",
+      "description": "Typography example: Large.",
+      "files": [
+        {
+          "path": "apps/docs/demos/typography/large.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "typography-lead",
+      "type": "registry:example",
+      "title": "Typography Lead",
+      "description": "Typography example: Lead.",
+      "files": [
+        {
+          "path": "apps/docs/demos/typography/lead.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "typography-list",
+      "type": "registry:example",
+      "title": "Typography List",
+      "description": "Typography example: List.",
+      "files": [
+        {
+          "path": "apps/docs/demos/typography/list.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "typography-muted",
+      "type": "registry:example",
+      "title": "Typography Muted",
+      "description": "Typography example: Muted.",
+      "files": [
+        {
+          "path": "apps/docs/demos/typography/muted.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "typography-paragraph",
+      "type": "registry:example",
+      "title": "Typography Paragraph",
+      "description": "Typography example: Paragraph.",
+      "files": [
+        {
+          "path": "apps/docs/demos/typography/paragraph.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "typography-small",
+      "type": "registry:example",
+      "title": "Typography Small",
+      "description": "Typography example: Small.",
+      "files": [
+        {
+          "path": "apps/docs/demos/typography/small.tsx",
+          "type": "registry:example"
         }
       ]
     }

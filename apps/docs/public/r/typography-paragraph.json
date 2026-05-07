@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "typography-paragraph",
+  "title": "Typography Paragraph",
+  "description": "Typography example: Paragraph.",
+  "files": [
+    {
+      "path": "apps/docs/demos/typography/paragraph.tsx",
+      "content": "\"use client\";\n\nexport default function TypographyParagraph() {\n  return (\n    <p className=\"not-first:mt-6 leading-7\">\n      Investing in shared foundations — tokens, components, and conventions —\n      pays dividends across every product surface.\n    </p>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

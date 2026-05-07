@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "typography-h1",
+  "title": "Typography H1",
+  "description": "Typography example: H1.",
+  "files": [
+    {
+      "path": "apps/docs/demos/typography/h1.tsx",
+      "content": "\"use client\";\n\nexport default function TypographyH1() {\n  return (\n    <h1 className=\"scroll-m-20 text-balance font-extrabold text-4xl tracking-tight\">\n      The Craft of Interface Design\n    </h1>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

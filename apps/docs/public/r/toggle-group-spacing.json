@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-group-spacing",
+  "title": "Toggle Group Spacing",
+  "description": "Toggle Group example: Spacing.",
+  "registryDependencies": [
+    "toggle-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/toggle-group/spacing.tsx",
+      "content": "\"use client\";\n\nimport { ToggleGroup, ToggleGroupItem } from \"@keystoneui/react/toggle-group\";\n\nexport default function ToggleGroupSpacing() {\n  return (\n    <div className=\"flex flex-col gap-6\">\n      <div className=\"flex flex-col gap-2\">\n        <p className=\"font-semibold text-sm\">Joined (spacing=0)</p>\n        <ToggleGroup defaultValue={[\"all\"]} variant=\"outline\">\n          <ToggleGroupItem value=\"all\">All</ToggleGroupItem>\n          <ToggleGroupItem value=\"missed\">Missed</ToggleGroupItem>\n        </ToggleGroup>\n      </div>\n      <div className=\"flex flex-col gap-2\">\n        <p className=\"font-semibold text-sm\">Spaced (spacing=2)</p>\n        <ToggleGroup defaultValue={[\"all\"]} spacing={2} variant=\"outline\">\n          <ToggleGroupItem value=\"all\">All</ToggleGroupItem>\n          <ToggleGroupItem value=\"missed\">Missed</ToggleGroupItem>\n        </ToggleGroup>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

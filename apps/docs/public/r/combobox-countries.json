@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "combobox-countries",
+  "title": "Combobox Countries",
+  "description": "Combobox example: Countries.",
+  "registryDependencies": [
+    "combobox"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/combobox/countries.tsx",
+      "content": "\"use client\";\n\nimport {\n  Combobox,\n  ComboboxContent,\n  ComboboxEmpty,\n  ComboboxInput,\n  ComboboxItem,\n  ComboboxList,\n} from \"@keystoneui/react/combobox\";\nimport { useState } from \"react\";\n\nconst countries = [\n  { code: \"us\", label: \"United States\", flag: \"🇺🇸\" },\n  { code: \"gb\", label: \"United Kingdom\", flag: \"🇬🇧\" },\n  { code: \"de\", label: \"Germany\", flag: \"🇩🇪\" },\n  { code: \"fr\", label: \"France\", flag: \"🇫🇷\" },\n  { code: \"jp\", label: \"Japan\", flag: \"🇯🇵\" },\n  { code: \"ca\", label: \"Canada\", flag: \"🇨🇦\" },\n  { code: \"au\", label: \"Australia\", flag: \"🇦🇺\" },\n  { code: \"br\", label: \"Brazil\", flag: \"🇧🇷\" },\n  { code: \"in\", label: \"India\", flag: \"🇮🇳\" },\n  { code: \"kr\", label: \"South Korea\", flag: \"🇰🇷\" },\n];\n\nexport default function ComboboxCountries() {\n  const [selected, setSelected] = useState<(typeof countries)[number] | null>(\n    null\n  );\n\n  return (\n    <Combobox\n      items={countries}\n      itemToStringValue={(country: (typeof countries)[number]) => country.label}\n      onValueChange={setSelected}\n      value={selected}\n    >\n      <ComboboxInput className=\"w-64\" placeholder=\"Search countries...\" />\n      <ComboboxContent>\n        <ComboboxEmpty>No countries found.</ComboboxEmpty>\n        <ComboboxList>\n          {(country) => (\n            <ComboboxItem key={country.code} value={country}>\n              <span className=\"text-base\">{country.flag}</span>\n              <span>{country.label}</span>\n            </ComboboxItem>\n          )}\n        </ComboboxList>\n      </ComboboxContent>\n    </Combobox>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

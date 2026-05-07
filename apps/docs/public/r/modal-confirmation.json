@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "modal-confirmation",
+  "title": "Modal Confirmation",
+  "description": "Modal example: Confirmation.",
+  "registryDependencies": [
+    "button",
+    "modal"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/modal/confirmation.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Modal,\n  ModalClose,\n  ModalContent,\n  ModalDescription,\n  ModalFooter,\n  ModalHeader,\n  ModalTitle,\n  ModalTrigger,\n} from \"@keystoneui/react/modal\";\nimport { useState } from \"react\";\n\nexport default function ModalConfirmation() {\n  const [open, setOpen] = useState(false);\n  const [confirmed, setConfirmed] = useState(false);\n\n  return (\n    <div className=\"flex items-center gap-4\">\n      <Modal onOpenChange={setOpen} open={open}>\n        <ModalTrigger render={<Button variant=\"destructive\" />}>\n          Delete Account\n        </ModalTrigger>\n        <ModalContent showCloseButton={false} size=\"sm\">\n          <ModalHeader>\n            <ModalTitle>Delete account?</ModalTitle>\n            <ModalDescription>\n              This action is permanent and cannot be undone. All your data will\n              be deleted.\n            </ModalDescription>\n          </ModalHeader>\n          <ModalFooter>\n            <Button\n              onClick={() => {\n                setConfirmed(true);\n                setOpen(false);\n              }}\n              variant=\"destructive\"\n            >\n              Delete\n            </Button>\n            <ModalClose render={<Button variant=\"outline\" />}>\n              Cancel\n            </ModalClose>\n          </ModalFooter>\n        </ModalContent>\n      </Modal>\n      {confirmed && (\n        <p className=\"text-destructive text-sm\">Account deleted.</p>\n      )}\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

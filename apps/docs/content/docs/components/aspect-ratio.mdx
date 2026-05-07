@@ -13,23 +13,61 @@ import { AspectRatio } from "@keystoneui/react/aspect-ratio";
 
 <ComponentPreview name="aspect-ratio-default" />
 
-## Square
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/aspect-ratio.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="aspect-ratio-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Examples
+
+### Square
 
 A 1:1 aspect ratio for square content:
 
 <ComponentPreview name="aspect-ratio-square" />
 
-## Wide
+
+### Wide
 
 Ultra-wide 21:9 aspect ratio for cinematic content:
 
 <ComponentPreview name="aspect-ratio-wide" />
 
-## Portrait
+
+### Portrait
 
 3:4 portrait aspect ratio:
 
 <ComponentPreview name="aspect-ratio-portrait" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
 
 ## API Reference
 

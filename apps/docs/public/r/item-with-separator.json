@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "item-with-separator",
+  "title": "Item With Separator",
+  "description": "Item example: With Separator.",
+  "registryDependencies": [
+    "item"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/item/with-separator.tsx",
+      "content": "\"use client\";\n\nimport {\n  Item,\n  ItemContent,\n  ItemDescription,\n  ItemMedia,\n  ItemSeparator,\n  ItemTitle,\n} from \"@keystoneui/react/item\";\nimport { Inbox as InboxIcon } from \"lucide-react\";\n\nexport default function ItemWithSeparator() {\n  return (\n    <div className=\"flex max-w-md flex-col\">\n      <Item>\n        <ItemMedia variant=\"icon\">\n          <InboxIcon />\n        </ItemMedia>\n        <ItemContent>\n          <ItemTitle>First Item</ItemTitle>\n          <ItemDescription>Description for the first item.</ItemDescription>\n        </ItemContent>\n      </Item>\n      <ItemSeparator />\n      <Item>\n        <ItemMedia variant=\"icon\">\n          <InboxIcon />\n        </ItemMedia>\n        <ItemContent>\n          <ItemTitle>Second Item</ItemTitle>\n          <ItemDescription>Description for the second item.</ItemDescription>\n        </ItemContent>\n      </Item>\n      <ItemSeparator />\n      <Item>\n        <ItemMedia variant=\"icon\">\n          <InboxIcon />\n        </ItemMedia>\n        <ItemContent>\n          <ItemTitle>Third Item</ItemTitle>\n          <ItemDescription>Description for the third item.</ItemDescription>\n        </ItemContent>\n      </Item>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-pressed",
+  "title": "Toggle Pressed",
+  "description": "Toggle example: Pressed.",
+  "registryDependencies": [
+    "toggle"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/toggle/pressed.tsx",
+      "content": "\"use client\";\n\nimport { Toggle } from \"@keystoneui/react/toggle\";\nimport { Bookmark as BookmarkIcon, Star as StarIcon } from \"lucide-react\";\n\nexport default function TogglePressed() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-2\">\n      <Toggle aria-label=\"Toggle bookmark\" defaultPressed>\n        <BookmarkIcon className=\"group-data-pressed/toggle:fill-current\" />\n        Bookmark\n      </Toggle>\n      <Toggle aria-label=\"Toggle star\" defaultPressed variant=\"outline\">\n        <StarIcon className=\"group-data-pressed/toggle:fill-current\" />\n        Starred\n      </Toggle>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

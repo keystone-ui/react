@@ -160,6 +160,48 @@ The docs site (Fumadocs) serves both interactive documentation and LLMs.txt endp
 - **MDX files** in `apps/docs/content/docs/components/` use `<ComponentPreview name="X" />` tags to reference demos
 - **LLMs.txt routes**: `/llms.txt`, `/llms-full.txt`, `/llms-components.txt`, `/docs/components/{name}.mdx`
 
+### Stories vs demos
+
+`apps/storybook/stories/*.stories.tsx` and `apps/docs/demos/<comp>/<variant>.tsx` are intentionally separate surfaces, not duplicates. Stories are the dev sandbox + interaction test bed (CSF 3 with `play()` tests); demos are the docs render + registry-installable source (flat `"use client"; export default function() { ... }` files consumed by `<ComponentPreview>`, MCP `get_examples`, and `npx shadcn add`). The two surfaces enumerate variants differently — stories typically expose one variant per export (`Secondary`, `Destructive`), while demos consolidate (`variants.tsx`).
+
+The lint at `pnpm lint:stories-demos` flags variant-name drift. Legitimate divergences are tracked in `scripts/stories-demos-allowlist.json` with rationale. The lint is also wired into `pnpm lint:docs` so CI catches new drift.
+
+## Component docs convention
+
+Every `apps/docs/content/docs/components/<name>.mdx` follows the canonical structure documented in `apps/docs/content/docs/components/_template.mdx`. The required section order is:
+
+1. Frontmatter (`title`, `description`)
+2. `<ComponentPreview name="<component>-default" />` — first non-heading content
+3. `## Installation` — `<CodeBlockTabs items={["CLI", "Manual"]}>` with the shadcn add command and a `<Steps>`/`<Step>` manual flow
+4. `## Usage` — import line + minimal usage snippet
+5. `## Composition` — required for compound components (any component exporting more than one named symbol)
+6. `## Examples` — variants as `### `-level subheaders, each with a 1-sentence description and a `<ComponentPreview>`
+7. `## RTL` — optional, only for components with non-trivial RTL behavior
+8. `## API Reference` — one Props table per part
+
+Mechanical migration: `node scripts/migrate-component-mdx.mjs`. Validation: `pnpm lint:docs`.
+
+## Block Authoring
+
+Blocks are full-page or feature-level compositions registered as `registry:block` items in `registry.json` (hand-maintained — *not* generated from sources). Each block has source under `apps/docs/demos/blocks/<name>{.tsx,/}` and an MDX page under `apps/docs/content/docs/blocks/<name>.mdx`.
+
+**Block items in `registry.json` must declare:**
+
+- `name`, `type: "registry:block"`, `title`, `description`
+- `dependencies` (npm) and `registryDependencies` (other registry items it pulls)
+- `files[]` with **per-file types** — use `registry:page` (with `target` like `app/<slug>/page.tsx`) for the entry point, `registry:component` for everything else
+- **`categories: [...]`** — at least one. Mirrors shadcn's taxonomy where it overlaps; current categories in use:
+  - `authentication`, `login`, `signup` — sign-in / sign-up flows (mirrors shadcn)
+  - `navigation` — user menus, dropdowns, sidebars
+  - `data` — tables, CRM-style data management
+  - `betting` — betting/wager UI (keystone-specific)
+  - When inventing a new category, prefer single-word lowercase that mirrors shadcn naming where possible
+- `pnpm sync:registry` warns if any block is missing `categories`
+
+**Discoverability via categories**: `keystoneui blocks --category authentication` (CLI) and `search_components({ type: "block", category: "authentication" })` (MCP) both filter by category. Categories also participate in fuzzy-match — searching `"authentication"` finds the auth blocks even if the word isn't in their description.
+
+When adding a new block, also: register the demo in `apps/docs/demos/index.ts` as `block-<name>` (used by `<BlockPreview name="block-<name>">` in MDX), write the MDX with `## Components Used` linking to `/docs/components/<name>` for each primitive (powers the auto-generated `## Related Blocks` backlinks via `pnpm docs:backlinks`), and run `pnpm registry:build` to refresh `apps/docs/public/r/`.
+
 ## Important Constraints
 
 - **No Radix UI** — use `@base-ui/react` for all primitives

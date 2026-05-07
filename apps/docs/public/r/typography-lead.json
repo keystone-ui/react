@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "typography-lead",
+  "title": "Typography Lead",
+  "description": "Typography example: Lead.",
+  "files": [
+    {
+      "path": "apps/docs/demos/typography/lead.tsx",
+      "content": "\"use client\";\n\nexport default function TypographyLead() {\n  return (\n    <p className=\"text-muted-foreground text-xl\">\n      A beautifully crafted component library built on Base UI primitives and\n      styled with Tailwind CSS.\n    </p>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

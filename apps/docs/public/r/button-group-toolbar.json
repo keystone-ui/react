@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-group-toolbar",
+  "title": "Button Group Toolbar",
+  "description": "Button Group example: Toolbar.",
+  "registryDependencies": [
+    "button",
+    "button-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/button-group/toolbar.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { ButtonGroup } from \"@keystoneui/react/button-group\";\nimport {\n  Bold as BoldIcon,\n  Italic as ItalicIcon,\n  Strikethrough as StrikethroughIcon,\n  Underline as UnderlineIcon,\n} from \"lucide-react\";\n\nexport default function ButtonGroupToolbar() {\n  return (\n    <ButtonGroup aria-label=\"Text formatting\">\n      <Button aria-label=\"Bold\" size=\"icon\" variant=\"outline\">\n        <BoldIcon />\n      </Button>\n      <Button aria-label=\"Italic\" size=\"icon\" variant=\"outline\">\n        <ItalicIcon />\n      </Button>\n      <Button aria-label=\"Underline\" size=\"icon\" variant=\"outline\">\n        <UnderlineIcon />\n      </Button>\n      <Button aria-label=\"Strikethrough\" size=\"icon\" variant=\"outline\">\n        <StrikethroughIcon />\n      </Button>\n    </ButtonGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

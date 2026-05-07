@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress-complete",
+  "title": "Progress Complete",
+  "description": "Progress example: Complete.",
+  "registryDependencies": [
+    "progress"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/progress/complete.tsx",
+      "content": "\"use client\";\n\nimport {\n  Progress,\n  ProgressIndicator,\n  ProgressLabel,\n  ProgressTrack,\n  ProgressValue,\n} from \"@keystoneui/react/progress\";\n\nexport default function ProgressComplete() {\n  return (\n    <div className=\"w-full max-w-sm\">\n      <Progress color=\"success\" value={100}>\n        <div className=\"flex justify-between\">\n          <ProgressLabel>Upload complete</ProgressLabel>\n          <ProgressValue />\n        </div>\n        <ProgressTrack>\n          <ProgressIndicator />\n        </ProgressTrack>\n      </Progress>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

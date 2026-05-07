@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "drawer-default",
+  "title": "Drawer Default",
+  "description": "Drawer example: Default.",
+  "registryDependencies": [
+    "button",
+    "drawer"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/drawer/default.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Drawer,\n  DrawerClose,\n  DrawerContent,\n  DrawerDescription,\n  DrawerFooter,\n  DrawerHeader,\n  DrawerTitle,\n  DrawerTrigger,\n} from \"@keystoneui/react/drawer\";\n\nexport default function DrawerDefault() {\n  return (\n    <Drawer swipeDirection=\"right\">\n      <DrawerTrigger render={<Button variant=\"outline\" />}>\n        Open Drawer\n      </DrawerTrigger>\n      <DrawerContent>\n        <DrawerHeader>\n          <DrawerTitle>Drawer</DrawerTitle>\n          <DrawerDescription>\n            This drawer slides in from the right side of the screen.\n          </DrawerDescription>\n        </DrawerHeader>\n        <div className=\"px-4 text-muted-foreground text-sm\">\n          Place any content here. Drawers are great for forms, filters, and\n          supplementary content.\n        </div>\n        <DrawerFooter>\n          <Button>Submit</Button>\n          <DrawerClose render={<Button variant=\"outline\" />}>\n            Cancel\n          </DrawerClose>\n        </DrawerFooter>\n      </DrawerContent>\n    </Drawer>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

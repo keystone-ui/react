@@ -3,7 +3,9 @@
   "name": "tooltip",
   "title": "Tooltip",
   "description": "Small floating label that appears on hover to provide additional descriptive text.",
-  "dependencies": ["@base-ui/react"],
+  "dependencies": [
+    "@base-ui/react"
+  ],
   "files": [
     {
       "path": "packages/ui/src/tooltip.tsx",

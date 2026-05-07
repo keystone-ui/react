@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio-group-default",
+  "title": "Radio Group Default",
+  "description": "Radio Group example: Default.",
+  "registryDependencies": [
+    "label",
+    "radio-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/radio-group/default.tsx",
+      "content": "\"use client\";\n\nimport { Label } from \"@keystoneui/react/label\";\nimport { RadioGroup, RadioGroupItem } from \"@keystoneui/react/radio-group\";\n\nexport default function RadioGroupDefault() {\n  return (\n    <RadioGroup defaultValue=\"comfortable\">\n      <div className=\"flex items-center gap-3\">\n        <RadioGroupItem id=\"r1\" value=\"default\" />\n        <Label htmlFor=\"r1\">Default</Label>\n      </div>\n      <div className=\"flex items-center gap-3\">\n        <RadioGroupItem id=\"r2\" value=\"comfortable\" />\n        <Label htmlFor=\"r2\">Comfortable</Label>\n      </div>\n      <div className=\"flex items-center gap-3\">\n        <RadioGroupItem id=\"r3\" value=\"compact\" />\n        <Label htmlFor=\"r3\">Compact</Label>\n      </div>\n    </RadioGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

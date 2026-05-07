@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-card",
+  "title": "Table Card",
+  "description": "Table example: Card.",
+  "registryDependencies": [
+    "table"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/table/card.tsx",
+      "content": "\"use client\";\n\nimport {\n  Table,\n  TableBody,\n  TableCell,\n  TableHead,\n  TableHeader,\n  TableRow,\n} from \"@keystoneui/react/table\";\n\nconst leaderboard = [\n  { rank: 1, name: \"Alex Dumitru\", role: \"UI/UX\", company: \"Hashgraph\" },\n  {\n    rank: 2,\n    name: \"Diana Sima\",\n    role: \"Graphic Designer\",\n    company: \"Hashgraph\",\n  },\n  {\n    rank: 3,\n    name: \"Otilia Bejenaru\",\n    role: \"Illustrator\",\n    company: \"Hashgraph\",\n  },\n  {\n    rank: 4,\n    name: \"Mihai Radu\",\n    role: \"Frontend Engineer\",\n    company: \"Hashgraph\",\n  },\n  {\n    rank: 5,\n    name: \"Elena Voicu\",\n    role: \"Product Manager\",\n    company: \"Hashgraph\",\n  },\n];\n\nexport default function TableCard() {\n  return (\n    <Table variant=\"card\">\n      <TableHeader>\n        <TableRow>\n          <TableHead className=\"w-16\">#</TableHead>\n          <TableHead>Name</TableHead>\n          <TableHead>Role</TableHead>\n          <TableHead className=\"text-right\">Company</TableHead>\n        </TableRow>\n      </TableHeader>\n      <TableBody>\n        {leaderboard.map((entry) => (\n          <TableRow key={entry.rank}>\n            <TableCell>{entry.rank}</TableCell>\n            <TableCell className=\"font-medium\">{entry.name}</TableCell>\n            <TableCell>{entry.role}</TableCell>\n            <TableCell className=\"text-right\">{entry.company}</TableCell>\n          </TableRow>\n        ))}\n      </TableBody>\n    </Table>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

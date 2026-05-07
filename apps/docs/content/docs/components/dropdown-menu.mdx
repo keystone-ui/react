@@ -28,6 +28,36 @@ import {
 
 <ComponentPreview name="dropdown-menu-default" />
 
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/dropdown-menu.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="dropdown-menu-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
 ## Composition
 
 ```text
@@ -47,53 +77,76 @@ DropdownMenu
         └── DropdownMenuSubContent
 ```
 
-## With Icons
+## Examples
+
+### With Icons
 
 Add icons to menu items for visual clarity:
 
 <ComponentPreview name="dropdown-menu-with-icons" />
 
-## Checkboxes
+
+### Checkboxes
 
 Use checkbox items for toggling options:
 
 <ComponentPreview name="dropdown-menu-checkboxes" />
 
-## Radio Group
+
+### Radio Group
 
 Use radio items for mutually exclusive selection:
 
 <ComponentPreview name="dropdown-menu-radio-group" />
 
-## Submenu
+
+### Submenu
 
 Nest menus with sub-triggers for hierarchical navigation:
 
 <ComponentPreview name="dropdown-menu-submenu" />
 
-## Shortcuts
+
+### Shortcuts
 
 Display keyboard shortcuts alongside menu items:
 
 <ComponentPreview name="dropdown-menu-shortcuts" />
 
-## Destructive
+
+### Destructive
 
 Dropdown menu with destructive/danger items:
 
 <ComponentPreview name="dropdown-menu-destructive" />
 
-## Account
+
+### Account
 
 Account dropdown menu:
 
 <ComponentPreview name="dropdown-menu-account" />
 
-## Complex
+
+### Complex
 
 Complex dropdown combining multiple features:
 
 <ComponentPreview name="dropdown-menu-complex" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Profile Dropdown 01](/docs/blocks/profile-dropdown-01) — A user profile dropdown with avatar, level progress, and navigation menu.
+- [Tickets 01](/docs/blocks/tickets-01) — A sortable, filterable tickets table with inline cell editing, a new-ticket modal, and a floating bulk-edit action bar.
+
+{/* backlinks:end */}
 
 ## API Reference
 

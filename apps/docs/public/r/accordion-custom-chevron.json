@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "accordion-custom-chevron",
+  "title": "Accordion Custom Chevron",
+  "description": "Accordion example: Custom Chevron.",
+  "registryDependencies": [
+    "accordion"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/accordion/custom-chevron.tsx",
+      "content": "\"use client\";\n\nimport {\n  Accordion,\n  AccordionHeader,\n  AccordionItem,\n  AccordionPanel,\n  AccordionTrigger,\n} from \"@keystoneui/react/accordion\";\nimport { Plus } from \"lucide-react\";\n\nexport default function AccordionCustomChevron() {\n  return (\n    <Accordion variant=\"box\">\n      <AccordionItem value=\"1\">\n        <AccordionHeader>\n          <AccordionTrigger\n            chevronIcon={\n              <Plus\n                aria-hidden=\"true\"\n                className=\"size-3 shrink-0 transition-all ease-out group-data-[panel-open]:rotate-45 group-data-[panel-open]:scale-110\"\n              />\n            }\n          >\n            Custom Chevron Icon\n          </AccordionTrigger>\n        </AccordionHeader>\n        <AccordionPanel>\n          This accordion uses a plus icon instead of the default chevron. The\n          icon rotates 45 degrees and scales up when the panel is open.\n        </AccordionPanel>\n      </AccordionItem>\n      <AccordionItem value=\"2\">\n        <AccordionHeader>\n          <AccordionTrigger\n            chevronIcon={\n              <Plus\n                aria-hidden=\"true\"\n                className=\"size-3 shrink-0 transition-all ease-out group-data-[panel-open]:rotate-45 group-data-[panel-open]:scale-110\"\n              />\n            }\n          >\n            Another Item\n          </AccordionTrigger>\n        </AccordionHeader>\n        <AccordionPanel>\n          Each item can use the same custom chevron icon for a consistent look.\n        </AccordionPanel>\n      </AccordionItem>\n    </Accordion>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

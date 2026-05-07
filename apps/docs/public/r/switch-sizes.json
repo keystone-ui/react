@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "switch-sizes",
+  "title": "Switch Sizes",
+  "description": "Switch example: Sizes.",
+  "registryDependencies": [
+    "field",
+    "switch"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/switch/sizes.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldGroup, FieldLabel } from \"@keystoneui/react/field\";\nimport { Switch } from \"@keystoneui/react/switch\";\n\nexport default function SwitchSizes() {\n  return (\n    <FieldGroup className=\"w-full max-w-40\">\n      <Field orientation=\"horizontal\">\n        <Switch id=\"switch-sm\" size=\"sm\" />\n        <FieldLabel htmlFor=\"switch-sm\">Small</FieldLabel>\n      </Field>\n      <Field orientation=\"horizontal\">\n        <Switch id=\"switch-default\" size=\"default\" />\n        <FieldLabel htmlFor=\"switch-default\">Default</FieldLabel>\n      </Field>\n    </FieldGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

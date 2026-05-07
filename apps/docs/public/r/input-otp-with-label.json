@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-otp-with-label",
+  "title": "Input Otp With Label",
+  "description": "Input Otp example: With Label.",
+  "registryDependencies": [
+    "input-otp"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-otp/with-label.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputOTP,\n  InputOTPGroup,\n  InputOTPSlot,\n} from \"@keystoneui/react/input-otp\";\nimport { useId } from \"react\";\n\nconst OTP_LENGTH = 6;\n\nexport default function InputOTPWithLabel() {\n  const id = useId();\n  const descriptionId = `${id}-description`;\n\n  return (\n    <div className=\"flex w-full max-w-80 flex-col items-start gap-1.5\">\n      <label className=\"font-medium text-foreground text-sm\" htmlFor={id}>\n        Verification code\n      </label>\n      <InputOTP aria-describedby={descriptionId} id={id} length={OTP_LENGTH}>\n        <InputOTPGroup>\n          {Array.from({ length: OTP_LENGTH }, (_, index) => (\n            <InputOTPSlot\n              aria-label={`Character ${index + 1} of ${OTP_LENGTH}`}\n              key={index}\n            />\n          ))}\n        </InputOTPGroup>\n      </InputOTP>\n      <p className=\"text-muted-foreground text-sm\" id={descriptionId}>\n        Enter the 6-character code we sent to your device.\n      </p>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

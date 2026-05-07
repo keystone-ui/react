@@ -3,8 +3,14 @@
   "name": "command",
   "title": "Command",
   "description": "A searchable command menu for quick actions, navigation, and filtering.",
-  "dependencies": ["cmdk", "lucide-react"],
-  "registryDependencies": ["modal", "input-group"],
+  "dependencies": [
+    "cmdk",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "modal",
+    "input-group"
+  ],
   "files": [
     {
       "path": "packages/ui/src/command.tsx",

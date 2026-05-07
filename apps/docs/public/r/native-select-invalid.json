@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "native-select-invalid",
+  "title": "Native Select Invalid",
+  "description": "Native Select example: Invalid.",
+  "registryDependencies": [
+    "field",
+    "native-select"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/native-select/invalid.tsx",
+      "content": "\"use client\";\n\nimport { Field, FieldError, FieldLabel } from \"@keystoneui/react/field\";\nimport {\n  NativeSelect,\n  NativeSelectOption,\n} from \"@keystoneui/react/native-select\";\n\nexport default function NativeSelectInvalid() {\n  return (\n    <Field data-invalid>\n      <FieldLabel>Fruit</FieldLabel>\n      <NativeSelect aria-invalid=\"true\">\n        <NativeSelectOption value=\"\">Select a fruit</NativeSelectOption>\n        <NativeSelectOption value=\"apple\">Apple</NativeSelectOption>\n        <NativeSelectOption value=\"banana\">Banana</NativeSelectOption>\n        <NativeSelectOption value=\"blueberry\">Blueberry</NativeSelectOption>\n      </NativeSelect>\n      <FieldError>Please select a fruit.</FieldError>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

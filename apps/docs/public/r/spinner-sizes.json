@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spinner-sizes",
+  "title": "Spinner Sizes",
+  "description": "Spinner example: Sizes.",
+  "registryDependencies": [
+    "spinner"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/spinner/sizes.tsx",
+      "content": "\"use client\";\n\nimport { Spinner } from \"@keystoneui/react/spinner\";\n\nexport default function SpinnerSizes() {\n  return (\n    <div className=\"flex items-center gap-4\">\n      <Spinner className=\"size-3\" />\n      <Spinner />\n      <Spinner className=\"size-6\" />\n      <Spinner className=\"size-8\" />\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

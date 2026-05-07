@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton-default",
+  "title": "Skeleton Default",
+  "description": "Skeleton example: Default.",
+  "registryDependencies": [
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/skeleton/default.tsx",
+      "content": "\"use client\";\n\nimport { Skeleton } from \"@keystoneui/react/skeleton\";\n\nexport default function SkeletonDefault() {\n  return (\n    <div className=\"flex items-center gap-4\">\n      <Skeleton className=\"size-12 rounded-full\" />\n      <div className=\"space-y-2\">\n        <Skeleton className=\"h-4 w-[250px]\" />\n        <Skeleton className=\"h-4 w-[200px]\" />\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

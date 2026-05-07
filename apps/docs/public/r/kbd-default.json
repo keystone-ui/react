@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd-default",
+  "title": "Kbd Default",
+  "description": "Kbd example: Default.",
+  "registryDependencies": [
+    "kbd"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/kbd/default.tsx",
+      "content": "\"use client\";\n\nimport { Kbd } from \"@keystoneui/react/kbd\";\n\nexport default function KbdDefault() {\n  return <Kbd>K</Kbd>;\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

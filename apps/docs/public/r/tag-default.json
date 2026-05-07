@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tag-default",
+  "title": "Tag Default",
+  "description": "Tag example: Default.",
+  "registryDependencies": [
+    "tag"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/tag/default.tsx",
+      "content": "\"use client\";\n\nimport { Tag } from \"@keystoneui/react/tag\";\n\nexport default function TagDefault() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-3\">\n      <Tag value=\"bold\">Bold</Tag>\n      <Tag value=\"italic\">Italic</Tag>\n      <Tag defaultPressed value=\"underline\">\n        Underline\n      </Tag>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -3,8 +3,14 @@
   "name": "calendar",
   "title": "Calendar",
   "description": "Interactive date calendar for browsing and selecting dates by month.",
-  "dependencies": ["react-day-picker", "lucide-react"],
-  "registryDependencies": ["button", "native-select"],
+  "dependencies": [
+    "react-day-picker",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "button",
+    "native-select"
+  ],
   "files": [
     {
       "path": "packages/ui/src/calendar.tsx",

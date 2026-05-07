@@ -13,41 +13,91 @@ import { Progress } from "@keystoneui/react/progress";
 
 <ComponentPreview name="progress-default" />
 
-## Animated
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/progress.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="progress-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Examples
+
+### Animated
 
 A smoothly animated progress bar:
 
 <ComponentPreview name="progress-animated" />
 
-## With Label
+
+### With Label
 
 Display a text label alongside the progress bar:
 
 <ComponentPreview name="progress-with-label" />
 
-## Colors
+
+### Colors
 
 Apply custom color themes to the progress indicator:
 
 <ComponentPreview name="progress-colors" />
 
-## Indeterminate
+
+### Indeterminate
 
 An indeterminate progress bar for unknown durations:
 
 <ComponentPreview name="progress-indeterminate" />
 
-## Controlled
+
+### Controlled
 
 Interactive controlled progress bar:
 
 <ComponentPreview name="progress-controlled" />
 
-## Complete
+
+### Complete
 
 Completed progress state:
 
 <ComponentPreview name="progress-complete" />
+
+## RTL
+
+This component supports RTL layouts via the standard `dir="rtl"` attribute on a parent element. See [the RTL guide](/docs/rtl).
+
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Profile Dropdown 01](/docs/blocks/profile-dropdown-01) — A user profile dropdown with avatar, level progress, and navigation menu.
+
+{/* backlinks:end */}
 
 ## API Reference
 

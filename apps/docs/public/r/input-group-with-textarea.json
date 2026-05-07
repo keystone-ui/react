@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-group-with-textarea",
+  "title": "Input Group With Textarea",
+  "description": "Input Group example: With Textarea.",
+  "registryDependencies": [
+    "input-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-group/with-textarea.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupButton,\n  InputGroupTextarea,\n} from \"@keystoneui/react/input-group\";\nimport { SendHorizontal as SendHorizonalIcon } from \"lucide-react\";\n\nexport default function InputGroupWithTextarea() {\n  return (\n    <div className=\"max-w-sm\">\n      <InputGroup>\n        <InputGroupTextarea placeholder=\"Write a message...\" rows={3} />\n        <InputGroupAddon align=\"inline-end\">\n          <InputGroupButton aria-label=\"Send\" size=\"icon-xs\">\n            <SendHorizonalIcon className=\"size-4\" />\n          </InputGroupButton>\n        </InputGroupAddon>\n      </InputGroup>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox-with-description",
+  "title": "Checkbox With Description",
+  "description": "Checkbox example: With Description.",
+  "registryDependencies": [
+    "checkbox",
+    "field"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/checkbox/with-description.tsx",
+      "content": "\"use client\";\n\nimport { Checkbox } from \"@keystoneui/react/checkbox\";\nimport {\n  Field,\n  FieldContent,\n  FieldDescription,\n  FieldLabel,\n} from \"@keystoneui/react/field\";\n\nexport default function CheckboxWithDescription() {\n  return (\n    <Field orientation=\"horizontal\">\n      <Checkbox defaultChecked id=\"terms\" name=\"terms\" />\n      <FieldContent>\n        <FieldLabel htmlFor=\"terms\">Accept terms and conditions</FieldLabel>\n        <FieldDescription>\n          By clicking this checkbox, you agree to the terms and conditions.\n        </FieldDescription>\n      </FieldContent>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

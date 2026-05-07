@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "popover-with-form",
+  "title": "Popover With Form",
+  "description": "Popover example: With Form.",
+  "registryDependencies": [
+    "button",
+    "input",
+    "label",
+    "popover"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/popover/with-form.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { Input } from \"@keystoneui/react/input\";\nimport { Label } from \"@keystoneui/react/label\";\nimport {\n  Popover,\n  PopoverContent,\n  PopoverHeader,\n  PopoverTitle,\n  PopoverTrigger,\n} from \"@keystoneui/react/popover\";\n\nexport default function PopoverWithForm() {\n  return (\n    <Popover>\n      <PopoverTrigger render={<Button variant=\"outline\" />}>\n        Edit Dimensions\n      </PopoverTrigger>\n      <PopoverContent className=\"w-80\">\n        <PopoverHeader>\n          <PopoverTitle>Dimensions</PopoverTitle>\n        </PopoverHeader>\n        <div className=\"grid gap-3\">\n          <div className=\"grid grid-cols-3 items-center gap-4\">\n            <Label htmlFor=\"width\">Width</Label>\n            <Input className=\"col-span-2\" defaultValue=\"100%\" id=\"width\" />\n          </div>\n          <div className=\"grid grid-cols-3 items-center gap-4\">\n            <Label htmlFor=\"max-width\">Max. width</Label>\n            <Input className=\"col-span-2\" defaultValue=\"300px\" id=\"max-width\" />\n          </div>\n          <div className=\"grid grid-cols-3 items-center gap-4\">\n            <Label htmlFor=\"height\">Height</Label>\n            <Input className=\"col-span-2\" defaultValue=\"25px\" id=\"height\" />\n          </div>\n        </div>\n      </PopoverContent>\n    </Popover>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

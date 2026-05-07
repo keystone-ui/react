@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-group-search",
+  "title": "Input Group Search",
+  "description": "Input Group example: Search.",
+  "registryDependencies": [
+    "input-group"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/input-group/search.tsx",
+      "content": "\"use client\";\n\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupInput,\n} from \"@keystoneui/react/input-group\";\nimport { Search as SearchIcon } from \"lucide-react\";\n\nexport default function InputGroupSearch() {\n  return (\n    <InputGroup>\n      <InputGroupAddon>\n        <SearchIcon className=\"size-4\" />\n      </InputGroupAddon>\n      <InputGroupInput placeholder=\"Search...\" type=\"search\" />\n      <InputGroupAddon align=\"inline-end\">\n        <kbd className=\"pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded-sm border bg-muted px-1.5 font-medium font-mono text-[10px]\">\n          <span className=\"text-xs\">⌘</span>K\n        </kbd>\n      </InputGroupAddon>\n    </InputGroup>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

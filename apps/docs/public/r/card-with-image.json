@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "card-with-image",
+  "title": "Card With Image",
+  "description": "Card example: With Image.",
+  "registryDependencies": [
+    "badge",
+    "button",
+    "card"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/card/with-image.tsx",
+      "content": "\"use client\";\n\nimport { Badge } from \"@keystoneui/react/badge\";\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Card,\n  CardAction,\n  CardDescription,\n  CardFooter,\n  CardHeader,\n  CardTitle,\n} from \"@keystoneui/react/card\";\n\nexport default function CardWithImage() {\n  return (\n    <Card className=\"!pt-0 mx-auto w-full max-w-sm overflow-hidden\">\n      <div className=\"flex aspect-video w-full items-center justify-center bg-muted text-muted-foreground\">\n        Event cover\n      </div>\n      <CardHeader>\n        <CardAction>\n          <Badge variant=\"default\">Featured</Badge>\n        </CardAction>\n        <CardTitle>Design systems meetup</CardTitle>\n        <CardDescription>\n          A practical talk on component APIs, accessibility, and shipping\n          faster.\n        </CardDescription>\n      </CardHeader>\n      <CardFooter>\n        <Button className=\"w-full\">View Event</Button>\n      </CardFooter>\n    </Card>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

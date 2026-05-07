@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "carousel-with-counter",
+  "title": "Carousel With Counter",
+  "description": "Carousel example: With Counter.",
+  "registryDependencies": [
+    "carousel"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/carousel/with-counter.tsx",
+      "content": "\"use client\";\n\nimport {\n  Carousel,\n  CarouselContent,\n  CarouselCounter,\n  CarouselItem,\n  CarouselNext,\n  CarouselPrevious,\n} from \"@keystoneui/react/carousel\";\n\nexport default function CarouselWithCounter() {\n  return (\n    <Carousel className=\"mx-12 max-w-sm\">\n      <CarouselContent>\n        {Array.from({ length: 5 }).map((_, i) => (\n          // biome-ignore lint/suspicious/noArrayIndexKey: static list\n          <CarouselItem key={`slide-${i}`}>\n            <div className=\"flex aspect-video items-center justify-center rounded-lg border bg-muted\">\n              <span className=\"font-semibold text-3xl\">{i + 1}</span>\n            </div>\n          </CarouselItem>\n        ))}\n      </CarouselContent>\n      <CarouselPrevious />\n      <CarouselNext />\n      <CarouselCounter />\n    </Carousel>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}
