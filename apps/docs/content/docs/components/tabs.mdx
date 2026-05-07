@@ -6,7 +6,13 @@ description: Tabbed interface for organizing content into selectable panels.
 ## Import
 
 ```tsx
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@keystoneui/react/tabs";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsTriggerLabel,
+  TabsContent,
+} from "@keystoneui/react/tabs";
 ```
 
 ## Usage
@@ -19,6 +25,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@keystoneui/react/tabs
 Tabs
 ├── TabsList
 │   ├── TabsTrigger
+│   │   └── TabsTriggerLabel
 │   └── TabsIndicator
 └── TabsContent
 ```
@@ -46,6 +53,15 @@ Individual tabs can be disabled to prevent selection:
 Add icons alongside tab labels:
 
 <ComponentPreview name="tabs-with-icons" />
+
+## Morphing
+
+Collapse inactive triggers to icon-only and reveal the label only on the active
+tab. Set `morphing` on `TabsList` and wrap each trigger's text in
+`<TabsTriggerLabel>`. Every trigger should include an icon so the collapsed
+state still reads.
+
+<ComponentPreview name="tabs-morphing" />
 
 ## Pill Variant
 
@@ -85,8 +101,11 @@ Vertical tabs with line variant:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `variant` | `"default" \| "line" \| "pill"` | `"default"` | Visual style variant |
+| `variant` | `"default" \| "line"` | `"default"` | Visual style variant |
+| `shape` | `"rounded" \| "pill"` | `"rounded"` | Trigger corner radius |
 | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Tab list orientation |
+| `scrollable` | `boolean` | `false` | Enable horizontal scroll with arrow buttons and gradient fades |
+| `morphing` | `boolean` | `false` | Collapse inactive triggers to icon-only; only the active trigger shows its `TabsTriggerLabel` |
 
 ### TabsTrigger
 
@@ -94,3 +113,8 @@ Vertical tabs with line variant:
 | --- | --- | --- | --- |
 | `value` | `string` | - | Unique tab identifier |
 | `disabled` | `boolean` | `false` | Whether the tab is disabled |
+
+### TabsTriggerLabel
+
+Wraps a tab's text label so it can collapse to width 0 in `morphing` mode.
+Outside morphing mode it behaves like a plain `<span>`.

@@ -46,9 +46,18 @@ const tabsListVariants = cva(
   }
 );
 
+const TabsListContext = React.createContext<{ morphing: boolean }>({
+  morphing: false,
+});
+
 export interface TabsListProps
   extends TabsPrimitive.List.Props,
     VariantProps<typeof tabsListVariants> {
+  /**
+   * Collapse inactive triggers to icon-only and reveal the label only on the
+   * active tab. Each trigger should pair an icon with `<TabsTriggerLabel>`.
+   */
+  morphing?: boolean;
   /** Enable horizontal scroll with gradient fades and arrow navigation */
   scrollable?: boolean;
   /**
@@ -63,33 +72,40 @@ function TabsList({
   variant = "default",
   shape = "rounded",
   scrollable,
+  morphing = false,
   children,
   ...props
 }: TabsListProps) {
   if (scrollable) {
     return (
-      <ScrollableTabsList
-        className={className}
-        shape={shape}
-        variant={variant}
-        {...props}
-      >
-        {children}
-      </ScrollableTabsList>
+      <TabsListContext.Provider value={{ morphing }}>
+        <ScrollableTabsList
+          className={className}
+          morphing={morphing}
+          shape={shape}
+          variant={variant}
+          {...props}
+        >
+          {children}
+        </ScrollableTabsList>
+      </TabsListContext.Provider>
     );
   }
 
   return (
-    <TabsPrimitive.List
-      className={cn(tabsListVariants({ variant }), className)}
-      data-shape={shape}
-      data-slot="tabs-list"
-      data-variant={variant}
-      {...props}
-    >
-      <TabsIndicator />
-      {children}
-    </TabsPrimitive.List>
+    <TabsListContext.Provider value={{ morphing }}>
+      <TabsPrimitive.List
+        className={cn(tabsListVariants({ variant }), className)}
+        data-morphing={morphing || undefined}
+        data-shape={shape}
+        data-slot="tabs-list"
+        data-variant={variant}
+        {...props}
+      >
+        <TabsIndicator />
+        {children}
+      </TabsPrimitive.List>
+    </TabsListContext.Provider>
   );
 }
 
@@ -103,6 +119,7 @@ function ScrollableTabsList({
   className,
   variant = "default",
   shape = "rounded",
+  morphing = false,
   children,
   ...props
 }: Omit<TabsListProps, "scrollable">) {
@@ -173,6 +190,7 @@ function ScrollableTabsList({
       >
         <TabsPrimitive.List
           className={cn(tabsListVariants({ variant }), className)}
+          data-morphing={morphing || undefined}
           data-shape={shape}
           data-slot="tabs-list"
           data-variant={variant}
@@ -204,22 +222,66 @@ function ScrollableTabsList({
 export interface TabsTriggerProps extends TabsPrimitive.Tab.Props {}
 
 function TabsTrigger({ className, ...props }: TabsTriggerProps) {
+  const { morphing } = React.useContext(TabsListContext);
   return (
     <TabsPrimitive.Tab
       className={cn(
         // Base styles
-        "relative z-[1] inline-flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-transparent px-2 py-0.5 font-medium text-muted-foreground text-sm transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "group/tabs-trigger relative z-[1] inline-flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-transparent px-2 py-0.5 font-medium text-muted-foreground text-sm transition-[color,gap] duration-[var(--duration-base)] ease-[var(--ease-in-out)] hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         // Shape-aware styles
         "group-data-[shape=pill]/tabs-list:rounded-full group-data-[shape=pill]/tabs-list:px-3",
         // Orientation-aware styles
         "group-data-[orientation=vertical]/tabs:h-8 group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:flex-initial group-data-[orientation=vertical]/tabs:justify-start",
         // Active state (text color only — background/shadow handled by indicator)
         "data-active:text-foreground dark:data-active:text-foreground",
+        // Morphing: triggers size to content (so the active tab can grow to fit its label)
+        // and the icon→label gap collapses on inactive triggers
+        "data-[morphing]:data-active:gap-1.5 data-[morphing]:flex-initial data-[morphing]:gap-0",
         className
       )}
+      data-morphing={morphing || undefined}
       data-slot="tabs-trigger"
       {...props}
     />
+  );
+}
+
+// =============================================================================
+// TabsTriggerLabel
+// =============================================================================
+export interface TabsTriggerLabelProps extends React.ComponentProps<"span"> {}
+
+/**
+ * Wraps a tab's text label so it can collapse to width 0 when the parent
+ * `TabsList` has `morphing` enabled and the trigger is not active.
+ *
+ * Uses the `grid-template-columns: 1fr → 0fr` trick to animate from intrinsic
+ * label width down to zero, paired with an opacity fade. Outside `morphing`
+ * mode it is a no-op wrapper and behaves like a plain `<span>`.
+ */
+function TabsTriggerLabel({
+  className,
+  children,
+  ...props
+}: TabsTriggerLabelProps) {
+  return (
+    <span
+      className={cn(
+        "grid grid-cols-[1fr] overflow-hidden opacity-100",
+        "transition-[grid-template-columns,opacity] duration-[var(--duration-base)] ease-[var(--ease-in-out)]",
+        // In morphing mode, collapse by default…
+        "group-data-[morphing]/tabs-trigger:grid-cols-[0fr] group-data-[morphing]/tabs-trigger:opacity-0",
+        // …and expand again when the trigger is active.
+        "group-data-[morphing]/tabs-trigger:group-data-active/tabs-trigger:grid-cols-[1fr] group-data-[morphing]/tabs-trigger:group-data-active/tabs-trigger:opacity-100",
+        className
+      )}
+      data-slot="tabs-trigger-label"
+      {...props}
+    >
+      <span className="min-w-0 overflow-hidden whitespace-nowrap">
+        {children}
+      </span>
+    </span>
   );
 }
 
@@ -275,5 +337,6 @@ export {
   TabsIndicator,
   TabsList,
   TabsTrigger,
+  TabsTriggerLabel,
   tabsListVariants,
 };

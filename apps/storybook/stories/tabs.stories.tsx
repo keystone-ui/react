@@ -12,6 +12,7 @@ import {
   TabsIndicator,
   TabsList,
   TabsTrigger,
+  TabsTriggerLabel,
 } from "@keystoneui/react/tabs";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
@@ -20,9 +21,13 @@ import {
   Code as CodeIcon,
   FileText as FileTextIcon,
   Globe as GlobeIcon,
+  House as HomeIcon,
+  Inbox as InboxIcon,
   LayoutDashboard as LayoutDashboardIcon,
   Mail as MailIcon,
   MessageSquare as MessageSquareIcon,
+  Mic as MicIcon,
+  Search as SearchIcon,
   Settings as SettingsIcon,
   Shield as ShieldIcon,
   Users as UsersIcon,
@@ -114,7 +119,13 @@ import {
       description: "The default selected tab value (uncontrolled)",
     },
   },
-  subcomponents: { TabsList, TabsTrigger, TabsIndicator, TabsContent },
+  subcomponents: {
+    TabsList,
+    TabsTrigger,
+    TabsTriggerLabel,
+    TabsIndicator,
+    TabsContent,
+  },
 } satisfies Meta<typeof Tabs>;
 
 export default meta;
@@ -775,6 +786,124 @@ export const AnimatedIndicator: Story = {
       description: {
         story:
           "The sliding indicator animates smoothly between tabs using CSS transitions on Base UI's `Tabs.Indicator`. Click between tabs to see the indicator slide. The animation adapts to each variant: a background pill for default, a fully rounded pill for pill shape, and a 2px bar for line. Respects `prefers-reduced-motion`.",
+      },
+    },
+  },
+};
+
+// Morphing tabs — Notion-style icon-only inactive, label revealed on active
+export const Morphing: Story = {
+  render: () => (
+    <Tabs defaultValue="meetings">
+      <TabsList morphing shape="pill">
+        <TabsTrigger value="home">
+          <HomeIcon />
+          <TabsTriggerLabel>Home</TabsTriggerLabel>
+        </TabsTrigger>
+        <TabsTrigger value="chat">
+          <MessageSquareIcon />
+          <TabsTriggerLabel>Chat</TabsTriggerLabel>
+        </TabsTrigger>
+        <TabsTrigger value="meetings">
+          <MicIcon />
+          <TabsTriggerLabel>Meetings</TabsTriggerLabel>
+        </TabsTrigger>
+        <TabsTrigger value="inbox">
+          <InboxIcon />
+          <TabsTriggerLabel>Inbox</TabsTriggerLabel>
+        </TabsTrigger>
+        <TabsTrigger value="search">
+          <SearchIcon />
+          <TabsTriggerLabel>Search</TabsTriggerLabel>
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="home">
+        <p className="pt-2 text-muted-foreground text-sm">
+          Home content goes here.
+        </p>
+      </TabsContent>
+      <TabsContent value="chat">
+        <p className="pt-2 text-muted-foreground text-sm">
+          Chat content goes here.
+        </p>
+      </TabsContent>
+      <TabsContent value="meetings">
+        <p className="pt-2 text-muted-foreground text-sm">
+          Meetings content goes here.
+        </p>
+      </TabsContent>
+      <TabsContent value="inbox">
+        <p className="pt-2 text-muted-foreground text-sm">
+          Inbox content goes here.
+        </p>
+      </TabsContent>
+      <TabsContent value="search">
+        <p className="pt-2 text-muted-foreground text-sm">
+          Search content goes here.
+        </p>
+      </TabsContent>
+    </Tabs>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Set `morphing` on `TabsList` and wrap each label in `<TabsTriggerLabel>` to collapse inactive triggers to icon-only. The active trigger expands to reveal its label, and the sliding indicator follows the resize automatically. Pair with `shape="pill"` for the Notion-style look. Every trigger should include an icon so the collapsed state still reads.',
+      },
+    },
+  },
+};
+
+// Morphing tabs combined with the line variant
+export const MorphingLine: Story = {
+  name: "Morphing Line",
+  render: () => (
+    <Tabs defaultValue="meetings">
+      <TabsList morphing variant="line">
+        <TabsTrigger value="home">
+          <HomeIcon />
+          <TabsTriggerLabel>Home</TabsTriggerLabel>
+        </TabsTrigger>
+        <TabsTrigger value="chat">
+          <MessageSquareIcon />
+          <TabsTriggerLabel>Chat</TabsTriggerLabel>
+        </TabsTrigger>
+        <TabsTrigger value="meetings">
+          <MicIcon />
+          <TabsTriggerLabel>Meetings</TabsTriggerLabel>
+        </TabsTrigger>
+        <TabsTrigger value="inbox">
+          <InboxIcon />
+          <TabsTriggerLabel>Inbox</TabsTriggerLabel>
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="home">
+        <p className="pt-2 text-muted-foreground text-sm">
+          Home content goes here.
+        </p>
+      </TabsContent>
+      <TabsContent value="chat">
+        <p className="pt-2 text-muted-foreground text-sm">
+          Chat content goes here.
+        </p>
+      </TabsContent>
+      <TabsContent value="meetings">
+        <p className="pt-2 text-muted-foreground text-sm">
+          Meetings content goes here.
+        </p>
+      </TabsContent>
+      <TabsContent value="inbox">
+        <p className="pt-2 text-muted-foreground text-sm">
+          Inbox content goes here.
+        </p>
+      </TabsContent>
+    </Tabs>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Combines `morphing` with `variant="line"`. The underline indicator slides and resizes to match the active trigger\'s expanded width.',
       },
     },
   },

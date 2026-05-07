@@ -419,6 +419,7 @@ import TabsDefault from "./tabs/default";
 import TabsDisabled from "./tabs/disabled";
 import TabsLine from "./tabs/line";
 import TabsLineVertical from "./tabs/line-vertical";
+import TabsMorphing from "./tabs/morphing";
 import TabsPill from "./tabs/pill";
 import TabsScrollable from "./tabs/scrollable";
 import TabsVertical from "./tabs/vertical";
@@ -1980,6 +1981,10 @@ export const demos: Record<string, DemoItem> = {
   "tabs-line-vertical": {
     component: TabsLineVertical,
     file: "tabs/line-vertical.tsx",
+  },
+  "tabs-morphing": {
+    component: TabsMorphing,
+    file: "tabs/morphing.tsx",
   },
   "tabs-pill": {
     component: TabsPill,
