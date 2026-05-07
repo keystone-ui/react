@@ -59,9 +59,17 @@ Add icons alongside tab labels:
 Collapse inactive triggers to icon-only and reveal the label only on the active
 tab. Set `morphing` on `TabsList` and wrap each trigger's text in
 `<TabsTriggerLabel>`. Every trigger should include an icon so the collapsed
-state still reads.
+state still reads. The pill and label morph together via a single spring, and
+rapid clicks carry velocity instead of restarting.
 
 <ComponentPreview name="tabs-morphing" />
+
+### Morphing with Line Variant
+
+Combine `morphing` with `variant="line"` for an underline-style morph. The 2px
+bar stretches and slides to match the active trigger's expanded width.
+
+<ComponentPreview name="tabs-morphing-line" />
 
 ## Pill Variant
 
