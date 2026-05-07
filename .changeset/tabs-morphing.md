@@ -4,7 +4,7 @@
 
 `Tabs`: add `morphing` prop on `TabsList` and a new `TabsTriggerLabel` sub-component for Notion-style collapsed-icon tabs.
 
-When `morphing` is set, inactive triggers collapse to icon-only and only the active trigger reveals its `TabsTriggerLabel`. Clicking another tab smoothly morphs the new trigger open while the previously active one collapses back. The existing sliding indicator follows the resize automatically. Works with both `default` and `line` variants and respects `prefers-reduced-motion`.
+When `morphing` is set, inactive triggers collapse to icon-only and only the active trigger reveals its `TabsTriggerLabel`. Clicking another tab springs the new trigger open while the previously active one collapses back. The morph is driven by `motion` (`layoutId` magic-move on the pill, animated `width` on the label) so the pill and label arrive together and rapid clicks carry velocity instead of restarting. Works with both `default` and `line` variants and respects `prefers-reduced-motion`.
 
 ```tsx
 <Tabs defaultValue="meetings">

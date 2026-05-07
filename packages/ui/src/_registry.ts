@@ -291,6 +291,7 @@ export const ui: Registry = [
       "@base-ui/react",
       "class-variance-authority",
       "lucide-react",
+      "motion",
     ],
     files: [{ path: "ui/tabs.tsx", type: "registry:ui" }],
   },
