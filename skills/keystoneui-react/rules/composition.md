@@ -120,6 +120,14 @@ Item components must be wrapped by their group/content parent. The library relie
 
 Never render `TabsTrigger` directly inside `Tabs` (must go in `TabsList`). Never render `SelectItem` outside `SelectContent`.
 
+For the `morphing` variant on `TabsList`, wrap each trigger's text in `<TabsTriggerLabel>` so it can collapse to width 0 when inactive. Triggers should also include an icon so the collapsed state stays meaningful. Outside morphing mode `TabsTriggerLabel` is a no-op wrapper.
+
+```tsx
+<TabsList morphing>
+  <TabsTrigger value="home"><HomeIcon /><TabsTriggerLabel>Home</TabsTriggerLabel></TabsTrigger>
+</TabsList>
+```
+
 ---
 
 ## Modal, Drawer, AlertDialog need a title
