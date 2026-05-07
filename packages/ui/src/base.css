@@ -136,6 +136,19 @@
   }
 }
 
+/* Morphing tabs: hide the leaving (inert) panel during Base UI's exit
+   transition. Base UI keeps the previous panel mounted for one frame after
+   the new one mounts so consumers can drive an exit transition. The
+   morphing pill uses Framer Motion's layoutId, which captures viewport
+   coordinates — if the parent container vertically centers the Tabs root,
+   the brief dual-mount inflates the root height and shifts those coords,
+   producing a U-shaped pill path on every tab change. We don't run exit
+   transitions on morphing panels, so dropping the leaving frame is safe. */
+[data-slot="tabs"]:has([data-slot="tabs-list"][data-morphing])
+  [role="tabpanel"][inert]:not([hidden]) {
+  display: none;
+}
+
 /* Drawer: swipe-movement transforms + open/close transitions.
    Driven by Base UI's CSS variables and data attributes.
    Positioning and visual styles (bg, border, rounded) are in Tailwind on the component. */

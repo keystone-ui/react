@@ -18,7 +18,10 @@ const TabsTriggerContext = React.createContext<{ isActive: boolean }>({
   isActive: false,
 });
 
-const MORPH_SPRING = { type: "spring", duration: 0.35, bounce: 0 } as const;
+// Slightly bouncier + longer than the previous values so the FLIP scale on
+// the layoutId pill is spread across more frames — matches the v0 reference
+// and makes the mid-morph stretching less prominent.
+const MORPH_SPRING = { type: "spring", duration: 0.4, bounce: 0.15 } as const;
 
 // =============================================================================
 // Tabs (Root)
