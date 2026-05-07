@@ -1,5 +1,27 @@
 # @keystoneui/react
 
+## 1.0.0-beta.4
+
+### Minor Changes
+
+- c3c0831: `Tabs`: add `morphing` prop on `TabsList` and a new `TabsTriggerLabel` sub-component for Notion-style collapsed-icon tabs.
+
+  When `morphing` is set, inactive triggers collapse to icon-only and only the active trigger reveals its `TabsTriggerLabel`. Clicking another tab springs the new trigger open while the previously active one collapses back. The morph is driven by `motion` (`layoutId` magic-move on the pill, animated `width` on the label) so the pill and label arrive together and rapid clicks carry velocity instead of restarting. Works with both `default` and `line` variants and respects `prefers-reduced-motion`.
+
+  ```tsx
+  <Tabs defaultValue="meetings">
+    <TabsList morphing shape="pill">
+      <TabsTrigger value="home">
+        <HomeIcon />
+        <TabsTriggerLabel>Home</TabsTriggerLabel>
+      </TabsTrigger>
+      {/* ... */}
+    </TabsList>
+  </Tabs>
+  ```
+
+  Outside `morphing` mode, `TabsTriggerLabel` is a no-op wrapper, so existing tab usage is unaffected.
+
 ## 1.0.0-beta.3
 
 ### Minor Changes
