@@ -41,6 +41,11 @@ jobs:
       - name: Build dependency packages
         run: pnpm build --filter=@keystoneui/docs^...
 
+      # Produces apps/docs/public/skills/*.tar.gz consumed by the
+      # /skills/[skill] route. Gitignored, so must be regenerated each run.
+      - name: Package skill tarballs
+        run: pnpm build:skills
+
       - name: Build for Cloudflare
         run: pnpm exec opennextjs-cloudflare build
         working-directory: apps/docs
