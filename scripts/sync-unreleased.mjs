@@ -6,6 +6,11 @@
  * always reflects what's queued for the next release without manual
  * editing.
  *
+ * The docs changelog tracks `@keystoneui/react` releases only. Changesets
+ * that don't bump `@keystoneui/react` (e.g. mcp-only releases) are
+ * filtered out — those packages have their own CHANGELOG.md in their
+ * package directory.
+ *
  * Pairs with `scripts/rotate-changelog.mjs`:
  *   1. `pnpm version-packages` runs this BEFORE `changeset version` so
  *      the rotated dated mdx inherits real auto-generated content.
@@ -31,6 +36,7 @@ const UNRELEASED = join(ROOT, "apps/docs/content/changelog/unreleased.mdx");
 const IGNORED_FILES = new Set(["README.md"]);
 const FRONTMATTER_RE = /^---\n([\s\S]*?)\n---\n?([\s\S]*)$/;
 const BUMP_RE = /^"?([@a-zA-Z0-9/_-]+)"?\s*:\s*(major|minor|patch)\s*$/gm;
+const TRACKED_PACKAGE = "@keystoneui/react";
 
 function fail(msg) {
   console.error(`sync-unreleased: ${msg}`);
@@ -59,7 +65,6 @@ const unconsumed = allChangesetFiles.filter(
 );
 
 const buckets = { major: [], minor: [], patch: [] };
-const packagesTouched = new Set();
 
 for (const file of unconsumed) {
   const raw = readFileSync(join(CHANGESET_DIR, file), "utf8");
@@ -69,19 +74,23 @@ for (const file of unconsumed) {
   }
   const [, fm, body] = fmMatch;
 
-  let highest = null;
+  // Only the bump that targets @keystoneui/react drives the docs changelog.
+  // Other packages (e.g. @keystoneui/mcp) ship via their own CHANGELOG.md.
+  let trackedBump = null;
   for (const [, pkg, bump] of fm.matchAll(BUMP_RE)) {
-    packagesTouched.add(pkg);
+    if (pkg !== TRACKED_PACKAGE) {
+      continue;
+    }
     if (bump === "major") {
-      highest = "major";
-    } else if (bump === "minor" && highest !== "major") {
-      highest = "minor";
-    } else if (bump === "patch" && highest === null) {
-      highest = "patch";
+      trackedBump = "major";
+    } else if (bump === "minor" && trackedBump !== "major") {
+      trackedBump = "minor";
+    } else if (bump === "patch" && trackedBump === null) {
+      trackedBump = "patch";
     }
   }
 
-  if (highest === null) {
+  if (trackedBump === null) {
     continue;
   }
 
@@ -90,7 +99,7 @@ for (const file of unconsumed) {
     continue;
   }
 
-  buckets[highest].push(trimmed);
+  buckets[trackedBump].push(trimmed);
 }
 
 const total =

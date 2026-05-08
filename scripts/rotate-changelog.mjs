@@ -11,6 +11,12 @@
  * `unreleased.mdx` is missing — that means rotation already ran, or someone
  * deleted it by hand and there's nothing to rotate.
  *
+ * Skips rotation entirely when `unreleased.mdx` is the empty stub. That
+ * signals the bump didn't touch `@keystoneui/react` (e.g. an mcp-only
+ * release) — the docs changelog only tracks react releases, so there's
+ * nothing to rotate and the file's "no changes" stub already reflects
+ * reality for the next round.
+ *
  * Does not stage anything in git: the human reviews the rename + new stub
  * alongside the version-bump diff before committing.
  */
@@ -40,6 +46,18 @@ if (!existsSync(UNRELEASED)) {
 }
 
 const today = new Date().toISOString().slice(0, 10);
+const original = readFileSync(UNRELEASED, "utf8");
+
+// sync-unreleased writes this excerpt when no @keystoneui/react changesets
+// are queued. Treat that as the signal that this bump didn't release react,
+// so there's nothing to rotate into a dated entry.
+if (original.includes('excerpt: "No changes since the last release."')) {
+  console.log(
+    "✓ rotate-changelog: no @keystoneui/react changes queued — skipping rotation"
+  );
+  process.exit(0);
+}
+
 const targetName = `${today}-v${pkgVersion}.mdx`;
 const target = join(CHANGELOG_DIR, targetName);
 
@@ -47,7 +65,6 @@ if (existsSync(target)) {
   fail(`${target} already exists — refusing to overwrite`);
 }
 
-const original = readFileSync(UNRELEASED, "utf8");
 const fmMatch = original.match(/^---\n([\s\S]*?)\n---\n?/);
 if (!fmMatch) {
   fail(`${UNRELEASED} is missing YAML frontmatter`);
