@@ -1,9 +1,15 @@
 "use client";
 
+import { Button } from "@keystoneui/react/button";
 import { ChevronDown } from "lucide-react";
 import React, { useState } from "react";
 
+import { V0Logo } from "@/components/v0-logo";
 import { cn } from "@/lib/cn";
+
+const V0_URL = process.env.NEXT_PUBLIC_V0_URL;
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
+const V0_ENABLED = Boolean(V0_URL && APP_URL);
 
 interface ComponentPreviewContainerProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -25,6 +31,10 @@ export function ComponentPreviewContainer({
   const Component = childArray[0];
   const Code = childArray[1];
 
+  const v0Href = V0_ENABLED
+    ? `${V0_URL}/chat/api/open?url=${encodeURIComponent(`${APP_URL}/r/${name}.json`)}`
+    : undefined;
+
   return (
     <div
       className={cn("not-prose group relative my-6 w-full", className)}
@@ -35,10 +45,31 @@ export function ComponentPreviewContainer({
         <p className="mb-2 text-fd-muted-foreground text-sm">{description}</p>
       )}
 
+      {/* Toolbar (only when v0 is configured) */}
+      {v0Href && (
+        <div className="flex flex-wrap items-center gap-2 rounded-t-xl border border-b-0 bg-fd-card px-3 py-2">
+          <span className="font-mono text-fd-muted-foreground text-xs">
+            {name}
+          </span>
+          <Button
+            className="ml-auto"
+            render={
+              // biome-ignore lint/a11y/useAnchorContent: children are forwarded by Base UI's render prop
+              <a href={v0Href} rel="noreferrer" target="_blank" />
+            }
+            size="sm"
+            variant="default"
+          >
+            Open in <V0Logo className="size-5" />
+          </Button>
+        </div>
+      )}
+
       {/* Preview Section */}
       <div
         className={cn(
-          "flex min-h-[200px] w-full items-center justify-center overflow-hidden rounded-t-xl border border-b-0 bg-fd-background p-6 sm:p-10",
+          "flex min-h-[200px] w-full items-center justify-center overflow-hidden border border-b-0 bg-fd-background p-6 sm:p-10",
+          !v0Href && "rounded-t-xl",
           hideCode && !Code && "rounded-b-xl border-b"
         )}
       >

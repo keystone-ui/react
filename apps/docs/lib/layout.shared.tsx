@@ -39,6 +39,10 @@ export function baseOptions(): BaseLayoutProps {
         url: "/gallery",
       },
       {
+        text: "Blocks",
+        url: "/blocks",
+      },
+      {
         text: "Changelog",
         url: "/changelog",
       },

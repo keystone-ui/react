@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { useRef, useState } from "react";
 import type { PanelImperativeHandle } from "react-resizable-panels";
-
+import { V0Logo } from "@/components/v0-logo";
 import { cn } from "@/lib/cn";
 
 const VIEWPORT_PRESETS = [
@@ -135,7 +135,7 @@ export function BlockPreviewContainer({
             size="sm"
             variant="default"
           >
-            Open in v0
+            Open in <V0Logo className="size-5" />
           </Button>
         )}
       </div>

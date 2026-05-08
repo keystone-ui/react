@@ -1,4 +1,5 @@
 import { loadProjectConfig } from "./config.js";
+import { runInfo } from "./info.js";
 import { init } from "./init.js";
 import {
   auditChecklistTool,
@@ -10,6 +11,7 @@ import {
 
 const VERBS = [
   "init",
+  "info",
   "search",
   "list",
   "view",
@@ -85,6 +87,9 @@ function printUsage(): void {
   console.log("");
   console.log("Verbs:");
   console.log("  init [--client <name>]              Configure MCP client");
+  console.log(
+    "  info [--json]                        Print env diagnostic (registry, MCP clients, installed packages)"
+  );
   console.log("  search <query> [--type T] [--category C] [--limit N]");
   console.log(
     "                                       Fuzzy search components, blocks, examples"
@@ -261,6 +266,9 @@ export async function runCli(args: string[]): Promise<void> {
   switch (verb) {
     case "init":
       init();
+      return;
+    case "info":
+      runInfo(rest);
       return;
     case "search":
       await runSearch(rest);
