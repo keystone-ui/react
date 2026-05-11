@@ -35,7 +35,10 @@ const Table = ({
   ref,
   ...props
 }: TableProps & React.RefAttributes<HTMLTableElement>) => (
-  <div className="relative w-full overflow-x-auto" data-slot="table-container">
+  <div
+    className="relative w-full overflow-x-auto overflow-y-hidden"
+    data-slot="table-container"
+  >
     <table
       className={cn(
         "group/table w-full caption-bottom text-sm data-[size=sm]:text-xs",

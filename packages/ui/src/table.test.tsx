@@ -69,6 +69,23 @@ describe("Table", () => {
     expect(container).toHaveAttribute("data-slot", "table-container");
   });
 
+  // overflow-x: auto + default overflow-y: visible computes to overflow-y: auto
+  // (CSS Overflow L3), which paints a phantom vertical scrollbar on macOS
+  // "Always show scrollbars". Pin both axes so the promotion can't recur.
+  it("pins both overflow axes on the container", () => {
+    render(
+      <Table>
+        <TableBody>
+          <TableRow>
+            <TableCell>Cell</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+    const container = screen.getByRole("table").parentElement;
+    expect(container).toHaveClass("overflow-x-auto", "overflow-y-hidden");
+  });
+
   it("sets data-size attribute", () => {
     render(
       <Table size="sm">
