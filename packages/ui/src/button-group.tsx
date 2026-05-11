@@ -114,6 +114,7 @@ const ButtonGroup = ({
   ref,
   ...props
 }: ButtonGroupProps & React.RefAttributes<HTMLDivElement>) => (
+  // biome-ignore lint/a11y/useSemanticElements: group of buttons, not a form fieldset
   <div
     className={cn(buttonGroupVariants({ orientation }), className)}
     data-orientation={orientation}

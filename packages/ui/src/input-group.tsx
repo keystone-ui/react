@@ -1,7 +1,15 @@
 "use client";
 
 import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
+import {
+  type ComponentProps,
+  createContext,
+  type HTMLAttributes,
+  type ReactNode,
+  type RefAttributes,
+  useContext,
+  useMemo,
+} from "react";
 import { Button } from "./button";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
@@ -12,18 +20,18 @@ import { cn } from "./utils";
 // =============================================================================
 type InputGroupSize = "sm" | "default";
 
-const InputGroupContext = React.createContext<{ size: InputGroupSize }>({
+const InputGroupContext = createContext<{ size: InputGroupSize }>({
   size: "default",
 });
 
 // =============================================================================
 // InputGroup
 // =============================================================================
-export interface InputGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface InputGroupProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * The children of the input group
    */
-  children: React.ReactNode;
+  children: ReactNode;
   /**
    * Optional additional className for the input group
    */
@@ -41,10 +49,11 @@ export const InputGroup = ({
   size = "default",
   ref,
   ...props
-}: InputGroupProps & React.RefAttributes<HTMLDivElement>) => {
-  const contextValue = React.useMemo(() => ({ size }), [size]);
+}: InputGroupProps & RefAttributes<HTMLDivElement>) => {
+  const contextValue = useMemo(() => ({ size }), [size]);
   return (
     <InputGroupContext.Provider value={contextValue}>
+      {/* biome-ignore lint/a11y/useSemanticElements: input wrapper, not a form fieldset */}
       <div
         className={cn(
           "group/input-group relative flex w-full items-center rounded-md border border-input bg-input-bg shadow-xs outline-none transition-[color,box-shadow]",
@@ -107,12 +116,12 @@ const inputGroupAddonVariants = cva(
 );
 
 export interface InputGroupAddonProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof inputGroupAddonVariants> {
   /**
    * The children of the addon
    */
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export const InputGroupAddon = ({
@@ -121,7 +130,8 @@ export const InputGroupAddon = ({
   children,
   ref,
   ...props
-}: InputGroupAddonProps & React.RefAttributes<HTMLDivElement>) => (
+}: InputGroupAddonProps & RefAttributes<HTMLDivElement>) => (
+  // biome-ignore lint/a11y/useSemanticElements: addon container groups icons/buttons next to an input
   <div
     className={cn(inputGroupAddonVariants({ align }), className)}
     data-align={align}
@@ -200,7 +210,7 @@ const inputGroupButtonVariants = cva(
 );
 
 export interface InputGroupButtonProps
-  extends Omit<React.ComponentProps<typeof Button>, "size">,
+  extends Omit<ComponentProps<typeof Button>, "size">,
     VariantProps<typeof inputGroupButtonVariants> {
   /**
    * The type of button
@@ -227,7 +237,7 @@ export const InputGroupButton = ({
   size = "auto",
   ref,
   ...props
-}: InputGroupButtonProps & React.RefAttributes<HTMLButtonElement>) => (
+}: InputGroupButtonProps & RefAttributes<HTMLButtonElement>) => (
   <Button
     className={cn(inputGroupButtonVariants({ size }), className)}
     data-size={size}
@@ -242,14 +252,13 @@ InputGroupButton.displayName = "InputGroupButton";
 // =============================================================================
 // InputGroupText
 // =============================================================================
-export interface InputGroupTextProps
-  extends React.HTMLAttributes<HTMLSpanElement> {}
+export interface InputGroupTextProps extends HTMLAttributes<HTMLSpanElement> {}
 
 export const InputGroupText = ({
   className,
   ref,
   ...props
-}: InputGroupTextProps & React.RefAttributes<HTMLSpanElement>) => (
+}: InputGroupTextProps & RefAttributes<HTMLSpanElement>) => (
   <span
     className={cn(
       "flex items-center gap-2 text-muted-foreground text-sm [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
@@ -264,16 +273,15 @@ InputGroupText.displayName = "InputGroupText";
 // =============================================================================
 // InputGroupInput
 // =============================================================================
-export interface InputGroupInputProps
-  extends React.ComponentProps<typeof Input> {}
+export interface InputGroupInputProps extends ComponentProps<typeof Input> {}
 
 export const InputGroupInput = ({
   className,
   size,
   ref,
   ...props
-}: InputGroupInputProps & React.RefAttributes<HTMLInputElement>) => {
-  const { size: groupSize } = React.useContext(InputGroupContext);
+}: InputGroupInputProps & RefAttributes<HTMLInputElement>) => {
+  const { size: groupSize } = useContext(InputGroupContext);
   return (
     <Input
       className={cn(
@@ -294,13 +302,13 @@ InputGroupInput.displayName = "InputGroupInput";
 // InputGroupTextarea
 // =============================================================================
 export interface InputGroupTextareaProps
-  extends React.ComponentProps<typeof Textarea> {}
+  extends ComponentProps<typeof Textarea> {}
 
 export const InputGroupTextarea = ({
   className,
   ref,
   ...props
-}: InputGroupTextareaProps & React.RefAttributes<HTMLTextAreaElement>) => (
+}: InputGroupTextareaProps & RefAttributes<HTMLTextAreaElement>) => (
   <Textarea
     className={cn(
       "field-sizing-content min-h-10 flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none md:py-2.5 dark:bg-transparent",

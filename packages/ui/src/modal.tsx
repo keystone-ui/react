@@ -3,7 +3,7 @@
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X as XIcon } from "lucide-react";
-import * as React from "react";
+import { type ComponentProps, useRef } from "react";
 import { Button } from "./button";
 import { cn } from "./utils";
 
@@ -123,7 +123,7 @@ function ModalContent({
   // instead of the first tabbable element. Without this, Base UI focuses
   // the first button (often at the bottom of long content), and the browser
   // auto-scrolls the overflow wrapper to reveal it — jumping to the bottom.
-  const popupRef = React.useRef<HTMLDivElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
 
   const closeButton = showCloseButton && (
     <DialogPrimitive.Close
@@ -181,7 +181,7 @@ function ModalContent({
 // =============================================================================
 // ModalHeader
 // =============================================================================
-export interface ModalHeaderProps extends React.ComponentProps<"div"> {}
+export interface ModalHeaderProps extends ComponentProps<"div"> {}
 
 function ModalHeader({ className, ...props }: ModalHeaderProps) {
   return (
@@ -196,7 +196,7 @@ function ModalHeader({ className, ...props }: ModalHeaderProps) {
 // =============================================================================
 // ModalFooter
 // =============================================================================
-export interface ModalFooterProps extends React.ComponentProps<"div"> {
+export interface ModalFooterProps extends ComponentProps<"div"> {
   /**
    * Whether to show a "Close" outline button at the end of the footer.
    * @default false

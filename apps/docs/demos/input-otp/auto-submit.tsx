@@ -9,6 +9,10 @@ import {
 import { type FormEvent, useId, useState } from "react";
 
 const OTP_LENGTH = 6;
+const OTP_SLOTS = Array.from({ length: OTP_LENGTH }, (_, i) => ({
+  key: `slot-${i + 1}`,
+  ariaLabel: `Character ${i + 1} of ${OTP_LENGTH}`,
+}));
 
 export default function InputOTPAutoSubmit() {
   const id = useId();
@@ -37,11 +41,8 @@ export default function InputOTPAutoSubmit() {
         name="verificationCode"
       >
         <InputOTPGroup>
-          {Array.from({ length: OTP_LENGTH }, (_, index) => (
-            <InputOTPSlot
-              aria-label={`Character ${index + 1} of ${OTP_LENGTH}`}
-              key={index}
-            />
+          {OTP_SLOTS.map((slot) => (
+            <InputOTPSlot aria-label={slot.ariaLabel} key={slot.key} />
           ))}
         </InputOTPGroup>
       </InputOTP>

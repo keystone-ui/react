@@ -103,6 +103,7 @@ export function Field({
   ...props
 }: FieldProps) {
   return (
+    // biome-ignore lint/a11y/useSemanticElements: Field wraps any control type, not strictly form-related
     <div
       className={cn(fieldVariants({ orientation }), className)}
       data-orientation={orientation}
@@ -264,6 +265,7 @@ export function FieldError({
       <ul className="ml-4 flex list-disc flex-col gap-1">
         {uniqueErrors.map(
           (error, index) =>
+            // biome-ignore lint/suspicious/noArrayIndexKey: error messages are positional and never reorder
             error?.message && <li key={index}>{error.message}</li>
         )}
       </ul>

@@ -1,7 +1,12 @@
 "use client";
 
 import { Calendar as CalendarIcon } from "lucide-react";
-import * as React from "react";
+import {
+  type InputHTMLAttributes,
+  type RefAttributes,
+  type RefObject,
+  useRef,
+} from "react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -11,15 +16,15 @@ import {
 import { cn } from "./utils";
 
 export interface DateInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "size"> {}
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size"> {}
 
 export const DateInput = ({
   className,
   ref,
   ...props
-}: DateInputProps & React.RefAttributes<HTMLInputElement>) => {
-  const innerRef = React.useRef<HTMLInputElement>(null);
-  const inputRef = (ref as React.RefObject<HTMLInputElement>) || innerRef;
+}: DateInputProps & RefAttributes<HTMLInputElement>) => {
+  const innerRef = useRef<HTMLInputElement>(null);
+  const inputRef = (ref as RefObject<HTMLInputElement>) || innerRef;
 
   return (
     <InputGroup>

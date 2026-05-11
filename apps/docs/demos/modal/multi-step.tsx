@@ -32,6 +32,7 @@ function StepIndicator() {
         return (
           <div
             className={`h-1.5 rounded-full transition-all duration-300 ${widthClass}`}
+            // biome-ignore lint/suspicious/noArrayIndexKey: position is identity for step indicators
             key={i}
           />
         );

@@ -7,16 +7,17 @@ import {
 } from "@keystoneui/react/input-otp";
 
 const OTP_LENGTH = 6;
+const OTP_SLOTS = Array.from({ length: OTP_LENGTH }, (_, i) => ({
+  key: `slot-${i + 1}`,
+  ariaLabel: `Character ${i + 1} of ${OTP_LENGTH}`,
+}));
 
 export default function InputOTPMasked() {
   return (
     <InputOTP length={OTP_LENGTH} mask>
       <InputOTPGroup>
-        {Array.from({ length: OTP_LENGTH }, (_, index) => (
-          <InputOTPSlot
-            aria-label={`Character ${index + 1} of ${OTP_LENGTH}`}
-            key={index}
-          />
+        {OTP_SLOTS.map((slot) => (
+          <InputOTPSlot aria-label={slot.ariaLabel} key={slot.key} />
         ))}
       </InputOTPGroup>
     </InputOTP>

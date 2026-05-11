@@ -11,6 +11,7 @@ import { cn } from "./utils";
 
 function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
+    // biome-ignore lint/a11y/useSemanticElements: list semantics without <ul>/<li> wrapping
     <div
       className={cn(
         "group/item-group flex w-full flex-col rounded-lg border border-border",
@@ -29,9 +30,12 @@ function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
 
 function ItemSeparator({ className, ...props }: React.ComponentProps<"div">) {
   return (
+    // biome-ignore lint/a11y/useFocusableInteractive: visual divider, not keyboard-interactive
+    // biome-ignore lint/a11y/useSemanticElements: decorative divider styled as div, no native <hr> needed
     <div
       className={cn("h-px bg-border", className)}
       data-slot="item-separator"
+      // biome-ignore lint/a11y/useAriaPropsForRole: decorative separator (no orientation/aria-* needed)
       role="separator"
       {...props}
     />

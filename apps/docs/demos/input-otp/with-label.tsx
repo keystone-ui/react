@@ -8,6 +8,10 @@ import {
 import { useId } from "react";
 
 const OTP_LENGTH = 6;
+const OTP_SLOTS = Array.from({ length: OTP_LENGTH }, (_, i) => ({
+  key: `slot-${i + 1}`,
+  ariaLabel: `Character ${i + 1} of ${OTP_LENGTH}`,
+}));
 
 export default function InputOTPWithLabel() {
   const id = useId();
@@ -20,11 +24,8 @@ export default function InputOTPWithLabel() {
       </label>
       <InputOTP aria-describedby={descriptionId} id={id} length={OTP_LENGTH}>
         <InputOTPGroup>
-          {Array.from({ length: OTP_LENGTH }, (_, index) => (
-            <InputOTPSlot
-              aria-label={`Character ${index + 1} of ${OTP_LENGTH}`}
-              key={index}
-            />
+          {OTP_SLOTS.map((slot) => (
+            <InputOTPSlot aria-label={slot.ariaLabel} key={slot.key} />
           ))}
         </InputOTPGroup>
       </InputOTP>

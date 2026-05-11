@@ -2,7 +2,7 @@
 
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
 import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group";
-import * as React from "react";
+import { createContext, useContext, useMemo } from "react";
 import { TagRemove, tagVariants } from "./tag";
 import { cn } from "./utils";
 
@@ -10,7 +10,7 @@ import { cn } from "./utils";
 // Context
 // ---------------------------------------------------------------------------
 
-const TagGroupContext = React.createContext<{
+const TagGroupContext = createContext<{
   onRemove?: (value: string) => void;
 }>({});
 
@@ -24,7 +24,7 @@ export interface TagGroupProps extends ToggleGroupPrimitive.Props {
 }
 
 function TagGroup({ className, onRemove, children, ...props }: TagGroupProps) {
-  const contextValue = React.useMemo(() => ({ onRemove }), [onRemove]);
+  const contextValue = useMemo(() => ({ onRemove }), [onRemove]);
 
   return (
     <ToggleGroupPrimitive
@@ -54,7 +54,7 @@ function TagGroupItem({
   children,
   ...props
 }: TagGroupItemProps) {
-  const { onRemove } = React.useContext(TagGroupContext);
+  const { onRemove } = useContext(TagGroupContext);
 
   return (
     <TogglePrimitive

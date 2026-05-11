@@ -7,14 +7,24 @@ import {
   ChevronRight as ChevronRightIcon,
 } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import * as React from "react";
+import {
+  type ComponentProps,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { cn } from "./utils";
 
 type TabsValue = string | number | null;
 type TabsListVariant = "default" | "line";
 
-const TabsActiveContext = React.createContext<TabsValue>(null);
-const TabsTriggerContext = React.createContext<{ isActive: boolean }>({
+const TabsActiveContext = createContext<TabsValue>(null);
+const TabsTriggerContext = createContext<{ isActive: boolean }>({
   isActive: false,
 });
 
@@ -36,7 +46,7 @@ function Tabs({
   onValueChange,
   ...props
 }: TabsProps) {
-  const [internalValue, setInternalValue] = React.useState<TabsValue>(
+  const [internalValue, setInternalValue] = useState<TabsValue>(
     defaultValue ?? null
   );
   const activeValue = value ?? internalValue;
@@ -85,7 +95,7 @@ const tabsListVariants = cva(
   }
 );
 
-const TabsListContext = React.createContext<{
+const TabsListContext = createContext<{
   morphing: boolean;
   variant: TabsListVariant;
   pillId: string;
@@ -121,8 +131,8 @@ function TabsList({
   children,
   ...props
 }: TabsListProps) {
-  const pillId = React.useId();
-  const contextValue = React.useMemo(
+  const pillId = useId();
+  const contextValue = useMemo(
     () => ({ morphing, variant: variant ?? "default", pillId }),
     [morphing, variant, pillId]
   );
@@ -176,11 +186,11 @@ function ScrollableTabsList({
   children,
   ...props
 }: Omit<TabsListProps, "scrollable">) {
-  const scrollRef = React.useRef<HTMLDivElement | null>(null);
-  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
-  const [canScrollRight, setCanScrollRight] = React.useState(false);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
-  const updateScrollState = React.useCallback(() => {
+  const updateScrollState = useCallback(() => {
     const el = scrollRef.current;
     if (!el) {
       return;
@@ -189,7 +199,7 @@ function ScrollableTabsList({
     setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const el = scrollRef.current;
     if (!el) {
       return;
@@ -280,12 +290,12 @@ function TabsTrigger({
   value,
   ...props
 }: TabsTriggerProps) {
-  const { morphing, variant, pillId } = React.useContext(TabsListContext);
-  const activeValue = React.useContext(TabsActiveContext);
+  const { morphing, variant, pillId } = useContext(TabsListContext);
+  const activeValue = useContext(TabsActiveContext);
   const isActive = activeValue === value;
   const shouldReduceMotion = useReducedMotion();
 
-  const triggerContext = React.useMemo(() => ({ isActive }), [isActive]);
+  const triggerContext = useMemo(() => ({ isActive }), [isActive]);
 
   return (
     <TabsTriggerContext.Provider value={triggerContext}>
@@ -339,7 +349,7 @@ function TabsTrigger({
 // =============================================================================
 // TabsTriggerLabel
 // =============================================================================
-export interface TabsTriggerLabelProps extends React.ComponentProps<"span"> {}
+export interface TabsTriggerLabelProps extends ComponentProps<"span"> {}
 
 /**
  * Wraps a tab's text label so it can collapse to width 0 when the parent
@@ -354,8 +364,8 @@ function TabsTriggerLabel({
   children,
   ...props
 }: TabsTriggerLabelProps) {
-  const { morphing } = React.useContext(TabsListContext);
-  const { isActive } = React.useContext(TabsTriggerContext);
+  const { morphing } = useContext(TabsListContext);
+  const { isActive } = useContext(TabsTriggerContext);
   const shouldReduceMotion = useReducedMotion();
 
   if (!morphing) {
@@ -379,7 +389,7 @@ function TabsTriggerLabel({
       data-slot="tabs-trigger-label"
       initial={false}
       transition={shouldReduceMotion ? { duration: 0 } : MORPH_SPRING}
-      {...(props as React.ComponentProps<typeof motion.span>)}
+      {...(props as ComponentProps<typeof motion.span>)}
     >
       <span className="pl-1.5">{children}</span>
     </motion.span>

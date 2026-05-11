@@ -7,16 +7,20 @@ import {
 } from "@keystoneui/react/input-otp";
 
 const OTP_LENGTH = 6;
+const OTP_SLOTS = Array.from({ length: OTP_LENGTH }, (_, i) => ({
+  key: `slot-${i + 1}`,
+  ariaLabel: `Character ${i + 1} of ${OTP_LENGTH}`,
+}));
 
 export default function InputOTPPlaceholder() {
   return (
     <InputOTP length={OTP_LENGTH}>
       <InputOTPGroup>
-        {Array.from({ length: OTP_LENGTH }, (_, index) => (
+        {OTP_SLOTS.map((slot) => (
           <InputOTPSlot
-            aria-label={`Character ${index + 1} of ${OTP_LENGTH}`}
+            aria-label={slot.ariaLabel}
             className="placeholder:text-muted-foreground/60 focus:placeholder:text-transparent"
-            key={index}
+            key={slot.key}
             placeholder="•"
           />
         ))}

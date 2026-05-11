@@ -2,14 +2,20 @@
 
 import { cva, type VariantProps } from "class-variance-authority";
 import { X as XIcon } from "lucide-react";
-import * as React from "react";
+import {
+  type HTMLAttributes,
+  type RefAttributes,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { Button, type ButtonProps } from "./button";
 import { cn } from "./utils";
 
 const EXIT_DURATION_MS = 220;
 
-interface SelectionBarProps extends React.HTMLAttributes<HTMLDivElement> {
+interface SelectionBarProps extends HTMLAttributes<HTMLDivElement> {
   /** Whether the bar is visible. Drives the enter/exit animation. */
   open: boolean;
   /** Where the bar is positioned. `fixed` (default) anchors to the viewport bottom; `inline` lets the consumer place it. */
@@ -24,11 +30,11 @@ function SelectionBar({
   style,
   ...props
 }: SelectionBarProps) {
-  const [shouldRender, setShouldRender] = React.useState(open);
-  const [isVisible, setIsVisible] = React.useState(open);
-  const exitTimeoutRef = React.useRef<number | null>(null);
+  const [shouldRender, setShouldRender] = useState(open);
+  const [isVisible, setIsVisible] = useState(open);
+  const exitTimeoutRef = useRef<number | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (exitTimeoutRef.current !== null) {
       window.clearTimeout(exitTimeoutRef.current);
       exitTimeoutRef.current = null;
@@ -109,7 +115,7 @@ const barHidden = "translate-y-3 opacity-0";
 function SelectionBarGroup({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
@@ -125,7 +131,7 @@ function SelectionBarGroup({
 function SelectionBarLabel({
   className,
   ...props
-}: React.HTMLAttributes<HTMLSpanElement>) {
+}: HTMLAttributes<HTMLSpanElement>) {
   return (
     <span
       aria-live="polite"
@@ -140,7 +146,7 @@ function SelectionBarBullet({
   className,
   children,
   ...props
-}: React.HTMLAttributes<HTMLSpanElement>) {
+}: HTMLAttributes<HTMLSpanElement>) {
   return (
     <span
       aria-hidden="true"
@@ -171,7 +177,7 @@ function SelectionBarLink({ className, ...props }: ButtonProps) {
 function SelectionBarSeparator({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       aria-hidden="true"
@@ -225,7 +231,7 @@ const SelectionBarButton = ({
   tone = "default",
   ref,
   ...props
-}: SelectionBarButtonProps & React.RefAttributes<HTMLButtonElement>) => (
+}: SelectionBarButtonProps & RefAttributes<HTMLButtonElement>) => (
   <Button
     className={cn(selectionBarButtonVariants({ shape, tone }), className)}
     data-slot="selection-bar-button"

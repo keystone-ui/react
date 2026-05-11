@@ -5,7 +5,7 @@ import {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
 } from "lucide-react";
-import * as React from "react";
+import { type ComponentProps, useEffect, useRef } from "react";
 import {
   type DayButton,
   DayPicker,
@@ -32,12 +32,12 @@ function Calendar({
   formatters,
   components,
   ...props
-}: React.ComponentProps<typeof DayPicker> & {
+}: ComponentProps<typeof DayPicker> & {
   /**
    * The variant to use for the navigation buttons.
    * @default "ghost"
    */
-  buttonVariant?: React.ComponentProps<typeof Button>["variant"];
+  buttonVariant?: ComponentProps<typeof Button>["variant"];
 }) {
   return (
     <DayPicker
@@ -131,6 +131,7 @@ function Calendar({
         ...classNames,
       }}
       components={{
+        // biome-ignore-start lint/correctness/noNestedComponentDefinitions: react-day-picker render-prop slots
         Root: ({ className, rootRef, ...props }) => (
           <div
             className={cn(className)}
@@ -183,6 +184,7 @@ function Calendar({
             </div>
           </td>
         ),
+        // biome-ignore-end lint/correctness/noNestedComponentDefinitions: react-day-picker render-prop slots
         ...components,
       }}
       formatters={{
@@ -205,9 +207,9 @@ function CalendarDayButton({
   day,
   modifiers,
   ...props
-}: React.ComponentProps<typeof DayButton>) {
-  const ref = React.useRef<HTMLButtonElement>(null);
-  React.useEffect(() => {
+}: ComponentProps<typeof DayButton>) {
+  const ref = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
     if (modifiers.focused) {
       ref.current?.focus();
     }

@@ -75,6 +75,8 @@ function BreadcrumbLink({ className, render, ...props }: BreadcrumbLinkProps) {
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
   return (
+    // biome-ignore lint/a11y/useFocusableInteractive: current page link is intentionally non-focusable (aria-disabled)
+    // biome-ignore lint/a11y/useSemanticElements: <span> with role="link" represents the current page (no href)
     <span
       aria-current="page"
       aria-disabled="true"

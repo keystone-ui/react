@@ -6,7 +6,19 @@ import {
   motion,
   useReducedMotion,
 } from "motion/react";
-import * as React from "react";
+import {
+  Children,
+  type ComponentProps,
+  createContext,
+  isValidElement,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import useMeasure from "react-use-measure";
 
 import { cn } from "./utils";
@@ -33,7 +45,7 @@ interface StepperContextValue {
   value: number;
 }
 
-const StepperContext = React.createContext<StepperContextValue | undefined>(
+const StepperContext = createContext<StepperContextValue | undefined>(
   undefined
 );
 
@@ -43,7 +55,7 @@ const StepperContext = React.createContext<StepperContextValue | undefined>(
  * Must be used within a `<Stepper>` component.
  */
 function useStepper(): StepperContextValue {
-  const context = React.useContext(StepperContext);
+  const context = useContext(StepperContext);
   if (context === undefined) {
     throw new Error("useStepper must be used within a <Stepper> component.");
   }
@@ -54,7 +66,7 @@ function useStepper(): StepperContextValue {
 // Stepper (Root)
 // =============================================================================
 export interface StepperProps {
-  children: React.ReactNode;
+  children: ReactNode;
   /** Callback when the step changes. */
   onValueChange: (value: number) => void;
   /** Current step index (0-based). */
@@ -62,19 +74,19 @@ export interface StepperProps {
 }
 
 function Stepper({ value, onValueChange, children }: StepperProps) {
-  const [direction, setDirection] = React.useState(1);
-  const previousValue = React.useRef(value);
+  const [direction, setDirection] = useState(1);
+  const previousValue = useRef(value);
 
   // Count StepperStep children to determine totalSteps.
   // We walk the tree looking inside StepperContent for StepperStep children.
-  const totalSteps = React.useMemo(() => {
+  const totalSteps = useMemo(() => {
     let count = 0;
-    const countSteps = (node: React.ReactNode) => {
-      React.Children.forEach(node, (child) => {
-        if (React.isValidElement(child) && child.type === StepperStep) {
+    const countSteps = (node: ReactNode) => {
+      Children.forEach(node, (child) => {
+        if (isValidElement(child) && child.type === StepperStep) {
           count++;
-        } else if (React.isValidElement(child)) {
-          const props = child.props as { children?: React.ReactNode };
+        } else if (isValidElement(child)) {
+          const props = child.props as { children?: ReactNode };
           if (props.children) {
             countSteps(props.children);
           }
@@ -86,14 +98,14 @@ function Stepper({ value, onValueChange, children }: StepperProps) {
   }, [children]);
 
   // Track direction based on value changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (value !== previousValue.current) {
       setDirection(value > previousValue.current ? 1 : -1);
       previousValue.current = value;
     }
   }, [value]);
 
-  const goTo = React.useCallback(
+  const goTo = useCallback(
     (step: number) => {
       const clamped = Math.max(0, Math.min(totalSteps - 1, step));
       onValueChange(clamped);
@@ -101,15 +113,15 @@ function Stepper({ value, onValueChange, children }: StepperProps) {
     [totalSteps, onValueChange]
   );
 
-  const goNext = React.useCallback(() => {
+  const goNext = useCallback(() => {
     goTo(value + 1);
   }, [goTo, value]);
 
-  const goPrevious = React.useCallback(() => {
+  const goPrevious = useCallback(() => {
     goTo(value - 1);
   }, [goTo, value]);
 
-  const contextValue = React.useMemo<StepperContextValue>(
+  const contextValue = useMemo<StepperContextValue>(
     () => ({
       value,
       totalSteps,
@@ -152,7 +164,7 @@ const reducedMotionVariants = {
 };
 
 export interface StepperContentProps {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }
 
@@ -165,9 +177,9 @@ function StepperContent({ className, children }: StepperContentProps) {
   const customValue = shouldReduceMotion ? undefined : direction;
 
   // Extract only StepperStep children and pick the active one
-  const steps: React.ReactNode[] = [];
-  React.Children.forEach(children, (child) => {
-    if (React.isValidElement(child) && child.type === StepperStep) {
+  const steps: ReactNode[] = [];
+  Children.forEach(children, (child) => {
+    if (isValidElement(child) && child.type === StepperStep) {
       steps.push(child);
     }
   });
@@ -213,7 +225,7 @@ function StepperContent({ className, children }: StepperContentProps) {
 // =============================================================================
 // StepperStep (Individual step wrapper)
 // =============================================================================
-export interface StepperStepProps extends React.ComponentProps<"div"> {}
+export interface StepperStepProps extends ComponentProps<"div"> {}
 
 function StepperStep({ className, ...props }: StepperStepProps) {
   return <div className={className} data-slot="stepper-step" {...props} />;

@@ -6,7 +6,13 @@ import {
   ChevronDown as ChevronDownIcon,
   X as XIcon,
 } from "lucide-react";
-import * as React from "react";
+import {
+  type ComponentPropsWithRef,
+  type ReactNode,
+  type RefAttributes,
+  type RefObject,
+  useRef,
+} from "react";
 import { Button } from "./button";
 import {
   InputGroup,
@@ -77,7 +83,7 @@ export interface ComboboxInputProps extends ComboboxPrimitive.Input.Props {
   /**
    * Children to render inside the input group (e.g., InputGroupAddon)
    */
-  children?: React.ReactNode;
+  children?: ReactNode;
   /**
    * Show the clear button when a value is selected
    * @default false
@@ -139,7 +145,7 @@ export interface ComboboxContentProps extends ComboboxPrimitive.Popup.Props {
   /**
    * Custom anchor element (used for chips mode)
    */
-  anchor?: React.RefObject<HTMLElement | null>;
+  anchor?: RefObject<HTMLElement | null>;
   /**
    * Side of the trigger to position the popup
    * @default "bottom"
@@ -221,7 +227,7 @@ function ComboboxList({ className, ...props }: ComboboxListProps) {
 // ComboboxItem
 // =============================================================================
 export interface ComboboxItemProps extends ComboboxPrimitive.Item.Props {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 function ComboboxItem({ className, children, ...props }: ComboboxItemProps) {
@@ -330,14 +336,14 @@ function ComboboxSeparator({ className, ...props }: ComboboxSeparatorProps) {
 // ComboboxChips
 // =============================================================================
 export interface ComboboxChipsProps
-  extends React.ComponentPropsWithRef<typeof ComboboxPrimitive.Chips>,
+  extends ComponentPropsWithRef<typeof ComboboxPrimitive.Chips>,
     ComboboxPrimitive.Chips.Props {}
 
 const ComboboxChips = ({
   className,
   ref,
   ...props
-}: ComboboxChipsProps & React.RefAttributes<HTMLDivElement>) => (
+}: ComboboxChipsProps & RefAttributes<HTMLDivElement>) => (
   <ComboboxPrimitive.Chips
     className={cn(
       "flex min-h-10 flex-wrap items-center gap-1 rounded-md border border-input bg-input-bg bg-clip-padding px-2.5 py-1 text-sm shadow-xs transition-colors",
@@ -415,7 +421,7 @@ function ComboboxChipsInput({ className, ...props }: ComboboxChipsInputProps) {
 // useComboboxAnchor Hook
 // =============================================================================
 function useComboboxAnchor() {
-  return React.useRef<HTMLDivElement | null>(null);
+  return useRef<HTMLDivElement | null>(null);
 }
 
 export type { ComboboxRootProps as ComboboxProps } from "@base-ui/react/combobox";

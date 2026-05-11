@@ -2,7 +2,15 @@
 
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion";
 import { ChevronDown } from "lucide-react";
-import * as React from "react";
+import {
+  type ComponentPropsWithoutRef,
+  type ComponentRef,
+  createContext,
+  type ReactElement,
+  type ReactNode,
+  type RefAttributes,
+  useContext,
+} from "react";
 
 import { cn } from "./utils";
 
@@ -11,7 +19,7 @@ import { cn } from "./utils";
 // ---------------------------------------------------------------------------
 
 type AccordionRootBaseProps = Omit<
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>,
+  ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>,
   | "className"
   | "render"
   | "variant"
@@ -25,27 +33,27 @@ type AccordionRootBaseProps = Omit<
   | "keepMounted"
 >;
 type AccordionItemBaseProps = Omit<
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>,
+  ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>,
   "className" | "render" | "variant" | "onOpenChange" | "disabled"
 >;
 type AccordionHeaderBaseProps = Omit<
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Header>,
+  ComponentPropsWithoutRef<typeof AccordionPrimitive.Header>,
   "className" | "render"
 >;
 type AccordionTriggerBaseProps = Omit<
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>,
+  ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>,
   "className" | "render" | "chevronIcon" | "variant"
 >;
 type AccordionPanelBaseProps = Omit<
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Panel>,
+  ComponentPropsWithoutRef<typeof AccordionPrimitive.Panel>,
   "className" | "render" | "variant" | "hiddenUntilFound" | "keepMounted"
 >;
 
 export type AccordionVariant = "box" | "underline" | "ghost" | "table";
-type RenderProp =
-  | React.ReactElement
-  | ((props: any, state: any) => React.ReactElement);
+// biome-ignore-start lint/suspicious/noExplicitAny: render/className accept Base UI's state generic, which varies per part
+type RenderProp = ReactElement | ((props: any, state: any) => ReactElement);
 type ClassNameProp = string | ((state: any) => string);
+// biome-ignore-end lint/suspicious/noExplicitAny: render/className accept Base UI's state generic, which varies per part
 
 export type AccordionProps = AccordionRootBaseProps & {
   /** The visual style variant of the accordion @default "underline" */
@@ -90,7 +98,7 @@ export type AccordionHeaderProps = AccordionHeaderBaseProps & {
 
 export type AccordionTriggerProps = AccordionTriggerBaseProps & {
   /** Icon to replace the default chevron icon on the right side. */
-  chevronIcon?: React.ReactNode;
+  chevronIcon?: ReactNode;
   /** The visual style variant of the trigger. Inherited from parent AccordionItem if not specified */
   variant?: AccordionVariant;
   className?: ClassNameProp;
@@ -113,8 +121,8 @@ export type AccordionPanelProps = AccordionPanelBaseProps & {
 // ---------------------------------------------------------------------------
 
 const AccordionVariantContext =
-  React.createContext<AccordionProps["variant"]>("underline");
-const AccordionLeadingIconContext = React.createContext<boolean>(false);
+  createContext<AccordionProps["variant"]>("underline");
+const AccordionLeadingIconContext = createContext<boolean>(false);
 
 // ---------------------------------------------------------------------------
 // Accordion (root)
@@ -133,7 +141,7 @@ const Accordion = ({
   ref,
   ...props
 }: AccordionProps &
-  React.RefAttributes<React.ComponentRef<typeof AccordionPrimitive.Root>>) => {
+  RefAttributes<ComponentRef<typeof AccordionPrimitive.Root>>) => {
   const baseClasses = cn("flex w-full flex-col justify-center");
 
   return (
@@ -168,8 +176,8 @@ const AccordionItem = ({
   ref,
   ...props
 }: AccordionItemProps &
-  React.RefAttributes<React.ComponentRef<typeof AccordionPrimitive.Item>>) => {
-  const contextVariant = React.useContext(AccordionVariantContext);
+  RefAttributes<ComponentRef<typeof AccordionPrimitive.Item>>) => {
+  const contextVariant = useContext(AccordionVariantContext);
   const variant = variantProp ?? contextVariant;
 
   const baseClasses = cn(
@@ -204,9 +212,7 @@ const AccordionHeader = ({
   ref,
   ...props
 }: AccordionHeaderProps &
-  React.RefAttributes<
-    React.ComponentRef<typeof AccordionPrimitive.Header>
-  >) => (
+  RefAttributes<ComponentRef<typeof AccordionPrimitive.Header>>) => (
   <AccordionPrimitive.Header className={cn(className)} ref={ref} {...props} />
 );
 
@@ -224,10 +230,8 @@ const AccordionTrigger = ({
   ref,
   ...props
 }: AccordionTriggerProps &
-  React.RefAttributes<
-    React.ComponentRef<typeof AccordionPrimitive.Trigger>
-  >) => {
-  const contextVariant = React.useContext(AccordionVariantContext);
+  RefAttributes<ComponentRef<typeof AccordionPrimitive.Trigger>>) => {
+  const contextVariant = useContext(AccordionVariantContext);
   const variant = variantProp ?? contextVariant;
 
   const baseClasses = cn(
@@ -275,8 +279,8 @@ const AccordionPanel = ({
   ref,
   ...props
 }: AccordionPanelProps &
-  React.RefAttributes<React.ComponentRef<typeof AccordionPrimitive.Panel>>) => {
-  const contextVariant = React.useContext(AccordionVariantContext);
+  RefAttributes<ComponentRef<typeof AccordionPrimitive.Panel>>) => {
+  const contextVariant = useContext(AccordionVariantContext);
   const variant = variantProp ?? contextVariant;
 
   const baseClasses = cn(

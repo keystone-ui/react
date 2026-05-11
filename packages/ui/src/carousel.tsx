@@ -7,7 +7,17 @@ import {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
 } from "lucide-react";
-import * as React from "react";
+import {
+  type ComponentProps,
+  type CSSProperties,
+  createContext,
+  type KeyboardEvent,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Button } from "./button";
 import { cn } from "./utils";
 
@@ -56,10 +66,10 @@ type CarouselContextProps = {
 // Context
 // ---------------------------------------------------------------------------
 
-const CarouselContext = React.createContext<CarouselContextProps | null>(null);
+const CarouselContext = createContext<CarouselContextProps | null>(null);
 
 function useCarousel() {
-  const context = React.useContext(CarouselContext);
+  const context = useContext(CarouselContext);
   if (!context) {
     throw new Error("useCarousel must be used within a <Carousel />");
   }
@@ -82,7 +92,7 @@ function Carousel({
   children,
   style,
   ...props
-}: React.ComponentProps<"div"> & CarouselProps) {
+}: ComponentProps<"div"> & CarouselProps) {
   const [carouselRef, api] = useEmblaCarousel(
     {
       ...opts,
@@ -91,12 +101,12 @@ function Carousel({
     plugins
   );
 
-  const [canScrollPrev, setCanScrollPrev] = React.useState(false);
-  const [canScrollNext, setCanScrollNext] = React.useState(false);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [slideCount, setSlideCount] = React.useState(0);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [slideCount, setSlideCount] = useState(0);
 
-  const onSelect = React.useCallback(
+  const onSelect = useCallback(
     (emblaApi: CarouselApi) => {
       if (!emblaApi) {
         return;
@@ -110,16 +120,16 @@ function Carousel({
     [onSlideChange]
   );
 
-  const scrollPrev = React.useCallback(() => {
+  const scrollPrev = useCallback(() => {
     api?.scrollPrev();
   }, [api]);
 
-  const scrollNext = React.useCallback(() => {
+  const scrollNext = useCallback(() => {
     api?.scrollNext();
   }, [api]);
 
-  const handleKeyDown = React.useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLDivElement>) => {
       if (event.key === "ArrowLeft") {
         event.preventDefault();
         scrollPrev();
@@ -131,14 +141,14 @@ function Carousel({
     [scrollPrev, scrollNext]
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!(api && setApi)) {
       return;
     }
     setApi(api);
   }, [api, setApi]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!api) {
       return;
     }
@@ -172,13 +182,14 @@ function Carousel({
         autoHideArrows,
       }}
     >
+      {/* biome-ignore lint/a11y/useSemanticElements: carousel wrapper exposes role="region" with aria-roledescription */}
       <div
         aria-roledescription="carousel"
         className={cn("group/carousel relative", className)}
         data-slot="carousel"
         onKeyDownCapture={handleKeyDown}
         role="region"
-        style={{ "--carousel-gap": gap, ...style } as React.CSSProperties}
+        style={{ "--carousel-gap": gap, ...style } as CSSProperties}
         {...props}
       >
         {children}
@@ -196,7 +207,7 @@ function CarouselContent({
   mask = false,
   style,
   ...props
-}: React.ComponentProps<"div"> & {
+}: ComponentProps<"div"> & {
   /**
    * When true, applies a CSS `mask-image` fade on edges that have
    * more content to scroll to. The fade width is controlled by the
@@ -207,7 +218,7 @@ function CarouselContent({
   const { carouselRef, orientation, canScrollPrev, canScrollNext } =
     useCarousel();
 
-  const maskStyle = React.useMemo<React.CSSProperties | undefined>(() => {
+  const maskStyle = useMemo<CSSProperties | undefined>(() => {
     if (!mask) {
       return;
     }
@@ -257,10 +268,11 @@ function CarouselContent({
 // CarouselItem
 // ---------------------------------------------------------------------------
 
-function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
+function CarouselItem({ className, ...props }: ComponentProps<"div">) {
   const { orientation } = useCarousel();
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: slide is a group, not a list/listitem
     <div
       aria-roledescription="slide"
       className={cn(
@@ -286,7 +298,7 @@ function CarouselPrevious({
   variant = "outline",
   size = "icon-xs",
   ...props
-}: React.ComponentProps<typeof Button>) {
+}: ComponentProps<typeof Button>) {
   const { orientation, scrollPrev, canScrollPrev, autoHideArrows } =
     useCarousel();
 
@@ -323,7 +335,7 @@ function CarouselNext({
   variant = "outline",
   size = "icon-xs",
   ...props
-}: React.ComponentProps<typeof Button>) {
+}: ComponentProps<typeof Button>) {
   const { orientation, scrollNext, canScrollNext, autoHideArrows } =
     useCarousel();
 
@@ -355,7 +367,7 @@ function CarouselNext({
 // CarouselDots
 // ---------------------------------------------------------------------------
 
-function CarouselDots({ className, ...props }: React.ComponentProps<"div">) {
+function CarouselDots({ className, ...props }: ComponentProps<"div">) {
   const { api, selectedIndex, slideCount } = useCarousel();
 
   if (slideCount <= 1) {
@@ -378,6 +390,7 @@ function CarouselDots({ className, ...props }: React.ComponentProps<"div">) {
               : "w-2 bg-foreground/25 hover:bg-foreground/50"
           )}
           data-active={index === selectedIndex || undefined}
+          // biome-ignore lint/suspicious/noArrayIndexKey: position is identity for slide dot indicators
           key={index}
           onClick={() => api?.scrollTo(index)}
           type="button"
@@ -391,7 +404,7 @@ function CarouselDots({ className, ...props }: React.ComponentProps<"div">) {
 // CarouselCounter
 // ---------------------------------------------------------------------------
 
-function CarouselCounter({ className, ...props }: React.ComponentProps<"div">) {
+function CarouselCounter({ className, ...props }: ComponentProps<"div">) {
   const { selectedIndex, slideCount } = useCarousel();
 
   if (slideCount <= 1) {

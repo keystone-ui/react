@@ -8,6 +8,10 @@ import {
 import { useId, useState } from "react";
 
 const OTP_LENGTH = 6;
+const OTP_SLOTS = Array.from({ length: OTP_LENGTH }, (_, i) => ({
+  key: `slot-${i + 1}`,
+  ariaLabel: `Character ${i + 1} of ${OTP_LENGTH}`,
+}));
 
 function sanitizeTierCode(value: string) {
   return value.replace(/[^0-3]/g, "");
@@ -37,11 +41,8 @@ export default function InputOTPCustomSanitization() {
         validationType="none"
       >
         <InputOTPGroup>
-          {Array.from({ length: OTP_LENGTH }, (_, index) => (
-            <InputOTPSlot
-              aria-label={`Character ${index + 1} of ${OTP_LENGTH}`}
-              key={index}
-            />
+          {OTP_SLOTS.map((slot) => (
+            <InputOTPSlot aria-label={slot.ariaLabel} key={slot.key} />
           ))}
         </InputOTPGroup>
       </InputOTP>

@@ -9,10 +9,12 @@ import { cn } from "./utils";
 // Types
 // ---------------------------------------------------------------------------
 
+// biome-ignore-start lint/suspicious/noExplicitAny: render/className accept Base UI's state generic, which varies per part
 type RenderProp =
   | React.ReactElement
   | ((props: any, state: any) => React.ReactElement);
 type ClassNameProp = string | ((state: any) => string);
+// biome-ignore-end lint/suspicious/noExplicitAny: render/className accept Base UI's state generic, which varies per part
 
 type CollapsibleRootBaseProps = Omit<
   React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Root>,
