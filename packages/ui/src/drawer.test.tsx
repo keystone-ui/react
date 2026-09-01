@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   Drawer,
+  DrawerBody,
   DrawerClose,
   DrawerContent,
   DrawerDescription,
@@ -89,6 +90,44 @@ describe("Drawer", () => {
     });
   });
 
+  // The inner content region is the drawer's default scroller, so a plain
+  // header/body/footer composition scrolls instead of clipping. It must stay
+  // Y-only: `overflow-y: auto` alone promotes the default `overflow-x: visible`
+  // to `auto` (CSS Overflow L3), which paints a phantom gutter on macOS "Show
+  // scrollbars: Always" AND makes Base UI's findScrollableTouchTarget() report a
+  // bogus cross-axis scroll container, swallowing swipe-to-dismiss on diagonal
+  // touch drags. Pin the X axis so neither can recur.
+  it("makes the inner content region a Y-only scroller", async () => {
+    renderDrawer({ defaultOpen: true });
+
+    await waitFor(() => {
+      const inner = document.querySelector(
+        "[data-slot='drawer-inner-content']"
+      );
+      expect(inner).toHaveClass(
+        "min-h-0",
+        "flex-1",
+        "overflow-y-auto",
+        "overflow-x-hidden",
+        "overscroll-contain"
+      );
+      expect(inner).not.toHaveClass("overflow-hidden");
+    });
+  });
+
+  it("keeps the header and footer out of the scroll region", async () => {
+    renderDrawer({ defaultOpen: true });
+
+    await waitFor(() => {
+      expect(document.querySelector("[data-slot='drawer-header']")).toHaveClass(
+        "shrink-0"
+      );
+      expect(document.querySelector("[data-slot='drawer-footer']")).toHaveClass(
+        "shrink-0"
+      );
+    });
+  });
+
   it("closes when DrawerClose is clicked", async () => {
     const user = userEvent.setup();
     renderDrawer({ defaultOpen: true });
@@ -126,6 +165,68 @@ describe("DrawerHeader", () => {
         .closest("[data-slot='drawer-header']");
       expect(header).toHaveClass("custom-header");
     });
+  });
+});
+
+// =============================================================================
+// DrawerBody
+// =============================================================================
+describe("DrawerBody", () => {
+  function renderBody(className?: string) {
+    return render(
+      <Drawer defaultOpen>
+        <DrawerContent>
+          <DrawerTitle>Title</DrawerTitle>
+          <DrawerBody className={className}>Body content</DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
+  it("has data-slot", async () => {
+    renderBody();
+
+    await waitFor(() => {
+      expect(screen.getByText("Body content")).toHaveAttribute(
+        "data-slot",
+        "drawer-body"
+      );
+    });
+  });
+
+  it("applies custom className", async () => {
+    renderBody("custom-body");
+
+    await waitFor(() => {
+      expect(screen.getByText("Body content")).toHaveClass("custom-body");
+    });
+  });
+
+  // Same CSS Overflow L3 / Base UI cross-axis reasoning as the
+  // "makes the inner content region a Y-only scroller" test above.
+  it("pins both overflow axes and contains overscroll", async () => {
+    renderBody();
+
+    await waitFor(() => {
+      expect(screen.getByText("Body content")).toHaveClass(
+        "min-h-0",
+        "flex-1",
+        "overflow-y-auto",
+        "overflow-x-hidden",
+        "overscroll-contain"
+      );
+    });
+  });
+
+  // Horizontal only — DrawerHeader and DrawerFooter are `p-4`, so vertical
+  // padding here would double the gap against them.
+  it("ships horizontal padding only", async () => {
+    renderBody();
+
+    const body = await waitFor(() => screen.getByText("Body content"));
+    expect(body).toHaveClass("px-4");
+    expect(body).not.toHaveClass("p-4");
+    expect(body).not.toHaveClass("py-4");
   });
 });
 

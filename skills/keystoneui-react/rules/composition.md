@@ -9,6 +9,7 @@ How Keystone UI components are composed and how to extend them.
 - The `render` prop for custom triggers
 - Items always inside their group
 - Modal, Drawer, AlertDialog need a title
+- Drawer bodies scroll — use `DrawerBody`
 - Use full Card composition
 - `Button` has no loading prop — compose with `Spinner`
 - `data-slot` for stable styling targets
@@ -149,6 +150,45 @@ For accessibility. Use `ModalTitle` / `DrawerTitle` / `AlertDialogTitle`. If the
   </ModalContent>
 </Modal>
 ```
+
+---
+
+## Drawer bodies scroll — use `DrawerBody`
+
+`DrawerContent` already scrolls its own content, so long forms are never clipped.
+Don't hand-roll a scroll container. When the header and footer should stay pinned
+while only the middle scrolls, reach for `DrawerBody`.
+
+**Incorrect:**
+
+```tsx
+<DrawerContent>
+  <DrawerHeader>
+    <DrawerTitle>Edit profile</DrawerTitle>
+  </DrawerHeader>
+  <div className="max-h-[60vh] overflow-y-auto px-4">{fields}</div>
+  <DrawerFooter>
+    <Button>Save</Button>
+  </DrawerFooter>
+</DrawerContent>
+```
+
+**Correct:**
+
+```tsx
+<DrawerContent>
+  <DrawerHeader>
+    <DrawerTitle>Edit profile</DrawerTitle>
+  </DrawerHeader>
+  <DrawerBody>{fields}</DrawerBody>
+  <DrawerFooter>
+    <Button>Save</Button>
+  </DrawerFooter>
+</DrawerContent>
+```
+
+`DrawerBody` ships `px-4` only — `DrawerHeader` and `DrawerFooter` supply their
+own vertical padding, so add `py-*` yourself only when the body stands alone.
 
 ---
 

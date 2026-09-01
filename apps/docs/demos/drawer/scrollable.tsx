@@ -3,6 +3,7 @@
 import { Button } from "@keystoneui/react/button";
 import {
   Drawer,
+  DrawerBody,
   DrawerClose,
   DrawerContent,
   DrawerDescription,
@@ -25,7 +26,7 @@ export default function DrawerScrollable() {
             Please review the following terms carefully.
           </DrawerDescription>
         </DrawerHeader>
-        <div className="no-scrollbar overflow-y-auto px-4">
+        <DrawerBody>
           {Array.from({ length: 10 }).map((_, index) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: static demo list
             <p className="mb-4 leading-normal" key={`paragraph-${index}`}>
@@ -35,7 +36,7 @@ export default function DrawerScrollable() {
               nisi ut aliquip ex ea commodo consequat.
             </p>
           ))}
-        </div>
+        </DrawerBody>
         <DrawerFooter>
           <Button>Accept</Button>
           <DrawerClose render={<Button variant="outline" />}>

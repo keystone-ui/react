@@ -12,6 +12,7 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerHeader,
+  DrawerBody,
   DrawerTitle,
   DrawerDescription,
   DrawerFooter,
@@ -61,6 +62,7 @@ Drawer
     ├── DrawerHeader
     │   ├── DrawerTitle
     │   └── DrawerDescription
+    ├── DrawerBody
     └── DrawerFooter
         └── DrawerClose
 ```
@@ -87,7 +89,12 @@ The variant has no effect on `top` / `bottom` directions or below the `md` break
 
 ### Scrollable
 
-A drawer with scrollable body content:
+`DrawerContent` scrolls its own content, so long forms and copy stay reachable
+instead of being clipped at the drawer's max height.
+
+Wrap the middle region in `DrawerBody` when `DrawerHeader` and `DrawerFooter`
+should stay pinned while only the body scrolls. `DrawerBody` ships horizontal
+padding only — add `py-*` if it has no header or footer to sit against.
 
 <ComponentPreview name="drawer-scrollable" />
 
@@ -146,12 +153,21 @@ This component supports RTL layouts via the standard `dir="rtl"` attribute on a 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `open` | `boolean` | - | Controlled open state |
+| `defaultOpen` | `boolean` | `false` | Open state for the uncontrolled case |
 | `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
+| `swipeDirection` | `"up" \| "right" \| "down" \| "left"` | `"down"` | The edge the drawer slides from, and the direction that swipes to dismiss |
+| `snapPoints` | `(string \| number)[]` | - | Heights the drawer settles at when dragged |
+| `modal` | `boolean \| "trap-focus"` | `true` | Whether the drawer blocks interaction with the page behind it |
 
 ### DrawerContent
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `side` | `"top" \| "right" \| "bottom" \| "left"` | `"right"` | The edge the drawer slides from |
 | `variant` | `"flush" \| "floating"` | `"flush"` | Visual style for `left` / `right` drawers at `md+`. `floating` detaches from the edge with a gap, full radius, and shadow. No effect on `top` / `bottom` or below `md`. |
 | `className` | `string` | - | Additional CSS classes |
+
+### DrawerBody
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes. Ships `px-4` only — add `py-*` for a body with no header or footer beside it. |

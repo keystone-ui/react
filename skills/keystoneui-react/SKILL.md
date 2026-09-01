@@ -74,6 +74,7 @@ These are always enforced. Each links to a file with code pairs.
 - **Use `render`, not `asChild`.** Base UI's slot pattern.
 - **Items always inside their group.** `SelectItem` → `SelectContent`, `TabsTrigger` → `TabsList`, `DropdownMenuItem` → `DropdownMenuContent`.
 - **`Modal`, `Drawer`, `AlertDialog` need a title.** Use `className="sr-only"` to hide it visually.
+- **Drawer content already scrolls.** Don't hand-roll an `overflow-y-auto` div — use `DrawerBody` when `DrawerHeader`/`DrawerFooter` should stay pinned.
 - **Use full Card composition.** `CardHeader`/`CardTitle`/`CardDescription`/`CardContent`/`CardFooter`.
 - **`Button` has no `isLoading` prop.** Compose with `Spinner` + `disabled`.
 - **`data-slot` is stable.** Use it for consumer overrides; don't override slot values when extending.
