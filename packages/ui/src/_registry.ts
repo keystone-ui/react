@@ -177,7 +177,7 @@ export const ui: Registry = [
   {
     name: "input-otp",
     type: "registry:ui",
-    dependencies: ["input-otp"],
+    dependencies: ["@base-ui/react"],
     files: [{ path: "ui/input-otp.tsx", type: "registry:ui" }],
   },
   {

@@ -35,7 +35,7 @@ const meta = {
     docs: {
       description: {
         component: `
-A one-time password input for verification codes. Built on Base UI's [\`OTPField\`](https://base-ui.com/react/components/otp-field) preview primitive.
+A one-time password input for verification codes. Built on Base UI's [\`OTPField\`](https://base-ui.com/react/components/otp-field) primitive.
 
 \`\`\`tsx
 import {
@@ -252,11 +252,11 @@ function CustomSanitizationExample() {
         id={id}
         inputMode="numeric"
         length={OTP_LENGTH}
+        normalizeValue={(value) => value.replace(/[^0-3]/g, "")}
         onValueChange={() => setStatusMessage("")}
         onValueInvalid={(value) =>
           setStatusMessage(`Unsupported characters were ignored from ${value}.`)
         }
-        sanitizeValue={(value) => value.replace(/[^0-3]/g, "")}
         validationType="none"
       >
         <InputOTPGroup>{renderSlots(OTP_LENGTH)}</InputOTPGroup>
