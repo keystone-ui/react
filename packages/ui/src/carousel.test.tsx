@@ -81,7 +81,7 @@ describe("CarouselPrevious / CarouselNext", () => {
     );
   });
 
-  // Arrows were centred on the whole root, so CarouselDots/CarouselCounter
+  // Arrows were centered on the whole root, so CarouselDots/CarouselCounter
   // below the slides dragged them off the slide's midline. Anchoring them to
   // the first grid row makes CarouselContent their containing block. All four
   // grid lines are required: an `auto` end line on an absolutely positioned

@@ -70,7 +70,7 @@ const CarouselContext = createContext<CarouselContextProps | null>(null);
 
 /**
  * Arrows are absolutely positioned against the first grid row of the root, which is
- * `CarouselContent`. That keeps them centred on the slide viewport when `CarouselDots`
+ * `CarouselContent`. That keeps them centered on the slide viewport when `CarouselDots`
  * or `CarouselCounter` adds height below. All four grid lines are required: an `auto`
  * end line on an absolutely positioned grid child resolves to the container's padding
  * edge, not to a single track.
