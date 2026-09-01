@@ -29,7 +29,12 @@ describe("Accordion", () => {
     expect(
       screen.getByRole("button", { name: "Trigger 1" })
     ).toBeInTheDocument();
-    expect(screen.getByRole("region")).toBeInTheDocument();
+    // The region role lives on the panel, not the root. Base UI 1.6.0 removed
+    // the region role from `Accordion.Root` (upstream #4961) because a landmark
+    // wrapping the whole accordion is not what APG prescribes. The panel is
+    // collapsed here, so it is `hidden` and outside the accessibility tree —
+    // hence `hidden: true`.
+    expect(screen.getByRole("region", { hidden: true })).toBeInTheDocument();
   });
 
   it("expands/collapses when clicked", async () => {

@@ -13,7 +13,7 @@ const OTP_SLOTS = Array.from({ length: OTP_LENGTH }, (_, i) => ({
   ariaLabel: `Character ${i + 1} of ${OTP_LENGTH}`,
 }));
 
-function sanitizeTierCode(value: string) {
+function normalizeTierCode(value: string) {
   return value.replace(/[^0-3]/g, "");
 }
 
@@ -33,11 +33,11 @@ export default function InputOTPCustomSanitization() {
         id={id}
         inputMode="numeric"
         length={OTP_LENGTH}
+        normalizeValue={normalizeTierCode}
         onValueChange={() => setStatusMessage("")}
         onValueInvalid={(value) =>
           setStatusMessage(`Unsupported characters were ignored from ${value}.`)
         }
-        sanitizeValue={sanitizeTierCode}
         validationType="none"
       >
         <InputOTPGroup>

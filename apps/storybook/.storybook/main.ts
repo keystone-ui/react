@@ -27,6 +27,11 @@ const config: StorybookConfig = {
     return mergeConfig(config, {
       plugins: [tailwindcss()],
       optimizeDeps: {
+        // Do NOT add "@base-ui/react/otp-field" here. Prebundling that subpath
+        // yields a module without its `OTPField` named export, so every story
+        // importing InputOTP fails to render with a misleading
+        // "does not provide an export named 'OTPField'" error. It resolves fine
+        // unbundled. Verified against @base-ui/react 1.7.0.
         include: [
           "@base-ui/react/accordion",
           "@base-ui/react/alert-dialog",
@@ -62,7 +67,6 @@ const config: StorybookConfig = {
           "embla-carousel-autoplay",
           "embla-carousel-react",
           "embla-carousel-wheel-gestures",
-          "input-otp",
           "libphonenumber-js",
           "lucide-react",
           "motion/react",

@@ -1,6 +1,6 @@
 "use client";
 
-import { OTPFieldPreview as OTPField } from "@base-ui/react/otp-field";
+import { OTPField } from "@base-ui/react/otp-field";
 import {
   LoaderCircle as LoaderCircleIcon,
   Minus as MinusIcon,
