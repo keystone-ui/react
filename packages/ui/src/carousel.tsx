@@ -68,6 +68,16 @@ type CarouselContextProps = {
 
 const CarouselContext = createContext<CarouselContextProps | null>(null);
 
+/**
+ * Arrows are absolutely positioned against the first grid row of the root, which is
+ * `CarouselContent`. That keeps them centered on the slide viewport when `CarouselDots`
+ * or `CarouselCounter` adds height below. All four grid lines are required: an `auto`
+ * end line on an absolutely positioned grid child resolves to the container's padding
+ * edge, not to a single track.
+ */
+const CAROUSEL_ARROW_BASE =
+  "absolute z-10 touch-manipulation rounded-full [grid-area:1/1/2/2]";
+
 function useCarousel() {
   const context = useContext(CarouselContext);
   if (!context) {
@@ -185,7 +195,7 @@ function Carousel({
       {/* biome-ignore lint/a11y/useSemanticElements: carousel wrapper exposes role="region" with aria-roledescription */}
       <div
         aria-roledescription="carousel"
-        className={cn("group/carousel relative", className)}
+        className={cn("group/carousel relative grid grid-cols-1", className)}
         data-slot="carousel"
         onKeyDownCapture={handleKeyDown}
         role="region"
@@ -305,7 +315,7 @@ function CarouselPrevious({
   return (
     <Button
       className={cn(
-        "absolute z-10 touch-manipulation rounded-full",
+        CAROUSEL_ARROW_BASE,
         orientation === "horizontal"
           ? "top-1/2 -left-8 -translate-y-1/2"
           : "-top-8 left-1/2 -translate-x-1/2 rotate-90",
@@ -342,7 +352,7 @@ function CarouselNext({
   return (
     <Button
       className={cn(
-        "absolute z-10 touch-manipulation rounded-full",
+        CAROUSEL_ARROW_BASE,
         orientation === "horizontal"
           ? "top-1/2 -right-8 -translate-y-1/2"
           : "-bottom-8 left-1/2 -translate-x-1/2 rotate-90",
