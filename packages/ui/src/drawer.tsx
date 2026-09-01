@@ -114,8 +114,15 @@ function DrawerContent({
         >
           {/* Drag handle for bottom drawer */}
           <div className="mx-auto mt-4 hidden h-1 w-[50px] shrink-0 rounded-full bg-muted group-data-[swipe-direction=down]/drawer-content:block" />
+          {/* Scrolls its own overflow so naive header/body/footer composition
+              can't clip. Y only: `overflow-y: auto` alone promotes the default
+              `overflow-x: visible` to `auto` (CSS Overflow L3), which paints a
+              phantom gutter on macOS "Show scrollbars: Always" and makes Base
+              UI report a bogus cross-axis scroll container, swallowing
+              swipe-to-dismiss on diagonal drags. A nested `DrawerBody` shrinks
+              to fit, so this region stays inert whenever one is present. */}
           <DrawerPrimitive.Content
-            className="flex min-h-0 flex-1 flex-col overflow-hidden"
+            className="flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden overscroll-contain"
             data-slot="drawer-inner-content"
           >
             {children}
@@ -135,10 +142,40 @@ function DrawerHeader({ className, ...props }: DrawerHeaderProps) {
   return (
     <div
       className={cn(
-        "flex flex-col gap-0.5 p-4 group-data-[swipe-direction=down]/drawer-content:text-center group-data-[swipe-direction=up]/drawer-content:text-center md:gap-0.5 md:text-left",
+        "flex shrink-0 flex-col gap-0.5 p-4 group-data-[swipe-direction=down]/drawer-content:text-center group-data-[swipe-direction=up]/drawer-content:text-center md:gap-0.5 md:text-left",
         className
       )}
       data-slot="drawer-header"
+      {...props}
+    />
+  );
+}
+
+// =============================================================================
+// DrawerBody
+// =============================================================================
+export interface DrawerBodyProps extends React.ComponentProps<"div"> {}
+
+/**
+ * Scrolling middle region of a drawer.
+ *
+ * Place it between `DrawerHeader` and `DrawerFooter` when those should stay
+ * pinned while the body scrolls. Without it, `DrawerContent`'s inner region
+ * scrolls as a whole — content is still reachable, but the header and footer
+ * scroll away with it.
+ *
+ * Ships horizontal padding only. `DrawerHeader` and `DrawerFooter` are already
+ * `p-4`, so vertical padding here would double the gap against them; add `py-*`
+ * via `className` for a body that stands alone.
+ */
+function DrawerBody({ className, ...props }: DrawerBodyProps) {
+  return (
+    <div
+      className={cn(
+        "min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain px-4",
+        className
+      )}
+      data-slot="drawer-body"
       {...props}
     />
   );
@@ -152,7 +189,7 @@ export interface DrawerFooterProps extends React.ComponentProps<"div"> {}
 function DrawerFooter({ className, ...props }: DrawerFooterProps) {
   return (
     <div
-      className={cn("mt-auto flex flex-col gap-2 p-4", className)}
+      className={cn("mt-auto flex shrink-0 flex-col gap-2 p-4", className)}
       data-slot="drawer-footer"
       {...props}
     />
@@ -195,6 +232,7 @@ function DrawerDescription({ className, ...props }: DrawerDescriptionProps) {
 // =============================================================================
 export {
   Drawer,
+  DrawerBody,
   DrawerClose,
   DrawerContent,
   DrawerDescription,

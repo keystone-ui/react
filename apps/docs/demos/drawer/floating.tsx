@@ -3,7 +3,12 @@
 import { Avatar, AvatarFallback } from "@keystoneui/react/avatar";
 import { Badge } from "@keystoneui/react/badge";
 import { Button } from "@keystoneui/react/button";
-import { Drawer, DrawerContent, DrawerTitle } from "@keystoneui/react/drawer";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerTitle,
+} from "@keystoneui/react/drawer";
 import { Separator } from "@keystoneui/react/separator";
 import { ExternalLink } from "lucide-react";
 import { useState } from "react";
@@ -143,7 +148,7 @@ export default function DrawerFloating() {
                 </Button>
               </div>
 
-              <div className="no-scrollbar flex flex-col gap-5 overflow-y-auto p-4">
+              <DrawerBody className="flex flex-col gap-5 py-4">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">Owner · {active.owner}</Badge>
                   <Badge variant={STATUS_VARIANT[active.status]}>
@@ -176,7 +181,7 @@ export default function DrawerFloating() {
                     <dd>{active.language}</dd>
                   </div>
                 </dl>
-              </div>
+              </DrawerBody>
             </>
           )}
         </DrawerContent>

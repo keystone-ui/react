@@ -4,6 +4,7 @@ import { Button } from "@keystoneui/react/button";
 import { Checkbox } from "@keystoneui/react/checkbox";
 import {
   Drawer,
+  DrawerBody,
   DrawerClose,
   DrawerContent,
   DrawerDescription,
@@ -177,7 +178,7 @@ export const ScrollableContent: Story = {
             Please review the following terms carefully.
           </DrawerDescription>
         </DrawerHeader>
-        <div className="no-scrollbar overflow-y-auto px-4">
+        <DrawerBody>
           {Array.from({ length: 10 }).map((_, index) => (
             <p className="mb-4 leading-normal" key={index}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
@@ -189,7 +190,7 @@ export const ScrollableContent: Story = {
               sunt in culpa qui officia deserunt mollit anim id est laborum.
             </p>
           ))}
-        </div>
+        </DrawerBody>
         <DrawerFooter>
           <Button>Accept</Button>
           <DrawerClose render={<Button variant="outline" />}>
@@ -203,7 +204,7 @@ export const ScrollableContent: Story = {
     docs: {
       description: {
         story:
-          "A right-side drawer with scrollable content. The header and footer remain fixed while the body scrolls.",
+          "A right-side drawer with scrollable content. `DrawerBody` scrolls while `DrawerHeader` and `DrawerFooter` stay pinned.",
       },
     },
   },
@@ -235,7 +236,7 @@ export const Sides: Story = {
                 screen.
               </DrawerDescription>
             </DrawerHeader>
-            <div className="no-scrollbar overflow-y-auto px-4">
+            <DrawerBody>
               {Array.from({ length: 6 }).map((_, index) => (
                 <p className="mb-4 leading-normal" key={index}>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
@@ -244,7 +245,7 @@ export const Sides: Story = {
                   laboris nisi ut aliquip ex ea commodo consequat.
                 </p>
               ))}
-            </div>
+            </DrawerBody>
             <DrawerFooter>
               <Button>Submit</Button>
               <DrawerClose render={<Button variant="outline" />}>
@@ -1247,7 +1248,7 @@ function FloatingDrawerDemo() {
                 </Button>
               </div>
 
-              <div className="no-scrollbar flex flex-col gap-5 overflow-y-auto p-4">
+              <DrawerBody className="flex flex-col gap-5 py-4">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">Owner · {active.owner}</Badge>
                   <Badge variant={FLOATING_STATUS_VARIANT[active.status]}>
@@ -1280,7 +1281,7 @@ function FloatingDrawerDemo() {
                     <dd>{active.language}</dd>
                   </div>
                 </dl>
-              </div>
+              </DrawerBody>
             </>
           )}
         </DrawerContent>
