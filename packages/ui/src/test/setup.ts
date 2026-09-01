@@ -21,6 +21,45 @@ if (typeof globalThis.ResizeObserver === "undefined") {
   } as unknown as typeof globalThis.ResizeObserver;
 }
 
+// Polyfill IntersectionObserver for jsdom (embla-carousel tracks which slides
+// are in view with one).
+if (typeof globalThis.IntersectionObserver === "undefined") {
+  globalThis.IntersectionObserver = class IntersectionObserver {
+    readonly root = null;
+    readonly rootMargin = "";
+    readonly thresholds: readonly number[] = [];
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+    takeRecords() {
+      return [];
+    }
+  } as unknown as typeof globalThis.IntersectionObserver;
+}
+
+// Polyfill matchMedia for jsdom (embla-carousel resolves its `breakpoints`
+// option through media queries on mount and throws without it).
+if (typeof globalThis.matchMedia === "undefined") {
+  globalThis.matchMedia = ((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener() {
+      // no-op: nothing re-evaluates media queries in jsdom
+    },
+    removeEventListener() {
+      // no-op
+    },
+    addListener() {
+      // no-op: deprecated MediaQueryList API, kept for callers that use it
+    },
+    removeListener() {
+      // no-op
+    },
+    dispatchEvent: () => false,
+  })) as unknown as typeof globalThis.matchMedia;
+}
+
 // jsdom doesn't perform real image loads, so the `image.onload` callback used
 // by @base-ui/react 1.4's Avatar.Image (via useImageLoadingStatus) never
 // fires and the <img> element is never mounted. Stub Image so setting `src`
