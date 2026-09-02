@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { loadProjectConfig } from "./config.js";
+import { readPackageVersion } from "./package-version.js";
 import {
   auditChecklistTool,
   getAddCommandTool,
@@ -16,7 +17,7 @@ const config = loadProjectConfig();
 export const server = new McpServer(
   {
     name: "keystoneui",
-    version: "0.1.0",
+    version: readPackageVersion(),
   },
   {
     capabilities: {

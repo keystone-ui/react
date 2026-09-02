@@ -1,9 +1,9 @@
 import { existsSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { resolve } from "node:path";
-import { fileURLToPath } from "node:url";
 
 import { loadProjectConfig } from "./config.js";
+import { readPackageVersion } from "./package-version.js";
 
 interface McpClientStatus {
   configPath: string;
@@ -32,18 +32,6 @@ interface InfoData {
 }
 
 const DEFAULT_DOCS_URL = "https://keystoneui.io";
-
-function readPackageVersion(): string {
-  try {
-    const pkgPath = fileURLToPath(new URL("../package.json", import.meta.url));
-    const pkg = JSON.parse(readFileSync(pkgPath, "utf-8")) as {
-      version?: string;
-    };
-    return pkg.version ?? "unknown";
-  } catch {
-    return "unknown";
-  }
-}
 
 function detectMcpClients(cwd: string): McpClientStatus[] {
   const candidates: { name: string; path: string }[] = [

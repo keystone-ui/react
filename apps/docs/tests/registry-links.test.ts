@@ -17,7 +17,13 @@ import { describe, expect, it } from "vitest";
 import { builtItemPath, REPO_ROOT } from "./registry-paths";
 
 /** Trees that document or generate registry install commands. */
-const SCANNED_ROOTS = ["apps/docs", "skills", "packages/keystoneui-mcp"];
+const SCANNED_ROOTS = [
+  "apps/docs",
+  "skills",
+  "packages/keystoneui-mcp",
+  // The published package README instructs registry URLs too.
+  "packages/ui",
+];
 
 const SCANNED_EXTENSIONS = [
   ".mdx",
@@ -154,23 +160,15 @@ describe("registry link integrity", () => {
     expect(uniqueItems.length).toBeGreaterThan(50);
   });
 
-  it("scans the docs, the agent skill and the MCP server", () => {
+  it("scans every tree that instructs a registry URL", () => {
     const roots = new Set(
-      references.map((r) => {
-        if (r.source.startsWith("apps/docs/")) {
-          return "apps/docs";
-        }
-        if (r.source.startsWith("skills/")) {
-          return "skills";
-        }
-        return "packages/keystoneui-mcp";
-      })
+      references.map(
+        (r) =>
+          SCANNED_ROOTS.find((root) => r.source.startsWith(`${root}/`)) ??
+          r.source
+      )
     );
-    expect([...roots].sort()).toEqual([
-      "apps/docs",
-      "packages/keystoneui-mcp",
-      "skills",
-    ]);
+    expect([...roots].sort()).toEqual([...SCANNED_ROOTS].sort());
   });
 
   it("still checks the theme URLs specifically", () => {

@@ -4,6 +4,19 @@
   "type": "module",
   "sideEffects": false,
   "license": "MIT",
+  "description": "Accessible React 19 component library built on Base UI and Tailwind CSS v4, distributed as an npm package and a shadcn-compatible registry.",
+  "homepage": "https://keystoneui.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keystone-ui/react.git",
+    "directory": "packages/ui"
+  },
+  "bugs": {
+    "url": "https://github.com/keystone-ui/react/issues"
+  },
+  "engines": {
+    "node": ">=22"
+  },
   "files": [
     "dist",
     "src",
