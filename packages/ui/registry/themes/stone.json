@@ -1,7 +1,9 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-  "name": "keystone-stone",
+  "name": "themes/stone",
   "type": "registry:theme",
+  "title": "Stone",
+  "description": "Stone gray scale for structural tokens — slightly warm.",
   "cssVars": {
     "light": {
       "background": "oklch(1 0 0)",

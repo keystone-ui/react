@@ -49,10 +49,30 @@ jobs:
       - name: Unit tests
         run: pnpm test --filter=@keystoneui/react
 
+      # `version` must be set explicitly. Without it the action runs a bare
+      # `changeset version`, which skips scripts/sync-unreleased.mjs and
+      # scripts/rotate-changelog.mjs -- so the docs changelog is never rotated
+      # into a dated entry and apps/docs/content/changelog/unreleased.mdx keeps
+      # accumulating. `pnpm version-packages` chains all three.
+      #
+      # `version` also has to run before `publish` for the npm dist-tag to be
+      # right. @changesets/cli picks the tag with:
+      #
+      #   if (preState !== undefined && pkgInfo.publishedState !== "only-pre")
+      #     return preState.tag;   // "beta"
+      #   return "latest";
+      #
+      # It tests for the mere *existence* of .changeset/pre.json, not for
+      # mode === "pre". `changeset pre exit` only rewrites the file to
+      # mode: "exit"; it is `changeset version` that deletes it. So publishing
+      # between those two steps still lands on @beta. The action's two-phase
+      # flow (version PR, then publish once no changesets remain) keeps that
+      # order correct.
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
         with:
+          version: pnpm version-packages
           publish: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

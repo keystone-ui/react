@@ -1,7 +1,7 @@
 ---
-date: "2026-09-01"
+date: "2026-09-02"
 description: "What's coming in the next release"
-excerpt: "6 changes queued for the next release."
+excerpt: "7 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -39,6 +39,21 @@ Other notes:
 The arrows are absolutely positioned with `top-1/2` against the `Carousel` root, which wraps the slides *and* anything rendered under them — so dot indicators and their margin dragged the arrows off the slide's midline. The root is now a single-column grid and the arrows take the first grid row (`CarouselContent`) as their containing block, so controls below the slides no longer shift them. The same fix straightens `CarouselNext` in vertical carousels, where it previously landed below the dots.
 
 `CarouselContent` must be the first child of `Carousel` for this to apply — the composition every example already uses. No public API change. If you worked around the old behavior with a manual offset such as `top-[calc(50%-1rem)]`, remove it.
+
+---
+
+### Publish the style and theme registry items, and fill in the npm metadata.
+
+`npx shadcn add https://keystoneui.io/r/default.json` and
+`https://keystoneui.io/r/themes/<name>.json` now resolve. The seven theme
+definitions in `packages/ui/registry/` were never wired into the registry
+build, so every documented theme-install URL 404'd. They are also included in
+the published tarball now (`files` gained `registry`), and `--ring` in the
+default and zinc themes was aligned to the canonical token set so installing
+the style and then re-applying the default theme no longer changes the design.
+
+The package also declares `repository`, `homepage`, `bugs` and
+`engines` (`node >=22`) for the first time.
 
 ---
 

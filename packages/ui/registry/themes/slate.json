@@ -1,7 +1,9 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-  "name": "keystone-slate",
+  "name": "themes/slate",
   "type": "registry:theme",
+  "title": "Slate",
+  "description": "Slate gray scale for structural tokens — slightly cool/blue.",
   "cssVars": {
     "light": {
       "background": "oklch(1 0 0)",

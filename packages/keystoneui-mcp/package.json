@@ -4,6 +4,18 @@
   "description": "MCP server and CLI for Keystone UI — lets AI agents and shell users discover, search, view, and install components, blocks, and named examples.",
   "type": "module",
   "license": "MIT",
+  "homepage": "https://keystoneui.io/docs/agents/mcp-server",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keystone-ui/react.git",
+    "directory": "packages/keystoneui-mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/keystone-ui/react/issues"
+  },
+  "engines": {
+    "node": ">=22"
+  },
   "keywords": [
     "keystoneui",
     "mcp",

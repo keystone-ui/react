@@ -2,6 +2,8 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "default",
   "type": "registry:style",
+  "title": "Keystone UI",
+  "description": "Full Keystone UI setup: base.css import, dark mode variant, Tailwind theme registration, default color tokens and base layer defaults.",
   "dependencies": ["@keystoneui/react"],
   "css": {
     "@import \"@keystoneui/react/base.css\"": {},

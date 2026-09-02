@@ -1,7 +1,9 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-  "name": "keystone-gray",
+  "name": "themes/gray",
   "type": "registry:theme",
+  "title": "Gray",
+  "description": "Gray scale for structural tokens — neutral with a blue cast.",
   "cssVars": {
     "light": {
       "background": "oklch(1 0 0)",
