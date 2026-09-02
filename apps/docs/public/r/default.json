@@ -1,36 +1,11 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "default",
-  "type": "registry:style",
   "title": "Keystone UI",
   "description": "Full Keystone UI setup: base.css import, dark mode variant, Tailwind theme registration, default color tokens and base layer defaults.",
-  "dependencies": ["@keystoneui/react"],
-  "css": {
-    "@import \"@keystoneui/react/base.css\"": {},
-    "@custom-variant dark (&:is(.dark *))": {},
-    "@layer base": {
-      "*": {
-        "@apply": "border-border outline-ring/50"
-      },
-      "body": {
-        "@apply": "bg-background text-foreground"
-      },
-      "pre::-webkit-scrollbar": {
-        "width": "5px"
-      },
-      "pre::-webkit-scrollbar-track": {
-        "background": "transparent"
-      },
-      "pre::-webkit-scrollbar-thumb": {
-        "background": "var(--border)",
-        "border-radius": "5px"
-      },
-      "pre": {
-        "scrollbar-width": "thin",
-        "scrollbar-color": "var(--border) transparent"
-      }
-    }
-  },
+  "dependencies": [
+    "@keystoneui/react"
+  ],
   "cssVars": {
     "theme": {
       "color-background": "var(--background)",
@@ -118,5 +93,32 @@
       "skeleton-shimmer": "oklch(1 0 0 / 0.1)",
       "radius": "0.625rem"
     }
-  }
+  },
+  "css": {
+    "@import \"@keystoneui/react/base.css\"": {},
+    "@custom-variant dark (&:is(.dark *))": {},
+    "@layer base": {
+      "*": {
+        "@apply": "border-border outline-ring/50"
+      },
+      "body": {
+        "@apply": "bg-background text-foreground"
+      },
+      "pre::-webkit-scrollbar": {
+        "width": "5px"
+      },
+      "pre::-webkit-scrollbar-track": {
+        "background": "transparent"
+      },
+      "pre::-webkit-scrollbar-thumb": {
+        "background": "var(--border)",
+        "border-radius": "5px"
+      },
+      "pre": {
+        "scrollbar-width": "thin",
+        "scrollbar-color": "var(--border) transparent"
+      }
+    }
+  },
+  "type": "registry:style"
 }

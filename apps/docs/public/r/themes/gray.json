@@ -1,7 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "themes/gray",
-  "type": "registry:theme",
   "title": "Gray",
   "description": "Gray scale for structural tokens — neutral with a blue cast.",
   "cssVars": {
@@ -59,5 +58,6 @@
       "skeleton-shimmer": "oklch(1 0 0 / 0.1)",
       "radius": "0.625rem"
     }
-  }
+  },
+  "type": "registry:theme"
 }

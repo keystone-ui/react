@@ -1,69 +1,9 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-  "name": "default",
-  "type": "registry:style",
-  "title": "Keystone UI",
-  "description": "Full Keystone UI setup: base.css import, dark mode variant, Tailwind theme registration, default color tokens and base layer defaults.",
-  "dependencies": ["@keystoneui/react"],
-  "css": {
-    "@import \"@keystoneui/react/base.css\"": {},
-    "@custom-variant dark (&:is(.dark *))": {},
-    "@layer base": {
-      "*": {
-        "@apply": "border-border outline-ring/50"
-      },
-      "body": {
-        "@apply": "bg-background text-foreground"
-      },
-      "pre::-webkit-scrollbar": {
-        "width": "5px"
-      },
-      "pre::-webkit-scrollbar-track": {
-        "background": "transparent"
-      },
-      "pre::-webkit-scrollbar-thumb": {
-        "background": "var(--border)",
-        "border-radius": "5px"
-      },
-      "pre": {
-        "scrollbar-width": "thin",
-        "scrollbar-color": "var(--border) transparent"
-      }
-    }
-  },
+  "name": "themes/zinc",
+  "title": "Zinc",
+  "description": "Zinc gray scale for structural tokens. The Keystone default.",
   "cssVars": {
-    "theme": {
-      "color-background": "var(--background)",
-      "color-foreground": "var(--foreground)",
-      "color-card": "var(--card)",
-      "color-card-foreground": "var(--card-foreground)",
-      "color-popover": "var(--popover)",
-      "color-popover-foreground": "var(--popover-foreground)",
-      "color-primary": "var(--primary)",
-      "color-primary-foreground": "var(--primary-foreground)",
-      "color-secondary": "var(--secondary)",
-      "color-secondary-hover": "var(--secondary-hover)",
-      "color-secondary-foreground": "var(--secondary-foreground)",
-      "color-muted": "var(--muted)",
-      "color-muted-foreground": "var(--muted-foreground)",
-      "color-accent": "var(--accent)",
-      "color-accent-foreground": "var(--accent-foreground)",
-      "color-destructive": "var(--destructive)",
-      "color-destructive-foreground": "var(--destructive-foreground)",
-      "color-border": "var(--border)",
-      "color-border-muted": "var(--border-muted)",
-      "color-popup-ring": "var(--popup-ring)",
-      "color-input": "var(--input)",
-      "color-input-bg": "var(--input-bg)",
-      "color-ring": "var(--ring)",
-      "radius-sm": "calc(var(--radius) - 4px)",
-      "radius-md": "calc(var(--radius) - 2px)",
-      "radius-lg": "var(--radius)",
-      "radius-xl": "calc(var(--radius) + 4px)",
-      "radius-2xl": "calc(var(--radius) + 8px)",
-      "radius-3xl": "calc(var(--radius) + 12px)",
-      "radius-4xl": "calc(var(--radius) + 16px)"
-    },
     "light": {
       "background": "oklch(1 0 0)",
       "foreground": "oklch(0.141 0.005 285.823)",
@@ -118,5 +58,6 @@
       "skeleton-shimmer": "oklch(1 0 0 / 0.1)",
       "radius": "0.625rem"
     }
-  }
+  },
+  "type": "registry:theme"
 }

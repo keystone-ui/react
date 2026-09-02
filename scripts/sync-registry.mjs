@@ -10,13 +10,24 @@
  * Reads:
  *   - packages/ui/src/_registry.ts        (component metadata)
  *   - apps/docs/content/docs/components/  (MDX descriptions)
+ *   - packages/ui/registry/default.json   (registry:style -- full theme setup)
+ *   - packages/ui/registry/themes/*.json  (registry:theme -- color palettes)
  *   - registry.json                       (existing blocks)
  *
  * Writes:
- *   - registry.json                       (merged: UI components + blocks)
+ *   - registry.json                       (merged: style + themes + UI components
+ *                                          + blocks + examples)
+ *   - apps/docs/public/r/themes/          (created if missing -- see note in
+ *                                          ensureNestedOutputDirs)
  */
 
-import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import {
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { join } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
@@ -24,6 +35,12 @@ const REGISTRY_TS = join(ROOT, "packages/ui/src/_registry.ts");
 const MDX_DIR = join(ROOT, "apps/docs/content/docs/components");
 const DEMOS_DIR = join(ROOT, "apps/docs/demos");
 const REGISTRY_JSON = join(ROOT, "registry.json");
+const STYLE_JSON = join(ROOT, "packages/ui/registry/default.json");
+const THEMES_DIR = join(ROOT, "packages/ui/registry/themes");
+const BUILD_OUTPUT_DIR = join(ROOT, "apps/docs/public/r");
+
+/** Item types owned by packages/ui/registry/ and regenerated on every sync. */
+const THEME_ITEM_TYPES = new Set(["registry:style", "registry:theme"]);
 
 function parseRegistryTs() {
   const content = readFileSync(REGISTRY_TS, "utf-8");
@@ -227,6 +244,56 @@ function buildExampleItems(uiNames) {
   return buildComponentExampleItems(componentDirs, knownComponents);
 }
 
+function buildThemeItems() {
+  const items = [];
+
+  // registry:style -- the full setup item, served at /r/default.json.
+  const style = JSON.parse(readFileSync(STYLE_JSON, "utf-8"));
+  items.push(style);
+
+  // registry:theme -- one palette per file, served at /r/themes/<name>.json.
+  // The item `name` carries the `themes/` prefix because `shadcn build` writes
+  // each item to `<outputDir>/<item.name>.json`, so the name *is* the URL path.
+  const themeFiles = readdirSync(THEMES_DIR)
+    .filter((f) => f.endsWith(".json"))
+    .sort();
+
+  for (const file of themeFiles) {
+    const theme = JSON.parse(readFileSync(join(THEMES_DIR, file), "utf-8"));
+    const expected = `themes/${file.replace(/\.json$/, "")}`;
+    if (theme.name !== expected) {
+      throw new Error(
+        `${join(THEMES_DIR, file)}: item name is "${theme.name}" but must be ` +
+          `"${expected}" so that \`shadcn build\` emits it at ` +
+          `apps/docs/public/r/${expected}.json (the URL the docs instruct).`
+      );
+    }
+    items.push(theme);
+  }
+
+  return items;
+}
+
+/**
+ * `shadcn build` writes each item with a plain `fs.writeFile` to
+ * `<outputDir>/<item.name>.json` and does NOT create parent directories, so a
+ * slash-bearing item name (e.g. `themes/zinc`) fails with ENOENT unless the
+ * subdirectory already exists. Create the ones our item names imply.
+ */
+function ensureNestedOutputDirs(items) {
+  const dirs = new Set();
+  for (const item of items) {
+    const slash = item.name.lastIndexOf("/");
+    if (slash > 0) {
+      dirs.add(item.name.slice(0, slash));
+    }
+  }
+  for (const dir of [...dirs].sort()) {
+    mkdirSync(join(BUILD_OUTPUT_DIR, dir), { recursive: true });
+  }
+  return [...dirs].sort();
+}
+
 function warnOnUncategorizedBlocks(blockItems) {
   const uncategorized = blockItems
     .filter((i) => i.type === "registry:block")
@@ -251,9 +318,17 @@ const mdxMeta = parseMdxDescriptions();
 const uiItems = buildUiItems(registryEntries, mdxMeta);
 const exampleItems = buildExampleItems(registryEntries.map((e) => e.name));
 
+const themeItems = buildThemeItems();
+
 const existing = JSON.parse(readFileSync(REGISTRY_JSON, "utf-8"));
+// Blocks are hand-maintained in registry.json and passed through. Style/theme
+// items are owned by packages/ui/registry/ and regenerated here, so drop any
+// stale copies before merging.
 const blockItems = existing.items.filter(
-  (i) => i.type !== "registry:ui" && i.type !== "registry:example"
+  (i) =>
+    i.type !== "registry:ui" &&
+    i.type !== "registry:example" &&
+    !THEME_ITEM_TYPES.has(i.type)
 );
 
 warnOnUncategorizedBlocks(blockItems);
@@ -262,11 +337,18 @@ const merged = {
   $schema: existing.$schema,
   name: existing.name,
   homepage: existing.homepage,
-  items: [...uiItems, ...blockItems, ...exampleItems],
+  items: [...themeItems, ...uiItems, ...blockItems, ...exampleItems],
 };
 
 writeFileSync(REGISTRY_JSON, JSON.stringify(merged, null, 2) + "\n");
 
+const nestedDirs = ensureNestedOutputDirs(merged.items);
+
 console.log(
-  `Synced registry.json: ${uiItems.length} UI components + ${blockItems.length} blocks + ${exampleItems.length} examples = ${merged.items.length} total items`
+  `Synced registry.json: ${themeItems.length} style/theme + ${uiItems.length} UI components + ${blockItems.length} blocks + ${exampleItems.length} examples = ${merged.items.length} total items`
 );
+if (nestedDirs.length > 0) {
+  console.log(
+    `Ensured nested build output dir(s): ${nestedDirs.map((d) => `apps/docs/public/r/${d}`).join(", ")}`
+  );
+}

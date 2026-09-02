@@ -1,7 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "themes/slate",
-  "type": "registry:theme",
   "title": "Slate",
   "description": "Slate gray scale for structural tokens — slightly cool/blue.",
   "cssVars": {
@@ -59,5 +58,6 @@
       "skeleton-shimmer": "oklch(1 0 0 / 0.1)",
       "radius": "0.625rem"
     }
-  }
+  },
+  "type": "registry:theme"
 }
