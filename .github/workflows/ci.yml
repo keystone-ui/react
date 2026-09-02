@@ -65,6 +65,12 @@ jobs:
       - name: Run unit tests
         run: pnpm test --filter=@keystoneui/react
 
+      # @keystoneui/docs holds the registry integrity/link tests and the demo
+      # loader tests. Neither ran in CI before, so a broken registry URL or a
+      # registry.json that had drifted from apps/docs/public/r/ shipped green.
+      - name: Run docs and registry tests
+        run: pnpm test --filter=@keystoneui/docs
+
   test-storybook:
     name: Storybook Tests
     runs-on: ubuntu-latest
