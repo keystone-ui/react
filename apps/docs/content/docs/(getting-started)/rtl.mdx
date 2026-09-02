@@ -1,0 +1,85 @@
+---
+title: RTL
+description: The current state of right-to-left support in Keystone UI, and what you need to do yourself.
+---
+
+Keystone UI does **not** have systematic right-to-left support yet. This page
+describes exactly what works today so you can judge whether the library fits an
+RTL product, rather than discovering the gaps after you have built on it.
+
+## Summary
+
+| Area | Status |
+| --- | --- |
+| Base UI keyboard nav and popup positioning | Works, but only if *you* render a `DirectionProvider` |
+| Keystone's own spacing and positioning CSS | Mostly physical, does **not** mirror |
+| Explicit `rtl:` handling in the library | One component (`calendar`) |
+| i18n / locale / message layer | None |
+| RTL tests or visual baselines | None |
+
+## What works
+
+The 28 components built on [Base UI](https://base-ui.com) inherit its
+direction-aware behavior: arrow-key navigation, popup side and alignment
+resolution, and slider/drawer axis handling. Base UI reads the reading direction
+from its own context, which defaults to `ltr`.
+
+To turn that on you must wrap your tree yourself. Keystone does not render this
+provider for you and does not re-export it:
+
+```tsx
+import { DirectionProvider } from "@base-ui/react/direction-provider";
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <div dir="rtl">
+      <DirectionProvider direction="rtl">{children}</DirectionProvider>
+    </div>
+  );
+}
+```
+
+`dir="rtl"` alone is not enough for the Base UI behaviors — the attribute drives
+CSS, the provider drives Base UI's JavaScript. You generally want both.
+
+## What does not work
+
+**Keystone's own styling is written with physical direction utilities.** The
+library source uses roughly 100 physical direction utilities (`pl-`, `pr-`,
+`left-`, `right-`, `ml-`, `mr-`) across 27 of its 54 components, against 3
+logical ones (`me-`, `-ms-`). Physical utilities do not respond to `dir`, so
+under `dir="rtl"` you should expect asymmetric padding, icon gutters, absolute
+offsets, and chevron placement to stay on their left-to-right side.
+
+The only component with explicit RTL handling is `calendar`, which flips the
+day-picker navigation chevrons with two `rtl:` variants. Nothing else in the
+library carries an `rtl:` or `ltr:` variant, and no component sets a `dir`
+attribute.
+
+**There is no i18n layer.** Keystone ships no locale plumbing, no message
+catalog, and no `Intl` formatting helpers. Date, number, and currency formatting
+in components such as `calendar` and `date-input` is the consumer's
+responsibility.
+
+**RTL is not covered by tests.** There are no RTL unit tests, no RTL Storybook
+stories, and no RTL visual regression baselines, so RTL rendering is not
+protected against regression.
+
+## Working around it today
+
+Until the library is converted to logical properties, the practical options are:
+
+- Override the affected utilities per component through the `className` prop.
+  Every component forwards `className` and merges it with `tailwind-merge`, so a
+  logical utility you pass in wins over the physical default.
+- Restrict RTL to layouts you compose yourself and keep Keystone components in
+  direction-neutral positions.
+- Set `dir="rtl"` plus `DirectionProvider` so that at least keyboard navigation
+  and popup positioning behave correctly, and accept the visual mirroring gaps.
+
+## Contributing
+
+Converting the library's physical direction utilities to logical ones
+(`pl-`/`pr-` to `ps-`/`pe-`, `ml-`/`mr-` to `ms-`/`me-`, `left-`/`right-` to
+`start-`/`end-`) is a well-scoped, high-value contribution. See
+[CONTRIBUTING.md](https://github.com/keystone-ui/react/blob/main/CONTRIBUTING.md).
