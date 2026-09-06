@@ -145,7 +145,7 @@
    producing a U-shaped pill path on every tab change. We don't run exit
    transitions on morphing panels, so dropping the leaving frame is safe. */
 [data-slot="tabs"]:has([data-slot="tabs-list"][data-morphing])
-  [role="tabpanel"][inert]:not([hidden]) {
+[role="tabpanel"][inert]:not([hidden]) {
   display: none;
 }
 
