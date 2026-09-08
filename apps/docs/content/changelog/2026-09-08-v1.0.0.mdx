@@ -1,0 +1,198 @@
+---
+version: "1.0.0"
+date: "2026-09-08"
+description: "What's coming in the next release"
+excerpt: "10 changes queued for the next release."
+---
+
+## Minor changes
+
+### Upgrade `@base-ui/react` 1.4.1 → 1.7.0.
+
+**Public API change (minor):** `InputOTP`'s `sanitizeValue` prop is now `normalizeValue`. Base UI renamed it upstream (#4717) and `InputOTP` spreads props straight through, so a `sanitizeValue` callback will be silently ignored rather than raising an error — rename it at the call site.
+
+```diff
+- <InputOTP sanitizeValue={fn} …>
++ <InputOTP normalizeValue={fn} …>
+```
+
+Other notes:
+
+- `InputOTP` is no longer built on a preview API. Base UI un-previewed OTP Field in 1.6.0 (`OTPFieldPreview` → `OTPField`, #5029); no keystoneui API changes as a result, since the alias was internal. With Drawer un-previewed back in 1.3.0, this library now consumes zero preview APIs.
+- Across the three releases Base UI added, removed, or renamed **no** components — the exported surface is identical to 1.4.1. These were the only two breaking changes.
+- Accessibility output changed in a few places upstream, all corrections rather than regressions: the `region` role moved off `Accordion.Root` to the panel where APG prescribes it (#4961), redundant ARIA attributes were dropped from `Radio.Root` (#5213), an invalid `aria-orientation` was dropped from `ToggleGroup`'s `role="group"` (#4628), and listbox separator semantics were fixed in `Select` / `Combobox` (#5399). If you assert on any of these in tests, expect to update them.
+- Form behaviour: `CheckboxGroup` and `RadioGroup` now submit values matching native form submission (#5218, #5238), and `disabled` cascades from Root to Item in `Menu` / `Select` / `Combobox` (#5363, #5365).
+- `input-otp` was removed from the `input-otp` registry entry's dependencies — that npm package stopped being used when the component moved to Base UI, so shadcn-CLI installs were pulling an unused package and missing `@base-ui/react`.
+
+---
+
+### Make `Drawer` content scrollable by default and add `DrawerBody`.
+
+- **Fix:** `[data-slot=drawer-inner-content]` was `overflow-hidden`, so a plain `DrawerHeader` + content + `DrawerFooter` composition silently clipped anything past the popup's `max-h-[80vh]` cap, with no scroll affordance. It is now a Y-axis scroller (`overflow-y-auto overflow-x-hidden overscroll-contain`). The X axis is pinned to `hidden` deliberately: `overflow-y: auto` alone promotes the default `overflow-x: visible` to `auto` per CSS Overflow L3, which paints a phantom gutter on macOS "Show scrollbars: Always" and makes Base UI read a bogus cross-axis scroll container, swallowing swipe-to-dismiss on diagonal touch drags. This also repairs a second defect: Base UI only recognises `overflow-y: auto | scroll` as a scroll region, so with `overflow-hidden` a downward drag on clipped content dismissed the sheet instead of scrolling it.
+- Drawers that already nest their own `overflow-y-auto` child are unaffected. That child's overflow is not `visible`, so its automatic minimum size is `0`, it shrinks to absorb the overflow, and the outer region never scrolls.
+- **New:** `DrawerBody` (`data-slot="drawer-body"`) — the scrolling middle region, making the pinned-header / scrolling-body / pinned-footer pattern a first-class API instead of a hand-rolled `<div className="overflow-y-auto px-4">`. Horizontal padding only (`px-4`), so it never doubles against `DrawerHeader` / `DrawerFooter`'s `p-4`.
+- `DrawerHeader` and `DrawerFooter` now carry `shrink-0` so they stay pinned alongside `DrawerBody`. `DrawerFooter` keeps `mt-auto` for compositions that don't use `DrawerBody`.
+
+---
+
+### `toast`: a bare message is now the **description**, and `title` is opt-in.
+
+The component has always been built on Base UI, but its API was shaped after
+Sonner: the first argument became the `title`, and `toast.promise` re-mapped
+Base UI's string shortcut from `description` back to `title`. Base UI treats
+`description` as the canonical message field — `Toast.Description` is
+documented as "the default message for the toast when no title is provided",
+and a string shortcut resolves to it. Following that makes the default toast a
+single muted line, and makes `title` mean what it looks like: an emphasized
+line above the message.
+
+```tsx
+// A bare message is the description — one muted line, no <h2> rendered
+toast("Event has been created.");
+toast("Saved", { duration: 10_000 });
+
+// Add a title for the emphasized line above it
+toast({
+  title: "Event created",
+  description: "Sunday, December 3 at 9:00 AM",
+  action: { label: "Undo", onClick: undo },
+});
+```
+
+Both forms work on `toast.success`, `toast.error`, `toast.warning`,
+`toast.info` and `toast.loading`.
+
+**Breaking:** `description` moved off `ToastOptions` onto the new `ToastInput`,
+so text passed in the options position is now a type error. Migrate to the
+object form:
+
+```diff
+-toast("Event has been created", { description: "Monday, January 3rd at 6:00pm" })
++toast({
++  title: "Event has been created",
++  description: "Monday, January 3rd at 6:00pm",
++})
+```
+
+Single-argument calls need no change, but they now render as the muted
+description rather than an emphasized title. `ToastOptions` is still exported
+and still carries every behavior field; `ToastInput` and `ToastPromiseOptions`
+are newly exported.
+
+Also in this release:
+
+- Each `toast.promise` state accepts exactly what `toast()` accepts, so
+  `duration`, `action` and `cancel` work there too, and non-string nodes
+  (`loading: <Spinner />`) resolve correctly instead of producing an empty
+  toast.
+- `toast.dismiss()` called without an id now closes every toast, matching Base
+  UI's `close(id?)`.
+- A description-only toast is named from its description text via `aria-label`.
+  Base UI names the root through the title, which such a toast doesn't render,
+  leaving the `role="dialog"` without an accessible name.
+
+---
+
+### `Toast`: move the close button into the content row and fix the phantom height.
+
+The close button carried both `absolute` and `relative` in one `cn()` call.
+Those are the same tailwind-merge conflict group, so the later `relative` won
+and silently stripped `absolute top-0 right-0` — dropping the button into
+normal flow below the content, where it rendered at the bottom-left corner.
+Base UI measures the root's natural height to publish `--toast-height`, so
+that stray button was also baked into the card as ~20px of empty space beneath
+the text.
+
+The close button is now an inline flex child at the end of the row, always
+visible, and sized to line up with the action button. A title-only toast goes
+from 74px to 54px, and title + description from 82px to 66px.
+
+Alongside it:
+
+- Row children are vertically centred. The text block previously stretched to
+  the row height (set by the close button) and left the title hanging at its
+  top edge — 12px above it, 21px below.
+- The leading semantic icon is centred rather than pinned to the first line.
+- The description is `text-sm` (14px), matching every other description in the
+  library; it was the lone `text-xs`.
+- Semantic types colour only their icon. The title and description stay
+  neutral, so the icon carries the signal instead of the type tinting the text.
+- Dropped the `max-sm:` wrap, so the text column and the button column hold at
+  every width: the message wraps short of the buttons instead of one of them
+  dropping to a second row.
+
+Docs fix: the `toast()` reference listed `duration` as defaulting to `4000`
+(it is `5000`) and documented a `richColors` prop on `Toaster` that has never
+existed — semantic colours are always applied.
+
+## Patch changes
+
+### Fix `CarouselPrevious`/`CarouselNext` sitting below the middle of the slides when `CarouselDots` or `CarouselCounter` is used.
+
+The arrows are absolutely positioned with `top-1/2` against the `Carousel` root, which wraps the slides *and* anything rendered under them — so dot indicators and their margin dragged the arrows off the slide's midline. The root is now a single-column grid and the arrows take the first grid row (`CarouselContent`) as their containing block, so controls below the slides no longer shift them. The same fix straightens `CarouselNext` in vertical carousels, where it previously landed below the dots.
+
+`CarouselContent` must be the first child of `Carousel` for this to apply — the composition every example already uses. No public API change. If you worked around the old behavior with a manual offset such as `top-[calc(50%-1rem)]`, remove it.
+
+---
+
+### Publish the style and theme registry items, and fill in the npm metadata.
+
+`npx shadcn add https://keystoneui.io/r/default.json` and
+`https://keystoneui.io/r/themes/<name>.json` now resolve. The seven theme
+definitions in `packages/ui/registry/` were never wired into the registry
+build, so every documented theme-install URL 404'd. They are also included in
+the published tarball now (`files` gained `registry`), and `--ring` in the
+default and zinc themes was aligned to the canonical token set so installing
+the style and then re-applying the default theme no longer changes the design.
+
+The package also declares `repository`, `homepage`, `bugs` and
+`engines` (`node >=22`) for the first time.
+
+---
+
+### Fix phantom vertical scrollbar inside `SelectionBar`.
+
+The bar's inner container set only `overflow-x: auto`, which per CSS Overflow L3 promotes the default `overflow-y: visible` to `auto` — a hidden vertical scroll context that renders a gutter on macOS "Show scrollbars: Always". Pin the Y axis to `hidden`. No public API change.
+
+---
+
+### Fix phantom vertical scrollbar inside `Table`.
+
+The `[data-slot=table-container]` wrapper set only `overflow-x: auto`. Per CSS Overflow L3, that promotes the default `overflow-y: visible` to `auto`, which on macOS "Show scrollbars: Always" renders a permanent vertical gutter inside every table card. Pin the Y axis to `hidden` so the implicit promotion can't recur. No public API change.
+
+---
+
+### `Toast`: fix the top edge disappearing when toasts stack.
+
+The root carried `bg-clip-padding`, which stops a toast's own background
+painting under its 1px border. The border tokens are semi-transparent, so the
+border then composited against whatever sat *behind* the element rather than
+against the toast's own surface. A lone toast was fine — the backdrop was the
+page — but stacked toasts underlap each other, so the frontmost toast's top
+edge rendered against the neighbouring card and washed out, leaving a card
+that looked open at the top. The border survived only in the ~18px at each end
+that the (scaled-down) card behind didn't cover, which read as the edge being
+cropped.
+
+Dropping `bg-clip-padding` paints the background under the border, so all four
+edges render identically regardless of backdrop. The root also moves from
+`border-border-muted` to `border-border`, matching shadcn's Base UI toast,
+which uses neither `bg-clip-padding` nor the muted token. Measured on the
+rendered pixels, the top edge goes from 5 to 23 levels of separation against a
+card interior of 24 — the side edges measure 15, so it is no longer the weakest
+edge on the card.
+
+---
+
+### Fix `useMediaQuery` painting the wrong branch for a frame.
+
+The hook was `useState(false)` + `useEffect`, so it always returned `false` on the first render and corrected itself in an effect — which runs *after paint*. Anything branching on a `min-width` query therefore rendered its small-viewport layout for a frame on desktop before swapping: the `Drawer` + `Modal` responsive-dialog pattern would mount the Drawer, then replace it with the Modal.
+
+It is now backed by `useSyncExternalStore`, so the value is already correct on the first client render, and it is tear-free under concurrent rendering. Same signature, no API change.
+
+Two follow-on effects worth noting:
+
+- `useMediaQuery` no longer throws where `matchMedia` is absent — it returns `false` instead. The old implementation called bare `matchMedia(query)` inside its effect and crashed in environments without it.
+- Server renders still report `false`, since the true value cannot be known without a viewport. React reads `getServerSnapshot` during hydration and reconciles afterwards, so there is no hydration mismatch warning. A layout that must be correct in the first server-rendered paint still belongs in CSS.
+
+Adds the hook's first test file, covering first-render correctness, `change` subscription and updates, cleanup on unmount, re-subscription when the query changes, and the missing-`matchMedia` fallback.
