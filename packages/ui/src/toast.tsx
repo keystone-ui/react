@@ -458,7 +458,7 @@ function ToastItem({
         className={cn(
           TOAST_STACK_BASE,
           positionClasses,
-          "pointer-events-auto select-none bg-clip-padding"
+          "pointer-events-auto select-none"
         )}
         swipeDirection={data.dismissible === false ? [] : ["down", "right"]}
         toast={t}
@@ -490,7 +490,14 @@ function ToastItem({
         // Layout
         "pointer-events-auto",
         // Appearance
-        "select-none rounded-lg border border-border-muted bg-popover bg-clip-padding text-popover-foreground shadow-lg",
+        // No `bg-clip-padding`: the border tokens are semi-transparent, so
+        // clipping the background to the padding box makes the border
+        // composite over whatever is *behind* the toast. Stacked toasts
+        // underlap each other, so the top edge would render against the
+        // neighbouring card instead of the toast's own surface and wash out.
+        // Painting the background under the border keeps all four edges
+        // identical regardless of backdrop.
+        "select-none rounded-lg border border-border bg-popover text-popover-foreground shadow-lg",
         // Semantic type colors
         typeClass
       )}
