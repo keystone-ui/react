@@ -1,6 +1,6 @@
 {
   "name": "@keystoneui/mcp",
-  "version": "0.2.0-beta.1",
+  "version": "0.2.0",
   "description": "MCP server and CLI for Keystone UI — lets AI agents and shell users discover, search, view, and install components, blocks, and named examples.",
   "type": "module",
   "license": "MIT",
