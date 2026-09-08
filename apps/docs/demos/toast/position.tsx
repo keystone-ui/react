@@ -13,7 +13,8 @@ export default function ToastPosition() {
         </p>
         <Button
           onClick={() =>
-            toast("Toast notification", {
+            toast({
+              title: "Toast notification",
               description: "This toast appears at the configured position.",
             })
           }

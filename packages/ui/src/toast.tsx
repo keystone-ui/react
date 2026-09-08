@@ -41,6 +41,7 @@ interface ToastData {
   render?: (id: string) => ReactNode;
 }
 
+/** Behavior options — content lives on {@link ToastInput}. */
 interface ToastOptions {
   /** Primary action button */
   action?: ToastAction;
@@ -48,8 +49,6 @@ interface ToastOptions {
   cancel?: ToastAction;
   /** Show a close button on this specific toast */
   closeButton?: boolean;
-  /** Description text shown below the title */
-  description?: ReactNode;
   /** Whether the toast can be swiped away or closed. @default true */
   dismissible?: boolean;
   /** Duration in ms before auto-dismiss. `Infinity` keeps the toast open. */
@@ -60,6 +59,41 @@ interface ToastOptions {
   onAutoClose?: () => void;
   /** Callback when a toast is manually dismissed */
   onDismiss?: () => void;
+}
+
+/** A toast's full payload: content plus behavior. */
+interface ToastInput extends ToastOptions {
+  /**
+   * The toast message. This is the default content field — a bare
+   * `toast("message")` fills it, matching Base UI.
+   */
+  description?: ReactNode;
+  /** Emphasized line rendered above the description. Optional. */
+  title?: ReactNode;
+}
+
+/** A `toast.promise` state: a bare message, or the same input `toast()` takes. */
+type ToastPromiseState<T> =
+  | ReactNode
+  | ToastInput
+  | ((arg: T) => ReactNode | ToastInput);
+
+interface ToastPromiseOptions<T> {
+  error: ToastPromiseState<Error>;
+  loading: ReactNode | ToastInput;
+  success: ToastPromiseState<T>;
+}
+
+/**
+ * Two call forms:
+ * - `toast("message")` — the message becomes the **description**, the muted
+ *   single line. Base UI's own default-content rule.
+ * - `toast({ title, description, ... })` — full control; `title` adds the
+ *   emphasized line above.
+ */
+interface ToastFn {
+  (input: ToastInput): string;
+  (message: ReactNode, options?: ToastOptions): string;
 }
 
 // ---------------------------------------------------------------------------
@@ -85,9 +119,11 @@ function nodeToText(n: ReactNode): string {
 }
 
 /**
- * Content-length-aware default timeout: a three-word toast dismisses faster
- * than a forty-word one. Reading speed ≈ 250 WPM (~240 ms/word) + a fixed
+ * Content-length-aware timeout used when **updating** an existing toast (a new
+ * toast takes the `Toaster`'s flat `duration`). A three-word toast dismisses
+ * faster than a forty-word one: reading speed ≈ 250 WPM (~240 ms/word) plus a
  * grace window, clamped to [3000ms, 10000ms]. Explicit `duration` always wins.
+ * Non-text nodes count as zero words, so an element-only toast lands on MIN.
  */
 function readingTimeMs(nodes: ReactNode[]): number {
   const text = nodes.map(nodeToText).join(" ");
@@ -99,13 +135,14 @@ function readingTimeMs(nodes: ReactNode[]): number {
   return Math.min(MAX, Math.max(MIN, GRACE + words * MS_PER_WORD));
 }
 
-function createToast(
-  title: ReactNode,
-  options?: ToastOptions,
-  type?: string
-): string {
+/**
+ * Build the Base UI toast payload from our vocabulary (`duration` → `timeout`,
+ * `action` → `actionProps`, `cancel`/`dismissible`/`closeButton` → `data`).
+ */
+function toPayload(input: ToastInput, type?: string) {
   const {
     id,
+    title,
     description,
     duration,
     action,
@@ -114,7 +151,7 @@ function createToast(
     closeButton,
     onAutoClose,
     onDismiss,
-  } = options ?? {};
+  } = input;
 
   // Resolve timeout: loading toasts don't auto-dismiss by default.
   // When updating an existing toast (id provided), reset to a content-aware
@@ -142,9 +179,15 @@ function createToast(
     data: { cancel, dismissible, closeButton } satisfies ToastData,
   };
 
-  if (id) {
-    toastManager.update(id, payload);
-    return id;
+  return payload;
+}
+
+function createToast(input: ToastInput, type?: string): string {
+  const payload = toPayload(input, type);
+
+  if (input.id) {
+    toastManager.update(input.id, payload);
+    return input.id;
   }
 
   return toastManager.add(payload);
@@ -152,81 +195,90 @@ function createToast(
 
 // --- Main callable + attached methods ---
 
-function toastFn(title: ReactNode, options?: ToastOptions): string {
-  return createToast(title, options);
+/**
+ * Distinguishes `toast({ ... })` from `toast(message)`. Most `ReactNode`s are
+ * objects too, so each kind has to be excluded explicitly: elements, portals
+ * and other `$$typeof`-tagged nodes, iterables (arrays included), and
+ * thenables (`Promise<ReactNode>`). Anything left is treated as our options
+ * bag — which also means a typo'd key surfaces as a type error rather than
+ * React's "Objects are not valid as a React child".
+ *
+ * Note: this relies on `ToastInput` sharing no keys with `ReactElement`
+ * (`type`/`props`/`key`) — adding such a field would break overload
+ * resolution for `toast(<El />)`.
+ */
+function isToastInput(value: unknown): value is ToastInput {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    !isValidElement(value) &&
+    !("$$typeof" in value) &&
+    !(Symbol.iterator in value) &&
+    typeof (value as { then?: unknown }).then !== "function"
+  );
 }
 
-toastFn.success = (title: ReactNode, options?: ToastOptions) =>
-  createToast(title, options, "success");
-
-toastFn.error = (title: ReactNode, options?: ToastOptions) =>
-  createToast(title, options, "error");
-
-toastFn.warning = (title: ReactNode, options?: ToastOptions) =>
-  createToast(title, options, "warning");
-
-toastFn.info = (title: ReactNode, options?: ToastOptions) =>
-  createToast(title, options, "info");
-
-toastFn.loading = (title: ReactNode, options?: ToastOptions) =>
-  createToast(title, options, "loading");
+function createToastFn(type?: string): ToastFn {
+  return ((
+    messageOrInput: ReactNode | ToastInput,
+    options?: ToastOptions
+  ): string =>
+    createToast(
+      isToastInput(messageOrInput)
+        ? messageOrInput
+        : { ...options, description: messageOrInput },
+      type
+    )) as ToastFn;
+}
 
 /**
  * Create a toast that tracks a promise through loading → success / error.
  *
- * String shortcuts are mapped to the toast **title** (matching Sonner's API).
- * Pass an object (`{ title, description, … }`) for richer control.
+ * Each state accepts whatever `toast()` accepts: a bare message becomes the
+ * **description**, or pass `{ title, description, action, ... }` for the full
+ * shape. States are normalized here rather than handed to Base UI raw, so our
+ * vocabulary (`duration`, `action`, `cancel`) works the same as everywhere
+ * else — and non-string nodes (`<Spinner />`) resolve correctly.
+ *
+ * `type` is not passed: Base UI overrides it per state
+ * (`loading` → `success`/`error`) after spreading what we return.
  */
-toastFn.promise = <T,>(
-  promise: Promise<T>,
-  options: {
-    loading: ReactNode | Record<string, unknown>;
-    success: ReactNode | ((data: T) => ReactNode) | Record<string, unknown>;
-    error: ReactNode | ((error: Error) => ReactNode) | Record<string, unknown>;
+function resolvePromiseState(state: ReactNode | ToastInput) {
+  return toPayload(isToastInput(state) ? state : { description: state });
+}
+
+function mapPromiseState<A>(state: ToastPromiseState<A>) {
+  if (typeof state === "function") {
+    return (arg: A) =>
+      resolvePromiseState((state as (a: A) => ReactNode | ToastInput)(arg));
   }
-): Promise<T> => {
-  // Map shorthand string / ReactNode values to `{ title }` so the toast
-  // shows the text as its title (Sonner compat — Base UI defaults to
-  // `description` for string shortcuts).
-  const mapOption = (
-    opt: ReactNode | ((arg: never) => ReactNode) | Record<string, unknown>
-  ): unknown => {
-    if (typeof opt === "function") {
-      return (arg: unknown) => {
-        const result = (opt as (a: unknown) => ReactNode)(arg);
-        if (
-          typeof result === "object" &&
-          result !== null &&
-          !isValidElement(result)
-        ) {
-          return result; // Already a config object
-        }
-        return { title: result };
-      };
-    }
-    if (typeof opt === "object" && opt !== null && !isValidElement(opt)) {
-      return opt; // Already a config object
-    }
-    return { title: opt };
-  };
+  return resolvePromiseState(state);
+}
 
-  return toastManager.promise(promise, {
-    loading: mapOption(options.loading),
-    success: mapOption(options.success),
-    error: mapOption(options.error),
+function promise<T>(
+  value: Promise<T>,
+  options: ToastPromiseOptions<T>
+): Promise<T> {
+  return toastManager.promise(value, {
+    error: mapPromiseState(options.error),
+    loading: resolvePromiseState(options.loading),
+    success: mapPromiseState(options.success),
   } as Parameters<typeof toastManager.promise>[1]);
-};
+}
 
-/** Close and remove a toast by its ID. */
-toastFn.dismiss = (id: string) => {
+/**
+ * Close and remove a toast by its ID. Called bare, closes every toast and
+ * clears their timers (Base UI's `close(id?)`).
+ */
+function dismiss(id?: string): void {
   toastManager.close(id);
-};
+}
 
 /** Create a fully custom toast with arbitrary JSX. */
-toastFn.custom = (
+function custom(
   render: (id: string) => ReactNode,
   options?: Pick<ToastOptions, "id" | "duration" | "dismissible">
-): string => {
+): string {
   const { id, duration, dismissible = true } = options ?? {};
 
   const payload = {
@@ -240,10 +292,22 @@ toastFn.custom = (
   }
 
   return toastManager.add(payload);
-};
+}
 
-/** Imperative toast API — call `toast("message")` or use typed helpers. */
-const toast = toastFn;
+/**
+ * Imperative toast API — `toast("message")` for a single muted line, or
+ * `toast({ title, description })` to add the emphasized line above it.
+ */
+const toast = Object.assign(createToastFn(), {
+  custom,
+  dismiss,
+  error: createToastFn("error"),
+  info: createToastFn("info"),
+  loading: createToastFn("loading"),
+  promise,
+  success: createToastFn("success"),
+  warning: createToastFn("warning"),
+});
 
 // ---------------------------------------------------------------------------
 // Icons
@@ -258,17 +322,17 @@ const TOAST_ICONS: Record<string, ReactNode> = {
 };
 
 // ---------------------------------------------------------------------------
-// Semantic color classes (icon + title only, matching Alert palette)
+// Semantic color classes (icon only — the title stays neutral)
 // ---------------------------------------------------------------------------
 
 const TYPE_CLASSES: Record<string, string> = {
   success:
-    "[&_[data-slot=toast-icon]]:text-green-600 dark:[&_[data-slot=toast-icon]]:text-green-500 [&_[data-slot=toast-title]]:text-green-600 dark:[&_[data-slot=toast-title]]:text-green-500",
+    "[&_[data-slot=toast-icon]]:text-green-600 dark:[&_[data-slot=toast-icon]]:text-green-500",
   error:
-    "[&_[data-slot=toast-icon]]:text-red-600 dark:[&_[data-slot=toast-icon]]:text-red-500 [&_[data-slot=toast-title]]:text-red-600 dark:[&_[data-slot=toast-title]]:text-red-500",
+    "[&_[data-slot=toast-icon]]:text-red-600 dark:[&_[data-slot=toast-icon]]:text-red-500",
   warning:
-    "[&_[data-slot=toast-icon]]:text-yellow-600 dark:[&_[data-slot=toast-icon]]:text-yellow-500 [&_[data-slot=toast-title]]:text-yellow-600 dark:[&_[data-slot=toast-title]]:text-yellow-500",
-  info: "[&_[data-slot=toast-icon]]:text-blue-600 dark:[&_[data-slot=toast-icon]]:text-blue-500 [&_[data-slot=toast-title]]:text-blue-600 dark:[&_[data-slot=toast-title]]:text-blue-500",
+    "[&_[data-slot=toast-icon]]:text-yellow-600 dark:[&_[data-slot=toast-icon]]:text-yellow-500",
+  info: "[&_[data-slot=toast-icon]]:text-blue-600 dark:[&_[data-slot=toast-icon]]:text-blue-500",
 };
 
 // ---------------------------------------------------------------------------
@@ -410,6 +474,11 @@ function ToastItem({
   const icon = t.type && t.type !== "default" ? TOAST_ICONS[t.type] : undefined;
   const typeClass = t.type ? TYPE_CLASSES[t.type] : undefined;
   const showCloseButton = data.closeButton ?? globalCloseButton ?? true;
+  // Base UI renders the root as role="dialog"/"alertdialog" and names it via
+  // `aria-labelledby` -> the title. A description-only toast registers no
+  // title, so name it from the description text instead.
+  const ariaLabel =
+    t.title == null ? nodeToText(t.description) || undefined : undefined;
   const isDismissible = data.dismissible !== false;
 
   return (
@@ -419,12 +488,13 @@ function ToastItem({
         TOAST_STACK_BASE,
         positionClasses,
         // Layout
-        "group/toast pointer-events-auto",
+        "pointer-events-auto",
         // Appearance
         "select-none rounded-lg border border-border-muted bg-popover bg-clip-padding text-popover-foreground shadow-lg",
         // Semantic type colors
         typeClass
       )}
+      aria-label={ariaLabel}
       data-slot="toast"
       swipeDirection={isDismissible ? ["down", "right"] : []}
       toast={t}
@@ -433,24 +503,18 @@ function ToastItem({
         className={cn(
           // Stacking: height clipping + behind/expanded opacity
           TOAST_CONTENT_CLASSES,
-          "flex w-full gap-2 p-3",
-          // Mobile: wrap action buttons below content
-          "max-sm:flex-wrap"
+          "flex w-full items-center gap-2 p-3"
         )}
         data-slot="toast-content"
       >
         {icon && (
-          <div className="mt-0.5 shrink-0" data-slot="toast-icon">
+          <div className="shrink-0" data-slot="toast-icon">
             {icon}
           </div>
         )}
 
         <div
-          className={cn(
-            "flex min-w-0 flex-1 flex-col gap-0.5",
-            // Mobile with icon: ensure text block fills the row
-            "max-sm:flex-[1_0_calc(100%-2rem)]"
-          )}
+          className="flex min-w-0 flex-1 flex-col gap-0.5"
           data-slot="toast-text"
         >
           {t.title != null && (
@@ -461,7 +525,7 @@ function ToastItem({
           )}
           {t.description != null && (
             <Toast.Description
-              className="text-muted-foreground text-xs leading-snug"
+              className="text-muted-foreground text-sm leading-snug"
               data-slot="toast-description"
             />
           )}
@@ -470,12 +534,7 @@ function ToastItem({
         {/* Action buttons */}
         {(t.actionProps || data.cancel) && (
           <div
-            className={cn(
-              "flex shrink-0 items-center gap-1.5",
-              // Mobile: full width row below the text
-              "max-sm:mt-1 max-sm:ml-0",
-              icon ? "max-sm:ml-6" : undefined
-            )}
+            className="flex shrink-0 items-center gap-1.5"
             data-slot="toast-actions"
           >
             {data.cancel && (
@@ -499,36 +558,29 @@ function ToastItem({
             )}
           </div>
         )}
-      </Toast.Content>
 
-      {/* Close button — round pill at the top-right corner */}
-      {showCloseButton && isDismissible && (
-        <Toast.Close
-          aria-label="Close"
-          className={cn(
-            // Position: centered on the top-right corner of the toast
-            "absolute top-0 right-0 translate-x-1/2 -translate-y-1/2",
-            // Size 20×20, circular
-            "flex size-5 items-center justify-center rounded-full border border-border p-0 shadow-sm",
-            // 44px tap target via invisible pseudo — keeps visual size small
-            "relative before:absolute before:-inset-3 before:content-['']",
-            // Colors: subtle background like ghost button
-            "bg-background text-muted-foreground",
-            "hover:bg-accent hover:text-foreground",
-            // Hidden by default, revealed on toast hover
-            "opacity-0 group-hover/toast:opacity-100",
-            // Also reveal on keyboard focus for a11y
-            "focus-visible:opacity-100",
-            // Smooth transitions for reveal + hover background
-            "cursor-pointer transition-[opacity,background-color,color] duration-150 ease-out",
-            // Mobile: always visible (no hover on touch)
-            "max-sm:opacity-100"
-          )}
-          data-slot="toast-close"
-        >
-          <XIcon className="size-3" />
-        </Toast.Close>
-      )}
+        {/* Close button — inline at the end of the content row */}
+        {showCloseButton && isDismissible && (
+          <Toast.Close
+            aria-label="Close"
+            className={cn(
+              // Inline at the end of the row, vertically centered
+              "relative shrink-0 self-center",
+              // 28×28 ghost icon button
+              "inline-flex size-7 cursor-pointer items-center justify-center rounded-md p-0",
+              "text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
+              // 44px tap target via invisible pseudo (28 + 2×8). `after:` is free
+              // here — the root's `after:` hover strip is a different element.
+              "after:absolute after:-inset-2 after:content-['']",
+              // Focus ring matching Button
+              "outline-none focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
+            )}
+            data-slot="toast-close"
+          >
+            <XIcon className="size-4" />
+          </Toast.Close>
+        )}
+      </Toast.Content>
     </Toast.Root>
   );
 }
@@ -594,5 +646,12 @@ Toaster.displayName = "Toaster";
 // Exports
 // ---------------------------------------------------------------------------
 
-export type { ToastAction, ToastData, ToastOptions, ToastPosition };
+export type {
+  ToastAction,
+  ToastData,
+  ToastInput,
+  ToastOptions,
+  ToastPosition,
+  ToastPromiseOptions,
+};
 export { Toaster, toast };

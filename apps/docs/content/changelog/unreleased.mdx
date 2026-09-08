@@ -1,7 +1,7 @@
 ---
-date: "2026-09-02"
+date: "2026-09-08"
 description: "What's coming in the next release"
-excerpt: "7 changes queued for the next release."
+excerpt: "9 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -31,6 +31,98 @@ Other notes:
 - Drawers that already nest their own `overflow-y-auto` child are unaffected. That child's overflow is not `visible`, so its automatic minimum size is `0`, it shrinks to absorb the overflow, and the outer region never scrolls.
 - **New:** `DrawerBody` (`data-slot="drawer-body"`) — the scrolling middle region, making the pinned-header / scrolling-body / pinned-footer pattern a first-class API instead of a hand-rolled `<div className="overflow-y-auto px-4">`. Horizontal padding only (`px-4`), so it never doubles against `DrawerHeader` / `DrawerFooter`'s `p-4`.
 - `DrawerHeader` and `DrawerFooter` now carry `shrink-0` so they stay pinned alongside `DrawerBody`. `DrawerFooter` keeps `mt-auto` for compositions that don't use `DrawerBody`.
+
+---
+
+### `toast`: a bare message is now the **description**, and `title` is opt-in.
+
+The component has always been built on Base UI, but its API was shaped after
+Sonner: the first argument became the `title`, and `toast.promise` re-mapped
+Base UI's string shortcut from `description` back to `title`. Base UI treats
+`description` as the canonical message field — `Toast.Description` is
+documented as "the default message for the toast when no title is provided",
+and a string shortcut resolves to it. Following that makes the default toast a
+single muted line, and makes `title` mean what it looks like: an emphasized
+line above the message.
+
+```tsx
+// A bare message is the description — one muted line, no <h2> rendered
+toast("Event has been created.");
+toast("Saved", { duration: 10_000 });
+
+// Add a title for the emphasized line above it
+toast({
+  title: "Event created",
+  description: "Sunday, December 3 at 9:00 AM",
+  action: { label: "Undo", onClick: undo },
+});
+```
+
+Both forms work on `toast.success`, `toast.error`, `toast.warning`,
+`toast.info` and `toast.loading`.
+
+**Breaking:** `description` moved off `ToastOptions` onto the new `ToastInput`,
+so text passed in the options position is now a type error. Migrate to the
+object form:
+
+```diff
+-toast("Event has been created", { description: "Monday, January 3rd at 6:00pm" })
++toast({
++  title: "Event has been created",
++  description: "Monday, January 3rd at 6:00pm",
++})
+```
+
+Single-argument calls need no change, but they now render as the muted
+description rather than an emphasized title. `ToastOptions` is still exported
+and still carries every behavior field; `ToastInput` and `ToastPromiseOptions`
+are newly exported.
+
+Also in this release:
+
+- Each `toast.promise` state accepts exactly what `toast()` accepts, so
+  `duration`, `action` and `cancel` work there too, and non-string nodes
+  (`loading: <Spinner />`) resolve correctly instead of producing an empty
+  toast.
+- `toast.dismiss()` called without an id now closes every toast, matching Base
+  UI's `close(id?)`.
+- A description-only toast is named from its description text via `aria-label`.
+  Base UI names the root through the title, which such a toast doesn't render,
+  leaving the `role="dialog"` without an accessible name.
+
+---
+
+### `Toast`: move the close button into the content row and fix the phantom height.
+
+The close button carried both `absolute` and `relative` in one `cn()` call.
+Those are the same tailwind-merge conflict group, so the later `relative` won
+and silently stripped `absolute top-0 right-0` — dropping the button into
+normal flow below the content, where it rendered at the bottom-left corner.
+Base UI measures the root's natural height to publish `--toast-height`, so
+that stray button was also baked into the card as ~20px of empty space beneath
+the text.
+
+The close button is now an inline flex child at the end of the row, always
+visible, and sized to line up with the action button. A title-only toast goes
+from 74px to 54px, and title + description from 82px to 66px.
+
+Alongside it:
+
+- Row children are vertically centred. The text block previously stretched to
+  the row height (set by the close button) and left the title hanging at its
+  top edge — 12px above it, 21px below.
+- The leading semantic icon is centred rather than pinned to the first line.
+- The description is `text-sm` (14px), matching every other description in the
+  library; it was the lone `text-xs`.
+- Semantic types colour only their icon. The title and description stay
+  neutral, so the icon carries the signal instead of the type tinting the text.
+- Dropped the `max-sm:` wrap, so the text column and the button column hold at
+  every width: the message wraps short of the buttons instead of one of them
+  dropping to a second row.
+
+Docs fix: the `toast()` reference listed `duration` as defaulting to `4000`
+(it is `5000`) and documented a `richColors` prop on `Toaster` that has never
+existed — semantic colours are always applied.
 
 ## Patch changes
 

@@ -8,7 +8,8 @@ export default function ToastWithDescription() {
     <div className="flex flex-wrap gap-2">
       <Button
         onClick={() =>
-          toast("Event has been created", {
+          toast({
+            title: "Event has been created",
             description: "Monday, January 3rd at 6:00pm",
           })
         }
@@ -18,7 +19,8 @@ export default function ToastWithDescription() {
       </Button>
       <Button
         onClick={() =>
-          toast.success("You have upgraded your plan", {
+          toast.success({
+            title: "You have upgraded your plan",
             description: "You can continue using the platform",
           })
         }
@@ -28,7 +30,8 @@ export default function ToastWithDescription() {
       </Button>
       <Button
         onClick={() =>
-          toast.error("Storage is full", {
+          toast.error({
+            title: "Storage is full",
             description: "Remove files to release space.",
           })
         }
