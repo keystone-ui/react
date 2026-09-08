@@ -16,7 +16,8 @@ export default function ToastDuration() {
       </Button>
       <Button
         onClick={() =>
-          toast("Toast with close button", {
+          toast({
+            title: "Toast with close button",
             closeButton: true,
             description: "Click the × to dismiss",
           })
@@ -27,7 +28,8 @@ export default function ToastDuration() {
       </Button>
       <Button
         onClick={() =>
-          toast("This toast won't auto-close", {
+          toast({
+            title: "This toast won't auto-close",
             duration: Number.POSITIVE_INFINITY,
             closeButton: true,
             description: "Dismiss manually",

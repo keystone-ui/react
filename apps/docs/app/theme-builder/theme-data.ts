@@ -479,5 +479,4 @@ export function findMatchingPreset(
       return preset.id;
     }
   }
-  return;
 }

@@ -22,7 +22,8 @@ export default function ToastWithAction() {
         </Button>
         <Button
           onClick={() =>
-            toast.success("Payment processed", {
+            toast.success({
+              title: "Payment processed",
               description: "Your invoice has been sent to your email",
               action: {
                 label: "View",

@@ -114,17 +114,63 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 
 ### toast()
 
-| Parameter | Type | Default | Description |
+Two call forms. A bare message becomes the **description** — the muted single
+line, and the default shape of a toast. Add a `title` for an emphasized line
+above it.
+
+```tsx
+toast("Event has been created.");
+toast("Saved", { duration: 10_000 });
+toast({
+  title: "Event created",
+  description: "Sunday, December 3 at 9:00 AM",
+  action: { label: "Undo", onClick: undo },
+});
+```
+
+The same two forms work on `toast.success`, `toast.error`, `toast.warning`,
+`toast.info` and `toast.loading`. (Base UI's `toastManager.add({ description })`
+maps to `toast({ description })`.)
+
+**Content** — `ToastInput`
+
+| Field | Type | Default | Description |
 | --- | --- | --- | --- |
-| `message` | `string` | - | The toast message |
-| `description` | `string` | - | Optional description text |
-| `action` | `ToastAction` | - | Action button configuration |
-| `position` | `ToastPosition` | `"bottom-right"` | Position on screen |
-| `duration` | `number` | `4000` | Duration in milliseconds |
+| `description` | `ReactNode` | - | The toast message. Filled by a bare `toast("…")` |
+| `title` | `ReactNode` | - | Optional emphasized line above the description |
+
+**Behavior** — `ToastOptions`, accepted in either form
+
+| Field | Type | Default | Description |
+| --- | --- | --- | --- |
+| `action` | `ToastAction` | - | Primary action button |
+| `cancel` | `ToastAction` | - | Secondary cancel/dismiss button |
+| `duration` | `number` | Toaster's `duration` | Milliseconds before auto-dismiss. `Infinity` keeps the toast open. Inert on `toast.loading`, which never auto-dismisses — update it by `id` or use `toast.promise` |
+| `dismissible` | `boolean` | `true` | Whether the toast can be swiped away or closed |
+| `closeButton` | `boolean` | Toaster's `closeButton` | Show a close button on this specific toast |
+| `id` | `string` | - | Pass an existing toast ID to update it in place |
+| `onAutoClose` | `() => void` | - | Called when the toast auto-closes after its duration |
+| `onDismiss` | `() => void` | - | Called when the toast is manually dismissed |
+
+Other methods: `toast.promise(promise, { loading, success, error })` — each
+state takes the same message-or-object input; `toast.custom(render, options?)`
+for arbitrary JSX; `toast.dismiss(id?)`, which closes every toast when called
+without an id.
+
+Semantic colors for `success`, `error`, `warning` and `info` are always applied
+— there is no opt-in flag. Only the icon is colored; the title and description
+stay neutral.
+
+Note: with no `title`, nothing registers as the toast's accessible name, so the
+description is used as an `aria-label` fallback. Passing a `title` labels it
+instead.
 
 ### Toaster
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `position` | `ToastPosition` | `"bottom-right"` | Default position for all toasts |
-| `richColors` | `boolean` | `false` | Use semantic colors for toast types |
+| `position` | `ToastPosition` | `"bottom-right"` | Where toasts appear on screen |
+| `duration` | `number` | `5000` | Default auto-dismiss timeout in ms |
+| `limit` | `number` | `3` | Maximum number of visible toasts |
+| `closeButton` | `boolean` | `true` | Show a close button on every toast |
+| `className` | `string` | - | Additional CSS class for the viewport container |

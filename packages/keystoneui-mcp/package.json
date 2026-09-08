@@ -43,14 +43,14 @@
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.29.0",
-    "fuzzysort": "^3.1.0",
-    "zod": "^4.3.6"
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "fuzzysort": "^4.0.2",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@keystoneui/typescript-config": "workspace:*",
-    "@types/node": "^25.6.0",
-    "tsup": "^8.5.0",
+    "@types/node": "^26.4.1",
+    "tsup": "^8.5.1",
     "typescript": "^6.0.3"
   },
   "publishConfig": {

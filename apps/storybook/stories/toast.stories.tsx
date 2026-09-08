@@ -62,15 +62,17 @@ import { Toaster, toast } from "@keystoneui/react/toast";
 // 1. Mount the provider once in your layout
 <Toaster />
 
-// 2. Trigger toasts anywhere
-toast("Event has been created");
+// 2. Trigger toasts anywhere. A bare message is the description —
+//    the muted single line.
+toast("Event has been created.");
 toast.success("Payment processed");
 toast.error("Something went wrong");
 toast.warning("Rate limit approaching");
 toast.info("New feature available");
 
-// With a description
-toast("Event has been created", {
+// Add a title for the emphasized line above the description
+toast({
+  title: "Event has been created",
   description: "Monday, January 3rd at 6:00pm",
 });
 
@@ -106,7 +108,7 @@ The Toaster inherits your app's light/dark theme automatically via Tailwind's \`
 
 ## Semantic Colors
 
-Success, error, warning, and info toasts automatically color their icon and title to match the toast type, consistent with the Alert component palette.
+Success, error, warning, and info toasts automatically color their icon to match the toast type, consistent with the Alert component palette. The title and description stay neutral so the icon carries the signal.
 
 ## Duration & Close Button
 
@@ -179,13 +181,17 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: "A basic default toast triggered with a simple string message.",
+        story:
+          "A basic default toast triggered with a simple string message. The message fills the description — the muted single line — and no title is rendered.",
       },
     },
   },
   render: () => (
     <div>
-      <Button onClick={() => toast("Event has been created")} variant="outline">
+      <Button
+        onClick={() => toast("Event has been created.")}
+        variant="outline"
+      >
         Show Toast
       </Button>
     </div>
@@ -197,8 +203,13 @@ export const Default: Story = {
     await userEvent.click(trigger);
     await new Promise((r) => setTimeout(r, 500));
 
-    const toastElement = document.querySelector("[data-slot='toast-title']");
-    await expect(toastElement).toBeInTheDocument();
+    // A bare message is the description, so no title element is rendered.
+    await expect(
+      document.querySelector("[data-slot='toast-description']")
+    ).toBeInTheDocument();
+    await expect(
+      document.querySelector("[data-slot='toast-title']")
+    ).not.toBeInTheDocument();
   },
 };
 
@@ -209,7 +220,7 @@ export const Types: Story = {
     docs: {
       description: {
         story:
-          "All toast types: default, success, info, warning, error, and loading. Each type displays a distinct icon and semantic color on the icon and title.",
+          "All toast types: default, success, info, warning, error, and loading. Each type displays a distinct icon, semantically colored; the text stays neutral.",
       },
     },
   },
@@ -271,7 +282,8 @@ export const WithDescription: Story = {
       <div className="flex flex-wrap gap-2">
         <Button
           onClick={() =>
-            toast("Event has been created", {
+            toast({
+              title: "Event has been created",
               description: "Monday, January 3rd at 6:00pm",
             })
           }
@@ -281,7 +293,8 @@ export const WithDescription: Story = {
         </Button>
         <Button
           onClick={() =>
-            toast.success("You have upgraded your plan", {
+            toast.success({
+              title: "You have upgraded your plan",
               description: "You can continue using HeroUI Chat",
             })
           }
@@ -291,7 +304,8 @@ export const WithDescription: Story = {
         </Button>
         <Button
           onClick={() =>
-            toast.error("Storage is full", {
+            toast.error({
+              title: "Storage is full",
               description: "Remove files to release space.",
             })
           }
@@ -301,7 +315,8 @@ export const WithDescription: Story = {
         </Button>
         <Button
           onClick={() =>
-            toast.warning("Your session is about to expire due to inactivity", {
+            toast.warning({
+              title: "Your session is about to expire due to inactivity",
               description:
                 "You will be automatically logged out in 5 minutes. Please save any unsaved changes before your session ends.",
             })
@@ -344,7 +359,8 @@ export const WithAction: Story = {
         </Button>
         <Button
           onClick={() =>
-            toast("You have been invited to join a team", {
+            toast({
+              title: "You have been invited to join a team",
               description: "Bob sent you an invitation to join HeroUI team",
               cancel: {
                 label: "Dismiss",
@@ -358,7 +374,8 @@ export const WithAction: Story = {
         </Button>
         <Button
           onClick={() =>
-            toast.error("Storage is full", {
+            toast.error({
+              title: "Storage is full",
               description:
                 "Remove files to release space. Adding more text to demonstrate longer content display",
               action: {
@@ -373,7 +390,8 @@ export const WithAction: Story = {
         </Button>
         <Button
           onClick={() =>
-            toast.success("Payment processed", {
+            toast.success({
+              title: "Payment processed",
               description: "Your invoice has been sent to your email",
               action: {
                 label: "View",
@@ -478,11 +496,13 @@ export const ManualLoading: Story = {
       <div className="flex flex-wrap gap-2">
         <Button
           onClick={() => {
-            const id = toast.loading("Uploading file...", {
+            const id = toast.loading({
+              title: "Uploading file...",
               description: "Please wait while we upload your file",
             });
             setTimeout(() => {
-              toast.success("File uploaded", {
+              toast.success({
+                title: "File uploaded",
                 id,
                 description: "Your file has been uploaded successfully",
               });
@@ -496,7 +516,8 @@ export const ManualLoading: Story = {
           onClick={() => {
             const id = toast.loading("Processing payment...");
             setTimeout(() => {
-              toast.success("Payment processed", {
+              toast.success({
+                title: "Payment processed",
                 id,
                 description: "Your payment has been processed successfully",
               });
@@ -510,7 +531,8 @@ export const ManualLoading: Story = {
           onClick={() => {
             const id = toast.loading("Saving changes...");
             setTimeout(() => {
-              toast.error("Failed to save", {
+              toast.error({
+                title: "Failed to save",
                 id,
                 description: "Please try again",
               });
@@ -623,7 +645,8 @@ function PositionDemo({ position }: { position: ToasterProps["position"] }) {
       <div className="flex flex-wrap justify-center gap-2">
         <Button
           onClick={() =>
-            toast(`Toast at ${position}`, {
+            toast({
+              title: `Toast at ${position}`,
               description: "This toast appears at the configured position.",
             })
           }
@@ -674,7 +697,8 @@ export const DurationAndClose: Story = {
         </Button>
         <Button
           onClick={() =>
-            toast("This toast won't auto-close", {
+            toast({
+              title: "This toast won't auto-close",
               duration: Number.POSITIVE_INFINITY,
               description: "Swipe or click to dismiss manually",
             })
@@ -685,7 +709,8 @@ export const DurationAndClose: Story = {
         </Button>
         <Button
           onClick={() =>
-            toast("Toast with close button", {
+            toast({
+              title: "Toast with close button",
               closeButton: true,
               description: "Click the × to dismiss",
             })
@@ -696,7 +721,8 @@ export const DurationAndClose: Story = {
         </Button>
         <Button
           onClick={() =>
-            toast.warning("Critical: this cannot be dismissed", {
+            toast.warning({
+              title: "Critical: this cannot be dismissed",
               dismissible: false,
               duration: 5000,
               description: "Will auto-close after 5 seconds",

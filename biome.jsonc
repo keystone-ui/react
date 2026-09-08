@@ -5,7 +5,9 @@
     "includes": [
       "!apps/docs/public/r",
       "!registry.json",
-      "!.claude/settings.local.json"
+      "!.claude/settings.local.json",
+      // Biome 2.5 started parsing SVGs; logos and placeholders are static assets
+      "!**/*.svg"
     ]
   },
   "linter": {
@@ -14,13 +16,22 @@
         // import * as React is a common pattern in React component libraries
         "noNamespaceImport": "warn",
         // Barrel file is the registry entry point -- intentional
-        "noBarrelFile": "off"
+        "noBarrelFile": "off",
+        // Inline handlers are idiomatic in demos and app code; surface, don't block
+        "noJsxPropsBind": "warn"
       },
       "suspicious": {
         // Allow explicit any in utility types and complex generics
         "noExplicitAny": "warn",
         // Array index keys are acceptable in static/demo lists
-        "noArrayIndexKey": "warn"
+        "noArrayIndexKey": "warn",
+        // Flags every JSX `&&`, not just leak-prone operands -- ours are booleans
+        "noLeakedRender": "warn",
+        "noShadow": "warn",
+        // Type-driven and noisy against optional props with defaults
+        "noUnnecessaryConditions": "warn",
+        // `== null` is an intentional nullish check
+        "noEqualsToNull": "off"
       },
       "a11y": {
         // Component library uses semantic roles on custom elements
@@ -35,7 +46,21 @@
       },
       "style": {
         // Re-exporting imports is a valid pattern for component libraries
-        "noExportedImports": "off"
+        "noExportedImports": "off",
+        // Stylistic only; props are named for readability, not destructured wholesale
+        "useDestructuring": "off",
+        "noIncrementDecrement": "off"
+      }
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        // Alphabetizing would scramble cva variant maps and deliberate prop order
+        "useSortedKeys": "off",
+        "useSortedAttributes": "off",
+        // packages/ui exports map is curated by component grouping, not alphabet
+        "useSortedPackageJson": "off"
       }
     }
   },
@@ -83,7 +108,9 @@
             "useAriaPropsForRole": "off",
             "useKeyWithClickEvents": "off",
             "noSvgWithoutTitle": "off",
-            "noNoninteractiveElementInteractions": "off"
+            "noNoninteractiveElementInteractions": "off",
+            // "Learn More" placeholder copy in demo stories
+            "noAmbiguousAnchorText": "off"
           },
           "suspicious": {
             "noShadowRestrictedNames": "off",
@@ -109,7 +136,9 @@
           },
           "performance": {
             "noNamespaceImport": "off",
-            "useTopLevelRegex": "off"
+            "useTopLevelRegex": "off",
+            // Inline handlers are the point of an example
+            "noJsxPropsBind": "off"
           }
         }
       }
@@ -153,6 +182,18 @@
           },
           "suspicious": {
             "noAssignInExpressions": "off"
+          }
+        }
+      }
+    },
+    {
+      // Demo and registry sources are copy-paste examples, not app code
+      "includes": ["apps/docs/demos/**", "registry/**"],
+      "linter": {
+        "rules": {
+          "performance": {
+            // Inline handlers are the point of an example
+            "noJsxPropsBind": "off"
           }
         }
       }

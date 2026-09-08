@@ -145,16 +145,16 @@ describe("registry theme items", () => {
 });
 
 describe("shadcn registry-item schema", () => {
-  it.each([
-    STYLE_ITEM,
-    ...THEME_ITEMS,
-  ])("%s parses against the schema", (name) => {
-    const item = readJson<unknown>(builtItemPath(name));
-    const result = registryItemSchema.safeParse(item);
-    expect(
-      result.success ? [] : result.error.issues.map((i) => i.message)
-    ).toEqual([]);
-  });
+  it.each([STYLE_ITEM, ...THEME_ITEMS])(
+    "%s parses against the schema",
+    (name) => {
+      const item = readJson<unknown>(builtItemPath(name));
+      const result = registryItemSchema.safeParse(item);
+      expect(
+        result.success ? [] : result.error.issues.map((i) => i.message)
+      ).toEqual([]);
+    }
+  );
 
   it("every built style/theme item is also declared in registry.json", () => {
     for (const name of [STYLE_ITEM, ...THEME_ITEMS]) {
@@ -167,21 +167,20 @@ describe("canonical token agreement", () => {
   // The default install path is: add the style, optionally re-apply the
   // default/zinc theme. Those must produce the same tokens as the app CSS,
   // otherwise re-applying the default theme silently changes the design.
-  it.each([
-    STYLE_ITEM,
-    "themes/default",
-    "themes/zinc",
-  ])("%s matches apps/docs/app/global.css exactly", (name) => {
-    const item = readJson<RegistryItem>(builtItemPath(name));
-    const drift: string[] = [];
-    for (const mode of ["light", "dark"] as const) {
-      for (const [token, value] of Object.entries(canonical[mode])) {
-        const actual = item.cssVars?.[mode]?.[token];
-        if (actual !== value) {
-          drift.push(`${mode}.${token}: css=${value} item=${actual}`);
+  it.each([STYLE_ITEM, "themes/default", "themes/zinc"])(
+    "%s matches apps/docs/app/global.css exactly",
+    (name) => {
+      const item = readJson<RegistryItem>(builtItemPath(name));
+      const drift: string[] = [];
+      for (const mode of ["light", "dark"] as const) {
+        for (const [token, value] of Object.entries(canonical[mode])) {
+          const actual = item.cssVars?.[mode]?.[token];
+          if (actual !== value) {
+            drift.push(`${mode}.${token}: css=${value} item=${actual}`);
+          }
         }
       }
+      expect(drift).toEqual([]);
     }
-    expect(drift).toEqual([]);
-  });
+  );
 });

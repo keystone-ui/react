@@ -41,6 +41,7 @@ async function readDirectory(dir: string): Promise<DemoFile[]> {
       dir;
     const fullPath = join(parent, entry.name);
     const relativePath = relative(dir, fullPath);
+    // biome-ignore lint/performance/noAwaitInLoops: build-time walk over a handful of demo files; ordering keeps the push deterministic
     const content = await readFile(fullPath, "utf-8");
     files.push({ path: relativePath, content });
   }
@@ -72,6 +73,7 @@ export async function getDemoFiles(args: {
   const candidates = [join(demosRoot, name), join(demosRoot, "blocks", name)];
 
   for (const dir of candidates) {
+    // biome-ignore lint/performance/noAwaitInLoops: ordered fallback lookup -- must stop at the first match, not stat every candidate
     if (existsSync(dir) && (await stat(dir)).isDirectory()) {
       const files = await readDirectory(dir);
       if (files.length > 0) {
