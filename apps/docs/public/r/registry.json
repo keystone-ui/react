@@ -1725,6 +1725,79 @@
       ]
     },
     {
+      "name": "dashboard-01",
+      "type": "registry:block",
+      "title": "Dashboard 01",
+      "description": "An analytics dashboard: a KPI row with semantic deltas, a stacked revenue chart with a toggleable legend, a sessions area chart, and a sortable, paginated top-pages table in a flush card.",
+      "dependencies": [
+        "lucide-react",
+        "recharts"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "stat",
+        "table",
+        "table-pagination",
+        "toggle-group",
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "registry/default/blocks/dashboard-01/page.tsx",
+          "type": "registry:page",
+          "target": "app/dashboard/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/dashboard-01/components/chart-formatters.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/dashboard-01/components/chart.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/dashboard-01/components/dashboard-page.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/dashboard-01/components/dashboard-toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/dashboard-01/components/kpi-row.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/dashboard-01/components/mock-analytics.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/dashboard-01/components/revenue-trend-card.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/dashboard-01/components/series-legend.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/dashboard-01/components/sessions-card.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/dashboard-01/components/top-pages-panel.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/dashboard-01/components/use-reduced-motion.ts",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "dashboard"
+      ]
+    },
+    {
       "name": "tickets-01",
       "type": "registry:block",
       "title": "Tickets 01",

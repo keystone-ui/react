@@ -191,7 +191,13 @@
       // components keystone deliberately does not ship (currently: sidebar),
       // kept as close to upstream as possible so re-vendoring stays a diff
       // rather than a merge. Lint-fixing code we do not own would defeat that.
-      "includes": ["apps/docs/components/ui/**"],
+      "includes": [
+        "apps/docs/components/ui/**",
+        // The chart layer inside a block is shadcn's chart.tsx, vendored so
+        // recharts stays a block dependency rather than a library one.
+        "apps/docs/demos/blocks/*/chart.tsx",
+        "registry/default/blocks/*/components/chart.tsx"
+      ],
       "linter": {
         "rules": {
           "correctness": {
@@ -203,6 +209,16 @@
           "suspicious": {
             // shadcn persists the open/collapsed state in a functional cookie
             "noDocumentCookie": "off"
+          },
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "off"
+          },
+          "security": {
+            // ChartStyle injects `--color-<key>` custom properties in a <style>
+            // tag. The values come from the block's own chart config, never
+            // from user input, and there is no other way to bind a runtime
+            // colour to a CSS variable recharts can read.
+            "noDangerouslySetInnerHtml": "off"
           }
         }
       }

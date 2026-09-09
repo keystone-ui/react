@@ -50,6 +50,7 @@ import BettingPanel01 from "./blocks/betting-panel-01";
 import BettingPanel02 from "./blocks/betting-panel-02";
 import BettingPanel03 from "./blocks/betting-panel-03";
 import BettingPanel04 from "./blocks/betting-panel-04";
+import Dashboard01 from "./blocks/dashboard-01";
 import ProfileDropdown01 from "./blocks/profile-dropdown-01";
 // blocks
 import Signin01 from "./blocks/signin-01";
@@ -2305,6 +2306,10 @@ export const demos: Record<string, DemoItem> = {
   "block-signin-04": {
     component: Signin04,
     file: "blocks/signin-04.tsx",
+  },
+  "block-dashboard-01": {
+    component: Dashboard01,
+    file: "blocks/dashboard-01/index.tsx",
   },
   "block-profile-dropdown-01": {
     component: ProfileDropdown01,

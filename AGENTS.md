@@ -196,9 +196,11 @@ Blocks are full-page or feature-level compositions registered as `registry:block
   - `authentication`, `login`, `signup` — sign-in / sign-up flows (mirrors shadcn)
   - `navigation` — user menus, dropdowns, sidebars
   - `data` — tables, CRM-style data management
+  - `dashboard` — analytics dashboards, KPI + chart pages
   - `betting` — betting/wager UI (keystone-specific)
   - When inventing a new category, prefer single-word lowercase that mirrors shadcn naming where possible
 - `pnpm sync:registry` warns if any block is missing `categories`
+- The installable copy under `registry/default/blocks/<name>/components/` is **generated** by `pnpm sync:blocks` from the demo — never hand-edit it. `pnpm lint:docs` runs `--check` and fails on drift. Only `page.tsx` is hand-written.
 
 **Discoverability via categories**: `keystoneui blocks --category authentication` (CLI) and `search_components({ type: "block", category: "authentication" })` (MCP) both filter by category. Categories also participate in fuzzy-match — searching `"authentication"` finds the auth blocks even if the word isn't in their description.
 

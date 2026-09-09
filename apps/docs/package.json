@@ -38,6 +38,7 @@
     "react-aria-components": "^1.21.1",
     "react-dom": "^19.2.8",
     "react-resizable-panels": "^4.12.3",
+    "recharts": "^3.8.0",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.1",
     "remark-mdx": "^3.1.1",

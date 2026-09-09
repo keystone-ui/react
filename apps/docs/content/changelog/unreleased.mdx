@@ -1,7 +1,7 @@
 ---
 date: "2026-09-09"
 description: "What's coming in the next release"
-excerpt: "18 changes queued for the next release."
+excerpt: "19 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -335,6 +335,31 @@ existed — semantic colours are always applied.
 The arrows are absolutely positioned with `top-1/2` against the `Carousel` root, which wraps the slides *and* anything rendered under them — so dot indicators and their margin dragged the arrows off the slide's midline. The root is now a single-column grid and the arrows take the first grid row (`CarouselContent`) as their containing block, so controls below the slides no longer shift them. The same fix straightens `CarouselNext` in vertical carousels, where it previously landed below the dots.
 
 `CarouselContent` must be the first child of `Carousel` for this to apply — the composition every example already uses. No public API change. If you worked around the old behavior with a manual offset such as `top-[calc(50%-1rem)]`, remove it.
+
+---
+
+### Add the `dashboard-01` block: an analytics dashboard.
+
+A KPI row whose deltas take their tone from what the metric *means* (the
+bounce-rate tile is `down-is-good`, so a fall renders green with a down arrow),
+a stacked revenue chart with a toggleable legend, a sessions area chart, and a
+sortable, paginated top-pages table in a flush card.
+
+`recharts` is a dependency of the **block**, not of `@keystoneui/react` — the
+library stays dependency-light, the same way `tickets-01` carries `@dnd-kit`.
+The chart layer is shadcn's `chart.tsx` vendored into the block, minus
+`ChartLegend` (the block ships a toggleable one, so recharts' own never mounts)
+and keeping two upstream fixes with their reasons in comments: `aspect-auto`
+rather than `aspect-video`, which under an explicit pixel height produces a
+462px floor and a horizontal document scrollbar, and an added `min-w-0`.
+
+Notable patterns the block is meant to teach: one `seriesColor()` resolves both
+the mark and the legend swatch so they cannot disagree; the "Other" band uses
+`--muted-foreground` rather than a ramp slot, because a fold of small values is
+not a category; panels take `format="money"` rather than a formatter function,
+since the installed entry point is a server component and a function cannot
+cross that boundary; and charts pass `isAnimationActive={!reducedMotion}`,
+which is the one motion case a stylesheet cannot reach.
 
 ---
 

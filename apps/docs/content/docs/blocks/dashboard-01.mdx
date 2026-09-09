@@ -1,0 +1,88 @@
+---
+title: Dashboard 01
+description: An analytics dashboard — KPI row with semantic deltas, a stacked revenue chart with a toggleable legend, a sessions area chart, and a sortable, paginated top-pages table.
+---
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/dashboard-01.json
+```
+
+<BlockPreview name="block-dashboard-01" />
+
+## Features
+
+- **KPI row** using [`StatValue`](/docs/components/stat) and `StatDelta`, where the tone comes from what the metric *means*. The bounce-rate tile is `down-is-good`, so a fall renders green — with a down arrow.
+- **Stacked revenue chart** with a legend you can switch series off in. Hidden series stay listed and struck through, and the last visible one refuses to switch off.
+- **Sessions area chart** sharing the same chart layer and colour ramp.
+- **Sortable, paginated table** in a flush [`Card`](/docs/components/card), with three-state sorting and [`TablePagination`](/docs/components/table-pagination).
+- **Charts respect reduced motion** — which a stylesheet cannot do on its own.
+- **An accessible info tip** in the header, with its text in the accessibility tree whether or not the tooltip is open.
+
+## Charts are a block dependency, not a library one
+
+`recharts` is a dependency of this block, not of `@keystoneui/react`. The library stays dependency-light and the chart layer lives in `chart.tsx` inside the block, vendored from shadcn. `tickets-01` does the same with `@dnd-kit`.
+
+Two changes from upstream shadcn are load-bearing, and both are commented in the file so they survive a tidy-up: `aspect-auto` rather than `aspect-video`, which under an explicit pixel height otherwise produces a 462px floor and a horizontal document scrollbar; and an added `min-w-0`, because a chart is a grid child and those default to `min-content`.
+
+`ChartLegend` is dropped from the port. The block ships its own toggleable legend, so recharts' `<Legend>` never mounts — leaving the dead path in would mean two legends to choose between.
+
+## One place decides a series' colour
+
+```tsx
+export function seriesColor(item: SeriesDef, index: number): string {
+  if (item.token) {
+    return `var(--${item.token})`;
+  }
+  return `var(--chart-${item.color ?? (index % 5) + 1})`;
+}
+```
+
+Both the mark and the legend swatch resolve through this, so they cannot disagree — a legend that says one thing while the band says another is worse than no legend at all.
+
+The `token` escape hatch matters. The "Other" band is `var(--muted-foreground)`, not a ramp slot: it is a fold of everything too small to name, and giving it a categorical hue would claim a channel that does not exist.
+
+The ramp itself ([`--chart-1` … `--chart-5`](/docs/theming/customization)) separates by **lightness**, which every form of colour blindness preserves, rather than by hue, which none of them do.
+
+## Serializable props
+
+Panels take `format="money"`, not `formatter={(v) => …}`. The installed entry point is `app/dashboard/page.tsx` — a server component — and a function cannot cross that boundary; React rejects it at render time. A block that taught the function form would teach a pattern that breaks on install.
+
+The same formatter keeps `null` distinct from `0`. Coercing with `Number(value)` turns an absent measurement into `0`, which then prints as "$0" — a reading the data never took.
+
+## Accessibility
+
+The legend entries are real buttons with `aria-pressed`, and a hidden series stays in the list struck through rather than disappearing — it is the only way back.
+
+Charts pass `isAnimationActive={!reducedMotion}`. `base.css` already zeroes CSS animation under `prefers-reduced-motion`, but recharts animates SVG *attributes* from JavaScript, which no stylesheet can reach, so the library's central rule silently does not cover charts.
+
+The bars carry no click handler, deliberately. A chart whose only affordance is `onClick` on an SVG path offers nothing to a keyboard or a screen reader — no focusable target, no middle-click, no "copy link" — and the fix is a visually hidden list of the same links beneath it. Not creating that debt is cheaper than remediating it.
+
+## Components Used
+
+- [Button](/docs/components/button)
+- [Card](/docs/components/card)
+- [Stat](/docs/components/stat)
+- [Table](/docs/components/table)
+- [Table Pagination](/docs/components/table-pagination)
+- [Toggle Group](/docs/components/toggle-group)
+- [Tooltip](/docs/components/tooltip)
+
+## Composition
+
+```text
+DashboardPage
+├── DashboardToolbar
+│   ├── ToggleGroup › ToggleGroupItem
+│   └── InfoTip › Tooltip
+├── KpiRow
+│   └── Card › CardContent › StatValue › StatDelta
+├── RevenueTrendCard
+│   ├── ChartContainer › BarChart › Bar
+│   └── SeriesLegend
+├── SessionsCard
+│   └── ChartContainer › AreaChart › Area
+└── TopPagesPanel
+    ├── Table › TableHead › TableSortButton
+    ├── TableEmpty
+    └── TablePagination
+```

@@ -21,14 +21,25 @@ export interface Rgb {
   r: number;
 }
 
-/** Parse any CSS colour culori understands (oklch, hex, color-mix is NOT). */
-export function rgb(color: string): Rgb {
+function parseOrThrow(color: string) {
   const parsed = parse(color);
   if (!parsed) {
+    // Most likely a color-mix() or var() reference, which needs a browser to
+    // resolve. Failing loudly beats silently measuring NaN.
     throw new Error(`Unparseable colour: ${color}`);
   }
-  const { b, g, r } = toRgb(parsed);
+  return parsed;
+}
+
+/** Parse any CSS colour culori understands (oklch, hex; color-mix is NOT). */
+export function rgb(color: string): Rgb {
+  const { b, g, r } = toRgb(parseOrThrow(color));
   return { b, g, r };
+}
+
+function lab(color: string) {
+  const converted = toLab(parseOrThrow(color));
+  return { a: converted.a, b: converted.b, l: converted.l };
 }
 
 // ---------------------------------------------------------------------------
@@ -68,8 +79,8 @@ const RAD = Math.PI / 180;
  * uncomfortably close for two categorical series in one chart.
  */
 export function ciede2000(colorA: string, colorB: string): number {
-  const first = toLab(parse(colorA));
-  const second = toLab(parse(colorB));
+  const first = lab(colorA);
+  const second = lab(colorB);
 
   const l1 = first.l;
   const a1 = first.a;
