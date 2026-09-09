@@ -46,6 +46,8 @@ Note `--warning-foreground` is deliberately dark rather than near-white: near-wh
 
 For a data table: `TableHead sortDirection` sets `aria-sort` (omit it for a non-sortable column — `null` means sortable but inactive), `TableSortButton` is the affordance and is polymorphic via `render` for URL-driven sorting, `numeric` right-aligns with `text-end tabular-nums`, and `TableEmpty` provides the spanning "no rows" row. A sticky header needs `containerClassName="max-h-96 overflow-y-auto"` plus `sticky top-0 z-[var(--z-sticky)] bg-background` on `TableHeader`; it cannot stick to the page scroll, only within a bounded container.
 
+There are no layout primitives (no `Grid`/`Stack`/`Flex`/`Container`) and there should not be — layout goes in `className`. Two utilities are load-bearing rather than cosmetic, though: `min-w-0 flex-1` on the text column of a header row (a flex item will not shrink below its content's intrinsic width, so a long title pushes the actions off-screen), and `[&>*]:min-w-0` on any grid holding a table or a wide value (grid children resolve to `min-content`, so one long value pushes its track open and gives the document a horizontal scrollbar). See the Page Layout guide in the docs.
+
 Prefer logical properties for anything new: `text-end` over `text-right`, `start-0` over `left-0`, `ms-*`/`me-*` over `ml-*`/`mr-*`. Most of the library still uses physical utilities, so this is a beachhead rather than a settled convention — but do not add to the pile.
 
 `Card` has two surface tiers: `filled` (default, paints `bg-card`) and `outline` (no fill, for chart and table panels). All of its spacing resolves from `--card-spacing`, so `<Card variant="outline" className="[--card-spacing:0px]">` gives a table-flush panel with no extra prop.

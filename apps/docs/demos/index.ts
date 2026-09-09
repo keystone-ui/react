@@ -485,6 +485,7 @@ import ToggleGroupVertical from "./toggle-group/vertical";
 import TooltipDefault from "./tooltip/default";
 import TooltipDisabledButton from "./tooltip/disabled-button";
 import TooltipGroupDelay from "./tooltip/group-delay";
+import TooltipInfoTip from "./tooltip/info-tip";
 import TooltipSides from "./tooltip/sides";
 import TooltipWithKbd from "./tooltip/with-kbd";
 // typography
@@ -2220,6 +2221,10 @@ export const demos: Record<string, DemoItem> = {
   "tooltip-group-delay": {
     component: TooltipGroupDelay,
     file: "tooltip/group-delay.tsx",
+  },
+  "tooltip-info-tip": {
+    component: TooltipInfoTip,
+    file: "tooltip/info-tip.tsx",
   },
   "tooltip-sides": {
     component: TooltipSides,

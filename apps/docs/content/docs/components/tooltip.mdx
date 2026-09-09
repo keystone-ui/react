@@ -13,6 +13,12 @@ import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@keyst
 
 <ComponentPreview name="tooltip-default" />
 
+<Callout type="warn">
+**Tooltip is a visual enhancement only.** Base UI's tooltip wires no `aria-describedby` and no `role` — the only `aria-*` attribute anywhere in its tooltip implementation is `aria-hidden` on the arrow — and its trigger is mouse-only. So a Tooltip is announced to **no** screen reader and opens on **no** touch device. It is keyboard-reachable, which makes the gap easy to miss.
+
+Never put information in a Tooltip that is not available elsewhere. When the tooltip really is the only place some text appears, use the [Info Tip](#info-tip) pattern below.
+</Callout>
+
 ## Installation
 
 <CodeBlockTabs items={["CLI", "Manual"]}>
@@ -74,6 +80,41 @@ Show a tooltip on a disabled button using a wrapper element:
 
 <ComponentPreview name="tooltip-disabled-button" />
 
+
+### Info Tip
+
+The pattern to reach for whenever a tooltip carries text that appears nowhere else — a metric definition, a units note, an explanation of a threshold.
+
+<ComponentPreview name="tooltip-info-tip" />
+
+Three things make it work, and all three are load-bearing:
+
+1. **The text lives in an always-present `sr-only` span**, associated with the trigger through `aria-describedby`. That span — not the popup — is what assistive technology reads, on every device, open or closed. Pointing `aria-describedby` at the popup does not work: it is unmounted while closed, so the reference dangles and is silently ignored.
+2. **The popup is `aria-hidden`.** Without it the same string sits in the accessibility tree twice while open, and a screen reader in browse mode reads it twice.
+3. **`open` is controlled and toggles on click**, so the tip works on touch — with `closeOnClick={false}`, because `TooltipTrigger` closes on click by default and would otherwise fight the toggle.
+
+```tsx
+const descriptionId = useId();
+const [open, setOpen] = useState(false);
+
+<Tooltip open={open} onOpenChange={setOpen}>
+  <TooltipTrigger
+    closeOnClick={false}
+    render={
+      <button
+        type="button"
+        aria-describedby={descriptionId}
+        aria-label="Pickup p50 definition"
+        onClick={() => setOpen((previous) => !previous)}
+      />
+    }
+  >
+    <InfoIcon aria-hidden="true" />
+  </TooltipTrigger>
+  <TooltipContent aria-hidden="true">{content}</TooltipContent>
+</Tooltip>
+<span id={descriptionId} className="sr-only">{content}</span>
+```
 
 ### Group Delay
 

@@ -10,10 +10,12 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   House as HomeIcon,
   Inbox as InboxIcon,
+  Info as InfoIcon,
   Save as SaveIcon,
   Search as SearchIcon,
   Settings as SettingsIcon,
 } from "lucide-react";
+import { useId, useState } from "react";
 import { expect, userEvent, within } from "storybook/test";
 
 // ---------------------------------------------------------------------------
@@ -233,5 +235,88 @@ export const GroupDelay: Story = {
         ))}
       </nav>
     </TooltipProvider>
+  ),
+};
+
+function DefinitionTip({ content, label }: { content: string; label: string }) {
+  const descriptionId = useId();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Tooltip onOpenChange={setOpen} open={open}>
+        <TooltipTrigger
+          closeOnClick={false}
+          render={
+            <button
+              aria-describedby={descriptionId}
+              aria-label={`${label} definition`}
+              className="inline-flex cursor-help items-center rounded-sm text-muted-foreground focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 [&_svg:not([class*='size-'])]:size-3 [&_svg]:pointer-events-none [&_svg]:shrink-0"
+              onClick={() => setOpen((previous) => !previous)}
+              type="button"
+            />
+          }
+        >
+          <InfoIcon aria-hidden="true" />
+        </TooltipTrigger>
+        <TooltipContent aria-hidden="true" className="max-w-64">
+          {content}
+        </TooltipContent>
+      </Tooltip>
+      <span className="sr-only" id={descriptionId}>
+        {content}
+      </span>
+    </>
+  );
+}
+
+export const InfoTip: Story = {
+  name: "Info Tip",
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Tooltip is a **visual enhancement only**. Base UI wires no \`aria-describedby\`
+and no \`role\` — the only \`aria-*\` attribute anywhere in its tooltip is
+\`aria-hidden\` on the arrow — and its trigger is \`mouseOnly\`. A plain Tooltip
+therefore reaches neither assistive technology nor touch.
+
+Never put information in a Tooltip that is not available elsewhere. When the
+tooltip *is* the only place the text appears, use this pattern:
+
+1. Render the text in an always-present \`sr-only\` span and point
+   \`aria-describedby\` at it. That span, not the popup, is what gets read —
+   pointing at the popup would dangle, since it is unmounted while closed.
+2. Mark the popup \`aria-hidden\`, or the same string sits in the accessibility
+   tree twice while open.
+3. Control \`open\` and toggle on click so touch works, with
+   \`closeOnClick={false}\` so Base UI's own click-to-close does not fight it.
+        `,
+      },
+    },
+  },
+  render: () => (
+    <dl className="mx-auto flex w-full max-w-sm flex-col gap-3">
+      <div className="flex items-baseline justify-between gap-2">
+        <dt className="inline-flex items-center gap-1 text-muted-foreground text-sm">
+          Pickup p50
+          <DefinitionTip
+            content="Ready-and-requested until someone other than the author reviews. The most common place teams lose days."
+            label="Pickup p50"
+          />
+        </dt>
+        <dd className="font-medium text-sm tabular-nums">3h 12m</dd>
+      </div>
+      <div className="flex items-baseline justify-between gap-2">
+        <dt className="inline-flex items-center gap-1 text-muted-foreground text-sm">
+          Coding p50
+          <DefinitionTip
+            content="First commit until the PR is ready and a review has been requested. Includes draft time — the author was still working."
+            label="Coding p50"
+          />
+        </dt>
+        <dd className="font-medium text-sm tabular-nums">1d 4h</dd>
+      </div>
+    </dl>
   ),
 };

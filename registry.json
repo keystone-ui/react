@@ -8327,6 +8327,21 @@
       ]
     },
     {
+      "name": "tooltip-info-tip",
+      "type": "registry:example",
+      "title": "Tooltip Info Tip",
+      "description": "Tooltip example: Info Tip.",
+      "registryDependencies": [
+        "tooltip"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/tooltip/info-tip.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
       "name": "tooltip-sides",
       "type": "registry:example",
       "title": "Tooltip Sides",

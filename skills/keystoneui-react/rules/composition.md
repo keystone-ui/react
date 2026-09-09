@@ -262,3 +262,31 @@ Naming is `[component]-[part]` kebab-case (`select-trigger`, `dropdown-menu-item
 ## Group naming for parent-child styling
 
 Tailwind named groups follow the component's `data-slot` value: `group/card`, `group/input-group`, `group/tabs-list`. Children reference them via `group-data-[size=sm]/card:`, `group-has-disabled/field:`, etc. When extending, keep the group name aligned with the slot name.
+
+---
+
+## Tooltip is decoration, not information
+
+Base UI's tooltip wires **no** `aria-describedby` and **no** `role` — the only
+`aria-*` attribute in its whole implementation is `aria-hidden` on the arrow —
+and its trigger is mouse-only. A `Tooltip` is therefore announced to no screen
+reader and opens on no touch device. It *is* keyboard-reachable, which is what
+makes the gap easy to miss.
+
+**Never put information in a Tooltip that is not available elsewhere.** Tooltips
+on an icon button whose `aria-label` already says the same thing are fine; a
+tooltip that is the only place a metric's definition appears is not.
+
+When the tooltip must carry the only copy of some text, all three of these are
+required:
+
+1. Render the text in an always-present `<span className="sr-only">` and point
+   the trigger's `aria-describedby` at it. Pointing at the popup dangles — it is
+   unmounted while closed.
+2. Mark the popup `aria-hidden="true"`, or the string is in the accessibility
+   tree twice while open.
+3. Control `open` and toggle it on click so touch works, passing
+   `closeOnClick={false}` so the trigger's own click-to-close does not fight the
+   toggle.
+
+See the Info Tip example in the Tooltip docs.
