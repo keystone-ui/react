@@ -1,0 +1,138 @@
+---
+title: Stat
+description: The headline number of a metric and its change, with colour derived from what the metric means rather than from the sign of the delta.
+---
+
+## Import
+
+```tsx
+import { deltaTone, StatDelta, StatValue } from "@keystoneui/react/stat";
+```
+
+## Usage
+
+<ComponentPreview name="stat-default" />
+
+Stat is deliberately two parts plus a helper. It has no root of its own and no surface: a KPI tile is a [Card](/docs/components/card) with a label, a number and a change, and [`Card`](/docs/components/card) already provides the surface system — giving Stat its own would duplicate it, and you would have two answers to "how do I get an outline KPI row?".
+
+## Installation
+
+<CodeBlockTabs>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/stat.json
+```
+
+```bash tab="Manual"
+pnpm add @keystoneui/react
+```
+
+</CodeBlockTabs>
+
+## Composition
+
+```text
+Card
+└── CardContent
+    ├── div (label)
+    ├── StatValue
+    │   └── StatDelta
+    └── div (sublabel)
+```
+
+## Direction, not sign
+
+The reason this component exists. Revenue rising is good; p95 latency rising is not; a headcount moving is neither. `StatDelta` takes a `direction`, and the tone is derived from the direction **and** the sign together:
+
+| `direction` | Delta > 0 | Delta < 0 | Delta 0 / `null` |
+| --- | --- | --- | --- |
+| `"up-is-good"` | positive | negative | neutral |
+| `"down-is-good"` | negative | positive | neutral |
+| `"neutral"` | neutral | neutral | neutral |
+
+The **arrow follows the sign** while the **colour follows the tone**, so a green down-arrow is correct for a `down-is-good` metric that improved.
+
+Zero is neutral rather than positive — "unchanged" is not an improvement. `null` and `undefined` are neutral too, so a metric with no comparison period renders without claiming a direction.
+
+### Tones
+
+`positive` is `text-success`, `neutral` is `text-muted-foreground`, and `negative` is **`text-destructive`** — not `text-warning`. A metric that got worse is bad news and there is already a token for that; `--warning` means caution or an approaching threshold. One channel, one meaning: a page where amber means both "worse" and "stale sync" teaches readers to ignore amber.
+
+When a number really is a caution state, reach for it deliberately:
+
+```tsx
+<StatDelta tone="warning" value={0.94}>94% of quota</StatDelta>
+```
+
+## Formatting is yours
+
+`children` carries the display text; `value` carries only the signed number that drives the arrow and the tone.
+
+```tsx
+<StatDelta value={0.1234}>+12.3%</StatDelta>
+```
+
+This is deliberate. Formatting a delta means choosing a locale, a digit count, a sign convention and a unit — none of which a component should decide on behalf of every consumer. If you need the tone outside a `StatDelta` (a table cell, a chart caption), the helper is exported:
+
+```tsx
+import { deltaTone } from "@keystoneui/react/stat";
+
+deltaTone(-0.18, "down-is-good"); // "positive"
+```
+
+## Examples
+
+### Direction
+
+The same delta reads differently depending on what the metric means. Note the third and fourth rows: the arrow follows the sign, the colour follows the tone.
+
+<ComponentPreview name="stat-direction" />
+
+### KPI Row
+
+<ComponentPreview name="stat-kpi-row" />
+
+`[&>*]:min-w-0` on the grid is load-bearing rather than decorative: grid and flex children default to `min-content`, so one long value pushes its track open and hands the whole document a horizontal scrollbar.
+
+## Accessibility
+
+Tone is conveyed by colour, which on its own fails [WCAG 1.4.1 Use of Color](https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html). `StatDelta` therefore renders a visually hidden qualifier — "improving", "declining" or "needs attention" — beside an `aria-hidden` arrow, so the direction reaches a screen reader too.
+
+Pass your own `aria-label` to replace it entirely:
+
+```tsx
+<StatDelta aria-label="down 18 percent, an improvement" value={-0.18} direction="down-is-good">
+  -18%
+</StatDelta>
+```
+
+`StatValue` and `StatDelta` both use `tabular-nums`. That is not cosmetic: with proportional digits a live-updating figure changes width on every tick and the whole row jitters.
+
+## API Reference
+
+### StatValue
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |
+| `children` | `ReactNode` | - | The number, and usually a `StatDelta` beside it |
+
+### StatDelta
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `number \| null` | - | The signed change. Drives the arrow and, with `direction`, the tone. Not rendered. |
+| `direction` | `"up-is-good" \| "down-is-good" \| "neutral"` | `"up-is-good"` | Which way counts as an improvement |
+| `tone` | `"positive" \| "negative" \| "neutral" \| "warning"` | derived | Override the derived tone |
+| `showIcon` | `boolean` | `true` | Render the directional arrow |
+| `children` | `ReactNode` | - | The display text, e.g. `"+12%"` |
+| `className` | `string` | - | Additional CSS classes |
+
+### deltaTone
+
+```ts
+function deltaTone(
+  value: number | null | undefined,
+  direction?: StatDirection
+): "positive" | "negative" | "neutral";
+```

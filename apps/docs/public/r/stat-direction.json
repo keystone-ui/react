@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stat-direction",
+  "title": "Stat Direction",
+  "description": "Stat example: Direction.",
+  "registryDependencies": [
+    "stat"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/stat/direction.tsx",
+      "content": "\"use client\";\n\nimport { StatDelta, StatValue } from \"@keystoneui/react/stat\";\n\nconst rows = [\n  {\n    delta: 0.12,\n    deltaLabel: \"+12%\",\n    direction: \"up-is-good\",\n    label: \"Revenue\",\n    note: \"rose, and rising is good — positive\",\n    value: \"$48.2k\",\n  },\n  {\n    delta: -0.06,\n    deltaLabel: \"-6%\",\n    direction: \"up-is-good\",\n    label: \"Signups\",\n    note: \"fell, and rising is good — negative\",\n    value: \"1,204\",\n  },\n  {\n    delta: -0.18,\n    deltaLabel: \"-18%\",\n    direction: \"down-is-good\",\n    label: \"p95 latency\",\n    note: \"fell, and falling is good — positive, with a down arrow\",\n    value: \"212ms\",\n  },\n  {\n    delta: 0.09,\n    deltaLabel: \"+9%\",\n    direction: \"down-is-good\",\n    label: \"Error rate\",\n    note: \"rose, and falling is good — negative, with an up arrow\",\n    value: \"0.4%\",\n  },\n  {\n    delta: 0.03,\n    deltaLabel: \"+3%\",\n    direction: \"neutral\",\n    label: \"Headcount\",\n    note: \"moved, but neither direction is better — neutral\",\n    value: \"86\",\n  },\n] as const;\n\nexport default function StatDirection() {\n  return (\n    <div className=\"flex w-full max-w-xl flex-col divide-y\">\n      {rows.map((row) => (\n        <div className=\"flex items-baseline gap-4 py-3\" key={row.label}>\n          <div className=\"min-w-0 flex-1\">\n            <div className=\"font-medium text-muted-foreground text-xs\">\n              {row.label}\n            </div>\n            <StatValue className=\"text-xl\">\n              {row.value}\n              <StatDelta direction={row.direction} value={row.delta}>\n                {row.deltaLabel}\n              </StatDelta>\n            </StatValue>\n          </div>\n          <p className=\"shrink-0 text-muted-foreground text-xs\">{row.note}</p>\n        </div>\n      ))}\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

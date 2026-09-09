@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stat-kpi-row",
+  "title": "Stat Kpi Row",
+  "description": "Stat example: Kpi Row.",
+  "registryDependencies": [
+    "card",
+    "stat"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/stat/kpi-row.tsx",
+      "content": "\"use client\";\n\nimport { Card, CardContent } from \"@keystoneui/react/card\";\nimport { StatDelta, StatValue } from \"@keystoneui/react/stat\";\n\nconst metrics = [\n  {\n    delta: 0.12,\n    deltaLabel: \"+12%\",\n    // More merged PRs is better.\n    direction: \"up-is-good\",\n    label: \"Merged PRs\",\n    sublabel: \"94 opened\",\n    value: \"128\",\n  },\n  {\n    delta: -0.08,\n    deltaLabel: \"-8%\",\n    // Faster pickup is better, so a fall is an improvement — this tile is the\n    // reason the component takes a direction instead of reading the sign.\n    direction: \"down-is-good\",\n    label: \"Pickup p50\",\n    sublabel: \"time to first review\",\n    value: \"3h 12m\",\n  },\n  {\n    delta: 0.04,\n    deltaLabel: \"+4%\",\n    direction: \"down-is-good\",\n    label: \"Review wait p50\",\n    sublabel: \"ready to approved\",\n    value: \"1d 4h\",\n  },\n  {\n    delta: null,\n    deltaLabel: null,\n    direction: \"neutral\",\n    label: \"Active authors\",\n    sublabel: \"no prior period\",\n    value: \"24\",\n  },\n] as const;\n\nexport default function StatKpiRow() {\n  return (\n    <div className=\"grid w-full gap-4 sm:grid-cols-2 xl:grid-cols-4 [&>*]:min-w-0\">\n      {metrics.map((metric) => (\n        <Card key={metric.label} size=\"sm\" variant=\"outline\">\n          <CardContent className=\"flex flex-col gap-1\">\n            <div className=\"font-medium text-muted-foreground text-xs\">\n              {metric.label}\n            </div>\n            <StatValue>\n              {metric.value}\n              {metric.delta === null ? null : (\n                <StatDelta direction={metric.direction} value={metric.delta}>\n                  {metric.deltaLabel}\n                </StatDelta>\n              )}\n            </StatValue>\n            <div className=\"text-muted-foreground text-xs\">\n              {metric.sublabel}\n            </div>\n          </CardContent>\n        </Card>\n      ))}\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -1387,6 +1387,25 @@
       ]
     },
     {
+      "name": "stat",
+      "type": "registry:ui",
+      "title": "Stat",
+      "description": "The headline number of a metric and its change, with colour derived from what the metric means rather than from the sign of the delta.",
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "card"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/stat.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "signin-01",
       "type": "registry:block",
       "title": "Sign in 01",
@@ -7032,6 +7051,53 @@
       "files": [
         {
           "path": "apps/docs/demos/spinner/with-empty.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "stat-default",
+      "type": "registry:example",
+      "title": "Stat Default",
+      "description": "Stat example: Default.",
+      "registryDependencies": [
+        "card",
+        "stat"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/stat/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "stat-direction",
+      "type": "registry:example",
+      "title": "Stat Direction",
+      "description": "Stat example: Direction.",
+      "registryDependencies": [
+        "stat"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/stat/direction.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "stat-kpi-row",
+      "type": "registry:example",
+      "title": "Stat Kpi Row",
+      "description": "Stat example: Kpi Row.",
+      "registryDependencies": [
+        "card",
+        "stat"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/stat/kpi-row.tsx",
           "type": "registry:example"
         }
       ]

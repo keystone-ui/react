@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stat-default",
+  "title": "Stat Default",
+  "description": "Stat example: Default.",
+  "registryDependencies": [
+    "card",
+    "stat"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/stat/default.tsx",
+      "content": "\"use client\";\n\nimport { Card, CardContent } from \"@keystoneui/react/card\";\nimport { StatDelta, StatValue } from \"@keystoneui/react/stat\";\n\nexport default function StatDefault() {\n  return (\n    <Card className=\"w-full max-w-xs\" size=\"sm\">\n      <CardContent className=\"flex flex-col gap-1\">\n        <div className=\"font-medium text-muted-foreground text-xs\">\n          Merged PRs\n        </div>\n        <StatValue>\n          128\n          <StatDelta direction=\"up-is-good\" value={0.12}>\n            +12%\n          </StatDelta>\n        </StatValue>\n        <div className=\"text-muted-foreground text-xs\">94 opened</div>\n      </CardContent>\n    </Card>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

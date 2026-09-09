@@ -393,6 +393,9 @@ import SpinnerSizes from "./spinner/sizes";
 import SpinnerWithBadge from "./spinner/with-badge";
 import SpinnerWithButton from "./spinner/with-button";
 import SpinnerWithEmpty from "./spinner/with-empty";
+import StatDefault from "./stat/default";
+import StatDirection from "./stat/direction";
+import StatKpiRow from "./stat/kpi-row";
 // stepper
 import StepperControlled from "./stepper/controlled";
 import StepperDefault from "./stepper/default";
@@ -2346,6 +2349,18 @@ export const demos: Record<string, DemoItem> = {
   "selection-bar-with-bulk-actions": {
     component: SelectionBarWithBulkActions,
     file: "selection-bar/with-bulk-actions.tsx",
+  },
+  "stat-default": {
+    component: StatDefault,
+    file: "stat/default.tsx",
+  },
+  "stat-direction": {
+    component: StatDirection,
+    file: "stat/direction.tsx",
+  },
+  "stat-kpi-row": {
+    component: StatKpiRow,
+    file: "stat/kpi-row.tsx",
   },
 };
 

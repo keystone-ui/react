@@ -1,7 +1,7 @@
 ---
 date: "2026-09-09"
 description: "What's coming in the next release"
-excerpt: "12 changes queued for the next release."
+excerpt: "13 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -68,6 +68,38 @@ passes on that bug.
 - Drawers that already nest their own `overflow-y-auto` child are unaffected. That child's overflow is not `visible`, so its automatic minimum size is `0`, it shrinks to absorb the overflow, and the outer region never scrolls.
 - **New:** `DrawerBody` (`data-slot="drawer-body"`) — the scrolling middle region, making the pinned-header / scrolling-body / pinned-footer pattern a first-class API instead of a hand-rolled `<div className="overflow-y-auto px-4">`. Horizontal padding only (`px-4`), so it never doubles against `DrawerHeader` / `DrawerFooter`'s `p-4`.
 - `DrawerHeader` and `DrawerFooter` now carry `shrink-0` so they stay pinned alongside `DrawerBody`. `DrawerFooter` keeps `mt-auto` for compositions that don't use `DrawerBody`.
+
+---
+
+### Add `Stat` — `StatValue`, `StatDelta` and the `deltaTone` helper.
+
+The headline number of a metric and its change. Deliberately two parts plus a
+helper rather than a full tile: a KPI tile is a `Card` with a label, a number
+and a change, and `Card` already provides the surface system, so giving `Stat`
+its own root would duplicate it.
+
+The part that carries real logic is the tone. Colour comes from what the metric
+*means*, not from the sign of the delta — revenue rising is good, p95 latency
+rising is not, a headcount moving is neither. `StatDelta` takes a `direction`
+(`"up-is-good"` | `"down-is-good"` | `"neutral"`) and derives the tone from the
+direction and the sign together. The arrow follows the **sign** while the colour
+follows the **tone**, so a green down-arrow is correct for a `down-is-good`
+metric that improved.
+
+`negative` maps to `--destructive`, not `--warning`: a metric that got worse is
+bad news and there is already a token for that, while `--warning` means caution
+or an approaching threshold. One channel, one meaning. Pass `tone="warning"`
+when a number really is a caution state.
+
+Formatting is not handled here — `children` carries the display text and `value`
+carries only the signed number. Formatting a delta means choosing a locale, a
+digit count, a sign convention and a unit, none of which a component should
+decide for every consumer. `deltaTone` is exported for the same decision outside
+a `StatDelta`.
+
+Tone by colour alone fails WCAG 1.4.1, so `StatDelta` also renders a visually
+hidden "improving" / "declining" / "needs attention" qualifier, suppressed when
+the caller supplies their own `aria-label`.
 
 ---
 

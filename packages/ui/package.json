@@ -82,7 +82,8 @@
     "./hooks": "./src/hooks/index.ts",
     "./utils": "./src/utils.ts",
     "./base.css": "./src/base.css",
-    "./selection-bar": "./src/selection-bar.tsx"
+    "./selection-bar": "./src/selection-bar.tsx",
+    "./stat": "./src/stat.tsx"
   },
   "scripts": {
     "build": "tsup",
@@ -345,6 +346,10 @@
       "./selection-bar": {
         "types": "./dist/selection-bar.d.ts",
         "default": "./dist/selection-bar.js"
+      },
+      "./stat": {
+        "types": "./dist/stat.d.ts",
+        "default": "./dist/stat.js"
       }
     }
   },

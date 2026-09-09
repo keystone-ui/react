@@ -146,6 +146,7 @@ import { Modal, ModalTrigger, ModalContent, ModalTitle } from "@keystoneui/react
 | Menus | `DropdownMenu`, `Command` (palette) |
 | Navigation | `Tabs`, `Breadcrumb`, `Pagination`, `Stepper` |
 | Data display | `Table`, `Card`, `DescriptionList`, `Avatar`, `Badge`, `Tag`, `TagGroup` |
+| Metrics / KPI | `StatValue` + `StatDelta` inside `Card` + `CardContent`. `StatDelta` takes a `direction` (`up-is-good` / `down-is-good` / `neutral`) — never colour a delta from its sign alone. Use `Card variant="outline"` for a panel row. |
 | Feedback | `Toast`, `Alert`, `Progress`, `CircularProgress`, `Skeleton`, `Spinner`, `Empty` |
 | Layout | `Card`, `Separator`, `Resizable`, `Accordion`, `Collapsible`, `AspectRatio`, `Carousel` |
 | Bulk-action bar | `SelectionBar` |
@@ -166,9 +167,9 @@ Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or
 
 ## Component List
 
-54 components, all importable from `@keystoneui/react/{kebab-case-name}`:
+55 components, all importable from `@keystoneui/react/{kebab-case-name}`:
 
-`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `button-group`, `calendar`, `card`, `carousel`, `checkbox`, `circular-progress`, `collapsible`, `combobox`, `command`, `date-input`, `description-list`, `drawer`, `dropdown-menu`, `empty`, `field`, `form`, `input`, `input-group`, `input-otp`, `item`, `kbd`, `label`, `modal`, `native-select`, `pagination`, `popover`, `progress`, `radio-group`, `resizable`, `select`, `selection-bar`, `separator`, `skeleton`, `slider`, `spinner`, `stepper`, `switch`, `table`, `tabs`, `tag`, `tag-group`, `textarea`, `toast`, `toggle`, `toggle-group`, `tooltip`.
+`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `button-group`, `calendar`, `card`, `carousel`, `checkbox`, `circular-progress`, `collapsible`, `combobox`, `command`, `date-input`, `description-list`, `drawer`, `dropdown-menu`, `empty`, `field`, `form`, `input`, `input-group`, `input-otp`, `item`, `kbd`, `label`, `modal`, `native-select`, `pagination`, `popover`, `progress`, `radio-group`, `resizable`, `select`, `selection-bar`, `separator`, `skeleton`, `slider`, `spinner`, `stat`, `stepper`, `switch`, `table`, `tabs`, `tag`, `tag-group`, `textarea`, `toast`, `toggle`, `toggle-group`, `tooltip`.
 
 ## Workflow
 

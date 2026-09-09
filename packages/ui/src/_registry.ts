@@ -350,4 +350,11 @@ export const ui: Registry = [
     registryDependencies: ["button"],
     files: [{ path: "ui/selection-bar.tsx", type: "registry:ui" }],
   },
+  {
+    name: "stat",
+    type: "registry:ui",
+    dependencies: ["class-variance-authority", "lucide-react"],
+    registryDependencies: ["card"],
+    files: [{ path: "ui/stat.tsx", type: "registry:ui" }],
+  },
 ];
