@@ -12,6 +12,8 @@ import {
   baseColors,
   calculatePrimaryForeground,
   destructiveTokens,
+  sidebarTokens,
+  statusTokens,
 } from "../theme-data";
 
 import type { ThemeState } from "./use-theme-state";
@@ -68,6 +70,8 @@ export function useCssSync(state: ThemeState) {
       "--primary-foreground": primaryFg,
       "--ring": primaryValue,
       ...destructiveTokens.light,
+      ...statusTokens.light,
+      ...sidebarTokens.light,
     };
 
     const darkVars: Record<string, string> = {
@@ -76,6 +80,8 @@ export function useCssSync(state: ThemeState) {
       "--primary-foreground": darkPrimaryFg,
       "--ring": darkPrimaryValue,
       ...destructiveTokens.dark,
+      ...statusTokens.dark,
+      ...sidebarTokens.dark,
     };
 
     // Radius — "default" means use the style's built-in --radius

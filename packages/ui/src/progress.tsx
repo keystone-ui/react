@@ -13,8 +13,9 @@ const progressVariants = cva("", {
   variants: {
     color: {
       default: "[--progress-indicator:var(--primary)]",
-      success: "[--progress-indicator:oklch(0.627_0.194_149.214)]", // green-500
-      warning: "[--progress-indicator:oklch(0.769_0.188_70.08)]", // amber-500
+      success:
+        "[--progress-indicator:var(--success,oklch(0.627_0.194_149.214))]",
+      warning: "[--progress-indicator:var(--warning,oklch(0.769_0.188_70.08))]",
       destructive: "[--progress-indicator:var(--destructive)]",
     },
   },

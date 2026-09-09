@@ -241,7 +241,7 @@ describe("Progress color variants", () => {
     render(<Progress color="success" value={50} />);
     const progressbar = screen.getByRole("progressbar");
     expect(progressbar).toHaveClass(
-      "[--progress-indicator:oklch(0.627_0.194_149.214)]"
+      "[--progress-indicator:var(--success,oklch(0.627_0.194_149.214))]"
     );
   });
 
@@ -249,7 +249,7 @@ describe("Progress color variants", () => {
     render(<Progress color="warning" value={50} />);
     const progressbar = screen.getByRole("progressbar");
     expect(progressbar).toHaveClass(
-      "[--progress-indicator:oklch(0.769_0.188_70.08)]"
+      "[--progress-indicator:var(--warning,oklch(0.769_0.188_70.08))]"
     );
   });
 

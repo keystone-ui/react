@@ -40,7 +40,9 @@ Use semantic tokens. Never raw Tailwind colors in component or app code.
 </div>
 ```
 
-For status indicators, prefer `Badge` variants or semantic tokens like `text-destructive`. If you need a positive/success color, ask the user about adding a custom CSS variable rather than reaching for `text-emerald-600`.
+For status indicators, prefer `Badge` variants or semantic tokens. All four status tones are tokenized: `text-success` / `bg-success`, `text-warning` / `bg-warning`, `text-destructive`, and `text-muted-foreground` for neutral. Never reach for `text-emerald-600` or `text-amber-500` — and never pair a status token with a `dark:` override, since the tokens already re-step for a dark surface.
+
+Note `--warning-foreground` is deliberately dark rather than near-white: near-white on amber-500 is ~1.9:1, a WCAG failure. Use `text-warning-foreground` on a `bg-warning` fill, not `text-white`.
 
 **Exception:** Badge color variants (`bg-red-500/15`, `text-red-700`) intentionally use raw Tailwind colors because each variant maps to a distinct hue.
 
@@ -214,6 +216,7 @@ Tailwind v4 changed the default cursor. Always set it explicitly on interactive 
 
 // Status: Badge or semantic tokens, not raw colors
 <Badge variant="secondary">+20.1%</Badge>
+<span className="text-success">+20.1%</span>
 <span className="text-destructive">-3.2%</span>
 
 // Conditional: cn(), not template literal

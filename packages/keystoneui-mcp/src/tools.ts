@@ -234,7 +234,9 @@ export function getThemeInfoTool(config: ProjectConfig) {
 |---|---|---|---|
 | \`--primary\` | \`oklch(0.21 0.006 285)\` | \`oklch(0.92 0.004 286)\` | Main actions, CTAs |
 | \`--secondary\` | \`oklch(0.967 0.001 286)\` | \`oklch(0.274 0.006 286)\` | Alternative actions |
-| \`--destructive\` | \`oklch(0.577 0.245 27)\` | \`oklch(0.704 0.191 22)\` | Destructive actions |
+| \`--destructive\` | \`oklch(0.577 0.245 27)\` | \`oklch(0.704 0.191 22)\` | Destructive actions, a metric that got worse |
+| \`--success\` | \`oklch(0.627 0.194 149)\` | \`oklch(0.723 0.19 150)\` | Positive status, a metric that improved |
+| \`--warning\` | \`oklch(0.769 0.188 70)\` | \`oklch(0.828 0.189 84)\` | Caution and threshold states only |
 | \`--muted\` | \`oklch(0.967 0.001 286)\` | \`oklch(0.274 0.006 286)\` | Subdued elements |
 | \`--accent\` | \`oklch(0.967 0.001 286)\` | \`oklch(0.274 0.006 286)\` | Highlights |
 | \`--background\` | \`oklch(1 0 0)\` | \`oklch(0.141 0.005 286)\` | Page background |
@@ -253,7 +255,11 @@ Base: \`--radius: 0.625rem\` (10px). Derived values:
 
 - \`--input-bg\`: Form control background (transparent light, 5% white dark)
 - \`--popup-ring\`: Subtle popup container ring
-- \`--border-muted\`: Lower-contrast separator inside popups
+- \`--border-muted\`: Lower-contrast separator inside popups, and Card's filled ring
+- \`--success-foreground\` / \`--warning-foreground\`: Text on a success/warning fill. \`--warning-foreground\` is dark, not near-white — near-white on amber-500 is ~1.9:1 and fails WCAG
+- \`--sidebar\` + 7 \`--sidebar-*\`: Read by an imported shadcn sidebar (keystone ships none). Declared as aliases, so the sidebar follows the active keystone theme
+
+Use \`text-success\` / \`bg-warning\` rather than raw \`emerald\`/\`amber\` classes, and never add a \`dark:\` override to a status token.
 
 ## Dark Mode
 

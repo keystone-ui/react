@@ -1,12 +1,12 @@
 {
-  "mode": "exit",
+  "mode": "pre",
   "tag": "beta",
   "initialVersions": {
     "@keystoneui/docs": "0.0.0",
     "@keystoneui/storybook": "0.0.0",
+    "@keystoneui/mcp": "0.2.0-beta.1",
     "@keystoneui/typescript-config": "0.0.0",
-    "@keystoneui/react": "0.0.0",
-    "@keystoneui/mcp": "0.1.0"
+    "@keystoneui/react": "1.0.0-beta.5"
   },
   "changesets": [
     "button-and-touch-polish",

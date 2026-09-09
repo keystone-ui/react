@@ -32,6 +32,18 @@
   --color-input: var(--input);
   --color-input-bg: var(--input-bg);
   --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -66,6 +78,38 @@
   --input-bg: transparent;
   --ring: oklch(0.21 0.006 285.885);
   --skeleton-shimmer: oklch(1 0 0 / 0.06);
+
+  /* Status tones. Theme-independent, exactly as --destructive is: these hues
+   * mean the same thing in every theme, so the six theme items do not carry
+   * them.
+   *
+   * --warning-foreground is deliberately DARK, breaking the pattern where
+   * every other *-foreground is near-white. Near-white on amber-500 is about
+   * 1.9:1, a WCAG failure. Do not "fix" this for symmetry. */
+  --success: oklch(0.627 0.194 149.214);
+  --success-foreground: oklch(0.982 0.018 155.826);
+  --warning: oklch(0.769 0.188 70.08);
+  --warning-foreground: oklch(0.279 0.077 45.635);
+
+  /* Sidebar surface. Keystone ships no sidebar -- consumers install shadcn's
+   * -- but it reads these tokens, so declaring them is what makes an imported
+   * sidebar follow the active keystone theme instead of shadcn's own neutral
+   * palette.
+   *
+   * Aliases rather than literals, which is why the theme items do not carry
+   * them: custom properties are substituted per element, and `.dark` applies
+   * to the same <html> as `:root`, so `var(--primary)` here already resolves
+   * to whichever theme and mode is active. Only --sidebar needs a dark
+   * override, because its formula differs rather than its inputs. */
+  --sidebar: color-mix(in oklch, var(--background) 97%, var(--foreground));
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+
   --radius: 0.625rem;
 }
 
@@ -94,6 +138,18 @@
   --input-bg: oklch(1 0 0 / 5%);
   --ring: oklch(0.92 0.004 286.32);
   --skeleton-shimmer: oklch(1 0 0 / 0.1);
+
+  /* Re-stepped for a dark surface: the light-mode green and amber read muddy
+   * on it. This is a deliberate visual change to Progress color="success" and
+   * color="warning" in dark mode, which previously rendered the light hues. */
+  --success: oklch(0.723 0.19 149.579);
+  --success-foreground: oklch(0.982 0.018 155.826);
+  --warning: oklch(0.828 0.189 84.429);
+  --warning-foreground: oklch(0.279 0.077 45.635);
+
+  /* The seven sidebar aliases are inherited from :root; only this one has a
+   * different formula in dark. */
+  --sidebar: var(--card);
 }
 
 @layer base {

@@ -14,6 +14,21 @@ Component runtime CSS (animations, transitions, hover gating) is in `packages/ui
 
 - `--input-bg` — form control background (transparent in light, `input` at 30% in dark). Use `bg-input-bg`.
 - `--popup-ring` — subtle ring for popup containers (`border` at 10% opacity). Use `ring-popup-ring`.
+- `--border-muted` — `border` at 50% alpha. Use `ring-border-muted` (Card's filled surface) or `bg-border-muted` (popup separators).
+- `--success` / `--success-foreground`, `--warning` / `--warning-foreground` — status tones. Theme-independent, exactly as `--destructive` is, so the six theme items do not carry them; the style item does.
+- `--sidebar`, `--sidebar-foreground`, `--sidebar-primary(-foreground)`, `--sidebar-accent(-foreground)`, `--sidebar-border`, `--sidebar-ring` — read by an *imported shadcn sidebar*; keystone ships none. Declared as **aliases** of the theme tokens, so the sidebar follows the active keystone theme rather than shadcn's neutral palette.
+
+### Status tones
+
+Use `text-success` / `bg-success` and `text-warning` / `bg-warning` rather than raw palette colors, and never add a `dark:` override — both tokens re-step for a dark surface already.
+
+`--warning-foreground` is **dark**, breaking the pattern where every other `*-foreground` is near-white. Near-white on amber-500 is ~1.9:1, a WCAG failure. Do not "fix" this for symmetry.
+
+Reserve `--warning` for caution and threshold states (approaching a limit, a stale sync). A metric that simply got worse is `--destructive`, not `--warning` — one channel, one meaning.
+
+### Why success/warning/sidebar live only in the style item
+
+`apps/docs/tests/registry-themes.test.ts` classifies every token as either `THEME_TOKENS` (what a theme *is*; all six theme items must declare it) or `STYLE_ONLY_TOKENS` (theme-independent; only the style item carries it). Adding a token to the canonical CSS without classifying it fails that test on purpose — the classification is a decision, not a side effect. Both classes are still held to cross-file agreement between `apps/docs/app/global.css`, `apps/storybook/.storybook/preview.css` and `packages/ui/registry/default.json`.
 
 ## Borders
 

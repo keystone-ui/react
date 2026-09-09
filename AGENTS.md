@@ -109,7 +109,7 @@ For full conventions, see `.cursor/rules/component-architecture.mdc`.
 For full conventions, see `.cursor/rules/design-tokens.mdc`.
 
 - **Tailwind CSS v4** with OKLCH color space
-- **Semantic tokens**: `primary`, `secondary`, `destructive`, `muted`, `accent`, `card`, `popover`
+- **Semantic tokens**: `primary`, `secondary`, `destructive`, `success`, `warning`, `muted`, `accent`, `card`, `popover`, plus `sidebar-*` aliases for an imported shadcn sidebar. Status tones are tokenized — never `text-emerald-600` / `text-amber-500`, and never a `dark:` override on them. `--warning-foreground` is deliberately dark (near-white on amber-500 fails WCAG).
 - **Hover gating**: `base.css` overrides `hover:` variant with `@media (hover: hover)` — never embed `:hover` in arbitrary selectors
 - **Focus styles**: Two patterns — outline-based (buttons, checkboxes) and ring-based (inputs, selects). Never mix.
 - **Disabled states**: Both `disabled:` (native HTML) and `data-disabled:` (Base UI) — always include `cursor-not-allowed` and `opacity-50`

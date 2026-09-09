@@ -444,6 +444,54 @@ export const destructiveTokens = {
 };
 
 // ---------------------------------------------------------------------------
+// Status tones (fixed — not user-configurable, exactly like destructive)
+// ---------------------------------------------------------------------------
+
+export const statusTokens = {
+  light: {
+    "--success": "oklch(0.627 0.194 149.214)",
+    "--success-foreground": "oklch(0.982 0.018 155.826)",
+    "--warning": "oklch(0.769 0.188 70.08)",
+    // Deliberately dark: near-white on amber-500 is ~1.9:1, a WCAG failure.
+    "--warning-foreground": "oklch(0.279 0.077 45.635)",
+  },
+  dark: {
+    "--success": "oklch(0.723 0.19 149.579)",
+    "--success-foreground": "oklch(0.982 0.018 155.826)",
+    "--warning": "oklch(0.828 0.189 84.429)",
+    "--warning-foreground": "oklch(0.279 0.077 45.635)",
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Sidebar surface (aliases — follow whatever the builder produces)
+// ---------------------------------------------------------------------------
+
+/**
+ * Keystone ships no sidebar; consumers install shadcn's, which reads these.
+ * They are aliases rather than literals so a generated theme carries them
+ * without the builder having to compute anything: `var(--primary)` resolves
+ * against whatever primary the user just picked. Only `--sidebar` differs
+ * between modes, because its formula differs rather than its inputs.
+ */
+export const sidebarTokens = {
+  light: {
+    "--sidebar":
+      "color-mix(in oklch, var(--background) 97%, var(--foreground))",
+    "--sidebar-foreground": "var(--foreground)",
+    "--sidebar-primary": "var(--primary)",
+    "--sidebar-primary-foreground": "var(--primary-foreground)",
+    "--sidebar-accent": "var(--accent)",
+    "--sidebar-accent-foreground": "var(--accent-foreground)",
+    "--sidebar-border": "var(--border)",
+    "--sidebar-ring": "var(--ring)",
+  },
+  dark: {
+    "--sidebar": "var(--card)",
+  },
+};
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 

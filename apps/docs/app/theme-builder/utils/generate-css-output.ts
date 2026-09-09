@@ -6,6 +6,8 @@ import {
   destructiveTokens,
   findMatchingPreset,
   primaryPresets,
+  sidebarTokens,
+  statusTokens,
 } from "../theme-data";
 
 const DEFAULT_RADIUS = "0.625rem";
@@ -70,6 +72,8 @@ export function generateCssOutput(state: ThemeState): string {
     "--primary-foreground": primaryFg,
     "--ring": primaryValue,
     ...destructiveTokens.light,
+    ...statusTokens.light,
+    ...sidebarTokens.light,
     "--font-sans": `"${fontConfig.label}", sans-serif`,
     "--radius": radiusValue,
   };
@@ -80,6 +84,8 @@ export function generateCssOutput(state: ThemeState): string {
     "--primary-foreground": darkPrimaryFg,
     "--ring": darkPrimaryValue,
     ...destructiveTokens.dark,
+    ...statusTokens.dark,
+    ...sidebarTokens.dark,
   };
 
   const indent = "  ";
@@ -134,6 +140,18 @@ export function generateCssOutput(state: ThemeState): string {
   --color-input: var(--input);
   --color-input-bg: var(--input-bg);
   --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
