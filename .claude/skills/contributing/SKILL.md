@@ -32,14 +32,15 @@ Blocks are full-page compositions, hand-registered (no `pnpm add:block` scaffold
 
 1. **Author the source** under `apps/docs/demos/blocks/<name>.tsx` (single-file) or `apps/docs/demos/blocks/<name>/` (multi-file with `index.tsx` re-export).
 2. **Register the demo** in `apps/docs/demos/index.ts` as `"block-<name>": { component: ..., file: "blocks/<name>.tsx" }`. The `block-<name>` key is what `<BlockPreview name="block-<name>">` resolves against.
-3. **Add the registry entry** by hand-editing `registry.json`. The block item must include:
+3. **Generate the installable copy** with `pnpm sync:blocks`. It rewrites the demo's imports (`@keystoneui/react/x` → `@/components/ui/x`, `@keystoneui/react/utils` → `@/lib/utils`, `./sibling` → `@/components/sibling`, de-aliased lucide names) into `registry/default/blocks/<name>/components/`, then formats the result. **Never hand-edit those files** — `pnpm lint:docs` runs `--check` and fails when they drift from the demo. `page.tsx` is the exception: four hand-written lines, not generated.
+4. **Add the registry entry** by hand-editing `registry.json`. The block item must include:
    - `name`, `type: "registry:block"`, `title`, `description`
    - `dependencies` (npm packages) and `registryDependencies` (other registry items)
    - `files[]` with **per-file types**: `registry:page` (with `target: "app/<slug>/page.tsx"`) for the page entry; `registry:component` for everything else
    - **`categories: [...]`** — see the taxonomy below. `pnpm sync:registry` warns if missing.
-4. **Write the MDX** at `apps/docs/content/docs/blocks/<name>.mdx`. Required structure: install bash fence, `<BlockPreview name="block-<name>">`, `## Components Used` with links to `/docs/components/<primitive>`. The lint at `pnpm lint:docs` blocks merge if any of these are missing or malformed. See `apps/docs/content/docs/blocks/_block-template.mdx`.
-5. **Regenerate backlinks** with `pnpm docs:backlinks` — this auto-injects `## Related Blocks` into every component MDX referenced under `## Components Used` (idempotent, fenced).
-6. **Rebuild the registry** with `pnpm registry:build`.
+5. **Write the MDX** at `apps/docs/content/docs/blocks/<name>.mdx`. Required structure: install bash fence, `<BlockPreview name="block-<name>">`, `## Components Used` with links to `/docs/components/<primitive>`. The lint at `pnpm lint:docs` blocks merge if any of these are missing or malformed. See `apps/docs/content/docs/blocks/_block-template.mdx`.
+6. **Regenerate backlinks** with `pnpm docs:backlinks` — this auto-injects `## Related Blocks` into every component MDX referenced under `## Components Used` (idempotent, fenced).
+7. **Rebuild the registry** with `pnpm registry:build`.
 
 ### Block category taxonomy
 
@@ -88,12 +89,13 @@ Three surfaces drift if not maintained explicitly. Run through this checklist af
 | Surface | Action |
 |---|---|
 | `packages/ui/src/_registry.ts` | Add the component entry (handled by `pnpm add:component`). |
-| `packages/ui/package.json` exports | Add `./{name}` subpath. |
+| `packages/ui/package.json` exports | Add `./{name}` subpath **in both `exports` and `publishConfig.exports`** — there are two maps, and a manual add that misses the second ships a broken package. `pnpm add:component` handles both. |
 | `packages/ui/tsup.config.ts` entryPoints | Add the source path. |
 | `skills/keystoneui-react/SKILL.md` | Bump the component count and add a row to the **Component List** table (kebab-case name). |
 | `skills/keystoneui-react/SKILL.md` Component Selection table | Add the component to the appropriate row (e.g. "Form layout" / "Overlays" / "Feedback"). |
 | `apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx` | Bump the "all 54+ UI components" count if you reference one. |
 | `README.md` | Bump the "54+ accessible" count if it appears. |
+| `apps/docs/app/gallery/page.tsx` | Add a `{name, slug, description}` entry. Hardcoded, so a new component is invisible in the gallery until it is listed. |
 | `apps/docs/public/r/` | Run `pnpm registry:build` to rebuild registry artifacts. |
 
 ### When changing a convention or adding a new rule

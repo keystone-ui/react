@@ -37,6 +37,12 @@ jobs:
       - name: Biome check
         run: pnpm check
 
+      # Component/block MDX structure, story-vs-demo parity, and whether each
+      # block's registry copy still matches its demo. These ran nowhere before,
+      # so every rule they enforce was advisory.
+      - name: Docs and registry lint
+        run: pnpm lint:docs
+
   test:
     name: Unit Tests
     runs-on: ubuntu-latest
