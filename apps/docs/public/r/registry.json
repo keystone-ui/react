@@ -1228,6 +1228,10 @@
       "type": "registry:ui",
       "title": "Table",
       "description": "Structured data table with rows, columns, headers, and cells for displaying tabular data.",
+      "dependencies": [
+        "@base-ui/react",
+        "lucide-react"
+      ],
       "files": [
         {
           "path": "packages/ui/src/table.tsx",
@@ -7350,6 +7354,36 @@
       "files": [
         {
           "path": "apps/docs/demos/table/selected-rows.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-sortable",
+      "type": "registry:example",
+      "title": "Table Sortable",
+      "description": "Table example: Sortable.",
+      "registryDependencies": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table/sortable.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-sticky-header",
+      "type": "registry:example",
+      "title": "Table Sticky Header",
+      "description": "Table example: Sticky Header.",
+      "registryDependencies": [
+        "table"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table/sticky-header.tsx",
           "type": "registry:example"
         }
       ]

@@ -36,10 +36,12 @@ import {
   TableBody,
   TableCaption,
   TableCell,
+  TableEmpty,
   TableFooter,
   TableHead,
   TableHeader,
   TableRow,
+  TableSortButton,
 } from "@keystoneui/react/table";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
@@ -1325,4 +1327,85 @@ function PaginatedTableExample() {
 
 export const WithPagination: Story = {
   render: () => <PaginatedTableExample />,
+};
+
+const sortableRows = [
+  { deploys: 42, leadTime: "1h 12m", squad: "Platform" },
+  { deploys: 31, leadTime: "2h 04m", squad: "Payments" },
+  { deploys: 18, leadTime: "3h 47m", squad: "Growth" },
+];
+
+export const Sortable: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`aria-sort` lives on `TableHead` (per ARIA) and `TableSortButton` is only the affordance. The three-way `sortDirection` matters: omitted means the column is not sortable and emits no attribute, `null` means sortable but inactive (`aria-sort="none"`), and `"asc"`/`"desc"` mark the active column. The inactive marker stays visible so the sortable columns are distinguishable from the ones that are not — `revealOnHover` opts into hiding it. `TableSortButton` is polymorphic, so `render={<a href="?sort=deploys" />}` serves a server-rendered table whose sort state lives in the URL.',
+      },
+    },
+  },
+  render: () => (
+    <Table className="mx-auto max-w-lg">
+      <TableHeader>
+        <TableRow>
+          <TableHead sortDirection={null}>
+            <TableSortButton>Squad</TableSortButton>
+          </TableHead>
+          <TableHead numeric sortDirection="desc">
+            <TableSortButton direction="desc">Deploys</TableSortButton>
+          </TableHead>
+          <TableHead numeric sortDirection={null}>
+            <TableSortButton>Lead time p50</TableSortButton>
+          </TableHead>
+          <TableHead>Owner</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {sortableRows.map((row) => (
+          <TableRow key={row.squad}>
+            <TableCell className="font-medium">{row.squad}</TableCell>
+            <TableCell numeric>{row.deploys}</TableCell>
+            <TableCell numeric>{row.leadTime}</TableCell>
+            <TableCell className="text-muted-foreground">—</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  ),
+};
+
+export const StickyHeader: Story = {
+  name: "Sticky Header",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The scroll container pins `overflow-y` to `hidden` by default — letting it be promoted to `auto` renders a permanent vertical gutter inside every table on macOS with "Show scrollbars: Always". A scrolling viewport is therefore opt-in via `containerClassName`, and it needs a height cap: `position: sticky` resolves against the nearest scrollport, so without one there is nothing for the header to stick within.',
+      },
+    },
+  },
+  render: () => (
+    <Table
+      className="mx-auto max-w-lg"
+      containerClassName="max-h-64 overflow-y-auto"
+      hoverable
+    >
+      <TableHeader className="sticky top-0 z-[var(--z-sticky)] bg-background">
+        <TableRow>
+          <TableHead>Squad</TableHead>
+          <TableHead numeric>Deploys</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {Array.from({ length: 24 }, (_, index) => (
+          <TableRow key={index}>
+            <TableCell className="font-medium">
+              Squad {String(index + 1).padStart(2, "0")}
+            </TableCell>
+            <TableCell numeric>{60 - index * 2}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  ),
 };

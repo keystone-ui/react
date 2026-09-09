@@ -415,6 +415,8 @@ import TableEmptyState from "./table/empty-state";
 import TableFooter from "./table/footer";
 import TableHoverable from "./table/hoverable";
 import TableSelectedRows from "./table/selected-rows";
+import TableSortable from "./table/sortable";
+import TableStickyHeader from "./table/sticky-header";
 import TableStriped from "./table/striped";
 import TableWithBadges from "./table/with-badges";
 import TableWithPagination from "./table/with-pagination";
@@ -1957,6 +1959,14 @@ export const demos: Record<string, DemoItem> = {
   "table-hoverable": {
     component: TableHoverable,
     file: "table/hoverable.tsx",
+  },
+  "table-sortable": {
+    component: TableSortable,
+    file: "table/sortable.tsx",
+  },
+  "table-sticky-header": {
+    component: TableStickyHeader,
+    file: "table/sticky-header.tsx",
   },
   "table-selected-rows": {
     component: TableSelectedRows,

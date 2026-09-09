@@ -283,6 +283,7 @@ export const ui: Registry = [
   {
     name: "table",
     type: "registry:ui",
+    dependencies: ["@base-ui/react", "lucide-react"],
     files: [{ path: "ui/table.tsx", type: "registry:ui" }],
   },
   {

@@ -60,9 +60,11 @@ Table
 ├── TableHeader
 │   └── TableRow
 │       └── TableHead
+│           └── TableSortButton
 ├── TableBody
-│   └── TableRow
-│       └── TableCell
+│   ├── TableRow
+│   │   └── TableCell
+│   └── TableEmpty
 └── TableFooter
     └── TableRow
         └── TableCell
@@ -139,6 +141,61 @@ Table with pagination:
 
 <ComponentPreview name="table-with-pagination" />
 
+### Sortable
+
+`aria-sort` belongs on the `th` per ARIA, so it stays on `TableHead` while `TableSortButton` is only the affordance. The three-way `sortDirection` is the part hand-rolled sort headers usually get wrong:
+
+| `sortDirection` | `aria-sort` | Meaning |
+| --- | --- | --- |
+| omitted | *(no attribute)* | The column is not sortable |
+| `null` | `"none"` | Sortable, but not the active column |
+| `"asc"` / `"desc"` | `"ascending"` / `"descending"` | The active column |
+
+Emitting `aria-sort="none"` on a column that cannot be sorted tells a screen-reader user that it can be.
+
+The inactive marker stays visible by default — that is what makes three sortable columns distinguishable from the twelve that are not, and a hover-only affordance is invisible to touch entirely. Pass `revealOnHover` for a dense table where every column sorts.
+
+<ComponentPreview name="table-sortable" />
+
+`TableSortButton` is polymorphic, so the same component serves a server-rendered table whose sort state lives in the URL:
+
+```tsx
+<TableHead numeric sortDirection={active ? direction : null}>
+  <TableSortButton
+    direction={active ? direction : null}
+    render={<Link href={sortHref("deploys")} />}
+  >
+    Deploys
+  </TableSortButton>
+</TableHead>
+```
+
+### Sticky Header
+
+The scroll container pins `overflow-y` to `hidden`, deliberately: letting it be promoted to `auto` renders a permanent vertical gutter inside every table on macOS with "Show scrollbars: Always". A scrolling viewport is therefore opt-in through `containerClassName` — and it **needs a height cap**, because `position: sticky` resolves against the nearest scrollport, so without one there is nothing for the header to stick within.
+
+```tsx
+<Table containerClassName="max-h-96 overflow-y-auto">
+  <TableHeader className="sticky top-0 z-[var(--z-sticky)] bg-background">
+```
+
+The background is not optional — a transparent sticky header lets rows scroll through it. Use `bg-background` rather than `bg-card`, since the table may already sit inside a painted `Card`.
+
+<ComponentPreview name="table-sticky-header" />
+
+<Callout type="warn">
+Sticky headers work only in this bounded-height mode. A header that sticks to the *page* scroll is not possible while `Table` owns the horizontal scroll wrapper: `overflow-x: auto` makes the container a scroll container, and the spec forces the other axis away from `visible`, so the header resolves against a box the page does not scroll. Sticky also requires `border-collapse` (the default), so `variant="card"` and a sticky header are mutually exclusive.
+</Callout>
+
+### Numeric Columns
+
+`numeric` right-aligns with tabular figures. It uses `text-end` rather than `text-right`, so the column flips with the writing direction — and `tabular-nums` matters as much as the alignment, because proportional digits read ragged even when flush.
+
+```tsx
+<TableHead numeric>Deploys</TableHead>
+<TableCell numeric>42</TableCell>
+```
+
 ## RTL
 
 RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/rtl) for what works today.
@@ -158,16 +215,40 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `hoverable` | `boolean` | `false` | Rows show a hover highlight |
+| `size` | `"default" \| "sm"` | `"default"` | Density |
+| `variant` | `"default" \| "card"` | `"default"` | Spaced, rounded rows |
+| `containerClassName` | `string` | - | Classes for the scroll container. Cap its height and set `overflow-y-auto` for a sticky header. |
+| `containerProps` | `ComponentProps<"div">` | - | Escape hatch for the scroll container element |
 | `className` | `string` | - | Additional CSS classes |
 
 ### TableHead
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `sortDirection` | `"asc" \| "desc" \| null` | - | Sets `aria-sort`. Omit for a non-sortable column; `null` for sortable but inactive. |
+| `numeric` | `boolean` | `false` | Right-align (`text-end`) with `tabular-nums` |
+| `className` | `string` | - | Additional CSS classes |
+
+### TableSortButton
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `direction` | `"asc" \| "desc" \| null` | `null` | Mirrors the enclosing head's `sortDirection`; picks the icon |
+| `revealOnHover` | `boolean` | `false` | Hide the inactive marker until hover or focus |
+| `render` | `RenderProp` | - | Render as another element, e.g. a link |
 | `className` | `string` | - | Additional CSS classes |
 
 ### TableCell
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `numeric` | `boolean` | `false` | Right-align (`text-end`) with `tabular-nums` |
 | `className` | `string` | - | Additional CSS classes |
+
+### TableEmpty
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `colSpan` | `number` | *required* | Columns to span. Cannot be derived — a table with a column-visibility menu changes it at runtime. |
+| `className` | `string` | - | Classes for the spanning cell |

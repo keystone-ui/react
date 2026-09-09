@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-sticky-header",
+  "title": "Table Sticky Header",
+  "description": "Table example: Sticky Header.",
+  "registryDependencies": [
+    "table"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/table/sticky-header.tsx",
+      "content": "\"use client\";\n\nimport {\n  Table,\n  TableBody,\n  TableCell,\n  TableHead,\n  TableHeader,\n  TableRow,\n} from \"@keystoneui/react/table\";\n\nconst rows = Array.from({ length: 24 }, (_, index) => ({\n  deploys: 60 - index * 2,\n  id: index + 1,\n  squad: `Squad ${String(index + 1).padStart(2, \"0\")}`,\n}));\n\nexport default function TableStickyHeader() {\n  return (\n    <Table\n      // The container pins overflow-y to hidden by default, because letting it\n      // be promoted to auto renders a permanent vertical gutter inside every\n      // table on macOS with \"Show scrollbars: Always\". A scrolling viewport is\n      // therefore opt-in, and it needs a height cap: `position: sticky`\n      // resolves against the nearest scrollport, so without one there is\n      // nothing for the header to stick within.\n      containerClassName=\"max-h-64 overflow-y-auto\"\n      hoverable\n    >\n      <TableHeader className=\"sticky top-0 z-[var(--z-sticky)] bg-background\">\n        <TableRow>\n          <TableHead>Squad</TableHead>\n          <TableHead numeric>Deploys</TableHead>\n        </TableRow>\n      </TableHeader>\n      <TableBody>\n        {rows.map((row) => (\n          <TableRow key={row.id}>\n            <TableCell className=\"font-medium\">{row.squad}</TableCell>\n            <TableCell numeric>{row.deploys}</TableCell>\n          </TableRow>\n        ))}\n      </TableBody>\n    </Table>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

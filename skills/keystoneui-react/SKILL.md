@@ -145,7 +145,7 @@ import { Modal, ModalTrigger, ModalContent, ModalTitle } from "@keystoneui/react
 | Overlays | `Modal`, `Drawer`, `AlertDialog`, `Popover`, `Tooltip` |
 | Menus | `DropdownMenu`, `Command` (palette) |
 | Navigation | `Tabs`, `Breadcrumb`, `Pagination`, `Stepper` |
-| Data display | `Table`, `Card`, `DescriptionList`, `Avatar`, `Badge`, `Tag`, `TagGroup` |
+| Data display | `Table` (+ `TableSortButton`, `TableEmpty`, `numeric`), `Card`, `DescriptionList`, `Avatar`, `Badge`, `Tag`, `TagGroup` |
 | Metrics / KPI | `StatValue` + `StatDelta` inside `Card` + `CardContent`. `StatDelta` takes a `direction` (`up-is-good` / `down-is-good` / `neutral`) — never colour a delta from its sign alone. Use `Card variant="outline"` for a panel row. |
 | Feedback | `Toast`, `Alert`, `Progress`, `CircularProgress`, `Skeleton`, `Spinner`, `Empty` |
 | Layout | `Card`, `Separator`, `Resizable`, `Accordion`, `Collapsible`, `AspectRatio`, `Carousel` |

@@ -10,7 +10,7 @@ import {
 import {
   Table,
   TableBody,
-  TableCell,
+  TableEmpty,
   TableHead,
   TableHeader,
   TableRow,
@@ -29,21 +29,21 @@ export default function TableEmptyState() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow className="hover:bg-transparent">
-          <TableCell colSpan={4}>
-            <Empty className="py-10">
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <InboxIcon />
-                </EmptyMedia>
-                <EmptyTitle>No invoices found</EmptyTitle>
-                <EmptyDescription>
-                  There are no invoices matching your filters.
-                </EmptyDescription>
-              </EmptyHeader>
-            </Empty>
-          </TableCell>
-        </TableRow>
+        {/* TableEmpty owns the tr/td plumbing and the hover suppression, so
+            the message itself is still just an Empty. */}
+        <TableEmpty colSpan={4}>
+          <Empty className="py-10">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <InboxIcon />
+              </EmptyMedia>
+              <EmptyTitle>No invoices found</EmptyTitle>
+              <EmptyDescription>
+                There are no invoices matching your filters.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        </TableEmpty>
       </TableBody>
     </Table>
   );
