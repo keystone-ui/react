@@ -187,6 +187,27 @@
       }
     },
     {
+      // Vendored third-party source. apps/docs/components/ui/ holds shadcn
+      // components keystone deliberately does not ship (currently: sidebar),
+      // kept as close to upstream as possible so re-vendoring stays a diff
+      // rather than a merge. Lint-fixing code we do not own would defeat that.
+      "includes": ["apps/docs/components/ui/**"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "useExhaustiveDependencies": "off"
+          },
+          "style": {
+            "useConsistentTypeDefinitions": "off"
+          },
+          "suspicious": {
+            // shadcn persists the open/collapsed state in a functional cookie
+            "noDocumentCookie": "off"
+          }
+        }
+      }
+    },
+    {
       // Demo and registry sources are copy-paste examples, not app code
       "includes": ["apps/docs/demos/**", "registry/**"],
       "linter": {

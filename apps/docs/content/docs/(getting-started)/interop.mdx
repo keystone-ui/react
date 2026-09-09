@@ -1,0 +1,77 @@
+---
+title: Using shadcn Components
+description: Keystone is a shadcn-compatible registry, so components it does not ship can come from shadcn's — here is what that costs and how to make it look right.
+---
+
+Keystone installs to the same paths shadcn does (`@/components/ui/*`, `@/lib/utils`) and uses the same registry format. Anything keystone does not ship you can install from shadcn's registry, side by side.
+
+## What keystone deliberately does not ship
+
+**Sidebar.** An app shell is a large, opinionated component — a collapsible icon rail, a mobile drawer, persisted state, a keyboard shortcut, and a `peer`/`group` layout contract between four parts. shadcn's is good, widely understood, and already maintained. Reimplementing it would mean owning ~900 lines to arrive somewhere very close.
+
+So [`admin-01`](/docs/blocks/admin-01) composes shadcn's sidebar rather than a keystone one:
+
+```bash
+npx shadcn@latest add sidebar
+```
+
+## Making it match your theme
+
+shadcn's sidebar reads eight `--sidebar-*` tokens. Keystone's style item declares all eight, as **aliases** of your theme tokens:
+
+```css
+--sidebar: color-mix(in oklch, var(--background) 97%, var(--foreground));
+--sidebar-foreground: var(--foreground);
+--sidebar-primary: var(--primary);
+--sidebar-primary-foreground: var(--primary-foreground);
+--sidebar-accent: var(--accent);
+--sidebar-accent-foreground: var(--accent-foreground);
+--sidebar-border: var(--border);
+--sidebar-ring: var(--ring);
+```
+
+Because they are aliases rather than literals, the sidebar follows whichever keystone theme is active — pick `slate` and the sidebar goes slate too. Only `--sidebar` needs a dark override, since its formula differs rather than its inputs.
+
+<Callout type="warn">
+`npx shadcn add sidebar` appends **its own** `--sidebar-*` block to your CSS, with shadcn's neutral values hardcoded. Because it lands after keystone's, it wins — and your sidebar renders neutral grey inside a slate app.
+
+**Delete the injected block.** It is the last `--sidebar-*` group in your `globals.css` after running the command.
+</Callout>
+
+## `SidebarInset` needs `min-w-0`
+
+```tsx
+<SidebarInset className="min-w-0">
+```
+
+Not cosmetic. A flex item will not shrink below its content's intrinsic width, so without it any wide child — a table, a chart, a long unbroken string — pushes the inset open and the whole document gains a horizontal scrollbar. In the app this pattern was taken from, the omission produced **+256px of overflow across eight pages, at every width from 768 to 1600**, and went unnoticed until a test measured it.
+
+Keystone bakes this into components it owns. It cannot for a file it does not, so this one is on you.
+
+## Which registry a dependency resolves against
+
+A registry item's `registryDependencies` may name items by bare name (`"button"`) or by namespace (`"@keystone/button"`). Bare names resolve against shadcn's registry, so configure the namespace if you want keystone's:
+
+```json title="components.json"
+{
+  "registries": {
+    "@keystone": "https://keystoneui.io/r/{name}.json"
+  }
+}
+```
+
+```bash
+npx shadcn@latest add @keystone/button
+```
+
+In practice the distinction matters less than it sounds, because both registries write to the same paths and `shadcn add` will not overwrite a file that already exists. If keystone's `button.tsx` is there, shadcn's sidebar composes keystone's Button.
+
+## The docs preview is adapted
+
+The sidebar rendered in `admin-01`'s preview on this site is shadcn's, vendored into the docs app with its imports pointed at `@keystoneui/react/*` and its mobile Sheet swapped for keystone's [`Drawer`](/docs/components/drawer) — the docs app has no shadcn primitives installed, so there was nothing else for it to import.
+
+A consumer running `shadcn add sidebar` on top of keystone lands in much the same place, since the overlapping files already exist and are skipped. The one real difference is the mobile overlay: shadcn's own sidebar uses its Sheet, and ours uses Drawer.
+
+It also keeps shadcn's `sidebar_state` cookie, which persists the collapsed state for a week. That is a functional cookie, not tracking, but it is worth knowing it exists — pass `open`/`onOpenChange` to `SidebarProvider` if you would rather own the state yourself.
+
+While adapting it we also fixed a hydration bug present upstream: `SidebarMenuSkeleton` calls `Math.random()` in a `useState` initialiser, so the server and the client pick different widths.
