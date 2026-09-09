@@ -1,0 +1,128 @@
+---
+title: Table Pagination
+description: The footer of a paginated data table — rows selected, rows per page, which page, and the four navigation buttons.
+---
+
+## Import
+
+```tsx
+import {
+  TablePagination,
+  TablePaginationButtons,
+  TablePaginationInfo,
+  TablePaginationPageSize,
+  TablePaginationStatus,
+} from "@keystoneui/react/table-pagination";
+```
+
+## Usage
+
+<ComponentPreview name="table-pagination-default" />
+
+This is deliberately **not** [`Pagination`](/docs/components/pagination). That component is a list of page *links* — `nav > ul > li > a`, with `aria-current="page"` — which is right when every page has its own URL. A data-table footer is a toolbar over an opaque page index: no per-page URLs, `aria-live` instead of `aria-current`, and a dependency on `Select` and `Label`. Merging the two would drag Base UI's Select into every bundle that only wanted page links.
+
+## Installation
+
+<CodeBlockTabs>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/table-pagination.json
+```
+
+```bash tab="Manual"
+pnpm add @keystoneui/react
+```
+
+</CodeBlockTabs>
+
+## Composition
+
+```text
+TablePagination
+├── TablePaginationInfo
+├── TablePaginationPageSize
+├── TablePaginationStatus
+└── TablePaginationButtons
+```
+
+Give `TablePagination` the props and it renders that composition for you. Pass `children` and it renders exactly what you give it instead — the same shape as [`Progress`](/docs/components/progress).
+
+## Examples
+
+### Composed
+
+<ComponentPreview name="table-pagination-composed" />
+
+## Accessibility
+
+Paging swaps the table's contents with no other visible confirmation, so without an announcement a screen-reader user hears **nothing at all** after clicking "next page". `TablePaginationStatus` and `TablePaginationInfo` are therefore both `aria-live="polite"`.
+
+Every navigation button carries an explicit `aria-label` ("Go to first page", and so on), since each one is icon-only.
+
+`TablePaginationPageSize` wires its `Label` to the select trigger with a generated id. Without that the control announces only its current value, with no indication of what the number means.
+
+## Notes
+
+`pageIndex` is **0-based**; the status line renders it 1-based. `pageCount` is clamped to a minimum of 1 for display, so an empty result set reads "Page 1 of 1" rather than "Page 1 of 0".
+
+When the page size changes, reset the page index — page 3 of a 10-per-page list does not exist at 50 per page:
+
+```tsx
+onPageSizeChange={(size) => {
+  setPageSize(size);
+  setPageIndex(0);
+}}
+```
+
+`TablePaginationInfo` and `TablePaginationPageSize` are hidden below the `lg` breakpoint, as are the first/last buttons, so the footer stays usable on a phone without wrapping.
+
+## API Reference
+
+### TablePagination
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `pageIndex` | `number` | *required* | 0-based current page |
+| `pageCount` | `number` | *required* | Total pages |
+| `pageSize` | `number` | - | Omit to hide the page-size control |
+| `pageSizeOptions` | `readonly number[]` | `[10, 20, 30, 50]` | Page-size choices |
+| `selectedCount` | `number` | - | Omit to hide the selection line |
+| `totalCount` | `number` | - | Rows in the whole result set |
+| `showEdgeButtons` | `boolean` | `true` | Render the first/last buttons |
+| `onPageIndexChange` | `(index: number) => void` | - | Called with the target page |
+| `onPageSizeChange` | `(size: number) => void` | - | Called with a `number`, not a string |
+| `children` | `ReactNode` | - | Replaces the default composition |
+
+### TablePaginationButtons
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `pageIndex` | `number` | *required* | 0-based current page |
+| `pageCount` | `number` | *required* | Total pages |
+| `showEdgeButtons` | `boolean` | `true` | Render the first/last buttons |
+| `onPageIndexChange` | `(index: number) => void` | - | Called with the target page |
+
+### TablePaginationStatus
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `pageIndex` | `number` | *required* | 0-based current page |
+| `pageCount` | `number` | *required* | Total pages, clamped to ≥ 1 for display |
+| `children` | `ReactNode` | - | Replaces the default "Page N of M" |
+
+### TablePaginationPageSize
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `number` | - | Current page size |
+| `options` | `readonly number[]` | `[10, 20, 30, 50]` | Page-size choices |
+| `label` | `string` | `"Rows per page"` | Label text |
+| `onValueChange` | `(size: number) => void` | - | Called with a `number` |
+
+### TablePaginationInfo
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `selectedCount` | `number` | - | Rows selected. Omit to render nothing. |
+| `totalCount` | `number` | - | Rows in the whole result set |
+| `children` | `ReactNode` | - | Replaces the default sentence |

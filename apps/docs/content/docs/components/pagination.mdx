@@ -19,6 +19,9 @@ import {
 
 ## Usage
 
+For the footer of a paginated data table — rows-per-page, "page N of M" and the four navigation buttons — use [`TablePagination`](/docs/components/table-pagination) instead. `Pagination` is a list of page *links* (`nav > ul > li > a`, with `aria-current="page"`); a data-table footer is a toolbar with an opaque page index and no per-page URLs.
+
+
 <ComponentPreview name="pagination-default" />
 
 ## Installation
@@ -74,11 +77,6 @@ A minimal previous/next pagination without page numbers:
 <ComponentPreview name="pagination-simple" />
 
 
-### Data Table
-
-Pagination integrated with a data table, including per-page and total counts:
-
-<ComponentPreview name="pagination-data-table" />
 
 ## RTL
 

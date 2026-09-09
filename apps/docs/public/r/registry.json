@@ -1410,6 +1410,26 @@
       ]
     },
     {
+      "name": "table-pagination",
+      "type": "registry:ui",
+      "title": "Table Pagination",
+      "description": "The footer of a paginated data table — rows selected, rows per page, which page, and the four navigation buttons.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "label",
+        "select"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/table-pagination.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "signin-01",
       "type": "registry:block",
       "title": "Sign in 01",
@@ -1720,6 +1740,7 @@
         "selection-bar",
         "stepper",
         "table",
+        "table-pagination",
         "toggle-group"
       ],
       "files": [
@@ -1742,10 +1763,6 @@
         },
         {
           "path": "registry/default/blocks/tickets-01/components/tickets-filters-drawer.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "registry/default/blocks/tickets-01/components/tickets-pagination.tsx",
           "type": "registry:component"
         },
         {
@@ -6136,21 +6153,6 @@
       ]
     },
     {
-      "name": "pagination-data-table",
-      "type": "registry:example",
-      "title": "Pagination Data Table",
-      "description": "Pagination example: Data Table.",
-      "registryDependencies": [
-        "button"
-      ],
-      "files": [
-        {
-          "path": "apps/docs/demos/pagination/data-table.tsx",
-          "type": "registry:example"
-        }
-      ]
-    },
-    {
       "name": "pagination-default",
       "type": "registry:example",
       "title": "Pagination Default",
@@ -7432,6 +7434,37 @@
       "files": [
         {
           "path": "apps/docs/demos/table/with-pagination.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-pagination-composed",
+      "type": "registry:example",
+      "title": "Table Pagination Composed",
+      "description": "Table Pagination example: Composed.",
+      "registryDependencies": [
+        "table-pagination"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table-pagination/composed.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "table-pagination-default",
+      "type": "registry:example",
+      "title": "Table Pagination Default",
+      "description": "Table Pagination example: Default.",
+      "registryDependencies": [
+        "table",
+        "table-pagination"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/table-pagination/default.tsx",
           "type": "registry:example"
         }
       ]

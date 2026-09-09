@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-pagination-default",
+  "title": "Table Pagination Default",
+  "description": "Table Pagination example: Default.",
+  "registryDependencies": [
+    "table",
+    "table-pagination"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/table-pagination/default.tsx",
+      "content": "\"use client\";\n\nimport {\n  Table,\n  TableBody,\n  TableCell,\n  TableHead,\n  TableHeader,\n  TableRow,\n} from \"@keystoneui/react/table\";\nimport { TablePagination } from \"@keystoneui/react/table-pagination\";\nimport { useMemo, useState } from \"react\";\n\nconst rows = Array.from({ length: 23 }, (_, index) => ({\n  amount: 120 + index * 37,\n  id: index + 1,\n  invoice: `INV-${String(1001 + index)}`,\n  status: index % 3 === 0 ? \"Paid\" : \"Pending\",\n}));\n\nexport default function TablePaginationDefault() {\n  const [pageIndex, setPageIndex] = useState(0);\n  const [pageSize, setPageSize] = useState(10);\n\n  const pageCount = Math.max(1, Math.ceil(rows.length / pageSize));\n  const page = useMemo(\n    () => rows.slice(pageIndex * pageSize, pageIndex * pageSize + pageSize),\n    [pageIndex, pageSize]\n  );\n\n  return (\n    <div className=\"flex w-full flex-col gap-4\">\n      <Table hoverable>\n        <TableHeader>\n          <TableRow>\n            <TableHead>Invoice</TableHead>\n            <TableHead>Status</TableHead>\n            <TableHead numeric>Amount</TableHead>\n          </TableRow>\n        </TableHeader>\n        <TableBody>\n          {page.map((row) => (\n            <TableRow key={row.id}>\n              <TableCell className=\"font-medium\">{row.invoice}</TableCell>\n              <TableCell className=\"text-muted-foreground\">\n                {row.status}\n              </TableCell>\n              <TableCell numeric>${row.amount}</TableCell>\n            </TableRow>\n          ))}\n        </TableBody>\n      </Table>\n\n      <TablePagination\n        onPageIndexChange={setPageIndex}\n        onPageSizeChange={(size) => {\n          setPageSize(size);\n          // Page 3 of a 10-per-page list does not exist at 50 per page.\n          setPageIndex(0);\n        }}\n        pageCount={pageCount}\n        pageIndex={pageIndex}\n        pageSize={pageSize}\n        selectedCount={0}\n        totalCount={rows.length}\n      />\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

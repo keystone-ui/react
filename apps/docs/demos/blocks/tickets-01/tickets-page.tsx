@@ -23,6 +23,7 @@ import {
   SelectionBarLink,
   SelectionBarSeparator,
 } from "@keystoneui/react/selection-bar";
+import { TablePagination } from "@keystoneui/react/table-pagination";
 import {
   ChevronDown as ChevronDownIcon,
   Download as DownloadIcon,
@@ -32,7 +33,6 @@ import {
   Trash as TrashIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-
 import { DeleteTicketsDialog } from "./delete-tickets-dialog";
 import {
   channelLabels,
@@ -51,7 +51,6 @@ import {
 } from "./mock-tickets";
 import { NewTicketModal } from "./new-ticket-modal";
 import { TicketDetailDrawer } from "./ticket-detail-drawer";
-import { TicketsPagination } from "./tickets-pagination";
 import {
   type SortState,
   type TicketColumnId,
@@ -373,11 +372,16 @@ export function TicketsPage() {
               tickets={paginatedTickets}
               visibleColumns={visibleColumns}
             />
-            <TicketsPagination
+            <TablePagination
               onPageIndexChange={setPageIndex}
               onPageSizeChange={handlePageSizeChange}
+              pageCount={Math.max(
+                1,
+                Math.ceil(visibleTickets.length / pageSize)
+              )}
               pageIndex={pageIndex}
               pageSize={pageSize}
+              pageSizeOptions={[5, 10, 20, 50]}
               selectedCount={selectedCount}
               totalCount={visibleTickets.length}
             />

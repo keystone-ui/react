@@ -33,6 +33,7 @@
     "tabs",
     "breadcrumb",
     "pagination",
+    "table-pagination",
     "stepper",
     "---Feedback---",
     "alert",

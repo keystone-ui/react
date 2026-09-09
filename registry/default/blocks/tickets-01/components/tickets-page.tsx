@@ -28,7 +28,6 @@ import {
 } from "@/components/mock-tickets";
 import { NewTicketModal } from "@/components/new-ticket-modal";
 import { TicketDetailDrawer } from "@/components/ticket-detail-drawer";
-import { TicketsPagination } from "@/components/tickets-pagination";
 import {
   type SortState,
   type TicketColumnId,
@@ -63,6 +62,7 @@ import {
   SelectionBarLink,
   SelectionBarSeparator,
 } from "@/components/ui/selection-bar";
+import { TablePagination } from "@/components/ui/table-pagination";
 
 const ALL_COLUMN_IDS = ticketColumns.map((c) => c.id);
 
@@ -372,11 +372,16 @@ export function TicketsPage() {
               tickets={paginatedTickets}
               visibleColumns={visibleColumns}
             />
-            <TicketsPagination
+            <TablePagination
               onPageIndexChange={setPageIndex}
               onPageSizeChange={handlePageSizeChange}
+              pageCount={Math.max(
+                1,
+                Math.ceil(visibleTickets.length / pageSize)
+              )}
               pageIndex={pageIndex}
               pageSize={pageSize}
+              pageSizeOptions={[5, 10, 20, 50]}
               selectedCount={selectedCount}
               totalCount={visibleTickets.length}
             />

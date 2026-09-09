@@ -323,7 +323,6 @@ import NativeSelectGroups from "./native-select/groups";
 import NativeSelectInvalid from "./native-select/invalid";
 import NativeSelectSizes from "./native-select/sizes";
 // pagination
-import PaginationDataTable from "./pagination/data-table";
 import PaginationDefault from "./pagination/default";
 import PaginationSimple from "./pagination/simple";
 // popover
@@ -420,6 +419,8 @@ import TableStickyHeader from "./table/sticky-header";
 import TableStriped from "./table/striped";
 import TableWithBadges from "./table/with-badges";
 import TableWithPagination from "./table/with-pagination";
+import TablePaginationComposed from "./table-pagination/composed";
+import TablePaginationDefault from "./table-pagination/default";
 // tabs
 import TabsAnimatedIndicator from "./tabs/animated-indicator";
 import TabsDefault from "./tabs/default";
@@ -1648,10 +1649,6 @@ export const demos: Record<string, DemoItem> = {
   },
 
   // pagination
-  "pagination-data-table": {
-    component: PaginationDataTable,
-    file: "pagination/data-table.tsx",
-  },
   "pagination-default": {
     component: PaginationDefault,
     file: "pagination/default.tsx",
@@ -2371,6 +2368,14 @@ export const demos: Record<string, DemoItem> = {
   "stat-kpi-row": {
     component: StatKpiRow,
     file: "stat/kpi-row.tsx",
+  },
+  "table-pagination-composed": {
+    component: TablePaginationComposed,
+    file: "table-pagination/composed.tsx",
+  },
+  "table-pagination-default": {
+    component: TablePaginationDefault,
+    file: "table-pagination/default.tsx",
   },
 };
 

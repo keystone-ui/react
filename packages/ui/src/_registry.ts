@@ -358,4 +358,11 @@ export const ui: Registry = [
     registryDependencies: ["card"],
     files: [{ path: "ui/stat.tsx", type: "registry:ui" }],
   },
+  {
+    name: "table-pagination",
+    type: "registry:ui",
+    dependencies: ["lucide-react"],
+    registryDependencies: ["button", "label", "select"],
+    files: [{ path: "ui/table-pagination.tsx", type: "registry:ui" }],
+  },
 ];

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-pagination-composed",
+  "title": "Table Pagination Composed",
+  "description": "Table Pagination example: Composed.",
+  "registryDependencies": [
+    "table-pagination"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/table-pagination/composed.tsx",
+      "content": "\"use client\";\n\nimport {\n  TablePagination,\n  TablePaginationButtons,\n  TablePaginationStatus,\n} from \"@keystoneui/react/table-pagination\";\nimport { useState } from \"react\";\n\nexport default function TablePaginationComposed() {\n  const [pageIndex, setPageIndex] = useState(1);\n  const pageCount = 5;\n\n  return (\n    // Passing children replaces the default composition entirely, so you keep\n    // only the parts you want — here: no selection line, no page-size select.\n    <TablePagination\n      className=\"w-full\"\n      pageCount={pageCount}\n      pageIndex={pageIndex}\n    >\n      <TablePaginationStatus pageCount={pageCount} pageIndex={pageIndex} />\n      <TablePaginationButtons\n        onPageIndexChange={setPageIndex}\n        pageCount={pageCount}\n        pageIndex={pageIndex}\n        showEdgeButtons={false}\n      />\n    </TablePagination>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

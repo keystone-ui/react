@@ -6,7 +6,7 @@ A modern React component library built with [Base UI](https://base-ui.com), [Tai
 
 | Package | Description |
 | --- | --- |
-| [`@keystoneui/react`](packages/ui) | Core component library — 55+ accessible, themeable components |
+| [`@keystoneui/react`](packages/ui) | Core component library — 56+ accessible, themeable components |
 | [`docs`](apps/docs) | Documentation site built with Fumadocs (Next.js) |
 | [`storybook`](apps/storybook) | Component development and visual testing with Storybook |
 

@@ -83,7 +83,8 @@
     "./utils": "./src/utils.ts",
     "./base.css": "./src/base.css",
     "./selection-bar": "./src/selection-bar.tsx",
-    "./stat": "./src/stat.tsx"
+    "./stat": "./src/stat.tsx",
+    "./table-pagination": "./src/table-pagination.tsx"
   },
   "scripts": {
     "build": "tsup",
@@ -350,6 +351,10 @@
       "./stat": {
         "types": "./dist/stat.d.ts",
         "default": "./dist/stat.js"
+      },
+      "./table-pagination": {
+        "types": "./dist/table-pagination.d.ts",
+        "default": "./dist/table-pagination.js"
       }
     }
   },
