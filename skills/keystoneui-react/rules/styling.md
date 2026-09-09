@@ -42,7 +42,9 @@ Use semantic tokens. Never raw Tailwind colors in component or app code.
 
 For status indicators, prefer `Badge` variants or semantic tokens. All four status tones are tokenized: `text-success` / `bg-success`, `text-warning` / `bg-warning`, `text-destructive`, and `text-muted-foreground` for neutral. Never reach for `text-emerald-600` or `text-amber-500` — and never pair a status token with a `dark:` override, since the tokens already re-step for a dark surface.
 
-Note `--warning-foreground` is deliberately dark rather than near-white: near-white on amber-500 is ~1.9:1, a WCAG failure. Use `text-warning-foreground` on a `bg-warning` fill, not `text-white`.
+Note `--success-foreground` and `--warning-foreground` are deliberately **dark** rather than near-white: near-white measures 3.10:1 on the success green and 1.97:1 on the warning amber, both WCAG failures. Use `text-success-foreground` / `text-warning-foreground` on a filled chip, never `text-white`.
+
+For charts, use `--chart-1` … `--chart-5` (`bg-chart-1`, `fill-chart-3`). Five slots is a decision, not a starting point — the ramp separates by lightness so it survives colour blindness, and adding hues erodes that. Resolve a series' colour through one shared helper so the legend swatch and the mark cannot disagree.
 
 For a data table: `TableHead sortDirection` sets `aria-sort` (omit it for a non-sortable column — `null` means sortable but inactive), `TableSortButton` is the affordance and is polymorphic via `render` for URL-driven sorting, `numeric` right-aligns with `text-end tabular-nums`, and `TableEmpty` provides the spanning "no rows" row. A sticky header needs `containerClassName="max-h-96 overflow-y-auto"` plus `sticky top-0 z-[var(--z-sticky)] bg-background` on `TableHeader`; it cannot stick to the page scroll, only within a bounded container.
 

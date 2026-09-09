@@ -16,15 +16,34 @@ Component runtime CSS (animations, transitions, hover gating) is in `packages/ui
 - `--popup-ring` — subtle ring for popup containers (`border` at 10% opacity). Use `ring-popup-ring`.
 - `--border-muted` — `border` at 50% alpha. Use `ring-border-muted` (Card's filled surface) or `bg-border-muted` (popup separators).
 - `--success` / `--success-foreground`, `--warning` / `--warning-foreground` — status tones. Theme-independent, exactly as `--destructive` is, so the six theme items do not carry them; the style item does.
+- `--chart-1` … `--chart-5` — categorical chart ramp. Use `bg-chart-1`, `fill-chart-3`, or `var(--chart-N)` in a chart config. Five slots, not twelve: crowding more hues into the same space measurably worsens colour-blind separation, and a dashboard stacks four or five channels plus an "Other".
 - `--sidebar`, `--sidebar-foreground`, `--sidebar-primary(-foreground)`, `--sidebar-accent(-foreground)`, `--sidebar-border`, `--sidebar-ring` — read by an *imported shadcn sidebar*; keystone ships none. Declared as **aliases** of the theme tokens, so the sidebar follows the active keystone theme rather than shadcn's neutral palette.
 
 ### Status tones
 
 Use `text-success` / `bg-success` and `text-warning` / `bg-warning` rather than raw palette colors, and never add a `dark:` override — both tokens re-step for a dark surface already.
 
-`--warning-foreground` is **dark**, breaking the pattern where every other `*-foreground` is near-white. Near-white on amber-500 is ~1.9:1, a WCAG failure. Do not "fix" this for symmetry.
+`--success-foreground` and `--warning-foreground` are both **dark**, breaking the pattern where every other `*-foreground` is near-white. Near-white measures 3.10:1 on the success green and 1.97:1 on the warning amber — both WCAG failures. Dark text gives 4.60 and 6.97. Do not "fix" these for symmetry; `apps/docs/tests/palette.test.ts` measures them.
+
+Note `--destructive-foreground` on `--destructive` is 4.47:1 in light and 2.63:1 in dark, i.e. below AA. That predates the status tokens and is left alone deliberately — it is the label colour on every destructive Button in every theme, so re-picking it is its own decision. The palette test pins it so it cannot get worse.
 
 Reserve `--warning` for caution and threshold states (approaching a limit, a stale sync). A metric that simply got worse is `--destructive`, not `--warning` — one channel, one meaning.
+
+### Categorical chart colours
+
+Separation between slots comes from **lightness**, not hue, because every form
+of colour-vision deficiency preserves lightness while collapsing hue. The ramp
+therefore staggers lightness deliberately rather than pairing each hue with the
+lightness that looks natural for it.
+
+This is not theoretical. A straight port of a twelve-slot palette measured
+**0.9 ΔE** between two slots under simulated tritanopia — below a
+just-noticeable difference, meaning a tritanope could not tell those two series
+apart at all. Pairing each hue with its natural lightness got that to 6-7. The
+staggered ramp reaches 11.1 in both modes.
+
+If you add or re-tune a slot, run `pnpm test --filter=@keystoneui/docs` — the
+palette test measures every pair under all three CVD types and will tell you.
 
 ### Why success/warning/sidebar live only in the style item
 

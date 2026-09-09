@@ -50,6 +50,11 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -93,7 +98,7 @@
    * every other *-foreground is near-white. Near-white on amber-500 is about
    * 1.9:1, a WCAG failure. Do not "fix" this for symmetry. */
   --success: oklch(0.627 0.194 149.214);
-  --success-foreground: oklch(0.982 0.018 155.826);
+  --success-foreground: oklch(0.266 0.065 152.934);
   --warning: oklch(0.769 0.188 70.08);
   --warning-foreground: oklch(0.279 0.077 45.635);
 
@@ -115,6 +120,17 @@
   --sidebar-accent-foreground: var(--accent-foreground);
   --sidebar-border: var(--border);
   --sidebar-ring: var(--ring);
+
+  /* Categorical chart ramp. Five slots, not twelve: a dashboard stacks four or
+   * five channels plus an "Other", and crowding more hues into the same space
+   * measurably worsens the colour-blind separation floor. Theme-independent,
+   * so the six theme items do not carry these -- see
+   * apps/docs/tests/palette.test.ts, which measures every claim here. */
+  --chart-1: oklch(0.55 0.16 258);
+  --chart-2: oklch(0.68 0.14 150);
+  --chart-3: oklch(0.56 0.19 25);
+  --chart-4: oklch(0.72 0.17 338);
+  --chart-5: oklch(0.8 0.16 100);
 
   --radius: 0.625rem;
 }
@@ -149,13 +165,21 @@
    * on it. This is a deliberate visual change to Progress color="success" and
    * color="warning" in dark mode, which previously rendered the light hues. */
   --success: oklch(0.723 0.19 149.579);
-  --success-foreground: oklch(0.982 0.018 155.826);
+  --success-foreground: oklch(0.266 0.065 152.934);
   --warning: oklch(0.828 0.189 84.429);
   --warning-foreground: oklch(0.279 0.077 45.635);
 
   /* The seven sidebar aliases are inherited from :root; only this one has a
    * different formula in dark. */
   --sidebar: var(--card);
+
+  /* Re-stepped for a dark surface rather than reused: the light ramp's
+   * lightness is tuned against a white card. */
+  --chart-1: oklch(0.65 0.16 258);
+  --chart-2: oklch(0.74 0.14 150);
+  --chart-3: oklch(0.66 0.18 25);
+  --chart-4: oklch(0.78 0.16 338);
+  --chart-5: oklch(0.9 0.16 100);
 }
 
 :root {

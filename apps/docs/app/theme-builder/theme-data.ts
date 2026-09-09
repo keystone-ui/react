@@ -450,14 +450,14 @@ export const destructiveTokens = {
 export const statusTokens = {
   light: {
     "--success": "oklch(0.627 0.194 149.214)",
-    "--success-foreground": "oklch(0.982 0.018 155.826)",
+    "--success-foreground": "oklch(0.266 0.065 152.934)",
     "--warning": "oklch(0.769 0.188 70.08)",
     // Deliberately dark: near-white on amber-500 is ~1.9:1, a WCAG failure.
     "--warning-foreground": "oklch(0.279 0.077 45.635)",
   },
   dark: {
     "--success": "oklch(0.723 0.19 149.579)",
-    "--success-foreground": "oklch(0.982 0.018 155.826)",
+    "--success-foreground": "oklch(0.266 0.065 152.934)",
     "--warning": "oklch(0.828 0.189 84.429)",
     "--warning-foreground": "oklch(0.279 0.077 45.635)",
   },

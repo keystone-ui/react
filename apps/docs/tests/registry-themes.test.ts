@@ -136,6 +136,12 @@ const STYLE_ONLY_TOKENS: readonly string[] = [
   "sidebar-accent-foreground",
   "sidebar-border",
   "sidebar-ring",
+  // Categorical chart ramp: five slots, the same hues in every theme.
+  "chart-1",
+  "chart-2",
+  "chart-3",
+  "chart-4",
+  "chart-5",
 ];
 
 const CANONICAL_CSS = join(REPO_ROOT, "apps", "docs", "app", "global.css");
