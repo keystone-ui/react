@@ -113,6 +113,7 @@ For full conventions, see `.cursor/rules/design-tokens.mdc`.
 - **Hover gating**: `base.css` overrides `hover:` variant with `@media (hover: hover)` — never embed `:hover` in arbitrary selectors
 - **Focus styles**: Two patterns — outline-based (buttons, checkboxes) and ring-based (inputs, selects). Never mix.
 - **Disabled states**: Both `disabled:` (native HTML) and `data-disabled:` (Base UI) — always include `cursor-not-allowed` and `opacity-50`
+- **Component-scoped spacing**: `Card` drives all padding/gap from `--card-spacing`, resolved via CVA (never via `data-[size=…]` variants, which defeat a consumer's `className` override). `<Card className="[--card-spacing:0px]">` is the table-flush recipe.
 - **Motion & layering tokens** (in `packages/ui/src/base.css`): use `--duration-fast|base|slow|drawer`, `--ease-out|in-out|drawer`, and the `--z-sticky|drawer|modal|dropdown|popover|tooltip|toast` scale instead of hard-coded durations or z-index values. Popups (dropdown/select/popover/combobox) sit at `z=60`, above modal/drawer (`50`/`40`), below tooltip (`70`) and toast (`80`).
 
 ## Icon Library

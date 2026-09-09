@@ -107,6 +107,8 @@ import CardDefault from "./card/default";
 import CardLoginForm from "./card/login-form";
 import CardSmall from "./card/small";
 import CardSocialCard from "./card/social-card";
+import CardTableFlush from "./card/table-flush";
+import CardVariants from "./card/variants";
 import CardWithAction from "./card/with-action";
 import CardWithImage from "./card/with-image";
 // carousel
@@ -820,6 +822,14 @@ export const demos: Record<string, DemoItem> = {
   "card-social-card": {
     component: CardSocialCard,
     file: "card/social-card.tsx",
+  },
+  "card-table-flush": {
+    component: CardTableFlush,
+    file: "card/table-flush.tsx",
+  },
+  "card-variants": {
+    component: CardVariants,
+    file: "card/variants.tsx",
   },
   "card-with-action": {
     component: CardWithAction,

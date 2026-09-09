@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "card-variants",
+  "title": "Card Variants",
+  "description": "Card example: Variants.",
+  "registryDependencies": [
+    "card"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/card/variants.tsx",
+      "content": "\"use client\";\n\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardHeader,\n  CardTitle,\n} from \"@keystoneui/react/card\";\n\nexport default function CardVariants() {\n  return (\n    <div className=\"grid w-full max-w-3xl gap-4 sm:grid-cols-2 [&>*]:min-w-0\">\n      <Card>\n        <CardHeader>\n          <CardTitle>Filled</CardTitle>\n          <CardDescription>\n            Paints <code>bg-card</code>. The default, and the right tier for a\n            card that sits on the page background.\n          </CardDescription>\n        </CardHeader>\n        <CardContent>\n          <p className=\"text-muted-foreground text-sm\">\n            Rings <code>border-muted</code> — the fill already separates it from\n            the page, so the edge only has to hint.\n          </p>\n        </CardContent>\n      </Card>\n\n      <Card variant=\"outline\">\n        <CardHeader>\n          <CardTitle>Outline</CardTitle>\n          <CardDescription>\n            No fill, so the page shows through. Use it for chart and table\n            panels, where a filled card on a filled page reads as two stacked\n            surfaces.\n          </CardDescription>\n        </CardHeader>\n        <CardContent>\n          <p className=\"text-muted-foreground text-sm\">\n            Rings <code>border</code> at full strength — with no fill the edge\n            is the only thing defining the card.\n          </p>\n        </CardContent>\n      </Card>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

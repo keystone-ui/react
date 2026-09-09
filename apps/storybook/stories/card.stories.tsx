@@ -12,6 +12,14 @@ import {
 } from "@keystoneui/react/card";
 import { Input } from "@keystoneui/react/input";
 import { Label } from "@keystoneui/react/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@keystoneui/react/table";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BadgeCheck as BadgeCheckIcon } from "lucide-react";
 
@@ -315,4 +323,99 @@ export const SocialCard: Story = {
       },
     },
   },
+};
+
+export const Variants: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The two surface tiers. `filled` (the default) paints `bg-card`; `outline` has no fill so the page shows through, which is the tier for chart and table panels where a filled card on a filled page reads as two stacked surfaces. Both use a ring rather than a border so the variants share identical interior geometry.",
+      },
+    },
+  },
+  render: () => (
+    <div className="mx-auto grid w-full max-w-3xl gap-4 sm:grid-cols-2 [&>*]:min-w-0">
+      <Card>
+        <CardHeader>
+          <CardTitle>Filled</CardTitle>
+          <CardDescription>
+            Rings <code>border-muted</code> — the fill already separates it from
+            the page.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground text-sm">The default surface.</p>
+        </CardContent>
+      </Card>
+      <Card variant="outline">
+        <CardHeader>
+          <CardTitle>Outline</CardTitle>
+          <CardDescription>
+            Rings <code>border</code> at full strength — with no fill the edge
+            is the only thing defining the card.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground text-sm">For panels.</p>
+        </CardContent>
+      </Card>
+    </div>
+  ),
+};
+
+export const TableFlush: Story = {
+  name: "Table Flush",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "All of Card's padding resolves from one `--card-spacing` custom property, so `className=\"[--card-spacing:0px]\"` gives a table-flush panel with no new prop: the header row sits against the edge and `overflow-hidden` clips the table's square corners to the card radius. For a padded header above a flush table, keep normal spacing and put the table in a bare sibling rather than in CardContent.",
+      },
+    },
+  },
+  render: () => (
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+      <Card className="[--card-spacing:0px]" variant="outline">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Squad</TableHead>
+              <TableHead className="text-end">Deploys</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="font-medium">Platform</TableCell>
+              <TableCell className="text-end tabular-nums">42</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-medium">Payments</TableCell>
+              <TableCell className="text-end tabular-nums">31</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </Card>
+
+      <Card variant="outline">
+        <CardHeader>
+          <CardTitle>Delivery by squad</CardTitle>
+        </CardHeader>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Squad</TableHead>
+              <TableHead className="text-end">Deploys</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="font-medium">Growth</TableCell>
+              <TableCell className="text-end tabular-nums">18</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </Card>
+    </div>
+  ),
 };

@@ -33,7 +33,7 @@ Reserve `--warning` for caution and threshold states (approaching a limit, a sta
 ## Borders
 
 - `border-input` — form controls (Input, Textarea, Select, NativeSelect, Checkbox, Radio, Switch, ComboboxChips, InputGroup)
-- `border-border` — structural borders (AccordionItem, Button outline, Badge default, Avatar, Card)
+- `border-border` — structural borders (AccordionItem, Button outline, Badge default, Avatar)
 
 These resolve to the same color, but the semantic distinction matters for maintainability.
 
@@ -44,7 +44,11 @@ These resolve to the same color, but the semantic distinction matters for mainta
 
 ## Rings
 
-- `ring-popup-ring` — popup container rings (DropdownMenu, Select, Combobox, Popover popups, Card). Do NOT use `ring-border/10` or `ring-foreground/10`.
+- `ring-popup-ring` — popup container rings (DropdownMenu, Select, Combobox, Popover popups). Do NOT use `ring-border/10` or `ring-foreground/10`.
+- `ring-border-muted` — Card's `filled` surface.
+- `ring-border` — Card's `outline` surface. Full strength rather than muted because with no fill the edge is the only thing defining the card.
+
+Card uses **rings, not borders**, for all its variants. A ring is a box-shadow with no layout impact; a border insets the content box by 1px, so flipping a row of cards between `filled` and `outline` would shift every child. (This section and "Borders" both used to list Card, contradicting each other, and neither matched the code.)
 
 ## Separators
 
@@ -97,6 +101,27 @@ Some components use `calc(var(--radius) - Npx)` for bespoke offsets that don't m
 
 - Calendar: `[--cell-radius:calc(var(--radius)-2px)]` for cell radius in range selections
 - InputGroupAddon: `[&>kbd]:rounded-[calc(var(--radius)-5px)]` for nested kbd elements
+
+## Component-scoped spacing
+
+`--card-spacing` drives every bit of Card's padding and gap, including its
+sub-parts, which read it by inheritance. Consumers reach any spacing from
+`className`:
+
+```tsx
+<Card variant="outline" className="[--card-spacing:0px]">
+  <Table />
+</Card>
+```
+
+`size` resolves the variable **through CVA**, not through
+`data-[size=sm]:[--card-spacing:…]` on the base class. Those look equivalent
+and are not: a variant modifier is part of tailwind-merge's group key, so an
+unmodified consumer override does not replace the size-scoped declarations, and
+the survivors out-specify it (class+attribute beats class). The override
+silently lost at `sm` and `xs`. If you add a variable-driven spacing scale to
+another component, emit exactly **one unmodified** declaration per render, and
+test the override at every size — a default-size-only test passes on the bug.
 
 ## Disabled States
 

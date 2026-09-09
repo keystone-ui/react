@@ -98,6 +98,30 @@ A compact card variant:
 
 <ComponentPreview name="card-small" />
 
+### Surface Variants
+
+Two surface tiers. `filled` (the default) paints `bg-card`. `outline` has no fill, so the page shows through — use it for chart and table panels, where a filled card on a filled page reads as two stacked surfaces.
+
+Both use a ring rather than a border, deliberately: a ring is a box-shadow with no layout impact, where a border insets the content box by 1px, so flipping a row of cards between variants would shift every child. `outline` rings `border` at full strength where `filled` rings `border-muted` (the same color at half alpha) — with no fill the edge is the only thing defining the card, so it has to do more work.
+
+<ComponentPreview name="card-variants" />
+
+### Table Flush
+
+Every bit of Card's padding and gap resolves from a single `--card-spacing` custom property, so you can reach any spacing — including none — from `className`:
+
+```tsx
+<Card variant="outline" className="[--card-spacing:0px]">
+  <Table>{/* ... */}</Table>
+</Card>
+```
+
+The header row then sits against the card's edge, and `overflow-hidden` clips the table container's square corners to the card radius. No extra prop needed.
+
+Zeroing `--card-spacing` also zeroes the root `gap`, so a `CardHeader` and the table become adjacent siblings. For a padded header *above* a flush table, keep the normal spacing and put the table in a bare `<div>` sibling rather than in `CardContent` — the second card in the preview does this.
+
+<ComponentPreview name="card-table-flush" />
+
 ## RTL
 
 RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/rtl) for what works today.
@@ -123,5 +147,6 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `size` | `"md" \| "sm" \| "xs"` | `"md"` | The size variant of the card |
+| `size` | `"md" \| "sm" \| "xs"` | `"md"` | The size variant of the card. Resolves `--card-spacing`, which every sub-part reads. |
+| `variant` | `"filled" \| "outline"` | `"filled"` | Surface treatment. `outline` drops the fill for panel use. |
 | `className` | `string` | - | Additional CSS classes |

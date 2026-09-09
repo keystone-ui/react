@@ -44,6 +44,8 @@ For status indicators, prefer `Badge` variants or semantic tokens. All four stat
 
 Note `--warning-foreground` is deliberately dark rather than near-white: near-white on amber-500 is ~1.9:1, a WCAG failure. Use `text-warning-foreground` on a `bg-warning` fill, not `text-white`.
 
+`Card` has two surface tiers: `filled` (default, paints `bg-card`) and `outline` (no fill, for chart and table panels). All of its spacing resolves from `--card-spacing`, so `<Card variant="outline" className="[--card-spacing:0px]">` gives a table-flush panel with no extra prop.
+
 **Exception:** Badge color variants (`bg-red-500/15`, `text-red-700`) intentionally use raw Tailwind colors because each variant maps to a distinct hue.
 
 ---

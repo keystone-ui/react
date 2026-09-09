@@ -82,6 +82,7 @@ export const ui: Registry = [
   {
     name: "card",
     type: "registry:ui",
+    dependencies: ["class-variance-authority"],
     files: [{ path: "ui/card.tsx", type: "registry:ui" }],
   },
   {

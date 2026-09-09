@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "card-table-flush",
+  "title": "Card Table Flush",
+  "description": "Card example: Table Flush.",
+  "registryDependencies": [
+    "card",
+    "table"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/card/table-flush.tsx",
+      "content": "\"use client\";\n\nimport { Card, CardHeader, CardTitle } from \"@keystoneui/react/card\";\nimport {\n  Table,\n  TableBody,\n  TableCell,\n  TableHead,\n  TableHeader,\n  TableRow,\n} from \"@keystoneui/react/table\";\n\nconst rows = [\n  { deploys: 42, p50: \"1h 12m\", squad: \"Platform\" },\n  { deploys: 31, p50: \"2h 04m\", squad: \"Payments\" },\n  { deploys: 18, p50: \"3h 47m\", squad: \"Growth\" },\n];\n\nexport default function CardTableFlush() {\n  return (\n    <div className=\"flex w-full max-w-2xl flex-col gap-6\">\n      {/* Padding zeroed, so the header row sits against the card's edge and\n          `overflow-hidden` clips the table's square corners to the radius. */}\n      <Card className=\"[--card-spacing:0px]\" variant=\"outline\">\n        <Table>\n          <TableHeader>\n            <TableRow>\n              <TableHead>Squad</TableHead>\n              <TableHead className=\"text-end\">Deploys</TableHead>\n              <TableHead className=\"text-end\">Lead time p50</TableHead>\n            </TableRow>\n          </TableHeader>\n          <TableBody>\n            {rows.map((row) => (\n              <TableRow key={row.squad}>\n                <TableCell className=\"font-medium\">{row.squad}</TableCell>\n                <TableCell className=\"text-end tabular-nums\">\n                  {row.deploys}\n                </TableCell>\n                <TableCell className=\"text-end tabular-nums\">\n                  {row.p50}\n                </TableCell>\n              </TableRow>\n            ))}\n          </TableBody>\n        </Table>\n      </Card>\n\n      {/* A titled panel keeps its normal spacing and puts the table in a bare\n          sibling instead of CardContent, so the header stays padded while the\n          table still runs edge to edge. */}\n      <Card variant=\"outline\">\n        <CardHeader>\n          <CardTitle>Delivery by squad</CardTitle>\n        </CardHeader>\n        <Table>\n          <TableHeader>\n            <TableRow>\n              <TableHead>Squad</TableHead>\n              <TableHead className=\"text-end\">Deploys</TableHead>\n            </TableRow>\n          </TableHeader>\n          <TableBody>\n            {rows.map((row) => (\n              <TableRow key={row.squad}>\n                <TableCell className=\"font-medium\">{row.squad}</TableCell>\n                <TableCell className=\"text-end tabular-nums\">\n                  {row.deploys}\n                </TableCell>\n              </TableRow>\n            ))}\n          </TableBody>\n        </Table>\n      </Card>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

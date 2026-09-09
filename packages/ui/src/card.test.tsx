@@ -259,3 +259,125 @@ describe("Card composition", () => {
     expect(screen.getByText("Footer")).toBeInTheDocument();
   });
 });
+
+// =============================================================================
+// Surface variants
+// =============================================================================
+describe("Card variants", () => {
+  it("defaults to the filled variant", () => {
+    render(<Card data-testid="card" />);
+    expect(screen.getByTestId("card")).toHaveAttribute(
+      "data-variant",
+      "filled"
+    );
+  });
+
+  it.each(["filled", "outline"] as const)(
+    "variant=%s sets data-variant",
+    (variant) => {
+      render(<Card data-testid="card" variant={variant} />);
+      expect(screen.getByTestId("card")).toHaveAttribute(
+        "data-variant",
+        variant
+      );
+    }
+  );
+
+  // Pins the surface so a future variant cannot quietly restyle the default.
+  it("keeps the filled surface on bg-card and the muted ring", () => {
+    render(<Card data-testid="card" />);
+    const card = screen.getByTestId("card");
+    expect(card).toHaveClass("bg-card", "ring-1", "ring-border-muted");
+  });
+
+  // With no fill the edge is the only thing defining the card, so outline
+  // rings `border` at full strength rather than `border-muted`.
+  it("gives outline no fill and a full-strength ring", () => {
+    render(<Card data-testid="card" variant="outline" />);
+    const card = screen.getByTestId("card");
+    expect(card).not.toHaveClass("bg-card");
+    expect(card).toHaveClass("ring-1", "ring-border");
+  });
+});
+
+// =============================================================================
+// Spacing
+// =============================================================================
+describe("Card spacing", () => {
+  const spacingFor = (el: HTMLElement) =>
+    [...el.classList].filter((c) => c.includes("--card-spacing:"));
+
+  it.each([
+    ["md", "[--card-spacing:--spacing(6)]"],
+    ["sm", "[--card-spacing:--spacing(4)]"],
+    ["xs", "[--card-spacing:--spacing(3)]"],
+  ] as const)("size=%s resolves --card-spacing to %s", (size, expected) => {
+    render(<Card data-testid="card" size={size} />);
+    expect(screen.getByTestId("card")).toHaveClass(expected);
+  });
+
+  it("drives padding and gap from the variable, not per-size utilities", () => {
+    render(<Card data-testid="card" size="sm" />);
+    const card = screen.getByTestId("card");
+    expect(card).toHaveClass("py-(--card-spacing)", "gap-(--card-spacing)");
+    // The per-size utilities this replaced.
+    expect(card).not.toHaveClass("py-4", "gap-4");
+  });
+
+  // The regression this API shape exists for. Spelling the scale as
+  // `data-[size=sm]:[--card-spacing:…]` on the base leaves the size-scoped
+  // declaration in place after tailwind-merge, and it out-specifies the
+  // consumer's unmodified class (class+attribute vs class), so the override
+  // silently lost at sm and xs. Asserting all three sizes is the point: a
+  // default-size-only test passes on the broken spelling too.
+  describe("consumer override", () => {
+    it.each(["md", "sm", "xs"] as const)(
+      "[--card-spacing:0px] wins at size=%s",
+      (size) => {
+        render(
+          <Card
+            className="[--card-spacing:0px]"
+            data-testid="card"
+            size={size}
+          />
+        );
+        expect(spacingFor(screen.getByTestId("card"))).toEqual([
+          "[--card-spacing:0px]",
+        ]);
+      }
+    );
+
+    it("survives cn() rather than being merged away", () => {
+      render(<Card className="[--card-spacing:2rem]" data-testid="card" />);
+      expect(screen.getByTestId("card")).toHaveClass("[--card-spacing:2rem]");
+    });
+  });
+
+  // Sub-parts read the inherited variable, so they need no size awareness.
+  it("gives sub-parts variable-driven padding", () => {
+    render(
+      <Card size="xs">
+        <CardHeader data-testid="header" />
+        <CardContent data-testid="content" />
+        <CardFooter data-testid="footer" />
+      </Card>
+    );
+    expect(screen.getByTestId("header")).toHaveClass("px-(--card-spacing)");
+    expect(screen.getByTestId("content")).toHaveClass("px-(--card-spacing)");
+    expect(screen.getByTestId("footer")).toHaveClass("p-(--card-spacing)");
+  });
+
+  // CardTitle's size behaviour is a *font* variant, not spacing, so it still
+  // reads data-size off the root group.
+  it("keeps data-size on the root for CardTitle's font variant", () => {
+    render(
+      <Card data-testid="card" size="xs">
+        <CardTitle data-testid="title">Title</CardTitle>
+      </Card>
+    );
+    expect(screen.getByTestId("card")).toHaveAttribute("data-size", "xs");
+    expect(screen.getByTestId("title")).toHaveClass(
+      "group-data-[size=xs]/card:text-sm"
+    );
+  });
+});

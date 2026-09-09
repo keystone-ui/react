@@ -723,6 +723,9 @@
       "type": "registry:ui",
       "title": "Card",
       "description": "Structured container with header, content, and footer sections for grouping related information.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
       "files": [
         {
           "path": "packages/ui/src/card.tsx",
@@ -3026,6 +3029,37 @@
       "files": [
         {
           "path": "apps/docs/demos/card/social-card.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "card-table-flush",
+      "type": "registry:example",
+      "title": "Card Table Flush",
+      "description": "Card example: Table Flush.",
+      "registryDependencies": [
+        "card",
+        "table"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/card/table-flush.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "card-variants",
+      "type": "registry:example",
+      "title": "Card Variants",
+      "description": "Card example: Variants.",
+      "registryDependencies": [
+        "card"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/card/variants.tsx",
           "type": "registry:example"
         }
       ]
