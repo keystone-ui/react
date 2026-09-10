@@ -3,7 +3,6 @@
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@keystoneui/react/card";
@@ -34,20 +33,26 @@ const columns = [
 
 interface TopPagesPanelProps {
   onPageIndexChange: (index: number) => void;
+  onPageSizeChange: (size: number) => void;
   onSort: (key: PageSortKey) => void;
   pageCount: number;
   pageIndex: number;
+  pageSize: number;
   rows: readonly PageRow[];
   sort: { direction: SortDirection; key: PageSortKey } | null;
+  totalCount: number;
 }
 
 export function TopPagesPanel({
   onPageIndexChange,
+  onPageSizeChange,
   onSort,
   pageCount,
   pageIndex,
+  pageSize,
   rows,
   sort,
+  totalCount,
 }: TopPagesPanelProps) {
   return (
     // The table goes in CardContent, so the title, the row separators and the
@@ -59,7 +64,7 @@ export function TopPagesPanel({
         <CardTitle className="font-semibold">Top pages</CardTitle>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="flex flex-col gap-4">
         <Table hoverable>
           <TableHeader>
             <TableRow>
@@ -108,16 +113,17 @@ export function TopPagesPanel({
             )}
           </TableBody>
         </Table>
-      </CardContent>
 
-      <CardFooter>
         <TablePagination
-          className="w-full px-0"
           onPageIndexChange={onPageIndexChange}
+          onPageSizeChange={onPageSizeChange}
           pageCount={pageCount}
           pageIndex={pageIndex}
+          pageSize={pageSize}
+          pageSizeOptions={[5, 10, 20, 50]}
+          totalCount={totalCount}
         />
-      </CardFooter>
+      </CardContent>
     </Card>
   );
 }

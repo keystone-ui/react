@@ -14,7 +14,7 @@ npx shadcn@latest add https://keystoneui.io/r/dashboard-01.json
 - **KPI row** using [`StatValue`](/docs/components/stat) and `StatDelta`, where the tone comes from what the metric *means*. The bounce-rate tile is `down-is-good`, so a fall renders green — with a down arrow.
 - **Stacked revenue chart** with a legend you can switch series off in. Hidden series stay listed and struck through, and the last visible one refuses to switch off.
 - **Sessions area chart** sharing the same chart layer and colour ramp.
-- **Sortable, paginated table** in a [`Card`](/docs/components/card), with three-state sorting and [`TablePagination`](/docs/components/table-pagination) in the footer.
+- **Sortable, paginated table** in a [`Card`](/docs/components/card), with three-state sorting and [`TablePagination`](/docs/components/table-pagination) — the same rows-per-page footer [`tickets-01`](/docs/blocks/tickets-01) uses.
 - **Charts respect reduced motion** — which a stylesheet cannot do on its own.
 - **An accessible info tip** in the header, with its text in the accessibility tree whether or not the tooltip is open.
 
@@ -105,7 +105,8 @@ DashboardPage
 ├── SessionsCard
 │   └── ChartContainer › AreaChart › Area
 └── TopPagesPanel
-    ├── Table › TableHead › TableSortButton
-    ├── TableEmpty
-    └── TablePagination
+    └── Card › CardContent
+        ├── Table › TableHead › TableSortButton
+        ├── TableEmpty
+        └── TablePagination
 ```

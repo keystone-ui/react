@@ -13,8 +13,6 @@ import { adminMetrics, signupsByMonth, users } from "@/components/mock-admin";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { useReducedMotion } from "@/components/use-reduced-motion";
 
-const PAGE_SIZE = 6;
-
 /** All state lives here; the panels below are presentational. */
 export function AdminPage() {
   const reducedMotion = useReducedMotion();
@@ -28,6 +26,7 @@ export function AdminPage() {
     key: UserSortKey;
   } | null>({ direction: "asc", key: "name" });
   const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -56,10 +55,10 @@ export function AdminPage() {
     });
   }, [filtered, sort]);
 
-  const pageCount = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  const pageCount = Math.max(1, Math.ceil(sorted.length / pageSize));
   const pageRows = sorted.slice(
-    pageIndex * PAGE_SIZE,
-    pageIndex * PAGE_SIZE + PAGE_SIZE
+    pageIndex * pageSize,
+    pageIndex * pageSize + pageSize
   );
 
   const toggleSeries = (key: string) => {
@@ -136,11 +135,17 @@ export function AdminPage() {
             <AdminUsersTable
               onClearSelection={() => setSelected(new Set())}
               onPageIndexChange={setPageIndex}
+              onPageSizeChange={(size) => {
+                setPageSize(size);
+                // Page 3 of a 5-per-page list does not exist at 50 per page.
+                setPageIndex(0);
+              }}
               onSort={cycleSort}
               onToggleAll={toggleAllOnPage}
               onToggleRow={toggleRow}
               pageCount={pageCount}
               pageIndex={pageIndex}
+              pageSize={pageSize}
               rows={pageRows}
               selected={selected}
               sort={sort}

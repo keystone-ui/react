@@ -23,8 +23,6 @@ import {
 } from "./top-pages-panel";
 import { useReducedMotion } from "./use-reduced-motion";
 
-const PAGE_SIZE = 5;
-
 /**
  * Every piece of state lives here; the panels below are presentational and
  * take callbacks. Same architecture as `tickets-01`, and the reason a block is
@@ -41,6 +39,7 @@ export function DashboardPage() {
     key: PageSortKey;
   } | null>({ direction: "desc", key: "views" });
   const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
 
   const weeks = weeksFor(range);
   const revenue = useMemo(() => revenueByWeek.slice(-weeks), [weeks]);
@@ -61,10 +60,10 @@ export function DashboardPage() {
     });
   }, [sort]);
 
-  const pageCount = Math.max(1, Math.ceil(sortedPages.length / PAGE_SIZE));
+  const pageCount = Math.max(1, Math.ceil(sortedPages.length / pageSize));
   const pageRows: readonly PageRow[] = sortedPages.slice(
-    pageIndex * PAGE_SIZE,
-    pageIndex * PAGE_SIZE + PAGE_SIZE
+    pageIndex * pageSize,
+    pageIndex * pageSize + pageSize
   );
 
   const toggleSeries = (key: string) => {
@@ -120,11 +119,18 @@ export function DashboardPage() {
 
         <TopPagesPanel
           onPageIndexChange={setPageIndex}
+          onPageSizeChange={(size) => {
+            setPageSize(size);
+            // Page 3 of a 5-per-page list does not exist at 50 per page.
+            setPageIndex(0);
+          }}
           onSort={cycleSort}
           pageCount={pageCount}
           pageIndex={pageIndex}
+          pageSize={pageSize}
           rows={pageRows}
           sort={sort}
+          totalCount={sortedPages.length}
         />
       </div>
     </div>

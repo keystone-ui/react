@@ -4,7 +4,6 @@ import { Badge } from "@keystoneui/react/badge";
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@keystoneui/react/card";
@@ -50,11 +49,13 @@ const STATUS_VARIANT: Record<Status, "default" | "outline" | "secondary"> = {
 interface AdminUsersTableProps {
   onClearSelection: () => void;
   onPageIndexChange: (index: number) => void;
+  onPageSizeChange: (size: number) => void;
   onSort: (key: UserSortKey) => void;
   onToggleAll: (checked: boolean) => void;
   onToggleRow: (id: string) => void;
   pageCount: number;
   pageIndex: number;
+  pageSize: number;
   rows: readonly User[];
   selected: ReadonlySet<string>;
   sort: { direction: SortDirection; key: UserSortKey } | null;
@@ -64,11 +65,13 @@ interface AdminUsersTableProps {
 export function AdminUsersTable({
   onClearSelection,
   onPageIndexChange,
+  onPageSizeChange,
   onSort,
   onToggleAll,
   onToggleRow,
   pageCount,
   pageIndex,
+  pageSize,
   rows,
   selected,
   sort,
@@ -91,7 +94,7 @@ export function AdminUsersTable({
           <CardTitle className="font-semibold">Users</CardTitle>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="flex flex-col gap-4">
           <Table hoverable>
             <TableHeader>
               <TableRow>
@@ -169,18 +172,18 @@ export function AdminUsersTable({
               )}
             </TableBody>
           </Table>
-        </CardContent>
 
-        <CardFooter>
           <TablePagination
-            className="w-full px-0"
             onPageIndexChange={onPageIndexChange}
+            onPageSizeChange={onPageSizeChange}
             pageCount={pageCount}
             pageIndex={pageIndex}
+            pageSize={pageSize}
+            pageSizeOptions={[5, 10, 20, 50]}
             selectedCount={selected.size}
             totalCount={totalCount}
           />
-        </CardFooter>
+        </CardContent>
       </Card>
 
       <SelectionBar open={selected.size > 0}>
