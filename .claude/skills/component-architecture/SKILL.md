@@ -189,3 +189,36 @@ Test files are co-located as siblings: `button.test.tsx` next to `button.tsx`.
 3. Add the entry to `tsup.config.ts` entryPoints
 4. Add the entry to `_registry.ts`
 5. Create `apps/storybook/stories/my-component.stories.tsx` for documentation
+
+## Assert computed style, not class names
+
+`toHaveClass` is the right assertion for "this component wires this prop to
+this class". It is the wrong assertion for "this rule wins", because a
+class-name test passes while the rule it names is being out-specified by
+another one.
+
+That is not hypothetical. `Card`'s `--card-spacing` API first shipped with the
+scale as `data-[size=sm]:[--card-spacing:…]` on the base class. A consumer's
+`className="[--card-spacing:0px]"` then lost at `sm` and `xs`: tailwind-merge
+leaves a *modified* declaration in place, and the survivor compiles to a
+class+attribute selector that beats the consumer's class-only one. Every
+class-name assertion still passed.
+
+**Where each kind of test goes:**
+
+| Assertion | Project | Why |
+|---|---|---|
+| Behaviour, ARIA, roles, `data-slot`, events | `packages/ui` (jsdom) | Fast, and CSS is irrelevant to it |
+| Resolved `getComputedStyle` values | `apps/storybook` (`play:`) | **`packages/ui`'s jsdom setup loads no CSS at all**, so Tailwind classes are completely inert there and `getComputedStyle` returns nothing meaningful |
+
+The second row is the part that is easy to get wrong: adding a computed-style
+assertion to a jsdom test does not fail, it silently measures nothing.
+
+`apps/storybook` already runs real Chromium with real Tailwind through
+`@storybook/addon-vitest`, and CI runs it. Put the assertion in a story's
+`play:` function.
+
+Reach for it when a later rule could plausibly win: a consumer override that
+has to beat a variant, a token that a `dark:` rule could override, two variants
+that must share geometry, or anything whose correctness is a resolved value
+rather than a class.

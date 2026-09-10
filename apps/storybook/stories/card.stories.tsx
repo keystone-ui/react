@@ -22,6 +22,7 @@ import {
 } from "@keystoneui/react/table";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { BadgeCheck as BadgeCheckIcon } from "lucide-react";
+import { expect } from "storybook/test";
 
 const meta = {
   title: "Components/Card",
@@ -326,6 +327,27 @@ export const SocialCard: Story = {
 };
 
 export const Variants: Story = {
+  // The variants must differ in FILL and share interior geometry -- a border
+  // instead of a ring would inset the content box and shift every child by 1px
+  // when swapping variants.
+  play: async ({ canvasElement }) => {
+    const cards = canvasElement.querySelectorAll('[data-slot="card"]');
+    const [filled, outline] = [...cards] as HTMLElement[];
+
+    const filledStyle = getComputedStyle(filled);
+    const outlineStyle = getComputedStyle(outline);
+
+    await expect(filledStyle.backgroundColor).not.toBe(
+      outlineStyle.backgroundColor
+    );
+    await expect(filledStyle.paddingLeft).toBe(outlineStyle.paddingLeft);
+    await expect(filledStyle.borderLeftWidth).toBe(
+      outlineStyle.borderLeftWidth
+    );
+    // Both draw their edge as a ring (a box-shadow), not a border.
+    await expect(filledStyle.boxShadow).not.toBe("none");
+    await expect(outlineStyle.boxShadow).not.toBe("none");
+  },
   parameters: {
     docs: {
       description: {
@@ -366,6 +388,31 @@ export const Variants: Story = {
 
 export const TableFlush: Story = {
   name: "Table Flush",
+  // Asserts the COMPUTED padding, not the class name. A class-name assertion
+  // passes while the rule it names is being out-specified by another, which is
+  // exactly how the `data-[size=…]:[--card-spacing:…]` spelling of this API
+  // shipped broken: tailwind-merge left the size-scoped declaration in place
+  // and it beat the consumer's override on specificity. Only the resolved value
+  // can tell you that. The jsdom suite in packages/ui cannot do this -- it
+  // loads no CSS -- which is why this assertion lives here.
+  play: async ({ canvasElement }) => {
+    const flush = canvasElement.querySelector(
+      '[data-slot="card"][data-variant="outline"]'
+    ) as HTMLElement;
+    await expect(flush).not.toBeNull();
+
+    const style = getComputedStyle(flush);
+    await expect(style.paddingTop).toBe("0px");
+    await expect(style.paddingBottom).toBe("0px");
+    await expect(style.rowGap).toBe("0px");
+
+    // The rounded corner has to clip the table's square one, or the flush
+    // recipe leaves the header sticking out past the card edge.
+    await expect(style.overflow).toBe("hidden");
+    await expect(Number.parseFloat(style.borderTopLeftRadius)).toBeGreaterThan(
+      0
+    );
+  },
   parameters: {
     docs: {
       description: {

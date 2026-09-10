@@ -93,10 +93,30 @@ Three surfaces drift if not maintained explicitly. Run through this checklist af
 | `packages/ui/src/_registry.ts` | Add the component entry (handled by `pnpm add:component`). |
 | `packages/ui/package.json` exports | Add `./{name}` subpath **in both `exports` and `publishConfig.exports`** — there are two maps, and a manual add that misses the second ships a broken package. `pnpm add:component` handles both. |
 | `packages/ui/tsup.config.ts` entryPoints | Add the source path. |
-| `skills/keystoneui-react/SKILL.md` | Bump the component count and add a row to the **Component List** table (kebab-case name). |
+| `skills/keystoneui-react/SKILL.md` | Bump the exact component count at the **Component List** heading and add the kebab-case name to the list. |
 | `skills/keystoneui-react/SKILL.md` Component Selection table | Add the component to the appropriate row (e.g. "Form layout" / "Overlays" / "Feedback"). |
 | `apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx` | Bump the "all 54+ UI components" count if you reference one. |
-| `README.md` | Bump the "54+ accessible" count if it appears. |
+| Component counts elsewhere | **Do not bump them.** Every other surface says `50+` on purpose. |
+
+**Count policy.** The component count is hardcoded in ~12 places. Only **two**
+state an exact number and both must be updated:
+
+- `skills/keystoneui-react/SKILL.md` — the `## Component List` heading.
+- `apps/docs/content/docs/(getting-started)/rtl.mdx` — a *ratio* ("30 of its 56
+  components"), so recompute it rather than incrementing:
+
+  ```bash
+  ls packages/ui/src/*.tsx | grep -v '.test.tsx' | wc -l          # components
+  grep -rlE '\b(ml-|mr-|pl-|pr-|left-|right-)' packages/ui/src/*.tsx \
+    | grep -v test | wc -l                                        # with physical utilities
+  ```
+
+Everywhere else — `README.md`, the home page, the gallery, `index.mdx`,
+`llms-utils.ts`, `mcp-server.mdx`, the intro blog post — says `50+` and should
+stay that way. Bumping a dozen numbers per component is how they end up
+disagreeing with each other, which is exactly the state this replaced (three
+different values across ten files).
+
 | `apps/docs/app/gallery/page.tsx` | Add a `{name, slug, description}` entry. Hardcoded, so a new component is invisible in the gallery until it is listed. |
 | `apps/docs/public/r/` | Run `pnpm registry:build` to rebuild registry artifacts. |
 

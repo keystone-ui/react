@@ -20,3 +20,7 @@ apps/docs/public/skills/*.tar.gz
 
 # TypeScript incremental build artifacts
 *.tsbuildinfo
+
+# Playwright
+test-results/
+playwright-report/

@@ -11,7 +11,8 @@
     "preview:cf": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy:cf": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "@keystoneui/typescript-config": "workspace:*",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/culori": "^4.0.1",
     "@types/react": "^19.2.18",

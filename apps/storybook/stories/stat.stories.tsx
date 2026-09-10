@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@keystoneui/react/card";
 import { StatDelta, StatValue } from "@keystoneui/react/stat";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect } from "storybook/test";
 
 const meta = {
   title: "Components/Stat",
@@ -58,6 +59,31 @@ export const Default: Story = {
 };
 
 export const Direction: Story = {
+  // Resolved colour, not class name: a `dark:` rule or a later utility could
+  // override the class while the test still passed. This is the assertion that
+  // proves tone comes from direction x sign rather than from the sign alone.
+  play: async ({ canvasElement }) => {
+    const deltas = [
+      ...canvasElement.querySelectorAll('[data-slot="stat-delta"]'),
+    ] as HTMLElement[];
+
+    // Revenue rose (up-is-good) and p95 latency fell (down-is-good): opposite
+    // signs, same tone, so they must resolve to the same colour.
+    const revenue = deltas[0];
+    const latency = deltas[2];
+    await expect(revenue.dataset.tone).toBe("positive");
+    await expect(latency.dataset.tone).toBe("positive");
+    await expect(getComputedStyle(latency).color).toBe(
+      getComputedStyle(revenue).color
+    );
+
+    // Signups fell (up-is-good): negative, and a different colour.
+    const signups = deltas[1];
+    await expect(signups.dataset.tone).toBe("negative");
+    await expect(getComputedStyle(signups).color).not.toBe(
+      getComputedStyle(revenue).color
+    );
+  },
   parameters: {
     docs: {
       description: {
