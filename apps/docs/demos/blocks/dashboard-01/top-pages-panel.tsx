@@ -56,7 +56,7 @@ export function TopPagesPanel({
     // table leaves the heading indented three times further than the columns.
     <Card variant="outline">
       <CardHeader>
-        <CardTitle>Top pages</CardTitle>
+        <CardTitle className="font-semibold">Top pages</CardTitle>
       </CardHeader>
 
       <CardContent>

@@ -73,7 +73,11 @@ export function AdminOverview({
 
       <Card variant="outline">
         <CardHeader>
-          <CardTitle>Signups</CardTitle>
+          {/* Semibold rather than CardTitle's default medium. A dashboard panel
+              heading competes with a lot of dense content, so it needs more
+              weight than a login card's title does -- but the component stays at
+              font-medium, in line with every other *Title part in the library. */}
+          <CardTitle className="font-semibold">Signups</CardTitle>
           <CardDescription>
             Trial and paid accounts started each month.
           </CardDescription>

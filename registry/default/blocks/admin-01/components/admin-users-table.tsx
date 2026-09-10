@@ -87,7 +87,7 @@ export function AdminUsersTable({
           than the columns. */}
       <Card variant="outline">
         <CardHeader>
-          <CardTitle>Users</CardTitle>
+          <CardTitle className="font-semibold">Users</CardTitle>
         </CardHeader>
 
         <CardContent>

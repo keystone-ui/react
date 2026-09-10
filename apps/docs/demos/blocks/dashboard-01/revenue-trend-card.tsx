@@ -43,7 +43,11 @@ export function RevenueTrendCard({
   return (
     <Card className="lg:col-span-2" variant="outline">
       <CardHeader>
-        <CardTitle>Revenue by channel</CardTitle>
+        {/* Semibold rather than CardTitle's default medium. A dashboard panel
+            heading competes with a lot of dense content, so it needs more
+            weight than a login card's title does -- but the component stays at
+            font-medium, in line with every other *Title part in the library. */}
+        <CardTitle className="font-semibold">Revenue by channel</CardTitle>
         <CardDescription>
           Stacked weekly revenue. Switch a channel off in the legend to read the
           rest.

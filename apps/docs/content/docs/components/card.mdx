@@ -106,6 +106,16 @@ Both use a ring rather than a border, deliberately: a ring is a box-shadow with 
 
 <ComponentPreview name="card-variants" />
 
+### Title weight
+
+`CardTitle` is `font-medium`, matching `DrawerTitle`, `AlertDialogTitle`, `AlertTitle`, `EmptyTitle` and `ItemTitle` — every `*Title` part in the library except `ModalTitle`, which is `font-semibold text-lg` because a dialog heading is a different tier.
+
+A dense dashboard panel usually wants more: its heading competes with a table or a chart, where a login card's title competes with nothing. Reach for `className` rather than changing the component, and keep it consistent across the panels on a page — one heavier heading beside a lighter one reads as a mistake:
+
+```tsx
+<CardTitle className="font-semibold">Top pages</CardTitle>
+```
+
 ### Tables in a Card
 
 Put the table in `CardContent`. It then shares the card's horizontal padding with the title, so the heading, the row separators and the cell text all line up:

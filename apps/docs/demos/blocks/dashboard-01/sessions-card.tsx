@@ -26,7 +26,7 @@ export function SessionsCard({ data, reducedMotion }: SessionsCardProps) {
   return (
     <Card variant="outline">
       <CardHeader>
-        <CardTitle>Sessions</CardTitle>
+        <CardTitle className="font-semibold">Sessions</CardTitle>
         <CardDescription>Weekly, all channels.</CardDescription>
       </CardHeader>
       <CardContent>
