@@ -52,6 +52,8 @@ There are no layout primitives (no `Grid`/`Stack`/`Flex`/`Container`) and there 
 
 Pair every `sticky` with `print:static`. A sticky element resolves against a scrollport that does not exist on paper, so it lands over the content it was pinned above. Keystone's sticky affordances are opt-in through `className`, so there is no library class to bake this into. The `dark` variant is scoped to `@media screen` so paper always gets the light tokens; no print rules ship in `base.css`, since hiding chrome is consumer policy and `!important` in library CSS cannot be undone by a consumer's class.
 
+`Toggle`/`ToggleGroup` and `Button` use different size scales and do not match at their defaults — Button default is 40px, Toggle default is 36px (it matches the popup item height). In a toolbar, pair `ToggleGroup size="lg"` with a default `Button` (both 40px), or `size="sm"` on both (both 32px). Mixing the defaults gives a 4px mismatch.
+
 Prefer logical properties for anything new: `text-end` over `text-right`, `start-0` over `left-0`, `ms-*`/`me-*` over `ml-*`/`mr-*`. Most of the library still uses physical utilities, so this is a beachhead rather than a settled convention — but do not add to the pile.
 
 `Card` has two surface tiers: `filled` (default, paints `bg-card`) and `outline` (no fill, for chart and table panels). A table goes in `CardContent`, which shares the card's horizontal padding with the title so the heading, the row separators and the cell text line up. All spacing resolves from `--card-spacing`, and `<Card className="[--card-spacing:0px]">` is for the narrower case of a card that is *only* a table — never under a padded `CardHeader`, which leaves the heading indented three times further than the columns.

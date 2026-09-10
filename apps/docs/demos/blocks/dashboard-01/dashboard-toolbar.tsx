@@ -75,8 +75,13 @@ export function DashboardToolbar({
         </p>
       </div>
       <div className="flex shrink-0 flex-wrap items-center gap-2">
+        {/* size="lg" is 40px, which is what matches a default Button. The two
+            scales do not line up at their defaults -- Button default is 40 and
+            Toggle default is 36 -- so a toolbar mixing them has to pick a tier
+            deliberately. */}
         <ToggleGroup
           aria-label="Reporting range"
+          size="lg"
           onValueChange={(next) => {
             // The group is array-valued; take the last pressed item and keep
             // the control single-select.
@@ -94,7 +99,7 @@ export function DashboardToolbar({
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
-        <Button size="sm" variant="outline">
+        <Button variant="outline">
           <DownloadIcon data-icon="inline-start" />
           Export
         </Button>

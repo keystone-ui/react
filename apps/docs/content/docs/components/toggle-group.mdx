@@ -55,6 +55,29 @@ ToggleGroup
 Use the **ButtonGroup** component when you want to group buttons that perform an action.
 Use the **ToggleGroup** component when you want to group buttons that toggle a state.
 
+## Matching Button heights in a toolbar
+
+`Toggle` and `Button` use different size scales, and they do **not** line up at their defaults:
+
+| | `xs` | `sm` | `default` | `lg` |
+| --- | --- | --- | --- | --- |
+| `Button` | 24px | **32px** | 40px | 48px |
+| `Toggle` / `ToggleGroup` | — | **32px** | 36px | 40px |
+
+`Toggle`'s default is 36px because it matches the popup item height, which is right for menu-like toggles and wrong for a toolbar sitting beside a button. So pick a tier deliberately:
+
+```tsx
+{/* both 40px */}
+<ToggleGroup size="lg">…</ToggleGroup>
+<Button>Export</Button>
+
+{/* both 32px */}
+<ToggleGroup size="sm">…</ToggleGroup>
+<Button size="sm">Export</Button>
+```
+
+Mixing the two defaults gives a 4px mismatch that is easy to miss on a dark background and obvious once seen.
+
 ## Examples
 
 ### Outline
