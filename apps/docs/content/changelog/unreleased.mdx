@@ -1,7 +1,7 @@
 ---
 date: "2026-09-10"
 description: "What's coming in the next release"
-excerpt: "22 changes queued for the next release."
+excerpt: "23 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -491,6 +491,19 @@ files byte for byte, which is the evidence the rules are right.
 `pnpm lint:docs` also now runs in CI. It previously ran in no workflow and no
 git hook, so every rule it enforces — the block MDX structure, story-vs-demo
 parity, and now block-copy sync — was advisory.
+
+---
+
+### `Table`'s scroll container no longer forces its grid or flex track open.
+
+As a grid or flex item, the container's `min-width` resolved to `min-content` —
+the table's full intrinsic width — so a wide table inside a grid pushed its
+track open and handed the whole document a horizontal scrollbar. It already
+scrolls internally, so it never needed to be wider than its track: `min-w-0`
+now says so.
+
+This is the most common instance of a general trap (`[&>*]:min-w-0` on grids),
+and the one place the library owns the code and can simply fix it.
 
 ---
 

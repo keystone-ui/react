@@ -56,6 +56,8 @@ The header is a plain element, so hide what should not print from your own style
 
 **`[&>*]:min-w-0` is not optional.** Grid and flex children resolve their minimum size to `min-content`, so a single long value — an untruncated email, a wide number, a table — pushes its track open and hands the whole document a horizontal scrollbar. It is invisible until real data arrives, and then it affects every page using that grid.
 
+[`Table`](/docs/components/table)'s own scroll container carries `min-w-0`, so a bare table in a grid track is already safe. The class above is for everything else — a long unbroken string, a chart with an explicit width, a card whose content refuses to shrink.
+
 The same applies to a panel row:
 
 ```tsx

@@ -65,7 +65,12 @@ const Table = ({
   <div
     {...containerProps}
     className={cn(
-      "relative w-full overflow-x-auto overflow-y-hidden",
+      // min-w-0 so the container can shrink below the table's intrinsic
+      // width. As a grid or flex item its min-width would otherwise resolve to
+      // min-content -- the full table width -- pushing its track open and
+      // handing the document a horizontal scrollbar. It already scrolls
+      // internally, so it never needs to be wider than its track.
+      "relative w-full min-w-0 overflow-x-auto overflow-y-hidden",
       containerClassName,
       containerProps?.className
     )}
