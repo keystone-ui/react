@@ -197,6 +197,7 @@ Blocks are full-page or feature-level compositions registered as `registry:block
   - `navigation` — user menus, dropdowns, sidebars
   - `data` — tables, CRM-style data management
   - `dashboard` — analytics dashboards, KPI + chart pages
+  - `admin` — admin panels and app shells
   - `betting` — betting/wager UI (keystone-specific)
   - When inventing a new category, prefer single-word lowercase that mirrors shadcn naming where possible
 - `pnpm sync:registry` warns if any block is missing `categories`

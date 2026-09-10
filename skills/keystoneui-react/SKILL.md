@@ -163,6 +163,7 @@ Blocks are full-page or feature-level compositions, not primitives. **If the use
 | Profile dropdown / user menu | `profile-dropdown-01` | `navigation` |
 | Tickets / CRM / data management table | `tickets-01` | `data` |
 | Analytics dashboard / KPIs + charts | `dashboard-01` | `dashboard` |
+| Admin panel / app shell with sidebar | `admin-01` | `admin` |
 | Betting panel / wager UI | `betting-panel-01`, `betting-panel-02`, `betting-panel-03`, `betting-panel-04` | `betting` |
 
 Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or via the unified CLI: `keystoneui blocks` to list, `keystoneui blocks --category authentication` to filter, `keystoneui blocks <name>` to view source. The `--category` flag works on `list` and `search` too.
@@ -177,7 +178,7 @@ Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or
 
 1. **Discover** — use MCP `search_components` / `list_components`, the `keystoneui search`/`keystoneui list` CLI verbs, or `node scripts/list_components.mjs`.
 2. **Find an example** — for "X with Y" patterns (e.g., "table with pagination", "card with image"), check `apps/docs/demos/<component>/<variant>.tsx` directly. These are real, working compositions authored by the team — examples include `apps/docs/demos/table/with-pagination.tsx`, `apps/docs/demos/card/with-image.tsx`. Via MCP, the equivalent is `get_examples({ name: "<component>" })` which returns all demos for the component as a bundle.
-3. **Find a block** — for full-page or multi-component patterns (e.g., "sign-in page", "tickets table with bulk actions"), check `apps/docs/demos/blocks/<name>.tsx` and the docs at `apps/docs/content/docs/blocks/<name>.mdx`. Existing categories: Sign in (`signin-01..04`), Signup (`signup-01..05`), User (`profile-dropdown-01`), CRM (`tickets-01`), Application (`dashboard-01`), Betting (`betting-panel-01..04`). Via MCP, use `list_components({ type: "block" })` or `search_components({ query: "...", type: "block" })`. **Always try a block before composing a page from primitives.**
+3. **Find a block** — for full-page or multi-component patterns (e.g., "sign-in page", "tickets table with bulk actions"), check `apps/docs/demos/blocks/<name>.tsx` and the docs at `apps/docs/content/docs/blocks/<name>.mdx`. Existing categories: Sign in (`signin-01..04`), Signup (`signup-01..05`), User (`profile-dropdown-01`), CRM (`tickets-01`), Application (`dashboard-01`, `admin-01`), Betting (`betting-panel-01..04`). Via MCP, use `list_components({ type: "block" })` or `search_components({ query: "...", type: "block" })`. **Always try a block before composing a page from primitives.**
 4. **Inspect** — `view_component` (MCP), `node scripts/get_component_docs.mjs <name>`, or fetch `https://keystoneui.io/llms.mdx/docs/components/<name>` directly (the `/llms.mdx/...` route returns MDX with `<ComponentPreview>` tags resolved to inline TSX source — single round-trip). **Always read the docs before implementing complex components.**
 5. **Install** — `npx shadcn@latest add <url>` (vendored source) or `pnpm add @keystoneui/react` (npm dependency). See [cli.md](./cli.md).
 6. **Theme** — define semantic tokens in your CSS. See [customization.md](./customization.md).

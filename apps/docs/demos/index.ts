@@ -46,6 +46,7 @@ import BadgeStats from "./badge/stats";
 import BadgeVariants from "./badge/variants";
 import BadgeWithIcon from "./badge/with-icon";
 import BadgeWithSpinner from "./badge/with-spinner";
+import Admin01 from "./blocks/admin-01";
 import BettingPanel01 from "./blocks/betting-panel-01";
 import BettingPanel02 from "./blocks/betting-panel-02";
 import BettingPanel03 from "./blocks/betting-panel-03";
@@ -2306,6 +2307,10 @@ export const demos: Record<string, DemoItem> = {
   "block-signin-04": {
     component: Signin04,
     file: "blocks/signin-04.tsx",
+  },
+  "block-admin-01": {
+    component: Admin01,
+    file: "blocks/admin-01/index.tsx",
   },
   "block-dashboard-01": {
     component: Dashboard01,

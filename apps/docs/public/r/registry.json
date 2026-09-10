@@ -1725,6 +1725,81 @@
       ]
     },
     {
+      "name": "admin-01",
+      "type": "registry:block",
+      "title": "Admin 01",
+      "description": "An admin panel: a collapsible sidebar shell, a topbar with breadcrumb and search, an overview with KPI tiles and a stacked signups chart, and a sortable, paginated users table with bulk actions.",
+      "dependencies": [
+        "lucide-react",
+        "recharts"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "breadcrumb",
+        "button",
+        "card",
+        "checkbox",
+        "input-group",
+        "selection-bar",
+        "separator",
+        "sidebar",
+        "stat",
+        "table",
+        "table-pagination"
+      ],
+      "files": [
+        {
+          "path": "registry/default/blocks/admin-01/page.tsx",
+          "type": "registry:page",
+          "target": "app/admin/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-overview.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-page.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-sidebar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-topbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-users-table.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/chart-formatters.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/chart.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/mock-admin.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/series-legend.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/use-reduced-motion.ts",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "admin"
+      ]
+    },
+    {
       "name": "dashboard-01",
       "type": "registry:block",
       "title": "Dashboard 01",

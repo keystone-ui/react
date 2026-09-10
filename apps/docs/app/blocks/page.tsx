@@ -27,6 +27,7 @@ interface BlockEntry {
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
+  admin: "Admin",
   authentication: "Authentication",
   betting: "Betting",
   dashboard: "Dashboard",

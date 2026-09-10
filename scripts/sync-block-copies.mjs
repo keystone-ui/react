@@ -26,20 +26,25 @@
  * the output is passed through the repo formatter (biome, via ultracite)
  * before comparison. Without that step every file would differ on ordering
  * alone and --check would be useless.
+ *
+ * --check therefore generates into the *real* target directory and restores
+ * the previous contents afterwards, rather than into a scratch dir. Biome
+ * resolves its configuration from the file's location upward, and biome.jsonc
+ * carries path-scoped overrides (the vendored chart layer among them), so a
+ * temp directory outside the repo is formatted under different rules and the
+ * comparison is meaningless.
  */
 
 import { execFileSync } from "node:child_process";
 import {
   existsSync,
   mkdirSync,
-  mkdtempSync,
   readdirSync,
   readFileSync,
   rmSync,
   statSync,
   writeFileSync,
 } from "node:fs";
-import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
@@ -121,49 +126,78 @@ function format(dir) {
 
 function generate(blockName, outDir) {
   const demoDir = join(DEMOS_DIR, blockName);
+  const files = listSourceFiles(demoDir);
   mkdirSync(outDir, { recursive: true });
-  for (const file of listSourceFiles(demoDir)) {
+
+  for (const file of files) {
     const source = readFileSync(join(demoDir, file), "utf-8");
     writeFileSync(join(outDir, file), rewriteImports(source));
   }
+
+  // Remove anything whose demo counterpart is gone. Without this a deleted
+  // file keeps shipping to consumers, which is how a block ends up installing
+  // a component nothing imports.
+  const expected = new Set(files);
+  for (const file of listSourceFiles(outDir)) {
+    if (!expected.has(file)) {
+      rmSync(join(outDir, file), { force: true });
+    }
+  }
+
   format(outDir);
-  return listSourceFiles(demoDir);
+  return files;
 }
 
 /** Problems with one block's committed registry copy, if any. */
 function checkBlock(blockName) {
   const target = join(REGISTRY_DIR, blockName, "components");
-  const scratch = mkdtempSync(join(tmpdir(), `block-${blockName}-`));
   const problems = [];
 
+  // Snapshot, regenerate in place, compare, restore. Generating elsewhere
+  // would be formatted under different biome rules -- see the note at the top.
+  const before = existsSync(target)
+    ? new Map(
+        listSourceFiles(target).map((file) => [
+          file,
+          readFileSync(join(target, file), "utf-8"),
+        ])
+      )
+    : new Map();
+
   try {
-    const files = generate(blockName, scratch);
+    const files = generate(blockName, target);
 
     for (const file of files) {
-      const committedPath = join(target, file);
-      if (!existsSync(committedPath)) {
-        problems.push(`${relative(ROOT, committedPath)} — missing`);
+      const committed = before.get(file);
+      if (committed === undefined) {
+        problems.push(`${relative(ROOT, join(target, file))} — missing`);
         continue;
       }
-      const expected = readFileSync(join(scratch, file), "utf-8");
-      if (readFileSync(committedPath, "utf-8") !== expected) {
-        problems.push(`${relative(ROOT, committedPath)} — out of date`);
+      if (readFileSync(join(target, file), "utf-8") !== committed) {
+        problems.push(`${relative(ROOT, join(target, file))} — out of date`);
       }
     }
 
     // A file left behind after its demo counterpart was deleted still ships.
-    if (existsSync(target)) {
-      const expected = new Set(files);
-      for (const file of listSourceFiles(target)) {
-        if (!expected.has(file)) {
-          problems.push(
-            `${relative(ROOT, join(target, file))} — no matching demo file`
-          );
-        }
+    const expected = new Set(files);
+    for (const file of before.keys()) {
+      if (!expected.has(file)) {
+        problems.push(
+          `${relative(ROOT, join(target, file))} — no matching demo file`
+        );
       }
     }
   } finally {
-    rmSync(scratch, { force: true, recursive: true });
+    // Restore exactly what was committed, including files the generator would
+    // not have produced.
+    for (const file of listSourceFiles(target)) {
+      if (!before.has(file)) {
+        rmSync(join(target, file), { force: true });
+      }
+    }
+    for (const [file, content] of before) {
+      writeFileSync(join(target, file), content);
+    }
   }
 
   return problems;

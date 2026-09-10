@@ -1,0 +1,88 @@
+---
+title: Admin 01
+description: An admin panel — collapsible sidebar shell, topbar with breadcrumb and search, an overview with KPI tiles and a signups chart, and a sortable users table with bulk actions.
+---
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/admin-01.json
+```
+
+<BlockPreview name="block-admin-01" />
+
+## Features
+
+- **Collapsible sidebar shell** with an icon rail, grouped navigation, a badge, and a footer account row.
+- **Topbar** with a sidebar trigger, [breadcrumb](/docs/components/breadcrumb), and a search field that filters the users table.
+- **Overview** with a KPI row and a stacked signups chart sharing the same toggleable legend as [`dashboard-01`](/docs/blocks/dashboard-01).
+- **Users table** — sortable columns, row selection, pagination, and a [`SelectionBar`](/docs/components/selection-bar) for bulk actions.
+
+## Requirements
+
+The sidebar is **shadcn's, not keystone's**. Keystone deliberately ships no app shell — see [Using shadcn Components](/docs/interop) for why, and for the two things you have to get right when mixing the registries.
+
+Installing this block pulls it in through `registryDependencies`, but if you are composing by hand:
+
+```bash
+npx shadcn@latest add sidebar
+```
+
+Two consequences worth knowing before you do:
+
+**Delete the `--sidebar-*` block that `shadcn add` appends to your CSS.** Keystone already declares those eight tokens as aliases of your theme tokens, so the sidebar follows whichever keystone theme is active. shadcn's injected values are hardcoded neutral and land *after* keystone's, so they win — and your sidebar renders grey inside a slate app.
+
+**`SidebarInset` needs `min-w-0`.** Not cosmetic: without it the wide users table pushes the inset open and the whole document gains a horizontal scrollbar. Keystone bakes this into components it owns; it cannot for a file it does not.
+
+```tsx
+<SidebarInset className="min-w-0">
+```
+
+## Shared with dashboard-01, byte for byte
+
+Four files — `chart.tsx`, `chart-formatters.ts`, `series-legend.tsx`, `use-reduced-motion.ts` — are duplicated verbatim from [`dashboard-01`](/docs/blocks/dashboard-01) rather than shared through a common registry item.
+
+That is deliberate. A block's installable copy is flat: every component lands at `@/components/<basename>.tsx`, so two blocks shipping a `chart.tsx` write to the same path and installing both is last-writer-wins. Hoisting them into their own registry item would have put chart code back on the installable component surface, which is exactly what keeping recharts a *block* dependency avoids.
+
+So they are duplicated and the duplication is enforced: `apps/docs/tests/block-shared-files.test.ts` asserts the copies are byte-identical and fails if a new basename starts colliding without being classified. Only infrastructure is shared this way — the panels and fixtures are each block's own, because two blocks sharing those would be the same demo twice.
+
+## Notes
+
+Select-all is binary rather than tri-state. Keystone's [`Checkbox`](/docs/components/checkbox) has no indeterminate variant, and re-implementing the custom mixed-state control that [`tickets-01`](/docs/blocks/tickets-01) uses would duplicate a workaround rather than share one.
+
+The Status column passes **no** `sortDirection` at all, where the sortable columns pass `null`. That distinction is the point of the three-way prop: omitted means the column does not sort and emits no `aria-sort`, while `null` means sortable but not currently active.
+
+## Components Used
+
+- [Avatar](/docs/components/avatar)
+- [Badge](/docs/components/badge)
+- [Breadcrumb](/docs/components/breadcrumb)
+- [Button](/docs/components/button)
+- [Card](/docs/components/card)
+- [Checkbox](/docs/components/checkbox)
+- [Input Group](/docs/components/input-group)
+- [Selection Bar](/docs/components/selection-bar)
+- [Separator](/docs/components/separator)
+- [Stat](/docs/components/stat)
+- [Table](/docs/components/table)
+- [Table Pagination](/docs/components/table-pagination)
+
+## Composition
+
+```text
+SidebarProvider
+├── AdminSidebar          (shadcn Sidebar, not keystone)
+│   ├── SidebarHeader › SidebarMenuButton
+│   ├── SidebarContent › SidebarGroup › SidebarMenuButton
+│   └── SidebarFooter › Avatar
+└── SidebarInset (min-w-0)
+    ├── AdminTopbar
+    │   ├── SidebarTrigger
+    │   ├── Breadcrumb
+    │   └── InputGroup › InputGroupInput
+    ├── AdminOverview
+    │   ├── Card › StatValue › StatDelta
+    │   └── ChartContainer › BarChart › Bar
+    └── AdminUsersTable
+        ├── Card › Table › TableSortButton
+        ├── TablePagination
+        └── SelectionBar › SelectionBarButton
+```

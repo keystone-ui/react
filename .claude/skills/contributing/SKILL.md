@@ -54,6 +54,7 @@ Every block must carry at least one category. Current values in use:
 | `navigation` | `profile-dropdown-01` | new |
 | `data` | `tickets-01` | new |
 | `dashboard` | `dashboard-01` | new |
+| `admin` | `admin-01` | new |
 | `betting` | `betting-panel-0X` | new |
 
 When adding a new category, prefer single-word lowercase strings that mirror shadcn naming where any overlap exists (`/Users/vladsuciu/dev/ui/apps/v4/registry.json` is the reference). Document the new category in this table and in `AGENTS.md` → "Block Authoring".

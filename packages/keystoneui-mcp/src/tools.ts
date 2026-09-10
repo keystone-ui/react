@@ -57,7 +57,7 @@ export const listComponentsSchema = z.object({
     .string()
     .optional()
     .describe(
-      "Filter by category (e.g. 'authentication', 'login', 'signup', 'navigation', 'data', 'dashboard', 'betting'). Currently only block items carry categories."
+      "Filter by category (e.g. 'authentication', 'login', 'signup', 'navigation', 'data', 'dashboard', 'admin', 'betting'). Currently only block items carry categories."
     ),
 });
 
