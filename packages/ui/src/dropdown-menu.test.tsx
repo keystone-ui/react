@@ -4,10 +4,13 @@ import { describe, expect, it, vi } from "vitest";
 
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
 
@@ -112,5 +115,109 @@ describe("DropdownMenu", () => {
 
     await user.click(screen.getByText("Action"));
     expect(onClick).toHaveBeenCalledOnce();
+  });
+});
+
+// =============================================================================
+// Close-on-click
+// =============================================================================
+// Base UI defaults `closeOnClick` to false for BOTH checkbox and radio items.
+// Keystone re-defaults radio items to true and leaves checkbox items alone, so
+// these tests pin the asymmetry -- a menu left open after a single-select pick
+// keeps an inert backdrop over the page and swallows the next click.
+describe("DropdownMenu close-on-click", () => {
+  function renderRadioMenu(props?: { closeOnClick?: boolean }) {
+    return render(
+      <DropdownMenu defaultOpen>
+        <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuRadioGroup value="all">
+            <DropdownMenuRadioItem value="all" {...props}>
+              All roles
+            </DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="admin" {...props}>
+              Admin
+            </DropdownMenuRadioItem>
+          </DropdownMenuRadioGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+
+  it("closes the menu when a radio item is picked", async () => {
+    const user = userEvent.setup();
+    renderRadioMenu();
+
+    await waitFor(() => {
+      expect(screen.getByText("Admin")).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByText("Admin"));
+
+    await waitFor(() => {
+      expect(screen.queryByText("Admin")).not.toBeInTheDocument();
+    });
+  });
+
+  it("keeps the menu open when a radio item opts out", async () => {
+    const user = userEvent.setup();
+    renderRadioMenu({ closeOnClick: false });
+
+    await waitFor(() => {
+      expect(screen.getByText("Admin")).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByText("Admin"));
+
+    expect(screen.getByText("Admin")).toBeInTheDocument();
+  });
+
+  it("still reports the picked value", async () => {
+    const user = userEvent.setup();
+    const onValueChange = vi.fn();
+
+    render(
+      <DropdownMenu defaultOpen>
+        <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuRadioGroup onValueChange={onValueChange} value="all">
+            <DropdownMenuRadioItem value="admin">Admin</DropdownMenuRadioItem>
+          </DropdownMenuRadioGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Admin")).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByText("Admin"));
+    expect(onValueChange).toHaveBeenCalledWith("admin", expect.anything());
+  });
+
+  it("keeps checkbox items open, so a group can be toggled in one visit", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <DropdownMenu defaultOpen>
+        <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuCheckboxItem checked={false}>
+            Status
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem checked={false}>
+            Assignee
+          </DropdownMenuCheckboxItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Status")).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByText("Status"));
+
+    expect(screen.getByText("Assignee")).toBeInTheDocument();
   });
 });

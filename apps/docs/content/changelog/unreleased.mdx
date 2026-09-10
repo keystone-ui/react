@@ -1,7 +1,7 @@
 ---
 date: "2026-09-10"
 description: "What's coming in the next release"
-excerpt: "23 changes queued for the next release."
+excerpt: "24 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -108,6 +108,18 @@ worse.
 - Drawers that already nest their own `overflow-y-auto` child are unaffected. That child's overflow is not `visible`, so its automatic minimum size is `0`, it shrinks to absorb the overflow, and the outer region never scrolls.
 - **New:** `DrawerBody` (`data-slot="drawer-body"`) — the scrolling middle region, making the pinned-header / scrolling-body / pinned-footer pattern a first-class API instead of a hand-rolled `<div className="overflow-y-auto px-4">`. Horizontal padding only (`px-4`), so it never doubles against `DrawerHeader` / `DrawerFooter`'s `p-4`.
 - `DrawerHeader` and `DrawerFooter` now carry `shrink-0` so they stay pinned alongside `DrawerBody`. `DrawerFooter` keeps `mt-auto` for compositions that don't use `DrawerBody`.
+
+---
+
+### `DropdownMenuRadioItem` now closes the menu when picked.
+
+Base UI defaults `closeOnClick` to `false` on both `Menu.CheckboxItem` and `Menu.RadioItem`. That is right for a checkbox group — multi-select wants the menu to stay put — and wrong for a radio group, where picking one *is* the interaction and the popup has nothing left to act on.
+
+The visible failure was worse than a menu that lingers: Base UI keeps a fullscreen `position: fixed` backdrop with `pointer-events: auto` mounted while the popup is open, so the user's next click *anywhere on the page* is swallowed. In a filter toolbar that reads as "the second filter is broken".
+
+`DropdownMenuRadioItem` therefore re-defaults `closeOnClick` to `true`, which is also what Radix — and so shadcn — does on select, so a ported menu behaves the way its author expects. `DropdownMenuCheckboxItem` keeps Base UI's `false`; the asymmetry is the decision.
+
+Pass `closeOnClick={false}` to restore the previous behaviour, for a menu that reveals further controls once a choice is made.
 
 ---
 

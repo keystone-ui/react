@@ -1,6 +1,6 @@
 ---
 title: Admin 01
-description: An admin panel — collapsible sidebar shell, topbar with breadcrumb and search, an overview with KPI tiles and a signups chart, and a sortable users table with bulk actions.
+description: An admin panel — collapsible sidebar shell, topbar with breadcrumb, an overview with KPI tiles and a signups chart, and a filterable, sortable users table with bulk actions.
 ---
 
 ```bash
@@ -12,9 +12,9 @@ npx shadcn@latest add https://keystoneui.io/r/admin-01.json
 ## Features
 
 - **Collapsible sidebar shell** with an icon rail, grouped navigation, a badge, and a footer account row.
-- **Topbar** with a sidebar trigger, [breadcrumb](/docs/components/breadcrumb), and a search field that filters the users table.
+- **Topbar** with a sidebar trigger and a [breadcrumb](/docs/components/breadcrumb).
 - **Overview** with a KPI row and a stacked signups chart sharing the same toggleable legend as [`dashboard-01`](/docs/blocks/dashboard-01).
-- **Users table** — sortable columns, row selection, pagination, and a [`SelectionBar`](/docs/components/selection-bar) for bulk actions.
+- **Users table** — a filter toolbar (search, role, status), sortable columns, row selection, pagination, and a [`SelectionBar`](/docs/components/selection-bar) for bulk actions.
 
 ## Requirements
 
@@ -46,6 +46,17 @@ So they are duplicated and the duplication is enforced: `apps/docs/tests/block-s
 
 ## Notes
 
+**The filter toolbar is a deliberately smaller version of [`tickets-01`](/docs/blocks/tickets-01)'s.** Two things that block has are left out rather than copied:
+
+- **No mobile filters drawer.** `tickets-01` forks at `sm:` into a single drawer trigger, which is the right answer for its nine controls. With three, `flex-wrap` degrades fine, and duplicating the drawer would add ~100 lines to demonstrate a pattern the other block already shows.
+- **No column-visibility menu.** Six columns do not earn one.
+
+The **Clear** button only renders when something is actually filtered, and carries the count. A permanently visible "Clear" on an unfiltered table is a control that does nothing, and it hides the one signal that a filter is on.
+
+The filter menus are [`DropdownMenuRadioGroup`](/docs/components/dropdown-menu#radio-group), not checkbox items — each filter is single-select, so picking a value closes the menu. That is keystone's default for radio items and the reason a second filter is clickable straight after the first; a menu left open holds an inert overlay across the page that swallows the next click.
+
+Every filter change resets `pageIndex` to 0. Page 2 of the unfiltered list usually does not exist once a filter is applied, and a table reading "Page 2 of 1" with no rows looks broken.
+
 Select-all is binary rather than tri-state. Keystone's [`Checkbox`](/docs/components/checkbox) has no indeterminate variant, and re-implementing the custom mixed-state control that [`tickets-01`](/docs/blocks/tickets-01) uses would duplicate a workaround rather than share one.
 
 The Status column passes **no** `sortDirection` at all, where the sortable columns pass `null`. That distinction is the point of the three-way prop: omitted means the column does not sort and emits no `aria-sort`, while `null` means sortable but not currently active.
@@ -58,6 +69,7 @@ The Status column passes **no** `sortDirection` at all, where the sortable colum
 - [Button](/docs/components/button)
 - [Card](/docs/components/card)
 - [Checkbox](/docs/components/checkbox)
+- [Dropdown Menu](/docs/components/dropdown-menu)
 - [Input Group](/docs/components/input-group)
 - [Selection Bar](/docs/components/selection-bar)
 - [Separator](/docs/components/separator)
@@ -76,13 +88,15 @@ SidebarProvider
 └── SidebarInset (min-w-0)
     ├── AdminTopbar
     │   ├── SidebarTrigger
-    │   ├── Breadcrumb
-    │   └── InputGroup › InputGroupInput
+    │   └── Breadcrumb
     ├── AdminOverview
     │   ├── Card › StatValue › StatDelta
     │   └── ChartContainer › BarChart › Bar
     └── AdminUsersTable
         ├── Card › CardContent
+        │   ├── AdminUsersToolbar
+        │   │   ├── InputGroup › InputGroupInput
+        │   │   └── DropdownMenu › DropdownMenuRadioGroup
         │   ├── Table › TableSortButton
         │   └── TablePagination
         └── SelectionBar › SelectionBarButton

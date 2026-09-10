@@ -11,6 +11,7 @@ import {
   type SortDirection,
   type UserSortKey,
 } from "./admin-users-table";
+import type { RoleFilter, StatusFilter } from "./admin-users-toolbar";
 import { adminMetrics, signupsByMonth, users } from "./mock-admin";
 import { useReducedMotion } from "./use-reduced-motion";
 
@@ -20,6 +21,8 @@ export function AdminPage() {
 
   const [section, setSection] = useState<AdminSection>("overview");
   const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState<RoleFilter>("all");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [hidden, setHidden] = useState<ReadonlySet<string>>(new Set());
   const [selected, setSelected] = useState<ReadonlySet<string>>(new Set());
   const [sort, setSort] = useState<{
@@ -31,15 +34,22 @@ export function AdminPage() {
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
-    if (!query) {
-      return users;
-    }
-    return users.filter(
-      (user) =>
+    return users.filter((user) => {
+      if (roleFilter !== "all" && user.role !== roleFilter) {
+        return false;
+      }
+      if (statusFilter !== "all" && user.status !== statusFilter) {
+        return false;
+      }
+      if (!query) {
+        return true;
+      }
+      return (
         user.name.toLowerCase().includes(query) ||
         user.email.toLowerCase().includes(query)
-    );
-  }, [search]);
+      );
+    });
+  }, [roleFilter, search, statusFilter]);
 
   const sorted = useMemo(() => {
     if (!sort) {
@@ -100,6 +110,15 @@ export function AdminPage() {
     });
   };
 
+  const filterAndReset =
+    <T,>(set: (value: T) => void) =>
+    (value: T) => {
+      set(value);
+      // Page 2 of the unfiltered list usually does not exist once a filter is
+      // applied, and a table showing "Page 2 of 1" with no rows looks broken.
+      setPageIndex(0);
+    };
+
   const cycleSort = (key: UserSortKey) => {
     setPageIndex(0);
     setSort((current) => {
@@ -122,14 +141,7 @@ export function AdminPage() {
           across eight pages. Keystone can bake this into components it owns;
           this one is shadcn's, so it lands at the call site. */}
       <SidebarInset className="min-w-0">
-        <AdminTopbar
-          onSearchChange={(value) => {
-            setSearch(value);
-            setPageIndex(0);
-          }}
-          search={search}
-          section={section}
-        />
+        <AdminTopbar section={section} />
 
         <div className="flex min-w-0 flex-1 flex-col gap-6 p-4 md:p-6">
           {section === "users" ? (
@@ -141,15 +153,21 @@ export function AdminPage() {
                 // Page 3 of a 5-per-page list does not exist at 50 per page.
                 setPageIndex(0);
               }}
+              onRoleFilterChange={filterAndReset(setRoleFilter)}
+              onSearchChange={filterAndReset(setSearch)}
               onSort={cycleSort}
+              onStatusFilterChange={filterAndReset(setStatusFilter)}
               onToggleAll={toggleAllOnPage}
               onToggleRow={toggleRow}
               pageCount={pageCount}
               pageIndex={pageIndex}
               pageSize={pageSize}
+              roleFilter={roleFilter}
               rows={pageRows}
+              search={search}
               selected={selected}
               sort={sort}
+              statusFilter={statusFilter}
               totalCount={sorted.length}
             />
           ) : null}

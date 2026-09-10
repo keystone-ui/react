@@ -1,13 +1,14 @@
 import { defineConfig, devices } from "@playwright/test";
 
 /**
- * Layout tests for the block previews.
+ * Browser tests for the block previews.
  *
  * Separate from the `vitest` suite in `tests/`, which is node-only and asserts
- * on files. This one needs a real browser measuring real layout, because the
- * failure it exists to catch — a grid or flex child pushing its track open and
- * handing the document a horizontal scrollbar — has no representation outside
- * a rendered page.
+ * on files, and from the jsdom component tests, which have no layout and no
+ * hit-testing. What lands here is what only a real browser can decide: a grid
+ * or flex child pushing its track open and handing the document a horizontal
+ * scrollbar (`overflow.spec.ts`), and whether a click actually reaches the
+ * element under the pointer (`menu-dismissal.spec.ts`).
  *
  * Runs against a production build. `next dev` serves the same markup but with
  * different timing, and a flaky layout test is worse than none.

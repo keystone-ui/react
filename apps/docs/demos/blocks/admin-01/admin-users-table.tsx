@@ -27,7 +27,11 @@ import {
   TableSortButton,
 } from "@keystoneui/react/table";
 import { TablePagination } from "@keystoneui/react/table-pagination";
-
+import {
+  AdminUsersToolbar,
+  type RoleFilter,
+  type StatusFilter,
+} from "./admin-users-toolbar";
 import { type Status, statusLabels, type User } from "./mock-admin";
 
 export type UserSortKey = "lastActive" | "name" | "role" | "seats";
@@ -50,15 +54,21 @@ interface AdminUsersTableProps {
   onClearSelection: () => void;
   onPageIndexChange: (index: number) => void;
   onPageSizeChange: (size: number) => void;
+  onRoleFilterChange: (role: RoleFilter) => void;
+  onSearchChange: (value: string) => void;
   onSort: (key: UserSortKey) => void;
+  onStatusFilterChange: (status: StatusFilter) => void;
   onToggleAll: (checked: boolean) => void;
   onToggleRow: (id: string) => void;
   pageCount: number;
   pageIndex: number;
   pageSize: number;
+  roleFilter: RoleFilter;
   rows: readonly User[];
+  search: string;
   selected: ReadonlySet<string>;
   sort: { direction: SortDirection; key: UserSortKey } | null;
+  statusFilter: StatusFilter;
   totalCount: number;
 }
 
@@ -66,15 +76,21 @@ export function AdminUsersTable({
   onClearSelection,
   onPageIndexChange,
   onPageSizeChange,
+  onRoleFilterChange,
+  onSearchChange,
   onSort,
+  onStatusFilterChange,
   onToggleAll,
   onToggleRow,
   pageCount,
   pageIndex,
   pageSize,
+  roleFilter,
   rows,
+  search,
   selected,
   sort,
+  statusFilter,
   totalCount,
 }: AdminUsersTableProps) {
   // Binary rather than tri-state: keystone's Checkbox has no indeterminate
@@ -95,6 +111,15 @@ export function AdminUsersTable({
         </CardHeader>
 
         <CardContent className="flex flex-col gap-4">
+          <AdminUsersToolbar
+            onRoleFilterChange={onRoleFilterChange}
+            onSearchChange={onSearchChange}
+            onStatusFilterChange={onStatusFilterChange}
+            roleFilter={roleFilter}
+            search={search}
+            statusFilter={statusFilter}
+          />
+
           <Table hoverable>
             <TableHeader>
               <TableRow>
@@ -133,7 +158,7 @@ export function AdminUsersTable({
               {rows.length === 0 ? (
                 <TableEmpty colSpan={columns.length + 2}>
                   <p className="py-10 text-center text-muted-foreground text-sm">
-                    No users match this search.
+                    No users match these filters.
                   </p>
                 </TableEmpty>
               ) : (

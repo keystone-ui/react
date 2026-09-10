@@ -1755,6 +1755,7 @@
         "button",
         "card",
         "checkbox",
+        "dropdown-menu",
         "input-group",
         "selection-bar",
         "separator",
@@ -1787,6 +1788,10 @@
         },
         {
           "path": "registry/default/blocks/admin-01/components/admin-users-table.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-users-toolbar.tsx",
           "type": "registry:component"
         },
         {

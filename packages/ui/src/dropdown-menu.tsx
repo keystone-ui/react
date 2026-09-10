@@ -373,6 +373,21 @@ function DropdownMenuRadioGroup({ ...props }: DropdownMenuRadioGroupProps) {
 export interface DropdownMenuRadioItemProps
   extends MenuPrimitive.RadioItem.Props {
   /**
+   * Whether to close the menu when the item is clicked.
+   *
+   * Defaults to `true`, which is a deliberate deviation from Base UI's `false`.
+   * A radio item is single-select: picking one *is* the interaction, so leaving
+   * the menu open strands the user on a popup that has nothing left to do —
+   * and Base UI's inert backdrop then swallows the next click anywhere on the
+   * page. Radix (and so shadcn) closes on select too, so `true` is also what a
+   * consumer porting a `DropdownMenuRadioItem` expects.
+   *
+   * `DropdownMenuCheckboxItem` keeps Base UI's `false`, because a checkbox
+   * group is multi-select and reopening the menu per item is the wrong trade.
+   * @default true
+   */
+  closeOnClick?: boolean;
+  /**
    * Visual style of the radio indicator
    * - "indicator": check icon on the right (default)
    * - "control": renders a real Radio component on the left
@@ -384,6 +399,7 @@ export interface DropdownMenuRadioItemProps
 function DropdownMenuRadioItem({
   className,
   children,
+  closeOnClick = true,
   variant = "indicator",
   ...props
 }: DropdownMenuRadioItemProps) {
@@ -398,6 +414,7 @@ function DropdownMenuRadioItem({
         "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
       )}
+      closeOnClick={closeOnClick}
       data-slot="dropdown-menu-radio-item"
       {...props}
     >

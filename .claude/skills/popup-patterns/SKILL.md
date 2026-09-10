@@ -118,6 +118,37 @@ Popup separators use `bg-border-muted` (subtle, lower contrast), NOT `bg-border`
 <DropdownMenuSeparator className="-mx-1 my-1 h-px bg-border-muted" />
 ```
 
+## Dismissal Pattern (`closeOnClick`)
+
+Base UI defaults `closeOnClick` to **`false`** on both `Menu.CheckboxItem` and
+`Menu.RadioItem`. That is right for one of them and wrong for the other, so
+keystone re-defaults only the radio item:
+
+| Item | `closeOnClick` default | Why |
+| --- | --- | --- |
+| `DropdownMenuItem` | closes (Base UI) | An action item's click is the whole interaction. |
+| `DropdownMenuCheckboxItem` | `false` (Base UI's) | Multi-select. Reopening the menu per column is the wrong trade. |
+| `DropdownMenuRadioItem` | **`true`** (keystone's) | Single-select. Picking one *is* the interaction. |
+
+The failure mode when a single-select menu stays open is not merely cosmetic.
+Base UI keeps a fullscreen `position: fixed` backdrop with `pointer-events: auto`
+mounted while the popup is open, so `elementFromPoint` at any coordinate returns
+the blocker and the user's next click anywhere on the page is swallowed. In a
+filter toolbar that reads as "the second filter is broken".
+
+Rules:
+
+- A radio group in a menu needs no `closeOnClick` — the default is already right.
+  Pass `closeOnClick={false}` only for a menu that reveals further controls once
+  a choice is made.
+- A checkbox group that is genuinely single-select wants an explicit
+  `closeOnClick` — or should be a radio group.
+- Do **not** propagate the radio default to checkbox items for symmetry. The
+  asymmetry is the decision.
+- `TooltipTrigger` is the mirror image: it defaults `closeOnClick` to **`true`**,
+  which fights a controlled click-to-open toggle. The touch-accessible info-tip
+  pattern passes `closeOnClick={false}` for that reason.
+
 ## Creating a New Popup Component
 
 If you ever need to add a new popup-based component:

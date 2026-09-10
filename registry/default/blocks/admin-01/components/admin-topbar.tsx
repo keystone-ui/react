@@ -1,6 +1,6 @@
 "use client";
 
-import { BellIcon, SearchIcon } from "lucide-react";
+import { BellIcon } from "lucide-react";
 import type { AdminSection } from "@/components/admin-sidebar";
 import {
   Breadcrumb,
@@ -11,11 +11,6 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -27,16 +22,10 @@ const TITLES: Record<AdminSection, string> = {
 };
 
 interface AdminTopbarProps {
-  onSearchChange: (value: string) => void;
-  search: string;
   section: AdminSection;
 }
 
-export function AdminTopbar({
-  onSearchChange,
-  search,
-  section,
-}: AdminTopbarProps) {
+export function AdminTopbar({ section }: AdminTopbarProps) {
   return (
     <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
       <SidebarTrigger className="-ml-1" />
@@ -54,19 +43,9 @@ export function AdminTopbar({
         </BreadcrumbList>
       </Breadcrumb>
 
+      {/* Search lives in the table's own toolbar, not here: it filters the
+          table, and a field in the app chrome reads as global search. */}
       <div className="ml-auto flex shrink-0 items-center gap-2">
-        <InputGroup className="hidden w-56 sm:flex" size="sm">
-          <InputGroupAddon align="inline-start">
-            <SearchIcon />
-          </InputGroupAddon>
-          <InputGroupInput
-            aria-label="Search users"
-            onChange={(event) => onSearchChange(event.target.value)}
-            placeholder="Search users…"
-            type="search"
-            value={search}
-          />
-        </InputGroup>
         <Button aria-label="Notifications" size="icon-sm" variant="ghost">
           <BellIcon />
         </Button>
