@@ -106,9 +106,30 @@ Both use a ring rather than a border, deliberately: a ring is a box-shadow with 
 
 <ComponentPreview name="card-variants" />
 
-### Table Flush
+### Tables in a Card
 
-Every bit of Card's padding and gap resolves from a single `--card-spacing` custom property, so you can reach any spacing — including none — from `className`:
+Put the table in `CardContent`. It then shares the card's horizontal padding with the title, so the heading, the row separators and the cell text all line up:
+
+```tsx
+<Card variant="outline">
+  <CardHeader>
+    <CardTitle>Delivery by squad</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <Table>{/* ... */}</Table>
+  </CardContent>
+</Card>
+```
+
+That is the whole recipe — no spacing tricks. The cell text sits `px-2` further in than the title, which is the table's own column gutter and reads as intentional. Use `size="sm"` for a denser panel.
+
+**Do not zero the spacing for a titled table.** A flush table under a padded `CardHeader` leaves the heading indented three times further than the columns (24px against 8px), and the card keeps its vertical padding below the last row. It looks like a mistake because it is one.
+
+<ComponentPreview name="card-table-flush" />
+
+### A card that is only a table
+
+Zeroing `--card-spacing` is for the case with no title and no description — an explorer table that *is* the card. The header row then sits against the card's edge, and `overflow-hidden` clips the table's square corners to the card radius:
 
 ```tsx
 <Card variant="outline" className="[--card-spacing:0px]">
@@ -116,11 +137,7 @@ Every bit of Card's padding and gap resolves from a single `--card-spacing` cust
 </Card>
 ```
 
-The header row then sits against the card's edge, and `overflow-hidden` clips the table container's square corners to the card radius. No extra prop needed.
-
-Zeroing `--card-spacing` also zeroes the root `gap`, so a `CardHeader` and the table become adjacent siblings. For a padded header *above* a flush table, keep the normal spacing and put the table in a bare `<div>` sibling rather than in `CardContent` — the second card in the preview does this.
-
-<ComponentPreview name="card-table-flush" />
+Both are in the preview above: padded first, flush second.
 
 ## RTL
 

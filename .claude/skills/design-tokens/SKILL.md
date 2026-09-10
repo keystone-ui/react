@@ -133,6 +133,11 @@ sub-parts, which read it by inheritance. Consumers reach any spacing from
 </Card>
 ```
 
+That is for a card that is *only* a table. A table under a padded
+`CardHeader` belongs in `CardContent`, which shares the card's horizontal
+padding so the heading and the rows line up — zeroing it there leaves the
+title indented three times further than the columns.
+
 `size` resolves the variable **through CVA**, not through
 `data-[size=sm]:[--card-spacing:…]` on the base class. Those look equivalent
 and are not: a variant modifier is part of tailwind-merge's group key, so an

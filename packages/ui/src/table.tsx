@@ -365,14 +365,14 @@ function TableSortButton({
             <Icon
               aria-hidden="true"
               className={cn(
-                "ms-1 size-3 shrink-0",
+                "size-3 shrink-0",
                 sortIconOpacity(direction, revealOnHover)
               )}
             />
           </>
         ),
         className: cn(
-          "inline-flex cursor-pointer items-center rounded-sm font-medium text-inherit transition-colors focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 group-data-numeric/table-head:flex-row-reverse [&_svg]:pointer-events-none",
+          "inline-flex cursor-pointer items-center gap-1 rounded-sm font-medium text-inherit transition-colors focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 group-data-numeric/table-head:flex-row-reverse [&_svg]:pointer-events-none",
           className
         ),
         type: "button",

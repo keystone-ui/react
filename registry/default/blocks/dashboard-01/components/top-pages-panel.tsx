@@ -2,7 +2,13 @@
 
 import { formatValue } from "@/components/chart-formatters";
 import type { PageRow } from "@/components/mock-analytics";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -43,67 +49,74 @@ export function TopPagesPanel({
   sort,
 }: TopPagesPanelProps) {
   return (
-    // The header keeps its padding while the table runs edge to edge, so the
-    // table sits in a bare sibling rather than in CardContent.
+    // The table goes in CardContent, so the title, the row separators and the
+    // cell text all share the card's horizontal padding. Zeroing the spacing
+    // is for a card that is *only* a table -- with a title above it, a flush
+    // table leaves the heading indented three times further than the columns.
     <Card variant="outline">
       <CardHeader>
         <CardTitle>Top pages</CardTitle>
       </CardHeader>
 
-      <Table hoverable>
-        <TableHeader>
-          <TableRow>
-            {columns.map((column) => (
-              <TableHead
-                key={column.key}
-                numeric={column.numeric}
-                // `null`, not omitted: every column here sorts, so each one
-                // reports aria-sort="none" until it becomes the active column.
-                sortDirection={sort?.key === column.key ? sort.direction : null}
-              >
-                <TableSortButton
-                  direction={sort?.key === column.key ? sort.direction : null}
-                  onClick={() => onSort(column.key)}
+      <CardContent>
+        <Table hoverable>
+          <TableHeader>
+            <TableRow>
+              {columns.map((column) => (
+                <TableHead
+                  key={column.key}
+                  numeric={column.numeric}
+                  // `null`, not omitted: every column here sorts, so each one
+                  // reports aria-sort="none" until it becomes the active column.
+                  sortDirection={
+                    sort?.key === column.key ? sort.direction : null
+                  }
                 >
-                  {column.label}
-                </TableSortButton>
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {rows.length === 0 ? (
-            <TableEmpty colSpan={columns.length}>
-              <p className="py-10 text-center text-muted-foreground text-sm">
-                No pages in this period.
-              </p>
-            </TableEmpty>
-          ) : (
-            rows.map((row) => (
-              <TableRow key={row.path}>
-                <TableCell className="font-medium">{row.path}</TableCell>
-                <TableCell numeric>
-                  {formatValue(row.views, "number")}
-                </TableCell>
-                <TableCell numeric>
-                  {formatValue(row.bounce, "percent")}
-                </TableCell>
-                <TableCell numeric>
-                  {formatValue(row.conversion, "percent")}
-                </TableCell>
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+                  <TableSortButton
+                    direction={sort?.key === column.key ? sort.direction : null}
+                    onClick={() => onSort(column.key)}
+                  >
+                    {column.label}
+                  </TableSortButton>
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {rows.length === 0 ? (
+              <TableEmpty colSpan={columns.length}>
+                <p className="py-10 text-center text-muted-foreground text-sm">
+                  No pages in this period.
+                </p>
+              </TableEmpty>
+            ) : (
+              rows.map((row) => (
+                <TableRow key={row.path}>
+                  <TableCell className="font-medium">{row.path}</TableCell>
+                  <TableCell numeric>
+                    {formatValue(row.views, "number")}
+                  </TableCell>
+                  <TableCell numeric>
+                    {formatValue(row.bounce, "percent")}
+                  </TableCell>
+                  <TableCell numeric>
+                    {formatValue(row.conversion, "percent")}
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </CardContent>
 
-      <div className="px-2 pb-1">
+      <CardFooter>
         <TablePagination
+          className="w-full px-0"
           onPageIndexChange={onPageIndexChange}
           pageCount={pageCount}
           pageIndex={pageIndex}
         />
-      </div>
+      </CardFooter>
     </Card>
   );
 }

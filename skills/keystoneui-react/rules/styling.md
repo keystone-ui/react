@@ -54,7 +54,7 @@ Pair every `sticky` with `print:static`. A sticky element resolves against a scr
 
 Prefer logical properties for anything new: `text-end` over `text-right`, `start-0` over `left-0`, `ms-*`/`me-*` over `ml-*`/`mr-*`. Most of the library still uses physical utilities, so this is a beachhead rather than a settled convention — but do not add to the pile.
 
-`Card` has two surface tiers: `filled` (default, paints `bg-card`) and `outline` (no fill, for chart and table panels). All of its spacing resolves from `--card-spacing`, so `<Card variant="outline" className="[--card-spacing:0px]">` gives a table-flush panel with no extra prop.
+`Card` has two surface tiers: `filled` (default, paints `bg-card`) and `outline` (no fill, for chart and table panels). A table goes in `CardContent`, which shares the card's horizontal padding with the title so the heading, the row separators and the cell text line up. All spacing resolves from `--card-spacing`, and `<Card className="[--card-spacing:0px]">` is for the narrower case of a card that is *only* a table — never under a padded `CardHeader`, which leaves the heading indented three times further than the columns.
 
 **Exception:** Badge color variants (`bg-red-500/15`, `text-red-700`) intentionally use raw Tailwind colors because each variant maps to a distinct hue.
 

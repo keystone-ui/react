@@ -396,69 +396,82 @@ export const TableFlush: Story = {
   // can tell you that. The jsdom suite in packages/ui cannot do this -- it
   // loads no CSS -- which is why this assertion lives here.
   play: async ({ canvasElement }) => {
-    const flush = canvasElement.querySelector(
-      '[data-slot="card"][data-variant="outline"]'
+    const cards = [
+      ...canvasElement.querySelectorAll('[data-slot="card"]'),
+    ] as HTMLElement[];
+    const [padded, flush] = cards;
+
+    // The padded card: title, separators and cell text share the card's
+    // horizontal padding, so the heading lines up with the rows.
+    const title = padded.querySelector(
+      '[data-slot="card-title"]'
     ) as HTMLElement;
-    await expect(flush).not.toBeNull();
+    const paddedRow = padded.querySelector("tbody tr") as HTMLElement;
+    const cardLeft = padded.getBoundingClientRect().left;
+    await expect(
+      Math.round(title.getBoundingClientRect().left - cardLeft)
+    ).toBe(Math.round(paddedRow.getBoundingClientRect().left - cardLeft));
 
-    const style = getComputedStyle(flush);
-    await expect(style.paddingTop).toBe("0px");
-    await expect(style.paddingBottom).toBe("0px");
-    await expect(style.rowGap).toBe("0px");
-
-    // The rounded corner has to clip the table's square one, or the flush
-    // recipe leaves the header sticking out past the card edge.
-    await expect(style.overflow).toBe("hidden");
-    await expect(Number.parseFloat(style.borderTopLeftRadius)).toBeGreaterThan(
-      0
-    );
+    // The flush card: zeroed spacing, so rows run to the card's edge.
+    const flushStyle = getComputedStyle(flush);
+    await expect(flushStyle.paddingTop).toBe("0px");
+    await expect(flushStyle.paddingBottom).toBe("0px");
+    await expect(flushStyle.rowGap).toBe("0px");
+    // The rounded corner has to clip the table's square one.
+    await expect(flushStyle.overflow).toBe("hidden");
+    await expect(
+      Number.parseFloat(flushStyle.borderTopLeftRadius)
+    ).toBeGreaterThan(0);
   },
   parameters: {
     docs: {
       description: {
         story:
-          "All of Card's padding resolves from one `--card-spacing` custom property, so `className=\"[--card-spacing:0px]\"` gives a table-flush panel with no new prop: the header row sits against the edge and `overflow-hidden` clips the table's square corners to the card radius. For a padded header above a flush table, keep normal spacing and put the table in a bare sibling rather than in CardContent.",
+          "Put a table in `CardContent` and it shares the card's horizontal padding with the title, so the heading, the row separators and the cell text line up. That is the normal recipe. Zeroing `--card-spacing` is for the narrower case of a card that is *only* a table — no title — where the header row sits against the edge and `overflow-hidden` clips the table's square corners. Do not zero it under a padded `CardHeader`: the heading ends up indented three times further than the columns.",
       },
     },
   },
   render: () => (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
+      <Card variant="outline">
+        <CardHeader>
+          <CardTitle>Delivery by squad</CardTitle>
+          <CardDescription>Last 30 days</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Squad</TableHead>
+                <TableHead numeric>Deploys</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell className="font-medium">Platform</TableCell>
+                <TableCell numeric>42</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">Payments</TableCell>
+                <TableCell numeric>31</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
       <Card className="[--card-spacing:0px]" variant="outline">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Squad</TableHead>
-              <TableHead className="text-end">Deploys</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">Platform</TableCell>
-              <TableCell className="text-end tabular-nums">42</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Payments</TableCell>
-              <TableCell className="text-end tabular-nums">31</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </Card>
-
-      <Card variant="outline">
-        <CardHeader>
-          <CardTitle>Delivery by squad</CardTitle>
-        </CardHeader>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Squad</TableHead>
-              <TableHead className="text-end">Deploys</TableHead>
+              <TableHead numeric>Deploys</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow>
               <TableCell className="font-medium">Growth</TableCell>
-              <TableCell className="text-end tabular-nums">18</TableCell>
+              <TableCell numeric>18</TableCell>
             </TableRow>
           </TableBody>
         </Table>
