@@ -8,6 +8,21 @@
   "css": {
     "@import \"@keystoneui/react/base.css\"": {},
     "@custom-variant dark (&:is(.dark *))": {},
+    "@media print": {
+      ":root": {
+        "--background": "#ffffff",
+        "--foreground": "#000000",
+        "--card": "#ffffff",
+        "--card-foreground": "#000000",
+        "--popover": "#ffffff",
+        "--popover-foreground": "#000000",
+        "--muted": "#f4f4f5",
+        "--muted-foreground": "#3f3f46",
+        "--border": "#d4d4d8",
+        "--border-muted": "#e4e4e7",
+        "--input": "#d4d4d8"
+      }
+    },
     "@layer base": {
       "*": {
         "@apply": "border-border outline-ring/50"

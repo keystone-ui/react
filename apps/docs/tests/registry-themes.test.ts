@@ -37,7 +37,7 @@
  * is read correctly instead of terminating on the inner brace.
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 
 // `shadcn` is a devDependency of the monorepo root, which is what
@@ -46,6 +46,7 @@ import { join } from "node:path";
 import { registryItemSchema } from "shadcn/schema";
 import { describe, expect, it } from "vitest";
 
+import { tokenSource } from "./css-tokens";
 import {
   builtItemPath,
   REPO_ROOT,
@@ -152,94 +153,6 @@ const STORYBOOK_CSS = join(
   ".storybook",
   "preview.css"
 );
-
-const TOKEN_DECL_RE = /--([a-z0-9-]+)\s*:\s*([^;]+);/g;
-const BACKGROUND_DECL_RE = /--background\s*:/;
-const WHITESPACE_RE = /\s/;
-
-/**
- * Bodies of every top-level rule with this selector, brace-matched so nested
- * at-rules are included rather than truncating the body.
- */
-function ruleBodies(css: string, selector: string): string[] {
-  const bodies: string[] = [];
-  let from = 0;
-
-  for (;;) {
-    const at = css.indexOf(selector, from);
-    if (at === -1) {
-      return bodies;
-    }
-    from = at + selector.length;
-
-    // Only a rule *opening* counts: `.dark {` is one, the `.dark *` inside
-    // `@custom-variant dark (&:is(.dark *))` is not.
-    let cursor = from;
-    while (cursor < css.length && WHITESPACE_RE.test(css[cursor])) {
-      cursor += 1;
-    }
-    if (css[cursor] !== "{") {
-      continue;
-    }
-
-    let depth = 0;
-    const bodyStart = cursor + 1;
-    for (let i = cursor; i < css.length; i += 1) {
-      if (css[i] === "{") {
-        depth += 1;
-      } else if (css[i] === "}") {
-        depth -= 1;
-        if (depth === 0) {
-          bodies.push(css.slice(bodyStart, i));
-          from = i + 1;
-          break;
-        }
-      }
-    }
-  }
-}
-
-function declarations(body: string): Record<string, string> {
-  const tokens: Record<string, string> = {};
-  TOKEN_DECL_RE.lastIndex = 0;
-  let decl = TOKEN_DECL_RE.exec(body);
-  while (decl !== null) {
-    tokens[decl[1]] = decl[2].trim();
-    decl = TOKEN_DECL_RE.exec(body);
-  }
-  return tokens;
-}
-
-/**
- * The token block for one mode. The docs site also declares Fumadocs vars in
- * their own `:root`, so the theme block is identified by content
- * (`--background`) rather than by being first.
- */
-function tokenBlock(path: string, selector: string): Record<string, string> {
-  const css = readFileSync(path, "utf-8");
-  const merged: Record<string, string> = {};
-  let found = false;
-
-  for (const body of ruleBodies(css, selector)) {
-    if (!BACKGROUND_DECL_RE.test(body)) {
-      continue;
-    }
-    found = true;
-    Object.assign(merged, declarations(body));
-  }
-
-  if (!found) {
-    throw new Error(`No ${selector} token block found in ${path}`);
-  }
-  return merged;
-}
-
-function tokenSource(path: string) {
-  return {
-    dark: tokenBlock(path, ".dark"),
-    light: tokenBlock(path, ":root"),
-  };
-}
 
 const canonical = tokenSource(CANONICAL_CSS);
 const storybook = tokenSource(STORYBOOK_CSS);

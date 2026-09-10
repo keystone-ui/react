@@ -6,7 +6,24 @@
 
 @import "@keystoneui/react/base.css";
 
-@custom-variant dark (&:is(.dark *));
+/* The `dark` variant is scoped to screens, deliberately.
+ *
+ * Printing a dark page renders every filled surface as a solid black
+ * rectangle -- summary tiles, badges, chart bands -- because the tokens are
+ * still the dark ones on paper. The obvious fix is a list of print overrides,
+ * but a list can be forgotten by the next token someone adds, and silently:
+ * nobody prints a dark page to check. Scoping the variant to `screen` cannot
+ * be forgotten, because paper simply never gets the dark values.
+ *
+ * The `.dark` token block below is wrapped in the same `@media screen` for the
+ * same reason. */
+@custom-variant dark {
+  @media screen {
+    &:is(.dark *) {
+      @slot;
+    }
+  }
+}
 
 @theme inline {
   --color-background: var(--background);
@@ -130,50 +147,78 @@
 }
 
 .dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.92 0.004 286.32);
-  --primary-foreground: oklch(0.21 0.006 285.885);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-hover: color-mix(in oklch, var(--secondary) 97%, white);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.971 0.013 17.38);
-  --border: oklch(1 0 0 / 10%);
-  --border-muted: oklch(1 0 0 / 5%);
-  --popup-ring: oklch(1 0 0 / 3%);
-  --input: oklch(1 0 0 / 15%);
-  --input-bg: oklch(1 0 0 / 5%);
-  --ring: oklch(0.92 0.004 286.32);
-  --skeleton-shimmer: oklch(1 0 0 / 0.1);
+  @media screen {
+    --background: oklch(0.141 0.005 285.823);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.21 0.006 285.885);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.21 0.006 285.885);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.92 0.004 286.32);
+    --primary-foreground: oklch(0.21 0.006 285.885);
+    --secondary: oklch(0.274 0.006 286.033);
+    --secondary-hover: color-mix(in oklch, var(--secondary) 97%, white);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.274 0.006 286.033);
+    --muted-foreground: oklch(0.705 0.015 286.067);
+    --accent: oklch(0.274 0.006 286.033);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --destructive-foreground: oklch(0.971 0.013 17.38);
+    --border: oklch(1 0 0 / 10%);
+    --border-muted: oklch(1 0 0 / 5%);
+    --popup-ring: oklch(1 0 0 / 3%);
+    --input: oklch(1 0 0 / 15%);
+    --input-bg: oklch(1 0 0 / 5%);
+    --ring: oklch(0.92 0.004 286.32);
+    --skeleton-shimmer: oklch(1 0 0 / 0.1);
 
-  /* Re-stepped for a dark surface: the light-mode green and amber read muddy
-   * on it. This is a deliberate visual change to Progress color="success" and
-   * color="warning" in dark mode, which previously rendered the light hues. */
-  --success: oklch(0.723 0.19 149.579);
-  --success-foreground: oklch(0.266 0.065 152.934);
-  --warning: oklch(0.828 0.189 84.429);
-  --warning-foreground: oklch(0.279 0.077 45.635);
+    /* Re-stepped for a dark surface: the light-mode green and amber read muddy
+     * on it. This is a deliberate visual change to Progress color="success" and
+     * color="warning" in dark mode, which previously rendered the light hues. */
+    --success: oklch(0.723 0.19 149.579);
+    --success-foreground: oklch(0.266 0.065 152.934);
+    --warning: oklch(0.828 0.189 84.429);
+    --warning-foreground: oklch(0.279 0.077 45.635);
 
-  /* The seven sidebar aliases are inherited from :root; only this one has a
-   * different formula in dark. */
-  --sidebar: var(--card);
+    /* The seven sidebar aliases are inherited from :root; only this one has a
+     * different formula in dark. */
+    --sidebar: var(--card);
 
-  /* Re-stepped for a dark surface rather than reused: the light ramp's
-   * lightness is tuned against a white card. */
-  --chart-1: oklch(0.65 0.16 258);
-  --chart-2: oklch(0.74 0.14 150);
-  --chart-3: oklch(0.66 0.18 25);
-  --chart-4: oklch(0.78 0.16 338);
-  --chart-5: oklch(0.9 0.16 100);
+    /* Re-stepped for a dark surface rather than reused: the light ramp's
+     * lightness is tuned against a white card. */
+    --chart-1: oklch(0.65 0.16 258);
+    --chart-2: oklch(0.74 0.14 150);
+    --chart-3: oklch(0.66 0.18 25);
+    --chart-4: oklch(0.78 0.16 338);
+    --chart-5: oklch(0.9 0.16 100);
+  }
+}
+
+/* Ink for paper.
+ *
+ * Not a theme: the `dark` variant above is screen-scoped, so paper already
+ * gets the light tokens and there is no dark surface left to undo. This is
+ * only "what light mode wants on a printer" -- pure black on pure white rather
+ * than the near-blacks a screen prefers, and a --muted-foreground dark enough
+ * to survive a laser printer rather than dissolving into the page.
+ *
+ * Chrome-hiding and background preservation are deliberately NOT here: those
+ * are policy about your own layout, not about colour. See the Printing guide. */
+@media print {
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+    --card: #ffffff;
+    --card-foreground: #000000;
+    --popover: #ffffff;
+    --popover-foreground: #000000;
+    --muted: #f4f4f5;
+    --muted-foreground: #3f3f46;
+    --border: #d4d4d8;
+    --border-muted: #e4e4e7;
+    --input: #d4d4d8;
+  }
 }
 
 @layer base {

@@ -1,0 +1,100 @@
+---
+title: Printing
+description: Keystone's tokens are print-aware by construction, and the rest is a short recipe you own.
+---
+
+Most component libraries ship no print CSS at all, which is defensible — printing is app policy, not component policy. But one part of it *is* the library's problem, and keystone handles it structurally rather than leaving it to you.
+
+## Dark mode cannot reach paper
+
+The `dark` variant is scoped to screens:
+
+```css
+@custom-variant dark {
+  @media screen {
+    &:is(.dark *) {
+      @slot;
+    }
+  }
+}
+```
+
+and the `.dark` token block is wrapped in the same `@media screen`.
+
+Without this, printing a page in dark mode renders every filled surface as a **solid black rectangle** — summary tiles, badges, chart bands — because the tokens on paper are still the dark ones. The obvious fix is a list of print overrides, one per token. The problem with a list is that it can be forgotten by whoever adds the next token, and forgotten silently: nobody prints a dark page to check. Scoping the variant cannot be forgotten, because paper never receives the dark values in the first place.
+
+<Callout type="info">
+If you installed the style item before this change, your `globals.css` still has the flat `@custom-variant dark (&:is(.dark *));`. Replace it with the nested form above and wrap your `.dark { … }` body in `@media screen { … }`.
+</Callout>
+
+## Ink tokens
+
+The style item also ships a small `@media print` block that shifts the light tokens toward ink: pure black on pure white rather than the near-blacks a screen prefers, and a `--muted-foreground` dark enough to survive a laser printer instead of dissolving into the page.
+
+Because the `dark` variant is screen-scoped, this block has no dark theme to undo. It is only "what light mode wants on a printer".
+
+## What keystone deliberately leaves to you
+
+No print rules ship in the library's own CSS. Hiding chrome is policy about *your* layout, and an `!important` rule in library CSS **cannot be undone by a consumer's class** — so a blanket `display: none` on dialogs would break "print the contents of this dialog" for everyone, with no way out.
+
+Every part of keystone carries a stable `data-slot`, so the recipe is short. Take what applies:
+
+```css
+@media print {
+  /* Chrome that cannot exist on paper. */
+  [data-slot="drawer-content"],
+  [data-slot="drawer-backdrop"],
+  [data-slot="modal-popup"],
+  [data-slot="modal-backdrop"],
+  [data-slot="toast-viewport"],
+  [data-slot="selection-bar"],
+  [data-slot="table-pagination"] {
+    display: none;
+  }
+
+  /* A horizontal scroller clips at paper width rather than wrapping, which
+     silently drops columns off the right of the page. */
+  [data-slot="table-container"] {
+    overflow: visible !important;
+  }
+
+  /* Keep a row and its values on one page. */
+  tr {
+    break-inside: avoid;
+  }
+
+  /* Browsers drop backgrounds when printing. For these the background IS the
+     mark, so without this a status badge prints as bare text and a progress
+     bar prints as an empty track. */
+  [data-slot="badge"],
+  [data-slot="progress-indicator"],
+  [data-slot="circular-progress-indicator"],
+  [data-slot="avatar-fallback"] {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+```
+
+Using shadcn's sidebar alongside keystone? Add `[data-slot="sidebar-container"]` and `[data-slot="sidebar-gap"]` to the hidden list — see [Using shadcn Components](/docs/interop).
+
+## Pair every `sticky` with `print:static`
+
+A sticky element resolves against a scrollport that does not exist on paper, so it lands in the wrong place — usually overlapping the content it was pinned above.
+
+```tsx
+<TableHeader className="sticky top-0 z-[var(--z-sticky)] bg-background print:static">
+```
+
+Keystone's own sticky affordances are opt-in through `className` rather than props, so there is no library class to bake this into. If you add `sticky`, add `print:static`.
+
+## Checking it
+
+Open a page, switch to dark mode, and print to PDF. You are looking for four things:
+
+1. Black text on white, with no dark surfaces anywhere.
+2. Every column of a wide table present, not clipped at the right margin.
+3. Badges and progress bars still carrying their fill.
+4. No row split across a page break, and no sticky header floating mid-page.
+
+The first is the library's job and should already hold. The rest come from the recipe above.

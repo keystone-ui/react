@@ -176,7 +176,7 @@ The scroll container pins `overflow-y` to `hidden`, deliberately: letting it be 
 
 ```tsx
 <Table containerClassName="max-h-96 overflow-y-auto">
-  <TableHeader className="sticky top-0 z-[var(--z-sticky)] bg-background">
+  <TableHeader className="sticky top-0 z-[var(--z-sticky)] bg-background print:static">
 ```
 
 The background is not optional — a transparent sticky header lets rows scroll through it. Use `bg-background` rather than `bg-card`, since the table may already sit inside a painted `Card`.

@@ -1390,7 +1390,7 @@ export const StickyHeader: Story = {
       containerClassName="max-h-64 overflow-y-auto"
       hoverable
     >
-      <TableHeader className="sticky top-0 z-[var(--z-sticky)] bg-background">
+      <TableHeader className="sticky top-0 z-[var(--z-sticky)] bg-background print:static">
         <TableRow>
           <TableHead>Squad</TableHead>
           <TableHead numeric>Deploys</TableHead>

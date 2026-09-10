@@ -25,37 +25,17 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { ciede2000, closestPair, contrast, simulate } from "./color-math";
+import { MODES, type Mode, tokenSource } from "./css-tokens";
 import { REPO_ROOT, type RegistryItem, readJson } from "./registry-paths";
 
 const GLOBAL_CSS = join(REPO_ROOT, "apps", "docs", "app", "global.css");
 const THEME_NAMES = ["default", "gray", "neutral", "slate", "stone", "zinc"];
 
-const TOKEN_DECL_RE = /--([a-z0-9-]+)\s*:\s*([^;]+);/g;
-const ROOT_BLOCK_RE = /:root\s*\{([^}]*)\}/;
-const DARK_BLOCK_RE = /\.dark\s*\{([^}]*)\}/;
 const RESOLVABLE_RE = /^(oklch|rgb|hsl|#)/;
 const THEME_INLINE_RE = /@theme inline\s*\{([\s\S]*?)\n\}/;
 
-function block(css: string, re: RegExp): Record<string, string> {
-  const body = css.match(re)?.[1] ?? "";
-  const tokens: Record<string, string> = {};
-  TOKEN_DECL_RE.lastIndex = 0;
-  let decl = TOKEN_DECL_RE.exec(body);
-  while (decl !== null) {
-    tokens[decl[1]] = decl[2].trim();
-    decl = TOKEN_DECL_RE.exec(body);
-  }
-  return tokens;
-}
-
 const css = readFileSync(GLOBAL_CSS, "utf-8");
-const appTokens = {
-  dark: block(css, DARK_BLOCK_RE),
-  light: block(css, ROOT_BLOCK_RE),
-};
-
-const MODES = ["light", "dark"] as const;
-type Mode = (typeof MODES)[number];
+const appTokens = tokenSource(GLOBAL_CSS);
 
 const chartRamp = (mode: Mode) =>
   [1, 2, 3, 4, 5].map((slot) => appTokens[mode][`chart-${slot}`]);

@@ -50,6 +50,8 @@ For a data table: `TableHead sortDirection` sets `aria-sort` (omit it for a non-
 
 There are no layout primitives (no `Grid`/`Stack`/`Flex`/`Container`) and there should not be — layout goes in `className`. Two utilities are load-bearing rather than cosmetic, though: `min-w-0 flex-1` on the text column of a header row (a flex item will not shrink below its content's intrinsic width, so a long title pushes the actions off-screen), and `[&>*]:min-w-0` on any grid holding a table or a wide value (grid children resolve to `min-content`, so one long value pushes its track open and gives the document a horizontal scrollbar). See the Page Layout guide in the docs.
 
+Pair every `sticky` with `print:static`. A sticky element resolves against a scrollport that does not exist on paper, so it lands over the content it was pinned above. Keystone's sticky affordances are opt-in through `className`, so there is no library class to bake this into — see the Printing guide.
+
 Prefer logical properties for anything new: `text-end` over `text-right`, `start-0` over `left-0`, `ms-*`/`me-*` over `ml-*`/`mr-*`. Most of the library still uses physical utilities, so this is a beachhead rather than a settled convention — but do not add to the pile.
 
 `Card` has two surface tiers: `filled` (default, paints `bg-card`) and `outline` (no fill, for chart and table panels). All of its spacing resolves from `--card-spacing`, so `<Card variant="outline" className="[--card-spacing:0px]">` gives a table-flush panel with no extra prop.
