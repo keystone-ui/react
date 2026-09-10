@@ -43,6 +43,29 @@ The `token` escape hatch matters. The "Other" band is `var(--muted-foreground)`,
 
 The ramp itself ([`--chart-1` … `--chart-5`](/docs/theming/customization)) separates by **lightness**, which every form of colour blindness preserves, rather than by hue, which none of them do.
 
+## The page header is three utilities, not a component
+
+Keystone ships no `PageHeader`, and this block hand-rolls its header in four
+lines. Layout belongs in `className` — but three of those utilities are
+load-bearing rather than cosmetic, and each is the one people delete when
+tidying up:
+
+```tsx
+<header className="flex flex-wrap items-end justify-between gap-4">
+  <div className="min-w-0 flex-1">
+    <h1 className="font-semibold text-2xl tracking-tight">Analytics</h1>
+    <p className="mt-1 text-muted-foreground text-sm">Weekly performance…</p>
+  </div>
+  <div className="flex shrink-0 flex-wrap items-center gap-2">{/* actions */}</div>
+</header>
+```
+
+**`min-w-0 flex-1`** on the text column. A flex item will not shrink below its content's intrinsic width, so without it a long title pushes the action cluster off-screen instead of wrapping or truncating.
+
+**`shrink-0 flex-wrap`** on the actions. `shrink-0` stops the buttons being squashed; `flex-wrap` lets a four-button cluster wrap *inside* the header rather than forcing the whole header onto a second line.
+
+**`items-end`**, not `items-center`. With a description present the action row should align to the bottom of the text column — `items-center` looks fine until you add a description, then reads as misaligned.
+
 ## Serializable props
 
 Panels take `format="money"`, not `formatter={(v) => …}`. The installed entry point is `app/dashboard/page.tsx` — a server component — and a function cannot cross that boundary; React rejects it at render time. A block that taught the function form would teach a pattern that breaks on install.
