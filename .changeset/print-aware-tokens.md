@@ -18,8 +18,8 @@ a `--muted-foreground` dark enough to survive a laser printer.
 
 **If you installed the style item before this, update your CSS by hand:**
 replace `@custom-variant dark (&:is(.dark *));` with the nested form and wrap
-your `.dark { … }` body in `@media screen { … }`. The new Printing guide has
-both.
+your `.dark { … }` body in `@media screen { … }`. The Dark Mode guide has both,
+along with a `data-slot` recipe for hiding chrome on paper.
 
 No print rules ship in `base.css`. Hiding chrome is policy about your layout,
 and `!important` in library CSS cannot be undone by a consumer's class — a

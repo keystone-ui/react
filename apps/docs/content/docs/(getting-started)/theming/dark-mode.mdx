@@ -43,13 +43,72 @@ export default function RootLayout({ children }) {
 
 ## How It Works
 
-Dark mode is activated via the `@custom-variant dark` directive in your theme CSS:
+Dark mode is activated via the `@custom-variant dark` directive in your theme CSS, scoped to screens:
 
 ```css
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark {
+  @media screen {
+    &:is(.dark *) {
+      @slot;
+    }
+  }
+}
 ```
 
-Any element inside a `.dark` ancestor receives dark styles. All CSS custom properties are redefined in the `.dark` scope with dark-appropriate values.
+Any element inside a `.dark` ancestor receives dark styles. All CSS custom properties are redefined in the `.dark` scope — which is likewise wrapped in `@media screen` — with dark-appropriate values.
+
+### Why it is scoped to screens
+
+Printing a dark page renders every filled surface as a **solid black rectangle**: summary tiles, badges, chart bands. The tokens on paper are still the dark ones.
+
+The obvious fix is a list of print overrides, one per token. The problem with a list is that it can be forgotten by whoever adds the next token, and forgotten *silently* — nobody prints a dark page to check. Scoping the variant cannot be forgotten, because paper never receives the dark values in the first place.
+
+The style item also ships a small `@media print` block shifting the light tokens toward ink: pure black on white rather than the near-blacks a screen prefers, and a `--muted-foreground` dark enough to survive a laser printer. Because the variant is screen-scoped, that block has no dark theme to undo.
+
+<Callout type="warn">
+If you installed the style item before this change, your CSS still has the flat `@custom-variant dark (&:is(.dark *));`. Replace it with the form above and wrap your `.dark { … }` body in `@media screen { … }`, or printing in dark mode will produce black rectangles.
+</Callout>
+
+### Printing your own layout
+
+No print rules ship in the library's CSS. Hiding chrome is policy about *your* layout, and `!important` in library CSS cannot be undone by a consumer's class — a blanket `display: none` on dialogs would break "print the contents of this dialog" with no way out.
+
+Every part carries a stable `data-slot`, so take what applies:
+
+```css
+@media print {
+  /* Chrome that cannot exist on paper. */
+  [data-slot="drawer-content"],
+  [data-slot="modal-popup"],
+  [data-slot="toast-viewport"],
+  [data-slot="selection-bar"],
+  [data-slot="table-pagination"] {
+    display: none;
+  }
+
+  /* A horizontal scroller clips at paper width rather than wrapping, which
+     silently drops columns off the right of the page. */
+  [data-slot="table-container"] {
+    overflow: visible !important;
+  }
+
+  /* Keep a row and its values on one page. */
+  tr {
+    break-inside: avoid;
+  }
+
+  /* Browsers drop backgrounds when printing, and for these the background IS
+     the mark — without this a badge prints as bare text. */
+  [data-slot="badge"],
+  [data-slot="progress-indicator"],
+  [data-slot="avatar-fallback"] {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+```
+
+Pair every `sticky` with `print:static` too — a sticky element resolves against a scrollport that does not exist on paper, so it lands over the content it was pinned above. Using shadcn's sidebar alongside keystone? Add `[data-slot="sidebar-container"]` and `[data-slot="sidebar-gap"]` to the hidden list, and see [Using shadcn Components](/docs/interop).
 
 ## Dark Mode Specific Tokens
 
