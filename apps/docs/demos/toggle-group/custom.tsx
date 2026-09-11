@@ -13,7 +13,6 @@ export default function ToggleGroupCustom() {
       <FieldLabel>Font Weight</FieldLabel>
       <ToggleGroup
         onValueChange={setFontWeight}
-        size="lg"
         spacing={2}
         value={fontWeight}
         variant="outline"

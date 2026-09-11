@@ -9,6 +9,7 @@ These are the always-enforced styling rules for `@keystoneui/react`. See [../cus
 - `className` for layout, not styling
 - No `space-x-*` / `space-y-*` — use `gap-*`
 - `size-*` when width and height are equal
+- Control heights — one tier per row
 - No manual `dark:` color overrides
 - Use `cn()` for conditional classes
 - Hover gating — never embed `:hover` in arbitrary selectors
@@ -52,7 +53,7 @@ There are no layout primitives (no `Grid`/`Stack`/`Flex`/`Container`) and there 
 
 Pair every `sticky` with `print:static`. A sticky element resolves against a scrollport that does not exist on paper, so it lands over the content it was pinned above. Keystone's sticky affordances are opt-in through `className`, so there is no library class to bake this into. The `dark` variant is scoped to `@media screen` so paper always gets the light tokens; no print rules ship in `base.css`, since hiding chrome is consumer policy and `!important` in library CSS cannot be undone by a consumer's class.
 
-`Toggle`/`ToggleGroup` and `Button` use different size scales and do not match at their defaults — Button default is 40px, Toggle default is 36px (it matches the popup item height). In a toolbar, pair `ToggleGroup size="lg"` with a default `Button` (both 40px), or `size="sm"` on both (both 32px). Mixing the defaults gives a 4px mismatch.
+**One tier per row.** Controls share a height ladder — `xs` 24px, `sm` 32px, `default` 40px, `lg` 48px — and Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle/ToggleGroup and TableHead all resolve to it, so a toolbar left at defaults lines up. The failure is mixing *tiers* between neighbours: a `size="sm"` button beside a default-height `InputGroup` is an 8px gap. 32 and 40 are the only tiers with broad coverage — `lg` is Button and Toggle only, so a 48px row cannot contain an input. 36px is the popup item height, not a control tier, and nothing outside `POPUP_ITEM_HEIGHT` may declare it.
 
 Prefer logical properties for anything new: `text-end` over `text-right`, `start-0` over `left-0`, `ms-*`/`me-*` over `ml-*`/`mr-*`. Most of the library still uses physical utilities, so this is a beachhead rather than a settled convention — but do not add to the pile.
 

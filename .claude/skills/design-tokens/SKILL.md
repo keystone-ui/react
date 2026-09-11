@@ -254,19 +254,57 @@ When checked and invalid, both Checkbox and Radio switch to destructive styling:
 aria-invalid:data-checked:bg-destructive aria-invalid:data-checked:border-destructive aria-invalid:data-checked:text-destructive-foreground
 ```
 
-## Control Height Scale
+## Control Height Ladder
 
-Standard heights used across components:
+**One tier per row.** Every interactive control that can sit beside another
+resolves its sizes to these four numbers. Mixing *tiers* between neighbours —
+a `size="sm"` button next to a default-height input — is the most common
+visual bug in this library's history; it has shipped five times.
 
-- `h-4` — Badge xs
-- `h-5` — Badge default, Kbd
-- `h-6` — Badge sm, Button xs, InputGroupButton xs, SelectScrollButton
-- `h-8` — Button sm, TabsTrigger, InputGroupButton sm, popup items (compact)
-- `h-9` — SelectTrigger sm, popup items (standard via `POPUP_ITEM_HEIGHT`)
-- `h-10` — Button/Input/SelectTrigger/NativeSelect/InputOTP default, ComboboxChips min-h
-- `h-12` — Button lg
+| tier | px | class | families |
+| --- | --- | --- | --- |
+| `xs` | 24 | `h-6` | Button, InputGroupButton |
+| `sm` | 32 | `h-8` | Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle/ToggleGroup, TableHead, TabsTrigger (all sizes), Pagination, TablePagination |
+| `default` | 40 | `h-10` | Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle/ToggleGroup, TableHead, InputOTPSlot, CommandInput, ComboboxChips (`min-h-10`) |
+| `lg` | 48 | `h-12` | Button, Toggle/ToggleGroup |
 
-Use `size-*` (not `h-*`) for square controls: Checkbox (`size-4`), Radio (`size-4`), Button icon-xs (`size-6`), Button icon-sm (`size-8`), Button icon (`size-10`), Button icon-lg (`size-12`).
+**32 and 40 are the only tiers with broad coverage.** `lg` (48px) exists on
+Button and Toggle only — no input-family control has one, so do not try to
+build a 48px row containing an input. `xs` is Button-only.
+
+Use `size-*` (not `h-*`) for square controls: Checkbox (`size-4`), Radio
+(`size-4`), Button icon-xs (`size-6`), icon-sm (`size-8`), icon (`size-10`),
+icon-lg (`size-12`).
+
+### The popup tier is separate
+
+`h-9` (36px) is the popup item height, shared via `POPUP_ITEM_HEIGHT` and
+dropping to `h-8` under `data-size="compact"`. It is **not** a control tier —
+a menu row is not something you place beside a button, and popups carry their
+own density switch. Nothing else in the library may declare a bare `h-9`;
+`packages/ui/src/control-ladder.test.tsx` fails if anything does.
+
+### Why 40px
+
+Three reasons, recorded so the question is not re-derived:
+
+1. **The input sets the floor.** `Input` is `text-base md:text-sm` — a
+   deliberate 16px on mobile so iOS does not zoom on focus — and 16px text
+   needs 24px of line-height. 40px carries that comfortably; 36px leaves a
+   pixel of slack per side.
+2. **It is a real industry cohort**, if not the largest one. Chakra (v2 and
+   v3), Material Design 3's button, and Carbon's text input all sit at 40px.
+   The denser enterprise systems (Ant, Fluent, Primer, Atlassian, Radix
+   Themes) sit at 32px. Both are defensible; keystone chose the roomier one.
+3. **Accessibility does not decide it.** WCAG 2.2 SC 2.5.8 (AA) asks for
+   24×24 CSS px, which every tier clears. SC 2.5.5 (AAA) and Apple's HIG want
+   44px, which no mainstream default reaches. 40px clears AA with margin and
+   misses AAA, exactly as 32px does.
+
+Note keystone's 40px differs from shadcn's current 36px (`new-york-v4`) and
+its newer 32px preset. Since both registries install to the same paths, a
+shadcn component composed alongside keystone's inherits keystone's Button —
+see the interop guide.
 
 ## `data-slot` Pattern
 

@@ -10,7 +10,7 @@ import { cn } from "./utils";
 // ---------------------------------------------------------------------------
 
 const toggleVariants = cva(
-  "group/toggle inline-flex shrink-0 cursor-pointer touch-manipulation select-none items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-md bg-transparent font-medium text-muted-foreground text-sm transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-pressed:bg-accent aria-pressed:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "group/toggle inline-flex shrink-0 cursor-pointer touch-manipulation select-none items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-lg bg-transparent font-medium text-muted-foreground text-sm transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-pressed:bg-accent aria-pressed:text-accent-foreground [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -20,10 +20,13 @@ const toggleVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary-hover hover:text-secondary-foreground aria-pressed:bg-foreground aria-pressed:text-background",
       },
+      // Shares Button's ladder: sm 32px, default 40px, lg 48px. Padding is
+      // deliberately NOT Button's -- it sets an icon-only toggle's width, and
+      // px-4 would make a 40px-tall icon toggle 48px wide.
       size: {
-        default: "h-9 min-w-9 px-3",
+        default: "h-10 min-w-10 px-3",
         sm: "h-8 min-w-8 px-2.5",
-        lg: "h-10 min-w-10 px-3.5",
+        lg: "h-12 min-w-12 px-3.5",
       },
     },
     defaultVariants: {

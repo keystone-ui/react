@@ -66,6 +66,14 @@ npx shadcn@latest add @keystone/button
 
 In practice the distinction matters less than it sounds, because both registries write to the same paths and `shadcn add` will not overwrite a file that already exists. If keystone's `button.tsx` is there, shadcn's sidebar composes keystone's Button.
 
+## Control heights differ
+
+Keystone's controls are **40px** at their default tier. shadcn's are **36px** in `new-york-v4` (what its CLI falls back to) and **32px** in the `base-nova` preset a new project gets — it has moved twice, and ships all three simultaneously.
+
+That matters here precisely because of the substitution above: a shadcn component that composes `Button` gets *keystone's* 40px one, inside a layout designed around 36px. Usually that is fine — a button in a stack just gets taller. It shows when a shadcn-authored row places a control beside a keystone one.
+
+The fix is the same rule keystone applies internally: **pick one tier for the row.** Both libraries expose `sm` at 32px, which is the tier they agree on, so a mixed toolbar is most reliable at `size="sm"` throughout.
+
 ## The docs preview is adapted
 
 The sidebar rendered in `admin-01`'s preview on this site is shadcn's, vendored into the docs app with its imports pointed at `@keystoneui/react/*` and its mobile Sheet swapped for keystone's [`Drawer`](/docs/components/drawer) — the docs app has no shadcn primitives installed, so there was nothing else for it to import.
