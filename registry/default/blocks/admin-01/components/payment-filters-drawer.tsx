@@ -4,9 +4,18 @@ import { SlidersHorizontalIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { CURRENCIES, PROVIDERS } from "@/components/mock-payments";
-import type {
-  PaymentFilters,
-  ProviderFilter,
+import {
+  FILTERS,
+  type PaymentFilters,
+  type ProviderFilter,
+  SORT_OPTIONS,
+  type SortOptionId,
+  type SortState,
+  STATUS_OPTIONS,
+  statusLabel,
+  TYPE_OPTIONS,
+  toSortOptionId,
+  typeLabel,
 } from "@/components/payment-filters";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,39 +41,35 @@ import {
 } from "@/components/ui/select";
 
 interface PaymentFiltersDrawerProps {
-  count: number;
   filters: PaymentFilters;
   onChange: (patch: Partial<PaymentFilters>) => void;
   onClear: () => void;
+  onSortChange: (id: SortOptionId) => void;
+  sort: SortState;
 }
 
 /**
- * The long tail of the filter set, in a right-hand sheet.
+ * The whole filter set, for widths where the pill row does not fit.
  *
- * A panel rather than a persistent rail because this table is wide: it needs
- * roughly 1050px and the content area is 1024px at a 1280px viewport, so a
- * 300px rail would cost a third of the width the columns need and force
- * horizontal scrolling on a standard laptop. Opening on demand costs nothing
- * until it is opened.
+ * A row of pills becomes a column of pills on a phone, pushing the table it is
+ * filtering off the screen — so below `sm` the pills fold away and this
+ * carries everything instead. Everything: the drawer is the *only* way to
+ * reach these filters at that width, so anything missing here is unreachable,
+ * not merely inconvenient.
  *
- * One `swipeDirection="right"` serves both sizes — the primitive is already
- * responsive, taking 75% of the width on a phone and, with `variant="floating"`,
- * detaching from the edge at `md` into an inset panel with the page visible
- * around it. There is no media query here, and so nothing to get wrong on the
- * server.
- *
- * `floating` rather than the default `flush` because this panel is a temporary
- * inspector over a table you are still reading: the inset and the backdrop show
- * the rows it is filtering, where a flush panel reads as a permanent region of
- * the layout.
+ * `swipeDirection="right"` with `variant="floating"`: the floating inset is
+ * inert below `md`, so a phone gets the full-height sheet and a tablet gets a
+ * panel with the rows still visible around it. One component, no media query.
  */
 export function PaymentFiltersDrawer({
-  count,
   filters,
   onChange,
   onClear,
+  onSortChange,
+  sort,
 }: PaymentFiltersDrawerProps) {
   const [open, setOpen] = useState(false);
+  const count = FILTERS.filter((def) => def.value(filters) !== null).length;
 
   const toggleCurrency = (currency: (typeof CURRENCIES)[number]) => {
     onChange({
@@ -87,6 +92,50 @@ export function PaymentFiltersDrawer({
         </DrawerHeader>
 
         <DrawerBody className="flex flex-col gap-6">
+          <Group label="Action">
+            <Select
+              onValueChange={(value) =>
+                onChange({ type: value as PaymentFilters["type"] })
+              }
+              value={filters.type}
+            >
+              <SelectTrigger aria-label="Action" className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {TYPE_OPTIONS.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {typeLabel(option)}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </Group>
+
+          <Group label="Status">
+            <Select
+              onValueChange={(value) =>
+                onChange({ status: value as PaymentFilters["status"] })
+              }
+              value={filters.status}
+            >
+              <SelectTrigger aria-label="Status" className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {STATUS_OPTIONS.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {statusLabel(option)}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </Group>
+
           <Group label="Currencies">
             <div className="flex flex-col gap-2">
               {CURRENCIES.map((currency) => (
@@ -178,6 +227,26 @@ export function PaymentFiltersDrawer({
                 />
               </Field>
             </div>
+          </Group>
+
+          <Group label="Sort">
+            <Select
+              onValueChange={(value) => onSortChange(value as SortOptionId)}
+              value={toSortOptionId(sort)}
+            >
+              <SelectTrigger aria-label="Sort" className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {SORT_OPTIONS.map((option) => (
+                    <SelectItem key={option.id} value={option.id}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </Group>
         </DrawerBody>
 

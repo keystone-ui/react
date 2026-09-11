@@ -20,6 +20,8 @@ import { payments } from "@/components/mock-payments";
 import {
   DEFAULT_SORT as DEFAULT_PAYMENT_SORT,
   EMPTY_FILTERS,
+  type FilterKey,
+  filterDef,
   matchesPaymentFilters,
   type PaymentFilters,
   type SortState as PaymentSortState,
@@ -53,6 +55,12 @@ export function AdminPage() {
     useState<PaymentSortState>(DEFAULT_PAYMENT_SORT);
   const [paymentPageIndex, setPaymentPageIndex] = useState(0);
   const [paymentPageSize, setPaymentPageSize] = useState(10);
+  // Which optional filter pills have been added by hand. A filter holding a
+  // value shows its pill regardless, so this only tracks the empty ones
+  // someone asked to see.
+  const [addedPaymentFilters, setAddedPaymentFilters] = useState<FilterKey[]>(
+    []
+  );
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -269,10 +277,25 @@ export function AdminPage() {
 
           {section === "payments" ? (
             <AdminPaymentsTable
+              addedFilters={addedPaymentFilters}
               filters={paymentFilters}
+              onFilterAdd={(key) =>
+                setAddedPaymentFilters((current) =>
+                  current.includes(key) ? current : [...current, key]
+                )
+              }
+              onFilterRemove={(key) => {
+                setAddedPaymentFilters((current) =>
+                  current.filter((item) => item !== key)
+                );
+                // Removing the pill has to clear the value too, or the filter
+                // would keep narrowing the table from nowhere.
+                patchPaymentFilters(filterDef(key).clear);
+              }}
               onFiltersChange={patchPaymentFilters}
               onFiltersClear={() => {
                 setPaymentFilters(EMPTY_FILTERS);
+                setAddedPaymentFilters([]);
                 setPaymentPageIndex(0);
               }}
               onOpenPayment={() => {

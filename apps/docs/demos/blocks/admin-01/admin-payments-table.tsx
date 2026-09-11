@@ -29,13 +29,17 @@ import {
   truncateId,
 } from "./mock-payments";
 import type {
+  FilterKey,
   PaymentFilters,
   SortOptionId,
   SortState,
 } from "./payment-filters";
 
 interface AdminPaymentsTableProps {
+  addedFilters: readonly FilterKey[];
   filters: PaymentFilters;
+  onFilterAdd: (key: FilterKey) => void;
+  onFilterRemove: (key: FilterKey) => void;
   onFiltersChange: (patch: Partial<PaymentFilters>) => void;
   onFiltersClear: () => void;
   onOpenPayment: (id: string) => void;
@@ -51,7 +55,10 @@ interface AdminPaymentsTableProps {
 }
 
 export function AdminPaymentsTable({
+  addedFilters,
   filters,
+  onFilterAdd,
+  onFilterRemove,
   onFiltersChange,
   onFiltersClear,
   onOpenPayment,
@@ -73,9 +80,12 @@ export function AdminPaymentsTable({
 
       <CardContent className="flex flex-col gap-4">
         <AdminPaymentsToolbar
+          added={addedFilters}
           filters={filters}
+          onAdd={onFilterAdd}
           onChange={onFiltersChange}
           onClear={onFiltersClear}
+          onRemove={onFilterRemove}
           onSortChange={onSortChange}
           sort={sort}
         />
