@@ -146,29 +146,52 @@ function mismatched(rows: Row[]): string[] {
 }
 
 /**
- * `admin-01` opens on Overview; its users table -- the one with the toolbar --
- * lives behind the Users nav item. Below `md` the sidebar collapses into a
- * drawer, so the nav item has to be revealed before it can be clicked.
+ * `admin-01` opens on Overview; its toolbars live behind nav items. Below `md`
+ * the sidebar collapses into a drawer, so the nav item has to be revealed
+ * before it can be clicked.
+ *
+ * Payments is swept as well as Users because it is a second toolbar with its
+ * own control mix -- and a guard that only reaches the toolbar the bug was
+ * found in stops guarding the moment someone writes the next one.
  */
-async function openBlock(page: Page, name: string) {
+async function openBlock(page: Page, name: string, section = "users") {
   await page.goto(`/preview/${name}`);
   if (name !== "block-admin-01") {
     return;
   }
-  const users = page.getByRole("button", { name: "Users" });
-  if (!(await users.isVisible())) {
+  const label = section === "payments" ? "Payments" : "Users";
+  const nav = page.getByRole("button", { name: label });
+  if (!(await nav.isVisible())) {
     await page.getByRole("button", { name: SIDEBAR_TRIGGER }).click();
   }
-  await users.click();
-  await expect(page.getByLabel("Search users")).toBeVisible();
+  await nav.click();
+  await expect(
+    page.getByLabel(
+      section === "payments" ? "Search payments by email" : "Search users"
+    )
+  ).toBeVisible();
 }
 
+/**
+ * Every block preview, plus `admin-01`'s Payments section: a second toolbar,
+ * reachable only through its own nav item, that the per-block sweep would
+ * otherwise never render.
+ */
+const TARGETS: readonly { id: string; name: string; section?: string }[] = [
+  ...BLOCK_NAMES.map((name) => ({ id: name, name })),
+  {
+    id: "block-admin-01 payments",
+    name: "block-admin-01",
+    section: "payments",
+  },
+];
+
 test.describe("controls sharing a row share a height", () => {
-  for (const name of BLOCK_NAMES) {
+  for (const target of TARGETS) {
     for (const width of WIDTHS) {
-      test(`${name} at ${width}px`, async ({ page }) => {
+      test(`${target.id} at ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: 1000 });
-        await openBlock(page, name);
+        await openBlock(page, target.name, target.section);
 
         expect(mismatched(await collectRows(page))).toEqual([]);
       });
