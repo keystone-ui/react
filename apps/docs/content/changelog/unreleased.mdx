@@ -492,6 +492,8 @@ Users also gains a filter model like payments' — descriptors plus matchers —
 
 The users drawer opens from the right on a desktop and from the bottom on a phone, each the idiom for its size. `swipeDirection` is a prop rather than a class, so it renders twice behind a CSS fork rather than switching at runtime; only one shell is in the accessibility tree at a time. The chip takes `Tag`'s 24px height while keeping `Badge`'s semantics — `Tag` extends Base UI's Toggle, so it announces a pressed state an applied filter does not have.
 
+The users `Filters` trigger carries a count of what is applied — the length of the same list the chips render, so the two cannot drift. Sort shares the drawer and is not counted, since a badge that ticks up when you reorder a column is lying about what it counts.
+
 ---
 
 ### `admin-01` gains a user detail view and an ID column.

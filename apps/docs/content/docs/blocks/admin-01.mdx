@@ -63,6 +63,8 @@ So they are duplicated and the duplication is enforced: `apps/docs/tests/block-s
 
 Pills suit a table you sit in front of, flipping a filter at a time while you work. The drawer suits a table you filter once and then read: the chip row *is* the answer to "what is applied", where six pills make you scan all of them to find the two that are set.
 
+The `Filters` trigger carries a count of what is applied. It is the length of the same list the chips render, so the two cannot disagree — unlike the badge this block once carried on the payments panel, which counted the filters the panel owned while pills showed the rest and so read as a second, contradictory signal. Sort lives in the same drawer and is deliberately not counted: a badge that ticks up when you reorder a column is lying about what it counts.
+
 The drawer's *shell* still differs by width — a bottom sheet on a phone, a right-hand panel on a desktop, each the idiom for its size. `swipeDirection` is a prop rather than a class, so it is rendered twice behind a CSS fork instead of being switched at runtime; a `useMediaQuery` would have to guess on the server and flip after hydration. Only one shell is in the accessibility tree at a time, which is what a guard asserts.
 
 The drawer layout also removes a fork. Its filters live in one surface at every width, so there is no desktop tree and mobile tree to keep in step — which is how this block once shipped three filters that were reachable on no phone at all. The pills pay for their speed with that duplication, and with a mobile drawer that has to mirror them.

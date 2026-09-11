@@ -4,6 +4,7 @@ import { ArrowLeftIcon, ChevronRightIcon, FilterIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import {
+  appliedFilters,
   defaultDirection,
   directionLabel,
   FILTERS,
@@ -27,6 +28,7 @@ import {
   type UserSortKey,
 } from "@/components/admin-filters";
 import { statusLabels } from "@/components/mock-admin";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -97,6 +99,7 @@ export function AdminFiltersDrawer({
 }: AdminFiltersDrawerProps) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
+  const activeCount = appliedFilters(filters).length;
 
   return (
     <Drawer
@@ -109,9 +112,15 @@ export function AdminFiltersDrawer({
       open={open}
       swipeDirection={placement}
     >
+      {/* The count is the length of the same list the chips render, so the two
+          cannot disagree — unlike the payments badge this block once carried,
+          which counted the panel's filters while pills showed the rest. Sort
+          lives in here too and is deliberately not counted: it is not a filter,
+          and a badge that ticks up when you reorder a column is lying. */}
       <DrawerTrigger render={<Button variant="outline" />}>
         <FilterIcon className="size-4" />
         Filters
+        {activeCount > 0 && <Badge variant="secondary">{activeCount}</Badge>}
       </DrawerTrigger>
       <DrawerContent variant={placement === "right" ? "floating" : "flush"}>
         <div className="mx-auto w-full max-w-sm">

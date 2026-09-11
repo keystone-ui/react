@@ -14,6 +14,7 @@ const SIDEBAR_TRIGGER = /Toggle Sidebar/i;
 const ROW_ACTIONS = /^Actions for /;
 const ROLE_ROW = /^Role/;
 const SEATS_ROW = /^Seats/;
+const SORT_ROW = /^Sort/;
 const TWO_FACTOR_ROW = /^Two-factor/;
 const USER_COLUMN = /User/;
 const SEATS_COLUMN = /Seats/;
@@ -178,6 +179,30 @@ test.describe("applied filters are chips", () => {
     await applyFilter(page, SEATS_ROW, "One seat");
 
     expect(await chipLabels(page)).toEqual(["Role: Admin", "Seats: One seat"]);
+  });
+
+  test("the Filters count agrees with the chips, and ignores sort", async ({
+    page,
+  }) => {
+    await openUsers(page);
+    const trigger = page.getByRole("button", { name: FILTERS_TRIGGER });
+
+    // Nothing applied: the badge is absent, not a zero.
+    await expect(trigger).toHaveText("Filters");
+
+    await applyFilter(page, ROLE_ROW, "Admin");
+    await applyFilter(page, SEATS_ROW, "One seat");
+
+    // The count is the length of the list the chips render, so the two cannot
+    // drift. The payments badge this block once carried could: it counted the
+    // panel's filters while pills showed the rest.
+    expect(await page.locator("[data-filter-chip]").count()).toBe(2);
+    await expect(trigger).toHaveText("Filters2");
+
+    // Sort lives in the same drawer and is not a filter. A badge that ticks up
+    // when you reorder a column is lying about what it counts.
+    await applyFilter(page, SORT_ROW, "Seats");
+    await expect(trigger).toHaveText("Filters2");
   });
 
   test("a chip removes only its own filter", async ({ page }) => {
