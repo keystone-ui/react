@@ -342,15 +342,18 @@ test.describe("payments filter pills", () => {
 });
 
 /**
- * Run in dark mode on purpose. `Button`'s outline variant carries
- * `dark:border-input`, which out-specifies a plain `border-ring` — so the
- * applied-pill treatment can be alive in light and silently dead in dark, and
- * a light-mode-only check would pass while half the users saw nothing.
+ * Run in dark mode on purpose. Emphasis that survives one theme and not the
+ * other is a recurring failure here — a plain `border-ring` was silently dead
+ * in dark because `Button`'s outline variant carries `dark:border-input` at a
+ * higher specificity — so the check runs where the paint is hardest to get
+ * right.
  */
-test.describe("an applied pill looks applied", () => {
+test.describe("an applied pill reads differently from an unset one", () => {
   test.use({ colorScheme: "dark" });
 
-  test("carries a border the unset pills do not", async ({ page }) => {
+  test("states its value at full strength, its placeholder muted", async ({
+    page,
+  }) => {
     await openPayments(page);
 
     await pill(page, "Status").click();
@@ -361,32 +364,29 @@ test.describe("an applied pill looks applied", () => {
     // Somewhere else, so nothing is left focused.
     await page.getByLabel("Search payments by email").click();
 
-    const borders = await page
+    const states = await page
       .locator("[data-filter-pill]")
       .evaluateAll((nodes) =>
         nodes.map((node) => ({
-          active: node.getAttribute("data-active"),
+          applied: Boolean(node.getAttribute("data-active")),
           border: getComputedStyle(node).borderColor,
-          // Geometry only. Tailwind always emits its ring slots, coloured but
-          // zero-sized, so comparing the raw string compares paint that does
-          // not paint. The offsets are what says whether a ring is drawn.
-          shadow: getComputedStyle(node)
-            .boxShadow.replace(/[a-z]+\([^)]*\)/g, "")
-            .replace(/\s+/g, " ")
-            .trim(),
+          value: getComputedStyle(
+            node.querySelector("[data-pill-value]") as Element
+          ).color,
         }))
       );
 
-    const applied = borders.filter((b) => b.active);
-    const unset = borders.filter((b) => !b.active);
-
+    const applied = states.filter((s) => s.applied);
+    const unset = states.filter((s) => !s.applied);
     expect(applied).toHaveLength(1);
     expect(unset.length).toBeGreaterThan(0);
-    expect(applied[0].border).not.toBe(unset[0].border);
 
-    // Not a ring: `ring-ring` is the focus colour, and an applied filter that
-    // looks focused is a control claiming the keyboard is on it.
-    expect(applied[0].shadow).toBe(unset[0].shadow);
+    // The value carries the distinction.
+    expect(applied[0].value).not.toBe(unset[0].value);
+
+    // The border does not. Anything bright enough to scan a row of pills for
+    // reads as focus — a control claiming the keyboard is on it.
+    expect(applied[0].border).toBe(unset[0].border);
   });
 });
 

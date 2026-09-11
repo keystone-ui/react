@@ -19,7 +19,7 @@ import type {
 } from "@/components/payment-filters";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { CopyButton } from "@/components/ui/copy-button";
 import {
   Table,
@@ -69,137 +69,141 @@ export function AdminPaymentsTable({
   totalCount,
 }: AdminPaymentsTableProps) {
   return (
-    <Card variant="outline">
-      <CardHeader>
-        <CardTitle>Payments</CardTitle>
-      </CardHeader>
+    <div className="flex w-full flex-col gap-6">
+      {/* A real `h1`, and the page's only heading. `CardTitle` renders a div,
+          so the section had no heading outline at all — a screen reader moving
+          by headings found nothing here. It also sat inside the card, which
+          made the panel announce itself rather than the page. */}
+      <h1 className="font-semibold text-2xl tracking-tight">Payments</h1>
 
-      <CardContent className="flex flex-col gap-4">
-        <AdminPaymentsToolbar
-          added={addedFilters}
-          filters={filters}
-          onAdd={onFilterAdd}
-          onChange={onFiltersChange}
-          onClear={onFiltersClear}
-        />
+      <Card variant="outline">
+        <CardContent className="flex flex-col gap-4">
+          <AdminPaymentsToolbar
+            added={addedFilters}
+            filters={filters}
+            onAdd={onFilterAdd}
+            onChange={onFiltersChange}
+            onClear={onFiltersClear}
+          />
 
-        <Table hoverable>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[136px]">Payment ID</TableHead>
-              {/* Only the four columns that actually sort carry a button.
+          <Table hoverable>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[136px]">Payment ID</TableHead>
+                {/* Only the four columns that actually sort carry a button.
                   `sortDirection` is omitted rather than passed as `null` on
                   the rest — `null` claims a column sorts and is merely
                   inactive, which would put `aria-sort` on eight headers when
                   four of them do nothing. */}
-              <SortableHead
-                columnKey="playerEmail"
-                onSort={onSortChange}
-                sort={sort}
-              >
-                Player
-              </SortableHead>
-              <SortableHead
-                columnKey="amount"
-                numeric
-                onSort={onSortChange}
-                sort={sort}
-              >
-                Amount
-              </SortableHead>
-              <TableHead>Currency</TableHead>
-              <TableHead>Type</TableHead>
-              <SortableHead
-                columnKey="status"
-                onSort={onSortChange}
-                sort={sort}
-              >
-                Status
-              </SortableHead>
-              <SortableHead
-                columnKey="createdAt"
-                onSort={onSortChange}
-                sort={sort}
-              >
-                Created
-              </SortableHead>
-              <TableHead>Finished</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {rows.length === 0 ? (
-              <TableEmpty colSpan={8}>
-                No payments match these filters.
-              </TableEmpty>
-            ) : (
-              rows.map((row) => (
-                <TableRow className="group/row" key={row.id}>
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      {/* Middle-truncated: the head and tail are what someone
+                <SortableHead
+                  columnKey="playerEmail"
+                  onSort={onSortChange}
+                  sort={sort}
+                >
+                  Player
+                </SortableHead>
+                <SortableHead
+                  columnKey="amount"
+                  numeric
+                  onSort={onSortChange}
+                  sort={sort}
+                >
+                  Amount
+                </SortableHead>
+                <TableHead>Currency</TableHead>
+                <TableHead>Type</TableHead>
+                <SortableHead
+                  columnKey="status"
+                  onSort={onSortChange}
+                  sort={sort}
+                >
+                  Status
+                </SortableHead>
+                <SortableHead
+                  columnKey="createdAt"
+                  onSort={onSortChange}
+                  sort={sort}
+                >
+                  Created
+                </SortableHead>
+                <TableHead>Finished</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {rows.length === 0 ? (
+                <TableEmpty colSpan={8}>
+                  No payments match these filters.
+                </TableEmpty>
+              ) : (
+                rows.map((row) => (
+                  <TableRow className="group/row" key={row.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        {/* Middle-truncated: the head and tail are what someone
                           eyeballs against another system, and the full value is
                           one click away on the clipboard or the record. */}
-                      <button
-                        className="cursor-pointer rounded-sm font-mono text-muted-foreground text-xs hover:underline focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
-                        onClick={() => onOpenPayment(row.id)}
-                        type="button"
-                      >
-                        {truncateId(row.id)}
-                      </button>
-                      <CopyButton size="icon-xs" value={row.id} />
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="truncate">{row.playerEmail}</span>
-                      <Button
-                        aria-label={`Open payment ${truncateId(row.id)}`}
-                        className="shrink-0 opacity-0 transition-opacity focus-visible:opacity-100 group-hover/row:opacity-100"
-                        onClick={() => onOpenPayment(row.id)}
-                        size="sm"
-                        variant="outline"
-                      >
-                        <ExternalLinkIcon className="size-3.5" />
-                        Open
-                      </Button>
-                    </div>
-                  </TableCell>
-                  <TableCell numeric>{row.amount}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{row.currency}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline">
-                      {paymentTypeLabels[row.type]}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={PAYMENT_STATUS_VARIANT[row.status]}>
-                      {paymentStatusLabels[row.status]}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {row.createdAt}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {row.finishedAt ?? "-"}
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+                        <button
+                          className="cursor-pointer rounded-sm font-mono text-muted-foreground text-xs hover:underline focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
+                          onClick={() => onOpenPayment(row.id)}
+                          type="button"
+                        >
+                          {truncateId(row.id)}
+                        </button>
+                        <CopyButton size="icon-xs" value={row.id} />
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="truncate">{row.playerEmail}</span>
+                        <Button
+                          aria-label={`Open payment ${truncateId(row.id)}`}
+                          className="shrink-0 opacity-0 transition-opacity focus-visible:opacity-100 group-hover/row:opacity-100"
+                          onClick={() => onOpenPayment(row.id)}
+                          size="sm"
+                          variant="outline"
+                        >
+                          <ExternalLinkIcon className="size-3.5" />
+                          Open
+                        </Button>
+                      </div>
+                    </TableCell>
+                    <TableCell numeric>{row.amount}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{row.currency}</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">
+                        {paymentTypeLabels[row.type]}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={PAYMENT_STATUS_VARIANT[row.status]}>
+                        {paymentStatusLabels[row.status]}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {row.createdAt}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">
+                      {row.finishedAt ?? "-"}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
 
-        <TablePagination
-          onPageIndexChange={onPageIndexChange}
-          onPageSizeChange={onPageSizeChange}
-          pageCount={pageCount}
-          pageIndex={pageIndex}
-          pageSize={pageSize}
-          totalCount={totalCount}
-        />
-      </CardContent>
-    </Card>
+          <TablePagination
+            onPageIndexChange={onPageIndexChange}
+            onPageSizeChange={onPageSizeChange}
+            pageCount={pageCount}
+            pageIndex={pageIndex}
+            pageSize={pageSize}
+            totalCount={totalCount}
+          />
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 

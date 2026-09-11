@@ -76,7 +76,9 @@ export function PaymentFilterPill({
     active: value !== null,
     label: def.label,
   };
-  const body = value ?? def.empty;
+  // Unset reads as a placeholder rather than a value, which is what separates
+  // the pills doing something from the ones merely present.
+  const body = <PillValue empty={def.empty} value={value} />;
 
   if (pillKey === "created" || pillKey === "amount") {
     return <RangePill filters={filters} onChange={change} pillKey={pillKey} />;
@@ -219,7 +221,7 @@ function RangePill({
       <PopoverTrigger
         render={<FilterTrigger active={value !== null} label={def.label} />}
       >
-        {value ?? def.empty}
+        <PillValue empty={def.empty} value={value} />
       </PopoverTrigger>
       <PopoverContent align="start" className="w-72">
         <div className="flex flex-col gap-3">
@@ -333,6 +335,22 @@ function MenuFooter({
         </Button>
       </div>
     </>
+  );
+}
+
+/**
+ * The pill's value, in its own slot so the set and unset cases are the same
+ * element rather than a span and a bare text node — which is what lets a test
+ * compare their colours at all.
+ */
+function PillValue({ empty, value }: { empty: string; value: string | null }) {
+  return (
+    <span
+      className={value === null ? "font-normal text-muted-foreground" : ""}
+      data-pill-value=""
+    >
+      {value ?? empty}
+    </span>
   );
 }
 
