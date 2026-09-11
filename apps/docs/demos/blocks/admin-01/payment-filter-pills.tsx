@@ -19,6 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@keystoneui/react/popover";
+import { Plus as PlusIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { FilterTrigger } from "./filter-trigger";
 import { CURRENCIES, type Currency } from "./mock-payments";
@@ -349,10 +350,10 @@ export function AddFilterMenu({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        render={<Button className="gap-1.5" variant="ghost" />}
-      >
-        <span aria-hidden="true">+</span>
+      {/* A lucide `Plus` rather than a literal "+": next to the `X` on Clear
+          all, a text glyph would sit at a different weight and baseline. */}
+      <DropdownMenuTrigger render={<Button variant="ghost" />}>
+        <PlusIcon />
         Add filter
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="min-w-44">

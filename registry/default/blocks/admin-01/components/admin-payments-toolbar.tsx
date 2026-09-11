@@ -1,6 +1,6 @@
 "use client";
 
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, XIcon } from "lucide-react";
 import {
   AddFilterMenu,
   PaymentFilterPill,
@@ -87,7 +87,15 @@ export function AdminPaymentsToolbar({
         <AddFilterMenu keys={addable} onAdd={onAdd} />
 
         {hasActiveFilters(filters) && (
-          <Button onClick={onClear} variant="ghost">
+          // Muted at rest: undoing everything is the least likely thing you
+          // came here to do, and it sits next to the control you probably did.
+          // It brightens on hover so it still answers when pointed at.
+          <Button
+            className="text-muted-foreground hover:text-foreground"
+            onClick={onClear}
+            variant="ghost"
+          >
+            <XIcon />
             Clear all
           </Button>
         )}
