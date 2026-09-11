@@ -11,11 +11,22 @@ import {
   type UserSortKey,
 } from "./admin-filters";
 import { AdminOverview } from "./admin-overview";
+import { AdminPaymentsTable } from "./admin-payments-table";
 import { type AdminSection, AdminSidebar } from "./admin-sidebar";
 import { AdminTopbar } from "./admin-topbar";
 import { AdminUserDetail } from "./admin-user-detail";
 import { AdminUsersTable } from "./admin-users-table";
 import { adminMetrics, signupsByMonth, users } from "./mock-admin";
+import { payments } from "./mock-payments";
+import {
+  DEFAULT_SORT as DEFAULT_PAYMENT_SORT,
+  EMPTY_FILTERS,
+  matchesPaymentFilters,
+  type PaymentFilters,
+  type SortState as PaymentSortState,
+  fromSortOptionId as paymentSortFromId,
+  sortPayments,
+} from "./payment-filters";
 import { useReducedMotion } from "./use-reduced-motion";
 
 /** All state lives here; the panels below are presentational. */
@@ -35,6 +46,13 @@ export function AdminPage() {
   });
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(5);
+
+  const [paymentFilters, setPaymentFilters] =
+    useState<PaymentFilters>(EMPTY_FILTERS);
+  const [paymentSort, setPaymentSort] =
+    useState<PaymentSortState>(DEFAULT_PAYMENT_SORT);
+  const [paymentPageIndex, setPaymentPageIndex] = useState(0);
+  const [paymentPageSize, setPaymentPageSize] = useState(10);
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -78,6 +96,32 @@ export function AdminPage() {
   const inviter = openUser?.invitedBy
     ? (users.find((user) => user.id === openUser.invitedBy) ?? null)
     : null;
+
+  const visiblePayments = useMemo(
+    () =>
+      sortPayments(
+        payments.filter((payment) =>
+          matchesPaymentFilters(payment, paymentFilters)
+        ),
+        paymentSort
+      ),
+    [paymentFilters, paymentSort]
+  );
+
+  const paymentPageCount = Math.max(
+    1,
+    Math.ceil(visiblePayments.length / paymentPageSize)
+  );
+  const paymentRows = visiblePayments.slice(
+    paymentPageIndex * paymentPageSize,
+    paymentPageIndex * paymentPageSize + paymentPageSize
+  );
+
+  // Any filter change can shrink the result below the current page.
+  const patchPaymentFilters = (patch: Partial<PaymentFilters>) => {
+    setPaymentFilters((current) => ({ ...current, ...patch }));
+    setPaymentPageIndex(0);
+  };
 
   const pageCount = Math.max(1, Math.ceil(sorted.length / pageSize));
   const pageRows = sorted.slice(
@@ -220,6 +264,36 @@ export function AdminPage() {
               onToggle={toggleSeries}
               reducedMotion={reducedMotion}
               signups={signupsByMonth}
+            />
+          ) : null}
+
+          {section === "payments" ? (
+            <AdminPaymentsTable
+              filters={paymentFilters}
+              onFiltersChange={patchPaymentFilters}
+              onFiltersClear={() => {
+                setPaymentFilters(EMPTY_FILTERS);
+                setPaymentPageIndex(0);
+              }}
+              onOpenPayment={() => {
+                // Deliberately inert: the record view this would open is the
+                // users one, and a payment record is its own piece of work.
+              }}
+              onPageIndexChange={setPaymentPageIndex}
+              onPageSizeChange={(size) => {
+                setPaymentPageSize(size);
+                setPaymentPageIndex(0);
+              }}
+              onSortChange={(id) => {
+                setPaymentSort(paymentSortFromId(id));
+                setPaymentPageIndex(0);
+              }}
+              pageCount={paymentPageCount}
+              pageIndex={paymentPageIndex}
+              pageSize={paymentPageSize}
+              rows={paymentRows}
+              sort={paymentSort}
+              totalCount={visiblePayments.length}
             />
           ) : null}
 

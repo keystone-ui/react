@@ -17,6 +17,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 const TITLES: Record<AdminSection, string> = {
   billing: "Billing",
   overview: "Overview",
+  payments: "Payments",
   settings: "Settings",
   users: "Users",
 };

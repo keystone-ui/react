@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ArrowLeftRightIcon,
   BuildingIcon,
   CreditCardIcon,
   GaugeIcon,
@@ -33,7 +34,12 @@ import {
  * needs no rewrite between them. See the Interop guide.
  */
 
-export type AdminSection = "billing" | "overview" | "settings" | "users";
+export type AdminSection =
+  | "billing"
+  | "overview"
+  | "payments"
+  | "settings"
+  | "users";
 
 interface NavItem {
   badge?: string;
@@ -47,6 +53,11 @@ const NAV: readonly { items: readonly NavItem[]; label: string }[] = [
     items: [
       { icon: GaugeIcon, key: "overview" as const, label: "Overview" },
       { badge: "10", icon: UsersIcon, key: "users" as const, label: "Users" },
+      {
+        icon: ArrowLeftRightIcon,
+        key: "payments" as const,
+        label: "Payments",
+      },
     ],
     label: "Workspace",
   },
