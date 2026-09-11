@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@keystoneui/react/badge";
+import { Button } from "@keystoneui/react/button";
 import {
   Card,
   CardContent,
@@ -27,7 +28,10 @@ import {
   TableSortButton,
 } from "@keystoneui/react/table";
 import { TablePagination } from "@keystoneui/react/table-pagination";
-import { Hash as HashIcon } from "lucide-react";
+import {
+  ExternalLink as ExternalLinkIcon,
+  Hash as HashIcon,
+} from "lucide-react";
 import {
   type RoleFilter,
   type SortOptionId,
@@ -183,6 +187,7 @@ export function AdminUsersTable({
               ) : (
                 rows.map((row) => (
                   <TableRow
+                    className="group/row"
                     data-state={selected.has(row.id) ? "selected" : undefined}
                     key={row.id}
                   >
@@ -199,15 +204,32 @@ export function AdminUsersTable({
                       </span>
                     </TableCell>
                     <TableCell>
-                      <button
-                        className="cursor-pointer rounded-sm text-left font-medium hover:underline focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
-                        onClick={() => onOpenUser(row.id)}
-                        type="button"
-                      >
-                        {row.name}
-                      </button>
-                      <div className="text-muted-foreground text-xs">
-                        {row.email}
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="min-w-0">
+                          <button
+                            className="cursor-pointer rounded-sm text-left font-medium hover:underline focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
+                            onClick={() => onOpenUser(row.id)}
+                            type="button"
+                          >
+                            {row.name}
+                          </button>
+                          <div className="truncate text-muted-foreground text-xs">
+                            {row.email}
+                          </div>
+                        </div>
+                        {/* Hidden until the row is hovered, but reachable by
+                            keyboard: `focus-visible:opacity-100` is what keeps
+                            a hover-only affordance from being mouse-only. */}
+                        <Button
+                          aria-label={`Open ${row.name}`}
+                          className="shrink-0 opacity-0 transition-opacity focus-visible:opacity-100 group-hover/row:opacity-100"
+                          onClick={() => onOpenUser(row.id)}
+                          size="sm"
+                          variant="outline"
+                        >
+                          <ExternalLinkIcon className="size-3.5" />
+                          Open
+                        </Button>
                       </div>
                     </TableCell>
                     <TableCell className="text-muted-foreground">

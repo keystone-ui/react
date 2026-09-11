@@ -103,7 +103,13 @@ test.describe("tickets-01 menus", () => {
     await page.goto("/preview/block-tickets-01");
 
     await page.getByRole("button", { name: "Table options" }).click();
+
     const items = page.getByRole("menuitemcheckbox");
+    // `count()` is a one-shot read with no auto-waiting, so it has to follow an
+    // assertion that waits for the menu to actually be there. Reading it
+    // straight after the click raced the popup and flaked about 1 run in 18.
+    await expect(items.first()).toBeVisible();
+
     const count = await items.count();
     expect(count).toBeGreaterThan(1);
 

@@ -89,8 +89,12 @@ export function AdminUserDetail({
         </div>
       </div>
 
-      <Card className="max-w-4xl gap-0 py-0" variant="outline">
-        <CardHeader className="border-border border-b px-6 py-4">
+      {/* `pb-0` because the sections carry the bottom padding; the top stays
+          the card's own, which is also what centres the header — CardHeader
+          supplies its own bottom padding when it has a `border-b`, so setting
+          `py-*` here would make it top-light. */}
+      <Card className="max-w-4xl gap-0 pb-0">
+        <CardHeader className="border-border border-b">
           <CardTitle className="text-base">User information</CardTitle>
         </CardHeader>
         {/* The card's own padding is zeroed so each section carries it, which

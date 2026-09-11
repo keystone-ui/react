@@ -22,6 +22,7 @@ const SORT_SEATS_LABEL = /Seats, most first/;
 const CLEAR_BUTTON = /^Clear/;
 const USERS_CRUMB = /^Users$/;
 const ID_COLUMN = /ID/;
+const OPEN_ACTION = /^Open /;
 
 const rowCount = (page: Page) =>
   page.locator('[data-slot="table-body"] tr').count();
@@ -287,6 +288,34 @@ test.describe("user detail", () => {
     await expect(page.getByRole("heading", { name: "Identity" })).toHaveCount(
       0
     );
+  });
+
+  /**
+   * A hover-revealed control is mouse-only unless it also appears on focus.
+   * `.focus()` will not prove it — Chromium only matches `:focus-visible`
+   * after real keyboard interaction — so this tabs to it.
+   */
+  test("the row's Open button is revealed on hover and reachable by keyboard", async ({
+    page,
+  }) => {
+    await openUsers(page);
+
+    const firstRow = page.locator('[data-slot="table-body"] tr').first();
+    const open = firstRow.getByRole("button", { name: OPEN_ACTION });
+
+    await expect(open).toHaveCSS("opacity", "0");
+
+    await firstRow.hover();
+    await expect(open).toHaveCSS("opacity", "1");
+
+    await page.mouse.move(0, 0);
+    await page
+      .getByRole("button", { exact: true, name: "Ada Okonkwo" })
+      .focus();
+    await page.keyboard.press("Tab");
+
+    await expect(open).toBeFocused();
+    await expect(open).toHaveCSS("opacity", "1");
   });
 
   test("the ID column shows the real id and sorts", async ({ page }) => {
