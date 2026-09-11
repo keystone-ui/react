@@ -41,10 +41,7 @@ export function AdminUserDetail({ onBack, user }: AdminUserDetailProps) {
     .join("");
 
   return (
-    // Capped: a record is read left-to-right across a pair, and on a wide
-    // screen an uncapped two-column grid pushes the second column so far from
-    // the first that they stop reading as one table of facts.
-    <div className="flex w-full max-w-5xl flex-col gap-6">
+    <div className="flex w-full flex-col gap-6">
       {/* Wraps: the name, its badge and two labelled actions do not fit one
           line on a phone, and the actions dropping to their own row reads
           better than truncating the name or hiding the labels. */}
@@ -81,9 +78,9 @@ export function AdminUserDetail({ onBack, user }: AdminUserDetailProps) {
 
       <Card variant="outline">
         <CardHeader>
-          <CardTitle className="font-semibold">User information</CardTitle>
+          <CardTitle>User information</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-col gap-6">
+        <CardContent className="flex flex-col gap-6 [&>section+section]:border-border [&>section+section]:border-t [&>section+section]:pt-6">
           <Section title="Identity">
             <Pair term="User ID">
               <Mono value={user.id} />
