@@ -48,50 +48,10 @@ describe("DescriptionList defaults", () => {
     expect(details).toHaveClass("ml-auto", "text-right");
   });
 
-  it("reports its layout through data attributes", () => {
+  it("reports its layout through a data attribute", () => {
     const { list } = renderList();
 
     expect(list).toHaveAttribute("data-orientation", "row");
-    expect(list).toHaveAttribute("data-columns", "1");
-  });
-});
-
-// =============================================================================
-// columns
-// =============================================================================
-describe("DescriptionList columns", () => {
-  it("switches to a grid that collapses below sm", () => {
-    const { list } = renderList({ columns: 2 });
-
-    expect(list).toHaveClass("grid", "grid-cols-1", "sm:grid-cols-2");
-    expect(list).not.toHaveClass("flex-col");
-    expect(list).toHaveAttribute("data-columns", "2");
-  });
-
-  /**
-   * The column count is resolved with a conditional, not a `data-[columns=2]:`
-   * variant, so a consumer's plain class still wins the base. That is the
-   * `--card-spacing` lesson: a variant-modified class is (0,2,0) and would
-   * out-specify a `className` of (0,1,0).
-   */
-  it("lets a consumer's className override the base column count", () => {
-    const { list } = renderList({ className: "grid-cols-4", columns: 2 });
-
-    expect(list).toHaveClass("grid-cols-4");
-    expect(list).not.toHaveClass("grid-cols-1");
-  });
-
-  /**
-   * The responsive half survives, though — `sm:grid-cols-2` is a different
-   * tailwind-merge group from `grid-cols-4`, so it still applies at `sm`. This
-   * is why `columns` is documented as 1 or 2 only, with "bring your own grid"
-   * for anything else. Pinned so the documented gotcha is a decision, not a
-   * surprise.
-   */
-  it("keeps its responsive class, which a bare override does not neutralize", () => {
-    const { list } = renderList({ className: "grid-cols-4", columns: 2 });
-
-    expect(list).toHaveClass("sm:grid-cols-2");
   });
 });
 
@@ -130,6 +90,22 @@ describe("DescriptionList stacked orientation", () => {
     const { list } = renderList();
 
     expect(list).not.toHaveClass("gap-y-4");
+  });
+
+  /**
+   * There is deliberately no `columns` prop. A multi-column record is four
+   * classes on the element the caller already styles, and layout belongs in
+   * `className` here. This pins that it actually composes: `grid` supersedes
+   * the default `flex`, and the stacked row gap survives alongside `gap-x-*`.
+   */
+  it("lets the caller supply a grid without losing the row gap", () => {
+    const { list } = renderList({
+      className: "grid grid-cols-1 gap-x-8 sm:grid-cols-2",
+      orientation: "stacked",
+    });
+
+    expect(list).toHaveClass("grid", "sm:grid-cols-2", "gap-x-8", "gap-y-4");
+    expect(list).not.toHaveClass("flex");
   });
 
   it("reports the orientation so the parts can respond to it", () => {

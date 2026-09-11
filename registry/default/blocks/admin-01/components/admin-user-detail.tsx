@@ -112,7 +112,13 @@ function Section({ children, title }: { children: ReactNode; title: string }) {
   return (
     <section className="flex flex-col gap-3">
       <h3 className="font-medium text-sm">{title}</h3>
-      <DescriptionList columns={2} orientation="stacked">
+      {/* The grid lives here rather than behind a `columns` prop: it is four
+          classes on the element we already style, and it is written once for
+          every section. */}
+      <DescriptionList
+        className="grid grid-cols-1 gap-x-8 sm:grid-cols-2"
+        orientation="stacked"
+      >
         {children}
       </DescriptionList>
     </section>

@@ -8,20 +8,12 @@ import { cn } from "./utils";
 
 export interface DescriptionListProps extends React.ComponentProps<"dl"> {
   /**
-   * How many columns the pairs flow into.
-   *
-   * `2` collapses to a single column below `sm`. Only `1` and `2` are offered
-   * because the responsive pair is baked in — for any other arrangement leave
-   * this at `1` and bring your own grid, since a `sm:grid-cols-2` emitted here
-   * would survive `cn()` and beat a plain `grid-cols-*` in your `className`
-   * at that breakpoint.
-   * @default 1
-   */
-  columns?: 1 | 2;
-  /**
    * How each pair is laid out.
    * - `row`: term and details on one line, details right-aligned
    * - `stacked`: term above details, left-aligned — a record/detail view
+   *
+   * For a multi-column record, put the grid in `className`: the stacked row
+   * gap survives it, and `grid` supersedes the default `flex`.
    * @default "row"
    */
   orientation?: "row" | "stacked";
@@ -41,7 +33,6 @@ export interface DescriptionListProps extends React.ComponentProps<"dl"> {
 
 const DescriptionList = ({
   className,
-  columns = 1,
   orientation = "row",
   size = "default",
   variant = "default",
@@ -50,14 +41,7 @@ const DescriptionList = ({
 }: DescriptionListProps & React.RefAttributes<HTMLDListElement>) => (
   <dl
     className={cn(
-      "group/description-list w-full text-sm",
-      // Conditional rather than a `data-[columns=2]:` variant: a
-      // variant-modified class is specificity (0,2,0) and would out-specify a
-      // consumer's plain `className`, which is what made Card's --card-spacing
-      // override silently fail. The prop is in scope here, so branch on it.
-      columns === 2
-        ? "grid grid-cols-1 gap-x-8 sm:grid-cols-2"
-        : "flex flex-col",
+      "group/description-list flex w-full flex-col text-sm",
       // Stacked pairs have no separators or padding to space them, so the row
       // gap is the only thing keeping one pair's value off the next pair's
       // label. Row orientation gets none: its items carry their own padding.
@@ -65,7 +49,6 @@ const DescriptionList = ({
       "data-[variant=card]:gap-1",
       className
     )}
-    data-columns={columns}
     data-orientation={orientation}
     data-size={size}
     data-slot="description-list"

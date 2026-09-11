@@ -89,7 +89,16 @@ Description list with custom value rendering:
 
 ### Record
 
-`orientation="stacked"` puts the term above the details, and `columns={2}` flows the pairs into two columns that collapse to one below `sm`. This is the shape a read-only detail page wants — the default row layout right-aligns each value against its label, which reads as a summary rather than a record.
+`orientation="stacked"` puts the term above the details — the shape a read-only detail page wants, where the default row layout right-aligns each value against its label and reads as a summary.
+
+Columns are layout, so they go in `className`. `grid` supersedes the component's default `flex`, and the stacked row gap survives alongside your own `gap-x-*`:
+
+```tsx
+<DescriptionList
+  className="grid grid-cols-1 gap-x-8 sm:grid-cols-2"
+  orientation="stacked"
+>
+```
 
 <ComponentPreview name="description-list-record" />
 
@@ -117,8 +126,7 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `orientation` | `"row" \| "stacked"` | `"row"` | `row` puts term and details on one line with the value right-aligned; `stacked` puts the term above, left-aligned |
-| `columns` | `1 \| 2` | `1` | `2` flows pairs into two columns, collapsing below `sm`. For any other arrangement leave this at `1` and bring your own grid |
+| `orientation` | `"row" \| "stacked"` | `"row"` | `row` puts term and details on one line with the value right-aligned; `stacked` puts the term above, left-aligned, and spaces the rows. Multi-column layouts go in `className` |
 | `size` | `"default" \| "sm"` | `"default"` | The size variant |
 | `variant` | `"default" \| "card"` | `"default"` | The visual variant |
 | `className` | `string` | - | Additional CSS classes |

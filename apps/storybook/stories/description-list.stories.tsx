@@ -337,7 +337,10 @@ export const OrderSummary: Story = {
 export const Record: Story = {
   render: () => (
     <div className="w-full max-w-2xl">
-      <DescriptionList columns={2} orientation="stacked">
+      <DescriptionList
+        className="grid grid-cols-1 gap-x-8 sm:grid-cols-2"
+        orientation="stacked"
+      >
         <DescriptionListItem>
           <DescriptionListTerm>Payment ID</DescriptionListTerm>
           <DescriptionListDetails className="flex items-center gap-1 font-mono">
