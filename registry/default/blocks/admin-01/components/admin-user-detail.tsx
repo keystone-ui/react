@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeftIcon } from "lucide-react";
+import { ArchiveIcon, ArrowLeftIcon, PencilIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { STATUS_VARIANT } from "@/components/admin-filters";
 import { statusLabels, type User } from "@/components/mock-admin";
@@ -45,7 +45,10 @@ export function AdminUserDetail({ onBack, user }: AdminUserDetailProps) {
     // screen an uncapped two-column grid pushes the second column so far from
     // the first that they stop reading as one table of facts.
     <div className="flex w-full max-w-5xl flex-col gap-6">
-      <div className="flex items-center gap-3">
+      {/* Wraps: the name, its badge and two labelled actions do not fit one
+          line on a phone, and the actions dropping to their own row reads
+          better than truncating the name or hiding the labels. */}
+      <div className="flex flex-wrap items-center gap-3">
         <Button
           aria-label="Back to users"
           onClick={onBack}
@@ -61,6 +64,19 @@ export function AdminUserDetail({ onBack, user }: AdminUserDetailProps) {
         <Badge variant={STATUS_VARIANT[user.status]}>
           {statusLabels[user.status]}
         </Badge>
+
+        {/* Pushed to the end, and on the same 32px tier as the back button so
+            the whole header row sits on one line of the control ladder. */}
+        <div className="ml-auto flex shrink-0 items-center gap-2">
+          <Button size="sm" variant="outline">
+            <PencilIcon />
+            Edit user
+          </Button>
+          <Button size="sm" variant="outline">
+            <ArchiveIcon />
+            Archive user
+          </Button>
+        </div>
       </div>
 
       <Card variant="outline">
@@ -111,7 +127,7 @@ export function AdminUserDetail({ onBack, user }: AdminUserDetailProps) {
 function Section({ children, title }: { children: ReactNode; title: string }) {
   return (
     <section className="flex flex-col gap-3">
-      <h3 className="font-medium text-sm">{title}</h3>
+      <h3 className="font-semibold text-sm">{title}</h3>
       {/* The grid lives here rather than behind a `columns` prop: it is four
           classes on the element we already style, and it is written once for
           every section. */}

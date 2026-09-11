@@ -199,6 +199,34 @@ test.describe("user detail", () => {
     await expect(invitedBy).toContainText("-");
   });
 
+  /**
+   * The block sweep in `overflow.spec.ts` only ever sees the list: the detail
+   * view is behind a click, so its layout is unguarded there. The header —
+   * name, status badge and two labelled actions — is the part that does not
+   * fit a phone.
+   */
+  test("does not overflow at any width", async ({ page }) => {
+    for (const width of [375, 768, 1280]) {
+      // biome-ignore lint/performance/noAwaitInLoops: one page, resized in turn
+      await page.setViewportSize({ height: 900, width });
+      // biome-ignore lint/performance/noAwaitInLoops: one page, resized in turn
+      await openUsers(page);
+      // biome-ignore lint/performance/noAwaitInLoops: sequential by nature
+      await page
+        .getByRole("button", { exact: true, name: "Ada Okonkwo" })
+        .click();
+
+      // biome-ignore lint/performance/noAwaitInLoops: sequential by nature
+      const overflow = await page.evaluate(
+        () =>
+          document.documentElement.scrollWidth -
+          document.documentElement.clientWidth
+      );
+
+      expect(overflow, `detail view at ${width}px`).toBeLessThanOrEqual(1);
+    }
+  });
+
   test("breadcrumb names the record and walks back to the list", async ({
     page,
   }) => {
