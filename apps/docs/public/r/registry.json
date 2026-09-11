@@ -1839,6 +1839,7 @@
         "input",
         "input-group",
         "label",
+        "popover",
         "radio-group",
         "select",
         "selection-bar",
@@ -1847,8 +1848,7 @@
         "stat",
         "stepper",
         "table",
-        "table-pagination",
-        "tag-group"
+        "table-pagination"
       ],
       "files": [
         {
@@ -1914,6 +1914,14 @@
         },
         {
           "path": "registry/default/blocks/admin-01/components/mock-payments.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/filter-trigger.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/payment-filter-pills.tsx",
           "type": "registry:component"
         },
         {

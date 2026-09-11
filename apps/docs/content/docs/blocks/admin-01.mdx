@@ -15,7 +15,7 @@ npx shadcn@latest add https://keystoneui.io/r/admin-01.json
 - **Topbar** with a sidebar trigger and a [breadcrumb](/docs/components/breadcrumb).
 - **Overview** with a KPI row and a stacked signups chart sharing the same toggleable legend as [`dashboard-01`](/docs/blocks/dashboard-01).
 - **Users table** — a responsive filter toolbar (search, role, status, sort), sortable columns, row selection, pagination, and a [`SelectionBar`](/docs/components/selection-bar) for bulk actions.
-- **Payments** — a wide transaction table with eleven filters: the three most-used inline, the rest behind a panel, and everything applied shown as a removable chip.
+- **Payments** — a wide transaction table whose filters are self-describing pills (`Action: Deposit`), two of them permanent and the rest added from a `+ Add filter` menu.
 - **Mobile filters** — below `sm` the cluster collapses into a single Filters button opening a bottom-sheet [`Drawer`](/docs/components/drawer), with a [`Stepper`](/docs/components/stepper) drilling into one screen per filter.
 - **User detail** — clicking a name opens a read-only record view built from [`DescriptionList`](/docs/components/description-list), with [`CopyButton`](/docs/components/copy-button) on the values that exist to be pasted elsewhere.
 
@@ -49,15 +49,23 @@ So they are duplicated and the duplication is enforced: `apps/docs/tests/block-s
 
 ## Notes
 
-**Why the payments filters are a panel and not a rail.** A filter sidebar is the obvious answer to eleven filters, and it is the wrong one for this table. The payments columns need about 1050px; the content area is 1024px at a 1280px viewport, so the table is already short before anything is taken from it. A 300px rail would leave 724px — a third less than the columns need — and force horizontal scrolling on a standard laptop. A panel costs nothing until it is opened.
+**Every filter names the dimension it filters.** A pill reads `Action: Deposit`, not `Deposit`. A bare value turns ambiguous the moment it sits next to another one — is "Deposit" a type or a status? — and the toolbar previously had exactly that pair: one control naming a value without its dimension, beside one naming a dimension without a value.
 
-That trade is table-shaped, not universal: a rail works well beside a narrow single-column list, which is why chat and mail apps use one.
+The exception is a value that names its own dimension. A date range reads as `Last 24h`; `Period: Last 24h` only says it twice.
 
-**The chips are what make a panel acceptable.** A filter you cannot see is a filter you forget you set, and the question that follows is always "why am I looking at four rows?". Every applied filter appears as a removable chip under the toolbar whether the panel is open or shut, and each removes only itself — selected currencies expand to one chip each, because dropping one value from a multi-select is a different action from clearing the whole thing.
+**Self-describing pills are why there is no chip row.** Chips exist to surface filters a panel has hidden. When the control itself says what it is and what it holds, a chip repeating it is a second representation of the same fact — and two representations can disagree. The pills are the record of what is applied, so there is nothing to keep in sync.
 
-The Filters button counts only what lives in the panel. Type and status have their own controls in the toolbar, and counting a filter you can already see would make the badge read as a second, contradictory signal.
+The invariant that makes that safe lives in `visibleKeys`: a pill is shown if it is one of the permanent two, if it was added by hand, **or if its filter holds a value**. That last term means applied state cannot be invisible — a filter narrowing the table with no pill on the row is structurally impossible rather than merely tested for.
 
-One panel serves both breakpoints. `Drawer`'s `swipeDirection="right"` is already responsive — 75% of the width on a phone, and at `md` `variant="floating"` detaches it from the edge so the rows it is filtering stay visible around it — so there is no media query and nothing to get wrong on the server.
+**Two filters are permanent; the rest are added.** Six pills at once wrap before anyone has used one, so `+ Add filter` offers only what is not already on the row and disappears when everything is. Each added pill carries its own `Remove filter`, which clears the value as it goes — otherwise the filter would keep narrowing the table from nowhere. Setting a pill back to `All` deliberately does *not* remove it: taking the control out from under the cursor mid-interaction is worse than a pill reading `All`.
+
+Ranges open a `Popover` rather than a menu, because a menu is a list of choices and a pair of bounds is a small form. An open-ended range still says which end it is open at — `Amount: from 20`, not `Amount: 20`.
+
+**Below `sm` the pills fold away and the drawer carries the whole filter set.** A row of pills becomes a column of pills on a phone, burying the table it is filtering. This is the same fork the users toolbar uses. The drawer holds *every* filter, not just the optional ones: at that width it is the only way in, so anything missing from it is unreachable rather than inconvenient.
+
+`Drawer`'s `swipeDirection="right"` is already responsive — 75% of the width on a phone, and at `md` `variant="floating"` detaches it from the edge so the rows it is filtering stay visible around it — so there is no media query and nothing to get wrong on the server.
+
+**A rail was the other candidate, and this table cannot afford one.** The payments columns need about 1050px; the content area is 1024px at a 1280px viewport, so the table is already short before anything is taken from it. A 300px filter sidebar would leave 724px and force horizontal scrolling on a standard laptop. That trade is table-shaped rather than universal — a rail works well beside a narrow single-column list, which is why chat and mail apps use one.
 
 Payment ids are middle-truncated in the table with a copy button, and shown in full on the record. The head and tail are what you eyeball against a provider's dashboard; the whole value is what you paste into it.
 
@@ -108,6 +116,7 @@ The Status column passes **no** `sortDirection` at all, where the sortable colum
 - [Input](/docs/components/input)
 - [Input Group](/docs/components/input-group)
 - [Label](/docs/components/label)
+- [Popover](/docs/components/popover)
 - [Radio Group](/docs/components/radio-group)
 - [Select](/docs/components/select)
 - [Selection Bar](/docs/components/selection-bar)
@@ -115,7 +124,6 @@ The Status column passes **no** `sortDirection` at all, where the sortable colum
 - [Stat](/docs/components/stat)
 - [Stepper](/docs/components/stepper)
 - [Table](/docs/components/table)
-- [Tag Group](/docs/components/tag-group)
 - [Table Pagination](/docs/components/table-pagination)
 
 ## Composition
@@ -139,9 +147,11 @@ SidebarProvider
     └── AdminPaymentsTable                      (section: payments)
         ├── AdminPaymentsToolbar
         │   ├── InputGroup › InputGroupInput
-        │   ├── DropdownMenu × 3                (hidden below sm)
-        │   ├── PaymentFiltersDrawer            (right, variant="floating")
-        │   └── TagGroup › TagGroupItem         (applied filters)
+        │   ├── PaymentFilterPill × n           (hidden below sm)
+        │   │   ├── FilterTrigger › DropdownMenu
+        │   │   └── FilterTrigger › Popover     (ranges)
+        │   ├── AddFilterMenu
+        │   └── PaymentFiltersDrawer            (sm:hidden, floating)
         └── Table › TablePagination
         ├── Card › CardContent
         │   ├── AdminUsersToolbar
