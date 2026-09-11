@@ -21,3 +21,5 @@ The status filter is now one control rather than one per payment type. The split
 Block-only change; no library API is affected.
 
 `tickets-01`'s pagination footer changes with it. Its info slot said "N of M row(s) selected" — which the `SelectionBar` already says, and says at every width where that slot is `hidden lg:block`. It now reports the visible range instead, the one number nothing else on the page states.
+
+Its toolbar picks up the labelled triggers too: `Sort: Manual` and `Status: All` rather than `Manual` beside `All Statuses`, which was the same pair of half-named controls this change set out to fix. `Table options` keeps no label, because it names a menu rather than a value.

@@ -7,6 +7,7 @@ import {
   SlidersHorizontalIcon,
   TableIcon,
 } from "lucide-react";
+import type { ReactNode } from "react";
 import { statusLabels, type TicketStatus } from "@/components/mock-tickets";
 import { TicketsFiltersDrawer } from "@/components/tickets-filters-drawer";
 import { type TicketColumnId, ticketColumns } from "@/components/tickets-table";
@@ -104,6 +105,7 @@ export function TicketsToolbar({
         <DropdownMenu>
           <DropdownMenuTrigger render={<Button variant="outline" />}>
             <ArrowUpDownIcon />
+            <TriggerLabel>Sort</TriggerLabel>
             {sortPresetLabels[sortPreset]}
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-48">
@@ -159,9 +161,8 @@ export function TicketsToolbar({
 
         <DropdownMenu>
           <DropdownMenuTrigger render={<Button variant="outline" />}>
-            {statusFilter === "all"
-              ? "All Statuses"
-              : statusLabels[statusFilter]}
+            <TriggerLabel>Status</TriggerLabel>
+            {statusFilter === "all" ? "All" : statusLabels[statusFilter]}
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-44">
             <DropdownMenuGroup>
@@ -171,9 +172,7 @@ export function TicketsToolbar({
                 }
                 value={statusFilter}
               >
-                <DropdownMenuRadioItem value="all">
-                  All Statuses
-                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="all">All</DropdownMenuRadioItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuRadioItem value="open">Open</DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="pending">
@@ -211,4 +210,19 @@ export function TicketsToolbar({
       </div>
     </div>
   );
+}
+
+/**
+ * The dimension a filter trigger acts on, muted ahead of its value.
+ *
+ * Without it a toolbar reads "Manual" beside "All Statuses" — one control
+ * naming a value with no dimension, the next naming a dimension with no
+ * value. `admin-01` states the same pair as `Sort: Manual` and `Status: All`.
+ *
+ * Deliberately not shared with that block: a presentational part in two
+ * blocks is the same demo twice, and the installable copies are flat, so two
+ * blocks shipping one basename would overwrite each other.
+ */
+function TriggerLabel({ children }: { children: ReactNode }) {
+  return <span className="font-normal text-muted-foreground">{children}:</span>;
 }

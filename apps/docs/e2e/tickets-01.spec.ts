@@ -44,3 +44,33 @@ test.describe("tickets pagination footer", () => {
     await expect(info).toHaveText("Showing 11–20 of 20 tickets");
   });
 });
+
+/**
+ * Every value-bearing control names its own dimension.
+ *
+ * A toolbar reading "Manual" beside "All Statuses" has one control naming a
+ * value with no dimension and the next naming a dimension with no value.
+ * `admin-01` states the same pair as `Sort: Manual` and `Status: All`.
+ */
+test.describe("tickets toolbar labels", () => {
+  test("labels the filters, and leaves the menu name alone", async ({
+    page,
+  }) => {
+    await page.goto("/preview/block-tickets-01");
+
+    const triggers = await page
+      .locator('[data-slot="dropdown-menu-trigger"]')
+      .evaluateAll((nodes) =>
+        nodes.slice(0, 3).map((node) => {
+          const label = node.querySelector("span.text-muted-foreground");
+          const all = node.textContent?.trim() ?? "";
+          return label
+            ? `${label.textContent?.trim()} ${all.slice((label.textContent ?? "").length).trim()}`
+            : all;
+        })
+      );
+
+    // "Table options" keeps no label: it names a menu, not a value.
+    expect(triggers).toEqual(["Sort: Manual", "Table options", "Status: All"]);
+  });
+});

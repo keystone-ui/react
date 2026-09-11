@@ -37,7 +37,9 @@ const SORT_OPTIONS: SortPreset[] = [
 ];
 
 const STATUS_OPTIONS: { value: StatusFilter; label: string }[] = [
-  { value: "all", label: "All Statuses" },
+  // "All", not "All Statuses": the row and the sub-screen heading beside it
+  // already say Status, so restating it makes the value read twice.
+  { value: "all", label: "All" },
   { value: "open", label: statusLabels.open },
   { value: "pending", label: statusLabels.pending },
   { value: "resolved", label: statusLabels.resolved },
@@ -98,9 +100,7 @@ export function TicketsFiltersDrawer({
                 <FilterMenu
                   sortLabel={sortPresetLabels[sortPreset]}
                   statusLabel={
-                    statusFilter === "all"
-                      ? "All Statuses"
-                      : statusLabels[statusFilter]
+                    statusFilter === "all" ? "All" : statusLabels[statusFilter]
                   }
                   viewLabel={view === "board" ? "Board" : "Table"}
                   visibleColumnsCount={visibleColumns.size}
