@@ -237,7 +237,7 @@
       "no-close-button",
       "scrollable-content"
     ],
-    "native-select": ["field", "field-example", "form"],
+    "native-select": ["field", "field-example", "form", "opaque-options"],
     "popover": ["basic", "with-close"],
     "progress": ["basic", "custom-value-format", "with-label-and-value"],
     "radio-group": ["basic", "description", "invalid"],

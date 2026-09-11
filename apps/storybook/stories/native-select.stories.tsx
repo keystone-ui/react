@@ -101,6 +101,46 @@ export const Default: Story = {
   },
 };
 
+/**
+ * The popup is painted by the browser from the control's own background, and
+ * `--input-bg` is transparent. So the options must name an opaque background
+ * themselves, or Chromium paints the list on its default white — which in dark
+ * mode puts near-white option text on a white popup.
+ */
+export const OpaqueOptions: Story = {
+  render: () => (
+    <NativeSelect>
+      <NativeSelectOption value="todo">Todo</NativeSelectOption>
+      <NativeSelectOptGroup label="Done">
+        <NativeSelectOption value="shipped">Shipped</NativeSelectOption>
+      </NativeSelectOptGroup>
+    </NativeSelect>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const select = canvas.getByRole("combobox");
+
+    // The control itself stays transparent: it is an input, and matching
+    // `Input` is the point. Only the options are painted.
+    await expect(getComputedStyle(select).backgroundColor).toBe(
+      "rgba(0, 0, 0, 0)"
+    );
+
+    const backgrounds = [
+      ...select.querySelectorAll("option"),
+      ...select.querySelectorAll("optgroup"),
+    ].map((el) => getComputedStyle(el).backgroundColor);
+
+    await expect(backgrounds.length).toBeGreaterThan(1);
+    // Fully opaque, not merely set: a translucent wash still composites onto
+    // whatever the browser paints underneath, which is the white being fixed.
+    for (const bg of backgrounds) {
+      expect(bg).not.toBe("rgba(0, 0, 0, 0)");
+      expect(bg).not.toMatch(/, 0\.\d+\)$/);
+    }
+  },
+};
+
 // With Field
 export const FieldExample: Story = {
   name: "Field",
