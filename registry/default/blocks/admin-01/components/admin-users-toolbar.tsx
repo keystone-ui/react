@@ -1,30 +1,22 @@
 "use client";
 
-import {
-  ArrowUpDownIcon,
-  SearchIcon,
-  ShieldUserIcon,
-  SlidersHorizontalIcon,
-} from "lucide-react";
+import { ArrowUpDownIcon, SearchIcon, XIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import {
+  appliedFilters,
   defaultDirection,
   directionLabel,
-  ROLES,
-  type RoleFilter,
-  roleLabel,
+  hasActiveFilters,
   SORT_KEYS,
   type SortDirection,
   type SortOptionId,
   type SortState,
-  STATUSES,
-  type StatusFilter,
   sortKeyLabel,
-  statusLabel,
+  type UserFilters,
   type UserSortKey,
 } from "@/components/admin-filters";
 import { AdminFiltersDrawer } from "@/components/admin-filters-drawer";
-import { statusLabels } from "@/components/mock-admin";
+import { FilterChip } from "@/components/filter-chip";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -43,227 +35,165 @@ import {
 } from "@/components/ui/input-group";
 
 interface AdminUsersToolbarProps {
-  onRoleFilterChange: (role: RoleFilter) => void;
-  onSearchChange: (value: string) => void;
+  filters: UserFilters;
+  onChange: (patch: Partial<UserFilters>) => void;
+  onClear: () => void;
   onSortChange: (id: SortOptionId) => void;
-  onStatusFilterChange: (status: StatusFilter) => void;
-  roleFilter: RoleFilter;
-  search: string;
   sort: SortState | null;
-  statusFilter: StatusFilter;
 }
 
 /**
- * The filter row for the users table.
+ * Search, one Filters button, one Sort — and what is applied as a chip row.
  *
- * Forks at `sm:` exactly as `tickets-01` does — search is shared and always
- * visible, the desktop cluster is `hidden sm:flex`, and below that a single
- * Filters button opens a drawer. The fork is CSS-only, so both trees are always
- * mounted and there is no `useMediaQuery` to get wrong on the server.
+ * The alternative to the payments table's inline pills, and the right shape
+ * for a different job. Pills suit a table you sit in front of flipping a
+ * filter at a time: two clicks to change one, and you can see what is
+ * filterable without opening anything. This suits a table you filter once and
+ * then read: the chip row *is* the answer to "what is applied", where a row of
+ * pills makes you scan six to find the two that are set.
  *
- * No `size` prop on anything: every control sits on the `default` 40px tier, so
- * the row lines up. This block previously paired `size="sm"` buttons with a
- * default-height `InputGroup` — an 8px mismatch, and the reason
- * `apps/docs/e2e/control-heights.spec.ts` exists.
+ * It also removes a fork. The drawer is the filter surface at every width, so
+ * there is no desktop tree and mobile tree to keep in step — which is how this
+ * block once shipped filters that were reachable on no phone at all.
  *
- * One deliberate difference from `tickets-01`: no column-visibility menu. Six
- * columns do not earn one, and that block already demonstrates the pattern.
+ * Sort keeps its own trigger at `sm+` and its drawer step below. Sorting is
+ * not filtering, and burying a one-click control on desktop to make the layout
+ * look tidier would be a regression.
  */
 export function AdminUsersToolbar({
-  onRoleFilterChange,
-  onSearchChange,
+  filters,
+  onChange,
+  onClear,
   onSortChange,
-  onStatusFilterChange,
-  roleFilter,
-  search,
   sort,
-  statusFilter,
 }: AdminUsersToolbarProps) {
-  // Sort is deliberately not counted. It is not a filter, and `Clear` must not
-  // silently reorder the table.
-  const activeCount =
-    (search.trim() ? 1 : 0) +
-    (roleFilter === "all" ? 0 : 1) +
-    (statusFilter === "all" ? 0 : 1);
-
-  const clearAll = () => {
-    onSearchChange("");
-    onRoleFilterChange("all");
-    onStatusFilterChange("all");
-  };
+  const applied = appliedFilters(filters);
 
   return (
-    <div className="flex flex-row items-center gap-2 sm:justify-between sm:gap-3">
-      <InputGroup className="min-w-0 flex-1 sm:max-w-xs">
-        <InputGroupAddon align="inline-start">
-          <SearchIcon />
-        </InputGroupAddon>
-        <InputGroupInput
-          aria-label="Search users"
-          onChange={(event) => onSearchChange(event.target.value)}
-          placeholder="Search name or email…"
-          type="search"
-          value={search}
-        />
-      </InputGroup>
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-row items-center gap-2 sm:gap-3">
+        <InputGroup className="min-w-0 flex-1 sm:max-w-xs">
+          <InputGroupAddon align="inline-start">
+            <SearchIcon />
+          </InputGroupAddon>
+          <InputGroupInput
+            aria-label="Search users"
+            onChange={(event) => onChange({ search: event.target.value })}
+            placeholder="Search name or email…"
+            type="search"
+            value={filters.search}
+          />
+        </InputGroup>
 
-      <div className="shrink-0 sm:hidden">
+        {/* No count badge: the chips below say which filters, not how many. */}
         <AdminFiltersDrawer
-          activeCount={activeCount}
-          onClearAll={clearAll}
-          onRoleFilterChange={onRoleFilterChange}
+          filters={filters}
+          onChange={onChange}
+          onClear={onClear}
           onSortChange={onSortChange}
-          onStatusFilterChange={onStatusFilterChange}
-          roleFilter={roleFilter}
           sort={sort}
-          statusFilter={statusFilter}
         />
+
+        <div className="hidden items-center gap-2 sm:flex">
+          <DropdownMenu>
+            <DropdownMenuTrigger render={<Button variant="outline" />}>
+              <ArrowUpDownIcon />
+              <TriggerLabel>Sort</TriggerLabel>
+              {sortKeyLabel(sort)}
+              {sort ? (
+                <span className="font-normal text-muted-foreground">
+                  ({directionLabel(sort.key, sort.direction)})
+                </span>
+              ) : null}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-52">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+                <DropdownMenuRadioGroup
+                  onValueChange={(value) =>
+                    onSortChange(
+                      value === "none"
+                        ? "none"
+                        : (`${value}:${defaultDirection(
+                            value as UserSortKey
+                          )}` as SortOptionId)
+                    )
+                  }
+                  value={sort?.key ?? "none"}
+                >
+                  <DropdownMenuRadioItem value="none">
+                    Unsorted
+                  </DropdownMenuRadioItem>
+                  {SORT_KEYS.map((option) => (
+                    <DropdownMenuRadioItem key={option.id} value={option.id}>
+                      {option.label}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuGroup>
+
+              {sort ? (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuRadioGroup
+                      onValueChange={(value) =>
+                        onSortChange(
+                          `${sort.key}:${
+                            value as SortDirection
+                          }` as SortOptionId
+                        )
+                      }
+                      value={sort.direction}
+                    >
+                      <DropdownMenuRadioItem value="asc">
+                        {directionLabel(sort.key, "asc")}
+                      </DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="desc">
+                        {directionLabel(sort.key, "desc")}
+                      </DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuGroup>
+                </>
+              ) : null}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
-      <div className="hidden flex-wrap items-center gap-2 sm:flex">
-        <DropdownMenu>
-          <DropdownMenuTrigger render={<Button variant="outline" />}>
-            <ShieldUserIcon />
-            <TriggerLabel>Role</TriggerLabel>
-            {roleLabel(roleFilter)}
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="min-w-44">
-            <DropdownMenuGroup>
-              <DropdownMenuRadioGroup
-                onValueChange={(value) =>
-                  onRoleFilterChange(value as RoleFilter)
-                }
-                value={roleFilter}
-              >
-                <DropdownMenuRadioItem value="all">
-                  All roles
-                </DropdownMenuRadioItem>
-                <DropdownMenuSeparator />
-                {ROLES.map((role) => (
-                  <DropdownMenuRadioItem key={role} value={role}>
-                    {role}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      {/* Keyed to `hasActiveFilters`, not to the chips: search is applied state
+          with no chip of its own — the field shows it — so gating on chips
+          alone left a searched table with nothing to clear it from.
 
-        <DropdownMenu>
-          <DropdownMenuTrigger render={<Button variant="outline" />}>
-            <SlidersHorizontalIcon />
-            <TriggerLabel>Status</TriggerLabel>
-            {statusLabel(statusFilter)}
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="min-w-44">
-            <DropdownMenuGroup>
-              <DropdownMenuRadioGroup
-                onValueChange={(value) =>
-                  onStatusFilterChange(value as StatusFilter)
-                }
-                value={statusFilter}
-              >
-                <DropdownMenuRadioItem value="all">
-                  All statuses
-                </DropdownMenuRadioItem>
-                <DropdownMenuSeparator />
-                {STATUSES.map((status) => (
-                  <DropdownMenuRadioItem key={status} value={status}>
-                    {statusLabels[status]}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        {/* Drives the same `sort` state the column headers write, so picking
-            here moves the header arrow and vice versa. One system, no sync. */}
-        <DropdownMenu>
-          <DropdownMenuTrigger render={<Button variant="outline" />}>
-            <ArrowUpDownIcon />
-            <TriggerLabel>Sort</TriggerLabel>
-            {sortKeyLabel(sort)}
-            {sort ? (
-              <span className="font-normal text-muted-foreground">
-                ({directionLabel(sort.key, sort.direction)})
-              </span>
-            ) : null}
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="min-w-52">
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>Sort by</DropdownMenuLabel>
-              <DropdownMenuRadioGroup
-                // Choosing a column takes that column's natural direction
-                // rather than carrying the last one over: "Name (Most first)"
-                // would be the literal reading of doing otherwise.
-                onValueChange={(value) =>
-                  onSortChange(
-                    value === "none"
-                      ? "none"
-                      : (`${value}:${defaultDirection(
-                          value as UserSortKey
-                        )}` as SortOptionId)
-                  )
-                }
-                value={sort?.key ?? "none"}
-              >
-                <DropdownMenuRadioItem value="none">
-                  Unsorted
-                </DropdownMenuRadioItem>
-                {SORT_KEYS.map((option) => (
-                  <DropdownMenuRadioItem key={option.id} value={option.id}>
-                    {option.label}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuGroup>
-
-            {/* Only once a column is chosen: two directions with nothing to
-                order are a pair of controls that cannot do anything. */}
-            {sort ? (
-              <>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuRadioGroup
-                    onValueChange={(value) =>
-                      onSortChange(
-                        `${sort.key}:${value as SortDirection}` as SortOptionId
-                      )
-                    }
-                    value={sort.direction}
-                  >
-                    <DropdownMenuRadioItem value="asc">
-                      {directionLabel(sort.key, "asc")}
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="desc">
-                      {directionLabel(sort.key, "desc")}
-                    </DropdownMenuRadioItem>
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuGroup>
-              </>
-            ) : null}
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        {/* Only rendered when something is actually filtered — a permanently
-            visible "Clear" on an unfiltered table is a control that does
-            nothing, and it hides the one signal that a filter is on. */}
-        {activeCount > 0 && (
-          <Button onClick={clearAll} variant="ghost">
-            Clear {activeCount}
+          At every width, because on a phone this is the one place a filter can
+          be seen and removed without reopening the drawer. */}
+      {hasActiveFilters(filters) && (
+        <div className="flex flex-wrap items-center gap-1.5">
+          {applied.map(({ def, value }) => (
+            <FilterChip
+              key={def.key}
+              label={def.label}
+              onRemove={() => onChange(def.clear)}
+              value={value}
+            />
+          ))}
+          <Button
+            className="text-muted-foreground hover:text-foreground"
+            onClick={onClear}
+            size="sm"
+            variant="ghost"
+          >
+            <XIcon />
+            Clear all
           </Button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
 
 /**
  * The dimension a filter trigger acts on, muted ahead of its value.
- *
- * Without it the row reads "All roles" beside "Name A–Z" — one control naming
- * a dimension with no value, the next naming a value with no dimension.
  *
  * A second copy rather than a shared part: presentational code in two blocks
  * is the same demo twice, and installable copies are flat, so two blocks

@@ -2,11 +2,10 @@
 
 import { CopyIcon, EyeIcon, HashIcon, MoreHorizontalIcon } from "lucide-react";
 import {
-  type RoleFilter,
   type SortOptionId,
   type SortState,
   STATUS_VARIANT,
-  type StatusFilter,
+  type UserFilters,
   type UserSortKey,
 } from "@/components/admin-filters";
 import { AdminUsersToolbar } from "@/components/admin-users-toolbar";
@@ -73,26 +72,23 @@ const columns = [
 ] as const;
 
 interface AdminUsersTableProps {
+  filters: UserFilters;
   onClearSelection: () => void;
+  onFiltersChange: (patch: Partial<UserFilters>) => void;
+  onFiltersClear: () => void;
   onOpenUser: (id: string) => void;
   onPageIndexChange: (index: number) => void;
   onPageSizeChange: (size: number) => void;
-  onRoleFilterChange: (role: RoleFilter) => void;
-  onSearchChange: (value: string) => void;
   onSort: (key: UserSortKey) => void;
   onSortChange: (id: SortOptionId) => void;
-  onStatusFilterChange: (status: StatusFilter) => void;
   onToggleAll: (checked: boolean) => void;
   onToggleRow: (id: string) => void;
   pageCount: number;
   pageIndex: number;
   pageSize: number;
-  roleFilter: RoleFilter;
   rows: readonly User[];
-  search: string;
   selected: ReadonlySet<string>;
   sort: SortState | null;
-  statusFilter: StatusFilter;
   totalCount: number;
 }
 
@@ -100,23 +96,20 @@ export function AdminUsersTable({
   onClearSelection,
   onPageIndexChange,
   onPageSizeChange,
-  onRoleFilterChange,
-  onSearchChange,
+  filters,
+  onFiltersChange,
+  onFiltersClear,
   onOpenUser,
   onSort,
   onSortChange,
-  onStatusFilterChange,
   onToggleAll,
   onToggleRow,
   pageCount,
   pageIndex,
   pageSize,
-  roleFilter,
   rows,
-  search,
   selected,
   sort,
-  statusFilter,
   totalCount,
 }: AdminUsersTableProps) {
   // Binary rather than tri-state: keystone's Checkbox has no indeterminate
@@ -136,14 +129,11 @@ export function AdminUsersTable({
         <Card variant="outline">
           <CardContent className="flex flex-col gap-4">
             <AdminUsersToolbar
-              onRoleFilterChange={onRoleFilterChange}
-              onSearchChange={onSearchChange}
+              filters={filters}
+              onChange={onFiltersChange}
+              onClear={onFiltersClear}
               onSortChange={onSortChange}
-              onStatusFilterChange={onStatusFilterChange}
-              roleFilter={roleFilter}
-              search={search}
               sort={sort}
-              statusFilter={statusFilter}
             />
 
             <Table hoverable>

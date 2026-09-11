@@ -1,13 +1,18 @@
 "use client";
 
 import { ArrowLeftIcon, ChevronRightIcon, FilterIcon } from "lucide-react";
+import type { ReactNode } from "react";
 import { useState } from "react";
 import {
   defaultDirection,
   directionLabel,
+  FILTERS,
+  type FilterKey,
+  hasActiveFilters,
   ROLES,
-  type RoleFilter,
   roleLabel,
+  SEATS_OPTIONS,
+  type SeatsFilter,
   SORT_KEYS,
   type SortDirection,
   type SortOptionId,
@@ -16,10 +21,12 @@ import {
   type StatusFilter,
   sortLabel,
   statusLabel,
+  TWO_FACTOR_OPTIONS,
+  type TwoFactorFilter,
+  type UserFilters,
   type UserSortKey,
 } from "@/components/admin-filters";
 import { statusLabels } from "@/components/mock-admin";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -29,6 +36,8 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Stepper,
@@ -38,41 +47,39 @@ import {
 } from "@/components/ui/stepper";
 
 interface AdminFiltersDrawerProps {
-  activeCount: number;
-  onClearAll: () => void;
-  onRoleFilterChange: (role: RoleFilter) => void;
+  filters: UserFilters;
+  onChange: (patch: Partial<UserFilters>) => void;
+  onClear: () => void;
   onSortChange: (id: SortOptionId) => void;
-  onStatusFilterChange: (status: StatusFilter) => void;
-  roleFilter: RoleFilter;
   sort: SortState | null;
-  statusFilter: StatusFilter;
 }
 
 /**
- * The mobile half of the users toolbar.
+ * The filter surface, at every width.
+ *
+ * Not a mobile fallback any more: this table's filters live here on desktop
+ * too, with the applied ones shown as chips in the toolbar. One surface means
+ * there is no second tree to keep in step — the failure this block shipped
+ * once, where three filters existed on desktop and nowhere else.
  *
  * A bottom sheet whose body is a `Stepper`: a menu of "label + current value"
  * rows that drill into one screen per filter. Same shape as `tickets-01`'s
- * drawer, because the pattern is the block-level answer to a toolbar that
- * cannot fit — not something each block should reinvent.
+ * drawer and the payments one, because a phone-sized filter set is the same
+ * problem wherever it appears.
  *
- * No `swipeDirection` is passed: the primitive's default is `down`, which is
- * what supplies the bottom-sheet geometry and the drag handle.
+ * The rows are generated from `FILTERS`, so a new filter is one descriptor
+ * rather than a row, a step, a hand-assigned index and a count that all have
+ * to agree.
  *
- * Filters apply live, with no draft state — `Apply` only dismisses. That is
- * `tickets-01`'s behaviour too, and it is the right one here: the table is
- * visible behind the sheet on larger phones, so a pick shows its effect
- * immediately.
+ * Filters apply live; `Apply` only dismisses. There is no draft state to
+ * reconcile, and on a large phone the table is visible behind the sheet.
  */
 export function AdminFiltersDrawer({
-  activeCount,
-  onClearAll,
-  onRoleFilterChange,
+  filters,
+  onChange,
+  onClear,
   onSortChange,
-  onStatusFilterChange,
-  roleFilter,
   sort,
-  statusFilter,
 }: AdminFiltersDrawerProps) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
@@ -87,13 +94,9 @@ export function AdminFiltersDrawer({
       }}
       open={open}
     >
-      {/* The count is on the trigger because the desktop `Clear N` button is
-          hidden at this width -- without it, a filtered table on a phone gives
-          no sign that anything is filtering it. */}
       <DrawerTrigger render={<Button variant="outline" />}>
         <FilterIcon className="size-4" />
         Filters
-        {activeCount > 0 && <Badge variant="secondary">{activeCount}</Badge>}
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
@@ -103,16 +106,12 @@ export function AdminFiltersDrawer({
                 <DrawerHeader>
                   <DrawerTitle className="text-center">Filters</DrawerTitle>
                 </DrawerHeader>
-                <FilterMenu
-                  roleValue={roleLabel(roleFilter)}
-                  sortValue={sortLabel(sort)}
-                  statusValue={statusLabel(statusFilter)}
-                />
+                <FilterMenu filters={filters} sort={sort} />
                 <DrawerFooter>
-                  {activeCount > 0 && (
+                  {hasActiveFilters(filters) && (
                     <Button
                       className="w-full"
-                      onClick={onClearAll}
+                      onClick={onClear}
                       variant="ghost"
                     >
                       Clear all
@@ -126,52 +125,94 @@ export function AdminFiltersDrawer({
 
               <StepperStep>
                 <SubHeader title="Role" />
-                <div className="pb-4">
-                  <RadioGroup
-                    className="gap-0 divide-y divide-border-muted"
-                    onValueChange={(value) => {
-                      if (value) {
-                        onRoleFilterChange(value as RoleFilter);
-                      }
-                    }}
-                    value={roleFilter}
-                  >
-                    <FilterOption label="All" value="all" />
-                    {ROLES.map((role) => (
-                      <FilterOption key={role} label={role} value={role} />
-                    ))}
-                  </RadioGroup>
-                </div>
+                <Options
+                  onValueChange={(value) =>
+                    onChange({ role: value as UserFilters["role"] })
+                  }
+                  value={filters.role}
+                >
+                  <FilterOption label={roleLabel("all")} value="all" />
+                  {ROLES.map((role) => (
+                    <FilterOption key={role} label={role} value={role} />
+                  ))}
+                </Options>
               </StepperStep>
 
               <StepperStep>
                 <SubHeader title="Status" />
-                <div className="pb-4">
-                  <RadioGroup
-                    className="gap-0 divide-y divide-border-muted"
-                    onValueChange={(value) => {
-                      if (value) {
-                        onStatusFilterChange(value as StatusFilter);
-                      }
-                    }}
-                    value={statusFilter}
-                  >
-                    <FilterOption label="All" value="all" />
-                    {STATUSES.map((status) => (
-                      <FilterOption
-                        key={status}
-                        label={statusLabels[status]}
-                        value={status}
-                      />
-                    ))}
-                  </RadioGroup>
+                <Options
+                  onValueChange={(value) =>
+                    onChange({ status: value as StatusFilter })
+                  }
+                  value={filters.status}
+                >
+                  <FilterOption label={statusLabel("all")} value="all" />
+                  {STATUSES.map((status) => (
+                    <FilterOption
+                      key={status}
+                      label={statusLabels[status]}
+                      value={status}
+                    />
+                  ))}
+                </Options>
+              </StepperStep>
+
+              <StepperStep>
+                <SubHeader title="Seats" />
+                <Options
+                  onValueChange={(value) =>
+                    onChange({ seats: value as SeatsFilter })
+                  }
+                  value={filters.seats}
+                >
+                  {SEATS_OPTIONS.map((option) => (
+                    <FilterOption
+                      key={option.id}
+                      label={option.label}
+                      value={option.id}
+                    />
+                  ))}
+                </Options>
+              </StepperStep>
+
+              <StepperStep>
+                <SubHeader title="Two-factor" />
+                <Options
+                  onValueChange={(value) =>
+                    onChange({ twoFactor: value as TwoFactorFilter })
+                  }
+                  value={filters.twoFactor}
+                >
+                  {TWO_FACTOR_OPTIONS.map((option) => (
+                    <FilterOption
+                      key={option.id}
+                      label={option.label}
+                      value={option.id}
+                    />
+                  ))}
+                </Options>
+              </StepperStep>
+
+              <StepperStep>
+                <SubHeader title="Created" />
+                <div className="grid grid-cols-2 gap-3 px-4 pb-4">
+                  <Bound
+                    id="users-created-after"
+                    label="After"
+                    onChange={(value) => onChange({ createdAfter: value })}
+                    value={filters.createdAfter}
+                  />
+                  <Bound
+                    id="users-created-before"
+                    label="Before"
+                    onChange={(value) => onChange({ createdBefore: value })}
+                    value={filters.createdBefore}
+                  />
                 </div>
               </StepperStep>
 
               <StepperStep>
                 <SubHeader title="Sort" />
-                {/* Column, then direction — the same split the desktop menu
-                    makes, so the two surfaces ask the same two questions. */}
                 <div className="pb-4">
                   <RadioGroup
                     className="gap-0 divide-y divide-border-muted"
@@ -232,6 +273,75 @@ export function AdminFiltersDrawer({
   );
 }
 
+/**
+ * The drilldown menu, generated from the descriptors so a row and its step
+ * cannot disagree about their order. Sort is appended by hand because it is
+ * not a filter and is not in `FILTERS`.
+ */
+function FilterMenu({
+  filters,
+  sort,
+}: {
+  filters: UserFilters;
+  sort: SortState | null;
+}) {
+  const { goTo } = useStepper();
+  const items: { key: FilterKey | "sort"; label: string; value: string }[] = [
+    ...FILTERS.map((def) => ({
+      key: def.key,
+      label: def.label,
+      value: def.value(filters) ?? def.empty,
+    })),
+    { key: "sort" as const, label: "Sort", value: sortLabel(sort) },
+  ];
+
+  return (
+    <div className="divide-y divide-border-muted">
+      {items.map((item, index) => (
+        <button
+          className="flex h-12 w-full cursor-pointer items-center justify-between gap-3 px-4 text-left active:text-muted-foreground"
+          key={item.key}
+          // Step 0 is the menu itself, so the first row is step 1.
+          onClick={() => goTo(index + 1)}
+          type="button"
+        >
+          <span className="font-medium text-sm">{item.label}</span>
+          <span className="ml-auto inline-flex min-w-0 items-center gap-2 text-muted-foreground text-sm">
+            <span className="truncate">{item.value}</span>
+            <ChevronRightIcon className="size-4 shrink-0" />
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function Options({
+  children,
+  onValueChange,
+  value,
+}: {
+  children: ReactNode;
+  onValueChange: (value: string) => void;
+  value: string;
+}) {
+  return (
+    <div className="pb-4">
+      <RadioGroup
+        className="gap-0 divide-y divide-border-muted"
+        onValueChange={(next) => {
+          if (next) {
+            onValueChange(next as string);
+          }
+        }}
+        value={value}
+      >
+        {children}
+      </RadioGroup>
+    </div>
+  );
+}
+
 function FilterOption({ label, value }: { label: string; value: string }) {
   return (
     // biome-ignore lint/a11y/noLabelWithoutControl: control is inside label
@@ -242,38 +352,28 @@ function FilterOption({ label, value }: { label: string; value: string }) {
   );
 }
 
-function FilterMenu({
-  roleValue,
-  sortValue,
-  statusValue,
+function Bound({
+  id,
+  label,
+  onChange,
+  value,
 }: {
-  roleValue: string;
-  sortValue: string;
-  statusValue: string;
+  id: string;
+  label: string;
+  onChange: (value: string) => void;
+  value: string;
 }) {
-  const { goTo } = useStepper();
-  const items = [
-    { label: "Role", step: 1, value: roleValue },
-    { label: "Status", step: 2, value: statusValue },
-    { label: "Sort", step: 3, value: sortValue },
-  ];
-
   return (
-    <div className="divide-y divide-border-muted">
-      {items.map((item) => (
-        <button
-          className="flex h-12 w-full cursor-pointer items-center justify-between gap-3 px-4 text-left active:text-muted-foreground"
-          key={item.step}
-          onClick={() => goTo(item.step)}
-          type="button"
-        >
-          <span className="font-medium text-sm">{item.label}</span>
-          <span className="ml-auto inline-flex min-w-0 items-center gap-2 text-muted-foreground text-sm">
-            <span className="truncate">{item.value}</span>
-            <ChevronRightIcon className="size-4 shrink-0" />
-          </span>
-        </button>
-      ))}
+    <div className="flex flex-col gap-1.5">
+      <Label className="text-muted-foreground" htmlFor={id}>
+        {label}
+      </Label>
+      <Input
+        id={id}
+        onChange={(event) => onChange(event.target.value)}
+        type="date"
+        value={value}
+      />
     </div>
   );
 }

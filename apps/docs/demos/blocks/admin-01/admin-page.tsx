@@ -3,11 +3,12 @@
 import { useMemo, useState } from "react";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import {
+  EMPTY_FILTERS as EMPTY_USER_FILTERS,
   fromSortOptionId,
-  type RoleFilter,
+  matchesUserFilters,
   type SortOptionId,
   type SortState,
-  type StatusFilter,
+  type UserFilters,
   type UserSortKey,
 } from "./admin-filters";
 import { AdminOverview } from "./admin-overview";
@@ -36,9 +37,8 @@ export function AdminPage() {
 
   const [section, setSection] = useState<AdminSection>("overview");
   const [openUserId, setOpenUserId] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
-  const [roleFilter, setRoleFilter] = useState<RoleFilter>("all");
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [userFilters, setUserFilters] =
+    useState<UserFilters>(EMPTY_USER_FILTERS);
   const [hidden, setHidden] = useState<ReadonlySet<string>>(new Set());
   const [selected, setSelected] = useState<ReadonlySet<string>>(new Set());
   const [sort, setSort] = useState<SortState | null>({
@@ -61,24 +61,10 @@ export function AdminPage() {
     []
   );
 
-  const filtered = useMemo(() => {
-    const query = search.trim().toLowerCase();
-    return users.filter((user) => {
-      if (roleFilter !== "all" && user.role !== roleFilter) {
-        return false;
-      }
-      if (statusFilter !== "all" && user.status !== statusFilter) {
-        return false;
-      }
-      if (!query) {
-        return true;
-      }
-      return (
-        user.name.toLowerCase().includes(query) ||
-        user.email.toLowerCase().includes(query)
-      );
-    });
-  }, [roleFilter, search, statusFilter]);
+  const filtered = useMemo(
+    () => users.filter((user) => matchesUserFilters(user, userFilters)),
+    [userFilters]
+  );
 
   const sorted = useMemo(() => {
     if (!sort) {
@@ -174,14 +160,12 @@ export function AdminPage() {
     });
   };
 
-  const filterAndReset =
-    <T,>(set: (value: T) => void) =>
-    (value: T) => {
-      set(value);
-      // Page 2 of the unfiltered list usually does not exist once a filter is
-      // applied, and a table showing "Page 2 of 1" with no rows looks broken.
-      setPageIndex(0);
-    };
+  const patchUserFilters = (patch: Partial<UserFilters>) => {
+    setUserFilters((current) => ({ ...current, ...patch }));
+    // Page 2 of the unfiltered list usually does not exist once a filter is
+    // applied, and a table showing "Page 2 of 1" with no rows looks broken.
+    setPageIndex(0);
+  };
 
   // The toolbar and the drawer set the sort directly; the headers cycle it.
   // Both land on the one `sort` state, so the two stay in step with no syncing.
@@ -243,23 +227,23 @@ export function AdminPage() {
                 // Page 3 of a 5-per-page list does not exist at 50 per page.
                 setPageIndex(0);
               }}
-              onRoleFilterChange={filterAndReset(setRoleFilter)}
-              onSearchChange={filterAndReset(setSearch)}
+              onFiltersChange={patchUserFilters}
+              onFiltersClear={() => {
+                setUserFilters(EMPTY_USER_FILTERS);
+                setPageIndex(0);
+              }}
               onOpenUser={setOpenUserId}
               onSort={cycleSort}
               onSortChange={setSortFromOption}
-              onStatusFilterChange={filterAndReset(setStatusFilter)}
               onToggleAll={toggleAllOnPage}
               onToggleRow={toggleRow}
               pageCount={pageCount}
               pageIndex={pageIndex}
               pageSize={pageSize}
-              roleFilter={roleFilter}
+              filters={userFilters}
               rows={pageRows}
-              search={search}
               selected={selected}
               sort={sort}
-              statusFilter={statusFilter}
               totalCount={sorted.length}
             />
           ) : null}
