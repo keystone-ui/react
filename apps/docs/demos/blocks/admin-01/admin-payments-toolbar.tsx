@@ -2,32 +2,18 @@
 
 import { Button } from "@keystoneui/react/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@keystoneui/react/dropdown-menu";
-import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@keystoneui/react/input-group";
 import { Search as SearchIcon } from "lucide-react";
 
-import { FilterTrigger } from "./filter-trigger";
 import { AddFilterMenu, PaymentFilterPill } from "./payment-filter-pills";
 import {
   addableKeys,
   type FilterKey,
   hasActiveFilters,
   type PaymentFilters,
-  SORT_OPTIONS,
-  type SortOptionId,
-  type SortState,
-  sortLabel,
-  toSortOptionId,
   visibleKeys,
 } from "./payment-filters";
 import { PaymentFiltersDrawer } from "./payment-filters-drawer";
@@ -39,8 +25,6 @@ interface AdminPaymentsToolbarProps {
   onChange: (patch: Partial<PaymentFilters>) => void;
   onClear: () => void;
   onRemove: (key: FilterKey) => void;
-  onSortChange: (id: SortOptionId) => void;
-  sort: SortState;
 }
 
 /**
@@ -55,6 +39,10 @@ interface AdminPaymentsToolbarProps {
  * most common cuts are permanent and the rest are added on demand. A filter
  * that holds a value always shows its pill regardless — see `visibleKeys`.
  *
+ * Sorting is not here: the column headers own it, the way `admin-01`'s users
+ * table does. A sort control in the filter row reads as a filter, and the
+ * header is where someone looks to reorder a column anyway.
+ *
  * Below `sm` the pills fold away and the drawer carries the whole filter set,
  * the same fork the users toolbar uses. A row of pills becomes a column of
  * pills on a phone, which buries the table it is filtering.
@@ -66,8 +54,6 @@ export function AdminPaymentsToolbar({
   onChange,
   onClear,
   onRemove,
-  onSortChange,
-  sort,
 }: AdminPaymentsToolbarProps) {
   const visible = visibleKeys(filters, added);
   const addable = addableKeys(filters, added);
@@ -100,29 +86,6 @@ export function AdminPaymentsToolbar({
 
         <AddFilterMenu keys={addable} onAdd={onAdd} />
 
-        {/* Sorting is not filtering, but it is the same kind of control and
-            reads best on the same rung. It keeps its label because "Created,
-            newest" alone does not say it is an ordering. */}
-        <DropdownMenu>
-          <DropdownMenuTrigger render={<FilterTrigger label="Sort" />}>
-            {sortLabel(sort)}
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="min-w-52">
-            <DropdownMenuGroup>
-              <DropdownMenuRadioGroup
-                onValueChange={(value) => onSortChange(value as SortOptionId)}
-                value={toSortOptionId(sort)}
-              >
-                {SORT_OPTIONS.map((option) => (
-                  <DropdownMenuRadioItem key={option.id} value={option.id}>
-                    {option.label}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
         {hasActiveFilters(filters) && (
           <Button onClick={onClear} variant="ghost">
             Clear all
@@ -135,8 +98,6 @@ export function AdminPaymentsToolbar({
           filters={filters}
           onChange={onChange}
           onClear={onClear}
-          onSortChange={onSortChange}
-          sort={sort}
         />
       </div>
     </div>
