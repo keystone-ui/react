@@ -15,9 +15,13 @@ import {
 import { Input } from "@keystoneui/react/input";
 import { Label } from "@keystoneui/react/label";
 import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@keystoneui/react/native-select";
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@keystoneui/react/select";
 import { SlidersHorizontal as SlidersHorizontalIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
@@ -100,20 +104,26 @@ export function PaymentFiltersDrawer({
           </Group>
 
           <Group label="Provider">
-            <NativeSelect
-              aria-label="Provider"
-              onChange={(event) =>
-                onChange({ provider: event.target.value as ProviderFilter })
+            <Select
+              onValueChange={(value) =>
+                onChange({ provider: value as ProviderFilter })
               }
               value={filters.provider}
             >
-              <NativeSelectOption value="all">All providers</NativeSelectOption>
-              {PROVIDERS.map((provider) => (
-                <NativeSelectOption key={provider} value={provider}>
-                  {provider}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              <SelectTrigger aria-label="Provider" className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="all">All providers</SelectItem>
+                  {PROVIDERS.map((provider) => (
+                    <SelectItem key={provider} value={provider}>
+                      {provider}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </Group>
 
           <Group label="Created">

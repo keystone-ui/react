@@ -23,9 +23,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface PaymentFiltersDrawerProps {
   count: number;
@@ -102,20 +106,26 @@ export function PaymentFiltersDrawer({
           </Group>
 
           <Group label="Provider">
-            <NativeSelect
-              aria-label="Provider"
-              onChange={(event) =>
-                onChange({ provider: event.target.value as ProviderFilter })
+            <Select
+              onValueChange={(value) =>
+                onChange({ provider: value as ProviderFilter })
               }
               value={filters.provider}
             >
-              <NativeSelectOption value="all">All providers</NativeSelectOption>
-              {PROVIDERS.map((provider) => (
-                <NativeSelectOption key={provider} value={provider}>
-                  {provider}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
+              <SelectTrigger aria-label="Provider" className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="all">All providers</SelectItem>
+                  {PROVIDERS.map((provider) => (
+                    <SelectItem key={provider} value={provider}>
+                      {provider}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </Group>
 
           <Group label="Created">

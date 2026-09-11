@@ -52,6 +52,24 @@ test.describe("payments filters", () => {
     expect(await chipLabels(page)).toContain("BTC");
   });
 
+  test("the Provider select opens above the panel that contains it", async ({
+    page,
+  }) => {
+    // A popup rendered inside a drawer is a layering question, not just a
+    // filtering one: Base UI portals the listbox, and the drawer sits on its
+    // own stacking layer. If the two disagree the options are unclickable.
+    await openPayments(page);
+    const total = await rowCount(page);
+
+    await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
+    await page.getByRole("combobox", { name: "Provider" }).click();
+    await page.getByRole("option", { name: "Stripe" }).click();
+    await page.keyboard.press("Escape");
+
+    expect(await rowCount(page)).toBeLessThan(total);
+    expect(await chipLabels(page)).toContain("Stripe");
+  });
+
   test("the Filters badge counts only what the panel owns", async ({
     page,
   }) => {
