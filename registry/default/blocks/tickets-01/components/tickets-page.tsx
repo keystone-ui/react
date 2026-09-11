@@ -62,7 +62,13 @@ import {
   SelectionBarLink,
   SelectionBarSeparator,
 } from "@/components/ui/selection-bar";
-import { TablePagination } from "@/components/ui/table-pagination";
+import {
+  TablePagination,
+  TablePaginationButtons,
+  TablePaginationInfo,
+  TablePaginationPageSize,
+  TablePaginationStatus,
+} from "@/components/ui/table-pagination";
 
 const ALL_COLUMN_IDS = ticketColumns.map((c) => c.id);
 
@@ -372,19 +378,36 @@ export function TicketsPage() {
               tickets={paginatedTickets}
               visibleColumns={visibleColumns}
             />
-            <TablePagination
-              onPageIndexChange={setPageIndex}
-              onPageSizeChange={handlePageSizeChange}
-              pageCount={Math.max(
-                1,
-                Math.ceil(visibleTickets.length / pageSize)
-              )}
-              pageIndex={pageIndex}
-              pageSize={pageSize}
-              pageSizeOptions={[5, 10, 20, 50]}
-              selectedCount={selectedCount}
-              totalCount={visibleTickets.length}
-            />
+            {/* Composed rather than props-driven: the info slot's only
+                props-driven content is a selection count, and the
+                `SelectionBar` already says how many tickets are selected. The
+                footer is better spent on the number nothing else states. */}
+            <TablePagination pageCount={pageCount} pageIndex={pageIndex}>
+              <TablePaginationInfo>
+                <ResultSummary
+                  pageIndex={pageIndex}
+                  pageSize={pageSize}
+                  rowCount={paginatedTickets.length}
+                  totalCount={visibleTickets.length}
+                />
+              </TablePaginationInfo>
+              <div className="flex w-full items-center gap-6 lg:w-fit lg:gap-8">
+                <TablePaginationPageSize
+                  onValueChange={handlePageSizeChange}
+                  options={[5, 10, 20, 50]}
+                  value={pageSize}
+                />
+                <TablePaginationStatus
+                  pageCount={pageCount}
+                  pageIndex={pageIndex}
+                />
+                <TablePaginationButtons
+                  onPageIndexChange={setPageIndex}
+                  pageCount={pageCount}
+                  pageIndex={pageIndex}
+                />
+              </div>
+            </TablePagination>
           </>
         ) : (
           <div className="flex h-[420px] items-center justify-center rounded-xl border border-border border-dashed bg-muted/20 text-muted-foreground text-sm">
@@ -561,5 +584,40 @@ export function TicketsPage() {
         }
       />
     </div>
+  );
+}
+
+/**
+ * How much of the result set is on screen.
+ *
+ * The footer's info slot used to carry "N of M row(s) selected", which the
+ * `SelectionBar` already says — and says at every width, where this slot is
+ * `hidden lg:block`. The page status next to it answers a different question:
+ * `Page 2 of 2` reads the same whether that page holds ten rows or the three
+ * left over.
+ */
+function ResultSummary({
+  pageIndex,
+  pageSize,
+  rowCount,
+  totalCount,
+}: {
+  pageIndex: number;
+  pageSize: number;
+  rowCount: number;
+  totalCount: number;
+}) {
+  if (totalCount === 0) {
+    return null;
+  }
+
+  const first = pageIndex * pageSize + 1;
+  const last = pageIndex * pageSize + rowCount;
+
+  return (
+    <>
+      Showing {first}–{last} of {totalCount}{" "}
+      {totalCount === 1 ? "ticket" : "tickets"}
+    </>
   );
 }

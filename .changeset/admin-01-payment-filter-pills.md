@@ -19,3 +19,5 @@ Below `sm` the pills fold away and a bottom-sheet `Drawer` carries the whole set
 The status filter is now one control rather than one per payment type. The split was what produced the "Mixed statuses" fallback, and expressing it cost a pill that could read something no one asked for.
 
 Block-only change; no library API is affected.
+
+`tickets-01`'s pagination footer changes with it. Its info slot said "N of M row(s) selected" — which the `SelectionBar` already says, and says at every width where that slot is `hidden lg:block`. It now reports the visible range instead, the one number nothing else on the page states.
