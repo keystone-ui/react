@@ -139,38 +139,18 @@ test.describe("payments filter pills", () => {
     expect(await pills(page)).toContain("Provider: Stripe");
   });
 
-  test("a pill is cleared before it can be removed", async ({ page }) => {
+  test("an empty menu offers options and nothing else", async ({ page }) => {
     await openPayments(page);
-    const total = await rowCount(page);
     const menu = page.locator('[data-slot="dropdown-menu-content"]');
 
     await addFilter(page, "Currency");
-    expect(await pills(page)).toContain("Currency: All");
-
-    // Empty and removable: the footer offers the way out.
     await pill(page, "Currency").click();
-    await expect(
-      menu.getByRole("button", { name: "Remove filter" })
-    ).toBeVisible();
-    await menu.getByRole("menuitemcheckbox", { name: "BTC" }).click();
 
-    // Now it is doing something, so the footer offers to empty it instead.
-    // A filter whose effect you can still see is not one you meant to delete.
-    await expect(menu.getByRole("button", { name: "Clear" })).toBeVisible();
-    await expect(
-      menu.getByRole("button", { name: "Remove filter" })
-    ).toBeHidden();
-    await closeMenu(page);
-
-    expect(await pills(page)).toContain("Currency: BTC");
-    expect(await rowCount(page)).toBeLessThan(total);
-
-    await pill(page, "Currency").click();
-    await menu.getByRole("button", { name: "Clear" }).click();
-    await menu.getByRole("button", { name: "Remove filter" }).click();
-
-    expect(await pills(page)).toEqual(["Action: All", "Status: All"]);
-    expect(await rowCount(page)).toBe(total);
+    // No footer while the filter holds nothing: there is no count to report
+    // and nothing to clear, and a row offering an action that would do
+    // nothing is one more thing to read past to reach the options.
+    await expect(menu.getByRole("button")).toHaveCount(0);
+    await expect(menu.getByRole("menuitemcheckbox")).toHaveCount(4);
   });
 
   test("the add-filter menu never offers a pill already on the row", async ({
@@ -247,8 +227,8 @@ test.describe("payments filter pills", () => {
     await menu.getByRole("menuitemcheckbox", { name: "BTC" }).click();
     await menu.getByRole("menuitemcheckbox", { name: "ETH" }).click();
 
-    // The footer spells out the number the pill only hints at, and offers the
-    // way to empty the filter without taking the pill off the row.
+    // The footer appears only once something is held: it spells out the number
+    // the pill abbreviates, and offers the way to empty it.
     await expect(menu.getByText("2 selected")).toBeVisible();
     await closeMenu(page);
 

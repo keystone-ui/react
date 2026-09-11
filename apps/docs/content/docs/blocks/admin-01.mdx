@@ -57,9 +57,11 @@ The exception is a value that names its own dimension. A date range reads as `La
 
 The invariant that makes that safe lives in `visibleKeys`: a pill is shown if it is one of the permanent two, if it was added by hand, **or if its filter holds a value**. That last term means applied state cannot be invisible — a filter narrowing the table with no pill on the row is structurally impossible rather than merely tested for.
 
-**Two filters are permanent; the rest are added.** Six pills at once wrap before anyone has used one, so `+ Add filter` offers only what is not already on the row and disappears when everything is. Each added pill carries its own `Remove filter`, which clears the value as it goes — otherwise the filter would keep narrowing the table from nowhere. Setting a pill back to `All` deliberately does *not* remove it: taking the control out from under the cursor mid-interaction is worse than a pill reading `All`.
+**Two filters are permanent; the rest are added.** Six pills at once wrap before anyone has used one, so `+ Add filter` offers only what is not already on the row and disappears when everything is.
 
-A multi-select names its first value and counts the rest — `Currency: BTC, +2`. A bare `3` says how many without saying which, and four values side by side stop being scannable. The menu's footer spells the number out and offers the one useful action: `Clear` while the filter holds a value, `Remove filter` once it is empty. A filter whose effect you can still see is not one you meant to delete.
+A multi-select names its first value and counts the rest — `Currency: BTC, +2`. A bare `3` says how many without saying which, and four values side by side stop being scannable. The menu's footer spells that number out and offers a `Clear`, and it exists only while the filter holds something: an empty filter has no count to report and nothing to undo.
+
+A pill is never removed from inside its own menu. Setting one back to `All` leaves it on the row on purpose — taking the control out from under the cursor mid-interaction is worse than a pill reading `All` — and an empty pill has nothing `Clear all` does not already handle.
 
 Ranges open a `Popover` rather than a menu, because a menu is a list of choices and a pair of bounds is a small form. An open-ended range still says which end it is open at — `Amount: from 20`, not `Amount: 20`.
 
