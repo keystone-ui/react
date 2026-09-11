@@ -87,8 +87,8 @@ export default function FieldSettingsForm() {
           </FieldContent>
           <ButtonGroup>
             <Input
-              className="h-7 w-14! font-mono"
-              htmlSize={3}
+              className="h-8 w-10! flex-none text-center font-mono"
+              htmlSize={2}
               id="number-of-gpus-f6l"
               maxLength={3}
               onChange={handleGpuInputChange}
