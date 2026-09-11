@@ -9,7 +9,7 @@
   "files": [
     {
       "path": "apps/docs/demos/copy-button/default.tsx",
-      "content": "\"use client\";\n\nimport { CopyButton } from \"@keystoneui/react/copy-button\";\n\nexport default function CopyButtonDefault() {\n  return (\n    <div className=\"flex items-center gap-2\">\n      <span className=\"font-mono text-sm\">u_01</span>\n      <CopyButton value=\"u_01\" />\n    </div>\n  );\n}\n",
+      "content": "\"use client\";\n\nimport { CopyButton } from \"@keystoneui/react/copy-button\";\n\nexport default function CopyButtonDefault() {\n  return (\n    <div className=\"flex items-center gap-2\">\n      <span className=\"font-mono text-sm\">usr_3f9a2c81</span>\n      <CopyButton value=\"usr_3f9a2c81\" />\n    </div>\n  );\n}\n",
       "type": "registry:example"
     }
   ],

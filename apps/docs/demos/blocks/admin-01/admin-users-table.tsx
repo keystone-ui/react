@@ -46,7 +46,13 @@ export type { SortDirection, SortState, UserSortKey } from "./admin-filters";
 const columns = [
   // Explicit width: the table distributes free space, and an id needs only
   // enough room for its own text — matching `tickets-01`'s ID column.
-  { icon: HashIcon, key: "id", label: "ID", numeric: false, width: "w-[88px]" },
+  {
+    icon: HashIcon,
+    key: "id",
+    label: "ID",
+    numeric: false,
+    width: "w-[116px]",
+  },
   { key: "name", label: "User", numeric: false },
   { key: "role", label: "Role", numeric: false },
   { key: "seats", label: "Seats", numeric: true },

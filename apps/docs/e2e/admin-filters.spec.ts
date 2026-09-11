@@ -179,7 +179,7 @@ test.describe("user detail", () => {
     await expect(page.getByRole("heading", { name: "Identity" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Access" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Activity" })).toBeVisible();
-    await expect(page.getByText("u_01", { exact: true })).toBeVisible();
+    await expect(page.getByText("usr_3f9a2c81", { exact: true })).toBeVisible();
   });
 
   test("renders a dash for a value the record does not have", async ({
@@ -244,16 +244,24 @@ test.describe("user detail", () => {
         .locator('[data-slot="table-body"] tr td:nth-child(2)')
         .allTextContents();
 
-    expect((await ids())[0]).toBe("u_01");
-
     // Scoped to the header: once sorted, the toolbar's Sort trigger also reads
     // "ID, first added".
     const idHeader = page
       .getByRole("columnheader", { name: ID_COLUMN })
       .getByRole("button");
-    await idHeader.click();
-    await idHeader.click();
 
-    expect((await ids())[0]).toBe("u_10");
+    await idHeader.click();
+    const ascending = await ids();
+
+    await idHeader.click();
+    const descending = await ids();
+
+    // Asserted as a relationship rather than against fixture values, so
+    // renaming an id in the mock does not break the test. Only the first page
+    // is visible, so the two directions are compared to their own ordering
+    // rather than to each other's ends.
+    expect(ascending).toEqual([...ascending].sort());
+    expect(descending).toEqual([...descending].sort().reverse());
+    expect(descending[0]).not.toBe(ascending[0]);
   });
 });

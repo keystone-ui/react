@@ -118,6 +118,20 @@ describe("DescriptionList stacked orientation", () => {
     );
   });
 
+  it("spaces the rows, which nothing else does once the chrome is gone", () => {
+    // Without this, one pair's value sits flush against the next pair's label:
+    // stacked items drop the padding and separators that space row items.
+    const { list } = renderList({ columns: 2, orientation: "stacked" });
+
+    expect(list).toHaveClass("gap-y-4");
+  });
+
+  it("leaves row orientation unspaced, since its items carry padding", () => {
+    const { list } = renderList();
+
+    expect(list).not.toHaveClass("gap-y-4");
+  });
+
   it("reports the orientation so the parts can respond to it", () => {
     const { list } = renderList({ orientation: "stacked" });
 

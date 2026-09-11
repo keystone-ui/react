@@ -20,10 +20,10 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: { value: "u_01" },
+  args: { value: "usr_3f9a2c81" },
   render: (args) => (
     <div className="flex items-center gap-2">
-      <span className="font-mono text-sm">u_01</span>
+      <span className="font-mono text-sm">usr_3f9a2c81</span>
       <CopyButton {...args} />
     </div>
   ),
@@ -62,7 +62,7 @@ export const Variants: Story = {
  * about the component rather than about browser clipboard permissions.
  */
 export const ConfirmsThroughItsAccessibleName: Story = {
-  args: { value: "u_01" },
+  args: { value: "usr_3f9a2c81" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const original = Object.getOwnPropertyDescriptor(navigator, "clipboard");

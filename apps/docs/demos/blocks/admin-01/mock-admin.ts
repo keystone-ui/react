@@ -67,7 +67,7 @@ export const users: readonly User[] = [
   {
     createdAt: "2024-03-04",
     email: "ada@northwind.io",
-    id: "u_01",
+    id: "usr_3f9a2c81",
     invitedBy: null,
     lastActive: "2 hours ago",
     lastSignIn: "2026-09-11 08:12",
@@ -80,7 +80,7 @@ export const users: readonly User[] = [
   {
     createdAt: "2024-06-18",
     email: "bruno@northwind.io",
-    id: "u_02",
+    id: "usr_7b4e1d02",
     invitedBy: "Ada Okonkwo",
     lastActive: "yesterday",
     lastSignIn: "2026-09-10 17:40",
@@ -93,7 +93,7 @@ export const users: readonly User[] = [
   {
     createdAt: "2024-08-02",
     email: "chen@northwind.io",
-    id: "u_03",
+    id: "usr_1c8d5f63",
     invitedBy: "Ada Okonkwo",
     lastActive: "3 days ago",
     lastSignIn: "2026-09-08 09:05",
@@ -106,7 +106,7 @@ export const users: readonly User[] = [
   {
     createdAt: "2025-01-15",
     email: "dara@northwind.io",
-    id: "u_04",
+    id: "usr_9a2e4b07",
     invitedBy: "Bruno Salgado",
     lastActive: "never",
     lastSignIn: "2026-09-11 07:58",
@@ -119,7 +119,7 @@ export const users: readonly User[] = [
   {
     createdAt: "2025-02-27",
     email: "eli@northwind.io",
-    id: "u_05",
+    id: "usr_4d6f0c95",
     invitedBy: "Ada Okonkwo",
     lastActive: "5 minutes ago",
     lastSignIn: "2026-08-29 14:22",
@@ -132,7 +132,7 @@ export const users: readonly User[] = [
   {
     createdAt: "2025-04-09",
     email: "farah@northwind.io",
-    id: "u_06",
+    id: "usr_8e1b7a24",
     invitedBy: "Dara Whitfield",
     lastActive: "2 weeks ago",
     lastSignIn: "2026-09-09 11:31",
@@ -145,7 +145,7 @@ export const users: readonly User[] = [
   {
     createdAt: "2025-05-21",
     email: "gus@northwind.io",
-    id: "u_07",
+    id: "usr_2f5c9d38",
     invitedBy: "Bruno Salgado",
     lastActive: "never",
     lastSignIn: "2026-07-14 16:03",
@@ -158,7 +158,7 @@ export const users: readonly User[] = [
   {
     createdAt: "2025-07-30",
     email: "hana@northwind.io",
-    id: "u_08",
+    id: "usr_6b3a8e51",
     invitedBy: "Ada Okonkwo",
     lastActive: "1 hour ago",
     lastSignIn: "2026-09-11 06:47",
@@ -171,7 +171,7 @@ export const users: readonly User[] = [
   {
     createdAt: "2025-09-12",
     email: "iris@northwind.io",
-    id: "u_09",
+    id: "usr_0d7f2c46",
     invitedBy: "Farah Nasser",
     lastActive: "4 days ago",
     lastSignIn: "2026-09-02 10:19",
@@ -184,7 +184,7 @@ export const users: readonly User[] = [
   {
     createdAt: "2025-11-05",
     email: "jonas@northwind.io",
-    id: "u_10",
+    id: "usr_5a9e3b18",
     invitedBy: "Dara Whitfield",
     lastActive: "1 month ago",
     lastSignIn: "2026-06-23 13:55",

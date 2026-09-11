@@ -58,6 +58,10 @@ const DescriptionList = ({
       columns === 2
         ? "grid grid-cols-1 gap-x-8 sm:grid-cols-2"
         : "flex flex-col",
+      // Stacked pairs have no separators or padding to space them, so the row
+      // gap is the only thing keeping one pair's value off the next pair's
+      // label. Row orientation gets none: its items carry their own padding.
+      orientation === "stacked" && "gap-y-4",
       "data-[variant=card]:gap-1",
       className
     )}

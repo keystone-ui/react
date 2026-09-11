@@ -41,7 +41,10 @@ export function AdminUserDetail({ onBack, user }: AdminUserDetailProps) {
     .join("");
 
   return (
-    <div className="flex flex-col gap-6">
+    // Capped: a record is read left-to-right across a pair, and on a wide
+    // screen an uncapped two-column grid pushes the second column so far from
+    // the first that they stop reading as one table of facts.
+    <div className="flex w-full max-w-5xl flex-col gap-6">
       <div className="flex items-center gap-3">
         <Button
           aria-label="Back to users"

@@ -29,15 +29,15 @@ describe("CopyButton", () => {
     const writeText = vi.fn(() => Promise.resolve());
     mockClipboard(writeText);
 
-    render(<CopyButton value="u_01" />);
+    render(<CopyButton value="usr_3f9a2c81" />);
     await user.click(screen.getByRole("button"));
 
-    expect(writeText).toHaveBeenCalledWith("u_01");
+    expect(writeText).toHaveBeenCalledWith("usr_3f9a2c81");
   });
 
   it("confirms through the accessible name, not only the icon", async () => {
     const user = userEvent.setup();
-    render(<CopyButton value="u_01" />);
+    render(<CopyButton value="usr_3f9a2c81" />);
 
     const button = screen.getByRole("button", { name: "Copy" });
     await user.click(button);
@@ -51,7 +51,7 @@ describe("CopyButton", () => {
 
   it("reverts after the reset delay", async () => {
     const user = userEvent.setup();
-    render(<CopyButton resetDelay={10} value="u_01" />);
+    render(<CopyButton resetDelay={10} value="usr_3f9a2c81" />);
 
     await user.click(screen.getByRole("button"));
     await waitFor(() => {
@@ -76,7 +76,7 @@ describe("CopyButton", () => {
     mockClipboard(() => Promise.reject(new Error("denied")));
     const onCopied = vi.fn();
 
-    render(<CopyButton onCopied={onCopied} value="u_01" />);
+    render(<CopyButton onCopied={onCopied} value="usr_3f9a2c81" />);
     await user.click(screen.getByRole("button"));
 
     expect(onCopied).not.toHaveBeenCalled();
@@ -88,7 +88,7 @@ describe("CopyButton", () => {
     const clearSpy = vi.spyOn(globalThis, "clearTimeout");
     const user = userEvent.setup();
 
-    const { unmount } = render(<CopyButton value="u_01" />);
+    const { unmount } = render(<CopyButton value="usr_3f9a2c81" />);
     await user.click(screen.getByRole("button"));
     await waitFor(() => {
       expect(
@@ -101,7 +101,7 @@ describe("CopyButton", () => {
   });
 
   it("passes size and variant through to Button", () => {
-    render(<CopyButton size="icon" value="u_01" variant="outline" />);
+    render(<CopyButton size="icon" value="usr_3f9a2c81" variant="outline" />);
 
     expect(screen.getByRole("button")).toHaveClass("size-10", "border");
   });
