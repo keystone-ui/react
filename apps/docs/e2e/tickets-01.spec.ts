@@ -92,6 +92,11 @@ test.describe("tickets row actions", () => {
     await expect(triggers.first()).toBeVisible();
 
     await triggers.first().click();
+    // `allTextContents()` is a one-shot read with no auto-waiting, so it can
+    // land while the popup is still animating open and come back empty.
+    await expect(
+      page.locator('[data-slot="dropdown-menu-content"]')
+    ).toBeVisible();
     expect(await page.getByRole("menuitem").allTextContents()).toEqual([
       "View details",
       "Copy ticket ID",

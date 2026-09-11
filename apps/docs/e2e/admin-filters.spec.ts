@@ -1,4 +1,4 @@
-import { expect, type Page, test } from "@playwright/test";
+import { expect, type Locator, type Page, test } from "@playwright/test";
 
 /**
  * `admin-01`'s filter parity with `tickets-01`, desktop and mobile.
@@ -17,9 +17,10 @@ const ROLE_ROW = /^Role/;
 const STATUS_ROW = /^Status/;
 const USER_COLUMN = /User/;
 const SEATS_COLUMN = /Seats/;
-const SORT_ASC_LABEL = /Name A–Z/;
-const SORT_DESC_LABEL = /Name Z–A/;
-const SORT_SEATS_LABEL = /Seats, most first/;
+const SORT_ASC_LABEL = /Sort:\s*Name\s*\(A–Z\)/;
+const SORT_DESC_LABEL = /Sort:\s*Name\s*\(Z–A\)/;
+const SORT_TRIGGER = /^Sort:/;
+const SORT_SEATS_LABEL = /Sort:\s*Seats\s*\(Most first\)/;
 const CLEAR_BUTTON = /^Clear/;
 const USERS_CRUMB = /^Users$/;
 const ID_COLUMN = /ID/;
@@ -111,6 +112,19 @@ test.describe("mobile filters drawer", () => {
   });
 });
 
+/**
+ * Open a menu and wait for its popup.
+ *
+ * `allTextContents()` is a one-shot read with no auto-waiting, so reading
+ * straight after the click lands mid-animation and returns an empty array.
+ */
+async function openMenu(page: Page, trigger: Locator) {
+  await trigger.click();
+  await expect(
+    page.locator('[data-slot="dropdown-menu-content"]')
+  ).toBeVisible();
+}
+
 test.describe("sort is one piece of state", () => {
   test("a header click updates the toolbar's Sort label", async ({ page }) => {
     await openUsers(page);
@@ -136,12 +150,70 @@ test.describe("sort is one piece of state", () => {
     await openUsers(page);
 
     await page.getByRole("button", { name: SORT_ASC_LABEL }).click();
-    await page
-      .getByRole("menuitemradio", { name: "Seats, most first" })
-      .click();
+    await page.getByRole("menuitemradio", { name: "Seats" }).click();
 
     const seats = page.getByRole("columnheader", { name: SEATS_COLUMN });
     await expect(seats).toHaveAttribute("aria-sort", "descending");
+  });
+
+  /**
+   * Column and direction are two choices, not one. The flat cross-product
+   * this replaced meant changing direction cost finding your column again in
+   * a list that had grown to hold both.
+   */
+  test("picks the column and the direction separately", async ({ page }) => {
+    await openUsers(page);
+    const trigger = page.getByRole("button", { name: SORT_TRIGGER });
+
+    await openMenu(page, trigger);
+    // Five columns plus Unsorted, then two directions — not eleven pairings.
+    expect(await page.getByRole("menuitemradio").allTextContents()).toEqual([
+      "Unsorted",
+      "ID",
+      "Name",
+      "Role",
+      "Seats",
+      "Last active",
+      "A–Z",
+      "Z–A",
+    ]);
+
+    // A column takes its natural direction, and the directions relabel to say
+    // what the order means for it — "Ascending" would say nothing.
+    await page.getByRole("menuitemradio", { name: "Seats" }).click();
+    await expect(trigger).toContainText("Seats");
+    await expect(trigger).toContainText("Most first");
+
+    await openMenu(page, trigger);
+    expect(
+      (await page.getByRole("menuitemradio").allTextContents()).slice(-2)
+    ).toEqual(["Fewest first", "Most first"]);
+
+    // Changing direction keeps the column.
+    await page.getByRole("menuitemradio", { name: "Fewest first" }).click();
+    await expect(trigger).toContainText("Seats");
+    await expect(
+      page.getByRole("columnheader", { name: SEATS_COLUMN })
+    ).toHaveAttribute("aria-sort", "ascending");
+  });
+
+  test("offers no direction while nothing is sorted", async ({ page }) => {
+    await openUsers(page);
+    const trigger = page.getByRole("button", { name: SORT_TRIGGER });
+
+    await openMenu(page, trigger);
+    await page.getByRole("menuitemradio", { name: "Unsorted" }).click();
+
+    // Two directions with nothing to order are controls that cannot act.
+    await openMenu(page, trigger);
+    expect(await page.getByRole("menuitemradio").allTextContents()).toEqual([
+      "Unsorted",
+      "ID",
+      "Name",
+      "Role",
+      "Seats",
+      "Last active",
+    ]);
   });
 });
 
@@ -152,7 +224,7 @@ test("Clear resets the filters and leaves the sort alone", async ({ page }) => {
   // must not touch it. Without this, clearing a search would silently reorder
   // the table under the reader.
   await page.getByRole("button", { name: SORT_ASC_LABEL }).click();
-  await page.getByRole("menuitemradio", { name: "Seats, most first" }).click();
+  await page.getByRole("menuitemradio", { name: "Seats" }).click();
 
   // A term narrow enough to drop below the 5-row page size, so the count is a
   // real signal rather than the pagination window.
@@ -312,6 +384,11 @@ test.describe("user detail", () => {
     expect(new Set(names).size).toBe(names.length);
 
     await triggers.first().click();
+    // `allTextContents()` is a one-shot read with no auto-waiting, so it can
+    // land while the popup is still animating open and come back empty.
+    await expect(
+      page.locator('[data-slot="dropdown-menu-content"]')
+    ).toBeVisible();
     expect(await page.getByRole("menuitem").allTextContents()).toEqual([
       "View details",
       "Copy user ID",

@@ -5,6 +5,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
+  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
@@ -23,17 +24,20 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import {
+  defaultDirection,
+  directionLabel,
   ROLES,
   type RoleFilter,
   roleLabel,
-  SORT_OPTIONS,
+  SORT_KEYS,
+  type SortDirection,
   type SortOptionId,
   type SortState,
   STATUSES,
   type StatusFilter,
-  sortLabel,
+  sortKeyLabel,
   statusLabel,
-  toSortOptionId,
+  type UserSortKey,
 } from "./admin-filters";
 
 import { AdminFiltersDrawer } from "./admin-filters-drawer";
@@ -180,21 +184,66 @@ export function AdminUsersToolbar({
           <DropdownMenuTrigger render={<Button variant="outline" />}>
             <ArrowUpDownIcon />
             <TriggerLabel>Sort</TriggerLabel>
-            {sortLabel(sort)}
+            {sortKeyLabel(sort)}
+            {sort ? (
+              <span className="font-normal text-muted-foreground">
+                ({directionLabel(sort.key, sort.direction)})
+              </span>
+            ) : null}
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-52">
             <DropdownMenuGroup>
+              <DropdownMenuLabel>Sort by</DropdownMenuLabel>
               <DropdownMenuRadioGroup
-                onValueChange={(value) => onSortChange(value as SortOptionId)}
-                value={toSortOptionId(sort)}
+                // Choosing a column takes that column's natural direction
+                // rather than carrying the last one over: "Name (Most first)"
+                // would be the literal reading of doing otherwise.
+                onValueChange={(value) =>
+                  onSortChange(
+                    value === "none"
+                      ? "none"
+                      : (`${value}:${defaultDirection(
+                          value as UserSortKey
+                        )}` as SortOptionId)
+                  )
+                }
+                value={sort?.key ?? "none"}
               >
-                {SORT_OPTIONS.map((option) => (
+                <DropdownMenuRadioItem value="none">
+                  Unsorted
+                </DropdownMenuRadioItem>
+                {SORT_KEYS.map((option) => (
                   <DropdownMenuRadioItem key={option.id} value={option.id}>
                     {option.label}
                   </DropdownMenuRadioItem>
                 ))}
               </DropdownMenuRadioGroup>
             </DropdownMenuGroup>
+
+            {/* Only once a column is chosen: two directions with nothing to
+                order are a pair of controls that cannot do anything. */}
+            {sort ? (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuRadioGroup
+                    onValueChange={(value) =>
+                      onSortChange(
+                        `${sort.key}:${value as SortDirection}` as SortOptionId
+                      )
+                    }
+                    value={sort.direction}
+                  >
+                    <DropdownMenuRadioItem value="asc">
+                      {directionLabel(sort.key, "asc")}
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="desc">
+                      {directionLabel(sort.key, "desc")}
+                    </DropdownMenuRadioItem>
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuGroup>
+              </>
+            ) : null}
           </DropdownMenuContent>
         </DropdownMenu>
 

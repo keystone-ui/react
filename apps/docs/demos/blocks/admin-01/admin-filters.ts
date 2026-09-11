@@ -64,20 +64,56 @@ export function statusLabel(status: StatusFilter): string {
  */
 export type SortOptionId = "none" | `${UserSortKey}:${SortDirection}`;
 
-export const SORT_OPTIONS: readonly { id: SortOptionId; label: string }[] = [
-  { id: "none", label: "Unsorted" },
-  { id: "id:asc", label: "ID, first added" },
-  { id: "id:desc", label: "ID, last added" },
-  { id: "name:asc", label: "Name A–Z" },
-  { id: "name:desc", label: "Name Z–A" },
-  { id: "role:asc", label: "Role A–Z" },
-  { id: "role:desc", label: "Role Z–A" },
-  { id: "seats:desc", label: "Seats, most first" },
-  { id: "seats:asc", label: "Seats, fewest first" },
-  { id: "lastActive:desc", label: "Last active, newest" },
-  { id: "lastActive:asc", label: "Last active, oldest" },
+/**
+ * Sorting is two choices, not one: which column, then which way.
+ *
+ * The flat cross-product this replaces listed every pairing — eleven entries
+ * for five columns — so changing direction meant finding your column again in
+ * a list that had grown to hold both. Split, it is five plus two, and every
+ * state the column headers can reach is expressible by construction rather
+ * than by remembering to add the pairing.
+ */
+export const SORT_KEYS: readonly { id: UserSortKey; label: string }[] = [
+  { id: "id", label: "ID" },
+  { id: "name", label: "Name" },
+  { id: "role", label: "Role" },
+  { id: "seats", label: "Seats" },
+  { id: "lastActive", label: "Last active" },
 ];
 
+/**
+ * What a direction means for the column it applies to. "Ascending" is
+ * accurate and says nothing — "A–Z" and "Newest first" say what you will see.
+ */
+const DIRECTION_LABELS: Record<UserSortKey, Record<SortDirection, string>> = {
+  id: { asc: "First added", desc: "Last added" },
+  lastActive: { asc: "Oldest first", desc: "Newest first" },
+  name: { asc: "A–Z", desc: "Z–A" },
+  role: { asc: "A–Z", desc: "Z–A" },
+  seats: { asc: "Fewest first", desc: "Most first" },
+};
+
+export function directionLabel(
+  key: UserSortKey,
+  direction: SortDirection
+): string {
+  return DIRECTION_LABELS[key][direction];
+}
+
+/**
+ * The direction a column takes when it is first chosen. Names read forwards;
+ * counts and dates are asked about from the large end, which is the same rule
+ * the column headers use on a first click.
+ */
+export function defaultDirection(key: UserSortKey): SortDirection {
+  return key === "name" || key === "role" ? "asc" : "desc";
+}
+
+export function sortKeyLabel(sort: SortState | null): string {
+  return sort
+    ? (SORT_KEYS.find((option) => option.id === sort.key)?.label ?? "Unsorted")
+    : "Unsorted";
+}
 export function toSortOptionId(sort: SortState | null): SortOptionId {
   return sort ? `${sort.key}:${sort.direction}` : "none";
 }
@@ -90,7 +126,9 @@ export function fromSortOptionId(id: SortOptionId): SortState | null {
   return { direction: direction as SortDirection, key: key as UserSortKey };
 }
 
+/** "Name (A–Z)" — the column, then what the order means for it. */
 export function sortLabel(sort: SortState | null): string {
-  const id = toSortOptionId(sort);
-  return SORT_OPTIONS.find((option) => option.id === id)?.label ?? "Unsorted";
+  return sort
+    ? `${sortKeyLabel(sort)} (${directionLabel(sort.key, sort.direction)})`
+    : "Unsorted";
 }

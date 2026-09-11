@@ -142,6 +142,22 @@ wasted one.
 
 ---
 
+## A sort menu is two choices, not one
+
+Column, separator, direction — not a flat list of every pairing. Five columns
+times two directions is ten entries that grow multiplicatively; split, it is
+five plus two, and changing direction no longer means finding your column again
+in a list that has grown to hold both.
+
+Every state the column headers can reach is then expressible by construction,
+rather than by remembering to add the pairing to a list.
+
+Label the directions for the column they apply to. "Ascending" is accurate and
+says nothing; `A–Z`, `Newest first` and `Most first` say what you will see.
+Choosing a column takes that column's natural direction — names read forwards,
+counts and dates from the large end — and the direction group only appears once
+a column is chosen, since two directions with nothing to order cannot act.
+
 ## Row actions go in a trailing menu, not on hover
 
 A hover-revealed button is unreachable on touch — `focus-visible` rescues a

@@ -25,17 +25,20 @@ import {
 import { useState } from "react";
 
 import {
+  defaultDirection,
+  directionLabel,
   ROLES,
   type RoleFilter,
   roleLabel,
-  SORT_OPTIONS,
+  SORT_KEYS,
+  type SortDirection,
   type SortOptionId,
   type SortState,
   STATUSES,
   type StatusFilter,
   sortLabel,
   statusLabel,
-  toSortOptionId,
+  type UserSortKey,
 } from "./admin-filters";
 import { statusLabels } from "./mock-admin";
 
@@ -172,17 +175,26 @@ export function AdminFiltersDrawer({
 
               <StepperStep>
                 <SubHeader title="Sort" />
+                {/* Column, then direction — the same split the desktop menu
+                    makes, so the two surfaces ask the same two questions. */}
                 <div className="pb-4">
                   <RadioGroup
                     className="gap-0 divide-y divide-border-muted"
                     onValueChange={(value) => {
                       if (value) {
-                        onSortChange(value as SortOptionId);
+                        onSortChange(
+                          value === "none"
+                            ? "none"
+                            : (`${value}:${defaultDirection(
+                                value as UserSortKey
+                              )}` as SortOptionId)
+                        );
                       }
                     }}
-                    value={toSortOptionId(sort)}
+                    value={sort?.key ?? "none"}
                   >
-                    {SORT_OPTIONS.map((option) => (
+                    <FilterOption label="Unsorted" value="none" />
+                    {SORT_KEYS.map((option) => (
                       <FilterOption
                         key={option.id}
                         label={option.label}
@@ -190,6 +202,31 @@ export function AdminFiltersDrawer({
                       />
                     ))}
                   </RadioGroup>
+
+                  {sort ? (
+                    <RadioGroup
+                      className="gap-0 divide-y divide-border-muted border-border-muted border-t"
+                      onValueChange={(value) => {
+                        if (value) {
+                          onSortChange(
+                            `${sort.key}:${
+                              value as SortDirection
+                            }` as SortOptionId
+                          );
+                        }
+                      }}
+                      value={sort.direction}
+                    >
+                      <FilterOption
+                        label={directionLabel(sort.key, "asc")}
+                        value="asc"
+                      />
+                      <FilterOption
+                        label={directionLabel(sort.key, "desc")}
+                        value="desc"
+                      />
+                    </RadioGroup>
+                  ) : null}
                 </div>
               </StepperStep>
             </StepperContent>
