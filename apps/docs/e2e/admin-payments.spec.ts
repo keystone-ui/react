@@ -341,6 +341,55 @@ test.describe("payments filter pills", () => {
   });
 });
 
+/**
+ * Run in dark mode on purpose. `Button`'s outline variant carries
+ * `dark:border-input`, which out-specifies a plain `border-ring` — so the
+ * applied-pill treatment can be alive in light and silently dead in dark, and
+ * a light-mode-only check would pass while half the users saw nothing.
+ */
+test.describe("an applied pill looks applied", () => {
+  test.use({ colorScheme: "dark" });
+
+  test("carries a border the unset pills do not", async ({ page }) => {
+    await openPayments(page);
+
+    await pill(page, "Status").click();
+    await page
+      .locator('[data-slot="dropdown-menu-content"]')
+      .getByRole("menuitemradio", { name: "Failed" })
+      .click();
+    // Somewhere else, so nothing is left focused.
+    await page.getByLabel("Search payments by email").click();
+
+    const borders = await page
+      .locator("[data-filter-pill]")
+      .evaluateAll((nodes) =>
+        nodes.map((node) => ({
+          active: node.getAttribute("data-active"),
+          border: getComputedStyle(node).borderColor,
+          // Geometry only. Tailwind always emits its ring slots, coloured but
+          // zero-sized, so comparing the raw string compares paint that does
+          // not paint. The offsets are what says whether a ring is drawn.
+          shadow: getComputedStyle(node)
+            .boxShadow.replace(/[a-z]+\([^)]*\)/g, "")
+            .replace(/\s+/g, " ")
+            .trim(),
+        }))
+      );
+
+    const applied = borders.filter((b) => b.active);
+    const unset = borders.filter((b) => !b.active);
+
+    expect(applied).toHaveLength(1);
+    expect(unset.length).toBeGreaterThan(0);
+    expect(applied[0].border).not.toBe(unset[0].border);
+
+    // Not a ring: `ring-ring` is the focus colour, and an applied filter that
+    // looks focused is a control claiming the keyboard is on it.
+    expect(applied[0].shadow).toBe(unset[0].shadow);
+  });
+});
+
 test.describe("payments filters on a phone", () => {
   test.use({ viewport: { height: 900, width: 375 } });
 

@@ -46,9 +46,16 @@ export function FilterTrigger({
     <Button
       className={cn(
         "gap-1.5",
-        // The ring, not a fill: an active pill still has to read as the same
-        // control it was, and a filled one reads as pressed.
-        active && "border-ring ring-1 ring-ring ring-inset",
+        // A brighter border, not a ring: `ring-ring` is the focus colour, so a
+        // pill holding a value looked exactly like a focused one.
+        //
+        // Written as `data-[active]:` variants rather than a plain conditional
+        // string because `Button`'s outline variant carries `dark:border-input`
+        // — (0,2,0), which out-specifies a plain `border-ring` at (0,1,0), so
+        // the conditional version was silently dead in dark mode and only the
+        // ring ever showed. Stacking `dark:` onto the data variant takes it to
+        // (0,3,0), which wins in both themes.
+        "data-[active]:border-ring data-[active]:dark:border-ring",
         className
       )}
       data-active={active || undefined}
