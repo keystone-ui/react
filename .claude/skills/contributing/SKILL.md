@@ -128,6 +128,7 @@ different values across ten files).
 | New form pattern (e.g. new Field variant) | `skills/keystoneui-react/rules/forms.md` AND any block demos that should reflect it. |
 | New compound component pattern (e.g. new `data-slot` use) | `skills/keystoneui-react/rules/composition.md` AND `.claude/skills/component-architecture/SKILL.md`. |
 | New popup behavior (height, animation, z-stack) | `skills/keystoneui-react/rules/composition.md` AND `.claude/skills/popup-patterns/SKILL.md`. |
+| New data-table convention (filter toolbar, applied state, sort affordance, pagination footer, mobile fold) | `.claude/skills/data-table-patterns/SKILL.md` AND the Notes section of every block that already does it differently. |
 | New install path or CLI flow | `skills/keystoneui-react/cli.md` AND `apps/docs/content/docs/(getting-started)/agents/skills.mdx`. |
 | New MCP tool | `packages/keystoneui-mcp/src/{server,tools,fetcher}.ts` AND `skills/keystoneui-react/mcp.md` AND `apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx`. |
 | New block | Follow [Adding a New Block](#adding-a-new-block) above; then add the block to the **Block Selection** table in `skills/keystoneui-react/SKILL.md`, run `pnpm docs:backlinks` and `pnpm registry:build`. |
@@ -225,5 +226,5 @@ Authoring rules:
 - MCP docs: `apps/docs/content/docs/(getting-started)/agents/{mcp-server,skills,llms-txt,agents-md}.mdx`
 
 ### Project-internal Claude/Cursor skills
-- `.claude/skills/{component-architecture,design-tokens,popup-patterns,contributing}/SKILL.md`
+- `.claude/skills/{component-architecture,design-tokens,popup-patterns,data-table-patterns,contributing}/SKILL.md`
 - `.cursor/rules/*.mdc` (symlinks to the same canonical files)
