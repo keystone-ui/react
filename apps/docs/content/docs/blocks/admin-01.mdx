@@ -57,7 +57,7 @@ That trade is table-shaped, not universal: a rail works well beside a narrow sin
 
 The Filters button counts only what lives in the panel. Type and status have their own controls in the toolbar, and counting a filter you can already see would make the badge read as a second, contradictory signal.
 
-One panel serves both breakpoints. `Drawer`'s `swipeDirection="right"` is already responsive — 75% of the width on a phone, a floating panel at `md` — so there is no media query and nothing to get wrong on the server.
+One panel serves both breakpoints. `Drawer`'s `swipeDirection="right"` is already responsive — 75% of the width on a phone, and at `md` `variant="floating"` detaches it from the edge so the rows it is filtering stay visible around it — so there is no media query and nothing to get wrong on the server.
 
 Payment ids are middle-truncated in the table with a copy button, and shown in full on the record. The head and tail are what you eyeball against a provider's dashboard; the whole value is what you paste into it.
 

@@ -42,9 +42,15 @@ interface PaymentFiltersDrawerProps {
  * until it is opened.
  *
  * One `swipeDirection="right"` serves both sizes — the primitive is already
- * responsive, taking 75% of the width on a phone and settling into a floating
- * panel at `md`. There is no media query here, and so nothing to get wrong on
- * the server.
+ * responsive, taking 75% of the width on a phone and, with `variant="floating"`,
+ * detaching from the edge at `md` into an inset panel with the page visible
+ * around it. There is no media query here, and so nothing to get wrong on the
+ * server.
+ *
+ * `floating` rather than the default `flush` because this panel is a temporary
+ * inspector over a table you are still reading: the inset and the backdrop show
+ * the rows it is filtering, where a flush panel reads as a permanent region of
+ * the layout.
  */
 export function PaymentFiltersDrawer({
   count,
@@ -69,7 +75,7 @@ export function PaymentFiltersDrawer({
         Filters
         {count > 0 && <Badge variant="secondary">{count}</Badge>}
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent variant="floating">
         <DrawerHeader>
           <DrawerTitle>Filters</DrawerTitle>
         </DrawerHeader>
