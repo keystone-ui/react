@@ -59,11 +59,15 @@ The invariant that makes that safe lives in `visibleKeys`: a pill is shown if it
 
 **Two filters are permanent; the rest are added.** Six pills at once wrap before anyone has used one, so `+ Add filter` offers only what is not already on the row and disappears when everything is. Each added pill carries its own `Remove filter`, which clears the value as it goes — otherwise the filter would keep narrowing the table from nowhere. Setting a pill back to `All` deliberately does *not* remove it: taking the control out from under the cursor mid-interaction is worse than a pill reading `All`.
 
+A multi-select names its first value and counts the rest — `Currency: BTC, +2`. A bare `3` says how many without saying which, and four values side by side stop being scannable. The menu's footer spells the number out and offers the one useful action: `Clear` while the filter holds a value, `Remove filter` once it is empty. A filter whose effect you can still see is not one you meant to delete.
+
 Ranges open a `Popover` rather than a menu, because a menu is a list of choices and a pair of bounds is a small form. An open-ended range still says which end it is open at — `Amount: from 20`, not `Amount: 20`.
 
-**Below `sm` the pills fold away and the drawer carries the whole filter set.** A row of pills becomes a column of pills on a phone, burying the table it is filtering. This is the same fork the users toolbar uses. The drawer holds *every* filter, not just the optional ones: at that width it is the only way in, so anything missing from it is unreachable rather than inconvenient.
+**Sorting lives in the column headers**, not the filter row, exactly as the users table does it. A sort control sitting among filters reads as a filter, and the header is where someone looks to reorder a column anyway. Four columns sort; the other four carry no `aria-sort` at all, because `none` would claim a column sorts and is merely inactive.
 
-`Drawer`'s `swipeDirection="right"` is already responsive — 75% of the width on a phone, and at `md` `variant="floating"` detaches it from the edge so the rows it is filtering stay visible around it — so there is no media query and nothing to get wrong on the server.
+**Below `sm` the pills fold away and a drawer carries the whole filter set** — the same bottom sheet and `Stepper` drilldown the users drawer uses, a menu of "label + current value" rows that open one screen per filter. A row of pills becomes a column of pills on a phone, burying the table it is filtering, and a scrolling column of selects is just a desktop panel moved sideways. Each row's value comes from the same descriptor the pills read, so a row and its pill cannot disagree about what is applied.
+
+The drawer holds *every* filter, not just the optional ones: at that width it is the only way in, so anything missing from it is unreachable rather than inconvenient. Its trigger carries the active count, because nothing else at that width says the table is filtered.
 
 **A rail was the other candidate, and this table cannot afford one.** The payments columns need about 1050px; the content area is 1024px at a 1280px viewport, so the table is already short before anything is taken from it. A 300px filter sidebar would leave 724px and force horizontal scrolling on a standard laptop. That trade is table-shaped rather than universal — a rail works well beside a narrow single-column list, which is why chat and mail apps use one.
 
@@ -151,8 +155,8 @@ SidebarProvider
         │   │   ├── FilterTrigger › DropdownMenu
         │   │   └── FilterTrigger › Popover     (ranges)
         │   ├── AddFilterMenu
-        │   └── PaymentFiltersDrawer            (sm:hidden, floating)
-        └── Table › TablePagination
+        │   └── PaymentFiltersDrawer            (sm:hidden, Stepper)
+        └── Table › TableSortButton › TablePagination
         ├── Card › CardContent
         │   ├── AdminUsersToolbar
         │   │   ├── InputGroup › InputGroupInput
