@@ -5,7 +5,6 @@ import { Button } from "@keystoneui/react/button";
 import { Checkbox } from "@keystoneui/react/checkbox";
 import {
   Drawer,
-  DrawerBody,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
@@ -14,30 +13,32 @@ import {
 } from "@keystoneui/react/drawer";
 import { Input } from "@keystoneui/react/input";
 import { Label } from "@keystoneui/react/label";
+import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@keystoneui/react/select";
-import { SlidersHorizontal as SlidersHorizontalIcon } from "lucide-react";
+  Stepper,
+  StepperContent,
+  StepperStep,
+  useStepper,
+} from "@keystoneui/react/stepper";
+import {
+  ArrowLeft as ArrowLeftIcon,
+  ChevronRight as ChevronRightIcon,
+  Funnel as FilterIcon,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 
-import { CURRENCIES, PROVIDERS } from "./mock-payments";
+import { CURRENCIES } from "./mock-payments";
 import {
   FILTERS,
+  filterDef,
+  hasActiveFilters,
   type PaymentFilters,
-  type ProviderFilter,
-  SORT_OPTIONS,
-  type SortOptionId,
-  type SortState,
+  PROVIDER_OPTIONS,
+  providerLabel,
   STATUS_OPTIONS,
   statusLabel,
   TYPE_OPTIONS,
-  toSortOptionId,
   typeLabel,
 } from "./payment-filters";
 
@@ -45,249 +46,347 @@ interface PaymentFiltersDrawerProps {
   filters: PaymentFilters;
   onChange: (patch: Partial<PaymentFilters>) => void;
   onClear: () => void;
-  onSortChange: (id: SortOptionId) => void;
-  sort: SortState;
 }
 
 /**
- * The whole filter set, for widths where the pill row does not fit.
+ * The mobile half of the payments toolbar.
  *
- * A row of pills becomes a column of pills on a phone, pushing the table it is
- * filtering off the screen — so below `sm` the pills fold away and this
- * carries everything instead. Everything: the drawer is the *only* way to
- * reach these filters at that width, so anything missing here is unreachable,
- * not merely inconvenient.
+ * The same bottom sheet + `Stepper` drilldown the users drawer uses, and for
+ * the same reason: a menu of "label + current value" rows that open one screen
+ * per filter is how a phone handles a filter set that will not fit, and a
+ * block should not answer that question twice in two different ways. This
+ * started life as a scrolling column of selects — a desktop panel put on a
+ * phone — which is exactly the reinvention the users drawer warns against.
  *
- * `swipeDirection="right"` with `variant="floating"`: the floating inset is
- * inert below `md`, so a phone gets the full-height sheet and a tablet gets a
- * panel with the rows still visible around it. One component, no media query.
+ * No `swipeDirection`: the primitive's default is `down`, which is what
+ * supplies the bottom-sheet geometry and the drag handle. No `variant` either
+ * — `floating` only applies from `md` up, and this drawer is `sm:hidden`, so
+ * it could never have taken effect.
+ *
+ * Filters apply live; `Apply` only dismisses. Same as the users drawer.
  */
 export function PaymentFiltersDrawer({
   filters,
   onChange,
   onClear,
-  onSortChange,
-  sort,
 }: PaymentFiltersDrawerProps) {
   const [open, setOpen] = useState(false);
-  const count = FILTERS.filter((def) => def.value(filters) !== null).length;
-
-  const toggleCurrency = (currency: (typeof CURRENCIES)[number]) => {
-    onChange({
-      currencies: filters.currencies.includes(currency)
-        ? filters.currencies.filter((item) => item !== currency)
-        : [...filters.currencies, currency],
-    });
-  };
+  const [step, setStep] = useState(0);
+  const activeCount = FILTERS.filter(
+    (def) => def.value(filters) !== null
+  ).length;
 
   return (
-    <Drawer onOpenChange={setOpen} open={open} swipeDirection="right">
+    <Drawer
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen);
+        if (!isOpen) {
+          setStep(0);
+        }
+      }}
+      open={open}
+    >
+      {/* The count is on the trigger because the pills are hidden at this
+          width — without it a filtered table gives no sign of being filtered. */}
       <DrawerTrigger render={<Button variant="outline" />}>
-        <SlidersHorizontalIcon />
+        <FilterIcon className="size-4" />
         Filters
-        {count > 0 && <Badge variant="secondary">{count}</Badge>}
+        {activeCount > 0 && <Badge variant="secondary">{activeCount}</Badge>}
       </DrawerTrigger>
-      <DrawerContent variant="floating">
-        <DrawerHeader>
-          <DrawerTitle>Filters</DrawerTitle>
-        </DrawerHeader>
+      <DrawerContent>
+        <div className="mx-auto w-full max-w-sm">
+          <Stepper onValueChange={setStep} value={step}>
+            <StepperContent>
+              <StepperStep>
+                <DrawerHeader>
+                  <DrawerTitle className="text-center">Filters</DrawerTitle>
+                </DrawerHeader>
+                <FilterMenu filters={filters} />
+                <DrawerFooter>
+                  {hasActiveFilters(filters) && (
+                    <Button
+                      className="w-full"
+                      onClick={onClear}
+                      variant="ghost"
+                    >
+                      Clear all
+                    </Button>
+                  )}
+                  <Button className="w-full" onClick={() => setOpen(false)}>
+                    Apply
+                  </Button>
+                </DrawerFooter>
+              </StepperStep>
 
-        <DrawerBody className="flex flex-col gap-6">
-          <Group label="Action">
-            <Select
-              onValueChange={(value) =>
-                onChange({ type: value as PaymentFilters["type"] })
-              }
-              value={filters.type}
-            >
-              <SelectTrigger aria-label="Action" className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {TYPE_OPTIONS.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {typeLabel(option)}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </Group>
-
-          <Group label="Status">
-            <Select
-              onValueChange={(value) =>
-                onChange({ status: value as PaymentFilters["status"] })
-              }
-              value={filters.status}
-            >
-              <SelectTrigger aria-label="Status" className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {STATUS_OPTIONS.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {statusLabel(option)}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </Group>
-
-          <Group label="Currencies">
-            <div className="flex flex-col gap-2">
-              {CURRENCIES.map((currency) => (
-                // biome-ignore lint/a11y/noLabelWithoutControl: control is inside label
-                <label
-                  className="flex cursor-pointer items-center gap-2.5 text-sm"
-                  key={currency}
+              <StepperStep>
+                <SubHeader title="Action" />
+                <Options
+                  onValueChange={(value) =>
+                    onChange({ type: value as PaymentFilters["type"] })
+                  }
+                  value={filters.type}
                 >
-                  <Checkbox
-                    checked={filters.currencies.includes(currency)}
-                    onCheckedChange={() => toggleCurrency(currency)}
+                  {TYPE_OPTIONS.map((option) => (
+                    <FilterOption
+                      key={option}
+                      label={typeLabel(option)}
+                      value={option}
+                    />
+                  ))}
+                </Options>
+              </StepperStep>
+
+              <StepperStep>
+                <SubHeader title="Status" />
+                <Options
+                  onValueChange={(value) =>
+                    onChange({ status: value as PaymentFilters["status"] })
+                  }
+                  value={filters.status}
+                >
+                  {STATUS_OPTIONS.map((option) => (
+                    <FilterOption
+                      key={option}
+                      label={statusLabel(option)}
+                      value={option}
+                    />
+                  ))}
+                </Options>
+              </StepperStep>
+
+              <StepperStep>
+                <SubHeader title="Currency" />
+                {/* Checkboxes, not radios: this is the one multi-select in the
+                    set, so it is the one screen you do not leave per pick. */}
+                <div className="divide-y divide-border-muted pb-4">
+                  {CURRENCIES.map((currency) => (
+                    // biome-ignore lint/a11y/noLabelWithoutControl: control is inside label
+                    <label
+                      className="flex h-12 cursor-pointer items-center gap-3 px-4"
+                      key={currency}
+                    >
+                      <Checkbox
+                        checked={filters.currencies.includes(currency)}
+                        onCheckedChange={() =>
+                          onChange({
+                            currencies: filters.currencies.includes(currency)
+                              ? filters.currencies.filter(
+                                  (item) => item !== currency
+                                )
+                              : [...filters.currencies, currency],
+                          })
+                        }
+                      />
+                      <span className="text-sm">{currency}</span>
+                    </label>
+                  ))}
+                </div>
+              </StepperStep>
+
+              <StepperStep>
+                <SubHeader title="Provider" />
+                <Options
+                  onValueChange={(value) =>
+                    onChange({ provider: value as PaymentFilters["provider"] })
+                  }
+                  value={filters.provider}
+                >
+                  {PROVIDER_OPTIONS.map((option) => (
+                    <FilterOption
+                      key={option}
+                      label={providerLabel(option)}
+                      value={option}
+                    />
+                  ))}
+                </Options>
+              </StepperStep>
+
+              <StepperStep>
+                <SubHeader title="Created" />
+                <Bounds>
+                  <Bound
+                    id="drawer-created-after"
+                    label="After"
+                    onChange={(value) => onChange({ createdAfter: value })}
+                    type="date"
+                    value={filters.createdAfter}
                   />
-                  {currency}
-                </label>
-              ))}
-            </div>
-          </Group>
+                  <Bound
+                    id="drawer-created-before"
+                    label="Before"
+                    onChange={(value) => onChange({ createdBefore: value })}
+                    type="date"
+                    value={filters.createdBefore}
+                  />
+                </Bounds>
+              </StepperStep>
 
-          <Group label="Provider">
-            <Select
-              onValueChange={(value) =>
-                onChange({ provider: value as ProviderFilter })
-              }
-              value={filters.provider}
-            >
-              <SelectTrigger aria-label="Provider" className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="all">All providers</SelectItem>
-                  {PROVIDERS.map((provider) => (
-                    <SelectItem key={provider} value={provider}>
-                      {provider}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </Group>
-
-          <Group label="Created">
-            <div className="grid grid-cols-2 gap-3">
-              <Field htmlFor="created-after" label="After">
-                <Input
-                  id="created-after"
-                  onChange={(event) =>
-                    onChange({ createdAfter: event.target.value })
-                  }
-                  type="date"
-                  value={filters.createdAfter}
-                />
-              </Field>
-              <Field htmlFor="created-before" label="Before">
-                <Input
-                  id="created-before"
-                  onChange={(event) =>
-                    onChange({ createdBefore: event.target.value })
-                  }
-                  type="date"
-                  value={filters.createdBefore}
-                />
-              </Field>
-            </div>
-          </Group>
-
-          <Group label="Amount">
-            <div className="grid grid-cols-2 gap-3">
-              <Field htmlFor="amount-min" label="Min">
-                <Input
-                  id="amount-min"
-                  inputMode="decimal"
-                  onChange={(event) =>
-                    onChange({ amountMin: event.target.value })
-                  }
-                  placeholder="0.00"
-                  value={filters.amountMin}
-                />
-              </Field>
-              <Field htmlFor="amount-max" label="Max">
-                <Input
-                  id="amount-max"
-                  inputMode="decimal"
-                  onChange={(event) =>
-                    onChange({ amountMax: event.target.value })
-                  }
-                  placeholder="Any"
-                  value={filters.amountMax}
-                />
-              </Field>
-            </div>
-          </Group>
-
-          <Group label="Sort">
-            <Select
-              onValueChange={(value) => onSortChange(value as SortOptionId)}
-              value={toSortOptionId(sort)}
-            >
-              <SelectTrigger aria-label="Sort" className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {SORT_OPTIONS.map((option) => (
-                    <SelectItem key={option.id} value={option.id}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </Group>
-        </DrawerBody>
-
-        <DrawerFooter className="flex-row gap-2">
-          <Button className="flex-1" onClick={onClear} variant="outline">
-            Clear all
-          </Button>
-          <Button className="flex-1" onClick={() => setOpen(false)}>
-            Done
-          </Button>
-        </DrawerFooter>
+              <StepperStep>
+                <SubHeader title="Amount" />
+                <Bounds>
+                  <Bound
+                    id="drawer-amount-min"
+                    label="Min"
+                    onChange={(value) => onChange({ amountMin: value })}
+                    placeholder="0.00"
+                    value={filters.amountMin}
+                  />
+                  <Bound
+                    id="drawer-amount-max"
+                    label="Max"
+                    onChange={(value) => onChange({ amountMax: value })}
+                    placeholder="Any"
+                    value={filters.amountMax}
+                  />
+                </Bounds>
+              </StepperStep>
+            </StepperContent>
+          </Stepper>
+        </div>
       </DrawerContent>
     </Drawer>
   );
 }
 
-function Group({ children, label }: { children: ReactNode; label: string }) {
+const MENU_STEPS = [
+  { key: "type", step: 1 },
+  { key: "status", step: 2 },
+  { key: "currencies", step: 3 },
+  { key: "provider", step: 4 },
+  { key: "created", step: 5 },
+  { key: "amount", step: 6 },
+] as const;
+
+/**
+ * The drilldown menu. Every row's value comes from the same `FILTERS`
+ * descriptor the desktop pills read, so a row and its pill cannot disagree
+ * about what is applied.
+ */
+function FilterMenu({ filters }: { filters: PaymentFilters }) {
+  const { goTo } = useStepper();
+
+  const items = MENU_STEPS.map(({ key, step }) => {
+    const def = filterDef(key);
+    return {
+      label: def.label,
+      step,
+      // A row has room the pill does not, so a multi-select says what the
+      // number counts rather than leaving a bare "3".
+      value:
+        key === "currencies" && filters.currencies.length > 1
+          ? `${filters.currencies.length} selected`
+          : (def.value(filters) ?? def.empty),
+    };
+  });
+
   return (
-    <section className="flex flex-col gap-3">
-      <h3 className="font-semibold text-sm">{label}</h3>
-      {children}
-    </section>
+    <div className="divide-y divide-border-muted">
+      {items.map((item) => (
+        <button
+          className="flex h-12 w-full cursor-pointer items-center justify-between gap-3 px-4 text-left active:text-muted-foreground"
+          key={item.step}
+          onClick={() => goTo(item.step)}
+          type="button"
+        >
+          <span className="font-medium text-sm">{item.label}</span>
+          <span className="ml-auto inline-flex min-w-0 items-center gap-2 text-muted-foreground text-sm">
+            <span className="truncate">{item.value}</span>
+            <ChevronRightIcon className="size-4 shrink-0" />
+          </span>
+        </button>
+      ))}
+    </div>
   );
 }
 
-function Field({
+function Options({
   children,
-  htmlFor,
-  label,
+  onValueChange,
+  value,
 }: {
   children: ReactNode;
-  htmlFor: string;
+  onValueChange: (value: string) => void;
+  value: string;
+}) {
+  return (
+    <div className="pb-4">
+      <RadioGroup
+        className="gap-0 divide-y divide-border-muted"
+        onValueChange={(next) => {
+          if (next) {
+            onValueChange(next as string);
+          }
+        }}
+        value={value}
+      >
+        {children}
+      </RadioGroup>
+    </div>
+  );
+}
+
+function FilterOption({ label, value }: { label: string; value: string }) {
+  return (
+    // biome-ignore lint/a11y/noLabelWithoutControl: control is inside label
+    <label className="flex h-12 cursor-pointer items-center gap-3 px-4">
+      <RadioGroupItem value={value} />
+      <span className="text-sm">{label}</span>
+    </label>
+  );
+}
+
+function Bounds({ children }: { children: ReactNode }) {
+  return <div className="grid grid-cols-2 gap-3 px-4 pb-4">{children}</div>;
+}
+
+function Bound({
+  id,
+  label,
+  onChange,
+  placeholder,
+  type = "text",
+  value,
+}: {
+  id: string;
   label: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  type?: string;
+  value: string;
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <Label className="text-muted-foreground" htmlFor={htmlFor}>
+      <Label className="text-muted-foreground" htmlFor={id}>
         {label}
       </Label>
-      {children}
+      <Input
+        id={id}
+        inputMode={type === "text" ? "decimal" : undefined}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        type={type}
+        value={value}
+      />
     </div>
+  );
+}
+
+function SubHeader({ title }: { title: string }) {
+  const { goTo } = useStepper();
+  return (
+    <DrawerHeader>
+      <div className="flex items-center gap-2">
+        <Button
+          aria-label="Back"
+          className="-ml-1"
+          onClick={() => goTo(0)}
+          size="icon-xs"
+          variant="ghost"
+        >
+          <ArrowLeftIcon className="size-4" />
+        </Button>
+        <DrawerTitle>{title}</DrawerTitle>
+      </div>
+    </DrawerHeader>
   );
 }
