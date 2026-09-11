@@ -102,7 +102,7 @@ export function AdminPaymentsTable({
                           eyeballs against another system, and the full value is
                           one click away on the clipboard or the record. */}
                       <button
-                        className="cursor-pointer rounded-sm font-mono text-xs hover:underline focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
+                        className="cursor-pointer rounded-sm font-mono text-muted-foreground text-xs hover:underline focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
                         onClick={() => onOpenPayment(row.id)}
                         type="button"
                       >
@@ -126,9 +126,7 @@ export function AdminPaymentsTable({
                       </Button>
                     </div>
                   </TableCell>
-                  <TableCell numeric>
-                    <span className="font-mono text-xs">{row.amount}</span>
-                  </TableCell>
+                  <TableCell numeric>{row.amount}</TableCell>
                   <TableCell>
                     <Badge variant="outline">{row.currency}</Badge>
                   </TableCell>
@@ -142,10 +140,10 @@ export function AdminPaymentsTable({
                       {paymentStatusLabels[row.status]}
                     </Badge>
                   </TableCell>
-                  <TableCell className="whitespace-nowrap text-muted-foreground text-xs">
+                  <TableCell className="text-muted-foreground">
                     {row.createdAt}
                   </TableCell>
-                  <TableCell className="whitespace-nowrap text-muted-foreground text-xs">
+                  <TableCell className="text-muted-foreground">
                     {row.finishedAt ?? "-"}
                   </TableCell>
                 </TableRow>

@@ -212,7 +212,7 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <Label className="text-muted-foreground text-xs" htmlFor={htmlFor}>
+      <Label className="text-muted-foreground" htmlFor={htmlFor}>
         {label}
       </Label>
       {children}
