@@ -1816,12 +1816,15 @@
         "button",
         "card",
         "checkbox",
+        "drawer",
         "dropdown-menu",
         "input-group",
+        "radio-group",
         "selection-bar",
         "separator",
         "sidebar",
         "stat",
+        "stepper",
         "table",
         "table-pagination"
       ],
@@ -1830,6 +1833,14 @@
           "path": "registry/default/blocks/admin-01/page.tsx",
           "type": "registry:page",
           "target": "app/admin/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-filters-drawer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-filters.ts",
+          "type": "registry:component"
         },
         {
           "path": "registry/default/blocks/admin-01/components/admin-overview.tsx",

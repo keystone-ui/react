@@ -1,18 +1,18 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import {
+  fromSortOptionId,
+  type RoleFilter,
+  type SortOptionId,
+  type SortState,
+  type StatusFilter,
+  type UserSortKey,
+} from "@/components/admin-filters";
 import { AdminOverview } from "@/components/admin-overview";
 import { type AdminSection, AdminSidebar } from "@/components/admin-sidebar";
 import { AdminTopbar } from "@/components/admin-topbar";
-import {
-  AdminUsersTable,
-  type SortDirection,
-  type UserSortKey,
-} from "@/components/admin-users-table";
-import type {
-  RoleFilter,
-  StatusFilter,
-} from "@/components/admin-users-toolbar";
+import { AdminUsersTable } from "@/components/admin-users-table";
 import { adminMetrics, signupsByMonth, users } from "@/components/mock-admin";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { useReducedMotion } from "@/components/use-reduced-motion";
@@ -27,10 +27,10 @@ export function AdminPage() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [hidden, setHidden] = useState<ReadonlySet<string>>(new Set());
   const [selected, setSelected] = useState<ReadonlySet<string>>(new Set());
-  const [sort, setSort] = useState<{
-    direction: SortDirection;
-    key: UserSortKey;
-  } | null>({ direction: "asc", key: "name" });
+  const [sort, setSort] = useState<SortState | null>({
+    direction: "asc",
+    key: "name",
+  });
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(5);
 
@@ -121,6 +121,13 @@ export function AdminPage() {
       setPageIndex(0);
     };
 
+  // The toolbar and the drawer set the sort directly; the headers cycle it.
+  // Both land on the one `sort` state, so the two stay in step with no syncing.
+  const setSortFromOption = (id: SortOptionId) => {
+    setPageIndex(0);
+    setSort(fromSortOptionId(id));
+  };
+
   const cycleSort = (key: UserSortKey) => {
     setPageIndex(0);
     setSort((current) => {
@@ -158,6 +165,7 @@ export function AdminPage() {
               onRoleFilterChange={filterAndReset(setRoleFilter)}
               onSearchChange={filterAndReset(setSearch)}
               onSort={cycleSort}
+              onSortChange={setSortFromOption}
               onStatusFilterChange={filterAndReset(setStatusFilter)}
               onToggleAll={toggleAllOnPage}
               onToggleRow={toggleRow}

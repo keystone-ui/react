@@ -1,10 +1,13 @@
 "use client";
 
-import {
-  AdminUsersToolbar,
-  type RoleFilter,
-  type StatusFilter,
-} from "@/components/admin-users-toolbar";
+import type {
+  RoleFilter,
+  SortOptionId,
+  SortState,
+  StatusFilter,
+  UserSortKey,
+} from "@/components/admin-filters";
+import { AdminUsersToolbar } from "@/components/admin-users-toolbar";
 import { type Status, statusLabels, type User } from "@/components/mock-admin";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,8 +32,13 @@ import {
 } from "@/components/ui/table";
 import { TablePagination } from "@/components/ui/table-pagination";
 
-export type UserSortKey = "lastActive" | "name" | "role" | "seats";
-export type SortDirection = "asc" | "desc";
+// Re-exported for the page, which composes this table. The types themselves
+// live in `admin-filters.ts` so the dependency runs one way.
+export type {
+  SortDirection,
+  SortState,
+  UserSortKey,
+} from "@/components/admin-filters";
 
 const columns = [
   { key: "name", label: "User", numeric: false },
@@ -52,6 +60,7 @@ interface AdminUsersTableProps {
   onRoleFilterChange: (role: RoleFilter) => void;
   onSearchChange: (value: string) => void;
   onSort: (key: UserSortKey) => void;
+  onSortChange: (id: SortOptionId) => void;
   onStatusFilterChange: (status: StatusFilter) => void;
   onToggleAll: (checked: boolean) => void;
   onToggleRow: (id: string) => void;
@@ -62,7 +71,7 @@ interface AdminUsersTableProps {
   rows: readonly User[];
   search: string;
   selected: ReadonlySet<string>;
-  sort: { direction: SortDirection; key: UserSortKey } | null;
+  sort: SortState | null;
   statusFilter: StatusFilter;
   totalCount: number;
 }
@@ -74,6 +83,7 @@ export function AdminUsersTable({
   onRoleFilterChange,
   onSearchChange,
   onSort,
+  onSortChange,
   onStatusFilterChange,
   onToggleAll,
   onToggleRow,
@@ -109,9 +119,11 @@ export function AdminUsersTable({
           <AdminUsersToolbar
             onRoleFilterChange={onRoleFilterChange}
             onSearchChange={onSearchChange}
+            onSortChange={onSortChange}
             onStatusFilterChange={onStatusFilterChange}
             roleFilter={roleFilter}
             search={search}
+            sort={sort}
             statusFilter={statusFilter}
           />
 

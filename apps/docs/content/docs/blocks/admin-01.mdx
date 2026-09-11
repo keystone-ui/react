@@ -1,6 +1,6 @@
 ---
 title: Admin 01
-description: An admin panel — collapsible sidebar shell, topbar with breadcrumb, an overview with KPI tiles and a signups chart, and a filterable, sortable users table with bulk actions.
+description: An admin panel — collapsible sidebar shell, topbar with breadcrumb, an overview with KPI tiles and a signups chart, and a users table with a responsive filter toolbar, sorting and bulk actions.
 ---
 
 ```bash
@@ -14,7 +14,8 @@ npx shadcn@latest add https://keystoneui.io/r/admin-01.json
 - **Collapsible sidebar shell** with an icon rail, grouped navigation, a badge, and a footer account row.
 - **Topbar** with a sidebar trigger and a [breadcrumb](/docs/components/breadcrumb).
 - **Overview** with a KPI row and a stacked signups chart sharing the same toggleable legend as [`dashboard-01`](/docs/blocks/dashboard-01).
-- **Users table** — a filter toolbar (search, role, status), sortable columns, row selection, pagination, and a [`SelectionBar`](/docs/components/selection-bar) for bulk actions.
+- **Users table** — a responsive filter toolbar (search, role, status, sort), sortable columns, row selection, pagination, and a [`SelectionBar`](/docs/components/selection-bar) for bulk actions.
+- **Mobile filters** — below `sm` the cluster collapses into a single Filters button opening a bottom-sheet [`Drawer`](/docs/components/drawer), with a [`Stepper`](/docs/components/stepper) drilling into one screen per filter.
 
 ## Requirements
 
@@ -46,12 +47,17 @@ So they are duplicated and the duplication is enforced: `apps/docs/tests/block-s
 
 ## Notes
 
-**The filter toolbar is a deliberately smaller version of [`tickets-01`](/docs/blocks/tickets-01)'s.** Two things that block has are left out rather than copied:
+**The toolbar forks at `sm:`, following [`tickets-01`](/docs/blocks/tickets-01).** Search is shared and always visible; the filter cluster is `hidden sm:flex`, and below that a single Filters button opens a bottom-sheet drawer. The fork is CSS-only — both trees are always mounted, so there is no `useMediaQuery` to get wrong on the server, and no flash of the wrong layout during hydration.
 
-- **No mobile filters drawer.** `tickets-01` forks at `sm:` into a single drawer trigger, which is the right answer for its nine controls. With three, `flex-wrap` degrades fine, and duplicating the drawer would add ~100 lines to demonstrate a pattern the other block already shows.
-- **No column-visibility menu.** Six columns do not earn one.
+The drawer's body is a [`Stepper`](/docs/components/stepper): a menu of "label + current value" rows that drill into one `RadioGroup` screen per filter, with a back arrow and an Apply footer. Filters apply **live** — `Apply` only dismisses, there is no draft state to reconcile.
 
-The **Clear** button only renders when something is actually filtered, and carries the count. A permanently visible "Clear" on an unfiltered table is a control that does nothing, and it hides the one signal that a filter is on.
+One thing `tickets-01` has is deliberately left out: **no column-visibility menu.** Six columns do not earn one, and that block already demonstrates the pattern.
+
+The **Clear** button only renders when something is actually filtered, and carries the count. A permanently visible "Clear" on an unfiltered table is a control that does nothing, and it hides the one signal that a filter is on. Since that button is desktop-only, the mobile trigger carries the count as a badge and the drawer footer gains a **Clear all** — otherwise a filtered table on a phone gives no sign that anything is filtering it.
+
+**Sorting is one piece of state, not two.** The toolbar's Sort menu and the column headers write the same `sort` value, so picking "Name Z–A" moves the header arrow and clicking a header updates the menu's label, with no syncing code. `SORT_OPTIONS` therefore lists every key × direction pair the headers can reach — a state the headers could produce but the toolbar could not name would leave the radio group with nothing selected. (`tickets-01` runs two independent sort systems; its column sort cannot be seen or cleared from its toolbar.)
+
+Every control in the row sits on the **40px** `default` tier, with no `size` props. Mixing tiers between neighbours is the single most common visual bug in this library's history, and `apps/docs/e2e/control-heights.spec.ts` now fails on it.
 
 The filter menus are [`DropdownMenuRadioGroup`](/docs/components/dropdown-menu#radio-group), not checkbox items — each filter is single-select, so picking a value closes the menu. That is keystone's default for radio items and the reason a second filter is clickable straight after the first; a menu left open holds an inert overlay across the page that swallows the next click.
 
@@ -69,11 +75,14 @@ The Status column passes **no** `sortDirection` at all, where the sortable colum
 - [Button](/docs/components/button)
 - [Card](/docs/components/card)
 - [Checkbox](/docs/components/checkbox)
+- [Drawer](/docs/components/drawer)
 - [Dropdown Menu](/docs/components/dropdown-menu)
 - [Input Group](/docs/components/input-group)
+- [Radio Group](/docs/components/radio-group)
 - [Selection Bar](/docs/components/selection-bar)
 - [Separator](/docs/components/separator)
 - [Stat](/docs/components/stat)
+- [Stepper](/docs/components/stepper)
 - [Table](/docs/components/table)
 - [Table Pagination](/docs/components/table-pagination)
 
