@@ -1521,6 +1521,22 @@
       ]
     },
     {
+      "name": "copy-button",
+      "type": "registry:ui",
+      "title": "Copy Button",
+      "description": "An icon button that copies a value to the clipboard and confirms it.",
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/copy-button.tsx",
+          "target": "components/ui/copy-button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "signin-01",
       "type": "registry:block",
       "title": "Sign in 01",
@@ -4163,6 +4179,51 @@
       ]
     },
     {
+      "name": "copy-button-default",
+      "type": "registry:example",
+      "title": "Copy Button Default",
+      "description": "Copy Button example: Default.",
+      "registryDependencies": [
+        "copy-button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/copy-button/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "copy-button-sizes",
+      "type": "registry:example",
+      "title": "Copy Button Sizes",
+      "description": "Copy Button example: Sizes.",
+      "registryDependencies": [
+        "copy-button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/copy-button/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "copy-button-variants",
+      "type": "registry:example",
+      "title": "Copy Button Variants",
+      "description": "Copy Button example: Variants.",
+      "registryDependencies": [
+        "copy-button"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/copy-button/variants.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
       "name": "date-input-controlled",
       "type": "registry:example",
       "title": "Date Input Controlled",
@@ -4390,6 +4451,23 @@
       "files": [
         {
           "path": "apps/docs/demos/description-list/order-summary.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "description-list-record",
+      "type": "registry:example",
+      "title": "Description List Record",
+      "description": "Description List example: Record.",
+      "registryDependencies": [
+        "badge",
+        "copy-button",
+        "description-list"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/description-list/record.tsx",
           "type": "registry:example"
         }
       ]

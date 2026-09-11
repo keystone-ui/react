@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "copy-button",
+  "title": "Copy Button",
+  "description": "An icon button that copies a value to the clipboard and confirms it.",
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "path": "packages/ui/src/copy-button.tsx",
+      "content": "\"use client\";\n\nimport { Check as CheckIcon, Copy as CopyIcon } from \"lucide-react\";\nimport type * as React from \"react\";\nimport { useEffect, useRef, useState } from \"react\";\n\nimport { Button } from \"./button\";\nimport { cn } from \"@/lib/utils\";\n\nconst RESET_DELAY_MS = 2000;\n\nexport interface CopyButtonProps\n  extends Omit<React.ComponentProps<typeof Button>, \"children\" | \"value\"> {\n  /** Called after the value reaches the clipboard. */\n  onCopied?: (value: string) => void;\n  /** How long the confirmed state lasts, in milliseconds. @default 2000 */\n  resetDelay?: number;\n  /** The text placed on the clipboard. */\n  value: string;\n}\n\n/**\n * Copies a value to the clipboard and confirms it.\n *\n * The affordance itself is trivial; the reason it is a component is that the\n * hand-rolled version is not. Every copy of it in this repo shared the same\n * three defects — the reset timer was never cleared, so a click followed by an\n * unmount set state on a dead component; `writeText` was not awaited, so a\n * rejection surfaced as an unhandled promise; and the failure path showed a\n * tick anyway, telling the user something was copied when nothing was.\n * Clipboard access throws whenever the document is not focused or the context\n * is insecure, which is not an edge case on a docs site.\n *\n * Pairs with a value rather than wrapping it, so it composes beside monospace\n * IDs, inside an `InputGroup`, or in a table cell without assuming a layout.\n */\nfunction CopyButton({\n  className,\n  onCopied,\n  resetDelay = RESET_DELAY_MS,\n  size = \"icon-sm\",\n  value,\n  variant = \"ghost\",\n  ...props\n}: CopyButtonProps) {\n  const [copied, setCopied] = useState(false);\n  const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  useEffect(\n    () => () => {\n      if (timeout.current) {\n        clearTimeout(timeout.current);\n      }\n    },\n    []\n  );\n\n  const handleCopy = async () => {\n    try {\n      await navigator.clipboard.writeText(value);\n    } catch {\n      // Leave the icon alone. A tick after a failed write is worse than no\n      // feedback — it tells the user the value is on their clipboard when it\n      // is not, and they find out when they paste.\n      return;\n    }\n\n    onCopied?.(value);\n    setCopied(true);\n\n    if (timeout.current) {\n      clearTimeout(timeout.current);\n    }\n    timeout.current = setTimeout(() => setCopied(false), resetDelay);\n  };\n\n  return (\n    <Button\n      aria-label={copied ? \"Copied\" : \"Copy\"}\n      className={cn(\"text-muted-foreground\", className)}\n      data-copied={copied || undefined}\n      data-slot=\"copy-button\"\n      onClick={handleCopy}\n      size={size}\n      type=\"button\"\n      variant={variant}\n      {...props}\n    >\n      {copied ? <CheckIcon /> : <CopyIcon />}\n    </Button>\n  );\n}\n\nCopyButton.displayName = \"CopyButton\";\n\nexport { CopyButton };\n",
+      "type": "registry:ui",
+      "target": "components/ui/copy-button.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

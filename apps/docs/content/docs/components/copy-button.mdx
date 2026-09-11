@@ -1,0 +1,79 @@
+---
+title: Copy Button
+description: An icon button that copies a value to the clipboard and confirms it.
+---
+
+## Import
+
+```tsx
+import { CopyButton } from "@keystoneui/react/copy-button";
+```
+
+## Usage
+
+Pass the value to copy. The button pairs with a value rather than wrapping it, so it composes beside a monospace ID, inside an [Input Group](/docs/components/input-group), or in a table cell without assuming a layout.
+
+<ComponentPreview name="copy-button-default" />
+
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/copy-button.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react lucide-react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="copy-button-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Examples
+
+### Sizes
+
+Sizes pass through to [Button](/docs/components/button), so a copy button lines up with whatever it sits beside.
+
+<ComponentPreview name="copy-button-sizes" />
+
+### Variants
+
+<ComponentPreview name="copy-button-variants" />
+
+## Accessibility
+
+The confirmation is carried by the accessible name, which moves from `Copy` to `Copied` — an icon swap alone announces nothing.
+
+Writing to the clipboard **fails** whenever the document is not focused or the page is served over an insecure origin. When it does, the button stays in its idle state rather than showing a tick, because a false confirmation is worse than none: the user finds out when they paste.
+
+## API Reference
+
+### CopyButton
+
+Accepts every [Button](/docs/components/button) prop except `children`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | - | The text placed on the clipboard |
+| `onCopied` | `(value: string) => void` | - | Called after the value reaches the clipboard, not before |
+| `resetDelay` | `number` | `2000` | How long the confirmed state lasts, in milliseconds |
+| `size` | Button sizes | `"icon-sm"` | Passed through to Button |
+| `variant` | Button variants | `"ghost"` | Passed through to Button |
+| `className` | `string` | - | Additional CSS classes |

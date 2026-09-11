@@ -114,6 +114,7 @@
       "with-clear-button"
     ],
     "command": ["basic", "with-groups"],
+    "copy-button": ["confirms-through-its-accessible-name"],
     "date input": ["default", "disabled", "with-default-value", "with-label"],
     "date picker": [
       "basic",

@@ -84,7 +84,8 @@
     "./base.css": "./src/base.css",
     "./selection-bar": "./src/selection-bar.tsx",
     "./stat": "./src/stat.tsx",
-    "./table-pagination": "./src/table-pagination.tsx"
+    "./table-pagination": "./src/table-pagination.tsx",
+    "./copy-button": "./src/copy-button.tsx"
   },
   "scripts": {
     "build": "tsup",
@@ -355,6 +356,10 @@
       "./table-pagination": {
         "types": "./dist/table-pagination.d.ts",
         "default": "./dist/table-pagination.js"
+      },
+      "./copy-button": {
+        "types": "./dist/copy-button.d.ts",
+        "default": "./dist/copy-button.js"
       }
     }
   },

@@ -365,4 +365,10 @@ export const ui: Registry = [
     registryDependencies: ["button", "label", "select"],
     files: [{ path: "ui/table-pagination.tsx", type: "registry:ui" }],
   },
+  {
+    name: "copy-button",
+    type: "registry:ui",
+    dependencies: [],
+    files: [{ path: "ui/copy-button.tsx", type: "registry:ui" }],
+  },
 ];

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "copy-button-variants",
+  "title": "Copy Button Variants",
+  "description": "Copy Button example: Variants.",
+  "registryDependencies": [
+    "copy-button"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/copy-button/variants.tsx",
+      "content": "\"use client\";\n\nimport { CopyButton } from \"@keystoneui/react/copy-button\";\n\nexport default function CopyButtonVariants() {\n  return (\n    <div className=\"flex items-center gap-4\">\n      <CopyButton value=\"ghost\" variant=\"ghost\" />\n      <CopyButton value=\"outline\" variant=\"outline\" />\n      <CopyButton value=\"secondary\" variant=\"secondary\" />\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

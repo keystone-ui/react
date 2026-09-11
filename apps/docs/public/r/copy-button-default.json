@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "copy-button-default",
+  "title": "Copy Button Default",
+  "description": "Copy Button example: Default.",
+  "registryDependencies": [
+    "copy-button"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/copy-button/default.tsx",
+      "content": "\"use client\";\n\nimport { CopyButton } from \"@keystoneui/react/copy-button\";\n\nexport default function CopyButtonDefault() {\n  return (\n    <div className=\"flex items-center gap-2\">\n      <span className=\"font-mono text-sm\">u_01</span>\n      <CopyButton value=\"u_01\" />\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

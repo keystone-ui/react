@@ -169,6 +169,9 @@ import CommandGroups from "./command/groups";
 import CommandKeyboardTrigger from "./command/keyboard-trigger";
 import CommandScrollable from "./command/scrollable";
 import CommandWithShortcuts from "./command/with-shortcuts";
+import CopyButtonDefault from "./copy-button/default";
+import CopyButtonSizes from "./copy-button/sizes";
+import CopyButtonVariants from "./copy-button/variants";
 // date-input
 import DateInputControlled from "./date-input/controlled";
 import DateInputDateOfBirth from "./date-input/date-of-birth";
@@ -185,6 +188,7 @@ import DescriptionListCustomValues from "./description-list/custom-values";
 import DescriptionListDefault from "./description-list/default";
 import DescriptionListInCard from "./description-list/in-card";
 import DescriptionListOrderSummary from "./description-list/order-summary";
+import DescriptionListRecord from "./description-list/record";
 // drawer
 import DrawerComplexFilter from "./drawer/complex-filter";
 import DrawerDefault from "./drawer/default";
@@ -2391,6 +2395,22 @@ export const demos: Record<string, DemoItem> = {
   "table-pagination-default": {
     component: TablePaginationDefault,
     file: "table-pagination/default.tsx",
+  },
+  "copy-button-default": {
+    component: CopyButtonDefault,
+    file: "copy-button/default.tsx",
+  },
+  "copy-button-sizes": {
+    component: CopyButtonSizes,
+    file: "copy-button/sizes.tsx",
+  },
+  "copy-button-variants": {
+    component: CopyButtonVariants,
+    file: "copy-button/variants.tsx",
+  },
+  "description-list-record": {
+    component: DescriptionListRecord,
+    file: "description-list/record.tsx",
   },
 };
 

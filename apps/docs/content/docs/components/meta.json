@@ -67,6 +67,7 @@
     "kbd",
     "item",
     "typography",
-    "selection-bar"
+    "selection-bar",
+    "copy-button"
   ]
 }

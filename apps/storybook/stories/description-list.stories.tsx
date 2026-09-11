@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@keystoneui/react/card";
+import { CopyButton } from "@keystoneui/react/copy-button";
 import {
   DescriptionList,
   DescriptionListDetails,
@@ -323,5 +324,50 @@ export const OrderSummary: Story = {
         </DescriptionList>
       </CardContent>
     </Card>
+  ),
+};
+
+/**
+ * The record layout: `orientation="stacked"` puts the term above the details,
+ * and `columns={2}` flows the pairs into two columns that collapse below `sm`.
+ * This is the shape a read-only detail page wants — the default row layout
+ * right-aligns values against their labels, which reads as a summary, not a
+ * record.
+ */
+export const Record: Story = {
+  render: () => (
+    <div className="w-full max-w-2xl">
+      <DescriptionList columns={2} orientation="stacked">
+        <DescriptionListItem>
+          <DescriptionListTerm>Payment ID</DescriptionListTerm>
+          <DescriptionListDetails className="flex items-center gap-1 font-mono">
+            4b87f2e4-7cf0
+            <CopyButton value="4b87f2e4-7cf0" />
+          </DescriptionListDetails>
+        </DescriptionListItem>
+
+        <DescriptionListItem>
+          <DescriptionListTerm>User ID</DescriptionListTerm>
+          <DescriptionListDetails className="flex items-center gap-1 font-mono">
+            01a048da-02dd
+            <CopyButton value="01a048da-02dd" />
+          </DescriptionListDetails>
+        </DescriptionListItem>
+
+        <DescriptionListItem>
+          <DescriptionListTerm>Status</DescriptionListTerm>
+          <DescriptionListDetails>
+            <Badge variant="secondary">Completed</Badge>
+          </DescriptionListDetails>
+        </DescriptionListItem>
+
+        <DescriptionListItem>
+          <DescriptionListTerm>Updated at</DescriptionListTerm>
+          <DescriptionListDetails className="text-muted-foreground">
+            -
+          </DescriptionListDetails>
+        </DescriptionListItem>
+      </DescriptionList>
+    </div>
   ),
 };
