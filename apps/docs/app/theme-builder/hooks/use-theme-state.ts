@@ -24,7 +24,9 @@ export function useThemeState() {
       primaryC: parseAsFloat.withDefault(0.006),
       primaryH: parseAsFloat.withDefault(285.885),
       radius: parseAsStringLiteral(radiusIds).withDefault("default"),
-      font: parseAsString.withDefault("inter"),
+      // Matches the site the builder lives in, so an untouched builder shows
+      // what keystone actually looks like.
+      font: parseAsString.withDefault("geist"),
       mode: parseAsStringLiteral(["light", "dark"] as const).withDefault(
         "dark"
       ),

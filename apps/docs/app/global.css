@@ -7,6 +7,18 @@
 @source "../demos/**/*.{ts,tsx}";
 @source "../components/**/*.{ts,tsx}";
 
+/* Point Tailwind's font scale at the loaded faces.
+ *
+ * This mapping is the whole mechanism: `next/font` defines
+ * `--font-geist-sans` on <html>, but nothing reads it unless `--font-sans`
+ * does. Without these two lines the app downloads a webfont and renders in the
+ * system stack -- which is exactly what happened here with Inter, silently,
+ * because nothing fails when a font is merely unused. */
+@theme {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
 /* The `dark` variant is scoped to screens, deliberately.
  *
  * Printing a dark page renders every filled surface as a solid black

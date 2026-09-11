@@ -1,10 +1,27 @@
 @import "tailwindcss";
 
+/* Self-hosted rather than a Google Fonts CDN import.
+ *
+ * Chromatic snapshots every story, and a webfont fetched at render time can
+ * arrive after the screenshot -- which produces a baseline drawn in the
+ * fallback and a diff on the next run that has nothing to do with the change.
+ * Bundling the faces removes the network from the picture. The docs app gets
+ * the same guarantee from `next/font`, which self-hosts at build time. */
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
 /* Tell Tailwind where to scan for class usage */
 @source "../../../packages/ui/src/**/*.{ts,tsx}";
 @source "../stories/**/*.{ts,tsx}";
 
 @import "@keystoneui/react/base.css";
+
+/* Point Tailwind's font scale at the faces above. Without this the app loads a
+   webfont and still renders in the system stack. */
+@theme {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, monospace;
+}
 
 /* The `dark` variant is scoped to screens, deliberately.
  *
