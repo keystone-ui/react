@@ -55,33 +55,6 @@ ToggleGroup
 Use the **ButtonGroup** component when you want to group buttons that perform an action.
 Use the **ToggleGroup** component when you want to group buttons that toggle a state.
 
-## Heights in a toolbar
-
-`ToggleGroup` shares [`Button`](/docs/components/button)'s height ladder, so a toolbar mixing them lines up with no size props at all:
-
-| | `xs` | `sm` | `default` | `lg` |
-| --- | --- | --- | --- | --- |
-| `Button` | 24px | 32px | **40px** | 48px |
-| `Toggle` / `ToggleGroup` | — | 32px | **40px** | 48px |
-
-```tsx
-{/* both 40px, nothing to remember */}
-<ToggleGroup>…</ToggleGroup>
-<Button>Export</Button>
-```
-
-The rule that matters is the general one: **pick one tier for the whole row.** Mixing tiers between neighbours — a `size="sm"` button beside a default-height input — is a gap of 8px, and it is easy to miss on a dark background and obvious once seen.
-
-`ToggleGroup` contributes no height of its own; the group is exactly as tall as its items. So setting `size` on the group, or on each item, gives the same result, and there is no wrapper padding to account for.
-
-<Callout type="info">
-  Toggle used to default to 36px, which is the popup item height. That was
-  inherited from shadcn when the component was reworked and never revisited —
-  no toggle in this library is ever rendered inside a menu. 36px remains the
-  popup tier, reachable through `DropdownMenuContent`'s own `size` prop, and is
-  deliberately not a control tier.
-</Callout>
-
 ## Examples
 
 ### Outline
@@ -106,6 +79,9 @@ Allow only one item to be selected at a time:
 
 
 ### Sizes
+
+The group has no height of its own — it is exactly as tall as its items, so
+`size` can go on the group or on each item.
 
 <ComponentPreview name="toggle-group-sizes" />
 
@@ -168,7 +144,7 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `variant` | `"default" \| "outline" \| "secondary"` | `"default"` | Visual style variant |
-| `size` | `"default" \| "sm" \| "lg"` | `"default"` | Size of the toggle items |
+| `size` | `"default" \| "sm" \| "lg"` | `"default"` | Item height — 32 / 40 / 48px, the same scale as [Button](/docs/components/button) |
 | `spacing` | `number` | `0` | Gap between items (0 = joined with connected borders) |
 | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
 | `multiple` | `boolean` | `false` | Allow multiple items to be selected |

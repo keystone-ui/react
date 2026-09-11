@@ -55,9 +55,9 @@ One thing `tickets-01` has is deliberately left out: **no column-visibility menu
 
 The **Clear** button only renders when something is actually filtered, and carries the count. A permanently visible "Clear" on an unfiltered table is a control that does nothing, and it hides the one signal that a filter is on. Since that button is desktop-only, the mobile trigger carries the count as a badge and the drawer footer gains a **Clear all** — otherwise a filtered table on a phone gives no sign that anything is filtering it.
 
-**Sorting is one piece of state, not two.** The toolbar's Sort menu and the column headers write the same `sort` value, so picking "Name Z–A" moves the header arrow and clicking a header updates the menu's label, with no syncing code. `SORT_OPTIONS` therefore lists every key × direction pair the headers can reach — a state the headers could produce but the toolbar could not name would leave the radio group with nothing selected. (`tickets-01` runs two independent sort systems; its column sort cannot be seen or cleared from its toolbar.)
+**Sorting is one piece of state, not two.** The toolbar's Sort menu and the column headers write the same `sort` value, so picking "Name Z–A" moves the header arrow and clicking a header updates the menu's label, with no syncing code. `SORT_OPTIONS` therefore lists every key × direction pair the headers can reach — a state the headers could produce but the toolbar could not name would leave the radio group with nothing selected.
 
-Every control in the row sits on the **40px** `default` tier, with no `size` props. Mixing tiers between neighbours is the single most common visual bug in this library's history, and `apps/docs/e2e/control-heights.spec.ts` now fails on it.
+Every control in the row sits on the **40px** `default` tier, with no `size` props. Anything added to the row should stay on that tier — mixing sizes between neighbours is the usual cause of a toolbar that looks subtly off.
 
 The filter menus are [`DropdownMenuRadioGroup`](/docs/components/dropdown-menu#radio-group), not checkbox items — each filter is single-select, so picking a value closes the menu. That is keystone's default for radio items and the reason a second filter is clickable straight after the first; a menu left open holds an inert overlay across the page that swallows the next click.
 
