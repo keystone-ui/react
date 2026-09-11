@@ -49,6 +49,12 @@ interface PillProps {
  * removing a pill you cannot add back would be a trap. Setting a pill to `All`
  * deliberately does *not* remove it: taking the control out from under the
  * cursor mid-interaction is worse than leaving a pill that reads `All`.
+ *
+ * The footer says what is selected on the left and offers the one useful
+ * action on the right: `Clear` while the filter holds a value, `Remove filter`
+ * once it is empty. A pill that is doing something should be emptied before it
+ * is thrown away, and a filter you can still see the effect of is not one you
+ * meant to delete.
  */
 export function PaymentFilterPill({
   filters,
@@ -92,7 +98,12 @@ export function PaymentFilterPill({
             />
           )}
         </DropdownMenuGroup>
-        <RemoveItem onRemove={onRemove} pillKey={pillKey} />
+        <MenuFooter
+          filters={filters}
+          onChange={onChange}
+          onRemove={onRemove}
+          pillKey={pillKey}
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -287,25 +298,54 @@ function Bound({
   );
 }
 
-function RemoveItem({
+/**
+ * The menu's footer: what is selected on the left, the way out on the right.
+ *
+ * A multi-select needs to say how many it holds, because the pill only has
+ * room for the first one and a count of the rest — "BTC, +2" tells you the
+ * shape but the footer is where the number is spelled out. `Clear` empties
+ * the filter without taking the pill off the row; `Remove filter` takes the
+ * pill away, and only appears for the pills that can be added back.
+ */
+function MenuFooter({
+  filters,
+  onChange,
   onRemove,
   pillKey,
 }: {
+  filters: PaymentFilters;
+  onChange: (patch: Partial<PaymentFilters>) => void;
   onRemove: (key: FilterKey) => void;
   pillKey: FilterKey;
 }) {
-  if (DEFAULT_KEYS.includes(pillKey)) {
+  const def = filterDef(pillKey);
+  const hasValue = def.value(filters) !== null;
+  const removable = !DEFAULT_KEYS.includes(pillKey);
+  const selectedCount =
+    pillKey === "currencies" ? filters.currencies.length : 0;
+
+  if (!(hasValue || removable)) {
     return null;
   }
+
   return (
     <>
       <DropdownMenuSeparator />
-      <DropdownMenuGroup>
-        <DropdownMenuItem onClick={() => onRemove(pillKey)}>
-          <Trash2Icon />
-          Remove filter
-        </DropdownMenuItem>
-      </DropdownMenuGroup>
+      <div className="flex h-9 items-center justify-between gap-3 px-2">
+        <span className="text-muted-foreground text-sm">
+          {selectedCount > 0 ? `${selectedCount} selected` : ""}
+        </span>
+        {hasValue ? (
+          <Button onClick={() => onChange(def.clear)} size="sm" variant="ghost">
+            Clear
+          </Button>
+        ) : (
+          <Button onClick={() => onRemove(pillKey)} size="sm" variant="ghost">
+            <Trash2Icon />
+            Remove filter
+          </Button>
+        )}
+      </div>
     </>
   );
 }

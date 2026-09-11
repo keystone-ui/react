@@ -243,15 +243,16 @@ export const FILTERS: readonly FilterDef[] = [
     empty: "All",
     key: "currencies",
     label: "Currency",
-    // One selection reads as itself; several read as a count, because four
-    // tickers side by side stop being scannable and start being a sentence.
+    // The first selection plus a count of the rest: "BTC, +2". A bare "3"
+    // says how many without saying which, and four tickers side by side stop
+    // being scannable and start being a sentence.
     value: (f) => {
       if (f.currencies.length === 0) {
         return null;
       }
       return f.currencies.length === 1
         ? f.currencies[0]
-        : String(f.currencies.length);
+        : `${f.currencies[0]}, +${f.currencies.length - 1}`;
     },
   },
   {
