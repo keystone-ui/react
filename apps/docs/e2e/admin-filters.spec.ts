@@ -11,10 +11,10 @@ import { expect, type Locator, type Page, test } from "@playwright/test";
 
 const FILTERS_TRIGGER = /Filters/;
 const SIDEBAR_TRIGGER = /Toggle Sidebar/i;
-const ROLE_TRIGGER = /^Role:/;
 const ROW_ACTIONS = /^Actions for /;
 const ROLE_ROW = /^Role/;
-const STATUS_ROW = /^Status/;
+const SEATS_ROW = /^Seats/;
+const TWO_FACTOR_ROW = /^Two-factor/;
 const USER_COLUMN = /User/;
 const SEATS_COLUMN = /Seats/;
 const SORT_ASC_LABEL = /Sort:\s*Name\s*\(A–Z\)/;
@@ -27,6 +27,43 @@ const ID_COLUMN = /ID/;
 
 const rowCount = (page: Page) =>
   page.locator('[data-slot="table-body"] tr').count();
+
+/** Chips read as "Label: value" — composed, because the spans are adjacent. */
+function chipLabels(page: Page): Promise<string[]> {
+  return page.locator("[data-filter-chip]").evaluateAll((nodes) =>
+    nodes.map((node) => {
+      const label = node.querySelector("span")?.textContent?.trim() ?? "";
+      const all = node.textContent?.trim() ?? "";
+      return `${label} ${all.slice(label.length).trim()}`;
+    })
+  );
+}
+
+/** The drawer's drilldown rows, read as "Label value". */
+function drawerRows(page: Page): Promise<string[]> {
+  return page
+    .locator('[data-slot="drawer-content"] button[type="button"]')
+    .evaluateAll((nodes) =>
+      nodes
+        .filter((node) => node.children.length === 2)
+        .map((node) =>
+          [...node.children]
+            .map((child) => child.textContent?.replace(/\s+/g, " ").trim())
+            .join(" ")
+        )
+    );
+}
+
+/** Open the drawer, drill into one filter, pick a value, and come back out. */
+async function applyFilter(page: Page, row: RegExp, option: string) {
+  const drawer = page.locator('[data-slot="drawer-content"]');
+  await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
+  await expect(drawer).toBeVisible();
+  await drawer.getByRole("button", { name: row }).click();
+  await drawer.getByRole("radio", { exact: true, name: option }).click();
+  await page.keyboard.press("Escape");
+  await expect(drawer).toHaveCount(0);
+}
 
 /**
  * Below `md` the sidebar is a drawer, so the Users nav item has to be revealed
@@ -46,20 +83,30 @@ async function openUsers(page: Page) {
   await expect(page.getByLabel("Search users")).toBeVisible();
 }
 
-test.describe("mobile filters drawer", () => {
-  test.use({ viewport: { width: 375, height: 900 } });
+test.describe("the filter drawer is the filter surface", () => {
+  /**
+   * One surface at every width, unlike the payments table's pills. That is the
+   * point of this layout: there is no desktop tree and mobile tree to keep in
+   * step, which is how this block once shipped filters reachable on no phone.
+   */
+  for (const width of [375, 1280]) {
+    test(`reaches all five filters at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ height: 900, width });
+      await openUsers(page);
 
-  test("collapses the filter cluster into one trigger", async ({ page }) => {
-    await openUsers(page);
+      await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
+      const rows = await drawerRows(page);
 
-    // Search stays; everything else folds into Filters. Nothing wraps onto a
-    // second line, which is what this block did before the drawer existed.
-    await expect(page.getByLabel("Search users")).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: FILTERS_TRIGGER })
-    ).toBeVisible();
-    await expect(page.getByRole("button", { name: ROLE_TRIGGER })).toBeHidden();
-  });
+      expect(rows).toEqual([
+        "Role All",
+        "Status All",
+        "Seats All",
+        "Two-factor All",
+        "Created Any",
+        "Sort Name (A–Z)",
+      ]);
+    });
+  }
 
   test("drills into a filter and applies it", async ({ page }) => {
     await openUsers(page);
@@ -69,15 +116,10 @@ test.describe("mobile filters drawer", () => {
     const drawer = page.locator('[data-slot="drawer-content"]');
     await expect(drawer.getByText("Filters")).toBeVisible();
 
-    // Step 0 is a menu of label + current value rows.
     await drawer.getByRole("button", { name: ROLE_ROW }).click();
     // The Stepper keeps the outgoing step mounted while it slides, so assert
     // on the step's own content rather than counting titles.
     await expect(drawer.getByRole("button", { name: "Back" })).toBeVisible();
-    await expect(
-      drawer.getByRole("radio", { name: "All", exact: true })
-    ).toBeVisible();
-
     await drawer.getByText("Viewer", { exact: true }).click();
     expect(await rowCount(page)).toBeLessThan(total);
 
@@ -87,28 +129,89 @@ test.describe("mobile filters drawer", () => {
       "Viewer"
     );
   });
+});
 
-  test("surfaces the active count and can clear from inside", async ({
+test.describe("applied filters are chips", () => {
+  test("one chip per applied filter, and none when nothing is", async ({
+    page,
+  }) => {
+    await openUsers(page);
+
+    // Nothing applied: no row at all, rather than an empty container holding
+    // space for one.
+    await expect(page.locator("[data-filter-chip]")).toHaveCount(0);
+
+    await applyFilter(page, ROLE_ROW, "Admin");
+    await applyFilter(page, SEATS_ROW, "One seat");
+
+    expect(await chipLabels(page)).toEqual(["Role: Admin", "Seats: One seat"]);
+  });
+
+  test("a chip removes only its own filter", async ({ page }) => {
+    await openUsers(page);
+
+    await applyFilter(page, ROLE_ROW, "Member");
+    await applyFilter(page, SEATS_ROW, "One seat");
+    await applyFilter(page, TWO_FACTOR_ROW, "Enabled");
+    const narrowed = await rowCount(page);
+
+    await page.getByRole("button", { name: "Remove Seats filter" }).click();
+
+    expect(await chipLabels(page)).toEqual([
+      "Role: Member",
+      "Two-factor: Enabled",
+    ]);
+    expect(await rowCount(page)).toBeGreaterThanOrEqual(narrowed);
+  });
+
+  test("each remove button names the filter it removes", async ({ page }) => {
+    await openUsers(page);
+
+    await applyFilter(page, ROLE_ROW, "Admin");
+    await applyFilter(page, SEATS_ROW, "One seat");
+
+    // Two buttons both labelled "Remove" would leave a screen reader to work
+    // out which from context it does not have.
+    const labels = await page
+      .locator("[data-filter-chip] button")
+      .evaluateAll((nodes) => nodes.map((n) => n.getAttribute("aria-label")));
+
+    expect(labels).toEqual(["Remove Role filter", "Remove Seats filter"]);
+  });
+
+  test("the chip nests no interactive element inside another", async ({
+    page,
+  }) => {
+    await openUsers(page);
+    await applyFilter(page, ROLE_ROW, "Admin");
+
+    // This is why the chip is built on `Badge` and not `TagGroup`:
+    // `TagGroupItem` renders its body as a button and puts the remove control
+    // inside it, which is invalid and leaves the label focusable.
+    const nested = await page.evaluate(
+      () =>
+        [...document.querySelectorAll("[data-filter-chip] button")].filter(
+          (button) => button.parentElement?.closest("button")
+        ).length
+    );
+
+    expect(nested).toBe(0);
+  });
+
+  test("Clear all empties the chips and restores every row", async ({
     page,
   }) => {
     await openUsers(page);
     const total = await rowCount(page);
 
     await page.getByLabel("Search users").fill("a");
-    await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
-    const drawer = page.locator('[data-slot="drawer-content"]');
-    await drawer.getByRole("button", { name: STATUS_ROW }).click();
-    await drawer.getByText("Active", { exact: true }).click();
-    await drawer.getByRole("button", { name: "Back" }).click();
+    await applyFilter(page, ROLE_ROW, "Admin");
+    expect(await rowCount(page)).toBeLessThan(total);
 
-    // The desktop `Clear N` is hidden at this width, so the count rides on the
-    // trigger and the reset lives in the drawer footer.
-    await drawer.getByRole("button", { name: "Clear all" }).click();
+    await page.getByRole("button", { name: "Clear all" }).first().click();
 
+    expect(await chipLabels(page)).toEqual([]);
     expect(await rowCount(page)).toBe(total);
-    await expect(drawer.getByRole("button", { name: "Clear all" })).toHaveCount(
-      0
-    );
   });
 });
 
@@ -282,14 +385,11 @@ test.describe("user detail", () => {
     for (const width of [375, 768, 1280]) {
       // biome-ignore lint/performance/noAwaitInLoops: one page, resized in turn
       await page.setViewportSize({ height: 900, width });
-      // biome-ignore lint/performance/noAwaitInLoops: one page, resized in turn
       await openUsers(page);
-      // biome-ignore lint/performance/noAwaitInLoops: sequential by nature
       await page
         .getByRole("button", { exact: true, name: "Ada Okonkwo" })
         .click();
 
-      // biome-ignore lint/performance/noAwaitInLoops: sequential by nature
       const overflow = await page.evaluate(
         () =>
           document.documentElement.scrollWidth -

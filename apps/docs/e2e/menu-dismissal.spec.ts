@@ -16,22 +16,27 @@ import { expect, type Page, test } from "@playwright/test";
  * here, because "fixing" the asymmetry breaks one block or the other.
  */
 
-const ROLE_TRIGGER = /^Role:/;
-const STATUS_TRIGGER = /^Status:/;
-const CLEAR_BUTTON = /^Clear/;
+const ACTION_PILL = /^Action:/;
+const STATUS_PILL = /^Status:/;
+const CURRENCY_PILL = /^Currency:/;
+const ADD_FILTER = /Add filter/;
 const SINGLE_PAGE = /Page 1 of 1/;
 const TICKETS_TRIGGER = /Status/;
 
 const rowCount = (page: Page) =>
   page.locator('[data-slot="table-body"] tr').count();
 
-test.describe("admin-01 filters", () => {
+test.describe("admin-01 payment filters", () => {
+  /**
+   * Retargeted from the users toolbar, whose two filter dropdowns moved into a
+   * drawer. The payments pills are the better home anyway: two adjacent
+   * single-select menus *and* a multi-select one, so both halves of the
+   * `closeOnClick` asymmetry are pinned against the same table.
+   */
   test.beforeEach(async ({ page }) => {
     await page.goto("/preview/block-admin-01");
-    // The users table lives behind the Users section; the block opens on
-    // Overview.
-    await page.getByRole("button", { name: "Users" }).click();
-    await expect(page.getByLabel("Search users")).toBeVisible();
+    await page.getByRole("button", { name: "Payments" }).click();
+    await expect(page.getByLabel("Search payments by email")).toBeVisible();
   });
 
   test("a picked filter closes its menu and narrows the table", async ({
@@ -40,8 +45,8 @@ test.describe("admin-01 filters", () => {
     const total = await rowCount(page);
     expect(total).toBeGreaterThan(0);
 
-    await page.getByRole("button", { name: ROLE_TRIGGER }).click();
-    await page.getByRole("menuitemradio", { name: "Viewer" }).click();
+    await page.getByRole("button", { name: ACTION_PILL }).click();
+    await page.getByRole("menuitemradio", { name: "Cashout" }).click();
 
     await expect(page.getByRole("menuitemradio")).toHaveCount(0);
     expect(await rowCount(page)).toBeLessThan(total);
@@ -50,36 +55,40 @@ test.describe("admin-01 filters", () => {
   test("a second filter is still clickable after the first", async ({
     page,
   }) => {
-    await page.getByRole("button", { name: ROLE_TRIGGER }).click();
-    await page.getByRole("menuitemradio", { name: "Viewer" }).click();
+    await page.getByRole("button", { name: ACTION_PILL }).click();
+    await page.getByRole("menuitemradio", { name: "Cashout" }).click();
 
     // This is the click the inert backdrop used to eat.
-    await page.getByRole("button", { name: STATUS_TRIGGER }).click();
-    await page.getByRole("menuitemradio", { name: "Active" }).click();
+    await page.getByRole("button", { name: STATUS_PILL }).click();
+    await page.getByRole("menuitemradio", { name: "Completed" }).click();
 
-    await expect(page.getByRole("button", { name: "Clear 2" })).toBeVisible();
+    await expect(page.getByRole("button", { name: ACTION_PILL })).toContainText(
+      "Cashout"
+    );
+    await expect(page.getByRole("button", { name: STATUS_PILL })).toContainText(
+      "Completed"
+    );
   });
 
-  test("Clear restores every filter", async ({ page }) => {
-    const total = await rowCount(page);
+  test("a multi-select menu stays open between picks", async ({ page }) => {
+    // The other half: picking three currencies must not cost three trips, so
+    // `DropdownMenuCheckboxItem` keeps Base UI's `closeOnClick: false`.
+    await page.getByRole("button", { name: ADD_FILTER }).click();
+    await page.getByRole("menuitem", { exact: true, name: "Currency" }).click();
+    await page.getByRole("button", { name: CURRENCY_PILL }).click();
 
-    await page.getByRole("button", { name: ROLE_TRIGGER }).click();
-    await page.getByRole("menuitemradio", { name: "Viewer" }).click();
-    await page.getByLabel("Search users").fill("a");
+    await page.getByRole("menuitemcheckbox", { name: "BTC" }).click();
+    await expect(page.getByRole("menuitemcheckbox")).toHaveCount(4);
+    await page.getByRole("menuitemcheckbox", { name: "ETH" }).click();
 
-    await page.getByRole("button", { name: CLEAR_BUTTON }).click();
-
-    expect(await rowCount(page)).toBe(total);
-    await expect(page.getByRole("button", { name: CLEAR_BUTTON })).toHaveCount(
-      0
-    );
+    await page.keyboard.press("Escape");
     await expect(
-      page.getByRole("button", { name: ROLE_TRIGGER })
-    ).toBeVisible();
+      page.getByRole("button", { name: CURRENCY_PILL })
+    ).toContainText("BTC, +1");
   });
 
   test("filtering resets pagination", async ({ page }) => {
-    await page.getByLabel("Search users").fill("zzz-no-match");
+    await page.getByLabel("Search payments by email").fill("zzz-no-match");
     await expect(page.getByText(SINGLE_PAGE)).toBeVisible();
   });
 });
