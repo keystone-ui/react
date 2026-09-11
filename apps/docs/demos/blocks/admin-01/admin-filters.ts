@@ -16,7 +16,7 @@ import { type Role, type Status, statusLabels } from "./mock-admin";
 export type RoleFilter = "all" | Role;
 export type StatusFilter = "all" | Status;
 
-export type UserSortKey = "lastActive" | "name" | "role" | "seats";
+export type UserSortKey = "id" | "lastActive" | "name" | "role" | "seats";
 export type SortDirection = "asc" | "desc";
 
 export interface SortState {
@@ -31,6 +31,16 @@ export const STATUSES: readonly Status[] = ["active", "invited", "suspended"];
 export function roleLabel(role: RoleFilter): string {
   return role === "all" ? "All roles" : role;
 }
+
+/** Shared by the table's Status cell and the detail view, so they cannot drift. */
+export const STATUS_VARIANT: Record<
+  Status,
+  "default" | "outline" | "secondary"
+> = {
+  active: "secondary",
+  invited: "outline",
+  suspended: "outline",
+};
 
 export function statusLabel(status: StatusFilter): string {
   return status === "all" ? "All statuses" : statusLabels[status];
@@ -55,6 +65,8 @@ export type SortOptionId = "none" | `${UserSortKey}:${SortDirection}`;
 
 export const SORT_OPTIONS: readonly { id: SortOptionId; label: string }[] = [
   { id: "none", label: "Unsorted" },
+  { id: "id:asc", label: "ID, first added" },
+  { id: "id:desc", label: "ID, last added" },
   { id: "name:asc", label: "Name A–Z" },
   { id: "name:desc", label: "Name Z–A" },
   { id: "role:asc", label: "Role A–Z" },

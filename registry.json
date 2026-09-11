@@ -1832,6 +1832,8 @@
         "button",
         "card",
         "checkbox",
+        "copy-button",
+        "description-list",
         "drawer",
         "dropdown-menu",
         "input-group",
@@ -1872,6 +1874,10 @@
         },
         {
           "path": "registry/default/blocks/admin-01/components/admin-topbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-user-detail.tsx",
           "type": "registry:component"
         },
         {

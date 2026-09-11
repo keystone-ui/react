@@ -16,6 +16,7 @@ npx shadcn@latest add https://keystoneui.io/r/admin-01.json
 - **Overview** with a KPI row and a stacked signups chart sharing the same toggleable legend as [`dashboard-01`](/docs/blocks/dashboard-01).
 - **Users table** — a responsive filter toolbar (search, role, status, sort), sortable columns, row selection, pagination, and a [`SelectionBar`](/docs/components/selection-bar) for bulk actions.
 - **Mobile filters** — below `sm` the cluster collapses into a single Filters button opening a bottom-sheet [`Drawer`](/docs/components/drawer), with a [`Stepper`](/docs/components/stepper) drilling into one screen per filter.
+- **User detail** — clicking a name opens a read-only record view built from [`DescriptionList`](/docs/components/description-list), with [`CopyButton`](/docs/components/copy-button) on the values that exist to be pasted elsewhere.
 
 ## Requirements
 
@@ -47,6 +48,12 @@ So they are duplicated and the duplication is enforced: `apps/docs/tests/block-s
 
 ## Notes
 
+**The detail view is a sub-state of Users, not a section of its own.** A new section would need a sidebar entry — and you cannot navigate to a detail page with no record chosen — so the open user is a separate `openUserId`, resolved to a record at render. Changing section clears it, or leaving to Billing and returning would land on a stale record.
+
+The breadcrumb reflects that: with a record open, `Users` stops being the page and becomes the way back to the list, with the user's name as the terminal crumb.
+
+Values are stacked above their labels in two columns — `DescriptionList`'s `orientation="stacked"` and `columns={2}`. Its default row layout right-aligns each value against its label, which reads as a summary; a record wants the label to sit above the value it describes. A field the record does not have renders `-` rather than being omitted, so the grid keeps its alignment.
+
 **The toolbar forks at `sm:`, following [`tickets-01`](/docs/blocks/tickets-01).** Search is shared and always visible; the filter cluster is `hidden sm:flex`, and below that a single Filters button opens a bottom-sheet drawer. The fork is CSS-only — both trees are always mounted, so there is no `useMediaQuery` to get wrong on the server, and no flash of the wrong layout during hydration.
 
 The drawer's body is a [`Stepper`](/docs/components/stepper): a menu of "label + current value" rows that drill into one `RadioGroup` screen per filter, with a back arrow and an Apply footer. Filters apply **live** — `Apply` only dismisses, there is no draft state to reconcile.
@@ -75,6 +82,8 @@ The Status column passes **no** `sortDirection` at all, where the sortable colum
 - [Button](/docs/components/button)
 - [Card](/docs/components/card)
 - [Checkbox](/docs/components/checkbox)
+- [Copy Button](/docs/components/copy-button)
+- [Description List](/docs/components/description-list)
 - [Drawer](/docs/components/drawer)
 - [Dropdown Menu](/docs/components/dropdown-menu)
 - [Input Group](/docs/components/input-group)
@@ -101,7 +110,9 @@ SidebarProvider
     ├── AdminOverview
     │   ├── Card › StatValue › StatDelta
     │   └── ChartContainer › BarChart › Bar
-    └── AdminUsersTable
+    ├── AdminUserDetail                         (a user is open)
+    │   └── Card › DescriptionList › CopyButton
+    └── AdminUsersTable                         (otherwise)
         ├── Card › CardContent
         │   ├── AdminUsersToolbar
         │   │   ├── InputGroup › InputGroupInput

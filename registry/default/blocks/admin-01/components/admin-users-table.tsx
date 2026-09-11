@@ -1,14 +1,16 @@
 "use client";
 
-import type {
-  RoleFilter,
-  SortOptionId,
-  SortState,
-  StatusFilter,
-  UserSortKey,
+import { HashIcon } from "lucide-react";
+import {
+  type RoleFilter,
+  type SortOptionId,
+  type SortState,
+  STATUS_VARIANT,
+  type StatusFilter,
+  type UserSortKey,
 } from "@/components/admin-filters";
 import { AdminUsersToolbar } from "@/components/admin-users-toolbar";
-import { type Status, statusLabels, type User } from "@/components/mock-admin";
+import { statusLabels, type User } from "@/components/mock-admin";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -41,20 +43,16 @@ export type {
 } from "@/components/admin-filters";
 
 const columns = [
+  { icon: HashIcon, key: "id", label: "ID", numeric: false },
   { key: "name", label: "User", numeric: false },
   { key: "role", label: "Role", numeric: false },
   { key: "seats", label: "Seats", numeric: true },
   { key: "lastActive", label: "Last active", numeric: false },
 ] as const;
 
-const STATUS_VARIANT: Record<Status, "default" | "outline" | "secondary"> = {
-  active: "secondary",
-  invited: "outline",
-  suspended: "outline",
-};
-
 interface AdminUsersTableProps {
   onClearSelection: () => void;
+  onOpenUser: (id: string) => void;
   onPageIndexChange: (index: number) => void;
   onPageSizeChange: (size: number) => void;
   onRoleFilterChange: (role: RoleFilter) => void;
@@ -82,6 +80,7 @@ export function AdminUsersTable({
   onPageSizeChange,
   onRoleFilterChange,
   onSearchChange,
+  onOpenUser,
   onSort,
   onSortChange,
   onStatusFilterChange,
@@ -151,6 +150,9 @@ export function AdminUsersTable({
                       }
                       onClick={() => onSort(column.key)}
                     >
+                      {"icon" in column ? (
+                        <column.icon className="size-3.5 shrink-0" />
+                      ) : null}
                       {column.label}
                     </TableSortButton>
                   </TableHead>
@@ -182,7 +184,18 @@ export function AdminUsersTable({
                       />
                     </TableCell>
                     <TableCell>
-                      <div className="font-medium">{row.name}</div>
+                      <span className="font-mono text-muted-foreground text-xs">
+                        {row.id}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <button
+                        className="cursor-pointer rounded-sm text-left font-medium hover:underline focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
+                        onClick={() => onOpenUser(row.id)}
+                        type="button"
+                      >
+                        {row.name}
+                      </button>
                       <div className="text-muted-foreground text-xs">
                         {row.email}
                       </div>

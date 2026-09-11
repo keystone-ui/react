@@ -20,6 +20,8 @@ const SORT_ASC_LABEL = /Name A–Z/;
 const SORT_DESC_LABEL = /Name Z–A/;
 const SORT_SEATS_LABEL = /Seats, most first/;
 const CLEAR_BUTTON = /^Clear/;
+const USERS_CRUMB = /^Users$/;
+const ID_COLUMN = /ID/;
 
 const rowCount = (page: Page) =>
   page.locator('[data-slot="table-body"] tr').count();
@@ -163,4 +165,95 @@ test("Clear resets the filters and leaves the sort alone", async ({ page }) => {
   await expect(
     page.getByRole("button", { name: SORT_SEATS_LABEL })
   ).toBeVisible();
+});
+
+test.describe("user detail", () => {
+  test("opens from the name and shows the record", async ({ page }) => {
+    await openUsers(page);
+
+    await page
+      .getByRole("button", { exact: true, name: "Ada Okonkwo" })
+      .click();
+
+    // Three sections of stacked pairs, not a table and not a form.
+    await expect(page.getByRole("heading", { name: "Identity" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Access" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Activity" })).toBeVisible();
+    await expect(page.getByText("u_01", { exact: true })).toBeVisible();
+  });
+
+  test("renders a dash for a value the record does not have", async ({
+    page,
+  }) => {
+    await openUsers(page);
+    await page
+      .getByRole("button", { exact: true, name: "Ada Okonkwo" })
+      .click();
+
+    // The founding account has no inviter. The row stays, so the grid keeps
+    // its alignment and the reader is told "nothing" rather than left guessing.
+    const invitedBy = page
+      .locator('[data-slot="description-list-item"]')
+      .filter({ hasText: "Invited by" });
+
+    await expect(invitedBy).toContainText("-");
+  });
+
+  test("breadcrumb names the record and walks back to the list", async ({
+    page,
+  }) => {
+    await openUsers(page);
+    await page
+      .getByRole("button", { exact: true, name: "Ada Okonkwo" })
+      .click();
+
+    await expect(page.getByRole("link", { name: USERS_CRUMB })).toBeVisible();
+    await page.getByRole("link", { name: USERS_CRUMB }).click();
+
+    await expect(page.getByLabel("Search users")).toBeVisible();
+  });
+
+  /**
+   * Leaving the section has to drop the open record. Without that, Billing and
+   * back lands on whichever user was open before, which looks like the app
+   * ignored the click.
+   */
+  test("leaving the section and returning lands on the list", async ({
+    page,
+  }) => {
+    await openUsers(page);
+    await page
+      .getByRole("button", { exact: true, name: "Ada Okonkwo" })
+      .click();
+    await expect(page.getByRole("heading", { name: "Identity" })).toBeVisible();
+
+    await page.getByRole("button", { name: "Billing" }).click();
+    await page.getByRole("button", { name: "Users" }).click();
+
+    await expect(page.getByLabel("Search users")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Identity" })).toHaveCount(
+      0
+    );
+  });
+
+  test("the ID column shows the real id and sorts", async ({ page }) => {
+    await openUsers(page);
+
+    const ids = () =>
+      page
+        .locator('[data-slot="table-body"] tr td:nth-child(2)')
+        .allTextContents();
+
+    expect((await ids())[0]).toBe("u_01");
+
+    // Scoped to the header: once sorted, the toolbar's Sort trigger also reads
+    // "ID, first added".
+    const idHeader = page
+      .getByRole("columnheader", { name: ID_COLUMN })
+      .getByRole("button");
+    await idHeader.click();
+    await idHeader.click();
+
+    expect((await ids())[0]).toBe("u_10");
+  });
 });

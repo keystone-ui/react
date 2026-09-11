@@ -13,6 +13,7 @@ import {
 import { AdminOverview } from "./admin-overview";
 import { type AdminSection, AdminSidebar } from "./admin-sidebar";
 import { AdminTopbar } from "./admin-topbar";
+import { AdminUserDetail } from "./admin-user-detail";
 import { AdminUsersTable } from "./admin-users-table";
 import { adminMetrics, signupsByMonth, users } from "./mock-admin";
 import { useReducedMotion } from "./use-reduced-motion";
@@ -22,6 +23,7 @@ export function AdminPage() {
   const reducedMotion = useReducedMotion();
 
   const [section, setSection] = useState<AdminSection>("overview");
+  const [openUserId, setOpenUserId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<RoleFilter>("all");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
@@ -67,6 +69,10 @@ export function AdminPage() {
       return ((left as number) - (right as number)) * factor;
     });
   }, [filtered, sort]);
+
+  const openUser = openUserId
+    ? (users.find((user) => user.id === openUserId) ?? null)
+    : null;
 
   const pageCount = Math.max(1, Math.ceil(sorted.length / pageSize));
   const pageRows = sorted.slice(
@@ -143,17 +149,34 @@ export function AdminPage() {
 
   return (
     <SidebarProvider>
-      <AdminSidebar onSectionChange={setSection} section={section} />
+      <AdminSidebar
+        onSectionChange={(next) => {
+          setSection(next);
+          setOpenUserId(null);
+        }}
+        section={section}
+      />
       {/* min-w-0 is required, not cosmetic. Without it a wide table pushes the
           inset open and the whole document gains a horizontal scrollbar — in
           the app this pattern came from, its absence cost +256px of overflow
           across eight pages. Keystone can bake this into components it owns;
           this one is shadcn's, so it lands at the call site. */}
       <SidebarInset className="min-w-0">
-        <AdminTopbar section={section} />
+        <AdminTopbar
+          detail={openUser?.name}
+          onDetailExit={() => setOpenUserId(null)}
+          section={section}
+        />
 
         <div className="flex min-w-0 flex-1 flex-col gap-6 p-4 md:p-6">
-          {section === "users" ? (
+          {section === "users" && openUser ? (
+            <AdminUserDetail
+              onBack={() => setOpenUserId(null)}
+              user={openUser}
+            />
+          ) : null}
+
+          {section === "users" && !openUser ? (
             <AdminUsersTable
               onClearSelection={() => setSelected(new Set())}
               onPageIndexChange={setPageIndex}
@@ -164,6 +187,7 @@ export function AdminPage() {
               }}
               onRoleFilterChange={filterAndReset(setRoleFilter)}
               onSearchChange={filterAndReset(setSearch)}
+              onOpenUser={setOpenUserId}
               onSort={cycleSort}
               onSortChange={setSortFromOption}
               onStatusFilterChange={filterAndReset(setStatusFilter)}
