@@ -22,12 +22,14 @@ import {
   ArrowUpDownIcon,
   ArrowUpIcon,
   ChevronsUpDownIcon,
-  ExternalLinkIcon,
+  CopyIcon,
+  EyeIcon,
   GripVerticalIcon,
   HashIcon,
   MailIcon,
   MessageSquareIcon,
   MinusIcon,
+  MoreHorizontalIcon,
   TagIcon,
   TriangleAlertIcon,
 } from "lucide-react";
@@ -57,6 +59,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
+  DropdownMenuItem,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
@@ -312,11 +315,16 @@ export function TicketsTable({
             assigneeOptions,
             editing,
             onCommitSubject: () => handleSubjectCommit(ticket.id),
-            onOpenTicket,
             onUpdateTicket,
           })}
         </TableCell>
       ))}
+      <TableCell>
+        <TicketRowActions
+          onOpen={() => onOpenTicket(ticket.id)}
+          ticketNumber={ticket.ticketNumber}
+        />
+      </TableCell>
     </>
   );
 
@@ -355,6 +363,12 @@ export function TicketsTable({
                   />
                 </TableHead>
               ))}
+              {/* No visible label: the column is one icon wide, and "Actions"
+                  above it would size the column from the header rather than
+                  from the control. */}
+              <TableHead className="w-12">
+                <span className="sr-only">Actions</span>
+              </TableHead>
             </TableRow>
           </TableHeader>
 
@@ -363,7 +377,7 @@ export function TicketsTable({
               <TableRow>
                 <TableCell
                   className="h-32 text-center text-muted-foreground"
-                  colSpan={visibleColumnDefs.length + 2}
+                  colSpan={visibleColumnDefs.length + 3}
                 >
                   No tickets match your filters.
                 </TableCell>
@@ -402,6 +416,9 @@ export function TicketsTable({
                   {renderSummary(column.id, tickets.length, summary)}
                 </TableCell>
               ))}
+              {/* Empty, but present: a summary row one cell short of the
+                  header pulls every column after it out of alignment. */}
+              <TableCell />
             </TableRow>
           </TableFooter>
         </Table>
@@ -514,7 +531,6 @@ function renderCell({
   assigneeOptions,
   editing,
   onCommitSubject,
-  onOpenTicket,
   onUpdateTicket,
 }: {
   ticket: Ticket;
@@ -522,7 +538,6 @@ function renderCell({
   assigneeOptions: TicketAssignee[];
   editing: ReturnType<typeof useCellEditing>;
   onCommitSubject: () => void;
-  onOpenTicket: (id: string) => void;
   onUpdateTicket: (id: string, patch: Partial<Ticket>) => void;
 }) {
   switch (columnId) {
@@ -570,15 +585,6 @@ function renderCell({
           >
             {ticket.subject}
           </button>
-          <Button
-            className="shrink-0 opacity-0 transition-opacity focus-visible:opacity-100 group-hover/row:opacity-100"
-            onClick={() => onOpenTicket(ticket.id)}
-            size="sm"
-            variant="outline"
-          >
-            <ExternalLinkIcon className="size-3.5" />
-            Open
-          </Button>
         </div>
       );
     }
@@ -881,3 +887,55 @@ export {
   TriangleAlertIcon,
   UserDot,
 };
+
+/**
+ * Row actions, in a trailing menu rather than a hover-revealed button.
+ *
+ * The button it replaces was unreachable on touch: there is no hover, and
+ * `focus-visible:opacity-100` only rescues a keyboard. It also lived inside
+ * the Subject cell, competing with the inline editor that cell already owns —
+ * one click started an edit, a click two pixels right opened the drawer.
+ *
+ * Deleting stays a bulk action in the `SelectionBar`: it is destructive, and
+ * confirming it per row from a menu would put an `AlertDialog` behind two
+ * clicks with no selection to show for it.
+ */
+function TicketRowActions({
+  onOpen,
+  ticketNumber,
+}: {
+  onOpen: () => void;
+  ticketNumber: string;
+}) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger render={<Button size="icon-sm" variant="ghost" />}>
+        <MoreHorizontalIcon />
+        <span className="sr-only">Actions for ticket {ticketNumber}</span>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-44">
+        <DropdownMenuGroup>
+          <DropdownMenuItem onClick={onOpen}>
+            <EyeIcon />
+            View details
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={async () => {
+              // No "Copied" state to hold — the menu closes on click — so this
+              // needs none of what `CopyButton` manages beyond awaiting the
+              // write and not throwing where the clipboard is unavailable.
+              try {
+                await navigator.clipboard.writeText(ticketNumber);
+              } catch {
+                // Insecure context or permission denied; nothing to undo.
+              }
+            }}
+          >
+            <CopyIcon />
+            Copy ticket ID
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
