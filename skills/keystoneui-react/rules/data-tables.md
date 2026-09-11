@@ -10,6 +10,7 @@ https://keystoneui.io/r/admin-01.json`.
 ## Contents
 
 - Filter controls name the dimension they act on
+- Two filter layouts, and how to choose
 - One representation of applied state
 - Applied emphasis must not read as focus
 - Overriding a component's variant class
@@ -48,12 +49,49 @@ reads `Last 24h`; `Period: Last 24h` says it twice.
 a menu rather than report a value, and take no label. The test is whether the
 trigger's text changes with state.
 
+## Two filter layouts, and how to choose
+
+**Inline pills** — every filter a control on the toolbar, each naming its own
+dimension. **Drawer and chips** — all filters behind one `Filters` button, with
+the applied ones as removable `Key: value` chips underneath.
+
+| | drawer + chips | inline pills |
+|---|---|---|
+| change a filter | 3–4 clicks | 2 |
+| remove one | 1 click on its ✕ | 2, through its menu |
+| read what is applied | the chip row is the answer | scan every pill for the set ones |
+| see what is filterable | open the drawer | already on screen |
+| desktop vs mobile | one surface | two, kept in step by hand |
+
+Pills suit a table someone sits in front of, flipping a filter at a time while
+they work. The drawer suits one they filter once and then read.
+
+The drawer layout also removes a fork, which is worth more than it sounds: its
+filters live in one surface at every width, so there is no second tree to keep
+in step. `admin-01` shipped three filters reachable on no phone at all under
+the pills layout; that failure cannot occur under this one.
+
+Past roughly six filters the pills stop fitting and the choice makes itself.
+
+**Both are renderings of one model.** Whichever you pick, declare each filter
+once as a descriptor — `{ key, label, empty, value(filters), clear }` — and
+derive the chips, the drawer's rows and steps, the active count and the
+predicate from that list. Switching layouts is then a change of presentation,
+and a new filter is one entry rather than a control, a row, a step index and a
+count that all have to agree.
+
 ## One representation of applied state
 
 Do not pair a visible control with a chip repeating it. Two representations of
 one fact can disagree, and keeping them in step buys nothing.
 
-Chips are for state a panel has **hidden**. If every filter is a visible,
+Chips are for state a panel has **hidden**.
+
+Build a chip from `Badge` — a polymorphic `<span>` — with the remove button
+nested inside it, and label that button for its filter (`Remove Role filter`).
+Not `TagGroup`: `TagGroupItem` with `onRemove` renders its body as a toggle
+button and appends the remove control *inside* it, emitting a button within a
+button — invalid, and the label stays focusable. If every filter is a visible,
 self-describing control, there is nothing for a chip to add.
 
 When filters are added on demand, derive which controls show:

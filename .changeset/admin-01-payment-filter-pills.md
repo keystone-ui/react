@@ -33,3 +33,11 @@ Payments rows carry their actions in a trailing `⋯` menu rather than a hover-r
 The users table follows both blocks: labelled triggers (`Role: All`, `Status: All`, `Sort: Name A–Z`), an `h1` above the card instead of a `CardTitle` inside it, a trailing row-actions menu, and a footer reporting `Showing 1–5 of 10 users` rather than the selection count its `SelectionBar` already states. All three tables in the two blocks now answer these questions the same way.
 
 The users sort menu splits into two groups: the column, then the direction, separated. The flat cross-product it replaces listed every pairing — eleven entries for five columns — so changing direction meant finding your column again in a list that had grown to hold both. Split it is five plus two, and every state the column headers can reach is expressible by construction rather than by remembering to add the pairing. The directions relabel per column, because "Ascending" is accurate and says nothing where "A–Z" and "Newest first" say what you will see.
+
+The users table gets the second filter layout: search, one `Filters` button and one `Sort`, with every applied filter as a removable `Role: Admin` chip. The block now demonstrates both answers and documents when each wins — pills for a table you sit in front of flipping a filter at a time, the drawer for one you filter once and then read, where the chip row *is* the answer to "what is applied".
+
+Users grows from two filters to five (Seats, Two-factor and Created join Role and Status, all from fields the fixture already carried), so the two layouts are compared at the same problem size rather than the layout being judged on its filter count.
+
+The chip is built on `Badge`, not `TagGroup`: `TagGroupItem` with `onRemove` renders its body as a toggle button and appends the remove control inside it, so a removable tag emits `<button>…<button/></button>` — invalid, and the label stays focusable. Worth fixing in the library separately.
+
+Users also gains a filter model like payments' — descriptors plus matchers — from which the chips, the drawer's rows and steps, the active count and the predicate all derive. That is what makes the two layouts two renderings rather than two implementations, and it removes the drawer's old hazard of hand-assigned step indices kept in sync by hand.
