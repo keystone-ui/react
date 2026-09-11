@@ -474,6 +474,8 @@ Its toolbar picks up the labelled triggers too: `Sort: Manual` and `Status: All`
 
 The conventions both blocks now follow ship as a skill rule — `rules/data-tables.md` in `keystoneui-react` (2.2.0) — so a project consuming the registry gets them when building a table rather than only when installing one of these blocks. The Block Selection table gains a row for filterable data tables, which previously advertised `admin-01` only as an app shell.
 
+Payments rows carry their actions in a trailing `⋯` menu rather than a hover-revealed Open button. Hover is unreachable on touch — `focus-visible` rescues a keyboard, not a finger — and this is the wider of the block's two tables, so the likeliest to be read on a phone. The menu holds `View details` and `Copy payment ID`, and has room for the refund and receipt actions a ledger accumulates. The users table keeps its hover button; the two are now deliberately different, and the block docs say why.
+
 ---
 
 ### `admin-01` gains a user detail view and an ID column.

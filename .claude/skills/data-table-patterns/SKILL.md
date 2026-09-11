@@ -142,6 +142,29 @@ wasted one.
 
 ---
 
+## Row actions go in a trailing menu, not on hover
+
+A hover-revealed button is unreachable on touch — `focus-visible` rescues a
+keyboard, not a finger — and a wide table is the likeliest to be read on a
+phone. Per-row actions also accumulate; a menu absorbs a fourth and fifth where
+a row of inline buttons cannot.
+
+```tsx
+<TableHead className="w-12"><span className="sr-only">Actions</span></TableHead>
+…
+<DropdownMenuTrigger render={<Button size="icon-sm" variant="ghost" />}>
+  <MoreHorizontalIcon />
+  <span className="sr-only">Actions for payment {truncateId(id)}</span>
+</DropdownMenuTrigger>
+```
+
+**Name the row in the trigger's accessible label.** Ten identical "Actions"
+buttons leave a screen reader to work out which row it is on from context it
+does not have.
+
+Duplicating an action that also exists inline is fine and often right: an icon
+button is the fast path, the menu item is the labelled one.
+
 ## The pagination footer reports the visible range
 
 `Showing 1–10 of 20 tickets`, in `TablePaginationInfo`.

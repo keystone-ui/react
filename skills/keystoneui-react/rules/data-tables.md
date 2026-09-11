@@ -15,6 +15,7 @@ https://keystoneui.io/r/admin-01.json`.
 - Overriding a component's variant class
 - Table type scale and the control ladder
 - Sorting belongs in the column headers
+- Row actions go in a trailing menu, not on hover
 - The pagination footer reports the visible range
 - The mobile fold
 
@@ -131,6 +132,29 @@ they claim to sort and merely be inactive.
 
 Sort an inactive column descending on first click: for dates and amounts the
 interesting end is the large one, and ascending makes every first click wasted.
+
+## Row actions go in a trailing menu, not on hover
+
+A hover-revealed button is unreachable on touch — `focus-visible` rescues a
+keyboard, not a finger — and a wide table is the likeliest to be read on a
+phone. Per-row actions also accumulate; a menu absorbs a fourth and fifth where
+a row of inline buttons cannot.
+
+```tsx
+<TableHead className="w-12"><span className="sr-only">Actions</span></TableHead>
+…
+<DropdownMenuTrigger render={<Button size="icon-sm" variant="ghost" />}>
+  <MoreHorizontalIcon />
+  <span className="sr-only">Actions for payment {truncateId(id)}</span>
+</DropdownMenuTrigger>
+```
+
+**Name the row in the trigger's accessible label.** Ten identical "Actions"
+buttons leave a screen reader to work out which row it is on from context it
+does not have.
+
+Duplicating an action that also exists inline is fine and often right: an icon
+button is the fast path, the menu item is the labelled one.
 
 ## The pagination footer reports the visible range
 

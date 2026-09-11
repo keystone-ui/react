@@ -18,6 +18,7 @@ const ROW_ACTION_CASHOUT = /^Action Cashout/;
 const ROW_CURRENCY = /^Currency/;
 const ROW_PROVIDER = /^Provider/;
 const NEXT_PAGE = /next page/i;
+const ROW_ACTIONS = /^Actions for payment/;
 const ROW_CURRENCY_TWO = /^Currency 2 selected/;
 
 const rowCount = (page: Page) =>
@@ -361,6 +362,37 @@ test.describe("payments filter pills", () => {
       );
     });
     expect(aligned).toBe(true);
+  });
+
+  test("every row carries its actions in a menu, not on hover", async ({
+    page,
+  }) => {
+    await openPayments(page);
+
+    // A hover-revealed button is unreachable on touch, and this table is the
+    // one most likely to be read on a phone. The menu is there without
+    // hovering, for every row.
+    const triggers = page.getByRole("button", { name: ROW_ACTIONS });
+    expect(await triggers.count()).toBe(10);
+    await expect(triggers.first()).toBeVisible();
+
+    await triggers.first().click();
+    expect(await page.getByRole("menuitem").allTextContents()).toEqual([
+      "View details",
+      "Copy payment ID",
+    ]);
+  });
+
+  test("the actions trigger names the row it belongs to", async ({ page }) => {
+    await openPayments(page);
+
+    // Ten identical "Actions" buttons would leave a screen reader to work out
+    // which row it is on from context it does not have.
+    const names = await page
+      .getByRole("button", { name: ROW_ACTIONS })
+      .evaluateAll((nodes) => nodes.map((node) => node.textContent?.trim()));
+
+    expect(new Set(names).size).toBe(names.length);
   });
 
   test("the table scrolls inside its own container, not the page", async ({

@@ -5,6 +5,13 @@ import { Button } from "@keystoneui/react/button";
 import { Card, CardContent } from "@keystoneui/react/card";
 import { CopyButton } from "@keystoneui/react/copy-button";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@keystoneui/react/dropdown-menu";
+import {
   Table,
   TableBody,
   TableCell,
@@ -21,7 +28,11 @@ import {
   TablePaginationPageSize,
   TablePaginationStatus,
 } from "@keystoneui/react/table-pagination";
-import { ExternalLink as ExternalLinkIcon } from "lucide-react";
+import {
+  Copy as CopyIcon,
+  Eye as EyeIcon,
+  Ellipsis as MoreHorizontalIcon,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import { AdminPaymentsToolbar } from "./admin-payments-toolbar";
 import {
@@ -133,11 +144,17 @@ export function AdminPaymentsTable({
                   Created
                 </SortableHead>
                 <TableHead>Finished</TableHead>
+                {/* No visible label: the column is one icon wide, and "Actions"
+                    above it would size the column from the header rather than
+                    from the control. */}
+                <TableHead className="w-12">
+                  <span className="sr-only">Actions</span>
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {rows.length === 0 ? (
-                <TableEmpty colSpan={8}>
+                <TableEmpty colSpan={9}>
                   No payments match these filters.
                 </TableEmpty>
               ) : (
@@ -159,19 +176,7 @@ export function AdminPaymentsTable({
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="truncate">{row.playerEmail}</span>
-                        <Button
-                          aria-label={`Open payment ${truncateId(row.id)}`}
-                          className="shrink-0 opacity-0 transition-opacity focus-visible:opacity-100 group-hover/row:opacity-100"
-                          onClick={() => onOpenPayment(row.id)}
-                          size="sm"
-                          variant="outline"
-                        >
-                          <ExternalLinkIcon className="size-3.5" />
-                          Open
-                        </Button>
-                      </div>
+                      <span className="truncate">{row.playerEmail}</span>
                     </TableCell>
                     <TableCell numeric>{row.amount}</TableCell>
                     <TableCell>
@@ -192,6 +197,12 @@ export function AdminPaymentsTable({
                     </TableCell>
                     <TableCell className="text-muted-foreground">
                       {row.finishedAt ?? "-"}
+                    </TableCell>
+                    <TableCell>
+                      <RowActions
+                        onOpen={() => onOpenPayment(row.id)}
+                        paymentId={row.id}
+                      />
                     </TableCell>
                   </TableRow>
                 ))
@@ -308,5 +319,59 @@ function ResultSummary({
       Showing {first}–{last} of {totalCount}{" "}
       {totalCount === 1 ? "payment" : "payments"}
     </>
+  );
+}
+
+/**
+ * Row actions, in a trailing menu rather than a hover-revealed button.
+ *
+ * The button it replaces was unreachable on touch: there is no hover, and
+ * `focus-visible:opacity-100` only rescues a keyboard. A ledger is also where
+ * per-row actions accumulate — refund, export receipt, open the player — and a
+ * menu absorbs those where a row of inline buttons cannot.
+ *
+ * "Copy payment ID" duplicates the icon button beside the id deliberately:
+ * that one is the fast path for a value the table shows truncated, this one is
+ * the labelled path for anyone who would not read an unlabelled icon.
+ */
+function RowActions({
+  onOpen,
+  paymentId,
+}: {
+  onOpen: () => void;
+  paymentId: string;
+}) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger render={<Button size="icon-sm" variant="ghost" />}>
+        <MoreHorizontalIcon />
+        <span className="sr-only">
+          Actions for payment {truncateId(paymentId)}
+        </span>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-44">
+        <DropdownMenuGroup>
+          <DropdownMenuItem onClick={onOpen}>
+            <EyeIcon />
+            View details
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={async () => {
+              // No "Copied" state to hold — the menu closes on click — so this
+              // needs none of what `CopyButton` manages beyond awaiting the
+              // write and not throwing where the clipboard is unavailable.
+              try {
+                await navigator.clipboard.writeText(paymentId);
+              } catch {
+                // Insecure context or permission denied; nothing to undo.
+              }
+            }}
+          >
+            <CopyIcon />
+            Copy payment ID
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
