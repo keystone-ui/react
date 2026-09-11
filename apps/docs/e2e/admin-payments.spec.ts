@@ -139,6 +139,47 @@ test.describe("payments filter pills", () => {
     expect(await pills(page)).toContain("Provider: Stripe");
   });
 
+  test("a new pill lands at the end of the row", async ({ page }) => {
+    await openPayments(page);
+
+    // Ordering by the descriptor table instead of by insertion put each new
+    // pill in its canonical slot — add Amount then Currency and Currency
+    // landed in front of it, nowhere near the button just clicked.
+    await addFilter(page, "Amount");
+    await addFilter(page, "Currency");
+    await addFilter(page, "Created");
+
+    expect(
+      await page
+        .locator("[data-filter-pill] [data-pill-label]")
+        .allTextContents()
+    ).toEqual(["Action:", "Status:", "Amount:", "Currency:", "Created:"]);
+  });
+
+  test("clearing a pill does not take it off the row", async ({ page }) => {
+    await openPayments(page);
+
+    // Set from the drawer, so the pill is showing only because it holds a
+    // value — the case where clearing could pull the control out from under
+    // the cursor.
+    await page.setViewportSize({ height: 900, width: 375 });
+    await page.getByRole("button", { name: DRAWER_TRIGGER }).click();
+    await page.getByRole("button", { name: ROW_PROVIDER }).click();
+    await page.getByRole("radio", { name: "Stripe" }).click();
+    await page.keyboard.press("Escape");
+    await page.setViewportSize({ height: 900, width: 1280 });
+
+    expect(await pills(page)).toContain("Provider: Stripe");
+
+    await pill(page, "Provider").click();
+    await page
+      .locator('[data-slot="dropdown-menu-content"]')
+      .getByRole("menuitemradio", { name: "All" })
+      .click();
+
+    expect(await pills(page)).toContain("Provider: All");
+  });
+
   test("an empty menu offers options and nothing else", async ({ page }) => {
     await openPayments(page);
     const menu = page.locator('[data-slot="dropdown-menu-content"]');

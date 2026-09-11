@@ -301,23 +301,35 @@ export function filterDef(key: FilterKey): FilterDef {
 }
 
 /**
- * Which pills the toolbar shows: the permanent ones, the ones added by hand,
- * and — the load-bearing term — every filter that currently holds a value.
+ * Which pills the toolbar shows, in the order it shows them: the permanent
+ * ones, then the ones added by hand in the order they were added, then — the
+ * load-bearing term — any filter that holds a value without having been asked
+ * for.
  *
- * That last one is what makes applied state impossible to hide. A filter with
- * a value and no pill is exactly the failure the old chip row existed to paper
- * over; here it cannot happen, rather than merely being tested for.
+ * That last group is what makes applied state impossible to hide. A filter
+ * with a value and no pill is exactly the failure the old chip row existed to
+ * paper over; here it cannot happen, rather than merely being tested for. It
+ * is reachable through the mobile drawer, which sets filters that were never
+ * added as pills.
+ *
+ * The ordering matters as much as the membership. Filtering `FILTERS` in
+ * declaration order put each new pill in its canonical slot instead of at the
+ * end — add Amount then Currency and Currency landed in front of it, nowhere
+ * near the `+ Add filter` button you were just looking at.
  */
 export function visibleKeys(
   filters: PaymentFilters,
   added: readonly FilterKey[]
 ): FilterKey[] {
-  return FILTERS.filter(
+  const pinned = [...DEFAULT_KEYS];
+  const chosen = added.filter((key) => !pinned.includes(key));
+  const valued = FILTERS.filter(
     (def) =>
-      DEFAULT_KEYS.includes(def.key) ||
-      added.includes(def.key) ||
-      def.value(filters) !== null
+      def.value(filters) !== null &&
+      !(pinned.includes(def.key) || chosen.includes(def.key))
   ).map((def) => def.key);
+
+  return [...pinned, ...chosen, ...valued];
 }
 
 /** Filters still available to add — the add-filter menu's contents. */

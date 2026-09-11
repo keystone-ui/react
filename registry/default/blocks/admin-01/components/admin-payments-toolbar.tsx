@@ -79,6 +79,7 @@ export function AdminPaymentsToolbar({
             filters={filters}
             key={key}
             onChange={onChange}
+            onPin={onAdd}
             pillKey={key}
           />
         ))}

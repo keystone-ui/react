@@ -37,6 +37,12 @@ import {
 interface PillProps {
   filters: PaymentFilters;
   onChange: (patch: Partial<PaymentFilters>) => void;
+  /**
+   * Pins the pill to the row. Clearing calls it so that a pill which was only
+   * showing because it held a value — one set from the mobile drawer, say —
+   * does not vanish under the cursor the moment it is emptied.
+   */
+  onPin: (key: FilterKey) => void;
 }
 
 /**
@@ -51,9 +57,19 @@ interface PillProps {
 export function PaymentFilterPill({
   filters,
   onChange,
+  onPin,
   pillKey,
 }: PillProps & { pillKey: FilterKey }) {
   const def = filterDef(pillKey);
+  // Every change made through a pill also pins it. Without this a pill that
+  // is only on the row because it holds a value — one set from the mobile
+  // drawer — disappears the moment you empty it, taking the control out from
+  // under the cursor. Emptying a filter is the one moment you are most likely
+  // to want to set it to something else.
+  const change = (patch: Partial<PaymentFilters>) => {
+    onChange(patch);
+    onPin(pillKey);
+  };
   const value = def.value(filters);
   const shared = {
     active: value !== null,
@@ -62,9 +78,7 @@ export function PaymentFilterPill({
   const body = value ?? def.empty;
 
   if (pillKey === "created" || pillKey === "amount") {
-    return (
-      <RangePill filters={filters} onChange={onChange} pillKey={pillKey} />
-    );
+    return <RangePill filters={filters} onChange={change} pillKey={pillKey} />;
   }
 
   return (
@@ -75,13 +89,9 @@ export function PaymentFilterPill({
       <DropdownMenuContent align="start" className="min-w-44">
         <DropdownMenuGroup>
           {pillKey === "currencies" ? (
-            <CurrencyItems filters={filters} onChange={onChange} />
+            <CurrencyItems filters={filters} onChange={change} />
           ) : (
-            <RadioItems
-              filters={filters}
-              onChange={onChange}
-              pillKey={pillKey}
-            />
+            <RadioItems filters={filters} onChange={change} pillKey={pillKey} />
           )}
         </DropdownMenuGroup>
         {/* Only the multi-select earns a footer: a single-select's list
@@ -89,7 +99,7 @@ export function PaymentFilterPill({
         {pillKey === "currencies" && (
           <MenuFooter
             count={filters.currencies.length}
-            onClear={() => onChange(def.clear)}
+            onClear={() => change(def.clear)}
           />
         )}
       </DropdownMenuContent>
@@ -198,7 +208,7 @@ function RangePill({
   filters,
   onChange,
   pillKey,
-}: PillProps & { pillKey: FilterKey }) {
+}: Omit<PillProps, "onPin"> & { pillKey: FilterKey }) {
   const def = filterDef(pillKey);
   const value = def.value(filters);
   const isDate = pillKey === "created";
