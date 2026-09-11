@@ -22,6 +22,7 @@
  */
 
 import {
+  existsSync,
   mkdirSync,
   readdirSync,
   readFileSync,
@@ -32,6 +33,7 @@ import { join } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
 const REGISTRY_TS = join(ROOT, "packages/ui/src/_registry.ts");
+const UI_SRC_DIR = join(ROOT, "packages/ui/src");
 const MDX_DIR = join(ROOT, "apps/docs/content/docs/components");
 const DEMOS_DIR = join(ROOT, "apps/docs/demos");
 const REGISTRY_JSON = join(ROOT, "registry.json");
@@ -102,6 +104,31 @@ function pascalToTitle(pascal) {
   return pascal.replace(/([a-z])([A-Z])/g, "$1 $2");
 }
 
+/**
+ * Sibling components a source file imports relatively (`./button`).
+ *
+ * These are real registry dependencies, but `_registry.ts` lists them by hand,
+ * so they get missed -- `date-input` and `input-group` both shipped without
+ * them, which installs a file whose sibling import resolves to nothing.
+ * Deriving them from the source makes that class of omission impossible.
+ */
+function extractSiblingImports(name) {
+  const file = join(UI_SRC_DIR, `${name}.tsx`);
+  if (!existsSync(file)) {
+    return [];
+  }
+  const source = readFileSync(file, "utf-8");
+  const siblings = new Set();
+  for (const match of source.matchAll(/from\s+["']\.\/([a-z0-9-]+)["']/g)) {
+    // `utils` is not a registry item -- it is the consumer's own lib/utils,
+    // and the built output rewrites the specifier to point at it.
+    if (match[1] !== "utils") {
+      siblings.add(match[1]);
+    }
+  }
+  return [...siblings];
+}
+
 function buildUiItems(registryEntries, mdxMeta) {
   return registryEntries.map((entry) => {
     const meta = mdxMeta.get(entry.name) ?? {
@@ -120,13 +147,24 @@ function buildUiItems(registryEntries, mdxMeta) {
       item.dependencies = entry.dependencies;
     }
 
-    if (entry.registryDependencies.length > 0) {
-      item.registryDependencies = entry.registryDependencies;
+    const registryDeps = [
+      ...new Set([
+        ...entry.registryDependencies,
+        ...extractSiblingImports(entry.name),
+      ]),
+    ].sort();
+
+    if (registryDeps.length > 0) {
+      item.registryDependencies = registryDeps;
     }
 
     item.files = [
       {
         path: `packages/ui/src/${entry.name}.tsx`,
+        // Without an explicit target, shadcn derives the destination from the
+        // source path and writes `components/ui/src/<name>.tsx` -- a doubled
+        // segment that puts the file somewhere nothing imports from.
+        target: `components/ui/${entry.name}.tsx`,
         type: "registry:ui",
       },
     ];

@@ -24,6 +24,9 @@ import {
 const registry = readRegistry();
 const builtNames = listBuiltItemNames();
 
+const RELATIVE_UTILS_IMPORT = /from\s*["']\.\/utils["']/;
+const RELATIVE_SIBLING_IMPORT = /from\s*["']\.\/([a-z0-9-]+)["']/g;
+
 describe("registry.json", () => {
   it("declares at least one item", () => {
     expect(registry.items.length).toBeGreaterThan(0);
@@ -100,5 +103,79 @@ describe("built registry output", () => {
     expect(readFileSync(copy, "utf-8")).toBe(
       readFileSync(REGISTRY_JSON, "utf-8")
     );
+  });
+});
+
+/**
+ * What a consumer actually receives.
+ *
+ * `shadcn build` embeds each source file verbatim, so the shipped content is
+ * this repo's source -- including imports written for this repo's layout. Three
+ * things went wrong there at once, all of them invisible to the parity tests
+ * above and all of them verified against a real `shadcn add` install:
+ *
+ *  - `import { cn } from "./utils"` shipped in 55 items. shadcn leaves the
+ *    specifier alone (it does not start with `@/`), so it resolved to a
+ *    sibling that no item creates.
+ *  - No `registry:ui` file declared a `target`, so shadcn derived one from the
+ *    source path and wrote `components/ui/src/<name>.tsx`.
+ *  - `date-input` and `input-group` imported siblings they did not declare as
+ *    registry dependencies, so those files were never installed.
+ */
+describe("what a consumer installs", () => {
+  const uiItems = registry.items.filter((item) => item.type === "registry:ui");
+
+  it("has registry:ui items to check", () => {
+    expect(uiItems.length).toBeGreaterThan(0);
+  });
+
+  it("targets components/ui for every registry:ui file", () => {
+    const untargeted: string[] = [];
+    for (const item of uiItems) {
+      for (const file of item.files ?? []) {
+        if (file.target !== `components/ui/${item.name}.tsx`) {
+          untargeted.push(`${item.name}: ${file.target ?? "(no target)"}`);
+        }
+      }
+    }
+
+    expect(untargeted).toEqual([]);
+  });
+
+  it("ships no import of `./utils`, which resolves to nothing once installed", () => {
+    const offenders: string[] = [];
+    for (const name of builtNames) {
+      const item = readJson<RegistryItem>(builtItemPath(name));
+      for (const file of item.files ?? []) {
+        if (RELATIVE_UTILS_IMPORT.test(file.content ?? "")) {
+          offenders.push(name);
+        }
+      }
+    }
+
+    expect(offenders).toEqual([]);
+  });
+
+  it("declares every sibling component it imports as a registry dependency", () => {
+    const undeclared: string[] = [];
+    for (const name of builtNames) {
+      const item = readJson<RegistryItem>(builtItemPath(name));
+      if (item.type !== "registry:ui") {
+        continue;
+      }
+      const declared = new Set(item.registryDependencies ?? []);
+      for (const file of item.files ?? []) {
+        for (const match of (file.content ?? "").matchAll(
+          RELATIVE_SIBLING_IMPORT
+        )) {
+          const sibling = match[1];
+          if (sibling !== "utils" && !declared.has(sibling)) {
+            undeclared.push(`${name} imports ./${sibling}`);
+          }
+        }
+      }
+    }
+
+    expect(undeclared).toEqual([]);
   });
 });

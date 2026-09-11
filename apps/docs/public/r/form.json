@@ -10,7 +10,8 @@
     {
       "path": "packages/ui/src/form.tsx",
       "content": "export type {\n  DescriptionProps,\n  ErrorMessageProps,\n  FieldGroupProps,\n  FormProps,\n  LabelProps,\n} from \"./label\";\nexport {\n  Description,\n  ErrorMessage,\n  FieldGroup,\n  Form,\n  Label,\n} from \"./label\";\n",
-      "type": "registry:ui"
+      "type": "registry:ui",
+      "target": "components/ui/form.tsx"
     }
   ],
   "type": "registry:ui"

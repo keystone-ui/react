@@ -29,7 +29,12 @@ export interface RegistryItem {
   cssVars?: Record<string, Record<string, string>>;
   dependencies?: string[];
   description?: string;
-  files?: { path: string; type: string; content?: string }[];
+  files?: {
+    content?: string;
+    path: string;
+    target?: string;
+    type: string;
+  }[];
   name: string;
   registryDependencies?: string[];
   title?: string;

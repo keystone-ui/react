@@ -576,6 +576,7 @@
       "files": [
         {
           "path": "packages/ui/src/accordion.tsx",
+          "target": "components/ui/accordion.tsx",
           "type": "registry:ui"
         }
       ]
@@ -588,6 +589,7 @@
       "files": [
         {
           "path": "packages/ui/src/aspect-ratio.tsx",
+          "target": "components/ui/aspect-ratio.tsx",
           "type": "registry:ui"
         }
       ]
@@ -606,6 +608,7 @@
       "files": [
         {
           "path": "packages/ui/src/alert-dialog.tsx",
+          "target": "components/ui/alert-dialog.tsx",
           "type": "registry:ui"
         }
       ]
@@ -621,6 +624,7 @@
       "files": [
         {
           "path": "packages/ui/src/avatar.tsx",
+          "target": "components/ui/avatar.tsx",
           "type": "registry:ui"
         }
       ]
@@ -637,6 +641,7 @@
       "files": [
         {
           "path": "packages/ui/src/badge.tsx",
+          "target": "components/ui/badge.tsx",
           "type": "registry:ui"
         }
       ]
@@ -653,6 +658,7 @@
       "files": [
         {
           "path": "packages/ui/src/breadcrumb.tsx",
+          "target": "components/ui/breadcrumb.tsx",
           "type": "registry:ui"
         }
       ]
@@ -670,6 +676,7 @@
       "files": [
         {
           "path": "packages/ui/src/button.tsx",
+          "target": "components/ui/button.tsx",
           "type": "registry:ui"
         }
       ]
@@ -689,6 +696,7 @@
       "files": [
         {
           "path": "packages/ui/src/button-group.tsx",
+          "target": "components/ui/button-group.tsx",
           "type": "registry:ui"
         }
       ]
@@ -709,6 +717,7 @@
       "files": [
         {
           "path": "packages/ui/src/calendar.tsx",
+          "target": "components/ui/calendar.tsx",
           "type": "registry:ui"
         }
       ]
@@ -729,6 +738,7 @@
       "files": [
         {
           "path": "packages/ui/src/carousel.tsx",
+          "target": "components/ui/carousel.tsx",
           "type": "registry:ui"
         }
       ]
@@ -744,6 +754,7 @@
       "files": [
         {
           "path": "packages/ui/src/alert.tsx",
+          "target": "components/ui/alert.tsx",
           "type": "registry:ui"
         }
       ]
@@ -759,6 +770,7 @@
       "files": [
         {
           "path": "packages/ui/src/card.tsx",
+          "target": "components/ui/card.tsx",
           "type": "registry:ui"
         }
       ]
@@ -775,6 +787,7 @@
       "files": [
         {
           "path": "packages/ui/src/circular-progress.tsx",
+          "target": "components/ui/circular-progress.tsx",
           "type": "registry:ui"
         }
       ]
@@ -790,6 +803,7 @@
       "files": [
         {
           "path": "packages/ui/src/checkbox.tsx",
+          "target": "components/ui/checkbox.tsx",
           "type": "registry:ui"
         }
       ]
@@ -805,6 +819,7 @@
       "files": [
         {
           "path": "packages/ui/src/collapsible.tsx",
+          "target": "components/ui/collapsible.tsx",
           "type": "registry:ui"
         }
       ]
@@ -825,6 +840,7 @@
       "files": [
         {
           "path": "packages/ui/src/combobox.tsx",
+          "target": "components/ui/combobox.tsx",
           "type": "registry:ui"
         }
       ]
@@ -839,12 +855,13 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "modal",
-        "input-group"
+        "input-group",
+        "modal"
       ],
       "files": [
         {
           "path": "packages/ui/src/command.tsx",
+          "target": "components/ui/command.tsx",
           "type": "registry:ui"
         }
       ]
@@ -854,9 +871,13 @@
       "type": "registry:ui",
       "title": "Date Input",
       "description": "Date picker input field for selecting dates with keyboard and calendar support.",
+      "registryDependencies": [
+        "input-group"
+      ],
       "files": [
         {
           "path": "packages/ui/src/date-input.tsx",
+          "target": "components/ui/date-input.tsx",
           "type": "registry:ui"
         }
       ]
@@ -869,6 +890,7 @@
       "files": [
         {
           "path": "packages/ui/src/description-list.tsx",
+          "target": "components/ui/description-list.tsx",
           "type": "registry:ui"
         }
       ]
@@ -884,6 +906,7 @@
       "files": [
         {
           "path": "packages/ui/src/drawer.tsx",
+          "target": "components/ui/drawer.tsx",
           "type": "registry:ui"
         }
       ]
@@ -899,6 +922,7 @@
       "files": [
         {
           "path": "packages/ui/src/empty.tsx",
+          "target": "components/ui/empty.tsx",
           "type": "registry:ui"
         }
       ]
@@ -918,6 +942,7 @@
       "files": [
         {
           "path": "packages/ui/src/dropdown-menu.tsx",
+          "target": "components/ui/dropdown-menu.tsx",
           "type": "registry:ui"
         }
       ]
@@ -934,6 +959,7 @@
       "files": [
         {
           "path": "packages/ui/src/field.tsx",
+          "target": "components/ui/field.tsx",
           "type": "registry:ui"
         }
       ]
@@ -949,6 +975,7 @@
       "files": [
         {
           "path": "packages/ui/src/form.tsx",
+          "target": "components/ui/form.tsx",
           "type": "registry:ui"
         }
       ]
@@ -965,6 +992,7 @@
       "files": [
         {
           "path": "packages/ui/src/item.tsx",
+          "target": "components/ui/item.tsx",
           "type": "registry:ui"
         }
       ]
@@ -977,6 +1005,7 @@
       "files": [
         {
           "path": "packages/ui/src/input.tsx",
+          "target": "components/ui/input.tsx",
           "type": "registry:ui"
         }
       ]
@@ -987,11 +1016,14 @@
       "title": "Input Group",
       "description": "Groups an input with adjacent buttons, icons, or text add-ons for combined input actions.",
       "registryDependencies": [
-        "button"
+        "button",
+        "input",
+        "textarea"
       ],
       "files": [
         {
           "path": "packages/ui/src/input-group.tsx",
+          "target": "components/ui/input-group.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1007,6 +1039,7 @@
       "files": [
         {
           "path": "packages/ui/src/input-otp.tsx",
+          "target": "components/ui/input-otp.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1019,6 +1052,7 @@
       "files": [
         {
           "path": "packages/ui/src/kbd.tsx",
+          "target": "components/ui/kbd.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1034,6 +1068,7 @@
       "files": [
         {
           "path": "packages/ui/src/label.tsx",
+          "target": "components/ui/label.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1054,6 +1089,7 @@
       "files": [
         {
           "path": "packages/ui/src/modal.tsx",
+          "target": "components/ui/modal.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1069,6 +1105,7 @@
       "files": [
         {
           "path": "packages/ui/src/native-select.tsx",
+          "target": "components/ui/native-select.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1087,6 +1124,7 @@
       "files": [
         {
           "path": "packages/ui/src/pagination.tsx",
+          "target": "components/ui/pagination.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1102,6 +1140,7 @@
       "files": [
         {
           "path": "packages/ui/src/popover.tsx",
+          "target": "components/ui/popover.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1118,6 +1157,7 @@
       "files": [
         {
           "path": "packages/ui/src/progress.tsx",
+          "target": "components/ui/progress.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1133,6 +1173,7 @@
       "files": [
         {
           "path": "packages/ui/src/radio-group.tsx",
+          "target": "components/ui/radio-group.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1148,6 +1189,7 @@
       "files": [
         {
           "path": "packages/ui/src/resizable.tsx",
+          "target": "components/ui/resizable.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1164,6 +1206,7 @@
       "files": [
         {
           "path": "packages/ui/src/select.tsx",
+          "target": "components/ui/select.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1179,6 +1222,7 @@
       "files": [
         {
           "path": "packages/ui/src/slider.tsx",
+          "target": "components/ui/slider.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1191,6 +1235,7 @@
       "files": [
         {
           "path": "packages/ui/src/separator.tsx",
+          "target": "components/ui/separator.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1203,6 +1248,7 @@
       "files": [
         {
           "path": "packages/ui/src/skeleton.tsx",
+          "target": "components/ui/skeleton.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1218,6 +1264,7 @@
       "files": [
         {
           "path": "packages/ui/src/spinner.tsx",
+          "target": "components/ui/spinner.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1234,6 +1281,7 @@
       "files": [
         {
           "path": "packages/ui/src/stepper.tsx",
+          "target": "components/ui/stepper.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1249,6 +1297,7 @@
       "files": [
         {
           "path": "packages/ui/src/switch.tsx",
+          "target": "components/ui/switch.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1265,6 +1314,7 @@
       "files": [
         {
           "path": "packages/ui/src/table.tsx",
+          "target": "components/ui/table.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1283,6 +1333,7 @@
       "files": [
         {
           "path": "packages/ui/src/tabs.tsx",
+          "target": "components/ui/tabs.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1295,6 +1346,7 @@
       "files": [
         {
           "path": "packages/ui/src/textarea.tsx",
+          "target": "components/ui/textarea.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1312,6 +1364,7 @@
       "files": [
         {
           "path": "packages/ui/src/tag.tsx",
+          "target": "components/ui/tag.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1331,6 +1384,7 @@
       "files": [
         {
           "path": "packages/ui/src/tag-group.tsx",
+          "target": "components/ui/tag-group.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1347,6 +1401,7 @@
       "files": [
         {
           "path": "packages/ui/src/toggle.tsx",
+          "target": "components/ui/toggle.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1366,6 +1421,7 @@
       "files": [
         {
           "path": "packages/ui/src/toggle-group.tsx",
+          "target": "components/ui/toggle-group.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1381,6 +1437,7 @@
       "files": [
         {
           "path": "packages/ui/src/tooltip.tsx",
+          "target": "components/ui/tooltip.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1397,6 +1454,7 @@
       "files": [
         {
           "path": "packages/ui/src/toast.tsx",
+          "target": "components/ui/toast.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1416,6 +1474,7 @@
       "files": [
         {
           "path": "packages/ui/src/selection-bar.tsx",
+          "target": "components/ui/selection-bar.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1435,6 +1494,7 @@
       "files": [
         {
           "path": "packages/ui/src/stat.tsx",
+          "target": "components/ui/stat.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1455,6 +1515,7 @@
       "files": [
         {
           "path": "packages/ui/src/table-pagination.tsx",
+          "target": "components/ui/table-pagination.tsx",
           "type": "registry:ui"
         }
       ]
