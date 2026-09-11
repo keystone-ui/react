@@ -27,7 +27,10 @@ import { STATUS_VARIANT } from "./admin-filters";
 import { statusLabels, type User } from "./mock-admin";
 
 interface AdminUserDetailProps {
+  /** The user who sent the invite, resolved from `user.invitedBy`. */
+  inviter: User | null;
   onBack: () => void;
+  onOpenUser: (id: string) => void;
   user: User;
 }
 
@@ -44,7 +47,12 @@ interface AdminUserDetailProps {
  * an id exists to be pasted somewhere else. Enum values get a `Badge` so they
  * read the same here as they do in the table.
  */
-export function AdminUserDetail({ onBack, user }: AdminUserDetailProps) {
+export function AdminUserDetail({
+  inviter,
+  onBack,
+  onOpenUser,
+  user,
+}: AdminUserDetailProps) {
   const initials = user.name
     .split(" ")
     .map((part) => part[0])
@@ -52,29 +60,34 @@ export function AdminUserDetail({ onBack, user }: AdminUserDetailProps) {
 
   return (
     <div className="flex w-full flex-col gap-6">
-      {/* Wraps: the name, its badge and two labelled actions do not fit one
-          line on a phone, and the actions dropping to their own row reads
-          better than truncating the name or hiding the labels. */}
-      <div className="flex flex-wrap items-center gap-3">
-        <Button
-          aria-label="Back to users"
-          onClick={onBack}
-          size="icon-sm"
-          variant="ghost"
-        >
-          <ArrowLeftIcon />
-        </Button>
-        <Avatar size="sm">
-          <AvatarFallback>{initials}</AvatarFallback>
-        </Avatar>
-        <h2 className="min-w-0 truncate font-semibold text-lg">{user.name}</h2>
-        <Badge variant={STATUS_VARIANT[user.status]}>
-          {statusLabels[user.status]}
-        </Badge>
+      {/* Full width with the actions at the far edge, while the card below is
+          capped — so the buttons reach the container without the record's two
+          columns drifting apart on a wide screen. Wraps, because the name, its
+          badge and two labelled actions do not share a line on a phone. */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <Button
+            aria-label="Back to users"
+            onClick={onBack}
+            size="icon-sm"
+            variant="ghost"
+          >
+            <ArrowLeftIcon />
+          </Button>
+          <Avatar size="sm">
+            <AvatarFallback>{initials}</AvatarFallback>
+          </Avatar>
+          <h2 className="min-w-0 truncate font-semibold text-lg">
+            {user.name}
+          </h2>
+          <Badge variant={STATUS_VARIANT[user.status]}>
+            {statusLabels[user.status]}
+          </Badge>
+        </div>
 
-        {/* Pushed to the end, and on the same 32px tier as the back button so
-            the whole header row sits on one line of the control ladder. */}
-        <div className="ml-auto flex shrink-0 items-center gap-2">
+        {/* Same 32px tier as the back button, so the header sits on one rung
+            of the control ladder. */}
+        <div className="flex shrink-0 items-center gap-2">
           <Button size="sm" variant="outline">
             <PencilIcon />
             Edit user
@@ -86,11 +99,14 @@ export function AdminUserDetail({ onBack, user }: AdminUserDetailProps) {
         </div>
       </div>
 
-      <Card variant="outline">
-        <CardHeader>
-          <CardTitle>User information</CardTitle>
+      <Card className="max-w-4xl gap-0 py-0" variant="outline">
+        <CardHeader className="border-border border-b px-6 py-4">
+          <CardTitle className="text-base">User information</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-col gap-6 [&>section+section]:border-border [&>section+section]:border-t [&>section+section]:pt-6">
+        {/* The card's own padding is zeroed so each section carries it, which
+            lets the rules between them run the full width of the card rather
+            than stopping short of its edges. */}
+        <CardContent className="flex flex-col p-0">
           <Section title="Identity">
             <Pair term="User ID">
               <Mono value={user.id} />
@@ -123,7 +139,19 @@ export function AdminUserDetail({ onBack, user }: AdminUserDetailProps) {
             {/* The founding account has no inviter. Rendering the dash here
                 rather than omitting the row keeps the grid aligned and says
                 "nothing" rather than leaving the reader to wonder. */}
-            <Pair term="Invited by">{user.invitedBy ?? <Empty />}</Pair>
+            <Pair term="Invited by">
+              {inviter ? (
+                <button
+                  className="cursor-pointer rounded-sm text-left hover:underline focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
+                  onClick={() => onOpenUser(inviter.id)}
+                  type="button"
+                >
+                  {inviter.name}
+                </button>
+              ) : (
+                <Empty />
+              )}
+            </Pair>
           </Section>
         </CardContent>
       </Card>
@@ -133,13 +161,13 @@ export function AdminUserDetail({ onBack, user }: AdminUserDetailProps) {
 
 function Section({ children, title }: { children: ReactNode; title: string }) {
   return (
-    <section className="flex flex-col gap-3">
-      <h3 className="font-semibold text-sm">{title}</h3>
+    <section className="flex flex-col gap-4 border-border border-t px-6 py-5 first:border-t-0">
+      <h3 className="font-semibold text-foreground text-sm">{title}</h3>
       {/* The grid lives here rather than behind a `columns` prop: it is four
           classes on the element we already style, and it is written once for
           every section. */}
       <DescriptionList
-        className="grid grid-cols-1 gap-x-8 sm:grid-cols-2"
+        className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2"
         orientation="stacked"
       >
         {children}

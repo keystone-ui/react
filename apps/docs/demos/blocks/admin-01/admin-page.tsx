@@ -74,6 +74,11 @@ export function AdminPage() {
     ? (users.find((user) => user.id === openUserId) ?? null)
     : null;
 
+  // `invitedBy` holds the inviter's id, so the record can link to them.
+  const inviter = openUser?.invitedBy
+    ? (users.find((user) => user.id === openUser.invitedBy) ?? null)
+    : null;
+
   const pageCount = Math.max(1, Math.ceil(sorted.length / pageSize));
   const pageRows = sorted.slice(
     pageIndex * pageSize,
@@ -171,7 +176,9 @@ export function AdminPage() {
         <div className="flex min-w-0 flex-1 flex-col gap-6 p-4 md:p-6">
           {section === "users" && openUser ? (
             <AdminUserDetail
+              inviter={inviter}
               onBack={() => setOpenUserId(null)}
+              onOpenUser={setOpenUserId}
               user={openUser}
             />
           ) : null}

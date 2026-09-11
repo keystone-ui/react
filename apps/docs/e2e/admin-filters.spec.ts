@@ -227,6 +227,31 @@ test.describe("user detail", () => {
     }
   });
 
+  /**
+   * `invitedBy` holds the inviter's id rather than their name, so the record
+   * can link to them. A detail page that names another record it can already
+   * open should not render it as dead text.
+   */
+  test("navigates from a record to the one that invited it", async ({
+    page,
+  }) => {
+    await openUsers(page);
+    await page
+      .getByRole("button", { exact: true, name: "Bruno Salgado" })
+      .click();
+
+    const invitedBy = page
+      .locator('[data-slot="description-list-item"]')
+      .filter({ hasText: "Invited by" });
+    await expect(invitedBy).toContainText("Ada Okonkwo");
+
+    await invitedBy.getByRole("button").click();
+
+    await expect(
+      page.getByRole("heading", { level: 2, name: "Ada Okonkwo" })
+    ).toBeVisible();
+  });
+
   test("breadcrumb names the record and walks back to the list", async ({
     page,
   }) => {

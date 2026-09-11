@@ -54,6 +54,10 @@ The breadcrumb reflects that: with a record open, `Users` stops being the page a
 
 Values are stacked above their labels in two columns — `DescriptionList`'s `orientation="stacked"`, with the grid itself in `className`. Its default row layout right-aligns each value against its label, which reads as a summary; a record wants the label to sit above the value it describes. A field the record does not have renders `-` rather than being omitted, so the grid keeps its alignment.
 
+`invitedBy` stores the inviter's **id**, not their name, so **Invited by** links to that user's record rather than naming it as dead text. A detail page that mentions another record it can already open should take you there.
+
+The header spans the full width with the actions at its right edge, while the card is capped — so the buttons reach the container without the record's two columns drifting apart on a wide screen. Sections carry their own padding and the card's is zeroed, which lets the rules between them run the full width of the card instead of stopping short of its edges.
+
 **The toolbar forks at `sm:`, following [`tickets-01`](/docs/blocks/tickets-01).** Search is shared and always visible; the filter cluster is `hidden sm:flex`, and below that a single Filters button opens a bottom-sheet drawer. The fork is CSS-only — both trees are always mounted, so there is no `useMediaQuery` to get wrong on the server, and no flash of the wrong layout during hydration.
 
 The drawer's body is a [`Stepper`](/docs/components/stepper): a menu of "label + current value" rows that drill into one `RadioGroup` screen per filter, with a back arrow and an Apply footer. Filters apply **live** — `Apply` only dismisses, there is no draft state to reconcile.
