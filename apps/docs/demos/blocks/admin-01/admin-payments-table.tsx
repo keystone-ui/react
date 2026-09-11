@@ -14,7 +14,13 @@ import {
   TableRow,
   TableSortButton,
 } from "@keystoneui/react/table";
-import { TablePagination } from "@keystoneui/react/table-pagination";
+import {
+  TablePagination,
+  TablePaginationButtons,
+  TablePaginationInfo,
+  TablePaginationPageSize,
+  TablePaginationStatus,
+} from "@keystoneui/react/table-pagination";
 import { ExternalLink as ExternalLinkIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { AdminPaymentsToolbar } from "./admin-payments-toolbar";
@@ -84,13 +90,6 @@ export function AdminPaymentsTable({
             onAdd={onFilterAdd}
             onChange={onFiltersChange}
             onClear={onFiltersClear}
-          />
-
-          <ResultSummary
-            pageIndex={pageIndex}
-            pageSize={pageSize}
-            rowCount={rows.length}
-            totalCount={totalCount}
           />
 
           <Table hoverable>
@@ -200,14 +199,34 @@ export function AdminPaymentsTable({
             </TableBody>
           </Table>
 
-          <TablePagination
-            onPageIndexChange={onPageIndexChange}
-            onPageSizeChange={onPageSizeChange}
-            pageCount={pageCount}
-            pageIndex={pageIndex}
-            pageSize={pageSize}
-            totalCount={totalCount}
-          />
+          {/* Composed rather than props-driven: the info slot only renders a
+              selection count from props, and this table has no selection. The
+              parts are otherwise the default composition. */}
+          <TablePagination pageCount={pageCount} pageIndex={pageIndex}>
+            <TablePaginationInfo>
+              <ResultSummary
+                pageIndex={pageIndex}
+                pageSize={pageSize}
+                rowCount={rows.length}
+                totalCount={totalCount}
+              />
+            </TablePaginationInfo>
+            <div className="flex w-full items-center gap-6 lg:w-fit lg:gap-8">
+              <TablePaginationPageSize
+                onValueChange={onPageSizeChange}
+                value={pageSize}
+              />
+              <TablePaginationStatus
+                pageCount={pageCount}
+                pageIndex={pageIndex}
+              />
+              <TablePaginationButtons
+                onPageIndexChange={onPageIndexChange}
+                pageCount={pageCount}
+                pageIndex={pageIndex}
+              />
+            </div>
+          </TablePagination>
         </CardContent>
       </Card>
     </div>
@@ -254,15 +273,15 @@ function SortableHead({
 }
 
 /**
- * How much of the result set is on screen.
+ * How much of the result set is on screen, for the footer's info slot.
  *
- * The pagination footer answers "which page", which is a different question —
- * it reads `Page 1 of 2` whether that page holds ten rows or one. This says
- * how many rows there are and which of them you are looking at.
+ * That slot is where this table's sibling puts "N of M row(s) selected", and
+ * it is the same question asked of a table without selection. The page status
+ * beside it answers something else: `Page 2 of 2` reads the same whether that
+ * page holds ten rows or the eight left over.
  *
- * `aria-live` because it is the only feedback a filter change produces for
- * someone who cannot see the table shrink. Polite, so it waits its turn
- * rather than interrupting the control being operated.
+ * No `aria-live` here — `TablePaginationInfo` is already one, so announcing
+ * would double up.
  */
 function ResultSummary({
   pageIndex,
@@ -285,9 +304,9 @@ function ResultSummary({
   const last = pageIndex * pageSize + rowCount;
 
   return (
-    <p aria-live="polite" className="text-muted-foreground text-sm">
+    <>
       Showing {first}–{last} of {totalCount}{" "}
       {totalCount === 1 ? "payment" : "payments"}
-    </p>
+    </>
   );
 }

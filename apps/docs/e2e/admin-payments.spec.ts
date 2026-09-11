@@ -323,9 +323,9 @@ test.describe("payments filter pills", () => {
     page,
   }) => {
     await openPayments(page);
-    // Scoped to the paragraph: `TablePagination` ships its own live regions,
-    // and one of them is an empty `table-pagination-info` slot.
-    const summary = page.locator('p[aria-live="polite"]');
+    // The footer's info slot — where the sibling table puts its selection
+    // count, and the same question asked of a table without selection.
+    const summary = page.locator('[data-slot="table-pagination-info"]');
 
     await expect(summary).toHaveText("Showing 1–10 of 18 payments");
 
@@ -344,7 +344,23 @@ test.describe("payments filter pills", () => {
     // The empty row already says nothing matched; a summary reading "0 of 0"
     // under it would only repeat that less gracefully.
     await page.getByLabel("Search payments by email").fill("zzzznomatch");
-    await expect(summary).toHaveCount(0);
+    await expect(summary).toHaveText("");
+
+    // It sits on the footer's baseline, beside the page-size control rather
+    // than above the table.
+    const aligned = await page.evaluate(() => {
+      const mid = (selector: string) => {
+        const box = document.querySelector(selector)?.getBoundingClientRect();
+        return box ? box.top + box.height / 2 : Number.NaN;
+      };
+      return (
+        Math.abs(
+          mid('[data-slot="table-pagination-info"]') -
+            mid('[data-slot="table-pagination-page-size"]')
+        ) < 1
+      );
+    });
+    expect(aligned).toBe(true);
   });
 
   test("the table scrolls inside its own container, not the page", async ({
