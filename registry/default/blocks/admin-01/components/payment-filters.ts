@@ -3,6 +3,7 @@ import {
   type Payment,
   type PaymentStatus,
   type PaymentType,
+  PROVIDERS,
   type Provider,
   paymentStatusLabels,
 } from "@/components/mock-payments";
@@ -10,11 +11,15 @@ import {
 /**
  * The payments filter vocabulary, owned in one place.
  *
- * Eleven filters is past what a toolbar row can hold, so most of them live in
- * a panel. That only works if what is applied stays visible while the panel is
- * shut — hence `activeFilterChips`, which turns the state into a list of
- * labelled, individually removable entries. Without it the panel hides the
- * answer to "why am I looking at four rows?".
+ * Every filter is a pill that names its own dimension — `Action: Deposit`, not
+ * `Deposit`. A bare value turns ambiguous the moment it sits beside another
+ * one: is "Deposit" a type or a status? Naming the dimension also lets the
+ * control double as the record of what is applied, which is why there is no
+ * separate chip row here. A chip repeating a visible pill is a second
+ * representation of the same fact, and two representations can disagree.
+ *
+ * `FILTERS` below is the single source of truth that the toolbar pills, the
+ * add-filter menu and the mobile drawer all read.
  */
 
 export type TypeFilter = "all" | PaymentType;
@@ -24,26 +29,24 @@ export type ProviderFilter = "all" | Provider;
 export interface PaymentFilters {
   amountMax: string;
   amountMin: string;
-  cashoutStatus: StatusFilter;
   createdAfter: string;
   createdBefore: string;
   currencies: readonly Currency[];
-  depositStatus: StatusFilter;
   email: string;
   provider: ProviderFilter;
+  status: StatusFilter;
   type: TypeFilter;
 }
 
 export const EMPTY_FILTERS: PaymentFilters = {
   amountMax: "",
   amountMin: "",
-  cashoutStatus: "all",
   createdAfter: "",
   createdBefore: "",
   currencies: [],
-  depositStatus: "all",
   email: "",
   provider: "all",
+  status: "all",
   type: "all",
 };
 
@@ -54,8 +57,23 @@ export const STATUS_OPTIONS: readonly StatusFilter[] = [
   "failed",
 ];
 
+export const TYPE_OPTIONS: readonly TypeFilter[] = [
+  "all",
+  "deposit",
+  "cashout",
+];
+
+export const PROVIDER_OPTIONS: readonly ProviderFilter[] = [
+  "all",
+  ...PROVIDERS,
+];
+
+/**
+ * The unset value reads as a bare "All" because the pill already says which
+ * dimension it belongs to — "Action: All types" would say it twice.
+ */
 const TYPE_LABELS: Record<TypeFilter, string> = {
-  all: "All types",
+  all: "All",
   cashout: "Cashout",
   deposit: "Deposit",
 };
@@ -65,11 +83,11 @@ export function typeLabel(type: TypeFilter): string {
 }
 
 export function statusLabel(status: StatusFilter): string {
-  return status === "all" ? "All statuses" : paymentStatusLabels[status];
+  return status === "all" ? "All" : paymentStatusLabels[status];
 }
 
 export function providerLabel(provider: ProviderFilter): string {
-  return provider === "all" ? "All providers" : provider;
+  return provider === "all" ? "All" : provider;
 }
 
 // ---------------------------------------------------------------------------
@@ -122,9 +140,9 @@ type PaymentMatcher = (payment: Payment, filters: PaymentFilters) => boolean;
 /**
  * One predicate per filter, each returning `true` when the filter is unset.
  *
- * A list rather than a single predicate with ten early returns: a filter set is
- * exactly a conjunction, and writing it as one keeps each rule readable on its
- * own and makes adding the eleventh a one-line change.
+ * A list rather than a single predicate with nine early returns: a filter set
+ * is exactly a conjunction, and writing it as one keeps each rule readable on
+ * its own and makes adding the tenth a one-line change.
  */
 const MATCHERS: readonly PaymentMatcher[] = [
   (payment, filters) => {
@@ -135,14 +153,8 @@ const MATCHERS: readonly PaymentMatcher[] = [
     filters.currencies.length === 0 ||
     filters.currencies.includes(payment.currency),
   (payment, filters) => filters.type === "all" || payment.type === filters.type,
-  // Status is held per type, so each one only judges its own rows.
-  (payment, filters) => {
-    const wanted =
-      payment.type === "cashout"
-        ? filters.cashoutStatus
-        : filters.depositStatus;
-    return wanted === "all" || payment.status === wanted;
-  },
+  (payment, filters) =>
+    filters.status === "all" || payment.status === filters.status,
   (payment, filters) =>
     filters.provider === "all" || payment.provider === filters.provider,
   // The timestamps are ISO, so the date half compares as a string.
@@ -178,124 +190,150 @@ export function sortPayments(
 }
 
 // ---------------------------------------------------------------------------
-// Applied state
+// The pills
 // ---------------------------------------------------------------------------
 
-export interface FilterChip {
-  /** The patch that removes just this one. */
+export type FilterKey =
+  | "amount"
+  | "created"
+  | "currencies"
+  | "provider"
+  | "status"
+  | "type";
+
+export interface FilterDef {
+  /** The patch that resets this filter. */
   clear: Partial<PaymentFilters>;
-  key: string;
+  /**
+   * What the pill reads when nothing is set. "All" suits a set of options;
+   * a range is not a set, so its bounds read as "Any".
+   */
+  empty: string;
+  key: FilterKey;
+  /** The dimension, shown muted ahead of the value. */
   label: string;
+  /** The value, or `null` when the filter is unset. */
+  value: (filters: PaymentFilters) => string | null;
 }
 
 /**
- * One entry per applied filter, each knowing how to remove itself.
+ * Two filters sit on the toolbar permanently because they are the cuts people
+ * take first. The rest are added on demand: every pill costs horizontal room,
+ * and a row that always carries all six wraps before anyone has used one.
+ */
+export const DEFAULT_KEYS: readonly FilterKey[] = ["type", "status"];
+
+export const FILTERS: readonly FilterDef[] = [
+  {
+    clear: { type: "all" },
+    empty: "All",
+    key: "type",
+    label: "Action",
+    value: (f) => (f.type === "all" ? null : typeLabel(f.type)),
+  },
+  {
+    clear: { status: "all" },
+    empty: "All",
+    key: "status",
+    label: "Status",
+    value: (f) => (f.status === "all" ? null : statusLabel(f.status)),
+  },
+  {
+    clear: { currencies: [] },
+    empty: "All",
+    key: "currencies",
+    label: "Currency",
+    // One selection reads as itself; several read as a count, because four
+    // tickers side by side stop being scannable and start being a sentence.
+    value: (f) => {
+      if (f.currencies.length === 0) {
+        return null;
+      }
+      return f.currencies.length === 1
+        ? f.currencies[0]
+        : String(f.currencies.length);
+    },
+  },
+  {
+    clear: { provider: "all" },
+    empty: "All",
+    key: "provider",
+    label: "Provider",
+    value: (f) => (f.provider === "all" ? null : f.provider),
+  },
+  {
+    clear: { createdAfter: "", createdBefore: "" },
+    empty: "Any",
+    key: "created",
+    label: "Created",
+    value: (f) => rangeValue(f.createdAfter, f.createdBefore),
+  },
+  {
+    clear: { amountMax: "", amountMin: "" },
+    empty: "Any",
+    key: "amount",
+    label: "Amount",
+    value: (f) => rangeValue(f.amountMin, f.amountMax),
+  },
+];
+
+/** An open-ended range still has to say which end it is open at. */
+function rangeValue(min: string, max: string): string | null {
+  if (min && max) {
+    return `${min} – ${max}`;
+  }
+  if (min) {
+    return `from ${min}`;
+  }
+  if (max) {
+    return `to ${max}`;
+  }
+  return null;
+}
+
+export function filterDef(key: FilterKey): FilterDef {
+  const def = FILTERS.find((item) => item.key === key);
+  if (!def) {
+    throw new Error(`Unknown filter: ${key}`);
+  }
+  return def;
+}
+
+/**
+ * Which pills the toolbar shows: the permanent ones, the ones added by hand,
+ * and — the load-bearing term — every filter that currently holds a value.
  *
- * Currencies expand to one chip per selection rather than a single "3
- * currencies" chip: the point of a chip is to be removable, and removing a
- * whole multi-select is a different action from dropping one value from it.
+ * That last one is what makes applied state impossible to hide. A filter with
+ * a value and no pill is exactly the failure the old chip row existed to paper
+ * over; here it cannot happen, rather than merely being tested for.
  */
-export function activeFilterChips(filters: PaymentFilters): FilterChip[] {
-  const chips: FilterChip[] = [];
-
-  if (filters.email.trim()) {
-    chips.push({
-      clear: { email: "" },
-      key: "email",
-      label: `Email: ${filters.email.trim()}`,
-    });
-  }
-
-  for (const currency of filters.currencies) {
-    chips.push({
-      clear: {
-        currencies: filters.currencies.filter((item) => item !== currency),
-      },
-      key: `currency:${currency}`,
-      label: currency,
-    });
-  }
-
-  if (filters.type !== "all") {
-    chips.push({
-      clear: { type: "all" },
-      key: "type",
-      label: typeLabel(filters.type),
-    });
-  }
-
-  if (filters.cashoutStatus !== "all") {
-    chips.push({
-      clear: { cashoutStatus: "all" },
-      key: "cashoutStatus",
-      label: `Cashout: ${statusLabel(filters.cashoutStatus)}`,
-    });
-  }
-
-  if (filters.depositStatus !== "all") {
-    chips.push({
-      clear: { depositStatus: "all" },
-      key: "depositStatus",
-      label: `Deposit: ${statusLabel(filters.depositStatus)}`,
-    });
-  }
-
-  if (filters.provider !== "all") {
-    chips.push({
-      clear: { provider: "all" },
-      key: "provider",
-      label: filters.provider,
-    });
-  }
-
-  if (filters.createdAfter) {
-    chips.push({
-      clear: { createdAfter: "" },
-      key: "createdAfter",
-      label: `After ${filters.createdAfter}`,
-    });
-  }
-
-  if (filters.createdBefore) {
-    chips.push({
-      clear: { createdBefore: "" },
-      key: "createdBefore",
-      label: `Before ${filters.createdBefore}`,
-    });
-  }
-
-  if (filters.amountMin) {
-    chips.push({
-      clear: { amountMin: "" },
-      key: "amountMin",
-      label: `≥ ${filters.amountMin}`,
-    });
-  }
-
-  if (filters.amountMax) {
-    chips.push({
-      clear: { amountMax: "" },
-      key: "amountMax",
-      label: `≤ ${filters.amountMax}`,
-    });
-  }
-
-  return chips;
+export function visibleKeys(
+  filters: PaymentFilters,
+  added: readonly FilterKey[]
+): FilterKey[] {
+  return FILTERS.filter(
+    (def) =>
+      DEFAULT_KEYS.includes(def.key) ||
+      added.includes(def.key) ||
+      def.value(filters) !== null
+  ).map((def) => def.key);
 }
 
-/**
- * How many filters live only in the panel — the number the Filters button
- * carries. Type and the statuses are excluded because they have their own
- * controls in the toolbar, and counting a filter you can already see would
- * make the badge read as a second, contradictory signal.
- */
-export function panelFilterCount(filters: PaymentFilters): number {
+/** Filters still available to add — the add-filter menu's contents. */
+export function addableKeys(
+  filters: PaymentFilters,
+  added: readonly FilterKey[]
+): FilterKey[] {
+  const visible = visibleKeys(filters, added);
+  return FILTERS.filter((def) => !visible.includes(def.key)).map(
+    (def) => def.key
+  );
+}
+
+/** Whether anything at all is applied, search included. */
+export function hasActiveFilters(filters: PaymentFilters): boolean {
   return (
-    filters.currencies.length +
-    (filters.provider === "all" ? 0 : 1) +
-    (filters.createdAfter ? 1 : 0) +
-    (filters.createdBefore ? 1 : 0) +
-    (filters.amountMin ? 1 : 0) +
-    (filters.amountMax ? 1 : 0)
+    Boolean(filters.email.trim()) ||
+    FILTERS.some((def) => def.value(filters) !== null)
   );
 }
