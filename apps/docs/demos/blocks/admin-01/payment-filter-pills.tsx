@@ -19,12 +19,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@keystoneui/react/popover";
-import { Trash2 as Trash2Icon } from "lucide-react";
 import type { ReactNode } from "react";
 import { FilterTrigger } from "./filter-trigger";
 import { CURRENCIES, type Currency } from "./mock-payments";
 import {
-  DEFAULT_KEYS,
   type FilterKey,
   filterDef,
   type PaymentFilters,
@@ -39,27 +37,20 @@ import {
 interface PillProps {
   filters: PaymentFilters;
   onChange: (patch: Partial<PaymentFilters>) => void;
-  onRemove: (key: FilterKey) => void;
 }
 
 /**
  * One pill per visible filter.
  *
- * Every pill carries its own `Remove filter`, except the two permanent ones —
- * removing a pill you cannot add back would be a trap. Setting a pill to `All`
- * deliberately does *not* remove it: taking the control out from under the
- * cursor mid-interaction is worse than leaving a pill that reads `All`.
- *
- * The footer says what is selected on the left and offers the one useful
- * action on the right: `Clear` while the filter holds a value, `Remove filter`
- * once it is empty. A pill that is doing something should be emptied before it
- * is thrown away, and a filter you can still see the effect of is not one you
- * meant to delete.
+ * A pill is never removed from inside its own menu. Setting one back to `All`
+ * leaves it on the row on purpose — taking the control out from under the
+ * cursor mid-interaction is worse than a pill that reads `All` — and an empty
+ * pill has nothing to remove that `Clear all` does not already handle. So the
+ * menu holds options and, once something is chosen, a `Clear`.
  */
 export function PaymentFilterPill({
   filters,
   onChange,
-  onRemove,
   pillKey,
 }: PillProps & { pillKey: FilterKey }) {
   const def = filterDef(pillKey);
@@ -72,12 +63,7 @@ export function PaymentFilterPill({
 
   if (pillKey === "created" || pillKey === "amount") {
     return (
-      <RangePill
-        filters={filters}
-        onChange={onChange}
-        onRemove={onRemove}
-        pillKey={pillKey}
-      />
+      <RangePill filters={filters} onChange={onChange} pillKey={pillKey} />
     );
   }
 
@@ -98,12 +84,14 @@ export function PaymentFilterPill({
             />
           )}
         </DropdownMenuGroup>
-        <MenuFooter
-          filters={filters}
-          onChange={onChange}
-          onRemove={onRemove}
-          pillKey={pillKey}
-        />
+        {/* Only the multi-select earns a footer: a single-select's list
+            already starts with "All", which is its own clear. */}
+        {pillKey === "currencies" && (
+          <MenuFooter
+            count={filters.currencies.length}
+            onClear={() => onChange(def.clear)}
+          />
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -209,7 +197,6 @@ function CurrencyItems({
 function RangePill({
   filters,
   onChange,
-  onRemove,
   pillKey,
 }: PillProps & { pillKey: FilterKey }) {
   const def = filterDef(pillKey);
@@ -247,19 +234,17 @@ function RangePill({
               value={isDate ? filters.createdBefore : filters.amountMax}
             />
           </div>
-          <div className="flex justify-between gap-2">
-            <Button
-              onClick={() => onChange(def.clear)}
-              size="sm"
-              variant="ghost"
-            >
-              Reset
-            </Button>
-            <Button onClick={() => onRemove(pillKey)} size="sm" variant="ghost">
-              <Trash2Icon />
-              Remove filter
-            </Button>
-          </div>
+          {value !== null && (
+            <div className="flex justify-end">
+              <Button
+                onClick={() => onChange(def.clear)}
+                size="xs"
+                variant="ghost"
+              >
+                Clear
+              </Button>
+            </div>
+          )}
         </div>
       </PopoverContent>
     </Popover>
@@ -299,52 +284,42 @@ function Bound({
 }
 
 /**
- * The menu's footer: what is selected on the left, the way out on the right.
+ * The menu's footer: what is held on the left, the way to empty it on the
+ * right.
  *
- * A multi-select needs to say how many it holds, because the pill only has
- * room for the first one and a count of the rest — "BTC, +2" tells you the
- * shape but the footer is where the number is spelled out. `Clear` empties
- * the filter without taking the pill off the row; `Remove filter` takes the
- * pill away, and only appears for the pills that can be added back.
+ * It exists only while the filter holds a value. An empty filter has nothing
+ * to say and nothing to undo, and a footer offering an action that would do
+ * nothing is just a row you have to read past to reach the options.
+ *
+ * The count is the point of it: the pill has room for the first value and a
+ * tally of the rest — "BTC, +2" — so the footer is where that number gets
+ * spelled out.
  */
 function MenuFooter({
-  filters,
-  onChange,
-  onRemove,
-  pillKey,
+  count,
+  onClear,
 }: {
-  filters: PaymentFilters;
-  onChange: (patch: Partial<PaymentFilters>) => void;
-  onRemove: (key: FilterKey) => void;
-  pillKey: FilterKey;
+  count: number;
+  onClear: () => void;
 }) {
-  const def = filterDef(pillKey);
-  const hasValue = def.value(filters) !== null;
-  const removable = !DEFAULT_KEYS.includes(pillKey);
-  const selectedCount =
-    pillKey === "currencies" ? filters.currencies.length : 0;
-
-  if (!(hasValue || removable)) {
+  if (count === 0) {
     return null;
   }
 
   return (
     <>
       <DropdownMenuSeparator />
-      <div className="flex h-9 items-center justify-between gap-3 px-2">
-        <span className="text-muted-foreground text-sm">
-          {selectedCount > 0 ? `${selectedCount} selected` : ""}
-        </span>
-        {hasValue ? (
-          <Button onClick={() => onChange(def.clear)} size="sm" variant="ghost">
-            Clear
-          </Button>
-        ) : (
-          <Button onClick={() => onRemove(pillKey)} size="sm" variant="ghost">
-            <Trash2Icon />
-            Remove filter
-          </Button>
-        )}
+      {/* A uniform `p-1.5` is what makes every gap here come out equal. The
+          content's own `p-1` already insets 4px on the right and bottom and
+          the separator's `my-1` gives 4px above, so adding the same 6px on
+          all four sides lands the button 10px from each — and lands the count
+          at the same 10px an item's text starts from (4px content + `px-1.5`),
+          so it lines up with the options above it. */}
+      <div className="flex items-center justify-between gap-3 p-1.5">
+        <span className="text-muted-foreground text-xs">{count} selected</span>
+        <Button onClick={onClear} size="xs" variant="ghost">
+          Clear
+        </Button>
       </div>
     </>
   );

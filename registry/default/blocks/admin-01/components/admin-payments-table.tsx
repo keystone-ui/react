@@ -37,7 +37,6 @@ interface AdminPaymentsTableProps {
   addedFilters: readonly FilterKey[];
   filters: PaymentFilters;
   onFilterAdd: (key: FilterKey) => void;
-  onFilterRemove: (key: FilterKey) => void;
   onFiltersChange: (patch: Partial<PaymentFilters>) => void;
   onFiltersClear: () => void;
   onOpenPayment: (id: string) => void;
@@ -56,7 +55,6 @@ export function AdminPaymentsTable({
   addedFilters,
   filters,
   onFilterAdd,
-  onFilterRemove,
   onFiltersChange,
   onFiltersClear,
   onOpenPayment,
@@ -83,7 +81,6 @@ export function AdminPaymentsTable({
           onAdd={onFilterAdd}
           onChange={onFiltersChange}
           onClear={onFiltersClear}
-          onRemove={onFilterRemove}
         />
 
         <Table hoverable>

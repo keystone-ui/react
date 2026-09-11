@@ -24,7 +24,6 @@ interface AdminPaymentsToolbarProps {
   onAdd: (key: FilterKey) => void;
   onChange: (patch: Partial<PaymentFilters>) => void;
   onClear: () => void;
-  onRemove: (key: FilterKey) => void;
 }
 
 /**
@@ -53,7 +52,6 @@ export function AdminPaymentsToolbar({
   onAdd,
   onChange,
   onClear,
-  onRemove,
 }: AdminPaymentsToolbarProps) {
   const visible = visibleKeys(filters, added);
   const addable = addableKeys(filters, added);
@@ -79,7 +77,6 @@ export function AdminPaymentsToolbar({
             filters={filters}
             key={key}
             onChange={onChange}
-            onRemove={onRemove}
             pillKey={key}
           />
         ))}

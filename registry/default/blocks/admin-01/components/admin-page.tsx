@@ -21,7 +21,6 @@ import {
   DEFAULT_SORT as DEFAULT_PAYMENT_SORT,
   EMPTY_FILTERS,
   type FilterKey,
-  filterDef,
   matchesPaymentFilters,
   type PaymentFilters,
   type SortState as PaymentSortState,
@@ -284,14 +283,6 @@ export function AdminPage() {
                   current.includes(key) ? current : [...current, key]
                 )
               }
-              onFilterRemove={(key) => {
-                setAddedPaymentFilters((current) =>
-                  current.filter((item) => item !== key)
-                );
-                // Removing the pill has to clear the value too, or the filter
-                // would keep narrowing the table from nowhere.
-                patchPaymentFilters(filterDef(key).clear);
-              }}
               onFiltersChange={patchPaymentFilters}
               onFiltersClear={() => {
                 setPaymentFilters(EMPTY_FILTERS);
