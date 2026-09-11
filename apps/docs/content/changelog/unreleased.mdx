@@ -490,6 +490,8 @@ The chip is built on `Badge`, not `TagGroup`: `TagGroupItem` with `onRemove` ren
 
 Users also gains a filter model like payments' — descriptors plus matchers — from which the chips, the drawer's rows and steps, the active count and the predicate all derive. That is what makes the two layouts two renderings rather than two implementations, and it removes the drawer's old hazard of hand-assigned step indices kept in sync by hand.
 
+The users drawer opens from the right on a desktop and from the bottom on a phone, each the idiom for its size. `swipeDirection` is a prop rather than a class, so it renders twice behind a CSS fork rather than switching at runtime; only one shell is in the accessibility tree at a time. The chip takes `Tag`'s 24px height while keeping `Badge`'s semantics — `Tag` extends Base UI's Toggle, so it announces a pressed state an applied filter does not have.
+
 ---
 
 ### `admin-01` gains a user detail view and an ID column.

@@ -73,6 +73,12 @@ the pills layout; that failure cannot occur under this one.
 
 Past roughly six filters the pills stop fitting and the choice makes itself.
 
+The drawer's shell should still suit its width: a bottom sheet on a phone, a
+side panel on a desktop. `swipeDirection` is a prop, not a class, so render the
+drawer twice behind a CSS fork rather than switching it at runtime — a media
+query has to guess on the server and flip after hydration. Keep one shell out
+of the accessibility tree, or both triggers are announced.
+
 **Both are renderings of one model.** Whichever you pick, declare each filter
 once as a descriptor — `{ key, label, empty, value(filters), clear }` — and
 derive the chips, the drawer's rows and steps, the active count and the

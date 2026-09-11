@@ -108,6 +108,39 @@ test.describe("the filter drawer is the filter surface", () => {
     });
   }
 
+  test("is a bottom sheet on a phone and a side panel on a desktop", async ({
+    page,
+  }) => {
+    // `swipeDirection` is a prop, not a class, so the two shells are rendered
+    // behind a CSS fork. Exactly one may be in the accessibility tree, or a
+    // screen reader — and `getByRole` — would find two Filters buttons.
+    for (const [width, expected] of [
+      [375, "bottom"],
+      [1280, "right"],
+    ] as const) {
+      // biome-ignore lint/performance/noAwaitInLoops: one page, resized in turn
+      await page.setViewportSize({ height: 900, width });
+      // biome-ignore lint/performance/noAwaitInLoops: sequential by nature
+      await openUsers(page);
+
+      const trigger = page.getByRole("button", { name: FILTERS_TRIGGER });
+      // biome-ignore lint/performance/noAwaitInLoops: sequential by nature
+      expect(await trigger.count()).toBe(1);
+      // biome-ignore lint/performance/noAwaitInLoops: sequential by nature
+      await trigger.click();
+
+      // biome-ignore lint/performance/noAwaitInLoops: sequential by nature
+      const box = await page
+        .locator('[data-slot="drawer-content"]')
+        .boundingBox();
+      const edge =
+        (box?.x ?? 0) + (box?.width ?? 0) >= width - 16 && (box?.x ?? 0) > 0
+          ? "right"
+          : "bottom";
+      expect(edge).toBe(expected);
+    }
+  });
+
   test("drills into a filter and applies it", async ({ page }) => {
     await openUsers(page);
     const total = await rowCount(page);

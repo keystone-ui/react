@@ -51,6 +51,11 @@ interface AdminFiltersDrawerProps {
   onChange: (patch: Partial<UserFilters>) => void;
   onClear: () => void;
   onSortChange: (id: SortOptionId) => void;
+  /**
+   * `down` gives a bottom sheet, `right` a side panel. Rendered twice behind a
+   * CSS fork rather than switched at runtime — see the note on the component.
+   */
+  placement: "down" | "right";
   sort: SortState | null;
 }
 
@@ -62,10 +67,18 @@ interface AdminFiltersDrawerProps {
  * there is no second tree to keep in step — the failure this block shipped
  * once, where three filters existed on desktop and nowhere else.
  *
- * A bottom sheet whose body is a `Stepper`: a menu of "label + current value"
- * rows that drill into one screen per filter. Same shape as `tickets-01`'s
- * drawer and the payments one, because a phone-sized filter set is the same
+ * The body is a `Stepper`: a menu of "label + current value" rows that drill
+ * into one screen per filter. Same shape as `tickets-01`'s drawer and the
+ * payments one, because a filter set too large for a toolbar is the same
  * problem wherever it appears.
+ *
+ * The *shell* differs by width — a bottom sheet on a phone, a right-hand panel
+ * on a desktop, each the idiom for its size. `swipeDirection` is a prop rather
+ * than a class, so this is rendered twice behind a CSS fork instead of being
+ * switched at runtime: a `useMediaQuery` would have to guess on the server and
+ * flip after hydration. Both shells are mounted, only one is in the
+ * accessibility tree, and the date inputs take their ids from `placement`
+ * because two mounted copies cannot share them.
  *
  * The rows are generated from `FILTERS`, so a new filter is one descriptor
  * rather than a row, a step, a hand-assigned index and a count that all have
@@ -79,6 +92,7 @@ export function AdminFiltersDrawer({
   onChange,
   onClear,
   onSortChange,
+  placement,
   sort,
 }: AdminFiltersDrawerProps) {
   const [open, setOpen] = useState(false);
@@ -93,12 +107,13 @@ export function AdminFiltersDrawer({
         }
       }}
       open={open}
+      swipeDirection={placement}
     >
       <DrawerTrigger render={<Button variant="outline" />}>
         <FilterIcon className="size-4" />
         Filters
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent variant={placement === "right" ? "floating" : "flush"}>
         <div className="mx-auto w-full max-w-sm">
           <Stepper onValueChange={setStep} value={step}>
             <StepperContent>
@@ -197,13 +212,13 @@ export function AdminFiltersDrawer({
                 <SubHeader title="Created" />
                 <div className="grid grid-cols-2 gap-3 px-4 pb-4">
                   <Bound
-                    id="users-created-after"
+                    id={`users-${placement}-created-after`}
                     label="After"
                     onChange={(value) => onChange({ createdAfter: value })}
                     value={filters.createdAfter}
                   />
                   <Bound
-                    id="users-created-before"
+                    id={`users-${placement}-created-before`}
                     label="Before"
                     onChange={(value) => onChange({ createdBefore: value })}
                     value={filters.createdBefore}

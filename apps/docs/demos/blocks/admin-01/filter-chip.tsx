@@ -12,11 +12,20 @@ export interface FilterChipProps {
 /**
  * An applied filter: `Role: Admin ✕`.
  *
- * Built on `Badge` rather than `TagGroup`. `TagGroupItem` renders its body as a
- * toggle button and appends the remove control *inside* it, so a removable tag
- * emits `<button>…<button/></button>` — invalid, and the body stays focusable
- * when it should be a label. `Badge` is a polymorphic `<span>`, so the remove
- * button nests validly.
+ * Built on `Badge`, not `Tag`, and the reason is semantic before it is
+ * practical. `Tag` extends Base UI's Toggle — it is a *selectable token*, with
+ * `aria-pressed`, a pointer cursor and a hover fill. An applied filter is not
+ * selectable: it is a label with one action attached. Rendering it as a toggle
+ * would announce a pressed state that means nothing and offer an affordance
+ * that does nothing.
+ *
+ * The practical half follows from the same fact. Because `Tag` and
+ * `TagGroupItem` are buttons, putting `TagRemove` inside one emits
+ * `<button>…<button/></button>` — invalid, and the label stays focusable.
+ * `Badge` is a polymorphic `<span>`, so the remove button nests validly.
+ *
+ * It does borrow `Tag`'s height. `Badge` defaults to 20px, which is right for
+ * a status badge with nothing to hit and cramped for one carrying a target.
  *
  * The chip is the only representation of this filter's state: the control that
  * sets it lives in the drawer. That is the condition under which a chip is
@@ -29,7 +38,11 @@ export interface FilterChipProps {
  */
 export function FilterChip({ label, onRemove, value }: FilterChipProps) {
   return (
-    <Badge className="gap-1 pr-1" data-filter-chip="" variant="secondary">
+    <Badge
+      className="h-6 gap-1 pr-1 pl-2.5"
+      data-filter-chip=""
+      variant="secondary"
+    >
       <span className="font-normal text-muted-foreground">{label}:</span>
       {value}
       <button

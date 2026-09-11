@@ -90,14 +90,30 @@ export function AdminUsersToolbar({
           />
         </InputGroup>
 
-        {/* No count badge: the chips below say which filters, not how many. */}
-        <AdminFiltersDrawer
-          filters={filters}
-          onChange={onChange}
-          onClear={onClear}
-          onSortChange={onSortChange}
-          sort={sort}
-        />
+        {/* No count badge: the chips below say which filters, not how many.
+            Two shells, one body — a bottom sheet on a phone and a right-hand
+            panel on a desktop. Only one is in the accessibility tree at a
+            time, so `getByRole` and a screen reader both see exactly one. */}
+        <div className="shrink-0 sm:hidden">
+          <AdminFiltersDrawer
+            filters={filters}
+            onChange={onChange}
+            onClear={onClear}
+            onSortChange={onSortChange}
+            placement="down"
+            sort={sort}
+          />
+        </div>
+        <div className="hidden shrink-0 sm:block">
+          <AdminFiltersDrawer
+            filters={filters}
+            onChange={onChange}
+            onClear={onClear}
+            onSortChange={onSortChange}
+            placement="right"
+            sort={sort}
+          />
+        </div>
 
         <div className="hidden items-center gap-2 sm:flex">
           <DropdownMenu>
