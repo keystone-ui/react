@@ -5,7 +5,7 @@ user-invocable: false
 allowed-tools: Bash(node packages/keystoneui-mcp/dist/index.js *), Bash(node scripts/*.mjs *), Bash(npx shadcn@latest add https://keystoneui.io/r/*)
 metadata:
   author: keystoneui
-  version: "2.1.0"
+  version: "2.2.0"
 ---
 
 # Keystone UI
@@ -78,6 +78,14 @@ These are always enforced. Each links to a file with code pairs.
 - **Use full Card composition.** `CardHeader`/`CardTitle`/`CardDescription`/`CardContent`/`CardFooter`.
 - **`Button` has no `isLoading` prop.** Compose with `Spinner` + `disabled`.
 - **`data-slot` is stable.** Use it for consumer overrides; don't override slot values when extending.
+
+### Data tables → [rules/data-tables.md](./rules/data-tables.md)
+
+- **Filter triggers name their dimension.** `Status: All`, never `All Statuses` — a bare value is ambiguous beside another one. A value that names its own dimension (a date range) takes no label.
+- **One representation of applied state.** Do not pair a visible control with a chip repeating it; a filter holding a value must always show its control.
+- **Sorting lives in the column headers**, and `aria-sort` only on columns that actually sort.
+- **The pagination footer reports the visible range**, not the page index or a selection count stated elsewhere.
+- **Below `sm`, fold the toolbar into a bottom-sheet `Drawer` + `Stepper`** holding *every* filter — at that width it is the only way in.
 
 ### Icons → [rules/icons.md](./rules/icons.md)
 
@@ -164,6 +172,7 @@ Blocks are full-page or feature-level compositions, not primitives. **If the use
 | Tickets / CRM / data management table | `tickets-01` | `data` |
 | Analytics dashboard / KPIs + charts | `dashboard-01` | `dashboard` |
 | Admin panel / app shell with sidebar | `admin-01` | `admin` |
+| Filterable data table (transactions, payments, records) | `admin-01`, `tickets-01` | `admin`, `data` |
 | Betting panel / wager UI | `betting-panel-01`, `betting-panel-02`, `betting-panel-03`, `betting-panel-04` | `betting` |
 
 Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or via the unified CLI: `keystoneui blocks` to list, `keystoneui blocks --category authentication` to filter, `keystoneui blocks <name>` to view source. The `--category` flag works on `list` and `search` too.
@@ -208,5 +217,6 @@ For LLM-friendly fetched content, use:
 - [rules/styling.md](./rules/styling.md) — semantic colors, layout, hover gating, focus, transitions, z-scale
 - [rules/forms.md](./rules/forms.md) — `Form`, `FieldGroup`, `Field`, `InputGroup`, `ToggleGroup`, `FieldSet`, validation
 - [rules/composition.md](./rules/composition.md) — `render`, compound parts, group items, Modal title, Card composition, `data-slot`
+- [rules/data-tables.md](./rules/data-tables.md) — filter toolbars, applied state, sorting, pagination footer, mobile fold
 - [rules/icons.md](./rules/icons.md) — lucide-react, no sizing classes, pass as components
 - [rules/base-vs-radix.md](./rules/base-vs-radix.md) — `render` vs `asChild`, attribute semantics, animation attributes

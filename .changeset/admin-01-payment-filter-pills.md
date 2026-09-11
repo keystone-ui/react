@@ -23,3 +23,5 @@ Block-only change; no library API is affected.
 `tickets-01`'s pagination footer changes with it. Its info slot said "N of M row(s) selected" — which the `SelectionBar` already says, and says at every width where that slot is `hidden lg:block`. It now reports the visible range instead, the one number nothing else on the page states.
 
 Its toolbar picks up the labelled triggers too: `Sort: Manual` and `Status: All` rather than `Manual` beside `All Statuses`, which was the same pair of half-named controls this change set out to fix. `Table options` keeps no label, because it names a menu rather than a value.
+
+The conventions both blocks now follow ship as a skill rule — `rules/data-tables.md` in `keystoneui-react` (2.2.0) — so a project consuming the registry gets them when building a table rather than only when installing one of these blocks. The Block Selection table gains a row for filterable data tables, which previously advertised `admin-01` only as an app shell.
