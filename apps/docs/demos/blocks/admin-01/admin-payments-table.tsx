@@ -86,6 +86,13 @@ export function AdminPaymentsTable({
             onClear={onFiltersClear}
           />
 
+          <ResultSummary
+            pageIndex={pageIndex}
+            pageSize={pageSize}
+            rowCount={rows.length}
+            totalCount={totalCount}
+          />
+
           <Table hoverable>
             <TableHeader>
               <TableRow>
@@ -243,5 +250,44 @@ function SortableHead({
         {children}
       </TableSortButton>
     </TableHead>
+  );
+}
+
+/**
+ * How much of the result set is on screen.
+ *
+ * The pagination footer answers "which page", which is a different question —
+ * it reads `Page 1 of 2` whether that page holds ten rows or one. This says
+ * how many rows there are and which of them you are looking at.
+ *
+ * `aria-live` because it is the only feedback a filter change produces for
+ * someone who cannot see the table shrink. Polite, so it waits its turn
+ * rather than interrupting the control being operated.
+ */
+function ResultSummary({
+  pageIndex,
+  pageSize,
+  rowCount,
+  totalCount,
+}: {
+  pageIndex: number;
+  pageSize: number;
+  rowCount: number;
+  totalCount: number;
+}) {
+  // The empty row already says no payments match; a summary reading "0 of 0"
+  // underneath it just says the same thing with less grace.
+  if (totalCount === 0) {
+    return null;
+  }
+
+  const first = pageIndex * pageSize + 1;
+  const last = pageIndex * pageSize + rowCount;
+
+  return (
+    <p aria-live="polite" className="text-muted-foreground text-sm">
+      Showing {first}–{last} of {totalCount}{" "}
+      {totalCount === 1 ? "payment" : "payments"}
+    </p>
   );
 }

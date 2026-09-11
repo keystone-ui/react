@@ -17,6 +17,7 @@ const ROW_ACTION = /^Action/;
 const ROW_ACTION_CASHOUT = /^Action Cashout/;
 const ROW_CURRENCY = /^Currency/;
 const ROW_PROVIDER = /^Provider/;
+const NEXT_PAGE = /next page/i;
 const ROW_CURRENCY_TWO = /^Currency 2 selected/;
 
 const rowCount = (page: Page) =>
@@ -316,6 +317,34 @@ test.describe("payments filter pills", () => {
     expect(sortStates.filter((state) => state && state !== "none")).toEqual([
       "ascending",
     ]);
+  });
+
+  test("the summary counts the rows on screen, not the pages", async ({
+    page,
+  }) => {
+    await openPayments(page);
+    // Scoped to the paragraph: `TablePagination` ships its own live regions,
+    // and one of them is an empty `table-pagination-info` slot.
+    const summary = page.locator('p[aria-live="polite"]');
+
+    await expect(summary).toHaveText("Showing 1–10 of 18 payments");
+
+    await page.getByRole("button", { name: NEXT_PAGE }).click();
+    // The last page is short, which is the case a page counter cannot express
+    // — `Page 2 of 2` says nothing about holding eight rows rather than ten.
+    await expect(summary).toHaveText("Showing 11–18 of 18 payments");
+
+    await pill(page, "Status").click();
+    await page
+      .locator('[data-slot="dropdown-menu-content"]')
+      .getByRole("menuitemradio", { name: "Failed" })
+      .click();
+    await expect(summary).toHaveText("Showing 1–5 of 5 payments");
+
+    // The empty row already says nothing matched; a summary reading "0 of 0"
+    // under it would only repeat that less gracefully.
+    await page.getByLabel("Search payments by email").fill("zzzznomatch");
+    await expect(summary).toHaveCount(0);
   });
 
   test("the table scrolls inside its own container, not the page", async ({
