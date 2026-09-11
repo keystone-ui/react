@@ -198,10 +198,14 @@ export function AdminUsersToolbar({
               value={value}
             />
           ))}
+          {/* `xs`, so it matches the 24px chips it sits among rather than the
+              40px controls above them. It is in the chip row, not the control
+              row, and the sweep in `e2e/control-heights.spec.ts` only compares
+              controls that share a visual row. */}
           <Button
             className="text-muted-foreground hover:text-foreground"
             onClick={onClear}
-            size="sm"
+            size="xs"
             variant="ghost"
           >
             <XIcon />
