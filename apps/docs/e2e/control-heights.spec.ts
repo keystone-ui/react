@@ -153,6 +153,11 @@ function mismatched(rows: Row[]): string[] {
  * Payments is swept as well as Users because it is a second toolbar with its
  * own control mix -- and a guard that only reaches the toolbar the bug was
  * found in stops guarding the moment someone writes the next one.
+ *
+ * Both get a search term typed into them before the sweep, because controls
+ * that render only once a filter is applied are invisible to a sweep of the
+ * resting page. `Clear all` is one of them, and it sits in the same row as the
+ * 40px controls.
  */
 async function openBlock(page: Page, name: string, section = "users") {
   await page.goto(`/preview/${name}`);
@@ -165,11 +170,21 @@ async function openBlock(page: Page, name: string, section = "users") {
     await page.getByRole("button", { name: SIDEBAR_TRIGGER }).click();
   }
   await nav.click();
-  await expect(
-    page.getByLabel(
-      section === "payments" ? "Search payments by email" : "Search users"
-    )
-  ).toBeVisible();
+  const search = page.getByLabel(
+    section === "payments" ? "Search payments by email" : "Search users"
+  );
+  await expect(search).toBeVisible();
+
+  // Type into it, which is what makes the conditional controls render. `Clear
+  // all` only exists once something is applied, so a sweep of the resting
+  // toolbar never sees it — and it is a button in the same row as the 40px
+  // ones, exactly where a mismatch would hide.
+  //
+  // Settle on the input's own value rather than on `Clear all`: that button is
+  // inside the `sm+` cluster on the payments toolbar, so waiting for it would
+  // hang at 375px on the very width this sweep exists to cover.
+  await search.fill("a");
+  await expect(search).toHaveValue("a");
 }
 
 /**
