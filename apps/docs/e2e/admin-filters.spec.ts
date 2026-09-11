@@ -18,6 +18,8 @@ const USER_COLUMN = /User/;
 const SEATS_COLUMN = /Seats/;
 const SORT_ASC_LABEL = /Name A–Z/;
 const SORT_DESC_LABEL = /Name Z–A/;
+const SORT_SEATS_LABEL = /Seats, most first/;
+const CLEAR_BUTTON = /^Clear/;
 
 const rowCount = (page: Page) =>
   page.locator('[data-slot="table-body"] tr').count();
@@ -138,4 +140,27 @@ test.describe("sort is one piece of state", () => {
     const seats = page.getByRole("columnheader", { name: SEATS_COLUMN });
     await expect(seats).toHaveAttribute("aria-sort", "descending");
   });
+});
+
+test("Clear resets the filters and leaves the sort alone", async ({ page }) => {
+  await openUsers(page);
+
+  // Sort is not a filter, so it is excluded from the active count and Clear
+  // must not touch it. Without this, clearing a search would silently reorder
+  // the table under the reader.
+  await page.getByRole("button", { name: SORT_ASC_LABEL }).click();
+  await page.getByRole("menuitemradio", { name: "Seats, most first" }).click();
+
+  // A term narrow enough to drop below the 5-row page size, so the count is a
+  // real signal rather than the pagination window.
+  const total = await rowCount(page);
+  await page.getByLabel("Search users").fill("Ada");
+  expect(await rowCount(page)).toBeLessThan(total);
+
+  await page.getByRole("button", { name: CLEAR_BUTTON }).click();
+
+  expect(await rowCount(page)).toBe(total);
+  await expect(
+    page.getByRole("button", { name: SORT_SEATS_LABEL })
+  ).toBeVisible();
 });
