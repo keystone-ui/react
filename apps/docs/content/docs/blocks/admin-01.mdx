@@ -15,6 +15,7 @@ npx shadcn@latest add https://keystoneui.io/r/admin-01.json
 - **Topbar** with a sidebar trigger and a [breadcrumb](/docs/components/breadcrumb).
 - **Overview** with a KPI row and a stacked signups chart sharing the same toggleable legend as [`dashboard-01`](/docs/blocks/dashboard-01).
 - **Users table** — a responsive filter toolbar (search, role, status, sort), sortable columns, row selection, pagination, and a [`SelectionBar`](/docs/components/selection-bar) for bulk actions.
+- **Payments** — a wide transaction table with eleven filters: the three most-used inline, the rest behind a panel, and everything applied shown as a removable chip.
 - **Mobile filters** — below `sm` the cluster collapses into a single Filters button opening a bottom-sheet [`Drawer`](/docs/components/drawer), with a [`Stepper`](/docs/components/stepper) drilling into one screen per filter.
 - **User detail** — clicking a name opens a read-only record view built from [`DescriptionList`](/docs/components/description-list), with [`CopyButton`](/docs/components/copy-button) on the values that exist to be pasted elsewhere.
 
@@ -47,6 +48,18 @@ That is deliberate. A block's installable copy is flat: every component lands at
 So they are duplicated and the duplication is enforced: `apps/docs/tests/block-shared-files.test.ts` asserts the copies are byte-identical and fails if a new basename starts colliding without being classified. Only infrastructure is shared this way — the panels and fixtures are each block's own, because two blocks sharing those would be the same demo twice.
 
 ## Notes
+
+**Why the payments filters are a panel and not a rail.** A filter sidebar is the obvious answer to eleven filters, and it is the wrong one for this table. The payments columns need about 1050px; the content area is 1024px at a 1280px viewport, so the table is already short before anything is taken from it. A 300px rail would leave 724px — a third less than the columns need — and force horizontal scrolling on a standard laptop. A panel costs nothing until it is opened.
+
+That trade is table-shaped, not universal: a rail works well beside a narrow single-column list, which is why chat and mail apps use one.
+
+**The chips are what make a panel acceptable.** A filter you cannot see is a filter you forget you set, and the question that follows is always "why am I looking at four rows?". Every applied filter appears as a removable chip under the toolbar whether the panel is open or shut, and each removes only itself — selected currencies expand to one chip each, because dropping one value from a multi-select is a different action from clearing the whole thing.
+
+The Filters button counts only what lives in the panel. Type and status have their own controls in the toolbar, and counting a filter you can already see would make the badge read as a second, contradictory signal.
+
+One panel serves both breakpoints. `Drawer`'s `swipeDirection="right"` is already responsive — 75% of the width on a phone, a floating panel at `md` — so there is no media query and nothing to get wrong on the server.
+
+Payment ids are middle-truncated in the table with a copy button, and shown in full on the record. The head and tail are what you eyeball against a provider's dashboard; the whole value is what you paste into it.
 
 **The detail view is a sub-state of Users, not a section of its own.** A new section would need a sidebar entry — and you cannot navigate to a detail page with no record chosen — so the open user is a separate `openUserId`, resolved to a record at render. Changing section clears it, or leaving to Billing and returning would land on a stale record.
 
@@ -92,13 +105,17 @@ The Status column passes **no** `sortDirection` at all, where the sortable colum
 - [Description List](/docs/components/description-list)
 - [Drawer](/docs/components/drawer)
 - [Dropdown Menu](/docs/components/dropdown-menu)
+- [Input](/docs/components/input)
 - [Input Group](/docs/components/input-group)
+- [Label](/docs/components/label)
+- [Native Select](/docs/components/native-select)
 - [Radio Group](/docs/components/radio-group)
 - [Selection Bar](/docs/components/selection-bar)
 - [Separator](/docs/components/separator)
 - [Stat](/docs/components/stat)
 - [Stepper](/docs/components/stepper)
 - [Table](/docs/components/table)
+- [Tag Group](/docs/components/tag-group)
 - [Table Pagination](/docs/components/table-pagination)
 
 ## Composition
@@ -118,7 +135,14 @@ SidebarProvider
     │   └── ChartContainer › BarChart › Bar
     ├── AdminUserDetail                         (a user is open)
     │   └── Card › DescriptionList › CopyButton
-    └── AdminUsersTable                         (otherwise)
+    ├── AdminUsersTable                         (otherwise)
+    └── AdminPaymentsTable                      (section: payments)
+        ├── AdminPaymentsToolbar
+        │   ├── InputGroup › InputGroupInput
+        │   ├── DropdownMenu × 3                (hidden below sm)
+        │   ├── PaymentFiltersDrawer            (swipeDirection="right")
+        │   └── TagGroup › TagGroupItem         (applied filters)
+        └── Table › TablePagination
         ├── Card › CardContent
         │   ├── AdminUsersToolbar
         │   │   ├── InputGroup › InputGroupInput

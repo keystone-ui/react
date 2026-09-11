@@ -1836,7 +1836,10 @@
         "description-list",
         "drawer",
         "dropdown-menu",
+        "input",
         "input-group",
+        "label",
+        "native-select",
         "radio-group",
         "selection-bar",
         "separator",
@@ -1844,7 +1847,8 @@
         "stat",
         "stepper",
         "table",
-        "table-pagination"
+        "table-pagination",
+        "tag-group"
       ],
       "files": [
         {
@@ -1858,6 +1862,14 @@
         },
         {
           "path": "registry/default/blocks/admin-01/components/admin-filters.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-payments-table.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-payments-toolbar.tsx",
           "type": "registry:component"
         },
         {
@@ -1898,6 +1910,18 @@
         },
         {
           "path": "registry/default/blocks/admin-01/components/mock-admin.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/mock-payments.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/payment-filters-drawer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/payment-filters.ts",
           "type": "registry:component"
         },
         {
