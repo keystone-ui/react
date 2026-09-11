@@ -478,6 +478,8 @@ Payments rows carry their actions in a trailing `⋯` menu rather than a hover-r
 
 `tickets-01` follows. Its Open button had a second problem beyond being hover-only: it lived inside the Subject cell, which owns an inline editor — one click started an edit, a click two pixels to the right opened the drawer. Deleting stays a bulk action in the `SelectionBar`, since confirming a destructive action per row from a menu would put an `AlertDialog` behind two clicks with no selection to show for it.
 
+The users table follows both blocks: labelled triggers (`Role: All`, `Status: All`, `Sort: Name A–Z`), an `h1` above the card instead of a `CardTitle` inside it, a trailing row-actions menu, and a footer reporting `Showing 1–5 of 10 users` rather than the selection count its `SelectionBar` already states. All three tables in the two blocks now answer these questions the same way.
+
 ---
 
 ### `admin-01` gains a user detail view and an ID column.

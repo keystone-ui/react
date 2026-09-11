@@ -6,6 +6,7 @@ import {
   ShieldUserIcon,
   SlidersHorizontalIcon,
 } from "lucide-react";
+import type { ReactNode } from "react";
 import {
   ROLES,
   type RoleFilter,
@@ -119,6 +120,7 @@ export function AdminUsersToolbar({
         <DropdownMenu>
           <DropdownMenuTrigger render={<Button variant="outline" />}>
             <ShieldUserIcon />
+            <TriggerLabel>Role</TriggerLabel>
             {roleLabel(roleFilter)}
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-44">
@@ -146,6 +148,7 @@ export function AdminUsersToolbar({
         <DropdownMenu>
           <DropdownMenuTrigger render={<Button variant="outline" />}>
             <SlidersHorizontalIcon />
+            <TriggerLabel>Status</TriggerLabel>
             {statusLabel(statusFilter)}
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-44">
@@ -175,6 +178,7 @@ export function AdminUsersToolbar({
         <DropdownMenu>
           <DropdownMenuTrigger render={<Button variant="outline" />}>
             <ArrowUpDownIcon />
+            <TriggerLabel>Sort</TriggerLabel>
             {sortLabel(sort)}
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-52">
@@ -204,4 +208,18 @@ export function AdminUsersToolbar({
       </div>
     </div>
   );
+}
+
+/**
+ * The dimension a filter trigger acts on, muted ahead of its value.
+ *
+ * Without it the row reads "All roles" beside "Name A–Z" — one control naming
+ * a dimension with no value, the next naming a value with no dimension.
+ *
+ * A second copy rather than a shared part: presentational code in two blocks
+ * is the same demo twice, and installable copies are flat, so two blocks
+ * shipping one basename would overwrite each other.
+ */
+function TriggerLabel({ children }: { children: ReactNode }) {
+  return <span className="font-normal text-muted-foreground">{children}:</span>;
 }

@@ -16,8 +16,8 @@ import { expect, type Page, test } from "@playwright/test";
  * here, because "fixing" the asymmetry breaks one block or the other.
  */
 
-const ROLE_TRIGGER = /All roles/;
-const STATUS_TRIGGER = /All statuses/;
+const ROLE_TRIGGER = /^Role:/;
+const STATUS_TRIGGER = /^Status:/;
 const CLEAR_BUTTON = /^Clear/;
 const SINGLE_PAGE = /Page 1 of 1/;
 const TICKETS_TRIGGER = /Status/;

@@ -11,7 +11,8 @@ import { expect, type Page, test } from "@playwright/test";
 
 const FILTERS_TRIGGER = /Filters/;
 const SIDEBAR_TRIGGER = /Toggle Sidebar/i;
-const ROLE_TRIGGER = /All roles/;
+const ROLE_TRIGGER = /^Role:/;
+const ROW_ACTIONS = /^Actions for /;
 const ROLE_ROW = /^Role/;
 const STATUS_ROW = /^Status/;
 const USER_COLUMN = /User/;
@@ -22,7 +23,6 @@ const SORT_SEATS_LABEL = /Seats, most first/;
 const CLEAR_BUTTON = /^Clear/;
 const USERS_CRUMB = /^Users$/;
 const ID_COLUMN = /ID/;
-const OPEN_ACTION = /^Open /;
 
 const rowCount = (page: Page) =>
   page.locator('[data-slot="table-body"] tr').count();
@@ -74,7 +74,7 @@ test.describe("mobile filters drawer", () => {
     // on the step's own content rather than counting titles.
     await expect(drawer.getByRole("button", { name: "Back" })).toBeVisible();
     await expect(
-      drawer.getByRole("radio", { name: "All roles" })
+      drawer.getByRole("radio", { name: "All", exact: true })
     ).toBeVisible();
 
     await drawer.getByText("Viewer", { exact: true }).click();
@@ -291,31 +291,36 @@ test.describe("user detail", () => {
   });
 
   /**
-   * A hover-revealed control is mouse-only unless it also appears on focus.
-   * `.focus()` will not prove it — Chromium only matches `:focus-visible`
-   * after real keyboard interaction — so this tabs to it.
+   * Replaces a hover-revealed Open button. Hover is unreachable on touch —
+   * `focus-visible` rescues a keyboard, not a finger — so the affordance is
+   * simply present, and the name stays clickable for the one-click path.
    */
-  test("the row's Open button is revealed on hover and reachable by keyboard", async ({
+  test("every row opens from a menu that is always present", async ({
     page,
   }) => {
     await openUsers(page);
 
-    const firstRow = page.locator('[data-slot="table-body"] tr').first();
-    const open = firstRow.getByRole("button", { name: OPEN_ACTION });
+    const triggers = page.getByRole("button", { name: ROW_ACTIONS });
+    expect(await triggers.count()).toBe(5);
+    await expect(triggers.first()).toBeVisible();
 
-    await expect(open).toHaveCSS("opacity", "0");
+    // Named per row: five identical "Actions" buttons would leave a screen
+    // reader to work out which row it is on from context it does not have.
+    const names = await triggers.evaluateAll((nodes) =>
+      nodes.map((node) => node.textContent?.trim())
+    );
+    expect(new Set(names).size).toBe(names.length);
 
-    await firstRow.hover();
-    await expect(open).toHaveCSS("opacity", "1");
+    await triggers.first().click();
+    expect(await page.getByRole("menuitem").allTextContents()).toEqual([
+      "View details",
+      "Copy user ID",
+    ]);
+    await page.getByRole("menuitem", { name: "View details" }).click();
 
-    await page.mouse.move(0, 0);
-    await page
-      .getByRole("button", { exact: true, name: "Ada Okonkwo" })
-      .focus();
-    await page.keyboard.press("Tab");
-
-    await expect(open).toBeFocused();
-    await expect(open).toHaveCSS("opacity", "1");
+    await expect(
+      page.getByRole("heading", { name: "Ada Okonkwo" })
+    ).toBeVisible();
   });
 
   test("the ID column shows the real id and sorts", async ({ page }) => {

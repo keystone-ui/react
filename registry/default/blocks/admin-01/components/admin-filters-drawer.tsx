@@ -133,7 +133,7 @@ export function AdminFiltersDrawer({
                     }}
                     value={roleFilter}
                   >
-                    <FilterOption label="All roles" value="all" />
+                    <FilterOption label="All" value="all" />
                     {ROLES.map((role) => (
                       <FilterOption key={role} label={role} value={role} />
                     ))}
@@ -153,7 +153,7 @@ export function AdminFiltersDrawer({
                     }}
                     value={statusFilter}
                   >
-                    <FilterOption label="All statuses" value="all" />
+                    <FilterOption label="All" value="all" />
                     {STATUSES.map((status) => (
                       <FilterOption
                         key={status}

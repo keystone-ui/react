@@ -29,7 +29,8 @@ export const ROLES: readonly Role[] = ["Admin", "Billing", "Member", "Viewer"];
 export const STATUSES: readonly Status[] = ["active", "invited", "suspended"];
 
 export function roleLabel(role: RoleFilter): string {
-  return role === "all" ? "All roles" : role;
+  // Bare "All": the trigger and the drawer row both say Role already.
+  return role === "all" ? "All" : role;
 }
 
 /** Shared by the table's Status cell and the detail view, so they cannot drift. */
@@ -43,7 +44,7 @@ export const STATUS_VARIANT: Record<
 };
 
 export function statusLabel(status: StatusFilter): string {
-  return status === "all" ? "All statuses" : statusLabels[status];
+  return status === "all" ? "All" : statusLabels[status];
 }
 
 // ---------------------------------------------------------------------------

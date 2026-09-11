@@ -81,9 +81,11 @@ The breadcrumb reflects that: with a record open, `Users` stops being the page a
 
 Values are stacked above their labels in two columns — `DescriptionList`'s `orientation="stacked"`, with the grid itself in `className`. Its default row layout right-aligns each value against its label, which reads as a summary; a record wants the label to sit above the value it describes. A field the record does not have renders `-` rather than being omitted, so the grid keeps its alignment.
 
-Rows in the **users** table reveal an **Open** button on hover, as [`tickets-01`](/docs/blocks/tickets-01) does. It carries `focus-visible:opacity-100` alongside `group-hover/row:opacity-100` — without that second rule a hover-revealed control is mouse-only. The name stays clickable too, so the affordance does not depend on discovering the hover.
+Both tables carry their row actions in a **trailing menu**. A hover-revealed button is unreachable on touch — `focus-visible` rescues a keyboard, not a finger — and these are the widest surfaces in the block, so the likeliest to be read on a phone. A ledger is also where per-row actions accumulate, and a menu absorbs a fourth and fifth where a row of inline buttons cannot.
 
-The **payments** table uses a trailing actions menu instead. A hover-revealed button is unreachable on touch — `focus-visible` rescues a keyboard, not a finger — and this is the wider of the two tables, so the likeliest to be read on a phone. A ledger is also where per-row actions accumulate, and a menu absorbs a fourth and fifth where a row of inline buttons cannot. `Copy payment ID` duplicates the icon button beside the id on purpose: that one is the fast path for a value shown truncated, this one is the labelled path for anyone who would not read an unlabelled icon.
+The trigger names its row: five identical "Actions" buttons would leave a screen reader to work out which one it is on from context it does not have. The record's name or id stays clickable, so opening keeps a one-click path.
+
+`Copy payment ID` duplicates the icon button beside the id on purpose: that one is the fast path for a value shown truncated, this one is the labelled path for anyone who would not read an unlabelled icon.
 
 `invitedBy` stores the inviter's **id**, not their name, so **Invited by** links to that user's record rather than naming it as dead text. A detail page that mentions another record it can already open should take you there.
 
