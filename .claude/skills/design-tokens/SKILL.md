@@ -157,8 +157,8 @@ and it is why nobody re-examined that line for years. The library now
 references no radius tier this way at all.)
 
 The reason is that **Tailwind only emits a `@theme` variable when some utility
-references that tier.** `--radius-md` exists at runtime because `rounded-md`
-appears 32 times across 19 files; `--radius-2xl` and `--radius-3xl` are not
+references that tier.** `--radius-md` exists at runtime only because
+`rounded-md` is used somewhere; `--radius-2xl` and `--radius-3xl` are not
 emitted at all, because nothing uses them. So `var(--radius-md)` in an
 arbitrary value works by borrowing a dependency it never declares — delete the
 last `rounded-md` in the library and it silently becomes invalid. Going through
