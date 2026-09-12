@@ -97,7 +97,7 @@ InputGroup.displayName = "InputGroup";
 // InputGroupAddon
 // =============================================================================
 const inputGroupAddonVariants = cva(
-  "group/input-group-addon flex h-auto cursor-text select-none items-center justify-center gap-1 py-1.5 text-muted-foreground text-sm group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "group/input-group-addon flex h-auto cursor-text select-none items-center justify-center gap-1 py-1.5 text-muted-foreground text-sm group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)*0.5)] [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       align: {
@@ -166,7 +166,7 @@ const inputGroupButtonVariants = cva(
         // addon's negative margin). Block addons: 32px toolbar height.
         // Icon-only when the only direct child is an svg.
         auto: [
-          "rounded-[calc(var(--radius)-5px)]",
+          "rounded-[calc(var(--radius)*0.5)]",
           "[&>svg:not([class*='size-'])]:size-4",
           // Default group (40px) — 32px button (4px inset)
           "group-data-[size=default]/input-group:h-8",

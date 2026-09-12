@@ -95,14 +95,16 @@ Do NOT mix these patterns. Do NOT use hybrid approaches (e.g., combining ring an
 A single `--radius` CSS variable (default `0.625rem` / 10px) drives the entire radius scale. It is a consumer-owned theme token defined in `:root`, just like colors. The derived scale is registered in `base.css` via `@theme inline`:
 
 ```
---radius-sm:  calc(var(--radius) - 4px)   → rounded-sm  (6px at default)
---radius-md:  calc(var(--radius) - 2px)   → rounded-md  (8px at default)
+--radius-sm:  calc(var(--radius) * 0.6)   → rounded-sm  (6px at default)
+--radius-md:  calc(var(--radius) * 0.8)   → rounded-md  (8px at default)
 --radius-lg:  var(--radius)               → rounded-lg  (10px at default)
---radius-xl:  calc(var(--radius) + 4px)   → rounded-xl  (14px at default)
---radius-2xl: calc(var(--radius) + 8px)   → rounded-2xl (18px at default)
---radius-3xl: calc(var(--radius) + 12px)  → rounded-3xl (22px at default)
---radius-4xl: calc(var(--radius) + 16px)  → rounded-4xl (26px at default)
+--radius-xl:  calc(var(--radius) * 1.4)   → rounded-xl  (14px at default)
+--radius-2xl: calc(var(--radius) * 1.8)   → rounded-2xl (18px at default)
+--radius-3xl: calc(var(--radius) * 2.2)   → rounded-3xl (22px at default)
+--radius-4xl: calc(var(--radius) * 2.6)   → rounded-4xl (26px at default)
 ```
+
+The steps are **ratios, not pixel offsets**, so the scale stays proportional at any base. `--radius: 0` gives genuinely square corners; offsets left `--radius-4xl` at 16px and drove `--radius-sm` negative. At the 0.625rem default both spellings give the same seven values, which is where the multipliers come from.
 
 Changing `--radius` shifts the entire scale uniformly. Components use Tailwind utilities (`rounded-sm`, `rounded-md`, etc.) and never hardcode pixel values.
 
@@ -116,10 +118,12 @@ Changing `--radius` shifts the entire scale uniformly. Components use Tailwind u
 
 ### Direct `var(--radius)` usage
 
-Some components use `calc(var(--radius) - Npx)` for bespoke offsets that don't match a named tier. Since `@theme inline` does not create runtime CSS variables for `--radius-sm` etc., always use `calc(var(--radius) ± offset)` when referencing the radius token directly:
+Some components use `calc(var(--radius)*N)` for bespoke offsets that don't match a named tier. Since `@theme inline` does not create runtime CSS variables for `--radius-sm` etc., always go through `calc(var(--radius) * ratio)` when referencing the radius token directly — never `var(--radius-md)`, which resolves to nothing:
 
-- Calendar: `[--cell-radius:calc(var(--radius)-2px)]` for cell radius in range selections
-- InputGroupAddon: `[&>kbd]:rounded-[calc(var(--radius)-5px)]` for nested kbd elements
+- Calendar: `[--cell-radius:calc(var(--radius)*0.8)]` for cell radius in range selections
+- InputGroupAddon: `[&>kbd]:rounded-[calc(var(--radius)*0.5)]` for nested kbd elements
+
+Use a ratio rather than a pixel offset for the same reason the scale does: an offset silently stops being proportional the moment a consumer changes `--radius`.
 
 ## Component-scoped spacing
 

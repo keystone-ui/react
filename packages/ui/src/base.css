@@ -44,15 +44,22 @@
 
 /* Radius scale — derived from a single --radius base token.
    Consumers define --radius in :root; these calc() expressions
-   make rounded-sm … rounded-4xl shift uniformly. */
+   make rounded-sm … rounded-4xl shift uniformly.
+
+   Ratios, not pixel offsets, so the scale stays proportional at every
+   base. Offsets did not: --radius:0 left --radius-4xl at 16px, so a
+   square theme still had rounded cards, and --radius-sm went negative.
+   At the 0.625rem default the two agree exactly (6/8/10/14/18/22/26px),
+   which is where the multipliers come from — it is also the scale
+   shadcn uses, so a mixed project has one set of corners. */
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 @keyframes progress-indeterminate {

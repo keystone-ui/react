@@ -246,10 +246,12 @@ export function getThemeInfoTool(config: ProjectConfig) {
 ## Radius Scale
 
 Base: \`--radius: 0.625rem\` (10px). Derived values:
-- \`rounded-sm\`: 6px
-- \`rounded-md\`: 8px
-- \`rounded-lg\`: 10px (base)
-- \`rounded-xl\`: 14px
+- \`rounded-sm\`: \`--radius * 0.6\` (6px)
+- \`rounded-md\`: \`--radius * 0.8\` (8px)
+- \`rounded-lg\`: \`--radius\` (10px, base)
+- \`rounded-xl\`: \`--radius * 1.4\` (14px)
+
+Ratios, not pixel offsets — the scale stays proportional at any base.
 
 ## Custom Tokens
 

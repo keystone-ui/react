@@ -111,13 +111,15 @@ A single `--radius` variable drives the whole scale. Default is `0.625rem` (10px
 
 | Utility | Formula | Default |
 |---|---|---|
-| `rounded-sm` | `--radius - 4px` | 6px |
-| `rounded-md` | `--radius - 2px` | 8px |
+| `rounded-sm` | `--radius * 0.6` | 6px |
+| `rounded-md` | `--radius * 0.8` | 8px |
 | `rounded-lg` | `--radius` | 10px |
-| `rounded-xl` | `--radius + 4px` | 14px |
-| `rounded-2xl` | `--radius + 8px` | 18px |
+| `rounded-xl` | `--radius * 1.4` | 14px |
+| `rounded-2xl` | `--radius * 1.8` | 18px |
 
-Components use the utility classes (`rounded-md`, `rounded-lg`) — never hardcoded pixel values. For bespoke offsets, use `calc(var(--radius) ± Npx)`.
+The steps are ratios, so the scale stays proportional at any base — `--radius: 0` gives genuinely square corners.
+
+Components use the utility classes (`rounded-md`, `rounded-lg`) — never hardcoded pixel values. For bespoke offsets, use `calc(var(--radius) * ratio)`.
 
 ## Dark mode
 
