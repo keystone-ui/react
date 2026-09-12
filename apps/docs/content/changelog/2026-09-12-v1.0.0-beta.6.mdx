@@ -1,0 +1,890 @@
+---
+version: "1.0.0-beta.6"
+date: "2026-09-12"
+description: "What's coming in the next release"
+excerpt: "40 changes queued for the next release."
+---
+
+## Minor changes
+
+### Upgrade `@base-ui/react` 1.4.1 → 1.7.0.
+
+**Public API change (minor):** `InputOTP`'s `sanitizeValue` prop is now `normalizeValue`. Base UI renamed it upstream (#4717) and `InputOTP` spreads props straight through, so a `sanitizeValue` callback will be silently ignored rather than raising an error — rename it at the call site.
+
+```diff
+- <InputOTP sanitizeValue={fn} …>
++ <InputOTP normalizeValue={fn} …>
+```
+
+Other notes:
+
+- `InputOTP` is no longer built on a preview API. Base UI un-previewed OTP Field in 1.6.0 (`OTPFieldPreview` → `OTPField`, #5029); no keystoneui API changes as a result, since the alias was internal. With Drawer un-previewed back in 1.3.0, this library now consumes zero preview APIs.
+- Across the three releases Base UI added, removed, or renamed **no** components — the exported surface is identical to 1.4.1. These were the only two breaking changes.
+- Accessibility output changed in a few places upstream, all corrections rather than regressions: the `region` role moved off `Accordion.Root` to the panel where APG prescribes it (#4961), redundant ARIA attributes were dropped from `Radio.Root` (#5213), an invalid `aria-orientation` was dropped from `ToggleGroup`'s `role="group"` (#4628), and listbox separator semantics were fixed in `Select` / `Combobox` (#5399). If you assert on any of these in tests, expect to update them.
+- Form behaviour: `CheckboxGroup` and `RadioGroup` now submit values matching native form submission (#5218, #5238), and `disabled` cascades from Root to Item in `Menu` / `Select` / `Combobox` (#5363, #5365).
+- `input-otp` was removed from the `input-otp` registry entry's dependencies — that npm package stopped being used when the component moved to Base UI, so shadcn-CLI installs were pulling an unused package and missing `@base-ui/react`.
+
+---
+
+### `Card` gains a `variant` prop and drives all spacing from `--card-spacing`.
+
+`variant="outline"` is a second surface tier: no fill, so the page shows
+through. It is the tier for chart and table panels, where a filled card on a
+filled page reads as two stacked surfaces. `filled` remains the default and is
+unchanged — verified mechanically, not by eye: `p-6` and `--spacing(6)` both
+compile to `calc(var(--spacing) * 6)`, so every size resolves to the same value
+it did before.
+
+Both variants use a ring rather than a border. A ring is a box-shadow with no
+layout impact, where a border insets the content box by 1px — so flipping a row
+of cards between variants would otherwise shift every child. `outline` rings
+`border` at full strength where `filled` rings `border-muted`, because with no
+fill the edge is the only thing defining the card.
+
+All of Card's padding and gap, sub-parts included, now resolve from one
+`--card-spacing` custom property, replacing nine `group-data-[size=…]/card`
+selectors across five sub-parts. That makes any spacing reachable from
+`className`, including the table-flush panel:
+
+```tsx
+<Card variant="outline" className="[--card-spacing:0px]">
+  <Table />
+</Card>
+```
+
+`size` resolves the variable through CVA rather than through
+`data-[size=sm]:[--card-spacing:…]` variants on the base class. Those look
+equivalent and are not: a variant modifier is part of tailwind-merge's group
+key, so an unmodified consumer override does not replace the size-scoped
+declarations, and the survivors out-specify it (class+attribute beats class) —
+`<Card size="sm" className="[--card-spacing:0px]">` silently kept its padding.
+The tests pin the override at all three sizes, because a default-size-only test
+passes on that bug.
+
+---
+
+### Add a five-slot categorical chart ramp (`--chart-1` … `--chart-5`), and correct
+
+`--success-foreground`.
+
+**`--success-foreground` was wrong and is now dark.** Shipped near-white, it
+measured 3.10:1 on the success green — a WCAG failure, and exactly the mistake
+already documented for `--warning-foreground`. Dark text gives 4.60 light /
+6.55 dark. If you have already copied the token block, re-copy it.
+
+**The chart ramp separates by lightness, not hue.** Every form of colour-vision
+deficiency preserves lightness while collapsing hue, so the ramp staggers
+lightness deliberately rather than pairing each hue with the lightness that
+looks natural for it. That is not a theoretical concern: a straight port of a
+twelve-slot palette measured **0.9 ΔE** between two slots under simulated
+tritanopia — below a just-noticeable difference, so a tritanope could not tell
+those two series apart at all. Natural hue/lightness pairing reached 6-7. The
+shipped ramp reaches 11.1 in both modes.
+
+Five slots rather than twelve, because crowding hues into the same space is
+what erodes that separation, and a dashboard stacks four or five channels plus
+an "Other".
+
+Like the status tones, the ramp is theme-independent, so the six theme items do
+not carry it — only the style item does.
+
+Also adds `apps/docs/tests/palette.test.ts`, which measures all of the above
+from the real CSS rather than a copy: chart contrast against the card, worst
+pair in normal vision, worst pair under all three CVD simulations, and the
+status-tone and per-theme text contrasts. Every threshold is a floor pinned at
+what the palette actually achieves, with the measured figure beside it, so it
+fails on regression rather than asserting compliance.
+
+One thing it records rather than fixes: `--destructive-foreground` on
+`--destructive` is 4.47:1 light and 2.63:1 dark, below AA. That predates these
+tokens and is the label colour on every destructive Button in every theme, so
+re-picking it deserves its own decision. The test pins it so it cannot get
+worse.
+
+---
+
+### Put every control on one corner radius: `rounded-md`, stepping to `rounded-sm` at the 24px rung.
+
+`Button`, `Toggle`, `ToggleGroup` and `ButtonGroup` were `rounded-lg` (10px) while `Input`, `InputGroup`, `SelectTrigger`, `NativeSelect` and `Textarea` were already `rounded-md` (8px). Every toolbar in the library therefore paired an 8px search field with 10px buttons. `bf72601` aligned Toggle to Button and fixed the mismatch it was looking at; this one closes the half it left open. It also matches shadcn, whose Button and Input are both `rounded-md` at the same `--radius: 0.625rem` default.
+
+| rung | height | before | after |
+| --- | --- | --- | --- |
+| `xs` / `icon-xs` | 24px | 10px | **6px** (`rounded-sm`) |
+| `sm` / `icon-sm` | 32px | 10px | **8px** (`rounded-md`) |
+| `default` / `icon` | 40px | 10px | **8px** |
+| `lg` / `icon-lg` | 48px | 10px | **8px** |
+
+**Nothing to change in your code** — no prop, no export and no class name moves. If you deliberately matched a custom control to keystone's buttons with `rounded-lg`, switch it to `rounded-md`.
+
+The `xs` step-down is geometric, not a new ladder: at 10px a 24px-tall button has 4px of straight edge per side and its corner arcs nearly meet, which reads as a lozenge. `icon-xs` was worse, being 4px of straight edge on both axes. `InputGroupButton` already shipped `xs: rounded-sm` / `sm: rounded-md`, so this generalises a rule the library already had in one place rather than inventing one.
+
+**Two latent bugs go with it.** A joined `ToggleGroup` at `size="sm"` clamped its container to 8px while its first and last items stayed at `rounded-l-lg`/`rounded-r-lg` — the item corners overhung the group by 2px. And `ButtonGroup` forced 10px end caps with `!important` onto children that were 8px (`Input`, `SelectTrigger`, `ButtonGroupText`), papering over a mismatch it was creating. Both now agree by construction.
+
+**Surfaces are unchanged.** `Card`, `Modal`, `Popover`, `Toast`, `Alert`, `Item`, `AccordionItem` and the popup containers keep `rounded-lg`/`rounded-xl` — they are not controls, and shadcn makes the same split. So do containers whose children are *inset* by padding: `TabsList` stays `rounded-lg` around its `rounded-md` triggers, and `SelectionBar` stays `rounded-2xl`. Flattening those would push the inner corners past the container.
+
+`control-ladder.test.tsx` now pins the radius alongside the height ladder, and `apps/docs/e2e/control-ladder.spec.ts` (renamed from `control-heights.spec.ts`) measures the rendered corner in a browser — a class-string assertion cannot see a mismatch that only exists between two components, which is why this one survived as long as it did.
+
+---
+
+### Make `Drawer` content scrollable by default and add `DrawerBody`.
+
+- **Fix:** `[data-slot=drawer-inner-content]` was `overflow-hidden`, so a plain `DrawerHeader` + content + `DrawerFooter` composition silently clipped anything past the popup's `max-h-[80vh]` cap, with no scroll affordance. It is now a Y-axis scroller (`overflow-y-auto overflow-x-hidden overscroll-contain`). The X axis is pinned to `hidden` deliberately: `overflow-y: auto` alone promotes the default `overflow-x: visible` to `auto` per CSS Overflow L3, which paints a phantom gutter on macOS "Show scrollbars: Always" and makes Base UI read a bogus cross-axis scroll container, swallowing swipe-to-dismiss on diagonal touch drags. This also repairs a second defect: Base UI only recognises `overflow-y: auto | scroll` as a scroll region, so with `overflow-hidden` a downward drag on clipped content dismissed the sheet instead of scrolling it.
+- Drawers that already nest their own `overflow-y-auto` child are unaffected. That child's overflow is not `visible`, so its automatic minimum size is `0`, it shrinks to absorb the overflow, and the outer region never scrolls.
+- **New:** `DrawerBody` (`data-slot="drawer-body"`) — the scrolling middle region, making the pinned-header / scrolling-body / pinned-footer pattern a first-class API instead of a hand-rolled `<div className="overflow-y-auto px-4">`. Horizontal padding only (`px-4`), so it never doubles against `DrawerHeader` / `DrawerFooter`'s `p-4`.
+- `DrawerHeader` and `DrawerFooter` now carry `shrink-0` so they stay pinned alongside `DrawerBody`. `DrawerFooter` keeps `mt-auto` for compositions that don't use `DrawerBody`.
+
+---
+
+### `DropdownMenuRadioItem` now closes the menu when picked.
+
+Base UI defaults `closeOnClick` to `false` on both `Menu.CheckboxItem` and `Menu.RadioItem`. That is right for a checkbox group — multi-select wants the menu to stay put — and wrong for a radio group, where picking one *is* the interaction and the popup has nothing left to act on.
+
+The visible failure was worse than a menu that lingers: Base UI keeps a fullscreen `position: fixed` backdrop with `pointer-events: auto` mounted while the popup is open, so the user's next click *anywhere on the page* is swallowed. In a filter toolbar that reads as "the second filter is broken".
+
+`DropdownMenuRadioItem` therefore re-defaults `closeOnClick` to `true`, which is also what Radix — and so shadcn — does on select, so a ported menu behaves the way its author expects. `DropdownMenuCheckboxItem` keeps Base UI's `false`; the asymmetry is the decision.
+
+Pass `closeOnClick={false}` to restore the previous behaviour, for a menu that reveals further controls once a choice is made.
+
+---
+
+### Scope the `dark` variant to screens, and ship ink tokens for paper.
+
+Printing a page in dark mode renders every filled surface as a solid black
+rectangle — summary tiles, badges, chart bands — because the tokens on paper are
+still the dark ones. The usual fix is a list of print overrides, one per token,
+which can be forgotten by whoever adds the next token, and forgotten *silently*:
+nobody prints a dark page to check. So the variant itself is now screen-scoped
+and the `.dark` token block is wrapped in the same `@media screen`. Paper cannot
+receive the dark values at all.
+
+The style item also gains a small `@media print` block shifting the light tokens
+toward ink — pure black on white rather than the near-blacks a screen wants, and
+a `--muted-foreground` dark enough to survive a laser printer.
+
+**If you installed the style item before this, update your CSS by hand:**
+replace `@custom-variant dark (&:is(.dark *));` with the nested form and wrap
+your `.dark { … }` body in `@media screen { … }`. The Dark Mode guide has both,
+along with a `data-slot` recipe for hiding chrome on paper.
+
+No print rules ship in `base.css`. Hiding chrome is policy about your layout,
+and `!important` in library CSS cannot be undone by a consumer's class — a
+blanket `display: none` on dialogs would break "print the contents of this
+dialog" with no way out. Every part carries a stable `data-slot`, so the guide
+gives the recipe instead.
+
+Note the style item keeps the **flat** `@custom-variant dark` form. The nested
+version does round-trip `shadcn build` intact, but whether it renders as valid
+CSS in a consumer's file could not be verified without a live install, and a
+malformed `@custom-variant dark` would break dark mode outright — so the
+upgrade is documented rather than pushed.
+
+---
+
+### The radius scale is derived by ratio instead of by pixel offset.
+
+```diff
+- --radius-sm: calc(var(--radius) - 4px);   --radius-xl:  calc(var(--radius) + 4px);
++ --radius-sm: calc(var(--radius) * 0.6);   --radius-xl:  calc(var(--radius) * 1.4);
+```
+
+**If you have not changed `--radius`, nothing moves.** At the `0.625rem`
+default both spellings give the same seven values — 6/8/10/14/18/22/26px —
+which is where the multipliers come from. `apps/docs/e2e/radius-scale.spec.ts`
+pins that.
+
+**If you have, your corners change.** Offsets stop being proportional as soon
+as the base moves, and the further it moves the worse it gets. Three of the
+four presets `/theme-builder` ships are affected:
+
+| `--radius` | sm | md | lg | xl | 2xl | 3xl | 4xl |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `0` before | **-4** | **-2** | 0 | 4 | 8 | 12 | **16** |
+| `0` after | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| `0.875rem` before | 10 | 12 | 14 | 18 | 22 | 26 | 30 |
+| `0.875rem` after | 8.4 | 11.2 | 14 | 19.6 | 25.2 | 30.8 | 36.4 |
+
+The `0` row is the bug this fixes: the "sharp" preset never produced a square
+corner, because `--radius-4xl` stayed at 16px however far you turned the dial
+down, and `--radius-sm` went negative. Ratios also mean the scale no longer
+mixes units — `calc(rem - px)` diverged from `calc(rem * n)` at any root font
+size other than 16px, so a reader who had enlarged their browser text got a
+subtly different scale from everyone else.
+
+It is the scale shadcn uses, so a project mixing both registries now has one
+set of corners rather than two.
+
+Two component-level offsets moved with it, both unchanged at the default:
+`InputGroupAddon`'s nested `kbd` (`calc(var(--radius) - 5px)` →
+`calc(var(--radius) * 0.5)`, 5px either way) and `Calendar`'s cell radius
+(`- 2px` → `* 0.8`, 8px either way). `ToggleGroup`'s
+`min(var(--radius-md), 10px)` was audited and left alone — the 10px ceiling
+guards against an oversized corner on a 32px control and is independent of the
+scale.
+
+**On the bump.** `minor` rather than `major` because the default is untouched
+and the change is corrective everywhere else: every value it alters was one the
+old formula got wrong. In pre mode the type is banked until `changeset pre
+exit`, so this is a decision about 1.1.0 versus 2.0.0, not about the next beta.
+If you have themed `--radius` and want the old geometry, the seven offset
+expressions above still work — set them in your own `@theme inline` block.
+
+---
+
+### Add `CopyButton`, and give `DescriptionList` a record layout.
+
+Between them these make a read-only detail view possible. The library had no way to build one: no block in the repo is a record view, and `DescriptionList` — the right primitive semantically, being a real `dl`/`dt`/`dd` — could render exactly one shape, `label ·········· value` on a single row with the value right-aligned. That reads as a summary. A record page wants the label above the value, in two columns.
+
+**`DescriptionList` gains `orientation`.** `orientation="stacked"` puts the term above the details, drops the row padding and separators — row-list affordances that read as noise between stacked pairs — and spaces the rows, since nothing else would. One prop, because it restyles three sub-parts at once; decorating every row from the call site is not a real alternative.
+
+Columns deliberately stay in `className`. A multi-column record is four classes on the element you already style, `grid` supersedes the component's default `flex`, and the stacked row gap survives alongside your own `gap-x-*`. Layout belongs at the call site here.
+
+Both default to today's behaviour, and that is verified rather than asserted: across all six existing demos — 85 elements — no class was removed and no element changed size. Only inert `group-data-[orientation=stacked]` classes were added.
+
+**`CopyButton`** copies a value and confirms it, pairing with a value rather than wrapping it so it composes beside a monospace ID, inside an `InputGroup`, or in a table cell. The affordance is trivial; the reason it is a component is that the hand-rolled version was not. The same snippet appeared five times in this repo, and every copy shared three defects: the reset timer was never cleared, so a click followed by an unmount set state on a dead component; `writeText` was not awaited, so a rejection surfaced as an unhandled promise; and the failure path showed a tick anyway. Clipboard writes fail whenever the document is unfocused or the origin is insecure, and a false confirmation is worse than none — the user finds out when they paste.
+
+Confirmation is carried by the accessible name, `Copy` → `Copied`; an icon swap announces nothing. Size and variant pass through to `Button`.
+
+---
+
+### Add `Stat` — `StatValue`, `StatDelta` and the `deltaTone` helper.
+
+The headline number of a metric and its change. Deliberately two parts plus a
+helper rather than a full tile: a KPI tile is a `Card` with a label, a number
+and a change, and `Card` already provides the surface system, so giving `Stat`
+its own root would duplicate it.
+
+The part that carries real logic is the tone. Colour comes from what the metric
+*means*, not from the sign of the delta — revenue rising is good, p95 latency
+rising is not, a headcount moving is neither. `StatDelta` takes a `direction`
+(`"up-is-good"` | `"down-is-good"` | `"neutral"`) and derives the tone from the
+direction and the sign together. The arrow follows the **sign** while the colour
+follows the **tone**, so a green down-arrow is correct for a `down-is-good`
+metric that improved.
+
+`negative` maps to `--destructive`, not `--warning`: a metric that got worse is
+bad news and there is already a token for that, while `--warning` means caution
+or an approaching threshold. One channel, one meaning. Pass `tone="warning"`
+when a number really is a caution state.
+
+Formatting is not handled here — `children` carries the display text and `value`
+carries only the signed number. Formatting a delta means choosing a locale, a
+digit count, a sign convention and a unit, none of which a component should
+decide for every consumer. `deltaTone` is exported for the same decision outside
+a `StatDelta`.
+
+Tone by colour alone fails WCAG 1.4.1, so `StatDelta` also renders a visually
+hidden "improving" / "declining" / "needs attention" qualifier, suppressed when
+the caller supplies their own `aria-label`.
+
+---
+
+### Add `--success`, `--warning` and `--sidebar-*` semantic tokens.
+
+`Progress` and `CircularProgress` previously inlined raw oklch for their
+`success` and `warning` color variants, with an in-file comment acknowledging
+it as an exception to the no-raw-colors rule. Both now read `var(--success)` /
+`var(--warning)`, so status tones are themeable and `text-success` /
+`bg-warning` are available to consumers instead of `text-emerald-600`.
+
+Three notes:
+
+- **Visual change in dark mode.** The tokens re-step for a dark surface
+  (green-400 / amber-400) where the inlined values were the light-mode hues in
+  both modes, which read muddy on a dark card. Light mode is unchanged: the new
+  light values are byte-identical to what was inlined.
+- **No action required on upgrade.** The variants resolve
+  `var(--success, <previous literal>)`, so a consumer who has not re-run the
+  style install keeps exactly the previous rendering.
+- `--warning-foreground` is deliberately dark rather than near-white. Near-white
+  on amber-500 is ~1.9:1, a WCAG failure.
+
+The eight `--sidebar-*` tokens are declared as aliases of the theme tokens.
+Keystone ships no sidebar; these exist so an imported shadcn sidebar follows the
+active keystone theme instead of shadcn's own neutral palette.
+
+---
+
+### Add `TablePagination` — the footer of a paginated data table.
+
+Rows selected, rows per page, "page N of M", and the four navigation buttons.
+Props-driven for the common case, with `TablePaginationInfo` / `PageSize` /
+`Status` / `Buttons` exported so `children` can compose them instead — the same
+shape `Progress` already uses.
+
+Deliberately a separate component from `Pagination` rather than an extension of
+it. `Pagination` is a list of page *links* (`nav > ul > li > a`, with
+`aria-current="page"`), which is right when every page has its own URL. A
+data-table footer is a toolbar over an opaque page index: no per-page URLs,
+`aria-live` instead of `aria-current`, and a dependency on `Select` and `Label`
+— merging them would drag Base UI's Select into every bundle that only wanted
+page links, and add both to `pagination`'s registry dependencies.
+
+Two things the hand-rolled copies lacked:
+
+- **`aria-live="polite"`** on the status and selection lines. Paging swaps the
+  table's contents with no other visible confirmation, so a screen-reader user
+  previously heard nothing at all after clicking "next page".
+- **A `pageCount` clamp**, so an empty result set reads "Page 1 of 1" rather
+  than "Page 1 of 0".
+
+`tickets-01` now uses it instead of its own `TicketsPagination`, and the
+`pagination` docs no longer carry a static "Data Table" example that claimed
+per-page and total counts it did not actually render.
+
+---
+
+### `Table` gains sortable headers, numeric columns, `TableEmpty`, and access to its
+
+scroll container.
+
+**`TableSortButton` + `TableHead sortDirection`.** `aria-sort` belongs on the
+`th` per ARIA, so it stays on `TableHead` while the button is only the
+affordance. `sortDirection` is three-way, which is what hand-rolled sort headers
+usually get wrong: omitted emits no attribute (the column is not sortable),
+`null` emits `aria-sort="none"` (sortable but inactive), and `"asc"`/`"desc"`
+mark the active column. Emitting `"none"` on a column that cannot be sorted
+tells a screen-reader user that it can be.
+
+`TableSortButton` is polymorphic via `render`, so one component serves both a
+client-state table (`onClick`) and a server-rendered one whose sort state lives
+in the URL (`render={<Link href={…} />}`). The inactive marker stays visible by
+default — that is what distinguishes the sortable columns from the ones that are
+not, and a hover-only affordance is invisible to touch; `revealOnHover` opts
+into hiding it.
+
+**`numeric` on `TableHead` and `TableCell`** right-aligns with tabular figures,
+using `text-end` rather than `text-right` so the column flips with the writing
+direction.
+
+**`TableEmpty`** provides the `tr`/`td` plumbing for a "no rows" row and
+suppresses the row hover, so it is not mistaken for a selectable row. `colSpan`
+is required rather than derived: counting header cells would need a context the
+header does not populate, and would be wrong the moment columns are
+conditionally hidden.
+
+**`containerClassName` / `containerProps`** expose the scroll container, which
+was previously unreachable. That is also how you get a sticky header: the
+container pins `overflow-y` to `hidden` on purpose (an implicit promotion to
+`auto` renders a permanent vertical gutter inside every table on macOS with
+"Show scrollbars: Always"), so a scrolling viewport is opt-in and needs a height
+cap. A header that sticks to the *page* scroll remains impossible while `Table`
+owns the horizontal scroll wrapper — documented rather than left to be
+discovered.
+
+---
+
+### `toast`: a bare message is now the **description**, and `title` is opt-in.
+
+The component has always been built on Base UI, but its API was shaped after
+Sonner: the first argument became the `title`, and `toast.promise` re-mapped
+Base UI's string shortcut from `description` back to `title`. Base UI treats
+`description` as the canonical message field — `Toast.Description` is
+documented as "the default message for the toast when no title is provided",
+and a string shortcut resolves to it. Following that makes the default toast a
+single muted line, and makes `title` mean what it looks like: an emphasized
+line above the message.
+
+```tsx
+// A bare message is the description — one muted line, no <h2> rendered
+toast("Event has been created.");
+toast("Saved", { duration: 10_000 });
+
+// Add a title for the emphasized line above it
+toast({
+  title: "Event created",
+  description: "Sunday, December 3 at 9:00 AM",
+  action: { label: "Undo", onClick: undo },
+});
+```
+
+Both forms work on `toast.success`, `toast.error`, `toast.warning`,
+`toast.info` and `toast.loading`.
+
+**Breaking:** `description` moved off `ToastOptions` onto the new `ToastInput`,
+so text passed in the options position is now a type error. Migrate to the
+object form:
+
+```diff
+-toast("Event has been created", { description: "Monday, January 3rd at 6:00pm" })
++toast({
++  title: "Event has been created",
++  description: "Monday, January 3rd at 6:00pm",
++})
+```
+
+Single-argument calls need no change, but they now render as the muted
+description rather than an emphasized title. `ToastOptions` is still exported
+and still carries every behavior field; `ToastInput` and `ToastPromiseOptions`
+are newly exported.
+
+Also in this release:
+
+- Each `toast.promise` state accepts exactly what `toast()` accepts, so
+  `duration`, `action` and `cancel` work there too, and non-string nodes
+  (`loading: <Spinner />`) resolve correctly instead of producing an empty
+  toast.
+- `toast.dismiss()` called without an id now closes every toast, matching Base
+  UI's `close(id?)`.
+- A description-only toast is named from its description text via `aria-label`.
+  Base UI names the root through the title, which such a toast doesn't render,
+  leaving the `role="dialog"` without an accessible name.
+
+---
+
+### `Toast`: move the close button into the content row and fix the phantom height.
+
+The close button carried both `absolute` and `relative` in one `cn()` call.
+Those are the same tailwind-merge conflict group, so the later `relative` won
+and silently stripped `absolute top-0 right-0` — dropping the button into
+normal flow below the content, where it rendered at the bottom-left corner.
+Base UI measures the root's natural height to publish `--toast-height`, so
+that stray button was also baked into the card as ~20px of empty space beneath
+the text.
+
+The close button is now an inline flex child at the end of the row, always
+visible, and sized to line up with the action button. A title-only toast goes
+from 74px to 54px, and title + description from 82px to 66px.
+
+Alongside it:
+
+- Row children are vertically centred. The text block previously stretched to
+  the row height (set by the close button) and left the title hanging at its
+  top edge — 12px above it, 21px below.
+- The leading semantic icon is centred rather than pinned to the first line.
+- The description is `text-sm` (14px), matching every other description in the
+  library; it was the lone `text-xs`.
+- Semantic types colour only their icon. The title and description stay
+  neutral, so the icon carries the signal instead of the type tinting the text.
+- Dropped the `max-sm:` wrap, so the text column and the button column hold at
+  every width: the message wraps short of the buttons instead of one of them
+  dropping to a second row.
+
+Docs fix: the `toast()` reference listed `duration` as defaulting to `4000`
+(it is `5000`) and documented a `richColors` prop on `Toaster` that has never
+existed — semantic colours are always applied.
+
+---
+
+### Put `Toggle` and `ToggleGroup` on the shared control height ladder.
+
+`Toggle` resolved `default` to 36px while `Button`, `Input`, `InputGroup`, `SelectTrigger` and `NativeSelect` all resolve it to 40px, so a toolbar left at its defaults was a 4px mismatch by construction. That 36px was not a decision: it is shadcn's `new-york-v4` ladder, inherited when the component was reworked a day after it was added and never revisited, while its padding *was* tuned to keystone's taste. The documented rationale — that 36px "matches the popup item height, which is right for menu-like toggles" — described a case that has never existed; no toggle in this library is rendered inside a menu.
+
+**The ladder is now `xs` 24px · `sm` 32px · `default` 40px · `lg` 48px**, and Toggle sits on it:
+
+| | before | after |
+| --- | --- | --- |
+| `sm` | 32px | 32px |
+| `default` | 36px | **40px** |
+| `lg` | 40px | **48px** |
+
+**If you used `size="lg"` to line a ToggleGroup up with a default Button, drop the prop** — the defaults now match, and `lg` is 48px. Padding is unchanged, because it sets an icon-only toggle's width; `min-w` follows the height, so an icon-only toggle is 40×40 at `default` and 48×48 at `lg`.
+
+Toggle's base radius also moves from `rounded-md` to `rounded-lg`, matching Button. With the heights aligned, a 2px corner difference was the remaining visible mismatch. Joined `ToggleGroupItem`s are unaffected — they already force `rounded-l-lg`/`rounded-r-lg` — so this shows on standalone toggles and groups with `spacing > 0`.
+
+Note `lg` keeps `text-sm` where Button's `lg` is `text-base`: the heights align, the type does not.
+
+36px remains the popup item tier (`POPUP_ITEM_HEIGHT`), which is deliberately off the control ladder and has its own density switch via `size="compact"`. `control-ladder.test.tsx` now pins the whole ladder and fails if any component declares a bare `h-9`.
+
+## Patch changes
+
+### Add the `admin-01` block: an admin panel.
+
+A collapsible sidebar shell, a topbar with breadcrumb and search, an overview
+with KPI tiles and a stacked signups chart, and a sortable, paginated users
+table with row selection and a `SelectionBar` for bulk actions.
+
+The sidebar is **shadcn's, not keystone's** — keystone deliberately ships no app
+shell. The block's `registryDependencies` name `sidebar` as a bare item so it
+resolves against shadcn's registry, and the new Interop guide covers the two
+things that then need care: deleting the `--sidebar-*` block `shadcn add`
+appends (keystone's aliases follow your theme; shadcn's hardcoded neutral values
+land afterwards and win), and passing `min-w-0` to `SidebarInset`, without which
+the wide users table gives the document a horizontal scrollbar.
+
+Four chart-infrastructure files are duplicated verbatim from `dashboard-01`
+rather than shared through a registry item. A block's installable copy is flat,
+so two blocks shipping a `chart.tsx` write to the same consumer path and
+installing both is last-writer-wins; hoisting them into their own item would put
+chart code back on the installable component surface, which is what keeping
+recharts a block dependency avoids. `apps/docs/tests/block-shared-files.test.ts`
+enforces the copies stay byte-identical and fails if a new basename starts
+colliding without being classified.
+
+---
+
+### `admin-01` gains full filter parity with `tickets-01`, desktop and mobile.
+
+The users toolbar now forks at `sm:` the way `tickets-01` does: search is shared and always visible, the filter cluster is `hidden sm:flex`, and below that a single Filters button opens a bottom-sheet `Drawer` whose body is a `Stepper` — a menu of "label + current value" rows drilling into one `RadioGroup` per filter. The fork is CSS-only, so both trees are always mounted and there is no `useMediaQuery` to get wrong on the server. Previously the block had no mobile story at all; its three controls simply wrapped onto separate lines.
+
+A Sort control joins Role and Status, and it drives the **same** state the column headers write — picking "Name Z–A" moves the header arrow, and clicking a header updates the menu's label, with no syncing code. `tickets-01` runs two independent sort systems, where its column sort cannot be seen or cleared from its toolbar; this is the better shape.
+
+Every control in the row now sits on the 40px `default` tier. The block previously paired `size="sm"` buttons with a default-height `InputGroup`, an 8px mismatch.
+
+Block-only change; no library API is affected.
+
+---
+
+### `admin-01` gains a Payments section, filtered by self-describing pills.
+
+Every filter is a pill that names its own dimension — `Action: Deposit`, not `Deposit`. A bare value turns ambiguous the moment it sits beside another one: is "Deposit" a type or a status? The exception is a value that names its own dimension; a date range reads as `Last 24h`, and `Period: Last 24h` only says it twice.
+
+That is also why there is no chip row. Chips exist to surface filters a panel has hidden, and when the control itself says what it is and what it holds, a chip repeating it is a second representation of the same fact — two representations that can disagree. The pills are the record of what is applied.
+
+The invariant that makes that safe lives in `visibleKeys`: a pill shows if it is one of the two permanent filters, if it was added by hand, **or if its filter holds a value**. That last term means a filter narrowing the table with no pill on the row is structurally impossible rather than merely tested for.
+
+Two filters are permanent and the rest are added from `+ Add filter`, which offers only what is not already shown and disappears when everything is. A multi-select names its first value and counts the rest — `Currency: BTC, +2` — because a bare `3` says how many without saying which. Each menu's footer spells that number out and offers a `Clear`, and exists only while the filter holds something — an empty filter has no count to report and nothing to undo. A pill is never removed from inside its own menu: setting one back to `All` leaves it on the row deliberately, and an empty pill has nothing `Clear all` does not already handle. Ranges open a `Popover` rather than a menu — a menu is a list of choices, a pair of bounds is a small form.
+
+Sorting is not in the filter row. The column headers own it, exactly as the users table does it: a sort control sitting among filters reads as a filter. Four columns sort and carry `aria-sort`; the other four carry none, because `none` would claim a column sorts and is merely inactive.
+
+Below `sm` the pills fold away and a bottom-sheet `Drawer` carries the whole set — the same `Stepper` drilldown the users drawer uses, a menu of "label + current value" rows opening one screen per filter. A row of pills becomes a column of pills on a phone, and a scrolling column of selects is just a desktop panel moved sideways. Each row's value comes from the same descriptor the pills read, so a row and its pill cannot disagree. The drawer holds *every* filter, because at that width it is the only way in.
+
+The status filter is now one control rather than one per payment type. The split was what produced the "Mixed statuses" fallback, and expressing it cost a pill that could read something no one asked for.
+
+Block-only change; no library API is affected.
+
+`tickets-01`'s pagination footer changes with it. Its info slot said "N of M row(s) selected" — which the `SelectionBar` already says, and says at every width where that slot is `hidden lg:block`. It now reports the visible range instead, the one number nothing else on the page states.
+
+Its toolbar picks up the labelled triggers too: `Sort: Manual` and `Status: All` rather than `Manual` beside `All Statuses`, which was the same pair of half-named controls this change set out to fix. `Table options` keeps no label, because it names a menu rather than a value.
+
+The conventions both blocks now follow ship as a skill rule — `rules/data-tables.md` in `keystoneui-react` (2.2.0) — so a project consuming the registry gets them when building a table rather than only when installing one of these blocks. The Block Selection table gains a row for filterable data tables, which previously advertised `admin-01` only as an app shell.
+
+Payments rows carry their actions in a trailing `⋯` menu rather than a hover-revealed Open button. Hover is unreachable on touch — `focus-visible` rescues a keyboard, not a finger — and this is the wider of the block's two tables, so the likeliest to be read on a phone. The menu holds `View details` and `Copy payment ID`, and has room for the refund and receipt actions a ledger accumulates. The users table keeps its hover button; the two are now deliberately different, and the block docs say why.
+
+`tickets-01` follows. Its Open button had a second problem beyond being hover-only: it lived inside the Subject cell, which owns an inline editor — one click started an edit, a click two pixels to the right opened the drawer. Deleting stays a bulk action in the `SelectionBar`, since confirming a destructive action per row from a menu would put an `AlertDialog` behind two clicks with no selection to show for it.
+
+The users table follows both blocks: labelled triggers (`Role: All`, `Status: All`, `Sort: Name A–Z`), an `h1` above the card instead of a `CardTitle` inside it, a trailing row-actions menu, and a footer reporting `Showing 1–5 of 10 users` rather than the selection count its `SelectionBar` already states. All three tables in the two blocks now answer these questions the same way.
+
+The users sort menu splits into two groups: the column, then the direction, separated. The flat cross-product it replaces listed every pairing — eleven entries for five columns — so changing direction meant finding your column again in a list that had grown to hold both. Split it is five plus two, and every state the column headers can reach is expressible by construction rather than by remembering to add the pairing. The directions relabel per column, because "Ascending" is accurate and says nothing where "A–Z" and "Newest first" say what you will see.
+
+The users table gets the second filter layout: search, one `Filters` button and one `Sort`, with every applied filter as a removable `Role: Admin` chip. The block now demonstrates both answers and documents when each wins — pills for a table you sit in front of flipping a filter at a time, the drawer for one you filter once and then read, where the chip row *is* the answer to "what is applied".
+
+Users grows from two filters to five (Seats, Two-factor and Created join Role and Status, all from fields the fixture already carried), so the two layouts are compared at the same problem size rather than the layout being judged on its filter count.
+
+The chip is built on `Badge`, not `TagGroup`: `TagGroupItem` with `onRemove` renders its body as a toggle button and appends the remove control inside it, so a removable tag emits `<button>…<button/></button>` — invalid, and the label stays focusable. Worth fixing in the library separately.
+
+Users also gains a filter model like payments' — descriptors plus matchers — from which the chips, the drawer's rows and steps, the active count and the predicate all derive. That is what makes the two layouts two renderings rather than two implementations, and it removes the drawer's old hazard of hand-assigned step indices kept in sync by hand.
+
+The users drawer opens from the right on a desktop and from the bottom on a phone, each the idiom for its size. `swipeDirection` is a prop rather than a class, so it renders twice behind a CSS fork rather than switching at runtime; only one shell is in the accessibility tree at a time. The chip takes `Tag`'s 24px height while keeping `Badge`'s semantics — `Tag` extends Base UI's Toggle, so it announces a pressed state an applied filter does not have.
+
+The users `Filters` trigger carries a count of what is applied — the length of the same list the chips render, so the two cannot drift. Sort shares the drawer and is not counted, since a badge that ticks up when you reorder a column is lying about what it counts.
+
+---
+
+### `admin-01` gains a user detail view and an ID column.
+
+Clicking a name in the users table opens a read-only record: three sections of label/value pairs built from `DescriptionList`'s new stacked two-column layout, with `CopyButton` on the id and email — the values that exist to be pasted somewhere else — and Badges for role and status so they read the same as they do in the table. A field the record does not have renders `-` rather than being dropped, so the grid keeps its alignment.
+
+The open record is a sub-state of the Users section rather than a section of its own. A new section would need a sidebar entry, and you cannot navigate to a detail page with no record chosen. Changing section clears it, or leaving to Billing and returning would land on a stale record.
+
+The table gains an ID column showing the record's real identifier in monospace, matching how `tickets-01` renders its own. It sorts, which means the toolbar's Sort menu gains the two matching entries — that block's rule is that every sort state the headers can reach must be nameable in the menu, or the radio group ends up with nothing selected.
+
+Block-only change; no library API is affected.
+
+---
+
+### `admin-01`'s two filter drawers now share their parts, and a test reports the next copy.
+
+An audit found six components declared more than once across the blocks — `SubHeader` three times byte-identical, `ResultSummary` three times, `FilterMenu`, `Options`, `FilterOption` and `Bound` besides — along with a 110-character class string written out verbatim in three files. Nothing had ever reported any of it: `block-shared-files.test.ts` compares duplicated *file basenames*, because its subject is install collision, and every one of these lives in a differently-named file.
+
+`block-duplication.test.ts` compares symbols instead, and sanctions two remedies rather than one. A block may share a part *within itself* — a block installs as one unit, so a file there collides with nothing — or it may record that the duplication is correct, because blocks are copy-paste starters and one that owns its own presentation is working as intended. A guard whose only escape is "promote it into the library" would ratchet the API upward forever, which is what the audit set out to stop.
+
+Four of the six are now shared inside `admin-01`. The remaining two are allowlisted with reasons: `ResultSummary` is two lines of arithmetic where `TablePaginationInfo` already accepts `children`, and `TriggerLabel` is a one-line span.
+
+No library API changed.
+
+---
+
+### Fix `CarouselPrevious`/`CarouselNext` sitting below the middle of the slides when `CarouselDots` or `CarouselCounter` is used.
+
+The arrows are absolutely positioned with `top-1/2` against the `Carousel` root, which wraps the slides *and* anything rendered under them — so dot indicators and their margin dragged the arrows off the slide's midline. The root is now a single-column grid and the arrows take the first grid row (`CarouselContent`) as their containing block, so controls below the slides no longer shift them. The same fix straightens `CarouselNext` in vertical carousels, where it previously landed below the dots.
+
+`CarouselContent` must be the first child of `Carousel` for this to apply — the composition every example already uses. No public API change. If you worked around the old behavior with a manual offset such as `top-[calc(50%-1rem)]`, remove it.
+
+---
+
+### Add the `dashboard-01` block: an analytics dashboard.
+
+A KPI row whose deltas take their tone from what the metric *means* (the
+bounce-rate tile is `down-is-good`, so a fall renders green with a down arrow),
+a stacked revenue chart with a toggleable legend, a sessions area chart, and a
+sortable, paginated top-pages table in a flush card.
+
+`recharts` is a dependency of the **block**, not of `@keystoneui/react` — the
+library stays dependency-light, the same way `tickets-01` carries `@dnd-kit`.
+The chart layer is shadcn's `chart.tsx` vendored into the block, minus
+`ChartLegend` (the block ships a toggleable one, so recharts' own never mounts)
+and keeping two upstream fixes with their reasons in comments: `aspect-auto`
+rather than `aspect-video`, which under an explicit pixel height produces a
+462px floor and a horizontal document scrollbar, and an added `min-w-0`.
+
+Notable patterns the block is meant to teach: one `seriesColor()` resolves both
+the mark and the legend swatch so they cannot disagree; the "Other" band uses
+`--muted-foreground` rather than a ramp slot, because a fold of small values is
+not a category; panels take `format="money"` rather than a formatter function,
+since the installed entry point is a server component and a function cannot
+cross that boundary; and charts pass `isAnimationActive={!reducedMotion}`,
+which is the one motion case a stylesheet cannot reach.
+
+---
+
+### Space the rows of a stacked `DescriptionList`.
+
+`orientation="stacked"` drops the padding and separators that space row-oriented items, and nothing replaced them — so one pair's value sat flush against the next pair's label, and a two-column record read as a wall of text. Stacked lists now carry a row gap; row orientation is unchanged, since its items still carry their own padding.
+
+---
+
+### Correct three stale figures in the agent-facing docs.
+
+`copy-button` was missing from the skill's component list entirely, so a consumer or agent reading it could not discover a component this library ships. The count beside that list said 56 and there are 57. And the RTL guide's ratio said "30 of its 56 components" against "12 logical" utilities; recounted from source it is 30 of 57, against 21 — the contributing guide says to recompute that ratio rather than increment it, which is why both halves moved.
+
+Also drops a redundant `className="h-8"` in `tickets-01`, on an `Input` that already passed `size="sm"` — the same 32px, written twice.
+
+---
+
+### Add layout and computed-style invariant tests.
+
+**Overflow invariants (Playwright, `apps/docs`).** Every block preview at 375,
+768 and 1280 must not give the document a horizontal scrollbar. Grid and flex
+children resolve to `min-content`, so one wide child pushes its track open and
+the whole page scrolls sideways — invisible until real data arrives, and the
+reason `[&>*]:min-w-0` is a convention rather than a preference. Confirmed to
+catch a real regression: removing that class and lengthening one metric value
+failed with "overflows the viewport by 45px at 375px wide".
+
+Includes a **positive control**, which is not optional: "nothing overflows"
+passes just as well when no content is wide enough to overflow anything, so the
+suite would go green the day a table stopped being wide. The control asserts a
+wide table really does scroll, inside its own container.
+
+**Computed-style assertions (Storybook `play:`).** `toHaveClass` passes while
+the rule it names is being out-specified by another — which is precisely how
+`Card`'s `--card-spacing` API first shipped broken. These assert resolved
+values instead: the flush card's padding really computes to `0px` at every
+size, the two Card variants differ in fill while sharing interior geometry, and
+a `down-is-good` metric that fell resolves to the *same* colour as an
+`up-is-good` metric that rose.
+
+They live in `apps/storybook` rather than `packages/ui` because that jsdom
+setup loads no CSS at all, so a computed-style assertion there silently
+measures nothing. Recorded in `component-architecture/SKILL.md`, since it is
+not obvious.
+
+Also reconciles the component count, which was hardcoded in ~12 places with
+three different values. Only the two that state an exact number are maintained
+now; everywhere else says `50+`, and the policy is written down.
+
+---
+
+### `NativeSelect`'s dropdown no longer renders white in dark mode.
+
+The closed control was always correct — it computes the same background and colour as `Input` in both themes. The open list was not. Chromium paints a `<select>` popup from the control's own background, and `--input-bg` is `transparent` in light and a 5% white wash in dark, so there was nothing opaque to paint the list against and Chromium fell back to its default white. In dark mode that put near-white option text on a white popup.
+
+The options now name `--popover` and `--popover-foreground` themselves, which is the same surface `Select`'s listbox uses — so the two selects' dropdowns match. The control keeps `--input-bg`, because matching `Input` is the whole point of it.
+
+Platforms that draw the popup natively rather than from CSS — macOS, iOS, Android — ignore these and follow `color-scheme`, which was already correct there.
+
+Pinned by a Storybook story that asserts the options compute to a *fully opaque* background, not merely a set one: a translucent wash still composites onto whatever the browser paints underneath, which is exactly the bug.
+
+---
+
+### The derived radius scale is declared in one file instead of five.
+
+`--radius-sm` … `--radius-4xl` were written out in `base.css`, `global.css`,
+Storybook's `preview.css`, the theme-builder's CSS export **and** the
+`registry:style` item. Tailwind takes the later `@theme inline` block whole, so
+every one of those shadowed `base.css` silently — editing the scale in the
+library changed nothing anywhere, which a sentinel value confirmed: set
+`--radius-xl` to `calc(var(--radius) * 9.9)` in `base.css` and the compiled
+output still said `1.4`.
+
+The consequence for consumers is the one that matters. `shadcn add
+@keystone/default` wrote the scale into their `globals.css`, where it is frozen
+at install time and outranks the library's. A scale corrected in a release
+would never have reached them.
+
+So `--radius` stays the token — consumers own it in `:root`, the way they own
+colors — and the derivation is library mechanism that arrives with
+`@import "@keystoneui/react/base.css"` and tracks the package. This matches how
+shadcn splits it: their `shadcn/tailwind.css` ships `@custom-variant` and
+keyframes, never theme values.
+
+Nothing renders differently: every surface already imported `base.css`, and the
+copies were identical to it.
+
+If you want a different derivation, declare your own `@theme inline` after the
+import — the later block still wins, and that is now the documented way to do
+it rather than something four files did by accident.
+
+---
+
+### Fix `shadcn add` writing components that cannot resolve their own imports.
+
+Three defects in the built registry, all confirmed against shadcn 4.21 with a real install rather than by reading the CLI:
+
+**`./utils` shipped verbatim in 55 items.** `shadcn build` embeds each source file as-is, so every component carried `import { cn } from "./utils"` — correct inside this repo, wrong once installed, because the component lands at `components/ui/<name>.tsx` while `cn` lives at `lib/utils.ts`. shadcn leaves the specifier alone since it does not start with `@/`, so it resolved to a sibling no item creates. The built output now rewrites it to `@/lib/utils`, which the CLI resolves through the consumer's `aliases.utils`.
+
+**No `registry:ui` file declared a `target`.** shadcn derived the destination from the source path and wrote `components/ui/src/<name>.tsx` — a doubled segment, outside where anything imports from. Every file now targets `components/ui/<name>.tsx` explicitly.
+
+**`date-input` and `input-group` imported siblings they did not declare.** `registryDependencies` are hand-maintained, so `input-group` was missing `input` and `textarea`, and `date-input` was missing `input-group` — those files were never installed. They are now derived from the source's relative imports, so the omission cannot recur.
+
+No source or API change; components installed before this shipped need reinstalling, or the two imports fixing by hand.
+
+---
+
+### Fix `combobox`, `command`, `dropdown-menu` and `select` shipping an import that resolves to nothing.
+
+The registry build rewrites `from "./utils"` to `from "@/lib/utils"`, which is shadcn's own file and contains `cn` and nothing else. These four also import `POPUP_ITEM_HEIGHT`, so every registry install of them landed a type error — and, at runtime, `undefined` interpolated into four `className` templates, producing `flex undefined cursor-pointer …`. Fifty registry items pull in at least one of the four, including five blocks.
+
+Shared constants from `utils.ts` are now inlined into the emitted file, read from source so the value cannot drift from the one this repo compiles against. The component keeps importing them normally; only what a consumer receives changes.
+
+`registry-integrity.test.ts` gains the assertion that would have caught it: nothing may import a symbol other than `cn` from `@/lib/utils`. The existing check could not see this — it tests the *specifier*, and by that point the specifier is correct; it was the symbol that was wrong.
+
+Inlining rather than shipping a `registry:lib` item is deliberate. The type exists in shadcn's schema, but the file it would land in is `@/lib/utils` — shadcn's own, which `shadcn add` writes on init and then refuses to overwrite. A keystone item declaring it would either lose the race silently or clobber a file another registry owns, and a consumer mixing both registries gets whichever ran first. Inlining has no such ordering.
+
+---
+
+### Publish the style and theme registry items, and fill in the npm metadata.
+
+`npx shadcn add https://keystoneui.io/r/default.json` and
+`https://keystoneui.io/r/themes/<name>.json` now resolve. The seven theme
+definitions in `packages/ui/registry/` were never wired into the registry
+build, so every documented theme-install URL 404'd. They are also included in
+the published tarball now (`files` gained `registry`), and `--ring` in the
+default and zinc themes was aligned to the canonical token set so installing
+the style and then re-applying the default theme no longer changes the design.
+
+The package also declares `repository`, `homepage`, `bugs` and
+`engines` (`node >=22`) for the first time.
+
+---
+
+### Fix phantom vertical scrollbar inside `SelectionBar`.
+
+The bar's inner container set only `overflow-x: auto`, which per CSS Overflow L3 promotes the default `overflow-y: visible` to `auto` — a hidden vertical scroll context that renders a gutter on macOS "Show scrollbars: Always". Pin the Y axis to `hidden`. No public API change.
+
+---
+
+### Fix `stat`, `table-pagination` and `copy-button` shipping subpaths that resolve to nothing.
+
+All three were declared in `exports` but missing from `tsup.config.ts`, so
+`dist/` never contained them. `@keystoneui/react/stat` and its two siblings
+failed to resolve for every npm consumer since the components landed.
+
+Nothing in this repo could see it. `exports` points at `./src/*.tsx` so the
+monorepo resolves components from source, and only `publishConfig.exports`
+swaps each subpath to `./dist/*.js` at publish time — so the docs app, Storybook
+and every test exercised a path the published package does not have. The three
+were added by hand rather than through `pnpm add:component`, which wires
+exports, tsup and `_registry.ts` together and would have caught it.
+
+`exports.test.ts` closes the gap in both directions: every built subpath
+`publishConfig` declares must have a tsup entry, every `exports` key must be
+published, every raw asset published from source (`./base.css`) must sit inside
+a `files` root, and no tsup entry may be orphaned. Each of the four was
+confirmed to fail on a deliberate break before being trusted.
+
+---
+
+### Generate each block's installable registry copy from its docs demo, rather than
+
+maintaining both by hand.
+
+Every block existed twice — the docs demo importing `@keystoneui/react/*`, and
+the `registry/default/blocks/**` copy importing `@/components/ui/*` — differing
+only by mechanical import rewrites, with nothing in the repo noticing when an
+edit landed in only one of them. `pnpm sync:blocks` now applies the rewrites and
+formats the result, and `pnpm lint:docs` runs it in `--check` mode so drift
+fails the build. Regenerating `tickets-01` reproduced all fourteen committed
+files byte for byte, which is the evidence the rules are right.
+
+`pnpm lint:docs` also now runs in CI. It previously ran in no workflow and no
+git hook, so every rule it enforces — the block MDX structure, story-vs-demo
+parity, and now block-copy sync — was advisory.
+
+---
+
+### `Table`'s scroll container no longer forces its grid or flex track open.
+
+As a grid or flex item, the container's `min-width` resolved to `min-content` —
+the table's full intrinsic width — so a wide table inside a grid pushed its
+track open and handed the whole document a horizontal scrollbar. It already
+scrolls internally, so it never needed to be wider than its track: `min-w-0`
+now says so.
+
+This is the most common instance of a general trap (`[&>*]:min-w-0` on grids),
+and the one place the library owns the code and can simply fix it.
+
+---
+
+### Fix phantom vertical scrollbar inside `Table`.
+
+The `[data-slot=table-container]` wrapper set only `overflow-x: auto`. Per CSS Overflow L3, that promotes the default `overflow-y: visible` to `auto`, which on macOS "Show scrollbars: Always" renders a permanent vertical gutter inside every table card. Pin the Y axis to `hidden` so the implicit promotion can't recur. No public API change.
+
+---
+
+### `TablePagination` exports the grouping its right-hand controls sit in.
+
+`TablePagination` accepts `children` to replace its default composition, and five of its six structural elements were already named, `data-slot`-bearing parts. The sixth — the wrapper holding the page size, the status and the buttons — was a bare `div`, so anyone taking the composition path had no way to reproduce it except by copying `flex w-full items-center gap-6 lg:w-fit lg:gap-8`. All three blocks in this repo had copied it verbatim.
+
+`TablePaginationControls` names it, with `data-slot="table-pagination-controls"`. No props, no behaviour, no new dependency — it makes the compound complete rather than larger. The default composition renders exactly what it did before, which is what the test asserts.
+
+---
+
+### `Toast`: fix the top edge disappearing when toasts stack.
+
+The root carried `bg-clip-padding`, which stops a toast's own background
+painting under its 1px border. The border tokens are semi-transparent, so the
+border then composited against whatever sat *behind* the element rather than
+against the toast's own surface. A lone toast was fine — the backdrop was the
+page — but stacked toasts underlap each other, so the frontmost toast's top
+edge rendered against the neighbouring card and washed out, leaving a card
+that looked open at the top. The border survived only in the ~18px at each end
+that the (scaled-down) card behind didn't cover, which read as the edge being
+cropped.
+
+Dropping `bg-clip-padding` paints the background under the border, so all four
+edges render identically regardless of backdrop. The root also moves from
+`border-border-muted` to `border-border`, matching shadcn's Base UI toast,
+which uses neither `bg-clip-padding` nor the muted token. Measured on the
+rendered pixels, the top edge goes from 5 to 23 levels of separation against a
+card interior of 24 — the side edges measure 15, so it is no longer the weakest
+edge on the card.
+
+---
+
+### Document that `Tooltip` is a visual enhancement only, and ship the accessible
+
+info-tip pattern.
+
+Base UI's tooltip wires no `aria-describedby` and no `role` — the only `aria-*`
+attribute anywhere in its tooltip implementation is `aria-hidden` on the arrow —
+and its trigger is mouse-only. A `Tooltip` is therefore announced to no screen
+reader and opens on no touch device. It *is* keyboard-reachable, which is what
+makes the gap easy to miss.
+
+No API change: adding `role="tooltip"` was considered and rejected, because on
+its own it is inert. Announcement needs `aria-describedby`, so the role alone
+would have improved automated audit scores while leaving every tooltip just as
+silent.
+
+Instead the docs now say plainly that information must never live only in a
+tooltip, and carry the pattern for when a tooltip is the only place some text
+appears: the text in an always-present `sr-only` span wired via
+`aria-describedby` (pointing at the popup dangles — it is unmounted while
+closed), `aria-hidden` on the popup so it is not read twice, and a controlled
+click toggle with `closeOnClick={false}` so it works on touch.
+
+---
+
+### Fix `useMediaQuery` painting the wrong branch for a frame.
+
+The hook was `useState(false)` + `useEffect`, so it always returned `false` on the first render and corrected itself in an effect — which runs *after paint*. Anything branching on a `min-width` query therefore rendered its small-viewport layout for a frame on desktop before swapping: the `Drawer` + `Modal` responsive-dialog pattern would mount the Drawer, then replace it with the Modal.
+
+It is now backed by `useSyncExternalStore`, so the value is already correct on the first client render, and it is tear-free under concurrent rendering. Same signature, no API change.
+
+Two follow-on effects worth noting:
+
+- `useMediaQuery` no longer throws where `matchMedia` is absent — it returns `false` instead. The old implementation called bare `matchMedia(query)` inside its effect and crashed in environments without it.
+- Server renders still report `false`, since the true value cannot be known without a viewport. React reads `getServerSnapshot` during hydration and reconciles afterwards, so there is no hydration mismatch warning. A layout that must be correct in the first server-rendered paint still belongs in CSS.
+
+Adds the hook's first test file, covering first-render correctness, `change` subscription and updates, cleanup on unmount, re-subscription when the query changes, and the missing-`matchMedia` fallback.
