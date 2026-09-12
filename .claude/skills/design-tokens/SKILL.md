@@ -118,12 +118,26 @@ Changing `--radius` shifts the entire scale uniformly. Components use Tailwind u
 
 ### Direct `var(--radius)` usage
 
-Some components use `calc(var(--radius)*N)` for bespoke offsets that don't match a named tier. Since `@theme inline` does not create runtime CSS variables for `--radius-sm` etc., always go through `calc(var(--radius) * ratio)` when referencing the radius token directly — never `var(--radius-md)`, which resolves to nothing:
+Some components use `calc(var(--radius)*N)` for bespoke offsets that don't match a named tier. Always go through `calc(var(--radius) * ratio)`, never `var(--radius-md)`:
 
 - Calendar: `[--cell-radius:calc(var(--radius)*0.8)]` for cell radius in range selections
 - InputGroupAddon: `[&>kbd]:rounded-[calc(var(--radius)*0.5)]` for nested kbd elements
 
 Use a ratio rather than a pixel offset for the same reason the scale does: an offset silently stops being proportional the moment a consumer changes `--radius`.
+
+The reason is not that `--radius-md` is unresolvable — it resolves fine, and
+`min(var(--radius-md),10px)` in `toggle-group.tsx` computes to 8px in the
+browser. (An earlier version of this rule said it "resolves to nothing." That
+was wrong, and it is why nobody re-examined that line for years.)
+
+The reason is that **Tailwind only emits a `@theme` variable when some utility
+references that tier.** `--radius-md` exists at runtime because `rounded-md`
+appears 29 times in the library; `--radius-2xl` and `--radius-3xl` are not
+emitted at all, because nothing uses them. So `var(--radius-md)` in an
+arbitrary value works by borrowing a dependency it never declares — delete the
+last `rounded-md` in the library and it silently becomes invalid. Going through
+`var(--radius)` has no such coupling: it is a real `:root` token that every
+theme declares.
 
 ## Component-scoped spacing
 
