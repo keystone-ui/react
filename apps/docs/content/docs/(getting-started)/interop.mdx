@@ -5,6 +5,17 @@ description: Keystone is a shadcn-compatible registry, so components it does not
 
 Keystone installs to the same paths shadcn does (`@/components/ui/*`, `@/lib/utils`) and uses the same registry format. Anything keystone does not ship you can install from shadcn's registry, side by side.
 
+## Both libraries are on Base UI now
+
+Since July 2026, [shadcn's default base is Base UI](https://ui.shadcn.com/docs/changelog) — the same primitives keystone has always used. New shadcn projects get it unless they opt out with `shadcn init -b radix`.
+
+That makes mixing the two far less interesting than it used to be. A shadcn component installed next to keystone wraps the same primitive, exposes the same `render` prop rather than Radix's `asChild`, and carries the same accessibility semantics. The differences left are visual, not behavioural.
+
+Two things follow:
+
+- **Check which base a project is on before copying shadcn snippets into it.** A Radix-era snippet uses `asChild`; keystone and Base-UI-era shadcn both use `render`. The rename is mechanical, but it is silent — `asChild` on a Base UI component is an unknown prop, not an error.
+- **Radix is not deprecated.** shadcn still ships every component for it, so a snippet you find may be written either way.
+
 ## What keystone deliberately does not ship
 
 **Sidebar.** An app shell is a large, opinionated component — a collapsible icon rail, a mobile drawer, persisted state, a keyboard shortcut, and a `peer`/`group` layout contract between four parts. shadcn's is good, widely understood, and already maintained. Reimplementing it would mean owning ~900 lines to arrive somewhere very close.
@@ -14,6 +25,24 @@ So [`admin-01`](/docs/blocks/admin-01) composes shadcn's sidebar rather than a k
 ```bash
 npx shadcn@latest add sidebar
 ```
+
+**Charts.** A chart wrapper is mostly a list of `[&_.recharts-*]` overrides that make recharts' hardcoded `#ccc` and `#fff` marks respect your theme — archaeology, not something worth re-deriving. The real reason it stays out of `@keystoneui/react` is recharts itself: a chart is one screen in most apps, and a library dependency would bill every other screen for it.
+
+```bash
+npx shadcn@latest add chart
+```
+
+Keystone's own `dashboard-01` and `admin-01` blocks vendor that file rather than importing it from the library, for the same reason. Two changes in those copies are worth carrying into yours, because upstream does not have them:
+
+```diff
+- <div className="aspect-video ...">
++ <div className="aspect-auto min-w-0 ...">
+```
+
+- **`aspect-auto`, not `aspect-video`.** Under an explicit pixel height the upstream class still imposes a 462px floor, which overflows the row and gives the whole document a horizontal scrollbar.
+- **`min-w-0`.** A chart is usually a grid or flex child, and those default to `min-content` — without it a wide chart pushes its container open instead of shrinking.
+
+shadcn's `chart` item lists `card` as a registry dependency. That is harmless here: `shadcn add` skips files that already exist, so keystone's [`Card`](/docs/components/card) stays.
 
 ## Making it match your theme
 
@@ -66,9 +95,17 @@ npx shadcn@latest add @keystone/button
 
 In practice the distinction matters less than it sounds, because both registries write to the same paths and `shadcn add` will not overwrite a file that already exists. If keystone's `button.tsx` is there, shadcn's sidebar composes keystone's Button.
 
+You can also declare registries in `package.json` instead of `components.json` — shadcn reads both, and merges them.
+
+### Toast is the one real collision
+
+shadcn now ships its own Base UI [Toast](https://ui.shadcn.com/docs/components/base/toast), and it writes to `toast.tsx` — the same path as keystone's. Whichever is installed first wins, silently, and the two have different APIs.
+
+Use keystone's and do not run `shadcn add toast`. If you already did, delete the file and reinstall `@keystone/toast`. shadcn's Sonner still exists in the registry but has lost its docs page, so treat it as on the way out rather than as the alternative.
+
 ## Control heights differ
 
-Keystone's controls are **40px** at their default size. shadcn's are **36px** (`new-york-v4`) or **32px** (the `base-nova` preset).
+Keystone's controls are **40px** at their default size. shadcn's depend on the style you install — they have run 32px to 40px across the eight current ones, so check rather than assume.
 
 Because keystone's files win the path collision above, a shadcn component that composes `Button` renders keystone's height inside a layout built for shadcn's. It only shows when the two sit in the same row.
 
