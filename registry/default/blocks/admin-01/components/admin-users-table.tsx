@@ -10,6 +10,7 @@ import {
 } from "@/components/admin-filters";
 import { AdminUsersToolbar } from "@/components/admin-users-toolbar";
 import { statusLabels, type User } from "@/components/mock-admin";
+import { ResultSummary } from "@/components/result-summary";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -252,6 +253,7 @@ export function AdminUsersTable({
             <TablePagination pageCount={pageCount} pageIndex={pageIndex}>
               <TablePaginationInfo>
                 <ResultSummary
+                  noun={["user", "users"]}
                   pageIndex={pageIndex}
                   pageSize={pageSize}
                   rowCount={rows.length}
@@ -296,32 +298,6 @@ export function AdminUsersTable({
 }
 
 /** How much of the result set is on screen. */
-function ResultSummary({
-  pageIndex,
-  pageSize,
-  rowCount,
-  totalCount,
-}: {
-  pageIndex: number;
-  pageSize: number;
-  rowCount: number;
-  totalCount: number;
-}) {
-  if (totalCount === 0) {
-    return null;
-  }
-
-  const first = pageIndex * pageSize + 1;
-  const last = pageIndex * pageSize + rowCount;
-
-  return (
-    <>
-      Showing {first}–{last} of {totalCount}{" "}
-      {totalCount === 1 ? "user" : "users"}
-    </>
-  );
-}
-
 /**
  * Row actions, in a trailing menu rather than a hover-revealed button.
  *

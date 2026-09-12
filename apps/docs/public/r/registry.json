@@ -1917,6 +1917,10 @@
           "type": "registry:component"
         },
         {
+          "path": "registry/default/blocks/admin-01/components/drawer-parts.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "registry/default/blocks/admin-01/components/filter-chip.tsx",
           "type": "registry:component"
         },
@@ -1934,6 +1938,10 @@
         },
         {
           "path": "registry/default/blocks/admin-01/components/payment-filters.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/result-summary.tsx",
           "type": "registry:component"
         },
         {

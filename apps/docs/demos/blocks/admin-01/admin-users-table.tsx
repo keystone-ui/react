@@ -51,6 +51,7 @@ import {
 } from "./admin-filters";
 import { AdminUsersToolbar } from "./admin-users-toolbar";
 import { statusLabels, type User } from "./mock-admin";
+import { ResultSummary } from "./result-summary";
 
 // Re-exported for the page, which composes this table. The types themselves
 // live in `admin-filters.ts` so the dependency runs one way.
@@ -253,6 +254,7 @@ export function AdminUsersTable({
             <TablePagination pageCount={pageCount} pageIndex={pageIndex}>
               <TablePaginationInfo>
                 <ResultSummary
+                  noun={["user", "users"]}
                   pageIndex={pageIndex}
                   pageSize={pageSize}
                   rowCount={rows.length}
@@ -297,32 +299,6 @@ export function AdminUsersTable({
 }
 
 /** How much of the result set is on screen. */
-function ResultSummary({
-  pageIndex,
-  pageSize,
-  rowCount,
-  totalCount,
-}: {
-  pageIndex: number;
-  pageSize: number;
-  rowCount: number;
-  totalCount: number;
-}) {
-  if (totalCount === 0) {
-    return null;
-  }
-
-  const first = pageIndex * pageSize + 1;
-  const last = pageIndex * pageSize + rowCount;
-
-  return (
-    <>
-      Showing {first}–{last} of {totalCount}{" "}
-      {totalCount === 1 ? "user" : "users"}
-    </>
-  );
-}
-
 /**
  * Row actions, in a trailing menu rather than a hover-revealed button.
  *

@@ -12,8 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@keystoneui/react/dropdown-menu";
-import { Input } from "@keystoneui/react/input";
-import { Label } from "@keystoneui/react/label";
 import {
   Popover,
   PopoverContent,
@@ -21,6 +19,7 @@ import {
 } from "@keystoneui/react/popover";
 import { Plus as PlusIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import { Bound } from "./drawer-parts";
 import { FilterTrigger } from "./filter-trigger";
 import { CURRENCIES, type Currency } from "./mock-payments";
 import {
@@ -261,38 +260,6 @@ function RangePill({
         </div>
       </PopoverContent>
     </Popover>
-  );
-}
-
-function Bound({
-  id,
-  label,
-  onChange,
-  placeholder,
-  type,
-  value,
-}: {
-  id: string;
-  label: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  type: string;
-  value: string;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <Label className="text-muted-foreground" htmlFor={id}>
-        {label}
-      </Label>
-      <Input
-        id={id}
-        inputMode={type === "text" ? "decimal" : undefined}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder={placeholder}
-        type={type}
-        value={value}
-      />
-    </div>
   );
 }
 

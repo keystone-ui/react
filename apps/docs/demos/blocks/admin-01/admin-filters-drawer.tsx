@@ -10,21 +10,14 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@keystoneui/react/drawer";
-import { Input } from "@keystoneui/react/input";
-import { Label } from "@keystoneui/react/label";
-import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
+import { RadioGroup } from "@keystoneui/react/radio-group";
 import {
   Stepper,
   StepperContent,
   StepperStep,
   useStepper,
 } from "@keystoneui/react/stepper";
-import {
-  ArrowLeft as ArrowLeftIcon,
-  ChevronRight as ChevronRightIcon,
-  Funnel as FilterIcon,
-} from "lucide-react";
-import type { ReactNode } from "react";
+import { Funnel as FilterIcon } from "lucide-react";
 import { useState } from "react";
 
 import {
@@ -51,6 +44,14 @@ import {
   type UserFilters,
   type UserSortKey,
 } from "./admin-filters";
+import {
+  Bound,
+  DrilldownList,
+  DrilldownRow,
+  FilterOption,
+  Options,
+  StepHeader,
+} from "./drawer-parts";
 import { statusLabels } from "./mock-admin";
 
 interface AdminFiltersDrawerProps {
@@ -135,7 +136,7 @@ export function AdminFiltersDrawer({
                 <DrawerHeader>
                   <DrawerTitle className="text-center">Filters</DrawerTitle>
                 </DrawerHeader>
-                <FilterMenu filters={filters} sort={sort} />
+                <UserFilterMenu filters={filters} sort={sort} />
                 <DrawerFooter>
                   {hasActiveFilters(filters) && (
                     <Button
@@ -153,7 +154,7 @@ export function AdminFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <SubHeader title="Role" />
+                <StepHeader onBack={() => setStep(0)} title="Role" />
                 <Options
                   onValueChange={(value) =>
                     onChange({ role: value as UserFilters["role"] })
@@ -168,7 +169,7 @@ export function AdminFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <SubHeader title="Status" />
+                <StepHeader onBack={() => setStep(0)} title="Status" />
                 <Options
                   onValueChange={(value) =>
                     onChange({ status: value as StatusFilter })
@@ -187,7 +188,7 @@ export function AdminFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <SubHeader title="Seats" />
+                <StepHeader onBack={() => setStep(0)} title="Seats" />
                 <Options
                   onValueChange={(value) =>
                     onChange({ seats: value as SeatsFilter })
@@ -205,7 +206,7 @@ export function AdminFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <SubHeader title="Two-factor" />
+                <StepHeader onBack={() => setStep(0)} title="Two-factor" />
                 <Options
                   onValueChange={(value) =>
                     onChange({ twoFactor: value as TwoFactorFilter })
@@ -223,7 +224,7 @@ export function AdminFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <SubHeader title="Created" />
+                <StepHeader onBack={() => setStep(0)} title="Created" />
                 <div className="grid grid-cols-2 gap-3 px-4 pb-4">
                   <Bound
                     id={`users-${placement}-created-after`}
@@ -241,7 +242,7 @@ export function AdminFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <SubHeader title="Sort" />
+                <StepHeader onBack={() => setStep(0)} title="Sort" />
                 <div className="pb-4">
                   <RadioGroup
                     className="gap-0 divide-y divide-border-muted"
@@ -307,7 +308,7 @@ export function AdminFiltersDrawer({
  * cannot disagree about their order. Sort is appended by hand because it is
  * not a filter and is not in `FILTERS`.
  */
-function FilterMenu({
+function UserFilterMenu({
   filters,
   sort,
 }: {
@@ -325,104 +326,16 @@ function FilterMenu({
   ];
 
   return (
-    <div className="divide-y divide-border-muted">
+    <DrilldownList>
       {items.map((item, index) => (
-        <button
-          className="flex h-12 w-full cursor-pointer items-center justify-between gap-3 px-4 text-left active:text-muted-foreground"
+        <DrilldownRow
           key={item.key}
+          label={item.label}
           // Step 0 is the menu itself, so the first row is step 1.
           onClick={() => goTo(index + 1)}
-          type="button"
-        >
-          <span className="font-medium text-sm">{item.label}</span>
-          <span className="ml-auto inline-flex min-w-0 items-center gap-2 text-muted-foreground text-sm">
-            <span className="truncate">{item.value}</span>
-            <ChevronRightIcon className="size-4 shrink-0" />
-          </span>
-        </button>
+          value={item.value}
+        />
       ))}
-    </div>
-  );
-}
-
-function Options({
-  children,
-  onValueChange,
-  value,
-}: {
-  children: ReactNode;
-  onValueChange: (value: string) => void;
-  value: string;
-}) {
-  return (
-    <div className="pb-4">
-      <RadioGroup
-        className="gap-0 divide-y divide-border-muted"
-        onValueChange={(next) => {
-          if (next) {
-            onValueChange(next as string);
-          }
-        }}
-        value={value}
-      >
-        {children}
-      </RadioGroup>
-    </div>
-  );
-}
-
-function FilterOption({ label, value }: { label: string; value: string }) {
-  return (
-    // biome-ignore lint/a11y/noLabelWithoutControl: control is inside label
-    <label className="flex h-12 cursor-pointer items-center gap-3 px-4">
-      <RadioGroupItem value={value} />
-      <span className="text-sm">{label}</span>
-    </label>
-  );
-}
-
-function Bound({
-  id,
-  label,
-  onChange,
-  value,
-}: {
-  id: string;
-  label: string;
-  onChange: (value: string) => void;
-  value: string;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <Label className="text-muted-foreground" htmlFor={id}>
-        {label}
-      </Label>
-      <Input
-        id={id}
-        onChange={(event) => onChange(event.target.value)}
-        type="date"
-        value={value}
-      />
-    </div>
-  );
-}
-
-function SubHeader({ title }: { title: string }) {
-  const { goTo } = useStepper();
-  return (
-    <DrawerHeader>
-      <div className="flex items-center gap-2">
-        <Button
-          aria-label="Back"
-          className="-ml-1"
-          onClick={() => goTo(0)}
-          size="icon-xs"
-          variant="ghost"
-        >
-          <ArrowLeftIcon className="size-4" />
-        </Button>
-        <DrawerTitle>{title}</DrawerTitle>
-      </div>
-    </DrawerHeader>
+    </DrilldownList>
   );
 }

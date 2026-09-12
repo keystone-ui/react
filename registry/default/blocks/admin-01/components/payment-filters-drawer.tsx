@@ -1,8 +1,16 @@
 "use client";
 
-import { ArrowLeftIcon, ChevronRightIcon, FilterIcon } from "lucide-react";
+import { FilterIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
+import {
+  Bound,
+  DrilldownList,
+  DrilldownRow,
+  FilterOption,
+  Options,
+  StepHeader,
+} from "@/components/drawer-parts";
 import { CURRENCIES } from "@/components/mock-payments";
 import {
   FILTERS,
@@ -27,9 +35,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Stepper,
   StepperContent,
@@ -96,7 +101,7 @@ export function PaymentFiltersDrawer({
                 <DrawerHeader>
                   <DrawerTitle className="text-center">Filters</DrawerTitle>
                 </DrawerHeader>
-                <FilterMenu filters={filters} />
+                <PaymentFilterMenu filters={filters} />
                 <DrawerFooter>
                   {hasActiveFilters(filters) && (
                     <Button
@@ -114,7 +119,7 @@ export function PaymentFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <SubHeader title="Action" />
+                <StepHeader onBack={() => setStep(0)} title="Action" />
                 <Options
                   onValueChange={(value) =>
                     onChange({ type: value as PaymentFilters["type"] })
@@ -132,7 +137,7 @@ export function PaymentFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <SubHeader title="Status" />
+                <StepHeader onBack={() => setStep(0)} title="Status" />
                 <Options
                   onValueChange={(value) =>
                     onChange({ status: value as PaymentFilters["status"] })
@@ -150,7 +155,7 @@ export function PaymentFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <SubHeader title="Currency" />
+                <StepHeader onBack={() => setStep(0)} title="Currency" />
                 {/* Checkboxes, not radios: this is the one multi-select in the
                     set, so it is the one screen you do not leave per pick. */}
                 <div className="divide-y divide-border-muted pb-4">
@@ -179,7 +184,7 @@ export function PaymentFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <SubHeader title="Provider" />
+                <StepHeader onBack={() => setStep(0)} title="Provider" />
                 <Options
                   onValueChange={(value) =>
                     onChange({ provider: value as PaymentFilters["provider"] })
@@ -197,7 +202,7 @@ export function PaymentFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <SubHeader title="Created" />
+                <StepHeader onBack={() => setStep(0)} title="Created" />
                 <Bounds>
                   <Bound
                     id="drawer-created-after"
@@ -217,7 +222,7 @@ export function PaymentFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <SubHeader title="Amount" />
+                <StepHeader onBack={() => setStep(0)} title="Amount" />
                 <Bounds>
                   <Bound
                     id="drawer-amount-min"
@@ -257,7 +262,7 @@ const MENU_STEPS = [
  * descriptor the desktop pills read, so a row and its pill cannot disagree
  * about what is applied.
  */
-function FilterMenu({ filters }: { filters: PaymentFilters }) {
+function PaymentFilterMenu({ filters }: { filters: PaymentFilters }) {
   const { goTo } = useStepper();
 
   const items = MENU_STEPS.map(({ key, step }) => {
@@ -275,113 +280,19 @@ function FilterMenu({ filters }: { filters: PaymentFilters }) {
   });
 
   return (
-    <div className="divide-y divide-border-muted">
+    <DrilldownList>
       {items.map((item) => (
-        <button
-          className="flex h-12 w-full cursor-pointer items-center justify-between gap-3 px-4 text-left active:text-muted-foreground"
+        <DrilldownRow
           key={item.step}
+          label={item.label}
           onClick={() => goTo(item.step)}
-          type="button"
-        >
-          <span className="font-medium text-sm">{item.label}</span>
-          <span className="ml-auto inline-flex min-w-0 items-center gap-2 text-muted-foreground text-sm">
-            <span className="truncate">{item.value}</span>
-            <ChevronRightIcon className="size-4 shrink-0" />
-          </span>
-        </button>
+          value={item.value}
+        />
       ))}
-    </div>
-  );
-}
-
-function Options({
-  children,
-  onValueChange,
-  value,
-}: {
-  children: ReactNode;
-  onValueChange: (value: string) => void;
-  value: string;
-}) {
-  return (
-    <div className="pb-4">
-      <RadioGroup
-        className="gap-0 divide-y divide-border-muted"
-        onValueChange={(next) => {
-          if (next) {
-            onValueChange(next as string);
-          }
-        }}
-        value={value}
-      >
-        {children}
-      </RadioGroup>
-    </div>
-  );
-}
-
-function FilterOption({ label, value }: { label: string; value: string }) {
-  return (
-    // biome-ignore lint/a11y/noLabelWithoutControl: control is inside label
-    <label className="flex h-12 cursor-pointer items-center gap-3 px-4">
-      <RadioGroupItem value={value} />
-      <span className="text-sm">{label}</span>
-    </label>
+    </DrilldownList>
   );
 }
 
 function Bounds({ children }: { children: ReactNode }) {
   return <div className="grid grid-cols-2 gap-3 px-4 pb-4">{children}</div>;
-}
-
-function Bound({
-  id,
-  label,
-  onChange,
-  placeholder,
-  type = "text",
-  value,
-}: {
-  id: string;
-  label: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  type?: string;
-  value: string;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <Label className="text-muted-foreground" htmlFor={id}>
-        {label}
-      </Label>
-      <Input
-        id={id}
-        inputMode={type === "text" ? "decimal" : undefined}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder={placeholder}
-        type={type}
-        value={value}
-      />
-    </div>
-  );
-}
-
-function SubHeader({ title }: { title: string }) {
-  const { goTo } = useStepper();
-  return (
-    <DrawerHeader>
-      <div className="flex items-center gap-2">
-        <Button
-          aria-label="Back"
-          className="-ml-1"
-          onClick={() => goTo(0)}
-          size="icon-xs"
-          variant="ghost"
-        >
-          <ArrowLeftIcon className="size-4" />
-        </Button>
-        <DrawerTitle>{title}</DrawerTitle>
-      </div>
-    </DrawerHeader>
-  );
 }

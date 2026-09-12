@@ -2,6 +2,7 @@
 
 import { PlusIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import { Bound } from "@/components/drawer-parts";
 import { FilterTrigger } from "@/components/filter-trigger";
 import { CURRENCIES, type Currency } from "@/components/mock-payments";
 import {
@@ -27,8 +28,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
@@ -261,38 +260,6 @@ function RangePill({
         </div>
       </PopoverContent>
     </Popover>
-  );
-}
-
-function Bound({
-  id,
-  label,
-  onChange,
-  placeholder,
-  type,
-  value,
-}: {
-  id: string;
-  label: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  type: string;
-  value: string;
-}) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <Label className="text-muted-foreground" htmlFor={id}>
-        {label}
-      </Label>
-      <Input
-        id={id}
-        inputMode={type === "text" ? "decimal" : undefined}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder={placeholder}
-        type={type}
-        value={value}
-      />
-    </div>
   );
 }
 

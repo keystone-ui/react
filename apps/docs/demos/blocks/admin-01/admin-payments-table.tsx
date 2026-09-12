@@ -49,6 +49,7 @@ import type {
   SortOptionId,
   SortState,
 } from "./payment-filters";
+import { ResultSummary } from "./result-summary";
 
 interface AdminPaymentsTableProps {
   addedFilters: readonly FilterKey[];
@@ -216,6 +217,7 @@ export function AdminPaymentsTable({
           <TablePagination pageCount={pageCount} pageIndex={pageIndex}>
             <TablePaginationInfo>
               <ResultSummary
+                noun={["payment", "payments"]}
                 pageIndex={pageIndex}
                 pageSize={pageSize}
                 rowCount={rows.length}
@@ -280,45 +282,6 @@ function SortableHead({
         {children}
       </TableSortButton>
     </TableHead>
-  );
-}
-
-/**
- * How much of the result set is on screen, for the footer's info slot.
- *
- * That slot is where this table's sibling puts "N of M row(s) selected", and
- * it is the same question asked of a table without selection. The page status
- * beside it answers something else: `Page 2 of 2` reads the same whether that
- * page holds ten rows or the eight left over.
- *
- * No `aria-live` here — `TablePaginationInfo` is already one, so announcing
- * would double up.
- */
-function ResultSummary({
-  pageIndex,
-  pageSize,
-  rowCount,
-  totalCount,
-}: {
-  pageIndex: number;
-  pageSize: number;
-  rowCount: number;
-  totalCount: number;
-}) {
-  // The empty row already says no payments match; a summary reading "0 of 0"
-  // underneath it just says the same thing with less grace.
-  if (totalCount === 0) {
-    return null;
-  }
-
-  const first = pageIndex * pageSize + 1;
-  const last = pageIndex * pageSize + rowCount;
-
-  return (
-    <>
-      Showing {first}–{last} of {totalCount}{" "}
-      {totalCount === 1 ? "payment" : "payments"}
-    </>
   );
 }
 
