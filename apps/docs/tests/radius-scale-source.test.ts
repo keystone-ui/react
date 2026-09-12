@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import { extname, join, relative } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
@@ -81,6 +81,68 @@ const DOCS = [
 /** More than one tier in a file's CSS is a copied block, not an example. */
 const COPIED_BLOCK_THRESHOLD = 2;
 
+/**
+ * The old spelling, anywhere: `calc(var(--radius) - 4px)`, `--radius + 8px`.
+ * An offset stops being proportional the moment the base moves.
+ */
+const ADDITIVE_SPELLING =
+  /var\(--radius\)\s*[-+]\s*\d+px|--radius\s*[-+]\s*\d+px/;
+
+/**
+ * Every surface that states the scale, in CSS or in prose. The scale was
+ * written out in ten of these and they had to be changed together -- four
+ * stylesheets, two docs pages, the MCP token reference, the design-tokens
+ * skill, the keystoneui-react skill, and the registry style item. Missing one
+ * is silent: nothing imports prose, and the stylesheet copies shadowed each
+ * other rather than conflicting.
+ */
+const SCALE_SURFACES = [
+  "packages/ui/src",
+  "packages/ui/registry",
+  "packages/keystoneui-mcp/src",
+  "apps/docs/app",
+  "apps/docs/content/docs",
+  "apps/storybook/.storybook",
+  "skills",
+  ".claude/skills",
+];
+
+/**
+ * Changelogs quote the old spelling on purpose -- that is what a migration
+ * note is. `public/r` is generated. This file carries the pattern it searches
+ * for.
+ */
+const NOT_SEARCHED = [
+  "node_modules",
+  ".next",
+  "dist",
+  "changelog",
+  "public",
+  "tests",
+];
+
+const TEXT = new Set([".css", ".ts", ".tsx", ".json", ".md", ".mdx"]);
+
+function walk(dir: string): string[] {
+  let entries: string[] = [];
+  try {
+    entries = readdirSync(dir);
+  } catch {
+    return [];
+  }
+
+  return entries.flatMap((entry) => {
+    if (NOT_SEARCHED.some((skip) => entry.toLowerCase().includes(skip))) {
+      return [];
+    }
+    const full = join(dir, entry);
+    if (statSync(full).isDirectory()) {
+      return walk(full);
+    }
+    return TEXT.has(extname(entry)) ? [full] : [];
+  });
+}
+
 function read(relative: string): string {
   return readFileSync(join(REPO_ROOT, relative), "utf-8");
 }
@@ -134,6 +196,21 @@ describe("radius scale", () => {
     const declared = read(relative).match(EVERY_DERIVED);
 
     expect(declared?.length ?? 0).toBeLessThan(COPIED_BLOCK_THRESHOLD);
+  });
+
+  it("is spelled the same way on every surface that states it", () => {
+    // One assertion covering all ten. Each of the surfaces below stated the
+    // scale independently, so a change that updated nine of them left the
+    // tenth quietly contradicting the shipped code -- which is how the MCP
+    // token reference and both skill docs came to document a scale the
+    // library had stopped using.
+    const offenders = SCALE_SURFACES.flatMap((surface) =>
+      walk(join(REPO_ROOT, surface))
+        .filter((file) => ADDITIVE_SPELLING.test(readFileSync(file, "utf-8")))
+        .map((file) => relative(REPO_ROOT, file))
+    );
+
+    expect(offenders).toEqual([]);
   });
 
   it("is absent from the registry:style item", () => {
