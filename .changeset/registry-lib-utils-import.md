@@ -10,4 +10,4 @@ Shared constants from `utils.ts` are now inlined into the emitted file, read fro
 
 `registry-integrity.test.ts` gains the assertion that would have caught it: nothing may import a symbol other than `cn` from `@/lib/utils`. The existing check could not see this — it tests the *specifier*, and by that point the specifier is correct; it was the symbol that was wrong.
 
-The underlying gap is that there is no `registry:lib` item, so shared non-component code has nowhere to be installed. Inlining is the fix that needs no new registry type.
+Inlining rather than shipping a `registry:lib` item is deliberate. The type exists in shadcn's schema, but the file it would land in is `@/lib/utils` — shadcn's own, which `shadcn add` writes on init and then refuses to overwrite. A keystone item declaring it would either lose the race silently or clobber a file another registry owns, and a consumer mixing both registries gets whichever ran first. Inlining has no such ordering.
