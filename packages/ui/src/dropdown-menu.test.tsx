@@ -2,6 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
+import { Button } from "./button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -125,6 +126,34 @@ describe("DropdownMenu", () => {
 // Keystone re-defaults radio items to true and leaves checkbox items alone, so
 // these tests pin the asymmetry -- a menu left open after a single-select pick
 // keeps an inert backdrop over the page and swallows the next click.
+/**
+ * `render` merges the trigger's props over the rendered element's, and that
+ * includes `data-slot`. The composition rules tell consumers that "every
+ * exported component part has a `data-slot` attribute; use it for consumer
+ * overrides" — true of a component used directly, and false of one used as a
+ * trigger, which is the library's own recommended idiom over `asChild`.
+ *
+ * Pinned as a fact so the documented caveat cannot quietly stop being true.
+ */
+describe("a component rendered as a trigger", () => {
+  it("carries the trigger's slot, not its own", () => {
+    render(
+      <DropdownMenu>
+        <DropdownMenuTrigger render={<Button />}>Open</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>Item</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+
+    const trigger = screen.getByRole("button", { name: "Open" });
+
+    expect(trigger).toHaveAttribute("data-slot", "dropdown-menu-trigger");
+    // So `[data-slot="button"] { … }` does not reach it.
+    expect(trigger).not.toHaveAttribute("data-slot", "button");
+  });
+});
+
 describe("DropdownMenu close-on-click", () => {
   function renderRadioMenu(props?: { closeOnClick?: boolean }) {
     return render(

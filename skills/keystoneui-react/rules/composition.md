@@ -253,6 +253,23 @@ Every exported component part has a `data-slot` attribute. Use it for consumer o
 [data-slot="button"] { min-width: 100px; }
 ```
 
+**It does not survive `render`.** A component composed into a trigger emits the
+*trigger's* slot, because `render` merges the trigger's props over the rendered
+element's:
+
+```tsx
+<DropdownMenuTrigger render={<Button />}>Open</DropdownMenuTrigger>
+// → data-slot="dropdown-menu-trigger", never "button"
+```
+
+So `[data-slot="button"]` misses every button used as a trigger — and `render`
+is the idiom this library recommends over `asChild`. Target the trigger's slot
+(`[data-slot="dropdown-menu-trigger"]`), or give the element a class or an
+attribute of your own. `Badge`, `Item`, `Breadcrumb` and `TableSortButton` use
+`useRender` with an explicit `state.slot`, and those *do* keep their slot when
+given a `render` element — the difference is whether the component owns the
+render call or is passed into someone else's.
+
 Naming is `[component]-[part]` kebab-case (`select-trigger`, `dropdown-menu-item`, `combobox-chips-input`). Root-level components use the component name alone (`card`, `button`).
 
 `data-slot` also drives parent-aware layout (`has-data-[slot=card-footer]:pb-0`) and parent-to-child styling (`*:data-[slot=avatar]:ring-2`). Don't override `data-slot` values when extending components.
