@@ -25,6 +25,8 @@ const registry = readRegistry();
 const builtNames = listBuiltItemNames();
 
 const RELATIVE_UTILS_IMPORT = /from\s*["']\.\/utils["']/;
+const ALIAS_UTILS_IMPORT =
+  /import\s*\{([^}]*)\}\s*from\s*["']@\/lib\/utils["']/g;
 const RELATIVE_SIBLING_IMPORT = /from\s*["']\.\/([a-z0-9-]+)["']/g;
 
 describe("registry.json", () => {
@@ -149,6 +151,32 @@ describe("what a consumer installs", () => {
       for (const file of item.files ?? []) {
         if (RELATIVE_UTILS_IMPORT.test(file.content ?? "")) {
           offenders.push(name);
+        }
+      }
+    }
+
+    expect(offenders).toEqual([]);
+  });
+
+  it("imports nothing but `cn` from `@/lib/utils`", () => {
+    // The rewrite above sends `./utils` to `@/lib/utils`, which is shadcn's own
+    // file and contains `cn` and nothing else. A second symbol therefore ships
+    // an import that resolves to nothing: a type error, and at runtime
+    // `undefined` interpolated into whatever template used it. The `./utils`
+    // check above cannot see this, because by then the specifier is correct --
+    // it is the *symbol* that is wrong.
+    const offenders: string[] = [];
+    for (const name of builtNames) {
+      const item = readJson<RegistryItem>(builtItemPath(name));
+      for (const file of item.files ?? []) {
+        for (const match of (file.content ?? "").matchAll(ALIAS_UTILS_IMPORT)) {
+          const extra = match[1]
+            .split(",")
+            .map((symbol) => symbol.trim())
+            .filter((symbol) => symbol && symbol !== "cn");
+          if (extra.length > 0) {
+            offenders.push(`${name}: ${extra.join(", ")}`);
+          }
         }
       }
     }
