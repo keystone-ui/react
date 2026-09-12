@@ -9,6 +9,7 @@ description: The footer of a paginated data table — rows selected, rows per pa
 import {
   TablePagination,
   TablePaginationButtons,
+  TablePaginationControls,
   TablePaginationInfo,
   TablePaginationPageSize,
   TablePaginationStatus,
@@ -40,12 +41,15 @@ pnpm add @keystoneui/react
 ```text
 TablePagination
 ├── TablePaginationInfo
-├── TablePaginationPageSize
-├── TablePaginationStatus
-└── TablePaginationButtons
+└── TablePaginationControls
+    ├── TablePaginationPageSize
+    ├── TablePaginationStatus
+    └── TablePaginationButtons
 ```
 
 Give `TablePagination` the props and it renders that composition for you. Pass `children` and it renders exactly what you give it instead — the same shape as [`Progress`](/docs/components/progress).
+
+`TablePaginationControls` is the grouping the last three sit in: full width below `lg` so they fill the row once the info slot is hidden, intrinsic above it so they sit at the end. It is named because `children` replaces the default composition entirely, and without it there is no way to reproduce that grouping except by copying its classes.
 
 ## Examples
 
@@ -101,6 +105,12 @@ onPageSizeChange={(size) => {
 | `onPageIndexChange` | `(index: number) => void` | - | Called with the target page |
 | `onPageSizeChange` | `(size: number) => void` | - | Called with a `number`, not a string |
 | `children` | `ReactNode` | - | Replaces the default composition |
+
+### TablePaginationControls
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | - | The controls to group |
 
 ### TablePaginationButtons
 

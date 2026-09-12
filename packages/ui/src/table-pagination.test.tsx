@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   TablePagination,
   TablePaginationButtons,
+  TablePaginationControls,
   TablePaginationInfo,
   TablePaginationPageSize,
   TablePaginationStatus,
@@ -68,6 +69,38 @@ describe("TablePagination", () => {
 
 // The disabled arithmetic is the actual duplicated logic this component exists
 // to centralise, so it gets the most coverage.
+describe("TablePaginationControls", () => {
+  it("carries its own slot so consumers can target it", () => {
+    const { container } = render(
+      <TablePaginationControls>
+        <span>child</span>
+      </TablePaginationControls>
+    );
+
+    expect(
+      container.querySelector('[data-slot="table-pagination-controls"]')
+    ).not.toBeNull();
+    expect(screen.getByText("child")).toBeInTheDocument();
+  });
+
+  it("is what the default composition already renders", () => {
+    // The part was extracted from the props-driven path, so naming it must not
+    // have changed what that path produces.
+    const { container } = render(
+      <TablePagination
+        onPageIndexChange={vi.fn()}
+        pageCount={3}
+        pageIndex={0}
+        pageSize={10}
+      />
+    );
+
+    expect(
+      container.querySelectorAll('[data-slot="table-pagination-controls"]')
+    ).toHaveLength(1);
+  });
+});
+
 describe("TablePaginationButtons", () => {
   const setup = (pageIndex: number, pageCount = 3) => {
     const onPageIndexChange = vi.fn();

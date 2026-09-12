@@ -273,6 +273,43 @@ export const TablePaginationButtons = ({
 TablePaginationButtons.displayName = "TablePaginationButtons";
 
 // ---------------------------------------------------------------------------
+// TablePaginationControls
+// ---------------------------------------------------------------------------
+
+export interface TablePaginationControlsProps
+  extends React.ComponentProps<"div"> {}
+
+/**
+ * The right-hand cluster: page size, page status, and the navigation buttons.
+ *
+ * Named because `TablePagination` accepts `children` to replace its default
+ * composition entirely, and a consumer who takes that path otherwise has no
+ * way to reproduce this grouping except by copying its classes. It was the one
+ * unnamed structural element among five named parts, and all three blocks in
+ * this repo had copied the string verbatim.
+ *
+ * Full width below `lg` so the controls fill the row once the info slot is
+ * hidden, and intrinsic above it so they sit at the end.
+ */
+export const TablePaginationControls = ({
+  className,
+  ref,
+  ...props
+}: TablePaginationControlsProps & React.RefAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      "flex w-full items-center gap-6 lg:w-fit lg:gap-8",
+      className
+    )}
+    data-slot="table-pagination-controls"
+    ref={ref}
+    {...props}
+  />
+);
+
+TablePaginationControls.displayName = "TablePaginationControls";
+
+// ---------------------------------------------------------------------------
 // TablePagination
 // ---------------------------------------------------------------------------
 
@@ -327,7 +364,7 @@ export const TablePagination = ({
           selectedCount={selectedCount}
           totalCount={totalCount}
         />
-        <div className="flex w-full items-center gap-6 lg:w-fit lg:gap-8">
+        <TablePaginationControls>
           {pageSize === undefined ? null : (
             <TablePaginationPageSize
               onValueChange={onPageSizeChange}
@@ -342,7 +379,7 @@ export const TablePagination = ({
             pageIndex={pageIndex}
             showEdgeButtons={showEdgeButtons}
           />
-        </div>
+        </TablePaginationControls>
       </>
     )}
   </div>

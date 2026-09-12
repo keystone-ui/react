@@ -1,7 +1,7 @@
 ---
 date: "2026-09-12"
 description: "What's coming in the next release"
-excerpt: "34 changes queued for the next release."
+excerpt: "35 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -686,6 +686,14 @@ and the one place the library owns the code and can simply fix it.
 ### Fix phantom vertical scrollbar inside `Table`.
 
 The `[data-slot=table-container]` wrapper set only `overflow-x: auto`. Per CSS Overflow L3, that promotes the default `overflow-y: visible` to `auto`, which on macOS "Show scrollbars: Always" renders a permanent vertical gutter inside every table card. Pin the Y axis to `hidden` so the implicit promotion can't recur. No public API change.
+
+---
+
+### `TablePagination` exports the grouping its right-hand controls sit in.
+
+`TablePagination` accepts `children` to replace its default composition, and five of its six structural elements were already named, `data-slot`-bearing parts. The sixth — the wrapper holding the page size, the status and the buttons — was a bare `div`, so anyone taking the composition path had no way to reproduce it except by copying `flex w-full items-center gap-6 lg:w-fit lg:gap-8`. All three blocks in this repo had copied it verbatim.
+
+`TablePaginationControls` names it, with `data-slot="table-pagination-controls"`. No props, no behaviour, no new dependency — it makes the compound complete rather than larger. The default composition renders exactly what it did before, which is what the test asserts.
 
 ---
 
