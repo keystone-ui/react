@@ -24,3 +24,11 @@ apps/docs/public/skills/*.tar.gz
 # Playwright
 test-results/
 playwright-report/
+
+# Local agent tooling, installed by the vercel-labs/skills installer.
+# `.claude/skills/find-skills` is a symlink into `.agents/`, so tracking it
+# without `.agents/` leaves a link that resolves to nothing on a fresh clone.
+.agents/
+.claude/skills/find-skills
+.codex/
+skills-lock.json
