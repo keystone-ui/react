@@ -32,6 +32,7 @@ import {
 import {
   TablePagination,
   TablePaginationButtons,
+  TablePaginationControls,
   TablePaginationInfo,
   TablePaginationPageSize,
   TablePaginationStatus,
@@ -261,7 +262,7 @@ export function AdminUsersTable({
                   totalCount={totalCount}
                 />
               </TablePaginationInfo>
-              <div className="flex w-full items-center gap-6 lg:w-fit lg:gap-8">
+              <TablePaginationControls>
                 <TablePaginationPageSize
                   onValueChange={onPageSizeChange}
                   options={[5, 10, 20, 50]}
@@ -276,7 +277,7 @@ export function AdminUsersTable({
                   pageCount={pageCount}
                   pageIndex={pageIndex}
                 />
-              </div>
+              </TablePaginationControls>
             </TablePagination>
           </CardContent>
         </Card>

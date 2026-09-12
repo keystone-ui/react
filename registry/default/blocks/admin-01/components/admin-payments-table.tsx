@@ -42,6 +42,7 @@ import {
 import {
   TablePagination,
   TablePaginationButtons,
+  TablePaginationControls,
   TablePaginationInfo,
   TablePaginationPageSize,
   TablePaginationStatus,
@@ -220,7 +221,7 @@ export function AdminPaymentsTable({
                 totalCount={totalCount}
               />
             </TablePaginationInfo>
-            <div className="flex w-full items-center gap-6 lg:w-fit lg:gap-8">
+            <TablePaginationControls>
               <TablePaginationPageSize
                 onValueChange={onPageSizeChange}
                 value={pageSize}
@@ -234,7 +235,7 @@ export function AdminPaymentsTable({
                 pageCount={pageCount}
                 pageIndex={pageIndex}
               />
-            </div>
+            </TablePaginationControls>
           </TablePagination>
         </CardContent>
       </Card>

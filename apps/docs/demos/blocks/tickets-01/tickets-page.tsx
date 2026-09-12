@@ -26,6 +26,7 @@ import {
 import {
   TablePagination,
   TablePaginationButtons,
+  TablePaginationControls,
   TablePaginationInfo,
   TablePaginationPageSize,
   TablePaginationStatus,
@@ -391,7 +392,7 @@ export function TicketsPage() {
                   totalCount={visibleTickets.length}
                 />
               </TablePaginationInfo>
-              <div className="flex w-full items-center gap-6 lg:w-fit lg:gap-8">
+              <TablePaginationControls>
                 <TablePaginationPageSize
                   onValueChange={handlePageSizeChange}
                   options={[5, 10, 20, 50]}
@@ -406,7 +407,7 @@ export function TicketsPage() {
                   pageCount={pageCount}
                   pageIndex={pageIndex}
                 />
-              </div>
+              </TablePaginationControls>
             </TablePagination>
           </>
         ) : (
