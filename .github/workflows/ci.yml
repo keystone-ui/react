@@ -64,8 +64,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Scoped to the package that declares @playwright/test. `.npmrc` only
+      # public-hoists *storybook*, so the binary exists in
+      # apps/docs/node_modules/.bin and nowhere else -- a bare `pnpm exec`
+      # from the repo root exits 254 with "Command playwright not found".
       - name: Install Playwright browser
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm --filter @keystoneui/docs exec playwright install --with-deps chromium
 
       # Every block preview at 375/768/1280, asserting the document never
       # scrolls sideways -- plus a positive control, because "nothing
