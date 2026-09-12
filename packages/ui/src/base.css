@@ -43,15 +43,27 @@
 }
 
 /* Radius scale — derived from a single --radius base token.
-   Consumers define --radius in :root; these calc() expressions
-   make rounded-sm … rounded-4xl shift uniformly.
+
+   --radius is the token: consumers define it in :root and own it, the
+   way they own colors. The derivation below is library mechanism, and
+   lives here alone. Declaring it again in an app's own @theme inline
+   shadows this one silently — Tailwind takes the later block whole, so
+   the copy wins and never reports the conflict. That is what used to
+   happen: global.css, preview.css, the theme-builder's export and the
+   registry:style item each carried a copy, and the one in this file had
+   no effect on any of them. Worse, a consumer's copy is frozen at
+   install time, so a scale fixed here would never have reached them.
 
    Ratios, not pixel offsets, so the scale stays proportional at every
    base. Offsets did not: --radius:0 left --radius-4xl at 16px, so a
    square theme still had rounded cards, and --radius-sm went negative.
    At the 0.625rem default the two agree exactly (6/8/10/14/18/22/26px),
    which is where the multipliers come from — it is also the scale
-   shadcn uses, so a mixed project has one set of corners. */
+   shadcn uses, so a mixed project has one set of corners.
+
+   To use a different derivation, declare your own @theme inline after
+   importing this file. Doing it deliberately is fine; the hazard was
+   doing it by copy-paste. */
 @theme inline {
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);

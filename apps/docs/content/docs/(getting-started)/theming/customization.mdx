@@ -52,13 +52,6 @@ Below is the full theme CSS. Copy this into your `globals.css` after `@import "@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 :root {
@@ -161,6 +154,42 @@ Below is the full theme CSS. Copy this into your `globals.css` after `@import "@
 <Callout type="info">
   Always define both `:root` (light) and `.dark` (dark) values to maintain
   proper contrast in both modes.
+</Callout>
+
+## Corner radius
+
+`--radius` is the only radius token you set. The scale Keystone derives from it
+— `rounded-sm` through `rounded-4xl` — lives in `base.css`, so it arrives with
+the import and tracks the package:
+
+| Utility | Value | At the `0.625rem` default |
+| --- | --- | --- |
+| `rounded-sm` | `--radius * 0.6` | 6px |
+| `rounded-md` | `--radius * 0.8` | 8px |
+| `rounded-lg` | `--radius` | 10px |
+| `rounded-xl` | `--radius * 1.4` | 14px |
+| `rounded-2xl` | `--radius * 1.8` | 18px |
+| `rounded-3xl` | `--radius * 2.2` | 22px |
+| `rounded-4xl` | `--radius * 2.6` | 26px |
+
+The steps are ratios, so the scale stays proportional at any base and
+`--radius: 0` gives genuinely square corners.
+
+To use a different derivation, declare your own `@theme inline` **after** the
+import — the later block wins:
+
+```css
+@import "@keystoneui/react/base.css";
+
+@theme inline {
+  --radius-xl: calc(var(--radius) * 2);
+}
+```
+
+<Callout type="warn">
+  That is also the failure mode to avoid: a block copied from these docs into
+  your own CSS shadows the library's silently, and freezes your scale at the
+  version you copied it from. Declare only the tiers you mean to change.
 </Callout>
 
 ## Adding New Colors
