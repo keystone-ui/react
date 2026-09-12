@@ -4,8 +4,14 @@
  * Syncs UI component entries from _registry.ts + MDX frontmatter into registry.json.
  *
  * Usage:
- *   node scripts/sync-registry.mjs
+ *   node scripts/sync-registry.mjs           regenerate registry.json
+ *   node scripts/sync-registry.mjs --check   fail if it is out of date
  *   pnpm sync:registry
+ *
+ * --check writes nothing. registry.json is generated but committed, so CI has
+ * to detect drift rather than quietly regenerate it -- `shadcn registry
+ * validate` downstream would otherwise be validating whatever the last local
+ * sync happened to leave behind.
  *
  * Reads:
  *   - packages/ui/src/_registry.ts        (component metadata)
@@ -378,7 +384,20 @@ const merged = {
   items: [...themeItems, ...uiItems, ...blockItems, ...exampleItems],
 };
 
-writeFileSync(REGISTRY_JSON, JSON.stringify(merged, null, 2) + "\n");
+const serialized = JSON.stringify(merged, null, 2) + "\n";
+
+if (process.argv.includes("--check")) {
+  if (readFileSync(REGISTRY_JSON, "utf-8") !== serialized) {
+    console.error(
+      "registry.json is out of date. Run `pnpm registry:sync` and commit the result."
+    );
+    process.exit(1);
+  }
+  console.log(`registry.json is up to date (${merged.items.length} items)`);
+  process.exit(0);
+}
+
+writeFileSync(REGISTRY_JSON, serialized);
 
 const nestedDirs = ensureNestedOutputDirs(merged.items);
 

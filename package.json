@@ -16,7 +16,7 @@
     "build:skills": "bash scripts/build-skills.sh",
     "registry:sync": "node scripts/sync-registry.mjs",
     "registry:build": "node scripts/sync-registry.mjs && shadcn build -o apps/docs/public/r && node scripts/fix-registry-imports.mjs",
-    "lint:docs": "node scripts/lint-component-mdx.mjs && node scripts/lint-block-mdx.mjs && node scripts/lint-stories-vs-demos.mjs && node scripts/sync-block-copies.mjs --check",
+    "lint:docs": "node scripts/lint-component-mdx.mjs && node scripts/lint-block-mdx.mjs && node scripts/lint-stories-vs-demos.mjs && node scripts/sync-block-copies.mjs --check && node scripts/sync-registry.mjs --check && shadcn registry validate",
     "lint:stories-demos": "node scripts/lint-stories-vs-demos.mjs",
     "docs:migrate": "node scripts/migrate-component-mdx.mjs",
     "docs:backlinks": "node scripts/generate-block-backlinks.mjs",
