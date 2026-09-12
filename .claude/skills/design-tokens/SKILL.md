@@ -110,11 +110,35 @@ Changing `--radius` shifts the entire scale uniformly. Components use Tailwind u
 
 ### Semantic usage
 
-- `rounded-sm` — small controls: Checkbox, nested InputGroupButton xs, ComboboxChip
-- `rounded-md` — form inputs: Input, Textarea, NativeSelect, InputOTPSlot, DropdownMenuSubContent, popup items
-- `rounded-lg` — containers/actions: Button, popups, TabsList, AccordionItem box, Toast
-- `rounded-xl` — large surfaces: Card, Command
-- `rounded-full` — pills/circles: Badge, Avatar, Switch, pill tabs
+- `rounded-sm` — the 24px rung and smaller: Button `xs`/`icon-xs`, InputGroupButton `xs`/`icon-xs`, Checkbox, Kbd, ComboboxChip
+- `rounded-md` — **every control**: Button, Toggle, ToggleGroup, ButtonGroup, Input, InputGroup, SelectTrigger, NativeSelect, Textarea, TabsTrigger, InputOTPSlot, ComboboxChips, DropdownMenuSubContent, popup items
+- `rounded-lg` — surfaces and padded containers: popups, Modal, Toast, Alert, Item, AccordionItem box, TabsList
+- `rounded-xl` — large surfaces: Card, Command, Drawer, AlertDialog
+- `rounded-2xl` — SelectionBar's floating bar
+- `rounded-full` — pills/circles: Badge, Tag, Avatar, Switch, pill tabs
+
+Three rules decide which tier a thing takes, and they were conflated for a
+long time:
+
+1. **Neighbour** — controls that sit *beside* each other share a radius. This
+   is why every control is `rounded-md` and why `Button` is no longer
+   `rounded-lg`: it spent months at 10px beside an 8px `Input` in every
+   toolbar in the library.
+2. **Flush** — a container whose children sit edge-to-edge with no padding
+   carries *exactly* their radius. `ButtonGroup` and a joined `ToggleGroup`
+   are flush, so they are `rounded-md` too, and their `first:`/`last:` end
+   caps must move whenever the child radius does.
+3. **Nesting** — a container whose children are *inset* by padding carries a
+   **larger** radius, roughly inner + inset. `TabsList` (`rounded-lg p-1`
+   around `rounded-md` triggers) and `SelectionBar` (`rounded-2xl` with 6px
+   padding) are correct as they are. Do not "unify" these down to
+   `rounded-md`; it makes the inner corners bulge past the container.
+
+Radius does **not** scale with the height ladder. A 32px control and a 40px
+control still want the same corner, because they still sit in the same row.
+The one exception is the 24px rung, where the geometry breaks down rather than
+the consistency: `rounded-md` on a 24px box leaves 4px of straight edge per
+side and the corner arcs nearly meet.
 
 ### Direct `var(--radius)` usage
 
@@ -125,14 +149,16 @@ Some components use `calc(var(--radius)*N)` for bespoke offsets that don't match
 
 Use a ratio rather than a pixel offset for the same reason the scale does: an offset silently stops being proportional the moment a consumer changes `--radius`.
 
-The reason is not that `--radius-md` is unresolvable — it resolves fine, and
-`min(var(--radius-md),10px)` in `toggle-group.tsx` computes to 8px in the
-browser. (An earlier version of this rule said it "resolves to nothing." That
-was wrong, and it is why nobody re-examined that line for years.)
+The reason is not that `--radius-md` is unresolvable — it resolves fine.
+`min(var(--radius-md),10px)`, which `ToggleGroup` carried until the control
+radius was unified, measured 8px in the browser rather than being invalid.
+(An earlier version of this rule said it "resolves to nothing." That was wrong,
+and it is why nobody re-examined that line for years. The library now
+references no radius tier this way at all.)
 
 The reason is that **Tailwind only emits a `@theme` variable when some utility
 references that tier.** `--radius-md` exists at runtime because `rounded-md`
-appears 29 times in the library; `--radius-2xl` and `--radius-3xl` are not
+appears 32 times across 19 files; `--radius-2xl` and `--radius-3xl` are not
 emitted at all, because nothing uses them. So `var(--radius-md)` in an
 arbitrary value works by borrowing a dependency it never declares — delete the
 last `rounded-md` in the library and it silently becomes invalid. Going through
@@ -279,12 +305,19 @@ resolves its sizes to these four numbers. Mixing *tiers* between neighbours —
 a `size="sm"` button next to a default-height input — is the most common
 visual bug in this library's history; it has shipped five times.
 
-| tier | px | class | families |
-| --- | --- | --- | --- |
-| `xs` | 24 | `h-6` | Button, InputGroupButton |
-| `sm` | 32 | `h-8` | Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle/ToggleGroup, TableHead, TabsTrigger (all sizes), Pagination, TablePagination |
-| `default` | 40 | `h-10` | Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle/ToggleGroup, TableHead, InputOTPSlot, CommandInput, ComboboxChips (`min-h-10`) |
-| `lg` | 48 | `h-12` | Button, Toggle/ToggleGroup |
+| tier | px | class | radius | families |
+| --- | --- | --- | --- | --- |
+| `xs` | 24 | `h-6` | `rounded-sm` | Button, InputGroupButton |
+| `sm` | 32 | `h-8` | `rounded-md` | Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle/ToggleGroup, TableHead, TabsTrigger (all sizes), Pagination, TablePagination |
+| `default` | 40 | `h-10` | `rounded-md` | Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle/ToggleGroup, TableHead, InputOTPSlot, CommandInput, ComboboxChips (`min-h-10`) |
+| `lg` | 48 | `h-12` | `rounded-md` | Button, Toggle/ToggleGroup |
+
+The radius column is flat on purpose — see "Rounded Corners" above for why, and
+for the two container rules that are **not** on this ladder.
+`control-ladder.test.tsx` pins the declarations and
+`apps/docs/e2e/control-ladder.spec.ts` measures the rendered corner, since
+jsdom resolves no CSS and a class-string assertion cannot see a mismatch that
+only exists between two components.
 
 **32 and 40 are the only tiers with broad coverage.** `lg` (48px) exists on
 Button and Toggle only — no input-family control has one, so do not try to

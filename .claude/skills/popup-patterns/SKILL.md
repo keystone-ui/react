@@ -79,7 +79,7 @@ bg-popover text-popover-foreground ring-popup-ring ring-1 rounded-lg shadow-lg z
 | Background | `bg-popover` | Semantic token — adapts to light/dark |
 | Text | `text-popover-foreground` | Set on popup root |
 | Ring | `ring-popup-ring ring-1` | Subtle border via custom token |
-| Radius | `rounded-lg` | 8px for main popups |
+| Radius | `rounded-lg` | 10px for main popups — a surface, one tier above the `rounded-md` controls |
 | Shadow | `shadow-lg` | Elevated appearance |
 | Z-index | `z-50` | Above page content |
 | Overflow | `overflow-hidden` | Clips content to rounded corners |
