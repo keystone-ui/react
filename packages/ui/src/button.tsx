@@ -12,7 +12,7 @@ import { cn } from "./utils";
 // ---------------------------------------------------------------------------
 
 const buttonVariants = cva(
-  "relative z-0 inline-flex shrink-0 cursor-pointer touch-manipulation select-none items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-lg font-medium text-sm transition-[transform,background-color,color,border-color,box-shadow,outline-color] duration-[160ms] ease-out focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "relative z-0 inline-flex shrink-0 cursor-pointer touch-manipulation select-none items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-md font-medium text-sm transition-[transform,background-color,color,border-color,box-shadow,outline-color] duration-[160ms] ease-out focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -28,13 +28,18 @@ const buttonVariants = cva(
           "border border-input bg-background shadow-xs hover:bg-accent hover:text-foreground active:bg-accent active:text-foreground disabled:border-border/50 disabled:bg-transparent disabled:text-foreground/50 aria-expanded:bg-accent aria-expanded:text-foreground dark:border-input dark:bg-input-bg dark:active:bg-input/50 dark:hover:bg-input/50",
         link: "text-primary underline-offset-4 hover:underline active:scale-100",
       },
+      // Only the 24px rung restates the radius. `rounded-md` on a 24px box
+      // leaves 4px of straight edge per side and the corner arcs nearly meet,
+      // which reads as a lozenge rather than a button; `rounded-sm` leaves 12px.
+      // Every other rung keeps the base, so a button of any size lines up with
+      // the Input, InputGroup, SelectTrigger and NativeSelect beside it.
       size: {
         default: "h-10 px-4 py-2",
-        xs: "h-6 px-2.5 py-1 text-xs",
+        xs: "h-6 rounded-sm px-2.5 py-1 text-xs",
         sm: "h-8 px-3 py-1.5",
         lg: "h-12 px-5 py-3.5 text-base",
         icon: "size-10 p-2",
-        "icon-xs": "size-6 p-0.5",
+        "icon-xs": "size-6 rounded-sm p-0.5",
         "icon-sm": "size-8 p-1.5",
         "icon-lg": "size-12 p-2.5",
       },

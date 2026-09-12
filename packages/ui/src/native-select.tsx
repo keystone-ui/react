@@ -38,7 +38,7 @@ function NativeSelect({
     >
       <select
         className={cn(
-          "h-10 w-full min-w-0 select-none appearance-none rounded-md border border-input bg-input-bg py-1 pr-8 pl-2.5 text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground/70 focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset disabled:pointer-events-none disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-destructive data-[size=sm]:h-8 data-[size=sm]:rounded-md data-[size=sm]:py-0.5 dark:aria-invalid:ring-destructive",
+          "h-10 w-full min-w-0 select-none appearance-none rounded-md border border-input bg-input-bg py-1 pr-8 pl-2.5 text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground/70 focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset disabled:pointer-events-none disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-destructive data-[size=sm]:h-8 data-[size=sm]:py-0.5 dark:aria-invalid:ring-destructive",
           // The popup is painted by the browser, and Chromium derives its
           // background from the control's own. `--input-bg` is transparent in
           // light and a 5% white wash in dark, so with nothing opaque to paint

@@ -10,7 +10,7 @@ import { cn } from "./utils";
 // =============================================================================
 const buttonGroupVariants = cva(
   [
-    "flex w-fit items-stretch rounded-lg shadow-xs",
+    "flex w-fit items-stretch rounded-md shadow-xs",
     "*:focus-visible:relative *:focus-visible:z-10",
     "[&>[data-input]]:focus-within:relative [&>[data-input]]:focus-within:z-10",
     "[&>input]:flex-1",
@@ -25,7 +25,7 @@ const buttonGroupVariants = cva(
     "has-[>[data-slot=button-group]]:shadow-none",
     "[&>[data-slot=button-group]]:shadow-none",
     // Select: handle hidden select element as last child
-    "has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-lg",
+    "has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-md",
     "[&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit",
   ].join(" "),
   {
@@ -33,7 +33,7 @@ const buttonGroupVariants = cva(
       orientation: {
         horizontal: [
           // Rounding
-          "[&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-lg!",
+          "[&>[data-slot]:not(:has(~[data-slot]))]:rounded-r-md!",
           "[&>[data-slot]~[data-slot]]:rounded-l-none",
           "*:data-[slot]:rounded-r-none",
           // Shared-edge border removal — both sides, uses ~ to skip hidden elements
@@ -64,7 +64,7 @@ const buttonGroupVariants = cva(
         vertical: [
           "flex-col",
           // Rounding
-          "[&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-lg!",
+          "[&>[data-slot]:not(:has(~[data-slot]))]:rounded-b-md!",
           "[&>[data-slot]~[data-slot]]:rounded-t-none",
           "*:data-[slot]:rounded-b-none",
           // Shared-edge border removal — both sides, uses ~ to skip hidden elements

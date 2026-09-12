@@ -72,10 +72,13 @@ function ToggleGroup({
     <ToggleGroupPrimitive
       className={cn(
         "group/toggle-group flex w-fit items-center",
-        spacing === 0 && "rounded-lg",
-        spacing === 0 &&
-          size === "sm" &&
-          "rounded-[min(var(--radius-md),10px)]",
+        // One radius for every size, because the items now have one too. The
+        // `sm` tier used to clamp the container to `min(var(--radius-md),10px)`
+        // while the first and last items stayed at `rounded-l-lg`/`rounded-r-lg`
+        // — 8px around 10px, so the item corners overhung the group by 2px.
+        // Container and items are separate declarations, so nothing but this
+        // comment and `control-ladder.spec.ts` keeps them agreeing.
+        spacing === 0 && "rounded-md",
         orientation === "vertical" && "flex-col items-stretch",
         className
       )}
@@ -127,8 +130,8 @@ function ToggleGroupItem({
         toggleVariants({ variant: resolvedVariant, size: resolvedSize }),
         "shrink-0 focus:z-10 focus-visible:z-10",
         isJoined && "rounded-none",
-        isJoined && isHorizontal && "first:rounded-l-lg last:rounded-r-lg",
-        isJoined && !isHorizontal && "first:rounded-t-lg last:rounded-b-lg",
+        isJoined && isHorizontal && "first:rounded-l-md last:rounded-r-md",
+        isJoined && !isHorizontal && "first:rounded-t-md last:rounded-b-md",
         isJoined && isOutline && isHorizontal && "border-l-0 first:border-l",
         isJoined && isOutline && !isHorizontal && "border-t-0 first:border-t",
         className

@@ -39,8 +39,9 @@ import { InputGroup } from "./input-group";
 import { NativeSelect } from "./native-select";
 import { Select, SelectTrigger, SelectValue } from "./select";
 import { Table, TableHead, TableHeader, TableRow } from "./table";
+import { Textarea } from "./textarea";
 import { toggleVariants } from "./toggle";
-import { POPUP_ITEM_HEIGHT } from "./utils";
+import { cn, POPUP_ITEM_HEIGHT } from "./utils";
 
 /** The ladder. Everything below is measured against these. */
 const XS = "h-6";
@@ -49,6 +50,27 @@ const MD = "h-10";
 const LG = "h-12";
 
 const ALL_TIERS = [XS, SM, MD, LG];
+
+/**
+ * The radius ladder, which is flatter than the height ladder on purpose.
+ *
+ * Every control is `rounded-md`; only the 24px rung steps down. Radius does not
+ * scale with height because controls of different tiers still sit in the same
+ * row and want the same corner — what breaks at 24px is the geometry, not the
+ * consistency: a 10px radius on a 24px box leaves 4px of straight edge and the
+ * corner arcs nearly meet.
+ *
+ * `rounded-lg` is deliberately absent. It belongs to surfaces (Modal, Popover,
+ * Toast, Alert, Item, Accordion box, popup containers) and to containers whose
+ * children are inset by padding (TabsList, SelectionBar), neither of which is a
+ * control. That is why there is no source-scan rule here in the style of
+ * `BARE_H9`: `select.tsx` holds a control at `rounded-md` and a popup surface at
+ * `rounded-lg` in the same file, so no file-level rule can express it.
+ */
+const R_XS = "rounded-sm";
+const R_CONTROL = "rounded-md";
+
+const ALL_RADII = [R_XS, R_CONTROL, "rounded-lg", "rounded-xl"];
 
 const SOURCE_FILE = /\.tsx?$/;
 const WHITESPACE = /\s+/;
@@ -61,6 +83,26 @@ function heightTokens(className: string): string[] {
   return className
     .split(WHITESPACE)
     .filter((token) => ALL_TIERS.includes(token));
+}
+
+/**
+ * The `rounded-*` a CVA family actually resolves to.
+ *
+ * Unlike height, radius is declared on the cva *base* and overridden by a size
+ * entry, so the raw `buttonVariants({ size: "xs" })` string contains both
+ * `rounded-md` and `rounded-sm`. Only `cn()` — which is what the component
+ * itself applies — collapses that to the one that wins. Asserting the raw
+ * string would fail on correct code, which is how this helper got written.
+ *
+ * Bare tokens only: a variant-modified token like `data-[size=sm]:rounded-md`
+ * says nothing about what the element resolves to at rest, and counting it
+ * would let a component pass by declaring every tier at once — the
+ * vacuous-assertion trap this file's header warns about.
+ */
+function radiusTokens(className: string): string[] {
+  return cn(className)
+    .split(WHITESPACE)
+    .filter((token) => ALL_RADII.includes(token));
 }
 
 // =============================================================================
@@ -90,6 +132,94 @@ describe("ladder: CVA families", () => {
         heightTokens(buttonVariants({ size }))
       );
     }
+  });
+
+  it.each([
+    ["xs", R_XS],
+    ["sm", R_CONTROL],
+    ["default", R_CONTROL],
+    ["lg", R_CONTROL],
+    ["icon-xs", R_XS],
+    ["icon-sm", R_CONTROL],
+    ["icon", R_CONTROL],
+    ["icon-lg", R_CONTROL],
+  ] as const)("Button %s is %s", (size, expected) => {
+    expect(radiusTokens(buttonVariants({ size }))).toEqual([expected]);
+  });
+
+  it.each([
+    ["sm", R_CONTROL],
+    ["default", R_CONTROL],
+    ["lg", R_CONTROL],
+  ] as const)("Toggle %s is %s", (size, expected) => {
+    expect(radiusTokens(toggleVariants({ size }))).toEqual([expected]);
+  });
+
+  it("gives Toggle and Button the same radius at every shared tier", () => {
+    for (const size of ["sm", "default", "lg"] as const) {
+      expect(radiusTokens(toggleVariants({ size }))).toEqual(
+        radiusTokens(buttonVariants({ size }))
+      );
+    }
+  });
+});
+
+// =============================================================================
+// The radius neighbour set
+// =============================================================================
+/**
+ * Every control that can share a row resolves to the same corner.
+ *
+ * This is the assertion that was missing when Button and Toggle sat at
+ * `rounded-lg` while the whole input family was already `rounded-md`: each side
+ * was internally consistent, so a per-component test saw nothing wrong. The bug
+ * only exists in the comparison.
+ *
+ * Declarations only — jsdom loads no CSS, so this proves the classes agree, not
+ * that the pixels do. `apps/docs/e2e/control-ladder.spec.ts` measures the
+ * rendered corner.
+ */
+describe("radius: the neighbour set", () => {
+  it("Button and Toggle declare the control radius", () => {
+    expect(radiusTokens(buttonVariants({ size: "default" }))).toEqual([
+      R_CONTROL,
+    ]);
+    expect(radiusTokens(toggleVariants({ size: "default" }))).toEqual([
+      R_CONTROL,
+    ]);
+  });
+
+  it("Input declares the control radius", () => {
+    render(<Input aria-label="Amount" />);
+    expect(screen.getByRole("textbox")).toHaveClass(R_CONTROL);
+  });
+
+  it("Textarea declares the control radius", () => {
+    render(<Textarea aria-label="Notes" />);
+    expect(screen.getByRole("textbox")).toHaveClass(R_CONTROL);
+  });
+
+  it("InputGroup declares the control radius", () => {
+    const { container } = render(<InputGroup />);
+    expect(container.querySelector('[data-slot="input-group"]')).toHaveClass(
+      R_CONTROL
+    );
+  });
+
+  it("SelectTrigger declares the control radius", () => {
+    render(
+      <Select>
+        <SelectTrigger aria-label="Rows">
+          <SelectValue />
+        </SelectTrigger>
+      </Select>
+    );
+    expect(screen.getByRole("combobox")).toHaveClass(R_CONTROL);
+  });
+
+  it("NativeSelect declares the control radius", () => {
+    const { container } = render(<NativeSelect aria-label="Rows" />);
+    expect(container.querySelector("select")).toHaveClass(R_CONTROL);
   });
 });
 

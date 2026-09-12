@@ -3,7 +3,7 @@ import { expect, type Page, test } from "@playwright/test";
 import { demos } from "../demos";
 
 /**
- * Controls sharing a row must share a height.
+ * Controls sharing a row must share a height *and* a corner radius.
  *
  * `packages/ui/src/control-ladder.test.tsx` asserts what each component
  * what it *declares*. It cannot catch the other half of the problem: an author picking
@@ -12,6 +12,21 @@ import { demos } from "../demos";
  * shipped in `admin-01` — a 40px search field beside 32px filter buttons.
  *
  * Only a rendered page can see it, so this sweeps the block previews.
+ *
+ * ## Why radius is measured here and not in jsdom
+ *
+ * The radius arm exists because the height arm did not catch its own sibling
+ * bug: `Button` and `Toggle` sat at `rounded-lg` (10px) while `Input`,
+ * `InputGroup`, `SelectTrigger`, `NativeSelect` and `Textarea` were all
+ * `rounded-md` (8px), so every toolbar in the library paired an 8px field with
+ * 10px buttons. Both halves were individually "correct" — which is exactly why
+ * a class-string assertion cannot see it. The mismatch only exists *between*
+ * two components, and only a real browser resolves `var(--radius)` to a length.
+ *
+ * `borderTopLeftRadius` is enough for a single corner because every control the
+ * sweep collects is standalone: `ButtonGroup` and `InputGroup` descendants are
+ * excluded (their end caps are meant to differ), and `toggle-group-item` is not
+ * in the selector.
  *
  * ## Why it groups by visual row rather than by parent
  *
@@ -80,6 +95,7 @@ const SIDEBAR_TRIGGER = /Toggle Sidebar/i;
 interface Row {
   heights: number[];
   labels: string[];
+  radii: number[];
   slots: string[];
 }
 
@@ -99,6 +115,12 @@ async function collectRows(page: Page): Promise<Row[]> {
             .trim()
             .replace(/\s+/g, " ")
             .slice(0, 16),
+          // Read here rather than in a second pass: `getComputedStyle` is the
+          // only way to resolve `var(--radius)` to a length, and doing it while
+          // the element is already in hand keeps one walk over the DOM.
+          radius: Number.parseFloat(
+            getComputedStyle(el).borderTopLeftRadius || "0"
+          ),
           slot: el.getAttribute("data-slot") ?? "",
         }))
         .filter(({ rect }) => rect.height > 4 && rect.width > 4)
@@ -130,6 +152,7 @@ async function collectRows(page: Page): Promise<Row[]> {
         .map((row) => ({
           heights: row.map(({ rect }) => Math.round(rect.height * 10) / 10),
           labels: row.map(({ slot, label }) => `${slot}(${label})`),
+          radii: row.map(({ radius }) => Math.round(radius * 10) / 10),
           slots: row.map(({ slot }) => slot),
         }));
     },
@@ -137,12 +160,19 @@ async function collectRows(page: Page): Promise<Row[]> {
   );
 }
 
-function mismatched(rows: Row[]): string[] {
+/**
+ * Rows whose controls disagree on one dimension, reported with every member so
+ * the failure names the row rather than just the delta.
+ */
+function mismatched(rows: Row[], dimension: "heights" | "radii"): string[] {
   return rows
-    .filter(
-      ({ heights }) => Math.max(...heights) - Math.min(...heights) > TOLERANCE
-    )
-    .map((row) => `${row.labels.join(" | ")} -> ${row.heights.join("px, ")}px`);
+    .filter((row) => {
+      const values = row[dimension];
+      return Math.max(...values) - Math.min(...values) > TOLERANCE;
+    })
+    .map(
+      (row) => `${row.labels.join(" | ")} -> ${row[dimension].join("px, ")}px`
+    );
 }
 
 /**
@@ -208,7 +238,20 @@ test.describe("controls sharing a row share a height", () => {
         await page.setViewportSize({ width, height: 1000 });
         await openBlock(page, target.name, target.section);
 
-        expect(mismatched(await collectRows(page))).toEqual([]);
+        expect(mismatched(await collectRows(page), "heights")).toEqual([]);
+      });
+    }
+  }
+});
+
+test.describe("controls sharing a row share a radius", () => {
+  for (const target of TARGETS) {
+    for (const width of WIDTHS) {
+      test(`${target.id} at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 1000 });
+        await openBlock(page, target.name, target.section);
+
+        expect(mismatched(await collectRows(page), "radii")).toEqual([]);
       });
     }
   }
@@ -250,4 +293,62 @@ test.describe("the sweep is actually measuring something", () => {
     expect(toolbar?.heights.length).toBeGreaterThan(2);
     expect([...new Set(toolbar?.heights)]).toEqual([40]);
   });
+
+  /**
+   * The radius counterpart. Agreement alone would be satisfied by every control
+   * drifting to 10px together, which is the state this arm was written to end.
+   * 8px is `--radius-md` at the default `--radius: 0.625rem`.
+   */
+  test("renders the control tier at 8px", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 1000 });
+    await openBlock(page, "block-tickets-01");
+
+    const rows = await collectRows(page);
+    const toolbar = rows.find((row) => row.slots.includes("input-group"));
+
+    expect(toolbar, "found the toolbar row").toBeDefined();
+    expect([...new Set(toolbar?.radii)]).toEqual([8]);
+  });
+});
+
+/**
+ * A joined ToggleGroup's container and its end items must round identically.
+ *
+ * They are separate declarations — `toggle-group.tsx` rounds the container, and
+ * the first/last item round themselves — so nothing forces them to agree. At
+ * `size="sm"` they did not: the container clamped to 8px while the items stayed
+ * at 10px, and the item corners overhung the group by 2px.
+ *
+ * This is the case the row sweep above structurally cannot reach:
+ * `toggle-group-item` is deliberately outside `CONTROL_SELECTOR`, and the
+ * relationship is nesting, not adjacency.
+ */
+test.describe("a joined ToggleGroup rounds its items like itself", () => {
+  for (const size of ["sm", "default", "lg"] as const) {
+    test(`size=${size}`, async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 1000 });
+      await page.goto("/preview/toggle-group-sizes");
+
+      const group = page
+        .locator('[data-slot="toggle-group"]')
+        .nth({ sm: 0, default: 1, lg: 2 }[size]);
+      await expect(group).toBeVisible();
+
+      const measured = await group.evaluate((el) => {
+        const first = el.firstElementChild as HTMLElement;
+        const last = el.lastElementChild as HTMLElement;
+        const px = (value: string) =>
+          Math.round(Number.parseFloat(value) * 10) / 10;
+        return {
+          groupLeft: px(getComputedStyle(el).borderTopLeftRadius),
+          groupRight: px(getComputedStyle(el).borderTopRightRadius),
+          firstLeft: px(getComputedStyle(first).borderTopLeftRadius),
+          lastRight: px(getComputedStyle(last).borderTopRightRadius),
+        };
+      });
+
+      expect(measured.firstLeft).toBe(measured.groupLeft);
+      expect(measured.lastRight).toBe(measured.groupRight);
+    });
+  }
 });
