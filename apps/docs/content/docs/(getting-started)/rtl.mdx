@@ -45,9 +45,9 @@ CSS, the provider drives Base UI's JavaScript. You generally want both.
 ## What does not work
 
 **Keystone's own styling is written with physical direction utilities.** The
-library source uses roughly 100 physical direction utilities (`pl-`, `pr-`,
-`left-`, `right-`, `ml-`, `mr-`, `text-left`, `text-right`) across 30 of its 56
-components, against 12 logical ones (`ms-`, `me-`, `start-`, `end-`,
+library source uses roughly 125 physical direction utilities (`pl-`, `pr-`,
+`left-`, `right-`, `ml-`, `mr-`, `text-left`, `text-right`) across 30 of its 57
+components, against 21 logical ones (`ms-`, `me-`, `start-`, `end-`,
 `text-end`). Physical utilities do not respond to `dir`, so
 under `dir="rtl"` you should expect asymmetric padding, icon gutters, absolute
 offsets, and chevron placement to stay on their left-to-right side.

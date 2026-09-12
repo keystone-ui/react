@@ -555,7 +555,6 @@ function renderCell({
         return (
           <Input
             autoFocus
-            className="h-8"
             onBlur={onCommitSubject}
             onChange={(event) => editing.setDraftValue(event.target.value)}
             onKeyDown={(event) => {

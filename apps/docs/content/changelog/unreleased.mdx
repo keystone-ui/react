@@ -1,7 +1,7 @@
 ---
 date: "2026-09-12"
 description: "What's coming in the next release"
-excerpt: "35 changes queued for the next release."
+excerpt: "36 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -556,6 +556,14 @@ which is the one motion case a stylesheet cannot reach.
 ### Space the rows of a stacked `DescriptionList`.
 
 `orientation="stacked"` drops the padding and separators that space row-oriented items, and nothing replaced them — so one pair's value sat flush against the next pair's label, and a two-column record read as a wall of text. Stacked lists now carry a row gap; row orientation is unchanged, since its items still carry their own padding.
+
+---
+
+### Correct three stale figures in the agent-facing docs.
+
+`copy-button` was missing from the skill's component list entirely, so a consumer or agent reading it could not discover a component this library ships. The count beside that list said 56 and there are 57. And the RTL guide's ratio said "30 of its 56 components" against "12 logical" utilities; recounted from source it is 30 of 57, against 21 — the contributing guide says to recompute that ratio rather than increment it, which is why both halves moved.
+
+Also drops a redundant `className="h-8"` in `tickets-01`, on an `Input` that already passed `size="sm"` — the same 32px, written twice.
 
 ---
 
