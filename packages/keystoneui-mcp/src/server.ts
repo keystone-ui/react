@@ -1,14 +1,16 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
 import { loadProjectConfig } from "./config.js";
 import { readPackageVersion } from "./package-version.js";
 import {
   auditChecklistTool,
   getAddCommandTool,
+  getDocsTool,
   getExamplesTool,
+  getProjectContextTool,
   getThemeInfoTool,
   listComponentsTool,
   searchComponentsTool,
+  TOOL_SPECS,
   viewComponentTool,
 } from "./tools.js";
 
@@ -28,146 +30,70 @@ export const server = new McpServer(
   }
 );
 
+/** Wrap a tool's string output in the MCP content envelope. */
+function text(value: string) {
+  return { content: [{ type: "text" as const, text: value }] };
+}
+
+// Descriptions and input shapes come from TOOL_SPECS in tools.ts -- the single
+// declaration site. Registering from it is what stops the registered shape and
+// the documented shape from drifting apart, which is how `category` came to be
+// missing from the docs while the server accepted it.
+
 server.tool(
   "list_components",
-  "List all available Keystone UI components, blocks, and named examples with pagination. Returns name, description, categories, and dependency info for each item.",
-  {
-    limit: z
-      .number()
-      .min(1)
-      .max(100)
-      .default(20)
-      .describe("Maximum number of items to return"),
-    offset: z.number().min(0).default(0).describe("Number of items to skip"),
-    type: z
-      .enum(["ui", "block", "example"])
-      .optional()
-      .describe(
-        "Filter by item type: 'ui' for components, 'block' for full-page blocks, 'example' for named demo variants like 'table-with-pagination'"
-      ),
-    category: z
-      .string()
-      .optional()
-      .describe(
-        "Filter by category (e.g. 'authentication', 'login', 'signup', 'navigation', 'data', 'betting'). Currently only block items carry categories."
-      ),
-  },
-  async ({ limit, offset, type, category }) => ({
-    content: [
-      {
-        type: "text",
-        text: await listComponentsTool(config, {
-          limit,
-          offset,
-          type,
-          category,
-        }),
-      },
-    ],
-  })
+  TOOL_SPECS.list_components.description,
+  TOOL_SPECS.list_components.schema.shape,
+  async (input) => text(await listComponentsTool(config, input))
 );
 
 server.tool(
   "search_components",
-  "Fuzzy search components, blocks, and named examples (e.g., `table-with-pagination`, `card-with-image`). Categories (e.g. 'authentication', 'login') participate in fuzzy matching. Use when the exact name isn't known; pair with `view_component` or `get_examples` to see code.",
-  {
-    query: z.string().describe("Search query (name, description, or keywords)"),
-    limit: z
-      .number()
-      .min(1)
-      .max(50)
-      .default(10)
-      .describe("Maximum number of results"),
-    type: z
-      .enum(["ui", "block", "example"])
-      .optional()
-      .describe(
-        "Filter by item type: 'ui' for components, 'block' for full-page blocks, 'example' for named demo variants"
-      ),
-    category: z
-      .string()
-      .optional()
-      .describe(
-        "Filter by category (e.g. 'authentication', 'login'). Currently only block items carry categories."
-      ),
-  },
-  async ({ query, limit, type, category }) => ({
-    content: [
-      {
-        type: "text",
-        text: await searchComponentsTool(config, {
-          query,
-          limit,
-          type,
-          category,
-        }),
-      },
-    ],
-  })
+  TOOL_SPECS.search_components.description,
+  TOOL_SPECS.search_components.schema.shape,
+  async (input) => text(await searchComponentsTool(config, input))
 );
 
 server.tool(
   "view_component",
-  "Get full details for one or more Keystone UI components, including complete source code, dependencies, and registry dependencies. Use this to understand how a component works before using or customizing it.",
-  {
-    names: z
-      .array(z.string())
-      .min(1)
-      .max(5)
-      .describe(
-        'Component names to view (e.g. ["button", "card"]). Returns full source code.'
-      ),
-  },
-  async ({ names }) => ({
-    content: [
-      { type: "text", text: await viewComponentTool(config, { names }) },
-    ],
-  })
+  TOOL_SPECS.view_component.description,
+  TOOL_SPECS.view_component.schema.shape,
+  async (input) => text(await viewComponentTool(config, input))
 );
 
 server.tool(
   "get_add_command",
-  "Generate the shadcn CLI command to install one or more Keystone UI components into a project.",
-  {
-    names: z
-      .array(z.string())
-      .min(1)
-      .describe("Component names to generate install commands for"),
-  },
-  async ({ names }) => ({
-    content: [
-      { type: "text", text: await getAddCommandTool(config, { names }) },
-    ],
-  })
+  TOOL_SPECS.get_add_command.description,
+  TOOL_SPECS.get_add_command.schema.shape,
+  (input) => text(getAddCommandTool(config, input))
 );
 
 server.tool(
   "get_examples",
-  "Fetch live demo files for a Keystone UI component or block. Returns the TSX source for every example/demo associated with the name (e.g. button, signin-01, tickets-01). Use after view_component to see real-world usage patterns.",
-  {
-    name: z
-      .string()
-      .describe(
-        'Component or block name (e.g. "button", "signin-01", "tickets-01")'
-      ),
-  },
-  async ({ name }) => ({
-    content: [{ type: "text", text: await getExamplesTool(config, { name }) }],
-  })
+  TOOL_SPECS.get_examples.description,
+  TOOL_SPECS.get_examples.schema.shape,
+  async (input) => text(await getExamplesTool(config, input))
 );
 
 server.tool(
-  "get_theme_info",
-  "Get Keystone UI theme configuration: CSS setup, semantic color tokens (OKLCH), radius scale, dark mode setup, and custom tokens.",
-  async () => ({
-    content: [{ type: "text", text: await getThemeInfoTool(config) }],
-  })
+  "get_docs",
+  TOOL_SPECS.get_docs.description,
+  TOOL_SPECS.get_docs.schema.shape,
+  async (input) => text(await getDocsTool(config, input))
+);
+
+server.tool(
+  "get_project_context",
+  TOOL_SPECS.get_project_context.description,
+  () => text(getProjectContextTool())
+);
+
+server.tool("get_theme_info", TOOL_SPECS.get_theme_info.description, async () =>
+  text(await getThemeInfoTool(config))
 );
 
 server.tool(
   "audit_checklist",
-  "Get a post-install audit checklist to verify Keystone UI is correctly configured in your project. Covers CSS setup, Tailwind config, dependencies, imports, and common issues.",
-  async () => ({
-    content: [{ type: "text", text: await auditChecklistTool() }],
-  })
+  TOOL_SPECS.audit_checklist.description,
+  async () => text(await auditChecklistTool())
 );

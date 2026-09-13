@@ -232,3 +232,124 @@ The control styles itself when `disabled`. To dim the `FieldLabel` and visually 
 ```
 
 In the lightweight pattern, just set `disabled` on the control. There's no group wrapper to coordinate with.
+
+---
+
+## Incorrect / Correct
+
+The four mistakes that actually recur, most of them muscle memory carried over
+from shadcn.
+
+### Validation state
+
+`data-invalid` on `Field` styles nothing in Keystone UI. It is a shadcn API, and
+importing the habit produces a field that reads as valid to both sighted users
+and screen readers.
+
+**Incorrect:**
+
+```tsx
+<Field data-invalid>
+  <FieldLabel htmlFor="email">Email</FieldLabel>
+  <Input id="email" />
+  <FieldDescription>Invalid email address.</FieldDescription>
+</Field>
+```
+
+**Correct** — `aria-invalid` on the *control*, and `FieldError` for the message:
+
+```tsx
+<Field>
+  <FieldLabel htmlFor="email">Email</FieldLabel>
+  <Input aria-invalid id="email" />
+  <FieldError>Invalid email address.</FieldError>
+</Field>
+```
+
+`FieldError` is wired to the control's description, so the message is announced.
+A `FieldDescription` holding an error message is not.
+
+### Form layout
+
+**Incorrect** — hand-rolled spacing, label not associated with the control:
+
+```tsx
+<div className="space-y-4">
+  <div>
+    <label className="mb-2 block text-sm">Email</label>
+    <Input />
+  </div>
+</div>
+```
+
+**Correct:**
+
+```tsx
+<FieldGroup>
+  <Field>
+    <FieldLabel htmlFor="email">Email</FieldLabel>
+    <Input id="email" />
+  </Field>
+</FieldGroup>
+```
+
+`FieldGroup` owns the spacing, and `FieldLabel` + `htmlFor` makes the label
+clickable and announced.
+
+### Buttons inside an input
+
+**Incorrect** — absolute positioning over a padded input, which breaks at every
+size and leaves the button outside the focus ring:
+
+```tsx
+<div className="relative">
+  <Input className="pr-10" placeholder="Search…" />
+  <Button className="absolute top-0 right-0" size="icon-sm">
+    <Search />
+  </Button>
+</div>
+```
+
+**Correct:**
+
+```tsx
+<InputGroup>
+  <InputGroupInput placeholder="Search…" />
+  <InputGroupAddon align="inline-end">
+    <InputGroupButton size="icon-sm">
+      <Search />
+    </InputGroupButton>
+  </InputGroupAddon>
+</InputGroup>
+```
+
+### A small set of choices
+
+**Incorrect** — a loop over `Button` with hand-managed active state, which has
+no roving focus and announces as a list of buttons:
+
+```tsx
+const [range, setRange] = useState("daily");
+
+<div className="flex gap-2">
+  {["daily", "weekly", "monthly"].map((option) => (
+    <Button
+      key={option}
+      onClick={() => setRange(option)}
+      variant={range === option ? "default" : "outline"}
+    >
+      {option}
+    </Button>
+  ))}
+</div>
+```
+
+**Correct:**
+
+```tsx
+<ToggleGroup onValueChange={setRange} value={range}>
+  <ToggleGroupItem value="daily">Daily</ToggleGroupItem>
+  <ToggleGroupItem value="weekly">Weekly</ToggleGroupItem>
+  <ToggleGroupItem value="monthly">Monthly</ToggleGroupItem>
+</ToggleGroup>
+```

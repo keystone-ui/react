@@ -8,6 +8,35 @@ set -e
 
 SKILL_NAME="${1:-keystoneui-react}"
 
+# The name is interpolated into install paths below, so it must not be able to
+# escape them. `..` or a slash here would let `curl … | bash -s ../../..` point
+# the extraction -- and the clean-first step -- anywhere under $HOME.
+case "$SKILL_NAME" in
+  *[!a-zA-Z0-9._-]* | "" | .* )
+    echo "✗ Invalid skill name: '$SKILL_NAME'" >&2
+    echo "  Expected letters, digits, dot, underscore or hyphen." >&2
+    exit 1
+    ;;
+esac
+
+# Extract into a clean directory.
+#
+# tar over an existing install leaves behind anything the skill has since
+# dropped -- the bundled .mjs scripts and evals/evals.json both went away, and
+# a stale copy of a deleted script is worse than no copy, because the skill no
+# longer documents it but an agent can still find and run it.
+#
+# Only removes a directory that actually looks like an installed skill, so a
+# wrong argument cannot delete something else.
+install_skill() {
+  target="$1"
+  if [ -f "$target/SKILL.md" ]; then
+    rm -rf "$target"
+  fi
+  mkdir -p "$target"
+  tar xzf "$TMP_TARBALL" -C "$target"
+}
+
 BASE_URL="${BASE_URL:-{{BASE_URL}}}"
 SKILL_URL="${BASE_URL}/skills/${SKILL_NAME}.tar.gz"
 
@@ -45,40 +74,35 @@ fi
 
 # Claude Code
 if [ -d "$HOME/.claude" ]; then
-  mkdir -p "$HOME/.claude/skills/${SKILL_NAME}"
-  tar xzf "$TMP_TARBALL" -C "$HOME/.claude/skills/${SKILL_NAME}"
+  install_skill "$HOME/.claude/skills/${SKILL_NAME}"
   echo "✓ Installed ${SKILL_NAME} skill for Claude Code"
   INSTALLED=$((INSTALLED + 1))
 fi
 
 # Cursor
 if [ -d "$HOME/.cursor" ]; then
-  mkdir -p "$HOME/.cursor/skills/${SKILL_NAME}"
-  tar xzf "$TMP_TARBALL" -C "$HOME/.cursor/skills/${SKILL_NAME}"
+  install_skill "$HOME/.cursor/skills/${SKILL_NAME}"
   echo "✓ Installed ${SKILL_NAME} skill for Cursor"
   INSTALLED=$((INSTALLED + 1))
 fi
 
 # OpenCode
 if command -v opencode &> /dev/null || [ -d "$HOME/.config/opencode" ]; then
-  mkdir -p "$HOME/.config/opencode/skill/${SKILL_NAME}"
-  tar xzf "$TMP_TARBALL" -C "$HOME/.config/opencode/skill/${SKILL_NAME}"
+  install_skill "$HOME/.config/opencode/skill/${SKILL_NAME}"
   echo "✓ Installed ${SKILL_NAME} skill for OpenCode"
   INSTALLED=$((INSTALLED + 1))
 fi
 
 # Codex CLI
 if command -v codex &> /dev/null || [ -d "$CODEX_HOME" ]; then
-  mkdir -p "$CODEX_HOME/skills/${SKILL_NAME}"
-  tar xzf "$TMP_TARBALL" -C "$CODEX_HOME/skills/${SKILL_NAME}"
+  install_skill "$CODEX_HOME/skills/${SKILL_NAME}"
   echo "✓ Installed ${SKILL_NAME} skill for Codex"
   INSTALLED=$((INSTALLED + 1))
 fi
 
 # Antigravity (Gemini CLI)
 if [ -d "$HOME/.gemini" ]; then
-  mkdir -p "$HOME/.gemini/antigravity/skills/${SKILL_NAME}"
-  tar xzf "$TMP_TARBALL" -C "$HOME/.gemini/antigravity/skills/${SKILL_NAME}"
+  install_skill "$HOME/.gemini/antigravity/skills/${SKILL_NAME}"
   echo "✓ Installed ${SKILL_NAME} skill for Antigravity"
   INSTALLED=$((INSTALLED + 1))
 fi

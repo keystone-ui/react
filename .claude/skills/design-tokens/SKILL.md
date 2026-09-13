@@ -3,6 +3,7 @@ name: design-tokens
 description: Design token conventions for the @keystoneui/react component library. Apply when creating or editing UI components in packages/ui/.
 globs: packages/ui/src/**/*
 alwaysApply: false
+allowed-tools: Read, Grep, Glob, Edit, Write, Bash(pnpm test*)
 ---
 # Design Token Conventions
 

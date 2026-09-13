@@ -60,8 +60,10 @@ Run `keystoneui help` for the full list. Without any verb the binary launches th
 
 ## MCP tools
 
-When run without arguments the server exposes seven tools to MCP clients:
+When run without arguments the server exposes nine tools to MCP clients:
 
+- `get_docs` — full docs page for a component or block, including its API Reference
+- `get_project_context` — install mode, aliases, theme CSS file, icon library, RSC
 - `list_components` — list components, blocks, or examples with pagination
 - `search_components` — fuzzy search across components, blocks, and examples
 - `view_component` — full source for one or more components

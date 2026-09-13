@@ -16,7 +16,7 @@ For full documentation, visit [keystoneui.io](https://keystoneui.io).
 
 Keystone UI is built to be consumed by AI coding assistants as a first-class concern. Every documented surface has a working implementation:
 
-- **MCP Server** (`@keystoneui/mcp`) — 7 tools for component discovery, source inspection, demo fetching, install commands, theme info, and post-install audit. Works with Claude Code, Cursor, VS Code Copilot, OpenCode, Codex.
+- **MCP Server** (`@keystoneui/mcp`) — 9 tools for project context, component discovery, source inspection, demo fetching, install commands, theme info, and post-install audit. Works with Claude Code, Cursor, VS Code Copilot, OpenCode, Codex.
 - **Agent Skill** (`skills/keystoneui-react/`) — modular SKILL.md plus `mcp.md`, `cli.md`, `customization.md`, and a `rules/` directory (styling, forms, composition, icons, base-vs-radix). Includes evals (`evals/evals.json`) and an OpenAI assistant interface (`agents/openai.yml`).
 - **LLMs.txt endpoints** — three dynamic routes generated from MDX, never stale: `/llms.txt`, `/llms-full.txt`, `/llms-components.txt`.
 - **AGENTS.md** — repo-root file with development conventions; also served at `/agents-md`.

@@ -36,7 +36,7 @@ The skill is organized into a slim entry point plus modular topic files. Your AI
 
 - Identity, install, key patterns, and component-selection table in `SKILL.md`
 - MCP server setup and tool reference (`mcp.md`)
-- CLI install paths and bundled scripts (`cli.md`)
+- CLI and shadcn install paths (`cli.md`)
 - Theming deep-dive (`customization.md`)
 - Topic-specific rules with do/don't code pairs in `rules/`
 
@@ -45,44 +45,45 @@ The skill is organized into a slim entry point plus modular topic files. Your AI
 ```
 skills/keystoneui-react/
 ├── SKILL.md              # Entry point: identity, install, principles, key patterns
-├── mcp.md                # MCP setup + 6 tools reference
-├── cli.md                # shadcn add + npm package + bundled scripts
+├── mcp.md                # MCP setup + 9 tools reference
+├── cli.md                # keystoneui verbs + shadcn add + npm package
 ├── customization.md      # CSS setup, OKLCH tokens, radius scale, motion/layering
+├── registry.md           # Authoring registry items: targets, styles, themes, blocks
 ├── rules/
 │   ├── styling.md        # Semantic colors, layout, hover gating, focus, transitions, z-scale
 │   ├── forms.md          # Form, FieldGroup, Field, InputGroup, ToggleGroup, validation
 │   ├── composition.md    # render prop, compound parts, group items, Modal title, data-slot
+│   ├── data-tables.md    # Filter toolbars, applied state, sorting, pagination, mobile fold
 │   ├── icons.md          # lucide-react, no sizing classes, pass as components
 │   └── base-vs-radix.md  # render vs asChild, data-attributes, animation patterns
 ├── agents/
 │   └── openai.yml        # OpenAI assistant interface metadata
-├── evals/
-│   └── evals.json        # Skill evaluation prompts and expected behaviors
 ├── assets/               # Brand icons referenced by agents/openai.yml
-├── scripts/              # Utility scripts for shell-based lookups
-│   ├── list_components.mjs
-│   ├── get_component_docs.mjs
-│   ├── get_source.mjs
-│   ├── get_theme.mjs
-│   └── get_docs.mjs
 └── LICENSE.txt
 ```
 
 ## Evals
 
-`evals/evals.json` contains a small set of prompts with expected behaviors (e.g. "build a sign-in form" → must use subpath imports, FieldGroup + Field, `aria-invalid` on the control + `FieldError`). Use them to measure skill regressions when components or conventions evolve.
+`evals/` in the [keystone-ui/react](https://github.com/keystone-ui/react)
+repository holds one directory per case — a `prompt.md` with a realistic request,
+and `graders/` asserting what a correct answer must contain (subpath imports,
+`render` rather than `asChild`, `aria-invalid` + `FieldError` rather than
+`data-invalid`, `TablePagination` rather than `Pagination`).
 
-## Scripts
+They live at the repository root rather than inside the skill, because that
+is where the plugin evaluator discovers them -- and because they are our
+regression suite, not something a consumer needs shipped to them.
 
-The skill includes 5 utility scripts your AI agent can run for deeper lookups:
+Run them from the repository root:
 
-| Script | What it does |
-|---|---|
-| `list_components.mjs` | Lists all available components |
-| `get_component_docs.mjs` | Fetches full MDX documentation for one or more components |
-| `get_source.mjs` | Fetches the TSX source code of a component |
-| `get_theme.mjs` | Fetches theme variables (light/dark OKLCH tokens) |
-| `get_docs.mjs` | Fetches non-component documentation pages |
+```bash
+claude plugin eval . --threshold 0.8
+```
+
+The run scores the same prompts twice, with the skill loaded and without it, so
+the number it reports is whether the skill *helped* — not just whether the model
+happened to answer well. Use it to catch regressions when components or
+conventions change.
 
 ## Related
 

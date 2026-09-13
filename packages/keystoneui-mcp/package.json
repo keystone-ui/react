@@ -1,7 +1,7 @@
 {
   "name": "@keystoneui/mcp",
   "version": "0.2.0-beta.1",
-  "description": "MCP server and CLI for Keystone UI — lets AI agents and shell users discover, search, view, and install components, blocks, and named examples.",
+  "description": "MCP server and CLI for Keystone UI \u2014 lets AI agents and shell users discover, search, view, and install components, blocks, and named examples.",
   "type": "module",
   "license": "MIT",
   "homepage": "https://keystoneui.io/docs/agents/mcp-server",
@@ -40,7 +40,9 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "clean": "rm -rf dist node_modules",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
@@ -51,7 +53,8 @@
     "@keystoneui/typescript-config": "workspace:*",
     "@types/node": "^26.4.1",
     "tsup": "^8.5.1",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.11"
   },
   "publishConfig": {
     "access": "public"

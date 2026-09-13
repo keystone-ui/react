@@ -88,4 +88,4 @@ function Status({ icon: Icon }: { icon: React.ComponentType }) {
 
 ## Stories may use `@remixicon/react` for brand glyphs
 
-Storybook stories sometimes import brand or social icons from `@remixicon/react`. That's acceptable in `apps/storybook/stories/**`. Don't import `@remixicon/react` from component source in `packages/ui/src/`.
+Brand and social glyphs (a GitHub mark, a payment-network logo) have no lucide equivalent, so a second icon package is reasonable for those alone. Keep it to brand marks: every functional icon — chevrons, checks, close, status — comes from the project's configured icon library.

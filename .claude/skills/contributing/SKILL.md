@@ -1,8 +1,9 @@
 ---
 name: contributing
 description: Component workflow for keystoneui — triggered when adding, creating, scaffolding, or modifying components, demos, stories, MDX docs, or any AI-agent surface (SKILL.md, AGENTS.md, llms.txt, MCP registry).
-globs:
+globs: skills/**,.claude/skills/**,AGENTS.md,apps/docs/content/docs/(getting-started)/agents/**
 alwaysApply: false
+allowed-tools: Read, Grep, Glob, Edit, Write, Bash(pnpm*), Bash(node scripts/*)
 ---
 # Component Contributing Workflow
 
@@ -57,7 +58,7 @@ Every block must carry at least one category. Current values in use:
 | `admin` | `admin-01` | new |
 | `betting` | `betting-panel-0X` | new |
 
-When adding a new category, prefer single-word lowercase strings that mirror shadcn naming where any overlap exists (`/Users/vladsuciu/dev/ui/apps/v4/registry.json` is the reference). Document the new category in this table and in `AGENTS.md` → "Block Authoring".
+When adding a new category, prefer single-word lowercase strings that mirror shadcn naming where any overlap exists (shadcn's own `registry.json`, at https://ui.shadcn.com/r/registry.json, is the reference). Document the new category in this table and in `AGENTS.md` → "Block Authoring".
 
 ## Updating an Existing Component
 

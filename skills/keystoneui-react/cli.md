@@ -1,6 +1,6 @@
 # CLI & Scripts
 
-Three paths reach the same Keystone UI registry: the **`keystoneui` CLI** (unified verb-based interface — preferred), the **shadcn CLI** (for installing source into a project), and the **bundled skill scripts** (legacy / non-MCP fallback).
+Two paths reach the same Keystone UI registry: the **`keystoneui` CLI** (unified verb-based interface, and the MCP server's own binary), and the **shadcn CLI** (for installing source into a project).
 
 ## `keystoneui` CLI (preferred)
 
@@ -51,10 +51,11 @@ npx shadcn@latest add https://keystoneui.io/r/default.json
 
 Use the project's package runner — `pnpm dlx shadcn@latest`, `bunx --bun shadcn@latest`, or `yarn dlx shadcn@latest` — based on `packageManager` in `package.json`.
 
-To get the right URL for one or more components without typing it by hand, use the MCP `get_add_command` tool (see [mcp.md](./mcp.md)) or the local script:
+To get the right URL for one or more components without typing it by hand, use the MCP `get_add_command` tool (see [mcp.md](./mcp.md)) or the CLI:
 
 ```bash
-node scripts/list_components.mjs   # list everything available
+keystoneui list                    # everything available
+keystoneui view button             # confirm the name before installing
 ```
 
 ## Installing as an npm package
@@ -75,20 +76,6 @@ Then import via subpaths (see SKILL.md). You still need the base CSS:
 ```
 
 The npm-package and shadcn-registry paths are mutually exclusive within a project — pick one.
-
-## Bundled skill scripts (fallback)
-
-These predate the unified `keystoneui` CLI and are kept for environments where the MCP package isn't installed. The CLI verbs above cover the same surface and should be preferred.
-
-| Script | Purpose | Example |
-|---|---|---|
-| `list_components.mjs` | List all components | `node scripts/list_components.mjs` |
-| `get_component_docs.mjs` | Fetch full MDX docs for one or more components | `node scripts/get_component_docs.mjs button card` |
-| `get_source.mjs` | Fetch component TSX source | `node scripts/get_source.mjs button` |
-| `get_theme.mjs` | Theme variables (light/dark OKLCH) | `node scripts/get_theme.mjs` |
-| `get_docs.mjs` | Non-component docs (guides, theming) | `node scripts/get_docs.mjs /docs/theming` |
-
-Each script accepts space-separated arguments where applicable. Output is plain text suitable for piping into agent context.
 
 ## Direct MDX URLs
 
@@ -119,7 +106,7 @@ Always fetch component docs **before** writing complex components. The MDX inclu
 ## Choosing a path
 
 - Claude Code, Cursor, VS Code Copilot, OpenCode, Codex → MCP (auto-loads via `.mcp.json`).
-- Shell, CI, or a non-MCP client → `keystoneui <verb>` (preferred) or the bundled `.mjs` scripts (fallback).
+- Shell, CI, or a non-MCP client → `keystoneui <verb>`, via `npx -y @keystoneui/mcp@latest <verb>` if it is not installed.
 - Need raw MDX → fetch the `.mdx` URLs directly, or use `keystoneui docs <name>` for the LLM-resolved version.
 
 All paths return the same source-of-truth content from the docs site.
