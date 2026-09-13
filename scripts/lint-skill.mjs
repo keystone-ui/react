@@ -320,6 +320,7 @@ if (tree) {
   const documented = new Set(
     [...tree[1].matchAll(/[├└]──\s+([A-Za-z0-9._-]+)/g)].map((m) => m[1])
   );
+  // `evals/` deliberately lives at the repo root, not in the shipped skill.
   const realTop = new Set(readdirSync(SKILL_DIR));
   for (const entry of realTop) {
     if (!documented.has(entry)) {

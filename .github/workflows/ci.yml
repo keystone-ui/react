@@ -188,3 +188,59 @@ jobs:
           exitZeroOnChanges: true
           autoAcceptChanges: main
           onlyChanged: true
+
+  skill-evals:
+    name: Skill Evals
+    runs-on: ubuntu-latest
+    needs: lint
+    # Costs money per run, and measures the skill rather than the code, so it
+    # only runs when the skill or the components it describes actually change.
+    # Forked PRs receive no secrets, so the job would fail for a reason the
+    # contributor cannot fix -- skip it there and let a maintainer run it.
+    if: >-
+      github.event_name == 'push' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Changed paths
+        id: changed
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            skill:
+              - 'skills/**'
+              - 'evals/**'
+              - 'packages/ui/src/**'
+              - '.claude-plugin/**'
+
+      - name: Setup Node.js
+        if: steps.changed.outputs.skill == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run evals
+        if: steps.changed.outputs.skill == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "ANTHROPIC_API_KEY is not set; skipping skill evals." >&2
+            exit 0
+          fi
+          npx -y @anthropic-ai/claude-code@latest plugin eval . \
+            --trust-plugin \
+            --no-publish \
+            --threshold 0.8 \
+            --max-cost-usd 15 \
+            --json eval-results.json
+
+      - name: Upload eval report
+        if: steps.changed.outputs.skill == 'true' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: eval-results.json
+          if-no-files-found: ignore

@@ -58,19 +58,23 @@ skills/keystoneui-react/
 │   └── base-vs-radix.md  # render vs asChild, data-attributes, animation patterns
 ├── agents/
 │   └── openai.yml        # OpenAI assistant interface metadata
-├── evals/                # One directory per eval case (prompt + graders)
 ├── assets/               # Brand icons referenced by agents/openai.yml
 └── LICENSE.txt
 ```
 
 ## Evals
 
-`evals/` holds one directory per case — a `prompt.md` with a realistic request,
+`evals/` in the [keystone-ui/react](https://github.com/keystone-ui/react)
+repository holds one directory per case — a `prompt.md` with a realistic request,
 and `graders/` asserting what a correct answer must contain (subpath imports,
 `render` rather than `asChild`, `aria-invalid` + `FieldError` rather than
 `data-invalid`, `TablePagination` rather than `Pagination`).
 
-Run them with the Claude Code plugin evaluator from the repository root:
+They live at the repository root rather than inside the skill, because that
+is where the plugin evaluator discovers them -- and because they are our
+regression suite, not something a consumer needs shipped to them.
+
+Run them from the repository root:
 
 ```bash
 claude plugin eval . --threshold 0.8
