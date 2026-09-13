@@ -111,6 +111,12 @@ jobs:
       - name: Run docs and registry tests
         run: pnpm test --filter=@keystoneui/docs
 
+      # The MCP package had no test script at all, so `turbo run test` skipped
+      # it and CI never touched seven tool handlers, a TTL cache, and the
+      # config resolver that decides which registry a consumer talks to.
+      - name: Run MCP server tests
+        run: pnpm test --filter=@keystoneui/mcp
+
   test-storybook:
     name: Storybook Tests
     runs-on: ubuntu-latest

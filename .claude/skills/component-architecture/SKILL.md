@@ -3,6 +3,7 @@ name: component-architecture
 description: Component architecture conventions for the @keystoneui/react package. Apply when creating, editing, or reviewing UI components in packages/ui/.
 globs: packages/ui/src/**/*
 alwaysApply: false
+allowed-tools: Read, Grep, Glob, Edit, Write, Bash(pnpm test*), Bash(pnpm build*)
 ---
 # Component Architecture
 

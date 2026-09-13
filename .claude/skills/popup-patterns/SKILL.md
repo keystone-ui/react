@@ -3,6 +3,7 @@ name: popup-patterns
 description: Popup component conventions for DropdownMenu, Select, Combobox, and Popover. Apply when creating or editing popup/overlay components in packages/ui/.
 globs: packages/ui/src/dropdown-menu.tsx,packages/ui/src/select.tsx,packages/ui/src/combobox.tsx,packages/ui/src/popover.tsx
 alwaysApply: false
+allowed-tools: Read, Grep, Glob, Edit, Write, Bash(pnpm test*)
 ---
 # Popup Component Patterns
 
