@@ -4,6 +4,7 @@ import { readPackageVersion } from "./package-version.js";
 import {
   auditChecklistTool,
   getAddCommandTool,
+  getDocsTool,
   getExamplesTool,
   getProjectContextTool,
   getThemeInfoTool,
@@ -72,6 +73,13 @@ server.tool(
   TOOL_SPECS.get_examples.description,
   TOOL_SPECS.get_examples.schema.shape,
   async (input) => text(await getExamplesTool(config, input))
+);
+
+server.tool(
+  "get_docs",
+  TOOL_SPECS.get_docs.description,
+  TOOL_SPECS.get_docs.schema.shape,
+  async (input) => text(await getDocsTool(config, input))
 );
 
 server.tool(

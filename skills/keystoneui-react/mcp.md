@@ -27,6 +27,7 @@ You can also run the init helper from the `@keystoneui/mcp` package to write the
 
 | Tool | When to use |
 |---|---|
+| `get_docs` | Full docs page for a component or block, **including the API Reference table**. Props live only here -- `view_component` returns source, not prop docs. |
 | `get_project_context` | **Call first.** Install mode, path aliases, theme CSS file, icon library, RSC, package manager. Import style depends on it. |
 | `list_components` | Browse all components, blocks, or named examples. Params: `limit`, `offset`, `type` (`ui \| block \| example`), `category`. |
 | `search_components` | Fuzzy search by name, description, keywords, or category. Use when the exact name isn't known. Params: `query`, `limit`, `type`, `category`. |
@@ -40,7 +41,7 @@ You can also run the init helper from the `@keystoneui/mcp` package to write the
 
 1. **Orient** — `get_project_context` to learn how this project consumes Keystone. Everything you write depends on `installMode`.
 2. **Discover** — `list_components` (broad) or `search_components` (targeted) to find the right component.
-3. **Inspect** — `view_component({ names: [...] })` to read source and understand the API. Up to 5 names per call.
+3. **Inspect** — `view_component({ names: [...] })` for source, and `get_docs({ name })` for the API Reference table. Props are documented only in the docs page.
 4. **See real usage** — `get_examples({ name })` to fetch demo TSX files. Especially useful for blocks (`signin-01`, `tickets-01`) and complex components.
 5. **Install** — `get_add_command({ names: [...] })` to get the install command. Run it.
 6. **Verify** — `audit_checklist` after first install to confirm CSS, Tailwind, and theme tokens are wired correctly.

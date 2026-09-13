@@ -351,6 +351,36 @@ function iconPackageFor(library: string | null): string {
   return ICON_PACKAGES[library] ?? library;
 }
 
+export const getDocsSchema = z.object({
+  name: z
+    .string()
+    .describe('Component or block name (e.g. "select", "signin-01")'),
+  type: z
+    .enum(["component", "block"])
+    .default("component")
+    .describe("Which docs section to read from"),
+});
+
+export async function getDocsTool(
+  config: ProjectConfig,
+  input: z.infer<typeof getDocsSchema>
+) {
+  const section = input.type === "block" ? "blocks" : "components";
+  const url = `${config.docsUrl}/llms.mdx/docs/${section}/${input.name}`;
+  try {
+    const response = await fetch(url, {
+      headers: { "User-Agent": "keystoneui-mcp" },
+      signal: AbortSignal.timeout(30_000),
+    });
+    if (!response.ok) {
+      return `**${input.name}**: no ${input.type} docs found (${response.status}). Try search_components to find the right name.`;
+    }
+    return await response.text();
+  } catch {
+    return `**${input.name}**: could not reach ${url}.`;
+  }
+}
+
 // --- Tool registry ---
 
 /**
@@ -392,6 +422,11 @@ export const TOOL_SPECS = {
     description:
       "Fetch live demo files for a Keystone UI component or block. Returns the TSX source for every example/demo associated with the name (e.g. button, signin-01, tickets-01). Use after view_component to see real-world usage patterns.",
     schema: getExamplesSchema,
+  },
+  get_docs: {
+    description:
+      "Fetch the full documentation page for a component or block, including its API Reference table. Props are documented ONLY here -- not in the registry -- so view_component alone will not give you a prop's type or default. Previews arrive resolved to inline TSX, so one call returns prose and working code.",
+    schema: getDocsSchema,
   },
   get_project_context: {
     description:

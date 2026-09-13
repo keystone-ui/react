@@ -145,6 +145,30 @@ const schemaFor = {
   get_examples: "getExamplesSchema",
 };
 
+// Every spec must actually be registered. TOOL_SPECS is only a source of truth
+// if server.ts wires each entry up; an unregistered spec would otherwise be
+// documented everywhere and callable nowhere.
+const serverSrc = read("packages/keystoneui-mcp/src/server.ts");
+const registered = new Set(
+  [...serverSrc.matchAll(/server\.tool\(\s*"([a-z_]+)"/g)].map((m) => m[1])
+);
+for (const name of toolNames) {
+  if (!registered.has(name)) {
+    fail(
+      "packages/keystoneui-mcp/src/server.ts",
+      `TOOL_SPECS declares \`${name}\` but server.ts never registers it`
+    );
+  }
+}
+for (const name of registered) {
+  if (!toolNames.includes(name)) {
+    fail(
+      "packages/keystoneui-mcp/src/server.ts",
+      `registers \`${name}\`, which has no TOOL_SPECS entry`
+    );
+  }
+}
+
 // Any prose that states a tool count must state the real one.
 const COUNT_WORDS = {
   five: 5,

@@ -72,10 +72,11 @@ No server infrastructure is needed -- the MCP server fetches static JSON files f
 
 ## Available Tools
 
-The MCP server exposes 8 tools that AI assistants can call:
+The MCP server exposes 9 tools that AI assistants can call:
 
 | Tool | Input | Description |
 |---|---|---|
+| `get_docs` | `name`, `type?` | Full docs page including the API Reference table; previews resolved to inline TSX |
 | `get_project_context` | -- | Install mode, aliases, theme CSS file, icon library, RSC, package manager. Call first: import style depends on it |
 | `list_components` | `limit?`, `offset?`, `type?`, `category?` | Paginated list of all components, blocks, and named examples |
 | `search_components` | `query`, `limit?`, `type?`, `category?` | Fuzzy search by name, description, keywords, or category |

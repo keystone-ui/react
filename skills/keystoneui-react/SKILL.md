@@ -321,7 +321,7 @@ give them to you — read the docs when you need a prop's type or default.
 
 ## Detailed References
 
-- [mcp.md](./mcp.md) — MCP setup, the 8 tools, and recommended workflow
+- [mcp.md](./mcp.md) — MCP setup, the 9 tools, and recommended workflow
 - [cli.md](./cli.md) — `npx shadcn@latest add`, npm package install, bundled scripts, direct MDX URLs
 - [customization.md](./customization.md) — CSS setup, light/dark tokens, color naming, radius scale, motion/layering, adding new tokens
 - [registry.md](./registry.md) — authoring registry items: the explicit `target` rule, style vs theme, block categories, cross-registry dependencies

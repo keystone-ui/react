@@ -10,7 +10,10 @@ import {
   viewComponentTool,
 } from "../tools.js";
 
-const config: ProjectConfig = { registry: { url: "https://example.test/r" } };
+const config: ProjectConfig = {
+  docsUrl: "https://example.test",
+  registry: { url: "https://example.test/r" },
+};
 
 afterEach(() => {
   vi.restoreAllMocks();
