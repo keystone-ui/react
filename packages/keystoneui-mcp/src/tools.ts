@@ -1,6 +1,10 @@
 import { z } from "zod";
 import type { ProjectConfig } from "./config.js";
 import { fetchExamples, fetchItem, fetchManifest } from "./fetcher.js";
+import {
+  detectProjectContext,
+  formatProjectContext,
+} from "./project-context.js";
 import { listItems, searchItems } from "./search.js";
 import type { RegistryItem } from "./types.js";
 
@@ -222,10 +226,14 @@ export async function getExamplesTool(
 
 export function getThemeInfoTool(config: ProjectConfig) {
   const registryUrl = config.registry.url;
+  const themeCtx = detectProjectContext();
 
   return `# Keystone UI Theme
 
 ## CSS Setup
+
+Add these to \`${themeCtx.tailwindCssFile ?? "your global CSS file"}\` -- edit that
+file rather than creating a new one, or the tokens will not reach the components.
 
 \`\`\`css
 @import "tailwindcss";
@@ -280,10 +288,16 @@ npx shadcn@latest add ${registryUrl}/default.json
 }
 
 export function auditChecklistTool() {
+  const ctx = detectProjectContext();
+  const registryMode = ctx.installMode === "registry";
+  const uiAlias = ctx.aliases?.ui ?? "@/components/ui";
+  const cssFile = ctx.tailwindCssFile ?? "your CSS entry point";
+  const iconPkg = iconPackageFor(ctx.iconLibrary);
+
   return `# Post-Install Audit Checklist
 
-## 1. CSS Setup
-- [ ] \`@import "tailwindcss"\` is present in your CSS entry point
+## 1. CSS Setup (\`${cssFile}\`)
+- [ ] \`@import "tailwindcss"\` is present in \`${cssFile}\`
 - [ ] \`@import "@keystoneui/react/base.css"\` is imported AFTER tailwindcss
 - [ ] Dark mode variant is configured: \`@custom-variant dark (&:is(.dark *))\`
 
@@ -296,21 +310,45 @@ export function auditChecklistTool() {
 - [ ] Component-specific peer dependencies are installed (check each component's \`dependencies\` field)
 - [ ] Using React 19+
 
-## 4. Import Pattern
-- [ ] Using subpath imports: \`import { Button } from "@keystoneui/react/button"\`
-- [ ] NOT using barrel imports from \`@keystoneui/react\`
+## 4. Import Pattern (install mode: ${ctx.installMode})
+${
+  registryMode
+    ? `- [ ] Importing from the project alias: \`import { Button } from "${uiAlias}/button"\`
+- [ ] NOT importing from \`@keystoneui/react\` -- it is not a dependency in this project`
+    : `- [ ] Using subpath imports: \`import { Button } from "@keystoneui/react/button"\`
+- [ ] NOT using barrel imports from \`@keystoneui/react\``
+}
 
 ## 5. Theme Variables
 - [ ] CSS custom properties are defined in \`:root\` (see \`get_theme_info\` for the full list)
 - [ ] Dark mode variables are defined in \`.dark\` selector
 
 ## 6. Icon Library
-- [ ] Using \`lucide-react\` for icons (not \`@iconify/react\` or others)
+- [ ] Using \`${iconPkg}\` for icons, matching this project's configured icon library
 
 ## 7. Common Issues
 - [ ] If hover styles feel "sticky" on mobile: ensure \`base.css\` is imported (it gates \`hover:\` with \`@media (hover: hover)\`)
 - [ ] If buttons don't show pointer cursor: Tailwind v4 changed the default — Keystone UI handles this internally
 - [ ] If focus rings look wrong: don't mix outline-based and ring-based focus patterns`;
+}
+
+/**
+ * npm package name for a shadcn `iconLibrary` value. Unknown values pass
+ * through: a project naming its own library knows better than this map, and a
+ * null means we simply have not been told, where lucide is the right default.
+ */
+const ICON_PACKAGES: Record<string, string> = {
+  lucide: "lucide-react",
+  tabler: "@tabler/icons-react",
+  hugeicons: "@hugeicons/react",
+  remix: "@remixicon/react",
+};
+
+function iconPackageFor(library: string | null): string {
+  if (library === null) {
+    return "lucide-react";
+  }
+  return ICON_PACKAGES[library] ?? library;
 }
 
 // --- Tool registry ---
@@ -355,6 +393,11 @@ export const TOOL_SPECS = {
       "Fetch live demo files for a Keystone UI component or block. Returns the TSX source for every example/demo associated with the name (e.g. button, signin-01, tickets-01). Use after view_component to see real-world usage patterns.",
     schema: getExamplesSchema,
   },
+  get_project_context: {
+    description:
+      "Read this project's Keystone UI setup: install mode (npm package vs vendored registry source), path aliases, which CSS file owns the theme tokens, icon library, whether React Server Components are in use, and the package manager. Call this FIRST -- import style and which file to edit both depend on it, and guessing wrong is the most common source of broken output.",
+    schema: emptySchema,
+  },
   get_theme_info: {
     description:
       "Get Keystone UI theme configuration: CSS setup, semantic color tokens (OKLCH), radius scale, dark mode setup, and custom tokens.",
@@ -368,3 +411,15 @@ export const TOOL_SPECS = {
 } as const;
 
 export type ToolName = keyof typeof TOOL_SPECS;
+
+/**
+ * Report the host project's setup.
+ *
+ * This is the tool an agent should reach for before writing any import. The
+ * MCP transport gives no shell, so without it an MCP-only client cannot see
+ * install mode at all and has to assume -- which is exactly the failure this
+ * whole surface existed to prevent.
+ */
+export function getProjectContextTool(): string {
+  return formatProjectContext(detectProjectContext());
+}

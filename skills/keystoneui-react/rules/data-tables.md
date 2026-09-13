@@ -264,3 +264,111 @@ cannot disagree.
 
 Both blocks implement this — see `admin-01`'s `payment-filters-drawer.tsx` or
 `tickets-01`'s `tickets-filters-drawer.tsx` after installing.
+
+---
+
+## Incorrect / Correct
+
+Every rule in this file was a defect before it was a rule. These are the four
+that shipped more than once.
+
+### The footer of a data table
+
+`Pagination` renders page *links*, each with its own URL. A data table paginates
+a client-side slice, so those links go nowhere.
+
+**Incorrect:**
+
+```tsx
+<Pagination>
+  <PaginationPrevious href="#" />
+  <PaginationItem href="#">1</PaginationItem>
+  <PaginationNext href="#" />
+</Pagination>
+```
+
+**Correct** — `TablePagination` reports the visible range and owns rows-per-page:
+
+```tsx
+<TablePagination
+  onPageChange={setPage}
+  onPageSizeChange={setPageSize}
+  page={page}
+  pageSize={pageSize}
+  total={rows.length}
+/>
+```
+
+### Filter triggers name their dimension
+
+A bare value is ambiguous the moment a second filter sits beside it — "All"
+next to "All" tells the reader nothing.
+
+**Incorrect:**
+
+```tsx
+<SelectTrigger>All Statuses</SelectTrigger>
+<SelectTrigger>All Priorities</SelectTrigger>
+```
+
+**Correct:**
+
+```tsx
+<SelectTrigger>Status: All</SelectTrigger>
+<SelectTrigger>Priority: All</SelectTrigger>
+```
+
+A filter whose value names its own dimension — a date range — takes no label.
+
+### One representation of applied state
+
+**Incorrect** — the control and a chip both report the same filter, so clearing
+one leaves the other stale:
+
+```tsx
+<Select value={status}>…</Select>
+{status !== "all" && <Tag onRemove={clearStatus}>Status: {status}</Tag>}
+```
+
+**Correct** — the control *is* the state; it always shows its own value:
+
+```tsx
+<Select value={status}>…</Select>
+```
+
+Reach for chips only when the controls are hidden behind a drawer, and then the
+chips are the only representation, not a second one.
+
+### `aria-sort` belongs only on sortable columns
+
+**Incorrect** — announcing every column as sortable, including the ones that
+are not:
+
+```tsx
+{columns.map((col) => (
+  <TableHead aria-sort={sort.key === col.key ? sort.dir : "none"} key={col.key}>
+    {col.label}
+  </TableHead>
+))}
+```
+
+**Correct:**
+
+```tsx
+{columns.map((col) => (
+  <TableHead
+    aria-sort={
+      col.sortable ? (sort.key === col.key ? sort.dir : "none") : undefined
+    }
+    key={col.key}
+  >
+    {col.sortable ? (
+      <TableSortButton onClick={() => toggleSort(col.key)}>
+        {col.label}
+      </TableSortButton>
+    ) : (
+      col.label
+    )}
+  </TableHead>
+))}
+```

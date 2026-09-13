@@ -4,6 +4,7 @@ How Keystone UI components are composed and how to extend them.
 
 ## Contents
 
+- Imports follow the project's install mode
 - Subpath imports — never barrel imports
 - Compound parts and named exports
 - The `render` prop for custom triggers
@@ -13,12 +14,40 @@ How Keystone UI components are composed and how to extend them.
 - Use full Card composition
 - `Button` has no loading prop — compose with `Spinner`
 - `data-slot` for stable styling targets
+- Client components in an RSC project
+
+---
+
+## Imports follow the project's install mode
+
+Keystone is dual-distribution, and import style depends on which path the
+project took. Read `installMode` from the project context before writing the
+first import — see [SKILL.md](../SKILL.md#current-project-context).
+
+**Incorrect** — assuming the package is installed when the project vendored the
+source:
+
+```tsx
+// installMode: "registry" — @keystoneui/react is not a dependency here.
+import { Button } from "@keystoneui/react/button";
+```
+
+**Correct** — use the project's own `aliases.ui`:
+
+```tsx
+// installMode: "registry", aliases.ui: "@/components/ui"
+import { Button } from "@/components/ui/button";
+```
+
+Do not hardcode `@/`. A monorepo commonly uses something like
+`@workspace/ui/components`, and `aliases.ui` is what says so.
 
 ---
 
 ## Subpath imports — never barrel imports
 
-Always import from the per-component subpath. There is no barrel file.
+**This section applies when `installMode` is `package`.** There is no barrel
+file, so always import from the per-component subpath.
 
 **Incorrect:**
 
@@ -307,3 +336,53 @@ required:
    toggle.
 
 See the Info Tip example in the Tooltip docs.
+
+---
+
+## Client components in an RSC project
+
+When the project context reports `isRSC: true`, any file that uses `useState`,
+`useEffect`, an event handler, or a browser API needs the `"use client"`
+directive. Most Keystone components are interactive, so in an RSC project this
+applies to nearly every file that renders one.
+
+**Incorrect** — a Server Component that renders interactive children and wires
+up state:
+
+```tsx
+import { useState } from "react";
+import { Modal, ModalTrigger, ModalContent } from "@keystoneui/react/modal";
+
+export function EditDialog() {
+  const [open, setOpen] = useState(false);
+  return (
+    <Modal onOpenChange={setOpen} open={open}>
+      <ModalTrigger render={<Button />}>Edit</ModalTrigger>
+      <ModalContent>…</ModalContent>
+    </Modal>
+  );
+}
+```
+
+**Correct:**
+
+```tsx
+"use client";
+
+import { useState } from "react";
+import { Modal, ModalTrigger, ModalContent } from "@keystoneui/react/modal";
+
+export function EditDialog() {
+  const [open, setOpen] = useState(false);
+  return (
+    <Modal onOpenChange={setOpen} open={open}>
+      <ModalTrigger render={<Button />}>Edit</ModalTrigger>
+      <ModalContent>…</ModalContent>
+    </Modal>
+  );
+}
+```
+
+The failure is not subtle — the build errors out — but it costs a cycle every
+time. Put the directive on the leaf component that needs it rather than on a
+page, so the server boundary stays as low in the tree as possible.

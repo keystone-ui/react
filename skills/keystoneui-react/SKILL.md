@@ -12,9 +12,46 @@ metadata:
 
 A production-ready React component library built on **Tailwind CSS v4** and **Base UI** (`@base-ui/react`), with 50+ accessible components, OKLCH semantic tokens, and dark mode.
 
+## Current Project Context
+
+```json
+!`npx -y @keystoneui/mcp@latest info --json 2>/dev/null || echo '{}'`
+```
+
+**If the block above is empty, `{}`, or absent**, this host does not run shell
+injection (it is disabled for account-synced skills, by
+`disableSkillShellExecution`, and everywhere outside Claude Code). Get the same
+answer another way before writing imports: call the MCP tool
+`get_project_context`, or run `keystoneui info`. If neither is available, ask
+which install mode the project uses rather than guessing.
+
+### Key Fields
+
+The `project` object decides how you write code. Read it first.
+
+- **`installMode`** — the single most important field.
+  - `package` → import from subpaths: `@keystoneui/react/button`.
+  - `registry` → source is vendored; import from the project's own alias:
+    `@/components/ui/button` (use `aliases.ui`, never hardcode `@/`).
+  - `unknown` → ask. Do not guess.
+- **`aliases.ui`** — where vendored components live. Use it verbatim; a
+  monorepo may use `@workspace/ui/components`.
+- **`tailwindCssFile`** — the file that owns the theme tokens. **Edit that file;
+  never create a new one.** Tokens in a new file do not reach the components.
+- **`iconLibrary`** — `lucide` → `lucide-react`, `tabler` → `@tabler/icons-react`.
+  Never assume lucide.
+- **`isRSC`** — when `true`, any file using `useState`, `useEffect`, an event
+  handler, or a browser API needs `"use client"` at the top. Most Keystone
+  components are interactive, so in an RSC project this applies constantly.
+- **`packageManager`** — use it for non-Keystone installs (`pnpm add date-fns`).
+
 ## Core Principles
 
-1. **Subpath imports only** — `@keystoneui/react/button`, never `@keystoneui/react`. There is no barrel.
+1. **Imports follow `installMode`** — in `package` mode, subpaths only:
+   `@keystoneui/react/button`, never the bare `@keystoneui/react` (there is no
+   barrel). In `registry` mode the source is vendored, so import from
+   `aliases.ui` instead. Check the context block above before writing the first
+   import.
 2. **Base UI, not Radix** — primitives come from `@base-ui/react`. The slot pattern is `render`, not `asChild`. → [rules/base-vs-radix.md](./rules/base-vs-radix.md)
 3. **Semantic tokens** — `bg-primary`, `text-muted-foreground`, never raw colors.
 4. **Compose, don't reinvent** — use existing components and their compound parts before writing custom markup.
@@ -140,6 +177,49 @@ import { Modal, ModalTrigger, ModalContent, ModalTitle } from "@keystoneui/react
 </Button>
 ```
 
+## Updating vendored components
+
+Only applies when `installMode` is `registry`. Keystone's registry is
+shadcn-compatible, so the shadcn CLI's merge tooling works against it.
+
+```bash
+# 1. See every file that would change.
+npx shadcn@latest add https://keystoneui.io/r/button.json --dry-run
+
+# 2. Read the diff for each one.
+npx shadcn@latest add https://keystoneui.io/r/button.json --diff button.tsx
+```
+
+Then decide per file:
+
+- No local changes → safe to overwrite.
+- Local changes → read the file, read the diff, and apply the upstream change
+  by hand so the local edits survive.
+
+**Never pass `--overwrite` without the user explicitly approving it.** Vendored
+source is theirs; it is normal for it to have been edited, and `--overwrite`
+discards that silently.
+
+In `package` mode there is nothing to merge — bump `@keystoneui/react` and read
+the changelog.
+
+## Interoperating with shadcn
+
+Keystone and shadcn can coexist, and `admin-01` deliberately ships shadcn's
+sidebar because Keystone intentionally has no app shell. Two things bite:
+
+1. **Both registries install to the same path.** `components/ui/button.tsx` is
+   one file. Installing shadcn's `button` over Keystone's replaces it. Bare
+   `registryDependencies` resolve to *shadcn's* registry, so a block that says
+   `"button"` when it means Keystone's will quietly do this — see
+   [registry.md](./registry.md).
+2. **The control ladders differ.** Keystone's default control height is 40px;
+   shadcn's is 36px (`new-york-v4`) and 32px in its newer presets. A shadcn
+   component in a Keystone toolbar is visibly short, and nothing errors.
+
+Full guidance, including which tokens the shadcn sidebar reads:
+`https://keystoneui.io/docs/interop`.
+
 ## Component Selection
 
 | Need | Use |
@@ -241,7 +321,7 @@ give them to you — read the docs when you need a prop's type or default.
 
 ## Detailed References
 
-- [mcp.md](./mcp.md) — MCP setup, the 7 tools, and recommended workflow
+- [mcp.md](./mcp.md) — MCP setup, the 8 tools, and recommended workflow
 - [cli.md](./cli.md) — `npx shadcn@latest add`, npm package install, bundled scripts, direct MDX URLs
 - [customization.md](./customization.md) — CSS setup, light/dark tokens, color naming, radius scale, motion/layering, adding new tokens
 - [registry.md](./registry.md) — authoring registry items: the explicit `target` rule, style vs theme, block categories, cross-registry dependencies

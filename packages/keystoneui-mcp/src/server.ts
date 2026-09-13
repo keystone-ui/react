@@ -5,6 +5,7 @@ import {
   auditChecklistTool,
   getAddCommandTool,
   getExamplesTool,
+  getProjectContextTool,
   getThemeInfoTool,
   listComponentsTool,
   searchComponentsTool,
@@ -71,6 +72,12 @@ server.tool(
   TOOL_SPECS.get_examples.description,
   TOOL_SPECS.get_examples.schema.shape,
   async (input) => text(await getExamplesTool(config, input))
+);
+
+server.tool(
+  "get_project_context",
+  TOOL_SPECS.get_project_context.description,
+  () => text(getProjectContextTool())
 );
 
 server.tool("get_theme_info", TOOL_SPECS.get_theme_info.description, async () =>
