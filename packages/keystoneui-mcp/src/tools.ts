@@ -152,6 +152,10 @@ export const getAddCommandSchema = z.object({
   names: z
     .array(z.string())
     .min(1)
+    // Bounded so a runaway array cannot build an unbounded shell command. The
+    // cap is looser than view_component's 5 because this tool only formats
+    // strings -- there is no per-name network fetch to fan out.
+    .max(20)
     .describe("Component names to generate install commands for"),
 });
 
@@ -183,7 +187,7 @@ export const getExamplesSchema = z.object({
   name: z
     .string()
     .describe(
-      'Component or block name to fetch examples for (e.g. "button" or "tickets-01")'
+      'Component or block name (e.g. "button", "signin-01", "tickets-01")'
     ),
 });
 
@@ -308,3 +312,59 @@ export function auditChecklistTool() {
 - [ ] If buttons don't show pointer cursor: Tailwind v4 changed the default — Keystone UI handles this internally
 - [ ] If focus rings look wrong: don't mix outline-based and ring-based focus patterns`;
 }
+
+// --- Tool registry ---
+
+/**
+ * One declaration site for every tool's name, description, and input shape.
+ *
+ * `server.ts` registers from this map rather than re-declaring each shape
+ * inline. That is what keeps the two from drifting: the `category` parameter
+ * once existed here and not in the registered description, and the docs
+ * inherited the shorter one.
+ *
+ * `scripts/lint-skill.mjs` parses this map to check the skill, the MCP docs
+ * page, and the package README against what is actually registered -- so the
+ * tool count and parameter lists cannot go stale without failing `lint:docs`.
+ */
+export const emptySchema = z.object({});
+
+export const TOOL_SPECS = {
+  list_components: {
+    description:
+      "List all available Keystone UI components, blocks, and named examples with pagination. Returns name, description, categories, and dependency info for each item.",
+    schema: listComponentsSchema,
+  },
+  search_components: {
+    description:
+      "Fuzzy search components, blocks, and named examples (e.g., `table-with-pagination`, `card-with-image`). Categories (e.g. 'authentication', 'login') participate in fuzzy matching. Use when the exact name isn't known; pair with `view_component` or `get_examples` to see code.",
+    schema: searchComponentsSchema,
+  },
+  view_component: {
+    description:
+      "Get full details for one or more Keystone UI components, including complete source code, dependencies, and registry dependencies. Use this to understand how a component works before using or customizing it.",
+    schema: viewComponentSchema,
+  },
+  get_add_command: {
+    description:
+      "Generate the shadcn CLI command to install one or more Keystone UI components into a project.",
+    schema: getAddCommandSchema,
+  },
+  get_examples: {
+    description:
+      "Fetch live demo files for a Keystone UI component or block. Returns the TSX source for every example/demo associated with the name (e.g. button, signin-01, tickets-01). Use after view_component to see real-world usage patterns.",
+    schema: getExamplesSchema,
+  },
+  get_theme_info: {
+    description:
+      "Get Keystone UI theme configuration: CSS setup, semantic color tokens (OKLCH), radius scale, dark mode setup, and custom tokens.",
+    schema: emptySchema,
+  },
+  audit_checklist: {
+    description:
+      "Get a post-install audit checklist to verify Keystone UI is correctly configured in your project. Covers CSS setup, Tailwind config, dependencies, imports, and common issues.",
+    schema: emptySchema,
+  },
+} as const;
+
+export type ToolName = keyof typeof TOOL_SPECS;
