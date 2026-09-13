@@ -188,7 +188,7 @@ transition-colors                                      /* ComboboxChips */
 
 ## Motion and layering tokens
 
-Defined in `packages/ui/src/base.css`. Use these instead of hard-coded durations or z-index.
+Defined in `@keystoneui/react/base.css`, which your global CSS imports. Use these instead of hard-coded durations or z-index.
 
 **Duration tokens** — `--duration-fast` (≈100ms), `--duration-base` (≈160ms), `--duration-slow` (≈220ms), `--duration-drawer`.
 

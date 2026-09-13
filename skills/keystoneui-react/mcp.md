@@ -27,8 +27,8 @@ You can also run the init helper from the `@keystoneui/mcp` package to write the
 
 | Tool | When to use |
 |---|---|
-| `list_components` | Browse all components or blocks. Supports `type: "ui" \| "block"`, `limit`, `offset`. |
-| `search_components` | Fuzzy search by name, description, or keywords. Use when the exact name isn't known. |
+| `list_components` | Browse all components, blocks, or named examples. Params: `limit`, `offset`, `type` (`ui \| block \| example`), `category`. |
+| `search_components` | Fuzzy search by name, description, keywords, or category. Use when the exact name isn't known. Params: `query`, `limit`, `type`, `category`. |
 | `view_component` | Get full source, dependencies, and registry deps for one or more components. |
 | `get_examples` | Fetch live demo files (TSX source) for a component or block. Use to see real-world usage. |
 | `get_add_command` | Generate the `npx shadcn@latest add` command for one or more components. |
@@ -43,10 +43,10 @@ You can also run the init helper from the `@keystoneui/mcp` package to write the
 4. **Install** — `get_add_command({ names: [...] })` to get the install command. Run it.
 5. **Verify** — `audit_checklist` after first install to confirm CSS, Tailwind, and theme tokens are wired correctly.
 
-## When to use MCP vs the bundled scripts
+## When to use MCP vs the CLI
 
 - **MCP tools** are best when you're working through an MCP-aware client (Claude Code, Cursor, VS Code Copilot, OpenCode, Codex).
-- **The bundled `.mjs` scripts** (`list_components.mjs`, `get_component_docs.mjs`, etc.) are for environments without MCP — direct shell invocation. They hit the same docs site. See [cli.md](./cli.md).
+- **The `keystoneui` CLI** covers the same surface as verbs, for shells, CI, and hosts without MCP — `npx -y @keystoneui/mcp@latest <verb>`. See [cli.md](./cli.md).
 
 Both reach the same registry; pick whichever fits the host.
 

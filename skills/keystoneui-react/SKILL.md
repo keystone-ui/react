@@ -2,10 +2,10 @@
 name: keystoneui-react
 description: Manages Keystone UI components and projects — adding, searching, fixing, debugging, styling, and composing UI built on Tailwind CSS v4 + Base UI. Provides project context, component docs, and usage examples. Applies when working with Keystone UI, @keystoneui/react, components.json with @keystoneui/* registries, or any project with @keystoneui/react in its dependencies. Also triggers for "keystoneui add", "find a Keystone UI example", or "switch to Keystone UI".
 user-invocable: false
-allowed-tools: Bash(node packages/keystoneui-mcp/dist/index.js *), Bash(node scripts/*.mjs *), Bash(npx shadcn@latest add https://keystoneui.io/r/*)
+allowed-tools: Bash(npx -y @keystoneui/mcp@latest *), Bash(pnpm dlx @keystoneui/mcp@latest *), Bash(bunx --bun @keystoneui/mcp@latest *), Bash(npx shadcn@latest add https://keystoneui.io/r/*)
 metadata:
   author: keystoneui
-  version: "2.2.0"
+  version: "3.0.0"
 ---
 
 # Keystone UI
@@ -185,35 +185,66 @@ Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or
 
 ## Workflow
 
-1. **Discover** — use MCP `search_components` / `list_components`, the `keystoneui search`/`keystoneui list` CLI verbs, or `node scripts/list_components.mjs`.
-2. **Find an example** — for "X with Y" patterns (e.g., "table with pagination", "card with image"), check `apps/docs/demos/<component>/<variant>.tsx` directly. These are real, working compositions authored by the team — examples include `apps/docs/demos/table/with-pagination.tsx`, `apps/docs/demos/card/with-image.tsx`. Via MCP, the equivalent is `get_examples({ name: "<component>" })` which returns all demos for the component as a bundle.
-3. **Find a block** — for full-page or multi-component patterns (e.g., "sign-in page", "tickets table with bulk actions"), check `apps/docs/demos/blocks/<name>.tsx` and the docs at `apps/docs/content/docs/blocks/<name>.mdx`. Existing categories: Sign in (`signin-01..04`), Signup (`signup-01..05`), User (`profile-dropdown-01`), CRM (`tickets-01`), Application (`dashboard-01`, `admin-01`), Betting (`betting-panel-01..04`). Via MCP, use `list_components({ type: "block" })` or `search_components({ query: "...", type: "block" })`. **Always try a block before composing a page from primitives.**
-4. **Inspect** — `view_component` (MCP), `node scripts/get_component_docs.mjs <name>`, or fetch `https://keystoneui.io/llms.mdx/docs/components/<name>` directly (the `/llms.mdx/...` route returns MDX with `<ComponentPreview>` tags resolved to inline TSX source — single round-trip). **Always read the docs before implementing complex components.**
-5. **Install** — `npx shadcn@latest add <url>` (vendored source) or `pnpm add @keystoneui/react` (npm dependency). See [cli.md](./cli.md).
-6. **Theme** — define semantic tokens in your CSS. See [customization.md](./customization.md).
-7. **Verify** — run MCP `audit_checklist` after first install to catch missing CSS imports or tokens.
+Every step below works from inside a consumer's project. Nothing here assumes
+the keystone monorepo.
 
-## Local Sources of Truth
+1. **Discover** — MCP `search_components` / `list_components`, or the CLI:
+   `keystoneui search "table pagination"`, `keystoneui list --type block`.
+   Filter with `--type ui|block|example` and `--category`.
+2. **Find an example** — for "X with Y" patterns ("table with pagination",
+   "card with image"), use `get_examples({ name: "table" })` over MCP or
+   `keystoneui examples table`. Both return every demo file for that name as a
+   bundle, which is where the real composition lives.
+3. **Find a block** — for a whole page or feature ("sign-in page", "tickets
+   table with bulk actions"), use `list_components({ type: "block" })` or
+   `keystoneui blocks`. **Always try a block before composing a page from
+   primitives** — see the Block Selection table above.
+4. **Inspect** — `view_component({ names: [...] })` for source, and
+   `keystoneui docs <name>` (or fetch
+   `https://keystoneui.io/llms.mdx/docs/components/<name>`) for the prose docs
+   and the API Reference table. The `/llms.mdx/...` route resolves
+   `<ComponentPreview>` tags to inline TSX, so one fetch gives you docs and
+   working code together. **Always read the docs before implementing a complex
+   component** — props are documented there and nowhere else.
+5. **Install** — `npx shadcn@latest add <url>` for vendored source, or
+   `pnpm add @keystoneui/react` for the npm dependency. `get_add_command`
+   builds the URLs. See [cli.md](./cli.md).
+6. **Theme** — define the semantic tokens in your global CSS. See
+   [customization.md](./customization.md).
+7. **Review what you added** — read every file the installer wrote before
+   moving on. Check for: a missing compound part (a `SelectItem` with no
+   `SelectContent`), imports that do not match this project's install mode,
+   icons from a library this project does not use, and any violation of the
+   Critical Rules above. Fix them now, not after they compound.
+8. **Verify the project** — `audit_checklist` (MCP) or `keystoneui audit` after
+   a first install, to catch a missing CSS import or undefined tokens.
 
-Before reaching for the docs site, these directories in the repo are authoritative:
+## Sources of Truth
 
-- **`apps/docs/demos/<component>/`** — per-component example variants (e.g., `table/with-pagination.tsx`, `card/with-image.tsx`). Resolved by `<ComponentPreview name="<component>-<variant>" />` tags in MDX.
-- **`apps/docs/demos/blocks/`** — full-page block compositions (`signin-01.tsx`, `tickets-01.tsx`, `profile-dropdown-01.tsx`, …).
-- **`apps/docs/content/docs/components/`** — per-component MDX docs.
-- **`apps/docs/content/docs/blocks/`** — per-block MDX docs with install commands and components-used cross-links.
-- **`packages/ui/src/`** — the component source. Read for prop semantics; consult demos for usage patterns.
+Reach for these in order. The first two need no network beyond the registry;
+the third is the fallback when a tool is unavailable.
 
-For LLM-friendly fetched content, use:
+- **MCP tools** — `view_component` (source), `get_examples` (real usage),
+  `get_theme_info` (tokens), `audit_checklist` (project wiring).
+- **The `keystoneui` CLI** — the same surface as verbs, for shells and non-MCP
+  hosts. See [cli.md](./cli.md).
+- **Fetched docs** — when neither is available:
+  - `https://keystoneui.io/llms.mdx/docs/components/<name>` — per-component MDX
+    with previews resolved to inline `tsx`.
+  - `https://keystoneui.io/llms.mdx/docs/blocks/<name>` — same for blocks.
+  - `https://keystoneui.io/llms-components.txt` — every component in one document.
+  - `https://keystoneui.io/AGENTS.md` — condensed project guidance.
 
-- `https://keystoneui.io/llms.mdx/docs/components/<name>` — per-component MDX with `<ComponentPreview>` resolved inline as `tsx` blocks.
-- `https://keystoneui.io/llms.mdx/docs/blocks/<name>` — same for blocks.
-- `https://keystoneui.io/llms-components.txt` — every component in a single document.
+Component props live in the `## API Reference` table of each component's docs
+page. They are not in the registry JSON, so `view_component` alone will not
+give them to you — read the docs when you need a prop's type or default.
 
 ## Detailed References
 
-- [mcp.md](./mcp.md) — MCP setup, the 6 tools, and recommended workflow
+- [mcp.md](./mcp.md) — MCP setup, the 7 tools, and recommended workflow
 - [cli.md](./cli.md) — `npx shadcn@latest add`, npm package install, bundled scripts, direct MDX URLs
 - [customization.md](./customization.md) — CSS setup, light/dark tokens, color naming, radius scale, motion/layering, adding new tokens
+- [registry.md](./registry.md) — authoring registry items: the explicit `target` rule, style vs theme, block categories, cross-registry dependencies
 - [rules/styling.md](./rules/styling.md) — semantic colors, layout, hover gating, focus, transitions, z-scale
 - [rules/forms.md](./rules/forms.md) — `Form`, `FieldGroup`, `Field`, `InputGroup`, `ToggleGroup`, `FieldSet`, validation
 - [rules/composition.md](./rules/composition.md) — `render`, compound parts, group items, Modal title, Card composition, `data-slot`

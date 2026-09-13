@@ -102,7 +102,7 @@ Keystone UI defines a few extra tokens used by specific components.
 
 **Where they come from depends on install path:**
 
-- **shadcn registry** (`npx shadcn@latest add https://keystoneui.io/r/default.json`) — these tokens are baked into `packages/ui/registry/default.json` and added to your CSS automatically.
+- **shadcn registry** (`npx shadcn@latest add https://keystoneui.io/r/default.json`) — the style item carries these tokens, and the installer writes them into your global CSS automatically.
 - **npm package** (`pnpm add @keystoneui/react`) — you must add these tokens manually to your `:root` and `.dark` blocks alongside the shadcn-style tokens above. Skip them and popup components and form controls won't render correctly in dark mode.
 
 ## Radius scale

@@ -76,11 +76,11 @@ The MCP server exposes 7 tools that AI assistants can call:
 
 | Tool | Input | Description |
 |---|---|---|
-| `list_components` | `limit?`, `offset?`, `type?` | Paginated list of all components and blocks |
-| `search_components` | `query`, `limit?`, `type?` | Fuzzy search by name, description, or keywords |
+| `list_components` | `limit?`, `offset?`, `type?`, `category?` | Paginated list of all components, blocks, and named examples |
+| `search_components` | `query`, `limit?`, `type?`, `category?` | Fuzzy search by name, description, keywords, or category |
 | `view_component` | `names[]` | Full source code, dependencies, and metadata for up to 5 components |
 | `get_examples` | `name` | Live demo TSX files for a component or block (e.g. `button`, `tickets-01`) |
-| `get_add_command` | `names[]` | Generates `npx shadcn@latest add` commands with registry URLs |
+| `get_add_command` | `names[]` | Generates `npx shadcn@latest add` commands with registry URLs (up to 20 names) |
 | `get_theme_info` | -- | CSS setup, OKLCH color tokens, radius scale, dark mode |
 | `audit_checklist` | -- | Post-install verification checklist |
 
