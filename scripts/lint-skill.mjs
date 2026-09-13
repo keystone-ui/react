@@ -20,7 +20,10 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SKILL_DIR = join(ROOT, "skills/keystoneui-react");
-const AGENTS_DOCS = join(ROOT, "apps/docs/content/docs/(getting-started)/agents");
+const AGENTS_DOCS = join(
+  ROOT,
+  "apps/docs/content/docs/(getting-started)/agents"
+);
 
 const failures = [];
 const fail = (file, message) => failures.push({ file, message });
@@ -60,12 +63,16 @@ const REPO_ONLY = [
 const ALLOW_MARKER = "lint-skill: allow-repo-paths";
 
 for (const file of skillFiles) {
-  if (!/\.(md|ya?ml|json)$/.test(file)) continue;
+  if (!/\.(md|ya?ml|json)$/.test(file)) {
+    continue;
+  }
   const body = read(file);
   // A file may opt out when repo paths are its actual subject -- registry.md
   // documents authoring the registry, where those paths are the content. The
   // marker is explicit and greppable so the exception stays visible.
-  if (body.includes(ALLOW_MARKER)) continue;
+  if (body.includes(ALLOW_MARKER)) {
+    continue;
+  }
   const lines = body.split("\n");
   lines.forEach((line, i) => {
     for (const pattern of REPO_ONLY) {
@@ -89,9 +96,14 @@ for (const file of skillFiles) {
 // ---------------------------------------------------------------------------
 const toolsSrc = read("packages/keystoneui-mcp/src/tools.ts");
 
-const specsBlock = toolsSrc.match(/export const TOOL_SPECS = \{([\s\S]*?)\n\} as const;/);
+const specsBlock = toolsSrc.match(
+  /export const TOOL_SPECS = \{([\s\S]*?)\n\} as const;/
+);
 if (!specsBlock) {
-  fail("packages/keystoneui-mcp/src/tools.ts", "TOOL_SPECS map not found — the linter cannot verify tool drift");
+  fail(
+    "packages/keystoneui-mcp/src/tools.ts",
+    "TOOL_SPECS map not found — the linter cannot verify tool drift"
+  );
 }
 
 const toolNames = specsBlock
@@ -101,19 +113,28 @@ const toolNames = specsBlock
 /** Top-level keys of an exported `z.object({ ... })`, by brace depth. */
 function schemaKeys(schemaName) {
   const start = toolsSrc.indexOf(`export const ${schemaName} = z.object({`);
-  if (start === -1) return null;
+  if (start === -1) {
+    return null;
+  }
   let depth = 0;
   let i = toolsSrc.indexOf("{", start);
   const body = [];
   for (; i < toolsSrc.length; i++) {
     const ch = toolsSrc[i];
-    if (ch === "{") depth++;
-    else if (ch === "}") {
+    if (ch === "{") {
+      depth++;
+    } else if (ch === "}") {
       depth--;
-      if (depth === 0) break;
-    } else if (depth === 1) body.push(ch);
+      if (depth === 0) {
+        break;
+      }
+    } else if (depth === 1) {
+      body.push(ch);
+    }
   }
-  return [...body.join("").matchAll(/(?:^|\n)\s{2}([a-zA-Z_]+):/g)].map((m) => m[1]);
+  return [...body.join("").matchAll(/(?:^|\n)\s{2}([a-zA-Z_]+):/g)].map(
+    (m) => m[1]
+  );
 }
 
 const schemaFor = {
@@ -126,7 +147,12 @@ const schemaFor = {
 
 // Any prose that states a tool count must state the real one.
 const COUNT_WORDS = {
-  five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10,
+  five: 5,
+  six: 6,
+  seven: 7,
+  eight: 8,
+  nine: 9,
+  ten: 10,
 };
 const countSurfaces = [
   "skills/keystoneui-react/SKILL.md",
@@ -141,7 +167,9 @@ for (const file of countSurfaces) {
   const lines = read(file).split("\n");
   lines.forEach((line, i) => {
     const m = line.match(/\b(\d+|five|six|seven|eight|nine|ten)\s+tools\b/i);
-    if (!m) return;
+    if (!m) {
+      return;
+    }
     const raw = m[1].toLowerCase();
     const stated = COUNT_WORDS[raw] ?? Number(raw);
     if (stated !== toolNames.length) {
@@ -155,9 +183,13 @@ for (const file of countSurfaces) {
 
 // Every tool the MCP docs tabulate must exist, and its documented parameters
 // must match the registered schema. This is what the `category` omission was.
-const mcpServerDoc = read("apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx");
+const mcpServerDoc = read(
+  "apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx"
+);
 for (const name of toolNames) {
-  const row = mcpServerDoc.match(new RegExp(`^\\|\\s*\`${name}\`\\s*\\|([^|]*)\\|`, "m"));
+  const row = mcpServerDoc.match(
+    new RegExp(`^\\|\\s*\`${name}\`\\s*\\|([^|]*)\\|`, "m")
+  );
   if (!row) {
     fail(
       "apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx",
@@ -166,7 +198,9 @@ for (const name of toolNames) {
     continue;
   }
   const keys = schemaFor[name] ? schemaKeys(schemaFor[name]) : [];
-  if (!keys) continue;
+  if (!keys) {
+    continue;
+  }
   const documented = row[1];
   for (const key of keys) {
     if (!documented.includes(key)) {
@@ -186,33 +220,46 @@ for (const name of toolNames) {
 // repo-wide count assertion would false-positive across eight files.
 // ---------------------------------------------------------------------------
 const registryTs = read("packages/ui/src/_registry.ts");
-const actualComponents = [...registryTs.matchAll(/^\s{4}name: "([a-z0-9-]+)",$/gm)]
+const actualComponents = [
+  ...registryTs.matchAll(/^\s{4}name: "([a-z0-9-]+)",$/gm),
+]
   .map((m) => m[1])
   .sort();
 
 const skillMd = read("skills/keystoneui-react/SKILL.md");
 const listSection = skillMd.match(/## Component List\n([\s\S]*?)(?=\n## )/);
-if (!listSection) {
-  fail("skills/keystoneui-react/SKILL.md", "no `## Component List` section");
-} else {
+if (listSection) {
   const stated = listSection[1].match(/(\d+)\s+components/);
   if (!stated) {
-    fail("skills/keystoneui-react/SKILL.md", "`## Component List` states no count");
+    fail(
+      "skills/keystoneui-react/SKILL.md",
+      "`## Component List` states no count"
+    );
   } else if (Number(stated[1]) !== actualComponents.length) {
     fail(
       "skills/keystoneui-react/SKILL.md",
       `\`## Component List\` says ${stated[1]} components; _registry.ts has ${actualComponents.length}`
     );
   }
-  const listed = [...listSection[1].matchAll(/`([a-z0-9-]+)`/g)].map((m) => m[1]).sort();
+  const listed = [...listSection[1].matchAll(/`([a-z0-9-]+)`/g)]
+    .map((m) => m[1])
+    .sort();
   const missing = actualComponents.filter((c) => !listed.includes(c));
   const extra = listed.filter((c) => !actualComponents.includes(c));
   if (missing.length) {
-    fail("skills/keystoneui-react/SKILL.md", `\`## Component List\` omits: ${missing.join(", ")}`);
+    fail(
+      "skills/keystoneui-react/SKILL.md",
+      `\`## Component List\` omits: ${missing.join(", ")}`
+    );
   }
   if (extra.length) {
-    fail("skills/keystoneui-react/SKILL.md", `\`## Component List\` names non-existent: ${extra.join(", ")}`);
+    fail(
+      "skills/keystoneui-react/SKILL.md",
+      `\`## Component List\` names non-existent: ${extra.join(", ")}`
+    );
   }
+} else {
+  fail("skills/keystoneui-react/SKILL.md", "no `## Component List` section");
 }
 
 // ---------------------------------------------------------------------------
@@ -220,19 +267,31 @@ if (!listSection) {
 // ---------------------------------------------------------------------------
 const registryJson = JSON.parse(read("registry.json"));
 const actualBlocks = new Set(
-  registryJson.items.filter((i) => i.type === "registry:block").map((i) => i.name)
+  registryJson.items
+    .filter((i) => i.type === "registry:block")
+    .map((i) => i.name)
 );
 const blockSection = skillMd.match(/## Block Selection\n([\s\S]*?)(?=\n## )/);
 if (blockSection) {
-  const named = new Set([...blockSection[1].matchAll(/`([a-z]+(?:-[a-z]+)*-\d{2})`/g)].map((m) => m[1]));
+  const named = new Set(
+    [...blockSection[1].matchAll(/`([a-z]+(?:-[a-z]+)*-\d{2})`/g)].map(
+      (m) => m[1]
+    )
+  );
   for (const name of named) {
     if (!actualBlocks.has(name)) {
-      fail("skills/keystoneui-react/SKILL.md", `Block Selection names \`${name}\`, absent from registry.json`);
+      fail(
+        "skills/keystoneui-react/SKILL.md",
+        `Block Selection names \`${name}\`, absent from registry.json`
+      );
     }
   }
   for (const name of actualBlocks) {
     if (!named.has(name)) {
-      fail("skills/keystoneui-react/SKILL.md", `registry.json has block \`${name}\`, missing from Block Selection`);
+      fail(
+        "skills/keystoneui-react/SKILL.md",
+        `registry.json has block \`${name}\`, missing from Block Selection`
+      );
     }
   }
 }
@@ -257,9 +316,7 @@ for (const file of skillFiles.filter((f) => f.endsWith(".md"))) {
 // ---------------------------------------------------------------------------
 const skillsDoc = readFileSync(join(AGENTS_DOCS, "skills.mdx"), "utf-8");
 const tree = skillsDoc.match(/```\nskills\/keystoneui-react\/\n([\s\S]*?)```/);
-if (!tree) {
-  fail("apps/docs/.../agents/skills.mdx", "no skills/keystoneui-react/ tree block");
-} else {
+if (tree) {
   const documented = new Set(
     [...tree[1].matchAll(/[├└]──\s+([A-Za-z0-9._-]+)/g)].map((m) => m[1])
   );
@@ -270,10 +327,20 @@ if (!tree) {
     }
   }
   for (const entry of documented) {
-    if (!realTop.has(entry) && !skillFiles.some((f) => f.endsWith(`/${entry}`))) {
-      fail("apps/docs/.../agents/skills.mdx", `tree lists \`${entry}\`, which does not exist`);
+    if (
+      !(realTop.has(entry) || skillFiles.some((f) => f.endsWith(`/${entry}`)))
+    ) {
+      fail(
+        "apps/docs/.../agents/skills.mdx",
+        `tree lists \`${entry}\`, which does not exist`
+      );
     }
   }
+} else {
+  fail(
+    "apps/docs/.../agents/skills.mdx",
+    "no skills/keystoneui-react/ tree block"
+  );
 }
 
 // ---------------------------------------------------------------------------
