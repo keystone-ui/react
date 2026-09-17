@@ -537,10 +537,10 @@ export function DemoComponents() {
               </FieldGroup>
             </FieldSet>
             <Field orientation="horizontal">
-              <Button type="submit">Submit</Button>
               <Button type="button" variant="outline">
                 Cancel
               </Button>
+              <Button type="submit">Submit</Button>
             </Field>
           </FieldGroup>
         </form>

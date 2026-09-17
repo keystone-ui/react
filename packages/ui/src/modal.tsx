@@ -198,7 +198,8 @@ function ModalHeader({ className, ...props }: ModalHeaderProps) {
 // =============================================================================
 export interface ModalFooterProps extends ComponentProps<"div"> {
   /**
-   * Whether to show a "Close" outline button at the end of the footer.
+   * Whether to show a "Close" outline button at the start of the footer, ahead
+   * of the primary action.
    * @default false
    */
   showCloseButton?: boolean;
@@ -219,12 +220,12 @@ function ModalFooter({
       data-slot="modal-footer"
       {...props}
     >
-      {children}
       {showCloseButton && (
         <DialogPrimitive.Close render={<Button variant="outline" />}>
           Close
         </DialogPrimitive.Close>
       )}
+      {children}
     </div>
   );
 }

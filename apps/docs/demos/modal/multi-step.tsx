@@ -45,11 +45,11 @@ function StepNav() {
   const { goNext, goPrevious, isFirst, isLast } = useStepper();
   return (
     <ModalFooter>
-      <Button onClick={isLast ? undefined : goNext}>
-        {isLast ? "Get Started" : "Continue"}
-      </Button>
       <Button disabled={isFirst} onClick={goPrevious} variant="outline">
         Back
+      </Button>
+      <Button onClick={isLast ? undefined : goNext}>
+        {isLast ? "Get Started" : "Continue"}
       </Button>
     </ModalFooter>
   );

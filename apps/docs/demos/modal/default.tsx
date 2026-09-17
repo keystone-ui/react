@@ -27,8 +27,8 @@ export default function ModalDefault() {
           </ModalDescription>
         </ModalHeader>
         <ModalFooter>
-          <Button>Confirm</Button>
           <ModalClose render={<Button variant="outline" />}>Cancel</ModalClose>
+          <Button>Confirm</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

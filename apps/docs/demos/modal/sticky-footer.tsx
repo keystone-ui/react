@@ -37,8 +37,8 @@ export default function ModalStickyFooter() {
           ))}
         </div>
         <ModalFooter>
-          <Button>Accept</Button>
           <ModalClose render={<Button variant="outline" />}>Close</ModalClose>
+          <Button>Accept</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

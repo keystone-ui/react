@@ -699,6 +699,36 @@ now; everywhere else says `50+`, and the policy is written down.
 
 ---
 
+### Overlay footers now put the primary action last, nearest the right edge.
+
+`ModalFooter`, `DrawerFooter` and `AlertDialogFooter` right-align from `sm:` up,
+so the last child is the one furthest right — where the eye lands and the thumb
+rests. Most of the demos and stories had it the other way round, with `Confirm`
+left of `Cancel`, which also buried the primary action *under* the cancel on
+mobile, since these footers are `flex-col-reverse` below `sm:`. Every overlay
+footer across the demos, stories and docs now reads cancel-then-primary, which
+is what `rules/composition.md` already told consumers to write.
+
+The one source change: `ModalFooter`'s built-in `showCloseButton` rendered after
+`children`, which put the generated `Close` to the right of whatever primary
+action the consumer passed. It now renders ahead of them.
+
+```diff
+  <ModalFooter>
+-   <Button>Confirm</Button>
+    <ModalClose render={<Button variant="outline" />}>Cancel</ModalClose>
++   <Button>Confirm</Button>
+  </ModalFooter>
+```
+
+A form's own action row follows the same order. `<Field orientation="horizontal">`
+has no `justify-end`, so nothing is pushed to an edge there, but the library had
+`Submit` before `Cancel` in some form examples and after it in others. They now
+all read cancel-then-primary, which makes the primary the rightmost button in
+every action row in the library, overlay or not.
+
+---
+
 ### `NativeSelect`'s dropdown no longer renders white in dark mode.
 
 The closed control was always correct — it computes the same background and colour as `Input` in both themes. The open list was not. Chromium paints a `<select>` popup from the control's own background, and `--input-bg` is `transparent` in light and a 5% white wash in dark, so there was nothing opaque to paint the list against and Chromium fell back to its default white. In dark mode that put near-white option text on a white popup.

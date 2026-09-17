@@ -53,10 +53,10 @@ import {
       <ModalDescription>Description text.</ModalDescription>
     </ModalHeader>
     <ModalFooter>
-      <Button>Submit</Button>
       <ModalClose render={<Button variant="outline" />}>
         Cancel
       </ModalClose>
+      <Button>Submit</Button>
     </ModalFooter>
   </ModalContent>
 </Modal>
@@ -112,8 +112,8 @@ export const Default: Story = {
           </ModalDescription>
         </ModalHeader>
         <ModalFooter>
-          <Button>Confirm</Button>
           <ModalClose render={<Button variant="outline" />}>Cancel</ModalClose>
+          <Button>Confirm</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
@@ -476,10 +476,10 @@ function ControlledDemo() {
             </ModalDescription>
           </ModalHeader>
           <ModalFooter>
-            <Button onClick={() => setOpen(false)}>Done</Button>
             <ModalClose render={<Button variant="outline" />}>
               Cancel
             </ModalClose>
+            <Button onClick={() => setOpen(false)}>Done</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -573,6 +573,9 @@ function ConfirmationDemo() {
             </ModalDescription>
           </ModalHeader>
           <ModalFooter>
+            <ModalClose render={<Button variant="outline" />}>
+              Cancel
+            </ModalClose>
             <Button
               onClick={() => {
                 setConfirmed(true);
@@ -582,9 +585,6 @@ function ConfirmationDemo() {
             >
               Delete
             </Button>
-            <ModalClose render={<Button variant="outline" />}>
-              Cancel
-            </ModalClose>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -634,11 +634,11 @@ function MultiStepNav() {
   const { goNext, goPrevious, isFirst, isLast } = useStepper();
   return (
     <ModalFooter>
-      <Button onClick={isLast ? undefined : goNext}>
-        {isLast ? "Get Started" : "Continue"}
-      </Button>
       <Button disabled={isFirst} onClick={goPrevious} variant="outline">
         Back
+      </Button>
+      <Button onClick={isLast ? undefined : goNext}>
+        {isLast ? "Get Started" : "Continue"}
       </Button>
     </ModalFooter>
   );
@@ -916,8 +916,8 @@ export const LongContent: Story = {
         </div>
 
         <ModalFooter>
-          <ModalClose render={<Button />}>I Accept</ModalClose>
           <ModalClose render={<Button variant="outline" />}>Decline</ModalClose>
+          <ModalClose render={<Button />}>I Accept</ModalClose>
         </ModalFooter>
       </ModalContent>
     </Modal>

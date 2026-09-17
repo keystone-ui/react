@@ -10,6 +10,7 @@ How Keystone UI components are composed and how to extend them.
 - The `render` prop for custom triggers
 - Items always inside their group
 - Modal, Drawer, AlertDialog need a title
+- Footer actions: cancel first, primary last
 - Drawer bodies scroll — use `DrawerBody`
 - Use full Card composition
 - `Button` has no loading prop — compose with `Spinner`
@@ -179,6 +180,46 @@ For accessibility. Use `ModalTitle` / `DrawerTitle` / `AlertDialogTitle`. If the
   </ModalContent>
 </Modal>
 ```
+
+---
+
+## Footer actions: cancel first, primary last
+
+`ModalFooter`, `DrawerFooter` and `AlertDialogFooter` right-align on `sm:` and
+up, so the last child sits furthest right — where the eye lands and the thumb
+rests. Put the primary action there and the dismissive one before it.
+
+**Incorrect:**
+
+```tsx
+<ModalFooter>
+  <Button>Confirm</Button>
+  <ModalClose render={<Button variant="outline" />}>Cancel</ModalClose>
+</ModalFooter>
+```
+
+**Correct:**
+
+```tsx
+<ModalFooter>
+  <ModalClose render={<Button variant="outline" />}>Cancel</ModalClose>
+  <Button>Confirm</Button>
+</ModalFooter>
+```
+
+The same order applies to `AlertDialogCancel` before `AlertDialogAction`, to
+`DrawerClose` before the submit button, and to a wizard's Back before its Next.
+`ModalFooter`'s built-in `showCloseButton` renders ahead of `children` for the
+same reason.
+
+These footers are `flex-col-reverse` below `sm:`, so this DOM order also stacks
+the primary action on top on mobile — reverse it and the primary ends up buried
+under the cancel.
+
+A form's own action row follows the same order even though it is left-aligned —
+`<Field orientation="horizontal">` has no `justify-end`, but `Cancel` still
+comes before `Submit`, so the primary is the rightmost button everywhere in the
+library.
 
 ---
 

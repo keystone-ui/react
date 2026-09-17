@@ -65,10 +65,10 @@ export default function DrawerNested() {
             </div>
           </div>
           <DrawerFooter>
-            <Button>Submit</Button>
             <DrawerClose render={<Button variant="outline" />}>
               Cancel
             </DrawerClose>
+            <Button>Submit</Button>
           </DrawerFooter>
         </div>
       </DrawerContent>

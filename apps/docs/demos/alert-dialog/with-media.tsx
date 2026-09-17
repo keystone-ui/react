@@ -33,8 +33,8 @@ export default function AlertDialogWithMedia() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction>Save Changes</AlertDialogAction>
           <AlertDialogCancel>Discard</AlertDialogCancel>
+          <AlertDialogAction>Save Changes</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -36,10 +36,10 @@ export default function DrawerSides() {
               </DrawerDescription>
             </DrawerHeader>
             <DrawerFooter>
-              <Button>Submit</Button>
               <DrawerClose render={<Button variant="outline" />}>
                 Cancel
               </DrawerClose>
+              <Button>Submit</Button>
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
