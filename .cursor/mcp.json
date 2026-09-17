@@ -1,8 +1,1 @@
-{
-  "mcpServers": {
-    "keystoneui": {
-      "command": "node",
-      "args": ["packages/keystoneui-mcp/dist/index.js"]
-    }
-  }
-}
+../.mcp.json

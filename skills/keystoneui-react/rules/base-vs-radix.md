@@ -105,7 +105,7 @@ Not Radix-style `data-state="open"` / `data-state="closed"`.
 
 ## ToggleGroup / Tabs / RadioGroup `value` semantics
 
-Base UI's group primitives expose `value` (single selection) or `value` as an array (multi-selection on `ToggleGroup` with `type="multiple"`-like behavior). The exact API may differ from Radix; always check the component's documentation via `node scripts/get_component_docs.mjs <component>` before assuming.
+Base UI's group primitives expose `value` (single selection) or `value` as an array (multi-selection on `ToggleGroup` with `type="multiple"`-like behavior). The exact API may differ from Radix; always check the component's documentation via `keystoneui docs <component>` before assuming.
 
 ---
 
@@ -114,8 +114,8 @@ Base UI's group primitives expose `value` (single selection) or `value` as an ar
 If you're unsure whether a prop / pattern works on a Keystone UI component, fetch the source:
 
 ```bash
-node scripts/get_source.mjs select
-node scripts/get_component_docs.mjs select
+keystoneui view select
+keystoneui docs select
 ```
 
 Or via MCP: `view_component({ names: ["select"] })`. Don't guess based on Radix knowledge — the wrappers thin out Base UI but don't reshape it into Radix's API.

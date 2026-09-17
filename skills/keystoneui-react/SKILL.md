@@ -2,19 +2,56 @@
 name: keystoneui-react
 description: Manages Keystone UI components and projects — adding, searching, fixing, debugging, styling, and composing UI built on Tailwind CSS v4 + Base UI. Provides project context, component docs, and usage examples. Applies when working with Keystone UI, @keystoneui/react, components.json with @keystoneui/* registries, or any project with @keystoneui/react in its dependencies. Also triggers for "keystoneui add", "find a Keystone UI example", or "switch to Keystone UI".
 user-invocable: false
-allowed-tools: Bash(node packages/keystoneui-mcp/dist/index.js *), Bash(node scripts/*.mjs *), Bash(npx shadcn@latest add https://keystoneui.io/r/*)
+allowed-tools: Bash(npx -y @keystoneui/mcp@latest *), Bash(pnpm dlx @keystoneui/mcp@latest *), Bash(bunx --bun @keystoneui/mcp@latest *), Bash(npx shadcn@latest add https://keystoneui.io/r/*)
 metadata:
   author: keystoneui
-  version: "2.2.0"
+  version: "3.0.0"
 ---
 
 # Keystone UI
 
 A production-ready React component library built on **Tailwind CSS v4** and **Base UI** (`@base-ui/react`), with 50+ accessible components, OKLCH semantic tokens, and dark mode.
 
+## Current Project Context
+
+```json
+!`npx -y @keystoneui/mcp@latest info --json 2>/dev/null || echo '{}'`
+```
+
+**If the block above is empty, `{}`, or absent**, this host does not run shell
+injection (it is disabled for account-synced skills, by
+`disableSkillShellExecution`, and everywhere outside Claude Code). Get the same
+answer another way before writing imports: call the MCP tool
+`get_project_context`, or run `keystoneui info`. If neither is available, ask
+which install mode the project uses rather than guessing.
+
+### Key Fields
+
+The `project` object decides how you write code. Read it first.
+
+- **`installMode`** — the single most important field.
+  - `package` → import from subpaths: `@keystoneui/react/button`.
+  - `registry` → source is vendored; import from the project's own alias:
+    `@/components/ui/button` (use `aliases.ui`, never hardcode `@/`).
+  - `unknown` → ask. Do not guess.
+- **`aliases.ui`** — where vendored components live. Use it verbatim; a
+  monorepo may use `@workspace/ui/components`.
+- **`tailwindCssFile`** — the file that owns the theme tokens. **Edit that file;
+  never create a new one.** Tokens in a new file do not reach the components.
+- **`iconLibrary`** — `lucide` → `lucide-react`, `tabler` → `@tabler/icons-react`.
+  Never assume lucide.
+- **`isRSC`** — when `true`, any file using `useState`, `useEffect`, an event
+  handler, or a browser API needs `"use client"` at the top. Most Keystone
+  components are interactive, so in an RSC project this applies constantly.
+- **`packageManager`** — use it for non-Keystone installs (`pnpm add date-fns`).
+
 ## Core Principles
 
-1. **Subpath imports only** — `@keystoneui/react/button`, never `@keystoneui/react`. There is no barrel.
+1. **Imports follow `installMode`** — in `package` mode, subpaths only:
+   `@keystoneui/react/button`, never the bare `@keystoneui/react` (there is no
+   barrel). In `registry` mode the source is vendored, so import from
+   `aliases.ui` instead. Check the context block above before writing the first
+   import.
 2. **Base UI, not Radix** — primitives come from `@base-ui/react`. The slot pattern is `render`, not `asChild`. → [rules/base-vs-radix.md](./rules/base-vs-radix.md)
 3. **Semantic tokens** — `bg-primary`, `text-muted-foreground`, never raw colors.
 4. **Compose, don't reinvent** — use existing components and their compound parts before writing custom markup.
@@ -140,6 +177,49 @@ import { Modal, ModalTrigger, ModalContent, ModalTitle } from "@keystoneui/react
 </Button>
 ```
 
+## Updating vendored components
+
+Only applies when `installMode` is `registry`. Keystone's registry is
+shadcn-compatible, so the shadcn CLI's merge tooling works against it.
+
+```bash
+# 1. See every file that would change.
+npx shadcn@latest add https://keystoneui.io/r/button.json --dry-run
+
+# 2. Read the diff for each one.
+npx shadcn@latest add https://keystoneui.io/r/button.json --diff button.tsx
+```
+
+Then decide per file:
+
+- No local changes → safe to overwrite.
+- Local changes → read the file, read the diff, and apply the upstream change
+  by hand so the local edits survive.
+
+**Never pass `--overwrite` without the user explicitly approving it.** Vendored
+source is theirs; it is normal for it to have been edited, and `--overwrite`
+discards that silently.
+
+In `package` mode there is nothing to merge — bump `@keystoneui/react` and read
+the changelog.
+
+## Interoperating with shadcn
+
+Keystone and shadcn can coexist, and `admin-01` deliberately ships shadcn's
+sidebar because Keystone intentionally has no app shell. Two things bite:
+
+1. **Both registries install to the same path.** `components/ui/button.tsx` is
+   one file. Installing shadcn's `button` over Keystone's replaces it. Bare
+   `registryDependencies` resolve to *shadcn's* registry, so a block that says
+   `"button"` when it means Keystone's will quietly do this — see
+   [registry.md](./registry.md).
+2. **The control ladders differ.** Keystone's default control height is 40px;
+   shadcn's is 36px (`new-york-v4`) and 32px in its newer presets. A shadcn
+   component in a Keystone toolbar is visibly short, and nothing errors.
+
+Full guidance, including which tokens the shadcn sidebar reads:
+`https://keystoneui.io/docs/interop`.
+
 ## Component Selection
 
 | Need | Use |
@@ -185,35 +265,66 @@ Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or
 
 ## Workflow
 
-1. **Discover** — use MCP `search_components` / `list_components`, the `keystoneui search`/`keystoneui list` CLI verbs, or `node scripts/list_components.mjs`.
-2. **Find an example** — for "X with Y" patterns (e.g., "table with pagination", "card with image"), check `apps/docs/demos/<component>/<variant>.tsx` directly. These are real, working compositions authored by the team — examples include `apps/docs/demos/table/with-pagination.tsx`, `apps/docs/demos/card/with-image.tsx`. Via MCP, the equivalent is `get_examples({ name: "<component>" })` which returns all demos for the component as a bundle.
-3. **Find a block** — for full-page or multi-component patterns (e.g., "sign-in page", "tickets table with bulk actions"), check `apps/docs/demos/blocks/<name>.tsx` and the docs at `apps/docs/content/docs/blocks/<name>.mdx`. Existing categories: Sign in (`signin-01..04`), Signup (`signup-01..05`), User (`profile-dropdown-01`), CRM (`tickets-01`), Application (`dashboard-01`, `admin-01`), Betting (`betting-panel-01..04`). Via MCP, use `list_components({ type: "block" })` or `search_components({ query: "...", type: "block" })`. **Always try a block before composing a page from primitives.**
-4. **Inspect** — `view_component` (MCP), `node scripts/get_component_docs.mjs <name>`, or fetch `https://keystoneui.io/llms.mdx/docs/components/<name>` directly (the `/llms.mdx/...` route returns MDX with `<ComponentPreview>` tags resolved to inline TSX source — single round-trip). **Always read the docs before implementing complex components.**
-5. **Install** — `npx shadcn@latest add <url>` (vendored source) or `pnpm add @keystoneui/react` (npm dependency). See [cli.md](./cli.md).
-6. **Theme** — define semantic tokens in your CSS. See [customization.md](./customization.md).
-7. **Verify** — run MCP `audit_checklist` after first install to catch missing CSS imports or tokens.
+Every step below works from inside a consumer's project. Nothing here assumes
+the keystone monorepo.
 
-## Local Sources of Truth
+1. **Discover** — MCP `search_components` / `list_components`, or the CLI:
+   `keystoneui search "table pagination"`, `keystoneui list --type block`.
+   Filter with `--type ui|block|example` and `--category`.
+2. **Find an example** — for "X with Y" patterns ("table with pagination",
+   "card with image"), use `get_examples({ name: "table" })` over MCP or
+   `keystoneui examples table`. Both return every demo file for that name as a
+   bundle, which is where the real composition lives.
+3. **Find a block** — for a whole page or feature ("sign-in page", "tickets
+   table with bulk actions"), use `list_components({ type: "block" })` or
+   `keystoneui blocks`. **Always try a block before composing a page from
+   primitives** — see the Block Selection table above.
+4. **Inspect** — `view_component({ names: [...] })` for source, and
+   `keystoneui docs <name>` (or fetch
+   `https://keystoneui.io/llms.mdx/docs/components/<name>`) for the prose docs
+   and the API Reference table. The `/llms.mdx/...` route resolves
+   `<ComponentPreview>` tags to inline TSX, so one fetch gives you docs and
+   working code together. **Always read the docs before implementing a complex
+   component** — props are documented there and nowhere else.
+5. **Install** — `npx shadcn@latest add <url>` for vendored source, or
+   `pnpm add @keystoneui/react` for the npm dependency. `get_add_command`
+   builds the URLs. See [cli.md](./cli.md).
+6. **Theme** — define the semantic tokens in your global CSS. See
+   [customization.md](./customization.md).
+7. **Review what you added** — read every file the installer wrote before
+   moving on. Check for: a missing compound part (a `SelectItem` with no
+   `SelectContent`), imports that do not match this project's install mode,
+   icons from a library this project does not use, and any violation of the
+   Critical Rules above. Fix them now, not after they compound.
+8. **Verify the project** — `audit_checklist` (MCP) or `keystoneui audit` after
+   a first install, to catch a missing CSS import or undefined tokens.
 
-Before reaching for the docs site, these directories in the repo are authoritative:
+## Sources of Truth
 
-- **`apps/docs/demos/<component>/`** — per-component example variants (e.g., `table/with-pagination.tsx`, `card/with-image.tsx`). Resolved by `<ComponentPreview name="<component>-<variant>" />` tags in MDX.
-- **`apps/docs/demos/blocks/`** — full-page block compositions (`signin-01.tsx`, `tickets-01.tsx`, `profile-dropdown-01.tsx`, …).
-- **`apps/docs/content/docs/components/`** — per-component MDX docs.
-- **`apps/docs/content/docs/blocks/`** — per-block MDX docs with install commands and components-used cross-links.
-- **`packages/ui/src/`** — the component source. Read for prop semantics; consult demos for usage patterns.
+Reach for these in order. The first two need no network beyond the registry;
+the third is the fallback when a tool is unavailable.
 
-For LLM-friendly fetched content, use:
+- **MCP tools** — `view_component` (source), `get_examples` (real usage),
+  `get_theme_info` (tokens), `audit_checklist` (project wiring).
+- **The `keystoneui` CLI** — the same surface as verbs, for shells and non-MCP
+  hosts. See [cli.md](./cli.md).
+- **Fetched docs** — when neither is available:
+  - `https://keystoneui.io/llms.mdx/docs/components/<name>` — per-component MDX
+    with previews resolved to inline `tsx`.
+  - `https://keystoneui.io/llms.mdx/docs/blocks/<name>` — same for blocks.
+  - `https://keystoneui.io/llms-components.txt` — every component in one document.
+  - `https://keystoneui.io/AGENTS.md` — condensed project guidance.
 
-- `https://keystoneui.io/llms.mdx/docs/components/<name>` — per-component MDX with `<ComponentPreview>` resolved inline as `tsx` blocks.
-- `https://keystoneui.io/llms.mdx/docs/blocks/<name>` — same for blocks.
-- `https://keystoneui.io/llms-components.txt` — every component in a single document.
+Component props live in the `## API Reference` table of each component's docs
+page. They are not in the registry JSON, so `view_component` alone will not
+give them to you — read the docs when you need a prop's type or default.
 
 ## Detailed References
 
-- [mcp.md](./mcp.md) — MCP setup, the 6 tools, and recommended workflow
+- [mcp.md](./mcp.md) — MCP setup, the 9 tools, and recommended workflow
 - [cli.md](./cli.md) — `npx shadcn@latest add`, npm package install, bundled scripts, direct MDX URLs
 - [customization.md](./customization.md) — CSS setup, light/dark tokens, color naming, radius scale, motion/layering, adding new tokens
+- [registry.md](./registry.md) — authoring registry items: the explicit `target` rule, style vs theme, block categories, cross-registry dependencies
 - [rules/styling.md](./rules/styling.md) — semantic colors, layout, hover gating, focus, transitions, z-scale
 - [rules/forms.md](./rules/forms.md) — `Form`, `FieldGroup`, `Field`, `InputGroup`, `ToggleGroup`, `FieldSet`, validation
 - [rules/composition.md](./rules/composition.md) — `render`, compound parts, group items, Modal title, Card composition, `data-slot`

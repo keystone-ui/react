@@ -1,0 +1,5 @@
+{
+  "name": "keystoneui",
+  "version": "3.0.0",
+  "description": "Keystone UI component library skill — installing, theming, composing, and writing forms with @keystoneui/react (Tailwind v4 + Base UI)."
+}
