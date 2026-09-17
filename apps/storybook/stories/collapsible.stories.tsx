@@ -150,9 +150,12 @@ export const Basic: Story = {
         <Collapsible className="rounded-md data-open:bg-muted">
           <CollapsibleTrigger
             render={
-              <Button className="w-full" variant="ghost">
+              <Button
+                className="group w-full justify-start px-2.5"
+                variant="ghost"
+              >
                 Product details
-                <ChevronDownIcon className="ml-auto group-data-panel-open/button:rotate-180" />
+                <ChevronDownIcon className="ml-auto transition-transform group-data-panel-open:rotate-180" />
               </Button>
             }
           />
