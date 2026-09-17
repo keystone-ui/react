@@ -1,7 +1,7 @@
 ---
 date: "2026-09-12"
 description: "What's coming in the next release"
-excerpt: "40 changes queued for the next release."
+excerpt: "44 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -745,6 +745,19 @@ The play function's queries use regex matchers rather than string ones on
 purpose: `lint-stories-vs-demos.mjs` scans a story file for name-colon-string
 pairs to find display-name overrides, and a string matcher inside a query reads
 to it as a story variant that has no matching demo.
+
+---
+
+### The `Popover` stories render centered, so the default alignment is legible.
+
+`PopoverContent` defaults to `align="center"`, and the stories render in the
+canvas's top-left corner. A 288px popover centered on a trigger 16px from the
+left edge does not fit, so Base UI's collision avoidance clamped it against the
+viewport — correct behaviour that reads as an alignment bug, and made the
+Default story look broken next to Basic, which passes `align="start"` and
+happens to fit. The Popover meta now sets `layout: "centered"`; measured, the
+popover's centre line and the trigger's now coincide at 640px in a 1280px
+canvas. No component change — `Popover` was positioning correctly all along.
 
 ---
 
