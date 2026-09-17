@@ -461,26 +461,80 @@ export const File: Story = {
 };
 
 // Increment/Decrement
-export const IncrementDecrement: Story = {
-  name: "Increment/Decrement",
-  render: () => (
+const STEPPER_MIN = 0;
+const STEPPER_MAX = 99;
+
+function NumberStepper() {
+  const [value, setValue] = useState(1);
+
+  const clamp = (next: number) =>
+    Math.min(STEPPER_MAX, Math.max(STEPPER_MIN, next));
+
+  return (
     <ButtonGroup>
-      <Button size="icon" variant="outline">
+      <Button
+        aria-label="Decrease"
+        disabled={value <= STEPPER_MIN}
+        onClick={() => setValue((v) => clamp(v - 1))}
+        size="icon"
+        variant="outline"
+      >
         <MinusIcon className="size-4" />
       </Button>
-      <Input className="w-16 text-center" defaultValue="1" />
-      <Button size="icon" variant="outline">
+      <Input
+        aria-label="Quantity"
+        className="w-16 text-center"
+        inputMode="numeric"
+        onChange={(e) => {
+          const next = Number.parseInt(e.target.value, 10);
+          setValue(Number.isNaN(next) ? STEPPER_MIN : clamp(next));
+        }}
+        value={String(value)}
+      />
+      <Button
+        aria-label="Increase"
+        disabled={value >= STEPPER_MAX}
+        onClick={() => setValue((v) => clamp(v + 1))}
+        size="icon"
+        variant="outline"
+      >
         <PlusIcon className="size-4" />
       </Button>
     </ButtonGroup>
-  ),
+  );
+}
+
+export const IncrementDecrement: Story = {
+  name: "Increment/Decrement",
+  render: () => <NumberStepper />,
   parameters: {
     docs: {
       description: {
         story:
-          "Use `ButtonGroup` to create a number stepper with increment/decrement buttons.",
+          "Use `ButtonGroup` to create a number stepper with increment/decrement buttons. The buttons own the value and clamp it to the allowed range, disabling themselves at each end.",
       },
     },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // Regex matchers, not string literals: lint-stories-vs-demos.mjs scans each
+    // story file for name-colon-string pairs and would read a string matcher
+    // here as a story-variant name.
+    const input = canvas.getByRole("textbox", { name: /^quantity$/i });
+    const increase = canvas.getByRole("button", { name: /^increase$/i });
+    const decrease = canvas.getByRole("button", { name: /^decrease$/i });
+
+    await expect(input).toHaveValue("1");
+
+    await userEvent.click(increase);
+    await expect(input).toHaveValue("2");
+
+    await userEvent.click(decrease);
+    await userEvent.click(decrease);
+    await expect(input).toHaveValue("0");
+
+    // Clamped at the floor: the button disables rather than going negative.
+    await expect(decrease).toBeDisabled();
   },
 };
 

@@ -729,6 +729,25 @@ every action row in the library, overlay or not.
 
 ---
 
+### The Increment/Decrement stepper story actually steps now, and a test keeps it that way.
+
+`Input`'s "Increment/Decrement" story rendered a `ButtonGroup` with `+` and `-`
+buttons that had no `onClick` at all — clicking either did nothing, and the
+`defaultValue="1"` input was the only editable part. It read as a broken
+component rather than the static mock it was.
+
+The buttons now own the value, clamp it to 0–99 and disable themselves at each
+end, and both buttons carry an `aria-label`. A `play` function steps up, steps
+down past the floor and asserts the disabled state — it runs in CI as part of
+the Storybook Vitest project, so the interaction cannot silently rot again.
+
+The play function's queries use regex matchers rather than string ones on
+purpose: `lint-stories-vs-demos.mjs` scans a story file for name-colon-string
+pairs to find display-name overrides, and a string matcher inside a query reads
+to it as a story variant that has no matching demo.
+
+---
+
 ### `NativeSelect`'s dropdown no longer renders white in dark mode.
 
 The closed control was always correct — it computes the same background and colour as `Input` in both themes. The open list was not. Chromium paints a `<select>` popup from the control's own background, and `--input-bg` is `transparent` in light and a 5% white wash in dark, so there was nothing opaque to paint the list against and Chromium fell back to its default white. In dark mode that put near-white option text on a white popup.
