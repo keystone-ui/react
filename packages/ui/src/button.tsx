@@ -121,14 +121,21 @@ const Button = ({
       type={type}
       {...props}
     >
-      <span
-        className={cn(
-          "inline-flex items-center justify-center gap-2",
-          isLoading ? "invisible" : "visible"
-        )}
-      >
-        {children}
-      </span>
+      {/*
+        Children are direct flex items of the button so that a consumer's
+        layout overrides land on them — `justify-start` on the button, `ml-auto`
+        on a trailing chevron, `flex-1` on a label. A permanent wrapper span is
+        shrink-to-fit and self-centering, which silently swallowed all three.
+        The wrapper exists only while loading, where it is what the spinner is
+        laid over; it is shrink-to-fit there too, so the button keeps its width.
+      */}
+      {isLoading ? (
+        <span className="invisible inline-flex items-center justify-center gap-2">
+          {children}
+        </span>
+      ) : (
+        children
+      )}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center">
           <LoaderCircleIcon

@@ -82,10 +82,10 @@ import {
       <DrawerDescription>Description text.</DrawerDescription>
     </DrawerHeader>
     <DrawerFooter>
-      <Button>Submit</Button>
       <DrawerClose render={<Button variant="outline" />}>
         Cancel
       </DrawerClose>
+      <Button>Submit</Button>
     </DrawerFooter>
   </DrawerContent>
 </Drawer>
@@ -140,10 +140,10 @@ export const Default: Story = {
             </DrawerDescription>
           </DrawerHeader>
           <DrawerFooter>
-            <Button>Submit</Button>
             <DrawerClose render={<Button variant="outline" />}>
               Cancel
             </DrawerClose>
+            <Button>Submit</Button>
           </DrawerFooter>
         </div>
       </DrawerContent>
@@ -192,10 +192,10 @@ export const ScrollableContent: Story = {
           ))}
         </DrawerBody>
         <DrawerFooter>
-          <Button>Accept</Button>
           <DrawerClose render={<Button variant="outline" />}>
             Decline
           </DrawerClose>
+          <Button>Accept</Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
@@ -247,10 +247,10 @@ export const Sides: Story = {
               ))}
             </DrawerBody>
             <DrawerFooter>
-              <Button>Submit</Button>
               <DrawerClose render={<Button variant="outline" />}>
                 Cancel
               </DrawerClose>
+              <Button>Submit</Button>
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
@@ -321,10 +321,10 @@ function GoalDrawerDemo() {
             </div>
           </div>
           <DrawerFooter>
-            <Button>Submit</Button>
             <DrawerClose render={<Button variant="outline" />}>
               Cancel
             </DrawerClose>
+            <Button>Submit</Button>
           </DrawerFooter>
         </div>
       </DrawerContent>

@@ -223,7 +223,7 @@ function CalendarDayButton({
         "data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground",
         "data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground",
         "dark:hover:text-foreground",
-        "relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 p-0 font-normal text-sm leading-none [&>span]:flex-col [&>span]:gap-0.5",
+        "relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-0.5 border-0 p-0 font-normal text-sm leading-none",
         "data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius)",
         "data-[range-middle=true]:rounded-none",
         "data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius)",

@@ -38,10 +38,10 @@ export default function DrawerScrollable() {
           ))}
         </DrawerBody>
         <DrawerFooter>
-          <Button>Accept</Button>
           <DrawerClose render={<Button variant="outline" />}>
             Decline
           </DrawerClose>
+          <Button>Accept</Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

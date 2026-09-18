@@ -114,7 +114,7 @@ export const Default: Story = {
         <PopoverTrigger
           render={
             <Button
-              className="w-[212px] font-normal data-[empty=true]:text-muted-foreground [&>span]:w-full [&>span]:justify-between"
+              className="w-[212px] justify-between font-normal data-[empty=true]:text-muted-foreground"
               data-empty={!date}
               variant="outline"
             >
@@ -399,7 +399,7 @@ export const WithTime: Story = {
             <PopoverTrigger
               render={
                 <Button
-                  className="w-32 font-normal [&>span]:w-full [&>span]:justify-between"
+                  className="w-32 justify-between font-normal"
                   id="date-picker-time"
                   variant="outline"
                 >

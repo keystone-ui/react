@@ -32,6 +32,9 @@ export default function ModalConfirmation() {
             </ModalDescription>
           </ModalHeader>
           <ModalFooter>
+            <ModalClose render={<Button variant="outline" />}>
+              Cancel
+            </ModalClose>
             <Button
               onClick={() => {
                 setConfirmed(true);
@@ -41,9 +44,6 @@ export default function ModalConfirmation() {
             >
               Delete
             </Button>
-            <ModalClose render={<Button variant="outline" />}>
-              Cancel
-            </ModalClose>
           </ModalFooter>
         </ModalContent>
       </Modal>

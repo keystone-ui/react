@@ -20,6 +20,11 @@ const meta = {
   title: "Components/Popover",
   component: Popover,
   parameters: {
+    // A popover defaults to `align="center"`, which needs room on both sides of
+    // the trigger to render honestly. In the default top-left canvas there is
+    // none, so Base UI's collision avoidance clamps it to the viewport edge and
+    // the default reads as a misalignment bug.
+    layout: "centered",
     docs: {
       description: {
         component: `

@@ -28,10 +28,10 @@ export default function AlertDialogDestructive() {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction variant="destructive">
             Delete Account
           </AlertDialogAction>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

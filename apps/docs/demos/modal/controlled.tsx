@@ -31,10 +31,10 @@ export default function ModalControlled() {
             </ModalDescription>
           </ModalHeader>
           <ModalFooter>
-            <Button onClick={() => setOpen(false)}>Done</Button>
             <ModalClose render={<Button variant="outline" />}>
               Cancel
             </ModalClose>
+            <Button onClick={() => setOpen(false)}>Done</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

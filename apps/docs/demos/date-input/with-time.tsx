@@ -25,7 +25,7 @@ export default function DatePickerWithTime() {
           <PopoverTrigger
             render={
               <Button
-                className="w-36 font-normal [&>span]:w-full [&>span]:justify-between"
+                className="w-36 justify-between font-normal"
                 id="date-time-picker"
                 variant="outline"
               >

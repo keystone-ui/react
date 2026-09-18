@@ -69,8 +69,8 @@ export default function ModalLongContent() {
           ))}
         </div>
         <ModalFooter>
-          <ModalClose render={<Button />}>I Accept</ModalClose>
           <ModalClose render={<Button variant="outline" />}>Decline</ModalClose>
+          <ModalClose render={<Button />}>I Accept</ModalClose>
         </ModalFooter>
       </ModalContent>
     </Modal>

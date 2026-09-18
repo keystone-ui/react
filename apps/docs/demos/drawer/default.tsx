@@ -30,10 +30,10 @@ export default function DrawerDefault() {
           supplementary content.
         </div>
         <DrawerFooter>
-          <Button>Submit</Button>
           <DrawerClose render={<Button variant="outline" />}>
             Cancel
           </DrawerClose>
+          <Button>Submit</Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

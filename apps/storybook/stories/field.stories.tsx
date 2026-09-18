@@ -276,10 +276,10 @@ export const ResponsiveLayout: Story = {
               <Input id="name" placeholder="Evil Rabbit" required />
             </Field>
             <Field orientation="responsive">
-              <Button type="submit">Submit</Button>
               <Button type="button" variant="outline">
                 Cancel
               </Button>
+              <Button type="submit">Submit</Button>
             </Field>
           </FieldGroup>
         </FieldSet>
@@ -576,10 +576,10 @@ export const PaymentMethod: Story = {
             </FieldGroup>
           </FieldSet>
           <Field orientation="horizontal">
-            <Button type="submit">Submit</Button>
             <Button type="button" variant="outline">
               Cancel
             </Button>
+            <Button type="submit">Submit</Button>
           </Field>
         </FieldGroup>
       </form>

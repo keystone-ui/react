@@ -1,7 +1,7 @@
 ---
 date: "2026-09-12"
 description: "What's coming in the next release"
-excerpt: "40 changes queued for the next release."
+excerpt: "44 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -99,6 +99,31 @@ One thing it records rather than fixes: `--destructive-foreground` on
 tokens and is the label colour on every destructive Button in every theme, so
 re-picking it deserves its own decision. The test pins it so it cannot get
 worse.
+
+---
+
+### `Button` children are direct flex items again, so layout classes on a button reach them.
+
+`Button` wrapped `children` in a permanent `<span class="inline-flex items-center justify-center gap-2">`. That span is shrink-to-fit and self-centering, and it sat between the button's flex container and everything a consumer passed in — so every layout class aimed at the children landed on a box that had no free space to distribute. Three common patterns were silently inert:
+
+```tsx
+<Button className="w-full justify-start">…</Button>          {/* stayed centered */}
+<Button className="w-full">Label<Chevron className="ml-auto" /></Button>  {/* chevron stayed next to the label */}
+<Button><span className="flex-1">Label</span><Kbd /></Button> {/* no growth */}
+```
+
+The wrapper now exists only while `isLoading`, where it is the thing the spinner is laid over. It is shrink-to-fit there too, so a button does not change width when it starts loading — measured before and after on all three of the Loading story's buttons.
+
+Nothing that was centered before moves: with the children back in the button's own `inline-flex items-center justify-center gap-2`, a default button lays out identically. What changes is that `justify-start`, `ml-auto`, `flex-1` and friends now do what they say, which corrected four places in the library's own demos that had been quietly centering: the collapsible file tree, the `Empty` list actions, the natural-language date input, and the Date Picker trigger.
+
+**If you targeted the wrapper, retarget the button.** A `[&>span]:w-full [&>span]:justify-between` workaround now hits the first real `<span>` child instead:
+
+```diff
+- <Button className="w-full [&>span]:w-full [&>span]:justify-between">
++ <Button className="w-full justify-between">
+```
+
+The same applies to any direct-child selector on a button — `[&>svg]`, `has-[>svg:only-child]`, `*:` — which previously could not match past the wrapper and now can. `InputGroupButton`'s icon-only sizing (`has-[>svg:only-child]:size-8` and its `sm` 14px icon rule) was written for this and had never fired; icon-only buttons inside an `InputGroup` are now square with no padding, as the code always said they should be.
 
 ---
 
@@ -671,6 +696,68 @@ not obvious.
 Also reconciles the component count, which was hardcoded in ~12 places with
 three different values. Only the two that state an exact number are maintained
 now; everywhere else says `50+`, and the policy is written down.
+
+---
+
+### Overlay footers now put the primary action last, nearest the right edge.
+
+`ModalFooter`, `DrawerFooter` and `AlertDialogFooter` right-align from `sm:` up,
+so the last child is the one furthest right — where the eye lands and the thumb
+rests. Most of the demos and stories had it the other way round, with `Confirm`
+left of `Cancel`, which also buried the primary action *under* the cancel on
+mobile, since these footers are `flex-col-reverse` below `sm:`. Every overlay
+footer across the demos, stories and docs now reads cancel-then-primary, which
+is what `rules/composition.md` already told consumers to write.
+
+The one source change: `ModalFooter`'s built-in `showCloseButton` rendered after
+`children`, which put the generated `Close` to the right of whatever primary
+action the consumer passed. It now renders ahead of them.
+
+```diff
+  <ModalFooter>
+-   <Button>Confirm</Button>
+    <ModalClose render={<Button variant="outline" />}>Cancel</ModalClose>
++   <Button>Confirm</Button>
+  </ModalFooter>
+```
+
+A form's own action row follows the same order. `<Field orientation="horizontal">`
+has no `justify-end`, so nothing is pushed to an edge there, but the library had
+`Submit` before `Cancel` in some form examples and after it in others. They now
+all read cancel-then-primary, which makes the primary the rightmost button in
+every action row in the library, overlay or not.
+
+---
+
+### The Increment/Decrement stepper story actually steps now, and a test keeps it that way.
+
+`Input`'s "Increment/Decrement" story rendered a `ButtonGroup` with `+` and `-`
+buttons that had no `onClick` at all — clicking either did nothing, and the
+`defaultValue="1"` input was the only editable part. It read as a broken
+component rather than the static mock it was.
+
+The buttons now own the value, clamp it to 0–99 and disable themselves at each
+end, and both buttons carry an `aria-label`. A `play` function steps up, steps
+down past the floor and asserts the disabled state — it runs in CI as part of
+the Storybook Vitest project, so the interaction cannot silently rot again.
+
+The play function's queries use regex matchers rather than string ones on
+purpose: `lint-stories-vs-demos.mjs` scans a story file for name-colon-string
+pairs to find display-name overrides, and a string matcher inside a query reads
+to it as a story variant that has no matching demo.
+
+---
+
+### The `Popover` stories render centered, so the default alignment is legible.
+
+`PopoverContent` defaults to `align="center"`, and the stories render in the
+canvas's top-left corner. A 288px popover centered on a trigger 16px from the
+left edge does not fit, so Base UI's collision avoidance clamped it against the
+viewport — correct behaviour that reads as an alignment bug, and made the
+Default story look broken next to Basic, which passes `align="start"` and
+happens to fit. The Popover meta now sets `layout: "centered"`; measured, the
+popover's centre line and the trigger's now coincide at 640px in a 1280px
+canvas. No component change — `Popover` was positioning correctly all along.
 
 ---
 
