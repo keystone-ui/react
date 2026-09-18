@@ -142,6 +142,39 @@ test.describe("the filter drawer is the filter surface", () => {
     }
   });
 
+  /**
+   * The side panel is already capped by the Drawer (`max-w-md` once `floating`
+   * applies), so the bottom sheet's own `max-w-sm` centring column must not be
+   * carried over into it — that carved 32px of dead margin out of each side, on
+   * top of the 16px `DrawerFooter` legitimately owns. And `DrawerFooter` only
+   * pins to the foot when it is a sibling of the scrolling body: nested inside
+   * `StepperContent`, which animates to its measured step height, it floated
+   * directly under the last row with the rest of the panel empty below it.
+   */
+  test("the side panel's column spans the panel, and Apply sits at its foot", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ height: 900, width: 1280 });
+    await openUsers(page);
+    await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
+
+    const panel = page.locator('[data-slot="drawer-content"]');
+    const panelBox = await panel.boundingBox();
+    const applyBox = await panel
+      .getByRole("button", { exact: true, name: "Apply" })
+      .boundingBox();
+    if (!(panelBox && applyBox)) {
+      throw new Error("drawer or Apply button not laid out");
+    }
+
+    // 16px is DrawerFooter's own p-4. Nothing else may inset the column.
+    expect(applyBox.x - panelBox.x).toBeLessThanOrEqual(20);
+    // …and the footer pins to the foot of a full-height panel.
+    expect(
+      panelBox.y + panelBox.height - (applyBox.y + applyBox.height)
+    ).toBeLessThan(24);
+  });
+
   test("drills into a filter and applies it", async ({ page }) => {
     await openUsers(page);
     const total = await rowCount(page);
