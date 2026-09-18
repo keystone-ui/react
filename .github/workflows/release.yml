@@ -23,6 +23,23 @@ jobs:
     name: Release
     if: github.repository_owner == 'keystone-ui'
     runs-on: ubuntu-latest
+    # Git hooks have no business running here. `.husky/pre-push` is
+    # `pnpm check && pnpm build` -- a full monorepo build -- and this job pushes
+    # more than once (a tag per published package, plus the version branch), so
+    # the hook fires repeatedly and the builds race:
+    #
+    #   ⨯ Another next build process is already running.
+    #
+    # That is what broke beta.6 after a successful publish: the first tag push
+    # lost the race and the step failed, so @keystoneui/mcp got no git tag and
+    # no GitHub release, and `published` never came back true -- skipping the
+    # dist-tag sync. The packages were on npm; everything after it was not.
+    #
+    # The hook is a useful local guard and stays. CI already runs check, build
+    # and tests as explicit steps above the publish, so re-running them from
+    # inside a git push adds nothing but a race.
+    env:
+      HUSKY: 0
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
