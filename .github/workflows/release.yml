@@ -41,12 +41,23 @@ jobs:
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
 
-      # Trusted Publishing needs npm >= 11.5.1 for the OIDC exchange. Node 22
-      # ships npm 10.x, which would fall back to looking for a token that no
-      # longer exists and fail the publish.
+      # Trusted Publishing needs npm >= 11.5.1 for the OIDC exchange, and Node
+      # 22 ships npm 10.x -- which would skip the exchange and fail looking for
+      # a token that no longer exists.
+      #
+      # Pinned to 11, NOT latest. `changeset publish` shells out to
+      # `pnpm publish --no-git-checks` (getPublishPlan.mjs), and pnpm 9 forwards
+      # that flag straight through to npm, which does not have it. npm <= 11
+      # ignores unknown flags; npm 12 made them fatal (EUNKNOWNCONFIG), so
+      # `npm@latest` breaks every publish before it reaches the registry.
+      # Verified locally against this package: npm 11 packs, npm 12 errors.
+      #
+      # The other way out is pnpm 12, which consumes the flag itself, but that
+      # means moving `packageManager` off 9.15.0 for every developer and CI job
+      # at once. Worth doing on its own, not as a rider on a stuck release.
       - name: Upgrade npm for Trusted Publishing
         run: |
-          npm install -g npm@latest
+          npm install -g npm@11
           npm --version
 
       - name: Install Dependencies
