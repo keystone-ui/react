@@ -23,6 +23,23 @@ jobs:
     name: Release
     if: github.repository_owner == 'keystone-ui'
     runs-on: ubuntu-latest
+    # Git hooks have no business running here. `.husky/pre-push` is
+    # `pnpm check && pnpm build` -- a full monorepo build -- and this job pushes
+    # more than once (a tag per published package, plus the version branch), so
+    # the hook fires repeatedly and the builds race:
+    #
+    #   ⨯ Another next build process is already running.
+    #
+    # That is what broke beta.6 after a successful publish: the first tag push
+    # lost the race and the step failed, so @keystoneui/mcp got no git tag and
+    # no GitHub release, and `published` never came back true -- skipping the
+    # dist-tag sync. The packages were on npm; everything after it was not.
+    #
+    # The hook is a useful local guard and stays. CI already runs check, build
+    # and tests as explicit steps above the publish, so re-running them from
+    # inside a git push adds nothing but a race.
+    env:
+      HUSKY: 0
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -158,15 +175,23 @@ jobs:
               return;
             }
 
-            const changelogPath = path.join(
-              process.env.GITHUB_WORKSPACE,
-              "packages/ui/CHANGELOG.md"
-            );
-            const changelog = fs.existsSync(changelogPath)
-              ? fs.readFileSync(changelogPath, "utf8")
-              : "";
+            // Resolve each package's OWN changelog. This used to hardcode
+            // packages/ui/CHANGELOG.md for every package, so @keystoneui/mcp
+            // could only ever get the generic fallback body -- its version is
+            // never a heading in @keystoneui/react's changelog.
+            const packagesDir = path.join(process.env.GITHUB_WORKSPACE, "packages");
+            const changelogByName = new Map();
+            for (const dir of fs.readdirSync(packagesDir)) {
+              const manifest = path.join(packagesDir, dir, "package.json");
+              if (!fs.existsSync(manifest)) continue;
+              const { name } = JSON.parse(fs.readFileSync(manifest, "utf8"));
+              const changelog = path.join(packagesDir, dir, "CHANGELOG.md");
+              if (name && fs.existsSync(changelog)) {
+                changelogByName.set(name, fs.readFileSync(changelog, "utf8"));
+              }
+            }
 
-            function extractSection(version) {
+            function extractSection(changelog, version) {
               const lines = changelog.split("\n");
               const start = lines.findIndex(
                 (line) => line.trim() === `## ${version}`
@@ -184,10 +209,16 @@ jobs:
 
             for (const pkg of packages) {
               const tag = `${pkg.name}@${pkg.version}`;
-              const section = extractSection(pkg.version);
+              const changelog = changelogByName.get(pkg.name);
+              const section = changelog
+                ? extractSection(changelog, pkg.version)
+                : null;
+              if (!section) {
+                core.warning(`No changelog section for ${tag}; using fallback body.`);
+              }
               const body =
                 section ||
-                `${tag} published via Changesets. See [CHANGELOG.md](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/packages/ui/CHANGELOG.md).`;
+                `${tag} published via Changesets. See the package's CHANGELOG.md in [${context.repo.owner}/${context.repo.repo}](https://github.com/${context.repo.owner}/${context.repo.repo}).`;
 
               try {
                 await github.rest.repos.createRelease({
