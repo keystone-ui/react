@@ -79,6 +79,38 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      # `changeset publish` chooses a dist-tag per package, and chooses
+      # differently for our two. From its own logic:
+      #
+      #   if (preState !== undefined && pkgInfo.publishedState !== "only-pre")
+      #     return preState.tag;   // "beta"
+      #   return "latest";
+      #
+      # @keystoneui/react has a non-prerelease 0.0.0 on npm, so it is not
+      # "only-pre" and lands on `beta` -- leaving `latest` pinned to that empty
+      # 0.0.0 stub, so a bare `npm i @keystoneui/react` installs nothing.
+      # @keystoneui/mcp has only ever published prereleases, so it *is*
+      # "only-pre", falls through, and lands on `latest` -- leaving its `beta`
+      # tag behind on the previous version. One release, two different holes.
+      #
+      # While the 1.0 beta train is the only thing we ship, both packages
+      # should answer to both tags. Once `changeset pre exit` lands and a real
+      # 1.0.0 publishes to `latest` on its own, this step keeps `beta` level
+      # with it rather than letting it rot at the last prerelease.
+      - name: Sync npm dist-tags
+        if: steps.changesets.outputs.published == 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
+        run: |
+          set -euo pipefail
+          echo "$PACKAGES" | jq -r '.[] | "\(.name)@\(.version)"' | while read -r spec; do
+            for tag in latest beta; do
+              echo "npm dist-tag add $spec $tag"
+              npm dist-tag add "$spec" "$tag"
+            done
+          done
+
       - name: Create GitHub releases
         if: steps.changesets.outputs.published == 'true'
         uses: actions/github-script@v7
