@@ -4,6 +4,7 @@ import { Badge } from "@keystoneui/react/badge";
 import { Button } from "@keystoneui/react/button";
 import {
   Drawer,
+  DrawerBody,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
@@ -17,6 +18,7 @@ import {
   StepperStep,
   useStepper,
 } from "@keystoneui/react/stepper";
+import { cn } from "@keystoneui/react/utils";
 import { Funnel as FilterIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -129,7 +131,19 @@ export function AdminFiltersDrawer({
         {activeCount > 0 && <Badge variant="secondary">{activeCount}</Badge>}
       </DrawerTrigger>
       <DrawerContent variant={placement === "right" ? "floating" : "flush"}>
-        <div className="mx-auto w-full max-w-sm">
+        {/* The centring column is a bottom-sheet idiom: that sheet is
+            full-width, so its content needs a readable cap. The side panel is
+            already capped — `sm:max-w-sm`, and `max-w-md` once `floating`
+            applies at `md+` — so carrying the same `max-w-sm` into it only
+            carves 32px of dead margin out of each side, on top of the 16px the
+            Drawer parts already own. `px-0` because the drilldown rows bring
+            their own `px-4`. */}
+        <DrawerBody
+          className={cn(
+            "px-0",
+            placement === "down" && "mx-auto w-full max-w-sm"
+          )}
+        >
           <Stepper onValueChange={setStep} value={step}>
             <StepperContent>
               <StepperStep>
@@ -137,20 +151,6 @@ export function AdminFiltersDrawer({
                   <DrawerTitle className="text-center">Filters</DrawerTitle>
                 </DrawerHeader>
                 <UserFilterMenu filters={filters} sort={sort} />
-                <DrawerFooter>
-                  {hasActiveFilters(filters) && (
-                    <Button
-                      className="w-full"
-                      onClick={onClear}
-                      variant="ghost"
-                    >
-                      Clear all
-                    </Button>
-                  )}
-                  <Button className="w-full" onClick={() => setOpen(false)}>
-                    Apply
-                  </Button>
-                </DrawerFooter>
               </StepperStep>
 
               <StepperStep>
@@ -297,7 +297,28 @@ export function AdminFiltersDrawer({
               </StepperStep>
             </StepperContent>
           </Stepper>
-        </div>
+        </DrawerBody>
+
+        {/* Outside the Stepper on purpose: `StepperContent` animates to its
+            measured step height and never stretches, so a footer nested inside
+            it cannot reach the foot of a full-height side panel. As a sibling
+            of `DrawerBody` (flex-1) its own `mt-auto`/`shrink-0` pins it. Only
+            step 0 ever had a footer — the sub-steps have a Back header and no
+            apply affordance. */}
+        {step === 0 && (
+          <DrawerFooter
+            className={cn(placement === "down" && "mx-auto w-full max-w-sm")}
+          >
+            {hasActiveFilters(filters) && (
+              <Button className="w-full" onClick={onClear} variant="ghost">
+                Clear all
+              </Button>
+            )}
+            <Button className="w-full" onClick={() => setOpen(false)}>
+              Apply
+            </Button>
+          </DrawerFooter>
+        )}
       </DrawerContent>
     </Drawer>
   );
