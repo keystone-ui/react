@@ -175,15 +175,23 @@ jobs:
               return;
             }
 
-            const changelogPath = path.join(
-              process.env.GITHUB_WORKSPACE,
-              "packages/ui/CHANGELOG.md"
-            );
-            const changelog = fs.existsSync(changelogPath)
-              ? fs.readFileSync(changelogPath, "utf8")
-              : "";
+            // Resolve each package's OWN changelog. This used to hardcode
+            // packages/ui/CHANGELOG.md for every package, so @keystoneui/mcp
+            // could only ever get the generic fallback body -- its version is
+            // never a heading in @keystoneui/react's changelog.
+            const packagesDir = path.join(process.env.GITHUB_WORKSPACE, "packages");
+            const changelogByName = new Map();
+            for (const dir of fs.readdirSync(packagesDir)) {
+              const manifest = path.join(packagesDir, dir, "package.json");
+              if (!fs.existsSync(manifest)) continue;
+              const { name } = JSON.parse(fs.readFileSync(manifest, "utf8"));
+              const changelog = path.join(packagesDir, dir, "CHANGELOG.md");
+              if (name && fs.existsSync(changelog)) {
+                changelogByName.set(name, fs.readFileSync(changelog, "utf8"));
+              }
+            }
 
-            function extractSection(version) {
+            function extractSection(changelog, version) {
               const lines = changelog.split("\n");
               const start = lines.findIndex(
                 (line) => line.trim() === `## ${version}`
@@ -201,10 +209,16 @@ jobs:
 
             for (const pkg of packages) {
               const tag = `${pkg.name}@${pkg.version}`;
-              const section = extractSection(pkg.version);
+              const changelog = changelogByName.get(pkg.name);
+              const section = changelog
+                ? extractSection(changelog, pkg.version)
+                : null;
+              if (!section) {
+                core.warning(`No changelog section for ${tag}; using fallback body.`);
+              }
               const body =
                 section ||
-                `${tag} published via Changesets. See [CHANGELOG.md](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/packages/ui/CHANGELOG.md).`;
+                `${tag} published via Changesets. See the package's CHANGELOG.md in [${context.repo.owner}/${context.repo.repo}](https://github.com/${context.repo.owner}/${context.repo.repo}).`;
 
               try {
                 await github.rest.repos.createRelease({
