@@ -202,6 +202,12 @@ test.describe("payments filter pills", () => {
     await openPayments(page);
 
     await page.getByRole("button", { name: ADD_FILTER }).click();
+    // `allTextContents()` is a one-shot read with no auto-waiting, so wait
+    // for the popup first or the read can land mid-animation and come back
+    // empty.
+    await expect(
+      page.locator('[data-slot="dropdown-menu-content"]')
+    ).toBeVisible();
     expect(await page.getByRole("menuitem").allTextContents()).toEqual([
       "Currency",
       "Provider",
@@ -212,6 +218,9 @@ test.describe("payments filter pills", () => {
 
     await addFilter(page, "Currency");
     await page.getByRole("button", { name: ADD_FILTER }).click();
+    await expect(
+      page.locator('[data-slot="dropdown-menu-content"]')
+    ).toBeVisible();
     expect(await page.getByRole("menuitem").allTextContents()).not.toContain(
       "Currency"
     );
