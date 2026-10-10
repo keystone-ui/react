@@ -38,5 +38,13 @@
     "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
       "ultracite fix"
     ]
+  },
+  "pnpm": {
+    "overrides": {
+      "minimatch@3>brace-expansion": "^1.1.21",
+      "serve>compression": "^1.8.2",
+      "ajv>fast-uri": "^3.1.8",
+      "@node-minify/core>glob": "^10.5.0"
+    }
   }
 }
