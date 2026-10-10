@@ -5,8 +5,7 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./*"],
-      "@keystoneui/react/*": ["../../packages/ui/src/*"],
-      "@keystone/theme/*": ["../../packages/theme/src/*"]
+      "@keystoneui/react/*": ["../../packages/ui/src/*"]
     },
     "strictNullChecks": true
   }

@@ -83,17 +83,6 @@
       }
     },
     {
-      // Theme CSS: intentional duplicate keyframe selectors
-      "includes": ["packages/theme/**"],
-      "linter": {
-        "rules": {
-          "suspicious": {
-            "noDuplicateSelectorsKeyframeBlock": "off"
-          }
-        }
-      }
-    },
-    {
       // Relax rules for Storybook stories (demo/example code)
       "includes": ["apps/storybook/**"],
       "linter": {
