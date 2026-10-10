@@ -15,8 +15,7 @@
     "preserveWatchOutput": true,
     "skipLibCheck": true,
     "strict": true,
-    "allowSyntheticDefaultImports": true,
-    "ignoreDeprecations": "6.0"
+    "allowSyntheticDefaultImports": true
   },
   "exclude": ["node_modules"]
 }

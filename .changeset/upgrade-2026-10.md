@@ -18,3 +18,10 @@ by the MCP server, GHSA fixed in 1.31), `zod` 4.5 → 4.6.
 `ImageResponse` and an SSRF in image optimization), `@opennextjs/cloudflare`
 1.20.10, `wrangler` 4.149, `react` 19.3, Tailwind 4.3.3, `storybook` 10.6.1,
 `vite` 8.3, `turbo` 2.11, biome 2.5.15, ultracite 7.12.
+
+**TypeScript 7:** docs, Storybook and the MCP server type-check with TS 7.0
+(Next runs it via `experimental.useTypeScriptCli`). `@keystoneui/react` keeps
+building its `.d.ts` with TS 6 through the `@typescript/typescript6` bridge,
+because tsup needs the TypeScript JS API, which 7.0 doesn't ship. Emitted
+declarations are unchanged. The shared config drops
+`ignoreDeprecations: "6.0"`, and the docs app drops `baseUrl`.

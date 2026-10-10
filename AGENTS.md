@@ -11,11 +11,11 @@ Keystone UI is a React component library built as a pnpm monorepo managed by Tur
 - **Node.js**: v22+
 - **pnpm**: v9.15.0
 - **React**: v19+
-- **Tailwind CSS**: v4.2
+- **Tailwind CSS**: v4.3
 - **Base UI**: `@base-ui/react` v1.9 (primitive library — NOT Radix UI). Pinned to an exact version, deliberately: Base UI has shipped breaking changes in minor releases twice (1.3.0 un-previewed Drawer, 1.6.0 renamed `OTPFieldPreview` → `OTPField`), so upgrades must be explicit commits and never arrive via a lockfile refresh.
 - **CVA**: `class-variance-authority` for variant management
-- **TypeScript**: v6.0
-- **Storybook**: v10.3 (documentation and component development)
+- **TypeScript**: v7.0 — except `packages/ui`, which aliases `typescript` to `@typescript/typescript6` because tsup's dts build needs the TypeScript JS API that 7.0 doesn't ship (returns in 7.1). Don't "fix" the alias until tsup or its replacement supports TS 7.
+- **Storybook**: v10.6 (documentation and component development)
 - **Biome**: Code formatting and linting (via `ultracite`)
 - **Changesets**: Version management
 

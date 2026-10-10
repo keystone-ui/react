@@ -273,7 +273,7 @@ export const Indeterminate: Story = {
 export const Controlled: Story = {
   name: "Controlled",
   render() {
-    const [value, setValue] = React.useState<number | number[]>(50);
+    const [value, setValue] = React.useState<number | readonly number[]>(50);
     const numericValue = Array.isArray(value) ? value[0] : value;
 
     return (
