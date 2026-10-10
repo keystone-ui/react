@@ -238,6 +238,7 @@ const AccordionTrigger = ({
     "group flex w-full cursor-pointer items-center justify-between gap-4 py-2.5 text-left font-semibold text-sm",
     "focus:ring-0 focus:ring-offset-0",
     "focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
+    "disabled:cursor-not-allowed disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50",
     variant === "box" && ["px-3", "rounded-lg"],
     variant === "table" && "px-3"
   );
