@@ -32,3 +32,6 @@ playwright-report/
 .claude/skills/find-skills
 .codex/
 skills-lock.json
+
+# Vitest 5 failure screenshots / attachments
+.vitest/
