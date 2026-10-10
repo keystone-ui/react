@@ -19,17 +19,16 @@
  *      fresh empty stub. Re-running this script in that state would
  *      produce an identical empty stub (idempotent).
  *
- * Pre-release mode: `.changeset/pre.json.changesets[]` lists changesets
- * already rolled into a prior bump. Those are excluded so they don't
- * resurrect in Unreleased.
+ * Pre-release mode: Changesets v3 moves changesets already rolled into a
+ * prior prerelease bump into `.changeset/pre/`. Only the top level of
+ * `.changeset/` is read, so they don't resurrect in Unreleased.
  */
 
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
 const CHANGESET_DIR = join(ROOT, ".changeset");
-const PRE_JSON = join(CHANGESET_DIR, "pre.json");
 const UI_PKG = join(ROOT, "packages/ui/package.json");
 const UNRELEASED = join(ROOT, "apps/docs/content/changelog/unreleased.mdx");
 
@@ -50,18 +49,8 @@ if (!pkgVersion) {
 
 const today = new Date().toISOString().slice(0, 10);
 
-let consumed = new Set();
-if (existsSync(PRE_JSON)) {
-  const pre = JSON.parse(readFileSync(PRE_JSON, "utf8"));
-  consumed = new Set(pre.changesets ?? []);
-}
-
-const allChangesetFiles = readdirSync(CHANGESET_DIR).filter(
+const unconsumed = readdirSync(CHANGESET_DIR).filter(
   (f) => f.endsWith(".md") && !IGNORED_FILES.has(f)
-);
-
-const unconsumed = allChangesetFiles.filter(
-  (f) => !consumed.has(f.replace(/\.md$/, ""))
 );
 
 const buckets = { major: [], minor: [], patch: [] };

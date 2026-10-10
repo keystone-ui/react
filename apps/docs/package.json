@@ -51,6 +51,7 @@
     "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/culori": "^4.0.1",
+    "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "postcss": "^8.5.29",
