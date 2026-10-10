@@ -6,7 +6,9 @@
 Upgrade dependencies to latest.
 
 **Runtime deps of `@keystoneui/react`:** `lucide-react` 1.41 → 1.55,
-`tailwind-merge` 3.6 → 3.7, `react-resizable-panels` 4.12 → 4.14.
+`tailwind-merge` 3.6 → 3.7, `react-resizable-panels` 4.12 → 4.14, `motion` 12.43 → 14.1 (no
+public API changes upstream: 13.0 dropped the optional `@emotion/is-prop-valid`
+auto-detection, 14.0 removed internal framer-motion compat shims).
 
 **`@keystoneui/mcp`:** `@modelcontextprotocol/sdk` 1.30 → 1.32 (security fix:
 the SDK's OAuth client could send credentials to an authorization server chosen
