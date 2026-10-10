@@ -45,13 +45,13 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@modelcontextprotocol/sdk": "^1.32.1",
     "fuzzysort": "^4.0.2",
-    "zod": "^4.5.4"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@keystoneui/typescript-config": "workspace:*",
-    "@types/node": "^26.4.1",
+    "@types/node": "^26.6.5",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.11"

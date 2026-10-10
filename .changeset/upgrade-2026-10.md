@@ -1,0 +1,18 @@
+---
+"@keystoneui/react": patch
+"@keystoneui/mcp": patch
+---
+
+Upgrade dependencies to latest.
+
+**Runtime deps of `@keystoneui/react`:** `lucide-react` 1.41 → 1.55,
+`tailwind-merge` 3.6 → 3.7, `react-resizable-panels` 4.12 → 4.14.
+
+**`@keystoneui/mcp`:** `@modelcontextprotocol/sdk` 1.30 → 1.32 (security fix:
+the SDK's OAuth client could send credentials to an authorization server chosen
+by the MCP server, GHSA fixed in 1.31), `zod` 4.5 → 4.6.
+
+**Tooling / docs:** `next` 16.3 → 16.4 (fixes a critical RCE in `next/og`
+`ImageResponse` and an SSRF in image optimization), `@opennextjs/cloudflare`
+1.20.10, `wrangler` 4.149, `react` 19.3, Tailwind 4.3.3, `storybook` 10.6.1,
+`vite` 8.3, `turbo` 2.11, biome 2.5.15, ultracite 7.12.
