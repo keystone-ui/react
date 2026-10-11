@@ -34,12 +34,12 @@ pnpm build        # Build all packages and apps via Turborepo
 ## Tech Stack
 
 - **React** v19+ with subpath exports (`@keystoneui/react/button`)
-- **Tailwind CSS** v4.2 with OKLCH semantic tokens
-- **Base UI** (`@base-ui/react` v1.7) for accessible primitives
+- **Tailwind CSS** v4.3 with OKLCH semantic tokens
+- **Base UI** (`@base-ui/react` v1.9) for accessible primitives
 - **CVA** + `clsx` + `tailwind-merge` for variant management
-- **TypeScript** v6.0 with strict mode
+- **TypeScript** v7.0 with strict mode
 - **tsup** (esbuild) — ESM-only output
-- **Storybook** v10.3 — component development and documentation
+- **Storybook** v10.6 — component development and documentation
 - **Fumadocs** — docs site with live demos and LLMs.txt endpoints
 - **Biome** (via `ultracite`) — formatting and linting
 - **Changesets** — versioning and npm publishing

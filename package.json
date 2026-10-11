@@ -24,13 +24,13 @@
     "sync:blocks": "node scripts/sync-block-copies.mjs"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.12",
+    "@biomejs/biome": "2.5.15",
     "@changesets/cli": "^2.31.1",
     "husky": "^9.1.7",
-    "lint-staged": "^17.5.0",
-    "shadcn": "^4.21.0",
-    "turbo": "^2.10.12",
-    "ultracite": "7.11.0"
+    "lint-staged": "^17.6.0",
+    "shadcn": "^4.21.4",
+    "turbo": "^2.11.7",
+    "ultracite": "7.12.4"
   },
   "packageManager": "pnpm@9.15.0",
   "name": "design-system",
@@ -38,5 +38,13 @@
     "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
       "ultracite fix"
     ]
+  },
+  "pnpm": {
+    "overrides": {
+      "minimatch@3>brace-expansion": "^1.1.21",
+      "serve>compression": "^1.8.2",
+      "ajv>fast-uri": "^3.1.8",
+      "@node-minify/core>glob": "^10.5.0"
+    }
   }
 }

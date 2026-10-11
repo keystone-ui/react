@@ -9,12 +9,11 @@
   ],
   "exclude": ["node_modules", ".next"],
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
       "@keystoneui/react/*": ["../../packages/ui/src/*"],
       "@keystone/theme/*": ["../../packages/theme/src/*"],
-      "fumadocs-mdx:collections/*": [".source/*"]
+      "fumadocs-mdx:collections/*": ["./.source/*"]
     },
     "plugins": [
       {

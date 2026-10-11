@@ -228,7 +228,7 @@ describe("Accordion", () => {
     );
 
     const trigger = screen.getByRole("button", { name: "Trigger 1" });
-    expect(trigger).toHaveAttribute("aria-disabled", "true");
+    expect(trigger).toBeDisabled();
   });
 
   it("respects disabled prop on accordion item", () => {
@@ -252,8 +252,8 @@ describe("Accordion", () => {
     const trigger1 = screen.getByRole("button", { name: "Trigger 1" });
     const trigger2 = screen.getByRole("button", { name: "Trigger 2" });
 
-    expect(trigger1).toHaveAttribute("aria-disabled", "true");
-    expect(trigger2).toHaveAttribute("aria-disabled", "false");
+    expect(trigger1).toBeDisabled();
+    expect(trigger2).toBeEnabled();
   });
 });
 
@@ -311,7 +311,7 @@ describe("AccordionItem", () => {
     );
 
     const trigger = screen.getByRole("button", { name: "Test Trigger" });
-    expect(trigger).toHaveAttribute("aria-disabled", "true");
+    expect(trigger).toBeDisabled();
   });
 
   it("applies box variant styles correctly", () => {

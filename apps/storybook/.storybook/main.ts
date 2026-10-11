@@ -31,7 +31,7 @@ const config: StorybookConfig = {
         // yields a module without its `OTPField` named export, so every story
         // importing InputOTP fails to render with a misleading
         // "does not provide an export named 'OTPField'" error. It resolves fine
-        // unbundled. Verified against @base-ui/react 1.7.0.
+        // unbundled. Verified against @base-ui/react 1.9.0.
         include: [
           "@base-ui/react/accordion",
           "@base-ui/react/alert-dialog",

@@ -84,7 +84,6 @@ function Calendar({
           captionLayout !== "label" && "hidden",
           defaultClassNames.caption_label
         ),
-        table: "w-full border-collapse",
         weekdays: cn("flex", defaultClassNames.weekdays),
         weekday: cn(
           "flex-1 select-none rounded-(--cell-radius) font-normal text-[0.8rem] text-muted-foreground",
@@ -162,8 +161,6 @@ function Calendar({
         },
         Dropdown: ({
           options,
-          components: _components,
-          classNames: _classNames,
           className: _className,
           size: htmlSize,
           ...selectProps

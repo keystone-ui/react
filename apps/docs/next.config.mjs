@@ -2,6 +2,11 @@ import { createMDX } from "fumadocs-mdx/next";
 
 /** @type {import('next').NextConfig} */
 const config = {
+  experimental: {
+    // TypeScript 7 ships no JS API, so Next's in-process type-check can't
+    // load it. Run the `tsc` CLI instead.
+    useTypeScriptCli: true,
+  },
   async redirects() {
     return [
       {

@@ -1,0 +1,27 @@
+---
+"@keystoneui/react": patch
+"@keystoneui/mcp": patch
+---
+
+Upgrade dependencies to latest.
+
+**Runtime deps of `@keystoneui/react`:** `lucide-react` 1.41 → 1.55,
+`tailwind-merge` 3.6 → 3.7, `react-resizable-panels` 4.12 → 4.14, `motion` 12.43 → 14.1 (no
+public API changes upstream: 13.0 dropped the optional `@emotion/is-prop-valid`
+auto-detection, 14.0 removed internal framer-motion compat shims).
+
+**`@keystoneui/mcp`:** `@modelcontextprotocol/sdk` 1.30 → 1.32 (security fix:
+the SDK's OAuth client could send credentials to an authorization server chosen
+by the MCP server, GHSA fixed in 1.31), `zod` 4.5 → 4.6.
+
+**Tooling / docs:** `next` 16.3 → 16.4 (fixes a critical RCE in `next/og`
+`ImageResponse` and an SSRF in image optimization), `@opennextjs/cloudflare`
+1.20.10, `wrangler` 4.149, `react` 19.3, Tailwind 4.3.3, `storybook` 10.6.1,
+`vite` 8.3, `turbo` 2.11, biome 2.5.15, ultracite 7.12.
+
+**TypeScript 7:** docs, Storybook and the MCP server type-check with TS 7.0
+(Next runs it via `experimental.useTypeScriptCli`). `@keystoneui/react` keeps
+building its `.d.ts` with TS 6 through the `@typescript/typescript6` bridge,
+because tsup needs the TypeScript JS API, which 7.0 doesn't ship. Emitted
+declarations are unchanged. The shared config drops
+`ignoreDeprecations: "6.0"`, and the docs app drops `baseUrl`.

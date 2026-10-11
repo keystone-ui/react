@@ -11,11 +11,11 @@ Keystone UI is a React component library built as a pnpm monorepo managed by Tur
 - **Node.js**: v22+
 - **pnpm**: v9.15.0
 - **React**: v19+
-- **Tailwind CSS**: v4.2
-- **Base UI**: `@base-ui/react` v1.7 (primitive library — NOT Radix UI). Pinned to an exact version, deliberately: Base UI has shipped breaking changes in minor releases twice (1.3.0 un-previewed Drawer, 1.6.0 renamed `OTPFieldPreview` → `OTPField`), so upgrades must be explicit commits and never arrive via a lockfile refresh.
+- **Tailwind CSS**: v4.3
+- **Base UI**: `@base-ui/react` v1.9 (primitive library — NOT Radix UI). Pinned to an exact version, deliberately: Base UI has shipped breaking changes in minor releases twice (1.3.0 un-previewed Drawer, 1.6.0 renamed `OTPFieldPreview` → `OTPField`), so upgrades must be explicit commits and never arrive via a lockfile refresh.
 - **CVA**: `class-variance-authority` for variant management
-- **TypeScript**: v6.0
-- **Storybook**: v10.3 (documentation and component development)
+- **TypeScript**: v7.0 — except `packages/ui`, which aliases `typescript` to `@typescript/typescript6` because tsup's dts build needs the TypeScript JS API that 7.0 doesn't ship (returns in 7.1). Don't "fix" the alias until tsup or its replacement supports TS 7.
+- **Storybook**: v10.6 (documentation and component development)
 - **Biome**: Code formatting and linting (via `ultracite`)
 - **Changesets**: Version management
 
@@ -218,3 +218,14 @@ When adding a new block, also: register the demo in `apps/docs/demos/index.ts` a
 - **No raw color values** in component base styles — always use semantic tokens (exception: Badge color variants)
 - **Explicit `cursor-pointer`** on all interactive elements — Tailwind v4 changed the default
 - **Update `_registry.ts`**, `package.json` exports, and `tsup.config.ts` entryPoints when adding new components
+
+<!-- BEGIN:turborepo-agent-rules -->
+
+# This is NOT the Turborepo you know
+
+Turborepo configuration, task behavior, and CLI commands can vary between installed versions and may differ from your training data. Resolve the `turbo` package from this file's directory or relevant workspace; in monorepos, it may not be visible from the repository root. For example, run `node -p "require.resolve('turbo/package.json')"` from a workspace that depends on `turbo`.
+
+Read `docs/README.md` inside that installed package first, then read the relevant pages from its `docs/` directory before changing Turborepo configuration or commands. Heed deprecation notices. These bundled docs match the installed package version and are available without network access.
+
+This block is written and re-added by `turbo` before repository-scoped commands when an AI agent is detected. In the Turborepo source repository, its template is defined in `crates/turborepo-cli/src/cli/agent_guidance.rs`. Removing the managed block while updates are enabled means a later qualifying invocation will add it again. Set `"agentGuidance": false` in the root `turbo.json` or `turbo.jsonc` to opt out; this does not remove an existing block. Keep the block committed with your work to avoid an uncommitted change on the next agent invocation.
+<!-- END:turborepo-agent-rules -->

@@ -51,7 +51,7 @@ describe("CopyButton", () => {
 
   it("reverts after the reset delay", async () => {
     const user = userEvent.setup();
-    render(<CopyButton resetDelay={10} value="usr_3f9a2c81" />);
+    render(<CopyButton resetDelay={300} value="usr_3f9a2c81" />);
 
     await user.click(screen.getByRole("button"));
     await waitFor(() => {

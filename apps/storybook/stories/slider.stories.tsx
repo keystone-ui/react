@@ -145,7 +145,7 @@ export const WithLabelAndValue: Story = {
 export const Controlled: Story = {
   name: "Controlled",
   render() {
-    const [value, setValue] = React.useState<number | number[]>(50);
+    const [value, setValue] = React.useState<number | readonly number[]>(50);
     const id = React.useId();
 
     return (
