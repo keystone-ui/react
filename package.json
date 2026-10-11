@@ -25,14 +25,14 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.15",
-    "@changesets/cli": "^2.31.1",
+    "@changesets/cli": "^3.0.3",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
     "shadcn": "^4.21.4",
     "turbo": "^2.11.7",
     "ultracite": "7.12.4"
   },
-  "packageManager": "pnpm@9.15.0",
+  "packageManager": "pnpm@10.34.6",
   "name": "design-system",
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
@@ -45,6 +45,11 @@
       "serve>compression": "^1.8.2",
       "ajv>fast-uri": "^3.1.8",
       "@node-minify/core>glob": "^10.5.0"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "msw",
+      "workerd"
+    ]
   }
 }

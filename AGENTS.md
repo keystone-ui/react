@@ -9,7 +9,7 @@ Keystone UI is a React component library built as a pnpm monorepo managed by Tur
 ### Key Technical Stack
 
 - **Node.js**: v22+
-- **pnpm**: v9.15.0
+- **pnpm**: v10 (pinned via `packageManager`; CI's `pnpm/action-setup` reads it)
 - **React**: v19+
 - **Tailwind CSS**: v4.3
 - **Base UI**: `@base-ui/react` v1.9 (primitive library — NOT Radix UI). Pinned to an exact version, deliberately: Base UI has shipped breaking changes in minor releases twice (1.3.0 un-previewed Drawer, 1.6.0 renamed `OTPFieldPreview` → `OTPField`), so upgrades must be explicit commits and never arrive via a lockfile refresh.
