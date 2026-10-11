@@ -711,7 +711,9 @@ export const PromptForm: Story = {
     const [mentions, setMentions] = useState<string[]>([]);
     const [mentionPopoverOpen, setMentionPopoverOpen] = useState(false);
     const [modelPopoverOpen, setModelPopoverOpen] = useState(false);
-    const [selectedModel, setSelectedModel] = useState(PROMPT_MODELS[0]);
+    const [selectedModel, setSelectedModel] = useState<
+      (typeof PROMPT_MODELS)[number]
+    >(PROMPT_MODELS[0]);
     const [scopeMenuOpen, setScopeMenuOpen] = useState(false);
 
     const grouped = useMemo(
@@ -751,18 +753,20 @@ export const PromptForm: Story = {
                 open={mentionPopoverOpen}
               >
                 <Tooltip>
-                  <TooltipTrigger asChild>
-                    <PopoverTrigger
-                      render={
-                        <InputGroupButton
-                          className="transition-transform"
-                          size={hasMentions ? "icon-sm" : "sm"}
-                          variant="outline"
-                        />
-                      }
-                    >
-                      <AtSignIcon /> {!hasMentions && "Add context"}
-                    </PopoverTrigger>
+                  <TooltipTrigger
+                    render={
+                      <PopoverTrigger
+                        render={
+                          <InputGroupButton
+                            className="transition-transform"
+                            size={hasMentions ? "icon-sm" : "sm"}
+                            variant="outline"
+                          />
+                        }
+                      />
+                    }
+                  >
+                    <AtSignIcon /> {!hasMentions && "Add context"}
                   </TooltipTrigger>
                   <TooltipContent>
                     Mention a person, page, or date
@@ -829,14 +833,16 @@ export const PromptForm: Story = {
               className="gap-1 px-2.5 pt-1.5 pb-2"
             >
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <InputGroupButton
-                    aria-label="Attach file"
-                    className="rounded-full"
-                    size="icon-sm"
-                  >
-                    <PaperclipIcon />
-                  </InputGroupButton>
+                <TooltipTrigger
+                  render={
+                    <InputGroupButton
+                      aria-label="Attach file"
+                      className="rounded-full"
+                      size="icon-sm"
+                    />
+                  }
+                >
+                  <PaperclipIcon />
                 </TooltipTrigger>
                 <TooltipContent>Attach file</TooltipContent>
               </Tooltip>
@@ -845,14 +851,19 @@ export const PromptForm: Story = {
                 open={modelPopoverOpen}
               >
                 <Tooltip>
-                  <TooltipTrigger asChild>
-                    <DropdownMenuTrigger
-                      render={
-                        <InputGroupButton className="rounded-full" size="sm" />
-                      }
-                    >
-                      {selectedModel.name}
-                    </DropdownMenuTrigger>
+                  <TooltipTrigger
+                    render={
+                      <DropdownMenuTrigger
+                        render={
+                          <InputGroupButton
+                            className="rounded-full"
+                            size="sm"
+                          />
+                        }
+                      />
+                    }
+                  >
+                    {selectedModel.name}
                   </TooltipTrigger>
                   <TooltipContent>Select AI model</TooltipContent>
                 </Tooltip>
