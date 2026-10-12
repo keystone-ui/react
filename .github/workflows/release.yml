@@ -115,26 +115,34 @@ jobs:
       #
       # While the 1.0 beta train is the only thing we ship, both packages
       # should answer to both tags. Once `changeset pre exit` lands and a real
-      # 1.0.0 publishes to `latest` on its own, this step keeps `beta` level
-      # with it rather than letting it rot at the last prerelease.
-      # Caveat: Trusted Publishing mints a credential for the `npm publish` call
-      # itself, so a later `npm dist-tag` in the same job may find no auth. That
-      # is unverified until this runs for real, so the step is allowed to fail
-      # without failing a release that has already published successfully --
-      # the packages are the deliverable, the tags are recoverable by hand. If
-      # it does fail, the warnings below name the exact commands to run.
-      - name: Sync npm dist-tags
+      # 1.0.0 publishes to `latest` on its own, `beta` still needs moving level
+      # with it rather than rotting at the last prerelease.
+      #
+      # CI can't do that. A Trusted Publishing credential may publish but not
+      # manage dist-tags -- the first real run got
+      # `E403 ... This trusted publisher cannot manage dist-tags`. So this step
+      # only lists the commands for a maintainer to run with their own npm
+      # login. Every published package gets both commands: `dist-tag add` is
+      # a no-op when the tag already points there, and the registry can serve
+      # stale dist-tags for a while after a publish, so diffing would be
+      # unreliable.
+      - name: List npm dist-tags to sync by hand
         if: steps.changesets.outputs.published == 'true'
-        continue-on-error: true
         env:
           PACKAGES: ${{ steps.changesets.outputs.published-packages }}
         run: |
-          echo "$PACKAGES" | jq -r '.[] | "\(.name)@\(.version)"' | while read -r spec; do
-            for tag in latest beta; do
-              echo "npm dist-tag add $spec $tag"
-              npm dist-tag add "$spec" "$tag" \
-                || echo "::warning::dist-tag $tag not set on $spec — run locally: npm dist-tag add $spec $tag"
-            done
+          cmds=$(echo "$PACKAGES" | jq -r '.[] | "npm dist-tag add \(.name)@\(.version) latest", "npm dist-tag add \(.name)@\(.version) beta"')
+          {
+            echo "### npm dist-tags to sync"
+            echo
+            echo "Trusted Publishing can't manage dist-tags. Run these with your own npm login:"
+            echo
+            echo '```sh'
+            echo "$cmds"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "$cmds" | while read -r cmd; do
+            echo "::notice title=Sync npm dist-tag::$cmd"
           done
 
       - name: Create GitHub releases
