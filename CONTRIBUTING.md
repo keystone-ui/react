@@ -303,14 +303,29 @@ git add \
   packages/keystoneui-mcp/package.json \
   packages/keystoneui-mcp/CHANGELOG.md \
   apps/docs/content/changelog/ \
-  .changeset/pre.json
+  .changeset/
 
 # 4. Commit and push
 git commit -m "chore: version packages"
 git push origin main
 ```
 
-CI runs `.github/workflows/release.yml` on push to `main`, which invokes `changesets/action@v1` with `publish: pnpm release`. Versions that don't yet exist on npm are published with the `beta` dist-tag, then a GitHub Release is auto-created per package using the matching `CHANGELOG.md` section as the body. Idempotent — re-running on a no-op push does nothing.
+CI runs `.github/workflows/release.yml` on push to `main`. While unconsumed changesets exist, `changesets/action@v2` opens (or updates) a **Version Packages** PR that runs `pnpm version-packages`; merging that PR is the alternative to `/release`. Once the bumped versions are on `main`, the same workflow publishes anything not yet on npm via `pnpm release` using npm **Trusted Publishing** (OIDC — there is no `NPM_TOKEN`), then creates a GitHub Release per package from the matching `CHANGELOG.md` section. Idempotent — re-running on a no-op push does nothing.
+
+### After a publish: sync the dist-tags by hand
+
+`changeset publish` sets only one dist-tag per package, and picks differently for each: `@keystoneui/react` lands on `beta`, while `@keystoneui/mcp` (which has only ever published prereleases) lands on `latest`. Both tags should point at the newest version, but a Trusted Publishing credential can't manage dist-tags (`E403 … This trusted publisher cannot manage dist-tags`), so CI can't fix this.
+
+The Release run lists the exact commands in its job summary (and as notices). Run them with your own npm login:
+
+```bash
+npm dist-tag add @keystoneui/react@<version> latest
+npm dist-tag add @keystoneui/react@<version> beta
+npm dist-tag add @keystoneui/mcp@<version> latest
+npm dist-tag add @keystoneui/mcp@<version> beta
+```
+
+Each command is a no-op when the tag already points there. Verify with `npm view @keystoneui/react dist-tags`.
 
 ### Version progression
 
@@ -335,6 +350,7 @@ pnpm changeset              # create a changeset for the stable release
 pnpm version-packages       # bumps to stable version (e.g. 1.0.0)
 git add . && git commit -m "chore: release stable version"
 git push origin main        # publishes to @latest tag
+# then move `beta` up to the stable version too (see "After a publish" above)
 ```
 
 After this, `pnpm add @keystoneui/react` (without `@beta`) installs the stable version.
