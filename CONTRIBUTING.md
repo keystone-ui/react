@@ -312,11 +312,13 @@ git push origin main
 
 CI runs `.github/workflows/release.yml` on push to `main`. While unconsumed changesets exist, `changesets/action@v2` opens (or updates) a **Version Packages** PR that runs `pnpm version-packages`; merging that PR is the alternative to `/release`. Once the bumped versions are on `main`, the same workflow publishes anything not yet on npm via `pnpm release` using npm **Trusted Publishing** (OIDC — there is no `NPM_TOKEN`), then creates a GitHub Release per package from the matching `CHANGELOG.md` section. Idempotent — re-running on a no-op push does nothing.
 
-### After a publish: sync the dist-tags by hand
+### Dist-tags: releases need no manual step
 
-`changeset publish` sets only one dist-tag per package, and picks differently for each: `@keystoneui/react` lands on `beta`, while `@keystoneui/mcp` (which has only ever published prereleases) lands on `latest`. Both tags should point at the newest version, but a Trusted Publishing credential can't manage dist-tags (`E403 … This trusted publisher cannot manage dist-tags`), so CI can't fix this.
+`changeset publish` sets only one dist-tag per package, and picks differently for each: `@keystoneui/react` lands on `beta`, while `@keystoneui/mcp` (which has only ever published prereleases) lands on `latest`. It refuses a custom `--tag` in pre mode, and a Trusted Publishing credential can't move tags afterwards (`E403 … This trusted publisher cannot manage dist-tags`).
 
-The Release run lists the exact commands in its job summary (and as notices). Run them with your own npm login:
+So the docs install from the tag CI does move: every install command says `@keystoneui/react@beta`, and the MCP server runs via `npx @keystoneui/mcp` (`latest`). `apps/docs/tests/install-dist-tag.test.ts` enforces this while in pre mode — and requires `@beta` to be dropped once you exit it.
+
+Optional: the other tag (react's `latest`, mcp's `beta`) stays on an older version unless you move it. The Release run lists the commands in its job summary; run them with your own npm login:
 
 ```bash
 npm dist-tag add @keystoneui/react@<version> latest
@@ -350,7 +352,8 @@ pnpm changeset              # create a changeset for the stable release
 pnpm version-packages       # bumps to stable version (e.g. 1.0.0)
 git add . && git commit -m "chore: release stable version"
 git push origin main        # publishes to @latest tag
-# then move `beta` up to the stable version too (see "After a publish" above)
+# then drop `@beta` from every install command in the docs --
+# apps/docs/tests/install-dist-tag.test.ts fails until you do
 ```
 
 After this, `pnpm add @keystoneui/react` (without `@beta`) installs the stable version.

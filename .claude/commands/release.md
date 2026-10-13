@@ -86,9 +86,9 @@ The push triggers `.github/workflows/release.yml`, which runs `changesets/action
 
 Auth is npm **Trusted Publishing** (OIDC): the job needs `id-token: write`, npm >= 11.5.1 (the workflow upgrades it), and **no** `NPM_TOKEN` / `NODE_AUTH_TOKEN` in the env — a configured token makes npm skip the OIDC exchange. If publish 404s or 403s, check the trusted-publisher entry for each package on npmjs.com (repo `keystone-ui/react`, workflow `release.yml`).
 
-## Phase 3 — sync npm dist-tags (local, needs the user's npm login)
+## Phase 3 — optional: level the npm dist-tags (needs the user's npm login)
 
-`changeset publish` sets one dist-tag per package — `@keystoneui/react` → `beta`, `@keystoneui/mcp` → `latest` — and a Trusted Publishing credential can't manage dist-tags, so CI can't level them. The Release run's job summary lists the commands; they are, per published package:
+`changeset publish` sets one dist-tag per package — `@keystoneui/react` → `beta`, `@keystoneui/mcp` → `latest` — and a Trusted Publishing credential can't manage dist-tags. Releases don't need this step: the docs install `@keystoneui/react@beta` and `npx @keystoneui/mcp` (`latest`), which are the tags CI moves. Leveling the other tag only matters for someone installing without a tag. The Release run's job summary lists the commands; they are, per published package:
 
 ```
 npm dist-tag add <name>@<version> latest
@@ -117,7 +117,7 @@ On a successful local run, print:
 - version: <OLD> → <NEW> in packages/ui/package.json
 - changelog: apps/docs/content/changelog/<date>-v<NEW>.mdx (auto-synced from N changeset(s))
 - pushed: <git sha> → origin/main
-- next: watch the Release workflow run to confirm npm publish, then run the dist-tag commands from its job summary
+- next: watch the Release workflow run to confirm npm publish
 ```
 
 On any failure, surface the failing command's output and the post-condition that didn't hold. Do not retry destructive operations (push/publish) automatically.

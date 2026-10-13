@@ -108,7 +108,7 @@ function sectionContainsPreview(section) {
 function buildInstallationSection(componentName) {
   return {
     heading: "Installation",
-    body: `\n<CodeBlockTabs items={["CLI", "Manual"]}>\n\n\`\`\`bash tab="CLI"\nnpx shadcn@latest add https://keystoneui.io/r/${componentName}.json\n\`\`\`\n\n<div tab="Manual">\n\n<Steps>\n\n<Step>Install dependencies.</Step>\n\n\`\`\`bash\npnpm add @keystoneui/react @base-ui/react\n\`\`\`\n\n<Step>Copy the source.</Step>\n\n<ComponentSource name="${componentName}-default" />\n\n<Step>Update import paths to match your project.</Step>\n\n</Steps>\n\n</div>\n\n</CodeBlockTabs>\n\n`,
+    body: `\n<CodeBlockTabs items={["CLI", "Manual"]}>\n\n\`\`\`bash tab="CLI"\nnpx shadcn@latest add https://keystoneui.io/r/${componentName}.json\n\`\`\`\n\n<div tab="Manual">\n\n<Steps>\n\n<Step>Install dependencies.</Step>\n\n\`\`\`bash\npnpm add @keystoneui/react@beta @base-ui/react\n\`\`\`\n\n<Step>Copy the source.</Step>\n\n<ComponentSource name="${componentName}-default" />\n\n<Step>Update import paths to match your project.</Step>\n\n</Steps>\n\n</div>\n\n</CodeBlockTabs>\n\n`,
   };
 }
 
