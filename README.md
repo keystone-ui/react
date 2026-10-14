@@ -66,7 +66,7 @@ pnpm build        # Build all packages and apps via Turborepo
 Install the package:
 
 ```bash
-pnpm add @keystoneui/react
+pnpm add @keystoneui/react@beta
 ```
 
 Import individual components:

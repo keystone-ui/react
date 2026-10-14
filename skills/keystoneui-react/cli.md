@@ -63,9 +63,9 @@ keystoneui view button             # confirm the name before installing
 Keystone UI is also published as `@keystoneui/react`. Use this when you want the package as a dependency rather than vendored source:
 
 ```bash
-npm install @keystoneui/react
+npm install @keystoneui/react@beta
 # or
-pnpm add @keystoneui/react
+pnpm add @keystoneui/react@beta
 ```
 
 Then import via subpaths (see SKILL.md). You still need the base CSS:

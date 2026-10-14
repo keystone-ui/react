@@ -21,7 +21,7 @@ The package is **ESM-only** (`"type": "module"`) and side-effect free.
 ## Install
 
 ```bash
-pnpm add @keystoneui/react
+pnpm add @keystoneui/react@beta
 ```
 
 Then import the stylesheet **after** Tailwind in your CSS entry point:

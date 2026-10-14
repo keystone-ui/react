@@ -120,9 +120,10 @@ jobs:
       #
       # CI can't do that. A Trusted Publishing credential may publish but not
       # manage dist-tags -- the first real run got
-      # `E403 ... This trusted publisher cannot manage dist-tags`. So this step
-      # only lists the commands for a maintainer to run with their own npm
-      # login. Every published package gets both commands: `dist-tag add` is
+      # `E403 ... This trusted publisher cannot manage dist-tags`. The docs
+      # therefore install the tag CI does move (`@beta` for react, enforced by
+      # apps/docs/tests/install-dist-tag.test.ts), and this step only lists the
+      # optional commands to level the other tag by hand. Every published package gets both commands: `dist-tag add` is
       # a no-op when the tag already points there, and the registry can serve
       # stale dist-tags for a while after a publish, so diffing would be
       # unreliable.
@@ -135,7 +136,7 @@ jobs:
           {
             echo "### npm dist-tags to sync"
             echo
-            echo "Trusted Publishing can't manage dist-tags. Run these with your own npm login:"
+            echo "Optional -- the docs install @beta (react) and latest (mcp), which CI already moved. To level the other tag too, run these with your own npm login:"
             echo
             echo '```sh'
             echo "$cmds"

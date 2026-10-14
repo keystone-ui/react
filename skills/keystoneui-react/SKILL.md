@@ -63,7 +63,7 @@ Two paths reach the same library — pick one. See [cli.md](./cli.md) for both.
 
 ```bash
 # As an npm dependency
-pnpm add @keystoneui/react
+pnpm add @keystoneui/react@beta
 
 # Or vendor source via shadcn-compatible registry
 npx shadcn@latest add https://keystoneui.io/r/button.json
@@ -287,7 +287,7 @@ the keystone monorepo.
    working code together. **Always read the docs before implementing a complex
    component** — props are documented there and nowhere else.
 5. **Install** — `npx shadcn@latest add <url>` for vendored source, or
-   `pnpm add @keystoneui/react` for the npm dependency. `get_add_command`
+   `pnpm add @keystoneui/react@beta` for the npm dependency. `get_add_command`
    builds the URLs. See [cli.md](./cli.md).
 6. **Theme** — define the semantic tokens in your global CSS. See
    [customization.md](./customization.md).
