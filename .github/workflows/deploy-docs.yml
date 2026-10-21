@@ -53,6 +53,21 @@ jobs:
         run: pnpm exec wrangler deploy
         working-directory: apps/docs
 
+      # CI's Playwright suite runs against `next start`, not the Workers
+      # runtime, so a crash that only happens inside workerd ships green.
+      # Prerendered pages are served from assets without invoking Next, so a
+      # broken server function is invisible until someone opens a dynamic
+      # route. This hits one directly, and the not-found path, right after
+      # the deploy. See scripts/smoke-docs.mjs.
+      - name: Smoke test production
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: node scripts/smoke-docs.mjs https://keystoneui.io
+        env:
+          # An edge can keep serving the previous version for a few seconds
+          # after `wrangler deploy` returns; wait so a healthy old version
+          # cannot vouch for a broken new one.
+          SMOKE_SETTLE_MS: "10000"
+
       - name: Deploy preview
         if: github.event_name == 'pull_request'
         id: preview
@@ -92,6 +107,14 @@ jobs:
                 body,
               });
             }
+
+      # Runs after the URL comment on purpose: a failing preview should still
+      # leave a link to investigate. Deliberately not gated on the URL output:
+      # if the grep above ever stops matching wrangler's output, the script's
+      # usage error turns this red instead of the check silently not running.
+      - name: Smoke test preview
+        if: github.event_name == 'pull_request'
+        run: node scripts/smoke-docs.mjs "${{ steps.preview.outputs.url }}"
 
   cleanup-preview:
     name: Cleanup Preview Worker

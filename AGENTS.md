@@ -37,7 +37,10 @@ pnpm clean            # Remove build artifacts and node_modules
 ```bash
 pnpm test --filter=@keystoneui/react    # Run component unit tests (Vitest)
 pnpm test --filter=@keystoneui/storybook       # Run Storybook interaction tests
+pnpm smoke:docs <url>                   # Post-deploy check that the docs Worker serves dynamic routes
 ```
+
+The docs e2e suite runs against `next start`, not the Workers runtime, so a crash that only happens inside workerd cannot fail CI. `deploy-docs.yml` runs `scripts/smoke-docs.mjs` against production and every PR preview Worker after deploying; it asserts a dynamic route returns 200 and an unknown path returns 404, both of which must reach the Next server.
 
 ### Release & Versioning
 
