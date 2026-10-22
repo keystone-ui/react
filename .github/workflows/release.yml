@@ -36,6 +36,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          # Resolve the newest 22.x instead of whatever the runner image cached,
+          # so Node security releases reach CI the day they ship.
+          check-latest: true
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
 
