@@ -91,6 +91,20 @@ describe("docs page client bundle", () => {
     ).toBeLessThanOrEqual(MAX_TOTAL_BYTES);
   });
 
+  it("keeps the server-component payload small", () => {
+    // The highlighted demo source used to be serialised token-by-token as
+    // props of the client <Pre>: ~1,700 spans per page, sent once as HTML
+    // and again in the Flight payload. button.rsc was 205 KB; as one HTML
+    // string it is 149 KB. What remains is the code itself, so the next
+    // step down is loading code on demand, not a tighter serialisation.
+    const rsc = statSync(
+      join(NEXT_DIR, "server", "app", "docs", "components", "button.rsc")
+    ).size;
+    expect(rsc, `button.rsc is ${Math.round(rsc / KB)} KB`).toBeLessThan(
+      160 * KB
+    );
+  });
+
   it("does not ship the charting library to a component page", () => {
     const offenders = page.chunks.filter((c) =>
       readFileSync(

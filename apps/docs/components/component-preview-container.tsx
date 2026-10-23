@@ -84,8 +84,11 @@ export function ComponentPreviewContainer({
         <div className="relative overflow-hidden rounded-b-xl border">
           <div
             className={cn(
-              "overflow-hidden transition-[max-height] duration-300 ease-in-out",
-              expanded ? "max-h-[2000px]" : "max-h-[140px]"
+              // `interpolate-size` lets the height tween to `auto`, so the
+              // animation covers the real distance instead of racing to a
+              // 2000px max-height; browsers without it switch instantly.
+              "overflow-hidden transition-[height] duration-300 ease-in-out [interpolate-size:allow-keywords]",
+              expanded ? "h-auto" : "h-[140px]"
             )}
           >
             {Code}

@@ -167,8 +167,10 @@ export function BlockPreviewContainer({
         <div className="relative overflow-hidden rounded-b-xl border">
           <div
             className={cn(
-              "overflow-hidden transition-[max-height] duration-300 ease-in-out",
-              expanded ? "max-h-[3000px]" : "max-h-[140px]"
+              // See component-preview-container.tsx: height tweens to auto
+              // with interpolate-size instead of racing to a 3000px max.
+              "overflow-hidden transition-[height] duration-300 ease-in-out [interpolate-size:allow-keywords]",
+              expanded ? "h-auto" : "h-[140px]"
             )}
           >
             {children}
