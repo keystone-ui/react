@@ -79,6 +79,91 @@ jobs:
       - name: Layout invariants
         run: pnpm --filter @keystoneui/docs test:e2e
 
+  # The Playwright job above runs against `next start`. A crash that only
+  # happens inside workerd -- the shape of the October 2026 outage, where a
+  # Next/OpenNext mismatch threw from the server constructor and every
+  # dynamic route was a Cloudflare 1101 for ten days -- cannot fail it, and
+  # until now the first time workerd saw a build was after `wrangler deploy`
+  # to production. This job builds the real Worker and runs the same smoke
+  # checks the deploy workflow runs, before anything merges. It needs no
+  # Cloudflare credentials, so it also runs for forks.
+  docs-workerd:
+    name: Docs on workerd (smoke)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          # Resolve the newest 22.x instead of whatever the runner image cached,
+          # so Node security releases reach CI the day they ship.
+          check-latest: true
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build dependency packages
+        run: pnpm build --filter=@keystoneui/docs^...
+
+      # Same as deploy-docs.yml: the /skills/[skill] route prerenders from
+      # these gitignored tarballs.
+      - name: Package skill tarballs
+        run: pnpm build:skills
+
+      - name: Build Worker
+        run: pnpm exec opennextjs-cloudflare build
+        working-directory: apps/docs
+
+      # `wrangler deploy` delegates to OpenNext, which populates the
+      # prerender cache in the static assets. `wrangler dev` does not, so
+      # without this step every prerendered page would render on demand and
+      # the run would not resemble production (after Cache Components lands,
+      # it would also throw on the read-only cache).
+      - name: Populate the static-assets cache
+        run: |
+          pnpm exec opennextjs-cloudflare populateCache local
+          if [ -z "$(ls -A .open-next/assets/cdn-cgi/_next_cache 2>/dev/null)" ]; then
+            echo "::error::OpenNext did not populate .open-next/assets/cdn-cgi/_next_cache"
+            exit 1
+          fi
+        working-directory: apps/docs
+
+      # wrangler's local proxy answers 404 before the Worker has loaded, so
+      # waiting for the port is not enough; wait for the Ready line.
+      - name: Start workerd
+        run: |
+          pnpm exec wrangler dev --port 8787 > wrangler.log 2>&1 &
+          for _ in $(seq 1 90); do
+            if grep -q "Ready on" wrangler.log; then
+              break
+            fi
+            sleep 1
+          done
+          if ! grep -q "Ready on" wrangler.log; then
+            echo "::error::wrangler dev did not become ready"
+            cat wrangler.log
+            exit 1
+          fi
+        working-directory: apps/docs
+
+      - name: Smoke test on workerd
+        run: node scripts/smoke-docs.mjs http://127.0.0.1:8787
+        env:
+          SMOKE_ATTEMPTS: "10"
+          SMOKE_DELAY_MS: "3000"
+
+      - name: Worker log
+        if: failure()
+        run: cat apps/docs/wrangler.log
+
   test:
     name: Unit Tests
     runs-on: ubuntu-latest
