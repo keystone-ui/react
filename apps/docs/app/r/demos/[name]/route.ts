@@ -2,7 +2,7 @@ import { join } from "node:path";
 
 import { NextResponse } from "next/server";
 
-import { demos } from "@/demos";
+import { demoFiles } from "@/demos/files";
 import { demoNamesFromFiles } from "@/lib/demo-names";
 import { getDemoFiles, isValidDemoName } from "@/lib/get-demo-files";
 
@@ -18,9 +18,9 @@ import { getDemoFiles, isValidDemoName } from "@/lib/get-demo-files";
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return demoNamesFromFiles(Object.values(demos).map((demo) => demo.file)).map(
-    (name) => ({ name })
-  );
+  return demoNamesFromFiles(Object.values(demoFiles)).map((name) => ({
+    name,
+  }));
 }
 
 export async function GET(

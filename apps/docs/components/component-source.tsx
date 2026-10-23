@@ -4,20 +4,20 @@ import { join } from "node:path";
 import { highlight } from "fumadocs-core/highlight";
 import { CodeBlock, Pre } from "fumadocs-ui/components/codeblock";
 
-import { getDemo } from "@/demos";
+import { getDemoFile } from "@/demos/files";
 
 interface ComponentSourceProps {
   name: string;
 }
 
 export async function ComponentSource({ name }: ComponentSourceProps) {
-  const demo = getDemo(name);
+  const file = getDemoFile(name);
 
-  if (!demo?.file) {
+  if (!file) {
     return null;
   }
 
-  const filePath = join(process.cwd(), "demos", demo.file);
+  const filePath = join(process.cwd(), "demos", file);
   let code: string;
 
   try {
@@ -25,7 +25,7 @@ export async function ComponentSource({ name }: ComponentSourceProps) {
   } catch {
     return (
       <div className="rounded-md border border-red-200 bg-red-50 p-3 text-red-600 text-sm">
-        Could not read source file: {demo.file}
+        Could not read source file: {file}
       </div>
     );
   }

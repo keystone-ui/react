@@ -9,8 +9,6 @@
  *   apps/docs/demos/loader.tsx     "use client" map of next/dynamic imports;
  *                                   the only module that references demo
  *                                   components, so each demo is its own chunk
- *   apps/docs/demos/index.ts       static import map kept for the current
- *                                   consumers; removed once they use the loader
  *
  * Usage:
  *   node scripts/gen-demos.mjs          regenerate
@@ -38,13 +36,6 @@ function walk(dir) {
         .split("\\")
         .join("/")
     );
-}
-
-function pascal(key) {
-  return key
-    .split("-")
-    .map((part) => (part ? part[0].toUpperCase() + part.slice(1) : ""))
-    .join("");
 }
 
 function withoutExtension(file) {
@@ -87,45 +78,12 @@ export function DemoLoader({ name }: { name: string }) {
 `;
 }
 
-function renderIndex(entries) {
-  const imports = entries
-    .map((e) => `import ${pascal(e.key)} from "./${withoutExtension(e.file)}";`)
-    .join("\n");
-  const items = entries
-    .map(
-      (e) => `  "${e.key}": {
-    component: ${pascal(e.key)},
-    file: "${e.file}",
-  },`
-    )
-    .join("\n");
-  return `${HEADER}
-import type { ComponentType } from "react";
-
-${imports}
-
-export interface DemoItem {
-  component: ComponentType;
-  file: string;
-}
-
-export const demos: Record<string, DemoItem> = {
-${items}
-};
-
-export function getDemo(name: string): DemoItem | undefined {
-  return demos[name];
-}
-`;
-}
-
 function main() {
   const check = process.argv.includes("--check");
   const entries = demoEntriesFromPaths(walk(DEMOS_DIR));
   const outputs = {
     "manifest.json": renderManifest(entries),
     "loader.tsx": renderLoader(entries),
-    "index.ts": renderIndex(entries),
   };
 
   const stale = [];

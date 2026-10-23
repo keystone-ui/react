@@ -49,11 +49,15 @@ describe("demo manifest", () => {
     expect(getDemoFile("nope")).toBeUndefined();
   });
 
-  it("is mirrored by the client loader and the static index", () => {
-    for (const file of ["loader.tsx", "index.ts"]) {
-      const source = readFileSync(join(DEMOS_DIR, file), "utf-8");
-      const absent = keys.filter((key) => !source.includes(`"${key}"`));
-      expect(absent, file).toEqual([]);
-    }
+  it("is mirrored by the client loader", () => {
+    const source = readFileSync(join(DEMOS_DIR, "loader.tsx"), "utf-8");
+    const absent = keys.filter((key) => !source.includes(`"${key}"`));
+    expect(absent).toEqual([]);
+  });
+
+  it("no longer ships a static import map", () => {
+    // index.ts imported every demo component; its presence would put all
+    // of them back into every docs route's module graph.
+    expect(existsSync(join(DEMOS_DIR, "index.ts"))).toBe(false);
   });
 });

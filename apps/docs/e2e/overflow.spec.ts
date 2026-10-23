@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-import { demos } from "../demos";
+import { demoFiles } from "../demos/files";
 
 /**
  * No block may give the document a horizontal scrollbar.
@@ -16,7 +16,7 @@ import { demos } from "../demos";
  * docs chrome, so what is measured is the block's own layout.
  */
 
-const BLOCK_NAMES = Object.keys(demos)
+const BLOCK_NAMES = Object.keys(demoFiles)
   .filter((name) => name.startsWith("block-"))
   .sort();
 

@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-import { getDemo } from "@/demos";
+import { getDemoFile } from "@/demos/files";
 import { formatLLMHeader, type Page } from "@/lib/llms-utils";
 import { readMdxSource } from "@/lib/read-mdx-source";
 
@@ -32,14 +32,14 @@ async function replaceComponentPreviews(content: string): Promise<string> {
         return { match: fullMatch, replacement: fullMatch };
       }
 
-      const demo = getDemo(demoName);
+      const file = getDemoFile(demoName);
 
-      if (!demo?.file) {
+      if (!file) {
         return { match: fullMatch, replacement: fullMatch };
       }
 
       try {
-        const filePath = join(process.cwd(), DEMOS_DIR, demo.file);
+        const filePath = join(process.cwd(), DEMOS_DIR, file);
         const code = await readFile(filePath, "utf-8");
 
         return {

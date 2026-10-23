@@ -1,4 +1,5 @@
-import { getDemo } from "@/demos";
+import { getDemoFile } from "@/demos/files";
+import { DemoLoader } from "@/demos/loader";
 import { cn } from "@/lib/cn";
 
 import { ComponentPreviewContainer } from "./component-preview-container";
@@ -10,6 +11,12 @@ interface ComponentPreviewProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string;
 }
 
+/**
+ * Server component. It only needs the demo's file path here; rendering goes
+ * through `DemoLoader`, the single client module that holds a `next/dynamic`
+ * entry per demo, so each demo is its own chunk instead of all ~450 being
+ * merged into one chunk on every docs page.
+ */
 export function ComponentPreview({
   className,
   description,
@@ -17,9 +24,9 @@ export function ComponentPreview({
   name,
   ...props
 }: ComponentPreviewProps) {
-  const demo = getDemo(name);
+  const file = getDemoFile(name);
 
-  if (!demo) {
+  if (!file) {
     return (
       <div
         className={cn(
@@ -28,25 +35,23 @@ export function ComponentPreview({
         )}
       >
         <p className="text-red-600 text-sm">
-          Component demo &quot;{name}&quot; not found. Make sure the demo is
-          registered in the demos index.
+          Component demo &quot;{name}&quot; not found. Make sure the demo file
+          exists under apps/docs/demos and run `pnpm gen:demos`.
         </p>
       </div>
     );
   }
 
-  const Component = demo.component;
-
   return (
     <ComponentPreviewContainer
       className={className}
+      code={hideCode ? undefined : <ComponentSource name={name} />}
       description={description}
       hideCode={hideCode}
       name={name}
       {...props}
     >
-      <Component />
-      {!hideCode && demo.file && <ComponentSource name={name} />}
+      <DemoLoader name={name} />
     </ComponentPreviewContainer>
   );
 }

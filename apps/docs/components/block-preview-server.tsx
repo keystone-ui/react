@@ -1,4 +1,4 @@
-import { getDemo } from "@/demos";
+import { getDemoFile } from "@/demos/files";
 import { cn } from "@/lib/cn";
 
 import { BlockPreviewContainer } from "./block-preview";
@@ -9,15 +9,19 @@ interface BlockPreviewProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string;
 }
 
+/**
+ * Server component. The block itself renders inside an iframe pointed at
+ * `/preview/<name>`, so only the source listing is produced here.
+ */
 export function BlockPreview({
   className,
   description,
   name,
   ...props
 }: BlockPreviewProps) {
-  const demo = getDemo(name);
+  const file = getDemoFile(name);
 
-  if (!demo) {
+  if (!file) {
     return (
       <div
         className={cn(
@@ -26,8 +30,8 @@ export function BlockPreview({
         )}
       >
         <p className="text-red-600 text-sm">
-          Block demo &quot;{name}&quot; not found. Make sure the demo is
-          registered in the demos index.
+          Block demo &quot;{name}&quot; not found. Make sure the demo file
+          exists under apps/docs/demos/blocks and run `pnpm gen:demos`.
         </p>
       </div>
     );
@@ -40,7 +44,7 @@ export function BlockPreview({
       name={name}
       {...props}
     >
-      {demo.file && <ComponentSource name={name} />}
+      <ComponentSource name={name} />
     </BlockPreviewContainer>
   );
 }

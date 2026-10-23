@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { demos } from "../demos";
+import { demoFiles } from "../demos/files";
 
 /**
  * Controls sharing a row must share a height *and* a corner radius.
@@ -42,7 +42,7 @@ import { demos } from "../demos";
  * That is robust to wrappers, to `flex-wrap`, and to the `sm:hidden` fork.
  */
 
-const BLOCK_NAMES = Object.keys(demos)
+const BLOCK_NAMES = Object.keys(demoFiles)
   .filter((name) => name.startsWith("block-"))
   .sort();
 

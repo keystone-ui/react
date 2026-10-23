@@ -29,7 +29,11 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: "pnpm build && pnpm start --port 3210",
+    // CI builds once and runs the built-output tests before Playwright;
+    // PLAYWRIGHT_SKIP_BUILD=1 reuses that build instead of compiling again.
+    command: process.env.PLAYWRIGHT_SKIP_BUILD
+      ? "pnpm start --port 3210"
+      : "pnpm build && pnpm start --port 3210",
     url: "http://127.0.0.1:3210",
     // Reusing a dev server here would hand the tests differently-timed markup
     // and they would pass while testing something else.

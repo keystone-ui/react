@@ -4,24 +4,19 @@
  * (`button-default` is a key; `button` is what the route serves).
  */
 
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync } from "node:fs";
 import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { demoFiles } from "../demos/files";
 import { demoNamesFromFiles } from "../lib/demo-names";
 
 const DEMOS_DIR = join(import.meta.dirname, "..", "demos");
-const FILE_FIELD = /file: "([^"]+)"/g;
 const TSX_EXT = /\.tsx$/;
 
-describe("demoNamesFromFiles against the real demo map", () => {
-  // The demo map is read as text: importing it pulls ~450 TSX components
-  // into vitest. B0 replaces it with an importable `demos/files.ts`.
-  const files = [
-    ...readFileSync(join(DEMOS_DIR, "index.ts"), "utf-8").matchAll(FILE_FIELD),
-  ].map((m) => m[1]);
-  const names = demoNamesFromFiles(files);
+describe("demoNamesFromFiles against the real demo manifest", () => {
+  const names = demoNamesFromFiles(Object.values(demoFiles));
 
   it("prerenders a /r/demos entry for every component directory and block on disk", () => {
     const onDisk = [
@@ -32,7 +27,7 @@ describe("demoNamesFromFiles against the real demo map", () => {
         b.replace(TSX_EXT, "")
       ),
     ];
-    expect(files.length).toBeGreaterThan(400);
+    expect(Object.keys(demoFiles).length).toBeGreaterThan(400);
     expect(names.length).toBeGreaterThan(50);
     expect(onDisk.filter((n) => !names.includes(n))).toEqual([]);
     expect(names.filter((n) => !onDisk.includes(n))).toEqual([]);

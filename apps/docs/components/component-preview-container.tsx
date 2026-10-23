@@ -2,7 +2,8 @@
 
 import { Button } from "@keystoneui/react/button";
 import { ChevronDown } from "lucide-react";
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 
 import { V0Logo } from "@/components/v0-logo";
 import { cn } from "@/lib/cn";
@@ -13,6 +14,8 @@ const V0_ENABLED = Boolean(V0_URL && APP_URL);
 
 interface ComponentPreviewContainerProps
   extends React.HTMLAttributes<HTMLDivElement> {
+  /** The highlighted source block; omitted when `hideCode` is set. */
+  code?: React.ReactNode;
   description?: string;
   hideCode?: boolean;
   name: string;
@@ -21,15 +24,15 @@ interface ComponentPreviewContainerProps
 export function ComponentPreviewContainer({
   children,
   className,
+  code,
   description,
   hideCode = false,
   name,
   ...props
 }: ComponentPreviewContainerProps) {
   const [expanded, setExpanded] = useState(false);
-  const childArray = React.Children.toArray(children) as React.ReactElement[];
-  const Component = childArray[0];
-  const Code = childArray[1];
+  const Component = children;
+  const Code = code;
 
   const v0Href = V0_ENABLED
     ? `${V0_URL}/chat/api/open?url=${encodeURIComponent(`${APP_URL}/r/${name}.json`)}`

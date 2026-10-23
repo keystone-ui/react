@@ -67,6 +67,8 @@ describe("prerender-manifest.json", () => {
 
   it("prerenders the filesystem-reading routes so workerd never reads fs", () => {
     for (const route of [
+      "/preview/button-default",
+      "/preview/block-signin-01",
       "/r/demos/button",
       "/r/demos/signin-01",
       "/llms.mdx/docs",
