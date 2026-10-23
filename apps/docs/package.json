@@ -11,7 +11,8 @@
     "preview:cf": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy:cf": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
-    "test": "vitest run",
+    "test": "vitest run --project unit",
+    "test:built": "vitest run --project built",
     "test:e2e": "playwright test"
   },
   "dependencies": {
