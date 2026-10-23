@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "@keystoneui/typescript-config": "workspace:*",
+    "@next/playwright": "16.4.2",
     "@playwright/test": "^1.64.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/culori": "^4.0.1",

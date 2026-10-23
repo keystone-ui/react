@@ -73,11 +73,28 @@ jobs:
       - name: Install Playwright browser
         run: pnpm --filter @keystoneui/docs exec playwright install --with-deps chromium
 
+      # One production build for both suites below. EXPOSE_TESTING_API=1 keeps
+      # Next's testing API in this build so the instant-navigation e2e can hold
+      # back un-prefetched content; it is a build-time switch and the deploy
+      # workflow never sets it.
+      - name: Build docs
+        run: pnpm build --filter=@keystoneui/docs
+        env:
+          EXPOSE_TESTING_API: "1"
+
+      # Chunk budgets, the prerender manifest and the known-paths list are
+      # read straight off the build output.
+      - name: Built-output invariants
+        run: pnpm --filter @keystoneui/docs test:built
+
       # Every block preview at 375/768/1280, asserting the document never
       # scrolls sideways -- plus a positive control, because "nothing
       # overflows" also passes when no content is wide enough to overflow.
-      - name: Layout invariants
+      # Plus the instant-navigation guard for the Cache Components model.
+      - name: Layout and navigation invariants
         run: pnpm --filter @keystoneui/docs test:e2e
+        env:
+          PLAYWRIGHT_SKIP_BUILD: "1"
 
   test:
     name: Unit Tests

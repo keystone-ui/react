@@ -27,6 +27,11 @@ const config = {
     },
   },
   experimental: {
+    // Next's testing API (the `next-instant-navigation-testing` cookie that
+    // `instant()` from @next/playwright drives) stays out of production
+    // builds unless the build asks for it. CI's e2e build sets this; deploy
+    // builds never do.
+    exposeTestingApiInProductionBuild: process.env.EXPOSE_TESTING_API === "1",
     // TypeScript 7 ships no JS API, so Next's in-process type-check can't
     // load it. Run the `tsc` CLI instead.
     useTypeScriptCli: true,

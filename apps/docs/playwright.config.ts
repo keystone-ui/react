@@ -29,11 +29,17 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    // CI builds once and runs the built-output tests before Playwright;
-    // PLAYWRIGHT_SKIP_BUILD=1 reuses that build instead of compiling again.
+    // CI builds once (with EXPOSE_TESTING_API=1, see below) and runs the
+    // built-output tests before Playwright; PLAYWRIGHT_SKIP_BUILD=1 reuses
+    // that build instead of compiling again.
+    //
+    // EXPOSE_TESTING_API=1 is a build-time switch: it keeps Next's testing
+    // API in the production build so `instant()` (@next/playwright) can hold
+    // back un-prefetched content in e2e/instant-navigation.spec.ts. Deploy
+    // builds never set it.
     command: process.env.PLAYWRIGHT_SKIP_BUILD
       ? "pnpm start --port 3210"
-      : "pnpm build && pnpm start --port 3210",
+      : "EXPOSE_TESTING_API=1 pnpm build && pnpm start --port 3210",
     url: "http://127.0.0.1:3210",
     // Reusing a dev server here would hand the tests differently-timed markup
     // and they would pass while testing something else.

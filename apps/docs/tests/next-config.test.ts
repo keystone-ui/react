@@ -8,6 +8,8 @@
  * is the single finite value its `computeCacheControl` treats as SSG.
  */
 
+import { readFile } from "node:fs/promises";
+
 import { describe, expect, it } from "vitest";
 
 const ONE_YEAR = 31_536_000;
@@ -25,7 +27,18 @@ describe("next.config", async () => {
       string,
       { stale?: number; revalidate?: number; expire?: number }
     >;
+    experimental?: { exposeTestingApiInProductionBuild?: boolean };
   };
+
+  it("keeps Next's testing API out of production builds unless asked", async () => {
+    // `instant()` from @next/playwright needs the API, so the e2e build sets
+    // EXPOSE_TESTING_API=1; a deploy build must never carry it.
+    expect(resolved.experimental?.exposeTestingApiInProductionBuild).toBe(
+      false
+    );
+    const source = await readFile(new URL(CONFIG_URL), "utf8");
+    expect(source).toContain('process.env.EXPOSE_TESTING_API === "1"');
+  });
 
   it("enables Cache Components and Partial Prefetching", () => {
     expect(resolved.cacheComponents).toBe(true);

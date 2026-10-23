@@ -3,6 +3,9 @@
   "tasks": {
     "build": {
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      // Build-time switch for the docs e2e build; part of the hash so a
+      // cached build made without it is never reused for one that needs it.
+      "env": ["EXPOSE_TESTING_API"],
       "outputs": ["dist/**", "storybook-static/**", ".next/**"],
       "dependsOn": ["^build"]
     },

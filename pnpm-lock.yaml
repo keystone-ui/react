@@ -135,6 +135,9 @@ importers:
       '@keystoneui/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
+      '@next/playwright':
+        specifier: 16.4.2
+        version: 16.4.2(@playwright/test@1.64.1)
       '@playwright/test':
         specifier: ^1.64.1
         version: 1.64.1
@@ -1792,6 +1795,14 @@ packages:
 
   '@next/env@16.4.2':
     resolution: {integrity: sha512-nTUTFH7G5/J/fmpkjVLegOkqyKOP0CEsJcMsyO4UCYeN1su+YMW/MfaSErnJskL7XM+UDK6aTvslxsRCyya/sA==}
+
+  '@next/playwright@16.4.2':
+    resolution: {integrity: sha512-j8hwXGX8ZnEdPSnHbh09QB40Zi5rE/dB5zf/YTArc/izOamG4HVbWBHP17FY6HnLDd8xoj2xurdtycgzCiMwxw==}
+    peerDependencies:
+      '@playwright/test': '>=1.0.0'
+    peerDependenciesMeta:
+      '@playwright/test':
+        optional: true
 
   '@next/swc-darwin-arm64@16.4.2':
     resolution: {integrity: sha512-ONkhFvZNFWlsEHOM/81AtxdyuJP2KRYKYR0JxPwvcu1AuPMMMgcL+wW2luldJvMtZwKtUxoSkCychW5wIeoYSw==}
@@ -9027,6 +9038,10 @@ snapshots:
     optional: true
 
   '@next/env@16.4.2': {}
+
+  '@next/playwright@16.4.2(@playwright/test@1.64.1)':
+    optionalDependencies:
+      '@playwright/test': 1.64.1
 
   '@next/swc-darwin-arm64@16.4.2':
     optional: true
