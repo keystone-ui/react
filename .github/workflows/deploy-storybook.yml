@@ -23,10 +23,12 @@ defaults:
 jobs:
   deploy:
     name: Deploy Storybook
-    # Forks receive no secrets; skip rather than fail on authentication.
+    # Forks and Dependabot receive no repository secrets; skip rather than
+    # fail on authentication.
     if: >-
-      github.event_name == 'push' ||
-      github.event.pull_request.head.repo.full_name == github.repository
+      github.actor != 'dependabot[bot]' &&
+      (github.event_name == 'push' ||
+      github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
     permissions:
       contents: read

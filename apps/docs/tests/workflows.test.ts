@@ -24,13 +24,16 @@ const VERSION_COMMENT = /^\s+#\s*v?\d+(?:\.\d+)*\s*$/;
 
 const FORK_GUARD =
   "github.event.pull_request.head.repo.full_name == github.repository";
+const DEPENDABOT_GUARD = "github.actor != 'dependabot[bot]'";
 const CANCEL_PULL_REQUESTS_ONLY = "github.event_name == 'pull_request'";
-const CLOUDFLARE_TOKEN = "CLOUDFLARE_API_TOKEN";
+// Always available, so it needs no guard.
+const GITHUB_TOKEN = "secrets.GITHUB_TOKEN";
 
 interface Step {
   env?: Record<string, unknown>;
   run?: string;
   uses?: string;
+  with?: Record<string, unknown>;
 }
 
 interface Job {
@@ -67,9 +70,11 @@ function mentionsSecret(value: unknown): boolean {
   return JSON.stringify(value ?? {}).includes("secrets.");
 }
 
-function stepsUsingCloudflareToken(job: Job): Step[] {
+function stepsUsingRepositorySecrets(job: Job): Step[] {
   return (job.steps ?? []).filter((step) =>
-    JSON.stringify(step.env ?? {}).includes(CLOUDFLARE_TOKEN)
+    JSON.stringify({ env: step.env, with: step.with })
+      .replaceAll(GITHUB_TOKEN, "")
+      .includes("secrets.")
   );
 }
 
@@ -156,18 +161,22 @@ describe("GitHub Actions workflows", () => {
     }
   });
 
-  it("skips Cloudflare deploys for pull requests from forks", () => {
-    // Forks receive no secrets, so without a guard the deploy fails with an
-    // auth error the contributor cannot fix.
+  it("skips jobs that need repository secrets for fork and Dependabot PRs", () => {
+    // Neither receives repository secrets, so without a guard the job fails
+    // on authentication: for a fork, with an error the contributor cannot
+    // fix; for Dependabot, on every weekly action bump.
     let guardedJobs = 0;
     for (const { file, doc } of workflows) {
       for (const [name, job] of Object.entries(doc.jobs)) {
-        if (stepsUsingCloudflareToken(job).length === 0) {
+        if (stepsUsingRepositorySecrets(job).length === 0) {
           continue;
         }
         guardedJobs++;
         expect(job.if, `${file} › ${name} needs a fork guard`).toContain(
           FORK_GUARD
+        );
+        expect(job.if, `${file} › ${name} needs a Dependabot guard`).toContain(
+          DEPENDABOT_GUARD
         );
       }
     }
@@ -202,6 +211,9 @@ describe("GitHub Actions workflows", () => {
         run.includes("registry:build") && run.includes("git diff --exit-code")
     );
     expect(drift).toBeDefined();
+    // `git diff` ignores untracked files, so a new block's JSON that the
+    // build created would pass unless it is first marked intent-to-add.
+    expect(drift).toContain("git add --intent-to-add");
   });
 });
 
