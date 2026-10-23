@@ -35,3 +35,6 @@ skills-lock.json
 
 # Vitest 5 failure screenshots / attachments
 .vitest/
+
+# wrangler dev state (apps/docs, apps/storybook)
+.wrangler/

@@ -4,13 +4,23 @@ on:
   push:
     branches:
       - main
+  # Unfiltered on purpose. A stacked PR targets another PR's branch, and a
+  # `branches: [main]` filter here meant such PRs ran only the deploy
+  # workflows -- no lint, no tests, no workerd smoke.
   pull_request:
-    branches:
-      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    # `bash` sets -o pipefail; the default shell does not, so a failing
+    # command on the left of a pipe would leave the step green.
+    shell: bash
 
 jobs:
   lint:
@@ -18,13 +28,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           # Resolve the newest 22.x instead of whatever the runner image cached,
@@ -44,18 +54,27 @@ jobs:
       - name: Docs and registry lint
         run: pnpm lint:docs
 
+      # registry.json and apps/docs/public/r/ are committed outputs of
+      # `pnpm registry:build`. lint:docs checks registry.json against its
+      # sources; this also covers the public JSON that `npx shadcn add`
+      # installs, so a demo edit that skipped the rebuild cannot ship stale.
+      - name: Registry drift
+        run: |
+          pnpm registry:build
+          git diff --exit-code --stat -- registry.json apps/docs/public/r
+
   docs-e2e:
     name: Docs Layout (Playwright)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           # Resolve the newest 22.x instead of whatever the runner image cached,
@@ -93,13 +112,13 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           # Resolve the newest 22.x instead of whatever the runner image cached,
@@ -170,13 +189,13 @@ jobs:
     needs: lint
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           # Resolve the newest 22.x instead of whatever the runner image cached,
@@ -211,13 +230,13 @@ jobs:
     needs: lint
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           # Resolve the newest 22.x instead of whatever the runner image cached,
@@ -247,15 +266,15 @@ jobs:
     needs: lint
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           # Resolve the newest 22.x instead of whatever the runner image cached,
@@ -270,7 +289,7 @@ jobs:
         run: pnpm build --filter=@keystoneui/storybook
 
       - name: Run Chromatic
-        uses: chromaui/action@latest
+        uses: chromaui/action@5bcadb5104b09e360e210c54f95a7437c2d82bab # v18.13.3
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           storybookBaseDir: apps/storybook
@@ -290,13 +309,17 @@ jobs:
     if: >-
       github.event_name == 'push' ||
       github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: read
+      # paths-filter lists a pull request's changed files through the API.
+      pull-requests: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Changed paths
         id: changed
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@0e4a8c6effa4802afeda77dc8d303f8176d7dfad # v3.0.4
         with:
           filters: |
             skill:
@@ -307,7 +330,7 @@ jobs:
 
       - name: Setup Node.js
         if: steps.changed.outputs.skill == 'true'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           # Resolve the newest 22.x instead of whatever the runner image cached,
@@ -320,7 +343,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           if [ -z "$ANTHROPIC_API_KEY" ]; then
-            echo "ANTHROPIC_API_KEY is not set; skipping skill evals." >&2
+            echo "::warning::ANTHROPIC_API_KEY is not set; skipping skill evals."
             exit 0
           fi
           npx -y @anthropic-ai/claude-code@latest plugin eval . \
@@ -332,7 +355,7 @@ jobs:
 
       - name: Upload eval report
         if: steps.changed.outputs.skill == 'true' && always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: eval-results
           path: eval-results.json

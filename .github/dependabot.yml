@@ -1,0 +1,18 @@
+# Actions in .github/workflows are pinned to commit SHAs (enforced by
+# apps/docs/tests/workflows.test.ts), so a moved tag cannot change what CI
+# runs. Dependabot is what moves those pins forward, one grouped PR a week.
+#
+# npm is deliberately not here: @base-ui/react, next and @opennextjs/cloudflare
+# are exact pins that must move in explicit commits (see AGENTS.md).
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: "ci"
+      include: "scope"
