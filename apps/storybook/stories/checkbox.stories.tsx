@@ -344,11 +344,11 @@ export const PillCheckboxGroup: Story = {
                     key={option.value}
                   >
                     <Field
-                      className="gap-1.5 overflow-hidden px-3! py-1.5! transition-all duration-100 ease-linear group-has-data-checked/field-label:px-2!"
+                      className="gap-1.5 overflow-hidden px-3! py-1.5! transition-[padding] duration-100 ease-linear group-has-data-checked/field-label:px-2!"
                       orientation="horizontal"
                     >
                       <Checkbox
-                        className="-ml-6 -translate-x-1 rounded-full transition-all duration-100 ease-linear data-checked:ml-0 data-checked:translate-x-0"
+                        className="-ml-6 -translate-x-1 rounded-full transition-[margin,translate] duration-100 ease-linear data-checked:ml-0 data-checked:translate-x-0"
                         defaultChecked={option.value === "social-media"}
                         id={`pill-${option.value}`}
                         value={option.value}
