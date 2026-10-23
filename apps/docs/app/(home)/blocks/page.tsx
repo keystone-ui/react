@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import registry from "../../public/r/registry.json";
+import registry from "../../../public/r/registry.json";
 
 export const metadata: Metadata = {
   title: "Blocks",

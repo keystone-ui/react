@@ -31,7 +31,10 @@ export function useThemeState() {
         "dark"
       ),
     },
-    { history: "push" }
+    // `replace`, not `push`: the colour area fires onChange on every drag
+    // tick, and each push made the Back button walk through dozens of
+    // intermediate themes. The URL still carries the full state for sharing.
+    { history: "replace" }
   );
 }
 

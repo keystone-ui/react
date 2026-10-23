@@ -65,7 +65,7 @@ const SOURCE = "packages/ui/src/base.css";
 const STYLESHEETS = [
   "apps/docs/app/global.css",
   "apps/storybook/.storybook/preview.css",
-  "apps/docs/app/theme-builder/utils/generate-css-output.ts",
+  "apps/docs/app/(home)/theme-builder/utils/generate-css-output.ts",
 ];
 
 /**

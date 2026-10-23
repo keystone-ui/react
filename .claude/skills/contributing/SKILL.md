@@ -118,7 +118,7 @@ stay that way. Bumping a dozen numbers per component is how they end up
 disagreeing with each other, which is exactly the state this replaced (three
 different values across ten files).
 
-| `apps/docs/app/gallery/page.tsx` | Add a `{name, slug, description}` entry. Hardcoded, so a new component is invisible in the gallery until it is listed. |
+| `apps/docs/app/(home)/gallery/page.tsx` | Add a `{name, slug, description}` entry. Hardcoded, so a new component is invisible in the gallery until it is listed. |
 | `apps/docs/public/r/` | Run `pnpm registry:build` to rebuild registry artifacts. |
 
 ### When changing a convention or adding a new rule
