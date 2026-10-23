@@ -1,5 +1,3 @@
-import { notFound } from "next/navigation";
-import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 import { getLLMText } from "@/lib/get-llm-text";
@@ -8,33 +6,34 @@ import { source } from "@/lib/source";
 
 export const revalidate = false;
 
+/**
+ * Every page is prerendered, including the docs root. Unknown slugs never
+ * reach the handler, so they get Next's 404 instead of the 500 this route
+ * used to return when `notFound()` was thrown inside a try/catch.
+ */
+export const dynamicParams = false;
+
 export async function GET(
-  _req: NextRequest,
-  { params }: { params: Promise<{ slug: string[] }> }
+  _req: Request,
+  { params }: { params: Promise<{ slug?: string[] }> }
 ) {
-  try {
-    const { slug } = await params;
-    const page = source.getPage(slug);
+  const { slug } = await params;
+  const page = source.getPage(slug ?? []);
 
-    if (!page) {
-      notFound();
-    }
-
-    const content = await getLLMText(page);
-
-    return new NextResponse(content, { headers: LLMS_TEXT_HEADERS });
-  } catch (error) {
-    console.error("Error generating llms.mdx:", error);
-
-    return new NextResponse("Error generating documentation", {
+  if (!page) {
+    return new NextResponse("Not found", {
       headers: LLMS_TEXT_HEADERS,
-      status: 500,
+      status: 404,
     });
   }
+
+  // No try/catch: this runs at build time, so a missing MDX file must fail
+  // the build rather than ship a placeholder body.
+  const content = await getLLMText(page);
+
+  return new NextResponse(content, { headers: LLMS_TEXT_HEADERS });
 }
 
 export function generateStaticParams() {
-  return source
-    .generateParams()
-    .filter((param) => param.slug && param.slug.length > 0);
+  return source.generateParams().map((param) => ({ slug: param.slug ?? [] }));
 }

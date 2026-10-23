@@ -3,7 +3,6 @@ import { Skeleton } from "@keystoneui/react/skeleton";
 import { cn } from "@/lib/cn";
 
 const REPO = "keystone-ui/react";
-const REVALIDATE_SECONDS = 86_400;
 
 interface ParticipationData {
   all: number[];
@@ -46,13 +45,14 @@ async function fetchGitHubStats(): Promise<{
     .toISOString()
     .slice(0, 10);
 
+  // No `next.revalidate`: the data is captured once at build time. A TTL
+  // here turned /changelog into an ISR route, and on the Worker's read-only
+  // static-assets cache that meant every request fell through to the Next
+  // server instead of being served from assets.
   const [participationRes, prRes] = await Promise.all([
-    fetch(`https://api.github.com/repos/${REPO}/stats/participation`, {
-      next: { revalidate: REVALIDATE_SECONDS },
-    }),
+    fetch(`https://api.github.com/repos/${REPO}/stats/participation`),
     fetch(
-      `https://api.github.com/search/issues?q=repo:${REPO}+type:pr+created:>${oneYearAgo}`,
-      { next: { revalidate: REVALIDATE_SECONDS } }
+      `https://api.github.com/search/issues?q=repo:${REPO}+type:pr+created:>${oneYearAgo}`
     ),
   ]);
 

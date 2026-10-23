@@ -24,6 +24,12 @@ describe("isValidDemoName", () => {
   it("rejects empty input", () => {
     expect(isValidDemoName("")).toBe(false);
   });
+
+  it("rejects the reserved blocks directory name", () => {
+    // `demos/blocks` is a real directory, so without this guard
+    // `/r/demos/blocks` would stream every block's source as one bundle.
+    expect(isValidDemoName("blocks")).toBe(false);
+  });
 });
 
 describe("getDemoFiles", () => {

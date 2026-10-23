@@ -2,13 +2,26 @@ import { join } from "node:path";
 
 import { NextResponse } from "next/server";
 
+import { demos } from "@/demos";
+import { demoNamesFromFiles } from "@/lib/demo-names";
 import { getDemoFiles, isValidDemoName } from "@/lib/get-demo-files";
 
-// Side-effect import: ensures Next.js's file tracer includes apps/docs/demos/**
-// in the runtime bundle. Without this, the demos directory may not be present
-// in production deployments (Vercel/OpenNext) since this route only does
-// filesystem reads. Mirrors the pattern in apps/docs/lib/get-llm-text.ts.
-import "@/demos";
+/**
+ * Prerendered for every component and block name.
+ *
+ * The filesystem this route reads does not exist inside the deployed Worker:
+ * when this ran at request time, every name returned 404 in production and
+ * the MCP `get_examples` tool was dead while CI stayed green (its unit test
+ * reads the repo). Prerendering moves the read to `next build`, where the
+ * files exist, and serves the JSON from static assets.
+ */
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return demoNamesFromFiles(Object.values(demos).map((demo) => demo.file)).map(
+    (name) => ({ name })
+  );
+}
 
 export async function GET(
   _: Request,
@@ -21,7 +34,14 @@ export async function GET(
   }
 
   const demosRoot = join(process.cwd(), "demos");
-  const bundle = await getDemoFiles({ name, demosRoot });
+  let bundle: Awaited<ReturnType<typeof getDemoFiles>> = null;
+  try {
+    bundle = await getDemoFiles({ name, demosRoot });
+  } catch {
+    // Only reachable off the build machine (no `demos/` on disk): answer
+    // like a miss rather than a server fault.
+    bundle = null;
+  }
 
   if (!bundle) {
     return NextResponse.json(

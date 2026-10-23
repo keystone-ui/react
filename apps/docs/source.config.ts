@@ -7,6 +7,12 @@ import { z } from "zod";
 
 export const docs = defineDocs({
   dir: "content/docs",
+  docs: {
+    // `_template.mdx` and `_block-template.mdx` are authoring references,
+    // not pages. Without this exclusion they were published, listed in
+    // llms.txt, and ranked first in search for "button".
+    files: ["**/*.{md,mdx}", "!**/_*.{md,mdx}"],
+  },
 });
 
 export const blogPosts = defineCollections({

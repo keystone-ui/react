@@ -16,8 +16,11 @@ const SOURCE_EXTENSIONS = new Set([".tsx", ".ts", ".css"]);
 
 const VALID_NAME = /^[a-z0-9-]+$/i;
 
+/** Directory names under `demos/` that are containers, not demos. */
+const RESERVED_NAMES = new Set(["blocks"]);
+
 export function isValidDemoName(name: string): boolean {
-  return VALID_NAME.test(name);
+  return VALID_NAME.test(name) && !RESERVED_NAMES.has(name.toLowerCase());
 }
 
 async function readDirectory(dir: string): Promise<DemoFile[]> {

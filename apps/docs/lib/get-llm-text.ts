@@ -3,25 +3,12 @@ import { join } from "node:path";
 
 import { getDemo } from "@/demos";
 import { formatLLMHeader, type Page } from "@/lib/llms-utils";
+import { readMdxSource } from "@/lib/read-mdx-source";
 
-const CONTENT_DIR = "content/docs";
 const DEMOS_DIR = "demos";
 
 function normalizePagePath(pagePath: string): string {
   return pagePath.endsWith(".mdx") ? pagePath : `${pagePath}.mdx`;
-}
-
-async function getRawMDXContent(pagePath: string): Promise<string> {
-  try {
-    const normalizedPath = normalizePagePath(pagePath);
-    const filePath = join(process.cwd(), CONTENT_DIR, normalizedPath);
-    const content = await readFile(filePath, "utf-8");
-
-    return content.trim() ? content : "";
-  } catch (error) {
-    console.error(`Failed to read MDX file: ${pagePath}`, error);
-    return "";
-  }
 }
 
 // --- ComponentPreview replacement ---
@@ -107,11 +94,9 @@ export async function getLLMText(page: Page): Promise<string> {
 
   const header = formatLLMHeader(title, url, normalizedPath, description);
 
-  const rawContent = await getRawMDXContent(page.path);
-
-  if (!rawContent) {
-    return `<page url="${url}">\n${header}\n*Content unavailable*\n</page>`;
-  }
+  // Throws on a missing file: these routes prerender, so the build fails
+  // instead of shipping a placeholder body.
+  const rawContent = await readMdxSource(page.path);
 
   const withDemos = await replaceComponentPreviews(rawContent);
 

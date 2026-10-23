@@ -30,16 +30,29 @@
 import { pathToFileURL } from "node:url";
 
 /**
- * Routes that cannot be answered without running the Next server.
+ * Routes that must reach the Next server, plus what their bodies must say.
  *
- * The dynamic route proves the server constructs and renders. The not-found
- * check is the safety net: if that route is ever prerendered, its 200 would
- * come from assets, but an unknown path always reaches the server, and a
- * throwing Worker turns it into a 500.
+ * `/api/search` is the dynamic canary: it reads the query string, so it can
+ * never be served from assets, and it exercises the Next server plus the
+ * in-memory search index. `bodyIncludes` guards against a 200 that is an
+ * error page or a stale handler. `/r/demos/button` is prerendered, but it
+ * is the route the MCP `get_examples` tool depends on and it 404'd in
+ * production for ten days while CI was green, so it stays pinned here. The
+ * two 404 checks always reach the server: an unknown path is never in
+ * assets, and a throwing Worker turns them into 500s. The `.mdx` one also
+ * proves the llms route answers a miss with 404, not the 500 it used to.
  */
+/** @typedef {{ path: string, status: number, bodyIncludes?: string }} Check */
+/** @type {Check[]} */
 export const DEFAULT_CHECKS = [
-  { path: "/preview/button-default", status: 200 },
+  {
+    path: "/api/search?query=button",
+    status: 200,
+    bodyIncludes: "/docs/components/button",
+  },
+  { path: "/r/demos/button", status: 200, bodyIncludes: '"name":"button"' },
   { path: "/__smoke-docs-missing-route", status: 404 },
+  { path: "/docs/components/__smoke-docs-missing.mdx", status: 404 },
 ];
 
 const defaultSleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -50,7 +63,7 @@ const defaultSleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  *
  * @param {object} options
  * @param {string} options.baseUrl           Origin of the deployed docs site.
- * @param {Array<{path: string, status: number}>} [options.checks]
+ * @param {Check[]} [options.checks]  Each may carry `bodyIncludes`, a substring the matching-status body must contain.
  * @param {typeof globalThis.fetch} [options.fetch]
  * @param {number} [options.attempts]        Attempts per check.
  * @param {number} [options.delayMs]         Pause between attempts.
@@ -84,49 +97,76 @@ export async function runChecks({
   }
 
   for (const check of checks) {
-    const url = `${origin}${check.path}`;
-    let actual;
-    let attempt = 0;
-    let ok = false;
-
-    while (attempt < attempts) {
-      attempt += 1;
-      try {
-        // biome-ignore lint/performance/noAwaitInLoops: retries are sequential by design; each attempt waits for the previous one to miss
-        const response = await fetch(url, {
-          // The error page is `no-store`, but make sure a stale cached success
-          // can never mask a broken deploy either.
-          headers: { "cache-control": "no-cache" },
-          // A redirect would hide the status we are asserting on.
-          redirect: "manual",
-        });
-        actual = response.status;
-      } catch (error) {
-        actual = error instanceof Error ? error.message : String(error);
-      }
-
-      ok = actual === check.status;
-      log(
-        `${ok ? "ok  " : "miss"} ${check.path} -> ${actual} (want ${check.status}, attempt ${attempt}/${attempts})`
-      );
-      if (ok) {
-        break;
-      }
-      if (attempt < attempts) {
-        await sleep(delayMs);
-      }
-    }
-
-    results.push({
-      path: check.path,
-      expected: check.status,
-      actual,
-      attempts: attempt,
-      ok,
+    // biome-ignore lint/performance/noAwaitInLoops: checks run one after another so their log lines read in order
+    const result = await runCheck({
+      check,
+      url: `${origin}${check.path}`,
+      fetch,
+      attempts,
+      delayMs,
+      sleep,
+      log,
     });
+    results.push(result);
   }
 
   return { ok: results.every((r) => r.ok), results };
+}
+
+/**
+ * One request. Returns the status on a plain match, or a string describing
+ * what was wrong: an error message, or the status plus the missing marker.
+ */
+async function attemptCheck({ check, url, fetch }) {
+  try {
+    const response = await fetch(url, {
+      // The error page is `no-store`, but make sure a stale cached success
+      // can never mask a broken deploy either.
+      headers: { "cache-control": "no-cache" },
+      // A redirect would hide the status we are asserting on.
+      redirect: "manual",
+    });
+    if (response.status !== check.status || !check.bodyIncludes) {
+      return response.status;
+    }
+    const body = await response.text();
+    return body.includes(check.bodyIncludes)
+      ? response.status
+      : `${response.status} without marker ${JSON.stringify(check.bodyIncludes)}`;
+  } catch (error) {
+    return error instanceof Error ? error.message : String(error);
+  }
+}
+
+/** Retries one check until it matches or the attempt budget runs out. */
+async function runCheck({ check, url, fetch, attempts, delayMs, sleep, log }) {
+  let actual;
+  let attempt = 0;
+  let ok = false;
+
+  while (attempt < attempts) {
+    attempt += 1;
+    // biome-ignore lint/performance/noAwaitInLoops: retries are sequential by design; each attempt waits for the previous one to miss
+    actual = await attemptCheck({ check, url, fetch });
+    ok = actual === check.status;
+    log(
+      `${ok ? "ok  " : "miss"} ${check.path} -> ${actual} (want ${check.status}, attempt ${attempt}/${attempts})`
+    );
+    if (ok) {
+      break;
+    }
+    if (attempt < attempts) {
+      await sleep(delayMs);
+    }
+  }
+
+  return {
+    path: check.path,
+    expected: check.status,
+    actual,
+    attempts: attempt,
+    ok,
+  };
 }
 
 async function main() {
