@@ -10,7 +10,61 @@ import {
 } from "@keystoneui/react/stepper";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
+
+/** The x component of an inline `transform`, e.g. `translateX(-110%)`. */
+const TRANSLATE_X = /translateX\((-?[\d.]+)/;
+
+/**
+ * Records the inline `style` an entering step is mounted with.
+ *
+ * Motion resolves the slide-in side once, from `direction` at mount, renders
+ * it as the initial inline transform, then drives the animation itself and
+ * rewrites that style -- so the value cannot be read back reliably after the
+ * click resolves. A MutationObserver sees the insertion and, through
+ * `attributeOldValue`, every value the attribute has held since; the first
+ * one carrying a `translateX` is the side the step entered from.
+ */
+/** The step wrapper a childList record inserted, if any. */
+function insertedStepWrapper(record: MutationRecord): HTMLElement | null {
+  for (const node of record.addedNodes) {
+    if (
+      node instanceof HTMLElement &&
+      node.querySelector('[data-slot="stepper-step"]')
+    ) {
+      return node;
+    }
+  }
+  return null;
+}
+
+function observeMountTransform(root: Element) {
+  let entering: HTMLElement | null = null;
+  const styles: string[] = [];
+  const observer = new MutationObserver((records) => {
+    for (const record of records) {
+      if (record.type === "childList") {
+        entering = insertedStepWrapper(record) ?? entering;
+      } else if (record.target === entering) {
+        styles.push(record.oldValue ?? "");
+      }
+    }
+    if (entering) {
+      styles.push(entering.getAttribute("style") ?? "");
+    }
+  });
+  observer.observe(root, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeOldValue: true,
+    attributeFilter: ["style"],
+  });
+  return () => {
+    observer.disconnect();
+    return styles.find((style) => TRANSLATE_X.test(style)) ?? null;
+  };
+}
 
 const meta = {
   title: "Components/Stepper",
@@ -194,8 +248,43 @@ export const Default: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const firstStep = canvas.getByText("This is step one");
-    await expect(firstStep).toBeInTheDocument();
+    await expect(canvas.getByText("This is step one")).toBeInTheDocument();
+
+    const content = canvasElement.querySelector(
+      '[data-slot="stepper-content"]'
+    );
+    await expect(content).toHaveAttribute("data-direction", "1");
+
+    await userEvent.click(canvas.getByRole("button", { name: /^continue$/i }));
+    await expect(canvas.getByText("This is step two")).toBeInTheDocument();
+    await expect(content).toHaveAttribute("data-direction", "1");
+
+    // Let step one finish leaving. Going back while it is still exiting
+    // makes AnimatePresence turn the same node around instead of mounting a
+    // fresh one, and a turned-around node never applies `initial`.
+    await waitFor(
+      async () => {
+        await expect(
+          canvas.queryByText("This is step one")
+        ).not.toBeInTheDocument();
+      },
+      { timeout: 5000 }
+    );
+
+    // The direction must be right in the render that mounts the returning
+    // step, not one render later: motion reads the slide-in side once, at
+    // mount. Going back, step one enters from the left, so it is mounted
+    // with a negative translateX. A direction that lagged a render would
+    // have mounted it on the right instead.
+    const readMountTransform = observeMountTransform(content as Element);
+    await userEvent.click(canvas.getByRole("button", { name: /^back$/i }));
+    await expect(content).toHaveAttribute("data-direction", "-1");
+    await expect(canvas.getByText("This is step one")).toBeInTheDocument();
+
+    const mountTransform = readMountTransform();
+    await expect(mountTransform).not.toBeNull();
+    const translateX = mountTransform?.match(TRANSLATE_X);
+    await expect(Number(translateX?.[1])).toBeLessThan(0);
   },
 };
 

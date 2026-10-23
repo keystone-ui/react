@@ -7,9 +7,13 @@ import {
 } from "lucide-react";
 import { type ComponentProps, useEffect, useRef } from "react";
 import {
+  type Chevron,
   type DayButton,
   DayPicker,
+  type Dropdown,
   getDefaultClassNames,
+  type Root,
+  type WeekNumber,
 } from "react-day-picker";
 import { Button, buttonVariants } from "./button";
 import { NativeSelect } from "./native-select";
@@ -18,6 +22,80 @@ import { cn } from "./utils";
 // Hoisted to module scope — pure function with no parameters, avoids repeated
 // allocations on every render (CalendarDayButton alone renders ~42 instances).
 const defaultClassNames = getDefaultClassNames();
+
+// =============================================================================
+// react-day-picker slots
+//
+// Module scope, deliberately. These used to be arrow functions inside
+// Calendar's render, so every render handed react-day-picker a brand-new
+// component type for each slot, and React unmounted and remounted the whole
+// grid on every selection — focus, hover state and any in-flight transition
+// were lost. None of them closes over a Calendar prop, so nothing is lost by
+// hoisting them.
+// =============================================================================
+
+function CalendarRoot({
+  className,
+  rootRef,
+  ...props
+}: ComponentProps<typeof Root>) {
+  return (
+    <div
+      className={cn(className)}
+      data-slot="calendar"
+      ref={rootRef}
+      {...props}
+    />
+  );
+}
+
+function CalendarChevron({
+  className,
+  orientation,
+  ...props
+}: ComponentProps<typeof Chevron>) {
+  if (orientation === "left") {
+    return <ChevronLeftIcon className={cn("size-4", className)} {...props} />;
+  }
+
+  if (orientation === "right") {
+    return <ChevronRightIcon className={cn("size-4", className)} {...props} />;
+  }
+
+  return <ChevronDownIcon className={cn("size-4", className)} {...props} />;
+}
+
+function CalendarDropdown({
+  options,
+  className: _className,
+  size: htmlSize,
+  ...selectProps
+}: ComponentProps<typeof Dropdown>) {
+  return (
+    <NativeSelect htmlSize={htmlSize} size="sm" {...selectProps}>
+      {options?.map(({ value, label, disabled }) => (
+        <option disabled={disabled} key={value} value={value}>
+          {label}
+        </option>
+      ))}
+    </NativeSelect>
+  );
+}
+
+// `week` is react-day-picker's data for the row; it is not a <td> attribute.
+function CalendarWeekNumber({
+  children,
+  week: _week,
+  ...props
+}: ComponentProps<typeof WeekNumber>) {
+  return (
+    <td {...props}>
+      <div className="flex size-(--cell-size) items-center justify-center text-center">
+        {children}
+      </div>
+    </td>
+  );
+}
 
 // =============================================================================
 // Calendar
@@ -130,58 +208,11 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        // biome-ignore-start lint/correctness/noNestedComponentDefinitions: react-day-picker render-prop slots
-        Root: ({ className, rootRef, ...props }) => (
-          <div
-            className={cn(className)}
-            data-slot="calendar"
-            ref={rootRef}
-            {...props}
-          />
-        ),
-        Chevron: ({ className, orientation, ...props }) => {
-          if (orientation === "left") {
-            return (
-              <ChevronLeftIcon className={cn("size-4", className)} {...props} />
-            );
-          }
-
-          if (orientation === "right") {
-            return (
-              <ChevronRightIcon
-                className={cn("size-4", className)}
-                {...props}
-              />
-            );
-          }
-
-          return (
-            <ChevronDownIcon className={cn("size-4", className)} {...props} />
-          );
-        },
-        Dropdown: ({
-          options,
-          className: _className,
-          size: htmlSize,
-          ...selectProps
-        }) => (
-          <NativeSelect htmlSize={htmlSize} size="sm" {...selectProps}>
-            {options?.map(({ value, label, disabled }) => (
-              <option disabled={disabled} key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </NativeSelect>
-        ),
+        Root: CalendarRoot,
+        Chevron: CalendarChevron,
+        Dropdown: CalendarDropdown,
         DayButton: CalendarDayButton,
-        WeekNumber: ({ children, ...props }) => (
-          <td {...props}>
-            <div className="flex size-(--cell-size) items-center justify-center text-center">
-              {children}
-            </div>
-          </td>
-        ),
-        // biome-ignore-end lint/correctness/noNestedComponentDefinitions: react-day-picker render-prop slots
+        WeekNumber: CalendarWeekNumber,
         ...components,
       }}
       formatters={{

@@ -163,35 +163,59 @@ function Carousel({
       return;
     }
 
+    // Named so the cleanup can hand embla the same function it registered.
+    // An inline arrow here was never removed and kept firing after unmount.
+    const onReInit = (emblaApi: CarouselApi) => {
+      if (!emblaApi) {
+        return;
+      }
+      setSlideCount(emblaApi.scrollSnapList().length);
+      onSelect(emblaApi);
+    };
+
     setSlideCount(api.scrollSnapList().length);
     onSelect(api);
 
-    api.on("reInit", onSelect);
+    api.on("reInit", onReInit);
     api.on("select", onSelect);
-    api.on("reInit", () => setSlideCount(api.scrollSnapList().length));
 
     return () => {
       api.off("select", onSelect);
-      api.off("reInit", onSelect);
+      api.off("reInit", onReInit);
     };
   }, [api, onSelect]);
 
+  // Memoised so consumers of `useCarousel()` do not re-render every time the
+  // root does; everything in it is state, a stable callback or a prop.
+  const contextValue = useMemo<CarouselContextProps>(
+    () => ({
+      carouselRef,
+      api,
+      orientation,
+      scrollPrev,
+      scrollNext,
+      canScrollPrev,
+      canScrollNext,
+      selectedIndex,
+      slideCount,
+      autoHideArrows,
+    }),
+    [
+      carouselRef,
+      api,
+      orientation,
+      scrollPrev,
+      scrollNext,
+      canScrollPrev,
+      canScrollNext,
+      selectedIndex,
+      slideCount,
+      autoHideArrows,
+    ]
+  );
+
   return (
-    <CarouselContext.Provider
-      value={{
-        carouselRef,
-        api,
-        orientation:
-          orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
-        scrollPrev,
-        scrollNext,
-        canScrollPrev,
-        canScrollNext,
-        selectedIndex,
-        slideCount,
-        autoHideArrows,
-      }}
-    >
+    <CarouselContext.Provider value={contextValue}>
       {/* biome-ignore lint/a11y/useSemanticElements: carousel wrapper exposes role="region" with aria-roledescription */}
       <div
         aria-roledescription="carousel"

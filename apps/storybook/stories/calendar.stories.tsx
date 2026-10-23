@@ -12,7 +12,7 @@ import { addDays } from "date-fns";
 import { Clock2 as Clock2Icon } from "lucide-react";
 import * as React from "react";
 import type { DateRange } from "react-day-picker";
-import { expect, within } from "storybook/test";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/Calendar",
@@ -105,6 +105,37 @@ export const Range: Story = {
           'Use `mode="range"` to enable range selection. Combine with `numberOfMonths={2}` to display two months side by side.',
       },
     },
+  },
+  // This story is controlled, so every selection re-renders `Calendar`
+  // itself. The sub-components it hands to react-day-picker used to be
+  // defined inline in that render, which gave them a new identity each
+  // time and remounted the whole grid on every click -- focus, hover and
+  // any in-flight transition were lost. A day cell captured before the
+  // clicks must be the very same DOM node afterwards. The grid is looked
+  // up fresh each time: holding the first grid would pass vacuously if it
+  // were the thing being remounted.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const days = () =>
+      Array.from(
+        canvas
+          .getAllByRole("grid")[0]
+          .querySelectorAll<HTMLButtonElement>(
+            '[data-slot="calendar-day-button"]'
+          )
+      );
+
+    // January has 31 days, so the third row is inside the month whatever
+    // weekday the 1st falls on.
+    const witness = days()[10];
+    await userEvent.click(days()[14]);
+    await userEvent.click(days()[16]);
+
+    await expect(
+      canvas.getAllByRole("grid")[0].querySelectorAll("[data-selected]").length
+    ).toBeGreaterThan(0);
+    await expect(days()[10]).toBe(witness);
+    await expect(witness.isConnected).toBe(true);
   },
 };
 
