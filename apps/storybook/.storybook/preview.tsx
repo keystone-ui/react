@@ -15,6 +15,12 @@ const preview: Preview = {
     docs: {
       theme: themes.dark,
     },
+    a11y: {
+      // Axe runs against every story in the Vitest run. "todo" reports
+      // violations without failing the suite; flip to "error" once the
+      // existing stories are clean.
+      test: "todo",
+    },
   },
   decorators: [
     withThemeByClassName({

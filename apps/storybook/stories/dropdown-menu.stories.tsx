@@ -144,6 +144,44 @@ export const Default: Story = {
       },
       { timeout: 5000 }
     );
+
+    // Arrow keys move focus through the items (roving tabindex).
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(document.activeElement).toHaveTextContent("Profile");
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(document.activeElement).toHaveTextContent("Billing");
+
+    // Escape closes and hands focus back to the trigger.
+    await userEvent.keyboard("{Escape}");
+    await waitFor(
+      async () => {
+        await expect(body.queryByRole("menu")).not.toBeInTheDocument();
+      },
+      { timeout: 5000 }
+    );
+    await expect(trigger).toHaveFocus();
+
+    // Keyboard all the way: Enter opens and, unlike a pointer open, lands
+    // focus on the first item; ArrowDown steps on; Enter activates the item,
+    // which closes the menu.
+    await userEvent.keyboard("{Enter}");
+    await waitFor(
+      async () => {
+        await expect(body.getByRole("menu")).toBeVisible();
+        await expect(document.activeElement).toHaveTextContent("Profile");
+      },
+      { timeout: 5000 }
+    );
+    await userEvent.keyboard("{ArrowDown}");
+    await expect(document.activeElement).toHaveTextContent("Billing");
+    await userEvent.keyboard("{Enter}");
+    await waitFor(
+      async () => {
+        await expect(body.queryByRole("menu")).not.toBeInTheDocument();
+      },
+      { timeout: 5000 }
+    );
+    await expect(trigger).toHaveFocus();
   },
   render: () => (
     <DropdownMenu>
