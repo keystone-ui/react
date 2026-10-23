@@ -161,10 +161,30 @@ If your token represents a background+foreground pair, follow the convention: `-
 Defined in `base.css`. Use in custom code rather than hard-coded durations or z-indexes.
 
 - Durations — `--duration-fast`, `--duration-base`, `--duration-slow`, `--duration-drawer`
-- Easings — `--ease-out`, `--ease-in-out`, `--ease-drawer`
+- Easings — `--ease-ks-out`, `--ease-ks-in-out`, `--ease-drawer`
 - Z-scale — `--z-sticky`, `--z-drawer` (40), `--z-modal` (50), `--z-dropdown`, `--z-popover` (60), `--z-tooltip` (70), `--z-toast` (80)
 
+As Tailwind utilities: `duration-(--duration-base)`, `ease-(--ease-ks-out)`, `z-(--z-popover)`. The easings carry a `ks` prefix so they never shadow Tailwind's own `ease-out` / `ease-in-out` utilities — those keep their default curves in your app.
+
 Library overlay components manage their own stacking; don't add `z-50` manually. See [rules/styling.md](./rules/styling.md#motion-and-layering-tokens).
+
+## Reduced motion
+
+`base.css` stops movement and looping animations under `prefers-reduced-motion: reduce` with one unlayered, `!important`-free rule, and zeroes the `--duration-*` tokens so the library's own transitions stop too. Spinners (`.animate-spin`) and indeterminate progress (`[data-indeterminate]`) keep animating, and the view-transition pseudo-elements are zeroed as well. To keep one of your own animations running, any selector of your own wins — the rule has zero specificity:
+
+```css
+.live-chart-cursor {
+  animation-duration: 1s;
+}
+```
+
+## Scrollbar skin
+
+The thin, token-coloured scrollbar skin is opt-in. Add `ks-scrollbar` to `<html>` to skin the page scrollbar and every nested scroll container, or to a single scroll container to skin only that one. `no-scrollbar` still hides the bar on any element that opts out.
+
+```tsx
+<html className="ks-scrollbar">
+```
 
 ## Switching between npm package and shadcn registry
 

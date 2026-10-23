@@ -17,10 +17,16 @@
   --animate-skeleton-shimmer: skeleton-shimmer 2s ease-in-out infinite;
 
   /* Motion tokens — strong custom curves, preferred over CSS defaults.
-     Use via `ease-[var(--ease-out)]` / `duration-[var(--duration-base)]`
-     or reference directly in raw CSS. */
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+     Namespaced `ks` on purpose: a `--ease-out` entry here makes Tailwind
+     emit an `ease-out` utility that replaces the framework's own for every
+     consumer app, not just this library. Use via `ease-(--ease-ks-out)` /
+     `duration-(--duration-base)` or reference directly in raw CSS.
+
+     Every transition time in this file derives from a `--duration-*` token
+     (literal times live only in this block), so the reduced-motion rule at
+     the bottom can stop them all by zeroing four variables. */
+  --ease-ks-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-ks-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
   --duration-fast: 125ms;
@@ -172,17 +178,24 @@
    Driven by Base UI's CSS variables and data attributes.
    Positioning and visual styles (bg, border, rounded) are in Tailwind on the component. */
 
-/* --- Backdrop (drawer-overlay) --- */
+/* --- Backdrop (drawer-overlay) ---
+   Three durations hang off `--duration-drawer` (400ms): the panel enters at
+   1.25x so it settles after the backdrop, exits at 1x, and the backdrop
+   fades at 0.75x in both directions so it never lingers past the panel. */
 [data-slot="drawer-overlay"] {
   opacity: calc(1 - var(--drawer-swipe-progress, 0));
-  transition: opacity 300ms cubic-bezier(0.32, 0.72, 0, 1);
+  transition: opacity calc(var(--duration-drawer) * 0.75) var(--ease-drawer);
 }
 [data-slot="drawer-overlay"][data-starting-style] {
   opacity: 0;
 }
 [data-slot="drawer-overlay"][data-ending-style] {
   opacity: 0;
-  transition-duration: calc(var(--drawer-swipe-strength, 1) * 300ms);
+  transition-duration: calc(
+    var(--drawer-swipe-strength, 1) *
+    var(--duration-drawer) *
+    0.75
+  );
 }
 [data-slot="drawer-overlay"][data-swiping] {
   transition: none;
@@ -190,13 +203,16 @@
 
 /* --- Popup (drawer-content) --- */
 [data-slot="drawer-content"] {
-  transition: transform 500ms cubic-bezier(0.32, 0.72, 0, 1);
+  transition: transform calc(var(--duration-drawer) * 1.25) var(--ease-drawer);
 }
 [data-slot="drawer-content"][data-swiping] {
   transition: none;
 }
 [data-slot="drawer-content"][data-ending-style] {
-  transition-duration: calc(var(--drawer-swipe-strength, 1) * 400ms);
+  transition-duration: calc(
+    var(--drawer-swipe-strength, 1) *
+    var(--duration-drawer)
+  );
 }
 
 /* Right drawer */
@@ -263,9 +279,9 @@
 [data-slot="select-content"],
 [data-slot="combobox-content"] {
   transition:
-    opacity var(--duration-base) var(--ease-out),
-    scale var(--duration-base) var(--ease-out),
-    translate var(--duration-base) var(--ease-out);
+    opacity var(--duration-base) var(--ease-ks-out),
+    scale var(--duration-base) var(--ease-ks-out),
+    translate var(--duration-base) var(--ease-ks-out);
 }
 
 [data-slot="popover-content"][data-starting-style],
@@ -324,13 +340,14 @@
   translate: -4px 0;
 }
 
-/* Asymmetric exit: exit is shorter than enter (Emil's principle). */
+/* Asymmetric exit: exit is shorter than enter (Emil's principle) — two
+   thirds of the enter duration, 120ms at the default token. */
 [data-slot="popover-content"][data-ending-style],
 [data-slot="dropdown-menu-content"][data-ending-style],
 [data-slot="dropdown-menu-sub-content"][data-ending-style],
 [data-slot="select-content"][data-ending-style],
 [data-slot="combobox-content"][data-ending-style] {
-  transition-duration: 120ms;
+  transition-duration: calc(var(--duration-base) * 2 / 3);
 }
 
 /* Select in alignItemWithTrigger mode: skip the slide to keep the item
@@ -344,9 +361,9 @@
 /* Tooltip — faster than other popups (Emil: 125-200ms). */
 [data-slot="tooltip-content"] {
   transition:
-    opacity var(--duration-fast) var(--ease-out),
-    scale var(--duration-fast) var(--ease-out),
-    translate var(--duration-fast) var(--ease-out);
+    opacity var(--duration-fast) var(--ease-ks-out),
+    scale var(--duration-fast) var(--ease-ks-out),
+    translate var(--duration-fast) var(--ease-ks-out);
 }
 [data-slot="tooltip-content"][data-starting-style],
 [data-slot="tooltip-content"][data-ending-style] {
@@ -369,8 +386,9 @@
 [data-slot="tooltip-content"][data-side="right"][data-ending-style] {
   translate: -2px 0;
 }
+/* Exit at four fifths of the enter duration — 100ms at the default token. */
 [data-slot="tooltip-content"][data-ending-style] {
-  transition-duration: 100ms;
+  transition-duration: calc(var(--duration-fast) * 0.8);
 }
 
 /* =========================================================================
@@ -381,7 +399,7 @@
 
 [data-slot="modal-overlay"],
 [data-slot="alert-dialog-overlay"] {
-  transition: opacity var(--duration-fast) var(--ease-out);
+  transition: opacity var(--duration-fast) var(--ease-ks-out);
 }
 [data-slot="modal-overlay"][data-starting-style],
 [data-slot="modal-overlay"][data-ending-style],
@@ -393,8 +411,8 @@
 [data-slot="modal-content"],
 [data-slot="alert-dialog-content"] {
   transition:
-    opacity var(--duration-slow) var(--ease-out),
-    scale var(--duration-slow) var(--ease-out);
+    opacity var(--duration-slow) var(--ease-ks-out),
+    scale var(--duration-slow) var(--ease-ks-out);
 }
 [data-slot="modal-content"][data-starting-style],
 [data-slot="modal-content"][data-ending-style],
@@ -403,14 +421,16 @@
   opacity: 0;
   scale: 0.95;
 }
+/* Content exits at three fifths of its enter — 150ms at the default token. */
 [data-slot="modal-content"][data-ending-style],
 [data-slot="alert-dialog-content"][data-ending-style] {
-  transition-duration: 150ms;
+  transition-duration: calc(var(--duration-slow) * 0.6);
 }
-/* Overlay exits faster than it enters — backdrop shouldn't linger past content. */
+/* Overlay exits faster than it enters — backdrop shouldn't linger past
+   content. Four fifths of its enter, 100ms at the default token. */
 [data-slot="modal-overlay"][data-ending-style],
 [data-slot="alert-dialog-overlay"][data-ending-style] {
-  transition-duration: 100ms;
+  transition-duration: calc(var(--duration-fast) * 0.8);
 }
 
 /* Hide scrollbar but keep scroll functionality */
@@ -425,13 +445,17 @@
 }
 
 /* ---------------------------------------------------------------------------
- * Global thin scrollbar skin — page scrollbar + every nested scroll container.
- * Token-driven so it follows the active theme. Kept thin enough (6px) to feel
- * native at any scale. The `.no-scrollbar` class above still wins for elements
- * that opt out (higher class specificity beats `*`).
+ * Thin scrollbar skin — opt in with the `ks-scrollbar` class.
+ *
+ * Applies to the element carrying the class and everything inside it, so
+ * `<html class="ks-scrollbar">` skins the page scrollbar plus every nested
+ * scroll container (the previous always-on behaviour), while a single scroll
+ * container can carry it alone. Token-driven so it follows the active theme;
+ * 6px feels native at any scale. `:where()` keeps the specificity at zero so
+ * `.no-scrollbar` above still wins on any element that opts out.
  * ------------------------------------------------------------------------- */
 @layer base {
-  * {
+  :where(.ks-scrollbar, .ks-scrollbar *) {
     scrollbar-color: color-mix(
         in oklch,
         var(--muted-foreground) 30%,
@@ -440,37 +464,67 @@
       transparent;
     scrollbar-width: thin;
   }
-  *::-webkit-scrollbar {
+  :where(.ks-scrollbar, .ks-scrollbar *)::-webkit-scrollbar {
     width: 6px;
     height: 6px;
     background: transparent;
   }
-  *::-webkit-scrollbar-track {
+  :where(.ks-scrollbar, .ks-scrollbar *)::-webkit-scrollbar-track {
     background: transparent;
   }
-  *::-webkit-scrollbar-thumb {
+  :where(.ks-scrollbar, .ks-scrollbar *)::-webkit-scrollbar-thumb {
     background: color-mix(in oklch, var(--muted-foreground) 20%, transparent);
     border-radius: 3px;
   }
-  *::-webkit-scrollbar-thumb:hover {
+  :where(.ks-scrollbar, .ks-scrollbar *)::-webkit-scrollbar-thumb:hover {
     background: color-mix(in oklch, var(--muted-foreground) 40%, transparent);
   }
-  *::-webkit-scrollbar-corner {
+  :where(.ks-scrollbar, .ks-scrollbar *)::-webkit-scrollbar-corner {
     background: transparent;
   }
 }
 
-/* Reduced motion — kill movement and looping animations, keep instantaneous
-   opacity/color transitions so state changes remain legible. One central
-   rule beats per-component `motion-reduce:` utilities. */
+/* Reduced motion — stop movement and looping animations, keep instantaneous
+   opacity/color changes so state changes remain legible. One central rule
+   beats per-component `motion-reduce:` utilities.
+
+   Deliberately unlayered and free of `!important`. Unlayered author styles
+   beat every cascade layer, so this zero-specificity rule still overrides
+   Tailwind's `duration-*` / `animate-*` utilities (which live in
+   `@layer utilities`), while any consumer selector — also unlayered, with any
+   specificity above (0,0,0) — can override it back. Inside `@layer base` it
+   would lose to every utility and silently do nothing.
+
+   The library's own `[data-slot]` transitions above out-specify `:where(*)`,
+   so they are stopped at the source instead: every one of them derives its
+   time from a `--duration-*` token, and the tokens are zeroed here.
+
+   Spinners and indeterminate progress keep animating. A stopped spinner reads
+   as a hung UI, and the preference is about non-essential motion.
+
+   View-transition pseudo-elements are listed by name because `*` never
+   matches a pseudo-element. */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  :root {
+    --duration-fast: 0.01ms;
+    --duration-base: 0.01ms;
+    --duration-slow: 0.01ms;
+    --duration-drawer: 0.01ms;
+  }
+
+  :where(*:not(.animate-spin, [data-indeterminate])),
+  :where(*:not(.animate-spin, [data-indeterminate]))::before,
+  :where(*:not(.animate-spin, [data-indeterminate]))::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none;
   }
 }
 

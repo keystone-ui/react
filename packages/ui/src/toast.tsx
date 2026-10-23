@@ -361,14 +361,18 @@ const TOAST_STACK_BASE = [
   "[--scale:calc(max(0,1-(var(--toast-index)*0.1)))]",
   "[--shrink:calc(1-var(--scale))]",
   "[--height:var(--toast-frontmost-height,var(--toast-height))]",
-  // Absolute stacking
+  // Absolute stacking. The z-index here orders toasts *within* the viewport,
+  // which is itself `z-(--z-toast)` and so a stacking context of its own --
+  // these values never compete with the page's `--z-*` scale.
   "absolute w-full",
   "z-[calc(1000-var(--toast-index))]",
   // Height: match frontmost when collapsed, own height when expanded
   "h-[var(--height)]",
   "data-[expanded]:h-[var(--toast-height)]",
-  // Transition
-  "[transition:transform_0.5s_cubic-bezier(0.22,1,0.36,1),opacity_0.5s,height_0.15s]",
+  // Transition. `height` stays a layout transition on purpose: the stack
+  // clips each toast to the frontmost one's height, and a scale would
+  // distort the content instead of revealing it.
+  "[transition:transform_var(--duration-drawer)_var(--ease-ks-out),opacity_var(--duration-drawer),height_var(--duration-fast)]",
   "data-[swiping]:[transition:none]",
   // Invisible gap below for hover continuity between stacked toasts
   "after:absolute after:top-full after:left-0 after:h-[calc(var(--gap)+1px)] after:w-full after:content-['']",
@@ -412,7 +416,7 @@ const TOAST_TOP_CLASSES = [
 /** Content classes: height clipping for varying heights + behind/expanded opacity. */
 const TOAST_CONTENT_CLASSES = [
   "h-full overflow-hidden",
-  "transition-opacity [transition-duration:250ms]",
+  "transition-opacity duration-(--duration-slow)",
   "data-[behind]:pointer-events-none data-[behind]:opacity-0",
   "data-[expanded]:pointer-events-auto data-[expanded]:opacity-100",
 ];
@@ -627,7 +631,7 @@ function Toaster({
       <Toast.Portal>
         <Toast.Viewport
           className={cn(
-            "fixed z-[var(--z-toast)] m-4 outline-none",
+            "fixed z-(--z-toast) m-4 outline-none",
             // Width: fixed on desktop, full on mobile
             "w-(--width) max-sm:right-0 max-sm:left-0 max-sm:mx-2 max-sm:w-auto",
             // Respect device safe areas (notch, home bar)

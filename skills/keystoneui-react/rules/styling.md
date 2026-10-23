@@ -15,7 +15,7 @@ These are the always-enforced styling rules for `@keystoneui/react`. See [../cus
 - Hover gating — never embed `:hover` in arbitrary selectors
 - Two focus patterns — outline vs ring, never mix
 - Transitions — never `transition-all`
-- Motion and layering tokens — `--duration-*`, `--ease-*`, `--z-*`
+- Motion and layering tokens — `--duration-*`, `--ease-ks-*`, `--z-*`
 - Disabled states — both `disabled:` and `data-disabled:`
 - Cursor — explicit `cursor-pointer` / `cursor-not-allowed`
 
@@ -176,7 +176,7 @@ Always specify the exact properties. `transition-all` causes unrelated transitio
 transition-[color,box-shadow]                          /* form controls */
 transition-[color,background-color,border-color,box-shadow]  /* TabsTrigger */
 transition-[background-color,border-color]             /* Switch */
-transition-transform duration-150 ease-out             /* icon rotations */
+transition-transform duration-150 ease-(--ease-ks-out) /* icon rotations */
 transition-colors                                      /* ComboboxChips */
 ```
 
@@ -192,7 +192,7 @@ Defined in `@keystoneui/react/base.css`, which your global CSS imports. Use thes
 
 **Duration tokens** — `--duration-fast` (≈100ms), `--duration-base` (≈160ms), `--duration-slow` (≈220ms), `--duration-drawer`.
 
-**Easing tokens** — `--ease-out`, `--ease-in-out`, `--ease-drawer`.
+**Easing tokens** — `--ease-ks-out`, `--ease-ks-in-out`, `--ease-drawer`. Use them as `ease-(--ease-ks-out)`; the `ks` prefix exists so the library never shadows Tailwind's own `ease-out` / `ease-in-out` utilities, which keep their default curves in your app.
 
 **Z-index scale** — `--z-sticky`, `--z-drawer` (40), `--z-modal` (50), `--z-dropdown`, `--z-popover` (60), `--z-tooltip` (70), `--z-toast` (80).
 

@@ -2,7 +2,9 @@
   "name": "@keystoneui/react",
   "version": "1.0.0-beta.7",
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "license": "MIT",
   "description": "Accessible React 19 component library built on Base UI and Tailwind CSS v4, distributed as an npm package and a shadcn-compatible registry.",
   "homepage": "https://keystoneui.io",

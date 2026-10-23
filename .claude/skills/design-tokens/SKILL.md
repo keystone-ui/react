@@ -255,7 +255,7 @@ Different transition properties for different control types:
 - `transition-[color,box-shadow]` — form controls (Input, Textarea, Select, NativeSelect, InputGroup, InputOTP)
 - `transition-[color,background-color,border-color,box-shadow]` — TabsTrigger (text, bg, border, and shadow all change on active)
 - `transition-[background-color,border-color]` — Switch (bg and border change on checked/invalid)
-- `transition-transform` — icon rotations (Select chevron, Accordion chevron). Paired with `duration-150 ease-out`.
+- `transition-transform` — icon rotations (Select chevron, Accordion chevron). Paired with `duration-150 ease-(--ease-ks-out)`.
 - `transition-colors` — ComboboxChips
 - `transition-none` — applied on `aria-invalid` states for Checkbox, Radio, Switch to prevent flash on validation
 
