@@ -11,12 +11,12 @@ type ChangeTagVariant =
   | "security";
 
 const variantClasses: Record<ChangeTagVariant, string> = {
-  added: "bg-green-500/15 text-green-700 dark:text-green-400",
-  changed: "bg-blue-500/15 text-blue-700 dark:text-blue-400",
-  fixed: "bg-yellow-500/15 text-yellow-700 dark:text-yellow-400",
-  removed: "bg-red-500/15 text-red-700 dark:text-red-400",
-  deprecated: "bg-orange-500/15 text-orange-700 dark:text-orange-400",
-  security: "bg-purple-500/15 text-purple-700 dark:text-purple-400",
+  added: "bg-success/15 text-success",
+  changed: "bg-primary/15 text-primary",
+  fixed: "bg-warning/15 text-warning",
+  removed: "bg-destructive/15 text-destructive",
+  deprecated: "bg-muted text-muted-foreground",
+  security: "bg-destructive/15 font-semibold text-destructive",
 };
 
 const variantLabels: Record<ChangeTagVariant, string> = {

@@ -327,7 +327,7 @@ export default function GalleryPage() {
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {category.components.map((component) => (
                 <Link
-                  className="group flex flex-col rounded-lg border border-border/50 bg-card p-4 transition-all hover:border-border hover:bg-accent/30"
+                  className="group flex flex-col rounded-lg border border-border/50 bg-card p-4 transition-[border-color,background-color] hover:border-border hover:bg-accent/30"
                   href={`/docs/components/${component.slug}`}
                   key={component.slug}
                 >
