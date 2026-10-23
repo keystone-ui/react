@@ -95,15 +95,24 @@ jobs:
       - name: Deploy preview
         if: github.event_name == 'pull_request'
         id: preview
+        # The URL comes from wrangler's ND-JSON output file, not a grep over
+        # its human-readable log: that grep silently produced an empty URL
+        # when the wording changed, and nothing failed until the smoke step.
         run: |
           WORKER_NAME="keystoneui-docs-preview-${{ github.event.pull_request.number }}"
-          pnpm exec wrangler deploy --name "$WORKER_NAME" 2>&1 | tee deploy-output.txt
-          PREVIEW_URL=$(grep -oP 'https://[^\s]+\.workers\.dev' deploy-output.txt | head -1)
+          pnpm exec wrangler deploy --name "$WORKER_NAME"
+          PREVIEW_URL=$(jq -rs '[.[] | select(.type == "deploy") | .targets[0]] | first // empty' wrangler-output.ndjson)
+          if [ -z "$PREVIEW_URL" ]; then
+            echo "::error::wrangler reported no deployment URL"
+            cat wrangler-output.ndjson
+            exit 1
+          fi
           echo "url=$PREVIEW_URL" >> "$GITHUB_OUTPUT"
         working-directory: apps/docs
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WRANGLER_OUTPUT_FILE_PATH: wrangler-output.ndjson
 
       - name: Comment preview URL on PR
         if: github.event_name == 'pull_request' && steps.preview.outputs.url

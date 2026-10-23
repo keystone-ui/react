@@ -215,6 +215,33 @@ describe("GitHub Actions workflows", () => {
     // build created would pass unless it is first marked intent-to-add.
     expect(drift).toContain("git add --intent-to-add");
   });
+
+  it("reads preview URLs from wrangler's structured output, never from a grep", () => {
+    // `grep -oP` over wrangler's human output silently yields an empty URL
+    // when the wording changes; WRANGLER_OUTPUT_FILE_PATH is ND-JSON with a
+    // `targets` array on the `deploy` entry, and an empty result must fail.
+    let previewSteps = 0;
+    for (const { file, doc } of workflows) {
+      for (const [name, job] of Object.entries(doc.jobs)) {
+        for (const step of job.steps ?? []) {
+          const run = step.run ?? "";
+          expect(run, `${file} › ${name}`).not.toContain("wrangler pages");
+          if (!run.includes("wrangler deploy --name")) {
+            continue;
+          }
+          previewSteps++;
+          const label = `${file} › ${name} › preview deploy`;
+          expect(run, label).not.toContain("grep -oP");
+          expect(JSON.stringify(step.env ?? {}), label).toContain(
+            "WRANGLER_OUTPUT_FILE_PATH"
+          );
+          expect(run, label).toContain('select(.type == "deploy")');
+          expect(run, label).toContain("::error::");
+        }
+      }
+    }
+    expect(previewSteps).toBe(2);
+  });
 });
 
 describe("Dependabot", () => {

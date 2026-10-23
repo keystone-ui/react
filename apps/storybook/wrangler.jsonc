@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "keystoneui-storybook",
+  "compatibility_date": "2026-10-20",
+  // Assets-only Worker: no script, the static Storybook build is served as
+  // is. Storybook routes through `?path=` on index.html, so no SPA fallback
+  // is needed and an unknown path is a real 404.
+  "assets": {
+    "directory": "storybook-static",
+    "not_found_handling": "none"
+  }
+}

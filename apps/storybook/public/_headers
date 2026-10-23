@@ -1,0 +1,6 @@
+# Served by Workers static assets (Pages honoured the same file). Vite writes
+# content-hashed filenames under /assets, so a file never changes in place
+# and can be cached for a year. Everything else keeps the default
+# revalidation: index.html, iframe.html and the sb-* runtime are not hashed.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

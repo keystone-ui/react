@@ -5,7 +5,7 @@ on:
     branches:
       - main
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, closed]
 
 concurrency:
   group: deploy-storybook-${{ github.event.pull_request.number || github.ref }}
@@ -26,6 +26,7 @@ jobs:
     # Forks and Dependabot receive no repository secrets; skip rather than
     # fail on authentication.
     if: >-
+      github.event.action != 'closed' &&
       github.actor != 'dependabot[bot]' &&
       (github.event_name == 'push' ||
       github.event.pull_request.head.repo.full_name == github.repository)
@@ -59,31 +60,39 @@ jobs:
       - name: Build Storybook
         run: pnpm build --filter=@keystoneui/storybook
 
+      # Workers static assets (apps/storybook/wrangler.jsonc), not Pages.
+      # The custom domain storybook.keystoneui.io is attached in the
+      # dashboard, so a deploy here never touches DNS.
       - name: Deploy to production
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          pnpm exec wrangler pages deploy storybook-static \
-            --project-name=keystoneui-storybook \
-            --branch=main
+        run: pnpm exec wrangler deploy
         working-directory: apps/storybook
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
+      # One Worker per open PR, deleted by cleanup-preview below. The URL is
+      # read from wrangler's ND-JSON output file rather than grepped out of
+      # its human-readable log, which changed wording before and left this
+      # output empty without failing anything.
       - name: Deploy preview
         if: github.event_name == 'pull_request'
         id: preview
         run: |
-          DEPLOY_OUTPUT=$(pnpm exec wrangler pages deploy storybook-static \
-            --project-name=keystoneui-storybook \
-            --branch="pr-${{ github.event.pull_request.number }}" 2>&1)
-          echo "$DEPLOY_OUTPUT"
-          PREVIEW_URL=$(echo "$DEPLOY_OUTPUT" | grep -oP 'https://[^\s]+\.pages\.dev' | head -1)
+          WORKER_NAME="keystoneui-storybook-preview-${{ github.event.pull_request.number }}"
+          pnpm exec wrangler deploy --name "$WORKER_NAME"
+          PREVIEW_URL=$(jq -rs '[.[] | select(.type == "deploy") | .targets[0]] | first // empty' wrangler-output.ndjson)
+          if [ -z "$PREVIEW_URL" ]; then
+            echo "::error::wrangler reported no deployment URL"
+            cat wrangler-output.ndjson
+            exit 1
+          fi
           echo "url=$PREVIEW_URL" >> "$GITHUB_OUTPUT"
         working-directory: apps/storybook
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WRANGLER_OUTPUT_FILE_PATH: wrangler-output.ndjson
 
       - name: Comment preview URL on PR
         if: github.event_name == 'pull_request' && steps.preview.outputs.url
@@ -114,3 +123,43 @@ jobs:
                 body,
               });
             }
+
+  cleanup-preview:
+    name: Cleanup Preview Worker
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.action == 'closed' &&
+      github.actor != 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          # Resolve the newest 22.x instead of whatever the runner image cached,
+          # so Node security releases reach CI the day they ship.
+          check-latest: true
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # `|| true`: a PR opened before previews moved to Workers has no Worker
+      # to delete.
+      - name: Delete preview Worker
+        run: |
+          WORKER_NAME="keystoneui-storybook-preview-${{ github.event.pull_request.number }}"
+          pnpm exec wrangler delete --name "$WORKER_NAME" --force || true
+        working-directory: apps/storybook
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

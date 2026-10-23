@@ -11,7 +11,8 @@
     "test": "vitest",
     "test-storybook": "vitest --project=storybook",
     "chromatic": "chromatic --exit-zero-on-changes --auto-accept-changes=main",
-    "deploy:cf": "wrangler pages deploy storybook-static --project-name=keystoneui-storybook"
+    "preview:cf": "wrangler dev",
+    "deploy:cf": "wrangler deploy"
   },
   "dependencies": {
     "@keystoneui/react": "workspace:*",

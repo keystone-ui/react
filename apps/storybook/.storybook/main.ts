@@ -5,6 +5,9 @@ import { mergeConfig } from "vite";
 
 const config: StorybookConfig = {
   stories: ["../**/*.stories.@(js|jsx|ts|tsx)", "../**/*.mdx"],
+  // Copied into storybook-static as is; carries public/_headers, which the
+  // Worker reads for cache rules.
+  staticDirs: ["../public"],
 
   framework: {
     name: getAbsolutePath("@storybook/react-vite"),
