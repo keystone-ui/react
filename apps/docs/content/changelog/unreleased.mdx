@@ -1,7 +1,27 @@
 ---
-date: "2026-10-11"
+date: "2026-10-23"
 description: "What's coming in the next release"
-excerpt: "No changes since the last release."
+excerpt: "1 change queued for the next release."
 ---
 
-No changes merged since v1.0.0-beta.7.
+## Major changes
+
+### Motion tokens renamed, reduced motion reworked, scrollbar skin now opt-in.
+
+Breaking:
+
+- `--ease-out` and `--ease-in-out` are now `--ease-ks-out` and `--ease-ks-in-out`. Declared in `@theme`, the old names made Tailwind emit `ease-out` / `ease-in-out` utilities that replaced the framework's own curves in every consumer app. Update any `var(--ease-out)` / `ease-[var(--ease-out)]` reference to the new names; the bare `ease-out` / `ease-in-out` utilities in your app now mean what Tailwind says they mean.
+- The thin, token-coloured scrollbar skin no longer applies to every element. Add `ks-scrollbar` to `<html>` to restore it everywhere, or to a single scroll container.
+
+Reduced motion:
+
+- The `prefers-reduced-motion` rule is unlayered and no longer uses `!important`, so any selector of your own can override it, and it zeroes the `--duration-*` tokens so the library's own transitions stop too. Spinners (`.animate-spin`) and indeterminate progress (`[data-indeterminate]`) keep animating, and the view-transition pseudo-elements are zeroed as well.
+
+Component fixes:
+
+- `Calendar` keeps the grid mounted across selections — the sub-components passed to react-day-picker were defined inline and remounted every cell on each click.
+- `Carousel` removes its embla `reInit` listener on unmount and memoises the context value.
+- `DateInput` merges a forwarded ref with its own, so the picker button works with callback refs (react-hook-form's `register()`).
+- `Stepper` derives the slide direction during render; 1 → 2 → 1 no longer enters from the wrong side. `StepperContent` exposes `data-direction`.
+- `Drawer`, `Toast`, `Progress`, `CircularProgress` and `TabsIndicator` use the `--duration-*`, `--ease-ks-*` and `--z-*` tokens; the tab indicator slides with a transform instead of `top` / `left`.
+- `Card`, `Separator` and `Kbd` drop `"use client"`; `package.json` marks only CSS as side-effectful so bundlers can tree-shake the JS.
