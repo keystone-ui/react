@@ -12,9 +12,8 @@ import { Clock2 as Clock2Icon } from "lucide-react";
 import { useState } from "react";
 
 export default function CalendarDateTime() {
-  const [date, setDate] = useState<Date | undefined>(
-    new Date(new Date().getFullYear(), new Date().getMonth(), 12)
-  );
+  // A fixed date: the demo is prerendered, so it must not read the clock.
+  const [date, setDate] = useState<Date | undefined>(new Date(2026, 5, 12));
 
   return (
     <Card className="mx-auto w-fit shadow-lg" size="xs">

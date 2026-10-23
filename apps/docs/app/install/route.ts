@@ -1,25 +1,30 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
+import { cacheLife } from "next/cache";
+
 const SITE_URL = "https://keystoneui.io";
 
-export const revalidate = false;
+/**
+ * Cached so the route prerenders under Cache Components: an uncached file
+ * read in a GET handler would make it render on demand, and `skills/` does
+ * not exist inside the deployed Worker.
+ */
+async function getInstallScript(): Promise<string> {
+  "use cache";
+  cacheLife("static");
+  const scriptPath = join(process.cwd(), "skills", "install.sh");
+  const script = await readFile(scriptPath, "utf-8");
+  return script.replace(/\{\{BASE_URL\}\}/g, SITE_URL);
+}
 
 export async function GET() {
-  try {
-    const scriptPath = join(process.cwd(), "skills", "install.sh");
-    let script = await readFile(scriptPath, "utf-8");
+  const script = await getInstallScript();
 
-    script = script.replace(/\{\{BASE_URL\}\}/g, SITE_URL);
-
-    return new Response(script, {
-      headers: {
-        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
-        "Content-Type": "text/x-shellscript; charset=utf-8",
-      },
-    });
-  } catch (error) {
-    console.error("Error serving install script:", error);
-    return new Response("Error serving install script", { status: 500 });
-  }
+  return new Response(script, {
+    headers: {
+      "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+      "Content-Type": "text/x-shellscript; charset=utf-8",
+    },
+  });
 }

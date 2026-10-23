@@ -4,15 +4,11 @@ import { getLLMText } from "@/lib/get-llm-text";
 import { LLMS_TEXT_HEADERS } from "@/lib/llms-utils";
 import { source } from "@/lib/source";
 
-export const revalidate = false;
-
 /**
- * Every page is prerendered, including the docs root. Unknown slugs never
- * reach the handler, so they get Next's 404 instead of the 500 this route
- * used to return when `notFound()` was thrown inside a try/catch.
+ * Every page is prerendered, including the docs root. An unknown slug
+ * answers 404 (it used to be a 500: `notFound()` thrown inside a
+ * try/catch).
  */
-export const dynamicParams = false;
-
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ slug?: string[] }> }
@@ -29,7 +25,7 @@ export async function GET(
 
   // No try/catch: this runs at build time, so a missing MDX file must fail
   // the build rather than ship a placeholder body.
-  const content = await getLLMText(page);
+  const content = await getLLMText(page.slugs);
 
   return new NextResponse(content, { headers: LLMS_TEXT_HEADERS });
 }

@@ -1,4 +1,5 @@
 import { Skeleton } from "@keystoneui/react/skeleton";
+import { cacheLife } from "next/cache";
 
 import { cn } from "@/lib/cn";
 
@@ -41,6 +42,11 @@ async function fetchGitHubStats(): Promise<{
   totalCommits: number;
   prCount: number;
 }> {
+  // Cached with the one-year profile so /changelog stays fully static under
+  // Cache Components; `Date.now()` is allowed inside a cached function.
+  "use cache";
+  cacheLife("static");
+
   const oneYearAgo = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000)
     .toISOString()
     .slice(0, 10);

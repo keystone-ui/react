@@ -13,7 +13,9 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 
 export default function DatePickerControlled() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  // A fixed initial date: the demo is prerendered, so render must not read
+  // the clock. The "Today" button below still does, on click.
+  const [date, setDate] = useState<Date | undefined>(new Date(2026, 5, 12));
   const [open, setOpen] = useState(false);
 
   return (

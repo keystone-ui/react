@@ -7,8 +7,8 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  getHighlightedSource,
   hastPropertiesToProps,
+  highlightDemoSource,
   styleToObject,
 } from "../lib/highlight-source";
 
@@ -54,9 +54,9 @@ describe("hastPropertiesToProps", () => {
   });
 });
 
-describe("getHighlightedSource", () => {
+describe("highlightDemoSource", () => {
   it("returns the code's inner HTML and the pre element's props", async () => {
-    const result = await getHighlightedSource("button/default.tsx");
+    const result = await highlightDemoSource("button/default.tsx");
     expect(result.html).toContain("<span");
     expect(result.html).not.toContain("<pre");
     expect(result.html).toContain("Button");
@@ -64,6 +64,6 @@ describe("getHighlightedSource", () => {
   });
 
   it("rejects a file outside the demos directory", async () => {
-    await expect(getHighlightedSource("../package.json")).rejects.toThrow();
+    await expect(highlightDemoSource("../package.json")).rejects.toThrow();
   });
 });

@@ -4,13 +4,12 @@ import { Calendar } from "@keystoneui/react/calendar";
 import { useState } from "react";
 
 export default function CalendarBookedDates() {
-  const [date, setDate] = useState<Date | undefined>(
-    new Date(new Date().getFullYear(), 0, 6)
-  );
+  // Fixed dates: the demo is prerendered, so it must not read the clock.
+  const [date, setDate] = useState<Date | undefined>(new Date(2026, 0, 6));
 
   const bookedDates = Array.from(
     { length: 15 },
-    (_, i) => new Date(new Date().getFullYear(), 0, 12 + i)
+    (_, i) => new Date(2026, 0, 12 + i)
   );
 
   return (

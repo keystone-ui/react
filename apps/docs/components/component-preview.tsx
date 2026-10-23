@@ -1,9 +1,9 @@
 import { getDemoFile } from "@/demos/files";
-import { DemoLoader } from "@/demos/loader";
 import { cn } from "@/lib/cn";
 
 import { ComponentPreviewContainer } from "./component-preview-container";
 import { ComponentSource } from "./component-source";
+import { DemoRender } from "./demo-render";
 
 interface ComponentPreviewProps extends React.HTMLAttributes<HTMLDivElement> {
   description?: string;
@@ -51,7 +51,7 @@ export function ComponentPreview({
       name={name}
       {...props}
     >
-      <DemoLoader name={name} />
+      <DemoRender name={name} />
     </ComponentPreviewContainer>
   );
 }

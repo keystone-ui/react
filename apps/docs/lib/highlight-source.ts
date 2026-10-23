@@ -4,6 +4,7 @@ import { join, resolve, sep } from "node:path";
 import { highlightHast } from "fumadocs-core/highlight";
 import type { Element, Properties } from "hast";
 import { toHtml } from "hast-util-to-html";
+import { cacheLife } from "next/cache";
 import type { CSSProperties } from "react";
 
 /**
@@ -16,10 +17,27 @@ import type { CSSProperties } from "react";
  * ~1,700 spans and a 205 KB RSC payload. A single `dangerouslySetInnerHTML`
  * string costs one Flight node.
  */
-export async function getHighlightedSource(file: string): Promise<{
+export async function getHighlightedSource(
+  file: string
+): Promise<HighlightedSource> {
+  // Cached (one-year profile) so the file read and highlighting count as
+  // static work under Cache Components and every docs page stays fully
+  // prerendered. The uncached core below is what the unit tests exercise;
+  // `cacheLife()` only works inside the Next runtime.
+  "use cache";
+  cacheLife("static");
+  return await highlightDemoSource(file);
+}
+
+export interface HighlightedSource {
   html: string;
   preProps: PreProps;
-}> {
+}
+
+/** Uncached: reads and highlights one demo file under `demos/`. */
+export async function highlightDemoSource(
+  file: string
+): Promise<HighlightedSource> {
   const demosRoot = join(process.cwd(), "demos");
   const filePath = resolve(demosRoot, file);
   if (!filePath.startsWith(demosRoot + sep)) {

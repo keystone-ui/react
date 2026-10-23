@@ -1,6 +1,6 @@
 "use client";
 
-import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { NuqsAdapter } from "nuqs/adapters/react";
 import { Suspense, useState } from "react";
 
 import { BaseColorPicker } from "./components/base-color-picker";
@@ -48,16 +48,23 @@ function ThemeBuilderInner() {
   );
 }
 
+/**
+ * The plain React nuqs adapter reads `location.search` after hydration
+ * instead of Next's `useSearchParams`. Under Cache Components the Next
+ * adapter would suspend during prerendering and turn this route into a
+ * partial prerender, which the Worker's cache interception cannot serve.
+ * The cost is a brief default-theme flash on shared links.
+ */
 export default function ThemeBuilderPage() {
   return (
-    <NuqsAdapter>
-      <Suspense
-        fallback={
-          <div className="min-h-0 flex-1 rounded-xl border border-border bg-muted/20" />
-        }
-      >
+    <Suspense
+      fallback={
+        <div className="min-h-0 flex-1 rounded-xl border border-border bg-muted/20" />
+      }
+    >
+      <NuqsAdapter>
         <ThemeBuilderInner />
-      </Suspense>
-    </NuqsAdapter>
+      </NuqsAdapter>
+    </Suspense>
   );
 }

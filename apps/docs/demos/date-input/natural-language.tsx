@@ -12,11 +12,13 @@ import { addDays, addWeeks, format, nextMonday } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 
+// Each preset is resolved on click. Reading the clock at module scope would
+// run during prerendering, where the current time is not a stable input.
 const presets = [
-  { label: "Tomorrow", value: addDays(new Date(), 1) },
-  { label: "Next week", value: addWeeks(new Date(), 1) },
-  { label: "Next Monday", value: nextMonday(new Date()) },
-  { label: "In 2 weeks", value: addWeeks(new Date(), 2) },
+  { label: "Tomorrow", pick: (now: Date) => addDays(now, 1) },
+  { label: "Next week", pick: (now: Date) => addWeeks(now, 1) },
+  { label: "Next Monday", pick: (now: Date) => nextMonday(now) },
+  { label: "In 2 weeks", pick: (now: Date) => addWeeks(now, 2) },
 ];
 
 export default function DatePickerNaturalLanguage() {
@@ -45,7 +47,7 @@ export default function DatePickerNaturalLanguage() {
               <Button
                 key={preset.label}
                 onClick={() => {
-                  setDate(preset.value);
+                  setDate(preset.pick(new Date()));
                   setOpen(false);
                 }}
                 size="sm"

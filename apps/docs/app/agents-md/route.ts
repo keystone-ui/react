@@ -1,8 +1,6 @@
 import { LLMS_TEXT_HEADERS } from "@/lib/llms-utils";
 import { source } from "@/lib/source";
 
-export const revalidate = false;
-
 const SITE_URL = "https://keystoneui.io";
 
 function getComponentList(): string[] {

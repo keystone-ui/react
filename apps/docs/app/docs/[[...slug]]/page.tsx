@@ -1,3 +1,4 @@
+import { Skeleton } from "@keystoneui/react/skeleton";
 import type { TableOfContents } from "fumadocs-core/toc";
 import {
   DocsBody,
@@ -8,7 +9,7 @@ import {
 import type { MDXProps } from "mdx/types";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import type { FC } from "react";
+import { type FC, Suspense } from "react";
 import { source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 
@@ -25,9 +26,24 @@ interface PageProps {
   params: Promise<{ slug?: string[] }>;
 }
 
-export default async function Page(props: PageProps) {
-  const params = await props.params;
-  const page = source.getPage(params.slug);
+/**
+ * The `params` read happens inside the Suspense boundary. Under Partial
+ * Prefetching every link to a docs page prefetches one shared App Shell for
+ * this route; anything that depends on the URL must sit below a boundary or
+ * the shell would be tied to a single page. The skeleton is what a
+ * navigation paints while the page's own payload arrives.
+ */
+export default function Page(props: PageProps) {
+  return (
+    <Suspense fallback={<DocsPageSkeleton />}>
+      <DocsPageContent params={props.params} />
+    </Suspense>
+  );
+}
+
+async function DocsPageContent({ params }: PageProps) {
+  const { slug } = await params;
+  const page = source.getPage(slug);
   if (!page) {
     notFound();
   }
@@ -42,6 +58,21 @@ export default async function Page(props: PageProps) {
       <DocsBody>
         <MDX components={getMDXComponents()} />
       </DocsBody>
+    </DocsPage>
+  );
+}
+
+function DocsPageSkeleton() {
+  return (
+    <DocsPage>
+      <Skeleton className="h-9 w-2/5" />
+      <Skeleton className="mt-3 h-5 w-3/5" />
+      <div className="mt-8 flex flex-col gap-3">
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-11/12" />
+        <Skeleton className="h-4 w-4/5" />
+        <Skeleton className="mt-6 h-56 w-full rounded-xl" />
+      </div>
     </DocsPage>
   );
 }

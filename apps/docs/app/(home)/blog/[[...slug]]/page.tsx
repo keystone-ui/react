@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { blogPosts } from "@/.source/server";
+import { IntentLink as Link } from "@/components/intent-link";
 import { getMDXComponents } from "@/mdx-components";
 
 const MDX_EXT_RE = /\.mdx?$/;
@@ -14,9 +15,20 @@ function getPostSlug(filePath: string) {
   return filePath.replace(MDX_EXT_RE, "");
 }
 
-export default async function BlogPage(props: PageProps) {
-  const params = await props.params;
-  const slug = params.slug;
+/**
+ * The slug is read below a Suspense boundary so the route's shared App
+ * Shell (prefetched once for every blog link) does not depend on the URL.
+ */
+export default function BlogPage(props: PageProps) {
+  return (
+    <Suspense fallback={<BlogSkeleton />}>
+      <BlogContent params={props.params} />
+    </Suspense>
+  );
+}
+
+async function BlogContent({ params }: PageProps) {
+  const { slug } = await params;
 
   // Blog index
   if (!slug || slug.length === 0) {
@@ -76,6 +88,16 @@ export default async function BlogPage(props: PageProps) {
         )}
         <MDX components={getMDXComponents()} />
       </article>
+    </main>
+  );
+}
+
+function BlogSkeleton() {
+  return (
+    <main className="mx-auto max-w-4xl px-6 py-16">
+      <div className="mb-2 h-10 w-40 animate-pulse rounded-md bg-muted" />
+      <div className="mb-12 h-6 w-2/3 animate-pulse rounded-md bg-muted" />
+      <div className="h-28 animate-pulse rounded-xl border border-border/50 bg-muted/30" />
     </main>
   );
 }

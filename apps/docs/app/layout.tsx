@@ -2,6 +2,7 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
+import { IntentLink } from "@/components/intent-link";
 import "./global.css";
 
 const geistSans = Geist({
@@ -33,7 +34,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       suppressHydrationWarning
     >
       <body className="flex min-h-screen flex-col antialiased">
-        <RootProvider>{children}</RootProvider>
+        {/* Every fumadocs link (sidebar, navbar, breadcrumbs, cards, MDX)
+            prefetches the route's shared App Shell on sight and the page
+            itself on hover/focus/touch. See components/intent-link.tsx. */}
+        <RootProvider components={{ Link: IntentLink }}>
+          {children}
+        </RootProvider>
       </body>
     </html>
   );

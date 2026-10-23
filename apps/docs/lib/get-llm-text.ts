@@ -1,9 +1,12 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
+import { cacheLife } from "next/cache";
+
 import { getDemoFile } from "@/demos/files";
-import { formatLLMHeader, type Page } from "@/lib/llms-utils";
+import { formatLLMHeader } from "@/lib/llms-utils";
 import { readMdxSource } from "@/lib/read-mdx-source";
+import { source } from "@/lib/source";
 
 const DEMOS_DIR = "demos";
 
@@ -86,7 +89,19 @@ function cleanContentForLLM(content: string): string {
 
 // --- Main export ---
 
-export async function getLLMText(page: Page): Promise<string> {
+/**
+ * Takes the page's slugs rather than the page object so the result can be
+ * cached: Cache Components keys `use cache` functions by their serialisable
+ * arguments, and a fumadocs page object is not one.
+ */
+export async function getLLMText(slugs: readonly string[]): Promise<string> {
+  "use cache";
+  cacheLife("static");
+
+  const page = source.getPage([...slugs]);
+  if (!page) {
+    throw new Error(`no docs page for slugs ${JSON.stringify(slugs)}`);
+  }
   const title = page.data.title || "Untitled";
   const description = page.data.description || "";
   const url = page.url || "";

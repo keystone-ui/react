@@ -1,10 +1,34 @@
 import { join } from "node:path";
 
+import { cacheLife } from "next/cache";
 import { NextResponse } from "next/server";
 
 import { demoFiles } from "@/demos/files";
 import { demoNamesFromFiles } from "@/lib/demo-names";
-import { getDemoFiles, isValidDemoName } from "@/lib/get-demo-files";
+import {
+  type DemoBundle,
+  getDemoFiles,
+  isValidDemoName,
+} from "@/lib/get-demo-files";
+
+/**
+ * Cached so the route prerenders under Cache Components (an uncached fs
+ * read in a GET handler would make it render on demand, where `demos/`
+ * does not exist). The try/catch stays inside so an unknown name at request
+ * time is a 404, not a 500.
+ */
+async function getDemoBundle(name: string): Promise<DemoBundle | null> {
+  "use cache";
+  cacheLife("static");
+  try {
+    return await getDemoFiles({
+      name,
+      demosRoot: join(process.cwd(), "demos"),
+    });
+  } catch {
+    return null;
+  }
+}
 
 /**
  * Prerendered for every component and block name.
@@ -15,7 +39,6 @@ import { getDemoFiles, isValidDemoName } from "@/lib/get-demo-files";
  * reads the repo). Prerendering moves the read to `next build`, where the
  * files exist, and serves the JSON from static assets.
  */
-export const dynamicParams = false;
 
 export function generateStaticParams() {
   return demoNamesFromFiles(Object.values(demoFiles)).map((name) => ({
@@ -33,15 +56,7 @@ export async function GET(
     return NextResponse.json({ error: "Invalid name", name }, { status: 400 });
   }
 
-  const demosRoot = join(process.cwd(), "demos");
-  let bundle: Awaited<ReturnType<typeof getDemoFiles>> = null;
-  try {
-    bundle = await getDemoFiles({ name, demosRoot });
-  } catch {
-    // Only reachable off the build machine (no `demos/` on disk): answer
-    // like a miss rather than a server fault.
-    bundle = null;
-  }
+  const bundle = await getDemoBundle(name);
 
   if (!bundle) {
     return NextResponse.json(

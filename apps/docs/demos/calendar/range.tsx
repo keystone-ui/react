@@ -5,7 +5,8 @@ import { addDays } from "date-fns";
 import { useState } from "react";
 
 export default function CalendarRange() {
-  const startDate = new Date(new Date().getFullYear(), 0, 12);
+  // A fixed date: the demo is prerendered, so it must not read the clock.
+  const startDate = new Date(2026, 0, 12);
 
   const [dateRange, setDateRange] = useState({
     from: startDate,

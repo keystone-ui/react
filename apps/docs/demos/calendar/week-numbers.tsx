@@ -4,9 +4,8 @@ import { Calendar } from "@keystoneui/react/calendar";
 import { useState } from "react";
 
 export default function CalendarWeekNumbers() {
-  const [date, setDate] = useState<Date | undefined>(
-    new Date(new Date().getFullYear(), 0, 12)
-  );
+  // A fixed date: the demo is prerendered, so it must not read the clock.
+  const [date, setDate] = useState<Date | undefined>(new Date(2026, 0, 12));
 
   return (
     <Calendar

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { DemoRender } from "@/components/demo-render";
 import { demoFiles } from "@/demos/files";
-import { DemoLoader } from "@/demos/loader";
 
 /**
  * Full-bleed render of one demo, iframed by the block docs and used by the
@@ -10,7 +10,6 @@ import { DemoLoader } from "@/demos/loader";
  * from static assets; it used to be a client page reading `useParams`,
  * which made every iframe load a Worker invocation plus the whole demo map.
  */
-export const dynamicParams = false;
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -32,7 +31,7 @@ export default async function PreviewPage({
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <DemoLoader name={name} />
+      <DemoRender name={name} />
     </div>
   );
 }

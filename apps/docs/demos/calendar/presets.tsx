@@ -7,10 +7,10 @@ import { addDays } from "date-fns";
 import { useState } from "react";
 
 export default function CalendarPresets() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [currentMonth, setCurrentMonth] = useState<Date>(
-    new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-  );
+  // Fixed initial dates: the demo is prerendered, so render must not read
+  // the clock. The preset buttons below still do, on click.
+  const [date, setDate] = useState<Date | undefined>(new Date(2026, 5, 12));
+  const [currentMonth, setCurrentMonth] = useState<Date>(new Date(2026, 5, 1));
 
   return (
     <Card className="w-fit shadow-lg" size="xs">

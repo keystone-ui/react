@@ -5,8 +5,6 @@ import {
 } from "@/lib/llms-utils";
 import { source } from "@/lib/source";
 
-export const revalidate = false;
-
 export function GET() {
   try {
     const lines = generateIndexHeader();

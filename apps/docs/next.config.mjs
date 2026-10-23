@@ -1,7 +1,31 @@
 import { createMDX } from "fumadocs-mdx/next";
 
+/**
+ * One year, in seconds. The only finite `revalidate` OpenNext's cache
+ * interceptor treats as static output: every built-in `cacheLife` profile
+ * is shorter (`max` is 30 days), and a shorter TTL on a route makes the
+ * interceptor consider it stale and fall through to the Worker, where the
+ * read-only static-assets cache cannot store anything.
+ */
+const ONE_YEAR = 31_536_000;
+
 /** @type {import('next').NextConfig} */
 const config = {
+  // The Cache Components model (Next 16.4 recommends it for every app and
+  // it becomes the default in 17): caching is explicit via `use cache`, and
+  // links prefetch one shared App Shell per route instead of a full page per
+  // visible link. This site is fully static, so the shell is the whole
+  // layout and `ensureStatic` on the layouts fails the build if anything
+  // ever starts rendering at request time.
+  cacheComponents: true,
+  partialPrefetching: true,
+  cacheLife: {
+    static: {
+      stale: 300,
+      revalidate: ONE_YEAR,
+      expire: ONE_YEAR,
+    },
+  },
   experimental: {
     // TypeScript 7 ships no JS API, so Next's in-process type-check can't
     // load it. Run the `tsc` CLI instead.

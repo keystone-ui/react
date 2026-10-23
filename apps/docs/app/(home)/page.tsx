@@ -8,7 +8,7 @@ import {
   TreePalm,
   Zap,
 } from "lucide-react";
-import Link from "next/link";
+import { IntentLink as Link } from "@/components/intent-link";
 
 const features = [
   {

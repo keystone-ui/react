@@ -8,8 +8,6 @@ import { NextResponse } from "next/server";
 const VALID_SKILLS = ["keystoneui-react"];
 const TAR_GZ_SUFFIX = /\.tar\.gz$/;
 
-export const revalidate = false;
-
 export function generateStaticParams() {
   return VALID_SKILLS.map((skill) => ({ skill: `${skill}.tar.gz` }));
 }
