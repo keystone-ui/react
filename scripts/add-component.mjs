@@ -16,6 +16,7 @@
  *   - Fumadocs demo + registry entry + MDX page
  */
 
+import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -214,33 +215,19 @@ function addRegistryEntry(kebab) {
   console.log("  ✓ packages/ui/src/_registry.ts — added entry");
 }
 
-function addDemoRegistryEntry(pascal, kebab) {
-  const indexPath = join(DOCS_DIR, "demos/index.ts");
-  let content = readFileSync(indexPath, "utf-8");
-
-  const importName = `${pascal}Default`;
-  const importLine = `import ${importName} from "./${kebab}/default";`;
-
-  if (content.includes(importLine)) {
-    console.log("  ⊘ demos/index.ts entry already exists");
-    return;
-  }
-
-  // Add import before the DemoItem interface
-  content = content.replace(
-    /\nexport interface DemoItem/,
-    `\n${importLine}\n\nexport interface DemoItem`
+function regenerateDemoRegistry() {
+  // demos/manifest.json, loader.tsx and index.ts are generated from the
+  // files under apps/docs/demos. Regenerate rather than edit by hand; the
+  // scaffolded <kebab>/default.tsx becomes the "<kebab>-default" entry.
+  const result = spawnSync(
+    process.execPath,
+    [join(ROOT, "scripts/gen-demos.mjs")],
+    { stdio: "inherit" }
   );
-
-  // Add registry entry before closing };
-  const entry = `  "${kebab}-default": {
-    component: ${importName},
-    file: "${kebab}/default.tsx",
-  },`;
-  content = content.replace(/\n};/, `\n${entry}\n};`);
-
-  writeFileSync(indexPath, content);
-  console.log("  ✓ apps/docs/demos/index.ts — added import + entry");
+  if (result.status !== 0) {
+    throw new Error("scripts/gen-demos.mjs failed");
+  }
+  console.log("  ✓ apps/docs/demos — registry regenerated");
 }
 
 function addToComponentsMetaJson(kebab) {
@@ -306,7 +293,7 @@ console.log("\nUpdating registries:");
 addPackageJsonExport(kebab);
 addTsupEntry(kebab);
 addRegistryEntry(kebab);
-addDemoRegistryEntry(pascal, kebab);
+regenerateDemoRegistry();
 addToComponentsMetaJson(kebab);
 
 console.log(`

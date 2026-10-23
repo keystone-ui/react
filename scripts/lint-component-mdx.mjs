@@ -18,7 +18,7 @@
  *      <ComponentPreview> and isn't a protected section name).
  *   6. ## API Reference must exist with at least one Markdown table.
  *   7. Every <ComponentPreview name="X"> referenced in MDX must exist as a
- *      key in apps/docs/demos/index.ts.
+ *      key in apps/docs/demos/manifest.json.
  */
 
 import { readdirSync, readFileSync } from "node:fs";
@@ -26,7 +26,7 @@ import { basename, join } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
 const COMPONENTS_DIR = join(ROOT, "apps/docs/content/docs/components");
-const DEMOS_INDEX = join(ROOT, "apps/docs/demos/index.ts");
+const DEMOS_MANIFEST = join(ROOT, "apps/docs/demos/manifest.json");
 
 const PROTECTED_HEADINGS = new Set([
   "Import",
@@ -48,14 +48,10 @@ const STRUCTURE_EXEMPT = new Set([
 ]);
 
 function loadDemoNames() {
-  const content = readFileSync(DEMOS_INDEX, "utf-8");
-  const names = new Set();
-  // demos: Record<string, DemoItem> entries look like:  "key-name": { ... }
-  const matches = content.matchAll(/^\s*"([^"]+)":\s*\{/gm);
-  for (const m of matches) {
-    names.add(m[1]);
-  }
-  return names;
+  // manifest.json is generated from the demo files by scripts/gen-demos.mjs.
+  return new Set(
+    Object.keys(JSON.parse(readFileSync(DEMOS_MANIFEST, "utf-8")))
+  );
 }
 
 function parseFrontmatter(content) {

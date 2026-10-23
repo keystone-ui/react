@@ -25,7 +25,7 @@ import { basename, join } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
 const STORIES_DIR = join(ROOT, "apps/storybook/stories");
-const DEMOS_INDEX = join(ROOT, "apps/docs/demos/index.ts");
+const DEMOS_MANIFEST = join(ROOT, "apps/docs/demos/manifest.json");
 const DEMOS_DIR = join(ROOT, "apps/docs/demos");
 const ALLOWLIST_PATH = join(ROOT, "scripts/stories-demos-allowlist.json");
 
@@ -89,15 +89,12 @@ function loadStoryIndex() {
 }
 
 function loadDemoIndex() {
-  // Prefer the registry index — it's the canonical demo set seen by
-  // <ComponentPreview>, MCP, and the registry build. Fall back to a
-  // filesystem walk for blocks (which use a different naming convention).
-  const content = readFileSync(DEMOS_INDEX, "utf-8");
+  // The manifest is the canonical demo set seen by <ComponentPreview>, MCP,
+  // and the registry build; scripts/gen-demos.mjs derives it from the files.
+  const keys = Object.keys(JSON.parse(readFileSync(DEMOS_MANIFEST, "utf-8")));
   const index = new Map();
 
-  const matches = content.matchAll(/^\s*"([a-z0-9-]+)":\s*\{/gm);
-  for (const m of matches) {
-    const key = m[1];
+  for (const key of keys) {
     if (key.startsWith("block-")) {
       continue;
     }
