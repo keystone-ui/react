@@ -2,7 +2,9 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
   "name": "keystoneui-docs",
-  "compatibility_date": "2026-10-24",
+  // Keep this a few days in the past: the Cloudflare API rejects a date that
+  // is in the future for its own clock, and CI runs in UTC.
+  "compatibility_date": "2026-10-20",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": ".open-next/assets",
