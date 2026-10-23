@@ -2,10 +2,15 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
   "name": "keystoneui-docs",
-  "compatibility_date": "2026-02-24",
+  "compatibility_date": "2026-10-24",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
+  },
+  // Keep Workers Logs so an uncaught exception in the server function is
+  // visible; the smoke test's failure message points operators here.
+  "observability": {
+    "enabled": true
   }
 }

@@ -1,14 +1,19 @@
 import { createMDX } from "fumadocs-mdx/next";
+import type { NextConfig } from "next";
 
-/** @type {import('next').NextConfig} */
-const config = {
+import { securityHeaders } from "./lib/security-headers";
+
+const config: NextConfig = {
   experimental: {
     // TypeScript 7 ships no JS API, so Next's in-process type-check can't
     // load it. Run the `tsc` CLI instead.
     useTypeScriptCli: true,
   },
-  async redirects() {
-    return [
+  headers() {
+    return Promise.resolve(securityHeaders());
+  },
+  redirects() {
+    return Promise.resolve([
       {
         source: "/themes",
         destination: "/theme-builder",
@@ -54,15 +59,15 @@ const config = {
         destination: "/docs/agents/llms-txt",
         permanent: true,
       },
-    ];
+    ]);
   },
-  async rewrites() {
-    return [
+  rewrites() {
+    return Promise.resolve([
       {
         source: "/docs/:path*.mdx",
         destination: "/llms.mdx/docs/:path*",
       },
-    ];
+    ]);
   },
 };
 

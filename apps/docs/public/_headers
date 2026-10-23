@@ -1,0 +1,8 @@
+# Served by Workers static assets, which never invoke the Worker, so this is
+# the only place that can set caching for build output. Next hashes every
+# file under /_next/static, so a year-long immutable cache is safe: a new
+# deploy produces new URLs. Without this rule every chunk shipped with
+# `max-age=0, must-revalidate`, one revalidation round trip per chunk per
+# page view.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable

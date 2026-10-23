@@ -16,13 +16,29 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
+const DESCRIPTION =
+  "Beautiful, accessible React components built with Tailwind CSS v4 and Base UI.";
+
 export const metadata: Metadata = {
+  // Resolves relative Open Graph URLs (and the generated opengraph-image).
+  metadataBase: new URL("https://keystoneui.io"),
   title: {
     default: "Keystone UI",
     template: "%s | Keystone UI",
   },
-  description:
-    "Beautiful, accessible React components built with Tailwind CSS v4 and Base UI.",
+  description: DESCRIPTION,
+  openGraph: {
+    type: "website",
+    siteName: "Keystone UI",
+    title: "Keystone UI",
+    description: DESCRIPTION,
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Keystone UI",
+    description: DESCRIPTION,
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
