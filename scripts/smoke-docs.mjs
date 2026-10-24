@@ -51,6 +51,7 @@ export const DEFAULT_CHECKS = [
     bodyIncludes: "/docs/components/button",
   },
   { path: "/r/demos/button", status: 200, bodyIncludes: '"name":"button"' },
+  { path: "/r/demos/smoke-docs-missing", status: 404 },
   { path: "/__smoke-docs-missing-route", status: 404 },
   { path: "/docs/components/__smoke-docs-missing.mdx", status: 404 },
 ];

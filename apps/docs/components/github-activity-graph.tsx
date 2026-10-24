@@ -2,13 +2,7 @@ import { Skeleton } from "@keystoneui/react/skeleton";
 import { cacheLife } from "next/cache";
 
 import { cn } from "@/lib/cn";
-
-const REPO = "keystone-ui/react";
-
-interface ParticipationData {
-  all: number[];
-  owner: number[];
-}
+import { type GitHubStats, loadGitHubStats } from "@/lib/github-stats";
 
 type ActivityLevel = 0 | 1 | 2 | 3 | 4;
 
@@ -37,39 +31,17 @@ function getActivityLevel(count: number, max: number): ActivityLevel {
   return 4;
 }
 
-async function fetchGitHubStats(): Promise<{
-  weeklyData: number[];
-  totalCommits: number;
-  prCount: number;
-}> {
+async function fetchGitHubStats(): Promise<GitHubStats> {
   // Cached with the one-year profile so /changelog stays fully static under
-  // Cache Components; `Date.now()` is allowed inside a cached function.
+  // Cache Components; Date.now() is allowed inside a cached function. No
+  // fetch TTL here: one turned /changelog into an ISR route, and on the
+  // Worker's read-only static-assets cache every request then fell through
+  // to the Next server instead of being served from assets. The loader
+  // throws on anything but two clean 200s, so a rate-limited build renders
+  // the neutral header below instead of caching "0 commits" for a year.
   "use cache";
   cacheLife("static");
-
-  const oneYearAgo = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000)
-    .toISOString()
-    .slice(0, 10);
-
-  // No `next.revalidate`: the data is captured once at build time. A TTL
-  // here turned /changelog into an ISR route, and on the Worker's read-only
-  // static-assets cache that meant every request fell through to the Next
-  // server instead of being served from assets.
-  const [participationRes, prRes] = await Promise.all([
-    fetch(`https://api.github.com/repos/${REPO}/stats/participation`),
-    fetch(
-      `https://api.github.com/search/issues?q=repo:${REPO}+type:pr+created:>${oneYearAgo}`
-    ),
-  ]);
-
-  const participation: ParticipationData = await participationRes.json();
-  const prData = await prRes.json();
-
-  const weeklyData = participation.all ?? [];
-  const totalCommits = weeklyData.reduce((acc, count) => acc + count, 0);
-  const prCount = prData.total_count ?? 0;
-
-  return { weeklyData, totalCommits, prCount };
+  return await loadGitHubStats();
 }
 
 function ActivityCell({
