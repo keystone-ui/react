@@ -12,6 +12,14 @@ import {
 } from "@/lib/get-demo-files";
 
 /**
+ * Every name that exists at build time. The cached read below must never run
+ * for anything else: on the Worker the static-assets cache is read-only and
+ * demos/ does not exist, so an unknown name would recompute and fail instead
+ * of answering 404.
+ */
+const KNOWN_NAMES = new Set(demoNamesFromFiles(Object.values(demoFiles)));
+
+/**
  * Cached so the route prerenders under Cache Components (an uncached fs
  * read in a GET handler would make it render on demand, where `demos/`
  * does not exist). The try/catch stays inside so an unknown name at request
@@ -41,9 +49,7 @@ async function getDemoBundle(name: string): Promise<DemoBundle | null> {
  */
 
 export function generateStaticParams() {
-  return demoNamesFromFiles(Object.values(demoFiles)).map((name) => ({
-    name,
-  }));
+  return [...KNOWN_NAMES].map((name) => ({ name }));
 }
 
 export async function GET(
@@ -54,6 +60,13 @@ export async function GET(
 
   if (!isValidDemoName(name)) {
     return NextResponse.json({ error: "Invalid name", name }, { status: 400 });
+  }
+
+  if (!KNOWN_NAMES.has(name)) {
+    return NextResponse.json(
+      { error: "Demo not found", name },
+      { status: 404 }
+    );
   }
 
   const bundle = await getDemoBundle(name);
