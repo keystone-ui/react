@@ -208,7 +208,7 @@ function StepIndicator() {
     <div className="mb-4 flex items-center justify-center gap-1.5">
       {Array.from({ length: totalSteps }).map((_, i) => (
         <div
-          className={`h-1.5 rounded-full transition-[width] duration-300 ${
+          className={`h-1.5 rounded-full transition-[width,background-color] duration-300 ${
             i === value
               ? "w-6 bg-primary"
               : i < value
