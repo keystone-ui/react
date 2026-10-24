@@ -6,6 +6,9 @@
       // Build-time switch for the docs e2e build; part of the hash so a
       // cached build made without it is never reused for one that needs it.
       "env": ["EXPOSE_TESTING_API"],
+      // Lifts the changelog header's GitHub API limit; pass-through so the
+      // token never enters the cache hash.
+      "passThroughEnv": ["GITHUB_TOKEN"],
       "outputs": ["dist/**", "storybook-static/**", ".next/**"],
       "dependsOn": ["^build"]
     },

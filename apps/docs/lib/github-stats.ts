@@ -30,19 +30,27 @@ const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
  * parse but carry no data. Reading those as "0 commits, 0 PRs" and caching
  * the result for a year would freeze a wrong headline for the whole deploy,
  * so this throws and the caller renders its neutral header instead.
+ *
+ * `token` (CI passes `GITHUB_TOKEN`) lifts the limit to 5,000 an hour.
  */
 export async function loadGitHubStats(
   fetchImpl: typeof fetch = fetch,
-  now: number = Date.now()
+  now: number = Date.now(),
+  token: string | undefined = process.env.GITHUB_TOKEN
 ): Promise<GitHubStats> {
   const oneYearAgo = new Date(now - ONE_YEAR_MS).toISOString().slice(0, 10);
+  const init: RequestInit | undefined = token
+    ? { headers: { Authorization: `Bearer ${token}` } }
+    : undefined;
 
   const [participationRes, prRes] = await Promise.all([
     fetchImpl(
-      `https://api.github.com/repos/${GITHUB_REPO}/stats/participation`
+      `https://api.github.com/repos/${GITHUB_REPO}/stats/participation`,
+      init
     ),
     fetchImpl(
-      `https://api.github.com/search/issues?q=repo:${GITHUB_REPO}+type:pr+created:>${oneYearAgo}`
+      `https://api.github.com/search/issues?q=repo:${GITHUB_REPO}+type:pr+created:>${oneYearAgo}`,
+      init
     ),
   ]);
 
@@ -68,4 +76,22 @@ export async function loadGitHubStats(
     totalCommits: weeklyData.reduce((acc, count) => acc + count, 0),
     prCount: search.total_count,
   };
+}
+
+/**
+ * `loadGitHubStats` with failures turned into `null`. The caller runs this
+ * inside a `use cache` function, and an error thrown there fails the
+ * prerender (and so the whole build) even when the component catches it, so
+ * the fallback has to be decided inside the cache boundary. Caching `null`
+ * for the deploy is the intended outcome: it renders the neutral header.
+ */
+export async function loadGitHubStatsOrNull(
+  ...args: Parameters<typeof loadGitHubStats>
+): Promise<GitHubStats | null> {
+  try {
+    return await loadGitHubStats(...args);
+  } catch (error) {
+    console.warn(`Changelog header falls back to neutral: ${error}`);
+    return null;
+  }
 }

@@ -2,7 +2,7 @@ import { Skeleton } from "@keystoneui/react/skeleton";
 import { cacheLife } from "next/cache";
 
 import { cn } from "@/lib/cn";
-import { type GitHubStats, loadGitHubStats } from "@/lib/github-stats";
+import { type GitHubStats, loadGitHubStatsOrNull } from "@/lib/github-stats";
 
 type ActivityLevel = 0 | 1 | 2 | 3 | 4;
 
@@ -31,17 +31,19 @@ function getActivityLevel(count: number, max: number): ActivityLevel {
   return 4;
 }
 
-async function fetchGitHubStats(): Promise<GitHubStats> {
+async function fetchGitHubStats(): Promise<GitHubStats | null> {
   // Cached with the one-year profile so /changelog stays fully static under
   // Cache Components; Date.now() is allowed inside a cached function. No
   // fetch TTL here: one turned /changelog into an ISR route, and on the
   // Worker's read-only static-assets cache every request then fell through
-  // to the Next server instead of being served from assets. The loader
-  // throws on anything but two clean 200s, so a rate-limited build renders
-  // the neutral header below instead of caching "0 commits" for a year.
+  // to the Next server instead of being served from assets. Anything but two
+  // clean 200s comes back as null, so a rate-limited build renders the
+  // neutral header below instead of caching "0 commits" for a year. It must
+  // not throw: an error inside "use cache" fails the prerender even though
+  // the component would catch it.
   "use cache";
   cacheLife("static");
-  return await loadGitHubStats();
+  return await loadGitHubStatsOrNull();
 }
 
 function ActivityCell({
@@ -90,87 +92,91 @@ export function GitHubActivityGraphSkeleton() {
   );
 }
 
+function ChangelogHeaderFallback() {
+  return (
+    <div className="flex flex-col gap-2 pb-12">
+      <h1 className="font-bold text-4xl tracking-tight">Changelog</h1>
+      <p className="text-muted-foreground">
+        All notable changes to Keystone UI are documented here.
+      </p>
+    </div>
+  );
+}
+
 export async function GitHubActivityGraph() {
-  try {
-    const { weeklyData, totalCommits, prCount } = await fetchGitHubStats();
+  const stats = await fetchGitHubStats();
+  if (!stats) {
+    return <ChangelogHeaderFallback />;
+  }
+  const { weeklyData, totalCommits, prCount } = stats;
 
-    const dailyData: number[][] = weeklyData.map((weekTotal) => {
-      const days: number[] = [];
-      let remaining = weekTotal;
+  const dailyData: number[][] = weeklyData.map((weekTotal) => {
+    const days: number[] = [];
+    let remaining = weekTotal;
 
-      for (let day = 0; day < 7; day++) {
-        if (day === 6) {
-          days.push(remaining);
-        } else {
-          const portion = Math.floor(remaining / (7 - day));
-          days.push(portion);
-          remaining -= portion;
-        }
+    for (let day = 0; day < 7; day++) {
+      if (day === 6) {
+        days.push(remaining);
+      } else {
+        const portion = Math.floor(remaining / (7 - day));
+        days.push(portion);
+        remaining -= portion;
       }
-      return days;
-    });
+    }
+    return days;
+  });
 
-    const maxDailyCommits = Math.max(...dailyData.flat(), 1);
+  const maxDailyCommits = Math.max(...dailyData.flat(), 1);
 
-    return (
-      <div className="flex flex-col gap-6 pt-3 pb-12">
-        <div className="flex flex-col gap-2">
-          <h1 className="font-bold text-4xl tracking-tight">Changelog</h1>
-          <p className="text-muted-foreground">
-            We&apos;re shipping a lot,{" "}
-            <span className="font-medium text-success tabular-nums">
-              {totalCommits.toLocaleString()} commit
-              {totalCommits === 1 ? "" : "s"}
-            </span>{" "}
-            and{" "}
-            <span className="font-medium text-success tabular-nums">
-              {prCount.toLocaleString()} PR{prCount === 1 ? "" : "s"}
-            </span>{" "}
-            in the past year.
-          </p>
-        </div>
-
-        <div className="relative w-full">
-          <div className="grid w-full grid-flow-col grid-cols-52 grid-rows-7 gap-0.5">
-            {dailyData.map((week, weekIndex) =>
-              week.map((dayCount, dayIndex) => (
-                <ActivityCell
-                  count={dayCount}
-                  dayIndex={dayIndex}
-                  key={`activity-cell-${weekIndex.toString()}-${dayIndex.toString()}`}
-                  maxCount={maxDailyCommits}
-                  weekIndex={weekIndex}
-                />
-              ))
-            )}
-          </div>
-          <div className="mt-2 flex items-center justify-end gap-2 text-muted-foreground text-xs">
-            <span>Less</span>
-            <div className="flex gap-0.5">
-              {([0, 1, 2, 3, 4] as ActivityLevel[]).map((level) => (
-                <div
-                  className={cn(
-                    "size-2.5 border border-dashed",
-                    ACTIVITY_COLORS[level],
-                    level === 0 && "border-border/30"
-                  )}
-                  key={level}
-                />
-              ))}
-            </div>
-            <span>More</span>
-          </div>
-        </div>
-      </div>
-    );
-  } catch {
-    return (
-      <div className="flex flex-col gap-2 pb-12">
+  return (
+    <div className="flex flex-col gap-6 pt-3 pb-12">
+      <div className="flex flex-col gap-2">
         <h1 className="font-bold text-4xl tracking-tight">Changelog</h1>
         <p className="text-muted-foreground">
-          All notable changes to Keystone UI are documented here.
+          We&apos;re shipping a lot,{" "}
+          <span className="font-medium text-success tabular-nums">
+            {totalCommits.toLocaleString()} commit
+            {totalCommits === 1 ? "" : "s"}
+          </span>{" "}
+          and{" "}
+          <span className="font-medium text-success tabular-nums">
+            {prCount.toLocaleString()} PR{prCount === 1 ? "" : "s"}
+          </span>{" "}
+          in the past year.
         </p>
       </div>
-    );
-  }
+
+      <div className="relative w-full">
+        <div className="grid w-full grid-flow-col grid-cols-52 grid-rows-7 gap-0.5">
+          {dailyData.map((week, weekIndex) =>
+            week.map((dayCount, dayIndex) => (
+              <ActivityCell
+                count={dayCount}
+                dayIndex={dayIndex}
+                key={`activity-cell-${weekIndex.toString()}-${dayIndex.toString()}`}
+                maxCount={maxDailyCommits}
+                weekIndex={weekIndex}
+              />
+            ))
+          )}
+        </div>
+        <div className="mt-2 flex items-center justify-end gap-2 text-muted-foreground text-xs">
+          <span>Less</span>
+          <div className="flex gap-0.5">
+            {([0, 1, 2, 3, 4] as ActivityLevel[]).map((level) => (
+              <div
+                className={cn(
+                  "size-2.5 border border-dashed",
+                  ACTIVITY_COLORS[level],
+                  level === 0 && "border-border/30"
+                )}
+                key={level}
+              />
+            ))}
+          </div>
+          <span>More</span>
+        </div>
+      </div>
+    </div>
+  );
 }
