@@ -7,11 +7,14 @@
 Breaking:
 
 - `--ease-out` and `--ease-in-out` are now `--ease-ks-out` and `--ease-ks-in-out`. Declared in `@theme`, the old names made Tailwind emit `ease-out` / `ease-in-out` utilities that replaced the framework's own curves in every consumer app. Update any `var(--ease-out)` / `ease-[var(--ease-out)]` reference to the new names; the bare `ease-out` / `ease-in-out` utilities in your app now mean what Tailwind says they mean.
+- The `prefers-reduced-motion` rule no longer uses `!important`. It still stops every Tailwind utility and every library transition, but your own rules that set a duration themselves — `a { transition: color 200ms }`, `html { scroll-behavior: smooth }`, or a `--duration-*` override placed after the import — are no longer forced to zero; give them a reduced-motion rule of their own.
+- `Drawer` now layers at `--z-drawer` (40), below `Modal` (50). A drawer opened from inside a modal renders behind it; before, both sat at 50 and DOM order decided.
+- `Progress` and `CircularProgress` fill transitions run at `--duration-slow` (250ms) instead of 500ms.
 - The thin, token-coloured scrollbar skin no longer applies to every element. Add `ks-scrollbar` to `<html>` to restore it everywhere, or to a single scroll container.
 
 Reduced motion:
 
-- The `prefers-reduced-motion` rule is unlayered and no longer uses `!important`, so any selector of your own can override it, and it zeroes the `--duration-*` tokens so the library's own transitions stop too. Spinners (`.animate-spin`) and indeterminate progress (`[data-indeterminate]`) keep animating, and the view-transition pseudo-elements are zeroed as well.
+- The rule is unlayered and `!important`-free, so any selector of your own can override it, and it zeroes the `--duration-*` tokens so the library's own transitions stop too. Spinners (`.animate-spin`) and indeterminate progress (`[data-indeterminate]`) keep animating, and the view-transition pseudo-elements are zeroed as well.
 
 Component fixes:
 
@@ -20,4 +23,5 @@ Component fixes:
 - `DateInput` merges a forwarded ref with its own, so the picker button works with callback refs (react-hook-form's `register()`).
 - `Stepper` derives the slide direction during render; 1 → 2 → 1 no longer enters from the wrong side. `StepperContent` exposes `data-direction`.
 - `Drawer`, `Toast`, `Progress`, `CircularProgress` and `TabsIndicator` use the `--duration-*`, `--ease-ks-*` and `--z-*` tokens; the tab indicator slides with a transform instead of `top` / `left`.
-- `Card`, `Separator` and `Kbd` drop `"use client"`; `package.json` marks only CSS as side-effectful so bundlers can tree-shake the JS.
+- `Card`, `Separator` and `Kbd` drop `"use client"`.
+- `package.json` declares `"sideEffects": ["**/*.css"]` instead of `false`. The JS was already tree-shakeable; the fix is that a bare `import "@keystoneui/react/base.css"` is no longer dropped by bundlers that honour the flag.

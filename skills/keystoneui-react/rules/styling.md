@@ -190,7 +190,7 @@ transition-colors                                      /* ComboboxChips */
 
 Defined in `@keystoneui/react/base.css`, which your global CSS imports. Use these instead of hard-coded durations or z-index.
 
-**Duration tokens** — `--duration-fast` (≈100ms), `--duration-base` (≈160ms), `--duration-slow` (≈220ms), `--duration-drawer`.
+**Duration tokens** — `--duration-fast` (125ms), `--duration-base` (180ms), `--duration-slow` (250ms), `--duration-drawer` (400ms). Every transition in `base.css` derives from one of these, and the reduced-motion rule zeroes them.
 
 **Easing tokens** — `--ease-ks-out`, `--ease-ks-in-out`, `--ease-drawer`. Use them as `ease-(--ease-ks-out)`; the `ks` prefix exists so the library never shadows Tailwind's own `ease-out` / `ease-in-out` utilities, which keep their default curves in your app.
 

@@ -89,6 +89,16 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 | `activeStep` | `number` | `0` | The currently active step index |
 | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
 
+### StepperContent
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `className` | `string` | - | Additional CSS classes |
+
+| Attribute | Value | Description |
+| --- | --- | --- |
+| `data-direction` | `"1"` \| `"-1"` | Direction of the last step change: `1` forward, `-1` backward. Set in the same render as the step change, so styles and tests can read the slide direction without reaching into the animation. |
+
 ### StepperStep
 
 | Prop | Type | Default | Description |
