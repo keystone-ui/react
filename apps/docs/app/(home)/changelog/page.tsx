@@ -11,6 +11,8 @@ import { getMDXComponents } from "@/mdx-components";
 export const metadata: Metadata = {
   title: "Changelog",
   description: "All notable changes to Keystone UI.",
+  alternates: { canonical: "/changelog" },
+  openGraph: { url: "/changelog" },
 };
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {

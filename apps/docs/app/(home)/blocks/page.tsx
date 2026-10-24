@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   title: "Blocks",
   description:
     "Browse all Keystone UI blocks — full-page templates ready to drop into your app.",
+  alternates: { canonical: "/blocks" },
+  openGraph: { url: "/blocks" },
 };
 
 interface RegistryItem {
