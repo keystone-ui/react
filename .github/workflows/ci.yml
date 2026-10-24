@@ -268,10 +268,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint
     # CHROMATIC_PROJECT_TOKEN is a repository secret, which pull requests
-    # from forks and from Dependabot do not receive.
+    # from forks and from Dependabot do not receive. The actor check is
+    # scoped to pull requests on purpose: a Dependabot-driven push to main
+    # (`@dependabot merge`) also gets no secrets, and there the job must run
+    # and fail loudly rather than skip and leave the baseline stale.
     if: >-
-      github.actor != 'dependabot[bot]' &&
-      (github.event_name == 'push' ||
+      github.event_name == 'push' ||
+      (github.actor != 'dependabot[bot]' &&
       github.event.pull_request.head.repo.full_name == github.repository)
     steps:
       - name: Checkout
@@ -315,10 +318,11 @@ jobs:
     # only runs when the skill or the components it describes actually change.
     # Forked and Dependabot PRs receive no secrets, so the job would fail for
     # a reason the contributor cannot fix -- skip it there and let a
-    # maintainer run it.
+    # maintainer run it. On push the job always runs (the missing-key branch
+    # below handles a Dependabot-driven push).
     if: >-
-      github.actor != 'dependabot[bot]' &&
-      (github.event_name == 'push' ||
+      github.event_name == 'push' ||
+      (github.actor != 'dependabot[bot]' &&
       github.event.pull_request.head.repo.full_name == github.repository)
     permissions:
       contents: read

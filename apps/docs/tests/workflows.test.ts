@@ -25,6 +25,10 @@ const VERSION_COMMENT = /^\s+#\s*v?\d+(?:\.\d+)*\s*$/;
 const FORK_GUARD =
   "github.event.pull_request.head.repo.full_name == github.repository";
 const DEPENDABOT_GUARD = "github.actor != 'dependabot[bot]'";
+// Dependabot can also push to main (`@dependabot merge`), and a skipped
+// deploy there would leave production stale behind a green run. The actor
+// check therefore belongs to the pull_request branch of the expression only.
+const PR_ONLY_DEPENDABOT_GUARD = `(${DEPENDABOT_GUARD} && ${FORK_GUARD})`;
 const CANCEL_PULL_REQUESTS_ONLY = "github.event_name == 'pull_request'";
 // Always available, so it needs no guard.
 const GITHUB_TOKEN = "secrets.GITHUB_TOKEN";
@@ -175,9 +179,14 @@ describe("GitHub Actions workflows", () => {
         expect(job.if, `${file} › ${name} needs a fork guard`).toContain(
           FORK_GUARD
         );
-        expect(job.if, `${file} › ${name} needs a Dependabot guard`).toContain(
-          DEPENDABOT_GUARD
-        );
+        expect(
+          job.if,
+          `${file} › ${name} needs a PR-only Dependabot guard`
+        ).toContain(PR_ONLY_DEPENDABOT_GUARD);
+        expect(
+          job.if?.split(DEPENDABOT_GUARD).length,
+          `${file} › ${name} checks the actor outside the pull_request branch`
+        ).toBe(2);
       }
     }
     expect(guardedJobs).toBeGreaterThan(0);
