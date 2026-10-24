@@ -68,6 +68,17 @@ describe("DEFAULT_CHECKS", () => {
       expect(check.bodyIncludes).toBeTypeOf("string");
     }
   });
+
+  it("covers the sitemap and the icon", () => {
+    // Both are generated routes that only exist if their handlers ran at
+    // build time; a deploy that lost either would otherwise pass silently.
+    const sitemap = DEFAULT_CHECKS.find((c) => c.path === "/sitemap.xml");
+    expect(sitemap?.status).toBe(200);
+    expect(sitemap?.bodyIncludes).toContain("/docs/components/button");
+    const icon = DEFAULT_CHECKS.find((c) => c.path === "/icon.svg");
+    expect(icon?.status).toBe(200);
+    expect(icon?.bodyIncludes).toContain("<svg");
+  });
 });
 
 describe("runChecks with bodyIncludes", () => {
