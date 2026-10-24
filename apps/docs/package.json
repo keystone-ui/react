@@ -22,19 +22,19 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@keystoneui/react": "workspace:*",
-    "@opennextjs/cloudflare": "^1.20.13",
+    "@opennextjs/cloudflare": "1.20.13",
     "@types/mdx": "^2.0.14",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "culori": "^4.0.2",
     "date-fns": "^4.4.0",
     "embla-carousel-autoplay": "^8.6.0",
-    "fumadocs-core": "^16.17.7",
-    "fumadocs-mdx": "^15.4.9",
-    "fumadocs-ui": "^16.17.7",
+    "fumadocs-core": "^16.17.8",
+    "fumadocs-mdx": "^15.4.10",
+    "fumadocs-ui": "^16.17.8",
     "hast-util-to-html": "^9.0.5",
     "lucide-react": "^1.61.0",
-    "next": "^16.4.2",
+    "next": "16.4.3",
     "next-themes": "^0.4.6",
     "nuqs": "^2.10.2",
     "react": "^19.3.1",
@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@keystoneui/typescript-config": "workspace:*",
-    "@next/playwright": "16.4.2",
+    "@next/playwright": "16.4.3",
     "@playwright/test": "^1.64.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/culori": "^4.0.1",
@@ -62,6 +62,6 @@
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vitest": "^5.0.5",
-    "wrangler": "^4.151.3"
+    "wrangler": "^4.152.0"
   }
 }

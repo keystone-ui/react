@@ -10,9 +10,9 @@ const config: StorybookConfig = {
     name: getAbsolutePath("@storybook/react-vite"),
     options: {},
   },
-  typescript: {
-    check: true,
-  },
+  // No `typescript.check`: the Vite builder does not type-check, so the
+  // option was a no-op. Stories are type-checked by `tsc --noEmit` in the
+  // CI lint job instead.
   addons: [
     getAbsolutePath("@storybook/addon-docs"),
     getAbsolutePath("@storybook/addon-themes"),

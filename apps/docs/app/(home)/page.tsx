@@ -72,7 +72,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,oklch(0.8_0.05_260/0.15),transparent_70%)]" />
         <div className="relative mx-auto max-w-7xl px-6 py-24 text-center sm:py-32 lg:py-40">
           <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-muted/50 px-4 py-1.5 text-muted-foreground text-sm">
-            <span className="inline-block size-2 rounded-full bg-green-500" />
+            <span className="inline-block size-2 rounded-full bg-success" />
             50+ components available
           </div>
           <h1 className="mx-auto max-w-4xl font-bold text-4xl tracking-tight sm:text-6xl lg:text-7xl">
@@ -152,7 +152,7 @@ export default function HomePage() {
           <div className="mt-16 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {components.map((component) => (
               <Link
-                className="group flex items-center justify-between rounded-lg border border-border/50 bg-card px-4 py-3 transition-all hover:border-border hover:bg-accent/50"
+                className="group flex items-center justify-between rounded-lg border border-border/50 bg-card px-4 py-3 transition-[border-color,background-color] hover:border-border hover:bg-accent/50"
                 href={component.href}
                 key={component.name}
               >

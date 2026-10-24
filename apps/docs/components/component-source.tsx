@@ -24,7 +24,7 @@ export async function ComponentSource({ name }: ComponentSourceProps) {
     highlighted = await getHighlightedSource(file);
   } catch {
     return (
-      <div className="rounded-md border border-red-200 bg-red-50 p-3 text-red-600 text-sm">
+      <div className="rounded-md border border-destructive/30 bg-destructive/10 p-3 text-destructive text-sm">
         Could not read source file: {file}
       </div>
     );

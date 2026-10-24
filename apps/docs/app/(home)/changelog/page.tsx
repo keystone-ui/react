@@ -63,7 +63,7 @@ export default function ChangelogPage() {
                   className="grid gap-8 py-12 md:grid-cols-[12rem_minmax(0,1fr)]"
                   key={entry.info.path}
                 >
-                  <div className="md:sticky md:top-24 md:self-start">
+                  <div className="md:sticky md:top-24 md:self-start print:static">
                     {entry.version ? (
                       <>
                         <a

@@ -15,6 +15,12 @@ const preview: Preview = {
     docs: {
       theme: themes.dark,
     },
+    // Chromatic pauses CSS animations by default but not JS-driven ones;
+    // snapshotting at the end state keeps popups, toasts and drawers from
+    // producing a diff that depends on frame timing.
+    chromatic: {
+      pauseAnimationAtEnd: true,
+    },
   },
   decorators: [
     withThemeByClassName({

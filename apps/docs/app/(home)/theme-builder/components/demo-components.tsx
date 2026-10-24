@@ -317,7 +317,7 @@ export function DemoComponents() {
           <div className="flex flex-1 flex-col gap-0.5">
             <div className="flex items-center gap-1 font-semibold text-sm leading-tight">
               shadcn
-              <BadgeCheckIcon className="size-4 fill-blue-500 text-white" />
+              <BadgeCheckIcon className="size-4 fill-primary text-primary-foreground" />
             </div>
             <p className="text-muted-foreground text-xs">@shadcn</p>
           </div>
@@ -387,35 +387,35 @@ export function DemoComponents() {
         <Badge variant="outline">
           <span
             aria-hidden="true"
-            className="size-1.5 rounded-full bg-green-500"
+            className="size-1.5 rounded-full bg-success"
           />
           Active
         </Badge>
         <Badge variant="outline">
           <span
             aria-hidden="true"
-            className="size-1.5 rounded-full bg-yellow-500"
+            className="size-1.5 rounded-full bg-warning"
           />
           Pending
         </Badge>
         <Badge variant="outline">
           <span
             aria-hidden="true"
-            className="size-1.5 rounded-full bg-red-500"
+            className="size-1.5 rounded-full bg-destructive"
           />
           Failed
         </Badge>
         <Badge variant="outline">
           <span
             aria-hidden="true"
-            className="size-1.5 rounded-full bg-blue-500"
+            className="size-1.5 rounded-full bg-primary"
           />
           Processing
         </Badge>
         <Badge variant="outline">
           <span
             aria-hidden="true"
-            className="size-1.5 rounded-full bg-gray-400"
+            className="size-1.5 rounded-full bg-muted-foreground"
           />
           Inactive
         </Badge>
@@ -689,11 +689,11 @@ export function DemoComponents() {
                       key={option.value}
                     >
                       <Field
-                        className="gap-1.5 overflow-hidden px-3! py-1.5! transition-all duration-100 ease-linear group-has-data-checked/field-label:px-2!"
+                        className="gap-1.5 overflow-hidden px-3! py-1.5! transition-[padding] duration-100 ease-linear group-has-data-checked/field-label:px-2!"
                         orientation="horizontal"
                       >
                         <Checkbox
-                          className="-ml-6 -translate-x-1 rounded-full transition-all duration-100 ease-linear data-checked:ml-0 data-checked:translate-x-0"
+                          className="-ml-6 -translate-x-1 rounded-full transition-[margin-left,translate] duration-100 ease-linear data-checked:ml-0 data-checked:translate-x-0"
                           defaultChecked={option.value === "social-media"}
                           id={`demo-pill-${option.value}`}
                           value={option.value}

@@ -18,7 +18,7 @@ export default function AccordionCustomChevron() {
             chevronIcon={
               <Plus
                 aria-hidden="true"
-                className="size-3 shrink-0 transition-all ease-out group-data-[panel-open]:rotate-45 group-data-[panel-open]:scale-110"
+                className="size-3 shrink-0 transition-transform ease-out group-data-[panel-open]:rotate-45 group-data-[panel-open]:scale-110"
               />
             }
           >
@@ -36,7 +36,7 @@ export default function AccordionCustomChevron() {
             chevronIcon={
               <Plus
                 aria-hidden="true"
-                className="size-3 shrink-0 transition-all ease-out group-data-[panel-open]:rotate-45 group-data-[panel-open]:scale-110"
+                className="size-3 shrink-0 transition-transform ease-out group-data-[panel-open]:rotate-45 group-data-[panel-open]:scale-110"
               />
             }
           >

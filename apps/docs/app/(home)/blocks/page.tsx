@@ -105,7 +105,7 @@ export default function BlocksGalleryPage() {
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {entries.map((block) => (
                 <Link
-                  className="group relative flex flex-col rounded-lg border border-border/50 bg-card p-4 transition-all hover:border-border hover:bg-accent/30"
+                  className="group relative flex flex-col rounded-lg border border-border/50 bg-card p-4 transition-[border-color,background-color] hover:border-border hover:bg-accent/30"
                   href={`/docs/blocks/${block.name}`}
                   key={block.name}
                 >

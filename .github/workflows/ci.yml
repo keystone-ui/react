@@ -38,6 +38,12 @@ jobs:
       - name: Biome check
         run: pnpm check
 
+      # The Vite builder never type-checked stories (`typescript.check` is a
+      # webpack-only option), so this is the first place a story with a
+      # wrong prop fails. About five seconds with the TS 7 CLI.
+      - name: Type-check stories
+        run: pnpm --filter @keystoneui/storybook exec tsc --noEmit -p .
+
       # Component/block MDX structure, story-vs-demo parity, and whether each
       # block's registry copy still matches its demo. These ran nowhere before,
       # so every rule they enforce was advisory.
@@ -167,9 +173,9 @@ jobs:
       - name: Build packages
         run: pnpm build --filter=@keystoneui/storybook^...
 
-      - name: Warm Vite dependency optimization cache
-        run: pnpm test --filter=@keystoneui/storybook || true
-
+      # No separate warm-up run: it doubled the suite's wall time and its
+      # `|| true` could hide a failure on the first pass. A cold Vite
+      # dependency-optimization reload is handled by the test runner.
       - name: Run Storybook interaction tests
         run: pnpm test --filter=@keystoneui/storybook
 

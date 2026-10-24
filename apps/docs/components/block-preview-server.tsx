@@ -25,11 +25,11 @@ export function BlockPreview({
     return (
       <div
         className={cn(
-          "my-4 rounded-md border border-red-200 bg-red-50 p-4",
+          "my-4 rounded-md border border-destructive/30 bg-destructive/10 p-4",
           className
         )}
       >
-        <p className="text-red-600 text-sm">
+        <p className="text-destructive text-sm">
           Block demo &quot;{name}&quot; not found. Make sure the demo file
           exists under apps/docs/demos/blocks and run `pnpm gen:demos`.
         </p>
