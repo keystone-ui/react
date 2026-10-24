@@ -4,6 +4,12 @@ import "./preview.css";
 import { Toaster } from "@keystoneui/react/toast";
 import { withThemeByClassName } from "@storybook/addon-themes";
 
+// The library's thin scrollbar skin is opt-in; stories keep it the way the
+// docs site does, by opting the preview document in once.
+if (typeof document !== "undefined") {
+  document.documentElement.classList.add("ks-scrollbar");
+}
+
 const preview: Preview = {
   parameters: {
     controls: {

@@ -75,4 +75,23 @@ describe("DateInput picker button", () => {
     expect(showPicker).toHaveBeenCalledTimes(1);
     expect(showPicker.mock.instances[0]).toBe(input);
   });
+
+  // React 19: a ref callback may return a cleanup. When it does, React calls
+  // that on detach instead of calling the ref again with `null`, and the
+  // merged ref must preserve that contract for the consumer's callback.
+  it("runs a cleanup-returning callback ref's cleanup on unmount instead of calling it with null", () => {
+    const cleanup = vi.fn();
+    const callbackRef = vi.fn(() => cleanup);
+    const { unmount } = render(<DateInput ref={callbackRef} />);
+
+    expect(callbackRef).toHaveBeenCalledTimes(1);
+    expect(callbackRef.mock.calls[0][0]).toBeInstanceOf(HTMLInputElement);
+    expect(cleanup).not.toHaveBeenCalled();
+
+    unmount();
+
+    expect(cleanup).toHaveBeenCalledTimes(1);
+    expect(callbackRef).toHaveBeenCalledTimes(1);
+    expect(callbackRef).not.toHaveBeenCalledWith(null);
+  });
 });

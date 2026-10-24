@@ -244,7 +244,7 @@ export const WithCustomChevron: Story = {
             chevronIcon={
               <Plus
                 aria-hidden="true"
-                className="size-3 shrink-0 transition-all ease-out group-data-[panel-open]:rotate-45 group-data-[panel-open]:scale-110"
+                className="size-3 shrink-0 transition-transform ease-(--ease-ks-out) group-data-[panel-open]:rotate-45 group-data-[panel-open]:scale-110"
               />
             }
           >

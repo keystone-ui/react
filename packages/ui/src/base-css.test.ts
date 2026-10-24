@@ -132,6 +132,27 @@ function componentSources(): Array<{ file: string; source: string }> {
     }));
 }
 
+/**
+ * Demos and stories are published surfaces too -- demos ship through the
+ * registry, so a bare `ease-out` there lands in a consumer's codebase with a
+ * curve the library's own components do not use.
+ */
+const SURFACE_DIRS = [
+  join(SRC_DIR, "../../../apps/docs/demos"),
+  join(SRC_DIR, "../../../apps/storybook/stories"),
+];
+
+function surfaceSources(): Array<{ file: string; source: string }> {
+  return SURFACE_DIRS.flatMap((dir) =>
+    readdirSync(dir, { recursive: true, withFileTypes: true })
+      .filter((entry) => entry.isFile() && COMPONENT_FILE.test(entry.name))
+      .map((entry) => {
+        const file = join(entry.parentPath, entry.name);
+        return { file, source: readFileSync(file, "utf-8") };
+      })
+  );
+}
+
 describe("motion tokens", () => {
   it("namespaces the easing tokens so Tailwind's ease-out and ease-in-out survive", () => {
     const theme = themeBlocks();
@@ -171,6 +192,13 @@ describe("motion tokens", () => {
     const offenders = componentSources()
       .filter(({ source }) => BARE_EASE_UTILITY.test(source))
       .map(({ file }) => file);
+    expect(offenders).toEqual([]);
+  });
+
+  it("no docs demo or story uses the bare ease-out or ease-in-out utility", () => {
+    const offenders = surfaceSources()
+      .filter(({ source }) => BARE_EASE_UTILITY.test(source))
+      .map(({ file }) => file.split("/apps/")[1]);
     expect(offenders).toEqual([]);
   });
 });

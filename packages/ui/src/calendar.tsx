@@ -82,18 +82,20 @@ function CalendarDropdown({
   );
 }
 
-// `week` is react-day-picker's data for the row; it is not a <td> attribute.
+// A <th>, not a <td>: react-day-picker passes `scope="row"` and
+// `role="rowheader"`, which are only valid on a header cell (axe
+// `scope-attr-valid`). `week` is the row's data, not an attribute.
 function CalendarWeekNumber({
   children,
   week: _week,
   ...props
 }: ComponentProps<typeof WeekNumber>) {
   return (
-    <td {...props}>
+    <th {...props}>
       <div className="flex size-(--cell-size) items-center justify-center text-center">
         {children}
       </div>
-    </td>
+    </th>
   );
 }
 
