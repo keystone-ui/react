@@ -1,25 +1,22 @@
 /**
  * @next/playwright is versioned in lockstep with next and talks to the
  * router's testing API, so a mismatch is a silent way to test the wrong
- * behaviour. Bump both together.
+ * behaviour. Compare what is installed, not what package.json declares: a
+ * lockfile refresh can move `next` within its range while the pin on
+ * `@next/playwright` stays put.
  */
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { createRequire } from "node:module";
 
 import { describe, expect, it } from "vitest";
 
-const LEADING_RANGE = /^[\^~]/;
+const require = createRequire(import.meta.url);
 
-const pkg = JSON.parse(
-  readFileSync(join(import.meta.dirname, "../package.json"), "utf8")
-) as {
-  dependencies: Record<string, string>;
-  devDependencies: Record<string, string>;
-};
+function installedVersion(pkg: string): string {
+  return (require(`${pkg}/package.json`) as { version: string }).version;
+}
 
 describe("@next/playwright", () => {
-  it("is pinned to the same version as next", () => {
-    const next = pkg.dependencies.next.replace(LEADING_RANGE, "");
-    expect(pkg.devDependencies["@next/playwright"]).toBe(next);
+  it("is installed at the same version as next", () => {
+    expect(installedVersion("@next/playwright")).toBe(installedVersion("next"));
   });
 });
