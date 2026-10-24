@@ -51,6 +51,12 @@ export const DEFAULT_CHECKS = [
     bodyIncludes: "/docs/components/button",
   },
   { path: "/r/demos/button", status: 200, bodyIncludes: '"name":"button"' },
+  {
+    path: "/sitemap.xml",
+    status: 200,
+    bodyIncludes: "https://keystoneui.io/docs/components/button",
+  },
+  { path: "/icon.svg", status: 200, bodyIncludes: "<svg" },
   { path: "/r/demos/smoke-docs-missing", status: 404 },
   // Computed per request from the code, so it only runs on the Worker.
   {
