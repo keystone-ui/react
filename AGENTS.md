@@ -8,7 +8,7 @@ Keystone UI is a React component library built as a pnpm monorepo managed by Tur
 
 ### Key Technical Stack
 
-- **Node.js**: v22+
+- **Node.js**: v26 in CI (`engines` floor stays `>=22` for consumers)
 - **pnpm**: v10 (pinned via `packageManager`; CI's `pnpm/action-setup` reads it)
 - **React**: v19+
 - **Tailwind CSS**: v4.3
