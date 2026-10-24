@@ -23,13 +23,14 @@ defaults:
 jobs:
   deploy:
     name: Deploy Storybook
-    # Forks and Dependabot receive no repository secrets; skip rather than
-    # fail on authentication.
+    # Forks and Dependabot pull requests receive no repository secrets; skip
+    # rather than fail on authentication. On push the job always runs, so a
+    # Dependabot-driven push to main fails loudly instead of skipping.
     if: >-
       github.event.action != 'closed' &&
-      github.actor != 'dependabot[bot]' &&
       (github.event_name == 'push' ||
-      github.event.pull_request.head.repo.full_name == github.repository)
+      (github.actor != 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository))
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -129,8 +130,8 @@ jobs:
     if: >-
       github.event_name == 'pull_request' &&
       github.event.action == 'closed' &&
-      github.actor != 'dependabot[bot]' &&
-      github.event.pull_request.head.repo.full_name == github.repository
+      (github.actor != 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
     permissions:
       contents: read

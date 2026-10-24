@@ -25,14 +25,17 @@ defaults:
 jobs:
   deploy:
     name: Deploy Docs
-    # Forks and Dependabot receive no repository secrets, so this job would
-    # fail on authentication instead of deploying. Skip it; ci.yml's workerd
-    # job still builds and smoke-tests the Worker for every PR.
+    # Forks and Dependabot pull requests receive no repository secrets, so
+    # this job would fail on authentication instead of deploying. Skip it
+    # there; ci.yml's workerd job still builds and smoke-tests the Worker for
+    # every PR. On push the job always runs: a Dependabot-driven push to main
+    # (`@dependabot merge`) gets no secrets either, and a red deploy is the
+    # right outcome, not a green skip that leaves production stale.
     if: >-
       github.event.action != 'closed' &&
-      github.actor != 'dependabot[bot]' &&
       (github.event_name == 'push' ||
-      github.event.pull_request.head.repo.full_name == github.repository)
+      (github.actor != 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository))
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -157,8 +160,8 @@ jobs:
     if: >-
       github.event_name == 'pull_request' &&
       github.event.action == 'closed' &&
-      github.actor != 'dependabot[bot]' &&
-      github.event.pull_request.head.repo.full_name == github.repository
+      (github.actor != 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
     permissions:
       contents: read
