@@ -5,7 +5,7 @@
  */
 import { describe, expect, it } from "vitest";
 
-import { loadGitHubStats } from "@/lib/github-stats";
+import { loadGitHubStats, loadGitHubStatsOrNull } from "@/lib/github-stats";
 
 const RATE_LIMITED = /403/;
 const STATS_PENDING = /202/;
@@ -97,5 +97,65 @@ describe("loadGitHubStats", () => {
         })
       )
     ).rejects.toThrow(BAD_SHAPE);
+  });
+
+  it("sends the token as a bearer header when one is given", async () => {
+    const headers: (HeadersInit | undefined)[] = [];
+    const recording = ((input: string | URL | Request, init?: RequestInit) => {
+      headers.push(init?.headers);
+      return Promise.resolve(
+        String(input).includes("/search/")
+          ? json(200, { total_count: 0 })
+          : json(200, { all: [] })
+      );
+    }) as typeof fetch;
+
+    await loadGitHubStats(recording, Date.now(), "t0ken");
+    expect(headers).toEqual([
+      { Authorization: "Bearer t0ken" },
+      { Authorization: "Bearer t0ken" },
+    ]);
+
+    headers.length = 0;
+    await loadGitHubStats(recording, Date.now(), "");
+    expect(headers).toEqual([undefined, undefined]);
+  });
+});
+
+/**
+ * The cached loader must never throw: an error inside `use cache` fails the
+ * prerender of /changelog, and with it the whole docs build, even though the
+ * component catches it.
+ */
+describe("loadGitHubStatsOrNull", () => {
+  it("returns null on a rate-limited 403 instead of throwing", async () => {
+    await expect(
+      loadGitHubStatsOrNull(
+        fakeFetch({
+          "/stats/participation": json(403, {
+            message: "API rate limit exceeded",
+          }),
+          "/search/issues": json(200, { total_count: 7 }),
+        })
+      )
+    ).resolves.toBeNull();
+  });
+
+  it("returns null when fetch itself rejects", async () => {
+    await expect(
+      loadGitHubStatsOrNull((() =>
+        Promise.reject(new TypeError("fetch failed"))) as typeof fetch)
+    ).resolves.toBeNull();
+  });
+
+  it("passes clean stats through", async () => {
+    await expect(
+      loadGitHubStatsOrNull(
+        fakeFetch({
+          "/stats/participation": json(200, { all: [2, 2] }),
+          "/search/issues": json(200, { total_count: 1 }),
+        })
+      )
+    ).resolves.toEqual({ weeklyData: [2, 2], totalCommits: 4, prCount: 1 });
   });
 });
