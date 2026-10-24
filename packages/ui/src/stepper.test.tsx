@@ -196,4 +196,54 @@ describe("Stepper", () => {
     );
     spy.mockRestore();
   });
+
+  // Direction used to live in state and be corrected in an effect, so the
+  // first render after a backward step still carried the old +1. The entering
+  // step mounts on that very render and reads its slide-in side from it, so
+  // 1 → 2 → 1 slid in from the wrong edge before the effect fixed the value.
+  // A probe that logs every render it sees catches the stale frame; asserting
+  // the final value alone would not, because the effect's re-render has
+  // committed by the time an `await click` resolves.
+  test("direction is already flipped in the render that changes the step", async () => {
+    const log: { value: number; direction: number }[] = [];
+    function Probe() {
+      const { value, direction } = useStepper();
+      log.push({ value, direction });
+      return null;
+    }
+    function Harness() {
+      const [step, setStep] = React.useState(0);
+      return (
+        <Stepper onValueChange={setStep} value={step}>
+          <Probe />
+          <StepperContent>
+            <StepperStep>one</StepperStep>
+            <StepperStep>two</StepperStep>
+          </StepperContent>
+          <StepperNav />
+        </Stepper>
+      );
+    }
+    render(<Harness />);
+
+    await userEvent.click(screen.getByTestId("next"));
+    await userEvent.click(screen.getByTestId("prev"));
+
+    const forward = log.findIndex((entry) => entry.value === 1);
+    expect(forward).toBeGreaterThan(0);
+    const firstBack = log.slice(forward).find((entry) => entry.value === 0);
+    expect(firstBack).toEqual({ value: 0, direction: -1 });
+  });
+
+  test("exposes the direction on the content container", async () => {
+    render(<TestStepper initialStep={1} />);
+    const content = document.querySelector('[data-slot="stepper-content"]');
+    expect(content).toHaveAttribute("data-direction", "1");
+
+    await userEvent.click(screen.getByTestId("prev"));
+    expect(content).toHaveAttribute("data-direction", "-1");
+
+    await userEvent.click(screen.getByTestId("next"));
+    expect(content).toHaveAttribute("data-direction", "1");
+  });
 });

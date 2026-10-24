@@ -180,6 +180,41 @@ export const Default: Story = {
       },
       { timeout: 5000 }
     );
+
+    // Keyboard selection: ArrowDown highlights, Enter commits and closes.
+    await userEvent.keyboard("{ArrowDown}");
+    await userEvent.keyboard("{Enter}");
+    await waitFor(
+      async () => {
+        await expect(body.queryByRole("listbox")).not.toBeInTheDocument();
+        await expect(trigger).not.toHaveTextContent("Select a fruit");
+        await expect(trigger).toHaveTextContent(
+          /apple|banana|blueberry|grapes|pineapple/i
+        );
+      },
+      { timeout: 5000 }
+    );
+
+    // Focus returns to the trigger, which reopens from the keyboard, and
+    // Escape closes without changing the value.
+    await expect(trigger).toHaveFocus();
+    const chosen = trigger.textContent;
+    await userEvent.keyboard("{ArrowDown}");
+    await waitFor(
+      async () => {
+        await expect(body.getByRole("listbox")).toBeVisible();
+      },
+      { timeout: 5000 }
+    );
+    await userEvent.keyboard("{Escape}");
+    await waitFor(
+      async () => {
+        await expect(body.queryByRole("listbox")).not.toBeInTheDocument();
+      },
+      { timeout: 5000 }
+    );
+    await expect(trigger).toHaveTextContent(chosen ?? "");
+    await expect(trigger).toHaveFocus();
   },
 };
 

@@ -4,6 +4,12 @@ import "./preview.css";
 import { Toaster } from "@keystoneui/react/toast";
 import { withThemeByClassName } from "@storybook/addon-themes";
 
+// The library's thin scrollbar skin is opt-in; stories keep it the way the
+// docs site does, by opting the preview document in once.
+if (typeof document !== "undefined") {
+  document.documentElement.classList.add("ks-scrollbar");
+}
+
 const preview: Preview = {
   parameters: {
     controls: {
@@ -20,6 +26,12 @@ const preview: Preview = {
     // producing a diff that depends on frame timing.
     chromatic: {
       pauseAnimationAtEnd: true,
+    },
+    a11y: {
+      // Axe runs against every story in the Vitest run. "todo" reports
+      // violations without failing the suite; flip to "error" once the
+      // existing stories are clean.
+      test: "todo",
     },
   },
   decorators: [

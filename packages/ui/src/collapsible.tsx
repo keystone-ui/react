@@ -116,7 +116,7 @@ const CollapsibleContent = ({
     "overflow-hidden",
     // CSS transition on height — smoothly cancellable mid-animation.
     // Reduced motion is handled globally by base.css.
-    "h-[var(--collapsible-panel-height)] transition-[height] duration-200 ease-out",
+    "h-[var(--collapsible-panel-height)] transition-[height] duration-200 ease-(--ease-ks-out)",
     // Enter: start from 0 height
     "data-[starting-style]:h-0",
     // Exit: collapse to 0 height

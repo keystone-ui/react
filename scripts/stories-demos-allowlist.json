@@ -6,7 +6,8 @@
       "perVariantStoriesVsConsolidatedDemo": "stories Secondary/Destructive/Ghost/Outline → demo variants.tsx. Story-only by design.",
       "perSizeStoriesVsSizesDemo": "stories Small/Medium/Large → demo sizes.tsx. Story-only by design.",
       "singularStoryVsPluralDemo": "story WithIcon → demo with-icons. Treat as conceptual match; allowlisted on story side.",
-      "basicStoryVsDefaultDemo": "story Basic → demo default. Conceptual match; allowlisted."
+      "basicStoryVsDefaultDemo": "story Basic → demo default. Conceptual match; allowlisted.",
+      "regressionFixture": "story exists to host a play() regression test for a fixed bug (date-input callback-ref: forwarded callback ref must still reach the picker button). Not a docs variant; story-only by design."
     }
   },
   "storyOnly": {
@@ -115,7 +116,13 @@
     ],
     "command": ["basic", "with-groups"],
     "copy-button": ["confirms-through-its-accessible-name"],
-    "date input": ["default", "disabled", "with-default-value", "with-label"],
+    "date input": [
+      "callback-ref",
+      "default",
+      "disabled",
+      "with-default-value",
+      "with-label"
+    ],
     "date picker": [
       "basic",
       "controlled",

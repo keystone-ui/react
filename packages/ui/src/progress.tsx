@@ -98,8 +98,11 @@ function ProgressIndicator({ className, ...props }: ProgressIndicatorProps) {
     <ProgressPrimitive.Indicator
       className={cn(
         "h-full rounded-full bg-[var(--progress-indicator)]",
-        // Smooth width animation (reduced motion handled globally by base.css)
-        "transition-[width] duration-500 ease-out",
+        // Smooth fill animation (reduced motion handled globally by base.css).
+        // This stays a `width` transition: Base UI sets the percentage as an
+        // inline `width` and does not expose it as a variable, so there is
+        // nothing a transform could read.
+        "transition-[width] duration-(--duration-slow) ease-(--ease-ks-out)",
         // Indeterminate: animated sliding bar
         "data-[indeterminate]:w-1/3 data-[indeterminate]:animate-progress-indeterminate",
         className

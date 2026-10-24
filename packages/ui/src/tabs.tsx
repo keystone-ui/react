@@ -405,19 +405,24 @@ function TabsIndicator({ className, ...props }: TabsIndicatorProps) {
   return (
     <TabsPrimitive.Indicator
       className={cn(
-        // Positioning via Base UI CSS custom properties
-        "absolute top-[var(--active-tab-top)] left-[var(--active-tab-left)] h-[var(--active-tab-height)] w-[var(--active-tab-width)]",
+        // Positioned at the list's origin and moved to the active tab with a
+        // translate, from Base UI's `--active-tab-*` variables. Animating
+        // `translate` keeps the slide on the compositor; animating `top` /
+        // `left` relaid out the list on every frame.
+        "absolute top-0 left-0 h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) translate-y-(--active-tab-top)",
         // Sliding animation (reduced motion handled globally by base.css)
-        "transition-[top,right,bottom,left,width,height] duration-200 ease-out",
+        "transition-[translate,width,height] duration-(--duration-base) ease-(--ease-ks-out)",
         // Default variant: pill/card sliding behind active tab
         "group-data-[variant=default]/tabs-list:rounded-md group-data-[variant=default]/tabs-list:bg-background group-data-[variant=default]/tabs-list:shadow-sm",
         "group-data-[variant=default]/tabs-list:group-data-[shape=pill]/tabs-list:rounded-full",
         "dark:group-data-[variant=default]/tabs-list:bg-input-bg",
-        // Line variant (horizontal): 2px bar at bottom
-        "group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:top-auto group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:bottom-0 group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:h-0.5",
+        // Line variant (horizontal): 2px bar pinned to the list's bottom edge,
+        // so only x follows the tab
+        "group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:top-auto group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:bottom-0 group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:h-0.5 group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:translate-y-0",
         "group-data-[variant=line]/tabs-list:bg-foreground",
-        // Line variant (vertical): 2px bar on the right edge
-        "group-data-[variant=line]/tabs-list:data-[orientation=vertical]:-right-1 group-data-[variant=line]/tabs-list:data-[orientation=vertical]:left-auto group-data-[variant=line]/tabs-list:data-[orientation=vertical]:w-0.5",
+        // Line variant (vertical): 2px bar pinned to the list's right edge,
+        // so only y follows the tab
+        "group-data-[variant=line]/tabs-list:data-[orientation=vertical]:-right-1 group-data-[variant=line]/tabs-list:data-[orientation=vertical]:left-auto group-data-[variant=line]/tabs-list:data-[orientation=vertical]:w-0.5 group-data-[variant=line]/tabs-list:data-[orientation=vertical]:translate-x-0",
         className
       )}
       data-slot="tabs-indicator"

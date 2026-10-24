@@ -62,6 +62,17 @@ Override any token to match your brand identity.
 
 [Learn more about customization](/docs/theming/customization)
 
+### Scrollbar skin
+
+The thin, token-coloured scrollbar skin in `base.css` is opt-in. Add the
+`ks-scrollbar` class to `<html>` to skin the page scrollbar and every nested
+scroll container, or to a single scroll container to skin only that one.
+`no-scrollbar` still hides the bar on any element that opts out.
+
+```tsx
+<html className="ks-scrollbar">
+```
+
 ## Design Principles
 
 - **Semantic over literal** -- Use `bg-primary` not `bg-zinc-900`

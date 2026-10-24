@@ -44,7 +44,7 @@ import {
   SiRipple,
   SiSolana,
 } from "react-icons/si";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 
 const meta = {
   title: "Components/Combobox",
@@ -175,13 +175,57 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const input = canvas.getByPlaceholderText(/select a framework/i);
+    const body = within(document.body);
+    const listbox = () => document.querySelector("[role='listbox']");
 
     await userEvent.click(input);
-    await new Promise((r) => setTimeout(r, 500));
+    await waitFor(
+      async () => {
+        await expect(listbox()).toBeInTheDocument();
+      },
+      { timeout: 5000 }
+    );
 
-    await expect(
-      document.querySelector("[role='listbox']")
-    ).toBeInTheDocument();
+    // Typing filters the list; ArrowDown highlights the first match and
+    // Enter commits it into the input and closes the popup.
+    await userEvent.keyboard("nu");
+    await waitFor(
+      async () => {
+        await expect(
+          body.getByRole("option", { name: /^nuxt\.js$/i })
+        ).toBeVisible();
+        await expect(
+          body.queryByRole("option", { name: /^remix$/i })
+        ).not.toBeInTheDocument();
+      },
+      { timeout: 5000 }
+    );
+    await userEvent.keyboard("{ArrowDown}");
+    await userEvent.keyboard("{Enter}");
+    await waitFor(
+      async () => {
+        await expect(input).toHaveValue("Nuxt.js");
+        await expect(listbox()).not.toBeInTheDocument();
+      },
+      { timeout: 5000 }
+    );
+
+    // ArrowDown reopens from the keyboard; Escape closes and keeps the value.
+    await userEvent.keyboard("{ArrowDown}");
+    await waitFor(
+      async () => {
+        await expect(listbox()).toBeInTheDocument();
+      },
+      { timeout: 5000 }
+    );
+    await userEvent.keyboard("{Escape}");
+    await waitFor(
+      async () => {
+        await expect(listbox()).not.toBeInTheDocument();
+      },
+      { timeout: 5000 }
+    );
+    await expect(input).toHaveValue("Nuxt.js");
   },
 };
 

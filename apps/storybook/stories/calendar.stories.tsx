@@ -12,7 +12,7 @@ import { addDays } from "date-fns";
 import { Clock2 as Clock2Icon } from "lucide-react";
 import * as React from "react";
 import type { DateRange } from "react-day-picker";
-import { expect, within } from "storybook/test";
+import { expect, userEvent, within } from "storybook/test";
 
 const meta = {
   title: "Components/Calendar",
@@ -105,6 +105,43 @@ export const Range: Story = {
           'Use `mode="range"` to enable range selection. Combine with `numberOfMonths={2}` to display two months side by side.',
       },
     },
+  },
+  // This story is controlled, so every selection re-renders `Calendar`
+  // itself. The sub-components it hands to react-day-picker used to be
+  // defined inline in that render, which gave them a new identity each
+  // time and remounted the whole grid on every click -- focus, hover and
+  // any in-flight transition were lost. A day cell captured before the
+  // clicks must be the very same DOM node afterwards. The grid is looked
+  // up fresh each time: holding the first grid would pass vacuously if it
+  // were the thing being remounted.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const days = () =>
+      Array.from(
+        canvas
+          .getAllByRole("grid")[0]
+          .querySelectorAll<HTMLButtonElement>(
+            '[data-slot="calendar-day-button"]'
+          )
+      );
+
+    // January has 31 days, so the third row is inside the month whatever
+    // weekday the 1st falls on. The nav chevron is captured too, so
+    // re-inlining the Chevron slot alone would also be caught.
+    const witness = days()[10];
+    const chevron = canvasElement.querySelector(".rdp-button_next svg");
+    await expect(chevron).not.toBeNull();
+    await userEvent.click(days()[14]);
+    await userEvent.click(days()[16]);
+
+    await expect(
+      canvas.getAllByRole("grid")[0].querySelectorAll("[data-selected]").length
+    ).toBeGreaterThan(0);
+    await expect(days()[10]).toBe(witness);
+    await expect(witness.isConnected).toBe(true);
+    await expect(canvasElement.querySelector(".rdp-button_next svg")).toBe(
+      chevron
+    );
   },
 };
 
@@ -378,5 +415,34 @@ export const WeekNumbers: Story = {
           "Use `showWeekNumber` to display ISO week numbers alongside the calendar rows.",
       },
     },
+  },
+  // Controlled, like Range: a selection re-renders Calendar, and the week
+  // number cells (the WeekNumber slot) must survive it as the same nodes.
+  // They are also header cells -- react-day-picker gives them
+  // `scope="row"`, which is only valid on a <th>.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const grid = () => canvas.getByRole("grid");
+    const weekNumbers = () =>
+      Array.from(grid().querySelectorAll('[role="rowheader"]'));
+    const days = () =>
+      Array.from(
+        grid().querySelectorAll<HTMLButtonElement>(
+          '[data-slot="calendar-day-button"]'
+        )
+      );
+
+    const weekWitness = weekNumbers()[2];
+    const dayWitness = days()[10];
+    await expect(weekWitness.tagName).toBe("TH");
+    await expect(weekWitness).toHaveAttribute("scope", "row");
+
+    await userEvent.click(days()[14]);
+    await userEvent.click(days()[16]);
+
+    await expect(grid().querySelectorAll("[data-selected]").length).toBe(1);
+    await expect(weekNumbers()[2]).toBe(weekWitness);
+    await expect(days()[10]).toBe(dayWitness);
+    await expect(weekWitness.isConnected).toBe(true);
   },
 };

@@ -14,9 +14,7 @@ import {
   type ReactNode,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 import useMeasure from "react-use-measure";
@@ -74,8 +72,20 @@ export interface StepperProps {
 }
 
 function Stepper({ value, onValueChange, children }: StepperProps) {
+  // Direction is derived while rendering, from the value this render has
+  // versus the one before it -- React's "adjusting state during render"
+  // pattern. It used to be set in an effect, which arrives one render late:
+  // the entering step mounts on the very render that changes `value` and
+  // reads its slide-in side from `direction` right then, so 1 → 2 → 1 slid
+  // in from the wrong edge before the effect corrected it. A state update
+  // during render makes React discard this render and start over with the
+  // new values before any child sees the stale pair.
+  const [previousValue, setPreviousValue] = useState(value);
   const [direction, setDirection] = useState(1);
-  const previousValue = useRef(value);
+  if (value !== previousValue) {
+    setPreviousValue(value);
+    setDirection(value > previousValue ? 1 : -1);
+  }
 
   // Count StepperStep children to determine totalSteps.
   // We walk the tree looking inside StepperContent for StepperStep children.
@@ -96,14 +106,6 @@ function Stepper({ value, onValueChange, children }: StepperProps) {
     countSteps(children);
     return count;
   }, [children]);
-
-  // Track direction based on value changes
-  useEffect(() => {
-    if (value !== previousValue.current) {
-      setDirection(value > previousValue.current ? 1 : -1);
-      previousValue.current = value;
-    }
-  }, [value]);
 
   const goTo = useCallback(
     (step: number) => {
@@ -197,6 +199,7 @@ function StepperContent({ className, children }: StepperContentProps) {
       <motion.div
         animate={{ height: bounds.height > 0 ? bounds.height : "auto" }}
         className={cn("relative overflow-hidden", className)}
+        data-direction={direction}
         data-slot="stepper-content"
       >
         <div ref={ref}>
