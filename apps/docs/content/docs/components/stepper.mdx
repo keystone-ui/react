@@ -86,8 +86,9 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `activeStep` | `number` | `0` | The currently active step index |
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction |
+| `value` | `number` | - | Index of the active step, 0-based. Controlled: the stepper renders whatever step this points at |
+| `onValueChange` | `(value: number) => void` | - | Called with the next index when a step action requests a change; the value is clamped to the step count |
+| `children` | `ReactNode` | - | `StepperStep` parts, in order |
 
 ### StepperContent
 
