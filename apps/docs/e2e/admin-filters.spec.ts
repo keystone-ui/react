@@ -1,5 +1,7 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
 
+import { gotoPreview } from "./preview";
+
 /**
  * `admin-01`'s filter parity with `tickets-01`, desktop and mobile.
  *
@@ -71,7 +73,7 @@ async function applyFilter(page: Page, row: RegExp, option: string) {
  * and then the nav dismissed before the table underneath is reachable.
  */
 async function openUsers(page: Page) {
-  await page.goto("/preview/block-admin-01");
+  await gotoPreview(page, "block-admin-01");
   const users = page.getByRole("button", { name: "Users" });
   if (await users.isVisible()) {
     await users.click();

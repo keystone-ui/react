@@ -4,7 +4,28 @@
 // Do not edit: run `pnpm gen:demos` (also wired into `pnpm lint:docs --check`).
 
 import dynamic from "next/dynamic";
-import type { ComponentType } from "react";
+import { type ComponentType, useEffect } from "react";
+
+/**
+ * Wraps a demo so the document records when it has hydrated. The wrapper
+ * lives in the demo's own chunk, so its effect runs only after that chunk
+ * has loaded and React has attached the demo's handlers; a click before
+ * that moment is not reliably replayed. e2e/preview.ts waits for
+ * `html[data-demo-hydrated="<name>"]` before interacting with a preview.
+ */
+function hydrated<P extends object>(
+  name: string,
+  Component: ComponentType<P>
+): ComponentType<P> {
+  function Hydrated(props: P) {
+    useEffect(() => {
+      document.documentElement.setAttribute("data-demo-hydrated", name);
+    }, []);
+    return <Component {...props} />;
+  }
+  Hydrated.displayName = `Hydrated(${name})`;
+  return Hydrated;
+}
 
 /**
  * One next/dynamic entry per demo. Because this is the only module that
@@ -12,453 +33,2241 @@ import type { ComponentType } from "react";
  * a separate chunk per demo instead of one chunk holding all of them.
  */
 const loaders: Record<string, ComponentType> = {
-  "accordion-custom-chevron": dynamic(() => import("./accordion/custom-chevron")),
-  "accordion-default": dynamic(() => import("./accordion/default")),
-  "accordion-disabled": dynamic(() => import("./accordion/disabled")),
-  "accordion-multiple": dynamic(() => import("./accordion/multiple")),
-  "accordion-variants": dynamic(() => import("./accordion/variants")),
-  "alert-custom-colors": dynamic(() => import("./alert/custom-colors")),
-  "alert-default": dynamic(() => import("./alert/default")),
-  "alert-dialog-default": dynamic(() => import("./alert-dialog/default")),
-  "alert-dialog-destructive": dynamic(() => import("./alert-dialog/destructive")),
-  "alert-dialog-small": dynamic(() => import("./alert-dialog/small")),
-  "alert-dialog-small-with-media": dynamic(() => import("./alert-dialog/small-with-media")),
-  "alert-dialog-with-media": dynamic(() => import("./alert-dialog/with-media")),
-  "alert-variants": dynamic(() => import("./alert/variants")),
-  "alert-with-action": dynamic(() => import("./alert/with-action")),
-  "alert-without-icon": dynamic(() => import("./alert/without-icon")),
-  "aspect-ratio-default": dynamic(() => import("./aspect-ratio/default")),
-  "aspect-ratio-portrait": dynamic(() => import("./aspect-ratio/portrait")),
-  "aspect-ratio-square": dynamic(() => import("./aspect-ratio/square")),
-  "aspect-ratio-wide": dynamic(() => import("./aspect-ratio/wide")),
-  "avatar-badge-with-icon": dynamic(() => import("./avatar/badge-with-icon")),
-  "avatar-default": dynamic(() => import("./avatar/default")),
-  "avatar-fallback": dynamic(() => import("./avatar/fallback")),
-  "avatar-group": dynamic(() => import("./avatar/group")),
-  "avatar-group-with-count": dynamic(() => import("./avatar/group-with-count")),
-  "avatar-sizes": dynamic(() => import("./avatar/sizes")),
-  "avatar-with-badge": dynamic(() => import("./avatar/with-badge")),
-  "badge-as-link": dynamic(() => import("./badge/as-link")),
-  "badge-custom-colors": dynamic(() => import("./badge/custom-colors")),
-  "badge-default": dynamic(() => import("./badge/default")),
-  "badge-removable": dynamic(() => import("./badge/removable")),
-  "badge-sizes": dynamic(() => import("./badge/sizes")),
-  "badge-stats": dynamic(() => import("./badge/stats")),
-  "badge-variants": dynamic(() => import("./badge/variants")),
-  "badge-with-icon": dynamic(() => import("./badge/with-icon")),
-  "badge-with-spinner": dynamic(() => import("./badge/with-spinner")),
-  "block-admin-01": dynamic(() => import("./blocks/admin-01/index")),
-  "block-betting-panel-01": dynamic(() => import("./blocks/betting-panel-01")),
-  "block-betting-panel-02": dynamic(() => import("./blocks/betting-panel-02")),
-  "block-betting-panel-03": dynamic(() => import("./blocks/betting-panel-03")),
-  "block-betting-panel-04": dynamic(() => import("./blocks/betting-panel-04")),
-  "block-dashboard-01": dynamic(() => import("./blocks/dashboard-01/index")),
-  "block-profile-dropdown-01": dynamic(() => import("./blocks/profile-dropdown-01")),
-  "block-signin-01": dynamic(() => import("./blocks/signin-01")),
-  "block-signin-02": dynamic(() => import("./blocks/signin-02")),
-  "block-signin-03": dynamic(() => import("./blocks/signin-03")),
-  "block-signin-04": dynamic(() => import("./blocks/signin-04")),
-  "block-signup-01": dynamic(() => import("./blocks/signup-01")),
-  "block-signup-02": dynamic(() => import("./blocks/signup-02")),
-  "block-signup-03": dynamic(() => import("./blocks/signup-03")),
-  "block-signup-04": dynamic(() => import("./blocks/signup-04")),
-  "block-signup-05": dynamic(() => import("./blocks/signup-05")),
-  "block-tickets-01": dynamic(() => import("./blocks/tickets-01/index")),
-  "breadcrumb-collapsed": dynamic(() => import("./breadcrumb/collapsed")),
-  "breadcrumb-custom-separator": dynamic(() => import("./breadcrumb/custom-separator")),
-  "breadcrumb-default": dynamic(() => import("./breadcrumb/default")),
-  "breadcrumb-link-component": dynamic(() => import("./breadcrumb/link-component")),
-  "breadcrumb-with-dropdown": dynamic(() => import("./breadcrumb/with-dropdown")),
-  "button-as-link": dynamic(() => import("./button/as-link")),
-  "button-custom-loading": dynamic(() => import("./button/custom-loading")),
-  "button-default": dynamic(() => import("./button/default")),
-  "button-disabled": dynamic(() => import("./button/disabled")),
-  "button-full-width": dynamic(() => import("./button/full-width")),
-  "button-group-default": dynamic(() => import("./button-group/default")),
-  "button-group-email-toolbar": dynamic(() => import("./button-group/email-toolbar")),
-  "button-group-nested": dynamic(() => import("./button-group/nested")),
-  "button-group-sizes": dynamic(() => import("./button-group/sizes")),
-  "button-group-split-button": dynamic(() => import("./button-group/split-button")),
-  "button-group-toolbar": dynamic(() => import("./button-group/toolbar")),
-  "button-group-vertical": dynamic(() => import("./button-group/vertical")),
-  "button-group-with-dropdown-menu": dynamic(() => import("./button-group/with-dropdown-menu")),
-  "button-group-with-input": dynamic(() => import("./button-group/with-input")),
-  "button-group-with-popover": dynamic(() => import("./button-group/with-popover")),
-  "button-group-with-select": dynamic(() => import("./button-group/with-select")),
-  "button-icon-buttons": dynamic(() => import("./button/icon-buttons")),
-  "button-link": dynamic(() => import("./button/link")),
-  "button-loading": dynamic(() => import("./button/loading")),
-  "button-rounded": dynamic(() => import("./button/rounded")),
-  "button-sizes": dynamic(() => import("./button/sizes")),
-  "button-social-buttons": dynamic(() => import("./button/social-buttons")),
-  "button-variants": dynamic(() => import("./button/variants")),
-  "button-with-icons": dynamic(() => import("./button/with-icons")),
-  "calendar-booked-dates": dynamic(() => import("./calendar/booked-dates")),
-  "calendar-date-time": dynamic(() => import("./calendar/date-time")),
-  "calendar-default": dynamic(() => import("./calendar/default")),
-  "calendar-month-year": dynamic(() => import("./calendar/month-year")),
-  "calendar-presets": dynamic(() => import("./calendar/presets")),
-  "calendar-range": dynamic(() => import("./calendar/range")),
-  "calendar-week-numbers": dynamic(() => import("./calendar/week-numbers")),
-  "card-default": dynamic(() => import("./card/default")),
-  "card-login-form": dynamic(() => import("./card/login-form")),
-  "card-small": dynamic(() => import("./card/small")),
-  "card-social-card": dynamic(() => import("./card/social-card")),
-  "card-table-flush": dynamic(() => import("./card/table-flush")),
-  "card-variants": dynamic(() => import("./card/variants")),
-  "card-with-action": dynamic(() => import("./card/with-action")),
-  "card-with-image": dynamic(() => import("./card/with-image")),
-  "carousel-autoplay": dynamic(() => import("./carousel/autoplay")),
-  "carousel-cards": dynamic(() => import("./carousel/cards")),
-  "carousel-controlled": dynamic(() => import("./carousel/controlled")),
-  "carousel-default": dynamic(() => import("./carousel/default")),
-  "carousel-multiple-slides": dynamic(() => import("./carousel/multiple-slides")),
-  "carousel-sizes": dynamic(() => import("./carousel/sizes")),
-  "carousel-spacing": dynamic(() => import("./carousel/spacing")),
-  "carousel-thumbnails": dynamic(() => import("./carousel/thumbnails")),
-  "carousel-vertical": dynamic(() => import("./carousel/vertical")),
-  "carousel-with-counter": dynamic(() => import("./carousel/with-counter")),
-  "carousel-with-dots": dynamic(() => import("./carousel/with-dots")),
-  "carousel-with-mask": dynamic(() => import("./carousel/with-mask")),
-  "checkbox-controlled": dynamic(() => import("./checkbox/controlled")),
-  "checkbox-default": dynamic(() => import("./checkbox/default")),
-  "checkbox-disabled": dynamic(() => import("./checkbox/disabled")),
-  "checkbox-group": dynamic(() => import("./checkbox/group")),
-  "checkbox-pill-group": dynamic(() => import("./checkbox/pill-group")),
-  "checkbox-with-description": dynamic(() => import("./checkbox/with-description")),
-  "circular-progress-animated": dynamic(() => import("./circular-progress/animated")),
-  "circular-progress-colors": dynamic(() => import("./circular-progress/colors")),
-  "circular-progress-complete": dynamic(() => import("./circular-progress/complete")),
-  "circular-progress-controlled": dynamic(() => import("./circular-progress/controlled")),
-  "circular-progress-custom-center-content": dynamic(() => import("./circular-progress/custom-center-content")),
-  "circular-progress-default": dynamic(() => import("./circular-progress/default")),
-  "circular-progress-indeterminate": dynamic(() => import("./circular-progress/indeterminate")),
-  "circular-progress-sizes": dynamic(() => import("./circular-progress/sizes")),
-  "circular-progress-with-avatar": dynamic(() => import("./circular-progress/with-avatar")),
-  "circular-progress-with-label": dynamic(() => import("./circular-progress/with-label")),
-  "collapsible-default": dynamic(() => import("./collapsible/default")),
-  "collapsible-file-tree": dynamic(() => import("./collapsible/file-tree")),
-  "collapsible-settings": dynamic(() => import("./collapsible/settings")),
-  "combobox-compact-items": dynamic(() => import("./combobox/compact-items")),
-  "combobox-controlled": dynamic(() => import("./combobox/controlled")),
-  "combobox-countries": dynamic(() => import("./combobox/countries")),
-  "combobox-custom-items": dynamic(() => import("./combobox/custom-items")),
-  "combobox-default": dynamic(() => import("./combobox/default")),
-  "combobox-disabled": dynamic(() => import("./combobox/disabled")),
-  "combobox-form-example": dynamic(() => import("./combobox/form-example")),
-  "combobox-groups": dynamic(() => import("./combobox/groups")),
-  "combobox-multi-with-create": dynamic(() => import("./combobox/multi-with-create")),
-  "combobox-multiple": dynamic(() => import("./combobox/multiple")),
-  "combobox-popup": dynamic(() => import("./combobox/popup")),
-  "combobox-scrollable": dynamic(() => import("./combobox/scrollable")),
-  "combobox-with-clear": dynamic(() => import("./combobox/with-clear")),
-  "command-default": dynamic(() => import("./command/default")),
-  "command-disabled-items": dynamic(() => import("./command/disabled-items")),
-  "command-groups": dynamic(() => import("./command/groups")),
-  "command-keyboard-trigger": dynamic(() => import("./command/keyboard-trigger")),
-  "command-scrollable": dynamic(() => import("./command/scrollable")),
-  "command-with-shortcuts": dynamic(() => import("./command/with-shortcuts")),
-  "copy-button-default": dynamic(() => import("./copy-button/default")),
-  "copy-button-sizes": dynamic(() => import("./copy-button/sizes")),
-  "copy-button-variants": dynamic(() => import("./copy-button/variants")),
-  "date-input-controlled": dynamic(() => import("./date-input/controlled")),
-  "date-input-date-of-birth": dynamic(() => import("./date-input/date-of-birth")),
-  "date-input-default": dynamic(() => import("./date-input/default")),
-  "date-input-natural-language": dynamic(() => import("./date-input/natural-language")),
-  "date-input-presets": dynamic(() => import("./date-input/presets")),
-  "date-input-range": dynamic(() => import("./date-input/range")),
-  "date-input-with-input": dynamic(() => import("./date-input/with-input")),
-  "date-input-with-time": dynamic(() => import("./date-input/with-time")),
-  "description-list-card-variant": dynamic(() => import("./description-list/card-variant")),
-  "description-list-compact": dynamic(() => import("./description-list/compact")),
-  "description-list-custom-values": dynamic(() => import("./description-list/custom-values")),
-  "description-list-default": dynamic(() => import("./description-list/default")),
-  "description-list-in-card": dynamic(() => import("./description-list/in-card")),
-  "description-list-order-summary": dynamic(() => import("./description-list/order-summary")),
-  "description-list-record": dynamic(() => import("./description-list/record")),
-  "drawer-complex-filter": dynamic(() => import("./drawer/complex-filter")),
-  "drawer-default": dynamic(() => import("./drawer/default")),
-  "drawer-filter": dynamic(() => import("./drawer/filter")),
-  "drawer-floating": dynamic(() => import("./drawer/floating")),
-  "drawer-nested": dynamic(() => import("./drawer/nested")),
-  "drawer-responsive": dynamic(() => import("./drawer/responsive")),
-  "drawer-scrollable": dynamic(() => import("./drawer/scrollable")),
-  "drawer-sides": dynamic(() => import("./drawer/sides")),
-  "drawer-sort-by": dynamic(() => import("./drawer/sort-by")),
-  "dropdown-menu-account": dynamic(() => import("./dropdown-menu/account")),
-  "dropdown-menu-checkboxes": dynamic(() => import("./dropdown-menu/checkboxes")),
-  "dropdown-menu-complex": dynamic(() => import("./dropdown-menu/complex")),
-  "dropdown-menu-default": dynamic(() => import("./dropdown-menu/default")),
-  "dropdown-menu-destructive": dynamic(() => import("./dropdown-menu/destructive")),
-  "dropdown-menu-radio-group": dynamic(() => import("./dropdown-menu/radio-group")),
-  "dropdown-menu-shortcuts": dynamic(() => import("./dropdown-menu/shortcuts")),
-  "dropdown-menu-submenu": dynamic(() => import("./dropdown-menu/submenu")),
-  "dropdown-menu-with-icons": dynamic(() => import("./dropdown-menu/with-icons")),
-  "empty-background": dynamic(() => import("./empty/background")),
-  "empty-default": dynamic(() => import("./empty/default")),
-  "empty-outline": dynamic(() => import("./empty/outline")),
-  "empty-with-action": dynamic(() => import("./empty/with-action")),
-  "empty-with-avatar": dynamic(() => import("./empty/with-avatar")),
-  "empty-with-description": dynamic(() => import("./empty/with-description")),
-  "empty-with-form": dynamic(() => import("./empty/with-form")),
-  "empty-with-image": dynamic(() => import("./empty/with-image")),
-  "empty-with-input": dynamic(() => import("./empty/with-input")),
-  "empty-with-list": dynamic(() => import("./empty/with-list")),
-  "empty-with-search": dynamic(() => import("./empty/with-search")),
-  "empty-with-spinner": dynamic(() => import("./empty/with-spinner")),
-  "field-checkout-form": dynamic(() => import("./field/checkout-form")),
-  "field-default": dynamic(() => import("./field/default")),
-  "field-fieldset": dynamic(() => import("./field/fieldset")),
-  "field-grid": dynamic(() => import("./field/grid")),
-  "field-horizontal": dynamic(() => import("./field/horizontal")),
-  "field-multiple-errors": dynamic(() => import("./field/multiple-errors")),
-  "field-payment-method": dynamic(() => import("./field/payment-method")),
-  "field-required": dynamic(() => import("./field/required")),
-  "field-settings-form": dynamic(() => import("./field/settings-form")),
-  "field-textarea-example": dynamic(() => import("./field/textarea-example")),
-  "field-validation-error": dynamic(() => import("./field/validation-error")),
-  "field-with-checkbox": dynamic(() => import("./field/with-checkbox")),
-  "field-with-switch": dynamic(() => import("./field/with-switch")),
-  "form-default": dynamic(() => import("./form/default")),
-  "form-with-validation": dynamic(() => import("./form/with-validation")),
-  "input-default": dynamic(() => import("./input/default")),
-  "input-disabled": dynamic(() => import("./input/disabled")),
-  "input-file": dynamic(() => import("./input/file")),
-  "input-form-example": dynamic(() => import("./input/form-example")),
-  "input-group-clear-button": dynamic(() => import("./input-group/clear-button")),
-  "input-group-copy-to-clipboard": dynamic(() => import("./input-group/copy-to-clipboard")),
-  "input-group-currency": dynamic(() => import("./input-group/currency")),
-  "input-group-default": dynamic(() => import("./input-group/default")),
-  "input-group-email-input": dynamic(() => import("./input-group/email-input")),
-  "input-group-loading-spinner": dynamic(() => import("./input-group/loading-spinner")),
-  "input-group-password-toggle": dynamic(() => import("./input-group/password-toggle")),
-  "input-group-phone-input": dynamic(() => import("./input-group/phone-input")),
-  "input-group-prompt-form": dynamic(() => import("./input-group/prompt-form")),
-  "input-group-search": dynamic(() => import("./input-group/search")),
-  "input-group-small-size": dynamic(() => import("./input-group/small-size")),
-  "input-group-stake-buttons": dynamic(() => import("./input-group/stake-buttons")),
-  "input-group-text-prefix": dynamic(() => import("./input-group/text-prefix")),
-  "input-group-text-suffix": dynamic(() => import("./input-group/text-suffix")),
-  "input-group-with-button": dynamic(() => import("./input-group/with-button")),
-  "input-group-with-textarea": dynamic(() => import("./input-group/with-textarea")),
-  "input-otp-alphanumeric": dynamic(() => import("./input-otp/alphanumeric")),
-  "input-otp-auto-submit": dynamic(() => import("./input-otp/auto-submit")),
-  "input-otp-custom-sanitization": dynamic(() => import("./input-otp/custom-sanitization")),
-  "input-otp-default": dynamic(() => import("./input-otp/default")),
-  "input-otp-disabled": dynamic(() => import("./input-otp/disabled")),
-  "input-otp-form": dynamic(() => import("./input-otp/form")),
-  "input-otp-four-digits": dynamic(() => import("./input-otp/four-digits")),
-  "input-otp-loading": dynamic(() => import("./input-otp/loading")),
-  "input-otp-masked": dynamic(() => import("./input-otp/masked")),
-  "input-otp-placeholder": dynamic(() => import("./input-otp/placeholder")),
-  "input-otp-with-label": dynamic(() => import("./input-otp/with-label")),
-  "input-otp-with-separator": dynamic(() => import("./input-otp/with-separator")),
-  "input-sizes": dynamic(() => import("./input/sizes")),
-  "input-types": dynamic(() => import("./input/types")),
-  "input-with-button": dynamic(() => import("./input/with-button")),
-  "input-with-error": dynamic(() => import("./input/with-error")),
-  "input-with-field": dynamic(() => import("./input/with-field")),
-  "input-with-helper-text": dynamic(() => import("./input/with-helper-text")),
-  "input-with-icon": dynamic(() => import("./input/with-icon")),
-  "input-with-label": dynamic(() => import("./input/with-label")),
-  "input-with-password-toggle": dynamic(() => import("./input/with-password-toggle")),
-  "input-with-prefix": dynamic(() => import("./input/with-prefix")),
-  "item-activity-feed": dynamic(() => import("./item/activity-feed")),
-  "item-default": dynamic(() => import("./item/default")),
-  "item-group": dynamic(() => import("./item/group")),
-  "item-link": dynamic(() => import("./item/link")),
-  "item-notification-list": dynamic(() => import("./item/notification-list")),
-  "item-settings-list": dynamic(() => import("./item/settings-list")),
-  "item-sizes": dynamic(() => import("./item/sizes")),
-  "item-with-actions": dynamic(() => import("./item/with-actions")),
-  "item-with-avatar": dynamic(() => import("./item/with-avatar")),
-  "item-with-description": dynamic(() => import("./item/with-description")),
-  "item-with-footer": dynamic(() => import("./item/with-footer")),
-  "item-with-icon": dynamic(() => import("./item/with-icon")),
-  "item-with-image": dynamic(() => import("./item/with-image")),
-  "item-with-separator": dynamic(() => import("./item/with-separator")),
-  "kbd-common-shortcuts": dynamic(() => import("./kbd/common-shortcuts")),
-  "kbd-default": dynamic(() => import("./kbd/default")),
-  "kbd-function-keys": dynamic(() => import("./kbd/function-keys")),
-  "kbd-group": dynamic(() => import("./kbd/group")),
-  "kbd-modifier-keys": dynamic(() => import("./kbd/modifier-keys")),
-  "kbd-special-keys": dynamic(() => import("./kbd/special-keys")),
-  "label-default": dynamic(() => import("./label/default")),
-  "label-required": dynamic(() => import("./label/required")),
-  "label-with-description": dynamic(() => import("./label/with-description")),
-  "modal-confirmation": dynamic(() => import("./modal/confirmation")),
-  "modal-controlled": dynamic(() => import("./modal/controlled")),
-  "modal-default": dynamic(() => import("./modal/default")),
-  "modal-long-content": dynamic(() => import("./modal/long-content")),
-  "modal-multi-step": dynamic(() => import("./modal/multi-step")),
-  "modal-nested": dynamic(() => import("./modal/nested")),
-  "modal-scrollable": dynamic(() => import("./modal/scrollable")),
-  "modal-sign-up-form": dynamic(() => import("./modal/sign-up-form")),
-  "modal-sizes": dynamic(() => import("./modal/sizes")),
-  "modal-sticky-footer": dynamic(() => import("./modal/sticky-footer")),
-  "native-select-default": dynamic(() => import("./native-select/default")),
-  "native-select-disabled": dynamic(() => import("./native-select/disabled")),
-  "native-select-form-example": dynamic(() => import("./native-select/form-example")),
-  "native-select-groups": dynamic(() => import("./native-select/groups")),
-  "native-select-invalid": dynamic(() => import("./native-select/invalid")),
-  "native-select-sizes": dynamic(() => import("./native-select/sizes")),
-  "pagination-default": dynamic(() => import("./pagination/default")),
-  "pagination-simple": dynamic(() => import("./pagination/simple")),
-  "popover-alignments": dynamic(() => import("./popover/alignments")),
-  "popover-default": dynamic(() => import("./popover/default")),
-  "popover-open-on-hover": dynamic(() => import("./popover/open-on-hover")),
-  "popover-with-arrow": dynamic(() => import("./popover/with-arrow")),
-  "popover-with-form": dynamic(() => import("./popover/with-form")),
-  "progress-animated": dynamic(() => import("./progress/animated")),
-  "progress-colors": dynamic(() => import("./progress/colors")),
-  "progress-complete": dynamic(() => import("./progress/complete")),
-  "progress-controlled": dynamic(() => import("./progress/controlled")),
-  "progress-default": dynamic(() => import("./progress/default")),
-  "progress-indeterminate": dynamic(() => import("./progress/indeterminate")),
-  "progress-with-label": dynamic(() => import("./progress/with-label")),
-  "radio-group-choice-card": dynamic(() => import("./radio-group/choice-card")),
-  "radio-group-default": dynamic(() => import("./radio-group/default")),
-  "radio-group-disabled": dynamic(() => import("./radio-group/disabled")),
-  "radio-group-fieldset": dynamic(() => import("./radio-group/fieldset")),
-  "radio-group-horizontal": dynamic(() => import("./radio-group/horizontal")),
-  "radio-group-with-description": dynamic(() => import("./radio-group/with-description")),
-  "resizable-collapsible": dynamic(() => import("./resizable/collapsible")),
-  "resizable-complex-layout": dynamic(() => import("./resizable/complex-layout")),
-  "resizable-default": dynamic(() => import("./resizable/default")),
-  "resizable-nested": dynamic(() => import("./resizable/nested")),
-  "resizable-vertical": dynamic(() => import("./resizable/vertical")),
-  "resizable-with-handle": dynamic(() => import("./resizable/with-handle")),
-  "select-controlled": dynamic(() => import("./select/controlled")),
-  "select-default": dynamic(() => import("./select/default")),
-  "select-disabled": dynamic(() => import("./select/disabled")),
-  "select-form-example": dynamic(() => import("./select/form-example")),
-  "select-groups": dynamic(() => import("./select/groups")),
-  "select-multiple": dynamic(() => import("./select/multiple")),
-  "select-scrollable": dynamic(() => import("./select/scrollable")),
-  "select-sizes": dynamic(() => import("./select/sizes")),
-  "select-with-icons": dynamic(() => import("./select/with-icons")),
-  "selection-bar-default": dynamic(() => import("./selection-bar/default")),
-  "selection-bar-tones": dynamic(() => import("./selection-bar/tones")),
-  "selection-bar-with-bulk-actions": dynamic(() => import("./selection-bar/with-bulk-actions")),
-  "separator-default": dynamic(() => import("./separator/default")),
-  "separator-vertical": dynamic(() => import("./separator/vertical")),
-  "separator-with-content": dynamic(() => import("./separator/with-content")),
-  "skeleton-card": dynamic(() => import("./skeleton/card")),
-  "skeleton-default": dynamic(() => import("./skeleton/default")),
-  "skeleton-form": dynamic(() => import("./skeleton/form")),
-  "skeleton-no-animation": dynamic(() => import("./skeleton/no-animation")),
-  "skeleton-shimmer": dynamic(() => import("./skeleton/shimmer")),
-  "skeleton-table": dynamic(() => import("./skeleton/table")),
-  "skeleton-text": dynamic(() => import("./skeleton/text")),
-  "slider-controlled": dynamic(() => import("./slider/controlled")),
-  "slider-custom-step": dynamic(() => import("./slider/custom-step")),
-  "slider-default": dynamic(() => import("./slider/default")),
-  "slider-disabled": dynamic(() => import("./slider/disabled")),
-  "slider-range": dynamic(() => import("./slider/range")),
-  "slider-with-label": dynamic(() => import("./slider/with-label")),
-  "spinner-default": dynamic(() => import("./spinner/default")),
-  "spinner-sizes": dynamic(() => import("./spinner/sizes")),
-  "spinner-with-badge": dynamic(() => import("./spinner/with-badge")),
-  "spinner-with-button": dynamic(() => import("./spinner/with-button")),
-  "spinner-with-empty": dynamic(() => import("./spinner/with-empty")),
-  "stat-default": dynamic(() => import("./stat/default")),
-  "stat-direction": dynamic(() => import("./stat/direction")),
-  "stat-kpi-row": dynamic(() => import("./stat/kpi-row")),
-  "stepper-controlled": dynamic(() => import("./stepper/controlled")),
-  "stepper-default": dynamic(() => import("./stepper/default")),
-  "stepper-with-indicator": dynamic(() => import("./stepper/with-indicator")),
-  "switch-choice-card": dynamic(() => import("./switch/choice-card")),
-  "switch-default": dynamic(() => import("./switch/default")),
-  "switch-disabled": dynamic(() => import("./switch/disabled")),
-  "switch-sizes": dynamic(() => import("./switch/sizes")),
-  "switch-with-description": dynamic(() => import("./switch/with-description")),
-  "table-actions": dynamic(() => import("./table/actions")),
-  "table-card": dynamic(() => import("./table/card")),
-  "table-compact": dynamic(() => import("./table/compact")),
-  "table-default": dynamic(() => import("./table/default")),
-  "table-empty-state": dynamic(() => import("./table/empty-state")),
-  "table-footer": dynamic(() => import("./table/footer")),
-  "table-hoverable": dynamic(() => import("./table/hoverable")),
-  "table-pagination-composed": dynamic(() => import("./table-pagination/composed")),
-  "table-pagination-default": dynamic(() => import("./table-pagination/default")),
-  "table-selected-rows": dynamic(() => import("./table/selected-rows")),
-  "table-sortable": dynamic(() => import("./table/sortable")),
-  "table-sticky-header": dynamic(() => import("./table/sticky-header")),
-  "table-striped": dynamic(() => import("./table/striped")),
-  "table-with-badges": dynamic(() => import("./table/with-badges")),
-  "table-with-pagination": dynamic(() => import("./table/with-pagination")),
-  "tabs-animated-indicator": dynamic(() => import("./tabs/animated-indicator")),
-  "tabs-default": dynamic(() => import("./tabs/default")),
-  "tabs-disabled": dynamic(() => import("./tabs/disabled")),
-  "tabs-line": dynamic(() => import("./tabs/line")),
-  "tabs-line-vertical": dynamic(() => import("./tabs/line-vertical")),
-  "tabs-morphing": dynamic(() => import("./tabs/morphing")),
-  "tabs-morphing-line": dynamic(() => import("./tabs/morphing-line")),
-  "tabs-pill": dynamic(() => import("./tabs/pill")),
-  "tabs-scrollable": dynamic(() => import("./tabs/scrollable")),
-  "tabs-vertical": dynamic(() => import("./tabs/vertical")),
-  "tabs-with-icons": dynamic(() => import("./tabs/with-icons")),
-  "tag-default": dynamic(() => import("./tag/default")),
-  "tag-disabled": dynamic(() => import("./tag/disabled")),
-  "tag-group-controlled": dynamic(() => import("./tag-group/controlled")),
-  "tag-group-default": dynamic(() => import("./tag-group/default")),
-  "tag-group-disabled": dynamic(() => import("./tag-group/disabled")),
-  "tag-group-removable": dynamic(() => import("./tag-group/removable")),
-  "tag-group-single-selection": dynamic(() => import("./tag-group/single-selection")),
-  "tag-group-with-avatars": dynamic(() => import("./tag-group/with-avatars")),
-  "tag-group-with-icons": dynamic(() => import("./tag-group/with-icons")),
-  "tag-states": dynamic(() => import("./tag/states")),
-  "tag-with-icon": dynamic(() => import("./tag/with-icon")),
-  "tag-with-remove": dynamic(() => import("./tag/with-remove")),
-  "textarea-character-count": dynamic(() => import("./textarea/character-count")),
-  "textarea-default": dynamic(() => import("./textarea/default")),
-  "textarea-disabled": dynamic(() => import("./textarea/disabled")),
-  "textarea-with-error": dynamic(() => import("./textarea/with-error")),
-  "textarea-with-field": dynamic(() => import("./textarea/with-field")),
-  "toast-custom": dynamic(() => import("./toast/custom")),
-  "toast-default": dynamic(() => import("./toast/default")),
-  "toast-duration": dynamic(() => import("./toast/duration")),
-  "toast-position": dynamic(() => import("./toast/position")),
-  "toast-promise": dynamic(() => import("./toast/promise")),
-  "toast-types": dynamic(() => import("./toast/types")),
-  "toast-with-action": dynamic(() => import("./toast/with-action")),
-  "toast-with-description": dynamic(() => import("./toast/with-description")),
-  "toggle-default": dynamic(() => import("./toggle/default")),
-  "toggle-disabled": dynamic(() => import("./toggle/disabled")),
-  "toggle-group-custom": dynamic(() => import("./toggle-group/custom")),
-  "toggle-group-default": dynamic(() => import("./toggle-group/default")),
-  "toggle-group-disabled": dynamic(() => import("./toggle-group/disabled")),
-  "toggle-group-outline": dynamic(() => import("./toggle-group/outline")),
-  "toggle-group-secondary": dynamic(() => import("./toggle-group/secondary")),
-  "toggle-group-single": dynamic(() => import("./toggle-group/single")),
-  "toggle-group-sizes": dynamic(() => import("./toggle-group/sizes")),
-  "toggle-group-spacing": dynamic(() => import("./toggle-group/spacing")),
-  "toggle-group-text-labels": dynamic(() => import("./toggle-group/text-labels")),
-  "toggle-group-vertical": dynamic(() => import("./toggle-group/vertical")),
-  "toggle-outline": dynamic(() => import("./toggle/outline")),
-  "toggle-pressed": dynamic(() => import("./toggle/pressed")),
-  "toggle-secondary": dynamic(() => import("./toggle/secondary")),
-  "toggle-sizes": dynamic(() => import("./toggle/sizes")),
-  "toggle-with-text": dynamic(() => import("./toggle/with-text")),
-  "tooltip-default": dynamic(() => import("./tooltip/default")),
-  "tooltip-disabled-button": dynamic(() => import("./tooltip/disabled-button")),
-  "tooltip-group-delay": dynamic(() => import("./tooltip/group-delay")),
-  "tooltip-info-tip": dynamic(() => import("./tooltip/info-tip")),
-  "tooltip-sides": dynamic(() => import("./tooltip/sides")),
-  "tooltip-with-kbd": dynamic(() => import("./tooltip/with-kbd")),
-  "typography-blockquote": dynamic(() => import("./typography/blockquote")),
-  "typography-default": dynamic(() => import("./typography/default")),
-  "typography-h1": dynamic(() => import("./typography/h1")),
-  "typography-h2": dynamic(() => import("./typography/h2")),
-  "typography-h3": dynamic(() => import("./typography/h3")),
-  "typography-h4": dynamic(() => import("./typography/h4")),
-  "typography-inline-code": dynamic(() => import("./typography/inline-code")),
-  "typography-large": dynamic(() => import("./typography/large")),
-  "typography-lead": dynamic(() => import("./typography/lead")),
-  "typography-list": dynamic(() => import("./typography/list")),
-  "typography-muted": dynamic(() => import("./typography/muted")),
-  "typography-paragraph": dynamic(() => import("./typography/paragraph")),
-  "typography-small": dynamic(() => import("./typography/small")),
+  "accordion-custom-chevron": dynamic(() =>
+    import("./accordion/custom-chevron").then((m) => ({
+      default: hydrated("accordion-custom-chevron", m.default),
+    }))
+  ),
+  "accordion-default": dynamic(() =>
+    import("./accordion/default").then((m) => ({
+      default: hydrated("accordion-default", m.default),
+    }))
+  ),
+  "accordion-disabled": dynamic(() =>
+    import("./accordion/disabled").then((m) => ({
+      default: hydrated("accordion-disabled", m.default),
+    }))
+  ),
+  "accordion-multiple": dynamic(() =>
+    import("./accordion/multiple").then((m) => ({
+      default: hydrated("accordion-multiple", m.default),
+    }))
+  ),
+  "accordion-variants": dynamic(() =>
+    import("./accordion/variants").then((m) => ({
+      default: hydrated("accordion-variants", m.default),
+    }))
+  ),
+  "alert-custom-colors": dynamic(() =>
+    import("./alert/custom-colors").then((m) => ({
+      default: hydrated("alert-custom-colors", m.default),
+    }))
+  ),
+  "alert-default": dynamic(() =>
+    import("./alert/default").then((m) => ({
+      default: hydrated("alert-default", m.default),
+    }))
+  ),
+  "alert-dialog-default": dynamic(() =>
+    import("./alert-dialog/default").then((m) => ({
+      default: hydrated("alert-dialog-default", m.default),
+    }))
+  ),
+  "alert-dialog-destructive": dynamic(() =>
+    import("./alert-dialog/destructive").then((m) => ({
+      default: hydrated("alert-dialog-destructive", m.default),
+    }))
+  ),
+  "alert-dialog-small": dynamic(() =>
+    import("./alert-dialog/small").then((m) => ({
+      default: hydrated("alert-dialog-small", m.default),
+    }))
+  ),
+  "alert-dialog-small-with-media": dynamic(() =>
+    import("./alert-dialog/small-with-media").then((m) => ({
+      default: hydrated("alert-dialog-small-with-media", m.default),
+    }))
+  ),
+  "alert-dialog-with-media": dynamic(() =>
+    import("./alert-dialog/with-media").then((m) => ({
+      default: hydrated("alert-dialog-with-media", m.default),
+    }))
+  ),
+  "alert-variants": dynamic(() =>
+    import("./alert/variants").then((m) => ({
+      default: hydrated("alert-variants", m.default),
+    }))
+  ),
+  "alert-with-action": dynamic(() =>
+    import("./alert/with-action").then((m) => ({
+      default: hydrated("alert-with-action", m.default),
+    }))
+  ),
+  "alert-without-icon": dynamic(() =>
+    import("./alert/without-icon").then((m) => ({
+      default: hydrated("alert-without-icon", m.default),
+    }))
+  ),
+  "aspect-ratio-default": dynamic(() =>
+    import("./aspect-ratio/default").then((m) => ({
+      default: hydrated("aspect-ratio-default", m.default),
+    }))
+  ),
+  "aspect-ratio-portrait": dynamic(() =>
+    import("./aspect-ratio/portrait").then((m) => ({
+      default: hydrated("aspect-ratio-portrait", m.default),
+    }))
+  ),
+  "aspect-ratio-square": dynamic(() =>
+    import("./aspect-ratio/square").then((m) => ({
+      default: hydrated("aspect-ratio-square", m.default),
+    }))
+  ),
+  "aspect-ratio-wide": dynamic(() =>
+    import("./aspect-ratio/wide").then((m) => ({
+      default: hydrated("aspect-ratio-wide", m.default),
+    }))
+  ),
+  "avatar-badge-with-icon": dynamic(() =>
+    import("./avatar/badge-with-icon").then((m) => ({
+      default: hydrated("avatar-badge-with-icon", m.default),
+    }))
+  ),
+  "avatar-default": dynamic(() =>
+    import("./avatar/default").then((m) => ({
+      default: hydrated("avatar-default", m.default),
+    }))
+  ),
+  "avatar-fallback": dynamic(() =>
+    import("./avatar/fallback").then((m) => ({
+      default: hydrated("avatar-fallback", m.default),
+    }))
+  ),
+  "avatar-group": dynamic(() =>
+    import("./avatar/group").then((m) => ({
+      default: hydrated("avatar-group", m.default),
+    }))
+  ),
+  "avatar-group-with-count": dynamic(() =>
+    import("./avatar/group-with-count").then((m) => ({
+      default: hydrated("avatar-group-with-count", m.default),
+    }))
+  ),
+  "avatar-sizes": dynamic(() =>
+    import("./avatar/sizes").then((m) => ({
+      default: hydrated("avatar-sizes", m.default),
+    }))
+  ),
+  "avatar-with-badge": dynamic(() =>
+    import("./avatar/with-badge").then((m) => ({
+      default: hydrated("avatar-with-badge", m.default),
+    }))
+  ),
+  "badge-as-link": dynamic(() =>
+    import("./badge/as-link").then((m) => ({
+      default: hydrated("badge-as-link", m.default),
+    }))
+  ),
+  "badge-custom-colors": dynamic(() =>
+    import("./badge/custom-colors").then((m) => ({
+      default: hydrated("badge-custom-colors", m.default),
+    }))
+  ),
+  "badge-default": dynamic(() =>
+    import("./badge/default").then((m) => ({
+      default: hydrated("badge-default", m.default),
+    }))
+  ),
+  "badge-removable": dynamic(() =>
+    import("./badge/removable").then((m) => ({
+      default: hydrated("badge-removable", m.default),
+    }))
+  ),
+  "badge-sizes": dynamic(() =>
+    import("./badge/sizes").then((m) => ({
+      default: hydrated("badge-sizes", m.default),
+    }))
+  ),
+  "badge-stats": dynamic(() =>
+    import("./badge/stats").then((m) => ({
+      default: hydrated("badge-stats", m.default),
+    }))
+  ),
+  "badge-variants": dynamic(() =>
+    import("./badge/variants").then((m) => ({
+      default: hydrated("badge-variants", m.default),
+    }))
+  ),
+  "badge-with-icon": dynamic(() =>
+    import("./badge/with-icon").then((m) => ({
+      default: hydrated("badge-with-icon", m.default),
+    }))
+  ),
+  "badge-with-spinner": dynamic(() =>
+    import("./badge/with-spinner").then((m) => ({
+      default: hydrated("badge-with-spinner", m.default),
+    }))
+  ),
+  "block-admin-01": dynamic(() =>
+    import("./blocks/admin-01/index").then((m) => ({
+      default: hydrated("block-admin-01", m.default),
+    }))
+  ),
+  "block-betting-panel-01": dynamic(() =>
+    import("./blocks/betting-panel-01").then((m) => ({
+      default: hydrated("block-betting-panel-01", m.default),
+    }))
+  ),
+  "block-betting-panel-02": dynamic(() =>
+    import("./blocks/betting-panel-02").then((m) => ({
+      default: hydrated("block-betting-panel-02", m.default),
+    }))
+  ),
+  "block-betting-panel-03": dynamic(() =>
+    import("./blocks/betting-panel-03").then((m) => ({
+      default: hydrated("block-betting-panel-03", m.default),
+    }))
+  ),
+  "block-betting-panel-04": dynamic(() =>
+    import("./blocks/betting-panel-04").then((m) => ({
+      default: hydrated("block-betting-panel-04", m.default),
+    }))
+  ),
+  "block-dashboard-01": dynamic(() =>
+    import("./blocks/dashboard-01/index").then((m) => ({
+      default: hydrated("block-dashboard-01", m.default),
+    }))
+  ),
+  "block-profile-dropdown-01": dynamic(() =>
+    import("./blocks/profile-dropdown-01").then((m) => ({
+      default: hydrated("block-profile-dropdown-01", m.default),
+    }))
+  ),
+  "block-signin-01": dynamic(() =>
+    import("./blocks/signin-01").then((m) => ({
+      default: hydrated("block-signin-01", m.default),
+    }))
+  ),
+  "block-signin-02": dynamic(() =>
+    import("./blocks/signin-02").then((m) => ({
+      default: hydrated("block-signin-02", m.default),
+    }))
+  ),
+  "block-signin-03": dynamic(() =>
+    import("./blocks/signin-03").then((m) => ({
+      default: hydrated("block-signin-03", m.default),
+    }))
+  ),
+  "block-signin-04": dynamic(() =>
+    import("./blocks/signin-04").then((m) => ({
+      default: hydrated("block-signin-04", m.default),
+    }))
+  ),
+  "block-signup-01": dynamic(() =>
+    import("./blocks/signup-01").then((m) => ({
+      default: hydrated("block-signup-01", m.default),
+    }))
+  ),
+  "block-signup-02": dynamic(() =>
+    import("./blocks/signup-02").then((m) => ({
+      default: hydrated("block-signup-02", m.default),
+    }))
+  ),
+  "block-signup-03": dynamic(() =>
+    import("./blocks/signup-03").then((m) => ({
+      default: hydrated("block-signup-03", m.default),
+    }))
+  ),
+  "block-signup-04": dynamic(() =>
+    import("./blocks/signup-04").then((m) => ({
+      default: hydrated("block-signup-04", m.default),
+    }))
+  ),
+  "block-signup-05": dynamic(() =>
+    import("./blocks/signup-05").then((m) => ({
+      default: hydrated("block-signup-05", m.default),
+    }))
+  ),
+  "block-tickets-01": dynamic(() =>
+    import("./blocks/tickets-01/index").then((m) => ({
+      default: hydrated("block-tickets-01", m.default),
+    }))
+  ),
+  "breadcrumb-collapsed": dynamic(() =>
+    import("./breadcrumb/collapsed").then((m) => ({
+      default: hydrated("breadcrumb-collapsed", m.default),
+    }))
+  ),
+  "breadcrumb-custom-separator": dynamic(() =>
+    import("./breadcrumb/custom-separator").then((m) => ({
+      default: hydrated("breadcrumb-custom-separator", m.default),
+    }))
+  ),
+  "breadcrumb-default": dynamic(() =>
+    import("./breadcrumb/default").then((m) => ({
+      default: hydrated("breadcrumb-default", m.default),
+    }))
+  ),
+  "breadcrumb-link-component": dynamic(() =>
+    import("./breadcrumb/link-component").then((m) => ({
+      default: hydrated("breadcrumb-link-component", m.default),
+    }))
+  ),
+  "breadcrumb-with-dropdown": dynamic(() =>
+    import("./breadcrumb/with-dropdown").then((m) => ({
+      default: hydrated("breadcrumb-with-dropdown", m.default),
+    }))
+  ),
+  "button-as-link": dynamic(() =>
+    import("./button/as-link").then((m) => ({
+      default: hydrated("button-as-link", m.default),
+    }))
+  ),
+  "button-custom-loading": dynamic(() =>
+    import("./button/custom-loading").then((m) => ({
+      default: hydrated("button-custom-loading", m.default),
+    }))
+  ),
+  "button-default": dynamic(() =>
+    import("./button/default").then((m) => ({
+      default: hydrated("button-default", m.default),
+    }))
+  ),
+  "button-disabled": dynamic(() =>
+    import("./button/disabled").then((m) => ({
+      default: hydrated("button-disabled", m.default),
+    }))
+  ),
+  "button-full-width": dynamic(() =>
+    import("./button/full-width").then((m) => ({
+      default: hydrated("button-full-width", m.default),
+    }))
+  ),
+  "button-group-default": dynamic(() =>
+    import("./button-group/default").then((m) => ({
+      default: hydrated("button-group-default", m.default),
+    }))
+  ),
+  "button-group-email-toolbar": dynamic(() =>
+    import("./button-group/email-toolbar").then((m) => ({
+      default: hydrated("button-group-email-toolbar", m.default),
+    }))
+  ),
+  "button-group-nested": dynamic(() =>
+    import("./button-group/nested").then((m) => ({
+      default: hydrated("button-group-nested", m.default),
+    }))
+  ),
+  "button-group-sizes": dynamic(() =>
+    import("./button-group/sizes").then((m) => ({
+      default: hydrated("button-group-sizes", m.default),
+    }))
+  ),
+  "button-group-split-button": dynamic(() =>
+    import("./button-group/split-button").then((m) => ({
+      default: hydrated("button-group-split-button", m.default),
+    }))
+  ),
+  "button-group-toolbar": dynamic(() =>
+    import("./button-group/toolbar").then((m) => ({
+      default: hydrated("button-group-toolbar", m.default),
+    }))
+  ),
+  "button-group-vertical": dynamic(() =>
+    import("./button-group/vertical").then((m) => ({
+      default: hydrated("button-group-vertical", m.default),
+    }))
+  ),
+  "button-group-with-dropdown-menu": dynamic(() =>
+    import("./button-group/with-dropdown-menu").then((m) => ({
+      default: hydrated("button-group-with-dropdown-menu", m.default),
+    }))
+  ),
+  "button-group-with-input": dynamic(() =>
+    import("./button-group/with-input").then((m) => ({
+      default: hydrated("button-group-with-input", m.default),
+    }))
+  ),
+  "button-group-with-popover": dynamic(() =>
+    import("./button-group/with-popover").then((m) => ({
+      default: hydrated("button-group-with-popover", m.default),
+    }))
+  ),
+  "button-group-with-select": dynamic(() =>
+    import("./button-group/with-select").then((m) => ({
+      default: hydrated("button-group-with-select", m.default),
+    }))
+  ),
+  "button-icon-buttons": dynamic(() =>
+    import("./button/icon-buttons").then((m) => ({
+      default: hydrated("button-icon-buttons", m.default),
+    }))
+  ),
+  "button-link": dynamic(() =>
+    import("./button/link").then((m) => ({
+      default: hydrated("button-link", m.default),
+    }))
+  ),
+  "button-loading": dynamic(() =>
+    import("./button/loading").then((m) => ({
+      default: hydrated("button-loading", m.default),
+    }))
+  ),
+  "button-rounded": dynamic(() =>
+    import("./button/rounded").then((m) => ({
+      default: hydrated("button-rounded", m.default),
+    }))
+  ),
+  "button-sizes": dynamic(() =>
+    import("./button/sizes").then((m) => ({
+      default: hydrated("button-sizes", m.default),
+    }))
+  ),
+  "button-social-buttons": dynamic(() =>
+    import("./button/social-buttons").then((m) => ({
+      default: hydrated("button-social-buttons", m.default),
+    }))
+  ),
+  "button-variants": dynamic(() =>
+    import("./button/variants").then((m) => ({
+      default: hydrated("button-variants", m.default),
+    }))
+  ),
+  "button-with-icons": dynamic(() =>
+    import("./button/with-icons").then((m) => ({
+      default: hydrated("button-with-icons", m.default),
+    }))
+  ),
+  "calendar-booked-dates": dynamic(() =>
+    import("./calendar/booked-dates").then((m) => ({
+      default: hydrated("calendar-booked-dates", m.default),
+    }))
+  ),
+  "calendar-date-time": dynamic(() =>
+    import("./calendar/date-time").then((m) => ({
+      default: hydrated("calendar-date-time", m.default),
+    }))
+  ),
+  "calendar-default": dynamic(() =>
+    import("./calendar/default").then((m) => ({
+      default: hydrated("calendar-default", m.default),
+    }))
+  ),
+  "calendar-month-year": dynamic(() =>
+    import("./calendar/month-year").then((m) => ({
+      default: hydrated("calendar-month-year", m.default),
+    }))
+  ),
+  "calendar-presets": dynamic(() =>
+    import("./calendar/presets").then((m) => ({
+      default: hydrated("calendar-presets", m.default),
+    }))
+  ),
+  "calendar-range": dynamic(() =>
+    import("./calendar/range").then((m) => ({
+      default: hydrated("calendar-range", m.default),
+    }))
+  ),
+  "calendar-week-numbers": dynamic(() =>
+    import("./calendar/week-numbers").then((m) => ({
+      default: hydrated("calendar-week-numbers", m.default),
+    }))
+  ),
+  "card-default": dynamic(() =>
+    import("./card/default").then((m) => ({
+      default: hydrated("card-default", m.default),
+    }))
+  ),
+  "card-login-form": dynamic(() =>
+    import("./card/login-form").then((m) => ({
+      default: hydrated("card-login-form", m.default),
+    }))
+  ),
+  "card-small": dynamic(() =>
+    import("./card/small").then((m) => ({
+      default: hydrated("card-small", m.default),
+    }))
+  ),
+  "card-social-card": dynamic(() =>
+    import("./card/social-card").then((m) => ({
+      default: hydrated("card-social-card", m.default),
+    }))
+  ),
+  "card-table-flush": dynamic(() =>
+    import("./card/table-flush").then((m) => ({
+      default: hydrated("card-table-flush", m.default),
+    }))
+  ),
+  "card-variants": dynamic(() =>
+    import("./card/variants").then((m) => ({
+      default: hydrated("card-variants", m.default),
+    }))
+  ),
+  "card-with-action": dynamic(() =>
+    import("./card/with-action").then((m) => ({
+      default: hydrated("card-with-action", m.default),
+    }))
+  ),
+  "card-with-image": dynamic(() =>
+    import("./card/with-image").then((m) => ({
+      default: hydrated("card-with-image", m.default),
+    }))
+  ),
+  "carousel-autoplay": dynamic(() =>
+    import("./carousel/autoplay").then((m) => ({
+      default: hydrated("carousel-autoplay", m.default),
+    }))
+  ),
+  "carousel-cards": dynamic(() =>
+    import("./carousel/cards").then((m) => ({
+      default: hydrated("carousel-cards", m.default),
+    }))
+  ),
+  "carousel-controlled": dynamic(() =>
+    import("./carousel/controlled").then((m) => ({
+      default: hydrated("carousel-controlled", m.default),
+    }))
+  ),
+  "carousel-default": dynamic(() =>
+    import("./carousel/default").then((m) => ({
+      default: hydrated("carousel-default", m.default),
+    }))
+  ),
+  "carousel-multiple-slides": dynamic(() =>
+    import("./carousel/multiple-slides").then((m) => ({
+      default: hydrated("carousel-multiple-slides", m.default),
+    }))
+  ),
+  "carousel-sizes": dynamic(() =>
+    import("./carousel/sizes").then((m) => ({
+      default: hydrated("carousel-sizes", m.default),
+    }))
+  ),
+  "carousel-spacing": dynamic(() =>
+    import("./carousel/spacing").then((m) => ({
+      default: hydrated("carousel-spacing", m.default),
+    }))
+  ),
+  "carousel-thumbnails": dynamic(() =>
+    import("./carousel/thumbnails").then((m) => ({
+      default: hydrated("carousel-thumbnails", m.default),
+    }))
+  ),
+  "carousel-vertical": dynamic(() =>
+    import("./carousel/vertical").then((m) => ({
+      default: hydrated("carousel-vertical", m.default),
+    }))
+  ),
+  "carousel-with-counter": dynamic(() =>
+    import("./carousel/with-counter").then((m) => ({
+      default: hydrated("carousel-with-counter", m.default),
+    }))
+  ),
+  "carousel-with-dots": dynamic(() =>
+    import("./carousel/with-dots").then((m) => ({
+      default: hydrated("carousel-with-dots", m.default),
+    }))
+  ),
+  "carousel-with-mask": dynamic(() =>
+    import("./carousel/with-mask").then((m) => ({
+      default: hydrated("carousel-with-mask", m.default),
+    }))
+  ),
+  "checkbox-controlled": dynamic(() =>
+    import("./checkbox/controlled").then((m) => ({
+      default: hydrated("checkbox-controlled", m.default),
+    }))
+  ),
+  "checkbox-default": dynamic(() =>
+    import("./checkbox/default").then((m) => ({
+      default: hydrated("checkbox-default", m.default),
+    }))
+  ),
+  "checkbox-disabled": dynamic(() =>
+    import("./checkbox/disabled").then((m) => ({
+      default: hydrated("checkbox-disabled", m.default),
+    }))
+  ),
+  "checkbox-group": dynamic(() =>
+    import("./checkbox/group").then((m) => ({
+      default: hydrated("checkbox-group", m.default),
+    }))
+  ),
+  "checkbox-pill-group": dynamic(() =>
+    import("./checkbox/pill-group").then((m) => ({
+      default: hydrated("checkbox-pill-group", m.default),
+    }))
+  ),
+  "checkbox-with-description": dynamic(() =>
+    import("./checkbox/with-description").then((m) => ({
+      default: hydrated("checkbox-with-description", m.default),
+    }))
+  ),
+  "circular-progress-animated": dynamic(() =>
+    import("./circular-progress/animated").then((m) => ({
+      default: hydrated("circular-progress-animated", m.default),
+    }))
+  ),
+  "circular-progress-colors": dynamic(() =>
+    import("./circular-progress/colors").then((m) => ({
+      default: hydrated("circular-progress-colors", m.default),
+    }))
+  ),
+  "circular-progress-complete": dynamic(() =>
+    import("./circular-progress/complete").then((m) => ({
+      default: hydrated("circular-progress-complete", m.default),
+    }))
+  ),
+  "circular-progress-controlled": dynamic(() =>
+    import("./circular-progress/controlled").then((m) => ({
+      default: hydrated("circular-progress-controlled", m.default),
+    }))
+  ),
+  "circular-progress-custom-center-content": dynamic(() =>
+    import("./circular-progress/custom-center-content").then((m) => ({
+      default: hydrated("circular-progress-custom-center-content", m.default),
+    }))
+  ),
+  "circular-progress-default": dynamic(() =>
+    import("./circular-progress/default").then((m) => ({
+      default: hydrated("circular-progress-default", m.default),
+    }))
+  ),
+  "circular-progress-indeterminate": dynamic(() =>
+    import("./circular-progress/indeterminate").then((m) => ({
+      default: hydrated("circular-progress-indeterminate", m.default),
+    }))
+  ),
+  "circular-progress-sizes": dynamic(() =>
+    import("./circular-progress/sizes").then((m) => ({
+      default: hydrated("circular-progress-sizes", m.default),
+    }))
+  ),
+  "circular-progress-with-avatar": dynamic(() =>
+    import("./circular-progress/with-avatar").then((m) => ({
+      default: hydrated("circular-progress-with-avatar", m.default),
+    }))
+  ),
+  "circular-progress-with-label": dynamic(() =>
+    import("./circular-progress/with-label").then((m) => ({
+      default: hydrated("circular-progress-with-label", m.default),
+    }))
+  ),
+  "collapsible-default": dynamic(() =>
+    import("./collapsible/default").then((m) => ({
+      default: hydrated("collapsible-default", m.default),
+    }))
+  ),
+  "collapsible-file-tree": dynamic(() =>
+    import("./collapsible/file-tree").then((m) => ({
+      default: hydrated("collapsible-file-tree", m.default),
+    }))
+  ),
+  "collapsible-settings": dynamic(() =>
+    import("./collapsible/settings").then((m) => ({
+      default: hydrated("collapsible-settings", m.default),
+    }))
+  ),
+  "combobox-compact-items": dynamic(() =>
+    import("./combobox/compact-items").then((m) => ({
+      default: hydrated("combobox-compact-items", m.default),
+    }))
+  ),
+  "combobox-controlled": dynamic(() =>
+    import("./combobox/controlled").then((m) => ({
+      default: hydrated("combobox-controlled", m.default),
+    }))
+  ),
+  "combobox-countries": dynamic(() =>
+    import("./combobox/countries").then((m) => ({
+      default: hydrated("combobox-countries", m.default),
+    }))
+  ),
+  "combobox-custom-items": dynamic(() =>
+    import("./combobox/custom-items").then((m) => ({
+      default: hydrated("combobox-custom-items", m.default),
+    }))
+  ),
+  "combobox-default": dynamic(() =>
+    import("./combobox/default").then((m) => ({
+      default: hydrated("combobox-default", m.default),
+    }))
+  ),
+  "combobox-disabled": dynamic(() =>
+    import("./combobox/disabled").then((m) => ({
+      default: hydrated("combobox-disabled", m.default),
+    }))
+  ),
+  "combobox-form-example": dynamic(() =>
+    import("./combobox/form-example").then((m) => ({
+      default: hydrated("combobox-form-example", m.default),
+    }))
+  ),
+  "combobox-groups": dynamic(() =>
+    import("./combobox/groups").then((m) => ({
+      default: hydrated("combobox-groups", m.default),
+    }))
+  ),
+  "combobox-multi-with-create": dynamic(() =>
+    import("./combobox/multi-with-create").then((m) => ({
+      default: hydrated("combobox-multi-with-create", m.default),
+    }))
+  ),
+  "combobox-multiple": dynamic(() =>
+    import("./combobox/multiple").then((m) => ({
+      default: hydrated("combobox-multiple", m.default),
+    }))
+  ),
+  "combobox-popup": dynamic(() =>
+    import("./combobox/popup").then((m) => ({
+      default: hydrated("combobox-popup", m.default),
+    }))
+  ),
+  "combobox-scrollable": dynamic(() =>
+    import("./combobox/scrollable").then((m) => ({
+      default: hydrated("combobox-scrollable", m.default),
+    }))
+  ),
+  "combobox-with-clear": dynamic(() =>
+    import("./combobox/with-clear").then((m) => ({
+      default: hydrated("combobox-with-clear", m.default),
+    }))
+  ),
+  "command-default": dynamic(() =>
+    import("./command/default").then((m) => ({
+      default: hydrated("command-default", m.default),
+    }))
+  ),
+  "command-disabled-items": dynamic(() =>
+    import("./command/disabled-items").then((m) => ({
+      default: hydrated("command-disabled-items", m.default),
+    }))
+  ),
+  "command-groups": dynamic(() =>
+    import("./command/groups").then((m) => ({
+      default: hydrated("command-groups", m.default),
+    }))
+  ),
+  "command-keyboard-trigger": dynamic(() =>
+    import("./command/keyboard-trigger").then((m) => ({
+      default: hydrated("command-keyboard-trigger", m.default),
+    }))
+  ),
+  "command-scrollable": dynamic(() =>
+    import("./command/scrollable").then((m) => ({
+      default: hydrated("command-scrollable", m.default),
+    }))
+  ),
+  "command-with-shortcuts": dynamic(() =>
+    import("./command/with-shortcuts").then((m) => ({
+      default: hydrated("command-with-shortcuts", m.default),
+    }))
+  ),
+  "copy-button-default": dynamic(() =>
+    import("./copy-button/default").then((m) => ({
+      default: hydrated("copy-button-default", m.default),
+    }))
+  ),
+  "copy-button-sizes": dynamic(() =>
+    import("./copy-button/sizes").then((m) => ({
+      default: hydrated("copy-button-sizes", m.default),
+    }))
+  ),
+  "copy-button-variants": dynamic(() =>
+    import("./copy-button/variants").then((m) => ({
+      default: hydrated("copy-button-variants", m.default),
+    }))
+  ),
+  "date-input-controlled": dynamic(() =>
+    import("./date-input/controlled").then((m) => ({
+      default: hydrated("date-input-controlled", m.default),
+    }))
+  ),
+  "date-input-date-of-birth": dynamic(() =>
+    import("./date-input/date-of-birth").then((m) => ({
+      default: hydrated("date-input-date-of-birth", m.default),
+    }))
+  ),
+  "date-input-default": dynamic(() =>
+    import("./date-input/default").then((m) => ({
+      default: hydrated("date-input-default", m.default),
+    }))
+  ),
+  "date-input-natural-language": dynamic(() =>
+    import("./date-input/natural-language").then((m) => ({
+      default: hydrated("date-input-natural-language", m.default),
+    }))
+  ),
+  "date-input-presets": dynamic(() =>
+    import("./date-input/presets").then((m) => ({
+      default: hydrated("date-input-presets", m.default),
+    }))
+  ),
+  "date-input-range": dynamic(() =>
+    import("./date-input/range").then((m) => ({
+      default: hydrated("date-input-range", m.default),
+    }))
+  ),
+  "date-input-with-input": dynamic(() =>
+    import("./date-input/with-input").then((m) => ({
+      default: hydrated("date-input-with-input", m.default),
+    }))
+  ),
+  "date-input-with-time": dynamic(() =>
+    import("./date-input/with-time").then((m) => ({
+      default: hydrated("date-input-with-time", m.default),
+    }))
+  ),
+  "description-list-card-variant": dynamic(() =>
+    import("./description-list/card-variant").then((m) => ({
+      default: hydrated("description-list-card-variant", m.default),
+    }))
+  ),
+  "description-list-compact": dynamic(() =>
+    import("./description-list/compact").then((m) => ({
+      default: hydrated("description-list-compact", m.default),
+    }))
+  ),
+  "description-list-custom-values": dynamic(() =>
+    import("./description-list/custom-values").then((m) => ({
+      default: hydrated("description-list-custom-values", m.default),
+    }))
+  ),
+  "description-list-default": dynamic(() =>
+    import("./description-list/default").then((m) => ({
+      default: hydrated("description-list-default", m.default),
+    }))
+  ),
+  "description-list-in-card": dynamic(() =>
+    import("./description-list/in-card").then((m) => ({
+      default: hydrated("description-list-in-card", m.default),
+    }))
+  ),
+  "description-list-order-summary": dynamic(() =>
+    import("./description-list/order-summary").then((m) => ({
+      default: hydrated("description-list-order-summary", m.default),
+    }))
+  ),
+  "description-list-record": dynamic(() =>
+    import("./description-list/record").then((m) => ({
+      default: hydrated("description-list-record", m.default),
+    }))
+  ),
+  "drawer-complex-filter": dynamic(() =>
+    import("./drawer/complex-filter").then((m) => ({
+      default: hydrated("drawer-complex-filter", m.default),
+    }))
+  ),
+  "drawer-default": dynamic(() =>
+    import("./drawer/default").then((m) => ({
+      default: hydrated("drawer-default", m.default),
+    }))
+  ),
+  "drawer-filter": dynamic(() =>
+    import("./drawer/filter").then((m) => ({
+      default: hydrated("drawer-filter", m.default),
+    }))
+  ),
+  "drawer-floating": dynamic(() =>
+    import("./drawer/floating").then((m) => ({
+      default: hydrated("drawer-floating", m.default),
+    }))
+  ),
+  "drawer-nested": dynamic(() =>
+    import("./drawer/nested").then((m) => ({
+      default: hydrated("drawer-nested", m.default),
+    }))
+  ),
+  "drawer-responsive": dynamic(() =>
+    import("./drawer/responsive").then((m) => ({
+      default: hydrated("drawer-responsive", m.default),
+    }))
+  ),
+  "drawer-scrollable": dynamic(() =>
+    import("./drawer/scrollable").then((m) => ({
+      default: hydrated("drawer-scrollable", m.default),
+    }))
+  ),
+  "drawer-sides": dynamic(() =>
+    import("./drawer/sides").then((m) => ({
+      default: hydrated("drawer-sides", m.default),
+    }))
+  ),
+  "drawer-sort-by": dynamic(() =>
+    import("./drawer/sort-by").then((m) => ({
+      default: hydrated("drawer-sort-by", m.default),
+    }))
+  ),
+  "dropdown-menu-account": dynamic(() =>
+    import("./dropdown-menu/account").then((m) => ({
+      default: hydrated("dropdown-menu-account", m.default),
+    }))
+  ),
+  "dropdown-menu-checkboxes": dynamic(() =>
+    import("./dropdown-menu/checkboxes").then((m) => ({
+      default: hydrated("dropdown-menu-checkboxes", m.default),
+    }))
+  ),
+  "dropdown-menu-complex": dynamic(() =>
+    import("./dropdown-menu/complex").then((m) => ({
+      default: hydrated("dropdown-menu-complex", m.default),
+    }))
+  ),
+  "dropdown-menu-default": dynamic(() =>
+    import("./dropdown-menu/default").then((m) => ({
+      default: hydrated("dropdown-menu-default", m.default),
+    }))
+  ),
+  "dropdown-menu-destructive": dynamic(() =>
+    import("./dropdown-menu/destructive").then((m) => ({
+      default: hydrated("dropdown-menu-destructive", m.default),
+    }))
+  ),
+  "dropdown-menu-radio-group": dynamic(() =>
+    import("./dropdown-menu/radio-group").then((m) => ({
+      default: hydrated("dropdown-menu-radio-group", m.default),
+    }))
+  ),
+  "dropdown-menu-shortcuts": dynamic(() =>
+    import("./dropdown-menu/shortcuts").then((m) => ({
+      default: hydrated("dropdown-menu-shortcuts", m.default),
+    }))
+  ),
+  "dropdown-menu-submenu": dynamic(() =>
+    import("./dropdown-menu/submenu").then((m) => ({
+      default: hydrated("dropdown-menu-submenu", m.default),
+    }))
+  ),
+  "dropdown-menu-with-icons": dynamic(() =>
+    import("./dropdown-menu/with-icons").then((m) => ({
+      default: hydrated("dropdown-menu-with-icons", m.default),
+    }))
+  ),
+  "empty-background": dynamic(() =>
+    import("./empty/background").then((m) => ({
+      default: hydrated("empty-background", m.default),
+    }))
+  ),
+  "empty-default": dynamic(() =>
+    import("./empty/default").then((m) => ({
+      default: hydrated("empty-default", m.default),
+    }))
+  ),
+  "empty-outline": dynamic(() =>
+    import("./empty/outline").then((m) => ({
+      default: hydrated("empty-outline", m.default),
+    }))
+  ),
+  "empty-with-action": dynamic(() =>
+    import("./empty/with-action").then((m) => ({
+      default: hydrated("empty-with-action", m.default),
+    }))
+  ),
+  "empty-with-avatar": dynamic(() =>
+    import("./empty/with-avatar").then((m) => ({
+      default: hydrated("empty-with-avatar", m.default),
+    }))
+  ),
+  "empty-with-description": dynamic(() =>
+    import("./empty/with-description").then((m) => ({
+      default: hydrated("empty-with-description", m.default),
+    }))
+  ),
+  "empty-with-form": dynamic(() =>
+    import("./empty/with-form").then((m) => ({
+      default: hydrated("empty-with-form", m.default),
+    }))
+  ),
+  "empty-with-image": dynamic(() =>
+    import("./empty/with-image").then((m) => ({
+      default: hydrated("empty-with-image", m.default),
+    }))
+  ),
+  "empty-with-input": dynamic(() =>
+    import("./empty/with-input").then((m) => ({
+      default: hydrated("empty-with-input", m.default),
+    }))
+  ),
+  "empty-with-list": dynamic(() =>
+    import("./empty/with-list").then((m) => ({
+      default: hydrated("empty-with-list", m.default),
+    }))
+  ),
+  "empty-with-search": dynamic(() =>
+    import("./empty/with-search").then((m) => ({
+      default: hydrated("empty-with-search", m.default),
+    }))
+  ),
+  "empty-with-spinner": dynamic(() =>
+    import("./empty/with-spinner").then((m) => ({
+      default: hydrated("empty-with-spinner", m.default),
+    }))
+  ),
+  "field-checkout-form": dynamic(() =>
+    import("./field/checkout-form").then((m) => ({
+      default: hydrated("field-checkout-form", m.default),
+    }))
+  ),
+  "field-default": dynamic(() =>
+    import("./field/default").then((m) => ({
+      default: hydrated("field-default", m.default),
+    }))
+  ),
+  "field-fieldset": dynamic(() =>
+    import("./field/fieldset").then((m) => ({
+      default: hydrated("field-fieldset", m.default),
+    }))
+  ),
+  "field-grid": dynamic(() =>
+    import("./field/grid").then((m) => ({
+      default: hydrated("field-grid", m.default),
+    }))
+  ),
+  "field-horizontal": dynamic(() =>
+    import("./field/horizontal").then((m) => ({
+      default: hydrated("field-horizontal", m.default),
+    }))
+  ),
+  "field-multiple-errors": dynamic(() =>
+    import("./field/multiple-errors").then((m) => ({
+      default: hydrated("field-multiple-errors", m.default),
+    }))
+  ),
+  "field-payment-method": dynamic(() =>
+    import("./field/payment-method").then((m) => ({
+      default: hydrated("field-payment-method", m.default),
+    }))
+  ),
+  "field-required": dynamic(() =>
+    import("./field/required").then((m) => ({
+      default: hydrated("field-required", m.default),
+    }))
+  ),
+  "field-settings-form": dynamic(() =>
+    import("./field/settings-form").then((m) => ({
+      default: hydrated("field-settings-form", m.default),
+    }))
+  ),
+  "field-textarea-example": dynamic(() =>
+    import("./field/textarea-example").then((m) => ({
+      default: hydrated("field-textarea-example", m.default),
+    }))
+  ),
+  "field-validation-error": dynamic(() =>
+    import("./field/validation-error").then((m) => ({
+      default: hydrated("field-validation-error", m.default),
+    }))
+  ),
+  "field-with-checkbox": dynamic(() =>
+    import("./field/with-checkbox").then((m) => ({
+      default: hydrated("field-with-checkbox", m.default),
+    }))
+  ),
+  "field-with-switch": dynamic(() =>
+    import("./field/with-switch").then((m) => ({
+      default: hydrated("field-with-switch", m.default),
+    }))
+  ),
+  "form-default": dynamic(() =>
+    import("./form/default").then((m) => ({
+      default: hydrated("form-default", m.default),
+    }))
+  ),
+  "form-with-validation": dynamic(() =>
+    import("./form/with-validation").then((m) => ({
+      default: hydrated("form-with-validation", m.default),
+    }))
+  ),
+  "input-default": dynamic(() =>
+    import("./input/default").then((m) => ({
+      default: hydrated("input-default", m.default),
+    }))
+  ),
+  "input-disabled": dynamic(() =>
+    import("./input/disabled").then((m) => ({
+      default: hydrated("input-disabled", m.default),
+    }))
+  ),
+  "input-file": dynamic(() =>
+    import("./input/file").then((m) => ({
+      default: hydrated("input-file", m.default),
+    }))
+  ),
+  "input-form-example": dynamic(() =>
+    import("./input/form-example").then((m) => ({
+      default: hydrated("input-form-example", m.default),
+    }))
+  ),
+  "input-group-clear-button": dynamic(() =>
+    import("./input-group/clear-button").then((m) => ({
+      default: hydrated("input-group-clear-button", m.default),
+    }))
+  ),
+  "input-group-copy-to-clipboard": dynamic(() =>
+    import("./input-group/copy-to-clipboard").then((m) => ({
+      default: hydrated("input-group-copy-to-clipboard", m.default),
+    }))
+  ),
+  "input-group-currency": dynamic(() =>
+    import("./input-group/currency").then((m) => ({
+      default: hydrated("input-group-currency", m.default),
+    }))
+  ),
+  "input-group-default": dynamic(() =>
+    import("./input-group/default").then((m) => ({
+      default: hydrated("input-group-default", m.default),
+    }))
+  ),
+  "input-group-email-input": dynamic(() =>
+    import("./input-group/email-input").then((m) => ({
+      default: hydrated("input-group-email-input", m.default),
+    }))
+  ),
+  "input-group-loading-spinner": dynamic(() =>
+    import("./input-group/loading-spinner").then((m) => ({
+      default: hydrated("input-group-loading-spinner", m.default),
+    }))
+  ),
+  "input-group-password-toggle": dynamic(() =>
+    import("./input-group/password-toggle").then((m) => ({
+      default: hydrated("input-group-password-toggle", m.default),
+    }))
+  ),
+  "input-group-phone-input": dynamic(() =>
+    import("./input-group/phone-input").then((m) => ({
+      default: hydrated("input-group-phone-input", m.default),
+    }))
+  ),
+  "input-group-prompt-form": dynamic(() =>
+    import("./input-group/prompt-form").then((m) => ({
+      default: hydrated("input-group-prompt-form", m.default),
+    }))
+  ),
+  "input-group-search": dynamic(() =>
+    import("./input-group/search").then((m) => ({
+      default: hydrated("input-group-search", m.default),
+    }))
+  ),
+  "input-group-small-size": dynamic(() =>
+    import("./input-group/small-size").then((m) => ({
+      default: hydrated("input-group-small-size", m.default),
+    }))
+  ),
+  "input-group-stake-buttons": dynamic(() =>
+    import("./input-group/stake-buttons").then((m) => ({
+      default: hydrated("input-group-stake-buttons", m.default),
+    }))
+  ),
+  "input-group-text-prefix": dynamic(() =>
+    import("./input-group/text-prefix").then((m) => ({
+      default: hydrated("input-group-text-prefix", m.default),
+    }))
+  ),
+  "input-group-text-suffix": dynamic(() =>
+    import("./input-group/text-suffix").then((m) => ({
+      default: hydrated("input-group-text-suffix", m.default),
+    }))
+  ),
+  "input-group-with-button": dynamic(() =>
+    import("./input-group/with-button").then((m) => ({
+      default: hydrated("input-group-with-button", m.default),
+    }))
+  ),
+  "input-group-with-textarea": dynamic(() =>
+    import("./input-group/with-textarea").then((m) => ({
+      default: hydrated("input-group-with-textarea", m.default),
+    }))
+  ),
+  "input-otp-alphanumeric": dynamic(() =>
+    import("./input-otp/alphanumeric").then((m) => ({
+      default: hydrated("input-otp-alphanumeric", m.default),
+    }))
+  ),
+  "input-otp-auto-submit": dynamic(() =>
+    import("./input-otp/auto-submit").then((m) => ({
+      default: hydrated("input-otp-auto-submit", m.default),
+    }))
+  ),
+  "input-otp-custom-sanitization": dynamic(() =>
+    import("./input-otp/custom-sanitization").then((m) => ({
+      default: hydrated("input-otp-custom-sanitization", m.default),
+    }))
+  ),
+  "input-otp-default": dynamic(() =>
+    import("./input-otp/default").then((m) => ({
+      default: hydrated("input-otp-default", m.default),
+    }))
+  ),
+  "input-otp-disabled": dynamic(() =>
+    import("./input-otp/disabled").then((m) => ({
+      default: hydrated("input-otp-disabled", m.default),
+    }))
+  ),
+  "input-otp-form": dynamic(() =>
+    import("./input-otp/form").then((m) => ({
+      default: hydrated("input-otp-form", m.default),
+    }))
+  ),
+  "input-otp-four-digits": dynamic(() =>
+    import("./input-otp/four-digits").then((m) => ({
+      default: hydrated("input-otp-four-digits", m.default),
+    }))
+  ),
+  "input-otp-loading": dynamic(() =>
+    import("./input-otp/loading").then((m) => ({
+      default: hydrated("input-otp-loading", m.default),
+    }))
+  ),
+  "input-otp-masked": dynamic(() =>
+    import("./input-otp/masked").then((m) => ({
+      default: hydrated("input-otp-masked", m.default),
+    }))
+  ),
+  "input-otp-placeholder": dynamic(() =>
+    import("./input-otp/placeholder").then((m) => ({
+      default: hydrated("input-otp-placeholder", m.default),
+    }))
+  ),
+  "input-otp-with-label": dynamic(() =>
+    import("./input-otp/with-label").then((m) => ({
+      default: hydrated("input-otp-with-label", m.default),
+    }))
+  ),
+  "input-otp-with-separator": dynamic(() =>
+    import("./input-otp/with-separator").then((m) => ({
+      default: hydrated("input-otp-with-separator", m.default),
+    }))
+  ),
+  "input-sizes": dynamic(() =>
+    import("./input/sizes").then((m) => ({
+      default: hydrated("input-sizes", m.default),
+    }))
+  ),
+  "input-types": dynamic(() =>
+    import("./input/types").then((m) => ({
+      default: hydrated("input-types", m.default),
+    }))
+  ),
+  "input-with-button": dynamic(() =>
+    import("./input/with-button").then((m) => ({
+      default: hydrated("input-with-button", m.default),
+    }))
+  ),
+  "input-with-error": dynamic(() =>
+    import("./input/with-error").then((m) => ({
+      default: hydrated("input-with-error", m.default),
+    }))
+  ),
+  "input-with-field": dynamic(() =>
+    import("./input/with-field").then((m) => ({
+      default: hydrated("input-with-field", m.default),
+    }))
+  ),
+  "input-with-helper-text": dynamic(() =>
+    import("./input/with-helper-text").then((m) => ({
+      default: hydrated("input-with-helper-text", m.default),
+    }))
+  ),
+  "input-with-icon": dynamic(() =>
+    import("./input/with-icon").then((m) => ({
+      default: hydrated("input-with-icon", m.default),
+    }))
+  ),
+  "input-with-label": dynamic(() =>
+    import("./input/with-label").then((m) => ({
+      default: hydrated("input-with-label", m.default),
+    }))
+  ),
+  "input-with-password-toggle": dynamic(() =>
+    import("./input/with-password-toggle").then((m) => ({
+      default: hydrated("input-with-password-toggle", m.default),
+    }))
+  ),
+  "input-with-prefix": dynamic(() =>
+    import("./input/with-prefix").then((m) => ({
+      default: hydrated("input-with-prefix", m.default),
+    }))
+  ),
+  "item-activity-feed": dynamic(() =>
+    import("./item/activity-feed").then((m) => ({
+      default: hydrated("item-activity-feed", m.default),
+    }))
+  ),
+  "item-default": dynamic(() =>
+    import("./item/default").then((m) => ({
+      default: hydrated("item-default", m.default),
+    }))
+  ),
+  "item-group": dynamic(() =>
+    import("./item/group").then((m) => ({
+      default: hydrated("item-group", m.default),
+    }))
+  ),
+  "item-link": dynamic(() =>
+    import("./item/link").then((m) => ({
+      default: hydrated("item-link", m.default),
+    }))
+  ),
+  "item-notification-list": dynamic(() =>
+    import("./item/notification-list").then((m) => ({
+      default: hydrated("item-notification-list", m.default),
+    }))
+  ),
+  "item-settings-list": dynamic(() =>
+    import("./item/settings-list").then((m) => ({
+      default: hydrated("item-settings-list", m.default),
+    }))
+  ),
+  "item-sizes": dynamic(() =>
+    import("./item/sizes").then((m) => ({
+      default: hydrated("item-sizes", m.default),
+    }))
+  ),
+  "item-with-actions": dynamic(() =>
+    import("./item/with-actions").then((m) => ({
+      default: hydrated("item-with-actions", m.default),
+    }))
+  ),
+  "item-with-avatar": dynamic(() =>
+    import("./item/with-avatar").then((m) => ({
+      default: hydrated("item-with-avatar", m.default),
+    }))
+  ),
+  "item-with-description": dynamic(() =>
+    import("./item/with-description").then((m) => ({
+      default: hydrated("item-with-description", m.default),
+    }))
+  ),
+  "item-with-footer": dynamic(() =>
+    import("./item/with-footer").then((m) => ({
+      default: hydrated("item-with-footer", m.default),
+    }))
+  ),
+  "item-with-icon": dynamic(() =>
+    import("./item/with-icon").then((m) => ({
+      default: hydrated("item-with-icon", m.default),
+    }))
+  ),
+  "item-with-image": dynamic(() =>
+    import("./item/with-image").then((m) => ({
+      default: hydrated("item-with-image", m.default),
+    }))
+  ),
+  "item-with-separator": dynamic(() =>
+    import("./item/with-separator").then((m) => ({
+      default: hydrated("item-with-separator", m.default),
+    }))
+  ),
+  "kbd-common-shortcuts": dynamic(() =>
+    import("./kbd/common-shortcuts").then((m) => ({
+      default: hydrated("kbd-common-shortcuts", m.default),
+    }))
+  ),
+  "kbd-default": dynamic(() =>
+    import("./kbd/default").then((m) => ({
+      default: hydrated("kbd-default", m.default),
+    }))
+  ),
+  "kbd-function-keys": dynamic(() =>
+    import("./kbd/function-keys").then((m) => ({
+      default: hydrated("kbd-function-keys", m.default),
+    }))
+  ),
+  "kbd-group": dynamic(() =>
+    import("./kbd/group").then((m) => ({
+      default: hydrated("kbd-group", m.default),
+    }))
+  ),
+  "kbd-modifier-keys": dynamic(() =>
+    import("./kbd/modifier-keys").then((m) => ({
+      default: hydrated("kbd-modifier-keys", m.default),
+    }))
+  ),
+  "kbd-special-keys": dynamic(() =>
+    import("./kbd/special-keys").then((m) => ({
+      default: hydrated("kbd-special-keys", m.default),
+    }))
+  ),
+  "label-default": dynamic(() =>
+    import("./label/default").then((m) => ({
+      default: hydrated("label-default", m.default),
+    }))
+  ),
+  "label-required": dynamic(() =>
+    import("./label/required").then((m) => ({
+      default: hydrated("label-required", m.default),
+    }))
+  ),
+  "label-with-description": dynamic(() =>
+    import("./label/with-description").then((m) => ({
+      default: hydrated("label-with-description", m.default),
+    }))
+  ),
+  "modal-confirmation": dynamic(() =>
+    import("./modal/confirmation").then((m) => ({
+      default: hydrated("modal-confirmation", m.default),
+    }))
+  ),
+  "modal-controlled": dynamic(() =>
+    import("./modal/controlled").then((m) => ({
+      default: hydrated("modal-controlled", m.default),
+    }))
+  ),
+  "modal-default": dynamic(() =>
+    import("./modal/default").then((m) => ({
+      default: hydrated("modal-default", m.default),
+    }))
+  ),
+  "modal-long-content": dynamic(() =>
+    import("./modal/long-content").then((m) => ({
+      default: hydrated("modal-long-content", m.default),
+    }))
+  ),
+  "modal-multi-step": dynamic(() =>
+    import("./modal/multi-step").then((m) => ({
+      default: hydrated("modal-multi-step", m.default),
+    }))
+  ),
+  "modal-nested": dynamic(() =>
+    import("./modal/nested").then((m) => ({
+      default: hydrated("modal-nested", m.default),
+    }))
+  ),
+  "modal-scrollable": dynamic(() =>
+    import("./modal/scrollable").then((m) => ({
+      default: hydrated("modal-scrollable", m.default),
+    }))
+  ),
+  "modal-sign-up-form": dynamic(() =>
+    import("./modal/sign-up-form").then((m) => ({
+      default: hydrated("modal-sign-up-form", m.default),
+    }))
+  ),
+  "modal-sizes": dynamic(() =>
+    import("./modal/sizes").then((m) => ({
+      default: hydrated("modal-sizes", m.default),
+    }))
+  ),
+  "modal-sticky-footer": dynamic(() =>
+    import("./modal/sticky-footer").then((m) => ({
+      default: hydrated("modal-sticky-footer", m.default),
+    }))
+  ),
+  "native-select-default": dynamic(() =>
+    import("./native-select/default").then((m) => ({
+      default: hydrated("native-select-default", m.default),
+    }))
+  ),
+  "native-select-disabled": dynamic(() =>
+    import("./native-select/disabled").then((m) => ({
+      default: hydrated("native-select-disabled", m.default),
+    }))
+  ),
+  "native-select-form-example": dynamic(() =>
+    import("./native-select/form-example").then((m) => ({
+      default: hydrated("native-select-form-example", m.default),
+    }))
+  ),
+  "native-select-groups": dynamic(() =>
+    import("./native-select/groups").then((m) => ({
+      default: hydrated("native-select-groups", m.default),
+    }))
+  ),
+  "native-select-invalid": dynamic(() =>
+    import("./native-select/invalid").then((m) => ({
+      default: hydrated("native-select-invalid", m.default),
+    }))
+  ),
+  "native-select-sizes": dynamic(() =>
+    import("./native-select/sizes").then((m) => ({
+      default: hydrated("native-select-sizes", m.default),
+    }))
+  ),
+  "pagination-default": dynamic(() =>
+    import("./pagination/default").then((m) => ({
+      default: hydrated("pagination-default", m.default),
+    }))
+  ),
+  "pagination-simple": dynamic(() =>
+    import("./pagination/simple").then((m) => ({
+      default: hydrated("pagination-simple", m.default),
+    }))
+  ),
+  "popover-alignments": dynamic(() =>
+    import("./popover/alignments").then((m) => ({
+      default: hydrated("popover-alignments", m.default),
+    }))
+  ),
+  "popover-default": dynamic(() =>
+    import("./popover/default").then((m) => ({
+      default: hydrated("popover-default", m.default),
+    }))
+  ),
+  "popover-open-on-hover": dynamic(() =>
+    import("./popover/open-on-hover").then((m) => ({
+      default: hydrated("popover-open-on-hover", m.default),
+    }))
+  ),
+  "popover-with-arrow": dynamic(() =>
+    import("./popover/with-arrow").then((m) => ({
+      default: hydrated("popover-with-arrow", m.default),
+    }))
+  ),
+  "popover-with-form": dynamic(() =>
+    import("./popover/with-form").then((m) => ({
+      default: hydrated("popover-with-form", m.default),
+    }))
+  ),
+  "progress-animated": dynamic(() =>
+    import("./progress/animated").then((m) => ({
+      default: hydrated("progress-animated", m.default),
+    }))
+  ),
+  "progress-colors": dynamic(() =>
+    import("./progress/colors").then((m) => ({
+      default: hydrated("progress-colors", m.default),
+    }))
+  ),
+  "progress-complete": dynamic(() =>
+    import("./progress/complete").then((m) => ({
+      default: hydrated("progress-complete", m.default),
+    }))
+  ),
+  "progress-controlled": dynamic(() =>
+    import("./progress/controlled").then((m) => ({
+      default: hydrated("progress-controlled", m.default),
+    }))
+  ),
+  "progress-default": dynamic(() =>
+    import("./progress/default").then((m) => ({
+      default: hydrated("progress-default", m.default),
+    }))
+  ),
+  "progress-indeterminate": dynamic(() =>
+    import("./progress/indeterminate").then((m) => ({
+      default: hydrated("progress-indeterminate", m.default),
+    }))
+  ),
+  "progress-with-label": dynamic(() =>
+    import("./progress/with-label").then((m) => ({
+      default: hydrated("progress-with-label", m.default),
+    }))
+  ),
+  "radio-group-choice-card": dynamic(() =>
+    import("./radio-group/choice-card").then((m) => ({
+      default: hydrated("radio-group-choice-card", m.default),
+    }))
+  ),
+  "radio-group-default": dynamic(() =>
+    import("./radio-group/default").then((m) => ({
+      default: hydrated("radio-group-default", m.default),
+    }))
+  ),
+  "radio-group-disabled": dynamic(() =>
+    import("./radio-group/disabled").then((m) => ({
+      default: hydrated("radio-group-disabled", m.default),
+    }))
+  ),
+  "radio-group-fieldset": dynamic(() =>
+    import("./radio-group/fieldset").then((m) => ({
+      default: hydrated("radio-group-fieldset", m.default),
+    }))
+  ),
+  "radio-group-horizontal": dynamic(() =>
+    import("./radio-group/horizontal").then((m) => ({
+      default: hydrated("radio-group-horizontal", m.default),
+    }))
+  ),
+  "radio-group-with-description": dynamic(() =>
+    import("./radio-group/with-description").then((m) => ({
+      default: hydrated("radio-group-with-description", m.default),
+    }))
+  ),
+  "resizable-collapsible": dynamic(() =>
+    import("./resizable/collapsible").then((m) => ({
+      default: hydrated("resizable-collapsible", m.default),
+    }))
+  ),
+  "resizable-complex-layout": dynamic(() =>
+    import("./resizable/complex-layout").then((m) => ({
+      default: hydrated("resizable-complex-layout", m.default),
+    }))
+  ),
+  "resizable-default": dynamic(() =>
+    import("./resizable/default").then((m) => ({
+      default: hydrated("resizable-default", m.default),
+    }))
+  ),
+  "resizable-nested": dynamic(() =>
+    import("./resizable/nested").then((m) => ({
+      default: hydrated("resizable-nested", m.default),
+    }))
+  ),
+  "resizable-vertical": dynamic(() =>
+    import("./resizable/vertical").then((m) => ({
+      default: hydrated("resizable-vertical", m.default),
+    }))
+  ),
+  "resizable-with-handle": dynamic(() =>
+    import("./resizable/with-handle").then((m) => ({
+      default: hydrated("resizable-with-handle", m.default),
+    }))
+  ),
+  "select-controlled": dynamic(() =>
+    import("./select/controlled").then((m) => ({
+      default: hydrated("select-controlled", m.default),
+    }))
+  ),
+  "select-default": dynamic(() =>
+    import("./select/default").then((m) => ({
+      default: hydrated("select-default", m.default),
+    }))
+  ),
+  "select-disabled": dynamic(() =>
+    import("./select/disabled").then((m) => ({
+      default: hydrated("select-disabled", m.default),
+    }))
+  ),
+  "select-form-example": dynamic(() =>
+    import("./select/form-example").then((m) => ({
+      default: hydrated("select-form-example", m.default),
+    }))
+  ),
+  "select-groups": dynamic(() =>
+    import("./select/groups").then((m) => ({
+      default: hydrated("select-groups", m.default),
+    }))
+  ),
+  "select-multiple": dynamic(() =>
+    import("./select/multiple").then((m) => ({
+      default: hydrated("select-multiple", m.default),
+    }))
+  ),
+  "select-scrollable": dynamic(() =>
+    import("./select/scrollable").then((m) => ({
+      default: hydrated("select-scrollable", m.default),
+    }))
+  ),
+  "select-sizes": dynamic(() =>
+    import("./select/sizes").then((m) => ({
+      default: hydrated("select-sizes", m.default),
+    }))
+  ),
+  "select-with-icons": dynamic(() =>
+    import("./select/with-icons").then((m) => ({
+      default: hydrated("select-with-icons", m.default),
+    }))
+  ),
+  "selection-bar-default": dynamic(() =>
+    import("./selection-bar/default").then((m) => ({
+      default: hydrated("selection-bar-default", m.default),
+    }))
+  ),
+  "selection-bar-tones": dynamic(() =>
+    import("./selection-bar/tones").then((m) => ({
+      default: hydrated("selection-bar-tones", m.default),
+    }))
+  ),
+  "selection-bar-with-bulk-actions": dynamic(() =>
+    import("./selection-bar/with-bulk-actions").then((m) => ({
+      default: hydrated("selection-bar-with-bulk-actions", m.default),
+    }))
+  ),
+  "separator-default": dynamic(() =>
+    import("./separator/default").then((m) => ({
+      default: hydrated("separator-default", m.default),
+    }))
+  ),
+  "separator-vertical": dynamic(() =>
+    import("./separator/vertical").then((m) => ({
+      default: hydrated("separator-vertical", m.default),
+    }))
+  ),
+  "separator-with-content": dynamic(() =>
+    import("./separator/with-content").then((m) => ({
+      default: hydrated("separator-with-content", m.default),
+    }))
+  ),
+  "skeleton-card": dynamic(() =>
+    import("./skeleton/card").then((m) => ({
+      default: hydrated("skeleton-card", m.default),
+    }))
+  ),
+  "skeleton-default": dynamic(() =>
+    import("./skeleton/default").then((m) => ({
+      default: hydrated("skeleton-default", m.default),
+    }))
+  ),
+  "skeleton-form": dynamic(() =>
+    import("./skeleton/form").then((m) => ({
+      default: hydrated("skeleton-form", m.default),
+    }))
+  ),
+  "skeleton-no-animation": dynamic(() =>
+    import("./skeleton/no-animation").then((m) => ({
+      default: hydrated("skeleton-no-animation", m.default),
+    }))
+  ),
+  "skeleton-shimmer": dynamic(() =>
+    import("./skeleton/shimmer").then((m) => ({
+      default: hydrated("skeleton-shimmer", m.default),
+    }))
+  ),
+  "skeleton-table": dynamic(() =>
+    import("./skeleton/table").then((m) => ({
+      default: hydrated("skeleton-table", m.default),
+    }))
+  ),
+  "skeleton-text": dynamic(() =>
+    import("./skeleton/text").then((m) => ({
+      default: hydrated("skeleton-text", m.default),
+    }))
+  ),
+  "slider-controlled": dynamic(() =>
+    import("./slider/controlled").then((m) => ({
+      default: hydrated("slider-controlled", m.default),
+    }))
+  ),
+  "slider-custom-step": dynamic(() =>
+    import("./slider/custom-step").then((m) => ({
+      default: hydrated("slider-custom-step", m.default),
+    }))
+  ),
+  "slider-default": dynamic(() =>
+    import("./slider/default").then((m) => ({
+      default: hydrated("slider-default", m.default),
+    }))
+  ),
+  "slider-disabled": dynamic(() =>
+    import("./slider/disabled").then((m) => ({
+      default: hydrated("slider-disabled", m.default),
+    }))
+  ),
+  "slider-range": dynamic(() =>
+    import("./slider/range").then((m) => ({
+      default: hydrated("slider-range", m.default),
+    }))
+  ),
+  "slider-with-label": dynamic(() =>
+    import("./slider/with-label").then((m) => ({
+      default: hydrated("slider-with-label", m.default),
+    }))
+  ),
+  "spinner-default": dynamic(() =>
+    import("./spinner/default").then((m) => ({
+      default: hydrated("spinner-default", m.default),
+    }))
+  ),
+  "spinner-sizes": dynamic(() =>
+    import("./spinner/sizes").then((m) => ({
+      default: hydrated("spinner-sizes", m.default),
+    }))
+  ),
+  "spinner-with-badge": dynamic(() =>
+    import("./spinner/with-badge").then((m) => ({
+      default: hydrated("spinner-with-badge", m.default),
+    }))
+  ),
+  "spinner-with-button": dynamic(() =>
+    import("./spinner/with-button").then((m) => ({
+      default: hydrated("spinner-with-button", m.default),
+    }))
+  ),
+  "spinner-with-empty": dynamic(() =>
+    import("./spinner/with-empty").then((m) => ({
+      default: hydrated("spinner-with-empty", m.default),
+    }))
+  ),
+  "stat-default": dynamic(() =>
+    import("./stat/default").then((m) => ({
+      default: hydrated("stat-default", m.default),
+    }))
+  ),
+  "stat-direction": dynamic(() =>
+    import("./stat/direction").then((m) => ({
+      default: hydrated("stat-direction", m.default),
+    }))
+  ),
+  "stat-kpi-row": dynamic(() =>
+    import("./stat/kpi-row").then((m) => ({
+      default: hydrated("stat-kpi-row", m.default),
+    }))
+  ),
+  "stepper-controlled": dynamic(() =>
+    import("./stepper/controlled").then((m) => ({
+      default: hydrated("stepper-controlled", m.default),
+    }))
+  ),
+  "stepper-default": dynamic(() =>
+    import("./stepper/default").then((m) => ({
+      default: hydrated("stepper-default", m.default),
+    }))
+  ),
+  "stepper-with-indicator": dynamic(() =>
+    import("./stepper/with-indicator").then((m) => ({
+      default: hydrated("stepper-with-indicator", m.default),
+    }))
+  ),
+  "switch-choice-card": dynamic(() =>
+    import("./switch/choice-card").then((m) => ({
+      default: hydrated("switch-choice-card", m.default),
+    }))
+  ),
+  "switch-default": dynamic(() =>
+    import("./switch/default").then((m) => ({
+      default: hydrated("switch-default", m.default),
+    }))
+  ),
+  "switch-disabled": dynamic(() =>
+    import("./switch/disabled").then((m) => ({
+      default: hydrated("switch-disabled", m.default),
+    }))
+  ),
+  "switch-sizes": dynamic(() =>
+    import("./switch/sizes").then((m) => ({
+      default: hydrated("switch-sizes", m.default),
+    }))
+  ),
+  "switch-with-description": dynamic(() =>
+    import("./switch/with-description").then((m) => ({
+      default: hydrated("switch-with-description", m.default),
+    }))
+  ),
+  "table-actions": dynamic(() =>
+    import("./table/actions").then((m) => ({
+      default: hydrated("table-actions", m.default),
+    }))
+  ),
+  "table-card": dynamic(() =>
+    import("./table/card").then((m) => ({
+      default: hydrated("table-card", m.default),
+    }))
+  ),
+  "table-compact": dynamic(() =>
+    import("./table/compact").then((m) => ({
+      default: hydrated("table-compact", m.default),
+    }))
+  ),
+  "table-default": dynamic(() =>
+    import("./table/default").then((m) => ({
+      default: hydrated("table-default", m.default),
+    }))
+  ),
+  "table-empty-state": dynamic(() =>
+    import("./table/empty-state").then((m) => ({
+      default: hydrated("table-empty-state", m.default),
+    }))
+  ),
+  "table-footer": dynamic(() =>
+    import("./table/footer").then((m) => ({
+      default: hydrated("table-footer", m.default),
+    }))
+  ),
+  "table-hoverable": dynamic(() =>
+    import("./table/hoverable").then((m) => ({
+      default: hydrated("table-hoverable", m.default),
+    }))
+  ),
+  "table-pagination-composed": dynamic(() =>
+    import("./table-pagination/composed").then((m) => ({
+      default: hydrated("table-pagination-composed", m.default),
+    }))
+  ),
+  "table-pagination-default": dynamic(() =>
+    import("./table-pagination/default").then((m) => ({
+      default: hydrated("table-pagination-default", m.default),
+    }))
+  ),
+  "table-selected-rows": dynamic(() =>
+    import("./table/selected-rows").then((m) => ({
+      default: hydrated("table-selected-rows", m.default),
+    }))
+  ),
+  "table-sortable": dynamic(() =>
+    import("./table/sortable").then((m) => ({
+      default: hydrated("table-sortable", m.default),
+    }))
+  ),
+  "table-sticky-header": dynamic(() =>
+    import("./table/sticky-header").then((m) => ({
+      default: hydrated("table-sticky-header", m.default),
+    }))
+  ),
+  "table-striped": dynamic(() =>
+    import("./table/striped").then((m) => ({
+      default: hydrated("table-striped", m.default),
+    }))
+  ),
+  "table-with-badges": dynamic(() =>
+    import("./table/with-badges").then((m) => ({
+      default: hydrated("table-with-badges", m.default),
+    }))
+  ),
+  "table-with-pagination": dynamic(() =>
+    import("./table/with-pagination").then((m) => ({
+      default: hydrated("table-with-pagination", m.default),
+    }))
+  ),
+  "tabs-animated-indicator": dynamic(() =>
+    import("./tabs/animated-indicator").then((m) => ({
+      default: hydrated("tabs-animated-indicator", m.default),
+    }))
+  ),
+  "tabs-default": dynamic(() =>
+    import("./tabs/default").then((m) => ({
+      default: hydrated("tabs-default", m.default),
+    }))
+  ),
+  "tabs-disabled": dynamic(() =>
+    import("./tabs/disabled").then((m) => ({
+      default: hydrated("tabs-disabled", m.default),
+    }))
+  ),
+  "tabs-line": dynamic(() =>
+    import("./tabs/line").then((m) => ({
+      default: hydrated("tabs-line", m.default),
+    }))
+  ),
+  "tabs-line-vertical": dynamic(() =>
+    import("./tabs/line-vertical").then((m) => ({
+      default: hydrated("tabs-line-vertical", m.default),
+    }))
+  ),
+  "tabs-morphing": dynamic(() =>
+    import("./tabs/morphing").then((m) => ({
+      default: hydrated("tabs-morphing", m.default),
+    }))
+  ),
+  "tabs-morphing-line": dynamic(() =>
+    import("./tabs/morphing-line").then((m) => ({
+      default: hydrated("tabs-morphing-line", m.default),
+    }))
+  ),
+  "tabs-pill": dynamic(() =>
+    import("./tabs/pill").then((m) => ({
+      default: hydrated("tabs-pill", m.default),
+    }))
+  ),
+  "tabs-scrollable": dynamic(() =>
+    import("./tabs/scrollable").then((m) => ({
+      default: hydrated("tabs-scrollable", m.default),
+    }))
+  ),
+  "tabs-vertical": dynamic(() =>
+    import("./tabs/vertical").then((m) => ({
+      default: hydrated("tabs-vertical", m.default),
+    }))
+  ),
+  "tabs-with-icons": dynamic(() =>
+    import("./tabs/with-icons").then((m) => ({
+      default: hydrated("tabs-with-icons", m.default),
+    }))
+  ),
+  "tag-default": dynamic(() =>
+    import("./tag/default").then((m) => ({
+      default: hydrated("tag-default", m.default),
+    }))
+  ),
+  "tag-disabled": dynamic(() =>
+    import("./tag/disabled").then((m) => ({
+      default: hydrated("tag-disabled", m.default),
+    }))
+  ),
+  "tag-group-controlled": dynamic(() =>
+    import("./tag-group/controlled").then((m) => ({
+      default: hydrated("tag-group-controlled", m.default),
+    }))
+  ),
+  "tag-group-default": dynamic(() =>
+    import("./tag-group/default").then((m) => ({
+      default: hydrated("tag-group-default", m.default),
+    }))
+  ),
+  "tag-group-disabled": dynamic(() =>
+    import("./tag-group/disabled").then((m) => ({
+      default: hydrated("tag-group-disabled", m.default),
+    }))
+  ),
+  "tag-group-removable": dynamic(() =>
+    import("./tag-group/removable").then((m) => ({
+      default: hydrated("tag-group-removable", m.default),
+    }))
+  ),
+  "tag-group-single-selection": dynamic(() =>
+    import("./tag-group/single-selection").then((m) => ({
+      default: hydrated("tag-group-single-selection", m.default),
+    }))
+  ),
+  "tag-group-with-avatars": dynamic(() =>
+    import("./tag-group/with-avatars").then((m) => ({
+      default: hydrated("tag-group-with-avatars", m.default),
+    }))
+  ),
+  "tag-group-with-icons": dynamic(() =>
+    import("./tag-group/with-icons").then((m) => ({
+      default: hydrated("tag-group-with-icons", m.default),
+    }))
+  ),
+  "tag-states": dynamic(() =>
+    import("./tag/states").then((m) => ({
+      default: hydrated("tag-states", m.default),
+    }))
+  ),
+  "tag-with-icon": dynamic(() =>
+    import("./tag/with-icon").then((m) => ({
+      default: hydrated("tag-with-icon", m.default),
+    }))
+  ),
+  "tag-with-remove": dynamic(() =>
+    import("./tag/with-remove").then((m) => ({
+      default: hydrated("tag-with-remove", m.default),
+    }))
+  ),
+  "textarea-character-count": dynamic(() =>
+    import("./textarea/character-count").then((m) => ({
+      default: hydrated("textarea-character-count", m.default),
+    }))
+  ),
+  "textarea-default": dynamic(() =>
+    import("./textarea/default").then((m) => ({
+      default: hydrated("textarea-default", m.default),
+    }))
+  ),
+  "textarea-disabled": dynamic(() =>
+    import("./textarea/disabled").then((m) => ({
+      default: hydrated("textarea-disabled", m.default),
+    }))
+  ),
+  "textarea-with-error": dynamic(() =>
+    import("./textarea/with-error").then((m) => ({
+      default: hydrated("textarea-with-error", m.default),
+    }))
+  ),
+  "textarea-with-field": dynamic(() =>
+    import("./textarea/with-field").then((m) => ({
+      default: hydrated("textarea-with-field", m.default),
+    }))
+  ),
+  "toast-custom": dynamic(() =>
+    import("./toast/custom").then((m) => ({
+      default: hydrated("toast-custom", m.default),
+    }))
+  ),
+  "toast-default": dynamic(() =>
+    import("./toast/default").then((m) => ({
+      default: hydrated("toast-default", m.default),
+    }))
+  ),
+  "toast-duration": dynamic(() =>
+    import("./toast/duration").then((m) => ({
+      default: hydrated("toast-duration", m.default),
+    }))
+  ),
+  "toast-position": dynamic(() =>
+    import("./toast/position").then((m) => ({
+      default: hydrated("toast-position", m.default),
+    }))
+  ),
+  "toast-promise": dynamic(() =>
+    import("./toast/promise").then((m) => ({
+      default: hydrated("toast-promise", m.default),
+    }))
+  ),
+  "toast-types": dynamic(() =>
+    import("./toast/types").then((m) => ({
+      default: hydrated("toast-types", m.default),
+    }))
+  ),
+  "toast-with-action": dynamic(() =>
+    import("./toast/with-action").then((m) => ({
+      default: hydrated("toast-with-action", m.default),
+    }))
+  ),
+  "toast-with-description": dynamic(() =>
+    import("./toast/with-description").then((m) => ({
+      default: hydrated("toast-with-description", m.default),
+    }))
+  ),
+  "toggle-default": dynamic(() =>
+    import("./toggle/default").then((m) => ({
+      default: hydrated("toggle-default", m.default),
+    }))
+  ),
+  "toggle-disabled": dynamic(() =>
+    import("./toggle/disabled").then((m) => ({
+      default: hydrated("toggle-disabled", m.default),
+    }))
+  ),
+  "toggle-group-custom": dynamic(() =>
+    import("./toggle-group/custom").then((m) => ({
+      default: hydrated("toggle-group-custom", m.default),
+    }))
+  ),
+  "toggle-group-default": dynamic(() =>
+    import("./toggle-group/default").then((m) => ({
+      default: hydrated("toggle-group-default", m.default),
+    }))
+  ),
+  "toggle-group-disabled": dynamic(() =>
+    import("./toggle-group/disabled").then((m) => ({
+      default: hydrated("toggle-group-disabled", m.default),
+    }))
+  ),
+  "toggle-group-outline": dynamic(() =>
+    import("./toggle-group/outline").then((m) => ({
+      default: hydrated("toggle-group-outline", m.default),
+    }))
+  ),
+  "toggle-group-secondary": dynamic(() =>
+    import("./toggle-group/secondary").then((m) => ({
+      default: hydrated("toggle-group-secondary", m.default),
+    }))
+  ),
+  "toggle-group-single": dynamic(() =>
+    import("./toggle-group/single").then((m) => ({
+      default: hydrated("toggle-group-single", m.default),
+    }))
+  ),
+  "toggle-group-sizes": dynamic(() =>
+    import("./toggle-group/sizes").then((m) => ({
+      default: hydrated("toggle-group-sizes", m.default),
+    }))
+  ),
+  "toggle-group-spacing": dynamic(() =>
+    import("./toggle-group/spacing").then((m) => ({
+      default: hydrated("toggle-group-spacing", m.default),
+    }))
+  ),
+  "toggle-group-text-labels": dynamic(() =>
+    import("./toggle-group/text-labels").then((m) => ({
+      default: hydrated("toggle-group-text-labels", m.default),
+    }))
+  ),
+  "toggle-group-vertical": dynamic(() =>
+    import("./toggle-group/vertical").then((m) => ({
+      default: hydrated("toggle-group-vertical", m.default),
+    }))
+  ),
+  "toggle-outline": dynamic(() =>
+    import("./toggle/outline").then((m) => ({
+      default: hydrated("toggle-outline", m.default),
+    }))
+  ),
+  "toggle-pressed": dynamic(() =>
+    import("./toggle/pressed").then((m) => ({
+      default: hydrated("toggle-pressed", m.default),
+    }))
+  ),
+  "toggle-secondary": dynamic(() =>
+    import("./toggle/secondary").then((m) => ({
+      default: hydrated("toggle-secondary", m.default),
+    }))
+  ),
+  "toggle-sizes": dynamic(() =>
+    import("./toggle/sizes").then((m) => ({
+      default: hydrated("toggle-sizes", m.default),
+    }))
+  ),
+  "toggle-with-text": dynamic(() =>
+    import("./toggle/with-text").then((m) => ({
+      default: hydrated("toggle-with-text", m.default),
+    }))
+  ),
+  "tooltip-default": dynamic(() =>
+    import("./tooltip/default").then((m) => ({
+      default: hydrated("tooltip-default", m.default),
+    }))
+  ),
+  "tooltip-disabled-button": dynamic(() =>
+    import("./tooltip/disabled-button").then((m) => ({
+      default: hydrated("tooltip-disabled-button", m.default),
+    }))
+  ),
+  "tooltip-group-delay": dynamic(() =>
+    import("./tooltip/group-delay").then((m) => ({
+      default: hydrated("tooltip-group-delay", m.default),
+    }))
+  ),
+  "tooltip-info-tip": dynamic(() =>
+    import("./tooltip/info-tip").then((m) => ({
+      default: hydrated("tooltip-info-tip", m.default),
+    }))
+  ),
+  "tooltip-sides": dynamic(() =>
+    import("./tooltip/sides").then((m) => ({
+      default: hydrated("tooltip-sides", m.default),
+    }))
+  ),
+  "tooltip-with-kbd": dynamic(() =>
+    import("./tooltip/with-kbd").then((m) => ({
+      default: hydrated("tooltip-with-kbd", m.default),
+    }))
+  ),
+  "typography-blockquote": dynamic(() =>
+    import("./typography/blockquote").then((m) => ({
+      default: hydrated("typography-blockquote", m.default),
+    }))
+  ),
+  "typography-default": dynamic(() =>
+    import("./typography/default").then((m) => ({
+      default: hydrated("typography-default", m.default),
+    }))
+  ),
+  "typography-h1": dynamic(() =>
+    import("./typography/h1").then((m) => ({
+      default: hydrated("typography-h1", m.default),
+    }))
+  ),
+  "typography-h2": dynamic(() =>
+    import("./typography/h2").then((m) => ({
+      default: hydrated("typography-h2", m.default),
+    }))
+  ),
+  "typography-h3": dynamic(() =>
+    import("./typography/h3").then((m) => ({
+      default: hydrated("typography-h3", m.default),
+    }))
+  ),
+  "typography-h4": dynamic(() =>
+    import("./typography/h4").then((m) => ({
+      default: hydrated("typography-h4", m.default),
+    }))
+  ),
+  "typography-inline-code": dynamic(() =>
+    import("./typography/inline-code").then((m) => ({
+      default: hydrated("typography-inline-code", m.default),
+    }))
+  ),
+  "typography-large": dynamic(() =>
+    import("./typography/large").then((m) => ({
+      default: hydrated("typography-large", m.default),
+    }))
+  ),
+  "typography-lead": dynamic(() =>
+    import("./typography/lead").then((m) => ({
+      default: hydrated("typography-lead", m.default),
+    }))
+  ),
+  "typography-list": dynamic(() =>
+    import("./typography/list").then((m) => ({
+      default: hydrated("typography-list", m.default),
+    }))
+  ),
+  "typography-muted": dynamic(() =>
+    import("./typography/muted").then((m) => ({
+      default: hydrated("typography-muted", m.default),
+    }))
+  ),
+  "typography-paragraph": dynamic(() =>
+    import("./typography/paragraph").then((m) => ({
+      default: hydrated("typography-paragraph", m.default),
+    }))
+  ),
+  "typography-small": dynamic(() =>
+    import("./typography/small").then((m) => ({
+      default: hydrated("typography-small", m.default),
+    }))
+  ),
 };
 
 export function hasDemo(name: string): boolean {
@@ -466,6 +2275,6 @@ export function hasDemo(name: string): boolean {
 }
 
 export function DemoLoader({ name }: { name: string }) {
-  const Demo = loaders[name];
+  const Demo = Object.hasOwn(loaders, name) ? loaders[name] : undefined;
   return Demo ? <Demo /> : null;
 }

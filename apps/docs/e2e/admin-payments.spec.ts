@@ -1,5 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 
+import { gotoPreview } from "./preview";
+
 /**
  * The payments filter pattern: self-describing pills, added on demand.
  *
@@ -40,7 +42,7 @@ function pills(page: Page): Promise<string[]> {
 }
 
 async function openPayments(page: Page) {
-  await page.goto("/preview/block-admin-01");
+  await gotoPreview(page, "block-admin-01");
   const payments = page.getByRole("button", { name: "Payments" });
   if (await payments.isVisible()) {
     await payments.click();

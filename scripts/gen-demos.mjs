@@ -50,13 +50,38 @@ function renderManifest(entries) {
 function renderLoader(entries) {
   const lines = entries.map(
     (e) =>
-      `  "${e.key}": dynamic(() => import("./${withoutExtension(e.file)}")),`
+      `  "${e.key}": dynamic(() =>
+    import("./${withoutExtension(e.file)}").then((m) => ({
+      default: hydrated("${e.key}", m.default),
+    }))
+  ),`
   );
   return `"use client";
 
 ${HEADER}
 import dynamic from "next/dynamic";
-import type { ComponentType } from "react";
+import { type ComponentType, useEffect } from "react";
+
+/**
+ * Wraps a demo so the document records when it has hydrated. The wrapper
+ * lives in the demo's own chunk, so its effect runs only after that chunk
+ * has loaded and React has attached the demo's handlers; a click before
+ * that moment is not reliably replayed. e2e/preview.ts waits for
+ * \`html[data-demo-hydrated="<name>"]\` before interacting with a preview.
+ */
+function hydrated<P extends object>(
+  name: string,
+  Component: ComponentType<P>
+): ComponentType<P> {
+  function Hydrated(props: P) {
+    useEffect(() => {
+      document.documentElement.setAttribute("data-demo-hydrated", name);
+    }, []);
+    return <Component {...props} />;
+  }
+  Hydrated.displayName = \`Hydrated(\${name})\`;
+  return Hydrated;
+}
 
 /**
  * One next/dynamic entry per demo. Because this is the only module that
@@ -72,7 +97,7 @@ export function hasDemo(name: string): boolean {
 }
 
 export function DemoLoader({ name }: { name: string }) {
-  const Demo = loaders[name];
+  const Demo = Object.hasOwn(loaders, name) ? loaders[name] : undefined;
   return Demo ? <Demo /> : null;
 }
 `;

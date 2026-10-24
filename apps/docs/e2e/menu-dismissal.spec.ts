@@ -1,5 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 
+import { gotoPreview } from "./preview";
+
 /**
  * A single-select menu must close when a value is picked.
  *
@@ -34,7 +36,7 @@ test.describe("admin-01 payment filters", () => {
    * `closeOnClick` asymmetry are pinned against the same table.
    */
   test.beforeEach(async ({ page }) => {
-    await page.goto("/preview/block-admin-01");
+    await gotoPreview(page, "block-admin-01");
     await page.getByRole("button", { name: "Payments" }).click();
     await expect(page.getByLabel("Search payments by email")).toBeVisible();
   });
@@ -97,7 +99,7 @@ test.describe("tickets-01 menus", () => {
   test("a single-select menu closes, and the next click lands", async ({
     page,
   }) => {
-    await page.goto("/preview/block-tickets-01");
+    await gotoPreview(page, "block-tickets-01");
 
     const trigger = page.getByRole("button", { name: TICKETS_TRIGGER }).first();
     await trigger.click();
@@ -109,7 +111,7 @@ test.describe("tickets-01 menus", () => {
   });
 
   test("the column menu stays open per item", async ({ page }) => {
-    await page.goto("/preview/block-tickets-01");
+    await gotoPreview(page, "block-tickets-01");
 
     await page.getByRole("button", { name: "Table options" }).click();
 

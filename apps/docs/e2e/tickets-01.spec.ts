@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { gotoPreview } from "./preview";
+
 const NEXT_PAGE = /next page/i;
 const ROW_ACTIONS = /^Actions for ticket/;
 
@@ -17,7 +19,7 @@ test.describe("tickets pagination footer", () => {
   test("counts the rows on screen, and leaves selection to the bar", async ({
     page,
   }) => {
-    await page.goto("/preview/block-tickets-01");
+    await gotoPreview(page, "block-tickets-01");
     const info = page.locator(INFO);
 
     await expect(info).toHaveText("Showing 1–10 of 20 tickets");
@@ -36,7 +38,7 @@ test.describe("tickets pagination footer", () => {
   test("reports the short last page, which a page counter cannot", async ({
     page,
   }) => {
-    await page.goto("/preview/block-tickets-01");
+    await gotoPreview(page, "block-tickets-01");
     const info = page.locator(INFO);
 
     await page.getByRole("button", { name: NEXT_PAGE }).first().click();
@@ -57,7 +59,7 @@ test.describe("tickets toolbar labels", () => {
   test("labels the filters, and leaves the menu name alone", async ({
     page,
   }) => {
-    await page.goto("/preview/block-tickets-01");
+    await gotoPreview(page, "block-tickets-01");
 
     const triggers = await page
       .locator('[data-slot="dropdown-menu-trigger"]')
@@ -85,7 +87,7 @@ test.describe("tickets toolbar labels", () => {
  */
 test.describe("tickets row actions", () => {
   test("are present without hovering, on every row", async ({ page }) => {
-    await page.goto("/preview/block-tickets-01");
+    await gotoPreview(page, "block-tickets-01");
 
     const triggers = page.getByRole("button", { name: ROW_ACTIONS });
     expect(await triggers.count()).toBe(10);
@@ -104,7 +106,7 @@ test.describe("tickets row actions", () => {
   });
 
   test("name the row they belong to", async ({ page }) => {
-    await page.goto("/preview/block-tickets-01");
+    await gotoPreview(page, "block-tickets-01");
 
     const names = await page
       .getByRole("button", { name: ROW_ACTIONS })
@@ -114,7 +116,7 @@ test.describe("tickets row actions", () => {
   });
 
   test("leave header, body and footer the same width", async ({ page }) => {
-    await page.goto("/preview/block-tickets-01");
+    await gotoPreview(page, "block-tickets-01");
 
     // A summary row one cell short of the header pulls every column after it
     // out of alignment, and the empty state's colSpan has to grow with it.

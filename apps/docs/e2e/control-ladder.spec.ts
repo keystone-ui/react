@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
-
 import { demoFiles } from "../demos/files";
+import { gotoPreview } from "./preview";
 
 /**
  * Controls sharing a row must share a height *and* a corner radius.
@@ -190,7 +190,7 @@ function mismatched(rows: Row[], dimension: "heights" | "radii"): string[] {
  * 40px controls.
  */
 async function openBlock(page: Page, name: string, section = "users") {
-  await page.goto(`/preview/${name}`);
+  await gotoPreview(page, name);
   if (name !== "block-admin-01") {
     return;
   }
@@ -327,7 +327,7 @@ test.describe("a joined ToggleGroup rounds its items like itself", () => {
   for (const size of ["sm", "default", "lg"] as const) {
     test(`size=${size}`, async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 1000 });
-      await page.goto("/preview/toggle-group-sizes");
+      await gotoPreview(page, "toggle-group-sizes");
 
       const group = page
         .locator('[data-slot="toggle-group"]')
