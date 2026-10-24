@@ -1,4 +1,7 @@
 import { createMDX } from "fumadocs-mdx/next";
+import type { NextConfig } from "next";
+
+import { securityHeaders } from "./lib/security-headers";
 
 /**
  * One year, in seconds. The only finite `revalidate` OpenNext's cache
@@ -9,8 +12,7 @@ import { createMDX } from "fumadocs-mdx/next";
  */
 const ONE_YEAR = 31_536_000;
 
-/** @type {import('next').NextConfig} */
-const config = {
+const config: NextConfig = {
   // The Cache Components model (Next 16.4 recommends it for every app and
   // it becomes the default in 17): caching is explicit via `use cache`, and
   // links prefetch one shared App Shell per route instead of a full page per
@@ -36,8 +38,11 @@ const config = {
     // load it. Run the `tsc` CLI instead.
     useTypeScriptCli: true,
   },
-  async redirects() {
-    return [
+  headers() {
+    return Promise.resolve(securityHeaders());
+  },
+  redirects() {
+    return Promise.resolve([
       {
         source: "/themes",
         destination: "/theme-builder",
@@ -83,15 +88,15 @@ const config = {
         destination: "/docs/agents/llms-txt",
         permanent: true,
       },
-    ];
+    ]);
   },
-  async rewrites() {
-    return [
+  rewrites() {
+    return Promise.resolve([
       {
         source: "/docs/:path*.mdx",
         destination: "/llms.mdx/docs/:path*",
       },
-    ];
+    ]);
   },
 };
 

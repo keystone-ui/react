@@ -16,7 +16,7 @@ const ONE_YEAR = 31_536_000;
 
 // A computed specifier keeps TypeScript (which has no declarations for the
 // .mjs config) out of the import; vitest resolves it at runtime.
-const CONFIG_URL = new URL("../next.config.mjs", import.meta.url).href;
+const CONFIG_URL = new URL("../next.config.ts", import.meta.url).href;
 
 describe("next.config", async () => {
   const { default: config } = await import(CONFIG_URL);

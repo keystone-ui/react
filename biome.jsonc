@@ -228,17 +228,6 @@
           }
         }
       }
-    },
-    {
-      // Next.js config requires async for redirects/rewrites
-      "includes": ["apps/docs/next.config.mjs"],
-      "linter": {
-        "rules": {
-          "suspicious": {
-            "useAwait": "off"
-          }
-        }
-      }
     }
   ]
 }

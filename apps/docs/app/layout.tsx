@@ -17,13 +17,28 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
+const DESCRIPTION =
+  "Beautiful, accessible React components built with Tailwind CSS v4 and Base UI.";
+
 export const metadata: Metadata = {
+  // Resolves relative Open Graph URLs (and the generated opengraph-image).
+  metadataBase: new URL("https://keystoneui.io"),
   title: {
     default: "Keystone UI",
     template: "%s | Keystone UI",
   },
-  description:
-    "Beautiful, accessible React components built with Tailwind CSS v4 and Base UI.",
+  description: DESCRIPTION,
+  // No title, description or url here: Next merges `openGraph`/`twitter`
+  // only when the current segment sets them, so a root value would pin every
+  // page's social card to the home page. Left unset, each card takes the
+  // page's own resolved title and description.
+  openGraph: {
+    type: "website",
+    siteName: "Keystone UI",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
