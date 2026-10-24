@@ -27,17 +27,16 @@ export const metadata: Metadata = {
     template: "%s | Keystone UI",
   },
   description: DESCRIPTION,
+  // No title, description or url here: Next merges `openGraph`/`twitter`
+  // only when the current segment sets them, so a root value would pin every
+  // page's social card to the home page. Left unset, each card takes the
+  // page's own resolved title and description.
   openGraph: {
     type: "website",
     siteName: "Keystone UI",
-    title: "Keystone UI",
-    description: DESCRIPTION,
-    url: "/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Keystone UI",
-    description: DESCRIPTION,
   },
 };
 
