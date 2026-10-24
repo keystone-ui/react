@@ -9,26 +9,47 @@ on:
 
 concurrency:
   group: deploy-docs-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  # A superseded preview can be dropped; a production deploy cannot, or the
+  # version that went live is the one the smoke test never ran against.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
-env:
-  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+permissions:
+  contents: read
+
+defaults:
+  run:
+    # `bash` sets -o pipefail. Without it, `wrangler deploy | tee` below
+    # reported tee's exit code, and a rejected deploy left the step green.
+    shell: bash
 
 jobs:
   deploy:
     name: Deploy Docs
-    if: github.event.action != 'closed'
+    # Forks and Dependabot pull requests receive no repository secrets, so
+    # this job would fail on authentication instead of deploying. Skip it
+    # there; ci.yml's workerd job still builds and smoke-tests the Worker for
+    # every PR. On push the job always runs: a Dependabot-driven push to main
+    # (`@dependabot merge`) gets no secrets either, and a red deploy is the
+    # right outcome, not a green skip that leaves production stale.
+    if: >-
+      github.event.action != 'closed' &&
+      (github.event_name == 'push' ||
+      (github.actor != 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository))
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # The preview-URL comment below.
+      pull-requests: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           # Resolve the newest 22.x instead of whatever the runner image cached,
@@ -55,6 +76,9 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: pnpm exec wrangler deploy
         working-directory: apps/docs
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       # CI's Playwright suite runs against `next start`, not the Workers
       # runtime, so a crash that only happens inside workerd ships green.
@@ -80,10 +104,13 @@ jobs:
           PREVIEW_URL=$(grep -oP 'https://[^\s]+\.workers\.dev' deploy-output.txt | head -1)
           echo "url=$PREVIEW_URL" >> "$GITHUB_OUTPUT"
         working-directory: apps/docs
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Comment preview URL on PR
         if: github.event_name == 'pull_request' && steps.preview.outputs.url
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           script: |
             const body = `**Docs Preview:** ${{ steps.preview.outputs.url }}`;
@@ -121,17 +148,23 @@ jobs:
 
   cleanup-preview:
     name: Cleanup Preview Worker
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.action == 'closed' &&
+      (github.actor != 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           # Resolve the newest 22.x instead of whatever the runner image cached,
@@ -147,3 +180,6 @@ jobs:
           WORKER_NAME="keystoneui-docs-preview-${{ github.event.pull_request.number }}"
           pnpm exec wrangler delete --name "$WORKER_NAME" --force || true
         working-directory: apps/docs
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
