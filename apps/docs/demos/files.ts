@@ -1,4 +1,4 @@
-import manifest from "./manifest.json";
+import manifest from "./manifest.json" with { type: "json" };
 
 /**
  * Demo key → source file, relative to this directory.
