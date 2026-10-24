@@ -35,6 +35,13 @@ describe("docsUrlFromFile", () => {
     expect(docsUrlFromFile("blocks/_block-template.mdx")).toBeNull();
     expect(docsUrlFromFile("components/meta.json")).toBeNull();
   });
+
+  it("accepts .md sources, which source.config.ts also collects", () => {
+    expect(docsUrlFromFile("components/notes.md")).toBe(
+      "/docs/components/notes"
+    );
+    expect(docsUrlFromFile("components/_draft.md")).toBeNull();
+  });
 });
 
 describe("isKnownPath", () => {
@@ -55,6 +62,16 @@ describe("isKnownPath", () => {
   it("accepts the .mdx mirror of a docs page and a trailing slash", () => {
     expect(isKnownPath("/docs/components/button.mdx", known)).toBe(true);
     expect(isKnownPath("/docs/components/button/", known)).toBe(true);
+  });
+
+  it("accepts percent-encoded forms of a known path, as Next routes them", () => {
+    expect(isKnownPath("/preview/button%2Ddefault", known)).toBe(true);
+    expect(isKnownPath("/docs/components/button%2Emdx", known)).toBe(true);
+    expect(isKnownPath("/blog/introducing%2Dkeystone-ui", known)).toBe(true);
+  });
+
+  it("treats a malformed escape as unknown instead of throwing", () => {
+    expect(isKnownPath("/docs/components/%E0%A4%A", known)).toBe(false);
   });
 
   it("rejects unknown params under the guarded prefixes", () => {
