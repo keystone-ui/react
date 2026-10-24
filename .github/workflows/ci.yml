@@ -70,7 +70,10 @@ jobs:
           # `git diff` ignores untracked files, so a new block's JSON that
           # the build just created would pass unless marked intent-to-add.
           git add --intent-to-add -- registry.json apps/docs/public/r
-          git diff --exit-code --stat -- registry.json apps/docs/public/r
+          if ! git diff --exit-code --stat -- registry.json apps/docs/public/r; then
+            echo "::error::registry.json or apps/docs/public/r is out of date; run pnpm registry:build and commit the result"
+            exit 1
+          fi
 
   docs-e2e:
     name: Docs Layout (Playwright)
@@ -205,8 +208,10 @@ jobs:
           SMOKE_ATTEMPTS: "10"
           SMOKE_DELAY_MS: "3000"
 
+      # Only when the Worker actually started: a failure before that has no
+      # log, and `cat` on a missing file would add a second red step.
       - name: Worker log
-        if: failure()
+        if: failure() && hashFiles('apps/docs/wrangler.log') != ''
         run: cat apps/docs/wrangler.log
 
   test:
