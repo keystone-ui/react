@@ -59,6 +59,7 @@ export function FilterTrigger({
       // `data-slot` here is silently discarded. This attribute is the one
       // thing that can identify a pill in the DOM.
       data-filter-pill=""
+      size="sm"
       variant="outline"
       {...props}
     >

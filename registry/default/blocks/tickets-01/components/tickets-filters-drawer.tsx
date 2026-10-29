@@ -85,7 +85,7 @@ export function TicketsFiltersDrawer({
       }}
       open={open}
     >
-      <DrawerTrigger render={<Button variant="outline" />}>
+      <DrawerTrigger render={<Button size="sm" variant="outline" />}>
         <FilterIcon className="size-4" />
         Filters
       </DrawerTrigger>

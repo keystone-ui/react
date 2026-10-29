@@ -88,7 +88,7 @@ export function PaymentFiltersDrawer({
     >
       {/* The count is on the trigger because the pills are hidden at this
           width — without it a filtered table gives no sign of being filtered. */}
-      <DrawerTrigger render={<Button variant="outline" />}>
+      <DrawerTrigger render={<Button size="sm" variant="outline" />}>
         <FilterIcon className="size-4" />
         Filters
         {activeCount > 0 && <Badge variant="secondary">{activeCount}</Badge>}

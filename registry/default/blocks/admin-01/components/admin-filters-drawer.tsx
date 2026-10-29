@@ -124,7 +124,7 @@ export function AdminFiltersDrawer({
           which counted the panel's filters while pills showed the rest. Sort
           lives in here too and is deliberately not counted: it is not a filter,
           and a badge that ticks up when you reorder a column is lying. */}
-      <DrawerTrigger render={<Button variant="outline" />}>
+      <DrawerTrigger render={<Button size="sm" variant="outline" />}>
         <FilterIcon className="size-4" />
         Filters
         {activeCount > 0 && <Badge variant="secondary">{activeCount}</Badge>}

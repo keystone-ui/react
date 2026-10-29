@@ -58,7 +58,7 @@ export function AdminPaymentsToolbar({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <InputGroup className="min-w-0 flex-1 sm:max-w-xs">
+      <InputGroup className="min-w-0 flex-1 sm:max-w-xs" size="sm">
         <InputGroupAddon align="inline-start">
           <SearchIcon />
         </InputGroupAddon>
@@ -91,6 +91,7 @@ export function AdminPaymentsToolbar({
           <Button
             className="text-muted-foreground hover:text-foreground"
             onClick={onClear}
+            size="sm"
             variant="ghost"
           >
             <XIcon />

@@ -72,7 +72,7 @@ export function AdminUsersToolbar({
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-row items-center gap-2 sm:gap-3">
-        <InputGroup className="min-w-0 flex-1 sm:max-w-xs">
+        <InputGroup className="min-w-0 flex-1 sm:max-w-xs" size="sm">
           <InputGroupAddon align="inline-start">
             <SearchIcon />
           </InputGroupAddon>
@@ -111,7 +111,9 @@ export function AdminUsersToolbar({
 
         <div className="hidden items-center gap-2 sm:flex">
           <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant="outline" />}>
+            <DropdownMenuTrigger
+              render={<Button size="sm" variant="outline" />}
+            >
               <ArrowUpDownIcon />
               <TriggerLabel>Sort</TriggerLabel>
               {sortKeyLabel(sort)}
@@ -193,8 +195,8 @@ export function AdminUsersToolbar({
             />
           ))}
           {/* `xs`, so it matches the 24px chips it sits among rather than the
-              40px controls above them. It is in the chip row, not the control
-              row, and the sweep in `e2e/control-heights.spec.ts` only compares
+              32px controls above them. It is in the chip row, not the control
+              row, and the sweep in `e2e/control-ladder.spec.ts` only compares
               controls that share a visual row. */}
           <Button
             className="text-muted-foreground hover:text-foreground"

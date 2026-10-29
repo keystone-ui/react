@@ -153,8 +153,9 @@ meant to change was identical to an unset control's.
   to — body, footer and caption together. Individual cells do not opt in. Two
   exceptions carry it legitimately: a `font-mono text-muted-foreground text-xs`
   id cell, and `Badge`, which ships `text-xs` itself.
-- **One visual row, one height tier.** Toolbar controls sit at 40px (`default`)
-  beside a 40px search field. Mixing `sm` (32px) with `default` in one row is
+- **One visual row, one height tier.** A data-table toolbar uses `size="sm"`
+  (32px) on every control, search field included, matching the 32px
+  `TablePagination` in the same card. Mixing `sm` with `default` in one row is
   the most common visual defect in a toolbar. See [styling.md](./styling.md).
 
 ## Sorting belongs in the column headers

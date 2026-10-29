@@ -337,7 +337,7 @@ export function AddFilterMenu({
     <DropdownMenu>
       {/* A lucide `Plus` rather than a literal "+": next to the `X` on Clear
           all, a text glyph would sit at a different weight and baseline. */}
-      <DropdownMenuTrigger render={<Button variant="ghost" />}>
+      <DropdownMenuTrigger render={<Button size="sm" variant="ghost" />}>
         <PlusIcon />
         Add filter
       </DropdownMenuTrigger>
