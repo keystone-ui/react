@@ -26,7 +26,8 @@ const MANIFEST = join(ROOT, "apps/docs/demos/manifest.json");
 const OUTPUT = join(ROOT, "apps/docs/lib/static-paths.json");
 
 const ROUTE_GROUP = /^\(.*\)$/;
-const MDX_EXT = /\.mdx$/;
+// Mirrors lib/known-paths.ts: fumadocs collects `**/*.{md,mdx}`.
+const MDX_EXT = /\.mdx?$/;
 
 function walk(dir) {
   return readdirSync(dir, { recursive: true, withFileTypes: true })
