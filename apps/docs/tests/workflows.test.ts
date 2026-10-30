@@ -35,6 +35,8 @@ const GITHUB_TOKEN = "secrets.GITHUB_TOKEN";
 
 interface Step {
   env?: Record<string, unknown>;
+  if?: string;
+  name?: string;
   run?: string;
   uses?: string;
   with?: Record<string, unknown>;
@@ -52,7 +54,10 @@ interface Workflow {
   defaults?: { run?: { shell?: string } };
   env?: Record<string, unknown>;
   jobs: Record<string, Job>;
-  on: Record<string, { branches?: unknown } | null>;
+  on: Record<
+    string,
+    { branches?: unknown; "branches-ignore"?: unknown; paths?: unknown } | null
+  >;
   permissions?: Record<string, string> | string;
 }
 
@@ -75,11 +80,20 @@ function mentionsSecret(value: unknown): boolean {
 }
 
 function stepsUsingRepositorySecrets(job: Job): Step[] {
+  // `run:` counts too: a secret passed on the command line needs the same
+  // guards as one bound through `env:` or `with:`.
   return (job.steps ?? []).filter((step) =>
-    JSON.stringify({ env: step.env, with: step.with })
+    JSON.stringify({ env: step.env, with: step.with, run: step.run })
       .replaceAll(GITHUB_TOKEN, "")
       .includes("secrets.")
   );
+}
+
+function findStep(file: string, stepName: string): Step | undefined {
+  const workflow = workflows.find((w) => w.file === file);
+  return Object.values(workflow?.doc.jobs ?? {})
+    .flatMap((job) => job.steps ?? [])
+    .find((step) => step.name === stepName);
 }
 
 describe("GitHub Actions workflows", () => {
@@ -162,7 +176,29 @@ describe("GitHub Actions workflows", () => {
         pullRequest?.branches,
         `${file} filters pull_request by branch`
       ).toBeUndefined();
+      // The other spellings of the same filter.
+      expect(
+        pullRequest?.["branches-ignore"],
+        `${file} filters pull_request by branches-ignore`
+      ).toBeUndefined();
+      expect(
+        pullRequest?.paths,
+        `${file} filters pull_request by paths`
+      ).toBeUndefined();
     }
+  });
+
+  it("tells a contributor how to fix registry drift", () => {
+    const drift = findStep("ci.yml", "Registry drift");
+    expect(drift?.run).toContain("::error::");
+    expect(drift?.run).toContain("pnpm registry:build");
+  });
+
+  it("prints the Worker log only when there is one", () => {
+    // A failure before `Start workerd` has no log; `cat` on a missing file
+    // would add a second red step for nothing.
+    const log = findStep("ci.yml", "Worker log");
+    expect(log?.if).toContain("hashFiles(");
   });
 
   it("skips jobs that need repository secrets for fork and Dependabot PRs", () => {
