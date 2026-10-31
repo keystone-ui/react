@@ -74,6 +74,15 @@ const LITERAL_URL_RE = /https:\/\/keystoneui\.io\/r\/([A-Za-z0-9._/-]+)\.json/g;
 const TEMPLATE_URL_RE = /\$\{\s*registryUrl\s*\}\/([A-Za-z0-9._/-]+)\.json/g;
 
 /**
+ * The namespaced form, once `@keystone` is configured in components.json:
+ *   npx shadcn add @keystone/themes/zinc
+ * `@keystoneui/react` never matches — the slash must follow `keystone`.
+ * Placeholders such as `@keystone/<name>` or `@keystone/{name}` don't match
+ * either, because the item must start with a name character.
+ */
+const NAMESPACED_RE = /@keystone\/([A-Za-z0-9][A-Za-z0-9._/-]*[A-Za-z0-9])/g;
+
+/**
  * Authoring templates use deliberately fake names (`component-name`,
  * `block-name-01`). Fumadocs and the repo's own linters treat `_`-prefixed
  * files as templates, so they are not user-facing instructions.
@@ -136,7 +145,7 @@ function collectReferences(): Reference[] {
       const content = readFileSync(file, "utf-8");
       const source = relative(REPO_ROOT, file).split(sep).join("/");
 
-      for (const re of [LITERAL_URL_RE, TEMPLATE_URL_RE]) {
+      for (const re of [LITERAL_URL_RE, TEMPLATE_URL_RE, NAMESPACED_RE]) {
         re.lastIndex = 0;
         let match = re.exec(content);
         while (match !== null) {
@@ -185,6 +194,15 @@ describe("registry link integrity", () => {
     ]) {
       expect(uniqueItems, `${item} is no longer referenced`).toContain(item);
     }
+  });
+
+  it("checks the namespaced @keystone/<item> form too", () => {
+    const namespaced = references.filter((r) =>
+      readFileSync(join(REPO_ROOT, r.source), "utf-8").includes(
+        `@keystone/${r.item}`
+      )
+    );
+    expect(namespaced.map((r) => r.item)).toContain("default");
   });
 
   it("resolves every referenced registry URL to a built file", () => {
