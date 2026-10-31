@@ -249,6 +249,7 @@ file rather than creating a new one, or the tokens will not reach the components
 | \`--destructive\` | \`oklch(0.577 0.245 27)\` | \`oklch(0.704 0.191 22)\` | Destructive actions, a metric that got worse |
 | \`--success\` | \`oklch(0.627 0.194 149)\` | \`oklch(0.723 0.19 150)\` | Positive status, a metric that improved |
 | \`--warning\` | \`oklch(0.769 0.188 70)\` | \`oklch(0.828 0.189 84)\` | Caution and threshold states only |
+| \`--info\` | \`oklch(0.546 0.245 263)\` | \`oklch(0.707 0.165 255)\` | Neutral notices (info Alert, info Toast) |
 | \`--muted\` | \`oklch(0.967 0.001 286)\` | \`oklch(0.274 0.006 286)\` | Subdued elements |
 | \`--accent\` | \`oklch(0.967 0.001 286)\` | \`oklch(0.274 0.006 286)\` | Highlights |
 | \`--background\` | \`oklch(1 0 0)\` | \`oklch(0.141 0.005 286)\` | Page background |

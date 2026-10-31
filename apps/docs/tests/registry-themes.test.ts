@@ -126,6 +126,8 @@ const STYLE_ONLY_TOKENS: readonly string[] = [
   "success-foreground",
   "warning",
   "warning-foreground",
+  "info",
+  "info-foreground",
   // Sidebar surface: aliases of theme tokens, so they follow the active theme
   // without each theme item restating them. Read by an imported shadcn
   // sidebar; keystone ships none of its own.

@@ -146,10 +146,10 @@ describe("status tones", () => {
   const MIN_ON_FILL = 4.5;
 
   it.each(MODES)(
-    "keeps success and warning readable on their fill in %s",
+    "keeps success, warning and info readable on their fill in %s",
     (mode) => {
       const failures: string[] = [];
-      for (const tone of ["success", "warning"]) {
+      for (const tone of ["success", "warning", "info"]) {
         const ratio = contrast(
           appTokens[mode][`${tone}-foreground`],
           appTokens[mode][tone]

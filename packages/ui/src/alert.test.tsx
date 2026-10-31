@@ -37,25 +37,25 @@ describe("Alert", () => {
   it("renders with success variant", () => {
     render(<Alert variant="success">Success alert</Alert>);
     const alert = screen.getByRole("alert");
-    expect(alert).toHaveClass("bg-green-500/15");
+    expect(alert).toHaveClass("bg-success/10");
   });
 
   it("renders with warning variant", () => {
     render(<Alert variant="warning">Warning alert</Alert>);
     const alert = screen.getByRole("alert");
-    expect(alert).toHaveClass("bg-yellow-500/15");
+    expect(alert).toHaveClass("bg-warning/10");
   });
 
   it("renders with error variant", () => {
     render(<Alert variant="error">Error alert</Alert>);
     const alert = screen.getByRole("alert");
-    expect(alert).toHaveClass("bg-red-500/15");
+    expect(alert).toHaveClass("bg-destructive/10");
   });
 
   it("renders with info variant", () => {
     render(<Alert variant="info">Info alert</Alert>);
     const alert = screen.getByRole("alert");
-    expect(alert).toHaveClass("bg-blue-500/15");
+    expect(alert).toHaveClass("bg-info/10");
   });
 
   it("forwards additional props", () => {

@@ -454,12 +454,16 @@ export const statusTokens = {
     "--warning": "oklch(0.769 0.188 70.08)",
     // Deliberately dark: near-white on amber-500 is ~1.9:1, a WCAG failure.
     "--warning-foreground": "oklch(0.279 0.077 45.635)",
+    "--info": "oklch(0.546 0.245 262.881)",
+    "--info-foreground": "oklch(0.97 0.014 254.604)",
   },
   dark: {
     "--success": "oklch(0.723 0.19 149.579)",
     "--success-foreground": "oklch(0.266 0.065 152.934)",
     "--warning": "oklch(0.828 0.189 84.429)",
     "--warning-foreground": "oklch(0.279 0.077 45.635)",
+    "--info": "oklch(0.707 0.165 254.624)",
+    "--info-foreground": "oklch(0.282 0.091 267.935)",
   },
 };
 

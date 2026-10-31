@@ -80,6 +80,17 @@ Picking a radio item now closes the menu, as Radix and shadcn do. Pass
 `xs` 24px · `sm` 32px · `default` 40px · `lg` 48px. If you used `size="lg"` to
 line a `ToggleGroup` up with a default `Button`, drop the prop.
 
+{/* changeset: status-tones-tokenized */}
+
+### Status Alerts use the status tokens
+
+`Alert`'s `success`, `warning`, `error` and `info` variants tint the surface
+and the icon from `--success`, `--warning`, `--destructive` and the new
+`--info`; the text stays neutral. If you matched the old `bg-green-500/15`
+classes in tests, match `bg-success/10` (and so on) instead. Add the `--info`
+token to your theme from [Customization](/docs/theming/customization) —
+without it, info falls back to the light-mode blue in dark mode.
+
 ### Popups and overlays
 
 - `PopoverContent` has no `max-height`; cap long content with `className`.

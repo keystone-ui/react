@@ -24,30 +24,17 @@ const alertVariants = cva(
       variant: {
         default:
           "border-border-muted bg-card text-card-foreground *:data-[slot=alert-description]:text-muted-foreground",
-        success: [
-          "bg-green-500/15 dark:bg-green-500/10",
-          "border-green-500/20 dark:border-green-500/15",
-          "text-green-700 dark:text-green-400",
-          "*:data-[slot=alert-description]:text-green-700/80 dark:*:data-[slot=alert-description]:text-green-400/80",
-        ].join(" "),
-        warning: [
-          "bg-yellow-500/15 dark:bg-yellow-500/10",
-          "border-yellow-500/20 dark:border-yellow-500/15",
-          "text-yellow-700 dark:text-yellow-300",
-          "*:data-[slot=alert-description]:text-yellow-700/80 dark:*:data-[slot=alert-description]:text-yellow-300/80",
-        ].join(" "),
-        error: [
-          "bg-red-500/15 dark:bg-red-500/10",
-          "border-red-500/20 dark:border-red-500/15",
-          "text-red-700 dark:text-red-400",
-          "*:data-[slot=alert-description]:text-red-700/80 dark:*:data-[slot=alert-description]:text-red-400/80",
-        ].join(" "),
-        info: [
-          "bg-blue-500/15 dark:bg-blue-500/10",
-          "border-blue-500/20 dark:border-blue-500/15",
-          "text-blue-700 dark:text-blue-400",
-          "*:data-[slot=alert-description]:text-blue-700/80 dark:*:data-[slot=alert-description]:text-blue-400/80",
-        ].join(" "),
+        // Status variants tint the surface and the icon from the status
+        // token; the text stays neutral. The tokens are tuned as fills, so
+        // `text-warning` on a tint would fall under 2:1 — the icon and border
+        // carry the signal, as Toast's do.
+        success:
+          "border-success/30 bg-success/10 text-card-foreground *:data-[slot=alert-description]:text-muted-foreground *:[svg]:text-success",
+        warning:
+          "border-warning/40 bg-warning/10 text-card-foreground *:data-[slot=alert-description]:text-muted-foreground *:[svg]:text-warning",
+        error:
+          "border-destructive/30 bg-destructive/10 text-card-foreground *:data-[slot=alert-description]:text-muted-foreground *:[svg]:text-destructive",
+        info: "border-info/30 bg-info/10 text-card-foreground *:data-[slot=alert-description]:text-muted-foreground *:[svg]:text-info",
       },
     },
     defaultVariants: {

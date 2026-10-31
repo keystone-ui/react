@@ -326,13 +326,10 @@ const TOAST_ICONS: Record<string, ReactNode> = {
 // ---------------------------------------------------------------------------
 
 const TYPE_CLASSES: Record<string, string> = {
-  success:
-    "[&_[data-slot=toast-icon]]:text-green-600 dark:[&_[data-slot=toast-icon]]:text-green-500",
-  error:
-    "[&_[data-slot=toast-icon]]:text-red-600 dark:[&_[data-slot=toast-icon]]:text-red-500",
-  warning:
-    "[&_[data-slot=toast-icon]]:text-yellow-600 dark:[&_[data-slot=toast-icon]]:text-yellow-500",
-  info: "[&_[data-slot=toast-icon]]:text-blue-600 dark:[&_[data-slot=toast-icon]]:text-blue-500",
+  success: "[&_[data-slot=toast-icon]]:text-success",
+  error: "[&_[data-slot=toast-icon]]:text-destructive",
+  warning: "[&_[data-slot=toast-icon]]:text-warning",
+  info: "[&_[data-slot=toast-icon]]:text-info",
 };
 
 // ---------------------------------------------------------------------------

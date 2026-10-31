@@ -70,6 +70,18 @@
    To use a different derivation, declare your own @theme inline after
    importing this file. Doing it deliberately is fine; the hazard was
    doing it by copy-paste. */
+/* --info is the one status colour registered here rather than in the app's
+   theme block. It arrived after 1.0.0-beta.8, when every installed theme had
+   already been copied without it, and a utility whose --color-* is missing is
+   simply not generated — the info Alert and Toast would lose their colour
+   with no error. The fallback is the light value; declare --info in :root and
+   .dark (as the style item and the docs' theme CSS do) to re-step it for dark.
+   Do not copy this registration into an app's @theme inline. */
+@theme inline {
+  --color-info: var(--info, oklch(0.546 0.245 262.881));
+  --color-info-foreground: var(--info-foreground, oklch(0.97 0.014 254.604));
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);

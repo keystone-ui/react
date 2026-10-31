@@ -198,10 +198,16 @@ const selectionBarButtonVariants = cva(
       tone: {
         default:
           "hover:bg-white/10 aria-expanded:bg-white/10 dark:aria-expanded:bg-black/8 dark:hover:bg-black/8",
+        // The bar is an inverted surface — dark on a light page, light on a
+        // dark one — so a status token tuned for the page reads wrong on it.
+        // Mixing it toward --background moves it the right way in both
+        // modes: lighter on the dark bar, darker on the light bar. Mixed in
+        // oklab, not oklch: white is `oklch(1 0 0)`, hue 0, so an oklch mix
+        // drags green's hue toward red and Export renders yellow.
         success:
-          "text-emerald-300 hover:bg-emerald-500/10 hover:text-emerald-200 dark:text-emerald-700 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-800",
+          "text-[color-mix(in_oklab,var(--success)_70%,var(--background))] hover:bg-success/15 hover:text-[color-mix(in_oklab,var(--success)_55%,var(--background))]",
         destructive:
-          "text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 dark:text-rose-600 dark:hover:bg-rose-500/10 dark:hover:text-rose-700",
+          "text-[color-mix(in_oklab,var(--destructive)_70%,var(--background))] hover:bg-destructive/15 hover:text-[color-mix(in_oklab,var(--destructive)_55%,var(--background))]",
       },
       shape: {
         text: "h-8 rounded-lg px-2.5 text-[13px]",

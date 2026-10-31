@@ -41,7 +41,7 @@ Use semantic tokens. Never raw Tailwind colors in component or app code.
 </div>
 ```
 
-For status indicators, prefer `Badge` variants or semantic tokens. All four status tones are tokenized: `text-success` / `bg-success`, `text-warning` / `bg-warning`, `text-destructive`, and `text-muted-foreground` for neutral. Never reach for `text-emerald-600` or `text-amber-500` — and never pair a status token with a `dark:` override, since the tokens already re-step for a dark surface.
+For status indicators, prefer `Badge` variants or semantic tokens. All five status tones are tokenized: `text-success` / `bg-success`, `text-warning` / `bg-warning`, `text-info` / `bg-info`, `text-destructive`, and `text-muted-foreground` for neutral. Never reach for `text-emerald-600` or `text-amber-500` — and never pair a status token with a `dark:` override, since the tokens already re-step for a dark surface.
 
 Note `--success-foreground` and `--warning-foreground` are deliberately **dark** rather than near-white: near-white measures 3.10:1 on the success green and 1.97:1 on the warning amber, both WCAG failures. Use `text-success-foreground` / `text-warning-foreground` on a filled chip, never `text-white`.
 
