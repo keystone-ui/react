@@ -1,12 +1,16 @@
+import { existsSync, readFileSync } from "node:fs";
+
 import { loadProjectConfig } from "./config.js";
 import { runInfo } from "./info.js";
 import { init } from "./init.js";
+import { detectProjectContext } from "./project-context.js";
 import {
   parseThemeCode,
   parseThemeParts,
   themeBuilderUrl,
   themeInstallCommand,
 } from "./theme.js";
+import { auditTheme, formatAudit, readThemeTokens } from "./theme-audit.js";
 import {
   auditChecklistTool,
   getExamplesTool,
@@ -113,7 +117,7 @@ function printUsage(): void {
     "  docs <name>                          Fetch /llms.mdx/docs/components/<name>"
   );
   console.log(
-    "  audit                                Print post-install checklist"
+    "  audit [--theme [css]] [--strict]     Post-install checklist, or measure your theme's contrast"
   );
   console.log(
     "  blocks [<filter>] [--category C]     List or filter full-page blocks"
@@ -213,8 +217,30 @@ async function runDocs(args: string[]): Promise<void> {
   console.log(await response.text());
 }
 
-function runAudit(): void {
-  console.log(auditChecklistTool());
+function runAudit(args: string[]): void {
+  const { flags } = parseArgs(args);
+  if (!("theme" in flags)) {
+    console.log(auditChecklistTool());
+    return;
+  }
+  // `--theme` alone measures the CSS file components.json names.
+  const file =
+    flags.theme === "true"
+      ? detectProjectContext().tailwindCssFile
+      : flags.theme;
+  if (!(file && existsSync(file))) {
+    console.error(
+      "Usage: keystoneui audit --theme [path/to/globals.css] [--strict]\n" +
+        "No CSS file found — pass the one that holds your :root and .dark tokens."
+    );
+    process.exitCode = 1;
+    return;
+  }
+  const results = auditTheme(readThemeTokens(readFileSync(file, "utf-8")));
+  console.log(formatAudit(file, results));
+  if (flags.strict === "true" && results.some((r) => r.status === "fail")) {
+    process.exitCode = 1;
+  }
 }
 
 async function runBlocks(args: string[]): Promise<void> {
@@ -321,7 +347,7 @@ export async function runCli(args: string[]): Promise<void> {
       await runDocs(rest);
       return;
     case "audit":
-      runAudit();
+      runAudit(rest);
       return;
     case "blocks":
       await runBlocks(rest);

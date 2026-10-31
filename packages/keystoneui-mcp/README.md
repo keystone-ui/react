@@ -56,7 +56,7 @@ npx keystoneui theme k1_slate_0.55_0.2_262.5_large_inter
 | `view <name> [<name>...]` | Show component source |
 | `examples <name>` | All demo files for a component or block |
 | `docs <name>` | Fetch the LLM-resolved MDX page (`/llms.mdx/docs/components/<name>`) |
-| `audit` | Print the post-install checklist |
+| `audit [--theme [css]] [--strict]` | Print the post-install checklist, or measure every text/surface token pair in your theme against WCAG AA |
 | `blocks [<filter>]` | List or filter full-page blocks |
 | `theme <code> [--only theme,font]` | Decode a theme-builder code and print its `shadcn add` command |
 

@@ -22,6 +22,7 @@ npx shadcn@latest add https://keystoneui.io/r/table-with-pagination.json
 
 # Verify
 keystoneui audit                   # post-install checklist
+keystoneui audit --theme           # WCAG contrast of the theme tokens in your CSS (--strict exits 1)
 
 # Theme — a code from the theme builder's Code panel
 keystoneui theme k1_slate_0.55_0.2_262.5_large_inter --only theme

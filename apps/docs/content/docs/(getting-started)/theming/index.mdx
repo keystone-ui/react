@@ -58,6 +58,22 @@ whole theme, so it is also what to paste into an issue or hand to an agent:
 `keystoneui theme <code>` prints the decoded settings, this command, and a link
 back into the builder.
 
+### Checking your theme
+
+Keystone measures its own palettes in CI. To measure yours — after editing
+`--primary`, say — run:
+
+```bash
+npx keystoneui audit --theme
+```
+
+It reads the `:root` and `.dark` blocks of the CSS file your `components.json`
+names (or pass a path), and reports every text-on-surface pair against WCAG AA
+(4.5:1) in both modes. Add `--strict` to exit non-zero on a failure, for CI.
+Keystone's default `--destructive-foreground` sits just under the line in light
+mode and well under it in dark — the audit reports that honestly rather than
+hiding it.
+
 ## Token Categories
 
 ### Colors
