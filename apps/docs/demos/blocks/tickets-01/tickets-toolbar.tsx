@@ -75,7 +75,7 @@ export function TicketsToolbar({
 }: TicketsToolbarProps) {
   return (
     <div className="flex flex-row items-center gap-2 sm:justify-between sm:gap-3">
-      <InputGroup className="min-w-0 flex-1 sm:max-w-md">
+      <InputGroup className="min-w-0 flex-1 sm:max-w-md" size="sm">
         <InputGroupAddon align="inline-start">
           <SearchIcon className="size-4" />
         </InputGroupAddon>
@@ -104,7 +104,7 @@ export function TicketsToolbar({
       {/* Desktop: full button cluster */}
       <div className="hidden flex-wrap items-center gap-2 sm:flex">
         <DropdownMenu>
-          <DropdownMenuTrigger render={<Button variant="outline" />}>
+          <DropdownMenuTrigger render={<Button size="sm" variant="outline" />}>
             <ArrowUpDownIcon />
             <TriggerLabel>Sort</TriggerLabel>
             {sortPresetLabels[sortPreset]}
@@ -136,7 +136,7 @@ export function TicketsToolbar({
         </DropdownMenu>
 
         <DropdownMenu>
-          <DropdownMenuTrigger render={<Button variant="outline" />}>
+          <DropdownMenuTrigger render={<Button size="sm" variant="outline" />}>
             <SlidersHorizontalIcon />
             Table options
           </DropdownMenuTrigger>
@@ -161,7 +161,7 @@ export function TicketsToolbar({
         </DropdownMenu>
 
         <DropdownMenu>
-          <DropdownMenuTrigger render={<Button variant="outline" />}>
+          <DropdownMenuTrigger render={<Button size="sm" variant="outline" />}>
             <TriggerLabel>Status</TriggerLabel>
             {statusFilter === "all" ? "All" : statusLabels[statusFilter]}
           </DropdownMenuTrigger>
@@ -198,6 +198,7 @@ export function TicketsToolbar({
               onViewChange(last);
             }
           }}
+          size="sm"
           value={[view]}
           variant="outline"
         >

@@ -85,6 +85,7 @@ export function DashboardToolbar({
               onRangeChange(last as Range);
             }
           }}
+          size="sm"
           value={[range]}
           variant="outline"
         >
@@ -94,7 +95,7 @@ export function DashboardToolbar({
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
-        <Button variant="outline">
+        <Button size="sm" variant="outline">
           <DownloadIcon data-icon="inline-start" />
           Export
         </Button>

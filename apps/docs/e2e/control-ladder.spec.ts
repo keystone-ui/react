@@ -187,7 +187,7 @@ function mismatched(rows: Row[], dimension: "heights" | "radii"): string[] {
  * Both get a search term typed into them before the sweep, because controls
  * that render only once a filter is applied are invisible to a sweep of the
  * resting page. `Clear all` is one of them, and it sits in the same row as the
- * 40px controls.
+ * toolbar controls.
  */
 async function openBlock(page: Page, name: string, section = "users") {
   await gotoPreview(page, name);
@@ -207,8 +207,8 @@ async function openBlock(page: Page, name: string, section = "users") {
 
   // Type into it, which is what makes the conditional controls render. `Clear
   // all` only exists once something is applied, so a sweep of the resting
-  // toolbar never sees it — and it is a button in the same row as the 40px
-  // ones, exactly where a mismatch would hide.
+  // toolbar never sees it — and it is a button in the same row as the toolbar
+  // controls, exactly where a mismatch would hide.
   //
   // Settle on the input's own value rather than on `Clear all`: that button is
   // inside the `sm+` cluster on the payments toolbar, so waiting for it would
@@ -280,9 +280,11 @@ test.describe("the sweep is actually measuring something", () => {
 
   /**
    * Pins the absolute tier, not just agreement. A drift that moved every
-   * control together would satisfy the sweep above and still be wrong.
+   * control together would satisfy the sweep above and still be wrong. Dense
+   * app screens put their toolbars on `sm`, so this is 32, not the 40px
+   * `default` that auth and standalone forms use.
    */
-  test("renders the default tier at 40px", async ({ page }) => {
+  test("renders the toolbar on the sm tier at 32px", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 1000 });
     await openBlock(page, "block-tickets-01");
 
@@ -291,7 +293,7 @@ test.describe("the sweep is actually measuring something", () => {
 
     expect(toolbar, "found the toolbar row").toBeDefined();
     expect(toolbar?.heights.length).toBeGreaterThan(2);
-    expect([...new Set(toolbar?.heights)]).toEqual([40]);
+    expect([...new Set(toolbar?.heights)]).toEqual([32]);
   });
 
   /**
@@ -309,6 +311,44 @@ test.describe("the sweep is actually measuring something", () => {
     expect(toolbar, "found the toolbar row").toBeDefined();
     expect([...new Set(toolbar?.radii)]).toEqual([8]);
   });
+});
+
+/**
+ * A toolbar and the pagination in the same card share a tier.
+ *
+ * The row sweep cannot see this: the two sit at opposite ends of the card, so
+ * they never share a visual row. It is still the mismatch people notice --
+ * `admin-01` shipped a 40px toolbar above 32px `TablePagination`, which is
+ * fixed at `sm`, and the card read as two different products.
+ */
+test.describe("a table's toolbar matches its pagination", () => {
+  for (const section of ["users", "payments"] as const) {
+    test(`block-admin-01 ${section}`, async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 1000 });
+      await openBlock(page, "block-admin-01", section);
+
+      const toolbar = (await collectRows(page)).find((row) =>
+        row.slots.includes("input-group")
+      );
+      const pagination = await page.evaluate(
+        (selector) =>
+          [
+            ...document.querySelectorAll(
+              `[data-slot="table-pagination"] :is(${selector})`
+            ),
+          ].map(
+            (el) => Math.round(el.getBoundingClientRect().height * 10) / 10
+          ),
+        CONTROL_SELECTOR
+      );
+
+      expect(toolbar, "found the toolbar row").toBeDefined();
+      expect(pagination.length, "found pagination controls").toBeGreaterThan(0);
+      expect([
+        ...new Set([...(toolbar?.heights ?? []), ...pagination]),
+      ]).toEqual([32]);
+    });
+  }
 });
 
 /**

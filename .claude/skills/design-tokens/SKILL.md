@@ -358,6 +358,18 @@ its newer 32px preset. Since both registries install to the same paths, a
 shadcn component composed alongside keystone's inherits keystone's Button —
 see the interop guide.
 
+### Dense screens use `sm`, not a smaller default
+
+40px suits auth pages and standalone forms; it reads oversized in an app
+shell, whose chrome (sidebar items, `icon-sm` topbar actions,
+`TablePagination`) is already 32px. Shipped products split the same way: login
+buttons are 40px or more at 11 of 13 measured, while in-app defaults sit at
+26–37px. So dense screens put toolbars, filter rows and page-header actions on
+`size="sm"`, and the default stays 40. A 36px default was considered and
+rejected: it undercuts auth pages and still leaves a 36px toolbar above 32px
+pagination. Density as a whole is a job for a future dense theme that remaps
+the tiers, which is why blocks write `size="sm"` and never a literal `h-8`.
+
 ## `data-slot` Pattern
 
 ### Why `data-slot`

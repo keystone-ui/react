@@ -332,17 +332,17 @@ export function TicketsPage() {
             Tickets
           </h1>
           <div className="flex items-center gap-2">
-            <Button variant="outline">
+            <Button size="sm" variant="outline">
               <DownloadIcon />
               <span className="hidden sm:inline">Export</span>
             </Button>
-            <Button onClick={() => setCreateOpen(true)}>
+            <Button onClick={() => setCreateOpen(true)} size="sm">
               <PlusIcon />
               New Ticket
             </Button>
             <Button
               aria-label="Toggle ticket metrics"
-              size="icon"
+              size="icon-sm"
               variant="ghost"
             >
               <ChevronDownIcon />
