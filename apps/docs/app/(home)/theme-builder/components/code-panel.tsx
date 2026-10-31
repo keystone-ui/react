@@ -9,6 +9,7 @@ import {
 import { useDeferredValue, useState } from "react";
 
 import type { ThemeState } from "../hooks/use-theme-state";
+import { themeContrast } from "../utils/contrast";
 import { generateCssOutput } from "../utils/generate-css-output";
 import { encodeThemeCode } from "../utils/theme-code";
 
@@ -23,6 +24,8 @@ export function CodePanel({ state, isVisible, onClose }: CodePanelProps) {
   const cssCode = generateCssOutput(state);
   const deferredCss = useDeferredValue(cssCode);
   const installCommand = `npx shadcn@latest add https://keystoneui.io/r/theme/${encodeThemeCode(state)}.json`;
+  const contrast = themeContrast(state);
+  const failing = contrast.filter((r) => !r.pass);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(deferredCss);
@@ -74,6 +77,29 @@ export function CodePanel({ state, isVisible, onClose }: CodePanelProps) {
           value={installCommand}
           variant="ghost"
         />
+      </div>
+
+      {/* Contrast: the checks `keystoneui audit --theme` runs, live */}
+      <div
+        className="flex flex-col gap-1 border-border border-b px-4 py-2 text-xs"
+        data-slot="theme-contrast"
+      >
+        <span className="font-medium text-foreground">
+          Contrast · WCAG AA ·{" "}
+          <span className="tabular-nums">
+            {contrast.length - failing.length}/{contrast.length}
+          </span>{" "}
+          pairs pass
+        </span>
+        {failing.map((r) => (
+          <span
+            className="text-muted-foreground tabular-nums"
+            key={`${r.mode}-${r.pair}`}
+          >
+            <span className="text-destructive">✖</span> {r.mode} {r.pair}{" "}
+            {r.ratio.toFixed(2)}:1
+          </span>
+        ))}
       </div>
 
       {/* Code */}

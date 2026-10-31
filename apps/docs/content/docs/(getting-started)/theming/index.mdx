@@ -70,6 +70,8 @@ npx keystoneui audit --theme
 It reads the `:root` and `.dark` blocks of the CSS file your `components.json`
 names (or pass a path), and reports every text-on-surface pair against WCAG AA
 (4.5:1) in both modes. Add `--strict` to exit non-zero on a failure, for CI.
+The [theme builder](/theme-builder) runs the same checks live in its **Code**
+panel, so a primary that no foreground can clear shows up before you export it.
 Keystone's default `--destructive-foreground` sits just under the line in light
 mode and well under it in dark — the audit reports that honestly rather than
 hiding it.
