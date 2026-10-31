@@ -2061,6 +2061,46 @@
       ]
     },
     {
+      "name": "settings-01",
+      "type": "registry:block",
+      "title": "Settings 01",
+      "description": "An account settings page: a validated profile form that only saves real changes, notification switches, a sessions table with sign-out, and a delete-account confirmation that asks for the email typed back.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/alert-dialog.json",
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/switch.json",
+        "https://keystoneui.io/r/table.json"
+      ],
+      "files": [
+        {
+          "path": "registry/default/blocks/settings-01/page.tsx",
+          "type": "registry:page",
+          "target": "app/settings/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/settings-01/components/mock-account.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/settings-01/components/settings-model.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/settings-01/components/settings-page.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "admin",
+        "settings"
+      ]
+    },
+    {
       "name": "dashboard-01",
       "type": "registry:block",
       "title": "Dashboard 01",

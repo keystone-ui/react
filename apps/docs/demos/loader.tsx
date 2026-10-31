@@ -248,6 +248,11 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("block-profile-dropdown-01", m.default),
     }))
   ),
+  "block-settings-01": dynamic(() =>
+    import("./blocks/settings-01/index").then((m) => ({
+      default: hydrated("block-settings-01", m.default),
+    }))
+  ),
   "block-signin-01": dynamic(() =>
     import("./blocks/signin-01").then((m) => ({
       default: hydrated("block-signin-01", m.default),

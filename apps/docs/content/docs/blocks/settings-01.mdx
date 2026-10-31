@@ -1,0 +1,32 @@
+---
+title: Settings 01
+description: An account settings page — a validated profile form that only saves real changes, notification switches, a sessions table with sign-out, and a delete-account confirmation.
+---
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/settings-01.json
+```
+
+<BlockPreview name="block-settings-01" />
+
+## Features
+
+- **Profile form that only saves real changes** — Save and Cancel stay disabled until a field differs from what is saved, ignoring whitespace nobody can see. Errors appear on submit, on the field they belong to, never while you are still typing.
+- **Notifications** — horizontal `Field` + `Switch` rows. A security setting can be locked on, and says why.
+- **Sessions** — a compact table of signed-in devices. Sign out one, or all others; the current session is labelled and can never sign itself out.
+- **Delete account** — an `AlertDialog` whose destructive action stays disabled until the account email is typed back, so deletion is a deliberate act rather than a reflex.
+- Dense-screen sizing: footer actions use `size="sm"`, and every card ends in a bordered footer with the primary action rightmost.
+
+The rules live in `settings-model.ts`, separate from the UI.
+
+## Components Used
+
+- [Card](/docs/components/card)
+- [Field](/docs/components/field)
+- [Input](/docs/components/input)
+- [Switch](/docs/components/switch)
+- [Table](/docs/components/table)
+- [Badge](/docs/components/badge)
+- [Avatar](/docs/components/avatar)
+- [Button](/docs/components/button)
+- [Alert Dialog](/docs/components/alert-dialog)

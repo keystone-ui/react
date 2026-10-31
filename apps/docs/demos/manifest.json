@@ -42,6 +42,7 @@
   "block-betting-panel-04": "blocks/betting-panel-04.tsx",
   "block-dashboard-01": "blocks/dashboard-01/index.tsx",
   "block-profile-dropdown-01": "blocks/profile-dropdown-01.tsx",
+  "block-settings-01": "blocks/settings-01/index.tsx",
   "block-signin-01": "blocks/signin-01.tsx",
   "block-signin-02": "blocks/signin-02.tsx",
   "block-signin-03": "blocks/signin-03.tsx",
