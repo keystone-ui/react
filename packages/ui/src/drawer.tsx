@@ -47,7 +47,7 @@ export interface DrawerOverlayProps extends DrawerPrimitive.Backdrop.Props {}
 function DrawerOverlay({ className, ...props }: DrawerOverlayProps) {
   return (
     <DrawerPrimitive.Backdrop
-      className={cn("fixed inset-0 z-(--z-drawer) bg-black/50", className)}
+      className={cn("fixed inset-0 z-(--z-drawer,40) bg-black/50", className)}
       data-slot="drawer-overlay"
       {...props}
     />
@@ -87,12 +87,12 @@ function DrawerContent({
     <DrawerPortal>
       <DrawerOverlay />
       <DrawerPrimitive.Viewport
-        className="fixed inset-0 z-(--z-drawer)"
+        className="fixed inset-0 z-(--z-drawer,40)"
         data-slot="drawer-viewport"
       >
         <DrawerPrimitive.Popup
           className={cn(
-            "group/drawer-content fixed z-(--z-drawer) flex h-auto flex-col bg-popover text-popover-foreground text-sm outline-none",
+            "group/drawer-content fixed z-(--z-drawer,40) flex h-auto flex-col bg-popover text-popover-foreground text-sm outline-none",
             // Bottom (swipeDirection="down", default) — pad for home indicator
             "data-[swipe-direction=down]:inset-x-0 data-[swipe-direction=down]:bottom-0 data-[swipe-direction=down]:mt-24 data-[swipe-direction=down]:max-h-[80vh] data-[swipe-direction=down]:rounded-t-xl data-[swipe-direction=down]:border-t data-[swipe-direction=down]:pb-[env(safe-area-inset-bottom)]",
             // Top (swipeDirection="up") — pad for notch

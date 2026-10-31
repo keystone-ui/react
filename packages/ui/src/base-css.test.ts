@@ -345,3 +345,31 @@ describe("coexisting with shadcn/tailwind.css", () => {
     expect([...keystone].filter((name) => shadcn.has(name))).toEqual([]);
   });
 });
+
+/**
+ * A component installed from the registry can be newer than the base.css a
+ * project has, and Open in v0 loads no base.css at all. Every base.css token
+ * a component reads therefore carries its default inline, so a missing
+ * token degrades to today's value instead of `z-index: auto` (a modal under
+ * the page) or no transition at all.
+ */
+const TOKEN_READ =
+  /(?:\(|var\()--((?:z|duration|ease|ks-control)-[a-z-]+)(,)?/g;
+
+describe("component token fallbacks", () => {
+  it("gives every base.css token a component reads an inline default", () => {
+    const missing: string[] = [];
+    for (const file of readdirSync(SRC_DIR)) {
+      if (!file.endsWith(".tsx") || file.includes(".test.")) {
+        continue;
+      }
+      const source = readFileSync(join(SRC_DIR, file), "utf-8");
+      for (const match of source.matchAll(TOKEN_READ)) {
+        if (!match[2]) {
+          missing.push(`${file}: --${match[1]}`);
+        }
+      }
+    }
+    expect(missing).toEqual([]);
+  });
+});

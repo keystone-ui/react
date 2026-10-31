@@ -74,7 +74,7 @@ function SelectTrigger({
       {children}
       <SelectPrimitive.Icon
         render={
-          <ChevronDownIcon className="pointer-events-none size-4 shrink-0 text-muted-foreground transition-transform duration-150 ease-(--ease-ks-out) group-data-[popup-open]:rotate-180" />
+          <ChevronDownIcon className="pointer-events-none size-4 shrink-0 text-muted-foreground transition-transform duration-150 ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)) group-data-[popup-open]:rotate-180" />
         }
       />
     </SelectPrimitive.Trigger>
@@ -140,7 +140,7 @@ function SelectContent({
       >
         <SelectPrimitive.Popup
           className={cn(
-            "relative isolate z-[var(--z-popover)] max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-lg ring-1 ring-popup-ring",
+            "relative isolate z-[var(--z-popover,60)] max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-lg ring-1 ring-popup-ring",
             className
           )}
           data-align-trigger={alignItemWithTrigger}

@@ -7,10 +7,7 @@ import { useState } from "react";
 
 import { V0Logo } from "@/components/v0-logo";
 import { cn } from "@/lib/cn";
-
-const V0_URL = process.env.NEXT_PUBLIC_V0_URL;
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
-const V0_ENABLED = Boolean(V0_URL && APP_URL);
+import { openInV0Href } from "@/lib/open-in-v0";
 
 interface ComponentPreviewContainerProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -34,9 +31,7 @@ export function ComponentPreviewContainer({
   const Component = children;
   const Code = code;
 
-  const v0Href = V0_ENABLED
-    ? `${V0_URL}/chat/api/open?url=${encodeURIComponent(`${APP_URL}/r/${name}.json`)}`
-    : undefined;
+  const v0Href = openInV0Href(name);
 
   return (
     <div

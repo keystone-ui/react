@@ -61,7 +61,10 @@ export interface ModalOverlayProps extends DialogPrimitive.Backdrop.Props {}
 function ModalOverlay({ className, ...props }: ModalOverlayProps) {
   return (
     <DialogPrimitive.Backdrop
-      className={cn("fixed inset-0 z-[var(--z-modal)] bg-black/50", className)}
+      className={cn(
+        "fixed inset-0 z-[var(--z-modal,50)] bg-black/50",
+        className
+      )}
       data-slot="modal-overlay"
       {...props}
     />
@@ -72,7 +75,7 @@ function ModalOverlay({ className, ...props }: ModalOverlayProps) {
 // ModalContent Variants
 // =============================================================================
 const modalContentVariants = cva(
-  "fixed top-[50%] left-[50%] z-[var(--z-modal)] grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg bg-popover p-6 text-popover-foreground shadow-lg outline-none ring-1 ring-popup-ring",
+  "fixed top-[50%] left-[50%] z-[var(--z-modal,50)] grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg bg-popover p-6 text-popover-foreground shadow-lg outline-none ring-1 ring-popup-ring",
   {
     variants: {
       size: {
@@ -159,7 +162,7 @@ function ModalContent({
       <ModalPortal>
         <ModalOverlay />
         <div
-          className="fixed inset-0 z-[var(--z-modal)] overflow-y-auto"
+          className="fixed inset-0 z-[var(--z-modal,50)] overflow-y-auto"
           data-slot="modal-scroll-wrapper"
         >
           <div className="flex min-h-full items-center justify-center p-4">

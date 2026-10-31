@@ -102,7 +102,7 @@ function ProgressIndicator({ className, ...props }: ProgressIndicatorProps) {
         // This stays a `width` transition: Base UI sets the percentage as an
         // inline `width` and does not expose it as a variable, so there is
         // nothing a transform could read.
-        "transition-[width] duration-(--duration-slow) ease-(--ease-ks-out)",
+        "transition-[width] duration-(--duration-slow,250ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
         // Indeterminate: animated sliding bar
         "data-[indeterminate]:w-1/3 data-[indeterminate]:animate-progress-indeterminate",
         className

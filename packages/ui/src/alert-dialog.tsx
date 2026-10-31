@@ -45,7 +45,10 @@ export interface AlertDialogOverlayProps
 function AlertDialogOverlay({ className, ...props }: AlertDialogOverlayProps) {
   return (
     <AlertDialogPrimitive.Backdrop
-      className={cn("fixed inset-0 z-[var(--z-modal)] bg-black/50", className)}
+      className={cn(
+        "fixed inset-0 z-[var(--z-modal,50)] bg-black/50",
+        className
+      )}
       data-slot="alert-dialog-overlay"
       {...props}
     />
@@ -76,7 +79,7 @@ function AlertDialogContent({
       <AlertDialogOverlay />
       <AlertDialogPrimitive.Popup
         className={cn(
-          "group/alert-dialog-content fixed top-[50%] left-[50%] z-[var(--z-modal)] grid w-full -translate-x-[50%] -translate-y-[50%] gap-4 rounded-xl bg-popover p-4 text-popover-foreground shadow-lg outline-none ring-1 ring-popup-ring data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm",
+          "group/alert-dialog-content fixed top-[50%] left-[50%] z-[var(--z-modal,50)] grid w-full -translate-x-[50%] -translate-y-[50%] gap-4 rounded-xl bg-popover p-4 text-popover-foreground shadow-lg outline-none ring-1 ring-popup-ring data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm",
           className
         )}
         data-size={size}

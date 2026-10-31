@@ -27,7 +27,7 @@ export interface TableProps extends React.ComponentProps<"table"> {
    *
    * ```tsx
    * <Table containerClassName="max-h-96 overflow-y-auto">
-   *   <TableHeader className="sticky top-0 z-[var(--z-sticky)] bg-background">
+   *   <TableHeader className="sticky top-0 z-[var(--z-sticky,30)] bg-background">
    * ```
    */
   containerClassName?: string;

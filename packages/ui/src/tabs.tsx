@@ -411,7 +411,7 @@ function TabsIndicator({ className, ...props }: TabsIndicatorProps) {
         // `left` relaid out the list on every frame.
         "absolute top-0 left-0 h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) translate-y-(--active-tab-top)",
         // Sliding animation (reduced motion handled globally by base.css)
-        "transition-[translate,width,height] duration-(--duration-base) ease-(--ease-ks-out)",
+        "transition-[translate,width,height] duration-(--duration-base,180ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
         // Default variant: pill/card sliding behind active tab
         "group-data-[variant=default]/tabs-list:rounded-md group-data-[variant=default]/tabs-list:bg-background group-data-[variant=default]/tabs-list:shadow-sm",
         "group-data-[variant=default]/tabs-list:group-data-[shape=pill]/tabs-list:rounded-full",

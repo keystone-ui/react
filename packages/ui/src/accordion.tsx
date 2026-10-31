@@ -253,14 +253,14 @@ const AccordionTrigger = ({
       {chevronIcon ? (
         <span
           aria-hidden="true"
-          className="flex shrink-0 items-center justify-center transition-transform duration-200 ease-(--ease-ks-out) group-data-[panel-open]:rotate-180"
+          className="flex shrink-0 items-center justify-center transition-transform duration-200 ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)) group-data-[panel-open]:rotate-180"
         >
           {chevronIcon}
         </span>
       ) : (
         <ChevronDown
           aria-hidden="true"
-          className="size-3 shrink-0 opacity-75 transition-transform duration-200 ease-(--ease-ks-out) group-data-[panel-open]:rotate-180"
+          className="size-3 shrink-0 opacity-75 transition-transform duration-200 ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)) group-data-[panel-open]:rotate-180"
         />
       )}
     </AccordionPrimitive.Trigger>
@@ -288,7 +288,7 @@ const AccordionPanel = ({
     "overflow-hidden text-muted-foreground text-sm",
     // CSS transition on height — smoothly cancellable mid-animation.
     // Reduced motion is handled globally by base.css.
-    "h-[var(--accordion-panel-height)] transition-[height] duration-200 ease-(--ease-ks-out)",
+    "h-[var(--accordion-panel-height)] transition-[height] duration-200 ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
     // Enter: start from 0 height
     "data-[starting-style]:h-0",
     // Exit: collapse to 0 height

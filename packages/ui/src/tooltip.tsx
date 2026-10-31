@@ -88,7 +88,7 @@ function TooltipContent({
         <TooltipPrimitive.Popup
           className={cn(
             "bg-foreground text-background",
-            "z-[var(--z-tooltip)] w-fit max-w-xs origin-(--transform-origin) rounded-md px-3 py-1.5 text-xs",
+            "z-[var(--z-tooltip,70)] w-fit max-w-xs origin-(--transform-origin) rounded-md px-3 py-1.5 text-xs",
             className
           )}
           data-slot="tooltip-content"

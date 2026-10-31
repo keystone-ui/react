@@ -72,7 +72,7 @@ function PopoverContent({
         <PopoverPrimitive.Popup
           className={cn(
             "bg-popover text-popover-foreground ring-popup-ring",
-            "z-[var(--z-popover)] w-72 origin-(--transform-origin) rounded-lg p-4 shadow-lg outline-none ring-1",
+            "z-[var(--z-popover,60)] w-72 origin-(--transform-origin) rounded-lg p-4 shadow-lg outline-none ring-1",
             className
           )}
           data-slot="popover-content"

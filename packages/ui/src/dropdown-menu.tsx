@@ -96,7 +96,7 @@ function DropdownMenuContent({
         <MenuPrimitive.Popup
           className={cn(
             "bg-popover text-popover-foreground ring-popup-ring",
-            "z-[var(--z-dropdown)] max-h-(--available-height) min-w-32 origin-(--transform-origin) overflow-y-auto overflow-x-hidden rounded-lg p-1 shadow-lg outline-none ring-1 data-closed:overflow-hidden",
+            "z-[var(--z-dropdown,60)] max-h-(--available-height) min-w-32 origin-(--transform-origin) overflow-y-auto overflow-x-hidden rounded-lg p-1 shadow-lg outline-none ring-1 data-closed:overflow-hidden",
             className
           )}
           data-size={size}
@@ -284,7 +284,7 @@ function DropdownMenuSubContent({
         <MenuPrimitive.Popup
           className={cn(
             "bg-popover text-popover-foreground ring-popup-ring",
-            "z-[var(--z-dropdown)] w-auto min-w-24 origin-(--transform-origin) overflow-hidden rounded-md p-1 shadow-lg ring-1",
+            "z-[var(--z-dropdown,60)] w-auto min-w-24 origin-(--transform-origin) overflow-hidden rounded-md p-1 shadow-lg ring-1",
             className
           )}
           data-slot="dropdown-menu-sub-content"

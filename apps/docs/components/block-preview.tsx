@@ -20,16 +20,13 @@ import { useRef, useState } from "react";
 import type { PanelImperativeHandle } from "react-resizable-panels";
 import { V0Logo } from "@/components/v0-logo";
 import { cn } from "@/lib/cn";
+import { openInV0Href } from "@/lib/open-in-v0";
 
 const VIEWPORT_PRESETS = [
   { value: "100%", label: "Desktop", Icon: MonitorIcon },
   { value: "60%", label: "Tablet", Icon: TabletIcon },
   { value: "30%", label: "Mobile", Icon: SmartphoneIcon },
 ] as const;
-
-const V0_URL = process.env.NEXT_PUBLIC_V0_URL;
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
-const V0_ENABLED = Boolean(V0_URL && APP_URL);
 
 const BLOCK_PREFIX_REGEX = /^block-/;
 
@@ -57,9 +54,7 @@ export function BlockPreviewContainer({
   const panelRef = useRef<PanelImperativeHandle>(null);
 
   const registryName = name.replace(BLOCK_PREFIX_REGEX, "");
-  const v0Href = V0_ENABLED
-    ? `${V0_URL}/chat/api/open?url=${encodeURIComponent(`${APP_URL}/r/${registryName}.json`)}`
-    : undefined;
+  const v0Href = openInV0Href(registryName);
 
   const handleViewportChange = (next: string[]) => {
     const last = next.at(-1);

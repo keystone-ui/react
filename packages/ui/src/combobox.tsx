@@ -188,7 +188,7 @@ function ComboboxContent({
           className={cn(
             "bg-popover text-popover-foreground ring-popup-ring",
             "group/combobox-content relative max-h-(--available-height) w-(--anchor-width) min-w-[calc(var(--anchor-width)+--spacing(7))] max-w-(--available-width)",
-            "z-[var(--z-popover)] origin-(--transform-origin) overflow-hidden rounded-lg shadow-lg ring-1",
+            "z-[var(--z-popover,60)] origin-(--transform-origin) overflow-hidden rounded-lg shadow-lg ring-1",
             "data-[chips=true]:min-w-(--anchor-width)",
             "*:data-[slot=input-group]:!border-0 *:data-[slot=input-group]:!shadow-none *:data-[slot=input-group]:!ring-0 *:data-[slot=input-group]:rounded-none *:data-[slot=input-group]:bg-transparent",
             className
