@@ -1,0 +1,130 @@
+---
+title: Upgrading to 1.0
+description: Every change during the 1.0 beta that can break a build or change what renders, and what to do about each.
+---
+
+The 1.0 betas shipped as `1.0.0-beta.N`, so a semver range never warned you
+about the changes below. If you installed any beta, walk this list once before
+moving to `1.0.0`. Each item says what changed and the smallest edit that
+restores the old behaviour, or adopts the new one.
+
+Registry users (`npx shadcn add`) own their copy of each component, so nothing
+changes until you re-add it. Re-adding overwrites the file — diff it first.
+
+## Type errors you will see
+
+{/* changeset: toast-description-first-api */}
+
+### `toast()` — a bare message is the description
+
+`toast("Saved")` now renders one muted description line; `title` is opt-in.
+`description` moved off the options argument, so passing it there is a type
+error. Use the object form:
+
+```diff
+-toast("Event created", { description: "Monday at 6:00pm" })
++toast({ title: "Event created", description: "Monday at 6:00pm" })
+```
+
+{/* changeset: react-day-picker-10 */}
+
+### `Calendar` — react-day-picker 10
+
+`Calendar` forwards its props to `DayPicker`, so v10's removals are removed
+here too and do nothing at runtime.
+
+| Removed | Use instead |
+| --- | --- |
+| `fromDate` / `fromMonth` / `fromYear` | `startMonth` (and `disabled={{ before }}` for dates) |
+| `toDate` / `toMonth` / `toYear` | `endMonth` (and `disabled={{ after }}` for dates) |
+
+{/* changeset: base-ui-1-7 */}
+
+### `InputOTP` — `sanitizeValue` is `normalizeValue`
+
+Base UI renamed the prop. The old name is spread through and silently ignored,
+so rename it at every call site.
+
+{/* changeset: upgrade-2026-04 */}
+
+### React 19 refs and lucide 1.x
+
+Primitives no longer use `forwardRef`; `ref` is an ordinary prop. Most callers
+need no change. Demos and blocks moved to `lucide-react` 1.x, whose default
+exports dropped the `*Icon` suffix — fix the import names in any block you
+copied.
+
+## Markup and behaviour changes
+
+{/* changeset: form-renders-form-element */}
+
+### `<Form>` renders a real `<form>`
+
+Remove your own `<form>` wrapper around it, or switch to `<FieldGroup>` for the
+old layout-only `<div>`.
+
+{/* changeset: input-group-auto-fit */}
+
+### `InputGroupButton` defaults to `size="auto"`
+
+An unsized button now fills the group: 32×32 in a default group, 24×24 in
+`size="sm"`. Pass `size="icon-xs"` or `size="xs"` to keep the old 24px button.
+
+### `DropdownMenuRadioItem` closes the menu
+
+Picking a radio item now closes the menu, as Radix and shadcn do. Pass
+`closeOnClick={false}` to keep it open.
+
+### Toggle sizes are on the control ladder
+
+`xs` 24px · `sm` 32px · `default` 40px · `lg` 48px. If you used `size="lg"` to
+line a `ToggleGroup` up with a default `Button`, drop the prop.
+
+### Popups and overlays
+
+- `PopoverContent` has no `max-height`; cap long content with `className`.
+- `Modal`, `AlertDialog` and `Drawer` paint `bg-popover`, one step above the
+  page in dark mode.
+- `Drawer` content scrolls by default. Use `DrawerBody` for a pinned header and
+  footer around a scrolling middle.
+
+## CSS and tokens
+
+{/* changeset: ease-tokens-reduced-motion-scrollbar */}
+
+### Easing tokens are namespaced
+
+`--ease-out` / `--ease-in-out` are now `--ease-ks-out` / `--ease-ks-in-out`.
+The old names replaced Tailwind's own `ease-out` utility in your app.
+
+```diff
+-transition-timing-function: var(--ease-out);
++transition-timing-function: var(--ease-ks-out);
+```
+
+### Reduced motion no longer uses `!important`
+
+The library's transitions still stop. Your own rules that set a duration —
+`html { scroll-behavior: smooth }`, for example — need their own
+`prefers-reduced-motion` rule.
+
+### The thin scrollbar is opt-in
+
+Add `ks-scrollbar` to `<html>` to restore it everywhere, or to one scroll
+container.
+
+### Drawer layers below Modal
+
+`Drawer` sits at `--z-drawer` (40), below `Modal` (50). A drawer opened from
+inside a modal now renders behind it.
+
+### Radius scale is a ratio
+
+`--radius-sm` … `--radius-4xl` are multiples of `--radius` rather than pixel
+offsets, matching shadcn. Nothing moves at the default radius; very small or
+very large `--radius` values now scale instead of clamping.
+
+### Dark tokens are screen-only
+
+The `dark` variant and the `.dark` token block are wrapped in
+`@media screen`, so a printed page always gets the light tokens.

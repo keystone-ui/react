@@ -87,7 +87,8 @@
     "/docs/theming",
     "/docs/theming/colors",
     "/docs/theming/customization",
-    "/docs/theming/dark-mode"
+    "/docs/theming/dark-mode",
+    "/docs/upgrading"
   ],
   "blog": [
     "/blog",
