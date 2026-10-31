@@ -256,6 +256,8 @@ Blocks are full-page or feature-level compositions, not primitives. **If the use
 | Analytics dashboard / KPIs + charts | `dashboard-01` | `dashboard` |
 | Admin panel / app shell with sidebar | `admin-01` | `admin` |
 | Account settings (profile form, notifications, sessions, delete account) | `settings-01` | `admin`, `settings` |
+
+Just the filter row from `admin-01` (pills that name their dimension, Add filter, focus-safe removal): install the `filter-pills` kit — `npx shadcn@latest add https://keystoneui.io/r/filter-pills.json`.
 | Filterable data table (transactions, payments, records) | `admin-01`, `tickets-01` | `admin`, `data` |
 | Betting panel / wager UI | `betting-panel-01`, `betting-panel-02`, `betting-panel-03`, `betting-panel-04` | `betting` |
 | Sportsbook bet slip (singles/accumulator, odds changes, deposit limits) | `bet-slip-01` | `betting` |

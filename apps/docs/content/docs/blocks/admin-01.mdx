@@ -36,6 +36,21 @@ It reads the eight `--sidebar-*` tokens, which keystone's style item declares as
 <SidebarInset className="min-w-0">
 ```
 
+## Reusing the filter pills
+
+The filter row — `FilterTrigger`, `OptionPill`, `DateRangePill`, `AddFilterMenu`
+and the `usePillRow` hook — installs on its own, without the rest of the admin
+panel:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/filter-pills.json
+```
+
+It writes the same four files this block uses (`filter-trigger.tsx`,
+`pill-shell.tsx`, `filter-pills.tsx`, `drawer-parts.tsx`), so the two stay in
+step: the item is built from this block's source. The payments table's
+operator chip stays in the block, since it is written against payment fields.
+
 ## Shared with dashboard-01, byte for byte
 
 Four files — `chart.tsx`, `chart-formatters.ts`, `series-legend.tsx`, `use-reduced-motion.ts` — are duplicated verbatim from [`dashboard-01`](/docs/blocks/dashboard-01) rather than shared through a common registry item.

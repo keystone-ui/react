@@ -121,6 +121,7 @@ function selectItems(registry, requested) {
       (i) =>
         i.type === "registry:ui" ||
         i.type === "registry:block" ||
+        i.type === "registry:component" ||
         i.name.startsWith("density/")
     )
     .map((i) => i.name);

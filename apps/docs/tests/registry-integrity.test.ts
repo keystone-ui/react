@@ -29,6 +29,8 @@ const ALIAS_UTILS_IMPORT =
   /import\s*\{([^}]*)\}\s*from\s*["']@\/lib\/utils["']/g;
 const RELATIVE_SIBLING_IMPORT = /from\s*["']\.\/([a-z0-9-]+)["']/g;
 
+const TS_EXT = /\.tsx?$/;
+const COMPONENTS_ALIAS_IMPORT = /["']@\/components\/(?!ui\/)([a-z0-9-]+)["']/g;
 const UI_ALIAS_IMPORT = /["']@\/components\/ui\/([a-z0-9-]+)["']/g;
 const KEYSTONE_ADDRESS = /^https:\/\/keystoneui\.io\/r\/([a-z0-9-]+)\.json$/;
 /** ui files a block ships itself rather than pulling from the registry. */
@@ -257,6 +259,33 @@ describe("what a consumer installs", () => {
       }
     }
     expect(drift).toEqual([]);
+  });
+
+  it("ships registry:component kits that import only their own files", () => {
+    // A kit lifted out of a block (filter-pills from admin-01) must not reach
+    // back into the block for a sibling it does not ship.
+    const leaks: string[] = [];
+    for (const item of registry.items) {
+      if (item.type !== "registry:component") {
+        continue;
+      }
+      const shipped = new Set(
+        (item.files ?? []).map((f) =>
+          f.path.split("/").pop()?.replace(TS_EXT, "")
+        )
+      );
+      for (const file of item.files ?? []) {
+        const source = readFileSync(join(REPO_ROOT, file.path), "utf-8");
+        for (const match of source.matchAll(COMPONENTS_ALIAS_IMPORT)) {
+          if (!shipped.has(match[1])) {
+            leaks.push(
+              `${item.name}: ${file.path} imports @/components/${match[1]}`
+            );
+          }
+        }
+      }
+    }
+    expect(leaks).toEqual([]);
   });
 
   it("never names a Keystone item as a bare registry dependency", () => {

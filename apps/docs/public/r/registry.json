@@ -2101,6 +2101,45 @@
       ]
     },
     {
+      "name": "filter-pills",
+      "type": "registry:component",
+      "title": "Filter Pills",
+      "description": "The filter pills from admin-01, installable on their own: a FilterTrigger that names its dimension (\"Status: All\"), option and date-range pills with an X to clear, an Add filter menu, and usePillRow to manage which pills are showing.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/drawer.json",
+        "https://keystoneui.io/r/dropdown-menu.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/label.json",
+        "https://keystoneui.io/r/popover.json",
+        "https://keystoneui.io/r/radio-group.json"
+      ],
+      "files": [
+        {
+          "path": "registry/default/blocks/admin-01/components/filter-trigger.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/pill-shell.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/filter-pills.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/drawer-parts.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "data"
+      ]
+    },
+    {
       "name": "dashboard-01",
       "type": "registry:block",
       "title": "Dashboard 01",
