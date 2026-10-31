@@ -11,6 +11,7 @@ https://keystoneui.io/r/admin-01.json`.
 
 - Filter controls name the dimension they act on
 - Two filter layouts, and how to choose
+- Simple filters and operator filters
 - View controls sit apart from the filters
 - Loading keeps the table's shape
 - One representation of applied state
@@ -87,6 +88,46 @@ presentation, and a new filter is one entry rather than a control, a row, a step
 index and a count that all have to agree. It is also what keeps the phone
 drawer in step with the pills: `admin-01` once shipped three filters reachable
 on no phone at all, before both were driven from one list.
+
+## Simple filters and operator filters
+
+Most filters are a dimension and a value: `Status: Failed`. Some also need a
+comparison — `Currency is not: BTC`, `Amount: > 100`, `Player contains:
+gmail`. Pick by the field's type, not by how powerful the filter could be:
+
+| field | control | operators |
+|---|---|---|
+| one choice from a list — status, role, type | simple pill, radio menu | none; `is` is implied. Add `is not` only if excluding one value of many is a common ask |
+| yes / no — two-factor, archived | simple pill, radio menu | none |
+| a set of values — currencies, tags | operator chip, multi-select | `is` / `is not` (any of / none of). Never `contains`: a row holds one currency, so `contains USDT` matches exactly what `is USDT` does |
+| free text — email, name | operator chip, text field | `contains` (default), `does not contain`, `is`, `is not`, `starts with`, `ends with` |
+| a number — amount, seats | operator chip, number fields | `between` (default), `=`, `>`, `<` |
+| a date | range popover, After / Before | none; add presets (`Last 7 days`) only if the data needs them |
+
+- **Operators earn their place.** Each one is a menu and a click. Give a field
+  operators when people genuinely ask the second question — "everything except
+  BTC", "anything over 100" — not because the data type could support them.
+  When search already covers a text field, it may not need a filter at all.
+- **Leave out operators that cannot match.** `is empty` / `is not empty` only on
+  a field that can be empty; on one that never is, both are constant.
+- **The default goes unsaid.** The pill reads `Currency: BTC`, not
+  `Currency is: BTC`; only a qualifier earns words — `Currency is not: BTC`. An
+  operator with nothing to compare reads as nothing: `Currency: All`, never
+  `Currency is not: All`.
+- **The operator lives in the popover header** — `Currency [is ⌄]` above the
+  values — so the pill opens straight onto what you came to set, and the
+  operator is one click away rather than a step in front of it. Where there is
+  a single value field, focus lands in it.
+- **Switching operator drops what the new one does not read.** `between 10 –
+  500` switched to `>` keeps `10` and drops `500`, or a ceiling no label shows
+  keeps narrowing the table.
+- **Removal is the same on both kinds** — the ✕ in the chevron's slot,
+  Backspace on the focused pill, and `Delete filter` on touch (in the menu for a
+  simple pill, behind the popover's `⋯` for an operator chip).
+
+`admin-01`'s payments table has one of each kind: Action, Status and Provider
+are simple pills, Created a range, Currency, Amount and Player operator chips —
+see `operator-filter-chip.tsx` after installing.
 
 ## View controls sit apart from the filters
 
