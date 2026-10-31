@@ -2332,6 +2332,50 @@
       ]
     },
     {
+      "name": "bet-slip-01",
+      "type": "registry:block",
+      "title": "Bet Slip 01",
+      "description": "A sportsbook bet slip with singles and accumulator modes, live odds changes that must be accepted, and a responsible-gambling daily limit.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://keystoneui.io/r/alert.json",
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/empty.json",
+        "https://keystoneui.io/r/input-group.json",
+        "https://keystoneui.io/r/tabs.json"
+      ],
+      "files": [
+        {
+          "path": "registry/default/blocks/bet-slip-01/page.tsx",
+          "type": "registry:page",
+          "target": "app/bet-slip/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/bet-slip-01/components/bet-slip-math.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/bet-slip-01/components/bet-slip.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/bet-slip-01/components/mock-selections.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/bet-slip-01/components/use-odds-feed.ts",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "betting"
+      ]
+    },
+    {
       "name": "accordion-custom-chevron",
       "type": "registry:example",
       "title": "Accordion Custom Chevron",

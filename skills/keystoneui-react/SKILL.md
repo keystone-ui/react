@@ -257,6 +257,7 @@ Blocks are full-page or feature-level compositions, not primitives. **If the use
 | Admin panel / app shell with sidebar | `admin-01` | `admin` |
 | Filterable data table (transactions, payments, records) | `admin-01`, `tickets-01` | `admin`, `data` |
 | Betting panel / wager UI | `betting-panel-01`, `betting-panel-02`, `betting-panel-03`, `betting-panel-04` | `betting` |
+| Sportsbook bet slip (singles/accumulator, odds changes, deposit limits) | `bet-slip-01` | `betting` |
 
 Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or via the unified CLI: `keystoneui blocks` to list, `keystoneui blocks --category authentication` to filter, `keystoneui blocks <name>` to view source. The `--category` flag works on `list` and `search` too.
 

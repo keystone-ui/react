@@ -213,6 +213,11 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("block-admin-01", m.default),
     }))
   ),
+  "block-bet-slip-01": dynamic(() =>
+    import("./blocks/bet-slip-01/index").then((m) => ({
+      default: hydrated("block-bet-slip-01", m.default),
+    }))
+  ),
   "block-betting-panel-01": dynamic(() =>
     import("./blocks/betting-panel-01").then((m) => ({
       default: hydrated("block-betting-panel-01", m.default),

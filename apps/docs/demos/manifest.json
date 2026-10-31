@@ -35,6 +35,7 @@
   "badge-with-icon": "badge/with-icon.tsx",
   "badge-with-spinner": "badge/with-spinner.tsx",
   "block-admin-01": "blocks/admin-01/index.tsx",
+  "block-bet-slip-01": "blocks/bet-slip-01/index.tsx",
   "block-betting-panel-01": "blocks/betting-panel-01.tsx",
   "block-betting-panel-02": "blocks/betting-panel-02.tsx",
   "block-betting-panel-03": "blocks/betting-panel-03.tsx",
