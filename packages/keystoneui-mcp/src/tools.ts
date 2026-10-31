@@ -426,7 +426,7 @@ export const TOOL_SPECS = {
   },
   get_docs: {
     description:
-      "Fetch the full documentation page for a component or block, including its API Reference table. Props are documented ONLY here -- not in the registry -- so view_component alone will not give you a prop's type or default. Previews arrive resolved to inline TSX, so one call returns prose and working code.",
+      "Fetch the full documentation page for a component or block, including its Composition tree (the parts hierarchy, and nestings Base UI rejects) and its API Reference table. Read it before composing any compound component. Props are documented ONLY here -- not in the registry -- so view_component alone will not give you a prop's type or default. Previews arrive resolved to inline TSX, so one call returns prose and working code.",
     schema: getDocsSchema,
   },
   get_project_context: {

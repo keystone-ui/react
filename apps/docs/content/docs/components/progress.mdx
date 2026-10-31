@@ -43,6 +43,20 @@ pnpm add @keystoneui/react@beta @base-ui/react
 
 </CodeBlockTabs>
 
+## Composition
+
+```text
+Progress
+├── ProgressLabel
+├── ProgressValue
+└── ProgressTrack
+    └── ProgressIndicator
+```
+
+With no children, `Progress` renders `ProgressTrack` and `ProgressIndicator`
+for you. Pass children to add a label or value — then you own the whole tree,
+track included.
+
 ## Examples
 
 ### Animated

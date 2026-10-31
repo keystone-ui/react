@@ -64,8 +64,8 @@ pnpm add @keystoneui/react@beta @base-ui/react
 DropdownMenu
 ├── DropdownMenuTrigger
 └── DropdownMenuContent
-    ├── DropdownMenuLabel
     ├── DropdownMenuGroup
+    │   ├── DropdownMenuLabel
     │   ├── DropdownMenuItem
     │   │   └── DropdownMenuShortcut
     │   ├── DropdownMenuCheckboxItem
@@ -76,6 +76,10 @@ DropdownMenu
         ├── DropdownMenuSubTrigger
         └── DropdownMenuSubContent
 ```
+
+**Invalid nesting:** `DropdownMenuLabel` must sit inside a `DropdownMenuGroup`
+or `DropdownMenuRadioGroup`. Placed directly in `DropdownMenuContent`, Base UI
+throws `MenuGroupContext is missing` when the menu opens.
 
 ## Examples
 

@@ -151,6 +151,30 @@ Item components must be wrapped by their group/content parent. The library relie
 
 Never render `TabsTrigger` directly inside `Tabs` (must go in `TabsList`). Never render `SelectItem` outside `SelectContent`.
 
+Group labels are stricter still — Base UI **throws** when one renders outside its group:
+
+| Part | Must sit inside | Error otherwise |
+| --- | --- | --- |
+| `DropdownMenuLabel` | `DropdownMenuGroup` or `DropdownMenuRadioGroup` | `MenuGroupContext is missing` |
+| `SelectLabel` | `SelectGroup` | `SelectGroupContext is missing` |
+| `ComboboxLabel` | `ComboboxGroup` | `ComboboxGroupContext is missing` |
+
+```tsx
+// Incorrect — throws when the menu opens
+<DropdownMenuContent>
+  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+  <DropdownMenuItem>Profile</DropdownMenuItem>
+</DropdownMenuContent>
+
+// Correct
+<DropdownMenuContent>
+  <DropdownMenuGroup>
+    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+    <DropdownMenuItem>Profile</DropdownMenuItem>
+  </DropdownMenuGroup>
+</DropdownMenuContent>
+```
+
 For the `morphing` variant on `TabsList`, wrap each trigger's text in `<TabsTriggerLabel>` so it can collapse to width 0 when inactive. Triggers should also include an icon so the collapsed state stays meaningful. Outside morphing mode `TabsTriggerLabel` is a no-op wrapper.
 
 ```tsx

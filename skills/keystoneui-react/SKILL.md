@@ -284,8 +284,11 @@ the keystone monorepo.
    `https://keystoneui.io/llms.mdx/docs/components/<name>`) for the prose docs
    and the API Reference table. The `/llms.mdx/...` route resolves
    `<ComponentPreview>` tags to inline TSX, so one fetch gives you docs and
-   working code together. **Always read the docs before implementing a complex
-   component** — props are documented there and nowhere else.
+   working code together. **Before composing any compound component (one with
+   more than one exported part), run `keystoneui docs <name>` and follow its
+   `## Composition` tree** — it is the parts hierarchy, and its "Invalid
+   nesting" notes list the placements Base UI throws on. Props are documented
+   there and nowhere else.
 5. **Install** — `npx shadcn@latest add <url>` for vendored source, or
    `pnpm add @keystoneui/react@beta` for the npm dependency. `get_add_command`
    builds the URLs. See [cli.md](./cli.md).

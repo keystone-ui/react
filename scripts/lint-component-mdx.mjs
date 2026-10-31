@@ -11,8 +11,11 @@
  *   2. ## Installation must exist with a <CodeBlockTabs> block referencing
  *      the component's registry URL.
  *   3. ## Usage must exist.
- *   4. Compound components (Usage import has more than one named export)
- *      must contain ## Composition.
+ *   4. Compound components must contain ## Composition. A component is
+ *      compound when its Usage import names more than one export, or when
+ *      packages/ui/src/<name>.tsx exports more than one component — a page
+ *      whose Usage only shows the shorthand (`<Progress value={60} />`) still
+ *      owes agents the parts tree.
  *   5. Variant subheadings must be ###-level under ## Examples — no loose
  *      top-level variant H2s allowed (anything that contains a
  *      <ComponentPreview> and isn't a protected section name).
@@ -21,11 +24,12 @@
  *      key in apps/docs/demos/manifest.json.
  */
 
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, join } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
 const COMPONENTS_DIR = join(ROOT, "apps/docs/content/docs/components");
+const UI_SRC = join(ROOT, "packages/ui/src");
 const DEMOS_MANIFEST = join(ROOT, "apps/docs/demos/manifest.json");
 
 const PROTECTED_HEADINGS = new Set([
@@ -99,7 +103,48 @@ function getH2Sections(content) {
   return sections;
 }
 
-function isCompound(content) {
+// Multi-export components whose extra exports are not composition parts.
+// Each entry must have a one-line rationale below it.
+const COMPOSITION_EXEMPT = new Set([
+  // CalendarDayButton is a slot override passed via `components`, not a child
+  "calendar",
+]);
+
+const EXPORT_BLOCK_RE = /export\s*\{([^}]*)\}/g;
+const EXPORT_DECL_RE = /export\s+(?:const|function)\s+([A-Z][A-Za-z]*)\b/g;
+const NOT_A_PART_RE = /(?:Props|Variants?|Context|Style)$/;
+
+/** PascalCase component exports of packages/ui/src/<name>.tsx. */
+function sourceComponentExports(componentName) {
+  const file = join(UI_SRC, `${componentName}.tsx`);
+  if (!existsSync(file)) {
+    return [];
+  }
+  const source = readFileSync(file, "utf-8");
+  const names = new Set();
+  for (const block of source.matchAll(EXPORT_BLOCK_RE)) {
+    for (const raw of block[1].split(",")) {
+      const name = raw.replace("type ", "").split(" as ").at(-1).trim();
+      if (/^[A-Z]/.test(name) && !NOT_A_PART_RE.test(name)) {
+        names.add(name);
+      }
+    }
+  }
+  for (const decl of source.matchAll(EXPORT_DECL_RE)) {
+    if (!NOT_A_PART_RE.test(decl[1])) {
+      names.add(decl[1]);
+    }
+  }
+  return [...names];
+}
+
+function isCompound(content, componentName) {
+  if (
+    !COMPOSITION_EXEMPT.has(componentName) &&
+    sourceComponentExports(componentName).length > 1
+  ) {
+    return true;
+  }
   const matches = content.matchAll(
     /import\s*\{([^}]+)\}\s*from\s*["']@keystoneui\/react\//g
   );
@@ -210,10 +255,8 @@ function lintFile(filePath, demoNames) {
     ...checkFrontmatter(content),
     ...checkInstallation(componentName, sections, headingNames),
     ...(headingNames.has("Usage") ? [] : ["missing ## Usage"]),
-    ...(isCompound(content) && !headingNames.has("Composition")
-      ? [
-          "compound component (multiple named exports in import) missing ## Composition",
-        ]
+    ...(isCompound(content, componentName) && !headingNames.has("Composition")
+      ? ["compound component (several exported parts) missing ## Composition"]
       : []),
     ...checkLooseVariantH2s(sections),
     ...checkApiReference(sections, headingNames),
