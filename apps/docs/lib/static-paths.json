@@ -543,6 +543,7 @@
     "typography-list",
     "typography-muted",
     "typography-paragraph",
-    "typography-small"
+    "typography-small",
+    "typography-typeset"
   ]
 }
