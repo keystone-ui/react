@@ -1,3 +1,5 @@
+import { Button } from "@keystoneui/react/button";
+import { Input } from "@keystoneui/react/input";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, waitFor, within } from "storybook/test";
 
@@ -85,5 +87,45 @@ export const Shimmer: Story = {
     await expect(style.backgroundClip).toBe("text");
     await expect(style.animationName).toBe("ks-shimmer-sweep");
     await expect(style.animationIterationCount).toBe("infinite");
+  },
+};
+
+/**
+ * The control ladder reads `--ks-control-*`. The compact values here are the
+ * `density/compact` registry item's: one container override moves every
+ * control together, and the default ladder is untouched outside it.
+ */
+const COMPACT =
+  "[--ks-control-xs:calc(var(--spacing)*6)] [--ks-control-sm:calc(var(--spacing)*7)] [--ks-control-md:calc(var(--spacing)*8)] [--ks-control-lg:calc(var(--spacing)*10)]";
+
+export const Density: Story = {
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <div className="flex items-center gap-2" data-testid="default">
+        <Input placeholder="Search" />
+        <Button>Save</Button>
+        <Button size="sm">Small</Button>
+      </div>
+      <div
+        className={`flex items-center gap-2 ${COMPACT}`}
+        data-testid="compact"
+      >
+        <Input placeholder="Search" />
+        <Button>Save</Button>
+        <Button size="sm">Small</Button>
+        <Button size="xs">Tiny</Button>
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const heights = (testId: string) =>
+      [...canvas.getByTestId(testId).children].map(
+        (el) => (el as HTMLElement).getBoundingClientRect().height
+      );
+
+    await expect(heights("default")).toEqual([40, 40, 32]);
+    // Input and default Button stay level with each other at every density.
+    await expect(heights("compact")).toEqual([32, 32, 28, 24]);
   },
 };

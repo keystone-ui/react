@@ -160,6 +160,37 @@ Below is the full theme CSS. Copy this into your `globals.css` after `@import "@
   proper contrast in both modes.
 </Callout>
 
+## Control density
+
+Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle and TableHead
+take their height from four variables in `base.css`. Changing them moves every
+control together, so a toolbar left at its defaults still lines up:
+
+| Variable | Default | `density/compact` |
+| --- | --- | --- |
+| `--ks-control-xs` | 24px | 24px |
+| `--ks-control-sm` | 32px | 28px |
+| `--ks-control-md` | 40px (`size="default"`) | 32px |
+| `--ks-control-lg` | 48px | 40px |
+
+Install the compact ladder app-wide:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/density/compact.json
+```
+
+Or set the variables on one container — a dense data screen inside an
+otherwise default app:
+
+```tsx
+<section className="[--ks-control-sm:1.75rem] [--ks-control-md:2rem]">
+  {/* every control in here is one step denser */}
+</section>
+```
+
+The variables are defined from `--spacing`, so they follow it if you rescale
+spacing. Keep every value at 24px or more — the WCAG minimum target size.
+
 ## Corner radius
 
 `--radius` is the only radius token you set. The scale Keystone derives from it

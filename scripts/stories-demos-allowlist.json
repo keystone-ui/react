@@ -117,7 +117,7 @@
     ],
     "command": ["basic", "with-groups"],
     "copy-button": ["confirms-through-its-accessible-name"],
-    "css utilities": ["scroll-fade", "shimmer"],
+    "css utilities": ["density", "scroll-fade", "shimmer"],
     "date input": [
       "callback-ref",
       "default",

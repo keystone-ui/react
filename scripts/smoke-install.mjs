@@ -117,7 +117,12 @@ function selectItems(registry, requested) {
     return requested;
   }
   return registry.items
-    .filter((i) => i.type === "registry:ui" || i.type === "registry:block")
+    .filter(
+      (i) =>
+        i.type === "registry:ui" ||
+        i.type === "registry:block" ||
+        i.name.startsWith("density/")
+    )
     .map((i) => i.name);
 }
 

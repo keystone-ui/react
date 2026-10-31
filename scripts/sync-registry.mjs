@@ -45,6 +45,7 @@ const DEMOS_DIR = join(ROOT, "apps/docs/demos");
 const REGISTRY_JSON = join(ROOT, "registry.json");
 const STYLE_JSON = join(ROOT, "packages/ui/registry/default.json");
 const THEMES_DIR = join(ROOT, "packages/ui/registry/themes");
+const DENSITY_DIR = join(ROOT, "packages/ui/registry/density");
 const BUILD_OUTPUT_DIR = join(ROOT, "apps/docs/public/r");
 
 /** Item types owned by packages/ui/registry/ and regenerated on every sync. */
@@ -319,7 +320,31 @@ function buildThemeItems() {
     items.push(theme);
   }
 
-  return items;
+  return [...items, ...buildDensityItems()];
+}
+
+/**
+ * registry:item -- one control-height ladder per file, served at
+ * /r/density/<name>.json. Not a registry:theme: a density swaps
+ * --ks-control-* only, and every theme item must carry the full colour set.
+ */
+function buildDensityItems() {
+  if (!existsSync(DENSITY_DIR)) {
+    return [];
+  }
+  return readdirSync(DENSITY_DIR)
+    .filter((f) => f.endsWith(".json"))
+    .sort()
+    .map((file) => {
+      const item = JSON.parse(readFileSync(join(DENSITY_DIR, file), "utf-8"));
+      const expected = `density/${file.replace(/\.json$/, "")}`;
+      if (item.name !== expected) {
+        throw new Error(
+          `${join(DENSITY_DIR, file)}: item name is "${item.name}" but must be "${expected}".`
+        );
+      }
+      return item;
+    });
 }
 
 /**
@@ -406,7 +431,8 @@ const blockItems = existing.items.filter(
   (i) =>
     i.type !== "registry:ui" &&
     i.type !== "registry:example" &&
-    !THEME_ITEM_TYPES.has(i.type)
+    !THEME_ITEM_TYPES.has(i.type) &&
+    !i.name.startsWith("density/")
 );
 
 warnOnUncategorizedBlocks(blockItems);

@@ -562,6 +562,21 @@
       }
     },
     {
+      "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+      "name": "density/compact",
+      "type": "registry:item",
+      "title": "Compact density",
+      "description": "Moves every control one step down the height ladder (xs 24 · sm 28 · default 32 · lg 40) for dense app screens. Colours, radius and spacing are untouched. Requires @keystoneui/react base.css with the --ks-control-* ladder.",
+      "cssVars": {
+        "light": {
+          "ks-control-xs": "calc(var(--spacing) * 6)",
+          "ks-control-sm": "calc(var(--spacing) * 7)",
+          "ks-control-md": "calc(var(--spacing) * 8)",
+          "ks-control-lg": "calc(var(--spacing) * 10)"
+        }
+      }
+    },
+    {
       "name": "accordion",
       "type": "registry:ui",
       "title": "Accordion",
