@@ -798,3 +798,29 @@
   background-size: 200% 100%;
   animation: ks-shimmer-sweep calc(var(--duration-slow) * 8) linear infinite;
 }
+
+/* ==========================================================================
+ * Control height ladder — xs 24 · sm 32 · default 40 · lg 48.
+ *
+ * Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle and
+ * TableHead read their height from these instead of a literal h-10, so a
+ * density is one set of four values rather than a fork of eight components:
+ *
+ *   :root { --ks-control-sm: 1.75rem; --ks-control-md: 2rem; ... }  app-wide
+ *   <section class="[--ks-control-md:2rem]">                         one area
+ *
+ * The `compact` registry item is the first such set. Defined from --spacing,
+ * so an app that rescales its spacing still rescales its controls, as h-10
+ * did. Each component carries the default as a fallback
+ * (`h-(--ks-control-md,2.5rem)`), so a component newer than this file still
+ * renders at the right height. Keep every rung at or above 24px — the WCAG
+ * 2.5.8 minimum target size.
+ * ========================================================================== */
+@layer base {
+  :root {
+    --ks-control-xs: calc(var(--spacing) * 6);
+    --ks-control-sm: calc(var(--spacing) * 8);
+    --ks-control-md: calc(var(--spacing) * 10);
+    --ks-control-lg: calc(var(--spacing) * 12);
+  }
+}

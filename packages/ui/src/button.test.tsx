@@ -127,26 +127,32 @@ describe("Button variants", () => {
 describe("Button sizes", () => {
   it("applies default size", () => {
     render(<Button size="default">Default</Button>);
-    expect(screen.getByRole("button")).toHaveClass("h-10");
+    expect(screen.getByRole("button")).toHaveClass(
+      "h-(--ks-control-md,2.5rem)"
+    );
   });
 
   it("applies xs size", () => {
     render(<Button size="xs">XS</Button>);
-    expect(screen.getByRole("button")).toHaveClass("h-6");
+    expect(screen.getByRole("button")).toHaveClass(
+      "h-(--ks-control-xs,1.5rem)"
+    );
   });
 
   it("applies sm size", () => {
     render(<Button size="sm">Small</Button>);
-    expect(screen.getByRole("button")).toHaveClass("h-8");
+    expect(screen.getByRole("button")).toHaveClass("h-(--ks-control-sm,2rem)");
   });
 
   it("applies lg size", () => {
     render(<Button size="lg">Large</Button>);
-    expect(screen.getByRole("button")).toHaveClass("h-12");
+    expect(screen.getByRole("button")).toHaveClass("h-(--ks-control-lg,3rem)");
   });
 
   it("applies icon size", () => {
     render(<Button size="icon">Icon</Button>);
-    expect(screen.getByRole("button")).toHaveClass("size-10");
+    expect(screen.getByRole("button")).toHaveClass(
+      "size-(--ks-control-md,2.5rem)"
+    );
   });
 });

@@ -135,7 +135,9 @@ describe("Toggle sizes", () => {
       </Toggle>
     );
 
-    expect(screen.getByRole("button")).toHaveClass("h-10");
+    expect(screen.getByRole("button")).toHaveClass(
+      "h-(--ks-control-md,2.5rem)"
+    );
   });
 
   it("applies sm size", () => {
@@ -145,7 +147,7 @@ describe("Toggle sizes", () => {
       </Toggle>
     );
 
-    expect(screen.getByRole("button")).toHaveClass("h-8");
+    expect(screen.getByRole("button")).toHaveClass("h-(--ks-control-sm,2rem)");
   });
 
   it("applies lg size", () => {
@@ -155,6 +157,6 @@ describe("Toggle sizes", () => {
       </Toggle>
     );
 
-    expect(screen.getByRole("button")).toHaveClass("h-12");
+    expect(screen.getByRole("button")).toHaveClass("h-(--ks-control-lg,3rem)");
   });
 });

@@ -103,6 +103,9 @@ describe("CopyButton", () => {
   it("passes size and variant through to Button", () => {
     render(<CopyButton size="icon" value="usr_3f9a2c81" variant="outline" />);
 
-    expect(screen.getByRole("button")).toHaveClass("size-10", "border");
+    expect(screen.getByRole("button")).toHaveClass(
+      "size-(--ks-control-md,2.5rem)",
+      "border"
+    );
   });
 });

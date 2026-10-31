@@ -43,11 +43,15 @@ import { Textarea } from "./textarea";
 import { toggleVariants } from "./toggle";
 import { cn, POPUP_ITEM_HEIGHT } from "./utils";
 
-/** The ladder. Everything below is measured against these. */
-const XS = "h-6";
-const SM = "h-8";
-const MD = "h-10";
-const LG = "h-12";
+/**
+ * The ladder. Everything below is measured against these. Each rung reads a
+ * `--ks-control-*` variable from base.css, with the default as a fallback, so
+ * a density is one set of values rather than a fork of every control.
+ */
+const XS = "h-(--ks-control-xs,1.5rem)";
+const SM = "h-(--ks-control-sm,2rem)";
+const MD = "h-(--ks-control-md,2.5rem)";
+const LG = "h-(--ks-control-lg,3rem)";
 
 const ALL_TIERS = [XS, SM, MD, LG];
 
@@ -341,5 +345,57 @@ describe("popup item height", () => {
     }
 
     expect(offenders).toEqual([]);
+  });
+});
+
+const LITERAL_RUNG =
+  /(?:^|[\s"'`:])(?:h|size|min-h|min-w)-(?:6|8|10|12)(?=$|[\s"'`])/;
+const SCROLL_ARROW = /sticky (?:top|bottom)-0 z-10 flex h-6/;
+
+describe("ladder: no literal rungs", () => {
+  /**
+   * A literal `h-10` in a ladder control would ignore `--ks-control-md`, so
+   * that control alone would stay put when a density theme moved the rest.
+   * Select's scroll arrows are popup chrome, not a control, and stay h-6.
+   */
+  const LADDER_FILES = [
+    "button.tsx",
+    "combobox.tsx",
+    "input-group.tsx",
+    "input.tsx",
+    "native-select.tsx",
+    "select.tsx",
+    "table.tsx",
+    "toggle.tsx",
+  ];
+
+  it("reads every rung from a --ks-control-* variable", () => {
+    const offenders: string[] = [];
+    for (const file of LADDER_FILES) {
+      const lines = readFileSync(
+        join(import.meta.dirname, file),
+        "utf-8"
+      ).split("\n");
+      lines.forEach((line, i) => {
+        if (LITERAL_RUNG.test(line) && !SCROLL_ARROW.test(line)) {
+          offenders.push(`${file}:${i + 1} ${line.trim().slice(0, 70)}`);
+        }
+      });
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("defines the four rungs in base.css from --spacing", () => {
+    const css = readFileSync(join(import.meta.dirname, "base.css"), "utf-8");
+    for (const [rung, steps] of [
+      ["xs", 6],
+      ["sm", 8],
+      ["md", 10],
+      ["lg", 12],
+    ] as const) {
+      expect(css).toContain(
+        `--ks-control-${rung}: calc(var(--spacing) * ${steps});`
+      );
+    }
   });
 });

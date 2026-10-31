@@ -34,14 +34,14 @@ const buttonVariants = cva(
       // Every other rung keeps the base, so a button of any size lines up with
       // the Input, InputGroup, SelectTrigger and NativeSelect beside it.
       size: {
-        default: "h-10 px-4 py-2",
-        xs: "h-6 rounded-sm px-2.5 py-1 text-xs",
-        sm: "h-8 px-3 py-1.5",
-        lg: "h-12 px-5 py-3.5 text-base",
-        icon: "size-10 p-2",
-        "icon-xs": "size-6 rounded-sm p-0.5",
-        "icon-sm": "size-8 p-1.5",
-        "icon-lg": "size-12 p-2.5",
+        default: "h-(--ks-control-md,2.5rem) px-4 py-2",
+        xs: "h-(--ks-control-xs,1.5rem) rounded-sm px-2.5 py-1 text-xs",
+        sm: "h-(--ks-control-sm,2rem) px-3 py-1.5",
+        lg: "h-(--ks-control-lg,3rem) px-5 py-3.5 text-base",
+        icon: "size-(--ks-control-md,2.5rem) p-2",
+        "icon-xs": "size-(--ks-control-xs,1.5rem) rounded-sm p-0.5",
+        "icon-sm": "size-(--ks-control-sm,2rem) p-1.5",
+        "icon-lg": "size-(--ks-control-lg,3rem) p-2.5",
       },
       fullWidth: {
         true: "w-full",

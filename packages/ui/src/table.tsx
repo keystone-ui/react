@@ -242,7 +242,7 @@ const TableHead = ({
         : (ARIA_SORT[sortDirection as "asc" | "desc"] ?? "none")
     }
     className={cn(
-      "group/table-head h-10 whitespace-nowrap px-2 text-left align-middle font-medium text-foreground data-numeric:text-end data-numeric:tabular-nums group-data-[size=sm]/table:h-8 group-data-[size=sm]/table:px-1.5 group-data-[variant=card]/table:font-normal group-data-[variant=card]/table:text-muted-foreground [&:has([role=checkbox])]:pr-0",
+      "group/table-head h-(--ks-control-md,2.5rem) whitespace-nowrap px-2 text-left align-middle font-medium text-foreground data-numeric:text-end data-numeric:tabular-nums group-data-[size=sm]/table:h-(--ks-control-sm,2rem) group-data-[size=sm]/table:px-1.5 group-data-[variant=card]/table:font-normal group-data-[variant=card]/table:text-muted-foreground [&:has([role=checkbox])]:pr-0",
       className
     )}
     data-numeric={numeric || undefined}

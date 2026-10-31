@@ -24,9 +24,10 @@ const toggleVariants = cva(
       // deliberately NOT Button's -- it sets an icon-only toggle's width, and
       // px-4 would make a 40px-tall icon toggle 48px wide.
       size: {
-        default: "h-10 min-w-10 px-3",
-        sm: "h-8 min-w-8 px-2.5",
-        lg: "h-12 min-w-12 px-3.5",
+        default:
+          "h-(--ks-control-md,2.5rem) min-w-(--ks-control-md,2.5rem) px-3",
+        sm: "h-(--ks-control-sm,2rem) min-w-(--ks-control-sm,2rem) px-2.5",
+        lg: "h-(--ks-control-lg,3rem) min-w-(--ks-control-lg,3rem) px-3.5",
       },
     },
     defaultVariants: {

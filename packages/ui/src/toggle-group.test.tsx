@@ -133,7 +133,7 @@ describe("ToggleGroup", () => {
       </ToggleGroup>
     );
 
-    expect(screen.getByRole("button")).toHaveClass("h-8");
+    expect(screen.getByRole("button")).toHaveClass("h-(--ks-control-sm,2rem)");
   });
 
   it("allows item-level variant override", () => {

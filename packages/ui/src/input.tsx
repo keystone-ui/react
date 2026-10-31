@@ -38,8 +38,8 @@ export const Input = ({
         "bg-input-bg text-base md:text-sm",
         "rounded-md border border-input",
         "flex w-full min-w-0 px-3 py-1 shadow-xs outline-none transition-[color,box-shadow] duration-150 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-        size === "default" && "h-10",
-        size === "sm" && "h-8",
+        size === "default" && "h-(--ks-control-md,2.5rem)",
+        size === "sm" && "h-(--ks-control-sm,2rem)",
         "placeholder:text-muted-foreground/70",
         // Focus styles
         "focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset",

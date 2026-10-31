@@ -58,8 +58,8 @@ export const InputGroup = ({
         className={cn(
           "group/input-group relative flex w-full items-center rounded-md border border-input bg-input-bg shadow-xs outline-none transition-[color,box-shadow]",
           "min-w-0",
-          size === "default" && "h-10",
-          size === "sm" && "h-8",
+          size === "default" && "h-(--ks-control-md,2.5rem)",
+          size === "sm" && "h-(--ks-control-sm,2rem)",
 
           // Textarea: auto-height, bottom-align addon so it stays anchored as textarea grows
           "has-[>textarea]:h-auto has-[>textarea]:items-end",
@@ -169,38 +169,39 @@ const inputGroupButtonVariants = cva(
           "rounded-[calc(var(--radius)*0.5)]",
           "[&>svg:not([class*='size-'])]:size-4",
           // Default group (40px) — 32px button (4px inset)
-          "group-data-[size=default]/input-group:h-8",
+          "group-data-[size=default]/input-group:h-[max(calc(var(--ks-control-md,2.5rem)-0.5rem),var(--ks-control-xs,1.5rem))]",
           "group-data-[size=default]/input-group:gap-1.5",
           "group-data-[size=default]/input-group:px-2.5",
           // Sm group (32px) — 24px button (4px inset), 14px icon (matches xs)
-          "group-data-[size=sm]/input-group:h-6",
+          "group-data-[size=sm]/input-group:h-[max(calc(var(--ks-control-sm,2rem)-0.5rem),var(--ks-control-xs,1.5rem))]",
           "group-data-[size=sm]/input-group:gap-1",
           "group-data-[size=sm]/input-group:px-2",
           "group-data-[size=sm]/input-group:[&>svg:not([class*='size-'])]:size-3.5",
           // Icon-only (only direct child is svg): square + p-0
           "has-[>svg:only-child]:p-0",
-          "group-data-[size=default]/input-group:has-[>svg:only-child]:size-8",
-          "group-data-[size=sm]/input-group:has-[>svg:only-child]:size-6",
+          "group-data-[size=default]/input-group:has-[>svg:only-child]:size-[max(calc(var(--ks-control-md,2.5rem)-0.5rem),var(--ks-control-xs,1.5rem))]",
+          "group-data-[size=sm]/input-group:has-[>svg:only-child]:size-[max(calc(var(--ks-control-sm,2rem)-0.5rem),var(--ks-control-xs,1.5rem))]",
           // Block addons: 32px toolbar height regardless of group size
-          "group-data-[align=block-start]/input-group-addon:h-8",
-          "group-data-[align=block-end]/input-group-addon:h-8",
+          "group-data-[align=block-start]/input-group-addon:h-(--ks-control-sm,2rem)",
+          "group-data-[align=block-end]/input-group-addon:h-(--ks-control-sm,2rem)",
           "group-data-[align=block-start]/input-group-addon:px-2.5",
           "group-data-[align=block-end]/input-group-addon:px-2.5",
-          "group-data-[align=block-start]/input-group-addon:has-[>svg:only-child]:size-8",
-          "group-data-[align=block-end]/input-group-addon:has-[>svg:only-child]:size-8",
+          "group-data-[align=block-start]/input-group-addon:has-[>svg:only-child]:size-(--ks-control-sm,2rem)",
+          "group-data-[align=block-end]/input-group-addon:has-[>svg:only-child]:size-(--ks-control-sm,2rem)",
           // Multi-button addon (sibling buttons present): compact 24px chips
           // so two/three buttons fit cleanly without extending past the input
           // frame. Stays out of block-addon scope (toolbars handle their own sizing).
-          "group-has-[>button~button]/input-group-addon:h-6",
+          "group-has-[>button~button]/input-group-addon:h-(--ks-control-xs,1.5rem)",
           "group-has-[>button~button]/input-group-addon:gap-1",
           "group-has-[>button~button]/input-group-addon:px-2",
           "group-has-[>button~button]/input-group-addon:[&>svg:not([class*='size-'])]:size-3.5",
-          "group-has-[>button~button]/input-group-addon:has-[>svg:only-child]:size-6",
+          "group-has-[>button~button]/input-group-addon:has-[>svg:only-child]:size-(--ks-control-xs,1.5rem)",
         ].join(" "),
-        xs: "h-6 gap-1 rounded-sm px-2 has-[>svg]:px-2 [&>svg:not([class*='size-'])]:size-3.5",
-        sm: "h-8 gap-1.5 rounded-md px-2.5 has-[>svg]:px-2.5",
-        "icon-xs": "size-6 rounded-sm p-0 has-[>svg]:p-0",
-        "icon-sm": "size-8 rounded-md p-0 has-[>svg]:p-0",
+        xs: "h-(--ks-control-xs,1.5rem) gap-1 rounded-sm px-2 has-[>svg]:px-2 [&>svg:not([class*='size-'])]:size-3.5",
+        sm: "h-(--ks-control-sm,2rem) gap-1.5 rounded-md px-2.5 has-[>svg]:px-2.5",
+        "icon-xs":
+          "size-(--ks-control-xs,1.5rem) rounded-sm p-0 has-[>svg]:p-0",
+        "icon-sm": "size-(--ks-control-sm,2rem) rounded-md p-0 has-[>svg]:p-0",
       },
     },
     defaultVariants: {
@@ -311,7 +312,7 @@ export const InputGroupTextarea = ({
 }: InputGroupTextareaProps & RefAttributes<HTMLTextAreaElement>) => (
   <Textarea
     className={cn(
-      "field-sizing-content min-h-10 flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none md:py-2.5 dark:bg-transparent",
+      "field-sizing-content min-h-(--ks-control-md,2.5rem) flex-1 resize-none rounded-none border-0 bg-transparent py-2 shadow-none md:py-2.5 dark:bg-transparent",
       "focus:border-transparent focus:shadow-none focus:ring-0",
       className
     )}
