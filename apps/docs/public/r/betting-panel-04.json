@@ -7,10 +7,10 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "button",
-    "card",
-    "tabs",
-    "toggle-group"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/card.json",
+    "https://keystoneui.io/r/tabs.json",
+    "https://keystoneui.io/r/toggle-group.json"
   ],
   "files": [
     {

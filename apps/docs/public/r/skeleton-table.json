@@ -4,7 +4,7 @@
   "title": "Skeleton Table",
   "description": "Skeleton example: Table.",
   "registryDependencies": [
-    "skeleton"
+    "https://keystoneui.io/r/skeleton.json"
   ],
   "files": [
     {

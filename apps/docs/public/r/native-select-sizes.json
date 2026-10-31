@@ -4,7 +4,7 @@
   "title": "Native Select Sizes",
   "description": "Native Select example: Sizes.",
   "registryDependencies": [
-    "native-select"
+    "https://keystoneui.io/r/native-select.json"
   ],
   "files": [
     {

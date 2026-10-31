@@ -4,7 +4,7 @@
   "title": "Button Rounded",
   "description": "Button example: Rounded.",
   "registryDependencies": [
-    "button"
+    "https://keystoneui.io/r/button.json"
   ],
   "files": [
     {

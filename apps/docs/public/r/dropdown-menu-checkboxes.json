@@ -4,8 +4,8 @@
   "title": "Dropdown Menu Checkboxes",
   "description": "Dropdown Menu example: Checkboxes.",
   "registryDependencies": [
-    "button",
-    "dropdown-menu"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/dropdown-menu.json"
   ],
   "files": [
     {

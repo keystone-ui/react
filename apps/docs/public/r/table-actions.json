@@ -4,8 +4,8 @@
   "title": "Table Actions",
   "description": "Table example: Actions.",
   "registryDependencies": [
-    "button",
-    "table"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/table.json"
   ],
   "files": [
     {

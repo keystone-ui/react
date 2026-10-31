@@ -4,7 +4,7 @@
   "title": "Slider With Label",
   "description": "Slider example: With Label.",
   "registryDependencies": [
-    "slider"
+    "https://keystoneui.io/r/slider.json"
   ],
   "files": [
     {

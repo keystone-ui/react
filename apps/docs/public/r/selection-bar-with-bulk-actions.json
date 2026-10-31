@@ -4,8 +4,8 @@
   "title": "Selection Bar With Bulk Actions",
   "description": "Selection Bar example: With Bulk Actions.",
   "registryDependencies": [
-    "dropdown-menu",
-    "selection-bar"
+    "https://keystoneui.io/r/dropdown-menu.json",
+    "https://keystoneui.io/r/selection-bar.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Toggle Group Vertical",
   "description": "Toggle Group example: Vertical.",
   "registryDependencies": [
-    "toggle-group"
+    "https://keystoneui.io/r/toggle-group.json"
   ],
   "files": [
     {

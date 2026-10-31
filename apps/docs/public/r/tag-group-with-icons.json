@@ -4,7 +4,7 @@
   "title": "Tag Group With Icons",
   "description": "Tag Group example: With Icons.",
   "registryDependencies": [
-    "tag-group"
+    "https://keystoneui.io/r/tag-group.json"
   ],
   "files": [
     {

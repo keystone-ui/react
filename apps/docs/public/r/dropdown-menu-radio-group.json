@@ -4,8 +4,8 @@
   "title": "Dropdown Menu Radio Group",
   "description": "Dropdown Menu example: Radio Group.",
   "registryDependencies": [
-    "button",
-    "dropdown-menu"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/dropdown-menu.json"
   ],
   "files": [
     {

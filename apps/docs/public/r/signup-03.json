@@ -7,10 +7,10 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "button",
-    "card",
-    "field",
-    "input"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/card.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Tabs Morphing Line",
   "description": "Tabs example: Morphing Line.",
   "registryDependencies": [
-    "tabs"
+    "https://keystoneui.io/r/tabs.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Spinner Sizes",
   "description": "Spinner example: Sizes.",
   "registryDependencies": [
-    "spinner"
+    "https://keystoneui.io/r/spinner.json"
   ],
   "files": [
     {

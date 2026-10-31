@@ -4,8 +4,8 @@
   "title": "Command Keyboard Trigger",
   "description": "Command example: Keyboard Trigger.",
   "registryDependencies": [
-    "button",
-    "command"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/command.json"
   ],
   "files": [
     {

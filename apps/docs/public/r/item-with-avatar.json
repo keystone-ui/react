@@ -4,8 +4,8 @@
   "title": "Item With Avatar",
   "description": "Item example: With Avatar.",
   "registryDependencies": [
-    "avatar",
-    "item"
+    "https://keystoneui.io/r/avatar.json",
+    "https://keystoneui.io/r/item.json"
   ],
   "files": [
     {

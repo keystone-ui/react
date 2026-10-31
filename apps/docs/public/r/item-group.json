@@ -4,9 +4,9 @@
   "title": "Item Group",
   "description": "Item example: Group.",
   "registryDependencies": [
-    "avatar",
-    "button",
-    "item"
+    "https://keystoneui.io/r/avatar.json",
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/item.json"
   ],
   "files": [
     {

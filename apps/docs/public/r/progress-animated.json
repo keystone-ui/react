@@ -4,7 +4,7 @@
   "title": "Progress Animated",
   "description": "Progress example: Animated.",
   "registryDependencies": [
-    "progress"
+    "https://keystoneui.io/r/progress.json"
   ],
   "files": [
     {

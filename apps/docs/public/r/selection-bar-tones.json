@@ -4,7 +4,7 @@
   "title": "Selection Bar Tones",
   "description": "Selection Bar example: Tones.",
   "registryDependencies": [
-    "selection-bar"
+    "https://keystoneui.io/r/selection-bar.json"
   ],
   "files": [
     {

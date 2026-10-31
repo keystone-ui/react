@@ -4,8 +4,8 @@
   "title": "Spinner With Button",
   "description": "Spinner example: With Button.",
   "registryDependencies": [
-    "button",
-    "spinner"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/spinner.json"
   ],
   "files": [
     {

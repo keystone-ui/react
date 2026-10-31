@@ -17,6 +17,13 @@ npx shadcn add https://keystoneui.io/r/default.json
 
 The CLI generates the complete theme CSS in your `globals.css`: dark mode variant, Tailwind registration, color tokens, and base layer defaults.
 
+<Callout type="info">
+Use **shadcn CLI 4.7 or later** (`npx shadcn@latest`). Components install to
+the directory your `components.json` names as `aliases.ui`, through the `@ui/`
+target placeholder that 4.7 introduced; an older CLI writes a literal
+`@ui/button.tsx` path instead.
+</Callout>
+
 ## Style vs Theme
 
 Keystone provides two registry item types:

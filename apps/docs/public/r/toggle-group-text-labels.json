@@ -4,7 +4,7 @@
   "title": "Toggle Group Text Labels",
   "description": "Toggle Group example: Text Labels.",
   "registryDependencies": [
-    "toggle-group"
+    "https://keystoneui.io/r/toggle-group.json"
   ],
   "files": [
     {

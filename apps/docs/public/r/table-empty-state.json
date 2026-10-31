@@ -4,8 +4,8 @@
   "title": "Table Empty State",
   "description": "Table example: Empty State.",
   "registryDependencies": [
-    "empty",
-    "table"
+    "https://keystoneui.io/r/empty.json",
+    "https://keystoneui.io/r/table.json"
   ],
   "files": [
     {

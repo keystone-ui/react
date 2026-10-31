@@ -4,8 +4,8 @@
   "title": "Modal Confirmation",
   "description": "Modal example: Confirmation.",
   "registryDependencies": [
-    "button",
-    "modal"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/modal.json"
   ],
   "files": [
     {

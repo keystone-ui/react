@@ -4,8 +4,8 @@
   "title": "Modal Scrollable",
   "description": "Modal example: Scrollable.",
   "registryDependencies": [
-    "button",
-    "modal"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/modal.json"
   ],
   "files": [
     {

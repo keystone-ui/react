@@ -4,7 +4,7 @@
   "title": "Slider Disabled",
   "description": "Slider example: Disabled.",
   "registryDependencies": [
-    "slider"
+    "https://keystoneui.io/r/slider.json"
   ],
   "files": [
     {

@@ -4,9 +4,9 @@
   "title": "Table With Pagination",
   "description": "Table example: With Pagination.",
   "registryDependencies": [
-    "badge",
-    "pagination",
-    "table"
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/pagination.json",
+    "https://keystoneui.io/r/table.json"
   ],
   "files": [
     {

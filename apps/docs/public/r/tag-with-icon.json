@@ -4,7 +4,7 @@
   "title": "Tag With Icon",
   "description": "Tag example: With Icon.",
   "registryDependencies": [
-    "tag"
+    "https://keystoneui.io/r/tag.json"
   ],
   "files": [
     {

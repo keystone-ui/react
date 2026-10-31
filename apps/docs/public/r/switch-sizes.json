@@ -4,8 +4,8 @@
   "title": "Switch Sizes",
   "description": "Switch example: Sizes.",
   "registryDependencies": [
-    "field",
-    "switch"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/switch.json"
   ],
   "files": [
     {

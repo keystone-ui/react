@@ -4,7 +4,7 @@
   "title": "Skeleton Card",
   "description": "Skeleton example: Card.",
   "registryDependencies": [
-    "skeleton"
+    "https://keystoneui.io/r/skeleton.json"
   ],
   "files": [
     {

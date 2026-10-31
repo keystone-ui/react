@@ -4,7 +4,7 @@
   "title": "Skeleton Shimmer",
   "description": "Skeleton example: Shimmer.",
   "registryDependencies": [
-    "skeleton"
+    "https://keystoneui.io/r/skeleton.json"
   ],
   "files": [
     {

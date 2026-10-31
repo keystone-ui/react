@@ -4,8 +4,8 @@
   "title": "Item With Footer",
   "description": "Item example: With Footer.",
   "registryDependencies": [
-    "button",
-    "item"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/item.json"
   ],
   "files": [
     {

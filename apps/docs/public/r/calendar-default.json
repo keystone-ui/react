@@ -4,7 +4,7 @@
   "title": "Calendar Default",
   "description": "Calendar example: Default.",
   "registryDependencies": [
-    "calendar"
+    "https://keystoneui.io/r/calendar.json"
   ],
   "files": [
     {

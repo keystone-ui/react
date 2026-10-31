@@ -4,8 +4,8 @@
   "title": "Switch With Description",
   "description": "Switch example: With Description.",
   "registryDependencies": [
-    "field",
-    "switch"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/switch.json"
   ],
   "files": [
     {

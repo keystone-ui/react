@@ -4,7 +4,7 @@
   "title": "Toggle Default",
   "description": "Toggle example: Default.",
   "registryDependencies": [
-    "toggle"
+    "https://keystoneui.io/r/toggle.json"
   ],
   "files": [
     {

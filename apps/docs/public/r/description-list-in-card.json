@@ -4,9 +4,9 @@
   "title": "Description List In Card",
   "description": "Description List example: In Card.",
   "registryDependencies": [
-    "badge",
-    "card",
-    "description-list"
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/card.json",
+    "https://keystoneui.io/r/description-list.json"
   ],
   "files": [
     {

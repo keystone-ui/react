@@ -4,8 +4,8 @@
   "title": "Tag Group With Avatars",
   "description": "Tag Group example: With Avatars.",
   "registryDependencies": [
-    "avatar",
-    "tag-group"
+    "https://keystoneui.io/r/avatar.json",
+    "https://keystoneui.io/r/tag-group.json"
   ],
   "files": [
     {

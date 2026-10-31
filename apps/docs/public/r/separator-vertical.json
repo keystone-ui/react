@@ -4,7 +4,7 @@
   "title": "Separator Vertical",
   "description": "Separator example: Vertical.",
   "registryDependencies": [
-    "separator"
+    "https://keystoneui.io/r/separator.json"
   ],
   "files": [
     {

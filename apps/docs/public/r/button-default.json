@@ -4,7 +4,7 @@
   "title": "Button Default",
   "description": "Button example: Default.",
   "registryDependencies": [
-    "button"
+    "https://keystoneui.io/r/button.json"
   ],
   "files": [
     {

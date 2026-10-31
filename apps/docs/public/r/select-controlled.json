@@ -4,9 +4,9 @@
   "title": "Select Controlled",
   "description": "Select example: Controlled.",
   "registryDependencies": [
-    "button",
-    "field",
-    "select"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/select.json"
   ],
   "files": [
     {

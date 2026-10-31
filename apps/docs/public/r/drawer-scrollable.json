@@ -4,8 +4,8 @@
   "title": "Drawer Scrollable",
   "description": "Drawer example: Scrollable.",
   "registryDependencies": [
-    "button",
-    "drawer"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/drawer.json"
   ],
   "files": [
     {

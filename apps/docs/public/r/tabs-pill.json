@@ -4,7 +4,7 @@
   "title": "Tabs Pill",
   "description": "Tabs example: Pill.",
   "registryDependencies": [
-    "tabs"
+    "https://keystoneui.io/r/tabs.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Tabs Default",
   "description": "Tabs example: Default.",
   "registryDependencies": [
-    "tabs"
+    "https://keystoneui.io/r/tabs.json"
   ],
   "files": [
     {

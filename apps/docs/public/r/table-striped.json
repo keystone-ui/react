@@ -4,7 +4,7 @@
   "title": "Table Striped",
   "description": "Table example: Striped.",
   "registryDependencies": [
-    "table"
+    "https://keystoneui.io/r/table.json"
   ],
   "files": [
     {

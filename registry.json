@@ -573,7 +573,7 @@
       "files": [
         {
           "path": "packages/ui/src/accordion.tsx",
-          "target": "components/ui/accordion.tsx",
+          "target": "@ui/accordion.tsx",
           "type": "registry:ui"
         }
       ]
@@ -586,7 +586,7 @@
       "files": [
         {
           "path": "packages/ui/src/aspect-ratio.tsx",
-          "target": "components/ui/aspect-ratio.tsx",
+          "target": "@ui/aspect-ratio.tsx",
           "type": "registry:ui"
         }
       ]
@@ -600,12 +600,12 @@
         "@base-ui/react"
       ],
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/alert-dialog.tsx",
-          "target": "components/ui/alert-dialog.tsx",
+          "target": "@ui/alert-dialog.tsx",
           "type": "registry:ui"
         }
       ]
@@ -621,7 +621,7 @@
       "files": [
         {
           "path": "packages/ui/src/avatar.tsx",
-          "target": "components/ui/avatar.tsx",
+          "target": "@ui/avatar.tsx",
           "type": "registry:ui"
         }
       ]
@@ -638,7 +638,7 @@
       "files": [
         {
           "path": "packages/ui/src/badge.tsx",
-          "target": "components/ui/badge.tsx",
+          "target": "@ui/badge.tsx",
           "type": "registry:ui"
         }
       ]
@@ -655,7 +655,7 @@
       "files": [
         {
           "path": "packages/ui/src/breadcrumb.tsx",
-          "target": "components/ui/breadcrumb.tsx",
+          "target": "@ui/breadcrumb.tsx",
           "type": "registry:ui"
         }
       ]
@@ -673,7 +673,7 @@
       "files": [
         {
           "path": "packages/ui/src/button.tsx",
-          "target": "components/ui/button.tsx",
+          "target": "@ui/button.tsx",
           "type": "registry:ui"
         }
       ]
@@ -687,13 +687,13 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
-        "button",
-        "separator"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/separator.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/button-group.tsx",
-          "target": "components/ui/button-group.tsx",
+          "target": "@ui/button-group.tsx",
           "type": "registry:ui"
         }
       ]
@@ -708,13 +708,13 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "native-select"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/native-select.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/calendar.tsx",
-          "target": "components/ui/calendar.tsx",
+          "target": "@ui/calendar.tsx",
           "type": "registry:ui"
         }
       ]
@@ -730,12 +730,12 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/carousel.tsx",
-          "target": "components/ui/carousel.tsx",
+          "target": "@ui/carousel.tsx",
           "type": "registry:ui"
         }
       ]
@@ -751,7 +751,7 @@
       "files": [
         {
           "path": "packages/ui/src/alert.tsx",
-          "target": "components/ui/alert.tsx",
+          "target": "@ui/alert.tsx",
           "type": "registry:ui"
         }
       ]
@@ -767,7 +767,7 @@
       "files": [
         {
           "path": "packages/ui/src/card.tsx",
-          "target": "components/ui/card.tsx",
+          "target": "@ui/card.tsx",
           "type": "registry:ui"
         }
       ]
@@ -784,7 +784,7 @@
       "files": [
         {
           "path": "packages/ui/src/circular-progress.tsx",
-          "target": "components/ui/circular-progress.tsx",
+          "target": "@ui/circular-progress.tsx",
           "type": "registry:ui"
         }
       ]
@@ -800,7 +800,7 @@
       "files": [
         {
           "path": "packages/ui/src/checkbox.tsx",
-          "target": "components/ui/checkbox.tsx",
+          "target": "@ui/checkbox.tsx",
           "type": "registry:ui"
         }
       ]
@@ -816,7 +816,7 @@
       "files": [
         {
           "path": "packages/ui/src/collapsible.tsx",
-          "target": "components/ui/collapsible.tsx",
+          "target": "@ui/collapsible.tsx",
           "type": "registry:ui"
         }
       ]
@@ -831,13 +831,13 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "input-group"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/combobox.tsx",
-          "target": "components/ui/combobox.tsx",
+          "target": "@ui/combobox.tsx",
           "type": "registry:ui"
         }
       ]
@@ -852,13 +852,13 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "input-group",
-        "modal"
+        "https://keystoneui.io/r/input-group.json",
+        "https://keystoneui.io/r/modal.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/command.tsx",
-          "target": "components/ui/command.tsx",
+          "target": "@ui/command.tsx",
           "type": "registry:ui"
         }
       ]
@@ -869,12 +869,12 @@
       "title": "Date Input",
       "description": "Date picker input field for selecting dates with keyboard and calendar support.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/date-input.tsx",
-          "target": "components/ui/date-input.tsx",
+          "target": "@ui/date-input.tsx",
           "type": "registry:ui"
         }
       ]
@@ -887,7 +887,7 @@
       "files": [
         {
           "path": "packages/ui/src/description-list.tsx",
-          "target": "components/ui/description-list.tsx",
+          "target": "@ui/description-list.tsx",
           "type": "registry:ui"
         }
       ]
@@ -903,7 +903,7 @@
       "files": [
         {
           "path": "packages/ui/src/drawer.tsx",
-          "target": "components/ui/drawer.tsx",
+          "target": "@ui/drawer.tsx",
           "type": "registry:ui"
         }
       ]
@@ -919,7 +919,7 @@
       "files": [
         {
           "path": "packages/ui/src/empty.tsx",
-          "target": "components/ui/empty.tsx",
+          "target": "@ui/empty.tsx",
           "type": "registry:ui"
         }
       ]
@@ -934,12 +934,12 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "checkbox"
+        "https://keystoneui.io/r/checkbox.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/dropdown-menu.tsx",
-          "target": "components/ui/dropdown-menu.tsx",
+          "target": "@ui/dropdown-menu.tsx",
           "type": "registry:ui"
         }
       ]
@@ -950,13 +950,13 @@
       "title": "Field",
       "description": "Form field wrapper that provides a label, description, and error message around a form control.",
       "registryDependencies": [
-        "label",
-        "separator"
+        "https://keystoneui.io/r/label.json",
+        "https://keystoneui.io/r/separator.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/field.tsx",
-          "target": "components/ui/field.tsx",
+          "target": "@ui/field.tsx",
           "type": "registry:ui"
         }
       ]
@@ -967,12 +967,12 @@
       "title": "Form",
       "description": "A form wrapper component that provides consistent layout and validation support.",
       "registryDependencies": [
-        "label"
+        "https://keystoneui.io/r/label.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/form.tsx",
-          "target": "components/ui/form.tsx",
+          "target": "@ui/form.tsx",
           "type": "registry:ui"
         }
       ]
@@ -989,7 +989,7 @@
       "files": [
         {
           "path": "packages/ui/src/item.tsx",
-          "target": "components/ui/item.tsx",
+          "target": "@ui/item.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1002,7 +1002,7 @@
       "files": [
         {
           "path": "packages/ui/src/input.tsx",
-          "target": "components/ui/input.tsx",
+          "target": "@ui/input.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1013,14 +1013,14 @@
       "title": "Input Group",
       "description": "Groups an input with adjacent buttons, icons, or text add-ons for combined input actions.",
       "registryDependencies": [
-        "button",
-        "input",
-        "textarea"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/textarea.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/input-group.tsx",
-          "target": "components/ui/input-group.tsx",
+          "target": "@ui/input-group.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1036,7 +1036,7 @@
       "files": [
         {
           "path": "packages/ui/src/input-otp.tsx",
-          "target": "components/ui/input-otp.tsx",
+          "target": "@ui/input-otp.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1049,7 +1049,7 @@
       "files": [
         {
           "path": "packages/ui/src/kbd.tsx",
-          "target": "components/ui/kbd.tsx",
+          "target": "@ui/kbd.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1065,7 +1065,7 @@
       "files": [
         {
           "path": "packages/ui/src/label.tsx",
-          "target": "components/ui/label.tsx",
+          "target": "@ui/label.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1081,12 +1081,12 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/modal.tsx",
-          "target": "components/ui/modal.tsx",
+          "target": "@ui/modal.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1102,7 +1102,7 @@
       "files": [
         {
           "path": "packages/ui/src/native-select.tsx",
-          "target": "components/ui/native-select.tsx",
+          "target": "@ui/native-select.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1116,12 +1116,12 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/pagination.tsx",
-          "target": "components/ui/pagination.tsx",
+          "target": "@ui/pagination.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1137,7 +1137,7 @@
       "files": [
         {
           "path": "packages/ui/src/popover.tsx",
-          "target": "components/ui/popover.tsx",
+          "target": "@ui/popover.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1154,7 +1154,7 @@
       "files": [
         {
           "path": "packages/ui/src/progress.tsx",
-          "target": "components/ui/progress.tsx",
+          "target": "@ui/progress.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1170,7 +1170,7 @@
       "files": [
         {
           "path": "packages/ui/src/radio-group.tsx",
-          "target": "components/ui/radio-group.tsx",
+          "target": "@ui/radio-group.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1186,7 +1186,7 @@
       "files": [
         {
           "path": "packages/ui/src/resizable.tsx",
-          "target": "components/ui/resizable.tsx",
+          "target": "@ui/resizable.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1203,7 +1203,7 @@
       "files": [
         {
           "path": "packages/ui/src/select.tsx",
-          "target": "components/ui/select.tsx",
+          "target": "@ui/select.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1219,7 +1219,7 @@
       "files": [
         {
           "path": "packages/ui/src/slider.tsx",
-          "target": "components/ui/slider.tsx",
+          "target": "@ui/slider.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1232,7 +1232,7 @@
       "files": [
         {
           "path": "packages/ui/src/separator.tsx",
-          "target": "components/ui/separator.tsx",
+          "target": "@ui/separator.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1245,7 +1245,7 @@
       "files": [
         {
           "path": "packages/ui/src/skeleton.tsx",
-          "target": "components/ui/skeleton.tsx",
+          "target": "@ui/skeleton.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1261,7 +1261,7 @@
       "files": [
         {
           "path": "packages/ui/src/spinner.tsx",
-          "target": "components/ui/spinner.tsx",
+          "target": "@ui/spinner.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1278,7 +1278,7 @@
       "files": [
         {
           "path": "packages/ui/src/stepper.tsx",
-          "target": "components/ui/stepper.tsx",
+          "target": "@ui/stepper.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1294,7 +1294,7 @@
       "files": [
         {
           "path": "packages/ui/src/switch.tsx",
-          "target": "components/ui/switch.tsx",
+          "target": "@ui/switch.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1311,7 +1311,7 @@
       "files": [
         {
           "path": "packages/ui/src/table.tsx",
-          "target": "components/ui/table.tsx",
+          "target": "@ui/table.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1330,7 +1330,7 @@
       "files": [
         {
           "path": "packages/ui/src/tabs.tsx",
-          "target": "components/ui/tabs.tsx",
+          "target": "@ui/tabs.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1343,7 +1343,7 @@
       "files": [
         {
           "path": "packages/ui/src/textarea.tsx",
-          "target": "components/ui/textarea.tsx",
+          "target": "@ui/textarea.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1361,7 +1361,7 @@
       "files": [
         {
           "path": "packages/ui/src/tag.tsx",
-          "target": "components/ui/tag.tsx",
+          "target": "@ui/tag.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1376,12 +1376,12 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
-        "tag"
+        "https://keystoneui.io/r/tag.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/tag-group.tsx",
-          "target": "components/ui/tag-group.tsx",
+          "target": "@ui/tag-group.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1398,7 +1398,7 @@
       "files": [
         {
           "path": "packages/ui/src/toggle.tsx",
-          "target": "components/ui/toggle.tsx",
+          "target": "@ui/toggle.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1413,12 +1413,12 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
-        "toggle"
+        "https://keystoneui.io/r/toggle.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/toggle-group.tsx",
-          "target": "components/ui/toggle-group.tsx",
+          "target": "@ui/toggle-group.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1434,7 +1434,7 @@
       "files": [
         {
           "path": "packages/ui/src/tooltip.tsx",
-          "target": "components/ui/tooltip.tsx",
+          "target": "@ui/tooltip.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1451,7 +1451,7 @@
       "files": [
         {
           "path": "packages/ui/src/toast.tsx",
-          "target": "components/ui/toast.tsx",
+          "target": "@ui/toast.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1466,12 +1466,12 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/selection-bar.tsx",
-          "target": "components/ui/selection-bar.tsx",
+          "target": "@ui/selection-bar.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1486,12 +1486,12 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "card"
+        "https://keystoneui.io/r/card.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/stat.tsx",
-          "target": "components/ui/stat.tsx",
+          "target": "@ui/stat.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1505,14 +1505,14 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "label",
-        "select"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/label.json",
+        "https://keystoneui.io/r/select.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/table-pagination.tsx",
-          "target": "components/ui/table-pagination.tsx",
+          "target": "@ui/table-pagination.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1523,12 +1523,12 @@
       "title": "Copy Button",
       "description": "An icon button that copies a value to the clipboard and confirms it.",
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
           "path": "packages/ui/src/copy-button.tsx",
-          "target": "components/ui/copy-button.tsx",
+          "target": "@ui/copy-button.tsx",
           "type": "registry:ui"
         }
       ]
@@ -1539,10 +1539,10 @@
       "title": "Sign in 01",
       "description": "A simple sign-in form inside a card with email and password fields.",
       "registryDependencies": [
-        "button",
-        "card",
-        "field",
-        "input"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -1569,9 +1569,9 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "field",
-        "input"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -1595,10 +1595,10 @@
       "title": "Sign in 03",
       "description": "A sign-in page with a form and image side by side inside a card.",
       "registryDependencies": [
-        "button",
-        "card",
-        "field",
-        "input"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -1625,9 +1625,9 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "field",
-        "input"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -1651,10 +1651,10 @@
       "title": "Signup 01",
       "description": "A simple signup form inside a card with name, email, and password fields.",
       "registryDependencies": [
-        "button",
-        "card",
-        "field",
-        "input"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -1681,9 +1681,9 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "field",
-        "input"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -1710,10 +1710,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "card",
-        "field",
-        "input"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -1737,10 +1737,10 @@
       "title": "Signup 04",
       "description": "A signup page with a form and image side by side inside a card.",
       "registryDependencies": [
-        "button",
-        "card",
-        "field",
-        "input"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -1767,9 +1767,9 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "field",
-        "input"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -1796,12 +1796,12 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "avatar",
-        "badge",
-        "button",
-        "dropdown-menu",
-        "progress",
-        "separator"
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/circular-progress.json",
+        "https://keystoneui.io/r/dropdown-menu.json",
+        "https://keystoneui.io/r/progress.json",
+        "https://keystoneui.io/r/separator.json"
       ],
       "files": [
         {
@@ -1823,34 +1823,33 @@
         "recharts"
       ],
       "registryDependencies": [
-        "avatar",
-        "badge",
-        "breadcrumb",
-        "button",
-        "card",
-        "checkbox",
-        "combobox",
-        "copy-button",
-        "description-list",
-        "drawer",
-        "dropdown-menu",
-        "empty",
-        "input",
-        "input-group",
-        "label",
-        "native-select",
-        "popover",
-        "radio-group",
-        "select",
-        "selection-bar",
-        "separator",
-        "sidebar",
-        "skeleton",
-        "stat",
-        "stepper",
-        "table",
-        "table-pagination",
-        "toggle-group"
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/breadcrumb.json",
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/combobox.json",
+        "https://keystoneui.io/r/copy-button.json",
+        "https://keystoneui.io/r/description-list.json",
+        "https://keystoneui.io/r/drawer.json",
+        "https://keystoneui.io/r/dropdown-menu.json",
+        "https://keystoneui.io/r/empty.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/input-group.json",
+        "https://keystoneui.io/r/label.json",
+        "https://keystoneui.io/r/native-select.json",
+        "https://keystoneui.io/r/popover.json",
+        "https://keystoneui.io/r/radio-group.json",
+        "https://keystoneui.io/r/selection-bar.json",
+        "https://keystoneui.io/r/separator.json",
+        "https://keystoneui.io/r/skeleton.json",
+        "https://keystoneui.io/r/stat.json",
+        "https://keystoneui.io/r/stepper.json",
+        "https://keystoneui.io/r/table.json",
+        "https://keystoneui.io/r/table-pagination.json",
+        "https://keystoneui.io/r/toggle-group.json",
+        "https://keystoneui.io/r/tooltip.json"
       ],
       "files": [
         {
@@ -1884,6 +1883,10 @@
         },
         {
           "path": "registry/default/blocks/admin-01/components/admin-sidebar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/sidebar.tsx",
           "type": "registry:component"
         },
         {
@@ -2033,13 +2036,13 @@
         "recharts"
       ],
       "registryDependencies": [
-        "button",
-        "card",
-        "stat",
-        "table",
-        "table-pagination",
-        "toggle-group",
-        "tooltip"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/stat.json",
+        "https://keystoneui.io/r/table.json",
+        "https://keystoneui.io/r/table-pagination.json",
+        "https://keystoneui.io/r/toggle-group.json",
+        "https://keystoneui.io/r/tooltip.json"
       ],
       "files": [
         {
@@ -2109,26 +2112,25 @@
         "@dnd-kit/utilities"
       ],
       "registryDependencies": [
-        "alert-dialog",
-        "avatar",
-        "badge",
-        "button",
-        "checkbox",
-        "combobox",
-        "drawer",
-        "dropdown-menu",
-        "field",
-        "input",
-        "input-group",
-        "label",
-        "modal",
-        "radio-group",
-        "select",
-        "selection-bar",
-        "stepper",
-        "table",
-        "table-pagination",
-        "toggle-group"
+        "https://keystoneui.io/r/alert-dialog.json",
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/combobox.json",
+        "https://keystoneui.io/r/drawer.json",
+        "https://keystoneui.io/r/dropdown-menu.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input-group.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/modal.json",
+        "https://keystoneui.io/r/radio-group.json",
+        "https://keystoneui.io/r/select.json",
+        "https://keystoneui.io/r/selection-bar.json",
+        "https://keystoneui.io/r/stepper.json",
+        "https://keystoneui.io/r/table-pagination.json",
+        "https://keystoneui.io/r/table.json",
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {
@@ -2202,13 +2204,13 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "card",
-        "field",
-        "input-group",
-        "select",
-        "tabs",
-        "toggle-group"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input-group.json",
+        "https://keystoneui.io/r/select.json",
+        "https://keystoneui.io/r/tabs.json",
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {
@@ -2229,10 +2231,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "card",
-        "slider",
-        "tabs"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/slider.json",
+        "https://keystoneui.io/r/tabs.json"
       ],
       "files": [
         {
@@ -2253,13 +2255,13 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "card",
-        "field",
-        "input-group",
-        "select",
-        "tabs",
-        "toggle-group"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input-group.json",
+        "https://keystoneui.io/r/select.json",
+        "https://keystoneui.io/r/tabs.json",
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {
@@ -2280,10 +2282,10 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "button",
-        "card",
-        "tabs",
-        "toggle-group"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/tabs.json",
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {
@@ -2301,7 +2303,7 @@
       "title": "Accordion Custom Chevron",
       "description": "Accordion example: Custom Chevron.",
       "registryDependencies": [
-        "accordion"
+        "https://keystoneui.io/r/accordion.json"
       ],
       "files": [
         {
@@ -2316,7 +2318,7 @@
       "title": "Accordion Default",
       "description": "Accordion example: Default.",
       "registryDependencies": [
-        "accordion"
+        "https://keystoneui.io/r/accordion.json"
       ],
       "files": [
         {
@@ -2331,7 +2333,7 @@
       "title": "Accordion Disabled",
       "description": "Accordion example: Disabled.",
       "registryDependencies": [
-        "accordion"
+        "https://keystoneui.io/r/accordion.json"
       ],
       "files": [
         {
@@ -2346,7 +2348,7 @@
       "title": "Accordion Multiple",
       "description": "Accordion example: Multiple.",
       "registryDependencies": [
-        "accordion"
+        "https://keystoneui.io/r/accordion.json"
       ],
       "files": [
         {
@@ -2361,7 +2363,7 @@
       "title": "Accordion Variants",
       "description": "Accordion example: Variants.",
       "registryDependencies": [
-        "accordion"
+        "https://keystoneui.io/r/accordion.json"
       ],
       "files": [
         {
@@ -2376,7 +2378,7 @@
       "title": "Alert Custom Colors",
       "description": "Alert example: Custom Colors.",
       "registryDependencies": [
-        "alert"
+        "https://keystoneui.io/r/alert.json"
       ],
       "files": [
         {
@@ -2391,7 +2393,7 @@
       "title": "Alert Default",
       "description": "Alert example: Default.",
       "registryDependencies": [
-        "alert"
+        "https://keystoneui.io/r/alert.json"
       ],
       "files": [
         {
@@ -2406,7 +2408,7 @@
       "title": "Alert Variants",
       "description": "Alert example: Variants.",
       "registryDependencies": [
-        "alert"
+        "https://keystoneui.io/r/alert.json"
       ],
       "files": [
         {
@@ -2421,8 +2423,8 @@
       "title": "Alert With Action",
       "description": "Alert example: With Action.",
       "registryDependencies": [
-        "alert",
-        "button"
+        "https://keystoneui.io/r/alert.json",
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -2437,7 +2439,7 @@
       "title": "Alert Without Icon",
       "description": "Alert example: Without Icon.",
       "registryDependencies": [
-        "alert"
+        "https://keystoneui.io/r/alert.json"
       ],
       "files": [
         {
@@ -2452,8 +2454,8 @@
       "title": "Alert Dialog Default",
       "description": "Alert Dialog example: Default.",
       "registryDependencies": [
-        "alert-dialog",
-        "button"
+        "https://keystoneui.io/r/alert-dialog.json",
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -2468,8 +2470,8 @@
       "title": "Alert Dialog Destructive",
       "description": "Alert Dialog example: Destructive.",
       "registryDependencies": [
-        "alert-dialog",
-        "button"
+        "https://keystoneui.io/r/alert-dialog.json",
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -2484,8 +2486,8 @@
       "title": "Alert Dialog Small With Media",
       "description": "Alert Dialog example: Small With Media.",
       "registryDependencies": [
-        "alert-dialog",
-        "button"
+        "https://keystoneui.io/r/alert-dialog.json",
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -2500,8 +2502,8 @@
       "title": "Alert Dialog Small",
       "description": "Alert Dialog example: Small.",
       "registryDependencies": [
-        "alert-dialog",
-        "button"
+        "https://keystoneui.io/r/alert-dialog.json",
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -2516,8 +2518,8 @@
       "title": "Alert Dialog With Media",
       "description": "Alert Dialog example: With Media.",
       "registryDependencies": [
-        "alert-dialog",
-        "button"
+        "https://keystoneui.io/r/alert-dialog.json",
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -2532,7 +2534,7 @@
       "title": "Aspect Ratio Default",
       "description": "Aspect Ratio example: Default.",
       "registryDependencies": [
-        "aspect-ratio"
+        "https://keystoneui.io/r/aspect-ratio.json"
       ],
       "files": [
         {
@@ -2547,7 +2549,7 @@
       "title": "Aspect Ratio Portrait",
       "description": "Aspect Ratio example: Portrait.",
       "registryDependencies": [
-        "aspect-ratio"
+        "https://keystoneui.io/r/aspect-ratio.json"
       ],
       "files": [
         {
@@ -2562,7 +2564,7 @@
       "title": "Aspect Ratio Square",
       "description": "Aspect Ratio example: Square.",
       "registryDependencies": [
-        "aspect-ratio"
+        "https://keystoneui.io/r/aspect-ratio.json"
       ],
       "files": [
         {
@@ -2577,7 +2579,7 @@
       "title": "Aspect Ratio Wide",
       "description": "Aspect Ratio example: Wide.",
       "registryDependencies": [
-        "aspect-ratio"
+        "https://keystoneui.io/r/aspect-ratio.json"
       ],
       "files": [
         {
@@ -2592,7 +2594,7 @@
       "title": "Avatar Badge With Icon",
       "description": "Avatar example: Badge With Icon.",
       "registryDependencies": [
-        "avatar"
+        "https://keystoneui.io/r/avatar.json"
       ],
       "files": [
         {
@@ -2607,7 +2609,7 @@
       "title": "Avatar Default",
       "description": "Avatar example: Default.",
       "registryDependencies": [
-        "avatar"
+        "https://keystoneui.io/r/avatar.json"
       ],
       "files": [
         {
@@ -2622,7 +2624,7 @@
       "title": "Avatar Fallback",
       "description": "Avatar example: Fallback.",
       "registryDependencies": [
-        "avatar"
+        "https://keystoneui.io/r/avatar.json"
       ],
       "files": [
         {
@@ -2637,7 +2639,7 @@
       "title": "Avatar Group With Count",
       "description": "Avatar example: Group With Count.",
       "registryDependencies": [
-        "avatar"
+        "https://keystoneui.io/r/avatar.json"
       ],
       "files": [
         {
@@ -2652,7 +2654,7 @@
       "title": "Avatar Group",
       "description": "Avatar example: Group.",
       "registryDependencies": [
-        "avatar"
+        "https://keystoneui.io/r/avatar.json"
       ],
       "files": [
         {
@@ -2667,7 +2669,7 @@
       "title": "Avatar Sizes",
       "description": "Avatar example: Sizes.",
       "registryDependencies": [
-        "avatar"
+        "https://keystoneui.io/r/avatar.json"
       ],
       "files": [
         {
@@ -2682,7 +2684,7 @@
       "title": "Avatar With Badge",
       "description": "Avatar example: With Badge.",
       "registryDependencies": [
-        "avatar"
+        "https://keystoneui.io/r/avatar.json"
       ],
       "files": [
         {
@@ -2697,7 +2699,7 @@
       "title": "Badge As Link",
       "description": "Badge example: As Link.",
       "registryDependencies": [
-        "badge"
+        "https://keystoneui.io/r/badge.json"
       ],
       "files": [
         {
@@ -2712,7 +2714,7 @@
       "title": "Badge Custom Colors",
       "description": "Badge example: Custom Colors.",
       "registryDependencies": [
-        "badge"
+        "https://keystoneui.io/r/badge.json"
       ],
       "files": [
         {
@@ -2727,7 +2729,7 @@
       "title": "Badge Default",
       "description": "Badge example: Default.",
       "registryDependencies": [
-        "badge"
+        "https://keystoneui.io/r/badge.json"
       ],
       "files": [
         {
@@ -2742,7 +2744,7 @@
       "title": "Badge Removable",
       "description": "Badge example: Removable.",
       "registryDependencies": [
-        "badge"
+        "https://keystoneui.io/r/badge.json"
       ],
       "files": [
         {
@@ -2757,7 +2759,7 @@
       "title": "Badge Sizes",
       "description": "Badge example: Sizes.",
       "registryDependencies": [
-        "badge"
+        "https://keystoneui.io/r/badge.json"
       ],
       "files": [
         {
@@ -2772,7 +2774,7 @@
       "title": "Badge Stats",
       "description": "Badge example: Stats.",
       "registryDependencies": [
-        "badge"
+        "https://keystoneui.io/r/badge.json"
       ],
       "files": [
         {
@@ -2787,7 +2789,7 @@
       "title": "Badge Variants",
       "description": "Badge example: Variants.",
       "registryDependencies": [
-        "badge"
+        "https://keystoneui.io/r/badge.json"
       ],
       "files": [
         {
@@ -2802,7 +2804,7 @@
       "title": "Badge With Icon",
       "description": "Badge example: With Icon.",
       "registryDependencies": [
-        "badge"
+        "https://keystoneui.io/r/badge.json"
       ],
       "files": [
         {
@@ -2817,8 +2819,8 @@
       "title": "Badge With Spinner",
       "description": "Badge example: With Spinner.",
       "registryDependencies": [
-        "badge",
-        "spinner"
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/spinner.json"
       ],
       "files": [
         {
@@ -2833,7 +2835,7 @@
       "title": "Breadcrumb Collapsed",
       "description": "Breadcrumb example: Collapsed.",
       "registryDependencies": [
-        "breadcrumb"
+        "https://keystoneui.io/r/breadcrumb.json"
       ],
       "files": [
         {
@@ -2848,7 +2850,7 @@
       "title": "Breadcrumb Custom Separator",
       "description": "Breadcrumb example: Custom Separator.",
       "registryDependencies": [
-        "breadcrumb"
+        "https://keystoneui.io/r/breadcrumb.json"
       ],
       "files": [
         {
@@ -2863,7 +2865,7 @@
       "title": "Breadcrumb Default",
       "description": "Breadcrumb example: Default.",
       "registryDependencies": [
-        "breadcrumb"
+        "https://keystoneui.io/r/breadcrumb.json"
       ],
       "files": [
         {
@@ -2878,7 +2880,7 @@
       "title": "Breadcrumb Link Component",
       "description": "Breadcrumb example: Link Component.",
       "registryDependencies": [
-        "breadcrumb"
+        "https://keystoneui.io/r/breadcrumb.json"
       ],
       "files": [
         {
@@ -2893,9 +2895,9 @@
       "title": "Breadcrumb With Dropdown",
       "description": "Breadcrumb example: With Dropdown.",
       "registryDependencies": [
-        "breadcrumb",
-        "button",
-        "dropdown-menu"
+        "https://keystoneui.io/r/breadcrumb.json",
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/dropdown-menu.json"
       ],
       "files": [
         {
@@ -2910,7 +2912,7 @@
       "title": "Button As Link",
       "description": "Button example: As Link.",
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -2925,7 +2927,7 @@
       "title": "Button Custom Loading",
       "description": "Button example: Custom Loading.",
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -2940,7 +2942,7 @@
       "title": "Button Default",
       "description": "Button example: Default.",
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -2955,7 +2957,7 @@
       "title": "Button Disabled",
       "description": "Button example: Disabled.",
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -2970,7 +2972,7 @@
       "title": "Button Full Width",
       "description": "Button example: Full Width.",
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -2985,7 +2987,7 @@
       "title": "Button Icon Buttons",
       "description": "Button example: Icon Buttons.",
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -3000,7 +3002,7 @@
       "title": "Button Link",
       "description": "Button example: Link.",
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -3015,7 +3017,7 @@
       "title": "Button Loading",
       "description": "Button example: Loading.",
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -3030,7 +3032,7 @@
       "title": "Button Rounded",
       "description": "Button example: Rounded.",
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -3045,7 +3047,7 @@
       "title": "Button Sizes",
       "description": "Button example: Sizes.",
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -3060,7 +3062,7 @@
       "title": "Button Social Buttons",
       "description": "Button example: Social Buttons.",
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -3075,7 +3077,7 @@
       "title": "Button Variants",
       "description": "Button example: Variants.",
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -3090,7 +3092,7 @@
       "title": "Button With Icons",
       "description": "Button example: With Icons.",
       "registryDependencies": [
-        "button"
+        "https://keystoneui.io/r/button.json"
       ],
       "files": [
         {
@@ -3105,8 +3107,8 @@
       "title": "Button Group Default",
       "description": "Button Group example: Default.",
       "registryDependencies": [
-        "button",
-        "button-group"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/button-group.json"
       ],
       "files": [
         {
@@ -3121,9 +3123,9 @@
       "title": "Button Group Email Toolbar",
       "description": "Button Group example: Email Toolbar.",
       "registryDependencies": [
-        "button",
-        "button-group",
-        "dropdown-menu"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/button-group.json",
+        "https://keystoneui.io/r/dropdown-menu.json"
       ],
       "files": [
         {
@@ -3138,8 +3140,8 @@
       "title": "Button Group Nested",
       "description": "Button Group example: Nested.",
       "registryDependencies": [
-        "button",
-        "button-group"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/button-group.json"
       ],
       "files": [
         {
@@ -3154,8 +3156,8 @@
       "title": "Button Group Sizes",
       "description": "Button Group example: Sizes.",
       "registryDependencies": [
-        "button",
-        "button-group"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/button-group.json"
       ],
       "files": [
         {
@@ -3170,8 +3172,8 @@
       "title": "Button Group Split Button",
       "description": "Button Group example: Split Button.",
       "registryDependencies": [
-        "button",
-        "button-group"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/button-group.json"
       ],
       "files": [
         {
@@ -3186,8 +3188,8 @@
       "title": "Button Group Toolbar",
       "description": "Button Group example: Toolbar.",
       "registryDependencies": [
-        "button",
-        "button-group"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/button-group.json"
       ],
       "files": [
         {
@@ -3202,8 +3204,8 @@
       "title": "Button Group Vertical",
       "description": "Button Group example: Vertical.",
       "registryDependencies": [
-        "button",
-        "button-group"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/button-group.json"
       ],
       "files": [
         {
@@ -3218,9 +3220,9 @@
       "title": "Button Group With Dropdown Menu",
       "description": "Button Group example: With Dropdown Menu.",
       "registryDependencies": [
-        "button",
-        "button-group",
-        "dropdown-menu"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/button-group.json",
+        "https://keystoneui.io/r/dropdown-menu.json"
       ],
       "files": [
         {
@@ -3235,9 +3237,9 @@
       "title": "Button Group With Input",
       "description": "Button Group example: With Input.",
       "registryDependencies": [
-        "button",
-        "button-group",
-        "input"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/button-group.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -3252,11 +3254,11 @@
       "title": "Button Group With Popover",
       "description": "Button Group example: With Popover.",
       "registryDependencies": [
-        "button",
-        "button-group",
-        "field",
-        "popover",
-        "textarea"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/button-group.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/popover.json",
+        "https://keystoneui.io/r/textarea.json"
       ],
       "files": [
         {
@@ -3271,10 +3273,10 @@
       "title": "Button Group With Select",
       "description": "Button Group example: With Select.",
       "registryDependencies": [
-        "button",
-        "button-group",
-        "input",
-        "select"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/button-group.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/select.json"
       ],
       "files": [
         {
@@ -3289,7 +3291,7 @@
       "title": "Calendar Booked Dates",
       "description": "Calendar example: Booked Dates.",
       "registryDependencies": [
-        "calendar"
+        "https://keystoneui.io/r/calendar.json"
       ],
       "files": [
         {
@@ -3304,10 +3306,10 @@
       "title": "Calendar Date Time",
       "description": "Calendar example: Date Time.",
       "registryDependencies": [
-        "calendar",
-        "card",
-        "field",
-        "input-group"
+        "https://keystoneui.io/r/calendar.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -3322,7 +3324,7 @@
       "title": "Calendar Default",
       "description": "Calendar example: Default.",
       "registryDependencies": [
-        "calendar"
+        "https://keystoneui.io/r/calendar.json"
       ],
       "files": [
         {
@@ -3337,7 +3339,7 @@
       "title": "Calendar Month Year",
       "description": "Calendar example: Month Year.",
       "registryDependencies": [
-        "calendar"
+        "https://keystoneui.io/r/calendar.json"
       ],
       "files": [
         {
@@ -3352,9 +3354,9 @@
       "title": "Calendar Presets",
       "description": "Calendar example: Presets.",
       "registryDependencies": [
-        "button",
-        "calendar",
-        "card"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/calendar.json",
+        "https://keystoneui.io/r/card.json"
       ],
       "files": [
         {
@@ -3369,7 +3371,7 @@
       "title": "Calendar Range",
       "description": "Calendar example: Range.",
       "registryDependencies": [
-        "calendar"
+        "https://keystoneui.io/r/calendar.json"
       ],
       "files": [
         {
@@ -3384,7 +3386,7 @@
       "title": "Calendar Week Numbers",
       "description": "Calendar example: Week Numbers.",
       "registryDependencies": [
-        "calendar"
+        "https://keystoneui.io/r/calendar.json"
       ],
       "files": [
         {
@@ -3399,8 +3401,8 @@
       "title": "Card Default",
       "description": "Card example: Default.",
       "registryDependencies": [
-        "button",
-        "card"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json"
       ],
       "files": [
         {
@@ -3415,10 +3417,10 @@
       "title": "Card Login Form",
       "description": "Card example: Login Form.",
       "registryDependencies": [
-        "button",
-        "card",
-        "input",
-        "label"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/label.json"
       ],
       "files": [
         {
@@ -3433,8 +3435,8 @@
       "title": "Card Small",
       "description": "Card example: Small.",
       "registryDependencies": [
-        "button",
-        "card"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json"
       ],
       "files": [
         {
@@ -3449,9 +3451,9 @@
       "title": "Card Social Card",
       "description": "Card example: Social Card.",
       "registryDependencies": [
-        "avatar",
-        "button",
-        "card"
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json"
       ],
       "files": [
         {
@@ -3466,8 +3468,8 @@
       "title": "Card Table Flush",
       "description": "Card example: Table Flush.",
       "registryDependencies": [
-        "card",
-        "table"
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/table.json"
       ],
       "files": [
         {
@@ -3482,7 +3484,7 @@
       "title": "Card Variants",
       "description": "Card example: Variants.",
       "registryDependencies": [
-        "card"
+        "https://keystoneui.io/r/card.json"
       ],
       "files": [
         {
@@ -3497,8 +3499,8 @@
       "title": "Card With Action",
       "description": "Card example: With Action.",
       "registryDependencies": [
-        "button",
-        "card"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json"
       ],
       "files": [
         {
@@ -3513,9 +3515,9 @@
       "title": "Card With Image",
       "description": "Card example: With Image.",
       "registryDependencies": [
-        "badge",
-        "button",
-        "card"
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json"
       ],
       "files": [
         {
@@ -3530,7 +3532,7 @@
       "title": "Carousel Autoplay",
       "description": "Carousel example: Autoplay.",
       "registryDependencies": [
-        "carousel"
+        "https://keystoneui.io/r/carousel.json"
       ],
       "files": [
         {
@@ -3545,7 +3547,7 @@
       "title": "Carousel Cards",
       "description": "Carousel example: Cards.",
       "registryDependencies": [
-        "carousel"
+        "https://keystoneui.io/r/carousel.json"
       ],
       "files": [
         {
@@ -3560,8 +3562,8 @@
       "title": "Carousel Controlled",
       "description": "Carousel example: Controlled.",
       "registryDependencies": [
-        "button",
-        "carousel"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/carousel.json"
       ],
       "files": [
         {
@@ -3576,7 +3578,7 @@
       "title": "Carousel Default",
       "description": "Carousel example: Default.",
       "registryDependencies": [
-        "carousel"
+        "https://keystoneui.io/r/carousel.json"
       ],
       "files": [
         {
@@ -3591,7 +3593,7 @@
       "title": "Carousel Multiple Slides",
       "description": "Carousel example: Multiple Slides.",
       "registryDependencies": [
-        "carousel"
+        "https://keystoneui.io/r/carousel.json"
       ],
       "files": [
         {
@@ -3606,7 +3608,7 @@
       "title": "Carousel Sizes",
       "description": "Carousel example: Sizes.",
       "registryDependencies": [
-        "carousel"
+        "https://keystoneui.io/r/carousel.json"
       ],
       "files": [
         {
@@ -3621,7 +3623,7 @@
       "title": "Carousel Spacing",
       "description": "Carousel example: Spacing.",
       "registryDependencies": [
-        "carousel"
+        "https://keystoneui.io/r/carousel.json"
       ],
       "files": [
         {
@@ -3636,7 +3638,7 @@
       "title": "Carousel Thumbnails",
       "description": "Carousel example: Thumbnails.",
       "registryDependencies": [
-        "carousel"
+        "https://keystoneui.io/r/carousel.json"
       ],
       "files": [
         {
@@ -3651,7 +3653,7 @@
       "title": "Carousel Vertical",
       "description": "Carousel example: Vertical.",
       "registryDependencies": [
-        "carousel"
+        "https://keystoneui.io/r/carousel.json"
       ],
       "files": [
         {
@@ -3666,7 +3668,7 @@
       "title": "Carousel With Counter",
       "description": "Carousel example: With Counter.",
       "registryDependencies": [
-        "carousel"
+        "https://keystoneui.io/r/carousel.json"
       ],
       "files": [
         {
@@ -3681,7 +3683,7 @@
       "title": "Carousel With Dots",
       "description": "Carousel example: With Dots.",
       "registryDependencies": [
-        "carousel"
+        "https://keystoneui.io/r/carousel.json"
       ],
       "files": [
         {
@@ -3696,7 +3698,7 @@
       "title": "Carousel With Mask",
       "description": "Carousel example: With Mask.",
       "registryDependencies": [
-        "carousel"
+        "https://keystoneui.io/r/carousel.json"
       ],
       "files": [
         {
@@ -3711,8 +3713,8 @@
       "title": "Checkbox Controlled",
       "description": "Checkbox example: Controlled.",
       "registryDependencies": [
-        "checkbox",
-        "field"
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/field.json"
       ],
       "files": [
         {
@@ -3727,8 +3729,8 @@
       "title": "Checkbox Default",
       "description": "Checkbox example: Default.",
       "registryDependencies": [
-        "checkbox",
-        "field"
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/field.json"
       ],
       "files": [
         {
@@ -3743,8 +3745,8 @@
       "title": "Checkbox Disabled",
       "description": "Checkbox example: Disabled.",
       "registryDependencies": [
-        "checkbox",
-        "field"
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/field.json"
       ],
       "files": [
         {
@@ -3759,8 +3761,8 @@
       "title": "Checkbox Group",
       "description": "Checkbox example: Group.",
       "registryDependencies": [
-        "checkbox",
-        "field"
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/field.json"
       ],
       "files": [
         {
@@ -3775,9 +3777,9 @@
       "title": "Checkbox Pill Group",
       "description": "Checkbox example: Pill Group.",
       "registryDependencies": [
-        "card",
-        "checkbox",
-        "field"
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/field.json"
       ],
       "files": [
         {
@@ -3792,8 +3794,8 @@
       "title": "Checkbox With Description",
       "description": "Checkbox example: With Description.",
       "registryDependencies": [
-        "checkbox",
-        "field"
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/field.json"
       ],
       "files": [
         {
@@ -3808,7 +3810,7 @@
       "title": "Circular Progress Animated",
       "description": "Circular Progress example: Animated.",
       "registryDependencies": [
-        "circular-progress"
+        "https://keystoneui.io/r/circular-progress.json"
       ],
       "files": [
         {
@@ -3823,7 +3825,7 @@
       "title": "Circular Progress Colors",
       "description": "Circular Progress example: Colors.",
       "registryDependencies": [
-        "circular-progress"
+        "https://keystoneui.io/r/circular-progress.json"
       ],
       "files": [
         {
@@ -3838,7 +3840,7 @@
       "title": "Circular Progress Complete",
       "description": "Circular Progress example: Complete.",
       "registryDependencies": [
-        "circular-progress"
+        "https://keystoneui.io/r/circular-progress.json"
       ],
       "files": [
         {
@@ -3853,8 +3855,8 @@
       "title": "Circular Progress Controlled",
       "description": "Circular Progress example: Controlled.",
       "registryDependencies": [
-        "circular-progress",
-        "slider"
+        "https://keystoneui.io/r/circular-progress.json",
+        "https://keystoneui.io/r/slider.json"
       ],
       "files": [
         {
@@ -3869,7 +3871,7 @@
       "title": "Circular Progress Custom Center Content",
       "description": "Circular Progress example: Custom Center Content.",
       "registryDependencies": [
-        "circular-progress"
+        "https://keystoneui.io/r/circular-progress.json"
       ],
       "files": [
         {
@@ -3884,7 +3886,7 @@
       "title": "Circular Progress Default",
       "description": "Circular Progress example: Default.",
       "registryDependencies": [
-        "circular-progress"
+        "https://keystoneui.io/r/circular-progress.json"
       ],
       "files": [
         {
@@ -3899,7 +3901,7 @@
       "title": "Circular Progress Indeterminate",
       "description": "Circular Progress example: Indeterminate.",
       "registryDependencies": [
-        "circular-progress"
+        "https://keystoneui.io/r/circular-progress.json"
       ],
       "files": [
         {
@@ -3914,7 +3916,7 @@
       "title": "Circular Progress Sizes",
       "description": "Circular Progress example: Sizes.",
       "registryDependencies": [
-        "circular-progress"
+        "https://keystoneui.io/r/circular-progress.json"
       ],
       "files": [
         {
@@ -3929,8 +3931,8 @@
       "title": "Circular Progress With Avatar",
       "description": "Circular Progress example: With Avatar.",
       "registryDependencies": [
-        "avatar",
-        "circular-progress"
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/circular-progress.json"
       ],
       "files": [
         {
@@ -3945,7 +3947,7 @@
       "title": "Circular Progress With Label",
       "description": "Circular Progress example: With Label.",
       "registryDependencies": [
-        "circular-progress"
+        "https://keystoneui.io/r/circular-progress.json"
       ],
       "files": [
         {
@@ -3960,7 +3962,7 @@
       "title": "Collapsible Default",
       "description": "Collapsible example: Default.",
       "registryDependencies": [
-        "collapsible"
+        "https://keystoneui.io/r/collapsible.json"
       ],
       "files": [
         {
@@ -3975,7 +3977,7 @@
       "title": "Collapsible File Tree",
       "description": "Collapsible example: File Tree.",
       "registryDependencies": [
-        "collapsible"
+        "https://keystoneui.io/r/collapsible.json"
       ],
       "files": [
         {
@@ -3990,7 +3992,7 @@
       "title": "Collapsible Settings",
       "description": "Collapsible example: Settings.",
       "registryDependencies": [
-        "collapsible"
+        "https://keystoneui.io/r/collapsible.json"
       ],
       "files": [
         {
@@ -4005,7 +4007,7 @@
       "title": "Combobox Compact Items",
       "description": "Combobox example: Compact Items.",
       "registryDependencies": [
-        "combobox"
+        "https://keystoneui.io/r/combobox.json"
       ],
       "files": [
         {
@@ -4020,8 +4022,8 @@
       "title": "Combobox Controlled",
       "description": "Combobox example: Controlled.",
       "registryDependencies": [
-        "button",
-        "combobox"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/combobox.json"
       ],
       "files": [
         {
@@ -4036,7 +4038,7 @@
       "title": "Combobox Countries",
       "description": "Combobox example: Countries.",
       "registryDependencies": [
-        "combobox"
+        "https://keystoneui.io/r/combobox.json"
       ],
       "files": [
         {
@@ -4051,7 +4053,7 @@
       "title": "Combobox Custom Items",
       "description": "Combobox example: Custom Items.",
       "registryDependencies": [
-        "combobox"
+        "https://keystoneui.io/r/combobox.json"
       ],
       "files": [
         {
@@ -4066,7 +4068,7 @@
       "title": "Combobox Default",
       "description": "Combobox example: Default.",
       "registryDependencies": [
-        "combobox"
+        "https://keystoneui.io/r/combobox.json"
       ],
       "files": [
         {
@@ -4081,7 +4083,7 @@
       "title": "Combobox Disabled",
       "description": "Combobox example: Disabled.",
       "registryDependencies": [
-        "combobox"
+        "https://keystoneui.io/r/combobox.json"
       ],
       "files": [
         {
@@ -4096,9 +4098,9 @@
       "title": "Combobox Form Example",
       "description": "Combobox example: Form Example.",
       "registryDependencies": [
-        "button",
-        "combobox",
-        "field"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/combobox.json",
+        "https://keystoneui.io/r/field.json"
       ],
       "files": [
         {
@@ -4113,7 +4115,7 @@
       "title": "Combobox Groups",
       "description": "Combobox example: Groups.",
       "registryDependencies": [
-        "combobox"
+        "https://keystoneui.io/r/combobox.json"
       ],
       "files": [
         {
@@ -4128,7 +4130,7 @@
       "title": "Combobox Multi With Create",
       "description": "Combobox example: Multi With Create.",
       "registryDependencies": [
-        "combobox"
+        "https://keystoneui.io/r/combobox.json"
       ],
       "files": [
         {
@@ -4143,9 +4145,9 @@
       "title": "Combobox Multiple In Popover",
       "description": "Combobox example: Multiple In Popover.",
       "registryDependencies": [
-        "button",
-        "combobox",
-        "popover"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/combobox.json",
+        "https://keystoneui.io/r/popover.json"
       ],
       "files": [
         {
@@ -4160,7 +4162,7 @@
       "title": "Combobox Multiple",
       "description": "Combobox example: Multiple.",
       "registryDependencies": [
-        "combobox"
+        "https://keystoneui.io/r/combobox.json"
       ],
       "files": [
         {
@@ -4175,8 +4177,8 @@
       "title": "Combobox Popup",
       "description": "Combobox example: Popup.",
       "registryDependencies": [
-        "button",
-        "combobox"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/combobox.json"
       ],
       "files": [
         {
@@ -4191,7 +4193,7 @@
       "title": "Combobox Scrollable",
       "description": "Combobox example: Scrollable.",
       "registryDependencies": [
-        "combobox"
+        "https://keystoneui.io/r/combobox.json"
       ],
       "files": [
         {
@@ -4206,7 +4208,7 @@
       "title": "Combobox With Clear",
       "description": "Combobox example: With Clear.",
       "registryDependencies": [
-        "combobox"
+        "https://keystoneui.io/r/combobox.json"
       ],
       "files": [
         {
@@ -4221,8 +4223,8 @@
       "title": "Command Default",
       "description": "Command example: Default.",
       "registryDependencies": [
-        "button",
-        "command"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/command.json"
       ],
       "files": [
         {
@@ -4237,8 +4239,8 @@
       "title": "Command Disabled Items",
       "description": "Command example: Disabled Items.",
       "registryDependencies": [
-        "button",
-        "command"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/command.json"
       ],
       "files": [
         {
@@ -4253,8 +4255,8 @@
       "title": "Command Groups",
       "description": "Command example: Groups.",
       "registryDependencies": [
-        "button",
-        "command"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/command.json"
       ],
       "files": [
         {
@@ -4269,8 +4271,8 @@
       "title": "Command Keyboard Trigger",
       "description": "Command example: Keyboard Trigger.",
       "registryDependencies": [
-        "button",
-        "command"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/command.json"
       ],
       "files": [
         {
@@ -4285,8 +4287,8 @@
       "title": "Command Scrollable",
       "description": "Command example: Scrollable.",
       "registryDependencies": [
-        "button",
-        "command"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/command.json"
       ],
       "files": [
         {
@@ -4301,8 +4303,8 @@
       "title": "Command With Shortcuts",
       "description": "Command example: With Shortcuts.",
       "registryDependencies": [
-        "button",
-        "command"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/command.json"
       ],
       "files": [
         {
@@ -4317,7 +4319,7 @@
       "title": "Copy Button Default",
       "description": "Copy Button example: Default.",
       "registryDependencies": [
-        "copy-button"
+        "https://keystoneui.io/r/copy-button.json"
       ],
       "files": [
         {
@@ -4332,7 +4334,7 @@
       "title": "Copy Button Sizes",
       "description": "Copy Button example: Sizes.",
       "registryDependencies": [
-        "copy-button"
+        "https://keystoneui.io/r/copy-button.json"
       ],
       "files": [
         {
@@ -4347,7 +4349,7 @@
       "title": "Copy Button Variants",
       "description": "Copy Button example: Variants.",
       "registryDependencies": [
-        "copy-button"
+        "https://keystoneui.io/r/copy-button.json"
       ],
       "files": [
         {
@@ -4362,10 +4364,10 @@
       "title": "Date Input Controlled",
       "description": "Date Input example: Controlled.",
       "registryDependencies": [
-        "button",
-        "calendar",
-        "field",
-        "popover"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/calendar.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/popover.json"
       ],
       "files": [
         {
@@ -4380,8 +4382,8 @@
       "title": "Date Input Date Of Birth",
       "description": "Date Input example: Date Of Birth.",
       "registryDependencies": [
-        "date-input",
-        "field"
+        "https://keystoneui.io/r/date-input.json",
+        "https://keystoneui.io/r/field.json"
       ],
       "files": [
         {
@@ -4396,7 +4398,7 @@
       "title": "Date Input Default",
       "description": "Date Input example: Default.",
       "registryDependencies": [
-        "date-input"
+        "https://keystoneui.io/r/date-input.json"
       ],
       "files": [
         {
@@ -4411,10 +4413,10 @@
       "title": "Date Input Natural Language",
       "description": "Date Input example: Natural Language.",
       "registryDependencies": [
-        "button",
-        "calendar",
-        "field",
-        "popover"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/calendar.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/popover.json"
       ],
       "files": [
         {
@@ -4429,9 +4431,9 @@
       "title": "Date Input Presets",
       "description": "Date Input example: Presets.",
       "registryDependencies": [
-        "button",
-        "date-input",
-        "field"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/date-input.json",
+        "https://keystoneui.io/r/field.json"
       ],
       "files": [
         {
@@ -4446,8 +4448,8 @@
       "title": "Date Input Range",
       "description": "Date Input example: Range.",
       "registryDependencies": [
-        "date-input",
-        "field"
+        "https://keystoneui.io/r/date-input.json",
+        "https://keystoneui.io/r/field.json"
       ],
       "files": [
         {
@@ -4462,8 +4464,8 @@
       "title": "Date Input With Input",
       "description": "Date Input example: With Input.",
       "registryDependencies": [
-        "date-input",
-        "field"
+        "https://keystoneui.io/r/date-input.json",
+        "https://keystoneui.io/r/field.json"
       ],
       "files": [
         {
@@ -4478,11 +4480,11 @@
       "title": "Date Input With Time",
       "description": "Date Input example: With Time.",
       "registryDependencies": [
-        "button",
-        "calendar",
-        "field",
-        "input",
-        "popover"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/calendar.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/popover.json"
       ],
       "files": [
         {
@@ -4497,8 +4499,8 @@
       "title": "Description List Card Variant",
       "description": "Description List example: Card Variant.",
       "registryDependencies": [
-        "badge",
-        "description-list"
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/description-list.json"
       ],
       "files": [
         {
@@ -4513,8 +4515,8 @@
       "title": "Description List Compact",
       "description": "Description List example: Compact.",
       "registryDependencies": [
-        "badge",
-        "description-list"
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/description-list.json"
       ],
       "files": [
         {
@@ -4529,8 +4531,8 @@
       "title": "Description List Custom Values",
       "description": "Description List example: Custom Values.",
       "registryDependencies": [
-        "badge",
-        "description-list"
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/description-list.json"
       ],
       "files": [
         {
@@ -4545,8 +4547,8 @@
       "title": "Description List Default",
       "description": "Description List example: Default.",
       "registryDependencies": [
-        "badge",
-        "description-list"
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/description-list.json"
       ],
       "files": [
         {
@@ -4561,9 +4563,9 @@
       "title": "Description List In Card",
       "description": "Description List example: In Card.",
       "registryDependencies": [
-        "badge",
-        "card",
-        "description-list"
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/description-list.json"
       ],
       "files": [
         {
@@ -4578,8 +4580,8 @@
       "title": "Description List Order Summary",
       "description": "Description List example: Order Summary.",
       "registryDependencies": [
-        "card",
-        "description-list"
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/description-list.json"
       ],
       "files": [
         {
@@ -4594,9 +4596,9 @@
       "title": "Description List Record",
       "description": "Description List example: Record.",
       "registryDependencies": [
-        "badge",
-        "copy-button",
-        "description-list"
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/copy-button.json",
+        "https://keystoneui.io/r/description-list.json"
       ],
       "files": [
         {
@@ -4611,11 +4613,11 @@
       "title": "Drawer Complex Filter",
       "description": "Drawer example: Complex Filter.",
       "registryDependencies": [
-        "button",
-        "checkbox",
-        "drawer",
-        "radio-group",
-        "stepper"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/drawer.json",
+        "https://keystoneui.io/r/radio-group.json",
+        "https://keystoneui.io/r/stepper.json"
       ],
       "files": [
         {
@@ -4630,8 +4632,8 @@
       "title": "Drawer Default",
       "description": "Drawer example: Default.",
       "registryDependencies": [
-        "button",
-        "drawer"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/drawer.json"
       ],
       "files": [
         {
@@ -4646,9 +4648,9 @@
       "title": "Drawer Filter",
       "description": "Drawer example: Filter.",
       "registryDependencies": [
-        "button",
-        "checkbox",
-        "drawer"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/drawer.json"
       ],
       "files": [
         {
@@ -4663,11 +4665,11 @@
       "title": "Drawer Floating",
       "description": "Drawer example: Floating.",
       "registryDependencies": [
-        "avatar",
-        "badge",
-        "button",
-        "drawer",
-        "separator"
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/drawer.json",
+        "https://keystoneui.io/r/separator.json"
       ],
       "files": [
         {
@@ -4682,8 +4684,8 @@
       "title": "Drawer Nested",
       "description": "Drawer example: Nested.",
       "registryDependencies": [
-        "button",
-        "drawer"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/drawer.json"
       ],
       "files": [
         {
@@ -4698,11 +4700,11 @@
       "title": "Drawer Responsive",
       "description": "Drawer example: Responsive.",
       "registryDependencies": [
-        "button",
-        "drawer",
-        "input",
-        "label",
-        "modal"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/drawer.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/label.json",
+        "https://keystoneui.io/r/modal.json"
       ],
       "files": [
         {
@@ -4717,8 +4719,8 @@
       "title": "Drawer Scrollable",
       "description": "Drawer example: Scrollable.",
       "registryDependencies": [
-        "button",
-        "drawer"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/drawer.json"
       ],
       "files": [
         {
@@ -4733,8 +4735,8 @@
       "title": "Drawer Sides",
       "description": "Drawer example: Sides.",
       "registryDependencies": [
-        "button",
-        "drawer"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/drawer.json"
       ],
       "files": [
         {
@@ -4749,8 +4751,8 @@
       "title": "Drawer Sort By",
       "description": "Drawer example: Sort By.",
       "registryDependencies": [
-        "button",
-        "drawer"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/drawer.json"
       ],
       "files": [
         {
@@ -4765,9 +4767,9 @@
       "title": "Dropdown Menu Account",
       "description": "Dropdown Menu example: Account.",
       "registryDependencies": [
-        "avatar",
-        "button",
-        "dropdown-menu"
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/dropdown-menu.json"
       ],
       "files": [
         {
@@ -4782,8 +4784,8 @@
       "title": "Dropdown Menu Checkboxes",
       "description": "Dropdown Menu example: Checkboxes.",
       "registryDependencies": [
-        "button",
-        "dropdown-menu"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/dropdown-menu.json"
       ],
       "files": [
         {
@@ -4798,8 +4800,8 @@
       "title": "Dropdown Menu Complex",
       "description": "Dropdown Menu example: Complex.",
       "registryDependencies": [
-        "button",
-        "dropdown-menu"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/dropdown-menu.json"
       ],
       "files": [
         {
@@ -4814,8 +4816,8 @@
       "title": "Dropdown Menu Default",
       "description": "Dropdown Menu example: Default.",
       "registryDependencies": [
-        "button",
-        "dropdown-menu"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/dropdown-menu.json"
       ],
       "files": [
         {
@@ -4830,8 +4832,8 @@
       "title": "Dropdown Menu Destructive",
       "description": "Dropdown Menu example: Destructive.",
       "registryDependencies": [
-        "button",
-        "dropdown-menu"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/dropdown-menu.json"
       ],
       "files": [
         {
@@ -4846,8 +4848,8 @@
       "title": "Dropdown Menu Filter",
       "description": "Dropdown Menu example: Filter.",
       "registryDependencies": [
-        "button",
-        "dropdown-menu"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/dropdown-menu.json"
       ],
       "files": [
         {
@@ -4862,8 +4864,8 @@
       "title": "Dropdown Menu Radio Group",
       "description": "Dropdown Menu example: Radio Group.",
       "registryDependencies": [
-        "button",
-        "dropdown-menu"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/dropdown-menu.json"
       ],
       "files": [
         {
@@ -4878,8 +4880,8 @@
       "title": "Dropdown Menu Shortcuts",
       "description": "Dropdown Menu example: Shortcuts.",
       "registryDependencies": [
-        "button",
-        "dropdown-menu"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/dropdown-menu.json"
       ],
       "files": [
         {
@@ -4894,8 +4896,8 @@
       "title": "Dropdown Menu Submenu",
       "description": "Dropdown Menu example: Submenu.",
       "registryDependencies": [
-        "button",
-        "dropdown-menu"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/dropdown-menu.json"
       ],
       "files": [
         {
@@ -4910,8 +4912,8 @@
       "title": "Dropdown Menu With Icons",
       "description": "Dropdown Menu example: With Icons.",
       "registryDependencies": [
-        "button",
-        "dropdown-menu"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/dropdown-menu.json"
       ],
       "files": [
         {
@@ -4926,8 +4928,8 @@
       "title": "Empty Background",
       "description": "Empty example: Background.",
       "registryDependencies": [
-        "button",
-        "empty"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/empty.json"
       ],
       "files": [
         {
@@ -4942,8 +4944,8 @@
       "title": "Empty Default",
       "description": "Empty example: Default.",
       "registryDependencies": [
-        "button",
-        "empty"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/empty.json"
       ],
       "files": [
         {
@@ -4958,8 +4960,8 @@
       "title": "Empty Outline",
       "description": "Empty example: Outline.",
       "registryDependencies": [
-        "button",
-        "empty"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/empty.json"
       ],
       "files": [
         {
@@ -4974,8 +4976,8 @@
       "title": "Empty With Action",
       "description": "Empty example: With Action.",
       "registryDependencies": [
-        "button",
-        "empty"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/empty.json"
       ],
       "files": [
         {
@@ -4990,9 +4992,9 @@
       "title": "Empty With Avatar",
       "description": "Empty example: With Avatar.",
       "registryDependencies": [
-        "avatar",
-        "button",
-        "empty"
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/empty.json"
       ],
       "files": [
         {
@@ -5007,8 +5009,8 @@
       "title": "Empty With Description",
       "description": "Empty example: With Description.",
       "registryDependencies": [
-        "button",
-        "empty"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/empty.json"
       ],
       "files": [
         {
@@ -5023,9 +5025,9 @@
       "title": "Empty With Form",
       "description": "Empty example: With Form.",
       "registryDependencies": [
-        "avatar",
-        "button",
-        "empty"
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/empty.json"
       ],
       "files": [
         {
@@ -5040,8 +5042,8 @@
       "title": "Empty With Image",
       "description": "Empty example: With Image.",
       "registryDependencies": [
-        "button",
-        "empty"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/empty.json"
       ],
       "files": [
         {
@@ -5056,9 +5058,9 @@
       "title": "Empty With Input",
       "description": "Empty example: With Input.",
       "registryDependencies": [
-        "button",
-        "empty",
-        "input-group"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/empty.json",
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5073,8 +5075,8 @@
       "title": "Empty With List",
       "description": "Empty example: With List.",
       "registryDependencies": [
-        "button",
-        "empty"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/empty.json"
       ],
       "files": [
         {
@@ -5089,9 +5091,9 @@
       "title": "Empty With Search",
       "description": "Empty example: With Search.",
       "registryDependencies": [
-        "empty",
-        "input-group",
-        "kbd"
+        "https://keystoneui.io/r/empty.json",
+        "https://keystoneui.io/r/input-group.json",
+        "https://keystoneui.io/r/kbd.json"
       ],
       "files": [
         {
@@ -5106,9 +5108,9 @@
       "title": "Empty With Spinner",
       "description": "Empty example: With Spinner.",
       "registryDependencies": [
-        "button",
-        "empty",
-        "spinner"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/empty.json",
+        "https://keystoneui.io/r/spinner.json"
       ],
       "files": [
         {
@@ -5123,12 +5125,12 @@
       "title": "Field Checkout Form",
       "description": "Field example: Checkout Form.",
       "registryDependencies": [
-        "button",
-        "checkbox",
-        "field",
-        "input",
-        "select",
-        "textarea"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/select.json",
+        "https://keystoneui.io/r/textarea.json"
       ],
       "files": [
         {
@@ -5143,8 +5145,8 @@
       "title": "Field Default",
       "description": "Field example: Default.",
       "registryDependencies": [
-        "field",
-        "input"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5159,8 +5161,8 @@
       "title": "Field Fieldset",
       "description": "Field example: Fieldset.",
       "registryDependencies": [
-        "field",
-        "input"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5175,8 +5177,8 @@
       "title": "Field Grid",
       "description": "Field example: Grid.",
       "registryDependencies": [
-        "field",
-        "input"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5191,8 +5193,8 @@
       "title": "Field Horizontal",
       "description": "Field example: Horizontal.",
       "registryDependencies": [
-        "field",
-        "input"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5207,8 +5209,8 @@
       "title": "Field Multiple Errors",
       "description": "Field example: Multiple Errors.",
       "registryDependencies": [
-        "field",
-        "input"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5223,10 +5225,10 @@
       "title": "Field Payment Method",
       "description": "Field example: Payment Method.",
       "registryDependencies": [
-        "button",
-        "field",
-        "input",
-        "radio-group"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/radio-group.json"
       ],
       "files": [
         {
@@ -5241,8 +5243,8 @@
       "title": "Field Required",
       "description": "Field example: Required.",
       "registryDependencies": [
-        "field",
-        "input"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5257,12 +5259,12 @@
       "title": "Field Settings Form",
       "description": "Field example: Settings Form.",
       "registryDependencies": [
-        "button",
-        "button-group",
-        "field",
-        "input",
-        "radio-group",
-        "switch"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/button-group.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/radio-group.json",
+        "https://keystoneui.io/r/switch.json"
       ],
       "files": [
         {
@@ -5277,8 +5279,8 @@
       "title": "Field Textarea Example",
       "description": "Field example: Textarea Example.",
       "registryDependencies": [
-        "field",
-        "textarea"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/textarea.json"
       ],
       "files": [
         {
@@ -5293,8 +5295,8 @@
       "title": "Field Validation Error",
       "description": "Field example: Validation Error.",
       "registryDependencies": [
-        "field",
-        "input"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5309,8 +5311,8 @@
       "title": "Field With Checkbox",
       "description": "Field example: With Checkbox.",
       "registryDependencies": [
-        "checkbox",
-        "field"
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/field.json"
       ],
       "files": [
         {
@@ -5325,8 +5327,8 @@
       "title": "Field With Switch",
       "description": "Field example: With Switch.",
       "registryDependencies": [
-        "field",
-        "switch"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/switch.json"
       ],
       "files": [
         {
@@ -5341,9 +5343,9 @@
       "title": "Form Default",
       "description": "Form example: Default.",
       "registryDependencies": [
-        "form",
-        "input",
-        "textarea"
+        "https://keystoneui.io/r/form.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/textarea.json"
       ],
       "files": [
         {
@@ -5358,9 +5360,9 @@
       "title": "Form With Validation",
       "description": "Form example: With Validation.",
       "registryDependencies": [
-        "button",
-        "form",
-        "input"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/form.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5375,7 +5377,7 @@
       "title": "Input Default",
       "description": "Input example: Default.",
       "registryDependencies": [
-        "input"
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5390,8 +5392,8 @@
       "title": "Input Disabled",
       "description": "Input example: Disabled.",
       "registryDependencies": [
-        "field",
-        "input"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5406,7 +5408,7 @@
       "title": "Input File",
       "description": "Input example: File.",
       "registryDependencies": [
-        "input"
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5421,9 +5423,9 @@
       "title": "Input Form Example",
       "description": "Input example: Form Example.",
       "registryDependencies": [
-        "button",
-        "field",
-        "input"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5438,7 +5440,7 @@
       "title": "Input Sizes",
       "description": "Input example: Sizes.",
       "registryDependencies": [
-        "input"
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5453,8 +5455,8 @@
       "title": "Input Types",
       "description": "Input example: Types.",
       "registryDependencies": [
-        "field",
-        "input"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5469,9 +5471,9 @@
       "title": "Input With Button",
       "description": "Input example: With Button.",
       "registryDependencies": [
-        "button",
-        "button-group",
-        "input"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/button-group.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5486,8 +5488,8 @@
       "title": "Input With Error",
       "description": "Input example: With Error.",
       "registryDependencies": [
-        "field",
-        "input"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5502,8 +5504,8 @@
       "title": "Input With Field",
       "description": "Input example: With Field.",
       "registryDependencies": [
-        "field",
-        "input"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5518,8 +5520,8 @@
       "title": "Input With Helper Text",
       "description": "Input example: With Helper Text.",
       "registryDependencies": [
-        "field",
-        "input"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5534,7 +5536,7 @@
       "title": "Input With Icon",
       "description": "Input example: With Icon.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5549,8 +5551,8 @@
       "title": "Input With Label",
       "description": "Input example: With Label.",
       "registryDependencies": [
-        "field",
-        "input"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json"
       ],
       "files": [
         {
@@ -5565,7 +5567,7 @@
       "title": "Input With Password Toggle",
       "description": "Input example: With Password Toggle.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5580,7 +5582,7 @@
       "title": "Input With Prefix",
       "description": "Input example: With Prefix.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5595,7 +5597,7 @@
       "title": "Input Group Clear Button",
       "description": "Input Group example: Clear Button.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5610,7 +5612,7 @@
       "title": "Input Group Copy To Clipboard",
       "description": "Input Group example: Copy To Clipboard.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5625,7 +5627,7 @@
       "title": "Input Group Currency",
       "description": "Input Group example: Currency.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5640,7 +5642,7 @@
       "title": "Input Group Default",
       "description": "Input Group example: Default.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5655,7 +5657,7 @@
       "title": "Input Group Email Input",
       "description": "Input Group example: Email Input.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5670,7 +5672,7 @@
       "title": "Input Group Loading Spinner",
       "description": "Input Group example: Loading Spinner.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5685,7 +5687,7 @@
       "title": "Input Group Password Toggle",
       "description": "Input Group example: Password Toggle.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5700,7 +5702,7 @@
       "title": "Input Group Phone Input",
       "description": "Input Group example: Phone Input.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5715,15 +5717,15 @@
       "title": "Input Group Prompt Form",
       "description": "Input Group example: Prompt Form.",
       "registryDependencies": [
-        "avatar",
-        "badge",
-        "command",
-        "dropdown-menu",
-        "field",
-        "input-group",
-        "popover",
-        "switch",
-        "tooltip"
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/command.json",
+        "https://keystoneui.io/r/dropdown-menu.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input-group.json",
+        "https://keystoneui.io/r/popover.json",
+        "https://keystoneui.io/r/switch.json",
+        "https://keystoneui.io/r/tooltip.json"
       ],
       "files": [
         {
@@ -5738,7 +5740,7 @@
       "title": "Input Group Search",
       "description": "Input Group example: Search.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5753,7 +5755,7 @@
       "title": "Input Group Small Size",
       "description": "Input Group example: Small Size.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5768,7 +5770,7 @@
       "title": "Input Group Stake Buttons",
       "description": "Input Group example: Stake Buttons.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5783,7 +5785,7 @@
       "title": "Input Group Text Prefix",
       "description": "Input Group example: Text Prefix.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5798,7 +5800,7 @@
       "title": "Input Group Text Suffix",
       "description": "Input Group example: Text Suffix.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5813,7 +5815,7 @@
       "title": "Input Group With Button",
       "description": "Input Group example: With Button.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5828,7 +5830,7 @@
       "title": "Input Group With Textarea",
       "description": "Input Group example: With Textarea.",
       "registryDependencies": [
-        "input-group"
+        "https://keystoneui.io/r/input-group.json"
       ],
       "files": [
         {
@@ -5843,7 +5845,7 @@
       "title": "Input Otp Alphanumeric",
       "description": "Input Otp example: Alphanumeric.",
       "registryDependencies": [
-        "input-otp"
+        "https://keystoneui.io/r/input-otp.json"
       ],
       "files": [
         {
@@ -5858,8 +5860,8 @@
       "title": "Input Otp Auto Submit",
       "description": "Input Otp example: Auto Submit.",
       "registryDependencies": [
-        "button",
-        "input-otp"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/input-otp.json"
       ],
       "files": [
         {
@@ -5874,7 +5876,7 @@
       "title": "Input Otp Custom Sanitization",
       "description": "Input Otp example: Custom Sanitization.",
       "registryDependencies": [
-        "input-otp"
+        "https://keystoneui.io/r/input-otp.json"
       ],
       "files": [
         {
@@ -5889,7 +5891,7 @@
       "title": "Input Otp Default",
       "description": "Input Otp example: Default.",
       "registryDependencies": [
-        "input-otp"
+        "https://keystoneui.io/r/input-otp.json"
       ],
       "files": [
         {
@@ -5904,7 +5906,7 @@
       "title": "Input Otp Disabled",
       "description": "Input Otp example: Disabled.",
       "registryDependencies": [
-        "input-otp"
+        "https://keystoneui.io/r/input-otp.json"
       ],
       "files": [
         {
@@ -5919,10 +5921,10 @@
       "title": "Input Otp Form",
       "description": "Input Otp example: Form.",
       "registryDependencies": [
-        "button",
-        "card",
-        "field",
-        "input-otp"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input-otp.json"
       ],
       "files": [
         {
@@ -5937,7 +5939,7 @@
       "title": "Input Otp Four Digits",
       "description": "Input Otp example: Four Digits.",
       "registryDependencies": [
-        "input-otp"
+        "https://keystoneui.io/r/input-otp.json"
       ],
       "files": [
         {
@@ -5952,7 +5954,7 @@
       "title": "Input Otp Loading",
       "description": "Input Otp example: Loading.",
       "registryDependencies": [
-        "input-otp"
+        "https://keystoneui.io/r/input-otp.json"
       ],
       "files": [
         {
@@ -5967,7 +5969,7 @@
       "title": "Input Otp Masked",
       "description": "Input Otp example: Masked.",
       "registryDependencies": [
-        "input-otp"
+        "https://keystoneui.io/r/input-otp.json"
       ],
       "files": [
         {
@@ -5982,7 +5984,7 @@
       "title": "Input Otp Placeholder",
       "description": "Input Otp example: Placeholder.",
       "registryDependencies": [
-        "input-otp"
+        "https://keystoneui.io/r/input-otp.json"
       ],
       "files": [
         {
@@ -5997,7 +5999,7 @@
       "title": "Input Otp With Label",
       "description": "Input Otp example: With Label.",
       "registryDependencies": [
-        "input-otp"
+        "https://keystoneui.io/r/input-otp.json"
       ],
       "files": [
         {
@@ -6012,7 +6014,7 @@
       "title": "Input Otp With Separator",
       "description": "Input Otp example: With Separator.",
       "registryDependencies": [
-        "input-otp"
+        "https://keystoneui.io/r/input-otp.json"
       ],
       "files": [
         {
@@ -6027,8 +6029,8 @@
       "title": "Item Activity Feed",
       "description": "Item example: Activity Feed.",
       "registryDependencies": [
-        "avatar",
-        "item"
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/item.json"
       ],
       "files": [
         {
@@ -6043,7 +6045,7 @@
       "title": "Item Default",
       "description": "Item example: Default.",
       "registryDependencies": [
-        "item"
+        "https://keystoneui.io/r/item.json"
       ],
       "files": [
         {
@@ -6058,9 +6060,9 @@
       "title": "Item Group",
       "description": "Item example: Group.",
       "registryDependencies": [
-        "avatar",
-        "button",
-        "item"
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/item.json"
       ],
       "files": [
         {
@@ -6075,7 +6077,7 @@
       "title": "Item Link",
       "description": "Item example: Link.",
       "registryDependencies": [
-        "item"
+        "https://keystoneui.io/r/item.json"
       ],
       "files": [
         {
@@ -6090,8 +6092,8 @@
       "title": "Item Notification List",
       "description": "Item example: Notification List.",
       "registryDependencies": [
-        "badge",
-        "item"
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/item.json"
       ],
       "files": [
         {
@@ -6106,7 +6108,7 @@
       "title": "Item Settings List",
       "description": "Item example: Settings List.",
       "registryDependencies": [
-        "item"
+        "https://keystoneui.io/r/item.json"
       ],
       "files": [
         {
@@ -6121,7 +6123,7 @@
       "title": "Item Sizes",
       "description": "Item example: Sizes.",
       "registryDependencies": [
-        "item"
+        "https://keystoneui.io/r/item.json"
       ],
       "files": [
         {
@@ -6136,8 +6138,8 @@
       "title": "Item With Actions",
       "description": "Item example: With Actions.",
       "registryDependencies": [
-        "button",
-        "item"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/item.json"
       ],
       "files": [
         {
@@ -6152,8 +6154,8 @@
       "title": "Item With Avatar",
       "description": "Item example: With Avatar.",
       "registryDependencies": [
-        "avatar",
-        "item"
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/item.json"
       ],
       "files": [
         {
@@ -6168,7 +6170,7 @@
       "title": "Item With Description",
       "description": "Item example: With Description.",
       "registryDependencies": [
-        "item"
+        "https://keystoneui.io/r/item.json"
       ],
       "files": [
         {
@@ -6183,8 +6185,8 @@
       "title": "Item With Footer",
       "description": "Item example: With Footer.",
       "registryDependencies": [
-        "button",
-        "item"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/item.json"
       ],
       "files": [
         {
@@ -6199,7 +6201,7 @@
       "title": "Item With Icon",
       "description": "Item example: With Icon.",
       "registryDependencies": [
-        "item"
+        "https://keystoneui.io/r/item.json"
       ],
       "files": [
         {
@@ -6214,7 +6216,7 @@
       "title": "Item With Image",
       "description": "Item example: With Image.",
       "registryDependencies": [
-        "item"
+        "https://keystoneui.io/r/item.json"
       ],
       "files": [
         {
@@ -6229,7 +6231,7 @@
       "title": "Item With Separator",
       "description": "Item example: With Separator.",
       "registryDependencies": [
-        "item"
+        "https://keystoneui.io/r/item.json"
       ],
       "files": [
         {
@@ -6244,7 +6246,7 @@
       "title": "Kbd Common Shortcuts",
       "description": "Kbd example: Common Shortcuts.",
       "registryDependencies": [
-        "kbd"
+        "https://keystoneui.io/r/kbd.json"
       ],
       "files": [
         {
@@ -6259,7 +6261,7 @@
       "title": "Kbd Default",
       "description": "Kbd example: Default.",
       "registryDependencies": [
-        "kbd"
+        "https://keystoneui.io/r/kbd.json"
       ],
       "files": [
         {
@@ -6274,7 +6276,7 @@
       "title": "Kbd Function Keys",
       "description": "Kbd example: Function Keys.",
       "registryDependencies": [
-        "kbd"
+        "https://keystoneui.io/r/kbd.json"
       ],
       "files": [
         {
@@ -6289,7 +6291,7 @@
       "title": "Kbd Group",
       "description": "Kbd example: Group.",
       "registryDependencies": [
-        "kbd"
+        "https://keystoneui.io/r/kbd.json"
       ],
       "files": [
         {
@@ -6304,7 +6306,7 @@
       "title": "Kbd Modifier Keys",
       "description": "Kbd example: Modifier Keys.",
       "registryDependencies": [
-        "kbd"
+        "https://keystoneui.io/r/kbd.json"
       ],
       "files": [
         {
@@ -6319,7 +6321,7 @@
       "title": "Kbd Special Keys",
       "description": "Kbd example: Special Keys.",
       "registryDependencies": [
-        "kbd"
+        "https://keystoneui.io/r/kbd.json"
       ],
       "files": [
         {
@@ -6334,8 +6336,8 @@
       "title": "Label Default",
       "description": "Label example: Default.",
       "registryDependencies": [
-        "input",
-        "label"
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/label.json"
       ],
       "files": [
         {
@@ -6350,8 +6352,8 @@
       "title": "Label Required",
       "description": "Label example: Required.",
       "registryDependencies": [
-        "input",
-        "label"
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/label.json"
       ],
       "files": [
         {
@@ -6366,8 +6368,8 @@
       "title": "Label With Description",
       "description": "Label example: With Description.",
       "registryDependencies": [
-        "input",
-        "label"
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/label.json"
       ],
       "files": [
         {
@@ -6382,8 +6384,8 @@
       "title": "Modal Confirmation",
       "description": "Modal example: Confirmation.",
       "registryDependencies": [
-        "button",
-        "modal"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/modal.json"
       ],
       "files": [
         {
@@ -6398,8 +6400,8 @@
       "title": "Modal Controlled",
       "description": "Modal example: Controlled.",
       "registryDependencies": [
-        "button",
-        "modal"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/modal.json"
       ],
       "files": [
         {
@@ -6414,8 +6416,8 @@
       "title": "Modal Default",
       "description": "Modal example: Default.",
       "registryDependencies": [
-        "button",
-        "modal"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/modal.json"
       ],
       "files": [
         {
@@ -6430,8 +6432,8 @@
       "title": "Modal Long Content",
       "description": "Modal example: Long Content.",
       "registryDependencies": [
-        "button",
-        "modal"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/modal.json"
       ],
       "files": [
         {
@@ -6446,11 +6448,11 @@
       "title": "Modal Multi Step",
       "description": "Modal example: Multi Step.",
       "registryDependencies": [
-        "button",
-        "input",
-        "label",
-        "modal",
-        "stepper"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/label.json",
+        "https://keystoneui.io/r/modal.json",
+        "https://keystoneui.io/r/stepper.json"
       ],
       "files": [
         {
@@ -6465,8 +6467,8 @@
       "title": "Modal Nested",
       "description": "Modal example: Nested.",
       "registryDependencies": [
-        "button",
-        "modal"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/modal.json"
       ],
       "files": [
         {
@@ -6481,8 +6483,8 @@
       "title": "Modal Scrollable",
       "description": "Modal example: Scrollable.",
       "registryDependencies": [
-        "button",
-        "modal"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/modal.json"
       ],
       "files": [
         {
@@ -6497,11 +6499,11 @@
       "title": "Modal Sign Up Form",
       "description": "Modal example: Sign Up Form.",
       "registryDependencies": [
-        "button",
-        "checkbox",
-        "input",
-        "label",
-        "modal"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/label.json",
+        "https://keystoneui.io/r/modal.json"
       ],
       "files": [
         {
@@ -6516,8 +6518,8 @@
       "title": "Modal Sizes",
       "description": "Modal example: Sizes.",
       "registryDependencies": [
-        "button",
-        "modal"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/modal.json"
       ],
       "files": [
         {
@@ -6532,8 +6534,8 @@
       "title": "Modal Sticky Footer",
       "description": "Modal example: Sticky Footer.",
       "registryDependencies": [
-        "button",
-        "modal"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/modal.json"
       ],
       "files": [
         {
@@ -6548,7 +6550,7 @@
       "title": "Native Select Default",
       "description": "Native Select example: Default.",
       "registryDependencies": [
-        "native-select"
+        "https://keystoneui.io/r/native-select.json"
       ],
       "files": [
         {
@@ -6563,7 +6565,7 @@
       "title": "Native Select Disabled",
       "description": "Native Select example: Disabled.",
       "registryDependencies": [
-        "native-select"
+        "https://keystoneui.io/r/native-select.json"
       ],
       "files": [
         {
@@ -6578,8 +6580,8 @@
       "title": "Native Select Form Example",
       "description": "Native Select example: Form Example.",
       "registryDependencies": [
-        "field",
-        "native-select"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/native-select.json"
       ],
       "files": [
         {
@@ -6594,7 +6596,7 @@
       "title": "Native Select Groups",
       "description": "Native Select example: Groups.",
       "registryDependencies": [
-        "native-select"
+        "https://keystoneui.io/r/native-select.json"
       ],
       "files": [
         {
@@ -6609,8 +6611,8 @@
       "title": "Native Select Invalid",
       "description": "Native Select example: Invalid.",
       "registryDependencies": [
-        "field",
-        "native-select"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/native-select.json"
       ],
       "files": [
         {
@@ -6625,7 +6627,7 @@
       "title": "Native Select Sizes",
       "description": "Native Select example: Sizes.",
       "registryDependencies": [
-        "native-select"
+        "https://keystoneui.io/r/native-select.json"
       ],
       "files": [
         {
@@ -6640,7 +6642,7 @@
       "title": "Pagination Default",
       "description": "Pagination example: Default.",
       "registryDependencies": [
-        "pagination"
+        "https://keystoneui.io/r/pagination.json"
       ],
       "files": [
         {
@@ -6655,7 +6657,7 @@
       "title": "Pagination Simple",
       "description": "Pagination example: Simple.",
       "registryDependencies": [
-        "pagination"
+        "https://keystoneui.io/r/pagination.json"
       ],
       "files": [
         {
@@ -6670,8 +6672,8 @@
       "title": "Popover Alignments",
       "description": "Popover example: Alignments.",
       "registryDependencies": [
-        "button",
-        "popover"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/popover.json"
       ],
       "files": [
         {
@@ -6686,8 +6688,8 @@
       "title": "Popover Default",
       "description": "Popover example: Default.",
       "registryDependencies": [
-        "button",
-        "popover"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/popover.json"
       ],
       "files": [
         {
@@ -6702,8 +6704,8 @@
       "title": "Popover Open On Hover",
       "description": "Popover example: Open On Hover.",
       "registryDependencies": [
-        "button",
-        "popover"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/popover.json"
       ],
       "files": [
         {
@@ -6718,8 +6720,8 @@
       "title": "Popover With Arrow",
       "description": "Popover example: With Arrow.",
       "registryDependencies": [
-        "button",
-        "popover"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/popover.json"
       ],
       "files": [
         {
@@ -6734,10 +6736,10 @@
       "title": "Popover With Form",
       "description": "Popover example: With Form.",
       "registryDependencies": [
-        "button",
-        "input",
-        "label",
-        "popover"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/label.json",
+        "https://keystoneui.io/r/popover.json"
       ],
       "files": [
         {
@@ -6752,7 +6754,7 @@
       "title": "Progress Animated",
       "description": "Progress example: Animated.",
       "registryDependencies": [
-        "progress"
+        "https://keystoneui.io/r/progress.json"
       ],
       "files": [
         {
@@ -6767,7 +6769,7 @@
       "title": "Progress Colors",
       "description": "Progress example: Colors.",
       "registryDependencies": [
-        "progress"
+        "https://keystoneui.io/r/progress.json"
       ],
       "files": [
         {
@@ -6782,7 +6784,7 @@
       "title": "Progress Complete",
       "description": "Progress example: Complete.",
       "registryDependencies": [
-        "progress"
+        "https://keystoneui.io/r/progress.json"
       ],
       "files": [
         {
@@ -6797,8 +6799,8 @@
       "title": "Progress Controlled",
       "description": "Progress example: Controlled.",
       "registryDependencies": [
-        "progress",
-        "slider"
+        "https://keystoneui.io/r/progress.json",
+        "https://keystoneui.io/r/slider.json"
       ],
       "files": [
         {
@@ -6813,7 +6815,7 @@
       "title": "Progress Default",
       "description": "Progress example: Default.",
       "registryDependencies": [
-        "progress"
+        "https://keystoneui.io/r/progress.json"
       ],
       "files": [
         {
@@ -6828,7 +6830,7 @@
       "title": "Progress Indeterminate",
       "description": "Progress example: Indeterminate.",
       "registryDependencies": [
-        "progress"
+        "https://keystoneui.io/r/progress.json"
       ],
       "files": [
         {
@@ -6843,7 +6845,7 @@
       "title": "Progress With Label",
       "description": "Progress example: With Label.",
       "registryDependencies": [
-        "progress"
+        "https://keystoneui.io/r/progress.json"
       ],
       "files": [
         {
@@ -6858,8 +6860,8 @@
       "title": "Radio Group Choice Card",
       "description": "Radio Group example: Choice Card.",
       "registryDependencies": [
-        "field",
-        "radio-group"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/radio-group.json"
       ],
       "files": [
         {
@@ -6874,8 +6876,8 @@
       "title": "Radio Group Default",
       "description": "Radio Group example: Default.",
       "registryDependencies": [
-        "label",
-        "radio-group"
+        "https://keystoneui.io/r/label.json",
+        "https://keystoneui.io/r/radio-group.json"
       ],
       "files": [
         {
@@ -6890,8 +6892,8 @@
       "title": "Radio Group Disabled",
       "description": "Radio Group example: Disabled.",
       "registryDependencies": [
-        "field",
-        "radio-group"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/radio-group.json"
       ],
       "files": [
         {
@@ -6906,8 +6908,8 @@
       "title": "Radio Group Fieldset",
       "description": "Radio Group example: Fieldset.",
       "registryDependencies": [
-        "field",
-        "radio-group"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/radio-group.json"
       ],
       "files": [
         {
@@ -6922,8 +6924,8 @@
       "title": "Radio Group Horizontal",
       "description": "Radio Group example: Horizontal.",
       "registryDependencies": [
-        "label",
-        "radio-group"
+        "https://keystoneui.io/r/label.json",
+        "https://keystoneui.io/r/radio-group.json"
       ],
       "files": [
         {
@@ -6938,8 +6940,8 @@
       "title": "Radio Group With Description",
       "description": "Radio Group example: With Description.",
       "registryDependencies": [
-        "field",
-        "radio-group"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/radio-group.json"
       ],
       "files": [
         {
@@ -6954,7 +6956,7 @@
       "title": "Resizable Collapsible",
       "description": "Resizable example: Collapsible.",
       "registryDependencies": [
-        "resizable"
+        "https://keystoneui.io/r/resizable.json"
       ],
       "files": [
         {
@@ -6969,7 +6971,7 @@
       "title": "Resizable Complex Layout",
       "description": "Resizable example: Complex Layout.",
       "registryDependencies": [
-        "resizable"
+        "https://keystoneui.io/r/resizable.json"
       ],
       "files": [
         {
@@ -6984,7 +6986,7 @@
       "title": "Resizable Default",
       "description": "Resizable example: Default.",
       "registryDependencies": [
-        "resizable"
+        "https://keystoneui.io/r/resizable.json"
       ],
       "files": [
         {
@@ -6999,7 +7001,7 @@
       "title": "Resizable Nested",
       "description": "Resizable example: Nested.",
       "registryDependencies": [
-        "resizable"
+        "https://keystoneui.io/r/resizable.json"
       ],
       "files": [
         {
@@ -7014,7 +7016,7 @@
       "title": "Resizable Vertical",
       "description": "Resizable example: Vertical.",
       "registryDependencies": [
-        "resizable"
+        "https://keystoneui.io/r/resizable.json"
       ],
       "files": [
         {
@@ -7029,7 +7031,7 @@
       "title": "Resizable With Handle",
       "description": "Resizable example: With Handle.",
       "registryDependencies": [
-        "resizable"
+        "https://keystoneui.io/r/resizable.json"
       ],
       "files": [
         {
@@ -7044,9 +7046,9 @@
       "title": "Select Controlled",
       "description": "Select example: Controlled.",
       "registryDependencies": [
-        "button",
-        "field",
-        "select"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/select.json"
       ],
       "files": [
         {
@@ -7061,7 +7063,7 @@
       "title": "Select Default",
       "description": "Select example: Default.",
       "registryDependencies": [
-        "select"
+        "https://keystoneui.io/r/select.json"
       ],
       "files": [
         {
@@ -7076,7 +7078,7 @@
       "title": "Select Disabled",
       "description": "Select example: Disabled.",
       "registryDependencies": [
-        "select"
+        "https://keystoneui.io/r/select.json"
       ],
       "files": [
         {
@@ -7091,9 +7093,9 @@
       "title": "Select Form Example",
       "description": "Select example: Form Example.",
       "registryDependencies": [
-        "button",
-        "field",
-        "select"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/select.json"
       ],
       "files": [
         {
@@ -7108,7 +7110,7 @@
       "title": "Select Groups",
       "description": "Select example: Groups.",
       "registryDependencies": [
-        "select"
+        "https://keystoneui.io/r/select.json"
       ],
       "files": [
         {
@@ -7123,7 +7125,7 @@
       "title": "Select Multiple",
       "description": "Select example: Multiple.",
       "registryDependencies": [
-        "select"
+        "https://keystoneui.io/r/select.json"
       ],
       "files": [
         {
@@ -7138,7 +7140,7 @@
       "title": "Select Scrollable",
       "description": "Select example: Scrollable.",
       "registryDependencies": [
-        "select"
+        "https://keystoneui.io/r/select.json"
       ],
       "files": [
         {
@@ -7153,7 +7155,7 @@
       "title": "Select Sizes",
       "description": "Select example: Sizes.",
       "registryDependencies": [
-        "select"
+        "https://keystoneui.io/r/select.json"
       ],
       "files": [
         {
@@ -7168,7 +7170,7 @@
       "title": "Select With Icons",
       "description": "Select example: With Icons.",
       "registryDependencies": [
-        "select"
+        "https://keystoneui.io/r/select.json"
       ],
       "files": [
         {
@@ -7183,8 +7185,8 @@
       "title": "Selection Bar Default",
       "description": "Selection Bar example: Default.",
       "registryDependencies": [
-        "button",
-        "selection-bar"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/selection-bar.json"
       ],
       "files": [
         {
@@ -7199,7 +7201,7 @@
       "title": "Selection Bar Tones",
       "description": "Selection Bar example: Tones.",
       "registryDependencies": [
-        "selection-bar"
+        "https://keystoneui.io/r/selection-bar.json"
       ],
       "files": [
         {
@@ -7214,8 +7216,8 @@
       "title": "Selection Bar With Bulk Actions",
       "description": "Selection Bar example: With Bulk Actions.",
       "registryDependencies": [
-        "dropdown-menu",
-        "selection-bar"
+        "https://keystoneui.io/r/dropdown-menu.json",
+        "https://keystoneui.io/r/selection-bar.json"
       ],
       "files": [
         {
@@ -7230,7 +7232,7 @@
       "title": "Separator Default",
       "description": "Separator example: Default.",
       "registryDependencies": [
-        "separator"
+        "https://keystoneui.io/r/separator.json"
       ],
       "files": [
         {
@@ -7245,7 +7247,7 @@
       "title": "Separator Vertical",
       "description": "Separator example: Vertical.",
       "registryDependencies": [
-        "separator"
+        "https://keystoneui.io/r/separator.json"
       ],
       "files": [
         {
@@ -7260,7 +7262,7 @@
       "title": "Separator With Content",
       "description": "Separator example: With Content.",
       "registryDependencies": [
-        "separator"
+        "https://keystoneui.io/r/separator.json"
       ],
       "files": [
         {
@@ -7275,7 +7277,7 @@
       "title": "Skeleton Card",
       "description": "Skeleton example: Card.",
       "registryDependencies": [
-        "skeleton"
+        "https://keystoneui.io/r/skeleton.json"
       ],
       "files": [
         {
@@ -7290,7 +7292,7 @@
       "title": "Skeleton Default",
       "description": "Skeleton example: Default.",
       "registryDependencies": [
-        "skeleton"
+        "https://keystoneui.io/r/skeleton.json"
       ],
       "files": [
         {
@@ -7305,7 +7307,7 @@
       "title": "Skeleton Form",
       "description": "Skeleton example: Form.",
       "registryDependencies": [
-        "skeleton"
+        "https://keystoneui.io/r/skeleton.json"
       ],
       "files": [
         {
@@ -7320,7 +7322,7 @@
       "title": "Skeleton No Animation",
       "description": "Skeleton example: No Animation.",
       "registryDependencies": [
-        "skeleton"
+        "https://keystoneui.io/r/skeleton.json"
       ],
       "files": [
         {
@@ -7335,7 +7337,7 @@
       "title": "Skeleton Shimmer",
       "description": "Skeleton example: Shimmer.",
       "registryDependencies": [
-        "skeleton"
+        "https://keystoneui.io/r/skeleton.json"
       ],
       "files": [
         {
@@ -7350,7 +7352,7 @@
       "title": "Skeleton Table",
       "description": "Skeleton example: Table.",
       "registryDependencies": [
-        "skeleton"
+        "https://keystoneui.io/r/skeleton.json"
       ],
       "files": [
         {
@@ -7365,7 +7367,7 @@
       "title": "Skeleton Text",
       "description": "Skeleton example: Text.",
       "registryDependencies": [
-        "skeleton"
+        "https://keystoneui.io/r/skeleton.json"
       ],
       "files": [
         {
@@ -7380,7 +7382,7 @@
       "title": "Slider Controlled",
       "description": "Slider example: Controlled.",
       "registryDependencies": [
-        "slider"
+        "https://keystoneui.io/r/slider.json"
       ],
       "files": [
         {
@@ -7395,7 +7397,7 @@
       "title": "Slider Custom Step",
       "description": "Slider example: Custom Step.",
       "registryDependencies": [
-        "slider"
+        "https://keystoneui.io/r/slider.json"
       ],
       "files": [
         {
@@ -7410,7 +7412,7 @@
       "title": "Slider Default",
       "description": "Slider example: Default.",
       "registryDependencies": [
-        "slider"
+        "https://keystoneui.io/r/slider.json"
       ],
       "files": [
         {
@@ -7425,7 +7427,7 @@
       "title": "Slider Disabled",
       "description": "Slider example: Disabled.",
       "registryDependencies": [
-        "slider"
+        "https://keystoneui.io/r/slider.json"
       ],
       "files": [
         {
@@ -7440,7 +7442,7 @@
       "title": "Slider Range",
       "description": "Slider example: Range.",
       "registryDependencies": [
-        "slider"
+        "https://keystoneui.io/r/slider.json"
       ],
       "files": [
         {
@@ -7455,7 +7457,7 @@
       "title": "Slider With Label",
       "description": "Slider example: With Label.",
       "registryDependencies": [
-        "slider"
+        "https://keystoneui.io/r/slider.json"
       ],
       "files": [
         {
@@ -7470,7 +7472,7 @@
       "title": "Spinner Default",
       "description": "Spinner example: Default.",
       "registryDependencies": [
-        "spinner"
+        "https://keystoneui.io/r/spinner.json"
       ],
       "files": [
         {
@@ -7485,7 +7487,7 @@
       "title": "Spinner Sizes",
       "description": "Spinner example: Sizes.",
       "registryDependencies": [
-        "spinner"
+        "https://keystoneui.io/r/spinner.json"
       ],
       "files": [
         {
@@ -7500,8 +7502,8 @@
       "title": "Spinner With Badge",
       "description": "Spinner example: With Badge.",
       "registryDependencies": [
-        "badge",
-        "spinner"
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/spinner.json"
       ],
       "files": [
         {
@@ -7516,8 +7518,8 @@
       "title": "Spinner With Button",
       "description": "Spinner example: With Button.",
       "registryDependencies": [
-        "button",
-        "spinner"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/spinner.json"
       ],
       "files": [
         {
@@ -7532,9 +7534,9 @@
       "title": "Spinner With Empty",
       "description": "Spinner example: With Empty.",
       "registryDependencies": [
-        "button",
-        "empty",
-        "spinner"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/empty.json",
+        "https://keystoneui.io/r/spinner.json"
       ],
       "files": [
         {
@@ -7549,8 +7551,8 @@
       "title": "Stat Default",
       "description": "Stat example: Default.",
       "registryDependencies": [
-        "card",
-        "stat"
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/stat.json"
       ],
       "files": [
         {
@@ -7565,7 +7567,7 @@
       "title": "Stat Direction",
       "description": "Stat example: Direction.",
       "registryDependencies": [
-        "stat"
+        "https://keystoneui.io/r/stat.json"
       ],
       "files": [
         {
@@ -7580,8 +7582,8 @@
       "title": "Stat Kpi Row",
       "description": "Stat example: Kpi Row.",
       "registryDependencies": [
-        "card",
-        "stat"
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/stat.json"
       ],
       "files": [
         {
@@ -7596,8 +7598,8 @@
       "title": "Stepper Controlled",
       "description": "Stepper example: Controlled.",
       "registryDependencies": [
-        "button",
-        "stepper"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/stepper.json"
       ],
       "files": [
         {
@@ -7612,8 +7614,8 @@
       "title": "Stepper Default",
       "description": "Stepper example: Default.",
       "registryDependencies": [
-        "button",
-        "stepper"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/stepper.json"
       ],
       "files": [
         {
@@ -7628,8 +7630,8 @@
       "title": "Stepper With Indicator",
       "description": "Stepper example: With Indicator.",
       "registryDependencies": [
-        "button",
-        "stepper"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/stepper.json"
       ],
       "files": [
         {
@@ -7644,8 +7646,8 @@
       "title": "Switch Choice Card",
       "description": "Switch example: Choice Card.",
       "registryDependencies": [
-        "field",
-        "switch"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/switch.json"
       ],
       "files": [
         {
@@ -7660,8 +7662,8 @@
       "title": "Switch Default",
       "description": "Switch example: Default.",
       "registryDependencies": [
-        "field",
-        "switch"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/switch.json"
       ],
       "files": [
         {
@@ -7676,8 +7678,8 @@
       "title": "Switch Disabled",
       "description": "Switch example: Disabled.",
       "registryDependencies": [
-        "field",
-        "switch"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/switch.json"
       ],
       "files": [
         {
@@ -7692,8 +7694,8 @@
       "title": "Switch Sizes",
       "description": "Switch example: Sizes.",
       "registryDependencies": [
-        "field",
-        "switch"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/switch.json"
       ],
       "files": [
         {
@@ -7708,8 +7710,8 @@
       "title": "Switch With Description",
       "description": "Switch example: With Description.",
       "registryDependencies": [
-        "field",
-        "switch"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/switch.json"
       ],
       "files": [
         {
@@ -7724,8 +7726,8 @@
       "title": "Table Actions",
       "description": "Table example: Actions.",
       "registryDependencies": [
-        "button",
-        "table"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/table.json"
       ],
       "files": [
         {
@@ -7740,7 +7742,7 @@
       "title": "Table Card",
       "description": "Table example: Card.",
       "registryDependencies": [
-        "table"
+        "https://keystoneui.io/r/table.json"
       ],
       "files": [
         {
@@ -7755,7 +7757,7 @@
       "title": "Table Compact",
       "description": "Table example: Compact.",
       "registryDependencies": [
-        "table"
+        "https://keystoneui.io/r/table.json"
       ],
       "files": [
         {
@@ -7770,7 +7772,7 @@
       "title": "Table Default",
       "description": "Table example: Default.",
       "registryDependencies": [
-        "table"
+        "https://keystoneui.io/r/table.json"
       ],
       "files": [
         {
@@ -7785,8 +7787,8 @@
       "title": "Table Empty State",
       "description": "Table example: Empty State.",
       "registryDependencies": [
-        "empty",
-        "table"
+        "https://keystoneui.io/r/empty.json",
+        "https://keystoneui.io/r/table.json"
       ],
       "files": [
         {
@@ -7801,7 +7803,7 @@
       "title": "Table Footer",
       "description": "Table example: Footer.",
       "registryDependencies": [
-        "table"
+        "https://keystoneui.io/r/table.json"
       ],
       "files": [
         {
@@ -7816,7 +7818,7 @@
       "title": "Table Hoverable",
       "description": "Table example: Hoverable.",
       "registryDependencies": [
-        "table"
+        "https://keystoneui.io/r/table.json"
       ],
       "files": [
         {
@@ -7831,9 +7833,9 @@
       "title": "Table Selected Rows",
       "description": "Table example: Selected Rows.",
       "registryDependencies": [
-        "badge",
-        "checkbox",
-        "table"
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/table.json"
       ],
       "files": [
         {
@@ -7848,7 +7850,7 @@
       "title": "Table Sortable",
       "description": "Table example: Sortable.",
       "registryDependencies": [
-        "table"
+        "https://keystoneui.io/r/table.json"
       ],
       "files": [
         {
@@ -7863,7 +7865,7 @@
       "title": "Table Sticky Header",
       "description": "Table example: Sticky Header.",
       "registryDependencies": [
-        "table"
+        "https://keystoneui.io/r/table.json"
       ],
       "files": [
         {
@@ -7878,7 +7880,7 @@
       "title": "Table Striped",
       "description": "Table example: Striped.",
       "registryDependencies": [
-        "table"
+        "https://keystoneui.io/r/table.json"
       ],
       "files": [
         {
@@ -7893,8 +7895,8 @@
       "title": "Table With Badges",
       "description": "Table example: With Badges.",
       "registryDependencies": [
-        "badge",
-        "table"
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/table.json"
       ],
       "files": [
         {
@@ -7909,9 +7911,9 @@
       "title": "Table With Pagination",
       "description": "Table example: With Pagination.",
       "registryDependencies": [
-        "badge",
-        "pagination",
-        "table"
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/pagination.json",
+        "https://keystoneui.io/r/table.json"
       ],
       "files": [
         {
@@ -7926,7 +7928,7 @@
       "title": "Table Pagination Composed",
       "description": "Table Pagination example: Composed.",
       "registryDependencies": [
-        "table-pagination"
+        "https://keystoneui.io/r/table-pagination.json"
       ],
       "files": [
         {
@@ -7941,8 +7943,8 @@
       "title": "Table Pagination Default",
       "description": "Table Pagination example: Default.",
       "registryDependencies": [
-        "table",
-        "table-pagination"
+        "https://keystoneui.io/r/table.json",
+        "https://keystoneui.io/r/table-pagination.json"
       ],
       "files": [
         {
@@ -7957,7 +7959,7 @@
       "title": "Tabs Animated Indicator",
       "description": "Tabs example: Animated Indicator.",
       "registryDependencies": [
-        "tabs"
+        "https://keystoneui.io/r/tabs.json"
       ],
       "files": [
         {
@@ -7972,7 +7974,7 @@
       "title": "Tabs Default",
       "description": "Tabs example: Default.",
       "registryDependencies": [
-        "tabs"
+        "https://keystoneui.io/r/tabs.json"
       ],
       "files": [
         {
@@ -7987,7 +7989,7 @@
       "title": "Tabs Disabled",
       "description": "Tabs example: Disabled.",
       "registryDependencies": [
-        "tabs"
+        "https://keystoneui.io/r/tabs.json"
       ],
       "files": [
         {
@@ -8002,7 +8004,7 @@
       "title": "Tabs Line Vertical",
       "description": "Tabs example: Line Vertical.",
       "registryDependencies": [
-        "tabs"
+        "https://keystoneui.io/r/tabs.json"
       ],
       "files": [
         {
@@ -8017,7 +8019,7 @@
       "title": "Tabs Line",
       "description": "Tabs example: Line.",
       "registryDependencies": [
-        "tabs"
+        "https://keystoneui.io/r/tabs.json"
       ],
       "files": [
         {
@@ -8032,7 +8034,7 @@
       "title": "Tabs Morphing Line",
       "description": "Tabs example: Morphing Line.",
       "registryDependencies": [
-        "tabs"
+        "https://keystoneui.io/r/tabs.json"
       ],
       "files": [
         {
@@ -8047,7 +8049,7 @@
       "title": "Tabs Morphing",
       "description": "Tabs example: Morphing.",
       "registryDependencies": [
-        "tabs"
+        "https://keystoneui.io/r/tabs.json"
       ],
       "files": [
         {
@@ -8062,7 +8064,7 @@
       "title": "Tabs Pill",
       "description": "Tabs example: Pill.",
       "registryDependencies": [
-        "tabs"
+        "https://keystoneui.io/r/tabs.json"
       ],
       "files": [
         {
@@ -8077,7 +8079,7 @@
       "title": "Tabs Scrollable",
       "description": "Tabs example: Scrollable.",
       "registryDependencies": [
-        "tabs"
+        "https://keystoneui.io/r/tabs.json"
       ],
       "files": [
         {
@@ -8092,7 +8094,7 @@
       "title": "Tabs Vertical",
       "description": "Tabs example: Vertical.",
       "registryDependencies": [
-        "tabs"
+        "https://keystoneui.io/r/tabs.json"
       ],
       "files": [
         {
@@ -8107,7 +8109,7 @@
       "title": "Tabs With Icons",
       "description": "Tabs example: With Icons.",
       "registryDependencies": [
-        "tabs"
+        "https://keystoneui.io/r/tabs.json"
       ],
       "files": [
         {
@@ -8122,7 +8124,7 @@
       "title": "Tag Default",
       "description": "Tag example: Default.",
       "registryDependencies": [
-        "tag"
+        "https://keystoneui.io/r/tag.json"
       ],
       "files": [
         {
@@ -8137,7 +8139,7 @@
       "title": "Tag Disabled",
       "description": "Tag example: Disabled.",
       "registryDependencies": [
-        "tag"
+        "https://keystoneui.io/r/tag.json"
       ],
       "files": [
         {
@@ -8152,7 +8154,7 @@
       "title": "Tag States",
       "description": "Tag example: States.",
       "registryDependencies": [
-        "tag"
+        "https://keystoneui.io/r/tag.json"
       ],
       "files": [
         {
@@ -8167,7 +8169,7 @@
       "title": "Tag With Icon",
       "description": "Tag example: With Icon.",
       "registryDependencies": [
-        "tag"
+        "https://keystoneui.io/r/tag.json"
       ],
       "files": [
         {
@@ -8182,7 +8184,7 @@
       "title": "Tag With Remove",
       "description": "Tag example: With Remove.",
       "registryDependencies": [
-        "tag"
+        "https://keystoneui.io/r/tag.json"
       ],
       "files": [
         {
@@ -8197,7 +8199,7 @@
       "title": "Tag Group Controlled",
       "description": "Tag Group example: Controlled.",
       "registryDependencies": [
-        "tag-group"
+        "https://keystoneui.io/r/tag-group.json"
       ],
       "files": [
         {
@@ -8212,7 +8214,7 @@
       "title": "Tag Group Default",
       "description": "Tag Group example: Default.",
       "registryDependencies": [
-        "tag-group"
+        "https://keystoneui.io/r/tag-group.json"
       ],
       "files": [
         {
@@ -8227,7 +8229,7 @@
       "title": "Tag Group Disabled",
       "description": "Tag Group example: Disabled.",
       "registryDependencies": [
-        "tag-group"
+        "https://keystoneui.io/r/tag-group.json"
       ],
       "files": [
         {
@@ -8242,7 +8244,7 @@
       "title": "Tag Group Removable",
       "description": "Tag Group example: Removable.",
       "registryDependencies": [
-        "tag-group"
+        "https://keystoneui.io/r/tag-group.json"
       ],
       "files": [
         {
@@ -8257,7 +8259,7 @@
       "title": "Tag Group Single Selection",
       "description": "Tag Group example: Single Selection.",
       "registryDependencies": [
-        "tag-group"
+        "https://keystoneui.io/r/tag-group.json"
       ],
       "files": [
         {
@@ -8272,8 +8274,8 @@
       "title": "Tag Group With Avatars",
       "description": "Tag Group example: With Avatars.",
       "registryDependencies": [
-        "avatar",
-        "tag-group"
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/tag-group.json"
       ],
       "files": [
         {
@@ -8288,7 +8290,7 @@
       "title": "Tag Group With Icons",
       "description": "Tag Group example: With Icons.",
       "registryDependencies": [
-        "tag-group"
+        "https://keystoneui.io/r/tag-group.json"
       ],
       "files": [
         {
@@ -8303,8 +8305,8 @@
       "title": "Textarea Character Count",
       "description": "Textarea example: Character Count.",
       "registryDependencies": [
-        "field",
-        "textarea"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/textarea.json"
       ],
       "files": [
         {
@@ -8319,7 +8321,7 @@
       "title": "Textarea Default",
       "description": "Textarea example: Default.",
       "registryDependencies": [
-        "textarea"
+        "https://keystoneui.io/r/textarea.json"
       ],
       "files": [
         {
@@ -8334,8 +8336,8 @@
       "title": "Textarea Disabled",
       "description": "Textarea example: Disabled.",
       "registryDependencies": [
-        "field",
-        "textarea"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/textarea.json"
       ],
       "files": [
         {
@@ -8350,8 +8352,8 @@
       "title": "Textarea With Error",
       "description": "Textarea example: With Error.",
       "registryDependencies": [
-        "field",
-        "textarea"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/textarea.json"
       ],
       "files": [
         {
@@ -8366,8 +8368,8 @@
       "title": "Textarea With Field",
       "description": "Textarea example: With Field.",
       "registryDependencies": [
-        "field",
-        "textarea"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/textarea.json"
       ],
       "files": [
         {
@@ -8382,8 +8384,8 @@
       "title": "Toast Custom",
       "description": "Toast example: Custom.",
       "registryDependencies": [
-        "button",
-        "toast"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/toast.json"
       ],
       "files": [
         {
@@ -8398,8 +8400,8 @@
       "title": "Toast Default",
       "description": "Toast example: Default.",
       "registryDependencies": [
-        "button",
-        "toast"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/toast.json"
       ],
       "files": [
         {
@@ -8414,8 +8416,8 @@
       "title": "Toast Duration",
       "description": "Toast example: Duration.",
       "registryDependencies": [
-        "button",
-        "toast"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/toast.json"
       ],
       "files": [
         {
@@ -8430,8 +8432,8 @@
       "title": "Toast Position",
       "description": "Toast example: Position.",
       "registryDependencies": [
-        "button",
-        "toast"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/toast.json"
       ],
       "files": [
         {
@@ -8446,8 +8448,8 @@
       "title": "Toast Promise",
       "description": "Toast example: Promise.",
       "registryDependencies": [
-        "button",
-        "toast"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/toast.json"
       ],
       "files": [
         {
@@ -8462,8 +8464,8 @@
       "title": "Toast Types",
       "description": "Toast example: Types.",
       "registryDependencies": [
-        "button",
-        "toast"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/toast.json"
       ],
       "files": [
         {
@@ -8478,8 +8480,8 @@
       "title": "Toast With Action",
       "description": "Toast example: With Action.",
       "registryDependencies": [
-        "button",
-        "toast"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/toast.json"
       ],
       "files": [
         {
@@ -8494,8 +8496,8 @@
       "title": "Toast With Description",
       "description": "Toast example: With Description.",
       "registryDependencies": [
-        "button",
-        "toast"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/toast.json"
       ],
       "files": [
         {
@@ -8510,7 +8512,7 @@
       "title": "Toggle Default",
       "description": "Toggle example: Default.",
       "registryDependencies": [
-        "toggle"
+        "https://keystoneui.io/r/toggle.json"
       ],
       "files": [
         {
@@ -8525,7 +8527,7 @@
       "title": "Toggle Disabled",
       "description": "Toggle example: Disabled.",
       "registryDependencies": [
-        "toggle"
+        "https://keystoneui.io/r/toggle.json"
       ],
       "files": [
         {
@@ -8540,7 +8542,7 @@
       "title": "Toggle Outline",
       "description": "Toggle example: Outline.",
       "registryDependencies": [
-        "toggle"
+        "https://keystoneui.io/r/toggle.json"
       ],
       "files": [
         {
@@ -8555,7 +8557,7 @@
       "title": "Toggle Pressed",
       "description": "Toggle example: Pressed.",
       "registryDependencies": [
-        "toggle"
+        "https://keystoneui.io/r/toggle.json"
       ],
       "files": [
         {
@@ -8570,7 +8572,7 @@
       "title": "Toggle Secondary",
       "description": "Toggle example: Secondary.",
       "registryDependencies": [
-        "toggle"
+        "https://keystoneui.io/r/toggle.json"
       ],
       "files": [
         {
@@ -8585,7 +8587,7 @@
       "title": "Toggle Sizes",
       "description": "Toggle example: Sizes.",
       "registryDependencies": [
-        "toggle"
+        "https://keystoneui.io/r/toggle.json"
       ],
       "files": [
         {
@@ -8600,7 +8602,7 @@
       "title": "Toggle With Text",
       "description": "Toggle example: With Text.",
       "registryDependencies": [
-        "toggle"
+        "https://keystoneui.io/r/toggle.json"
       ],
       "files": [
         {
@@ -8615,8 +8617,8 @@
       "title": "Toggle Group Custom",
       "description": "Toggle Group example: Custom.",
       "registryDependencies": [
-        "field",
-        "toggle-group"
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {
@@ -8631,7 +8633,7 @@
       "title": "Toggle Group Default",
       "description": "Toggle Group example: Default.",
       "registryDependencies": [
-        "toggle-group"
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {
@@ -8646,7 +8648,7 @@
       "title": "Toggle Group Disabled",
       "description": "Toggle Group example: Disabled.",
       "registryDependencies": [
-        "toggle-group"
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {
@@ -8661,7 +8663,7 @@
       "title": "Toggle Group Outline",
       "description": "Toggle Group example: Outline.",
       "registryDependencies": [
-        "toggle-group"
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {
@@ -8676,7 +8678,7 @@
       "title": "Toggle Group Secondary",
       "description": "Toggle Group example: Secondary.",
       "registryDependencies": [
-        "toggle-group"
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {
@@ -8691,7 +8693,7 @@
       "title": "Toggle Group Single",
       "description": "Toggle Group example: Single.",
       "registryDependencies": [
-        "toggle-group"
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {
@@ -8706,7 +8708,7 @@
       "title": "Toggle Group Sizes",
       "description": "Toggle Group example: Sizes.",
       "registryDependencies": [
-        "toggle-group"
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {
@@ -8721,7 +8723,7 @@
       "title": "Toggle Group Spacing",
       "description": "Toggle Group example: Spacing.",
       "registryDependencies": [
-        "toggle-group"
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {
@@ -8736,7 +8738,7 @@
       "title": "Toggle Group Text Labels",
       "description": "Toggle Group example: Text Labels.",
       "registryDependencies": [
-        "toggle-group"
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {
@@ -8751,7 +8753,7 @@
       "title": "Toggle Group Vertical",
       "description": "Toggle Group example: Vertical.",
       "registryDependencies": [
-        "toggle-group"
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {
@@ -8766,8 +8768,8 @@
       "title": "Tooltip Default",
       "description": "Tooltip example: Default.",
       "registryDependencies": [
-        "button",
-        "tooltip"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/tooltip.json"
       ],
       "files": [
         {
@@ -8782,8 +8784,8 @@
       "title": "Tooltip Disabled Button",
       "description": "Tooltip example: Disabled Button.",
       "registryDependencies": [
-        "button",
-        "tooltip"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/tooltip.json"
       ],
       "files": [
         {
@@ -8798,8 +8800,8 @@
       "title": "Tooltip Group Delay",
       "description": "Tooltip example: Group Delay.",
       "registryDependencies": [
-        "button",
-        "tooltip"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/tooltip.json"
       ],
       "files": [
         {
@@ -8814,7 +8816,7 @@
       "title": "Tooltip Info Tip",
       "description": "Tooltip example: Info Tip.",
       "registryDependencies": [
-        "tooltip"
+        "https://keystoneui.io/r/tooltip.json"
       ],
       "files": [
         {
@@ -8829,8 +8831,8 @@
       "title": "Tooltip Sides",
       "description": "Tooltip example: Sides.",
       "registryDependencies": [
-        "button",
-        "tooltip"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/tooltip.json"
       ],
       "files": [
         {
@@ -8845,8 +8847,8 @@
       "title": "Tooltip With Kbd",
       "description": "Tooltip example: With Kbd.",
       "registryDependencies": [
-        "button",
-        "tooltip"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/tooltip.json"
       ],
       "files": [
         {

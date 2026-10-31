@@ -4,7 +4,7 @@
   "title": "Date Input Default",
   "description": "Date Input example: Default.",
   "registryDependencies": [
-    "date-input"
+    "https://keystoneui.io/r/date-input.json"
   ],
   "files": [
     {

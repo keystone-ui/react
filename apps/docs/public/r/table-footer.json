@@ -4,7 +4,7 @@
   "title": "Table Footer",
   "description": "Table example: Footer.",
   "registryDependencies": [
-    "table"
+    "https://keystoneui.io/r/table.json"
   ],
   "files": [
     {

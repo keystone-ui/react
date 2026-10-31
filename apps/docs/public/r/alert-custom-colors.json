@@ -4,7 +4,7 @@
   "title": "Alert Custom Colors",
   "description": "Alert example: Custom Colors.",
   "registryDependencies": [
-    "alert"
+    "https://keystoneui.io/r/alert.json"
   ],
   "files": [
     {

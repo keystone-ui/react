@@ -4,14 +4,14 @@
   "title": "Date Input",
   "description": "Date picker input field for selecting dates with keyboard and calendar support.",
   "registryDependencies": [
-    "input-group"
+    "https://keystoneui.io/r/input-group.json"
   ],
   "files": [
     {
       "path": "packages/ui/src/date-input.tsx",
       "content": "\"use client\";\n\nimport { Calendar as CalendarIcon } from \"lucide-react\";\nimport {\n  type InputHTMLAttributes,\n  type Ref,\n  type RefAttributes,\n  useCallback,\n  useRef,\n} from \"react\";\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupButton,\n  InputGroupInput,\n} from \"./input-group\";\nimport { cn } from \"@/lib/utils\";\n\nexport interface DateInputProps\n  extends Omit<InputHTMLAttributes<HTMLInputElement>, \"type\" | \"size\"> {}\n\n/** Assign `value` to a ref of either shape; returns a callback ref's cleanup. */\nfunction assignRef<T>(ref: Ref<T> | undefined, value: T | null) {\n  if (typeof ref === \"function\") {\n    return ref(value);\n  }\n  if (ref) {\n    ref.current = value;\n  }\n}\n\nexport const DateInput = ({\n  className,\n  ref,\n  ...props\n}: DateInputProps & RefAttributes<HTMLInputElement>) => {\n  const innerRef = useRef<HTMLInputElement | null>(null);\n\n  // The picker button needs the input element, so the component keeps its\n  // own ref and forwards to the consumer's as well. It used to *adopt* the\n  // forwarded ref instead, which only works for an object ref: a callback\n  // ref -- what `register()` from react-hook-form hands you -- has no\n  // `.current`, so the button silently did nothing.\n  const inputRef = useCallback(\n    (node: HTMLInputElement | null) => {\n      innerRef.current = node;\n      const cleanup = assignRef(ref, node);\n      return () => {\n        innerRef.current = null;\n        if (typeof cleanup === \"function\") {\n          cleanup();\n        } else {\n          assignRef(ref, null);\n        }\n      };\n    },\n    [ref]\n  );\n\n  return (\n    <InputGroup>\n      <InputGroupInput\n        className={cn(\n          \"[&::-webkit-calendar-picker-indicator]:hidden\",\n          className\n        )}\n        ref={inputRef}\n        type=\"date\"\n        {...props}\n      />\n      <InputGroupAddon align=\"inline-end\">\n        <InputGroupButton\n          aria-label=\"Open date picker\"\n          onClick={() => innerRef.current?.showPicker?.()}\n          size=\"icon-xs\"\n          type=\"button\"\n        >\n          <CalendarIcon className=\"size-4\" />\n        </InputGroupButton>\n      </InputGroupAddon>\n    </InputGroup>\n  );\n};\n\nDateInput.displayName = \"DateInput\";\n",
       "type": "registry:ui",
-      "target": "components/ui/date-input.tsx"
+      "target": "@ui/date-input.tsx"
     }
   ],
   "type": "registry:ui"

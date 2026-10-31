@@ -4,10 +4,10 @@
   "title": "Calendar Date Time",
   "description": "Calendar example: Date Time.",
   "registryDependencies": [
-    "calendar",
-    "card",
-    "field",
-    "input-group"
+    "https://keystoneui.io/r/calendar.json",
+    "https://keystoneui.io/r/card.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input-group.json"
   ],
   "files": [
     {

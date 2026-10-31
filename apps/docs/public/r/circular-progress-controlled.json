@@ -4,8 +4,8 @@
   "title": "Circular Progress Controlled",
   "description": "Circular Progress example: Controlled.",
   "registryDependencies": [
-    "circular-progress",
-    "slider"
+    "https://keystoneui.io/r/circular-progress.json",
+    "https://keystoneui.io/r/slider.json"
   ],
   "files": [
     {

@@ -8,13 +8,13 @@
     "recharts"
   ],
   "registryDependencies": [
-    "button",
-    "card",
-    "stat",
-    "table",
-    "table-pagination",
-    "toggle-group",
-    "tooltip"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/card.json",
+    "https://keystoneui.io/r/stat.json",
+    "https://keystoneui.io/r/table.json",
+    "https://keystoneui.io/r/table-pagination.json",
+    "https://keystoneui.io/r/toggle-group.json",
+    "https://keystoneui.io/r/tooltip.json"
   ],
   "files": [
     {

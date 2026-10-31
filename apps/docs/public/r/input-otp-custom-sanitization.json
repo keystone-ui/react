@@ -4,7 +4,7 @@
   "title": "Input Otp Custom Sanitization",
   "description": "Input Otp example: Custom Sanitization.",
   "registryDependencies": [
-    "input-otp"
+    "https://keystoneui.io/r/input-otp.json"
   ],
   "files": [
     {

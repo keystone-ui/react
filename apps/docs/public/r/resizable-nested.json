@@ -4,7 +4,7 @@
   "title": "Resizable Nested",
   "description": "Resizable example: Nested.",
   "registryDependencies": [
-    "resizable"
+    "https://keystoneui.io/r/resizable.json"
   ],
   "files": [
     {

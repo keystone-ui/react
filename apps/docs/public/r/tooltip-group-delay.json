@@ -4,8 +4,8 @@
   "title": "Tooltip Group Delay",
   "description": "Tooltip example: Group Delay.",
   "registryDependencies": [
-    "button",
-    "tooltip"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/tooltip.json"
   ],
   "files": [
     {

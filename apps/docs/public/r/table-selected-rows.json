@@ -4,9 +4,9 @@
   "title": "Table Selected Rows",
   "description": "Table example: Selected Rows.",
   "registryDependencies": [
-    "badge",
-    "checkbox",
-    "table"
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/checkbox.json",
+    "https://keystoneui.io/r/table.json"
   ],
   "files": [
     {

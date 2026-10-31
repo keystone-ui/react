@@ -4,7 +4,7 @@
   "title": "Progress Indeterminate",
   "description": "Progress example: Indeterminate.",
   "registryDependencies": [
-    "progress"
+    "https://keystoneui.io/r/progress.json"
   ],
   "files": [
     {

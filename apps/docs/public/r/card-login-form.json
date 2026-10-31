@@ -4,10 +4,10 @@
   "title": "Card Login Form",
   "description": "Card example: Login Form.",
   "registryDependencies": [
-    "button",
-    "card",
-    "input",
-    "label"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/card.json",
+    "https://keystoneui.io/r/input.json",
+    "https://keystoneui.io/r/label.json"
   ],
   "files": [
     {

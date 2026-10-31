@@ -4,8 +4,8 @@
   "title": "Command With Shortcuts",
   "description": "Command example: With Shortcuts.",
   "registryDependencies": [
-    "button",
-    "command"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/command.json"
   ],
   "files": [
     {

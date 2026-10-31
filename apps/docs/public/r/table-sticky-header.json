@@ -4,7 +4,7 @@
   "title": "Table Sticky Header",
   "description": "Table example: Sticky Header.",
   "registryDependencies": [
-    "table"
+    "https://keystoneui.io/r/table.json"
   ],
   "files": [
     {

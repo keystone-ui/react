@@ -4,7 +4,7 @@
   "title": "Input Default",
   "description": "Input example: Default.",
   "registryDependencies": [
-    "input"
+    "https://keystoneui.io/r/input.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Input Otp With Label",
   "description": "Input Otp example: With Label.",
   "registryDependencies": [
-    "input-otp"
+    "https://keystoneui.io/r/input-otp.json"
   ],
   "files": [
     {

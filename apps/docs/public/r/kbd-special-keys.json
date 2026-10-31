@@ -4,7 +4,7 @@
   "title": "Kbd Special Keys",
   "description": "Kbd example: Special Keys.",
   "registryDependencies": [
-    "kbd"
+    "https://keystoneui.io/r/kbd.json"
   ],
   "files": [
     {

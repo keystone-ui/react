@@ -15,7 +15,7 @@ import {
   paymentsFromParams,
   paymentsToParams,
 } from "@/components/payment-filters";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/sidebar";
 import { oneOf } from "@/components/url-params";
 import { usePaymentsTable } from "@/components/use-payments-table";
 import { useReducedMotion } from "@/components/use-reduced-motion";

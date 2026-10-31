@@ -4,15 +4,15 @@
   "title": "Input Group Prompt Form",
   "description": "Input Group example: Prompt Form.",
   "registryDependencies": [
-    "avatar",
-    "badge",
-    "command",
-    "dropdown-menu",
-    "field",
-    "input-group",
-    "popover",
-    "switch",
-    "tooltip"
+    "https://keystoneui.io/r/avatar.json",
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/command.json",
+    "https://keystoneui.io/r/dropdown-menu.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input-group.json",
+    "https://keystoneui.io/r/popover.json",
+    "https://keystoneui.io/r/switch.json",
+    "https://keystoneui.io/r/tooltip.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Badge Variants",
   "description": "Badge example: Variants.",
   "registryDependencies": [
-    "badge"
+    "https://keystoneui.io/r/badge.json"
   ],
   "files": [
     {

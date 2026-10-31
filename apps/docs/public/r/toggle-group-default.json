@@ -4,7 +4,7 @@
   "title": "Toggle Group Default",
   "description": "Toggle Group example: Default.",
   "registryDependencies": [
-    "toggle-group"
+    "https://keystoneui.io/r/toggle-group.json"
   ],
   "files": [
     {

@@ -4,8 +4,8 @@
   "title": "Drawer Default",
   "description": "Drawer example: Default.",
   "registryDependencies": [
-    "button",
-    "drawer"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/drawer.json"
   ],
   "files": [
     {

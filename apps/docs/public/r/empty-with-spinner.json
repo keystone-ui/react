@@ -4,9 +4,9 @@
   "title": "Empty With Spinner",
   "description": "Empty example: With Spinner.",
   "registryDependencies": [
-    "button",
-    "empty",
-    "spinner"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/empty.json",
+    "https://keystoneui.io/r/spinner.json"
   ],
   "files": [
     {

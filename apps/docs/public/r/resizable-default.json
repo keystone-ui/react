@@ -4,7 +4,7 @@
   "title": "Resizable Default",
   "description": "Resizable example: Default.",
   "registryDependencies": [
-    "resizable"
+    "https://keystoneui.io/r/resizable.json"
   ],
   "files": [
     {

@@ -4,8 +4,8 @@
   "title": "Combobox Popup",
   "description": "Combobox example: Popup.",
   "registryDependencies": [
-    "button",
-    "combobox"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/combobox.json"
   ],
   "files": [
     {

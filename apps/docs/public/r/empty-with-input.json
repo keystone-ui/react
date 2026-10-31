@@ -4,9 +4,9 @@
   "title": "Empty With Input",
   "description": "Empty example: With Input.",
   "registryDependencies": [
-    "button",
-    "empty",
-    "input-group"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/empty.json",
+    "https://keystoneui.io/r/input-group.json"
   ],
   "files": [
     {

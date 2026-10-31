@@ -4,9 +4,9 @@
   "title": "Form With Validation",
   "description": "Form example: With Validation.",
   "registryDependencies": [
-    "button",
-    "form",
-    "input"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/form.json",
+    "https://keystoneui.io/r/input.json"
   ],
   "files": [
     {

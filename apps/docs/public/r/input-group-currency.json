@@ -4,7 +4,7 @@
   "title": "Input Group Currency",
   "description": "Input Group example: Currency.",
   "registryDependencies": [
-    "input-group"
+    "https://keystoneui.io/r/input-group.json"
   ],
   "files": [
     {

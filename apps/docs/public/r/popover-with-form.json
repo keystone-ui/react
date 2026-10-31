@@ -4,10 +4,10 @@
   "title": "Popover With Form",
   "description": "Popover example: With Form.",
   "registryDependencies": [
-    "button",
-    "input",
-    "label",
-    "popover"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/input.json",
+    "https://keystoneui.io/r/label.json",
+    "https://keystoneui.io/r/popover.json"
   ],
   "files": [
     {

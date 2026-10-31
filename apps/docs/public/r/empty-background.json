@@ -4,8 +4,8 @@
   "title": "Empty Background",
   "description": "Empty example: Background.",
   "registryDependencies": [
-    "button",
-    "empty"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/empty.json"
   ],
   "files": [
     {

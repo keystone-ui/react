@@ -4,7 +4,7 @@
   "title": "Avatar Group",
   "description": "Avatar example: Group.",
   "registryDependencies": [
-    "avatar"
+    "https://keystoneui.io/r/avatar.json"
   ],
   "files": [
     {

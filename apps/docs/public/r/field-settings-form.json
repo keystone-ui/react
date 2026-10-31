@@ -4,12 +4,12 @@
   "title": "Field Settings Form",
   "description": "Field example: Settings Form.",
   "registryDependencies": [
-    "button",
-    "button-group",
-    "field",
-    "input",
-    "radio-group",
-    "switch"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/button-group.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input.json",
+    "https://keystoneui.io/r/radio-group.json",
+    "https://keystoneui.io/r/switch.json"
   ],
   "files": [
     {

@@ -4,9 +4,9 @@
   "title": "Card With Image",
   "description": "Card example: With Image.",
   "registryDependencies": [
-    "badge",
-    "button",
-    "card"
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/card.json"
   ],
   "files": [
     {

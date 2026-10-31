@@ -4,7 +4,7 @@
   "title": "Copy Button Sizes",
   "description": "Copy Button example: Sizes.",
   "registryDependencies": [
-    "copy-button"
+    "https://keystoneui.io/r/copy-button.json"
   ],
   "files": [
     {

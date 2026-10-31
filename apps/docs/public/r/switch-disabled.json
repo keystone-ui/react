@@ -4,8 +4,8 @@
   "title": "Switch Disabled",
   "description": "Switch example: Disabled.",
   "registryDependencies": [
-    "field",
-    "switch"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/switch.json"
   ],
   "files": [
     {

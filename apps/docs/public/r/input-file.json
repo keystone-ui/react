@@ -4,7 +4,7 @@
   "title": "Input File",
   "description": "Input example: File.",
   "registryDependencies": [
-    "input"
+    "https://keystoneui.io/r/input.json"
   ],
   "files": [
     {

@@ -4,8 +4,8 @@
   "title": "Dropdown Menu With Icons",
   "description": "Dropdown Menu example: With Icons.",
   "registryDependencies": [
-    "button",
-    "dropdown-menu"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/dropdown-menu.json"
   ],
   "files": [
     {

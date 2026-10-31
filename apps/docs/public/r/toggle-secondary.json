@@ -4,7 +4,7 @@
   "title": "Toggle Secondary",
   "description": "Toggle example: Secondary.",
   "registryDependencies": [
-    "toggle"
+    "https://keystoneui.io/r/toggle.json"
   ],
   "files": [
     {

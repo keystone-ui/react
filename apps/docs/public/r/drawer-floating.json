@@ -4,11 +4,11 @@
   "title": "Drawer Floating",
   "description": "Drawer example: Floating.",
   "registryDependencies": [
-    "avatar",
-    "badge",
-    "button",
-    "drawer",
-    "separator"
+    "https://keystoneui.io/r/avatar.json",
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/drawer.json",
+    "https://keystoneui.io/r/separator.json"
   ],
   "files": [
     {

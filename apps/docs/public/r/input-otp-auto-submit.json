@@ -4,8 +4,8 @@
   "title": "Input Otp Auto Submit",
   "description": "Input Otp example: Auto Submit.",
   "registryDependencies": [
-    "button",
-    "input-otp"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/input-otp.json"
   ],
   "files": [
     {

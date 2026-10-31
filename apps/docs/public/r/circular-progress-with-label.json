@@ -4,7 +4,7 @@
   "title": "Circular Progress With Label",
   "description": "Circular Progress example: With Label.",
   "registryDependencies": [
-    "circular-progress"
+    "https://keystoneui.io/r/circular-progress.json"
   ],
   "files": [
     {

@@ -4,12 +4,12 @@
   "title": "Field Checkout Form",
   "description": "Field example: Checkout Form.",
   "registryDependencies": [
-    "button",
-    "checkbox",
-    "field",
-    "input",
-    "select",
-    "textarea"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/checkbox.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input.json",
+    "https://keystoneui.io/r/select.json",
+    "https://keystoneui.io/r/textarea.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Combobox Scrollable",
   "description": "Combobox example: Scrollable.",
   "registryDependencies": [
-    "combobox"
+    "https://keystoneui.io/r/combobox.json"
   ],
   "files": [
     {

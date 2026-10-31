@@ -4,9 +4,9 @@
   "title": "Empty With Search",
   "description": "Empty example: With Search.",
   "registryDependencies": [
-    "empty",
-    "input-group",
-    "kbd"
+    "https://keystoneui.io/r/empty.json",
+    "https://keystoneui.io/r/input-group.json",
+    "https://keystoneui.io/r/kbd.json"
   ],
   "files": [
     {

@@ -4,8 +4,8 @@
   "title": "Alert With Action",
   "description": "Alert example: With Action.",
   "registryDependencies": [
-    "alert",
-    "button"
+    "https://keystoneui.io/r/alert.json",
+    "https://keystoneui.io/r/button.json"
   ],
   "files": [
     {

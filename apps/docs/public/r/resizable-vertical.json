@@ -4,7 +4,7 @@
   "title": "Resizable Vertical",
   "description": "Resizable example: Vertical.",
   "registryDependencies": [
-    "resizable"
+    "https://keystoneui.io/r/resizable.json"
   ],
   "files": [
     {

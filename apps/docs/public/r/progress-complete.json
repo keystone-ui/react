@@ -4,7 +4,7 @@
   "title": "Progress Complete",
   "description": "Progress example: Complete.",
   "registryDependencies": [
-    "progress"
+    "https://keystoneui.io/r/progress.json"
   ],
   "files": [
     {

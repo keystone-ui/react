@@ -4,7 +4,7 @@
   "title": "Input Otp Alphanumeric",
   "description": "Input Otp example: Alphanumeric.",
   "registryDependencies": [
-    "input-otp"
+    "https://keystoneui.io/r/input-otp.json"
   ],
   "files": [
     {

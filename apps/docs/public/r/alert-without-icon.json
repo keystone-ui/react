@@ -4,7 +4,7 @@
   "title": "Alert Without Icon",
   "description": "Alert example: Without Icon.",
   "registryDependencies": [
-    "alert"
+    "https://keystoneui.io/r/alert.json"
   ],
   "files": [
     {

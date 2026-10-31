@@ -4,7 +4,7 @@
   "title": "Tag Disabled",
   "description": "Tag example: Disabled.",
   "registryDependencies": [
-    "tag"
+    "https://keystoneui.io/r/tag.json"
   ],
   "files": [
     {

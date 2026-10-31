@@ -4,9 +4,9 @@
   "title": "Button Group With Dropdown Menu",
   "description": "Button Group example: With Dropdown Menu.",
   "registryDependencies": [
-    "button",
-    "button-group",
-    "dropdown-menu"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/button-group.json",
+    "https://keystoneui.io/r/dropdown-menu.json"
   ],
   "files": [
     {

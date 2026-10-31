@@ -4,8 +4,8 @@
   "title": "Circular Progress With Avatar",
   "description": "Circular Progress example: With Avatar.",
   "registryDependencies": [
-    "avatar",
-    "circular-progress"
+    "https://keystoneui.io/r/avatar.json",
+    "https://keystoneui.io/r/circular-progress.json"
   ],
   "files": [
     {

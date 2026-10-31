@@ -4,7 +4,7 @@
   "title": "Tag Group Controlled",
   "description": "Tag Group example: Controlled.",
   "registryDependencies": [
-    "tag-group"
+    "https://keystoneui.io/r/tag-group.json"
   ],
   "files": [
     {

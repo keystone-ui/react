@@ -4,8 +4,8 @@
   "title": "Stat Kpi Row",
   "description": "Stat example: Kpi Row.",
   "registryDependencies": [
-    "card",
-    "stat"
+    "https://keystoneui.io/r/card.json",
+    "https://keystoneui.io/r/stat.json"
   ],
   "files": [
     {

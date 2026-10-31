@@ -4,8 +4,8 @@
   "title": "Field With Switch",
   "description": "Field example: With Switch.",
   "registryDependencies": [
-    "field",
-    "switch"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/switch.json"
   ],
   "files": [
     {

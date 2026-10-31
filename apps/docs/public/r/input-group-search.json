@@ -4,7 +4,7 @@
   "title": "Input Group Search",
   "description": "Input Group example: Search.",
   "registryDependencies": [
-    "input-group"
+    "https://keystoneui.io/r/input-group.json"
   ],
   "files": [
     {

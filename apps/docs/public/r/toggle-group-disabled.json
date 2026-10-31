@@ -4,7 +4,7 @@
   "title": "Toggle Group Disabled",
   "description": "Toggle Group example: Disabled.",
   "registryDependencies": [
-    "toggle-group"
+    "https://keystoneui.io/r/toggle-group.json"
   ],
   "files": [
     {

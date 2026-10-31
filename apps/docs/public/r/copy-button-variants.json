@@ -4,7 +4,7 @@
   "title": "Copy Button Variants",
   "description": "Copy Button example: Variants.",
   "registryDependencies": [
-    "copy-button"
+    "https://keystoneui.io/r/copy-button.json"
   ],
   "files": [
     {

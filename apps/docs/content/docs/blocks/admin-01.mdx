@@ -26,17 +26,9 @@ npx shadcn@latest add https://keystoneui.io/r/admin-01.json
 
 ## Requirements
 
-The sidebar is **shadcn's, not keystone's**. Keystone deliberately ships no app shell — see [Using shadcn Components](/docs/interop) for why, and for the two things you have to get right when mixing the registries.
+The sidebar is **shadcn's, adapted onto keystone's primitives** and shipped inside the block as `components/sidebar.tsx`. Keystone deliberately ships no app shell — see [Using shadcn Components](/docs/interop) for why. Do not also run `shadcn add sidebar`: its dependencies are shadcn's Button, Input and Tooltip, and they replace keystone's.
 
-Installing this block pulls it in through `registryDependencies`, but if you are composing by hand:
-
-```bash
-npx shadcn@latest add sidebar
-```
-
-Two consequences worth knowing before you do:
-
-**Delete the `--sidebar-*` block that `shadcn add` appends to your CSS.** Keystone already declares those eight tokens as aliases of your theme tokens, so the sidebar follows whichever keystone theme is active. shadcn's injected values are hardcoded neutral and land *after* keystone's, so they win — and your sidebar renders grey inside a slate app.
+It reads the eight `--sidebar-*` tokens, which keystone's style item declares as aliases of your theme tokens — so the sidebar follows whichever keystone theme is active.
 
 **`SidebarInset` needs `min-w-0`.** Not cosmetic: without it the wide users table pushes the inset open and the whole document gains a horizontal scrollbar. Keystone bakes this into components it owns; it cannot for a file it does not.
 

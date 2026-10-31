@@ -4,8 +4,8 @@
   "title": "Item Notification List",
   "description": "Item example: Notification List.",
   "registryDependencies": [
-    "badge",
-    "item"
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/item.json"
   ],
   "files": [
     {

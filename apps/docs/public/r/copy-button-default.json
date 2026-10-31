@@ -4,7 +4,7 @@
   "title": "Copy Button Default",
   "description": "Copy Button example: Default.",
   "registryDependencies": [
-    "copy-button"
+    "https://keystoneui.io/r/copy-button.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Resizable Complex Layout",
   "description": "Resizable example: Complex Layout.",
   "registryDependencies": [
-    "resizable"
+    "https://keystoneui.io/r/resizable.json"
   ],
   "files": [
     {

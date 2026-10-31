@@ -4,8 +4,8 @@
   "title": "Label Required",
   "description": "Label example: Required.",
   "registryDependencies": [
-    "input",
-    "label"
+    "https://keystoneui.io/r/input.json",
+    "https://keystoneui.io/r/label.json"
   ],
   "files": [
     {

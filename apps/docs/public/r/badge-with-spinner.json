@@ -4,8 +4,8 @@
   "title": "Badge With Spinner",
   "description": "Badge example: With Spinner.",
   "registryDependencies": [
-    "badge",
-    "spinner"
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/spinner.json"
   ],
   "files": [
     {

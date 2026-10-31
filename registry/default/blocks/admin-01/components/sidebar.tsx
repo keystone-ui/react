@@ -1,21 +1,18 @@
 /**
- * shadcn's Sidebar, vendored for the docs site.
+ * shadcn's Sidebar, adapted onto keystone primitives and shipped with
+ * `admin-01`.
  *
- * Keystone deliberately does not ship a sidebar: consumers install shadcn's
- * (`npx shadcn@latest add sidebar`), and `admin-01` composes that rather than a
- * keystone equivalent. This copy exists only so the block's preview has
- * something to render.
+ * Keystone deliberately has no app shell, so this is not a keystone component:
+ * it is not in `packages/ui`, not in the component count, and not covered by
+ * the library's tests. It ships inside the block (as `components/sidebar.tsx`)
+ * rather than as a dependency on shadcn's `sidebar` item, because that item's
+ * own dependencies are shadcn's Button, Input, Separator, Skeleton, Tooltip
+ * and Sheet — installing it replaced keystone's files at those paths with
+ * Radix ones. Found by scripts/smoke-install.mjs.
  *
- * Do not treat it as a keystone component. It is not in `packages/ui`, not in
- * the component count, and not covered by the library's tests. See the Interop
- * guide in the docs.
+ * Adapted from the upstream file in four ways:
  *
- * Adapted from the upstream file in three ways, all forced by this repo:
- *
- *  - Imports point at `@keystoneui/react/*` instead of `@/components/ui/*`,
- *    because the docs app has no shadcn primitives installed. A consumer who
- *    already has keystone at those paths ends up in the same place, since
- *    `shadcn add sidebar` will not overwrite files that exist.
+ *  - Imports point at keystone primitives instead of shadcn's.
  *  - The mobile Sheet is keystone's `Drawer`. Its side comes from the root's
  *    `swipeDirection` rather than a `side` prop on the content, it hardcodes a
  *    width that has to be overridden, and it renders no close button — so
@@ -24,32 +21,49 @@
  *  - `SidebarMenuSkeleton` no longer calls `Math.random()` in a `useState`
  *    initialiser. That is a hydration mismatch in the upstream file: the server
  *    and client pick different widths. It is derived from `useId()` instead.
+ *  - The mobile breakpoint is a local `useIsMobile`, not
+ *    `@keystoneui/react/hooks`: blocks install as copies, and that subpath has
+ *    no registry item to land at.
  */
 "use client";
 
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { Button } from "@keystoneui/react/button";
+import { cva, type VariantProps } from "class-variance-authority";
+import { PanelLeftIcon } from "lucide-react";
+import * as React from "react";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-} from "@keystoneui/react/drawer";
-import { useMediaQuery } from "@keystoneui/react/hooks";
-import { Input } from "@keystoneui/react/input";
-import { Separator } from "@keystoneui/react/separator";
-import { Skeleton } from "@keystoneui/react/skeleton";
+} from "@/components/ui/drawer";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@keystoneui/react/tooltip";
-import { cn } from "@keystoneui/react/utils";
-import { cva, type VariantProps } from "class-variance-authority";
-import { PanelLeftIcon } from "lucide-react";
-import * as React from "react";
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+
+const MOBILE_QUERY = "(max-width: 767px)";
+
+/** Below the md breakpoint. False on the server; the first client render corrects it. */
+function useIsMobile(): boolean {
+  return React.useSyncExternalStore(
+    (onChange) => {
+      const query = window.matchMedia(MOBILE_QUERY);
+      query.addEventListener("change", onChange);
+      return () => query.removeEventListener("change", onChange);
+    },
+    () => window.matchMedia(MOBILE_QUERY).matches,
+    () => false
+  );
+}
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -92,7 +106,7 @@ function SidebarProvider({
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) {
-  const isMobile = useMediaQuery("(max-width: 767px)");
+  const isMobile = useIsMobile();
   const [openMobile, setOpenMobile] = React.useState(false);
 
   // This is the internal state of the sidebar.
@@ -323,7 +337,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
       onClick={toggleSidebar}
       title="Toggle Sidebar"
       className={cn(
-        "absolute inset-y-0 z-20 hidden w-4 transition-all ease-linear after:absolute after:inset-y-0 after:start-1/2 after:w-[2px] hover:after:bg-sidebar-border group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex ltr:-translate-x-1/2 rtl:-translate-x-1/2",
+        "absolute inset-y-0 z-20 hidden w-4 transition-transform ease-linear after:absolute after:inset-y-0 after:start-1/2 after:w-[2px] hover:after:bg-sidebar-border group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex ltr:-translate-x-1/2 rtl:-translate-x-1/2",
         "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
         "[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize",
         "group-data-[collapsible=offcanvas]:translate-x-0 hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:after:left-full",

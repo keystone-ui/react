@@ -4,7 +4,7 @@
   "title": "Textarea Default",
   "description": "Textarea example: Default.",
   "registryDependencies": [
-    "textarea"
+    "https://keystoneui.io/r/textarea.json"
   ],
   "files": [
     {

@@ -4,9 +4,9 @@
   "title": "Combobox Multiple In Popover",
   "description": "Combobox example: Multiple In Popover.",
   "registryDependencies": [
-    "button",
-    "combobox",
-    "popover"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/combobox.json",
+    "https://keystoneui.io/r/popover.json"
   ],
   "files": [
     {

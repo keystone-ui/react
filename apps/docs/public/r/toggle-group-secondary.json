@@ -4,7 +4,7 @@
   "title": "Toggle Group Secondary",
   "description": "Toggle Group example: Secondary.",
   "registryDependencies": [
-    "toggle-group"
+    "https://keystoneui.io/r/toggle-group.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Kbd Common Shortcuts",
   "description": "Kbd example: Common Shortcuts.",
   "registryDependencies": [
-    "kbd"
+    "https://keystoneui.io/r/kbd.json"
   ],
   "files": [
     {

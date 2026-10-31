@@ -20,11 +20,7 @@ Two things follow:
 
 **Sidebar.** An app shell is a large, opinionated component — a collapsible icon rail, a mobile drawer, persisted state, a keyboard shortcut, and a `peer`/`group` layout contract between four parts. shadcn's is good, widely understood, and already maintained. Reimplementing it would mean owning ~900 lines to arrive somewhere very close.
 
-So [`admin-01`](/docs/blocks/admin-01) composes shadcn's sidebar rather than a keystone one:
-
-```bash
-npx shadcn@latest add sidebar
-```
+So [`admin-01`](/docs/blocks/admin-01) composes shadcn's sidebar rather than a keystone one — adapted onto keystone's Button, Drawer and Tooltip, and shipped inside the block as `components/sidebar.tsx`. Installing the block is all it takes; do not also run `shadcn add sidebar` (see [below](#the-block-ships-an-adapted-sidebar)).
 
 **Charts.** A chart wrapper is mostly a list of `[&_.recharts-*]` overrides that make recharts' hardcoded `#ccc` and `#fff` marks respect your theme — archaeology, not something worth re-deriving. The real reason it stays out of `@keystoneui/react` is recharts itself: a chart is one screen in most apps, and a library dependency would bill every other screen for it.
 
@@ -93,7 +89,7 @@ A registry item's `registryDependencies` may name items by bare name (`"button"`
 npx shadcn@latest add @keystone/button
 ```
 
-In practice the distinction matters less than it sounds, because both registries write to the same paths and `shadcn add` will not overwrite a file that already exists. If keystone's `button.tsx` is there, shadcn's sidebar composes keystone's Button.
+Both registries write to the same paths, so the distinction matters. `shadcn add` skips a file that already exists, which protects an app that installed keystone's `button.tsx` *earlier* — but not one command that resolves both: an item that pulls shadcn's `button` and keystone's in the same run writes one of them, and it was shadcn's when we measured. That is why every keystone item names its keystone dependencies by full URL (`https://keystoneui.io/r/button.json`), never by bare name.
 
 You can also declare registries in `package.json` instead of `components.json` — shadcn reads both, and merges them.
 
@@ -111,11 +107,11 @@ Because keystone's files win the path collision above, a shadcn component that c
 
 Both libraries expose `sm` at 32px, so a mixed toolbar is most reliable with `size="sm"` throughout.
 
-## The docs preview is adapted
+## The block ships an adapted sidebar
 
-The sidebar rendered in `admin-01`'s preview on this site is shadcn's, vendored into the docs app with its imports pointed at `@keystoneui/react/*` and its mobile Sheet swapped for keystone's [`Drawer`](/docs/components/drawer) — the docs app has no shadcn primitives installed, so there was nothing else for it to import.
+`admin-01`'s sidebar is shadcn's with its imports pointed at keystone's primitives and its mobile Sheet swapped for keystone's [`Drawer`](/docs/components/drawer). The block installs that file as `components/sidebar.tsx`, so what you install is exactly what the preview renders.
 
-A consumer running `shadcn add sidebar` on top of keystone lands in much the same place, since the overlapping files already exist and are skipped. The one real difference is the mobile overlay: shadcn's own sidebar uses its Sheet, and ours uses Drawer.
+It used to depend on shadcn's `sidebar` item instead. That item's own dependencies are shadcn's Button, Input, Separator, Skeleton, Tooltip and Sheet, and installing it replaced keystone's files at those paths with Radix ones — so do not run `shadcn add sidebar` into a keystone app.
 
 It also keeps shadcn's `sidebar_state` cookie, which persists the collapsed state for a week. That is a functional cookie, not tracking, but it is worth knowing it exists — pass `open`/`onOpenChange` to `SidebarProvider` if you would rather own the state yourself.
 

@@ -4,7 +4,7 @@
   "title": "Tag Default",
   "description": "Tag example: Default.",
   "registryDependencies": [
-    "tag"
+    "https://keystoneui.io/r/tag.json"
   ],
   "files": [
     {

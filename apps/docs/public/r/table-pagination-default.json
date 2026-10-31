@@ -4,8 +4,8 @@
   "title": "Table Pagination Default",
   "description": "Table Pagination example: Default.",
   "registryDependencies": [
-    "table",
-    "table-pagination"
+    "https://keystoneui.io/r/table.json",
+    "https://keystoneui.io/r/table-pagination.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Toggle Sizes",
   "description": "Toggle example: Sizes.",
   "registryDependencies": [
-    "toggle"
+    "https://keystoneui.io/r/toggle.json"
   ],
   "files": [
     {

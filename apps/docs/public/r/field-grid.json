@@ -4,8 +4,8 @@
   "title": "Field Grid",
   "description": "Field example: Grid.",
   "registryDependencies": [
-    "field",
-    "input"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input.json"
   ],
   "files": [
     {

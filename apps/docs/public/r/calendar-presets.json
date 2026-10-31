@@ -4,9 +4,9 @@
   "title": "Calendar Presets",
   "description": "Calendar example: Presets.",
   "registryDependencies": [
-    "button",
-    "calendar",
-    "card"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/calendar.json",
+    "https://keystoneui.io/r/card.json"
   ],
   "files": [
     {

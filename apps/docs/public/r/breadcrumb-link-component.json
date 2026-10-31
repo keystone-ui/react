@@ -4,7 +4,7 @@
   "title": "Breadcrumb Link Component",
   "description": "Breadcrumb example: Link Component.",
   "registryDependencies": [
-    "breadcrumb"
+    "https://keystoneui.io/r/breadcrumb.json"
   ],
   "files": [
     {

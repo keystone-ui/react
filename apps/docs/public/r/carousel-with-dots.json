@@ -4,7 +4,7 @@
   "title": "Carousel With Dots",
   "description": "Carousel example: With Dots.",
   "registryDependencies": [
-    "carousel"
+    "https://keystoneui.io/r/carousel.json"
   ],
   "files": [
     {

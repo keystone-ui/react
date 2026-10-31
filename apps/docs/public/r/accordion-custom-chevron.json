@@ -4,7 +4,7 @@
   "title": "Accordion Custom Chevron",
   "description": "Accordion example: Custom Chevron.",
   "registryDependencies": [
-    "accordion"
+    "https://keystoneui.io/r/accordion.json"
   ],
   "files": [
     {

@@ -4,8 +4,8 @@
   "title": "Modal Sticky Footer",
   "description": "Modal example: Sticky Footer.",
   "registryDependencies": [
-    "button",
-    "modal"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/modal.json"
   ],
   "files": [
     {

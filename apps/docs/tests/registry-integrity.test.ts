@@ -29,6 +29,15 @@ const ALIAS_UTILS_IMPORT =
   /import\s*\{([^}]*)\}\s*from\s*["']@\/lib\/utils["']/g;
 const RELATIVE_SIBLING_IMPORT = /from\s*["']\.\/([a-z0-9-]+)["']/g;
 
+const UI_ALIAS_IMPORT = /["']@\/components\/ui\/([a-z0-9-]+)["']/g;
+const KEYSTONE_ADDRESS = /^https:\/\/keystoneui\.io\/r\/([a-z0-9-]+)\.json$/;
+/** ui files a block ships itself rather than pulling from the registry. */
+const BLOCK_LOCAL_UI = new Set<string>();
+
+/** How an item names a Keystone sibling: its full registry URL. */
+const keystoneAddress = (name: string) =>
+  `https://keystoneui.io/r/${name}.json`;
+
 describe("registry.json", () => {
   it("declares at least one item", () => {
     expect(registry.items.length).toBeGreaterThan(0);
@@ -131,11 +140,14 @@ describe("what a consumer installs", () => {
     expect(uiItems.length).toBeGreaterThan(0);
   });
 
-  it("targets components/ui for every registry:ui file", () => {
+  // `@ui/` is shadcn's placeholder for the consumer's `aliases.ui`. A literal
+  // `components/ui/` ignored a project whose ui alias points elsewhere —
+  // scripts/smoke-install.mjs's custom-ui-alias fixture.
+  it("targets the consumer's ui alias for every registry:ui file", () => {
     const untargeted: string[] = [];
     for (const item of uiItems) {
       for (const file of item.files ?? []) {
-        if (file.target !== `components/ui/${item.name}.tsx`) {
+        if (file.target !== `@ui/${item.name}.tsx`) {
           untargeted.push(`${item.name}: ${file.target ?? "(no target)"}`);
         }
       }
@@ -197,7 +209,7 @@ describe("what a consumer installs", () => {
           RELATIVE_SIBLING_IMPORT
         )) {
           const sibling = match[1];
-          if (sibling !== "utils" && !declared.has(sibling)) {
+          if (sibling !== "utils" && !declared.has(keystoneAddress(sibling))) {
             undeclared.push(`${name} imports ./${sibling}`);
           }
         }
@@ -205,5 +217,60 @@ describe("what a consumer installs", () => {
     }
 
     expect(undeclared).toEqual([]);
+  });
+
+  it("declares exactly the ui components each block imports", () => {
+    // profile-dropdown-01 imported circular-progress without declaring it, so
+    // a consumer's install did not typecheck; three blocks also declared
+    // components they never used. Found by scripts/smoke-install.mjs.
+    const drift: string[] = [];
+    for (const item of registry.items) {
+      if (item.type !== "registry:block") {
+        continue;
+      }
+      const used = new Set<string>();
+      for (const file of item.files ?? []) {
+        const source = readFileSync(join(REPO_ROOT, file.path), "utf-8");
+        for (const match of source.matchAll(UI_ALIAS_IMPORT)) {
+          used.add(match[1]);
+        }
+      }
+      const declared = new Set(
+        (item.registryDependencies ?? [])
+          .map((dep) => KEYSTONE_ADDRESS.exec(dep)?.[1])
+          .filter((name): name is string => name !== undefined)
+      );
+      for (const name of used) {
+        if (!(declared.has(name) || BLOCK_LOCAL_UI.has(name))) {
+          drift.push(`${item.name} imports ${name} but does not declare it`);
+        }
+      }
+      for (const name of declared) {
+        if (
+          !used.has(name) &&
+          registry.items.some(
+            (i) => i.name === name && i.type === "registry:ui"
+          )
+        ) {
+          drift.push(`${item.name} declares ${name} but never imports it`);
+        }
+      }
+    }
+    expect(drift).toEqual([]);
+  });
+
+  it("never names a Keystone item as a bare registry dependency", () => {
+    // A bare name is an address in shadcn's registry. `combobox` once
+    // declared `"button"` and installed shadcn's Radix Button beside it.
+    const bare: string[] = [];
+    for (const name of builtNames) {
+      const item = readJson<RegistryItem>(builtItemPath(name));
+      for (const dep of item.registryDependencies ?? []) {
+        if (builtNames.includes(dep)) {
+          bare.push(`${name} -> ${dep}`);
+        }
+      }
+    }
+    expect(bare).toEqual([]);
   });
 });

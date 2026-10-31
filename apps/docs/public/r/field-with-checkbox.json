@@ -4,8 +4,8 @@
   "title": "Field With Checkbox",
   "description": "Field example: With Checkbox.",
   "registryDependencies": [
-    "checkbox",
-    "field"
+    "https://keystoneui.io/r/checkbox.json",
+    "https://keystoneui.io/r/field.json"
   ],
   "files": [
     {

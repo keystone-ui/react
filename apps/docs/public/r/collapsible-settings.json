@@ -4,7 +4,7 @@
   "title": "Collapsible Settings",
   "description": "Collapsible example: Settings.",
   "registryDependencies": [
-    "collapsible"
+    "https://keystoneui.io/r/collapsible.json"
   ],
   "files": [
     {

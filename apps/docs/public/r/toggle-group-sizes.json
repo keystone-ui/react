@@ -4,7 +4,7 @@
   "title": "Toggle Group Sizes",
   "description": "Toggle Group example: Sizes.",
   "registryDependencies": [
-    "toggle-group"
+    "https://keystoneui.io/r/toggle-group.json"
   ],
   "files": [
     {

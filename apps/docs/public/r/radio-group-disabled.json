@@ -4,8 +4,8 @@
   "title": "Radio Group Disabled",
   "description": "Radio Group example: Disabled.",
   "registryDependencies": [
-    "field",
-    "radio-group"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/radio-group.json"
   ],
   "files": [
     {

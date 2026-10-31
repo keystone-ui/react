@@ -4,9 +4,9 @@
   "title": "Card Social Card",
   "description": "Card example: Social Card.",
   "registryDependencies": [
-    "avatar",
-    "button",
-    "card"
+    "https://keystoneui.io/r/avatar.json",
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/card.json"
   ],
   "files": [
     {

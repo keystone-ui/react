@@ -4,8 +4,8 @@
   "title": "Command Default",
   "description": "Command example: Default.",
   "registryDependencies": [
-    "button",
-    "command"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/command.json"
   ],
   "files": [
     {

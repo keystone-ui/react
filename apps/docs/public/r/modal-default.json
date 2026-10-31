@@ -4,8 +4,8 @@
   "title": "Modal Default",
   "description": "Modal example: Default.",
   "registryDependencies": [
-    "button",
-    "modal"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/modal.json"
   ],
   "files": [
     {

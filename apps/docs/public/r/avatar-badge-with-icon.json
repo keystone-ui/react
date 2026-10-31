@@ -4,7 +4,7 @@
   "title": "Avatar Badge With Icon",
   "description": "Avatar example: Badge With Icon.",
   "registryDependencies": [
-    "avatar"
+    "https://keystoneui.io/r/avatar.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Kbd Default",
   "description": "Kbd example: Default.",
   "registryDependencies": [
-    "kbd"
+    "https://keystoneui.io/r/kbd.json"
   ],
   "files": [
     {

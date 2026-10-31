@@ -4,9 +4,9 @@
   "title": "Button Group Email Toolbar",
   "description": "Button Group example: Email Toolbar.",
   "registryDependencies": [
-    "button",
-    "button-group",
-    "dropdown-menu"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/button-group.json",
+    "https://keystoneui.io/r/dropdown-menu.json"
   ],
   "files": [
     {

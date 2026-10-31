@@ -72,6 +72,15 @@ jobs:
           git add --intent-to-add -- registry.json apps/docs/public/r
           git diff --exit-code --stat -- registry.json apps/docs/public/r
 
+      # Install every ui item, and each block on its own, into fresh consumer
+      # projects with the real shadcn CLI, then typecheck the result. Offline:
+      # the committed registry is served locally and dependency installs are
+      # stubbed. Unit tests check registry.json; this checks what a consumer
+      # gets -- bare registry dependencies installing shadcn's Button beside
+      # keystone's combobox passed every unit test.
+      - name: Registry install smoke
+        run: pnpm smoke:install
+
   docs-e2e:
     name: Docs Layout (Playwright)
     runs-on: ubuntu-latest

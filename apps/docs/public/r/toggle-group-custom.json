@@ -4,8 +4,8 @@
   "title": "Toggle Group Custom",
   "description": "Toggle Group example: Custom.",
   "registryDependencies": [
-    "field",
-    "toggle-group"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/toggle-group.json"
   ],
   "files": [
     {

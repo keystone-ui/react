@@ -4,7 +4,7 @@
   "title": "Circular Progress Default",
   "description": "Circular Progress example: Default.",
   "registryDependencies": [
-    "circular-progress"
+    "https://keystoneui.io/r/circular-progress.json"
   ],
   "files": [
     {

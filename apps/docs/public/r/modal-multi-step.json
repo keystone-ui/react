@@ -4,11 +4,11 @@
   "title": "Modal Multi Step",
   "description": "Modal example: Multi Step.",
   "registryDependencies": [
-    "button",
-    "input",
-    "label",
-    "modal",
-    "stepper"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/input.json",
+    "https://keystoneui.io/r/label.json",
+    "https://keystoneui.io/r/modal.json",
+    "https://keystoneui.io/r/stepper.json"
   ],
   "files": [
     {

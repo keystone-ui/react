@@ -4,8 +4,8 @@
   "title": "Switch Choice Card",
   "description": "Switch example: Choice Card.",
   "registryDependencies": [
-    "field",
-    "switch"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/switch.json"
   ],
   "files": [
     {

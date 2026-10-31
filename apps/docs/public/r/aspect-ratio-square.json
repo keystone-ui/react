@@ -4,7 +4,7 @@
   "title": "Aspect Ratio Square",
   "description": "Aspect Ratio example: Square.",
   "registryDependencies": [
-    "aspect-ratio"
+    "https://keystoneui.io/r/aspect-ratio.json"
   ],
   "files": [
     {

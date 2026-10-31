@@ -4,7 +4,7 @@
   "title": "Toggle Outline",
   "description": "Toggle example: Outline.",
   "registryDependencies": [
-    "toggle"
+    "https://keystoneui.io/r/toggle.json"
   ],
   "files": [
     {

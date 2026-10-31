@@ -135,9 +135,9 @@ function extractSiblingImports(name) {
   return [...siblings];
 }
 
-function buildUiItems(registryEntries, mdxMeta) {
-  return registryEntries.map((entry) => {
-    const meta = mdxMeta.get(entry.name) ?? {
+function buildUiItems(entries, metaByName) {
+  return entries.map((entry) => {
+    const meta = metaByName.get(entry.name) ?? {
       title: toTitleCase(entry.name),
       description: "",
     };
@@ -169,8 +169,12 @@ function buildUiItems(registryEntries, mdxMeta) {
         path: `packages/ui/src/${entry.name}.tsx`,
         // Without an explicit target, shadcn derives the destination from the
         // source path and writes `components/ui/src/<name>.tsx` -- a doubled
-        // segment that puts the file somewhere nothing imports from.
-        target: `components/ui/${entry.name}.tsx`,
+        // segment that puts the file somewhere nothing imports from. `@ui/`
+        // is shadcn's (>= 4.7) placeholder for the consumer's `aliases.ui`; a
+        // literal `components/ui/` ignored a project whose ui alias points
+        // elsewhere. Sibling imports stay `./button` -- every ui item lands in
+        // the same directory, whichever it is.
+        target: `@ui/${entry.name}.tsx`,
         type: "registry:ui",
       },
     ];
@@ -338,8 +342,8 @@ function ensureNestedOutputDirs(items) {
   return [...dirs].sort();
 }
 
-function warnOnUncategorizedBlocks(blockItems) {
-  const uncategorized = blockItems
+function warnOnUncategorizedBlocks(passthroughItems) {
+  const uncategorized = passthroughItems
     .filter((i) => i.type === "registry:block")
     .filter((i) => !(Array.isArray(i.categories) && i.categories.length > 0))
     .map((i) => i.name);
@@ -355,6 +359,36 @@ function warnOnUncategorizedBlocks(blockItems) {
       "(e.g. ['authentication', 'login'], ['betting'], ['data']). " +
       "See AGENTS.md → Block Authoring."
   );
+}
+
+/**
+ * Point every dependency on a Keystone item at Keystone's registry.
+ *
+ * A bare `registryDependencies` entry is an address in *shadcn's* registry,
+ * never a sibling in this one. Installing `combobox.json` by URL with bare
+ * `"button"` / `"input-group"` deps pulled shadcn's Radix Button, Input and
+ * InputGroup into `components/ui/` -- Keystone's combobox then imported a
+ * Button with a different API, and nothing errored. Found by
+ * `scripts/smoke-install.mjs`.
+ *
+ * Names that are not Keystone items (`sidebar`, which admin-01 takes from
+ * shadcn on purpose) and anything already an address (URL, `@ns/x`,
+ * `owner/repo/x`) pass through untouched, so this is idempotent over the
+ * hand-maintained block entries.
+ */
+function qualifyRegistryDependencies(items, homepage) {
+  const keystoneNames = new Set(items.map((i) => i.name));
+  return items.map((item) => {
+    if (!item.registryDependencies) {
+      return item;
+    }
+    return {
+      ...item,
+      registryDependencies: item.registryDependencies.map((dep) =>
+        keystoneNames.has(dep) ? `${homepage}/r/${dep}.json` : dep
+      ),
+    };
+  });
 }
 
 const registryEntries = parseRegistryTs();
@@ -377,11 +411,13 @@ const blockItems = existing.items.filter(
 
 warnOnUncategorizedBlocks(blockItems);
 
+const allItems = [...themeItems, ...uiItems, ...blockItems, ...exampleItems];
+
 const merged = {
   $schema: existing.$schema,
   name: existing.name,
   homepage: existing.homepage,
-  items: [...themeItems, ...uiItems, ...blockItems, ...exampleItems],
+  items: qualifyRegistryDependencies(allItems, existing.homepage),
 };
 
 const serialized = JSON.stringify(merged, null, 2) + "\n";

@@ -4,9 +4,9 @@
   "title": "Date Input Presets",
   "description": "Date Input example: Presets.",
   "registryDependencies": [
-    "button",
-    "date-input",
-    "field"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/date-input.json",
+    "https://keystoneui.io/r/field.json"
   ],
   "files": [
     {

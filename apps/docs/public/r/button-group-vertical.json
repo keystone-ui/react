@@ -4,8 +4,8 @@
   "title": "Button Group Vertical",
   "description": "Button Group example: Vertical.",
   "registryDependencies": [
-    "button",
-    "button-group"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/button-group.json"
   ],
   "files": [
     {

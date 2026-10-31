@@ -4,7 +4,7 @@
   "title": "Button With Icons",
   "description": "Button example: With Icons.",
   "registryDependencies": [
-    "button"
+    "https://keystoneui.io/r/button.json"
   ],
   "files": [
     {

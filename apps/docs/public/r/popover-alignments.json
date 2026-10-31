@@ -4,8 +4,8 @@
   "title": "Popover Alignments",
   "description": "Popover example: Alignments.",
   "registryDependencies": [
-    "button",
-    "popover"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/popover.json"
   ],
   "files": [
     {

@@ -4,11 +4,11 @@
   "title": "Drawer Complex Filter",
   "description": "Drawer example: Complex Filter.",
   "registryDependencies": [
-    "button",
-    "checkbox",
-    "drawer",
-    "radio-group",
-    "stepper"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/checkbox.json",
+    "https://keystoneui.io/r/drawer.json",
+    "https://keystoneui.io/r/radio-group.json",
+    "https://keystoneui.io/r/stepper.json"
   ],
   "files": [
     {

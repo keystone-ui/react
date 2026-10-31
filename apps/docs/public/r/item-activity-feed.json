@@ -4,8 +4,8 @@
   "title": "Item Activity Feed",
   "description": "Item example: Activity Feed.",
   "registryDependencies": [
-    "avatar",
-    "item"
+    "https://keystoneui.io/r/avatar.json",
+    "https://keystoneui.io/r/item.json"
   ],
   "files": [
     {

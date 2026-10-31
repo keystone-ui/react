@@ -4,7 +4,7 @@
   "title": "Progress With Label",
   "description": "Progress example: With Label.",
   "registryDependencies": [
-    "progress"
+    "https://keystoneui.io/r/progress.json"
   ],
   "files": [
     {

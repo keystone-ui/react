@@ -4,8 +4,8 @@
   "title": "Item With Actions",
   "description": "Item example: With Actions.",
   "registryDependencies": [
-    "button",
-    "item"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/item.json"
   ],
   "files": [
     {

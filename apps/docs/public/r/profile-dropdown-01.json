@@ -7,12 +7,12 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "avatar",
-    "badge",
-    "button",
-    "dropdown-menu",
-    "progress",
-    "separator"
+    "https://keystoneui.io/r/avatar.json",
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/circular-progress.json",
+    "https://keystoneui.io/r/dropdown-menu.json",
+    "https://keystoneui.io/r/progress.json",
+    "https://keystoneui.io/r/separator.json"
   ],
   "files": [
     {

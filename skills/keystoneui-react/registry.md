@@ -153,6 +153,12 @@ one member that duplicates an existing one makes search worse, not better.
 - `"@keystone/card"` → Keystone's `card`, via the configured namespace.
 - Relative addresses (`"./card"`) are not supported.
 
+Keystone's own items therefore name every Keystone dependency by full URL
+(`"https://keystoneui.io/r/button.json"`) — `scripts/sync-registry.mjs`
+qualifies them, and `registry-integrity.test.ts` fails on a bare one. Their
+`files[].target` is `@ui/<name>.tsx`, shadcn's placeholder for your
+`aliases.ui`, which needs **shadcn CLI 4.7 or later**.
+
 This matters more for Keystone than for most registries, because **both
 registries install to the same path** (`components/ui/`). A block that means to
 pull Keystone's `button` but says `"button"` will quietly fetch shadcn's and

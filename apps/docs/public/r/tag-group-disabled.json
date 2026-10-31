@@ -4,7 +4,7 @@
   "title": "Tag Group Disabled",
   "description": "Tag Group example: Disabled.",
   "registryDependencies": [
-    "tag-group"
+    "https://keystoneui.io/r/tag-group.json"
   ],
   "files": [
     {

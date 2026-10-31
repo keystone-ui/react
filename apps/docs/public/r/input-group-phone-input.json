@@ -4,7 +4,7 @@
   "title": "Input Group Phone Input",
   "description": "Input Group example: Phone Input.",
   "registryDependencies": [
-    "input-group"
+    "https://keystoneui.io/r/input-group.json"
   ],
   "files": [
     {

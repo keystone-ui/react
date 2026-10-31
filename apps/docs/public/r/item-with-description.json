@@ -4,7 +4,7 @@
   "title": "Item With Description",
   "description": "Item example: With Description.",
   "registryDependencies": [
-    "item"
+    "https://keystoneui.io/r/item.json"
   ],
   "files": [
     {

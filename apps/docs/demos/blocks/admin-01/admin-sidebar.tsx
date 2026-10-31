@@ -25,13 +25,13 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar";
+} from "./sidebar";
 
 /**
- * The sidebar is **shadcn's**, not keystone's — keystone deliberately ships no
- * app shell. It is imported from `@/components/ui/sidebar` in both this demo
- * and the installable copy, which makes it the one import in the block that
- * needs no rewrite between them. See the Interop guide.
+ * The sidebar is **shadcn's**, adapted onto keystone primitives and shipped
+ * with the block as `./sidebar` — keystone deliberately ships no app shell.
+ * See the note at the top of sidebar.tsx for why it is not a dependency on
+ * shadcn's `sidebar` item.
  */
 
 export type AdminSection =

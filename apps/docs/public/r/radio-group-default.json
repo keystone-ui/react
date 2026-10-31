@@ -4,8 +4,8 @@
   "title": "Radio Group Default",
   "description": "Radio Group example: Default.",
   "registryDependencies": [
-    "label",
-    "radio-group"
+    "https://keystoneui.io/r/label.json",
+    "https://keystoneui.io/r/radio-group.json"
   ],
   "files": [
     {

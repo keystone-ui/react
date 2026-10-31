@@ -4,7 +4,7 @@
   "title": "Breadcrumb Default",
   "description": "Breadcrumb example: Default.",
   "registryDependencies": [
-    "breadcrumb"
+    "https://keystoneui.io/r/breadcrumb.json"
   ],
   "files": [
     {

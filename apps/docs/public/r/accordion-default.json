@@ -4,7 +4,7 @@
   "title": "Accordion Default",
   "description": "Accordion example: Default.",
   "registryDependencies": [
-    "accordion"
+    "https://keystoneui.io/r/accordion.json"
   ],
   "files": [
     {

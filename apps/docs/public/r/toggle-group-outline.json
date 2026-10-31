@@ -4,7 +4,7 @@
   "title": "Toggle Group Outline",
   "description": "Toggle Group example: Outline.",
   "registryDependencies": [
-    "toggle-group"
+    "https://keystoneui.io/r/toggle-group.json"
   ],
   "files": [
     {

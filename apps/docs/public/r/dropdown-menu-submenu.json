@@ -4,8 +4,8 @@
   "title": "Dropdown Menu Submenu",
   "description": "Dropdown Menu example: Submenu.",
   "registryDependencies": [
-    "button",
-    "dropdown-menu"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/dropdown-menu.json"
   ],
   "files": [
     {

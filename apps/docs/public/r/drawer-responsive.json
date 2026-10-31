@@ -4,11 +4,11 @@
   "title": "Drawer Responsive",
   "description": "Drawer example: Responsive.",
   "registryDependencies": [
-    "button",
-    "drawer",
-    "input",
-    "label",
-    "modal"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/drawer.json",
+    "https://keystoneui.io/r/input.json",
+    "https://keystoneui.io/r/label.json",
+    "https://keystoneui.io/r/modal.json"
   ],
   "files": [
     {

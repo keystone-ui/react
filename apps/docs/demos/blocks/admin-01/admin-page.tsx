@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { usersFromParams, usersToParams } from "./admin-filters";
 import { AdminOverview } from "./admin-overview";
 import { AdminPaymentsTable } from "./admin-payments-table";
@@ -13,6 +12,7 @@ import { adminMetrics, signupsByMonth, users } from "./mock-admin";
 import { payments } from "./mock-payments";
 import { PaymentDetailDrawer } from "./payment-detail-drawer";
 import { paymentsFromParams, paymentsToParams } from "./payment-filters";
+import { SidebarInset, SidebarProvider } from "./sidebar";
 import { oneOf } from "./url-params";
 import { usePaymentsTable } from "./use-payments-table";
 import { useReducedMotion } from "./use-reduced-motion";

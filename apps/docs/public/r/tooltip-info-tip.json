@@ -4,7 +4,7 @@
   "title": "Tooltip Info Tip",
   "description": "Tooltip example: Info Tip.",
   "registryDependencies": [
-    "tooltip"
+    "https://keystoneui.io/r/tooltip.json"
   ],
   "files": [
     {

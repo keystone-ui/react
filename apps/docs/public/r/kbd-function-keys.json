@@ -4,7 +4,7 @@
   "title": "Kbd Function Keys",
   "description": "Kbd example: Function Keys.",
   "registryDependencies": [
-    "kbd"
+    "https://keystoneui.io/r/kbd.json"
   ],
   "files": [
     {

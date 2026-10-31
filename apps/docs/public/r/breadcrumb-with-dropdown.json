@@ -4,9 +4,9 @@
   "title": "Breadcrumb With Dropdown",
   "description": "Breadcrumb example: With Dropdown.",
   "registryDependencies": [
-    "breadcrumb",
-    "button",
-    "dropdown-menu"
+    "https://keystoneui.io/r/breadcrumb.json",
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/dropdown-menu.json"
   ],
   "files": [
     {

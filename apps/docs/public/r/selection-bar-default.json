@@ -4,8 +4,8 @@
   "title": "Selection Bar Default",
   "description": "Selection Bar example: Default.",
   "registryDependencies": [
-    "button",
-    "selection-bar"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/selection-bar.json"
   ],
   "files": [
     {

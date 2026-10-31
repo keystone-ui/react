@@ -4,7 +4,7 @@
   "title": "Button Full Width",
   "description": "Button example: Full Width.",
   "registryDependencies": [
-    "button"
+    "https://keystoneui.io/r/button.json"
   ],
   "files": [
     {

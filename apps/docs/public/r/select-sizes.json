@@ -4,7 +4,7 @@
   "title": "Select Sizes",
   "description": "Select example: Sizes.",
   "registryDependencies": [
-    "select"
+    "https://keystoneui.io/r/select.json"
   ],
   "files": [
     {

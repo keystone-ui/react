@@ -4,7 +4,7 @@
   "title": "Progress Colors",
   "description": "Progress example: Colors.",
   "registryDependencies": [
-    "progress"
+    "https://keystoneui.io/r/progress.json"
   ],
   "files": [
     {

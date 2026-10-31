@@ -4,7 +4,7 @@
   "title": "Tag Group Single Selection",
   "description": "Tag Group example: Single Selection.",
   "registryDependencies": [
-    "tag-group"
+    "https://keystoneui.io/r/tag-group.json"
   ],
   "files": [
     {

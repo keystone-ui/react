@@ -4,9 +4,9 @@
   "title": "Form Default",
   "description": "Form example: Default.",
   "registryDependencies": [
-    "form",
-    "input",
-    "textarea"
+    "https://keystoneui.io/r/form.json",
+    "https://keystoneui.io/r/input.json",
+    "https://keystoneui.io/r/textarea.json"
   ],
   "files": [
     {

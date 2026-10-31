@@ -4,8 +4,8 @@
   "title": "Modal Nested",
   "description": "Modal example: Nested.",
   "registryDependencies": [
-    "button",
-    "modal"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/modal.json"
   ],
   "files": [
     {

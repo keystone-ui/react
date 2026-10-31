@@ -4,7 +4,7 @@
   "title": "Combobox Custom Items",
   "description": "Combobox example: Custom Items.",
   "registryDependencies": [
-    "combobox"
+    "https://keystoneui.io/r/combobox.json"
   ],
   "files": [
     {

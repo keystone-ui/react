@@ -4,10 +4,10 @@
   "title": "Sign in 03",
   "description": "A sign-in page with a form and image side by side inside a card.",
   "registryDependencies": [
-    "button",
-    "card",
-    "field",
-    "input"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/card.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input.json"
   ],
   "files": [
     {

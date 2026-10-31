@@ -4,7 +4,7 @@
   "title": "Avatar Group With Count",
   "description": "Avatar example: Group With Count.",
   "registryDependencies": [
-    "avatar"
+    "https://keystoneui.io/r/avatar.json"
   ],
   "files": [
     {

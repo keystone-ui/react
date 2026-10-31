@@ -4,8 +4,8 @@
   "title": "Description List Compact",
   "description": "Description List example: Compact.",
   "registryDependencies": [
-    "badge",
-    "description-list"
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/description-list.json"
   ],
   "files": [
     {

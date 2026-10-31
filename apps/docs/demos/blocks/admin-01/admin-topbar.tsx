@@ -11,9 +11,8 @@ import {
 import { Button } from "@keystoneui/react/button";
 import { Separator } from "@keystoneui/react/separator";
 import { Bell as BellIcon } from "lucide-react";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-
 import type { AdminSection } from "./admin-sidebar";
+import { SidebarTrigger } from "./sidebar";
 
 const TITLES: Record<AdminSection, string> = {
   billing: "Billing",

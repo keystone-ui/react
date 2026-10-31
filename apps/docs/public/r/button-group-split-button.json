@@ -4,8 +4,8 @@
   "title": "Button Group Split Button",
   "description": "Button Group example: Split Button.",
   "registryDependencies": [
-    "button",
-    "button-group"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/button-group.json"
   ],
   "files": [
     {

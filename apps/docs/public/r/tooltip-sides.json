@@ -4,8 +4,8 @@
   "title": "Tooltip Sides",
   "description": "Tooltip example: Sides.",
   "registryDependencies": [
-    "button",
-    "tooltip"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/tooltip.json"
   ],
   "files": [
     {

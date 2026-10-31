@@ -4,7 +4,7 @@
   "title": "Select Groups",
   "description": "Select example: Groups.",
   "registryDependencies": [
-    "select"
+    "https://keystoneui.io/r/select.json"
   ],
   "files": [
     {

@@ -4,8 +4,8 @@
   "title": "Drawer Sort By",
   "description": "Drawer example: Sort By.",
   "registryDependencies": [
-    "button",
-    "drawer"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/drawer.json"
   ],
   "files": [
     {

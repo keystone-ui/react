@@ -4,8 +4,8 @@
   "title": "Native Select Invalid",
   "description": "Native Select example: Invalid.",
   "registryDependencies": [
-    "field",
-    "native-select"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/native-select.json"
   ],
   "files": [
     {

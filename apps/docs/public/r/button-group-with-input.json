@@ -4,9 +4,9 @@
   "title": "Button Group With Input",
   "description": "Button Group example: With Input.",
   "registryDependencies": [
-    "button",
-    "button-group",
-    "input"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/button-group.json",
+    "https://keystoneui.io/r/input.json"
   ],
   "files": [
     {

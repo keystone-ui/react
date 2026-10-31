@@ -4,7 +4,7 @@
   "title": "Input Group Small Size",
   "description": "Input Group example: Small Size.",
   "registryDependencies": [
-    "input-group"
+    "https://keystoneui.io/r/input-group.json"
   ],
   "files": [
     {

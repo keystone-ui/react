@@ -4,8 +4,8 @@
   "title": "Combobox Controlled",
   "description": "Combobox example: Controlled.",
   "registryDependencies": [
-    "button",
-    "combobox"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/combobox.json"
   ],
   "files": [
     {

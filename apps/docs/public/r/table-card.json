@@ -4,7 +4,7 @@
   "title": "Table Card",
   "description": "Table example: Card.",
   "registryDependencies": [
-    "table"
+    "https://keystoneui.io/r/table.json"
   ],
   "files": [
     {

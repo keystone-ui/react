@@ -4,7 +4,7 @@
   "title": "Collapsible File Tree",
   "description": "Collapsible example: File Tree.",
   "registryDependencies": [
-    "collapsible"
+    "https://keystoneui.io/r/collapsible.json"
   ],
   "files": [
     {

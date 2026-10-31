@@ -4,8 +4,8 @@
   "title": "Card Table Flush",
   "description": "Card example: Table Flush.",
   "registryDependencies": [
-    "card",
-    "table"
+    "https://keystoneui.io/r/card.json",
+    "https://keystoneui.io/r/table.json"
   ],
   "files": [
     {

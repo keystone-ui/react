@@ -4,8 +4,8 @@
   "title": "Radio Group Choice Card",
   "description": "Radio Group example: Choice Card.",
   "registryDependencies": [
-    "field",
-    "radio-group"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/radio-group.json"
   ],
   "files": [
     {

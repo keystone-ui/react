@@ -4,8 +4,8 @@
   "title": "Label With Description",
   "description": "Label example: With Description.",
   "registryDependencies": [
-    "input",
-    "label"
+    "https://keystoneui.io/r/input.json",
+    "https://keystoneui.io/r/label.json"
   ],
   "files": [
     {

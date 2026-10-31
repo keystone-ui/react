@@ -4,11 +4,11 @@
   "title": "Date Input With Time",
   "description": "Date Input example: With Time.",
   "registryDependencies": [
-    "button",
-    "calendar",
-    "field",
-    "input",
-    "popover"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/calendar.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input.json",
+    "https://keystoneui.io/r/popover.json"
   ],
   "files": [
     {

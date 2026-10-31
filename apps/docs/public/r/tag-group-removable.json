@@ -4,7 +4,7 @@
   "title": "Tag Group Removable",
   "description": "Tag Group example: Removable.",
   "registryDependencies": [
-    "tag-group"
+    "https://keystoneui.io/r/tag-group.json"
   ],
   "files": [
     {

@@ -4,8 +4,8 @@
   "title": "Popover With Arrow",
   "description": "Popover example: With Arrow.",
   "registryDependencies": [
-    "button",
-    "popover"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/popover.json"
   ],
   "files": [
     {

@@ -4,8 +4,8 @@
   "title": "Stepper Controlled",
   "description": "Stepper example: Controlled.",
   "registryDependencies": [
-    "button",
-    "stepper"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/stepper.json"
   ],
   "files": [
     {

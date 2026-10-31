@@ -4,7 +4,7 @@
   "title": "Breadcrumb Collapsed",
   "description": "Breadcrumb example: Collapsed.",
   "registryDependencies": [
-    "breadcrumb"
+    "https://keystoneui.io/r/breadcrumb.json"
   ],
   "files": [
     {

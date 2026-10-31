@@ -4,7 +4,7 @@
   "title": "Carousel Vertical",
   "description": "Carousel example: Vertical.",
   "registryDependencies": [
-    "carousel"
+    "https://keystoneui.io/r/carousel.json"
   ],
   "files": [
     {

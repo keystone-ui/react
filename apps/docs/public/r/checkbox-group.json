@@ -4,8 +4,8 @@
   "title": "Checkbox Group",
   "description": "Checkbox example: Group.",
   "registryDependencies": [
-    "checkbox",
-    "field"
+    "https://keystoneui.io/r/checkbox.json",
+    "https://keystoneui.io/r/field.json"
   ],
   "files": [
     {

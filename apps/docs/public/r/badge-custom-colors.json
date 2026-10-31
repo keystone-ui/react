@@ -4,7 +4,7 @@
   "title": "Badge Custom Colors",
   "description": "Badge example: Custom Colors.",
   "registryDependencies": [
-    "badge"
+    "https://keystoneui.io/r/badge.json"
   ],
   "files": [
     {

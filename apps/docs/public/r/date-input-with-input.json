@@ -4,8 +4,8 @@
   "title": "Date Input With Input",
   "description": "Date Input example: With Input.",
   "registryDependencies": [
-    "date-input",
-    "field"
+    "https://keystoneui.io/r/date-input.json",
+    "https://keystoneui.io/r/field.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Input Group Text Prefix",
   "description": "Input Group example: Text Prefix.",
   "registryDependencies": [
-    "input-group"
+    "https://keystoneui.io/r/input-group.json"
   ],
   "files": [
     {

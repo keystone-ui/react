@@ -4,8 +4,8 @@
   "title": "Date Input Range",
   "description": "Date Input example: Range.",
   "registryDependencies": [
-    "date-input",
-    "field"
+    "https://keystoneui.io/r/date-input.json",
+    "https://keystoneui.io/r/field.json"
   ],
   "files": [
     {

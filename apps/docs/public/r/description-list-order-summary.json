@@ -4,8 +4,8 @@
   "title": "Description List Order Summary",
   "description": "Description List example: Order Summary.",
   "registryDependencies": [
-    "card",
-    "description-list"
+    "https://keystoneui.io/r/card.json",
+    "https://keystoneui.io/r/description-list.json"
   ],
   "files": [
     {

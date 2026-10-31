@@ -4,10 +4,10 @@
   "title": "Field Payment Method",
   "description": "Field example: Payment Method.",
   "registryDependencies": [
-    "button",
-    "field",
-    "input",
-    "radio-group"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input.json",
+    "https://keystoneui.io/r/radio-group.json"
   ],
   "files": [
     {

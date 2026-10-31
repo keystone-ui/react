@@ -4,7 +4,7 @@
   "title": "Breadcrumb Custom Separator",
   "description": "Breadcrumb example: Custom Separator.",
   "registryDependencies": [
-    "breadcrumb"
+    "https://keystoneui.io/r/breadcrumb.json"
   ],
   "files": [
     {

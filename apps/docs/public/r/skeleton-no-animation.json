@@ -4,7 +4,7 @@
   "title": "Skeleton No Animation",
   "description": "Skeleton example: No Animation.",
   "registryDependencies": [
-    "skeleton"
+    "https://keystoneui.io/r/skeleton.json"
   ],
   "files": [
     {

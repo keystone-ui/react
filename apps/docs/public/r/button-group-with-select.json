@@ -4,10 +4,10 @@
   "title": "Button Group With Select",
   "description": "Button Group example: With Select.",
   "registryDependencies": [
-    "button",
-    "button-group",
-    "input",
-    "select"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/button-group.json",
+    "https://keystoneui.io/r/input.json",
+    "https://keystoneui.io/r/select.json"
   ],
   "files": [
     {

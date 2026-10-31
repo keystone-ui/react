@@ -4,8 +4,8 @@
   "title": "Toast With Description",
   "description": "Toast example: With Description.",
   "registryDependencies": [
-    "button",
-    "toast"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/toast.json"
   ],
   "files": [
     {

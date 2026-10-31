@@ -4,7 +4,7 @@
   "title": "Badge As Link",
   "description": "Badge example: As Link.",
   "registryDependencies": [
-    "badge"
+    "https://keystoneui.io/r/badge.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Input Group Copy To Clipboard",
   "description": "Input Group example: Copy To Clipboard.",
   "registryDependencies": [
-    "input-group"
+    "https://keystoneui.io/r/input-group.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Alert Default",
   "description": "Alert example: Default.",
   "registryDependencies": [
-    "alert"
+    "https://keystoneui.io/r/alert.json"
   ],
   "files": [
     {

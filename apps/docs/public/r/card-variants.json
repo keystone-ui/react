@@ -4,7 +4,7 @@
   "title": "Card Variants",
   "description": "Card example: Variants.",
   "registryDependencies": [
-    "card"
+    "https://keystoneui.io/r/card.json"
   ],
   "files": [
     {

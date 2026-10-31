@@ -4,8 +4,8 @@
   "title": "Native Select Form Example",
   "description": "Native Select example: Form Example.",
   "registryDependencies": [
-    "field",
-    "native-select"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/native-select.json"
   ],
   "files": [
     {

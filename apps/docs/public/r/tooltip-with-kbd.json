@@ -4,8 +4,8 @@
   "title": "Tooltip With Kbd",
   "description": "Tooltip example: With Kbd.",
   "registryDependencies": [
-    "button",
-    "tooltip"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/tooltip.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Badge Default",
   "description": "Badge example: Default.",
   "registryDependencies": [
-    "badge"
+    "https://keystoneui.io/r/badge.json"
   ],
   "files": [
     {

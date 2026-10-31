@@ -4,7 +4,7 @@
   "title": "Resizable With Handle",
   "description": "Resizable example: With Handle.",
   "registryDependencies": [
-    "resizable"
+    "https://keystoneui.io/r/resizable.json"
   ],
   "files": [
     {

@@ -7,9 +7,9 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "button",
-    "field",
-    "input"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input.json"
   ],
   "files": [
     {

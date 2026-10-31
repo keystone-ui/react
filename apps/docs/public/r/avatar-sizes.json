@@ -4,7 +4,7 @@
   "title": "Avatar Sizes",
   "description": "Avatar example: Sizes.",
   "registryDependencies": [
-    "avatar"
+    "https://keystoneui.io/r/avatar.json"
   ],
   "files": [
     {

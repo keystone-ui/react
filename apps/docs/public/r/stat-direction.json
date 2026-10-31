@@ -4,7 +4,7 @@
   "title": "Stat Direction",
   "description": "Stat example: Direction.",
   "registryDependencies": [
-    "stat"
+    "https://keystoneui.io/r/stat.json"
   ],
   "files": [
     {

@@ -4,9 +4,9 @@
   "title": "Drawer Filter",
   "description": "Drawer example: Filter.",
   "registryDependencies": [
-    "button",
-    "checkbox",
-    "drawer"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/checkbox.json",
+    "https://keystoneui.io/r/drawer.json"
   ],
   "files": [
     {

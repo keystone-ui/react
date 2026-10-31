@@ -4,7 +4,7 @@
   "title": "Circular Progress Custom Center Content",
   "description": "Circular Progress example: Custom Center Content.",
   "registryDependencies": [
-    "circular-progress"
+    "https://keystoneui.io/r/circular-progress.json"
   ],
   "files": [
     {

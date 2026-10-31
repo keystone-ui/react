@@ -4,7 +4,7 @@
   "title": "Accordion Variants",
   "description": "Accordion example: Variants.",
   "registryDependencies": [
-    "accordion"
+    "https://keystoneui.io/r/accordion.json"
   ],
   "files": [
     {

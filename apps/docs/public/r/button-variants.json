@@ -4,7 +4,7 @@
   "title": "Button Variants",
   "description": "Button example: Variants.",
   "registryDependencies": [
-    "button"
+    "https://keystoneui.io/r/button.json"
   ],
   "files": [
     {

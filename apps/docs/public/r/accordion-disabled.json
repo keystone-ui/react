@@ -4,7 +4,7 @@
   "title": "Accordion Disabled",
   "description": "Accordion example: Disabled.",
   "registryDependencies": [
-    "accordion"
+    "https://keystoneui.io/r/accordion.json"
   ],
   "files": [
     {

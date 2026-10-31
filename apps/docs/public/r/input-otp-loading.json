@@ -4,7 +4,7 @@
   "title": "Input Otp Loading",
   "description": "Input Otp example: Loading.",
   "registryDependencies": [
-    "input-otp"
+    "https://keystoneui.io/r/input-otp.json"
   ],
   "files": [
     {

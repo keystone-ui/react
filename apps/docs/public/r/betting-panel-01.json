@@ -7,13 +7,13 @@
     "lucide-react"
   ],
   "registryDependencies": [
-    "button",
-    "card",
-    "field",
-    "input-group",
-    "select",
-    "tabs",
-    "toggle-group"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/card.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input-group.json",
+    "https://keystoneui.io/r/select.json",
+    "https://keystoneui.io/r/tabs.json",
+    "https://keystoneui.io/r/toggle-group.json"
   ],
   "files": [
     {

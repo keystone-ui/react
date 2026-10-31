@@ -4,8 +4,8 @@
   "title": "Checkbox Default",
   "description": "Checkbox example: Default.",
   "registryDependencies": [
-    "checkbox",
-    "field"
+    "https://keystoneui.io/r/checkbox.json",
+    "https://keystoneui.io/r/field.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Calendar Week Numbers",
   "description": "Calendar example: Week Numbers.",
   "registryDependencies": [
-    "calendar"
+    "https://keystoneui.io/r/calendar.json"
   ],
   "files": [
     {

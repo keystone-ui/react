@@ -4,7 +4,7 @@
   "title": "Separator Default",
   "description": "Separator example: Default.",
   "registryDependencies": [
-    "separator"
+    "https://keystoneui.io/r/separator.json"
   ],
   "files": [
     {

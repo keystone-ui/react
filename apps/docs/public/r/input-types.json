@@ -4,8 +4,8 @@
   "title": "Input Types",
   "description": "Input example: Types.",
   "registryDependencies": [
-    "field",
-    "input"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input.json"
   ],
   "files": [
     {

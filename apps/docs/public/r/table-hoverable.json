@@ -4,7 +4,7 @@
   "title": "Table Hoverable",
   "description": "Table example: Hoverable.",
   "registryDependencies": [
-    "table"
+    "https://keystoneui.io/r/table.json"
   ],
   "files": [
     {

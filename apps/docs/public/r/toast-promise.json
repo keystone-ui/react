@@ -4,8 +4,8 @@
   "title": "Toast Promise",
   "description": "Toast example: Promise.",
   "registryDependencies": [
-    "button",
-    "toast"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/toast.json"
   ],
   "files": [
     {

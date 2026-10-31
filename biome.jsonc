@@ -181,12 +181,14 @@
       }
     },
     {
-      // Vendored third-party source. apps/docs/components/ui/ holds shadcn
-      // components keystone deliberately does not ship (currently: sidebar),
-      // kept as close to upstream as possible so re-vendoring stays a diff
-      // rather than a merge. Lint-fixing code we do not own would defeat that.
+      // Vendored third-party source, kept as close to upstream as possible so
+      // re-vendoring stays a diff rather than a merge. Lint-fixing code we do
+      // not own would defeat that.
       "includes": [
         "apps/docs/components/ui/**",
+        // admin-01 ships shadcn's sidebar, adapted onto keystone primitives.
+        "apps/docs/demos/blocks/*/sidebar.tsx",
+        "registry/default/blocks/*/components/sidebar.tsx",
         // The chart layer inside a block is shadcn's chart.tsx, vendored so
         // recharts stays a block dependency rather than a library one.
         "apps/docs/demos/blocks/*/chart.tsx",

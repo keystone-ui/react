@@ -4,8 +4,8 @@
   "title": "Input With Error",
   "description": "Input example: With Error.",
   "registryDependencies": [
-    "field",
-    "input"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input.json"
   ],
   "files": [
     {

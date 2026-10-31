@@ -4,8 +4,8 @@
   "title": "Alert Dialog Small With Media",
   "description": "Alert Dialog example: Small With Media.",
   "registryDependencies": [
-    "alert-dialog",
-    "button"
+    "https://keystoneui.io/r/alert-dialog.json",
+    "https://keystoneui.io/r/button.json"
   ],
   "files": [
     {

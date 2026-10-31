@@ -4,8 +4,8 @@
   "title": "Textarea With Error",
   "description": "Textarea example: With Error.",
   "registryDependencies": [
-    "field",
-    "textarea"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/textarea.json"
   ],
   "files": [
     {

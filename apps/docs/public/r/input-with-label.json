@@ -4,8 +4,8 @@
   "title": "Input With Label",
   "description": "Input example: With Label.",
   "registryDependencies": [
-    "field",
-    "input"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input.json"
   ],
   "files": [
     {

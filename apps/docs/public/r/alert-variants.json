@@ -4,7 +4,7 @@
   "title": "Alert Variants",
   "description": "Alert example: Variants.",
   "registryDependencies": [
-    "alert"
+    "https://keystoneui.io/r/alert.json"
   ],
   "files": [
     {

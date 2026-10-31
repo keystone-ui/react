@@ -4,9 +4,9 @@
   "title": "Dropdown Menu Account",
   "description": "Dropdown Menu example: Account.",
   "registryDependencies": [
-    "avatar",
-    "button",
-    "dropdown-menu"
+    "https://keystoneui.io/r/avatar.json",
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/dropdown-menu.json"
   ],
   "files": [
     {

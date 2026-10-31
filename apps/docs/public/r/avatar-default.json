@@ -4,7 +4,7 @@
   "title": "Avatar Default",
   "description": "Avatar example: Default.",
   "registryDependencies": [
-    "avatar"
+    "https://keystoneui.io/r/avatar.json"
   ],
   "files": [
     {

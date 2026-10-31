@@ -4,11 +4,11 @@
   "title": "Modal Sign Up Form",
   "description": "Modal example: Sign Up Form.",
   "registryDependencies": [
-    "button",
-    "checkbox",
-    "input",
-    "label",
-    "modal"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/checkbox.json",
+    "https://keystoneui.io/r/input.json",
+    "https://keystoneui.io/r/label.json",
+    "https://keystoneui.io/r/modal.json"
   ],
   "files": [
     {

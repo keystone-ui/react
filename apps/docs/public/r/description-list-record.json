@@ -4,9 +4,9 @@
   "title": "Description List Record",
   "description": "Description List example: Record.",
   "registryDependencies": [
-    "badge",
-    "copy-button",
-    "description-list"
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/copy-button.json",
+    "https://keystoneui.io/r/description-list.json"
   ],
   "files": [
     {

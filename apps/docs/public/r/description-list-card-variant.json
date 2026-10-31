@@ -4,8 +4,8 @@
   "title": "Description List Card Variant",
   "description": "Description List example: Card Variant.",
   "registryDependencies": [
-    "badge",
-    "description-list"
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/description-list.json"
   ],
   "files": [
     {

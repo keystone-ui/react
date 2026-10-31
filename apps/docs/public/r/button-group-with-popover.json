@@ -4,11 +4,11 @@
   "title": "Button Group With Popover",
   "description": "Button Group example: With Popover.",
   "registryDependencies": [
-    "button",
-    "button-group",
-    "field",
-    "popover",
-    "textarea"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/button-group.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/popover.json",
+    "https://keystoneui.io/r/textarea.json"
   ],
   "files": [
     {

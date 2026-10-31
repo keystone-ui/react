@@ -4,8 +4,8 @@
   "title": "Label Default",
   "description": "Label example: Default.",
   "registryDependencies": [
-    "input",
-    "label"
+    "https://keystoneui.io/r/input.json",
+    "https://keystoneui.io/r/label.json"
   ],
   "files": [
     {

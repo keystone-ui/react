@@ -4,7 +4,7 @@
   "title": "Button Disabled",
   "description": "Button example: Disabled.",
   "registryDependencies": [
-    "button"
+    "https://keystoneui.io/r/button.json"
   ],
   "files": [
     {

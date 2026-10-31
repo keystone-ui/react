@@ -4,7 +4,7 @@
   "title": "Tabs Vertical",
   "description": "Tabs example: Vertical.",
   "registryDependencies": [
-    "tabs"
+    "https://keystoneui.io/r/tabs.json"
   ],
   "files": [
     {

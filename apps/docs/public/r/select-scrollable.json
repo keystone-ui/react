@@ -4,7 +4,7 @@
   "title": "Select Scrollable",
   "description": "Select example: Scrollable.",
   "registryDependencies": [
-    "select"
+    "https://keystoneui.io/r/select.json"
   ],
   "files": [
     {

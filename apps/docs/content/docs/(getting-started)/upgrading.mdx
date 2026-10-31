@@ -99,6 +99,23 @@ without it, info falls back to the light-mode blue in dark mode.
 - `Drawer` content scrolls by default. Use `DrawerBody` for a pinned header and
   footer around a scrolling middle.
 
+## Registry installs
+
+### Re-add components installed by URL
+
+Until this release, installing a Keystone item by URL also installed
+*shadcn's* versions of its dependencies — `combobox` brought shadcn's Radix
+`button`, `input` and `input-group`. If `components/ui/button.tsx` imports
+`radix-ui` or `cn`, it is shadcn's. Re-add it with
+`npx shadcn@latest add https://keystoneui.io/r/button.json --overwrite`.
+
+`admin-01` now ships its own `components/sidebar.tsx`. If you installed an
+earlier version, `components/ui/sidebar.tsx` and `components/ui/sheet.tsx` came
+from shadcn and can be deleted once you re-add the block.
+
+Use shadcn CLI 4.7 or later: components now install to your `aliases.ui`
+directory through the `@ui/` target placeholder.
+
 ## CSS and tokens
 
 {/* changeset: ease-tokens-reduced-motion-scrollbar */}

@@ -4,8 +4,8 @@
   "title": "Empty With List",
   "description": "Empty example: With List.",
   "registryDependencies": [
-    "button",
-    "empty"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/empty.json"
   ],
   "files": [
     {

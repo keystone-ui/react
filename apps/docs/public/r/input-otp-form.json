@@ -4,10 +4,10 @@
   "title": "Input Otp Form",
   "description": "Input Otp example: Form.",
   "registryDependencies": [
-    "button",
-    "card",
-    "field",
-    "input-otp"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/card.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/input-otp.json"
   ],
   "files": [
     {

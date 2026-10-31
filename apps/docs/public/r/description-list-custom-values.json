@@ -4,8 +4,8 @@
   "title": "Description List Custom Values",
   "description": "Description List example: Custom Values.",
   "registryDependencies": [
-    "badge",
-    "description-list"
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/description-list.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Input Otp Placeholder",
   "description": "Input Otp example: Placeholder.",
   "registryDependencies": [
-    "input-otp"
+    "https://keystoneui.io/r/input-otp.json"
   ],
   "files": [
     {

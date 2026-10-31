@@ -4,7 +4,7 @@
   "title": "Spinner Default",
   "description": "Spinner example: Default.",
   "registryDependencies": [
-    "spinner"
+    "https://keystoneui.io/r/spinner.json"
   ],
   "files": [
     {

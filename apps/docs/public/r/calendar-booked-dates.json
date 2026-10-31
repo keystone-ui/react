@@ -4,7 +4,7 @@
   "title": "Calendar Booked Dates",
   "description": "Calendar example: Booked Dates.",
   "registryDependencies": [
-    "calendar"
+    "https://keystoneui.io/r/calendar.json"
   ],
   "files": [
     {

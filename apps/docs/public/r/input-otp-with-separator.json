@@ -4,7 +4,7 @@
   "title": "Input Otp With Separator",
   "description": "Input Otp example: With Separator.",
   "registryDependencies": [
-    "input-otp"
+    "https://keystoneui.io/r/input-otp.json"
   ],
   "files": [
     {

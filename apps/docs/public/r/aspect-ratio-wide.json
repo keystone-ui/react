@@ -4,7 +4,7 @@
   "title": "Aspect Ratio Wide",
   "description": "Aspect Ratio example: Wide.",
   "registryDependencies": [
-    "aspect-ratio"
+    "https://keystoneui.io/r/aspect-ratio.json"
   ],
   "files": [
     {

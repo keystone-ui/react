@@ -4,7 +4,7 @@
   "title": "Tag With Remove",
   "description": "Tag example: With Remove.",
   "registryDependencies": [
-    "tag"
+    "https://keystoneui.io/r/tag.json"
   ],
   "files": [
     {

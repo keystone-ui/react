@@ -4,7 +4,7 @@
   "title": "Input Sizes",
   "description": "Input example: Sizes.",
   "registryDependencies": [
-    "input"
+    "https://keystoneui.io/r/input.json"
   ],
   "files": [
     {

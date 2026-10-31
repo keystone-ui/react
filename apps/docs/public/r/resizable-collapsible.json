@@ -4,7 +4,7 @@
   "title": "Resizable Collapsible",
   "description": "Resizable example: Collapsible.",
   "registryDependencies": [
-    "resizable"
+    "https://keystoneui.io/r/resizable.json"
   ],
   "files": [
     {

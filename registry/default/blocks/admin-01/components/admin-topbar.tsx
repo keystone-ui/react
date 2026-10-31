@@ -2,6 +2,7 @@
 
 import { BellIcon } from "lucide-react";
 import type { AdminSection } from "@/components/admin-sidebar";
+import { SidebarTrigger } from "@/components/sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,7 +13,6 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 
 const TITLES: Record<AdminSection, string> = {
   billing: "Billing",

@@ -4,10 +4,10 @@
   "title": "Date Input Natural Language",
   "description": "Date Input example: Natural Language.",
   "registryDependencies": [
-    "button",
-    "calendar",
-    "field",
-    "popover"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/calendar.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/popover.json"
   ],
   "files": [
     {

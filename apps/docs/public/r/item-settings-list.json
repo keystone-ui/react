@@ -4,7 +4,7 @@
   "title": "Item Settings List",
   "description": "Item example: Settings List.",
   "registryDependencies": [
-    "item"
+    "https://keystoneui.io/r/item.json"
   ],
   "files": [
     {

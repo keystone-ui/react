@@ -4,7 +4,7 @@
   "title": "Input Otp Four Digits",
   "description": "Input Otp example: Four Digits.",
   "registryDependencies": [
-    "input-otp"
+    "https://keystoneui.io/r/input-otp.json"
   ],
   "files": [
     {

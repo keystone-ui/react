@@ -4,7 +4,7 @@
   "title": "Calendar Month Year",
   "description": "Calendar example: Month Year.",
   "registryDependencies": [
-    "calendar"
+    "https://keystoneui.io/r/calendar.json"
   ],
   "files": [
     {

@@ -4,9 +4,9 @@
   "title": "Combobox Form Example",
   "description": "Combobox example: Form Example.",
   "registryDependencies": [
-    "button",
-    "combobox",
-    "field"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/combobox.json",
+    "https://keystoneui.io/r/field.json"
   ],
   "files": [
     {

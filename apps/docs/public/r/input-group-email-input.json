@@ -4,7 +4,7 @@
   "title": "Input Group Email Input",
   "description": "Input Group example: Email Input.",
   "registryDependencies": [
-    "input-group"
+    "https://keystoneui.io/r/input-group.json"
   ],
   "files": [
     {

@@ -4,7 +4,7 @@
   "title": "Button Social Buttons",
   "description": "Button example: Social Buttons.",
   "registryDependencies": [
-    "button"
+    "https://keystoneui.io/r/button.json"
   ],
   "files": [
     {

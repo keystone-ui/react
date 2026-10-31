@@ -4,7 +4,7 @@
   "title": "Tag Group Default",
   "description": "Tag Group example: Default.",
   "registryDependencies": [
-    "tag-group"
+    "https://keystoneui.io/r/tag-group.json"
   ],
   "files": [
     {

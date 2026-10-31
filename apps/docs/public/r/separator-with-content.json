@@ -4,7 +4,7 @@
   "title": "Separator With Content",
   "description": "Separator example: With Content.",
   "registryDependencies": [
-    "separator"
+    "https://keystoneui.io/r/separator.json"
   ],
   "files": [
     {

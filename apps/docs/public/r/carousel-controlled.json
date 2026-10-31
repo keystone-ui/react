@@ -4,8 +4,8 @@
   "title": "Carousel Controlled",
   "description": "Carousel example: Controlled.",
   "registryDependencies": [
-    "button",
-    "carousel"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/carousel.json"
   ],
   "files": [
     {

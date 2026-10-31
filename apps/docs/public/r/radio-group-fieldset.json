@@ -4,8 +4,8 @@
   "title": "Radio Group Fieldset",
   "description": "Radio Group example: Fieldset.",
   "registryDependencies": [
-    "field",
-    "radio-group"
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/radio-group.json"
   ],
   "files": [
     {

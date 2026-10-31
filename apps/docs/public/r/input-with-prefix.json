@@ -4,7 +4,7 @@
   "title": "Input With Prefix",
   "description": "Input example: With Prefix.",
   "registryDependencies": [
-    "input-group"
+    "https://keystoneui.io/r/input-group.json"
   ],
   "files": [
     {

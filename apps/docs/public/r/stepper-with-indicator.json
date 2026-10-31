@@ -4,8 +4,8 @@
   "title": "Stepper With Indicator",
   "description": "Stepper example: With Indicator.",
   "registryDependencies": [
-    "button",
-    "stepper"
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/stepper.json"
   ],
   "files": [
     {

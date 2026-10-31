@@ -4,7 +4,7 @@
   "title": "Tabs Animated Indicator",
   "description": "Tabs example: Animated Indicator.",
   "registryDependencies": [
-    "tabs"
+    "https://keystoneui.io/r/tabs.json"
   ],
   "files": [
     {

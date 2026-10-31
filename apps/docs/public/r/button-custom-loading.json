@@ -4,7 +4,7 @@
   "title": "Button Custom Loading",
   "description": "Button example: Custom Loading.",
   "registryDependencies": [
-    "button"
+    "https://keystoneui.io/r/button.json"
   ],
   "files": [
     {

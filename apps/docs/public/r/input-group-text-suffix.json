@@ -4,7 +4,7 @@
   "title": "Input Group Text Suffix",
   "description": "Input Group example: Text Suffix.",
   "registryDependencies": [
-    "input-group"
+    "https://keystoneui.io/r/input-group.json"
   ],
   "files": [
     {

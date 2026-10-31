@@ -4,7 +4,7 @@
   "title": "Calendar Range",
   "description": "Calendar example: Range.",
   "registryDependencies": [
-    "calendar"
+    "https://keystoneui.io/r/calendar.json"
   ],
   "files": [
     {

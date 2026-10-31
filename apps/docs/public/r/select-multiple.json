@@ -4,7 +4,7 @@
   "title": "Select Multiple",
   "description": "Select example: Multiple.",
   "registryDependencies": [
-    "select"
+    "https://keystoneui.io/r/select.json"
   ],
   "files": [
     {

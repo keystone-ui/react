@@ -4,8 +4,8 @@
   "title": "Table With Badges",
   "description": "Table example: With Badges.",
   "registryDependencies": [
-    "badge",
-    "table"
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/table.json"
   ],
   "files": [
     {

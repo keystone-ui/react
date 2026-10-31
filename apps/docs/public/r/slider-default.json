@@ -4,7 +4,7 @@
   "title": "Slider Default",
   "description": "Slider example: Default.",
   "registryDependencies": [
-    "slider"
+    "https://keystoneui.io/r/slider.json"
   ],
   "files": [
     {

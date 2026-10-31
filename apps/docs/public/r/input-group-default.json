@@ -4,7 +4,7 @@
   "title": "Input Group Default",
   "description": "Input Group example: Default.",
   "registryDependencies": [
-    "input-group"
+    "https://keystoneui.io/r/input-group.json"
   ],
   "files": [
     {

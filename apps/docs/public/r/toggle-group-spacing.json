@@ -4,7 +4,7 @@
   "title": "Toggle Group Spacing",
   "description": "Toggle Group example: Spacing.",
   "registryDependencies": [
-    "toggle-group"
+    "https://keystoneui.io/r/toggle-group.json"
   ],
   "files": [
     {
