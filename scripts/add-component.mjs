@@ -184,12 +184,20 @@ function addTsupEntry(kebab) {
     return;
   }
 
-  // Insert before the closing bracket of entryPoints
-  content = content.replace(
-    /("src\/utils\.ts",?)\s*\]/,
-    `$1\n    ${entry},\n  ]`
+  // Append before the closing bracket of the entryPoints array. Anchoring on
+  // a particular last entry broke silently once `src/utils.ts` stopped being
+  // last: the replace matched nothing and the script still reported success,
+  // shipping an export that `tsup` never built.
+  const updated = content.replace(
+    /(entryPoints:\s*\[[\s\S]*?)(\n\s*\],)/,
+    `$1\n    ${entry},$2`
   );
-  writeFileSync(tsupPath, content);
+  if (updated === content) {
+    throw new Error(
+      "Could not find the entryPoints array in packages/ui/tsup.config.ts"
+    );
+  }
+  writeFileSync(tsupPath, updated);
   console.log("  ✓ packages/ui/tsup.config.ts — added entry");
 }
 

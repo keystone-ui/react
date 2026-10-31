@@ -1,0 +1,140 @@
+---
+title: Code Block
+description: Code, terminal output, logs and diffs, with an optional header and copy button.
+---
+
+## Import
+
+```tsx
+import {
+  CodeBlock,
+  CodeBlockActions,
+  CodeBlockContent,
+  CodeBlockCopyButton,
+  CodeBlockHeader,
+  CodeBlockTitle,
+} from "@keystoneui/react/code-block";
+```
+
+## Usage
+
+Pass the source as `code`. The header is optional; the copy button copies `code`
+itself, so it never picks up line numbers or diff markers.
+
+<ComponentPreview name="code-block-default" />
+
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/code-block.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react@beta lucide-react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="code-block-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Composition
+
+```text
+CodeBlock
+├── CodeBlockHeader
+│   ├── CodeBlockTitle
+│   └── CodeBlockActions
+│       └── CodeBlockCopyButton
+└── CodeBlockContent
+```
+
+**Invalid nesting:** every part must sit inside `CodeBlock`, which holds the
+code. Rendered on its own, `CodeBlockContent` throws
+`CodeBlockContent must be used within <CodeBlock>`.
+
+## Examples
+
+### Line numbers and highlighted lines
+
+Line numbers are a CSS counter, so selecting and copying the code skips them.
+`highlightLines` takes 1-based line numbers.
+
+<ComponentPreview name="code-block-line-numbers" />
+
+### Diff
+
+With `diff`, a leading `+` or `-` marks an added or removed line, tinted from
+the `--success` and `--destructive` tokens.
+
+<ComponentPreview name="code-block-diff" />
+
+### Terminal output
+
+`size="sm"` and `wrap` suit tool output and logs, where long lines should wrap
+rather than scroll.
+
+<ComponentPreview name="code-block-terminal" />
+
+### Syntax highlighting
+
+`CodeBlock` ships no highlighter. Render your highlighter's output as
+`CodeBlockContent`'s children; the frame, header and copy button keep working,
+and the copy button still copies the plain `code`.
+
+```tsx
+<CodeBlock code={source}>
+  <CodeBlockContent>
+    <span dangerouslySetInnerHTML={{ __html: highlighted }} />
+  </CodeBlockContent>
+</CodeBlock>
+```
+
+## Accessibility
+
+`CodeBlockContent` is a scroll container, so it is focusable (`tabIndex={0}`)
+and keyboard users can scroll long lines with the arrow keys. The copy button is
+labelled "Copy code"; pass `aria-label` to name what it copies.
+
+## API Reference
+
+### CodeBlock
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `code` | `string` | — | The source shown and copied. |
+| `lineNumbers` | `boolean` | `false` | Number each line. |
+| `highlightLines` | `number[]` | — | 1-based lines to highlight. |
+| `diff` | `boolean` | `false` | Read a leading `+` / `-` as an added / removed line. |
+| `wrap` | `boolean` | `false` | Wrap long lines instead of scrolling. |
+| `size` | `"default" \| "sm"` | `"default"` | Text size and padding. |
+
+### CodeBlockContent
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | — | Highlighted markup to render instead of the plain lines. |
+
+### CodeBlockCopyButton
+
+Accepts every [Copy Button](/docs/components/copy-button) prop except `value`,
+which comes from `CodeBlock`. Defaults to `size="icon-xs"` and the label "Copy code".
+
+### CodeBlockHeader, CodeBlockTitle, CodeBlockActions
+
+Accept the props of a `div`.

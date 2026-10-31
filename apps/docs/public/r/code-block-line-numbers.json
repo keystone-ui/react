@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "code-block-line-numbers",
+  "title": "Code Block Line Numbers",
+  "description": "Code Block example: Line Numbers.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/code-block.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/code-block/line-numbers.tsx",
+      "content": "\"use client\";\n\nimport { CodeBlock, CodeBlockContent } from \"@keystoneui/react/code-block\";\n\nconst code = `const total = items.reduce((sum, item) => {\n  return sum + item.price * item.quantity;\n}, 0);\n\nconst tax = total * TAX_RATE;\nconst grandTotal = total + tax;`;\n\n/** Line numbers are a CSS counter, so selecting and copying skips them. */\nexport default function CodeBlockLineNumbers() {\n  return (\n    <CodeBlock\n      className=\"w-full max-w-lg\"\n      code={code}\n      highlightLines={[5, 6]}\n      lineNumbers\n    >\n      <CodeBlockContent />\n    </CodeBlock>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

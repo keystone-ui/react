@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "code-block-terminal",
+  "title": "Code Block Terminal",
+  "description": "Code Block example: Terminal.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/code-block.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/code-block/terminal.tsx",
+      "content": "\"use client\";\n\nimport {\n  CodeBlock,\n  CodeBlockActions,\n  CodeBlockContent,\n  CodeBlockCopyButton,\n  CodeBlockHeader,\n  CodeBlockTitle,\n} from \"@keystoneui/react/code-block\";\n\nconst output = `$ pnpm smoke:install\n✔ vite-src / ui\n✔ next-root / ui\n✔ custom-ui-alias / ui\n\nOK — 54 install(s) typechecked.`;\n\n/** The small size, with wrapping, for tool output and logs. */\nexport default function CodeBlockTerminal() {\n  return (\n    <CodeBlock className=\"w-full max-w-lg\" code={output} size=\"sm\" wrap>\n      <CodeBlockHeader>\n        <CodeBlockTitle>Terminal</CodeBlockTitle>\n        <CodeBlockActions>\n          <CodeBlockCopyButton />\n        </CodeBlockActions>\n      </CodeBlockHeader>\n      <CodeBlockContent />\n    </CodeBlock>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

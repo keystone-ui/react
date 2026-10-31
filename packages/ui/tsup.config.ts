@@ -16,6 +16,7 @@ export default defineConfig((options) => ({
     "src/aspect-ratio.tsx",
     "src/card.tsx",
     "src/checkbox.tsx",
+    "src/code-block.tsx",
     "src/collapsible.tsx",
     "src/combobox.tsx",
     "src/command.tsx",

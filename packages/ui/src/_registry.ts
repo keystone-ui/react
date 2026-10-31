@@ -371,4 +371,11 @@ export const ui: RegistryItem[] = [
     dependencies: [],
     files: [{ path: "ui/copy-button.tsx", type: "registry:ui" }],
   },
+  {
+    name: "code-block",
+    type: "registry:ui",
+    dependencies: ["class-variance-authority"],
+    registryDependencies: ["copy-button"],
+    files: [{ path: "ui/code-block.tsx", type: "registry:ui" }],
+  },
 ];

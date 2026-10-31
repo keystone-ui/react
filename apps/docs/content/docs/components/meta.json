@@ -68,6 +68,7 @@
     "item",
     "typography",
     "selection-bar",
-    "copy-button"
+    "copy-button",
+    "code-block"
   ]
 }

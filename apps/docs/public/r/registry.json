@@ -1549,6 +1549,25 @@
       ]
     },
     {
+      "name": "code-block",
+      "type": "registry:ui",
+      "title": "Code Block",
+      "description": "Code, terminal output, logs and diffs, with an optional header and copy button.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://keystoneui.io/r/copy-button.json"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/code-block.tsx",
+          "target": "@ui/code-block.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "signin-01",
       "type": "registry:block",
       "title": "Sign in 01",
@@ -3967,6 +3986,66 @@
       "files": [
         {
           "path": "apps/docs/demos/circular-progress/with-label.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "code-block-default",
+      "type": "registry:example",
+      "title": "Code Block Default",
+      "description": "Code Block example: Default.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/code-block.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/code-block/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "code-block-diff",
+      "type": "registry:example",
+      "title": "Code Block Diff",
+      "description": "Code Block example: Diff.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/code-block.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/code-block/diff.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "code-block-line-numbers",
+      "type": "registry:example",
+      "title": "Code Block Line Numbers",
+      "description": "Code Block example: Line Numbers.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/code-block.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/code-block/line-numbers.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "code-block-terminal",
+      "type": "registry:example",
+      "title": "Code Block Terminal",
+      "description": "Code Block example: Terminal.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/code-block.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/code-block/terminal.tsx",
           "type": "registry:example"
         }
       ]

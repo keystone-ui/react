@@ -87,7 +87,8 @@
     "./selection-bar": "./src/selection-bar.tsx",
     "./stat": "./src/stat.tsx",
     "./table-pagination": "./src/table-pagination.tsx",
-    "./copy-button": "./src/copy-button.tsx"
+    "./copy-button": "./src/copy-button.tsx",
+    "./code-block": "./src/code-block.tsx"
   },
   "scripts": {
     "build": "tsup",
@@ -362,6 +363,10 @@
       "./copy-button": {
         "types": "./dist/copy-button.d.ts",
         "default": "./dist/copy-button.js"
+      },
+      "./code-block": {
+        "types": "./dist/code-block.d.ts",
+        "default": "./dist/code-block.js"
       }
     }
   },

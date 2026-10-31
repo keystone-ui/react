@@ -653,6 +653,26 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("circular-progress-with-label", m.default),
     }))
   ),
+  "code-block-default": dynamic(() =>
+    import("./code-block/default").then((m) => ({
+      default: hydrated("code-block-default", m.default),
+    }))
+  ),
+  "code-block-diff": dynamic(() =>
+    import("./code-block/diff").then((m) => ({
+      default: hydrated("code-block-diff", m.default),
+    }))
+  ),
+  "code-block-line-numbers": dynamic(() =>
+    import("./code-block/line-numbers").then((m) => ({
+      default: hydrated("code-block-line-numbers", m.default),
+    }))
+  ),
+  "code-block-terminal": dynamic(() =>
+    import("./code-block/terminal").then((m) => ({
+      default: hydrated("code-block-terminal", m.default),
+    }))
+  ),
   "collapsible-default": dynamic(() =>
     import("./collapsible/default").then((m) => ({
       default: hydrated("collapsible-default", m.default),

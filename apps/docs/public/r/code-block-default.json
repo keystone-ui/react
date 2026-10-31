@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "code-block-default",
+  "title": "Code Block Default",
+  "description": "Code Block example: Default.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/code-block.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/code-block/default.tsx",
+      "content": "\"use client\";\n\nimport {\n  CodeBlock,\n  CodeBlockActions,\n  CodeBlockContent,\n  CodeBlockCopyButton,\n  CodeBlockHeader,\n  CodeBlockTitle,\n} from \"@keystoneui/react/code-block\";\n\nconst code = `import { Button } from \"@/components/ui/button\";\n\nexport function SaveButton() {\n  return <Button>Save changes</Button>;\n}`;\n\nexport default function CodeBlockDefault() {\n  return (\n    <CodeBlock className=\"w-full max-w-lg\" code={code}>\n      <CodeBlockHeader>\n        <CodeBlockTitle>save-button.tsx</CodeBlockTitle>\n        <CodeBlockActions>\n          <CodeBlockCopyButton />\n        </CodeBlockActions>\n      </CodeBlockHeader>\n      <CodeBlockContent />\n    </CodeBlock>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}
