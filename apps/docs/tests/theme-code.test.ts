@@ -129,3 +129,16 @@ describe("GET /r/theme/[code]", () => {
     expect(res.status).toBe(404);
   });
 });
+
+describe("fonts", () => {
+  it("falls back to the font's own generic family", async () => {
+    const serif = await (
+      await call("k1_stone_0.21_0.006_285.885_default_source-serif.json")
+    ).json();
+    expect(serif.cssVars.light["font-sans"]).toBe('"Source Serif 4", serif');
+    const mono = await (
+      await call("k1_zinc_0.21_0.006_285.885_default_jetbrains-mono.json")
+    ).json();
+    expect(mono.cssVars.light["font-sans"]).toBe('"JetBrains Mono", monospace');
+  });
+});

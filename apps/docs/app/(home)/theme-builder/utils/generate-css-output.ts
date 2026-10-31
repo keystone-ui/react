@@ -72,7 +72,7 @@ export function resolveThemeVars(settings: ThemeSettings) {
     ...destructiveTokens.light,
     ...statusTokens.light,
     ...sidebarTokens.light,
-    "--font-sans": `"${fontConfig.label}", sans-serif`,
+    "--font-sans": `"${fontConfig.label}", ${fontConfig.generic}`,
     "--radius": radiusValue,
   };
 

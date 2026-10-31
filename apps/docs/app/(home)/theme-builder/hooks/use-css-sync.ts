@@ -108,7 +108,7 @@ export function useCssSync(state: ThemeState) {
       fontVarEl.id = fontVarId;
       document.head.appendChild(fontVarEl);
     }
-    fontVarEl.textContent = `:root { ${fontConfig.variable}: "${fontConfig.label}", sans-serif; }`;
+    fontVarEl.textContent = `:root { ${fontConfig.variable}: "${fontConfig.label}", ${fontConfig.generic}; }`;
 
     // Build scoped CSS — the preview container uses a data attribute for mode
     const css = `

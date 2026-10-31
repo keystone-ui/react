@@ -49,11 +49,14 @@ export const fontIds = [
   "figtree",
   "public-sans",
   "jetbrains-mono",
+  "source-serif",
 ] as const;
 export type FontId = (typeof fontIds)[number];
 
 export interface FontConfig {
   cdnUrl: string;
+  /** The CSS generic family the stack falls back to. */
+  generic: "monospace" | "sans-serif" | "serif";
   id: FontId;
   label: string;
   /** next/font/google import name (e.g. `Inter`, `DM_Sans`) */
@@ -64,6 +67,7 @@ export interface FontConfig {
 export const fonts: FontConfig[] = [
   {
     id: "inter",
+    generic: "sans-serif",
     label: "Inter",
     nextFontImport: "Inter",
     variable: "--font-inter",
@@ -72,6 +76,7 @@ export const fonts: FontConfig[] = [
   },
   {
     id: "geist",
+    generic: "sans-serif",
     label: "Geist",
     nextFontImport: "Geist",
     variable: "--font-geist",
@@ -80,6 +85,7 @@ export const fonts: FontConfig[] = [
   },
   {
     id: "dm-sans",
+    generic: "sans-serif",
     label: "DM Sans",
     nextFontImport: "DM_Sans",
     variable: "--font-dm-sans",
@@ -88,6 +94,7 @@ export const fonts: FontConfig[] = [
   },
   {
     id: "figtree",
+    generic: "sans-serif",
     label: "Figtree",
     nextFontImport: "Figtree",
     variable: "--font-figtree",
@@ -96,6 +103,7 @@ export const fonts: FontConfig[] = [
   },
   {
     id: "public-sans",
+    generic: "sans-serif",
     label: "Public Sans",
     nextFontImport: "Public_Sans",
     variable: "--font-public-sans",
@@ -104,11 +112,23 @@ export const fonts: FontConfig[] = [
   },
   {
     id: "jetbrains-mono",
+    generic: "monospace",
     label: "JetBrains Mono",
     nextFontImport: "JetBrains_Mono",
     variable: "--font-jetbrains-mono",
     cdnUrl:
       "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap",
+  },
+  {
+    // An editorial, print-first face — shadcn's Sera style covers the same
+    // ground with a whole style; here it is one font choice.
+    id: "source-serif",
+    generic: "serif",
+    label: "Source Serif 4",
+    nextFontImport: "Source_Serif_4",
+    variable: "--font-source-serif",
+    cdnUrl:
+      "https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,200..900&display=swap",
   },
 ];
 
