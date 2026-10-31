@@ -6,7 +6,7 @@
  */
 export default function TypographyTypeset() {
   return (
-    <article className="typeset max-w-2xl">
+    <article className="ks-typeset max-w-2xl">
       <h1>The Joke Tax Chronicles</h1>
       <p>
         Once upon a time, in a far-off land, there was a very lazy king who

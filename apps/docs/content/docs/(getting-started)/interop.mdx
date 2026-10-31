@@ -116,3 +116,52 @@ It used to depend on shadcn's `sidebar` item instead. That item's own dependenci
 It also keeps shadcn's `sidebar_state` cookie, which persists the collapsed state for a week. That is a functional cookie, not tracking, but it is worth knowing it exists — pass `open`/`onOpenChange` to `SidebarProvider` if you would rather own the state yourself.
 
 While adapting it we also fixed a hydration bug present upstream: `SidebarMenuSkeleton` calls `Math.random()` in a `useState` initialiser, so the server and the client pick different widths.
+
+## Chat and agent UI come from shadcn
+
+Keystone does not ship chat components. shadcn's — `MessageScroller`,
+`Message`, `Bubble`, `Attachment`, `Marker`, and the AI Elements compositions
+built on them — are Base UI, read the same semantic tokens, and work in a
+keystone app:
+
+```bash
+npx shadcn@latest add message-scroller message bubble attachment marker
+```
+
+Run it **after** keystone's components are installed and never with
+`--overwrite`. The chat items depend on shadcn's `button` and friends, and an
+existing keystone file at the same path is what keeps them composing keystone's
+Button rather than replacing it.
+
+They style themselves with utilities from `shadcn/tailwind.css`, which
+`shadcn init` imports. If your project started from `pnpm add
+@keystoneui/react` instead, add it next to keystone's:
+
+```css
+@import "tailwindcss";
+@import "shadcn/tailwind.css";
+@import "@keystoneui/react/base.css";
+```
+
+The two stylesheets do not collide. Keystone's own utilities are namespaced —
+`ks-typeset`, `ks-scroll-fade`, `ks-shimmer`, `ks-scrollbar` — because shadcn
+defines `scroll-fade` and `shimmer` too, and Tailwind applies *both* rules when
+two `@utility` blocks share a name. A test reads the installed
+`shadcn/tailwind.css` and fails if a keystone name ever overlaps again.
+
+## Vendoring base.css
+
+`@keystoneui/react/base.css` is the one runtime file a registry install still
+imports from the npm package. To drop the dependency, copy it into your project
+and import the copy instead:
+
+```bash
+cp node_modules/@keystoneui/react/src/base.css src/styles/keystone-base.css
+```
+
+```css
+@import "./styles/keystone-base.css";
+```
+
+You then own it: future fixes to motion tokens, popup layering or the
+utilities above reach you only when you copy it again.

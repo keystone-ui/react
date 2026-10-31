@@ -1,45 +1,45 @@
 ---
 title: CSS Utilities
-description: The class-only utilities in base.css — typeset, scroll-fade, shimmer and ks-scrollbar.
+description: The class-only utilities in base.css — typeset, ks-scroll-fade, ks-shimmer and ks-scrollbar.
 ---
 
 `@keystoneui/react/base.css` ships a few utilities that have no component.
 Each is a Tailwind `@utility` or an opt-in class, so it costs nothing until you
 use it, and each takes its colours from your theme tokens.
 
-## typeset
+## ks-typeset
 
 Styles a block of rendered markdown, CMS HTML or a chat reply with one class.
 See [Typography](/docs/components/typography#typeset) for the full reference.
 
 ```tsx
-<article className="typeset">{content}</article>
+<article className="ks-typeset">{content}</article>
 ```
 
-## scroll-fade
+## ks-scroll-fade
 
 Fades a scroll container's edges only where there is more to scroll: no fade
 at the top until you scroll down, none at the bottom once you reach it. Use
-`scroll-fade` for vertical containers and `scroll-fade-x` for horizontal ones.
+`ks-scroll-fade` for vertical containers and `ks-scroll-fade-x` for horizontal ones.
 
 ```tsx
-<div className="scroll-fade h-80 overflow-y-auto">{messages}</div>
-<div className="scroll-fade-x flex overflow-x-auto">{chips}</div>
+<div className="ks-scroll-fade h-80 overflow-y-auto">{messages}</div>
+<div className="ks-scroll-fade-x flex overflow-x-auto">{chips}</div>
 ```
 
-Set `--scroll-fade-size` to change the depth of each fade (default `1.5rem`).
+Set `--ks-scroll-fade-size` to change the depth of each fade (default `1.5rem`).
 
 It is a scroll-driven animation reading a mask, so there is no scroll listener
 and no overlay element to click through. Browsers without scroll-driven
 animations show no fade and still scroll.
 
-## shimmer
+## ks-shimmer
 
 A light sweep across text, for live status — "Thinking…", a running tool, a
 job in progress.
 
 ```tsx
-<span className="shimmer text-sm">Thinking…</span>
+<span className="ks-shimmer text-sm">Thinking…</span>
 ```
 
 The text is readable at every frame: the sweep runs between

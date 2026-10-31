@@ -250,12 +250,12 @@ describe("scrollbar skin", () => {
   });
 });
 
-const TYPESET_BLOCK = /@utility typeset\s*\{([\s\S]*?)\n\}/;
+const TYPESET_BLOCK = /@utility ks-typeset\s*\{([\s\S]*?)\n\}/;
 const NESTED_SELECTOR = /^\s*&\s+([^{]+)\{/gm;
 const ORDER_DEPENDENT = /:last-child|:last-of-type|:only-child|~|:has\(/;
 const RAW_COLOR = /#[0-9a-f]{3,8}\b|\b(?:rgb|hsl|oklch)\(/i;
 
-describe("typeset", () => {
+describe("ks-typeset", () => {
   const block = TYPESET_BLOCK.exec(css)?.[1] ?? "";
   const selectors = [...block.matchAll(NESTED_SELECTOR)].map((m) =>
     m[1].trim()
@@ -276,9 +276,9 @@ describe("typeset", () => {
 
   it("reads its knobs with fallbacks and colours only from tokens", () => {
     for (const knob of [
-      "--typeset-size",
-      "--typeset-leading",
-      "--typeset-flow",
+      "--ks-typeset-size",
+      "--ks-typeset-leading",
+      "--ks-typeset-flow",
     ]) {
       expect(block).toMatch(new RegExp(`var\\(${knob},`));
     }
@@ -286,12 +286,13 @@ describe("typeset", () => {
   });
 });
 
-const SHIMMER_BLOCK = /@utility shimmer\s*\{([\s\S]*?)\n\}/;
-const SHIMMER_FROM_TOKEN = /animation:\s*ks-shimmer\s+calc\(var\(--duration-/;
+const SHIMMER_BLOCK = /@utility ks-shimmer\s*\{([\s\S]*?)\n\}/;
+const SHIMMER_FROM_TOKEN =
+  /animation:\s*ks-shimmer-sweep\s+calc\(var\(--duration-/;
 
-describe("scroll-fade and shimmer", () => {
-  it("guard scroll-fade behind scroll-driven animation support", () => {
-    for (const name of ["scroll-fade", "scroll-fade-x"]) {
+describe("ks-scroll-fade and ks-shimmer", () => {
+  it("guard ks-scroll-fade behind scroll-driven animation support", () => {
+    for (const name of ["ks-scroll-fade", "ks-scroll-fade-x"]) {
       const block = new RegExp(
         `@utility ${name}\\s*\\{\\s*@supports \\(animation-timeline: scroll\\(\\)\\)`
       );
@@ -299,8 +300,48 @@ describe("scroll-fade and shimmer", () => {
     }
   });
 
-  it("time shimmer from a duration token, so reduced motion freezes it", () => {
+  it("time ks-shimmer from a duration token, so reduced motion freezes it", () => {
     const shimmer = css.match(SHIMMER_BLOCK)?.[1] ?? "";
     expect(shimmer).toMatch(SHIMMER_FROM_TOKEN);
+  });
+});
+
+/**
+ * Every shadcn project imports `shadcn/tailwind.css`, and a keystone app
+ * built with the shadcn CLI usually has both stylesheets. Tailwind merges two
+ * `@utility` blocks of the same name, so a shared name applies both rules to
+ * one element: shadcn's MessageScroller depends on its own `scroll-fade`,
+ * which keystone briefly defined too. Keystone's names carry `ks-` instead.
+ */
+const SHADCN_CSS = join(
+  SRC_DIR,
+  "..",
+  "..",
+  "..",
+  "node_modules",
+  "shadcn",
+  "dist",
+  "tailwind.css"
+);
+const DEFINITIONS =
+  /@(utility|keyframes|property|custom-variant)\s+([\w-]+(?:-\*)?)/g;
+
+function definedNames(source: string): Set<string> {
+  return new Set(
+    [...source.matchAll(DEFINITIONS)].map((m) => `@${m[1]} ${m[2]}`)
+  );
+}
+
+describe("coexisting with shadcn/tailwind.css", () => {
+  const shadcn = definedNames(readFileSync(SHADCN_CSS, "utf-8"));
+  const keystone = definedNames(css);
+
+  it("reads definitions from both stylesheets", () => {
+    expect(shadcn.has("@utility scroll-fade")).toBe(true);
+    expect(keystone.has("@utility ks-scroll-fade")).toBe(true);
+  });
+
+  it("defines no utility, keyframes, property or variant shadcn also defines", () => {
+    expect([...keystone].filter((name) => shadcn.has(name))).toEqual([]);
   });
 });

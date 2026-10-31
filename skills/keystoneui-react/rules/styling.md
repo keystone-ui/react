@@ -247,19 +247,19 @@ Tailwind v4 changed the default cursor. Always set it explicitly on interactive 
 
 ---
 
-## Rendered markdown: `typeset`, not per-element classes
+## Rendered markdown: `ks-typeset`, not per-element classes
 
 For content you do not author element by element — markdown output, CMS HTML,
-a chat reply — put `typeset` on the container instead of mapping each element
-to utility classes. It ships in `base.css`; tune it with `--typeset-size`,
-`--typeset-leading` and `--typeset-flow` on the container.
+a chat reply — put `ks-typeset` on the container instead of mapping each element
+to utility classes. It ships in `base.css`; tune it with `--ks-typeset-size`,
+`--ks-typeset-leading` and `--ks-typeset-flow` on the container.
 
 ```tsx
 // Incorrect — re-implements typeset, and misses tables, code and quotes
 <ReactMarkdown components={{ h1: (p) => <h1 className="text-4xl font-extrabold" {...p} /> }} />
 
 // Correct
-<div className="typeset [--typeset-size:0.875rem]">
+<div className="ks-typeset [--ks-typeset-size:0.875rem]">
   <ReactMarkdown>{reply}</ReactMarkdown>
 </div>
 ```

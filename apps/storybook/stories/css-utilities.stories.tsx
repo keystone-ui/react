@@ -19,7 +19,7 @@ export const ScrollFade: Story = {
   render: () => (
     <div className="flex gap-6">
       <ul
-        className="scroll-fade h-48 w-56 overflow-y-auto rounded-lg border p-2"
+        className="ks-scroll-fade h-48 w-56 overflow-y-auto rounded-lg border p-2"
         data-testid="scrolls"
       >
         {ROWS.map((row) => (
@@ -29,13 +29,13 @@ export const ScrollFade: Story = {
         ))}
       </ul>
       <ul
-        className="scroll-fade h-48 w-56 overflow-y-auto rounded-lg border p-2"
+        className="ks-scroll-fade h-48 w-56 overflow-y-auto rounded-lg border p-2"
         data-testid="fits"
       >
         <li className="py-1 text-sm">Fits without scrolling</li>
       </ul>
       <div
-        className="scroll-fade-x flex w-56 gap-2 overflow-x-auto rounded-lg border p-2"
+        className="ks-scroll-fade-x flex w-56 gap-2 overflow-x-auto rounded-lg border p-2"
         data-testid="scrolls-x"
       >
         {ROWS.slice(0, 12).map((row) => (
@@ -58,32 +58,32 @@ export const ScrollFade: Story = {
     await expect(getComputedStyle(scrolls).maskImage).toContain("gradient");
 
     // At the top: no start fade, an end fade because there is more below.
-    await waitFor(() => expect(fade(scrolls, "--scroll-fade-end")).toBe(1));
-    await expect(fade(scrolls, "--scroll-fade-start")).toBe(0);
+    await waitFor(() => expect(fade(scrolls, "--ks-scroll-fade-end")).toBe(1));
+    await expect(fade(scrolls, "--ks-scroll-fade-start")).toBe(0);
 
     // At the bottom: the start fade appears and the end fade clears.
     scrolls.scrollTop = scrolls.scrollHeight;
-    await waitFor(() => expect(fade(scrolls, "--scroll-fade-end")).toBe(0));
-    await expect(fade(scrolls, "--scroll-fade-start")).toBe(1);
+    await waitFor(() => expect(fade(scrolls, "--ks-scroll-fade-end")).toBe(0));
+    await expect(fade(scrolls, "--ks-scroll-fade-start")).toBe(1);
 
     // A container with nothing to scroll has an inactive timeline: no fade.
     const fits = canvas.getByTestId("fits");
-    await expect(fade(fits, "--scroll-fade-start")).toBe(0);
-    await expect(fade(fits, "--scroll-fade-end")).toBe(0);
+    await expect(fade(fits, "--ks-scroll-fade-start")).toBe(0);
+    await expect(fade(fits, "--ks-scroll-fade-end")).toBe(0);
   },
 };
 
 export const Shimmer: Story = {
   render: () => (
-    <p className="shimmer font-medium text-sm" data-testid="shimmer">
+    <p className="ks-shimmer font-medium text-sm" data-testid="ks-shimmer">
       Thinking…
     </p>
   ),
   play: async ({ canvasElement }) => {
-    const text = within(canvasElement).getByTestId("shimmer");
+    const text = within(canvasElement).getByTestId("ks-shimmer");
     const style = getComputedStyle(text);
     await expect(style.backgroundClip).toBe("text");
-    await expect(style.animationName).toBe("ks-shimmer");
+    await expect(style.animationName).toBe("ks-shimmer-sweep");
     await expect(style.animationIterationCount).toBe("infinite");
   },
 };

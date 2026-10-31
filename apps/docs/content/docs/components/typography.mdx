@@ -4,43 +4,43 @@ description: Style rendered markdown with one class, or style headings, paragrap
 ---
 
 Two ways to style text. For content you do not write element by element —
-rendered markdown, CMS HTML, a chat reply — put `typeset` on the container. For
+rendered markdown, CMS HTML, a chat reply — put `ks-typeset` on the container. For
 text you compose yourself, use the per-element utility recipes further down.
 
 ## Typeset
 
-`typeset` ships in `@keystoneui/react/base.css`, so there is nothing to install.
+`ks-typeset` ships in `@keystoneui/react/base.css`, so there is nothing to install.
 It styles every heading, paragraph, list, link, quote, code block and table
 inside it from your theme tokens.
 
 <ComponentPreview name="typography-typeset" />
 
 ```tsx
-<article className="typeset">{content}</article>
+<article className="ks-typeset">{content}</article>
 ```
 
 Three custom properties tune it. Set them on the container or any ancestor; every
-size inside is in `em`, so `--typeset-size` rescales the whole block.
+size inside is in `em`, so `--ks-typeset-size` rescales the whole block.
 
 | Property | Default | Controls |
 | --- | --- | --- |
-| `--typeset-size` | `1rem` | Body font size |
-| `--typeset-leading` | `1.7` | Body line height |
-| `--typeset-flow` | `1.25` | Gap between blocks, in `em` |
+| `--ks-typeset-size` | `1rem` | Body font size |
+| `--ks-typeset-leading` | `1.7` | Body line height |
+| `--ks-typeset-flow` | `1.25` | Gap between blocks, in `em` |
 
 Define as many variants as you need — a tighter one for chat, a roomier one for
 docs:
 
 ```css
 .typeset-chat {
-  --typeset-size: 0.875rem;
-  --typeset-leading: 1.6;
-  --typeset-flow: 0.75;
+  --ks-typeset-size: 0.875rem;
+  --ks-typeset-leading: 1.6;
+  --ks-typeset-flow: 0.75;
 }
 ```
 
 ```tsx
-<div className="typeset typeset-chat">{message}</div>
+<div className="ks-typeset typeset-chat">{message}</div>
 ```
 
 Every rule is wrapped in `:where()`, so a class on an element inside — a

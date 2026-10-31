@@ -548,35 +548,35 @@
 }
 
 /* ==========================================================================
- * Typeset — `class="typeset"` styles rendered markdown, CMS HTML and chat
+ * Typeset — `class="ks-typeset"` styles rendered markdown, CMS HTML and chat
  * replies: headings, paragraphs, lists, links, quotes, code, tables.
  *
  * Three knobs, set on the container or any ancestor:
- *   --typeset-size     body font size            (default 1rem)
- *   --typeset-leading  body line height          (default 1.7)
- *   --typeset-flow     gap between blocks, in em (default 1.25)
- * Everything else is in `em`, so one --typeset-size rescales the whole block:
- *   .typeset-chat { --typeset-size: 0.875rem; --typeset-flow: 0.75; }
+ *   --ks-typeset-size     body font size            (default 1rem)
+ *   --ks-typeset-leading  body line height          (default 1.7)
+ *   --ks-typeset-flow     gap between blocks, in em (default 1.25)
+ * Everything else is in `em`, so one --ks-typeset-size rescales the whole block:
+ *   .typeset-chat { --ks-typeset-size: 0.875rem; --ks-typeset-flow: 0.75; }
  *
  * Every element selector is wrapped in :where(), so the rules weigh (0,1,0)
- * — the `.typeset` class alone — and any class on an element inside wins.
+ * — the `.ks-typeset` class alone — and any class on an element inside wins.
  * No rule reads :last-child or a following sibling, so content streamed in
  * at the end never restyles what is already on screen.
  *
  * An @utility rather than a plain class: Tailwind emits it only for apps that
- * use it, and it takes variants (`md:typeset`).
+ * use it, and it takes variants (`md:ks-typeset`).
  * ========================================================================== */
-@utility typeset {
-  font-size: var(--typeset-size, 1rem);
-  line-height: var(--typeset-leading, 1.7);
+@utility ks-typeset {
+  font-size: var(--ks-typeset-size, 1rem);
+  line-height: var(--ks-typeset-leading, 1.7);
   color: var(--color-foreground);
   overflow-wrap: break-word;
 
   & :where(* + *) {
-    margin-top: calc(var(--typeset-flow, 1.25) * 1em);
+    margin-top: calc(var(--ks-typeset-flow, 1.25) * 1em);
   }
   & :where(li + li, li > * + *) {
-    margin-top: calc(var(--typeset-flow, 1.25) * 0.4em);
+    margin-top: calc(var(--ks-typeset-flow, 1.25) * 0.4em);
   }
 
   & :where(h1, h2, h3, h4) {
@@ -606,7 +606,7 @@
     line-height: 1.5;
   }
   & :where(* + h2, * + h3, * + h4) {
-    margin-top: calc(var(--typeset-flow, 1.25) * 1.6em);
+    margin-top: calc(var(--ks-typeset-flow, 1.25) * 1.6em);
   }
 
   & :where(p) {
@@ -690,84 +690,94 @@
 }
 
 /* ==========================================================================
- * scroll-fade / scroll-fade-x — fade a scroll container's edges only where
+ * ks-scroll-fade / ks-scroll-fade-x — fade a scroll container's edges only where
  * there is more to scroll. A scroll-driven animation moves two progress
  * properties from 0 to 1 as the container leaves its start and nears its
  * end, and a mask reads them. No listener, no overlay element, nothing to
  * click through.
  *
- *   --scroll-fade-size   depth of each fade (default 1.5rem)
+ *   --ks-scroll-fade-size   depth of each fade (default 1.5rem)
  *
  * Generalised from TabsList's scroll fade. Browsers without scroll-driven
  * animations get no fade and still scroll.
  * ========================================================================== */
-@property --scroll-fade-start {
+@property --ks-scroll-fade-start {
   syntax: "<number>";
   inherits: false;
   initial-value: 0;
 }
 
-@property --scroll-fade-end {
+@property --ks-scroll-fade-end {
   syntax: "<number>";
   inherits: false;
   initial-value: 0;
 }
 
-@keyframes ks-scroll-fade {
+@keyframes ks-scroll-fade-edges {
   0% {
-    --scroll-fade-start: 0;
-    --scroll-fade-end: 1;
+    --ks-scroll-fade-start: 0;
+    --ks-scroll-fade-end: 1;
   }
   10%,
   90% {
-    --scroll-fade-start: 1;
-    --scroll-fade-end: 1;
+    --ks-scroll-fade-start: 1;
+    --ks-scroll-fade-end: 1;
   }
   100% {
-    --scroll-fade-start: 1;
-    --scroll-fade-end: 0;
+    --ks-scroll-fade-start: 1;
+    --ks-scroll-fade-end: 0;
   }
 }
 
-@utility scroll-fade {
+@utility ks-scroll-fade {
   @supports (animation-timeline: scroll()) {
     mask-image: linear-gradient(
       to bottom,
       transparent,
-      black calc(var(--scroll-fade-start) * var(--scroll-fade-size, 1.5rem)),
       black
-        calc(100% - var(--scroll-fade-end) * var(--scroll-fade-size, 1.5rem)),
+        calc(var(--ks-scroll-fade-start) * var(--ks-scroll-fade-size, 1.5rem)),
+      black
+        calc(
+          100% -
+          var(--ks-scroll-fade-end) *
+          var(--ks-scroll-fade-size, 1.5rem)
+        ),
       transparent
     );
-    animation: ks-scroll-fade linear both;
+    animation: ks-scroll-fade-edges linear both;
     animation-timeline: scroll(self block);
   }
 }
 
-@utility scroll-fade-x {
+@utility ks-scroll-fade-x {
   @supports (animation-timeline: scroll()) {
     mask-image: linear-gradient(
       to right,
       transparent,
-      black calc(var(--scroll-fade-start) * var(--scroll-fade-size, 1.5rem)),
       black
-        calc(100% - var(--scroll-fade-end) * var(--scroll-fade-size, 1.5rem)),
+        calc(var(--ks-scroll-fade-start) * var(--ks-scroll-fade-size, 1.5rem)),
+      black
+        calc(
+          100% -
+          var(--ks-scroll-fade-end) *
+          var(--ks-scroll-fade-size, 1.5rem)
+        ),
       transparent
     );
-    animation: ks-scroll-fade linear both;
+    animation: ks-scroll-fade-edges linear both;
     animation-timeline: scroll(self inline);
   }
 }
 
 /* ==========================================================================
- * shimmer — a light sweep across text, for live status: "Thinking…", a tool
+ * ks-shimmer — a light sweep across text, for live status: "Thinking…", a tool
  * that is running, a job in progress. The text stays readable at every
  * frame: the gradient runs between --muted-foreground and --foreground.
  *
  * The period derives from --duration-slow, so the reduced-motion rule above,
  * which zeroes the duration tokens, freezes it.
  * ========================================================================== */
-@keyframes ks-shimmer {
+@keyframes ks-shimmer-sweep {
   0% {
     background-position: 100% 0;
   }
@@ -776,7 +786,7 @@
   }
 }
 
-@utility shimmer {
+@utility ks-shimmer {
   color: transparent;
   background-image: linear-gradient(
     90deg,
@@ -786,5 +796,5 @@
   );
   background-clip: text;
   background-size: 200% 100%;
-  animation: ks-shimmer calc(var(--duration-slow) * 8) linear infinite;
+  animation: ks-shimmer-sweep calc(var(--duration-slow) * 8) linear infinite;
 }

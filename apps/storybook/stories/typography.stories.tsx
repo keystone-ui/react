@@ -314,24 +314,24 @@ const TYPESET_SAMPLE = (
 );
 
 /**
- * `class="typeset"` from base.css. The play test pins the contract the
- * docs promise: one --typeset-size rescales everything, a class on an
- * element beats the typeset rule, and appended content leaves what is
+ * `class="ks-typeset"` from base.css. The play test pins the contract the
+ * docs promise: one --ks-typeset-size rescales everything, a class on an
+ * element beats the ks-typeset rule, and appended content leaves what is
  * already rendered where it was.
  */
 export const Typeset: Story = {
   render: () => (
     <div className="flex max-w-2xl flex-col gap-10">
-      <article className="typeset" data-testid="typeset-default">
+      <article className="ks-typeset" data-testid="typeset-default">
         {TYPESET_SAMPLE}
       </article>
       <article
-        className="typeset [--typeset-size:0.875rem]"
+        className="ks-typeset [--ks-typeset-size:0.875rem]"
         data-testid="typeset-small"
       >
         {TYPESET_SAMPLE}
       </article>
-      <article className="typeset" data-testid="typeset-override">
+      <article className="ks-typeset" data-testid="typeset-override">
         <p className="text-xs">A class on the element wins.</p>
       </article>
     </div>
@@ -345,7 +345,7 @@ export const Typeset: Story = {
     const small = canvas.getByTestId("typeset-small");
     const h1 = base.querySelector("h1") as HTMLElement;
 
-    // Headings are em-relative to --typeset-size.
+    // Headings are em-relative to --ks-typeset-size.
     await expect(px(h1, "fontSize")).toBeCloseTo(36, 0);
     await expect(
       px(small.querySelector("h1") as HTMLElement, "fontSize")
