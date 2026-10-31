@@ -249,3 +249,39 @@ describe("scrollbar skin", () => {
     expect(css).not.toMatch(BARE_STAR_WEBKIT_SCROLLBAR);
   });
 });
+
+const TYPESET_BLOCK = /@utility typeset\s*\{([\s\S]*?)\n\}/;
+const NESTED_SELECTOR = /^\s*&\s+([^{]+)\{/gm;
+const ORDER_DEPENDENT = /:last-child|:last-of-type|:only-child|~|:has\(/;
+const RAW_COLOR = /#[0-9a-f]{3,8}\b|\b(?:rgb|hsl|oklch)\(/i;
+
+describe("typeset", () => {
+  const block = TYPESET_BLOCK.exec(css)?.[1] ?? "";
+  const selectors = [...block.matchAll(NESTED_SELECTOR)].map((m) =>
+    m[1].trim()
+  );
+
+  it("is an @utility with nested element rules", () => {
+    expect(block).not.toBe("");
+    expect(selectors.length).toBeGreaterThan(15);
+  });
+
+  it("wraps every element selector in :where() so element classes win", () => {
+    expect(selectors.filter((s) => !s.startsWith(":where("))).toEqual([]);
+  });
+
+  it("never depends on what comes after an element, so streaming is stable", () => {
+    expect(selectors.filter((s) => ORDER_DEPENDENT.test(s))).toEqual([]);
+  });
+
+  it("reads its knobs with fallbacks and colours only from tokens", () => {
+    for (const knob of [
+      "--typeset-size",
+      "--typeset-leading",
+      "--typeset-flow",
+    ]) {
+      expect(block).toMatch(new RegExp(`var\\(${knob},`));
+    }
+    expect(block).not.toMatch(RAW_COLOR);
+  });
+});

@@ -2278,6 +2278,11 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("typography-small", m.default),
     }))
   ),
+  "typography-typeset": dynamic(() =>
+    import("./typography/typeset").then((m) => ({
+      default: hydrated("typography-typeset", m.default),
+    }))
+  ),
 };
 
 export function hasDemo(name: string): boolean {

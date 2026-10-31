@@ -9012,6 +9012,18 @@
           "type": "registry:example"
         }
       ]
+    },
+    {
+      "name": "typography-typeset",
+      "type": "registry:example",
+      "title": "Typography Typeset",
+      "description": "Typography example: Typeset.",
+      "files": [
+        {
+          "path": "apps/docs/demos/typography/typeset.tsx",
+          "type": "registry:example"
+        }
+      ]
     }
   ]
 }

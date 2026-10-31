@@ -447,5 +447,6 @@
   "typography-list": "typography/list.tsx",
   "typography-muted": "typography/muted.tsx",
   "typography-paragraph": "typography/paragraph.tsx",
-  "typography-small": "typography/small.tsx"
+  "typography-small": "typography/small.tsx",
+  "typography-typeset": "typography/typeset.tsx"
 }

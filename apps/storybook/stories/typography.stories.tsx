@@ -285,3 +285,92 @@ export const TextSizes: Story = {
     await expect(canvas.getByText("Enter your email address.")).toBeVisible();
   },
 };
+
+const TYPESET_SAMPLE = (
+  <>
+    <h1>The Joke Tax Chronicles</h1>
+    <p>
+      Once upon a time, in a far-off land, there was a very lazy king who spent
+      all day lounging on his throne. One day, his advisors came to him with a{" "}
+      <a href="#problem">problem</a>: the kingdom was running out of money.
+    </p>
+    <h2>The King&apos;s Plan</h2>
+    <p>
+      The king thought long and hard, and finally came up with{" "}
+      <strong>a brilliant plan</strong>: he would tax the jokes in the kingdom.
+    </p>
+    <blockquote>
+      &ldquo;After all,&rdquo; he said, &ldquo;everyone enjoys a good joke, so
+      it&apos;s only fair that they should pay for the privilege.&rdquo;
+    </blockquote>
+    <ul>
+      <li>1st level of puns: 5 gold coins</li>
+      <li>2nd level of jokes: 10 gold coins</li>
+    </ul>
+    <p>
+      Run <code>pnpm add @keystoneui/react</code> to get started.
+    </p>
+  </>
+);
+
+/**
+ * `class="typeset"` from base.css. The play test pins the contract the
+ * docs promise: one --typeset-size rescales everything, a class on an
+ * element beats the typeset rule, and appended content leaves what is
+ * already rendered where it was.
+ */
+export const Typeset: Story = {
+  render: () => (
+    <div className="flex max-w-2xl flex-col gap-10">
+      <article className="typeset" data-testid="typeset-default">
+        {TYPESET_SAMPLE}
+      </article>
+      <article
+        className="typeset [--typeset-size:0.875rem]"
+        data-testid="typeset-small"
+      >
+        {TYPESET_SAMPLE}
+      </article>
+      <article className="typeset" data-testid="typeset-override">
+        <p className="text-xs">A class on the element wins.</p>
+      </article>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const px = (el: Element, prop: "fontSize" | "marginTop") =>
+      Number.parseFloat(getComputedStyle(el)[prop]);
+
+    const base = canvas.getByTestId("typeset-default");
+    const small = canvas.getByTestId("typeset-small");
+    const h1 = base.querySelector("h1") as HTMLElement;
+
+    // Headings are em-relative to --typeset-size.
+    await expect(px(h1, "fontSize")).toBeCloseTo(36, 0);
+    await expect(
+      px(small.querySelector("h1") as HTMLElement, "fontSize")
+    ).toBeCloseTo(31.5, 0);
+
+    // Block rhythm: the first block sits flush, the next gets the flow gap.
+    await expect(px(h1, "marginTop")).toBe(0);
+    await expect(
+      px(base.querySelector("p") as HTMLElement, "marginTop")
+    ).toBeGreaterThan(0);
+
+    // :where() keeps the rules at (0,1,0), so text-xs beats them.
+    const override = canvas
+      .getByTestId("typeset-override")
+      .querySelector("p") as HTMLElement;
+    await expect(px(override, "fontSize")).toBe(12);
+
+    // Streaming: appending a block must not move anything already rendered.
+    const paragraphs = base.querySelectorAll("p");
+    const last = paragraphs.item(paragraphs.length - 1);
+    const before = last.getBoundingClientRect().top;
+    const streamed = document.createElement("p");
+    streamed.textContent = "A streamed token arrives.";
+    base.append(streamed);
+    await expect(last.getBoundingClientRect().top).toBe(before);
+    streamed.remove();
+  },
+};
