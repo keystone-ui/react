@@ -11,9 +11,21 @@ export type CsvColumn<Row> = readonly [
 ];
 
 const NEEDS_QUOTES = /[",\r\n]/;
+const FORMULA_START = /^[=+\-@\t\r]/;
+const NUMBER = /^[+-]?\d+(\.\d+)?$/;
 
-/** RFC 4180: quote a field only when it holds a comma, quote or line break. */
-function csvField(value: string): string {
+/**
+ * One field: neutralised, then quoted per RFC 4180 only when it holds a comma,
+ * quote or line break.
+ *
+ * Neutralised because a spreadsheet runs a cell that starts with `=`, `+`, `-`
+ * or `@` as a formula, and these exports carry text people typed — a name of
+ * `=HYPERLINK(…)` would become a live link in whoever opens the file. A leading
+ * `'` makes Excel and Sheets read it as text. A plain number is left alone, so
+ * `-5` stays a number someone can sum.
+ */
+function csvField(raw: string): string {
+  const value = FORMULA_START.test(raw) && !NUMBER.test(raw) ? `'${raw}` : raw;
   return NEEDS_QUOTES.test(value) ? `"${value.replaceAll('"', '""')}"` : value;
 }
 

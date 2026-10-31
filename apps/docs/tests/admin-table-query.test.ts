@@ -161,6 +161,23 @@ describe("toCsv", () => {
     );
   });
 
+  it("neutralises cells a spreadsheet would run as a formula", () => {
+    const rows = [
+      { a: '=HYPERLINK("http://x")' },
+      { a: "+1" },
+      { a: "@SUM(A1)" },
+      { a: "-5" },
+      { a: "ada@example.com" },
+    ];
+    expect(toCsv(columns, rows).split("\r\n").slice(1, -1)).toEqual([
+      '"\'=HYPERLINK(""http://x"")"',
+      "+1",
+      "'@SUM(A1)",
+      "-5",
+      "ada@example.com",
+    ]);
+  });
+
   it("writes the users export with raw values", () => {
     const [header, first] = toUsersCsv(users.slice(0, 1) as User[]).split(
       "\r\n"
