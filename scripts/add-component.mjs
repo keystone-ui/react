@@ -176,7 +176,7 @@ function addPackageJsonExport(kebab) {
 
 function addTsupEntry(kebab) {
   const tsupPath = join(UI_DIR, "tsup.config.ts");
-  let content = readFileSync(tsupPath, "utf-8");
+  const content = readFileSync(tsupPath, "utf-8");
 
   const entry = `"src/${kebab}.tsx"`;
   if (content.includes(entry)) {
