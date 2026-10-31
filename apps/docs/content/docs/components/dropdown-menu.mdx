@@ -116,6 +116,13 @@ to keep it open, for a menu that reveals more controls once a choice is made.
 </Callout>
 
 
+### Filter
+
+A toolbar filter: the trigger reads `Status: Failed` — the dimension muted, then the value — and opens a radio group. A bare value is ambiguous beside another one ("Failed" next to "Deposit"), and the muted unset value (`Status: All`) lets the filters doing something stand out. See [`admin-01`](/docs/blocks/admin-01) for a full filter row built on this, with removable pills and `+ Add filter`.
+
+<ComponentPreview name="dropdown-menu-filter" />
+
+
 ### Submenu
 
 Nest menus with sub-triggers for hierarchical navigation:

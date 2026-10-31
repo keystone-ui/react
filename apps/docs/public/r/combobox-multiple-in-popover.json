@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "combobox-multiple-in-popover",
+  "title": "Combobox Multiple In Popover",
+  "description": "Combobox example: Multiple In Popover.",
+  "registryDependencies": [
+    "button",
+    "combobox",
+    "popover"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/combobox/multiple-in-popover.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Combobox,\n  ComboboxChip,\n  ComboboxChips,\n  ComboboxChipsInput,\n  ComboboxEmpty,\n  ComboboxItem,\n  ComboboxList,\n  ComboboxValue,\n} from \"@keystoneui/react/combobox\";\nimport {\n  Popover,\n  PopoverContent,\n  PopoverTrigger,\n} from \"@keystoneui/react/popover\";\nimport {\n  ChevronDown as ChevronDownIcon,\n  CircleX as CircleXIcon,\n} from \"lucide-react\";\nimport { useState } from \"react\";\n\nconst labels = [\"Bug\", \"Feature\", \"Docs\", \"Design\", \"Performance\"] as const;\ntype Label = (typeof labels)[number];\n\nexport default function ComboboxMultipleInPopover() {\n  const [value, setValue] = useState<Label[]>([\"Bug\"]);\n\n  return (\n    <Popover>\n      <PopoverTrigger render={<Button size=\"sm\" variant=\"outline\" />}>\n        <span className=\"font-normal text-muted-foreground\">Labels:</span>\n        {value.length === 0\n          ? \"All\"\n          : `${value[0]}${value.length > 1 ? `, +${value.length - 1}` : \"\"}`}\n        <ChevronDownIcon className=\"text-muted-foreground\" />\n      </PopoverTrigger>\n      <PopoverContent align=\"start\" className=\"w-64 p-1\">\n        {/* `inline` renders the list in place rather than in a popup of its\n            own: the popover is already the popup. Picked items stay in the\n            list with a check, so nothing moves under the pointer. */}\n        <Combobox\n          autoHighlight\n          inline\n          items={labels}\n          multiple\n          onValueChange={(next: Label[]) => setValue(next)}\n          open\n          value={value}\n        >\n          <div className=\"px-1 py-1\">\n            <ComboboxChips className=\"min-h-8 py-0.5 pe-1\">\n              <ComboboxValue>\n                {(values: Label[]) => (\n                  <>\n                    {values.map((item) => (\n                      <ComboboxChip key={item}>{item}</ComboboxChip>\n                    ))}\n                    <ComboboxChipsInput\n                      aria-label=\"Search labels\"\n                      placeholder={values.length > 0 ? \"\" : \"Search…\"}\n                    />\n                  </>\n                )}\n              </ComboboxValue>\n              {value.length > 0 && (\n                <Button\n                  aria-label=\"Clear labels\"\n                  className=\"ms-auto shrink-0 rounded-full text-muted-foreground\"\n                  onClick={() => setValue([])}\n                  size=\"icon-xs\"\n                  variant=\"ghost\"\n                >\n                  <CircleXIcon />\n                </Button>\n              )}\n            </ComboboxChips>\n          </div>\n          <ComboboxEmpty className=\"px-2 py-1.5 text-muted-foreground text-sm\">\n            No match\n          </ComboboxEmpty>\n          <ComboboxList className=\"max-h-none p-0\" data-size=\"compact\">\n            {(item: Label) => (\n              <ComboboxItem key={item} value={item}>\n                {item}\n              </ComboboxItem>\n            )}\n          </ComboboxList>\n        </Combobox>\n      </PopoverContent>\n    </Popover>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

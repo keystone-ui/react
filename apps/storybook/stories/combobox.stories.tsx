@@ -25,9 +25,16 @@ import {
   FieldLabel,
 } from "@keystoneui/react/field";
 import { InputGroupAddon } from "@keystoneui/react/input-group";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@keystoneui/react/popover";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { countries as countryDataList } from "country-data-list";
 import {
+  ChevronDown as ChevronDownIcon,
+  CircleX as CircleXIcon,
   Globe as GlobeIcon,
   Plus as PlusIcon,
   Search as SearchIcon,
@@ -1126,6 +1133,113 @@ export const CompactItems: Story = {
       description: {
         story:
           'Use `size="compact"` on `ComboboxContent` to reduce item height from 36px to 32px.',
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Multiple Selection In A Popover
+// =============================================================================
+const LABELS = ["Bug", "Feature", "Docs", "Design", "Performance"] as const;
+type IssueLabel = (typeof LABELS)[number];
+
+export const MultipleInPopover: Story = {
+  render: () => {
+    const [value, setValue] = useState<IssueLabel[]>(["Bug"]);
+
+    return (
+      <Popover>
+        <PopoverTrigger render={<Button size="sm" variant="outline" />}>
+          <span className="font-normal text-muted-foreground">Labels:</span>
+          {value.length === 0
+            ? "All"
+            : `${value[0]}${value.length > 1 ? `, +${value.length - 1}` : ""}`}
+          <ChevronDownIcon className="text-muted-foreground" />
+        </PopoverTrigger>
+        <PopoverContent align="start" className="w-64 p-1">
+          <Combobox
+            autoHighlight
+            inline
+            items={LABELS}
+            multiple
+            onValueChange={(next: IssueLabel[]) => setValue(next)}
+            open
+            value={value}
+          >
+            <div className="px-1 py-1">
+              <ComboboxChips className="min-h-8 py-0.5 pe-1">
+                <ComboboxValue>
+                  {(values: IssueLabel[]) => (
+                    <>
+                      {values.map((item) => (
+                        <ComboboxChip key={item}>{item}</ComboboxChip>
+                      ))}
+                      <ComboboxChipsInput
+                        aria-label="Search labels"
+                        placeholder={values.length > 0 ? "" : "Search…"}
+                      />
+                    </>
+                  )}
+                </ComboboxValue>
+                {value.length > 0 && (
+                  <Button
+                    aria-label="Clear labels"
+                    className="ms-auto shrink-0 rounded-full text-muted-foreground"
+                    onClick={() => setValue([])}
+                    size="icon-xs"
+                    variant="ghost"
+                  >
+                    <CircleXIcon />
+                  </Button>
+                )}
+              </ComboboxChips>
+            </div>
+            <ComboboxEmpty className="px-2 py-1.5 text-muted-foreground text-sm">
+              No match
+            </ComboboxEmpty>
+            <ComboboxList className="max-h-none p-0" data-size="compact">
+              {(item: IssueLabel) => (
+                <ComboboxItem key={item} value={item}>
+                  {item}
+                </ComboboxItem>
+              )}
+            </ComboboxList>
+          </Combobox>
+        </PopoverContent>
+      </Popover>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(document.body);
+    const trigger = canvas.getByRole("button", { name: /labels:/i });
+    await expect(trigger).toHaveTextContent("Labels:Bug");
+
+    await userEvent.click(trigger);
+    await userEvent.click(
+      await body.findByRole("option", { name: /^feature$/i })
+    );
+
+    // The popover stays open between picks, and the trigger counts the rest.
+    // Waited on: the popup may still be animating in when the pick lands.
+    await waitFor(async () => {
+      await expect(body.getByRole("option", { name: /^bug$/i })).toBeVisible();
+      await expect(trigger).toHaveTextContent("Labels:Bug, +1");
+    });
+
+    await userEvent.click(
+      body.getByRole("button", { name: /^clear labels$/i })
+    );
+    await waitFor(async () => {
+      await expect(trigger).toHaveTextContent("Labels:All");
+    });
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A multi-select filter, Notion-style: an `inline` combobox inside a popover, with chips in the search field and picked items kept in the list.",
       },
     },
   },

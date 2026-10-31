@@ -92,6 +92,12 @@ Multi-select chips combobox that lets the user create a new value when their typ
 
 <ComponentPreview name="combobox-multi-with-create" />
 
+### Multiple Selection In A Popover
+
+A multi-select filter, Notion-style: a trigger opens a popover holding an `inline` combobox, so the list renders in place rather than in a second popup. Chosen values show as chips in the search field, picked items stay in the list with a check — nothing shifts under the pointer between picks — and the trigger names its first value and counts the rest. The [`admin-01`](/docs/blocks/admin-01) payments table uses this for its Currency filter.
+
+<ComponentPreview name="combobox-multiple-in-popover" />
+
 
 ### With Clear Button
 
@@ -159,12 +165,6 @@ Combobox used within a form:
 
 RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/rtl) for what works today.
 
-## API Reference
-
-### Combobox
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
 
 {/* backlinks:start */}
 
@@ -173,6 +173,12 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 - [Admin 01](/docs/blocks/admin-01) — An admin panel — collapsible sidebar shell, topbar with breadcrumb, an overview with KPI tiles and a signups chart, and users and payments tables sharing one toolbar design.
 
 {/* backlinks:end */}
+## API Reference
+
+### Combobox
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
 | `value` | `string \| string[]` | - | Controlled selected value(s) |
 | `onValueChange` | `(value: string \| string[]) => void` | - | Callback when value changes |
 | `multiple` | `boolean` | `false` | Allow multiple selections |

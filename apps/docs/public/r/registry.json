@@ -4134,6 +4134,23 @@
       ]
     },
     {
+      "name": "combobox-multiple-in-popover",
+      "type": "registry:example",
+      "title": "Combobox Multiple In Popover",
+      "description": "Combobox example: Multiple In Popover.",
+      "registryDependencies": [
+        "button",
+        "combobox",
+        "popover"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/combobox/multiple-in-popover.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
       "name": "combobox-multiple",
       "type": "registry:example",
       "title": "Combobox Multiple",
@@ -4815,6 +4832,22 @@
       "files": [
         {
           "path": "apps/docs/demos/dropdown-menu/destructive.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu-filter",
+      "type": "registry:example",
+      "title": "Dropdown Menu Filter",
+      "description": "Dropdown Menu example: Filter.",
+      "registryDependencies": [
+        "button",
+        "dropdown-menu"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/dropdown-menu/filter.tsx",
           "type": "registry:example"
         }
       ]

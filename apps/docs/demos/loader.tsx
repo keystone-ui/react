@@ -718,6 +718,11 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("combobox-multiple", m.default),
     }))
   ),
+  "combobox-multiple-in-popover": dynamic(() =>
+    import("./combobox/multiple-in-popover").then((m) => ({
+      default: hydrated("combobox-multiple-in-popover", m.default),
+    }))
+  ),
   "combobox-popup": dynamic(() =>
     import("./combobox/popup").then((m) => ({
       default: hydrated("combobox-popup", m.default),
@@ -921,6 +926,11 @@ const loaders: Record<string, ComponentType> = {
   "dropdown-menu-destructive": dynamic(() =>
     import("./dropdown-menu/destructive").then((m) => ({
       default: hydrated("dropdown-menu-destructive", m.default),
+    }))
+  ),
+  "dropdown-menu-filter": dynamic(() =>
+    import("./dropdown-menu/filter").then((m) => ({
+      default: hydrated("dropdown-menu-filter", m.default),
     }))
   ),
   "dropdown-menu-radio-group": dynamic(() =>

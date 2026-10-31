@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dropdown-menu-filter",
+  "title": "Dropdown Menu Filter",
+  "description": "Dropdown Menu example: Filter.",
+  "registryDependencies": [
+    "button",
+    "dropdown-menu"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/dropdown-menu/filter.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  DropdownMenu,\n  DropdownMenuContent,\n  DropdownMenuGroup,\n  DropdownMenuRadioGroup,\n  DropdownMenuRadioItem,\n  DropdownMenuTrigger,\n} from \"@keystoneui/react/dropdown-menu\";\nimport { ChevronDown as ChevronDownIcon } from \"lucide-react\";\nimport { useState } from \"react\";\n\nconst statuses = [\n  { label: \"All\", value: \"all\" },\n  { label: \"Completed\", value: \"completed\" },\n  { label: \"In progress\", value: \"in-progress\" },\n  { label: \"Failed\", value: \"failed\" },\n];\n\nexport default function DropdownMenuFilter() {\n  const [status, setStatus] = useState(\"all\");\n  const current = statuses.find((option) => option.value === status);\n\n  return (\n    <DropdownMenu>\n      {/* The trigger names the dimension, muted, then the value — \"Status:\n          Failed\", never a bare \"Failed\" beside another bare value. Unset, the\n          value is muted too, so a filter doing something stands out. */}\n      <DropdownMenuTrigger render={<Button size=\"sm\" variant=\"outline\" />}>\n        <span className=\"font-normal text-muted-foreground\">Status:</span>\n        <span\n          className={\n            status === \"all\" ? \"font-normal text-muted-foreground\" : undefined\n          }\n        >\n          {current?.label}\n        </span>\n        <ChevronDownIcon className=\"text-muted-foreground\" />\n      </DropdownMenuTrigger>\n      <DropdownMenuContent align=\"start\" className=\"min-w-44\">\n        <DropdownMenuGroup>\n          {/* Radio items close the menu on pick: a filter is single-select. */}\n          <DropdownMenuRadioGroup onValueChange={setStatus} value={status}>\n            {statuses.map((option) => (\n              <DropdownMenuRadioItem key={option.value} value={option.value}>\n                {option.label}\n              </DropdownMenuRadioItem>\n            ))}\n          </DropdownMenuRadioGroup>\n        </DropdownMenuGroup>\n      </DropdownMenuContent>\n    </DropdownMenu>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -21,6 +21,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
   Bell as BellIcon,
   Building2 as Building2Icon,
+  ChevronDown as ChevronDownIcon,
   CreditCard as CreditCardIcon,
   Download as DownloadIcon,
   Eye as EyeIcon,
@@ -1139,6 +1140,75 @@ export const Complex: Story = {
       description: {
         story:
           "A richer example combining groups, icons, shortcuts, submenus, checkboxes, and radio items. Shown in both default and compact sizes.",
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Filter
+// =============================================================================
+const FILTER_STATUSES = [
+  { label: "All", value: "all" },
+  { label: "Completed", value: "completed" },
+  { label: "In progress", value: "in-progress" },
+  { label: "Failed", value: "failed" },
+];
+
+export const Filter: Story = {
+  render: () => {
+    const [status, setStatus] = useState("all");
+    const current = FILTER_STATUSES.find((option) => option.value === status);
+
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger render={<Button size="sm" variant="outline" />}>
+          <span className="font-normal text-muted-foreground">Status:</span>
+          <span
+            className={
+              status === "all" ? "font-normal text-muted-foreground" : undefined
+            }
+          >
+            {current?.label}
+          </span>
+          <ChevronDownIcon className="text-muted-foreground" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" className="min-w-44">
+          <DropdownMenuGroup>
+            <DropdownMenuRadioGroup onValueChange={setStatus} value={status}>
+              {FILTER_STATUSES.map((option) => (
+                <DropdownMenuRadioItem key={option.value} value={option.value}>
+                  {option.label}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(document.body);
+    const trigger = canvas.getByRole("button", { name: /status:/i });
+    await expect(trigger).toHaveTextContent("Status:All");
+
+    await userEvent.click(trigger);
+    await userEvent.click(
+      await body.findByRole("menuitemradio", { name: /^failed$/i })
+    );
+
+    // A pick closes the menu and the trigger names the value.
+    await waitFor(async () => {
+      await expect(body.queryByRole("menu")).not.toBeInTheDocument();
+    });
+    await expect(trigger).toHaveTextContent("Status:Failed");
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "A toolbar filter: the trigger names the dimension, muted, then the value, and opens a radio group that closes on pick.",
       },
     },
   },
