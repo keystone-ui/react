@@ -52,6 +52,13 @@ export const DEFAULT_CHECKS = [
   },
   { path: "/r/demos/button", status: 200, bodyIncludes: '"name":"button"' },
   { path: "/r/demos/smoke-docs-missing", status: 404 },
+  // Computed per request from the code, so it only runs on the Worker.
+  {
+    path: "/r/theme/k1_zinc_0.21_0.006_285.885_default_geist.json",
+    status: 200,
+    bodyIncludes: '"type":"registry:theme"',
+  },
+  { path: "/r/theme/k1_smoke-docs-invalid.json", status: 404 },
   { path: "/__smoke-docs-missing-route", status: 404 },
   { path: "/docs/components/__smoke-docs-missing.mdx", status: 404 },
 ];

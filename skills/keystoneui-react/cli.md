@@ -23,6 +23,9 @@ npx shadcn@latest add https://keystoneui.io/r/table-with-pagination.json
 # Verify
 keystoneui audit                   # post-install checklist
 
+# Theme — a code from the theme builder's Code panel
+keystoneui theme k1_slate_0.55_0.2_262.5_large_inter --only theme
+
 # Configure MCP client
 keystoneui init --client claude    # or cursor | vscode | codex | opencode
 ```

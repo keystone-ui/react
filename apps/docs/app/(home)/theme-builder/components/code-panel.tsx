@@ -1,5 +1,6 @@
 "use client";
 
+import { CopyButton } from "@keystoneui/react/copy-button";
 import {
   Check as CheckIcon,
   Clipboard as ClipboardIcon,
@@ -9,6 +10,7 @@ import { useDeferredValue, useState } from "react";
 
 import type { ThemeState } from "../hooks/use-theme-state";
 import { generateCssOutput } from "../utils/generate-css-output";
+import { encodeThemeCode } from "../utils/theme-code";
 
 interface CodePanelProps {
   isVisible: boolean;
@@ -20,6 +22,7 @@ export function CodePanel({ state, isVisible, onClose }: CodePanelProps) {
   const [copied, setCopied] = useState(false);
   const cssCode = generateCssOutput(state);
   const deferredCss = useDeferredValue(cssCode);
+  const installCommand = `npx shadcn@latest add https://keystoneui.io/r/theme/${encodeThemeCode(state)}.json`;
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(deferredCss);
@@ -58,6 +61,19 @@ export function CodePanel({ state, isVisible, onClose }: CodePanelProps) {
             <XIcon className="size-4" />
           </button>
         </div>
+      </div>
+
+      {/* Install by code: the code is the whole theme, served as a registry item */}
+      <div className="flex items-center gap-2 border-border border-b bg-muted/40 px-4 py-2">
+        <code className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-muted-foreground text-xs">
+          {installCommand}
+        </code>
+        <CopyButton
+          aria-label="Copy install command"
+          size="icon-xs"
+          value={installCommand}
+          variant="ghost"
+        />
       </div>
 
       {/* Code */}

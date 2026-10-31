@@ -1,5 +1,4 @@
 import { fontMap, radiusCssMap } from "../constants";
-import type { ThemeState } from "../hooks/use-theme-state";
 import {
   baseColors,
   calculatePrimaryForeground,
@@ -9,6 +8,7 @@ import {
   sidebarTokens,
   statusTokens,
 } from "../theme-data";
+import type { ThemeSettings } from "./theme-code";
 
 const DEFAULT_RADIUS = "0.625rem";
 
@@ -44,11 +44,9 @@ function resolveDarkPrimary(
   };
 }
 
-/**
- * Generate copy-pasteable CSS that users add to their global.css.
- */
-export function generateCssOutput(state: ThemeState): string {
-  const { base, primaryL, primaryC, primaryH, radius, font } = state;
+/** The `:root` and `.dark` custom properties a theme resolves to. */
+export function resolveThemeVars(settings: ThemeSettings) {
+  const { base, primaryL, primaryC, primaryH, radius, font } = settings;
 
   const baseColor = baseColors[base];
 
@@ -87,6 +85,15 @@ export function generateCssOutput(state: ThemeState): string {
     ...statusTokens.dark,
     ...sidebarTokens.dark,
   };
+
+  return { darkVars, fontConfig, lightVars };
+}
+
+/**
+ * Generate copy-pasteable CSS that users add to their global.css.
+ */
+export function generateCssOutput(state: ThemeSettings): string {
+  const { darkVars, fontConfig, lightVars } = resolveThemeVars(state);
 
   const indent = "  ";
   const lightBlock = Object.entries(lightVars)

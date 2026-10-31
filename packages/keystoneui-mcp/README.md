@@ -41,6 +41,9 @@ npx shadcn@latest add https://keystoneui.io/r/table-with-pagination.json
 
 # Verify
 npx keystoneui audit
+
+# Theme (a code from https://keystoneui.io/theme-builder)
+npx keystoneui theme k1_slate_0.55_0.2_262.5_large_inter
 ```
 
 ## Verbs
@@ -55,6 +58,7 @@ npx keystoneui audit
 | `docs <name>` | Fetch the LLM-resolved MDX page (`/llms.mdx/docs/components/<name>`) |
 | `audit` | Print the post-install checklist |
 | `blocks [<filter>]` | List or filter full-page blocks |
+| `theme <code> [--only theme,font]` | Decode a theme-builder code and print its `shadcn add` command |
 
 Run `keystoneui help` for the full list. Without any verb the binary launches the MCP stdio server.
 

@@ -285,7 +285,17 @@ Add the \`dark\` class to a parent element.
 Get the full style definition:
 \`\`\`bash
 npx shadcn@latest add ${registryUrl}/default.json
-\`\`\``;
+\`\`\`
+
+## Custom themes
+
+The theme builder (${config.docsUrl}/theme-builder) encodes a theme as a code,
+\`k1_<base>_<L>_<C>_<H>_<radius>_<font>\`, served as a \`registry:theme\` item.
+Install one, or only its colours (\`?only=theme\`) or font (\`?only=font\`):
+\`\`\`bash
+npx shadcn@latest add ${registryUrl}/theme/<code>.json
+\`\`\`
+\`keystoneui theme <code>\` prints the decoded settings and this command.`;
 }
 
 export function auditChecklistTool() {

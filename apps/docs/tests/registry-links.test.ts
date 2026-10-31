@@ -14,6 +14,7 @@ import { join, relative, sep } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { decodeThemeCode } from "@/app/(home)/theme-builder/utils/theme-code";
 import { builtItemPath, REPO_ROOT } from "./registry-paths";
 
 /** Trees that document or generate registry install commands. */
@@ -162,6 +163,19 @@ function collectReferences(): Reference[] {
 const references = collectReferences();
 const uniqueItems = [...new Set(references.map((r) => r.item))].sort();
 
+const THEME_CODE_PREFIX = "theme/";
+
+/**
+ * Built items are files. `/r/theme/<code>.json` is computed by a route from
+ * the code itself, so a theme-builder code resolves when it decodes.
+ */
+function resolves(item: string): boolean {
+  if (item.startsWith(THEME_CODE_PREFIX)) {
+    return decodeThemeCode(item.slice(THEME_CODE_PREFIX.length)) !== null;
+  }
+  return existsSync(builtItemPath(item));
+}
+
 describe("registry link integrity", () => {
   it("finds registry URLs to check", () => {
     // A silent drop to zero would make this whole suite vacuous.
@@ -207,7 +221,7 @@ describe("registry link integrity", () => {
 
   it("resolves every referenced registry URL to a built file", () => {
     const broken = references
-      .filter(({ item }) => !existsSync(builtItemPath(item)))
+      .filter(({ item }) => !resolves(item))
       .map(({ item, source }) => `${source} -> /r/${item}.json`)
       .sort();
 

@@ -1,12 +1,7 @@
 "use client";
 
-import {
-  parseAsFloat,
-  parseAsString,
-  parseAsStringLiteral,
-  useQueryStates,
-} from "nuqs";
-import { radiusIds } from "../constants";
+import { parseAsFloat, parseAsStringLiteral, useQueryStates } from "nuqs";
+import { fontIds, radiusIds } from "../constants";
 import { baseColorIds } from "../theme-data";
 
 /**
@@ -26,7 +21,7 @@ export function useThemeState() {
       radius: parseAsStringLiteral(radiusIds).withDefault("default"),
       // Matches the site the builder lives in, so an untouched builder shows
       // what keystone actually looks like.
-      font: parseAsString.withDefault("geist"),
+      font: parseAsStringLiteral(fontIds).withDefault("geist"),
       mode: parseAsStringLiteral(["light", "dark"] as const).withDefault(
         "dark"
       ),

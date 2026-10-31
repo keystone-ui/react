@@ -2,6 +2,12 @@ import { loadProjectConfig } from "./config.js";
 import { runInfo } from "./info.js";
 import { init } from "./init.js";
 import {
+  parseThemeCode,
+  parseThemeParts,
+  themeBuilderUrl,
+  themeInstallCommand,
+} from "./theme.js";
+import {
   auditChecklistTool,
   getExamplesTool,
   listComponentsTool,
@@ -19,6 +25,7 @@ const VERBS = [
   "docs",
   "audit",
   "blocks",
+  "theme",
 ] as const;
 
 type Verb = (typeof VERBS)[number];
@@ -110,6 +117,9 @@ function printUsage(): void {
   );
   console.log(
     "  blocks [<filter>] [--category C]     List or filter full-page blocks"
+  );
+  console.log(
+    "  theme <code> [--only theme,font]     Install a theme-builder code via shadcn"
   );
   console.log("");
   console.log("Without a verb, launches the MCP stdio server.");
@@ -246,6 +256,31 @@ async function runBlocks(args: string[]): Promise<void> {
   console.log(text);
 }
 
+function runTheme(args: string[]): void {
+  const { flags, positional } = parseArgs(args);
+  const code = positional[0];
+  const fields = code ? parseThemeCode(code) : null;
+  if (!(code && fields)) {
+    console.error(
+      "Usage: keystoneui theme <code> [--only theme,font]\n" +
+        "Copy a code from https://keystoneui.io/theme-builder (Code panel)."
+    );
+    process.exitCode = 1;
+    return;
+  }
+  const siteUrl = process.env.KEYSTONEUI_URL ?? "https://keystoneui.io";
+  const only = parseThemeParts(flags.only);
+  console.log(`Theme ${code}`);
+  console.log(
+    `  base ${fields.base} · primary ${fields.primary} · radius ${fields.radius} · font ${fields.font}`
+  );
+  console.log("");
+  console.log("Install (writes the tokens into your global CSS):");
+  console.log(`  ${themeInstallCommand(code, siteUrl, only)}`);
+  console.log("");
+  console.log(`Edit: ${themeBuilderUrl(code, siteUrl)}`);
+}
+
 export async function runCli(args: string[]): Promise<void> {
   const verb = args[0];
   const rest = args.slice(1);
@@ -290,6 +325,9 @@ export async function runCli(args: string[]): Promise<void> {
       return;
     case "blocks":
       await runBlocks(rest);
+      return;
+    case "theme":
+      runTheme(rest);
       return;
     default: {
       const exhaustive: never = verb;

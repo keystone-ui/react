@@ -42,6 +42,22 @@ This generates the complete theme CSS in your project. See [Registry](/docs/inst
 
 **Manual setup:** Copy the token blocks from the [Customization](/docs/theming/customization) page into your CSS.
 
+### From the theme builder
+
+The [theme builder](/theme-builder) turns your choices into a short code — base
+colour, primary, radius and font — and serves that code as a registry theme.
+Copy the install command from its **Code** panel:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/theme/k1_slate_0.55_0.2_262.5_large_inter.json
+```
+
+Add `?only=theme` to take only the colours and radius, or `?only=font` to take
+only the font, when you want to keep the rest of your setup. The code is the
+whole theme, so it is also what to paste into an issue or hand to an agent:
+`keystoneui theme <code>` prints the decoded settings, this command, and a link
+back into the builder.
+
 ## Token Categories
 
 ### Colors
