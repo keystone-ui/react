@@ -7,7 +7,8 @@
       "perSizeStoriesVsSizesDemo": "stories Small/Medium/Large → demo sizes.tsx. Story-only by design.",
       "singularStoryVsPluralDemo": "story WithIcon → demo with-icons. Treat as conceptual match; allowlisted on story side.",
       "basicStoryVsDefaultDemo": "story Basic → demo default. Conceptual match; allowlisted.",
-      "regressionFixture": "story exists to host a play() regression test for a fixed bug (date-input callback-ref: forwarded callback ref must still reach the picker button). Not a docs variant; story-only by design."
+      "regressionFixture": "story exists to host a play() regression test for a fixed bug (date-input callback-ref: forwarded callback ref must still reach the picker button). Not a docs variant; story-only by design.",
+      "cssUtilityFixture": "CSS-only utilities in base.css (scroll-fade, shimmer) have no component and no demo directory; their story hosts the browser play() test, and the docs page is theming/utilities."
     }
   },
   "storyOnly": {
@@ -116,6 +117,7 @@
     ],
     "command": ["basic", "with-groups"],
     "copy-button": ["confirms-through-its-accessible-name"],
+    "css utilities": ["scroll-fade", "shimmer"],
     "date input": [
       "callback-ref",
       "default",

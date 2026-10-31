@@ -688,3 +688,103 @@
     font-weight: 600;
   }
 }
+
+/* ==========================================================================
+ * scroll-fade / scroll-fade-x — fade a scroll container's edges only where
+ * there is more to scroll. A scroll-driven animation moves two progress
+ * properties from 0 to 1 as the container leaves its start and nears its
+ * end, and a mask reads them. No listener, no overlay element, nothing to
+ * click through.
+ *
+ *   --scroll-fade-size   depth of each fade (default 1.5rem)
+ *
+ * Generalised from TabsList's scroll fade. Browsers without scroll-driven
+ * animations get no fade and still scroll.
+ * ========================================================================== */
+@property --scroll-fade-start {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --scroll-fade-end {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@keyframes ks-scroll-fade {
+  0% {
+    --scroll-fade-start: 0;
+    --scroll-fade-end: 1;
+  }
+  10%,
+  90% {
+    --scroll-fade-start: 1;
+    --scroll-fade-end: 1;
+  }
+  100% {
+    --scroll-fade-start: 1;
+    --scroll-fade-end: 0;
+  }
+}
+
+@utility scroll-fade {
+  @supports (animation-timeline: scroll()) {
+    mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      black calc(var(--scroll-fade-start) * var(--scroll-fade-size, 1.5rem)),
+      black
+        calc(100% - var(--scroll-fade-end) * var(--scroll-fade-size, 1.5rem)),
+      transparent
+    );
+    animation: ks-scroll-fade linear both;
+    animation-timeline: scroll(self block);
+  }
+}
+
+@utility scroll-fade-x {
+  @supports (animation-timeline: scroll()) {
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black calc(var(--scroll-fade-start) * var(--scroll-fade-size, 1.5rem)),
+      black
+        calc(100% - var(--scroll-fade-end) * var(--scroll-fade-size, 1.5rem)),
+      transparent
+    );
+    animation: ks-scroll-fade linear both;
+    animation-timeline: scroll(self inline);
+  }
+}
+
+/* ==========================================================================
+ * shimmer — a light sweep across text, for live status: "Thinking…", a tool
+ * that is running, a job in progress. The text stays readable at every
+ * frame: the gradient runs between --muted-foreground and --foreground.
+ *
+ * The period derives from --duration-slow, so the reduced-motion rule above,
+ * which zeroes the duration tokens, freezes it.
+ * ========================================================================== */
+@keyframes ks-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@utility shimmer {
+  color: transparent;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-muted-foreground) 35%,
+    var(--color-foreground) 50%,
+    var(--color-muted-foreground) 65%
+  );
+  background-clip: text;
+  background-size: 200% 100%;
+  animation: ks-shimmer calc(var(--duration-slow) * 8) linear infinite;
+}

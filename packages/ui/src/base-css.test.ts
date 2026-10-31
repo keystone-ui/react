@@ -285,3 +285,22 @@ describe("typeset", () => {
     expect(block).not.toMatch(RAW_COLOR);
   });
 });
+
+const SHIMMER_BLOCK = /@utility shimmer\s*\{([\s\S]*?)\n\}/;
+const SHIMMER_FROM_TOKEN = /animation:\s*ks-shimmer\s+calc\(var\(--duration-/;
+
+describe("scroll-fade and shimmer", () => {
+  it("guard scroll-fade behind scroll-driven animation support", () => {
+    for (const name of ["scroll-fade", "scroll-fade-x"]) {
+      const block = new RegExp(
+        `@utility ${name}\\s*\\{\\s*@supports \\(animation-timeline: scroll\\(\\)\\)`
+      );
+      expect(css, name).toMatch(block);
+    }
+  });
+
+  it("time shimmer from a duration token, so reduced motion freezes it", () => {
+    const shimmer = css.match(SHIMMER_BLOCK)?.[1] ?? "";
+    expect(shimmer).toMatch(SHIMMER_FROM_TOKEN);
+  });
+});
