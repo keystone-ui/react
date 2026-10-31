@@ -4,7 +4,6 @@ import { Badge } from "@keystoneui/react/badge";
 import { Button } from "@keystoneui/react/button";
 import {
   Drawer,
-  DrawerBody,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
@@ -18,31 +17,20 @@ import {
   StepperStep,
   useStepper,
 } from "@keystoneui/react/stepper";
-import { cn } from "@keystoneui/react/utils";
 import { Funnel as FilterIcon } from "lucide-react";
 import { useState } from "react";
 
 import {
-  appliedFilters,
+  activeCount,
   defaultDirection,
   directionLabel,
   FILTERS,
-  type FilterKey,
   hasActiveFilters,
-  ROLES,
-  roleLabel,
-  SEATS_OPTIONS,
-  type SeatsFilter,
+  OPTIONS,
+  type OptionKey,
   SORT_KEYS,
-  type SortDirection,
-  type SortOptionId,
   type SortState,
-  STATUSES,
-  type StatusFilter,
   sortLabel,
-  statusLabel,
-  TWO_FACTOR_OPTIONS,
-  type TwoFactorFilter,
   type UserFilters,
   type UserSortKey,
 } from "./admin-filters";
@@ -54,45 +42,35 @@ import {
   Options,
   StepHeader,
 } from "./drawer-parts";
-import { statusLabels } from "./mock-admin";
+import { directionsFor, type SortDirection } from "./sort";
 
 interface AdminFiltersDrawerProps {
   filters: UserFilters;
   onChange: (patch: Partial<UserFilters>) => void;
   onClear: () => void;
-  onSortChange: (id: SortOptionId) => void;
-  /**
-   * `down` gives a bottom sheet, `right` a side panel. Rendered twice behind a
-   * CSS fork rather than switched at runtime — see the note on the component.
-   */
-  placement: "down" | "right";
-  sort: SortState | null;
+  onSortChange: (sort: SortState) => void;
+  sort: SortState;
 }
 
+/** The single-select filters, in `FILTERS` order; Created and Sort follow. */
+const OPTION_STEPS: readonly OptionKey[] = [
+  "role",
+  "status",
+  "seats",
+  "twoFactor",
+];
+
 /**
- * The filter surface, at every width.
+ * The phone half of the users toolbar — the same bottom sheet and `Stepper`
+ * drilldown as the payments one, because the two tables are one design.
  *
- * Not a mobile fallback any more: this table's filters live here on desktop
- * too, with the applied ones shown as chips in the toolbar. One surface means
- * there is no second tree to keep in step — the failure this block shipped
- * once, where three filters existed on desktop and nowhere else.
+ * Desktop has the pills; below `sm` they would wrap into a column that buries
+ * the table, so the whole filter set folds in here: a menu of "label + current
+ * value" rows that each open one screen. The rows come from `FILTERS`, the same
+ * descriptors the pills read, so a row and its pill cannot disagree.
  *
- * The body is a `Stepper`: a menu of "label + current value" rows that drill
- * into one screen per filter. Same shape as `tickets-01`'s drawer and the
- * payments one, because a filter set too large for a toolbar is the same
- * problem wherever it appears.
- *
- * The *shell* differs by width — a bottom sheet on a phone, a right-hand panel
- * on a desktop, each the idiom for its size. `swipeDirection` is a prop rather
- * than a class, so this is rendered twice behind a CSS fork instead of being
- * switched at runtime: a `useMediaQuery` would have to guess on the server and
- * flip after hydration. Both shells are mounted, only one is in the
- * accessibility tree, and the date inputs take their ids from `placement`
- * because two mounted copies cannot share them.
- *
- * The rows are generated from `FILTERS`, so a new filter is one descriptor
- * rather than a row, a step, a hand-assigned index and a count that all have
- * to agree.
+ * No `swipeDirection`: the primitive's default is `down`, which supplies the
+ * bottom-sheet geometry and the drag handle.
  *
  * Filters apply live; `Apply` only dismisses. There is no draft state to
  * reconcile, and on a large phone the table is visible behind the sheet.
@@ -102,12 +80,11 @@ export function AdminFiltersDrawer({
   onChange,
   onClear,
   onSortChange,
-  placement,
   sort,
 }: AdminFiltersDrawerProps) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
-  const activeCount = appliedFilters(filters).length;
+  const count = activeCount(filters);
 
   return (
     <Drawer
@@ -118,32 +95,18 @@ export function AdminFiltersDrawer({
         }
       }}
       open={open}
-      swipeDirection={placement}
     >
-      {/* The count is the length of the same list the chips render, so the two
-          cannot disagree — unlike the payments badge this block once carried,
-          which counted the panel's filters while pills showed the rest. Sort
-          lives in here too and is deliberately not counted: it is not a filter,
-          and a badge that ticks up when you reorder a column is lying. */}
+      {/* The count is on the trigger because the pills are hidden at this
+          width — without it a filtered table gives no sign of being filtered.
+          Sort is deliberately not counted: it is not a filter, and a badge that
+          ticks up when you reorder a column is lying. */}
       <DrawerTrigger render={<Button size="sm" variant="outline" />}>
         <FilterIcon className="size-4" />
         Filters
-        {activeCount > 0 && <Badge variant="secondary">{activeCount}</Badge>}
+        {count > 0 && <Badge variant="secondary">{count}</Badge>}
       </DrawerTrigger>
-      <DrawerContent variant={placement === "right" ? "floating" : "flush"}>
-        {/* The centring column is a bottom-sheet idiom: that sheet is
-            full-width, so its content needs a readable cap. The side panel is
-            already capped — `sm:max-w-sm`, and `max-w-md` once `floating`
-            applies at `md+` — so carrying the same `max-w-sm` into it only
-            carves 32px of dead margin out of each side, on top of the 16px the
-            Drawer parts already own. `px-0` because the drilldown rows bring
-            their own `px-4`. */}
-        <DrawerBody
-          className={cn(
-            "px-0",
-            placement === "down" && "mx-auto w-full max-w-sm"
-          )}
-        >
+      <DrawerContent>
+        <div className="mx-auto w-full max-w-sm">
           <Stepper onValueChange={setStep} value={step}>
             <StepperContent>
               <StepperStep>
@@ -151,91 +114,58 @@ export function AdminFiltersDrawer({
                   <DrawerTitle className="text-center">Filters</DrawerTitle>
                 </DrawerHeader>
                 <UserFilterMenu filters={filters} sort={sort} />
+                <DrawerFooter>
+                  {hasActiveFilters(filters) && (
+                    <Button
+                      className="w-full"
+                      onClick={onClear}
+                      variant="ghost"
+                    >
+                      Clear all
+                    </Button>
+                  )}
+                  <Button className="w-full" onClick={() => setOpen(false)}>
+                    Apply
+                  </Button>
+                </DrawerFooter>
               </StepperStep>
 
-              <StepperStep>
-                <StepHeader onBack={() => setStep(0)} title="Role" />
-                <Options
-                  onValueChange={(value) =>
-                    onChange({ role: value as UserFilters["role"] })
-                  }
-                  value={filters.role}
-                >
-                  <FilterOption label={roleLabel("all")} value="all" />
-                  {ROLES.map((role) => (
-                    <FilterOption key={role} label={role} value={role} />
-                  ))}
-                </Options>
-              </StepperStep>
-
-              <StepperStep>
-                <StepHeader onBack={() => setStep(0)} title="Status" />
-                <Options
-                  onValueChange={(value) =>
-                    onChange({ status: value as StatusFilter })
-                  }
-                  value={filters.status}
-                >
-                  <FilterOption label={statusLabel("all")} value="all" />
-                  {STATUSES.map((status) => (
-                    <FilterOption
-                      key={status}
-                      label={statusLabels[status]}
-                      value={status}
-                    />
-                  ))}
-                </Options>
-              </StepperStep>
-
-              <StepperStep>
-                <StepHeader onBack={() => setStep(0)} title="Seats" />
-                <Options
-                  onValueChange={(value) =>
-                    onChange({ seats: value as SeatsFilter })
-                  }
-                  value={filters.seats}
-                >
-                  {SEATS_OPTIONS.map((option) => (
-                    <FilterOption
-                      key={option.id}
-                      label={option.label}
-                      value={option.id}
-                    />
-                  ))}
-                </Options>
-              </StepperStep>
-
-              <StepperStep>
-                <StepHeader onBack={() => setStep(0)} title="Two-factor" />
-                <Options
-                  onValueChange={(value) =>
-                    onChange({ twoFactor: value as TwoFactorFilter })
-                  }
-                  value={filters.twoFactor}
-                >
-                  {TWO_FACTOR_OPTIONS.map((option) => (
-                    <FilterOption
-                      key={option.id}
-                      label={option.label}
-                      value={option.id}
-                    />
-                  ))}
-                </Options>
-              </StepperStep>
+              {OPTION_STEPS.map((key) => (
+                <StepperStep key={key}>
+                  <StepHeader
+                    onBack={() => setStep(0)}
+                    title={FILTERS.find((def) => def.key === key)?.label ?? key}
+                  />
+                  <Options
+                    onValueChange={(value) => onChange({ [key]: value })}
+                    value={filters[key]}
+                  >
+                    {OPTIONS[key].map((option) => (
+                      <FilterOption
+                        key={option.value}
+                        label={option.label}
+                        value={option.value}
+                      />
+                    ))}
+                  </Options>
+                </StepperStep>
+              ))}
 
               <StepperStep>
                 <StepHeader onBack={() => setStep(0)} title="Created" />
                 <div className="grid grid-cols-2 gap-3 px-4 pb-4">
                   <Bound
-                    id={`users-${placement}-created-after`}
+                    id="users-drawer-created-after"
                     label="After"
                     onChange={(value) => onChange({ createdAfter: value })}
+                    type="date"
                     value={filters.createdAfter}
                   />
                   <Bound
-                    id={`users-${placement}-created-before`}
+                    id="users-drawer-created-before"
                     label="Before"
                     onChange={(value) => onChange({ createdBefore: value })}
+                    type="date"
                     value={filters.createdBefore}
                   />
                 </div>
@@ -248,18 +178,12 @@ export function AdminFiltersDrawer({
                     className="gap-0 divide-y divide-border-muted"
                     onValueChange={(value) => {
                       if (value) {
-                        onSortChange(
-                          value === "none"
-                            ? "none"
-                            : (`${value}:${defaultDirection(
-                                value as UserSortKey
-                              )}` as SortOptionId)
-                        );
+                        const key = value as UserSortKey;
+                        onSortChange({ direction: defaultDirection(key), key });
                       }
                     }}
-                    value={sort?.key ?? "none"}
+                    value={sort.key}
                   >
-                    <FilterOption label="Unsorted" value="none" />
                     {SORT_KEYS.map((option) => (
                       <FilterOption
                         key={option.id}
@@ -268,57 +192,33 @@ export function AdminFiltersDrawer({
                       />
                     ))}
                   </RadioGroup>
-
-                  {sort ? (
-                    <RadioGroup
-                      className="gap-0 divide-y divide-border-muted border-border-muted border-t"
-                      onValueChange={(value) => {
-                        if (value) {
-                          onSortChange(
-                            `${sort.key}:${
-                              value as SortDirection
-                            }` as SortOptionId
-                          );
-                        }
-                      }}
-                      value={sort.direction}
-                    >
-                      <FilterOption
-                        label={directionLabel(sort.key, "asc")}
-                        value="asc"
-                      />
-                      <FilterOption
-                        label={directionLabel(sort.key, "desc")}
-                        value="desc"
-                      />
-                    </RadioGroup>
-                  ) : null}
+                  <RadioGroup
+                    className="gap-0 divide-y divide-border-muted border-border-muted border-t"
+                    onValueChange={(value) => {
+                      if (value) {
+                        onSortChange({
+                          direction: value as SortDirection,
+                          key: sort.key,
+                        });
+                      }
+                    }}
+                    value={sort.direction}
+                  >
+                    {directionsFor(defaultDirection(sort.key)).map(
+                      (direction) => (
+                        <FilterOption
+                          key={direction}
+                          label={directionLabel(sort.key, direction)}
+                          value={direction}
+                        />
+                      )
+                    )}
+                  </RadioGroup>
                 </div>
               </StepperStep>
             </StepperContent>
           </Stepper>
-        </DrawerBody>
-
-        {/* Outside the Stepper on purpose: `StepperContent` animates to its
-            measured step height and never stretches, so a footer nested inside
-            it cannot reach the foot of a full-height side panel. As a sibling
-            of `DrawerBody` (flex-1) its own `mt-auto`/`shrink-0` pins it. Only
-            step 0 ever had a footer — the sub-steps have a Back header and no
-            apply affordance. */}
-        {step === 0 && (
-          <DrawerFooter
-            className={cn(placement === "down" && "mx-auto w-full max-w-sm")}
-          >
-            {hasActiveFilters(filters) && (
-              <Button className="w-full" onClick={onClear} variant="ghost">
-                Clear all
-              </Button>
-            )}
-            <Button className="w-full" onClick={() => setOpen(false)}>
-              Apply
-            </Button>
-          </DrawerFooter>
-        )}
+        </div>
       </DrawerContent>
     </Drawer>
   );
@@ -334,16 +234,16 @@ function UserFilterMenu({
   sort,
 }: {
   filters: UserFilters;
-  sort: SortState | null;
+  sort: SortState;
 }) {
   const { goTo } = useStepper();
-  const items: { key: FilterKey | "sort"; label: string; value: string }[] = [
+  const items = [
     ...FILTERS.map((def) => ({
-      key: def.key,
+      key: def.key as string,
       label: def.label,
       value: def.value(filters) ?? def.empty,
     })),
-    { key: "sort" as const, label: "Sort", value: sortLabel(sort) },
+    { key: "sort", label: "Sort", value: sortLabel(sort) },
   ];
 
   return (

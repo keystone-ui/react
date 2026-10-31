@@ -13,17 +13,32 @@ import {
 } from "@/components/drawer-parts";
 import { CURRENCIES } from "@/components/mock-payments";
 import {
+  AMOUNT_OPERATORS,
+  type AmountOperator,
+  amountOperatorLabel,
+  CURRENCY_OPERATORS,
+  type CurrencyOperator,
+  defaultDirection,
+  directionLabel,
   FILTERS,
   filterDef,
   hasActiveFilters,
   type PaymentFilters,
+  type PaymentSortKey,
+  PLAYER_OPERATORS,
+  type PlayerOperator,
   PROVIDER_OPTIONS,
   providerLabel,
+  SORT_KEYS,
+  type SortState,
   STATUS_OPTIONS,
+  setAmountOp,
+  sortLabel,
   statusLabel,
   TYPE_OPTIONS,
   typeLabel,
 } from "@/components/payment-filters";
+import { directionsFor, type SortDirection } from "@/components/sort";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -36,16 +51,24 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
+import { RadioGroup } from "@/components/ui/radio-group";
+import {
   Stepper,
   StepperContent,
   StepperStep,
   useStepper,
 } from "@/components/ui/stepper";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface PaymentFiltersDrawerProps {
   filters: PaymentFilters;
   onChange: (patch: Partial<PaymentFilters>) => void;
   onClear: () => void;
+  onSortChange: (sort: SortState) => void;
+  sort: SortState;
 }
 
 /**
@@ -64,11 +87,17 @@ interface PaymentFiltersDrawerProps {
  * it could never have taken effect.
  *
  * Filters apply live; `Apply` only dismisses. Same as the users drawer.
+ *
+ * Sort is the last row, because the desktop Sort menu is hidden at this width
+ * too. It is not counted on the trigger: it is not a filter, and a badge that
+ * ticks up when you reorder a column is lying.
  */
 export function PaymentFiltersDrawer({
   filters,
   onChange,
   onClear,
+  onSortChange,
+  sort,
 }: PaymentFiltersDrawerProps) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
@@ -101,7 +130,7 @@ export function PaymentFiltersDrawer({
                 <DrawerHeader>
                   <DrawerTitle className="text-center">Filters</DrawerTitle>
                 </DrawerHeader>
-                <PaymentFilterMenu filters={filters} />
+                <PaymentFilterMenu filters={filters} sort={sort} />
                 <DrawerFooter>
                   {hasActiveFilters(filters) && (
                     <Button
@@ -156,6 +185,14 @@ export function PaymentFiltersDrawer({
 
               <StepperStep>
                 <StepHeader onBack={() => setStep(0)} title="Currency" />
+                <OperatorToggle
+                  label="Currency operator"
+                  onValueChange={(op) =>
+                    onChange({ currencyOp: op as CurrencyOperator })
+                  }
+                  options={CURRENCY_OPERATORS}
+                  value={filters.currencyOp}
+                />
                 {/* Checkboxes, not radios: this is the one multi-select in the
                     set, so it is the one screen you do not leave per pick. */}
                 <div className="divide-y divide-border-muted pb-4">
@@ -202,6 +239,38 @@ export function PaymentFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
+                <StepHeader onBack={() => setStep(0)} title="Player" />
+                {/* Six operators do not fit a segmented row on a phone, and a
+                    native select is the phone's own picker for one-of-many. */}
+                <div className="px-4 pb-3">
+                  <NativeSelect
+                    aria-label="Player operator"
+                    onChange={(event) =>
+                      onChange({
+                        playerOp: event.target.value as PlayerOperator,
+                      })
+                    }
+                    value={filters.playerOp}
+                  >
+                    {PLAYER_OPERATORS.map((op) => (
+                      <NativeSelectOption key={op.value} value={op.value}>
+                        {op.label.charAt(0).toUpperCase() + op.label.slice(1)}
+                      </NativeSelectOption>
+                    ))}
+                  </NativeSelect>
+                </div>
+                <div className="px-4 pb-4">
+                  <Bound
+                    id="drawer-player"
+                    label="Player email"
+                    onChange={(value) => onChange({ player: value })}
+                    placeholder="e.g. gmail"
+                    value={filters.player}
+                  />
+                </div>
+              </StepperStep>
+
+              <StepperStep>
                 <StepHeader onBack={() => setStep(0)} title="Created" />
                 <Bounds>
                   <Bound
@@ -223,22 +292,101 @@ export function PaymentFiltersDrawer({
 
               <StepperStep>
                 <StepHeader onBack={() => setStep(0)} title="Amount" />
-                <Bounds>
-                  <Bound
-                    id="drawer-amount-min"
-                    label="Min"
-                    onChange={(value) => onChange({ amountMin: value })}
-                    placeholder="0.00"
-                    value={filters.amountMin}
-                  />
-                  <Bound
-                    id="drawer-amount-max"
-                    label="Max"
-                    onChange={(value) => onChange({ amountMax: value })}
-                    placeholder="Any"
-                    value={filters.amountMax}
-                  />
-                </Bounds>
+                <OperatorToggle
+                  label="Amount operator"
+                  onValueChange={(op) =>
+                    onChange(setAmountOp(op as AmountOperator))
+                  }
+                  options={AMOUNT_OPERATORS.map((op) => ({
+                    label: amountOperatorLabel(op),
+                    value: op,
+                  }))}
+                  value={filters.amountOp}
+                />
+                {filters.amountOp === "between" ? (
+                  <Bounds>
+                    <Bound
+                      id="drawer-amount-min"
+                      label="Min"
+                      onChange={(value) => onChange({ amountMin: value })}
+                      placeholder="0.00"
+                      value={filters.amountMin}
+                    />
+                    <Bound
+                      id="drawer-amount-max"
+                      label="Max"
+                      onChange={(value) => onChange({ amountMax: value })}
+                      placeholder="Any"
+                      value={filters.amountMax}
+                    />
+                  </Bounds>
+                ) : (
+                  <div className="px-4 pb-4">
+                    <Bound
+                      id="drawer-amount-value"
+                      label="Amount"
+                      onChange={(value) =>
+                        onChange(
+                          filters.amountOp === "lt"
+                            ? { amountMax: value }
+                            : { amountMin: value }
+                        )
+                      }
+                      placeholder="0.00"
+                      value={
+                        filters.amountOp === "lt"
+                          ? filters.amountMax
+                          : filters.amountMin
+                      }
+                    />
+                  </div>
+                )}
+              </StepperStep>
+
+              <StepperStep>
+                <StepHeader onBack={() => setStep(0)} title="Sort" />
+                <div className="pb-4">
+                  <RadioGroup
+                    className="gap-0 divide-y divide-border-muted"
+                    onValueChange={(value) => {
+                      if (value) {
+                        const key = value as PaymentSortKey;
+                        onSortChange({ direction: defaultDirection(key), key });
+                      }
+                    }}
+                    value={sort.key}
+                  >
+                    {SORT_KEYS.map((option) => (
+                      <FilterOption
+                        key={option.id}
+                        label={option.label}
+                        value={option.id}
+                      />
+                    ))}
+                  </RadioGroup>
+                  <RadioGroup
+                    className="gap-0 divide-y divide-border-muted border-border-muted border-t"
+                    onValueChange={(value) => {
+                      if (value) {
+                        onSortChange({
+                          direction: value as SortDirection,
+                          key: sort.key,
+                        });
+                      }
+                    }}
+                    value={sort.direction}
+                  >
+                    {directionsFor(defaultDirection(sort.key)).map(
+                      (direction) => (
+                        <FilterOption
+                          key={direction}
+                          label={directionLabel(sort.key, direction)}
+                          value={direction}
+                        />
+                      )
+                    )}
+                  </RadioGroup>
+                </div>
               </StepperStep>
             </StepperContent>
           </Stepper>
@@ -253,29 +401,45 @@ const MENU_STEPS = [
   { key: "status", step: 2 },
   { key: "currencies", step: 3 },
   { key: "provider", step: 4 },
-  { key: "created", step: 5 },
-  { key: "amount", step: 6 },
+  { key: "player", step: 5 },
+  { key: "created", step: 6 },
+  { key: "amount", step: 7 },
 ] as const;
+
+/** After every filter step, so adding a filter never renumbers it. */
+const SORT_STEP = MENU_STEPS.length + 1;
 
 /**
  * The drilldown menu. Every row's value comes from the same `FILTERS`
  * descriptor the desktop pills read, so a row and its pill cannot disagree
  * about what is applied.
  */
-function PaymentFilterMenu({ filters }: { filters: PaymentFilters }) {
+function PaymentFilterMenu({
+  filters,
+  sort,
+}: {
+  filters: PaymentFilters;
+  sort: SortState;
+}) {
   const { goTo } = useStepper();
 
   const items = MENU_STEPS.map(({ key, step }) => {
     const def = filterDef(key);
+    const value = def.value(filters);
+    // The same operator the pill shows, so `is not` set on a desktop is not
+    // invisible on a phone — the row would otherwise read "BTC" for a table
+    // that excludes it.
+    const operator = value === null ? null : def.operator?.(filters);
+    // A row has room the pill does not, so a multi-select says what the
+    // number counts rather than leaving a bare "3".
+    const shown =
+      key === "currencies" && filters.currencies.length > 1
+        ? `${filters.currencies.length} selected`
+        : (value ?? def.empty);
     return {
       label: def.label,
       step,
-      // A row has room the pill does not, so a multi-select says what the
-      // number counts rather than leaving a bare "3".
-      value:
-        key === "currencies" && filters.currencies.length > 1
-          ? `${filters.currencies.length} selected`
-          : (def.value(filters) ?? def.empty),
+      value: operator ? `${operator} ${shown}` : shown,
     };
   });
 
@@ -289,7 +453,58 @@ function PaymentFilterMenu({ filters }: { filters: PaymentFilters }) {
           value={item.value}
         />
       ))}
+      <DrilldownRow
+        label="Sort"
+        onClick={() => goTo(SORT_STEP)}
+        value={sortLabel(sort)}
+      />
     </DrilldownList>
+  );
+}
+
+/**
+ * A drawer step's operator, as a segmented control above its values: two to
+ * four short options fit one row on a phone, where a menu would be a sheet
+ * inside a sheet.
+ */
+function OperatorToggle({
+  label,
+  onValueChange,
+  options,
+  value,
+}: {
+  label: string;
+  onValueChange: (value: string) => void;
+  options: readonly { label: string; value: string }[];
+  value: string;
+}) {
+  return (
+    <div className="px-4 pb-3">
+      <ToggleGroup
+        aria-label={label}
+        className="w-full"
+        onValueChange={(next) => {
+          // A segmented control always holds one value; pressing the active
+          // segment again would otherwise empty it.
+          if (next[0]) {
+            onValueChange(next[0] as string);
+          }
+        }}
+        size="sm"
+        value={[value]}
+        variant="outline"
+      >
+        {options.map((option) => (
+          <ToggleGroupItem
+            className="flex-1"
+            key={option.value}
+            value={option.value}
+          >
+            {option.label}
+          </ToggleGroupItem>
+        ))}
+      </ToggleGroup>
+    </div>
   );
 }
 

@@ -11,11 +11,13 @@ https://keystoneui.io/r/admin-01.json`.
 
 - Filter controls name the dimension they act on
 - Two filter layouts, and how to choose
+- View controls sit apart from the filters
+- Loading keeps the table's shape
 - One representation of applied state
 - Applied emphasis must not read as focus
 - Overriding a component's variant class
 - Table type scale and the control ladder
-- Sorting belongs in the column headers
+- The column headers sort; a Sort menu may join them
 - A sort menu is two choices, not one
 - Row actions go in a trailing menu, not on hover
 - The pagination footer reports the visible range
@@ -58,33 +60,61 @@ the applied ones as removable `Key: value` chips underneath.
 | | drawer + chips | inline pills |
 |---|---|---|
 | change a filter | 3–4 clicks | 2 |
-| remove one | 1 click on its ✕ | 2, through its menu |
-| read what is applied | the chip row is the answer | scan every pill for the set ones |
+| remove one | 1 click on its ✕ | 1, on the pill's ✕ |
+| read what is applied | the chip row is the answer | the pills are the answer |
 | see what is filterable | open the drawer | already on screen |
-| desktop vs mobile | one surface | two, kept in step by hand |
+| desktop vs mobile | one surface | two, kept in step by a shared descriptor |
 
-Pills suit a table someone sits in front of, flipping a filter at a time while
-they work. The drawer suits one they filter once and then read.
+**Default to pills.** An admin table is one someone sits in front of, flipping a
+filter at a time while they work, and pills make that two clicks with nothing to
+open. Start the row with the two most common filters and offer the rest from
+`+ Add filter`, so six filters do not wrap before anyone has used one; a filter
+that holds a value always shows its pill, so applied state is never invisible.
+`admin-01` implements this on both of its tables.
 
-The drawer layout also removes a fork, which is worth more than it sounds: its
-filters live in one surface at every width, so there is no second tree to keep
-in step. `admin-01` shipped three filters reachable on no phone at all under
-the pills layout; that failure cannot occur under this one.
-
-Past roughly six filters the pills stop fitting and the choice makes itself.
-
-The drawer's shell should still suit its width: a bottom sheet on a phone, a
-side panel on a desktop. `swipeDirection` is a prop, not a class, so render the
-drawer twice behind a CSS fork rather than switching it at runtime — a media
-query has to guess on the server and flip after hydration. Keep one shell out
-of the accessibility tree, or both triggers are announced.
+Drawer and chips remain the better fit for a table filtered once and then read,
+or one with more filters than a row can hold even on demand. Its shell should
+suit its width — a bottom sheet on a phone, a side panel on a desktop — and,
+since `swipeDirection` is a prop rather than a class, render it twice behind a
+CSS fork with one copy out of the accessibility tree rather than switching it at
+runtime.
 
 **Both are renderings of one model.** Whichever you pick, declare each filter
 once as a descriptor — `{ key, label, empty, value(filters), clear }` — and
-derive the chips, the drawer's rows and steps, the active count and the
-predicate from that list. Switching layouts is then a change of presentation,
-and a new filter is one entry rather than a control, a row, a step index and a
-count that all have to agree.
+derive the pills or chips, the drawer's rows and steps, the active count, the
+URL and the predicate from that list. Switching layouts is then a change of
+presentation, and a new filter is one entry rather than a control, a row, a step
+index and a count that all have to agree. It is also what keeps the phone
+drawer in step with the pills: `admin-01` once shipped three filters reachable
+on no phone at all, before both were driven from one list.
+
+## View controls sit apart from the filters
+
+`Columns`, `Export` and `Sort` change how the rows are shown, not which rows, so
+put them at the far end of the toolbar, each naming itself. Give search a
+minimum width so a full row wraps this group onto a second line instead of
+crushing the field.
+
+- **Columns** lists only what can go: the id or name, the selection checkbox and
+  the row actions identify and act on a row, so they stay. Checkbox items with
+  `closeOnClick={false}`, so hiding three columns is one visit. It is a view
+  preference — keep it out of the URL.
+- **Export** writes every row the filters and sort produce, not the current
+  page, as raw values — the stored amount rather than `10,000.00`, whose comma a
+  spreadsheet misreads; ids rather than labels; an empty cell rather than a
+  dash.
+- **The query belongs in the URL** — search, filters, sort, page, page size —
+  written with `replaceState` (not `pushState`, or every keystroke is a Back
+  step), defaults left out, and read back value by value with a fallback, since
+  a URL is input anyone can edit.
+
+## Loading keeps the table's shape
+
+While a request is in flight, set `aria-busy` on the table and render skeleton
+rows at the real rows' height — including the 32px row-actions box and any
+two-line cell — in the count the previous page had. Keep the footer describing
+the last answer rather than collapsing it to zero. Rows that change height or
+number when the data lands make the page jump under the pointer.
 
 ## One representation of applied state
 
@@ -157,11 +187,27 @@ meant to change was identical to an unset control's.
   (32px) on every control, search field included, matching the 32px
   `TablePagination` in the same card. Mixing `sm` with `default` in one row is
   the most common visual defect in a toolbar. See [styling.md](./styling.md).
+- **The header is on the ladder; body rows are not.** `TableHead` is a fixed
+  40px (32px at `size="sm"`). A body row is its cell padding plus its tallest
+  content plus a 1px divider: 37px for text, 49px with the `icon-sm` row-actions
+  trigger, more for a two-line cell. A 40px header over 49px rows is the
+  intended shape — `table-actions` in the docs and shadcn's own data table are
+  the same — so do not force the rows to the header's height.
+- **Size in-row controls to the table.** At `size="sm"` the padding is 6px, so a
+  32px control makes a 45px row: taller than a default table's text rows, with
+  the text shrunk to 12px for nothing. A compact table that needs controls uses
+  `icon-xs` / `xs` (37px rows); a table whose rows need `icon-sm` stays at the
+  default size.
 
-## Sorting belongs in the column headers
+## The column headers sort; a Sort menu may join them
 
-Not in the filter row — a sort control among filters reads as a filter, and the
-header is where someone looks to reorder a column.
+The header is where someone looks to reorder a column, so sortable columns
+always carry a `TableSortButton`. A toolbar `Sort` menu is an addition, not a
+replacement — it can name an order a header arrow cannot (`Newest first`), and
+it is the only way to sort on a phone, where the headers scroll out of reach. If
+you add one, set it apart from the filters (the far end of the row, labelled
+`Sort:`) so it does not read as one more filter, and have it write the same
+`sort` state the headers do, so a header click moves the menu's check.
 
 ```tsx
 <TableHead sortDirection={active ? direction : null}>
@@ -176,8 +222,10 @@ header is where someone looks to reorder a column.
 active one — **omit `sortDirection` entirely** on columns that do not sort, or
 they claim to sort and merely be inactive.
 
-Sort an inactive column descending on first click: for dates and amounts the
-interesting end is the large one, and ascending makes every first click wasted.
+Sort an inactive column in its natural direction on first click — dates and
+amounts descending, where the interesting end is the large one; names A–Z — and
+use the same default when the column is picked from a Sort menu, so the two
+handles agree on what choosing a column means.
 
 ## A sort menu is two choices, not one
 
@@ -263,8 +311,9 @@ anything missing from it is unreachable, not merely inconvenient. Drive each row
 from the same descriptor the desktop control reads, so a row and its control
 cannot disagree.
 
-Both blocks implement this — see `admin-01`'s `payment-filters-drawer.tsx` or
-`tickets-01`'s `tickets-filters-drawer.tsx` after installing.
+Both blocks implement this — see `admin-01`'s `payment-filters-drawer.tsx` and
+`admin-filters-drawer.tsx`, or `tickets-01`'s `tickets-filters-drawer.tsx`,
+after installing.
 
 ---
 

@@ -1813,7 +1813,7 @@
       "name": "admin-01",
       "type": "registry:block",
       "title": "Admin 01",
-      "description": "An admin panel: a collapsible sidebar shell, a topbar with breadcrumb and search, an overview with KPI tiles and a stacked signups chart, and a sortable, paginated users table with bulk actions.",
+      "description": "An admin panel: a collapsible sidebar shell, a topbar with breadcrumb, an overview with KPI tiles and a stacked signups chart, and users and payments tables with filter pills, sorting, column visibility, row selection, CSV export, loading states and URL-synced views.",
       "dependencies": [
         "lucide-react",
         "recharts"
@@ -1825,23 +1825,28 @@
         "button",
         "card",
         "checkbox",
+        "combobox",
         "copy-button",
         "description-list",
         "drawer",
         "dropdown-menu",
+        "empty",
         "input",
         "input-group",
         "label",
+        "native-select",
         "popover",
         "radio-group",
         "select",
         "selection-bar",
         "separator",
         "sidebar",
+        "skeleton",
         "stat",
         "stepper",
         "table",
-        "table-pagination"
+        "table-pagination",
+        "toggle-group"
       ],
       "files": [
         {
@@ -1902,6 +1907,22 @@
           "type": "registry:component"
         },
         {
+          "path": "registry/default/blocks/admin-01/components/columns-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/csv.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/filter-pills.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/filter-row.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "registry/default/blocks/admin-01/components/mock-admin.ts",
           "type": "registry:component"
         },
@@ -1914,11 +1935,19 @@
           "type": "registry:component"
         },
         {
-          "path": "registry/default/blocks/admin-01/components/filter-chip.tsx",
+          "path": "registry/default/blocks/admin-01/components/filter-trigger.tsx",
           "type": "registry:component"
         },
         {
-          "path": "registry/default/blocks/admin-01/components/filter-trigger.tsx",
+          "path": "registry/default/blocks/admin-01/components/filtered-empty.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/operator-filter-chip.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/payment-detail-drawer.tsx",
           "type": "registry:component"
         },
         {
@@ -1934,6 +1963,10 @@
           "type": "registry:component"
         },
         {
+          "path": "registry/default/blocks/admin-01/components/pill-shell.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "registry/default/blocks/admin-01/components/result-summary.tsx",
           "type": "registry:component"
         },
@@ -1942,7 +1975,43 @@
           "type": "registry:component"
         },
         {
+          "path": "registry/default/blocks/admin-01/components/skeleton-rows.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/sort-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/sort.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/url-params.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/use-data-table.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/use-payments-table.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "registry/default/blocks/admin-01/components/use-reduced-motion.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/use-url-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/use-users-table.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/user-filter-pills.tsx",
           "type": "registry:component"
         }
       ],

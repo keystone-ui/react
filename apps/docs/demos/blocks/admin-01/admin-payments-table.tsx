@@ -3,6 +3,7 @@
 import { Badge } from "@keystoneui/react/badge";
 import { Button } from "@keystoneui/react/button";
 import { Card, CardContent } from "@keystoneui/react/card";
+import { Checkbox } from "@keystoneui/react/checkbox";
 import { CopyButton } from "@keystoneui/react/copy-button";
 import {
   DropdownMenu,
@@ -12,14 +13,19 @@ import {
   DropdownMenuTrigger,
 } from "@keystoneui/react/dropdown-menu";
 import {
+  SelectionBar,
+  SelectionBarButton,
+  SelectionBarClose,
+  SelectionBarGroup,
+  SelectionBarLabel,
+} from "@keystoneui/react/selection-bar";
+import {
   Table,
   TableBody,
   TableCell,
-  TableEmpty,
   TableHead,
   TableHeader,
   TableRow,
-  TableSortButton,
 } from "@keystoneui/react/table";
 import {
   TablePagination,
@@ -31,258 +37,347 @@ import {
 } from "@keystoneui/react/table-pagination";
 import {
   Copy as CopyIcon,
+  Download as DownloadIcon,
   Eye as EyeIcon,
   Ellipsis as MoreHorizontalIcon,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import { AdminPaymentsToolbar } from "./admin-payments-toolbar";
+import { downloadCsv } from "./csv";
+import { FilteredEmpty } from "./filtered-empty";
 import {
+  formatAmount,
   PAYMENT_STATUS_VARIANT,
   type Payment,
   paymentStatusLabels,
+  payments,
   paymentTypeLabels,
   truncateId,
 } from "./mock-payments";
-import type {
-  FilterKey,
-  PaymentFilters,
-  PaymentSortKey,
-  SortOptionId,
-  SortState,
+import {
+  defaultDirection,
+  hasActiveFilters,
+  PAGE_SIZES,
+  type PaymentSortKey,
+  toPaymentsCsv,
 } from "./payment-filters";
 import { ResultSummary } from "./result-summary";
+import { SkeletonRows } from "./skeleton-rows";
+import { SortableHead } from "./sort-menu";
+import type { PaymentColumnId, PaymentsTableState } from "./use-payments-table";
 
-interface AdminPaymentsTableProps {
-  addedFilters: readonly FilterKey[];
-  filters: PaymentFilters;
-  onFilterAdd: (key: FilterKey) => void;
-  onFiltersChange: (patch: Partial<PaymentFilters>) => void;
-  onFiltersClear: () => void;
-  onOpenPayment: (id: string) => void;
-  onPageIndexChange: (index: number) => void;
-  onPageSizeChange: (size: number) => void;
-  onSortChange: (id: SortOptionId) => void;
-  pageCount: number;
-  pageIndex: number;
-  pageSize: number;
-  rows: readonly Payment[];
-  sort: SortState;
-  totalCount: number;
+interface PaymentColumn {
+  cell: (row: Payment) => ReactNode;
+  /** Classes for the body cell. */
+  className?: string;
+  id: PaymentColumnId;
+  label: string;
+  numeric?: boolean;
+  /** Present on the columns that sort. */
+  sortKey?: PaymentSortKey;
 }
 
+/**
+ * The columns a person can show or hide, in order. The payment id, the
+ * selection checkbox and the actions are not here: they identify and act on a
+ * row, so they are always on.
+ */
+const COLUMNS: readonly PaymentColumn[] = [
+  {
+    cell: (row) => <span className="truncate">{row.playerEmail}</span>,
+    id: "playerEmail",
+    label: "Player",
+    sortKey: "playerEmail",
+  },
+  {
+    // The raw string rides along, so a test can read the value the sort used
+    // rather than parsing the formatted one back.
+    cell: (row) => (
+      <span data-amount={row.amount}>
+        {formatAmount(row.amount, row.currency)}
+      </span>
+    ),
+    id: "amount",
+    label: "Amount",
+    numeric: true,
+    sortKey: "amount",
+  },
+  {
+    cell: (row) => <Badge variant="outline">{row.currency}</Badge>,
+    id: "currency",
+    label: "Currency",
+  },
+  {
+    cell: (row) => (
+      <Badge variant="outline">{paymentTypeLabels[row.type]}</Badge>
+    ),
+    id: "type",
+    label: "Type",
+  },
+  {
+    cell: (row) => (
+      <Badge variant={PAYMENT_STATUS_VARIANT[row.status]}>
+        {paymentStatusLabels[row.status]}
+      </Badge>
+    ),
+    id: "status",
+    label: "Status",
+    sortKey: "status",
+  },
+  {
+    cell: (row) => row.createdAt,
+    className: "text-muted-foreground",
+    id: "createdAt",
+    label: "Created",
+    sortKey: "createdAt",
+  },
+  {
+    cell: (row) => row.finishedAt ?? "-",
+    className: "text-muted-foreground",
+    id: "finishedAt",
+    label: "Finished",
+    sortKey: "finishedAt",
+  },
+];
+
+const PAYMENT_COLUMNS = COLUMNS.map(({ id, label }) => ({ id, label }));
+
 export function AdminPaymentsTable({
-  addedFilters,
-  filters,
-  onFilterAdd,
-  onFiltersChange,
-  onFiltersClear,
   onOpenPayment,
-  onPageIndexChange,
-  onPageSizeChange,
-  onSortChange,
-  pageCount,
-  pageIndex,
-  pageSize,
-  rows,
-  sort,
-  totalCount,
-}: AdminPaymentsTableProps) {
+  table,
+}: {
+  onOpenPayment: (id: string) => void;
+  table: PaymentsTableState;
+}) {
+  const { loading, result, selected } = table;
+  const visible = COLUMNS.filter(
+    (column) => !table.hiddenColumns.has(column.id)
+  );
+  const allOnPageSelected =
+    result.page.length > 0 && result.page.every((row) => selected.has(row.id));
+
   return (
-    <div className="flex w-full flex-col gap-6">
-      {/* A real `h1`, and the page's only heading. `CardTitle` renders a div,
-          so the section had no heading outline at all — a screen reader moving
-          by headings found nothing here. It also sat inside the card, which
-          made the panel announce itself rather than the page. */}
-      <h1 className="font-semibold text-2xl tracking-tight">Payments</h1>
+    <>
+      <div className="flex w-full flex-col gap-6">
+        {/* A real `h1`, and the page's only heading. `CardTitle` renders a div,
+            so the section had no heading outline at all — a screen reader
+            moving by headings found nothing here. It also sat inside the card,
+            which made the panel announce itself rather than the page. */}
+        <h1 className="font-semibold text-2xl tracking-tight">Payments</h1>
 
-      <Card variant="outline">
-        <CardContent className="flex flex-col gap-4">
-          <AdminPaymentsToolbar
-            added={addedFilters}
-            filters={filters}
-            onAdd={onFilterAdd}
-            onChange={onFiltersChange}
-            onClear={onFiltersClear}
-          />
+        <Card variant="outline">
+          <CardContent className="flex flex-col gap-4">
+            <AdminPaymentsToolbar columns={PAYMENT_COLUMNS} table={table} />
 
-          <Table hoverable>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[136px]">Payment ID</TableHead>
-                {/* Only the four columns that actually sort carry a button.
-                  `sortDirection` is omitted rather than passed as `null` on
-                  the rest — `null` claims a column sorts and is merely
-                  inactive, which would put `aria-sort` on eight headers when
-                  four of them do nothing. */}
-                <SortableHead
-                  columnKey="playerEmail"
-                  onSort={onSortChange}
-                  sort={sort}
-                >
-                  Player
-                </SortableHead>
-                <SortableHead
-                  columnKey="amount"
-                  numeric
-                  onSort={onSortChange}
-                  sort={sort}
-                >
-                  Amount
-                </SortableHead>
-                <TableHead>Currency</TableHead>
-                <TableHead>Type</TableHead>
-                <SortableHead
-                  columnKey="status"
-                  onSort={onSortChange}
-                  sort={sort}
-                >
-                  Status
-                </SortableHead>
-                <SortableHead
-                  columnKey="createdAt"
-                  onSort={onSortChange}
-                  sort={sort}
-                >
-                  Created
-                </SortableHead>
-                <TableHead>Finished</TableHead>
-                {/* No visible label: the column is one icon wide, and "Actions"
-                    above it would size the column from the header rather than
-                    from the control. */}
-                <TableHead className="w-12">
-                  <span className="sr-only">Actions</span>
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rows.length === 0 ? (
-                <TableEmpty colSpan={9}>
-                  No payments match these filters.
-                </TableEmpty>
-              ) : (
-                rows.map((row) => (
-                  <TableRow className="group/row" key={row.id}>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        {/* Middle-truncated: the head and tail are what someone
-                          eyeballs against another system, and the full value is
-                          one click away on the clipboard or the record. */}
-                        <button
-                          className="cursor-pointer rounded-sm font-mono text-muted-foreground text-xs hover:underline focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
-                          onClick={() => onOpenPayment(row.id)}
-                          type="button"
-                        >
-                          {truncateId(row.id)}
-                        </button>
-                        <CopyButton size="icon-xs" value={row.id} />
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="truncate">{row.playerEmail}</span>
-                    </TableCell>
-                    <TableCell numeric>{row.amount}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{row.currency}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">
-                        {paymentTypeLabels[row.type]}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={PAYMENT_STATUS_VARIANT[row.status]}>
-                        {paymentStatusLabels[row.status]}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {row.createdAt}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {row.finishedAt ?? "-"}
-                    </TableCell>
-                    <TableCell>
-                      <RowActions
-                        onOpen={() => onOpenPayment(row.id)}
-                        paymentId={row.id}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+            {/* `aria-busy` is the loading announcement; the skeleton rows
+                underneath are hidden from assistive tech. */}
+            <Table aria-busy={loading} hoverable>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-10">
+                    <Checkbox
+                      aria-label="Select all payments on this page"
+                      checked={allOnPageSelected}
+                      disabled={loading}
+                      onCheckedChange={(checked) =>
+                        table.togglePage(checked === true)
+                      }
+                    />
+                  </TableHead>
+                  <TableHead className="w-[136px]">Payment ID</TableHead>
+                  {visible.map((column) =>
+                    column.sortKey ? (
+                      <SortableHead
+                        columnKey={column.sortKey}
+                        defaultDirection={defaultDirection}
+                        key={column.id}
+                        numeric={column.numeric}
+                        onSortChange={table.setSort}
+                        sort={table.sort}
+                      >
+                        {column.label}
+                      </SortableHead>
+                    ) : (
+                      // Not sortable, so no `sortDirection` at all — see
+                      // `SortableHead`.
+                      <TableHead key={column.id} numeric={column.numeric}>
+                        {column.label}
+                      </TableHead>
+                    )
+                  )}
+                  {/* No visible label: the column is one icon wide, and
+                      "Actions" above it would size the column from the header
+                      rather than from the control. */}
+                  <TableHead className="w-12">
+                    <span className="sr-only">Actions</span>
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {loading ? (
+                  <SkeletonRows
+                    checkbox
+                    columns={visible.length + 1}
+                    count={result.page.length || table.pageSize}
+                  />
+                ) : null}
+                {!loading && result.page.length === 0 ? (
+                  <FilteredEmpty
+                    colSpan={visible.length + 3}
+                    filtered={hasActiveFilters(table.filters)}
+                    noun="payments"
+                    onClear={table.clearFilters}
+                  />
+                ) : null}
+                {loading
+                  ? null
+                  : result.page.map((row) => (
+                      <TableRow
+                        className="group/row"
+                        data-state={
+                          selected.has(row.id) ? "selected" : undefined
+                        }
+                        key={row.id}
+                      >
+                        <TableCell>
+                          <Checkbox
+                            aria-label={`Select payment ${truncateId(row.id)}`}
+                            checked={selected.has(row.id)}
+                            onCheckedChange={() => table.toggleRow(row.id)}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            {/* Middle-truncated: the head and tail are what
+                                someone eyeballs against another system, and
+                                the full value is one click away on the
+                                clipboard or the record. */}
+                            <button
+                              className="cursor-pointer rounded-sm font-mono text-muted-foreground text-xs hover:underline focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
+                              onClick={() => onOpenPayment(row.id)}
+                              type="button"
+                            >
+                              {truncateId(row.id)}
+                            </button>
+                            <CopyButton size="icon-xs" value={row.id} />
+                          </div>
+                        </TableCell>
+                        {visible.map((column) => (
+                          <TableCell
+                            className={column.className}
+                            data-column={column.id}
+                            key={column.id}
+                            numeric={column.numeric}
+                          >
+                            {column.cell(row)}
+                          </TableCell>
+                        ))}
+                        <TableCell>
+                          <RowActions
+                            onOpen={() => onOpenPayment(row.id)}
+                            paymentId={row.id}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+              </TableBody>
+            </Table>
 
-          {/* Composed rather than props-driven: the info slot only renders a
-              selection count from props, and this table has no selection. The
-              parts are otherwise the default composition. */}
-          <TablePagination pageCount={pageCount} pageIndex={pageIndex}>
-            <TablePaginationInfo>
-              <ResultSummary
-                noun={["payment", "payments"]}
-                pageIndex={pageIndex}
-                pageSize={pageSize}
-                rowCount={rows.length}
-                totalCount={totalCount}
-              />
-            </TablePaginationInfo>
-            <TablePaginationControls>
-              <TablePaginationPageSize
-                onValueChange={onPageSizeChange}
-                value={pageSize}
-              />
-              <TablePaginationStatus
-                pageCount={pageCount}
-                pageIndex={pageIndex}
-              />
-              <TablePaginationButtons
-                onPageIndexChange={onPageIndexChange}
-                pageCount={pageCount}
-                pageIndex={pageIndex}
-              />
-            </TablePaginationControls>
-          </TablePagination>
-        </CardContent>
-      </Card>
-    </div>
+            {/* Composed rather than props-driven: the info slot's only
+                props-driven content is a selection count, which the
+                `SelectionBar` already states — at every width, where this slot
+                is `hidden lg:block`. */}
+            <TablePagination
+              pageCount={result.pageCount}
+              pageIndex={table.pageIndex}
+            >
+              <TablePaginationInfo>
+                <ResultSummary
+                  noun={["payment", "payments"]}
+                  pageIndex={table.pageIndex}
+                  pageSize={table.pageSize}
+                  rowCount={result.page.length}
+                  totalCount={result.total}
+                />
+              </TablePaginationInfo>
+              <TablePaginationControls>
+                <TablePaginationPageSize
+                  onValueChange={table.setPageSize}
+                  options={PAGE_SIZES}
+                  value={table.pageSize}
+                />
+                <TablePaginationStatus
+                  pageCount={result.pageCount}
+                  pageIndex={table.pageIndex}
+                />
+                <TablePaginationButtons
+                  onPageIndexChange={table.setPageIndex}
+                  pageCount={result.pageCount}
+                  pageIndex={table.pageIndex}
+                />
+              </TablePaginationControls>
+            </TablePagination>
+          </CardContent>
+        </Card>
+      </div>
+
+      <PaymentSelectionBar onClear={table.clearSelection} selected={selected} />
+    </>
   );
 }
 
 /**
- * A sortable column header.
+ * What to do with the rows you ticked. Only actions this block can actually
+ * perform: a ledger's real bulk actions — refund, retry, mark reviewed — need a
+ * backend, and a button that does nothing is worse than none.
  *
- * Clicking an inactive column sorts it descending first — for dates and
- * amounts the interesting end is the large one, and starting ascending would
- * make every first click a wasted one.
+ * It reads from every payment, not the current result, because a selection
+ * outlives the filter that was on when you made it.
  */
-function SortableHead({
-  children,
-  columnKey,
-  numeric,
-  onSort,
-  sort,
+function PaymentSelectionBar({
+  onClear,
+  selected,
 }: {
-  children: ReactNode;
-  columnKey: PaymentSortKey;
-  numeric?: boolean;
-  onSort: (id: SortOptionId) => void;
-  sort: SortState;
+  onClear: () => void;
+  selected: ReadonlySet<string>;
 }) {
-  const active = sort.key === columnKey;
-  const direction = active ? sort.direction : null;
+  const [copied, setCopied] = useState(false);
+  const rows = payments.filter((payment) => selected.has(payment.id));
 
   return (
-    <TableHead numeric={numeric} sortDirection={direction}>
-      <TableSortButton
-        direction={direction}
+    <SelectionBar open={selected.size > 0}>
+      <SelectionBarClose onClick={onClear} />
+      <SelectionBarGroup>
+        <SelectionBarLabel>
+          {selected.size} {selected.size === 1 ? "payment" : "payments"}{" "}
+          selected
+        </SelectionBarLabel>
+      </SelectionBarGroup>
+      <SelectionBarButton
         onClick={() =>
-          onSort(
-            `${columnKey}:${active && sort.direction === "desc" ? "asc" : "desc"}`
-          )
+          downloadCsv("payments-selected.csv", toPaymentsCsv(rows))
         }
       >
-        {children}
-      </TableSortButton>
-    </TableHead>
+        <DownloadIcon />
+        Export
+      </SelectionBarButton>
+      <SelectionBarButton
+        onClick={async () => {
+          try {
+            await navigator.clipboard.writeText(
+              rows.map((row) => row.id).join("\n")
+            );
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500);
+          } catch {
+            // Insecure context or permission denied; nothing to undo.
+          }
+        }}
+      >
+        <CopyIcon />
+        {copied ? "Copied" : "Copy IDs"}
+      </SelectionBarButton>
+    </SelectionBar>
   );
 }
 
@@ -295,7 +390,7 @@ function SortableHead({
  * menu absorbs those where a row of inline buttons cannot.
  *
  * "Copy payment ID" duplicates the icon button beside the id deliberately:
- * that one is the fast path for a value the table shows truncated, this one is
+ * that one is the fast path for a value the table shows cut down, this one is
  * the labelled path for anyone who would not read an unlabelled icon.
  */
 function RowActions({

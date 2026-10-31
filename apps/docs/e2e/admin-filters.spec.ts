@@ -1,43 +1,51 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
 
-import { gotoPreview } from "./preview";
+import { gotoPreview, settled } from "./preview";
 
 /**
- * `admin-01`'s filter parity with `tickets-01`, desktop and mobile.
+ * `admin-01`'s users table, on the payments table's design.
  *
- * `menu-dismissal.spec.ts` covers the desktop menus, because those exist to pin
- * the `closeOnClick` default. This file covers what is specific to this block:
- * the mobile drawer, and the fact that its Sort control and the table headers
- * write the same piece of state.
+ * `admin-payments.spec.ts` pins the pill mechanics in depth — focus after
+ * removal, operator chips, the X swap. This file pins what the users table
+ * adds or does differently: its vocabulary on the same pills, its phone
+ * drawer, its sort, and its record page.
  */
 
 const FILTERS_TRIGGER = /Filters/;
 const SIDEBAR_TRIGGER = /Toggle Sidebar/i;
 const ROW_ACTIONS = /^Actions for /;
+const ADD_FILTER = /Add filter/;
+const ROLE_PILL = /^Role:/;
 const ROLE_ROW = /^Role/;
 const SEATS_ROW = /^Seats/;
 const SORT_ROW = /^Sort/;
-const TWO_FACTOR_ROW = /^Two-factor/;
 const USER_COLUMN = /User/;
 const SEATS_COLUMN = /Seats/;
 const SORT_ASC_LABEL = /Sort:\s*Name\s*\(A–Z\)/;
 const SORT_DESC_LABEL = /Sort:\s*Name\s*\(Z–A\)/;
 const SORT_TRIGGER = /^Sort:/;
 const SORT_SEATS_LABEL = /Sort:\s*Seats\s*\(Most first\)/;
-const CLEAR_BUTTON = /^Clear/;
 const USERS_CRUMB = /^Users$/;
 const ID_COLUMN = /ID/;
+const URL_VIEW = /view=users/;
+const URL_ROLE = /role=Admin/;
 
-const rowCount = (page: Page) =>
-  page.locator('[data-slot="table-body"] tr').count();
+/** Real rows only, once the request has answered — never the skeleton. */
+async function rowCount(page: Page): Promise<number> {
+  await settled(page);
+  return page
+    .locator('[data-slot="table-body"] tr:not([data-skeleton-row])')
+    .count();
+}
 
-/** Chips read as "Label: value" — composed, because the spans are adjacent. */
-function chipLabels(page: Page): Promise<string[]> {
-  return page.locator("[data-filter-chip]").evaluateAll((nodes) =>
+/** Every pill, read as "Label: value" the way a person would scan the row. */
+function pills(page: Page): Promise<string[]> {
+  return page.locator("[data-filter-pill]").evaluateAll((nodes) =>
     nodes.map((node) => {
-      const label = node.querySelector("span")?.textContent?.trim() ?? "";
       const all = node.textContent?.trim() ?? "";
-      return `${label} ${all.slice(label.length).trim()}`;
+      const label =
+        node.querySelector("[data-pill-label]")?.textContent?.trim() ?? "";
+      return label ? `${label} ${all.slice(label.length).trim()}` : all;
     })
   );
 }
@@ -57,8 +65,8 @@ function drawerRows(page: Page): Promise<string[]> {
     );
 }
 
-/** Open the drawer, drill into one filter, pick a value, and come back out. */
-async function applyFilter(page: Page, row: RegExp, option: string) {
+/** On a phone: open the drawer, drill into one filter, pick, and come out. */
+async function applyInDrawer(page: Page, row: RegExp, option: string) {
   const drawer = page.locator('[data-slot="drawer-content"]');
   await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
   await expect(drawer).toBeVisible();
@@ -84,229 +92,8 @@ async function openUsers(page: Page) {
     await page.keyboard.press("Escape");
   }
   await expect(page.getByLabel("Search users")).toBeVisible();
+  await settled(page);
 }
-
-test.describe("the filter drawer is the filter surface", () => {
-  /**
-   * One surface at every width, unlike the payments table's pills. That is the
-   * point of this layout: there is no desktop tree and mobile tree to keep in
-   * step, which is how this block once shipped filters reachable on no phone.
-   */
-  for (const width of [375, 1280]) {
-    test(`reaches all five filters at ${width}px`, async ({ page }) => {
-      await page.setViewportSize({ height: 900, width });
-      await openUsers(page);
-
-      await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
-      const rows = await drawerRows(page);
-
-      expect(rows).toEqual([
-        "Role All",
-        "Status All",
-        "Seats All",
-        "Two-factor All",
-        "Created Any",
-        "Sort Name (A–Z)",
-      ]);
-    });
-  }
-
-  test("is a bottom sheet on a phone and a side panel on a desktop", async ({
-    page,
-  }) => {
-    // `swipeDirection` is a prop, not a class, so the two shells are rendered
-    // behind a CSS fork. Exactly one may be in the accessibility tree, or a
-    // screen reader — and `getByRole` — would find two Filters buttons.
-    for (const [width, expected] of [
-      [375, "bottom"],
-      [1280, "right"],
-    ] as const) {
-      // biome-ignore lint/performance/noAwaitInLoops: one page, resized in turn
-      await page.setViewportSize({ height: 900, width });
-      // biome-ignore lint/performance/noAwaitInLoops: sequential by nature
-      await openUsers(page);
-
-      const trigger = page.getByRole("button", { name: FILTERS_TRIGGER });
-      // biome-ignore lint/performance/noAwaitInLoops: sequential by nature
-      expect(await trigger.count()).toBe(1);
-      // biome-ignore lint/performance/noAwaitInLoops: sequential by nature
-      await trigger.click();
-
-      // biome-ignore lint/performance/noAwaitInLoops: sequential by nature
-      const box = await page
-        .locator('[data-slot="drawer-content"]')
-        .boundingBox();
-      const edge =
-        (box?.x ?? 0) + (box?.width ?? 0) >= width - 16 && (box?.x ?? 0) > 0
-          ? "right"
-          : "bottom";
-      expect(edge).toBe(expected);
-    }
-  });
-
-  /**
-   * The side panel is already capped by the Drawer (`max-w-md` once `floating`
-   * applies), so the bottom sheet's own `max-w-sm` centring column must not be
-   * carried over into it — that carved 32px of dead margin out of each side, on
-   * top of the 16px `DrawerFooter` legitimately owns. And `DrawerFooter` only
-   * pins to the foot when it is a sibling of the scrolling body: nested inside
-   * `StepperContent`, which animates to its measured step height, it floated
-   * directly under the last row with the rest of the panel empty below it.
-   */
-  test("the side panel's column spans the panel, and Apply sits at its foot", async ({
-    page,
-  }) => {
-    await page.setViewportSize({ height: 900, width: 1280 });
-    await openUsers(page);
-    await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
-
-    const panel = page.locator('[data-slot="drawer-content"]');
-    const panelBox = await panel.boundingBox();
-    const applyBox = await panel
-      .getByRole("button", { exact: true, name: "Apply" })
-      .boundingBox();
-    if (!(panelBox && applyBox)) {
-      throw new Error("drawer or Apply button not laid out");
-    }
-
-    // 16px is DrawerFooter's own p-4. Nothing else may inset the column.
-    expect(applyBox.x - panelBox.x).toBeLessThanOrEqual(20);
-    // …and the footer pins to the foot of a full-height panel.
-    expect(
-      panelBox.y + panelBox.height - (applyBox.y + applyBox.height)
-    ).toBeLessThan(24);
-  });
-
-  test("drills into a filter and applies it", async ({ page }) => {
-    await openUsers(page);
-    const total = await rowCount(page);
-
-    await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
-    const drawer = page.locator('[data-slot="drawer-content"]');
-    await expect(drawer.getByText("Filters")).toBeVisible();
-
-    await drawer.getByRole("button", { name: ROLE_ROW }).click();
-    // The Stepper keeps the outgoing step mounted while it slides, so assert
-    // on the step's own content rather than counting titles.
-    await expect(drawer.getByRole("button", { name: "Back" })).toBeVisible();
-    await drawer.getByText("Viewer", { exact: true }).click();
-    expect(await rowCount(page)).toBeLessThan(total);
-
-    // Back returns to the menu, which now shows the picked value.
-    await drawer.getByRole("button", { name: "Back" }).click();
-    await expect(drawer.getByRole("button", { name: ROLE_ROW })).toContainText(
-      "Viewer"
-    );
-  });
-});
-
-test.describe("applied filters are chips", () => {
-  test("one chip per applied filter, and none when nothing is", async ({
-    page,
-  }) => {
-    await openUsers(page);
-
-    // Nothing applied: no row at all, rather than an empty container holding
-    // space for one.
-    await expect(page.locator("[data-filter-chip]")).toHaveCount(0);
-
-    await applyFilter(page, ROLE_ROW, "Admin");
-    await applyFilter(page, SEATS_ROW, "One seat");
-
-    expect(await chipLabels(page)).toEqual(["Role: Admin", "Seats: One seat"]);
-  });
-
-  test("the Filters count agrees with the chips, and ignores sort", async ({
-    page,
-  }) => {
-    await openUsers(page);
-    const trigger = page.getByRole("button", { name: FILTERS_TRIGGER });
-
-    // Nothing applied: the badge is absent, not a zero.
-    await expect(trigger).toHaveText("Filters");
-
-    await applyFilter(page, ROLE_ROW, "Admin");
-    await applyFilter(page, SEATS_ROW, "One seat");
-
-    // The count is the length of the list the chips render, so the two cannot
-    // drift. The payments badge this block once carried could: it counted the
-    // panel's filters while pills showed the rest.
-    expect(await page.locator("[data-filter-chip]").count()).toBe(2);
-    await expect(trigger).toHaveText("Filters2");
-
-    // Sort lives in the same drawer and is not a filter. A badge that ticks up
-    // when you reorder a column is lying about what it counts.
-    await applyFilter(page, SORT_ROW, "Seats");
-    await expect(trigger).toHaveText("Filters2");
-  });
-
-  test("a chip removes only its own filter", async ({ page }) => {
-    await openUsers(page);
-
-    await applyFilter(page, ROLE_ROW, "Member");
-    await applyFilter(page, SEATS_ROW, "One seat");
-    await applyFilter(page, TWO_FACTOR_ROW, "Enabled");
-    const narrowed = await rowCount(page);
-
-    await page.getByRole("button", { name: "Remove Seats filter" }).click();
-
-    expect(await chipLabels(page)).toEqual([
-      "Role: Member",
-      "Two-factor: Enabled",
-    ]);
-    expect(await rowCount(page)).toBeGreaterThanOrEqual(narrowed);
-  });
-
-  test("each remove button names the filter it removes", async ({ page }) => {
-    await openUsers(page);
-
-    await applyFilter(page, ROLE_ROW, "Admin");
-    await applyFilter(page, SEATS_ROW, "One seat");
-
-    // Two buttons both labelled "Remove" would leave a screen reader to work
-    // out which from context it does not have.
-    const labels = await page
-      .locator("[data-filter-chip] button")
-      .evaluateAll((nodes) => nodes.map((n) => n.getAttribute("aria-label")));
-
-    expect(labels).toEqual(["Remove Role filter", "Remove Seats filter"]);
-  });
-
-  test("the chip nests no interactive element inside another", async ({
-    page,
-  }) => {
-    await openUsers(page);
-    await applyFilter(page, ROLE_ROW, "Admin");
-
-    // This is why the chip is built on `Badge` and not `TagGroup`:
-    // `TagGroupItem` renders its body as a button and puts the remove control
-    // inside it, which is invalid and leaves the label focusable.
-    const nested = await page.evaluate(
-      () =>
-        [...document.querySelectorAll("[data-filter-chip] button")].filter(
-          (button) => button.parentElement?.closest("button")
-        ).length
-    );
-
-    expect(nested).toBe(0);
-  });
-
-  test("Clear all empties the chips and restores every row", async ({
-    page,
-  }) => {
-    await openUsers(page);
-    const total = await rowCount(page);
-
-    await page.getByLabel("Search users").fill("a");
-    await applyFilter(page, ROLE_ROW, "Admin");
-    expect(await rowCount(page)).toBeLessThan(total);
-
-    await page.getByRole("button", { name: "Clear all" }).first().click();
-
-    expect(await chipLabels(page)).toEqual([]);
-    expect(await rowCount(page)).toBe(total);
-  });
-});
 
 /**
  * Open a menu and wait for its popup.
@@ -321,15 +108,123 @@ async function openMenu(page: Page, trigger: Locator) {
   ).toBeVisible();
 }
 
+test.describe("filters are pills, as on payments", () => {
+  test("the row starts with Role and Status; the rest are added", async ({
+    page,
+  }) => {
+    await openUsers(page);
+    expect(await pills(page)).toEqual(["Role: All", "Status: All"]);
+
+    await openMenu(page, page.getByRole("button", { name: ADD_FILTER }));
+    expect(await page.getByRole("menuitem").allTextContents()).toEqual([
+      "Seats",
+      "Two-factor",
+      "Created",
+    ]);
+  });
+
+  test("a pill narrows the table and reads what it holds", async ({ page }) => {
+    await openUsers(page);
+    const total = await rowCount(page);
+
+    await page.getByRole("button", { name: ROLE_PILL }).click();
+    await page.getByRole("menuitemradio", { name: "Viewer" }).click();
+
+    expect(await pills(page)).toContain("Role: Viewer");
+    expect(await rowCount(page)).toBeLessThan(total);
+  });
+
+  test("Clear all restores every row and the starting pills", async ({
+    page,
+  }) => {
+    await openUsers(page);
+    const total = await rowCount(page);
+
+    await page.getByLabel("Search users").fill("a");
+    await page.getByRole("button", { name: ROLE_PILL }).click();
+    await page.getByRole("menuitemradio", { name: "Admin" }).click();
+    expect(await rowCount(page)).toBeLessThan(total);
+
+    await page.getByRole("button", { name: "Clear all" }).click();
+
+    expect(await pills(page)).toEqual(["Role: All", "Status: All"]);
+    await expect(page.getByLabel("Search users")).toHaveValue("");
+    expect(await rowCount(page)).toBe(total);
+  });
+});
+
+test.describe("on a phone the filters fold into a drawer", () => {
+  test.use({ viewport: { height: 900, width: 375 } });
+
+  test("it reaches every filter and the sort", async ({ page }) => {
+    await openUsers(page);
+    await expect(page.locator("[data-filter-pill]").first()).toBeHidden();
+
+    await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
+    expect(await drawerRows(page)).toEqual([
+      "Role All",
+      "Status All",
+      "Seats All",
+      "Two-factor All",
+      "Created Any",
+      "Sort Name (A–Z)",
+    ]);
+  });
+
+  test("drills into a filter and applies it", async ({ page }) => {
+    await openUsers(page);
+    const total = await rowCount(page);
+
+    await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
+    const drawer = page.locator('[data-slot="drawer-content"]');
+    await drawer.getByRole("button", { name: ROLE_ROW }).click();
+    // The Stepper keeps the outgoing step mounted while it slides, so assert
+    // on the step's own content rather than counting titles.
+    await expect(drawer.getByRole("button", { name: "Back" })).toBeVisible();
+    await drawer.getByText("Viewer", { exact: true }).click();
+    expect(await rowCount(page)).toBeLessThan(total);
+
+    await drawer.getByRole("button", { name: "Back" }).click();
+    await expect(drawer.getByRole("button", { name: ROLE_ROW })).toContainText(
+      "Viewer"
+    );
+  });
+
+  test("the Filters count ignores sort", async ({ page }) => {
+    await openUsers(page);
+    const trigger = page.getByRole("button", { name: FILTERS_TRIGGER });
+    await expect(trigger).toHaveText("Filters");
+
+    await applyInDrawer(page, ROLE_ROW, "Admin");
+    await applyInDrawer(page, SEATS_ROW, "One seat");
+    await expect(trigger).toHaveText("Filters2");
+
+    // Sort lives in the same drawer and is not a filter. A badge that ticks up
+    // when you reorder a column is lying about what it counts.
+    await applyInDrawer(page, SORT_ROW, "Seats");
+    await expect(trigger).toHaveText("Filters2");
+  });
+
+  test("a filter set on the phone shows its pill on a desktop", async ({
+    page,
+  }) => {
+    await openUsers(page);
+    await applyInDrawer(page, SEATS_ROW, "One seat");
+
+    // Seats is not one of the starting pills, but it holds a value, so it is
+    // on the row — a filter that narrows the table is never invisible.
+    await page.setViewportSize({ height: 900, width: 1280 });
+    expect(await pills(page)).toContain("Seats: One seat");
+  });
+});
+
 test.describe("sort is one piece of state", () => {
   test("a header click updates the toolbar's Sort label", async ({ page }) => {
     await openUsers(page);
+    await expect(
+      page.getByRole("button", { name: SORT_ASC_LABEL })
+    ).toBeVisible();
 
-    const sortTrigger = page.getByRole("button", { name: SORT_ASC_LABEL });
-    await expect(sortTrigger).toBeVisible();
-
-    // Cycling the Name header to descending must move the toolbar with it. If
-    // these were two systems, the label would still read "Name A–Z".
     await page
       .getByRole("columnheader", { name: USER_COLUMN })
       .getByRole("button")
@@ -344,7 +239,6 @@ test.describe("sort is one piece of state", () => {
     page,
   }) => {
     await openUsers(page);
-
     await page.getByRole("button", { name: SORT_ASC_LABEL }).click();
     await page.getByRole("menuitemradio", { name: "Seats" }).click();
 
@@ -352,88 +246,109 @@ test.describe("sort is one piece of state", () => {
     await expect(seats).toHaveAttribute("aria-sort", "descending");
   });
 
-  /**
-   * Column and direction are two choices, not one. The flat cross-product
-   * this replaced meant changing direction cost finding your column again in
-   * a list that had grown to hold both.
-   */
-  test("picks the column and the direction separately", async ({ page }) => {
+  test("picks the column, then a direction named for it", async ({ page }) => {
     await openUsers(page);
     const trigger = page.getByRole("button", { name: SORT_TRIGGER });
 
+    // Always sorted, like payments: five columns, then two directions.
     await openMenu(page, trigger);
-    // Five columns plus Unsorted, then two directions — not eleven pairings.
     expect(await page.getByRole("menuitemradio").allTextContents()).toEqual([
-      "Unsorted",
-      "ID",
       "Name",
       "Role",
       "Seats",
       "Last active",
+      "ID",
       "A–Z",
       "Z–A",
     ]);
 
-    // A column takes its natural direction, and the directions relabel to say
-    // what the order means for it — "Ascending" would say nothing.
+    // A column takes its natural direction, which the list puts first.
     await page.getByRole("menuitemradio", { name: "Seats" }).click();
-    await expect(trigger).toContainText("Seats");
     await expect(trigger).toContainText("Most first");
-
     await openMenu(page, trigger);
     expect(
       (await page.getByRole("menuitemradio").allTextContents()).slice(-2)
-    ).toEqual(["Fewest first", "Most first"]);
+    ).toEqual(["Most first", "Fewest first"]);
 
     // Changing direction keeps the column.
     await page.getByRole("menuitemradio", { name: "Fewest first" }).click();
-    await expect(trigger).toContainText("Seats");
     await expect(
       page.getByRole("columnheader", { name: SEATS_COLUMN })
     ).toHaveAttribute("aria-sort", "ascending");
   });
 
-  test("offers no direction while nothing is sorted", async ({ page }) => {
+  test("Clear all resets the filters and leaves the sort alone", async ({
+    page,
+  }) => {
     await openUsers(page);
-    const trigger = page.getByRole("button", { name: SORT_TRIGGER });
 
-    await openMenu(page, trigger);
-    await page.getByRole("menuitemradio", { name: "Unsorted" }).click();
+    // Sort is not a filter, so Clear must not touch it. Without this, clearing
+    // a search would silently reorder the table under the reader.
+    await page.getByRole("button", { name: SORT_ASC_LABEL }).click();
+    await page.getByRole("menuitemradio", { name: "Seats" }).click();
 
-    // Two directions with nothing to order are controls that cannot act.
-    await openMenu(page, trigger);
-    expect(await page.getByRole("menuitemradio").allTextContents()).toEqual([
-      "Unsorted",
-      "ID",
-      "Name",
-      "Role",
-      "Seats",
-      "Last active",
-    ]);
+    const total = await rowCount(page);
+    await page.getByLabel("Search users").fill("Ada");
+    expect(await rowCount(page)).toBeLessThan(total);
+
+    await page.getByRole("button", { name: "Clear all" }).click();
+
+    expect(await rowCount(page)).toBe(total);
+    await expect(
+      page.getByRole("button", { name: SORT_SEATS_LABEL })
+    ).toBeVisible();
   });
 });
 
-test("Clear resets the filters and leaves the sort alone", async ({ page }) => {
-  await openUsers(page);
+test.describe("users view controls", () => {
+  test("a hidden column leaves the header and every row", async ({ page }) => {
+    await openUsers(page);
+    await page.getByRole("button", { name: "Columns" }).click();
+    // The name is the row, so it is not offered.
+    await expect(
+      page.getByRole("menuitemcheckbox", { name: "User" })
+    ).toHaveCount(0);
+    await page.getByRole("menuitemcheckbox", { name: "Role" }).click();
+    await page.keyboard.press("Escape");
 
-  // Sort is not a filter, so it is excluded from the active count and Clear
-  // must not touch it. Without this, clearing a search would silently reorder
-  // the table under the reader.
-  await page.getByRole("button", { name: SORT_ASC_LABEL }).click();
-  await page.getByRole("menuitemradio", { name: "Seats" }).click();
+    await expect(page.getByRole("columnheader", { name: "Role" })).toHaveCount(
+      0
+    );
+    await expect(page.locator('td[data-column="role"]')).toHaveCount(0);
+  });
 
-  // A term narrow enough to drop below the 5-row page size, so the count is a
-  // real signal rather than the pagination window.
-  const total = await rowCount(page);
-  await page.getByLabel("Search users").fill("Ada");
-  expect(await rowCount(page)).toBeLessThan(total);
+  test("the URL carries the view, and a reload lands on it", async ({
+    page,
+  }) => {
+    await openUsers(page);
+    await page.getByRole("button", { name: ROLE_PILL }).click();
+    await page.getByRole("menuitemradio", { name: "Admin" }).click();
+    await settled(page);
+    await expect(page).toHaveURL(URL_VIEW);
+    await expect(page).toHaveURL(URL_ROLE);
 
-  await page.getByRole("button", { name: CLEAR_BUTTON }).click();
+    await page.reload();
+    await settled(page);
+    expect(await pills(page)).toContain("Role: Admin");
+  });
 
-  expect(await rowCount(page)).toBe(total);
-  await expect(
-    page.getByRole("button", { name: SORT_SEATS_LABEL })
-  ).toBeVisible();
+  test("skeleton rows keep the two-line rows' height", async ({ page }) => {
+    await openUsers(page);
+    const real = await page
+      .locator('[data-slot="table-body"] tr')
+      .first()
+      .evaluate((row) => row.getBoundingClientRect().height);
+
+    await page.getByRole("button", { name: SORT_ASC_LABEL }).click();
+    await page.getByRole("menuitemradio", { name: "Seats" }).click();
+    const skeleton = page.locator("[data-skeleton-row]").first();
+    await expect(skeleton).toBeVisible();
+    const placeholder = await skeleton.evaluate(
+      (row) => row.getBoundingClientRect().height
+    );
+
+    expect(Math.round(placeholder)).toBe(Math.round(real));
+  });
 });
 
 test.describe("user detail", () => {
@@ -596,22 +511,25 @@ test.describe("user detail", () => {
   test("the ID column shows the real id and sorts", async ({ page }) => {
     await openUsers(page);
 
-    const ids = () =>
-      page
-        .locator('[data-slot="table-body"] tr td:nth-child(2)')
+    const ids = async () => {
+      await settled(page);
+      return page
+        .locator('[data-slot="table-body"] td[data-column="id"]')
         .allTextContents();
+    };
 
     // Scoped to the header: once sorted, the toolbar's Sort trigger also reads
-    // "ID, first added".
+    // "ID". The first click takes the column's natural direction — last added
+    // first — and the second flips it.
     const idHeader = page
       .getByRole("columnheader", { name: ID_COLUMN })
       .getByRole("button");
 
     await idHeader.click();
-    const ascending = await ids();
+    const descending = await ids();
 
     await idHeader.click();
-    const descending = await ids();
+    const ascending = await ids();
 
     // Asserted as a relationship rather than against fixture values, so
     // renaming an id in the mock does not break the test. Only the first page

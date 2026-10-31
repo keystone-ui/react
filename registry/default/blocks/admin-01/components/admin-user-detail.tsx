@@ -170,7 +170,14 @@ function Section({ children, title }: { children: ReactNode; title: string }) {
   );
 }
 
-function Pair({ children, term }: { children: ReactNode; term: string }) {
+/** Also the payment record's, so the two records read as one family. */
+export function Pair({
+  children,
+  term,
+}: {
+  children: ReactNode;
+  term: string;
+}) {
   return (
     <DescriptionListItem>
       <DescriptionListTerm>{term}</DescriptionListTerm>
@@ -179,7 +186,7 @@ function Pair({ children, term }: { children: ReactNode; term: string }) {
   );
 }
 
-function Mono({ value }: { value: string }) {
+export function Mono({ value }: { value: string }) {
   return (
     <span className="flex min-w-0 items-center gap-1">
       <span className="truncate font-mono">{value}</span>

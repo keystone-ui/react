@@ -1,16 +1,28 @@
 "use client";
 
-import { CopyIcon, EyeIcon, HashIcon, MoreHorizontalIcon } from "lucide-react";
 import {
-  type SortOptionId,
-  type SortState,
+  CopyIcon,
+  DownloadIcon,
+  EyeIcon,
+  HashIcon,
+  MoreHorizontalIcon,
+} from "lucide-react";
+import { type ReactNode, useState } from "react";
+import {
+  defaultDirection,
+  hasActiveFilters,
+  PAGE_SIZES,
   STATUS_VARIANT,
-  type UserFilters,
+  toUsersCsv,
   type UserSortKey,
 } from "@/components/admin-filters";
 import { AdminUsersToolbar } from "@/components/admin-users-toolbar";
-import { statusLabels, type User } from "@/components/mock-admin";
+import { downloadCsv } from "@/components/csv";
+import { FilteredEmpty } from "@/components/filtered-empty";
+import { statusLabels, type User, users } from "@/components/mock-admin";
 import { ResultSummary } from "@/components/result-summary";
+import { SkeletonRows } from "@/components/skeleton-rows";
+import { SortableHead } from "@/components/sort-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -28,17 +40,14 @@ import {
   SelectionBarClose,
   SelectionBarGroup,
   SelectionBarLabel,
-  SelectionBarSeparator,
 } from "@/components/ui/selection-bar";
 import {
   Table,
   TableBody,
   TableCell,
-  TableEmpty,
   TableHead,
   TableHeader,
   TableRow,
-  TableSortButton,
 } from "@/components/ui/table";
 import {
   TablePagination,
@@ -48,77 +57,125 @@ import {
   TablePaginationPageSize,
   TablePaginationStatus,
 } from "@/components/ui/table-pagination";
+import type {
+  UserColumnId,
+  UsersTableState,
+} from "@/components/use-users-table";
 
-// Re-exported for the page, which composes this table. The types themselves
-// live in `admin-filters.ts` so the dependency runs one way.
-export type {
-  SortDirection,
-  SortState,
-  UserSortKey,
-} from "@/components/admin-filters";
-
-const columns = [
-  // Explicit width: the table distributes free space, and an id needs only
-  // enough room for its own text — matching `tickets-01`'s ID column.
-  {
-    icon: HashIcon,
-    key: "id",
-    label: "ID",
-    numeric: false,
-    width: "w-[116px]",
-  },
-  { key: "name", label: "User", numeric: false },
-  { key: "role", label: "Role", numeric: false },
-  { key: "seats", label: "Seats", numeric: true },
-  { key: "lastActive", label: "Last active", numeric: false },
-] as const;
-
-interface AdminUsersTableProps {
-  filters: UserFilters;
-  onClearSelection: () => void;
-  onFiltersChange: (patch: Partial<UserFilters>) => void;
-  onFiltersClear: () => void;
-  onOpenUser: (id: string) => void;
-  onPageIndexChange: (index: number) => void;
-  onPageSizeChange: (size: number) => void;
-  onSort: (key: UserSortKey) => void;
-  onSortChange: (id: SortOptionId) => void;
-  onToggleAll: (checked: boolean) => void;
-  onToggleRow: (id: string) => void;
-  pageCount: number;
-  pageIndex: number;
-  pageSize: number;
-  rows: readonly User[];
-  selected: ReadonlySet<string>;
-  sort: SortState | null;
-  totalCount: number;
+interface UserColumn {
+  cell: (row: User, onOpenUser: (id: string) => void) => ReactNode;
+  /** Classes for the body cell. */
+  className?: string;
+  /** Classes for the header cell — a fixed width, say. */
+  headClassName?: string;
+  /** Hideable from the Columns menu. The name column is not: it is the row. */
+  id: UserColumnId | "name";
+  label: ReactNode;
+  /** The name the Columns menu shows, when `label` is not plain text. */
+  menuLabel: string;
+  numeric?: boolean;
+  /** Present on the columns that sort. */
+  sortKey?: UserSortKey;
 }
 
+const COLUMNS: readonly UserColumn[] = [
+  {
+    cell: (row) => (
+      <span className="font-mono text-muted-foreground text-xs">{row.id}</span>
+    ),
+    // Explicit width: the table distributes free space, and an id needs only
+    // enough room for its own text — matching `tickets-01`'s ID column.
+    headClassName: "w-[116px]",
+    id: "id",
+    label: (
+      <>
+        <HashIcon className="size-3.5 shrink-0" />
+        ID
+      </>
+    ),
+    menuLabel: "ID",
+    sortKey: "id",
+  },
+  {
+    cell: (row, onOpenUser) => (
+      <div className="min-w-0">
+        <button
+          className="cursor-pointer rounded-sm text-left font-medium hover:underline focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
+          onClick={() => onOpenUser(row.id)}
+          type="button"
+        >
+          {row.name}
+        </button>
+        <div className="truncate text-muted-foreground text-xs">
+          {row.email}
+        </div>
+      </div>
+    ),
+    id: "name",
+    label: "User",
+    menuLabel: "User",
+    sortKey: "name",
+  },
+  {
+    cell: (row) => row.role,
+    className: "text-muted-foreground",
+    id: "role",
+    label: "Role",
+    menuLabel: "Role",
+    sortKey: "role",
+  },
+  {
+    cell: (row) => row.seats,
+    id: "seats",
+    label: "Seats",
+    menuLabel: "Seats",
+    numeric: true,
+    sortKey: "seats",
+  },
+  {
+    cell: (row) => row.lastActive,
+    className: "text-muted-foreground",
+    id: "lastActive",
+    label: "Last active",
+    menuLabel: "Last active",
+    sortKey: "lastActive",
+  },
+  {
+    cell: (row) => (
+      <Badge variant={STATUS_VARIANT[row.status]}>
+        {statusLabels[row.status]}
+      </Badge>
+    ),
+    id: "status",
+    label: "Status",
+    menuLabel: "Status",
+  },
+];
+
+const USER_COLUMNS = COLUMNS.flatMap((column) =>
+  column.id === "name" ? [] : [{ id: column.id, label: column.menuLabel }]
+);
+
+/**
+ * The users table, on the payments table's design: the same toolbar, header,
+ * skeleton, empty state, footer and selection bar, over different columns.
+ * What is particular to users is the two-line name cell, and that a name opens
+ * a full record page rather than a side panel — a user is a record you work
+ * in, a payment one you glance at.
+ */
 export function AdminUsersTable({
-  onClearSelection,
-  onPageIndexChange,
-  onPageSizeChange,
-  filters,
-  onFiltersChange,
-  onFiltersClear,
   onOpenUser,
-  onSort,
-  onSortChange,
-  onToggleAll,
-  onToggleRow,
-  pageCount,
-  pageIndex,
-  pageSize,
-  rows,
-  selected,
-  sort,
-  totalCount,
-}: AdminUsersTableProps) {
-  // Binary rather than tri-state: keystone's Checkbox has no indeterminate
-  // variant, and re-implementing tickets-01's custom mixed-state button here
-  // would duplicate a workaround rather than share one.
+  table,
+}: {
+  onOpenUser: (id: string) => void;
+  table: UsersTableState;
+}) {
+  const { loading, result, selected } = table;
+  const visible = COLUMNS.filter(
+    (column) => column.id === "name" || !table.hiddenColumns.has(column.id)
+  );
   const allOnPageSelected =
-    rows.length > 0 && rows.every((row) => selected.has(row.id));
+    result.page.length > 0 && result.page.every((row) => selected.has(row.id));
 
   return (
     <>
@@ -130,51 +187,46 @@ export function AdminUsersTable({
 
         <Card variant="outline">
           <CardContent className="flex flex-col gap-4">
-            <AdminUsersToolbar
-              filters={filters}
-              onChange={onFiltersChange}
-              onClear={onFiltersClear}
-              onSortChange={onSortChange}
-              sort={sort}
-            />
+            <AdminUsersToolbar columns={USER_COLUMNS} table={table} />
 
-            <Table hoverable>
+            <Table aria-busy={loading} hoverable>
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-10">
                     <Checkbox
                       aria-label="Select all users on this page"
                       checked={allOnPageSelected}
+                      disabled={loading}
                       onCheckedChange={(checked) =>
-                        onToggleAll(checked === true)
+                        table.togglePage(checked === true)
                       }
                     />
                   </TableHead>
-                  {columns.map((column) => (
-                    <TableHead
-                      className={"width" in column ? column.width : undefined}
-                      key={column.key}
-                      numeric={column.numeric}
-                      sortDirection={
-                        sort?.key === column.key ? sort.direction : null
-                      }
-                    >
-                      <TableSortButton
-                        direction={
-                          sort?.key === column.key ? sort.direction : null
-                        }
-                        onClick={() => onSort(column.key)}
+                  {visible.map((column) =>
+                    column.sortKey ? (
+                      <SortableHead
+                        className={column.headClassName}
+                        columnKey={column.sortKey}
+                        defaultDirection={defaultDirection}
+                        key={column.id}
+                        numeric={column.numeric}
+                        onSortChange={table.setSort}
+                        sort={table.sort}
                       >
-                        {"icon" in column ? (
-                          <column.icon className="size-3.5 shrink-0" />
-                        ) : null}
                         {column.label}
-                      </TableSortButton>
-                    </TableHead>
-                  ))}
-                  {/* Not sortable, so no sortDirection at all — omitting it means
-                      no aria-sort, where `null` would claim the column sorts. */}
-                  <TableHead>Status</TableHead>
+                      </SortableHead>
+                    ) : (
+                      // Not sortable, so no `sortDirection` at all — see
+                      // `SortableHead`.
+                      <TableHead
+                        className={column.headClassName}
+                        key={column.id}
+                        numeric={column.numeric}
+                      >
+                        {column.label}
+                      </TableHead>
+                    )
+                  )}
                   {/* One icon wide, so no visible label: "Actions" above it
                       would size the column from the header. */}
                   <TableHead className="w-12">
@@ -184,97 +236,93 @@ export function AdminUsersTable({
               </TableHeader>
 
               <TableBody>
-                {rows.length === 0 ? (
-                  <TableEmpty colSpan={columns.length + 3}>
-                    <p className="py-10 text-center text-muted-foreground text-sm">
-                      No users match these filters.
-                    </p>
-                  </TableEmpty>
-                ) : (
-                  rows.map((row) => (
-                    <TableRow
-                      className="group/row"
-                      data-state={selected.has(row.id) ? "selected" : undefined}
-                      key={row.id}
-                    >
-                      <TableCell>
-                        <Checkbox
-                          aria-label={`Select ${row.name}`}
-                          checked={selected.has(row.id)}
-                          onCheckedChange={() => onToggleRow(row.id)}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <span className="font-mono text-muted-foreground text-xs">
-                          {row.id}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        <div className="min-w-0">
-                          <button
-                            className="cursor-pointer rounded-sm text-left font-medium hover:underline focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
-                            onClick={() => onOpenUser(row.id)}
-                            type="button"
+                {loading ? (
+                  <SkeletonRows
+                    checkbox
+                    columns={visible.length}
+                    count={result.page.length || table.pageSize}
+                    twoLine={visible.findIndex(
+                      (column) => column.id === "name"
+                    )}
+                  />
+                ) : null}
+                {!loading && result.page.length === 0 ? (
+                  <FilteredEmpty
+                    colSpan={visible.length + 2}
+                    filtered={hasActiveFilters(table.filters)}
+                    noun="users"
+                    onClear={table.clearFilters}
+                  />
+                ) : null}
+                {loading
+                  ? null
+                  : result.page.map((row) => (
+                      <TableRow
+                        className="group/row"
+                        data-state={
+                          selected.has(row.id) ? "selected" : undefined
+                        }
+                        key={row.id}
+                      >
+                        <TableCell>
+                          <Checkbox
+                            aria-label={`Select ${row.name}`}
+                            checked={selected.has(row.id)}
+                            onCheckedChange={() => table.toggleRow(row.id)}
+                          />
+                        </TableCell>
+                        {visible.map((column) => (
+                          <TableCell
+                            className={column.className}
+                            data-column={column.id}
+                            key={column.id}
+                            numeric={column.numeric}
                           >
-                            {row.name}
-                          </button>
-                          <div className="truncate text-muted-foreground text-xs">
-                            {row.email}
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {row.role}
-                      </TableCell>
-                      <TableCell numeric>{row.seats}</TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {row.lastActive}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={STATUS_VARIANT[row.status]}>
-                          {statusLabels[row.status]}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <UserRowActions
-                          name={row.name}
-                          onOpen={() => onOpenUser(row.id)}
-                          userId={row.id}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
+                            {column.cell(row, onOpenUser)}
+                          </TableCell>
+                        ))}
+                        <TableCell>
+                          <UserRowActions
+                            name={row.name}
+                            onOpen={() => onOpenUser(row.id)}
+                            userId={row.id}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
               </TableBody>
             </Table>
 
             {/* Composed: the info slot's only props-driven content is a
                 selection count, which the `SelectionBar` already states — and
                 states at every width, where this slot is `hidden lg:block`. */}
-            <TablePagination pageCount={pageCount} pageIndex={pageIndex}>
+            <TablePagination
+              pageCount={result.pageCount}
+              pageIndex={table.pageIndex}
+            >
               <TablePaginationInfo>
                 <ResultSummary
                   noun={["user", "users"]}
-                  pageIndex={pageIndex}
-                  pageSize={pageSize}
-                  rowCount={rows.length}
-                  totalCount={totalCount}
+                  pageIndex={table.pageIndex}
+                  pageSize={table.pageSize}
+                  rowCount={result.page.length}
+                  totalCount={result.total}
                 />
               </TablePaginationInfo>
               <TablePaginationControls>
                 <TablePaginationPageSize
-                  onValueChange={onPageSizeChange}
-                  options={[5, 10, 20, 50]}
-                  value={pageSize}
+                  onValueChange={table.setPageSize}
+                  options={PAGE_SIZES}
+                  value={table.pageSize}
                 />
                 <TablePaginationStatus
-                  pageCount={pageCount}
-                  pageIndex={pageIndex}
+                  pageCount={result.pageCount}
+                  pageIndex={table.pageIndex}
                 />
                 <TablePaginationButtons
-                  onPageIndexChange={onPageIndexChange}
-                  pageCount={pageCount}
-                  pageIndex={pageIndex}
+                  onPageIndexChange={table.setPageIndex}
+                  pageCount={result.pageCount}
+                  pageIndex={table.pageIndex}
                 />
               </TablePaginationControls>
             </TablePagination>
@@ -282,23 +330,60 @@ export function AdminUsersTable({
         </Card>
       </div>
 
-      <SelectionBar open={selected.size > 0}>
-        <SelectionBarClose onClick={onClearSelection} />
-        <SelectionBarGroup>
-          <SelectionBarLabel>
-            {selected.size} {selected.size === 1 ? "user" : "users"} selected
-          </SelectionBarLabel>
-        </SelectionBarGroup>
-        <SelectionBarButton>Change role</SelectionBarButton>
-        <SelectionBarButton>Resend invite</SelectionBarButton>
-        <SelectionBarSeparator />
-        <SelectionBarButton tone="destructive">Suspend</SelectionBarButton>
-      </SelectionBar>
+      <UserSelectionBar onClear={table.clearSelection} selected={selected} />
     </>
   );
 }
 
-/** How much of the result set is on screen. */
+/**
+ * The same two actions as the payments bar, for the same reason: this block
+ * can perform them. Role changes, invites and suspensions need a backend, and
+ * buttons that do nothing were what this bar used to carry.
+ */
+function UserSelectionBar({
+  onClear,
+  selected,
+}: {
+  onClear: () => void;
+  selected: ReadonlySet<string>;
+}) {
+  const [copied, setCopied] = useState(false);
+  const rows = users.filter((user) => selected.has(user.id));
+
+  return (
+    <SelectionBar open={selected.size > 0}>
+      <SelectionBarClose onClick={onClear} />
+      <SelectionBarGroup>
+        <SelectionBarLabel>
+          {selected.size} {selected.size === 1 ? "user" : "users"} selected
+        </SelectionBarLabel>
+      </SelectionBarGroup>
+      <SelectionBarButton
+        onClick={() => downloadCsv("users-selected.csv", toUsersCsv(rows))}
+      >
+        <DownloadIcon />
+        Export
+      </SelectionBarButton>
+      <SelectionBarButton
+        onClick={async () => {
+          try {
+            await navigator.clipboard.writeText(
+              rows.map((row) => row.id).join("\n")
+            );
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500);
+          } catch {
+            // Insecure context or permission denied; nothing to undo.
+          }
+        }}
+      >
+        <CopyIcon />
+        {copied ? "Copied" : "Copy IDs"}
+      </SelectionBarButton>
+    </SelectionBar>
+  );
+}
+
 /**
  * Row actions, in a trailing menu rather than a hover-revealed button.
  *

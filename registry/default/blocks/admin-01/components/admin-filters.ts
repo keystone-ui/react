@@ -1,42 +1,43 @@
+import { type CsvColumn, toCsv } from "@/components/csv";
+import {
+  addableKeys as addableKeysOf,
+  visibleKeys as visibleKeysOf,
+} from "@/components/filter-row";
 import {
   type Role,
   type Status,
   statusLabels,
   type User,
 } from "@/components/mock-admin";
+import type {
+  SortState as BaseSortState,
+  SortDirection,
+} from "@/components/sort";
+import {
+  oneOf,
+  pageFromParams,
+  pageToParams,
+  sortFromParam,
+  sortToParam,
+} from "@/components/url-params";
+import type { DataTableQuery } from "@/components/use-data-table";
 
 /**
- * The filter and sort vocabulary, owned in one place.
+ * The users table's filter and sort vocabulary, owned in one place.
  *
- * The toolbar, the mobile drawer and the page all need the same option lists
- * and labels. `tickets-01` declares its lists twice — inline in the toolbar and
- * again in the drawer — which works until someone adds an option to one of
- * them. One owner, imported three ways, avoids that.
- *
- * Sort types live here too rather than in `admin-users-table.tsx`, so the
- * dependency runs one way: table and toolbar both import this, and this imports
- * neither.
+ * The pills, the phone drawer, the URL and the page all need the same option
+ * lists and labels. One owner, imported each way, is what keeps an option
+ * added to one of them from going missing in another. It is the same shape as
+ * `payment-filters.ts`, so both toolbars are one design over two vocabularies.
  */
 
 export type RoleFilter = "all" | Role;
 export type StatusFilter = "all" | Status;
+export type SeatsFilter = "all" | "none" | "one" | "many";
+export type TwoFactorFilter = "all" | "off" | "on";
 
-export type UserSortKey = "id" | "lastActive" | "name" | "role" | "seats";
-export type SortDirection = "asc" | "desc";
-
-export interface SortState {
-  direction: SortDirection;
-  key: UserSortKey;
-}
-
-/** "all" is rendered separately above the separator, so it is not in here. */
 export const ROLES: readonly Role[] = ["Admin", "Billing", "Member", "Viewer"];
 export const STATUSES: readonly Status[] = ["active", "invited", "suspended"];
-
-export function roleLabel(role: RoleFilter): string {
-  // Bare "All": the trigger and the drawer row both say Role already.
-  return role === "all" ? "All" : role;
-}
 
 /** Shared by the table's Status cell and the detail view, so they cannot drift. */
 export const STATUS_VARIANT: Record<
@@ -47,17 +48,6 @@ export const STATUS_VARIANT: Record<
   invited: "outline",
   suspended: "outline",
 };
-
-export function statusLabel(status: StatusFilter): string {
-  return status === "all" ? "All" : statusLabels[status];
-}
-
-// ---------------------------------------------------------------------------
-// The filter model
-// ---------------------------------------------------------------------------
-
-export type SeatsFilter = "all" | "none" | "one" | "many";
-export type TwoFactorFilter = "all" | "off" | "on";
 
 export interface UserFilters {
   createdAfter: string;
@@ -79,40 +69,47 @@ export const EMPTY_FILTERS: UserFilters = {
   twoFactor: "all",
 };
 
-export type FilterKey = "created" | "role" | "seats" | "status" | "twoFactor";
+/**
+ * Each single-select filter's options, `All` first. The pills and the drawer
+ * both list these, so the two cannot offer different choices.
+ *
+ * The unset value reads as a bare "All" because the pill already says which
+ * dimension it belongs to — "Role: All roles" would say it twice.
+ */
+export const OPTIONS = {
+  role: [
+    { label: "All", value: "all" },
+    ...ROLES.map((role) => ({ label: role, value: role })),
+  ],
+  seats: [
+    { label: "All", value: "all" },
+    { label: "No seats", value: "none" },
+    { label: "One seat", value: "one" },
+    { label: "More than one", value: "many" },
+  ],
+  status: [
+    { label: "All", value: "all" },
+    ...STATUSES.map((status) => ({
+      label: statusLabels[status],
+      value: status,
+    })),
+  ],
+  twoFactor: [
+    { label: "All", value: "all" },
+    { label: "Enabled", value: "on" },
+    { label: "Not enabled", value: "off" },
+  ],
+} as const satisfies Record<
+  "role" | "seats" | "status" | "twoFactor",
+  readonly { label: string; value: string }[]
+>;
 
-export interface FilterDef {
-  /** The patch that resets this filter. */
-  clear: Partial<UserFilters>;
-  /** What the drawer row reads when nothing is set. */
-  empty: string;
-  key: FilterKey;
-  label: string;
-  /** The value, or `null` when the filter is unset. */
-  value: (filters: UserFilters) => string | null;
-}
+export type OptionKey = keyof typeof OPTIONS;
 
-export const SEATS_OPTIONS: readonly { id: SeatsFilter; label: string }[] = [
-  { id: "all", label: "All" },
-  { id: "none", label: "No seats" },
-  { id: "one", label: "One seat" },
-  { id: "many", label: "More than one" },
-];
-
-export const TWO_FACTOR_OPTIONS: readonly {
-  id: TwoFactorFilter;
-  label: string;
-}[] = [
-  { id: "all", label: "All" },
-  { id: "on", label: "Enabled" },
-  { id: "off", label: "Not enabled" },
-];
-
-function optionLabel(
-  options: readonly { id: string; label: string }[],
-  id: string
-): string {
-  return options.find((option) => option.id === id)?.label ?? "All";
+function optionLabel(key: OptionKey, value: string): string | null {
+  return value === "all"
+    ? null
+    : (OPTIONS[key].find((option) => option.value === value)?.label ?? null);
 }
 
 /** An open-ended range still has to say which end it is open at. */
@@ -129,15 +126,28 @@ function rangeValue(after: string, before: string): string | null {
   return null;
 }
 
+// ---------------------------------------------------------------------------
+// The pills
+// ---------------------------------------------------------------------------
+
+export type FilterKey = "created" | "role" | "seats" | "status" | "twoFactor";
+
+export interface FilterDef {
+  /** The patch that resets this filter. */
+  clear: Partial<UserFilters>;
+  /** What the pill reads when nothing is set. */
+  empty: string;
+  key: FilterKey;
+  /** The dimension, shown muted ahead of the value. */
+  label: string;
+  /** The value, or `null` when the filter is unset. */
+  value: (filters: UserFilters) => string | null;
+}
+
 /**
- * One descriptor per filter, and the only place a filter is declared.
- *
- * The chip row, the drawer's rows and steps, the active count and the
- * predicate all derive from this list, which is what keeps this layout and the
- * pills on the payments table two *renderings* of one model rather than two
- * implementations. It is also what removes the drawer's old hazard: its step
- * indices were hand-assigned integers in two places that had to be kept in
- * step with each other by hand.
+ * One descriptor per filter, and the only place a filter is declared. The
+ * pills, the drawer's rows and steps, the active count and the URL all derive
+ * from this list.
  */
 export const FILTERS: readonly FilterDef[] = [
   {
@@ -145,32 +155,28 @@ export const FILTERS: readonly FilterDef[] = [
     empty: "All",
     key: "role",
     label: "Role",
-    value: (f) => (f.role === "all" ? null : f.role),
+    value: (f) => optionLabel("role", f.role),
   },
   {
     clear: { status: "all" },
     empty: "All",
     key: "status",
     label: "Status",
-    value: (f) => (f.status === "all" ? null : statusLabels[f.status]),
+    value: (f) => optionLabel("status", f.status),
   },
   {
     clear: { seats: "all" },
     empty: "All",
     key: "seats",
     label: "Seats",
-    value: (f) =>
-      f.seats === "all" ? null : optionLabel(SEATS_OPTIONS, f.seats),
+    value: (f) => optionLabel("seats", f.seats),
   },
   {
     clear: { twoFactor: "all" },
     empty: "All",
     key: "twoFactor",
     label: "Two-factor",
-    value: (f) =>
-      f.twoFactor === "all"
-        ? null
-        : optionLabel(TWO_FACTOR_OPTIONS, f.twoFactor),
+    value: (f) => optionLabel("twoFactor", f.twoFactor),
   },
   {
     clear: { createdAfter: "", createdBefore: "" },
@@ -181,6 +187,9 @@ export const FILTERS: readonly FilterDef[] = [
   },
 ];
 
+/** The two cuts people take first; the rest are added on demand. */
+export const DEFAULT_KEYS: readonly FilterKey[] = ["role", "status"];
+
 export function filterDef(key: FilterKey): FilterDef {
   const def = FILTERS.find((item) => item.key === key);
   if (!def) {
@@ -189,19 +198,28 @@ export function filterDef(key: FilterKey): FilterDef {
   return def;
 }
 
-/** One entry per applied filter — the chip row, and the active count. */
-export function appliedFilters(
-  filters: UserFilters
-): { def: FilterDef; value: string }[] {
-  return FILTERS.flatMap((def) => {
-    const value = def.value(filters);
-    return value === null ? [] : [{ def, value }];
-  });
+export function visibleKeys(
+  filters: UserFilters,
+  added: readonly FilterKey[]
+): FilterKey[] {
+  return visibleKeysOf(FILTERS, filters, added);
 }
 
-/** Search is applied but is not a chip: the field itself shows its own state. */
+export function addableKeys(
+  filters: UserFilters,
+  added: readonly FilterKey[]
+): FilterKey[] {
+  return addableKeysOf(FILTERS, filters, added);
+}
+
+/** How many filters hold a value — the phone drawer trigger's badge. */
+export function activeCount(filters: UserFilters): number {
+  return FILTERS.filter((def) => def.value(filters) !== null).length;
+}
+
+/** Whether anything at all is applied, search included. */
 export function hasActiveFilters(filters: UserFilters): boolean {
-  return Boolean(filters.search.trim()) || appliedFilters(filters).length > 0;
+  return Boolean(filters.search.trim()) || activeCount(filters) > 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -249,34 +267,21 @@ export function matchesUserFilters(user: User, filters: UserFilters): boolean {
 // Sort
 // ---------------------------------------------------------------------------
 
-/**
- * A sort state flattened to a single string, so one `RadioGroup` can drive it.
- *
- * The toolbar and the table headers write the *same* `sort` state — picking
- * "Name Z–A" moves the header arrow, and clicking a header updates the
- * toolbar's label, with no syncing code. That only holds if every state the
- * headers can reach is nameable here, so all eight key × direction pairs are
- * listed even though a few are unlikely to be picked from the menu. A state the
- * headers could produce but the toolbar could not name would leave the radio
- * group with nothing selected.
- */
-export type SortOptionId = "none" | `${UserSortKey}:${SortDirection}`;
+export type UserSortKey = "id" | "lastActive" | "name" | "role" | "seats";
 
 /**
- * Sorting is two choices, not one: which column, then which way.
- *
- * The flat cross-product this replaces listed every pairing — eleven entries
- * for five columns — so changing direction meant finding your column again in
- * a list that had grown to hold both. Split, it is five plus two, and every
- * state the column headers can reach is expressible by construction rather
- * than by remembering to add the pairing.
+ * Always set, like the payments sort. The "Unsorted" option this replaces
+ * meant fixture order, which is no order anyone asked for, and it gave the
+ * headers a third click that undid the second.
  */
+export type SortState = BaseSortState<UserSortKey>;
+
 export const SORT_KEYS: readonly { id: UserSortKey; label: string }[] = [
-  { id: "id", label: "ID" },
   { id: "name", label: "Name" },
   { id: "role", label: "Role" },
   { id: "seats", label: "Seats" },
   { id: "lastActive", label: "Last active" },
+  { id: "id", label: "ID" },
 ];
 
 /**
@@ -299,34 +304,155 @@ export function directionLabel(
 }
 
 /**
- * The direction a column takes when it is first chosen. Names read forwards;
- * counts and dates are asked about from the large end, which is the same rule
- * the column headers use on a first click.
+ * The direction a column takes when it is first chosen, from the menu or a
+ * header. Names read forwards; counts and recency are asked about from the
+ * large end.
  */
 export function defaultDirection(key: UserSortKey): SortDirection {
   return key === "name" || key === "role" ? "asc" : "desc";
 }
 
-export function sortKeyLabel(sort: SortState | null): string {
-  return sort
-    ? (SORT_KEYS.find((option) => option.id === sort.key)?.label ?? "Unsorted")
-    : "Unsorted";
-}
-export function toSortOptionId(sort: SortState | null): SortOptionId {
-  return sort ? `${sort.key}:${sort.direction}` : "none";
-}
-
-export function fromSortOptionId(id: SortOptionId): SortState | null {
-  if (id === "none") {
-    return null;
-  }
-  const [key, direction] = id.split(":");
-  return { direction: direction as SortDirection, key: key as UserSortKey };
-}
+export const DEFAULT_SORT: SortState = { direction: "asc", key: "name" };
 
 /** "Name (A–Z)" — the column, then what the order means for it. */
-export function sortLabel(sort: SortState | null): string {
-  return sort
-    ? `${sortKeyLabel(sort)} (${directionLabel(sort.key, sort.direction)})`
-    : "Unsorted";
+export function sortLabel(sort: SortState): string {
+  const key = SORT_KEYS.find((option) => option.id === sort.key)?.label;
+  return `${key} (${directionLabel(sort.key, sort.direction)})`;
+}
+
+const RELATIVE = /^(\d+|an?) (minute|hour|day|week|month|year)s? ago$/;
+const MINUTES = {
+  day: 1440,
+  hour: 60,
+  minute: 1,
+  month: 43_200,
+  week: 10_080,
+  year: 525_600,
+} as const;
+
+/**
+ * How long ago "Last active" was, in minutes, or `null` for "never".
+ *
+ * The fixture stores the text the table shows — "2 hours ago" — rather than a
+ * timestamp, and that text does not sort: "yesterday" comes after "5 minutes
+ * ago" alphabetically. A real table sorts on the timestamp behind the label.
+ */
+export function minutesAgo(text: string): number | null {
+  if (text === "never") {
+    return null;
+  }
+  if (text === "yesterday") {
+    return MINUTES.day;
+  }
+  const match = RELATIVE.exec(text);
+  if (!match) {
+    return null;
+  }
+  const count = Number.isNaN(Number(match[1])) ? 1 : Number(match[1]);
+  return count * MINUTES[match[2] as keyof typeof MINUTES];
+}
+
+/**
+ * Users who have never been active have no recency to order by, so they sink
+ * to the end in both directions — the same rule as an unfinished payment.
+ */
+export function sortUsers(rows: readonly User[], sort: SortState): User[] {
+  const factor = sort.direction === "asc" ? 1 : -1;
+  return [...rows].sort((a, b) => {
+    if (sort.key === "lastActive") {
+      const left = minutesAgo(a.lastActive);
+      const right = minutesAgo(b.lastActive);
+      if (left === null || right === null) {
+        return Number(left === null) - Number(right === null);
+      }
+      // Fewer minutes ago is newer, so "Newest first" (desc) is ascending
+      // minutes.
+      return (right - left) * factor;
+    }
+    if (sort.key === "seats") {
+      return (a.seats - b.seats) * factor;
+    }
+    return a[sort.key].localeCompare(b[sort.key]) * factor;
+  });
+}
+
+// ---------------------------------------------------------------------------
+// URL
+// ---------------------------------------------------------------------------
+
+export const PAGE_SIZES = [5, 10, 20, 50] as const;
+export const DEFAULT_PAGE_SIZE = 5;
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+/** The table's query as URL parameters, defaults left out. */
+export function usersToParams(
+  query: DataTableQuery<UserFilters, UserSortKey>
+): Record<string, string> {
+  const f = query.filters;
+  return {
+    q: f.search,
+    role: f.role === "all" ? "" : f.role,
+    status: f.status === "all" ? "" : f.status,
+    seats: f.seats === "all" ? "" : f.seats,
+    twoFactor: f.twoFactor === "all" ? "" : f.twoFactor,
+    from: f.createdAfter,
+    to: f.createdBefore,
+    sort: sortToParam(query.sort, DEFAULT_SORT),
+    ...pageToParams(query.pageIndex, query.pageSize, DEFAULT_PAGE_SIZE),
+  };
+}
+
+/** The inverse, validating every value; anything unrecognised is dropped. */
+export function usersFromParams(
+  params: URLSearchParams
+): Partial<DataTableQuery<UserFilters, UserSortKey>> {
+  const date = (key: string) => {
+    const value = params.get(key) ?? "";
+    return ISO_DATE.test(value) ? value : "";
+  };
+  const option = <K extends OptionKey>(key: K) =>
+    oneOf(
+      params.get(key),
+      OPTIONS[key].map((item) => item.value),
+      "all"
+    );
+
+  return {
+    filters: {
+      createdAfter: date("from"),
+      createdBefore: date("to"),
+      role: option("role") as RoleFilter,
+      search: params.get("q") ?? "",
+      seats: option("seats") as SeatsFilter,
+      status: option("status") as StatusFilter,
+      twoFactor: option("twoFactor") as TwoFactorFilter,
+    },
+    sort: sortFromParam(
+      params.get("sort"),
+      SORT_KEYS.map((key) => key.id)
+    ),
+    ...pageFromParams(params, PAGE_SIZES),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Export
+// ---------------------------------------------------------------------------
+
+const CSV_COLUMNS: readonly CsvColumn<User>[] = [
+  ["User ID", (u) => u.id],
+  ["Name", (u) => u.name],
+  ["Email", (u) => u.email],
+  ["Role", (u) => u.role],
+  ["Status", (u) => u.status],
+  ["Seats", (u) => String(u.seats)],
+  ["Two-factor", (u) => (u.twoFactor ? "on" : "off")],
+  ["Created", (u) => u.createdAt],
+  ["Last sign-in", (u) => u.lastSignIn],
+];
+
+/** Raw values, as the payments export writes them: ids, not labels. */
+export function toUsersCsv(rows: readonly User[]): string {
+  return toCsv(CSV_COLUMNS, rows);
 }

@@ -218,11 +218,8 @@ export function TicketsToolbar({
  *
  * Without it a toolbar reads "Manual" beside "All Statuses" — one control
  * naming a value with no dimension, the next naming a dimension with no
- * value. `admin-01` states the same pair as `Sort: Manual` and `Status: All`.
- *
- * Deliberately not shared with that block: a presentational part in two
- * blocks is the same demo twice, and the installable copies are flat, so two
- * blocks shipping one basename would overwrite each other.
+ * value. `admin-01` states the same pair as `Sort: Created` and
+ * `Status: All`, through its `FilterTrigger`.
  */
 function TriggerLabel({ children }: { children: ReactNode }) {
   return <span className="font-normal text-muted-foreground">{children}:</span>;

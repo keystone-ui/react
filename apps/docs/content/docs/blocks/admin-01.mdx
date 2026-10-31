@@ -1,6 +1,6 @@
 ---
 title: Admin 01
-description: An admin panel — collapsible sidebar shell, topbar with breadcrumb, an overview with KPI tiles and a signups chart, and two tables demonstrating the two filter-toolbar layouts.
+description: An admin panel — collapsible sidebar shell, topbar with breadcrumb, an overview with KPI tiles and a signups chart, and users and payments tables sharing one toolbar design.
 ---
 
 ```bash
@@ -14,10 +14,14 @@ npx shadcn@latest add https://keystoneui.io/r/admin-01.json
 - **Collapsible sidebar shell** with an icon rail, grouped navigation, a badge, and a footer account row.
 - **Topbar** with a sidebar trigger and a [breadcrumb](/docs/components/breadcrumb).
 - **Overview** with a KPI row and a stacked signups chart sharing the same toggleable legend as [`dashboard-01`](/docs/blocks/dashboard-01).
-- **Users table** — search, one Filters button and one Sort, with every applied filter shown as a removable `Role: Admin` chip. Sortable columns, row selection, pagination, and a [`SelectionBar`](/docs/components/selection-bar) for bulk actions.
-- **Payments** — a wide transaction table whose filters are self-describing pills (`Action: Deposit`), two of them permanent and the rest added from a `+ Add filter` menu.
-- **Two filter layouts, deliberately** — Users hides its filters in a [`Drawer`](/docs/components/drawer) and shows what is applied as chips; Payments keeps its filters inline as pills. The block documents when each wins.
-- **Mobile filters** — the same bottom-sheet `Drawer` and [`Stepper`](/docs/components/stepper) drilldown both tables fold into below `sm`.
+- **Two tables, one design** — Users and Payments share the same toolbar, header, skeleton, empty state, footer and selection bar, built from the same parts over two filter vocabularies.
+- **Filter pills** — every filter is a self-describing pill (`Role: Admin`, `Action: Deposit`), two on the row from the start and the rest added from `+ Add filter`. Payments' Currency, Amount and Player are operator chips (`Currency is not: BTC`, `Amount: > 100`, `Player does not contain: gmail`), Notion-style.
+- **View controls** — at the far end of the row, `Columns` hides and shows columns, `Export` downloads the filtered result as CSV, and `Sort` orders by any sortable column in words that fit it (`Newest first`, `Largest first`, `A–Z`). The headers sort the same state.
+- **Row selection** — a checkbox column and a [`SelectionBar`](/docs/components/selection-bar) whose actions — export the selection, copy its ids — actually run.
+- **Loading** — every change goes through a stand-in request, with [`Skeleton`](/docs/components/skeleton) rows at the real rows' height while it is in flight.
+- **Shareable views** — the open section, filters, sort and page live in the URL, so a link or a reload lands on the same rows.
+- **Payments details** — amounts grouped at their currency's precision, a record that opens in a side [`Drawer`](/docs/components/drawer), and an [`Empty`](/docs/components/empty) state that offers `Clear filters`.
+- **Mobile filters** — below `sm` both tables fold their pills, view controls and sort into the same bottom-sheet `Drawer` and [`Stepper`](/docs/components/stepper) drilldown.
 - **User detail** — clicking a name opens a read-only record view built from [`DescriptionList`](/docs/components/description-list), with [`CopyButton`](/docs/components/copy-button) on the values that exist to be pasted elsewhere.
 
 ## Requirements
@@ -50,26 +54,9 @@ So they are duplicated and the duplication is enforced: `apps/docs/tests/block-s
 
 ## Notes
 
-**Two filter layouts, and when each wins.** The two tables answer the same question differently on purpose.
+**One toolbar design for both tables.** Users and Payments are built from the same parts — `filter-pills.tsx`, `sort-menu.tsx`, `columns-menu.tsx`, `skeleton-rows.tsx`, `filtered-empty.tsx` — over a state hook they also share, `useDataTable`. What differs is each table's vocabulary file (`admin-filters.ts`, `payment-filters.ts`): its filters, options, sort labels, URL parameters and CSV columns. A change to how a pill behaves, how a page resets or how a selection survives paging is made once.
 
-| | Users — drawer + chips | Payments — inline pills |
-|---|---|---|
-| where filters live | a `Drawer`, at every width | on the toolbar |
-| what is applied | a chip row, one chip per filter | the pills themselves |
-| change a filter | 3–4 clicks | 2 |
-| remove one | 1 click on its ✕ | 2, through its menu |
-| see what is filterable | open the drawer | already on screen |
-| desktop vs mobile | one surface | two, kept in step by hand |
-
-Pills suit a table you sit in front of, flipping a filter at a time while you work. The drawer suits a table you filter once and then read: the chip row *is* the answer to "what is applied", where six pills make you scan all of them to find the two that are set.
-
-The `Filters` trigger carries a count of what is applied. It is the length of the same list the chips render, so the two cannot disagree — unlike the badge this block once carried on the payments panel, which counted the filters the panel owned while pills showed the rest and so read as a second, contradictory signal. Sort lives in the same drawer and is deliberately not counted: a badge that ticks up when you reorder a column is lying about what it counts.
-
-The drawer's *shell* still differs by width — a bottom sheet on a phone, a right-hand panel on a desktop, each the idiom for its size. `swipeDirection` is a prop rather than a class, so it is rendered twice behind a CSS fork instead of being switched at runtime; a `useMediaQuery` would have to guess on the server and flip after hydration. Only one shell is in the accessibility tree at a time, which is what a guard asserts.
-
-The drawer layout also removes a fork. Its filters live in one surface at every width, so there is no desktop tree and mobile tree to keep in step — which is how this block once shipped three filters that were reachable on no phone at all. The pills pay for their speed with that duplication, and with a mobile drawer that has to mirror them.
-
-One thing does not fold in: `Sort` keeps its own trigger at `sm+` and its drawer step below. Sorting is not filtering, and burying a one-click control to make the layout look tidier would be a regression.
+This block used to show two filter layouts side by side — the users filters in a drawer at every width with the applied ones as a chip row, the payments filters inline as pills. The pills won on the measure that matters for an admin table: changing a filter is two clicks rather than three or four, and what is filterable is on screen rather than behind a button. The drawer is still the right shell on a phone, so both tables keep one there.
 
 **Every filter names the dimension it filters.** A pill reads `Action: Deposit`, not `Deposit`. A bare value turns ambiguous the moment it sits next to another one — is "Deposit" a type or a status? — and the toolbar previously had exactly that pair: one control naming a value without its dimension, beside one naming a dimension without a value.
 
@@ -77,17 +64,21 @@ The exception is a value that names its own dimension. A date range reads as `La
 
 **Self-describing pills are why there is no chip row.** Chips exist to surface filters a panel has hidden. When the control itself says what it is and what it holds, a chip repeating it is a second representation of the same fact — and two representations can disagree. The pills are the record of what is applied, so there is nothing to keep in sync.
 
-The invariant that makes that safe lives in `visibleKeys`: a pill is shown if it is one of the permanent two, if it was added by hand, **or if its filter holds a value**. That last term means applied state cannot be invisible — a filter narrowing the table with no pill on the row is structurally impossible rather than merely tested for.
+The invariant that makes that safe lives in `visibleKeys`: a pill is shown if it is on the row — the starting two, plus any added by hand — **or if its filter holds a value**. That last term means applied state cannot be invisible — a filter narrowing the table with no pill on the row is structurally impossible rather than merely tested for.
 
-**Two filters are permanent; the rest are added.** Six pills at once wrap before anyone has used one, so `+ Add filter` offers only what is not already on the row and disappears when everything is.
+**Two filters to start; the rest are added.** Six pills at once wrap before anyone has used one, so each row starts with its two most common cuts — Role and Status on Users, Action and Status on Payments — `+ Add filter` offers only what is not already on the row, and it disappears when everything is. The starting two are not permanent: they come off like any other pill, and `Clear all` puts them back. Picking a filter there mounts its pill with the menu or popover already open — you picked "Currency" to filter by currency, so a second click on the new pill would be a wasted step.
 
-A multi-select names its first value and counts the rest — `Currency: BTC, +2`. A bare `3` says how many without saying which, and four values side by side stop being scannable. The menu's footer spells that number out and offers a `Clear`, and it exists only while the filter holds something: an empty filter has no count to report and nothing to undo.
+A multi-select names its first value and counts the rest — `Currency: BTC, +2`. A bare `3` says how many without saying which, and four values side by side stop being scannable. The popover spells the selection out as chips in a field, Notion's multi-select: picked options stay in the list below it with a check — so nothing shifts under the pointer between picks, and a second click unpicks — typing filters the list, and a round X clears the lot — shown only while there is something to clear.
 
-A pill is never removed from inside its own menu. Setting one back to `All` leaves it on the row on purpose — taking the control out from under the cursor mid-interaction is worse than a pill reading `All` — and an empty pill has nothing `Clear all` does not already handle.
+**Two kinds of filter.** Most pills are one dimension and a value. Currency and Amount also carry a comparison, the way Notion's filters do: the popover header reads `Currency [is ⌄]`, with `is` / `is not` for the currency, `between` / `=` / `>` / `<` for the amount, and Notion's full text set for the player's email — `is`, `is not`, `contains`, `does not contain`, `starts with`, `ends with` (`ends with @gmail.com` is the filter an email field invites). `is empty` is left out everywhere a field can never be empty. Each field gets the operators that mean something for it: a payment has one currency, so `contains USDT` would match exactly the rows `is USDT` does; `contains` belongs to text, where `gmail` matches every gmail address. The default operator goes unsaid on the chip — `Currency: BTC` — and only a qualifier earns words: `Currency is not: BTC`. Switching the amount operator drops the bound the new one does not read, so `between 10 – 500` switched to `>` cannot keep a hidden ceiling of 500 that no label shows.
+
+**Removing a filter.** On a simple pill the X takes the chevron's 16px slot on hover and on keyboard focus, so the pill never changes width, and Backspace removes a focused pill. Touch screens have no hover and never see the X, so on those the pill's menu carries a **Delete filter** row instead. Operator chips take the same X and Backspace, so every pill on the row comes off the same way; they also keep **Delete filter** behind the `⋯` in the popover header, which is their touch path. Every pill has the X, the starting two included, so it always means the same thing: clear the filter and take its pill off the row. Focus moves to the next pill, or to `+ Add filter`, where the removed filter is back on offer.
+
+Picking `All` never takes a pill off the row — removing the control from under the cursor mid-interaction is worse than a pill reading `All`. Removal is always its own, explicit action.
 
 Ranges open a `Popover` rather than a menu, because a menu is a list of choices and a pair of bounds is a small form. An open-ended range still says which end it is open at — `Amount: from 20`, not `Amount: 20`.
 
-**Sorting lives in the column headers**, not the filter row, exactly as the users table does it. A sort control sitting among filters reads as a filter, and the header is where someone looks to reorder a column anyway. Four columns sort; the other four carry no `aria-sort` at all, because `none` would claim a column sorts and is merely inactive.
+**Sorting has two handles on one state**, as in the users table: the column headers and a `Sort` menu pushed to the far end of the row, apart from the pills and labelled as a sort so it does not read as one more filter. The menu is column first, then direction, and the direction is named for the column — `Newest first` for dates, `Largest first` for amounts, `A–Z` for names — with the column's natural direction listed first and picked by default. A header's first click uses that same default. Unfinished payments have no finish time, so sorting by Finished sinks them to the end in both directions rather than opening "Newest first" on a page of dashes. Below `sm` the menu becomes the drawer's last step. Five columns sort; the other three carry no `aria-sort` at all, because `none` would claim a column sorts and is merely inactive.
 
 **Below `sm` the pills fold away and a drawer carries the whole filter set** — the same bottom sheet and `Stepper` drilldown the users drawer uses, a menu of "label + current value" rows that open one screen per filter. A row of pills becomes a column of pills on a phone, burying the table it is filtering, and a scrolling column of selects is just a desktop panel moved sideways. Each row's value comes from the same descriptor the pills read, so a row and its pill cannot disagree about what is applied.
 
@@ -96,6 +87,14 @@ The drawer holds *every* filter, not just the optional ones: at that width it is
 **A rail was the other candidate, and this table cannot afford one.** The payments columns need about 1050px; the content area is 1024px at a 1280px viewport, so the table is already short before anything is taken from it. A 300px filter sidebar would leave 724px and force horizontal scrolling on a standard laptop. That trade is table-shaped rather than universal — a rail works well beside a narrow single-column list, which is why chat and mail apps use one.
 
 Payment ids are middle-truncated in the table with a copy button, and shown in full on the record. The head and tail are what you eyeball against a provider's dashboard; the whole value is what you paste into it.
+
+**A payment's record is a side panel; a user's is a page.** A payment is looked at and left — check a status, copy an id, go back to the row you were on — so the ledger, its filters and its scroll position stay behind a right-hand `Drawer`. A user is a record you work in, which is why that one replaces the table. Both build their values from the same `DescriptionList` pairs. The panel shows only the fields a payment has: a refund or retry button belongs there in a real app, but one that does nothing is worse than none.
+
+**Amounts are formatted for reading, stored for computing.** The fixture holds the provider's raw string (`10000.000000` for every currency), which is what sorting and the Amount filter read. The cell shows it grouped and at its currency's precision — two places for EUR and USDT, as many as it carries for BTC and ETH — with tabular figures so the column lines up. Amounts compare across currencies as plain numbers, so 1 BTC sorts below 600 EUR; a real ledger sorts on a converted reporting-currency column, or narrows to one currency first.
+
+**Export is the result, not the page.** `Export` writes every row the filters and sort produce — all eighteen, not the ten on screen — as CSV, in the order the table shows them. It writes raw values: the provider's amount string rather than `10,000.00`, whose comma a spreadsheet would misread; enum ids rather than labels; an empty cell rather than a dash for a payment that has not finished. It is disabled when there is nothing to export, and desktop-only, like the pills.
+
+**An empty result says how to get out of it.** Both tables render an `Empty` inside `TableEmpty` when the filters leave nothing: an icon, "No payments match these filters", and a `Clear filters` button — the toolbar's own `Clear all` is easy to miss on a wide row, and on a phone it is inside the drawer. The component takes `filtered` rather than assuming it, because a real table also needs "No payments yet", where there is nothing to clear.
 
 **The detail view is a sub-state of Users, not a section of its own.** A new section would need a sidebar entry — and you cannot navigate to a detail page with no record chosen — so the open user is a separate `openUserId`, resolved to a record at render. Changing section clears it, or leaving to Billing and returning would land on a stale record.
 
@@ -113,15 +112,19 @@ The trigger names its row: five identical "Actions" buttons would leave a screen
 
 The header spans the full width with the actions at its right edge, while the card is capped — so the buttons reach the container without the record's two columns drifting apart on a wide screen. Sections carry their own padding and the card's is zeroed, which lets the rules between them run the full width of the card instead of stopping short of its edges.
 
-**The toolbar forks at `sm:`, following [`tickets-01`](/docs/blocks/tickets-01).** Search is shared and always visible; the filter cluster is `hidden sm:flex`, and below that a single Filters button opens a bottom-sheet drawer. The fork is CSS-only — both trees are always mounted, so there is no `useMediaQuery` to get wrong on the server, and no flash of the wrong layout during hydration.
+**The toolbar forks at `sm:`, following [`tickets-01`](/docs/blocks/tickets-01).** Search is shared and always visible; the pills and the view controls are `hidden sm:flex`, and below that a single Filters button opens a bottom-sheet drawer. The fork is CSS-only — both trees are always mounted, so there is no `useMediaQuery` to get wrong on the server, and no flash of the wrong layout during hydration.
 
-The drawer's body is a [`Stepper`](/docs/components/stepper): a menu of "label + current value" rows that drill into one `RadioGroup` screen per filter, with a back arrow and an Apply footer. Filters apply **live** — `Apply` only dismisses, there is no draft state to reconcile.
+The drawer's body is a [`Stepper`](/docs/components/stepper): a menu of "label + current value" rows that drill into one `RadioGroup` screen per filter, with a back arrow and an Apply footer. Filters apply **live** — `Apply` only dismisses, there is no draft state to reconcile. Its trigger carries a count of the filters that hold a value, because at that width nothing else says the table is filtered; sort is not counted, because a badge that ticks up when you reorder a column is lying about what it counts.
 
-One thing `tickets-01` has is deliberately left out: **no column-visibility menu.** Six columns do not earn one, and that block already demonstrates the pattern.
+**Columns, Export and Sort sit apart from the pills.** They change how the rows are shown, not which rows, so they live at the far end of the row and each names itself — `Sort:` reads as a sort, not one more filter. When the row is full, search keeps a minimum width and this group wraps to a second line rather than crushing the field. `Columns` lists only what can go: the id or name, the selection checkbox and the row actions identify and act on a row, so they always stay. It is a view preference, not part of the query, so it is not in the URL — a link should show someone the same rows, not your layout.
 
-The **Clear** button only renders when something is actually filtered, and carries the count. A permanently visible "Clear" on an unfiltered table is a control that does nothing, and it hides the one signal that a filter is on. Since that button is desktop-only, the mobile trigger carries the count as a badge and the drawer footer gains a **Clear all** — otherwise a filtered table on a phone gives no sign that anything is filtering it.
+**Selection outlives the page and the filter.** Ticking rows on page one, then page two, then exporting is the point of a selection that is kept by id rather than by position. The bar's actions read from the full data set, not the current result, for the same reason. It offers only what this block can do — export the selection, copy its ids; the role changes and suspensions a real admin needs require a backend, and buttons that do nothing are what this bar used to carry.
 
-**Sorting is one piece of state, not two.** The toolbar's Sort menu and the column headers write the same `sort` value, so picking "Name Z–A" moves the header arrow and clicking a header updates the menu's label, with no syncing code. `SORT_OPTIONS` therefore lists every key × direction pair the headers can reach — a state the headers could produce but the toolbar could not name would leave the radio group with nothing selected.
+**Loading is a stand-in request.** The fixtures are local, so without one the loading state would never be seen. `useDataTable` answers each query after 300ms; while it waits the table carries `aria-busy` and the body shows skeleton rows built to the real rows' height — 49px, or 53px where a name sits over an email — in the count the previous page had, so nothing jumps when the data lands. Each change restarts the wait, which makes search settle once rather than per keystroke. The pagination and summary keep describing the last answer meanwhile. Swap `useSimulatedFetch` for your data layer and keep the rest.
+
+**The view lives in the URL.** The open section and that section's query — search, filters, sort, page, page size — are written to the query string with `replaceState` (one history entry per keystroke would make Back useless), defaults left out, so an untouched table has a clean URL. On load the URL is read once and validated value by value: `?status=bogus` opens the table unfiltered rather than broken, and a page past the end snaps to the last one. It is plain `history`, so the block works in any React app; in Next.js the router observes it and `useSearchParams` follows.
+
+**Sorting is one piece of state, not two.** The toolbar's Sort menu and the column headers write the same `sort` value, so picking "Name Z–A" moves the header arrow and clicking a header updates the menu's label, with no syncing code. That only holds because the menu splits the choice into column and direction, so every pair the headers can reach is nameable by construction — a state the headers could produce but the menu could not name would leave the radio group with nothing selected. Both tables are always sorted: an "Unsorted" option would mean fixture order, which is no order anyone asked for, and it gave the headers a third click that undid the second. Users who have never been active sort last whichever way Last active runs, as unfinished payments do on Finished.
 
 Every control in the row sits on the **32px** `sm` tier, the same tier as the pagination below the table and the app chrome around it. Anything added to the row should take `size="sm"` too — mixing sizes between neighbours is the usual cause of a toolbar that looks subtly off. Forms inside the filter drawers stay at `default`.
 
@@ -141,22 +144,27 @@ The Status column passes **no** `sortDirection` at all, where the sortable colum
 - [Button](/docs/components/button)
 - [Card](/docs/components/card)
 - [Checkbox](/docs/components/checkbox)
+- [Combobox](/docs/components/combobox)
 - [Copy Button](/docs/components/copy-button)
 - [Description List](/docs/components/description-list)
 - [Drawer](/docs/components/drawer)
 - [Dropdown Menu](/docs/components/dropdown-menu)
+- [Empty](/docs/components/empty)
 - [Input](/docs/components/input)
 - [Input Group](/docs/components/input-group)
 - [Label](/docs/components/label)
+- [Native Select](/docs/components/native-select)
 - [Popover](/docs/components/popover)
 - [Radio Group](/docs/components/radio-group)
 - [Select](/docs/components/select)
 - [Selection Bar](/docs/components/selection-bar)
 - [Separator](/docs/components/separator)
+- [Skeleton](/docs/components/skeleton)
 - [Stat](/docs/components/stat)
 - [Stepper](/docs/components/stepper)
 - [Table](/docs/components/table)
 - [Table Pagination](/docs/components/table-pagination)
+- [Toggle Group](/docs/components/toggle-group)
 
 ## Composition
 
@@ -176,22 +184,29 @@ SidebarProvider
     ├── AdminUserDetail                         (a user is open)
     │   └── Card › DescriptionList › CopyButton
     ├── AdminUsersTable                         (otherwise)
-    └── AdminPaymentsTable                      (section: payments)
-        ├── AdminPaymentsToolbar
-        │   ├── InputGroup › InputGroupInput
-        │   ├── PaymentFilterPill × n           (hidden below sm)
-        │   │   ├── FilterTrigger › DropdownMenu
-        │   │   └── FilterTrigger › Popover     (ranges)
-        │   ├── AddFilterMenu
-        │   └── PaymentFiltersDrawer            (sm:hidden, Stepper)
-        └── Table › TableSortButton › RowActions › TablePagination
-        ├── Card › CardContent
-        │   ├── AdminUsersToolbar
-        │   │   ├── InputGroup › InputGroupInput
-        │   │   ├── AdminFiltersDrawer         (all widths, Stepper)
-        │   │   ├── DropdownMenu               (Sort, sm+)
-        │   │   └── FilterChip × n             (applied)
-        │   ├── Table › TableSortButton › RowActions
-        │   └── TablePagination
-        └── SelectionBar › SelectionBarButton
+    │   ├── AdminUsersToolbar
+    │   │   ├── InputGroup › InputGroupInput
+    │   │   ├── UserFilterPill × n              (hidden below sm)
+    │   │   │   ├── OptionPill › PillShell › FilterTrigger › DropdownMenu
+    │   │   │   └── DateRangePill › PillShell › FilterTrigger › Popover
+    │   │   ├── AddFilterMenu
+    │   │   ├── ColumnsMenu · Button (Export) · SortMenu   (sm+)
+    │   │   └── AdminFiltersDrawer              (sm:hidden, Stepper, Sort step)
+    │   ├── Table › SortableHead · SkeletonRows · FilteredEmpty · UserRowActions
+    │   ├── TablePagination
+    │   └── SelectionBar
+    ├── AdminPaymentsTable                      (section: payments)
+    │   ├── AdminPaymentsToolbar
+    │   │   ├── InputGroup › InputGroupInput
+    │   │   ├── PaymentFilterPill × n           (hidden below sm)
+    │   │   │   ├── OptionPill · DateRangePill  (as above)
+    │   │   │   └── OperatorFilterChip › PillShell › Popover   (currency, amount, player)
+    │   │   │       └── DropdownMenu × 2        (operator, ⋯)
+    │   │   ├── AddFilterMenu
+    │   │   ├── ColumnsMenu · Button (Export) · SortMenu   (sm+)
+    │   │   └── PaymentFiltersDrawer            (sm:hidden, Stepper, Sort step)
+    │   ├── Table › SortableHead · SkeletonRows · FilteredEmpty · RowActions
+    │   ├── TablePagination
+    │   └── SelectionBar
+    └── PaymentDetailDrawer                     (right, DescriptionList)
 ```

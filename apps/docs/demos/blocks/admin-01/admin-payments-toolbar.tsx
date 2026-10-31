@@ -6,83 +6,106 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@keystoneui/react/input-group";
-import { Search as SearchIcon, X as XIcon } from "lucide-react";
-
-import { AddFilterMenu, PaymentFilterPill } from "./payment-filter-pills";
+import {
+  Download as DownloadIcon,
+  Search as SearchIcon,
+  X as XIcon,
+} from "lucide-react";
+import { ColumnsMenu } from "./columns-menu";
+import { downloadCsv } from "./csv";
+import { AddFilterMenu, usePillRow } from "./filter-pills";
+import { PaymentFilterPill } from "./payment-filter-pills";
 import {
   addableKeys,
-  type FilterKey,
+  defaultDirection,
+  directionLabel,
+  filterDef,
   hasActiveFilters,
-  type PaymentFilters,
+  SORT_KEYS,
+  toPaymentsCsv,
   visibleKeys,
 } from "./payment-filters";
 import { PaymentFiltersDrawer } from "./payment-filters-drawer";
-
-interface AdminPaymentsToolbarProps {
-  added: readonly FilterKey[];
-  filters: PaymentFilters;
-  onAdd: (key: FilterKey) => void;
-  onChange: (patch: Partial<PaymentFilters>) => void;
-  onClear: () => void;
-}
+import { SortMenu } from "./sort-menu";
+import type { PaymentColumnId, PaymentsTableState } from "./use-payments-table";
 
 /**
- * Search, then one self-describing pill per filter, then `+ Add filter`.
+ * Search, then one self-describing pill per filter, then `+ Add filter`; at the
+ * far end, how the table is viewed — Columns, Export, Sort.
  *
  * Each pill names its own dimension — `Action: Deposit` rather than `Deposit`
  * — which is what lets the control double as the record of what is applied.
  * That is why there is no chip row underneath: a chip repeating a pill you can
  * already see is a second copy of the same fact, and the two can drift.
  *
- * Six pills at once would wrap before anyone had used one, so only the two
- * most common cuts are permanent and the rest are added on demand. A filter
- * that holds a value always shows its pill regardless — see `visibleKeys`.
+ * Six pills at once would wrap before anyone had used one, so the row starts
+ * with the two most common cuts and the rest are added on demand. Any pill can
+ * come off again. A filter that holds a value always shows its pill
+ * regardless — see `visibleKeys`.
  *
- * Sorting is not here: the column headers own it, the way `admin-01`'s users
- * table does. A sort control in the filter row reads as a filter, and the
- * header is where someone looks to reorder a column anyway.
+ * The right-hand group changes how the rows are shown, not which rows, so it
+ * sits apart from the pills and each control names itself — `Sort:` reads as a
+ * sort, not one more filter. The headers sort too, and both write the one
+ * `sort` state, so a header click moves the menu's check and back.
  *
- * Below `sm` the pills fold away and the drawer carries the whole filter set,
- * the same fork the users toolbar uses. A row of pills becomes a column of
- * pills on a phone, which buries the table it is filtering.
+ * Below `sm` the pills and the right-hand group fold away and the drawer
+ * carries the whole filter set, with Sort as its last step. A row of pills
+ * becomes a column of pills on a phone, which buries the table it is
+ * filtering; a CSV download on a phone lands in a files app nobody opens.
  */
 export function AdminPaymentsToolbar({
-  added,
-  filters,
-  onAdd,
-  onChange,
-  onClear,
-}: AdminPaymentsToolbarProps) {
-  const visible = visibleKeys(filters, added);
-  const addable = addableKeys(filters, added);
+  columns,
+  table,
+}: {
+  columns: readonly { id: PaymentColumnId; label: string }[];
+  table: PaymentsTableState;
+}) {
+  const { added, filters, patchFilters } = table;
+  const row = usePillRow({
+    onAdd: table.addFilter,
+    onRemove: table.removeFilter,
+  });
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <InputGroup className="min-w-0 flex-1 sm:max-w-xs" size="sm">
+      {/* A floor on the field's width, so a full row wraps its right-hand
+          group onto a second line rather than crushing search to a stub. */}
+      <InputGroup className="min-w-0 flex-1 sm:min-w-56 sm:max-w-xs" size="sm">
         <InputGroupAddon align="inline-start">
           <SearchIcon />
         </InputGroupAddon>
         <InputGroupInput
           aria-label="Search payments by email"
-          onChange={(event) => onChange({ email: event.target.value })}
+          onChange={(event) => patchFilters({ email: event.target.value })}
           placeholder="Search email…"
           type="search"
           value={filters.email}
         />
       </InputGroup>
 
-      <div className="hidden flex-wrap items-center gap-2 sm:flex">
-        {visible.map((key) => (
+      <div
+        className="hidden flex-wrap items-center gap-2 sm:flex"
+        ref={row.rowRef}
+      >
+        {visibleKeys(filters, added).map((key) => (
           <PaymentFilterPill
+            autoOpen={key === row.opening}
             filters={filters}
             key={key}
-            onChange={onChange}
-            onPin={onAdd}
+            onChange={patchFilters}
+            onPin={table.addFilter}
+            onRemove={row.remove}
             pillKey={key}
           />
         ))}
 
-        <AddFilterMenu keys={addable} onAdd={onAdd} />
+        <AddFilterMenu
+          items={addableKeys(filters, added).map((key) => ({
+            key,
+            label: filterDef(key).label,
+          }))}
+          onAdd={row.add}
+        />
 
         {hasActiveFilters(filters) && (
           // Muted at rest: undoing everything is the least likely thing you
@@ -90,7 +113,7 @@ export function AdminPaymentsToolbar({
           // It brightens on hover so it still answers when pointed at.
           <Button
             className="text-muted-foreground hover:text-foreground"
-            onClick={onClear}
+            onClick={table.clearFilters}
             size="sm"
             variant="ghost"
           >
@@ -100,11 +123,39 @@ export function AdminPaymentsToolbar({
         )}
       </div>
 
+      <div className="hidden shrink-0 items-center gap-2 sm:ml-auto sm:flex">
+        <ColumnsMenu
+          columns={columns}
+          hidden={table.hiddenColumns}
+          onToggle={table.toggleColumn}
+        />
+        <Button
+          disabled={table.loading || table.result.total === 0}
+          onClick={() =>
+            downloadCsv("payments.csv", toPaymentsCsv(table.result.all))
+          }
+          size="sm"
+          variant="outline"
+        >
+          <DownloadIcon />
+          Export
+        </Button>
+        <SortMenu
+          defaultDirection={defaultDirection}
+          directionLabel={directionLabel}
+          keys={SORT_KEYS}
+          onSortChange={table.setSort}
+          sort={table.sort}
+        />
+      </div>
+
       <div className="shrink-0 sm:hidden">
         <PaymentFiltersDrawer
           filters={filters}
-          onChange={onChange}
-          onClear={onClear}
+          onChange={patchFilters}
+          onClear={table.clearFilters}
+          onSortChange={table.setSort}
+          sort={table.sort}
         />
       </div>
     </div>

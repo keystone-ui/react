@@ -52,9 +52,6 @@ const SHARED_BASENAMES = new Set([
 
 /** Duplication that is correct. Each entry needs a reason. */
 const DUPLICATED_ON_PURPOSE: Record<string, string> = {
-  // A one-line muted span. Below the bar for library API, and a block that
-  // spells out its own label styling is easier to read than one that imports it.
-  TriggerLabel: "one-line presentational span; not worth an API",
   // Two lines of arithmetic and a plural, in two blocks. `TablePaginationInfo`
   // already takes `children`, which is the composition answer; a library prop
   // would be four props to delete four lines from demos. Each block's copy is

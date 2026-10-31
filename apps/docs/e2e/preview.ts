@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import { expect, type Page } from "@playwright/test";
 
 /**
  * Open a demo's preview page and wait until the demo has hydrated.
@@ -9,9 +9,27 @@ import type { Page } from "@playwright/test";
  * generated loader sets `data-demo-hydrated` on `<html>` from an effect
  * inside the demo's own chunk, which is the first moment a click is safe.
  */
-export async function gotoPreview(page: Page, name: string): Promise<void> {
-  await page.goto(`/preview/${name}`);
+export async function gotoPreview(
+  page: Page,
+  name: string,
+  search = ""
+): Promise<void> {
+  await page.goto(`/preview/${name}${search}`);
   await page
     .locator(`html[data-demo-hydrated="${name}"]`)
     .waitFor({ state: "attached" });
+}
+
+/**
+ * Wait for a table's stand-in request to answer.
+ *
+ * admin-01's tables answer each change after a short simulated latency, with
+ * skeleton rows in between and `aria-busy` on the table. Reading rows before
+ * this would read the skeleton. Pass `table` when the page holds more than one.
+ */
+export async function settled(
+  page: Page,
+  table = page.locator('[data-slot="table"]').first()
+): Promise<void> {
+  await expect(table).toHaveAttribute("aria-busy", "false");
 }

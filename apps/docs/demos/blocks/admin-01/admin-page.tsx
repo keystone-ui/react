@@ -1,16 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import {
-  EMPTY_FILTERS as EMPTY_USER_FILTERS,
-  fromSortOptionId,
-  matchesUserFilters,
-  type SortOptionId,
-  type SortState,
-  type UserFilters,
-  type UserSortKey,
-} from "./admin-filters";
+import { usersFromParams, usersToParams } from "./admin-filters";
 import { AdminOverview } from "./admin-overview";
 import { AdminPaymentsTable } from "./admin-payments-table";
 import { type AdminSection, AdminSidebar } from "./admin-sidebar";
@@ -19,67 +11,53 @@ import { AdminUserDetail } from "./admin-user-detail";
 import { AdminUsersTable } from "./admin-users-table";
 import { adminMetrics, signupsByMonth, users } from "./mock-admin";
 import { payments } from "./mock-payments";
-import {
-  DEFAULT_SORT as DEFAULT_PAYMENT_SORT,
-  EMPTY_FILTERS,
-  type FilterKey,
-  matchesPaymentFilters,
-  type PaymentFilters,
-  type SortState as PaymentSortState,
-  fromSortOptionId as paymentSortFromId,
-  sortPayments,
-} from "./payment-filters";
+import { PaymentDetailDrawer } from "./payment-detail-drawer";
+import { paymentsFromParams, paymentsToParams } from "./payment-filters";
+import { oneOf } from "./url-params";
+import { usePaymentsTable } from "./use-payments-table";
 import { useReducedMotion } from "./use-reduced-motion";
+import { useUrlState } from "./use-url-state";
+import { useUsersTable } from "./use-users-table";
+
+const SECTIONS: readonly AdminSection[] = [
+  "overview",
+  "users",
+  "payments",
+  "billing",
+  "settings",
+];
 
 /** All state lives here; the panels below are presentational. */
 export function AdminPage() {
   const reducedMotion = useReducedMotion();
 
   const [section, setSection] = useState<AdminSection>("overview");
-  const [openUserId, setOpenUserId] = useState<string | null>(null);
-  const [userFilters, setUserFilters] =
-    useState<UserFilters>(EMPTY_USER_FILTERS);
   const [hidden, setHidden] = useState<ReadonlySet<string>>(new Set());
-  const [selected, setSelected] = useState<ReadonlySet<string>>(new Set());
-  const [sort, setSort] = useState<SortState | null>({
-    direction: "asc",
-    key: "name",
-  });
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const usersTable = useUsersTable();
+  const [openUserId, setOpenUserId] = useState<string | null>(null);
+  const paymentsTable = usePaymentsTable();
+  const [openPaymentId, setOpenPaymentId] = useState<string | null>(null);
 
-  const [paymentFilters, setPaymentFilters] =
-    useState<PaymentFilters>(EMPTY_FILTERS);
-  const [paymentSort, setPaymentSort] =
-    useState<PaymentSortState>(DEFAULT_PAYMENT_SORT);
-  const [paymentPageIndex, setPaymentPageIndex] = useState(0);
-  const [paymentPageSize, setPaymentPageSize] = useState(10);
-  // Which optional filter pills have been added by hand. A filter holding a
-  // value shows its pill regardless, so this only tracks the empty ones
-  // someone asked to see.
-  const [addedPaymentFilters, setAddedPaymentFilters] = useState<FilterKey[]>(
-    []
-  );
-
-  const filtered = useMemo(
-    () => users.filter((user) => matchesUserFilters(user, userFilters)),
-    [userFilters]
-  );
-
-  const sorted = useMemo(() => {
-    if (!sort) {
-      return filtered;
-    }
-    const factor = sort.direction === "asc" ? 1 : -1;
-    return [...filtered].sort((a, b) => {
-      const left = a[sort.key];
-      const right = b[sort.key];
-      if (typeof left === "string" && typeof right === "string") {
-        return left.localeCompare(right) * factor;
+  // The URL carries the open section and that section's query, so a link
+  // opens on the same rows. Only the open section's: a link to a filtered
+  // payments view should not also carry a users filter nobody can see.
+  useUrlState(
+    (params) => {
+      const view = oneOf(params.get("view"), SECTIONS, "overview");
+      setSection(view);
+      if (view === "users") {
+        usersTable.restore(usersFromParams(params));
       }
-      return ((left as number) - (right as number)) * factor;
-    });
-  }, [filtered, sort]);
+      if (view === "payments") {
+        paymentsTable.restore(paymentsFromParams(params));
+      }
+    },
+    {
+      view: section === "overview" ? "" : section,
+      ...(section === "users" ? usersToParams(usersTable.query) : {}),
+      ...(section === "payments" ? paymentsToParams(paymentsTable.query) : {}),
+    }
+  );
 
   const openUser = openUserId
     ? (users.find((user) => user.id === openUserId) ?? null)
@@ -89,38 +67,6 @@ export function AdminPage() {
   const inviter = openUser?.invitedBy
     ? (users.find((user) => user.id === openUser.invitedBy) ?? null)
     : null;
-
-  const visiblePayments = useMemo(
-    () =>
-      sortPayments(
-        payments.filter((payment) =>
-          matchesPaymentFilters(payment, paymentFilters)
-        ),
-        paymentSort
-      ),
-    [paymentFilters, paymentSort]
-  );
-
-  const paymentPageCount = Math.max(
-    1,
-    Math.ceil(visiblePayments.length / paymentPageSize)
-  );
-  const paymentRows = visiblePayments.slice(
-    paymentPageIndex * paymentPageSize,
-    paymentPageIndex * paymentPageSize + paymentPageSize
-  );
-
-  // Any filter change can shrink the result below the current page.
-  const patchPaymentFilters = (patch: Partial<PaymentFilters>) => {
-    setPaymentFilters((current) => ({ ...current, ...patch }));
-    setPaymentPageIndex(0);
-  };
-
-  const pageCount = Math.max(1, Math.ceil(sorted.length / pageSize));
-  const pageRows = sorted.slice(
-    pageIndex * pageSize,
-    pageIndex * pageSize + pageSize
-  );
 
   const toggleSeries = (key: string) => {
     setHidden((current) => {
@@ -134,65 +80,13 @@ export function AdminPage() {
     });
   };
 
-  const toggleRow = (id: string) => {
-    setSelected((current) => {
-      const next = new Set(current);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  };
-
-  const toggleAllOnPage = (checked: boolean) => {
-    setSelected((current) => {
-      const next = new Set(current);
-      for (const row of pageRows) {
-        if (checked) {
-          next.add(row.id);
-        } else {
-          next.delete(row.id);
-        }
-      }
-      return next;
-    });
-  };
-
-  const patchUserFilters = (patch: Partial<UserFilters>) => {
-    setUserFilters((current) => ({ ...current, ...patch }));
-    // Page 2 of the unfiltered list usually does not exist once a filter is
-    // applied, and a table showing "Page 2 of 1" with no rows looks broken.
-    setPageIndex(0);
-  };
-
-  // The toolbar and the drawer set the sort directly; the headers cycle it.
-  // Both land on the one `sort` state, so the two stay in step with no syncing.
-  const setSortFromOption = (id: SortOptionId) => {
-    setPageIndex(0);
-    setSort(fromSortOptionId(id));
-  };
-
-  const cycleSort = (key: UserSortKey) => {
-    setPageIndex(0);
-    setSort((current) => {
-      if (current?.key !== key) {
-        return { direction: "asc", key };
-      }
-      if (current.direction === "asc") {
-        return { direction: "desc", key };
-      }
-      return null;
-    });
-  };
-
   return (
     <SidebarProvider>
       <AdminSidebar
         onSectionChange={(next) => {
           setSection(next);
           setOpenUserId(null);
+          setOpenPaymentId(null);
         }}
         section={section}
       />
@@ -219,33 +113,7 @@ export function AdminPage() {
           ) : null}
 
           {section === "users" && !openUser ? (
-            <AdminUsersTable
-              onClearSelection={() => setSelected(new Set())}
-              onPageIndexChange={setPageIndex}
-              onPageSizeChange={(size) => {
-                setPageSize(size);
-                // Page 3 of a 5-per-page list does not exist at 50 per page.
-                setPageIndex(0);
-              }}
-              onFiltersChange={patchUserFilters}
-              onFiltersClear={() => {
-                setUserFilters(EMPTY_USER_FILTERS);
-                setPageIndex(0);
-              }}
-              onOpenUser={setOpenUserId}
-              onSort={cycleSort}
-              onSortChange={setSortFromOption}
-              onToggleAll={toggleAllOnPage}
-              onToggleRow={toggleRow}
-              pageCount={pageCount}
-              pageIndex={pageIndex}
-              pageSize={pageSize}
-              filters={userFilters}
-              rows={pageRows}
-              selected={selected}
-              sort={sort}
-              totalCount={sorted.length}
-            />
+            <AdminUsersTable onOpenUser={setOpenUserId} table={usersTable} />
           ) : null}
 
           {section === "overview" ? (
@@ -260,40 +128,23 @@ export function AdminPage() {
 
           {section === "payments" ? (
             <AdminPaymentsTable
-              addedFilters={addedPaymentFilters}
-              filters={paymentFilters}
-              onFilterAdd={(key) =>
-                setAddedPaymentFilters((current) =>
-                  current.includes(key) ? current : [...current, key]
-                )
-              }
-              onFiltersChange={patchPaymentFilters}
-              onFiltersClear={() => {
-                setPaymentFilters(EMPTY_FILTERS);
-                setAddedPaymentFilters([]);
-                setPaymentPageIndex(0);
-              }}
-              onOpenPayment={() => {
-                // Deliberately inert: the record view this would open is the
-                // users one, and a payment record is its own piece of work.
-              }}
-              onPageIndexChange={setPaymentPageIndex}
-              onPageSizeChange={(size) => {
-                setPaymentPageSize(size);
-                setPaymentPageIndex(0);
-              }}
-              onSortChange={(id) => {
-                setPaymentSort(paymentSortFromId(id));
-                setPaymentPageIndex(0);
-              }}
-              pageCount={paymentPageCount}
-              pageIndex={paymentPageIndex}
-              pageSize={paymentPageSize}
-              rows={paymentRows}
-              sort={paymentSort}
-              totalCount={visiblePayments.length}
+              onOpenPayment={setOpenPaymentId}
+              table={paymentsTable}
             />
           ) : null}
+
+          {/* Always mounted, open only while a payment is chosen, so the
+              Drawer can play its exit animation rather than vanish with its
+              row. Leaving the section clears the choice. */}
+          <PaymentDetailDrawer
+            onClose={() => setOpenPaymentId(null)}
+            payment={
+              section === "payments" && openPaymentId
+                ? (payments.find((payment) => payment.id === openPaymentId) ??
+                  null)
+                : null
+            }
+          />
 
           {section === "billing" || section === "settings" ? (
             <div className="flex h-[420px] items-center justify-center rounded-xl border border-border border-dashed bg-muted/20 text-muted-foreground text-sm">

@@ -1,6 +1,6 @@
 import { expect, type Page, test } from "@playwright/test";
 
-import { gotoPreview } from "./preview";
+import { gotoPreview, settled } from "./preview";
 
 /**
  * A single-select menu must close when a value is picked.
@@ -25,8 +25,12 @@ const ADD_FILTER = /Add filter/;
 const SINGLE_PAGE = /Page 1 of 1/;
 const TICKETS_TRIGGER = /Status/;
 
-const rowCount = (page: Page) =>
-  page.locator('[data-slot="table-body"] tr').count();
+async function rowCount(page: Page): Promise<number> {
+  await settled(page);
+  return page
+    .locator('[data-slot="table-body"] tr:not([data-skeleton-row])')
+    .count();
+}
 
 test.describe("admin-01 payment filters", () => {
   /**
@@ -72,16 +76,18 @@ test.describe("admin-01 payment filters", () => {
     );
   });
 
-  test("a multi-select menu stays open between picks", async ({ page }) => {
-    // The other half: picking three currencies must not cost three trips, so
-    // `DropdownMenuCheckboxItem` keeps Base UI's `closeOnClick: false`.
+  test("a multi-select stays open between picks", async ({ page }) => {
+    // The other half: picking three currencies must not cost three trips. The
+    // currency filter is an operator chip now, a popover with a chip list rather
+    // than a menu, but the promise is the same one.
     await page.getByRole("button", { name: ADD_FILTER }).click();
+    // Adding a filter opens its popover, so there is no pill to click first.
     await page.getByRole("menuitem", { exact: true, name: "Currency" }).click();
-    await page.getByRole("button", { name: CURRENCY_PILL }).click();
 
-    await page.getByRole("menuitemcheckbox", { name: "BTC" }).click();
-    await expect(page.getByRole("menuitemcheckbox")).toHaveCount(4);
-    await page.getByRole("menuitemcheckbox", { name: "ETH" }).click();
+    await page.getByRole("option", { name: "BTC" }).click();
+    // Still open: the rest of the list is there for the next pick.
+    await expect(page.getByRole("option")).toHaveCount(4);
+    await page.getByRole("option", { name: "ETH" }).click();
 
     await page.keyboard.press("Escape");
     await expect(

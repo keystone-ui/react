@@ -59,6 +59,42 @@ export const PROVIDERS: readonly Provider[] = [
   "MoonPay",
 ];
 
+/**
+ * Fraction digits per currency, as a range. Fiat and stablecoins settle in
+ * cents, so they always show two; crypto shows as many as the amount carries,
+ * up to its useful precision — `0.045` BTC, not `0.045000` and not `0.05`.
+ */
+const FRACTION_DIGITS: Record<Currency, [min: number, max: number]> = {
+  BTC: [2, 8],
+  ETH: [2, 6],
+  EUR: [2, 2],
+  USDT: [2, 2],
+};
+
+const amountFormats = new Map<Currency, Intl.NumberFormat>();
+
+/**
+ * An amount as someone reads it: grouped thousands and the precision its
+ * currency uses. The fixture stores the provider's raw string (six fixed
+ * decimals for everything), which is what sorting and filtering read — this
+ * is display only.
+ *
+ * Pinned to `en-US` so the fixture renders the same on every machine; a real
+ * app would pass the viewer's locale.
+ */
+export function formatAmount(amount: string, currency: Currency): string {
+  let format = amountFormats.get(currency);
+  if (!format) {
+    const [min, max] = FRACTION_DIGITS[currency];
+    format = new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: max,
+      minimumFractionDigits: min,
+    });
+    amountFormats.set(currency, format);
+  }
+  return format.format(Number(amount));
+}
+
 /** Middle-truncates an id so the distinctive head and tail both survive. */
 export function truncateId(id: string, head = 3, tail = 3): string {
   return `${id.slice(0, head)}...${id.slice(-tail)}`;
