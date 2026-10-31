@@ -92,7 +92,7 @@ function DrawerContent({
       >
         <DrawerPrimitive.Popup
           className={cn(
-            "group/drawer-content fixed z-(--z-drawer) flex h-auto flex-col bg-background text-sm outline-none",
+            "group/drawer-content fixed z-(--z-drawer) flex h-auto flex-col bg-popover text-popover-foreground text-sm outline-none",
             // Bottom (swipeDirection="down", default) — pad for home indicator
             "data-[swipe-direction=down]:inset-x-0 data-[swipe-direction=down]:bottom-0 data-[swipe-direction=down]:mt-24 data-[swipe-direction=down]:max-h-[80vh] data-[swipe-direction=down]:rounded-t-xl data-[swipe-direction=down]:border-t data-[swipe-direction=down]:pb-[env(safe-area-inset-bottom)]",
             // Top (swipeDirection="up") — pad for notch

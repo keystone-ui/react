@@ -76,7 +76,7 @@ function AlertDialogContent({
       <AlertDialogOverlay />
       <AlertDialogPrimitive.Popup
         className={cn(
-          "group/alert-dialog-content fixed top-[50%] left-[50%] z-[var(--z-modal)] grid w-full -translate-x-[50%] -translate-y-[50%] gap-4 rounded-xl bg-background p-4 shadow-lg outline-none data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm",
+          "group/alert-dialog-content fixed top-[50%] left-[50%] z-[var(--z-modal)] grid w-full -translate-x-[50%] -translate-y-[50%] gap-4 rounded-xl bg-popover p-4 text-popover-foreground shadow-lg outline-none ring-1 ring-popup-ring data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm",
           className
         )}
         data-size={size}

@@ -72,7 +72,7 @@ function ModalOverlay({ className, ...props }: ModalOverlayProps) {
 // ModalContent Variants
 // =============================================================================
 const modalContentVariants = cva(
-  "fixed top-[50%] left-[50%] z-[var(--z-modal)] grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg bg-background p-6 shadow-lg outline-none",
+  "fixed top-[50%] left-[50%] z-[var(--z-modal)] grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg bg-popover p-6 text-popover-foreground shadow-lg outline-none ring-1 ring-popup-ring",
   {
     variants: {
       size: {

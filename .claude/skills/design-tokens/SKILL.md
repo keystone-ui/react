@@ -59,12 +59,14 @@ These resolve to the same color, but the semantic distinction matters for mainta
 
 ## Backgrounds
 
+- `bg-background` — the page, and only the page. Never a surface that floats above it.
+- `bg-popover text-popover-foreground` — every floating surface: DropdownMenu, Select, Combobox, Popover, Command, Modal, AlertDialog, Drawer. Every shipped theme puts `--popover` one step above `--background` in dark mode; in light mode both are white. Modal, AlertDialog and Drawer used `bg-background` until 2026-10, which in dark mode left a modal the page's own colour over a page dimmed to nearly the same black. Pinned by `packages/ui/src/overlay-surface.test.tsx`.
 - `bg-input-bg` — form control background. Handles light (transparent) and dark (input/30) automatically. Do NOT use `bg-transparent dark:bg-input/30`.
 - `bg-input/80` — Switch unchecked track only. Intentionally more opaque than form controls.
 
 ## Rings
 
-- `ring-popup-ring` — popup container rings (DropdownMenu, Select, Combobox, Popover popups). Do NOT use `ring-border/10` or `ring-foreground/10`.
+- `ring-popup-ring` — floating surface rings (DropdownMenu, Select, Combobox, Popover popups, Modal, AlertDialog). Do NOT use `ring-border/10` or `ring-foreground/10`. Drawer takes the surface without the ring: an edge sheet already draws its inner-edge border.
 - `ring-border-muted` — Card's `filled` surface.
 - `ring-border` — Card's `outline` surface. Full strength rather than muted because with no fill the edge is the only thing defining the card.
 
