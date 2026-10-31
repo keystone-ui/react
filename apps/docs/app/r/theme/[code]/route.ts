@@ -34,7 +34,7 @@ function toRegistryVars(
   );
 }
 
-export function buildThemeItem(
+function buildThemeItem(
   code: string,
   settings: ThemeSettings,
   only: Set<Part>
