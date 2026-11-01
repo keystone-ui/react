@@ -1,0 +1,111 @@
+---
+version: "1.0.0-beta.9"
+date: "2026-11-01"
+description: "What's coming in the next release"
+excerpt: "11 changes queued for the next release."
+---
+
+## Minor changes
+
+### Add `CodeBlock`: code, terminal output, logs and diffs, with an optional header and copy button.
+
+```tsx
+<CodeBlock code={source} lineNumbers highlightLines={[4]}>
+  <CodeBlockHeader>
+    <CodeBlockTitle>save-button.tsx</CodeBlockTitle>
+    <CodeBlockActions>
+      <CodeBlockCopyButton />
+    </CodeBlockActions>
+  </CodeBlockHeader>
+  <CodeBlockContent />
+</CodeBlock>
+```
+
+- `lineNumbers` numbers lines with a CSS counter, so a copied selection never includes them.
+- `highlightLines` takes 1-based line numbers.
+- `diff` reads a leading `+` / `-` as an added / removed line, tinted from `--success` / `--destructive`.
+- `wrap` wraps long lines, and `size="sm"` suits tool output.
+- No highlighter ships with it: pass your highlighter's markup as `CodeBlockContent`'s children, and the copy button still copies the plain `code`.
+
+---
+
+### The control height ladder reads from CSS variables: `--ks-control-xs`, `--ks-control-sm`, `--ks-control-md` and `--ks-control-lg` (24 · 32 · 40 · 48px by default, defined in `base.css` from `--spacing`).
+
+Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle and TableHead use `h-(--ks-control-md,2.5rem)` and its siblings instead of a literal `h-10`, so you can change density with one set of values instead of a fork of every control. Override them app-wide in `:root`, or for one area with a class: `<section className="[--ks-control-md:2rem]">`. Rendered sizes are unchanged at the defaults, and each class carries its default as a fallback.
+
+A `className="h-12"` override on a control still wins: tailwind-merge reads `h-(--var)` as a height.
+
+---
+
+### Add the `density/compact` registry item: the control ladder one step denser (xs 24 · sm 28 · default 32 · lg 40) for dense app screens.
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/density/compact.json
+```
+
+It sets the four `--ks-control-*` variables and nothing else — colours, radius and spacing are untouched — so it composes with any theme. To make only one area denser, set the variables on a container instead.
+
+---
+
+### Add the `ks-scroll-fade`, `ks-scroll-fade-x` and `ks-shimmer` utilities to `base.css`.
+
+- `ks-scroll-fade` / `ks-scroll-fade-x` fade a scroll container's edges only where there is more to scroll, through a scroll-driven animation and a mask: no listener, no overlay. Tune the depth with `--ks-scroll-fade-size`. Browsers without scroll-driven animations show no fade and still scroll.
+- `ks-shimmer` sweeps a light highlight across text for live status ("Thinking…"). Its period derives from `--duration-slow`, so `prefers-reduced-motion` freezes it.
+
+Both are Tailwind `@utility`s, emitted only where used. They are documented on the new Theming → CSS Utilities page.
+
+The names carry `ks-` because `shadcn/tailwind.css` defines its own `scroll-fade` and `shimmer`, and Tailwind applies both rules when two utilities share a name — so a keystone app with shadcn's chat components keeps both working.
+
+---
+
+### Alert, Toast and SelectionBar take their status colour from tokens.** Add the `--info` token.
+
+The three components hard-coded Tailwind's palette with `dark:` overrides — the warning Alert was `yellow`, every other warning in the library was the `--warning` amber, and none of them followed a theme.
+
+- **Behavior change for consumers** of `Alert`: the status variants now tint the surface and colour the icon from `--success`, `--warning`, `--destructive` (for `error`) and the new `--info`. Title and description stay neutral (`text-card-foreground` / `text-muted-foreground`), as Toast's already do — the status tokens are tuned as fills, and `text-warning` on a tint is under 2:1.
+- `Toast` icons use the same four tokens.
+- `SelectionBar`'s `success` and `destructive` tones mix their token toward `--background`, which lightens them on the dark bar and darkens them on the light one.
+- New `--info` / `--info-foreground` tokens (blue). `base.css` registers `--color-info` with a light-mode fallback, so an app whose theme predates the token still gets `bg-info` / `text-info`; add `--info` to `:root` and `.dark` (see the theming docs) to re-step it for dark mode.
+
+`status-tokens.test.ts` now fails on any chromatic palette class in component source outside Badge.
+
+---
+
+### Add `ks-typeset`: one class that styles rendered markdown, CMS HTML and chat replies.
+
+```tsx
+<article className="ks-typeset">{content}</article>
+```
+
+It ships in `base.css` as a Tailwind `@utility`, so it is emitted only where you use it and takes variants (`md:ks-typeset`). Headings, paragraphs, lists, links, quotes, inline and block code, tables and images all draw from your theme tokens. Three custom properties tune it — `--ks-typeset-size`, `--ks-typeset-leading` and `--ks-typeset-flow` — and everything inside is sized in `em`, so one property rescales the block.
+
+Every rule is wrapped in `:where()`, so a class on an element inside wins, and no rule depends on later siblings, so content streamed in at the end never restyles what is already rendered.
+
+## Patch changes
+
+### Add the `bet-slip-01` block: a sportsbook bet slip with singles and accumulator modes, live odds changes the punter must accept before placing, and a responsible-gambling daily limit that blocks an over-limit stake — checked before the odds, so accepting a new price is never a way past a limit. Money is integer cents throughout and every figure is `tabular-nums`.
+
+---
+
+### Add the `filter-pills` registry item: admin-01's filter row — `FilterTrigger`, `OptionPill`, `DateRangePill`, `AddFilterMenu` and `usePillRow` — installable without the rest of the block (`npx shadcn@latest add https://keystoneui.io/r/filter-pills.json`). It is built from admin-01's own source, so the two never drift.
+
+---
+
+### Registry installs get Keystone's components, in the directory you configured.
+
+- **Fix:** every Keystone item named its Keystone dependencies by bare name (`"button"`, `"input-group"`), and a bare name is an address in *shadcn's* registry. Installing `combobox` by URL therefore wrote shadcn's Radix Button, Input, InputGroup and Textarea beside Keystone's combobox, and they have a different API. Dependencies are now full URLs (`https://keystoneui.io/r/button.json`).
+- **Fix:** `admin-01` depended on shadcn's `sidebar` item, and that item's dependencies replaced Keystone's Button, Input, Separator, Skeleton and Tooltip with shadcn's. The block now ships its sidebar, adapted onto Keystone primitives, as `components/sidebar.tsx`.
+- **Fix:** `profile-dropdown-01` imported `circular-progress` without declaring it, so its install did not typecheck.
+- `registry:ui` files target `@ui/<name>.tsx`, which follows your `aliases.ui` instead of always writing `components/ui/`. This requires shadcn CLI 4.7 or later.
+
+`pnpm smoke:install` (now in CI) installs every ui item, and each block on its own, into fresh Vite, Next.js and custom-alias projects with the real shadcn CLI, then typechecks the result.
+
+---
+
+### Add the `settings-01` block: an account settings page with a validated profile form that only enables Save for a real change, notification switches, a sessions table with sign-out, and a delete-account confirmation that requires the email typed back.
+
+---
+
+### Components carry their `base.css` motion and layering tokens inline as fallbacks: `z-(--z-modal,50)`, `duration-(--duration-base,180ms)`, `ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))`.
+
+A component installed from the registry can be newer than the `base.css` in your project, and Open in v0 loads no `base.css` at all. Without the fallbacks a missing token meant `z-index: auto` — a modal rendering under the page — and no transition. Rendered values are unchanged when `base.css` is present. A test fails on any token read without a default.
