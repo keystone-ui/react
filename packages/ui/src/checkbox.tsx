@@ -12,7 +12,7 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
         "peer relative flex size-4 shrink-0 items-center justify-center rounded-sm border",
         "border-input bg-input-bg",
         // Smooth color transitions
-        "transition-colors duration-150",
+        "transition-colors duration-(--duration-fast,125ms)",
         // Click area extension — bumped toward AAA touch target (~36×24)
         "after:absolute after:-inset-x-4 after:-inset-y-3",
         // Checked state
@@ -34,13 +34,13 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
         className={cn(
           "grid place-content-center text-current [&>svg]:size-3.5",
           // Micro-animation: scale + opacity transition
-          "transition-[transform,opacity] duration-150",
-          // Enter: animate from small + transparent
-          "data-[starting-style]:scale-50 data-[starting-style]:opacity-0",
-          // Exit: animate to small + transparent
-          "data-[ending-style]:scale-50 data-[ending-style]:opacity-0",
-          // Hide when unchecked (after exit transition completes)
-          "data-[unchecked]:hidden"
+          // Tailwind v4 `scale-*` sets the standalone `scale` property, so it
+          // must be named here — `transform` would leave it snapping.
+          "transition-[scale,opacity] duration-(--duration-fast,125ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
+          // Unchecked: small + transparent (never scale(0)). Kept mounted so
+          // the uncheck plays out instead of vanishing.
+          "data-[unchecked]:scale-90 data-[unchecked]:opacity-0",
+          "data-[checked]:scale-100 data-[indeterminate]:scale-100 data-[checked]:opacity-100 data-[indeterminate]:opacity-100"
         )}
         data-slot="checkbox-indicator"
         keepMounted

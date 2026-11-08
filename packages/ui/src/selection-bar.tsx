@@ -5,6 +5,7 @@ import { X as XIcon } from "lucide-react";
 import {
   type HTMLAttributes,
   type RefAttributes,
+  type TransitionEvent,
   useEffect,
   useRef,
   useState,
@@ -13,7 +14,27 @@ import {
 import { Button, type ButtonProps } from "./button";
 import { cn } from "./utils";
 
-const EXIT_DURATION_MS = 220;
+function clearTimer(ref: { current: number | null }) {
+  if (ref.current !== null) {
+    window.clearTimeout(ref.current);
+    ref.current = null;
+  }
+}
+
+/** Longest computed transition on the bar, plus a frame of slack. */
+function getExitFallbackMs(element: HTMLElement | null): number {
+  if (!element) {
+    return 0;
+  }
+  const durations = getComputedStyle(element)
+    .transitionDuration.split(",")
+    .map(
+      (value) =>
+        Number.parseFloat(value) * (value.trim().endsWith("ms") ? 1 : 1000)
+    )
+    .filter((value) => Number.isFinite(value));
+  return Math.max(0, ...durations) + 50;
+}
 
 interface SelectionBarProps extends HTMLAttributes<HTMLDivElement> {
   /** Whether the bar is visible. Drives the enter/exit animation. */
@@ -32,42 +53,52 @@ function SelectionBar({
 }: SelectionBarProps) {
   const [shouldRender, setShouldRender] = useState(open);
   const [isVisible, setIsVisible] = useState(open);
+  const innerRef = useRef<HTMLDivElement>(null);
   const exitTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (exitTimeoutRef.current !== null) {
-      window.clearTimeout(exitTimeoutRef.current);
-      exitTimeoutRef.current = null;
-    }
+    clearTimer(exitTimeoutRef);
 
     if (open) {
-      const frameId = window.requestAnimationFrame(() => {
-        setShouldRender(true);
-        setIsVisible(true);
-      });
-      return () => window.cancelAnimationFrame(frameId);
+      // Mount straight into the visible state; `starting:` (@starting-style)
+      // supplies the from-values, so no rAF dance is needed.
+      setShouldRender(true);
+      setIsVisible(true);
+      return;
     }
 
     setIsVisible(false);
+    // Unmount on `transitionend`; this timer is the fallback for when no
+    // transition runs (reduced motion, display:none ancestors).
     exitTimeoutRef.current = window.setTimeout(() => {
       setShouldRender(false);
       exitTimeoutRef.current = null;
-    }, EXIT_DURATION_MS);
+    }, getExitFallbackMs(innerRef.current));
 
-    return () => {
-      if (exitTimeoutRef.current !== null) {
-        window.clearTimeout(exitTimeoutRef.current);
-        exitTimeoutRef.current = null;
-      }
-    };
+    return () => clearTimer(exitTimeoutRef);
   }, [open]);
+
+  const handleTransitionEnd = (event: TransitionEvent<HTMLDivElement>) => {
+    if (
+      !open &&
+      event.target === event.currentTarget &&
+      event.propertyName === "opacity"
+    ) {
+      clearTimer(exitTimeoutRef);
+      setShouldRender(false);
+    }
+  };
 
   if (!shouldRender) {
     return null;
   }
 
   const inner = (
-    <div className={cn(barInnerClass, isVisible ? barVisible : barHidden)}>
+    <div
+      className={cn(barInnerClass, isVisible ? barVisible : barHidden)}
+      onTransitionEnd={handleTransitionEnd}
+      ref={innerRef}
+    >
       {children}
     </div>
   );
@@ -108,9 +139,11 @@ function SelectionBar({
 }
 
 const barInnerClass =
-  "pointer-events-auto flex w-fit max-w-full transform-gpu items-center gap-1 overflow-x-auto overflow-y-hidden rounded-2xl border border-zinc-800/90 bg-zinc-950 px-1.5 py-1.5 text-zinc-100 shadow-xl ring-1 ring-black/20 will-change-[transform,opacity] dark:border-zinc-300/80 dark:bg-zinc-100 dark:text-zinc-900 dark:ring-white/25 transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none";
-const barVisible = "translate-y-0 opacity-100";
-const barHidden = "translate-y-3 opacity-0";
+  "pointer-events-auto flex w-fit max-w-full items-center gap-1 overflow-x-auto overflow-y-hidden rounded-2xl border border-zinc-800/90 bg-zinc-950 px-1.5 py-1.5 text-zinc-100 shadow-xl ring-1 ring-black/20 dark:border-zinc-300/80 dark:bg-zinc-100 dark:text-zinc-900 dark:ring-white/25 transition-[opacity,translate] ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)) motion-reduce:transition-none";
+// Enter at --duration-base from the @starting-style values; exit faster.
+const barVisible =
+  "translate-y-0 opacity-100 duration-(--duration-base,180ms) starting:translate-y-3 starting:opacity-0";
+const barHidden = "translate-y-3 opacity-0 duration-(--duration-fast,125ms)";
 
 function SelectionBarGroup({
   className,

@@ -278,7 +278,12 @@ export function FieldError({
 
   return (
     <div
-      className={cn("font-normal text-destructive text-sm", className)}
+      className={cn(
+        // Fade in (opacity only, so nothing reflows); the input's red border
+        // stays instant.
+        "font-normal text-destructive text-sm starting:opacity-0 transition-opacity duration-(--duration-fast,125ms)",
+        className
+      )}
       data-slot="field-error"
       role="alert"
       {...props}

@@ -37,7 +37,7 @@ export const Input = ({
       className={cn(
         "bg-input-bg text-base md:text-sm",
         "rounded-md border border-input",
-        "flex w-full min-w-0 px-3 py-1 shadow-xs outline-none transition-[color,box-shadow] duration-150 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+        "flex w-full min-w-0 px-3 py-1 shadow-xs outline-none transition-[color,box-shadow] duration-(--duration-fast,125ms) disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
         size === "default" && "h-(--ks-control-md,2.5rem)",
         size === "sm" && "h-(--ks-control-sm,2rem)",
         "placeholder:text-muted-foreground/70",

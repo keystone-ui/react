@@ -93,7 +93,7 @@ function SliderThumb({ className, ...props }: SliderThumbProps) {
         // Focus ring
         "focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
         // Active state: slightly grow + slightly deeper shadow
-        "transition-[transform,box-shadow,ring-color] duration-150",
+        "transition-[scale,box-shadow] duration-(--duration-fast,125ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
         "data-[dragging]:scale-105 data-[dragging]:shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_2px_6px_rgba(0,0,0,0.12)] data-[dragging]:ring-2 data-[dragging]:ring-ring/20",
         // Disabled (reduced motion handled globally by base.css)
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
