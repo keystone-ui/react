@@ -29,6 +29,8 @@ export function SignupForm({
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
+                  autoComplete="email"
+                  enterKeyHint="next"
                   id="email"
                   placeholder="m@example.com"
                   required
@@ -43,13 +45,25 @@ export function SignupForm({
                 <Field className="grid grid-cols-2 gap-4">
                   <Field>
                     <FieldLabel htmlFor="password">Password</FieldLabel>
-                    <Input id="password" required type="password" />
+                    <Input
+                      autoComplete="new-password"
+                      enterKeyHint="next"
+                      id="password"
+                      required
+                      type="password"
+                    />
                   </Field>
                   <Field>
                     <FieldLabel htmlFor="confirm-password">
                       Confirm Password
                     </FieldLabel>
-                    <Input id="confirm-password" required type="password" />
+                    <Input
+                      autoComplete="new-password"
+                      enterKeyHint="done"
+                      id="confirm-password"
+                      required
+                      type="password"
+                    />
                   </Field>
                 </Field>
                 <FieldDescription>

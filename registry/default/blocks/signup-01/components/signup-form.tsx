@@ -31,11 +31,20 @@ export function SignupForm({
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor="name">Full Name</FieldLabel>
-              <Input id="name" placeholder="John Doe" required type="text" />
+              <Input
+                autoComplete="name"
+                enterKeyHint="next"
+                id="name"
+                placeholder="John Doe"
+                required
+                type="text"
+              />
             </Field>
             <Field>
               <FieldLabel htmlFor="email">Email</FieldLabel>
               <Input
+                autoComplete="email"
+                enterKeyHint="next"
                 id="email"
                 placeholder="m@example.com"
                 required
@@ -48,7 +57,13 @@ export function SignupForm({
             </Field>
             <Field>
               <FieldLabel htmlFor="password">Password</FieldLabel>
-              <Input id="password" required type="password" />
+              <Input
+                autoComplete="new-password"
+                enterKeyHint="next"
+                id="password"
+                required
+                type="password"
+              />
               <FieldDescription>
                 Must be at least 8 characters long.
               </FieldDescription>
@@ -57,7 +72,13 @@ export function SignupForm({
               <FieldLabel htmlFor="confirm-password">
                 Confirm Password
               </FieldLabel>
-              <Input id="confirm-password" required type="password" />
+              <Input
+                autoComplete="new-password"
+                enterKeyHint="done"
+                id="confirm-password"
+                required
+                type="password"
+              />
               <FieldDescription>Please confirm your password.</FieldDescription>
             </Field>
             <Field className="gap-3">

@@ -13,6 +13,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "./chart";
 import { formatValue, type ValueFormat } from "./chart-formatters";
 import type { RevenuePoint } from "./mock-analytics";
 import { type SeriesDef, SeriesLegend, seriesColor } from "./series-legend";
+import { useMountOnlyAnimation } from "./use-reduced-motion";
 
 interface RevenueTrendCardProps {
   data: readonly RevenuePoint[];
@@ -31,6 +32,7 @@ export function RevenueTrendCard({
   reducedMotion,
   series,
 }: RevenueTrendCardProps) {
+  const animation = useMountOnlyAnimation(reducedMotion);
   const shown = series.filter((item) => !hidden.has(item.key));
 
   const config = Object.fromEntries(
@@ -91,8 +93,10 @@ export function RevenueTrendCard({
                 dataKey={item.key}
                 fill={`var(--color-${item.key})`}
                 // recharts animates SVG attributes from JS, which the
-                // stylesheet's prefers-reduced-motion rule cannot reach.
-                isAnimationActive={!reducedMotion}
+                // stylesheet's prefers-reduced-motion rule cannot reach; the
+                // hook also stops a legend toggle or range change replaying
+                // the entrance.
+                {...animation}
                 key={item.key}
                 // Rounded cap on the top band only, measured against the
                 // VISIBLE bands: against all of them, hiding the top series

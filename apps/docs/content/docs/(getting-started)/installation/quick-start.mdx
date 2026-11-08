@@ -249,6 +249,31 @@ Keystone UI supports dark mode out of the box. Add the `dark` class to your `<ht
 
 All components will automatically adapt to dark mode with carefully tuned colors.
 
+## Mobile Viewport
+
+Drawer, Toast and SelectionBar pad themselves with `env(safe-area-inset-*)` so they clear the notch and the home indicator. Browsers report those insets as `0` unless the page opts in with `viewport-fit=cover`:
+
+```html
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+/>
+```
+
+In the Next.js App Router, export it from your root layout instead:
+
+```tsx title="app/layout.tsx"
+import type { Viewport } from "next";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+```
+
+Text inputs render at 16px on touch devices and 14px under a mouse or trackpad, so iOS never zooms the page when a field takes focus. Don't add `maximum-scale=1` to stop that zoom; it also blocks pinch-zoom for everyone.
+
 ## What's Next?
 
 - [Theming Guide](/docs/theming) -- Customize colors and tokens
