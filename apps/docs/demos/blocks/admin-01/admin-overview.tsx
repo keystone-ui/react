@@ -18,6 +18,7 @@ import {
   type SignupPoint,
 } from "./mock-admin";
 import { SeriesLegend, seriesColor } from "./series-legend";
+import { useMountOnlyAnimation } from "./use-reduced-motion";
 
 interface AdminOverviewProps {
   hidden: ReadonlySet<string>;
@@ -34,6 +35,7 @@ export function AdminOverview({
   reducedMotion,
   signups,
 }: AdminOverviewProps) {
+  const animation = useMountOnlyAnimation(reducedMotion);
   const shown = SIGNUP_SERIES.filter((item) => !hidden.has(item.key));
 
   const config = Object.fromEntries(
@@ -116,7 +118,7 @@ export function AdminOverview({
                 <Bar
                   dataKey={item.key}
                   fill={`var(--color-${item.key})`}
-                  isAnimationActive={!reducedMotion}
+                  {...animation}
                   key={item.key}
                   // Cap measured against the VISIBLE bands, so hiding the top
                   // series does not leave the stack uncapped.

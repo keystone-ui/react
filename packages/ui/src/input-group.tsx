@@ -56,7 +56,7 @@ export const InputGroup = ({
       {/* biome-ignore lint/a11y/useSemanticElements: input wrapper, not a form fieldset */}
       <div
         className={cn(
-          "group/input-group relative flex w-full items-center rounded-md border border-input bg-input-bg shadow-xs outline-none transition-[color,box-shadow]",
+          "group/input-group relative flex w-full items-center rounded-md border border-input bg-input-bg shadow-xs outline-none transition-[color]",
           "min-w-0",
           size === "default" && "h-(--ks-control-md,2.5rem)",
           size === "sm" && "h-(--ks-control-sm,2rem)",

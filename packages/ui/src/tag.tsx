@@ -48,7 +48,7 @@ function TagRemove({
     <button
       aria-label={ariaLabel ?? (hasCustomChildren ? undefined : "Remove")}
       className={cn(
-        "relative -my-px -ms-0.5 -me-1.5 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full p-0 text-current/60 outline-none transition-[color,box-shadow] before:absolute before:-inset-3.5 before:content-[''] hover:text-current focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
+        "relative -my-px -ms-0.5 -me-1.5 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full p-0 text-current/60 outline-none transition-[color] before:absolute before:-inset-3.5 before:content-[''] hover:text-current focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
         className
       )}
       data-slot="tag-remove"

@@ -70,7 +70,7 @@ export const InputOTPSlot = ({ className, ...props }: InputOTPSlotProps) => (
     className={cn(
       // 16px on mobile to prevent iOS zoom when the slot input takes focus
       "bg-input-bg text-center text-base tabular-nums md:text-sm",
-      "relative h-10 w-10 outline-none transition-[color,box-shadow]",
+      "relative h-10 w-10 outline-none transition-[color]",
       "rounded-md border border-input shadow-xs",
       // Focus ring matching the Input component
       "focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset",

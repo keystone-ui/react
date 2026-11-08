@@ -59,6 +59,9 @@ function CommandDialog({
           "top-1/3 translate-y-0 overflow-hidden rounded-xl! p-0",
           className
         )}
+        // Keyboard surface: base.css drops the content's open/close motion
+        // for this attribute. The overlay keeps its fade.
+        data-command=""
         scrollBehavior="inside"
         showCloseButton={showCloseButton}
       >

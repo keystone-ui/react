@@ -453,6 +453,40 @@
   transition-duration: calc(var(--duration-fast) * 0.8);
 }
 
+/* =========================================================================
+   No motion on keyboard surfaces. These rules sit after every popup and
+   modal rule above on purpose: they share the specificity of the
+   `[data-ending-style]` duration rules, so source order is what lets them
+   win, and the `transition` shorthand resets those longhands too.
+   ========================================================================= */
+
+/* Base UI sets `data-instant` when a menu or popover is opened from the
+   keyboard or dismissed with Escape, and when a tooltip opens on focus,
+   closes on press/Escape or hops between triggers in a delay group. A
+   keyboard user is moving fast and already knows where the popup comes
+   from, so any duration reads as lag. */
+[data-slot="dropdown-menu-content"][data-instant],
+[data-slot="dropdown-menu-sub-content"][data-instant],
+[data-slot="popover-content"][data-instant],
+[data-slot="tooltip-content"][data-instant] {
+  transition: none;
+}
+
+/* The command palette is a keyboard surface (Cmd+K) opened many times a
+   day, so its content appears and leaves at once. `CommandDialog` marks its
+   ModalContent with `data-command`. Resetting the from-values as well keeps
+   the panel from sitting at opacity 0 / scale 0.95 for the frame Base UI
+   holds `data-starting-style` or `data-ending-style`. The overlay keeps its
+   short fade, which stops the page underneath from flashing dark. */
+[data-slot="modal-content"][data-command] {
+  transition: none;
+}
+[data-slot="modal-content"][data-command][data-starting-style],
+[data-slot="modal-content"][data-command][data-ending-style] {
+  opacity: 1;
+  scale: 1;
+}
+
 /* Hide scrollbar but keep scroll functionality */
 @layer base {
   .no-scrollbar {

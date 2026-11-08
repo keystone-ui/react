@@ -181,7 +181,7 @@ const TableRow = ({
 }: TableRowProps & React.RefAttributes<HTMLTableRowElement>) => (
   <tr
     className={cn(
-      "border-b transition-colors data-[state=selected]:bg-muted group-data-[variant=card]/table:border-0 group-data-[hoverable]/table:[[data-slot=table-body]_&]:hover:bg-muted/50",
+      "border-b data-[state=selected]:bg-muted group-data-[variant=card]/table:border-0 group-data-[hoverable]/table:[[data-slot=table-body]_&]:hover:bg-muted/50",
       className
     )}
     data-slot="table-row"
