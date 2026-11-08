@@ -3,6 +3,7 @@
 import { Command as CommandPrimitive } from "cmdk";
 import { Check as CheckIcon, Search as SearchIcon } from "lucide-react";
 import type * as React from "react";
+import { Children } from "react";
 import { InputGroup, InputGroupAddon } from "./input-group";
 import {
   Modal,
@@ -12,6 +13,40 @@ import {
   ModalTitle,
 } from "./modal";
 import { cn, POPUP_ITEM_HEIGHT } from "./utils";
+
+/**
+ * Wraps bare text children in a span that can ellipsize. A flex row cannot
+ * ellipsize its own text — it sits in an anonymous flex item — and a
+ * fixed-height row has nowhere to wrap it to. Adjacent strings and numbers
+ * (`{count} items`) share one span; elements pass through untouched.
+ */
+function wrapText(
+  children: React.ReactNode,
+  className: string
+): React.ReactNode {
+  const out: React.ReactNode[] = [];
+  let text = "";
+  const flush = () => {
+    if (text) {
+      out.push(
+        <span className={className} key={`text-${out.length}`}>
+          {text}
+        </span>
+      );
+      text = "";
+    }
+  };
+  for (const child of Children.toArray(children)) {
+    if (typeof child === "string" || typeof child === "number") {
+      text += child;
+    } else {
+      flush();
+      out.push(child);
+    }
+  }
+  flush();
+  return out;
+}
 
 // =============================================================================
 // Command (Root)
@@ -188,7 +223,7 @@ function CommandItem({
       className={cn(
         "data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground",
         "not-data-[variant=destructive]:data-[selected=true]:**:text-accent-foreground",
-        `group/command-item relative flex ${POPUP_ITEM_HEIGHT} cursor-pointer select-none items-center gap-1.5 rounded-md px-1.5 text-sm outline-hidden`,
+        `group/command-item relative flex ${POPUP_ITEM_HEIGHT} min-w-0 cursor-pointer select-none items-center gap-1.5 rounded-md px-1.5 text-sm outline-hidden`,
         "data-[disabled=true]:pointer-events-none data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-50",
         "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
@@ -196,7 +231,7 @@ function CommandItem({
       data-slot="command-item"
       {...props}
     >
-      {children}
+      {wrapText(children, "min-w-0 flex-1 truncate")}
       <CheckIcon className="ml-auto opacity-0 group-has-data-[slot=command-shortcut]/command-item:hidden group-data-[checked=true]/command-item:opacity-100" />
     </CommandPrimitive.Item>
   );

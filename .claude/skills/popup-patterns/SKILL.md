@@ -72,8 +72,10 @@ This sets `data-size="compact"` on the content container. The `POPUP_ITEM_HEIGHT
 All popup containers share this composite recipe:
 
 ```
-bg-popover text-popover-foreground ring-popup-ring ring-1 rounded-lg shadow-lg z-50 overflow-hidden
+bg-popover text-popover-foreground ring-popup-ring ring-1 rounded-lg shadow-lg max-w-(--available-width) overflow-hidden
 ```
+
+The z-index is **not** on the popup. It goes on the `Positioner` that wraps it — `z-(--z-dropdown,60)`, `z-(--z-popover,60)` or `z-(--z-tooltip,70)` — because a z-index on the Popup only orders it inside the positioner's stacking context. Never `isolate z-50` on the positioner; `popup-layering.test.ts` fails on it.
 
 | Property | Value | Notes |
 |---|---|---|
@@ -82,7 +84,8 @@ bg-popover text-popover-foreground ring-popup-ring ring-1 rounded-lg shadow-lg z
 | Ring | `ring-popup-ring ring-1` | Subtle border via custom token |
 | Radius | `rounded-lg` | 10px for main popups — a surface, one tier above the `rounded-md` controls |
 | Shadow | `shadow-lg` | Elevated appearance |
-| Z-index | `z-50` | Above page content |
+| Max width | `max-w-(--available-width)` | Never wider than the viewport space Base UI measured |
+| Z-index | on the `Positioner`, from the `--z-*` scale | Not on the popup — see above |
 | Overflow | `overflow-hidden` | Clips content to rounded corners |
 
 ### Exceptions

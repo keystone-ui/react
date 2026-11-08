@@ -961,3 +961,91 @@ export const FormExample: Story = {
     },
   },
 };
+
+// ---------------------------------------------------------------------------
+// Worst case
+// ---------------------------------------------------------------------------
+
+/**
+ * Realistic worst-case data, not lorem: an 80-character address with no
+ * break opportunity, a four-digit page, counts of exactly 0 and 1. The play
+ * test measures real layout in the browser, so a regression to overflowing
+ * text fails here rather than in a user's account menu.
+ */
+const WORST_EMAIL =
+  "bartholomew.fitzgerald-wisniewska@northwind-industries-holdings-emea.example.com";
+
+/** `inner` lies inside `outer`, with half a pixel for subpixel rounding. */
+function expectInside(inner: DOMRect, outer: { left: number; right: number }) {
+  expect(inner.left).toBeGreaterThanOrEqual(outer.left - 0.5);
+  expect(inner.right).toBeLessThanOrEqual(outer.right + 0.5);
+}
+
+/** The element's content fits its box: nothing spills past the border. */
+function expectNoOverflow(el: Element) {
+  expect(el.scrollWidth).toBeLessThanOrEqual(el.clientWidth);
+}
+
+const viewport = () => ({ left: 0, right: window.innerWidth });
+
+export const WorstCase: Story = {
+  name: "Worst case",
+  render: () => (
+    <div className="w-80" data-testid="frame">
+      <Select
+        defaultValue="email"
+        items={{ email: WORST_EMAIL, jo: "Jo", members: "1 member" }}
+      >
+        <SelectTrigger aria-label="Recipient">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="email">{WORST_EMAIL}</SelectItem>
+            <SelectItem value="jo">Jo</SelectItem>
+            <SelectItem value="members">{1} member</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const frame = canvas.getByTestId("frame").getBoundingClientRect();
+    const trigger = canvas.getByRole("combobox");
+    await expect(trigger).toHaveTextContent(WORST_EMAIL);
+
+    // The trigger stops at its container and the label ellipsizes inside it,
+    // so the chevron stays on screen instead of being pushed past the edge.
+    const triggerRect = trigger.getBoundingClientRect();
+    expectInside(triggerRect, frame);
+    expectNoOverflow(trigger);
+    const chevron = trigger.lastElementChild as Element;
+    expectInside(chevron.getBoundingClientRect(), triggerRect);
+
+    await userEvent.click(trigger);
+    const body = within(document.body);
+    await waitFor(
+      async () => {
+        await expect(body.getByRole("option", { name: /^Jo$/ })).toBeVisible();
+      },
+      { timeout: 5000 }
+    );
+
+    const popup = document.querySelector(
+      '[data-slot="select-content"]'
+    ) as HTMLElement;
+    expectInside(popup.getBoundingClientRect(), viewport());
+    for (const option of body.getAllByRole("option")) {
+      expectNoOverflow(option);
+    }
+
+    // The z-index lives on the positioned element, where it is not trapped
+    // inside a stacking context of its own making.
+    await expect(
+      getComputedStyle(popup.parentElement as HTMLElement).zIndex
+    ).toBe("60");
+
+    await userEvent.keyboard("{Escape}");
+  },
+};

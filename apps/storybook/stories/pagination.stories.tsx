@@ -168,3 +168,79 @@ export const Simple: Story = {
 
 // ---------------------------------------------------------------------------
 // DataTable
+
+// ---------------------------------------------------------------------------
+// Worst case
+// ---------------------------------------------------------------------------
+
+/**
+ * Realistic worst-case data, not lorem: an 80-character address with no
+ * break opportunity, a four-digit page, counts of exactly 0 and 1. The play
+ * test measures real layout in the browser, so a regression to overflowing
+ * text fails here rather than in a user's account menu.
+ */
+const WORST_EMAIL =
+  "bartholomew.fitzgerald-wisniewska@northwind-industries-holdings-emea.example.com";
+
+/** `inner` lies inside `outer`, with half a pixel for subpixel rounding. */
+function expectInside(inner: DOMRect, outer: { left: number; right: number }) {
+  expect(inner.left).toBeGreaterThanOrEqual(outer.left - 0.5);
+  expect(inner.right).toBeLessThanOrEqual(outer.right + 0.5);
+}
+
+/** The element's content fits its box: nothing spills past the border. */
+function expectNoOverflow(el: Element) {
+  expect(el.scrollWidth).toBeLessThanOrEqual(el.clientWidth);
+}
+
+const viewport = () => ({ left: 0, right: window.innerWidth });
+
+export const WorstCase: Story = {
+  name: "Worst case",
+  render: () => (
+    <div className="w-80" data-testid="frame">
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">1</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#" isActive>
+              1,284
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const frame = canvas.getByTestId("frame").getBoundingClientRect();
+
+    // A four-digit page grows its link instead of spilling out of a square.
+    const current = canvas.getByRole("button", { name: /^1,284$/ });
+    expectNoOverflow(current);
+    const currentRect = current.getBoundingClientRect();
+    await expect(currentRect.width).toBeGreaterThan(currentRect.height);
+
+    // A single digit keeps the square, same height as its neighbours.
+    const first = canvas.getByRole("button", { name: /^1$/ });
+    const firstRect = first.getBoundingClientRect();
+    await expect(Math.abs(firstRect.width - firstRect.height)).toBeLessThan(1);
+    await expect(firstRect.height).toBeCloseTo(currentRect.height, 0);
+
+    // Base UI gives a non-native Button `role="button"`, links included.
+    for (const link of canvas.getAllByRole("button")) {
+      expectInside(link.getBoundingClientRect(), frame);
+    }
+  },
+};

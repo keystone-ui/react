@@ -7,6 +7,7 @@ import {
   X as XIcon,
 } from "lucide-react";
 import {
+  Children,
   type ComponentPropsWithRef,
   type ReactNode,
   type RefAttributes,
@@ -21,6 +22,37 @@ import {
   InputGroupInput,
 } from "./input-group";
 import { cn, POPUP_ITEM_HEIGHT } from "./utils";
+
+/**
+ * Wraps bare text children in a span that can ellipsize. A flex row cannot
+ * ellipsize its own text — it sits in an anonymous flex item — and a
+ * fixed-height row has nowhere to wrap it to. Adjacent strings and numbers
+ * (`{count} items`) share one span; elements pass through untouched.
+ */
+function wrapText(children: ReactNode, className: string): ReactNode {
+  const out: ReactNode[] = [];
+  let text = "";
+  const flush = () => {
+    if (text) {
+      out.push(
+        <span className={className} key={`text-${out.length}`}>
+          {text}
+        </span>
+      );
+      text = "";
+    }
+  };
+  for (const child of Children.toArray(children)) {
+    if (typeof child === "string" || typeof child === "number") {
+      text += child;
+    } else {
+      flush();
+      out.push(child);
+    }
+  }
+  flush();
+  return out;
+}
 
 // =============================================================================
 // Combobox (Root)
@@ -180,7 +212,7 @@ function ComboboxContent({
         align={align}
         alignOffset={alignOffset}
         anchor={anchor}
-        className="isolate z-50"
+        className="z-(--z-popover,60)"
         side={side}
         sideOffset={sideOffset}
       >
@@ -188,7 +220,7 @@ function ComboboxContent({
           className={cn(
             "bg-popover text-popover-foreground ring-popup-ring",
             "group/combobox-content relative max-h-(--available-height) w-(--anchor-width) min-w-[calc(var(--anchor-width)+--spacing(7))] max-w-(--available-width)",
-            "z-[var(--z-popover,60)] origin-(--transform-origin) overflow-hidden rounded-lg shadow-lg ring-1",
+            "origin-(--transform-origin) overflow-hidden rounded-lg shadow-lg ring-1",
             "data-[chips=true]:min-w-(--anchor-width)",
             "*:data-[slot=input-group]:!border-0 *:data-[slot=input-group]:!shadow-none *:data-[slot=input-group]:!ring-0 *:data-[slot=input-group]:rounded-none *:data-[slot=input-group]:bg-transparent",
             className
@@ -235,7 +267,7 @@ function ComboboxItem({ className, children, ...props }: ComboboxItemProps) {
     <ComboboxPrimitive.Item
       className={cn(
         "data-highlighted:bg-accent data-highlighted:text-accent-foreground not-data-[variant=destructive]:data-highlighted:*:text-accent-foreground",
-        `relative flex ${POPUP_ITEM_HEIGHT} w-full cursor-pointer select-none items-center gap-1.5 rounded-md pr-8 pl-1.5 text-sm outline-hidden`,
+        `relative flex ${POPUP_ITEM_HEIGHT} w-full min-w-0 cursor-pointer select-none items-center gap-1.5 rounded-md pr-8 pl-1.5 text-sm outline-hidden`,
         "data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50",
         "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
@@ -243,7 +275,7 @@ function ComboboxItem({ className, children, ...props }: ComboboxItemProps) {
       data-slot="combobox-item"
       {...props}
     >
-      {children}
+      {wrapText(children, "min-w-0 flex-1 truncate")}
       <ComboboxPrimitive.ItemIndicator
         render={
           <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />
@@ -379,7 +411,7 @@ function ComboboxChip({
   return (
     <ComboboxPrimitive.Chip
       className={cn(
-        "flex h-5.5 w-fit items-center justify-center gap-1 whitespace-nowrap rounded-sm bg-muted px-1.5 font-medium text-foreground text-xs",
+        "flex h-5.5 w-fit min-w-0 max-w-full items-center justify-center gap-1 whitespace-nowrap rounded-sm bg-muted px-1.5 font-medium text-foreground text-xs",
         "has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50",
         "has-data-[slot=combobox-chip-remove]:pr-0",
         className
@@ -387,10 +419,10 @@ function ComboboxChip({
       data-slot="combobox-chip"
       {...props}
     >
-      {children}
+      {wrapText(children, "min-w-0 truncate")}
       {showRemove && (
         <ComboboxPrimitive.ChipRemove
-          className="-ml-1 size-5 opacity-50 hover:opacity-100"
+          className="-ml-1 size-5 shrink-0 opacity-50 hover:opacity-100"
           data-slot="combobox-chip-remove"
           render={<Button size="icon" variant="ghost" />}
         >

@@ -1213,3 +1213,95 @@ export const Filter: Story = {
     },
   },
 };
+
+// ---------------------------------------------------------------------------
+// Worst case
+// ---------------------------------------------------------------------------
+
+/**
+ * Realistic worst-case data, not lorem: an 80-character address with no
+ * break opportunity, a four-digit page, counts of exactly 0 and 1. The play
+ * test measures real layout in the browser, so a regression to overflowing
+ * text fails here rather than in a user's account menu.
+ */
+const WORST_EMAIL =
+  "bartholomew.fitzgerald-wisniewska@northwind-industries-holdings-emea.example.com";
+
+/** `inner` lies inside `outer`, with half a pixel for subpixel rounding. */
+function expectInside(inner: DOMRect, outer: { left: number; right: number }) {
+  expect(inner.left).toBeGreaterThanOrEqual(outer.left - 0.5);
+  expect(inner.right).toBeLessThanOrEqual(outer.right + 0.5);
+}
+
+/** The element's content fits its box: nothing spills past the border. */
+function expectNoOverflow(el: Element) {
+  expect(el.scrollWidth).toBeLessThanOrEqual(el.clientWidth);
+}
+
+const viewport = () => ({ left: 0, right: window.innerWidth });
+
+export const WorstCase: Story = {
+  name: "Worst case",
+  render: () => (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={<Button variant="outline">Account</Button>}
+      />
+      <DropdownMenuContent>
+        <DropdownMenuItem>
+          <UserIcon />
+          {WORST_EMAIL}
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <BellIcon />
+          {0} notifications
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          {1} invitation
+          <DropdownMenuShortcut>⌘I</DropdownMenuShortcut>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Account" }));
+
+    const body = within(document.body);
+    await waitFor(
+      async () => {
+        await expect(
+          body.getByRole("menuitem", { name: /notifications/ })
+        ).toBeVisible();
+      },
+      { timeout: 5000 }
+    );
+
+    // The menu is capped at the space the viewport has, and each row
+    // ellipsizes its label instead of overflowing the menu.
+    const popup = document.querySelector(
+      '[data-slot="dropdown-menu-content"]'
+    ) as HTMLElement;
+    expectInside(popup.getBoundingClientRect(), viewport());
+    for (const item of body.getAllByRole("menuitem")) {
+      expectNoOverflow(item);
+      expectInside(item.getBoundingClientRect(), popup.getBoundingClientRect());
+    }
+
+    // The shortcut keeps its slot at the end of the row.
+    const invitation = body.getByRole("menuitem", { name: /invitation/ });
+    const shortcut = within(invitation).getByText("⌘I");
+    expectInside(
+      shortcut.getBoundingClientRect(),
+      invitation.getBoundingClientRect()
+    );
+
+    // The positioner carries the z-index token, not a hard-coded 50 that
+    // would sit level with an open Modal.
+    await expect(
+      getComputedStyle(popup.parentElement as HTMLElement).zIndex
+    ).toBe("60");
+
+    await userEvent.keyboard("{Escape}");
+  },
+};

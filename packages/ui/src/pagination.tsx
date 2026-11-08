@@ -61,12 +61,19 @@ type PaginationLinkProps = {
 function PaginationLink({
   className,
   isActive,
-  size = "icon-sm",
+  size,
   ...props
 }: PaginationLinkProps) {
   return (
     <Button
-      className={cn("tabular-nums", className)}
+      className={cn(
+        "tabular-nums",
+        // A page number is not an icon: `icon-sm` pins a 32px square, which a
+        // label like "1,284" overflows. Without an explicit size the link is a
+        // `sm` button that is at least square and grows with its label.
+        size === undefined && "min-w-(--ks-control-sm,2rem) px-2",
+        className
+      )}
       nativeButton={false}
       render={
         <a
@@ -76,7 +83,7 @@ function PaginationLink({
           {...props}
         />
       }
-      size={size}
+      size={size ?? "sm"}
       variant={isActive ? "outline" : "ghost"}
     />
   );

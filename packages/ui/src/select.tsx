@@ -37,7 +37,13 @@ export interface SelectValueProps extends SelectPrimitive.Value.Props {}
 function SelectValue({ className, ...props }: SelectValueProps) {
   return (
     <SelectPrimitive.Value
-      className={cn("flex flex-1 text-left", className)}
+      className={cn(
+        // Block, not flex: an ellipsis is drawn by the box whose own line
+        // overflows, and a flex container's text sits in an anonymous item it
+        // cannot ellipsize. Icons stay inline beside the label instead.
+        "block min-w-0 flex-1 truncate text-left [&>svg]:me-1.5 [&>svg]:inline-block [&>svg]:align-[-0.2em]",
+        className
+      )}
       data-slot="select-value"
       {...props}
     />
@@ -64,7 +70,7 @@ function SelectTrigger({
   return (
     <SelectPrimitive.Trigger
       className={cn(
-        "group flex w-fit select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-md border border-input bg-input-bg py-2 pr-2 pl-3 text-sm shadow-xs outline-none transition-[color] focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive data-[size=default]:h-(--ks-control-md,2.5rem) data-[size=sm]:h-(--ks-control-sm,2rem) data-[popup-open]:border-ring data-placeholder:text-muted-foreground/70 data-[popup-open]:ring-1 data-[popup-open]:ring-ring data-[popup-open]:ring-inset *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 dark:aria-invalid:ring-destructive [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "group flex w-fit min-w-0 max-w-full select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-md border border-input bg-input-bg py-2 pr-2 pl-3 text-sm shadow-xs outline-none transition-[color] focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive data-[size=default]:h-(--ks-control-md,2.5rem) data-[size=sm]:h-(--ks-control-sm,2rem) data-[popup-open]:border-ring data-placeholder:text-muted-foreground/70 data-[popup-open]:ring-1 data-[popup-open]:ring-ring data-[popup-open]:ring-inset dark:aria-invalid:ring-destructive [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
       )}
       data-size={size}
@@ -134,13 +140,13 @@ function SelectContent({
         align={align}
         alignItemWithTrigger={alignItemWithTrigger}
         alignOffset={alignOffset}
-        className="isolate z-50"
+        className="z-(--z-popover,60)"
         side={side}
         sideOffset={sideOffset}
       >
         <SelectPrimitive.Popup
           className={cn(
-            "relative isolate z-[var(--z-popover,60)] max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-lg ring-1 ring-popup-ring",
+            "relative isolate max-h-(--available-height) w-(--anchor-width) min-w-36 max-w-(--available-width) origin-(--transform-origin) overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-lg ring-1 ring-popup-ring",
             className
           )}
           data-align-trigger={alignItemWithTrigger}
@@ -214,7 +220,7 @@ function SelectItem({
           {indicator}
         </SelectPrimitive.ItemIndicator>
       )}
-      <SelectPrimitive.ItemText className="flex flex-1 shrink-0 gap-2 whitespace-nowrap">
+      <SelectPrimitive.ItemText className="min-w-0 flex-1 truncate [&>svg]:me-2 [&>svg]:inline-block [&>svg]:align-[-0.2em]">
         {children}
       </SelectPrimitive.ItemText>
       {showDefaultIndicator && (
