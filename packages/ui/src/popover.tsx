@@ -65,14 +65,14 @@ function PopoverContent({
       <PopoverPrimitive.Positioner
         align={align}
         alignOffset={alignOffset}
-        className="isolate z-50 outline-none"
+        className="z-(--z-popover,60) outline-none"
         side={side}
         sideOffset={sideOffset}
       >
         <PopoverPrimitive.Popup
           className={cn(
             "bg-popover text-popover-foreground ring-popup-ring",
-            "z-[var(--z-popover,60)] w-72 origin-(--transform-origin) rounded-lg p-4 shadow-lg outline-none ring-1",
+            "w-72 max-w-(--available-width) origin-(--transform-origin) rounded-lg p-4 shadow-lg outline-none ring-1",
             className
           )}
           data-slot="popover-content"

@@ -33,6 +33,8 @@ export function SignInForm({
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
+                  autoComplete="email"
+                  enterKeyHint="next"
                   id="email"
                   placeholder="m@example.com"
                   required
@@ -50,7 +52,13 @@ export function SignInForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" required type="password" />
+                <Input
+                  autoComplete="current-password"
+                  enterKeyHint="go"
+                  id="password"
+                  required
+                  type="password"
+                />
               </Field>
               <Field className="gap-3">
                 <Button type="submit">Sign in</Button>

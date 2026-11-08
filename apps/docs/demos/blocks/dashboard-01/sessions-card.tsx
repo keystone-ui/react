@@ -12,6 +12,7 @@ import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "./chart";
 import { formatValue } from "./chart-formatters";
 import type { ChannelPoint } from "./mock-analytics";
+import { useMountOnlyAnimation } from "./use-reduced-motion";
 
 interface SessionsCardProps {
   data: readonly ChannelPoint[];
@@ -23,6 +24,7 @@ const config = {
 };
 
 export function SessionsCard({ data, reducedMotion }: SessionsCardProps) {
+  const animation = useMountOnlyAnimation(reducedMotion);
   return (
     <Card variant="outline">
       <CardHeader>
@@ -78,7 +80,7 @@ export function SessionsCard({ data, reducedMotion }: SessionsCardProps) {
             <Area
               dataKey="sessions"
               fill="url(#sessions-fill)"
-              isAnimationActive={!reducedMotion}
+              {...animation}
               stroke="var(--color-sessions)"
               strokeWidth={2}
               type="monotone"

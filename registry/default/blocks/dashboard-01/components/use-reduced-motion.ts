@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const QUERY = "(prefers-reduced-motion: reduce)";
 
@@ -30,4 +30,28 @@ export function useReducedMotion(): boolean {
   }, []);
 
   return reduced;
+}
+
+/**
+ * Recharts props that animate a chart once, on mount, and never again.
+ *
+ * Recharts replays its entrance on every data change, so a legend toggle or a
+ * range switch redrew the whole chart for 1.5s. Charts are data the viewer is
+ * reading; the entrance is worth one short pass, after which changes snap.
+ * The flag flips on the first `onAnimationEnd` — every series in a card
+ * starts together and runs the same duration, so the first end is all of
+ * them.
+ *
+ * Spread the result onto each `<Bar>` / `<Area>` in the card.
+ */
+export function useMountOnlyAnimation(reducedMotion: boolean) {
+  const [played, setPlayed] = useState(false);
+  const onAnimationEnd = useCallback(() => setPlayed(true), []);
+
+  return {
+    animationDuration: 400,
+    animationEasing: "ease-out",
+    isAnimationActive: !(reducedMotion || played),
+    onAnimationEnd,
+  } as const;
 }

@@ -68,9 +68,9 @@ export type InputOTPSlotProps = OTPField.Input.Props;
 export const InputOTPSlot = ({ className, ...props }: InputOTPSlotProps) => (
   <OTPField.Input
     className={cn(
-      // 16px on mobile to prevent iOS zoom when the slot input takes focus
-      "bg-input-bg text-center text-base tabular-nums md:text-sm",
-      "relative h-10 w-10 outline-none transition-[color,box-shadow]",
+      // 16px on touch (any width — iPads are wide) to prevent iOS focus zoom
+      "bg-input-bg text-center pointer-fine:text-sm text-base tabular-nums",
+      "relative h-10 w-10 outline-none transition-[color]",
       "rounded-md border border-input shadow-xs",
       // Focus ring matching the Input component
       "focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset",

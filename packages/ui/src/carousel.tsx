@@ -287,9 +287,11 @@ function CarouselContent({
       <div
         className={cn(
           "flex",
+          // Embla owns the drag axis; hand the other axis (and pinch) back to
+          // the browser so a swipe across the track still scrolls the page.
           orientation === "horizontal"
-            ? "[margin-inline-start:calc(var(--carousel-gap)*-1)]"
-            : "flex-col [margin-top:calc(var(--carousel-gap)*-1)]",
+            ? "touch-pan-y touch-pinch-zoom [margin-inline-start:calc(var(--carousel-gap)*-1)]"
+            : "touch-pan-x touch-pinch-zoom flex-col [margin-top:calc(var(--carousel-gap)*-1)]",
           className
         )}
         {...props}
@@ -344,7 +346,7 @@ function CarouselPrevious({
           ? "top-1/2 -left-8 -translate-y-1/2"
           : "-top-8 left-1/2 -translate-x-1/2 rotate-90",
         autoHideArrows &&
-          "opacity-0 transition-opacity group-hover/carousel:opacity-100",
+          "opacity-0 pointer-coarse:opacity-100 transition-opacity focus-visible:opacity-100 group-hover/carousel:opacity-100",
         className
       )}
       data-slot="carousel-previous"
@@ -381,7 +383,7 @@ function CarouselNext({
           ? "top-1/2 -right-8 -translate-y-1/2"
           : "-bottom-8 left-1/2 -translate-x-1/2 rotate-90",
         autoHideArrows &&
-          "opacity-0 transition-opacity group-hover/carousel:opacity-100",
+          "opacity-0 pointer-coarse:opacity-100 transition-opacity focus-visible:opacity-100 group-hover/carousel:opacity-100",
         className
       )}
       data-slot="carousel-next"
@@ -418,7 +420,10 @@ function CarouselDots({ className, ...props }: ComponentProps<"div">) {
         <button
           aria-label={`Go to slide ${index + 1}`}
           className={cn(
-            "h-2 cursor-pointer rounded-full transition-[width,background-color] duration-(--duration-base,180ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
+            // 8px dot, 24px-tall hit area. Horizontally the pseudo stops at
+            // the gap midpoint (3px each side) so a neighbour never steals
+            // taps that land on this dot's visible pixels.
+            "relative h-2 cursor-pointer rounded-full transition-[width,background-color] duration-(--duration-base,180ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)) after:absolute after:-inset-x-[3px] after:-inset-y-2",
             index === selectedIndex
               ? "w-4 bg-foreground"
               : "w-2 bg-foreground/25 hover:bg-foreground/50"

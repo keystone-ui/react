@@ -61,15 +61,17 @@ export function ProfileDropdown() {
               />
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
-            <div className="flex-1">
+            <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-base">John Doe</span>
+                <span className="min-w-0 truncate font-semibold text-base">
+                  John Doe
+                </span>
                 <Badge size="sm" variant="default">
                   Pro
                 </Badge>
               </div>
               <p className="text-muted-foreground text-sm">$1,250.00</p>
-              <div className="mt-2 flex gap-1.5">
+              <div className="mt-2 flex flex-wrap gap-1.5">
                 <Badge
                   className="border-primary/20 bg-primary/15 text-primary"
                   size="sm"
