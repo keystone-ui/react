@@ -23,7 +23,7 @@ function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
         "peer relative flex aspect-square size-4 shrink-0 items-center justify-center rounded-full border",
         "border-input bg-input-bg text-primary",
         // Smooth color transitions
-        "transition-colors duration-150",
+        "transition-colors duration-(--duration-fast,125ms)",
         // Click area extension — bumped toward AAA touch target
         "after:absolute after:-inset-x-4 after:-inset-y-3",
         // Checked state - primary bg with white indicator
@@ -45,9 +45,9 @@ function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
       <RadioPrimitive.Indicator
         className={cn(
           // Micro-animation: scale + opacity transition
-          "transition-[transform,opacity] duration-150",
-          // Hidden when unchecked — start from scale(0.5), never scale(0)
-          "data-[unchecked]:scale-50 data-[unchecked]:opacity-0",
+          "transition-[scale,opacity] duration-(--duration-fast,125ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
+          // Hidden when unchecked — start from scale(0.9), never scale(0)
+          "data-[unchecked]:scale-90 data-[unchecked]:opacity-0",
           // Visible when checked
           "data-[checked]:scale-100 data-[checked]:opacity-100"
         )}

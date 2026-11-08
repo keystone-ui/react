@@ -21,7 +21,7 @@ export const Switch = ({
   return (
     <SwitchPrimitive.Root
       className={cn(
-        "peer group/switch relative inline-flex shrink-0 cursor-pointer touch-manipulation items-center rounded-full border border-transparent transition-[background-color,border-color] duration-150",
+        "peer group/switch relative inline-flex shrink-0 cursor-pointer touch-manipulation items-center rounded-full border border-transparent transition-[background-color,border-color] duration-(--duration-fast,125ms)",
         // Size variants
         "data-[size=default]:h-4.5 data-[size=default]:w-8",
         "data-[size=sm]:h-3.5 data-[size=sm]:w-6",
@@ -45,7 +45,7 @@ export const Switch = ({
     >
       <SwitchPrimitive.Thumb
         className={cn(
-          "pointer-events-none block rounded-full ring-0 transition-transform duration-150",
+          "pointer-events-none block rounded-full ring-0 transition-transform duration-(--duration-fast,125ms) ease-(--ease-ks-in-out,cubic-bezier(0.77,0,0.175,1))",
           "bg-background dark:data-checked:bg-primary-foreground dark:data-unchecked:bg-foreground",
           // Size variants for thumb
           "group-data-[size=default]/switch:size-4",

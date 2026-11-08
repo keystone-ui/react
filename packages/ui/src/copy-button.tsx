@@ -19,6 +19,9 @@ export interface CopyButtonProps
   value: string;
 }
 
+const ICON_SWAP =
+  "transition-[opacity,scale,filter] duration-(--duration-fast,125ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))";
+
 /**
  * Copies a value to the clipboard and confirms it.
  *
@@ -86,7 +89,22 @@ function CopyButton({
       variant={variant}
       {...props}
     >
-      {copied ? <CheckIcon /> : <CopyIcon />}
+      {/* Both icons stay mounted and crossfade, so the swap reads as one
+          state change rather than a flicker. */}
+      <span className="grid *:col-start-1 *:row-start-1">
+        <CopyIcon
+          className={cn(
+            ICON_SWAP,
+            copied ? "scale-50 opacity-0 blur-[2px]" : "scale-100 opacity-100"
+          )}
+        />
+        <CheckIcon
+          className={cn(
+            ICON_SWAP,
+            copied ? "scale-100 opacity-100" : "scale-50 opacity-0 blur-[2px]"
+          )}
+        />
+      </span>
     </Button>
   );
 }

@@ -1,7 +1,20 @@
 ---
-date: "2026-11-01"
+date: "2026-11-08"
 description: "What's coming in the next release"
-excerpt: "No changes since the last release."
+excerpt: "2 changes queued for the next release."
 ---
 
-No changes merged since v1.0.0-beta.9.
+## Patch changes
+
+### Raise the `motion` dependency floor to `^14.6.0`. Since 14.2, Motion runs `x`/`y` animations on the compositor, so Stepper's slide no longer drops frames when the main thread is busy. It also dedupes with the version the docs already used.
+
+---
+
+### Motion that read as animated but snapped now animates, and every transition times itself from the motion tokens:
+
+- Tailwind v4's `scale-*` / `translate-*` set the standalone `scale` / `translate` properties, so `transition-[transform,…]` never animated them. Button's press, the Checkbox and Radio indicators, the Slider thumb's drag grow and SelectionBar's rise now transition (`transition-[scale,…]` / `[translate,…]`).
+- Checkbox's indicator now animates out on uncheck (it was hidden instantly) and, like Radio's, starts from `scale(0.9)` instead of `0.5`.
+- SelectionBar's enter now plays: it mounts into the visible state with `@starting-style` from-values instead of a batched rAF, exits faster than it enters, unmounts on `transitionend`, and drops its permanent `will-change`. Uses `--ease-ks-out` instead of a private curve.
+- Literal `duration-150` / `duration-200` / `duration-[160ms]` / `duration-100` across Accordion, Collapsible, Carousel dots, Checkbox, Radio, Switch, Input, Select, Item and Button now resolve to `--duration-fast` / `--duration-base`.
+- Switch thumb moves on `--ease-ks-in-out`; Toggle gets the same `active:` press scale as Button; Dropdown sub-menus get the 4px slide toward their trigger like every other popup.
+- CopyButton crossfades its copy/check icons; FieldError fades in (opacity only).

@@ -219,7 +219,7 @@ When adding a new block, also: register the demo in `apps/docs/demos/index.ts` a
 
 - **No Radix UI** — use `@base-ui/react` for all primitives
 - **No barrel files** — each component file is its own entry point
-- **No `transition-all`** — always specify exact transition properties. Button uses `transition-[transform,background-color,color,border-color,box-shadow,outline-color]` with an explicit 160ms `ease-(--ease-ks-out)`; use that as a template for other interactive primitives.
+- **No `transition-all`** — always specify exact transition properties. Button uses `transition-[scale,background-color,color,border-color,box-shadow,outline-color] duration-(--duration-fast) ease-(--ease-ks-out)`; use that as a template for other interactive primitives. Tailwind v4's `scale-*` / `translate-*` / `rotate-*` set the standalone `scale` / `translate` / `rotate` properties, so name those (or use `transition-transform`, which expands to all four) — a `transition-[transform,…]` list leaves them snapping. Durations come from the `--duration-*` tokens, never `duration-150`. `motion-props.test.ts` enforces both.
 - **No raw color values** in component base styles — always use semantic tokens (exception: Badge color variants)
 - **Explicit `cursor-pointer`** on all interactive elements — Tailwind v4 changed the default
 - **Update `_registry.ts`**, `package.json` exports, and `tsup.config.ts` entryPoints when adding new components
