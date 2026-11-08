@@ -81,14 +81,14 @@ function TooltipContent({
       <TooltipPrimitive.Positioner
         align={align}
         alignOffset={alignOffset}
-        className="isolate z-50"
+        className="z-(--z-tooltip,70)"
         side={side}
         sideOffset={sideOffset}
       >
         <TooltipPrimitive.Popup
           className={cn(
             "bg-foreground text-background",
-            "z-[var(--z-tooltip,70)] w-fit max-w-xs origin-(--transform-origin) rounded-md px-3 py-1.5 text-xs",
+            "wrap-anywhere w-fit max-w-xs origin-(--transform-origin) rounded-md px-3 py-1.5 text-xs",
             className
           )}
           data-slot="tooltip-content"
