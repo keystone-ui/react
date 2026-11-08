@@ -1,8 +1,19 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Toaster, toast } from "./toast";
+import {
+  getSwipeDirections,
+  Toaster,
+  type ToastPosition,
+  toast,
+} from "./toast";
 
 // =============================================================================
 // Toaster
@@ -331,5 +342,239 @@ describe("toast content", () => {
     expect(
       document.querySelector("[data-slot='toast-icon']")
     ).toBeInTheDocument();
+  });
+});
+
+// =============================================================================
+// Position: swipe directions + viewport placement
+// =============================================================================
+describe("getSwipeDirections", () => {
+  it.each([
+    ["top-left", ["up", "left"]],
+    ["top-center", ["up"]],
+    ["top-right", ["up", "right"]],
+    ["bottom-left", ["down", "left"]],
+    ["bottom-center", ["down"]],
+    ["bottom-right", ["down", "right"]],
+  ] as const)("%s swipes %j", (position, expected) => {
+    expect(getSwipeDirections(position)).toEqual(expected);
+  });
+});
+
+/** Unprefixed margin/padding utilities (`m-4`, `pt-…`, `pl-[…]`). */
+const SPACING_CLASS = /^(m|p)[trblxy]?-/;
+
+describe("Toaster viewport placement", () => {
+  const viewportClasses = () =>
+    Array.from(
+      document.querySelector("[data-slot='toaster']")?.classList ?? []
+    );
+
+  it.each(["top-center", "bottom-center"] as const)(
+    "centres %s from sm up only",
+    (position) => {
+      render(<Toaster position={position} />);
+      const classes = viewportClasses();
+      // An unprefixed translate pushes phone toasts half off-screen, because
+      // below `sm` the viewport already spans the screen.
+      expect(classes).toContain("sm:-translate-x-1/2");
+      expect(classes).toContain("sm:left-1/2");
+      expect(classes).not.toContain("-translate-x-1/2");
+      expect(classes).not.toContain("left-1/2");
+    }
+  );
+
+  it.each([
+    "top-left",
+    "top-center",
+    "top-right",
+    "bottom-left",
+    "bottom-center",
+    "bottom-right",
+  ] as ToastPosition[])(
+    "%s uses safe-area offsets, not margin or padding",
+    (position) => {
+      render(<Toaster position={position} />);
+      const classes = viewportClasses();
+      // Toasts are absolute inside the viewport: padding never moved them, and
+      // a margin knocked the centred positions off-centre.
+      expect(classes.some((c) => SPACING_CLASS.test(c))).toBe(false);
+      const edge = position.startsWith("top") ? "top" : "bottom";
+      expect(classes).toContain(
+        `${edge}-[max(1rem,env(safe-area-inset-${edge}))]`
+      );
+      expect(classes).toContain(
+        "max-sm:left-[max(0.5rem,env(safe-area-inset-left))]"
+      );
+      expect(classes).toContain(
+        "max-sm:right-[max(0.5rem,env(safe-area-inset-right))]"
+      );
+    }
+  );
+});
+
+// =============================================================================
+// Close callbacks: onDismiss vs onAutoClose
+// =============================================================================
+describe("toast close callbacks", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    act(() => {
+      toast.dismiss();
+      vi.runOnlyPendingTimers();
+    });
+    vi.useRealTimers();
+  });
+
+  /** Render a Toaster and flush the add so the toast is mounted. */
+  function show(input: Parameters<typeof toast>[0]) {
+    render(<Toaster />);
+    let id = "";
+    act(() => {
+      id = toast(input as Parameters<typeof toast>[0]);
+    });
+    return id;
+  }
+
+  const getEl = (slot: string) => {
+    const el = document.querySelector<HTMLElement>(`[data-slot='${slot}']`);
+    if (!el) {
+      throw new Error(`no [data-slot='${slot}']`);
+    }
+    return el;
+  };
+
+  it("close button calls onDismiss only", () => {
+    const onDismiss = vi.fn();
+    const onAutoClose = vi.fn();
+    show({ description: "Closable", onDismiss, onAutoClose });
+
+    fireEvent.click(getEl("toast-close"));
+
+    expect(onDismiss).toHaveBeenCalledTimes(1);
+    expect(onAutoClose).not.toHaveBeenCalled();
+  });
+
+  it("toast.dismiss(id) calls onDismiss only, synchronously", () => {
+    const onDismiss = vi.fn();
+    const onAutoClose = vi.fn();
+    const id = show({ description: "Dismiss me", onDismiss, onAutoClose });
+
+    act(() => {
+      toast.dismiss(id);
+    });
+
+    expect(onDismiss).toHaveBeenCalledTimes(1);
+    expect(onAutoClose).not.toHaveBeenCalled();
+  });
+
+  it("toast.dismiss() with no id attributes every close to the user", () => {
+    const onDismiss = vi.fn();
+    const onAutoClose = vi.fn();
+    render(<Toaster />);
+    act(() => {
+      toast({ description: "One", onDismiss, onAutoClose });
+      toast({ description: "Two", onDismiss, onAutoClose });
+    });
+
+    act(() => {
+      toast.dismiss();
+    });
+
+    expect(onDismiss).toHaveBeenCalledTimes(2);
+    expect(onAutoClose).not.toHaveBeenCalled();
+  });
+
+  it("cancel button calls onDismiss only", () => {
+    const onDismiss = vi.fn();
+    const onAutoClose = vi.fn();
+    const onCancel = vi.fn();
+    show({
+      description: "Cancelable",
+      cancel: { label: "Cancel", onClick: onCancel },
+      onDismiss,
+      onAutoClose,
+    });
+
+    fireEvent.click(getEl("toast-cancel"));
+
+    expect(onCancel).toHaveBeenCalledTimes(1);
+    expect(onDismiss).toHaveBeenCalledTimes(1);
+    expect(onAutoClose).not.toHaveBeenCalled();
+  });
+
+  it("action button runs its handler, then closes as a dismiss", () => {
+    const calls: string[] = [];
+    show({
+      description: "Undoable",
+      action: { label: "Undo", onClick: () => calls.push("action") },
+      onDismiss: () => calls.push("dismiss"),
+      onAutoClose: () => calls.push("auto"),
+    });
+
+    fireEvent.click(getEl("toast-action"));
+
+    expect(calls).toEqual(["action", "dismiss"]);
+  });
+
+  it("timer expiry calls onAutoClose only", () => {
+    const onDismiss = vi.fn();
+    const onAutoClose = vi.fn();
+    show({ description: "Expiring", duration: 1000, onDismiss, onAutoClose });
+
+    act(() => {
+      vi.advanceTimersByTime(1000);
+    });
+
+    expect(onAutoClose).toHaveBeenCalledTimes(1);
+    expect(onDismiss).not.toHaveBeenCalled();
+  });
+
+  it("timer expiry falls back to onDismiss when onAutoClose is unset", () => {
+    const onDismiss = vi.fn();
+    show({ description: "Expiring", duration: 1000, onDismiss });
+
+    act(() => {
+      vi.advanceTimersByTime(1000);
+    });
+
+    expect(onDismiss).toHaveBeenCalledTimes(1);
+  });
+
+  it("closes cleanly with neither callback set", () => {
+    const id = show({ description: "No callbacks", duration: 1000 });
+
+    expect(() => {
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+      act(() => {
+        toast.dismiss(id);
+      });
+    }).not.toThrow();
+  });
+
+  it("a manual close does not leak attribution into a later auto-close", () => {
+    const first = vi.fn();
+    const onAutoClose = vi.fn();
+    const onDismiss = vi.fn();
+    const id = show({ description: "First", onDismiss: first });
+    act(() => {
+      toast.dismiss(id);
+    });
+    expect(first).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      toast({ description: "Second", duration: 1000, onAutoClose, onDismiss });
+    });
+    act(() => {
+      vi.advanceTimersByTime(1000);
+    });
+
+    expect(onAutoClose).toHaveBeenCalledTimes(1);
+    expect(onDismiss).not.toHaveBeenCalled();
   });
 });

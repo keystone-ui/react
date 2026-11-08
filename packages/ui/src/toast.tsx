@@ -55,9 +55,18 @@ interface ToastOptions {
   duration?: number;
   /** Pass an existing toast ID to update it in-place */
   id?: string;
-  /** Callback when a toast auto-closes after its duration */
+  /**
+   * Called when the toast closes on its own: its `duration` ran out, or it
+   * was swiped away or closed with Escape (Base UI reports no reason for
+   * those, so they count as unattributed). Falls back to `onDismiss` when
+   * unset.
+   */
   onAutoClose?: () => void;
-  /** Callback when a toast is manually dismissed */
+  /**
+   * Called when the toast is closed by the close button, the `cancel` or
+   * `action` button, or `toast.dismiss()`. Swipe and Escape are unattributed:
+   * they call `onAutoClose` when it is set, `onDismiss` otherwise.
+   */
   onDismiss?: () => void;
 }
 
@@ -139,6 +148,46 @@ function readingTimeMs(nodes: ReactNode[]): number {
  * Build the Base UI toast payload from our vocabulary (`duration` → `timeout`,
  * `action` → `actionProps`, `cancel`/`dismissible`/`closeButton` → `data`).
  */
+/**
+ * Depth of in-flight manual closes. Base UI's `onClose` carries no reason, but
+ * `toastManager.close()` is synchronous end to end (emit -> provider ->
+ * `store.closeToast` -> `toast.onClose`), so a counter raised around the call
+ * attributes the close without tracking ids -- nothing to clean up afterwards,
+ * and it covers `toast.dismiss()` closing every toast at once.
+ */
+let manualCloseDepth = 0;
+
+/** Close a toast (or all of them) and attribute it to the user. */
+function closeManually(id?: string): void {
+  manualCloseDepth += 1;
+  try {
+    toastManager.close(id);
+  } finally {
+    manualCloseDepth -= 1;
+  }
+}
+
+/**
+ * Route Base UI's reason-less `onClose` to the right public callback: a manual
+ * close calls `onDismiss`; anything else (timer, swipe, Escape) calls
+ * `onAutoClose`, falling back to `onDismiss`.
+ */
+function closeHandler(
+  onAutoClose: (() => void) | undefined,
+  onDismiss: (() => void) | undefined
+): (() => void) | undefined {
+  if (!(onAutoClose || onDismiss)) {
+    return undefined;
+  }
+  return () => {
+    if (manualCloseDepth > 0) {
+      onDismiss?.();
+    } else {
+      (onAutoClose ?? onDismiss)?.();
+    }
+  };
+}
+
 function toPayload(input: ToastInput, type?: string) {
   const {
     id,
@@ -172,7 +221,7 @@ function toPayload(input: ToastInput, type?: string) {
     description,
     type: type ?? "default",
     timeout: resolvedTimeout,
-    onClose: onAutoClose ?? onDismiss,
+    onClose: closeHandler(onAutoClose, onDismiss),
     actionProps: action
       ? { children: action.label, onClick: action.onClick }
       : undefined,
@@ -271,7 +320,7 @@ function promise<T>(
  * clears their timers (Base UI's `close(id?)`).
  */
 function dismiss(id?: string): void {
-  toastManager.close(id);
+  closeManually(id);
 }
 
 /** Create a fully custom toast with arbitrary JSX. */
@@ -336,14 +385,44 @@ const TYPE_CLASSES: Record<string, string> = {
 // Viewport position mapping
 // ---------------------------------------------------------------------------
 
+// Offsets, not margin + padding: the toasts are `absolute` inside the
+// viewport, so padding never moved them, and a margin shifted the centred
+// positions 16px off-centre. Each edge sits 1rem in, or clear of the device's
+// safe area (notch, home indicator) when that is larger. Below `sm` the
+// viewport spans the screen (see `Toaster`), so centring is `sm:`-only -- an
+// unprefixed `-translate-x-1/2` pushed phone toasts half off-screen.
+const TOP = "top-[max(1rem,env(safe-area-inset-top))]";
+const BOTTOM = "bottom-[max(1rem,env(safe-area-inset-bottom))]";
+const LEFT = "left-[max(1rem,env(safe-area-inset-left))]";
+const RIGHT = "right-[max(1rem,env(safe-area-inset-right))]";
+const CENTER = "sm:left-1/2 sm:-translate-x-1/2";
+
 const VIEWPORT_POSITION_CLASSES: Record<ToastPosition, string> = {
-  "top-left": "top-0 left-0",
-  "top-center": "top-0 left-1/2 -translate-x-1/2",
-  "top-right": "top-0 right-0",
-  "bottom-left": "bottom-0 left-0",
-  "bottom-center": "bottom-0 left-1/2 -translate-x-1/2",
-  "bottom-right": "bottom-0 right-0",
+  "top-left": `${TOP} ${LEFT}`,
+  "top-center": `${TOP} ${CENTER}`,
+  "top-right": `${TOP} ${RIGHT}`,
+  "bottom-left": `${BOTTOM} ${LEFT}`,
+  "bottom-center": `${BOTTOM} ${CENTER}`,
+  "bottom-right": `${BOTTOM} ${RIGHT}`,
 };
+
+type SwipeDirection = "up" | "down" | "left" | "right";
+
+/**
+ * The directions a toast can be swiped away in: toward the edge it is
+ * anchored to vertically, plus the nearer side for a corner position.
+ * Centred toasts have no nearer side, so they only swipe vertically.
+ */
+function getSwipeDirections(position: ToastPosition): SwipeDirection[] {
+  const vertical: SwipeDirection = position.startsWith("top") ? "up" : "down";
+  if (position.endsWith("-left")) {
+    return [vertical, "left"];
+  }
+  if (position.endsWith("-right")) {
+    return [vertical, "right"];
+  }
+  return [vertical];
+}
 
 // ---------------------------------------------------------------------------
 // Toast stacking classes (matching Base UI Toast example verbatim)
@@ -369,7 +448,14 @@ const TOAST_STACK_BASE = [
   // Transition. `height` stays a layout transition on purpose: the stack
   // clips each toast to the frontmost one's height, and a scale would
   // distort the content instead of revealing it.
-  "[transition:transform_var(--duration-drawer,400ms)_var(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)),opacity_var(--duration-drawer,400ms),height_var(--duration-fast,125ms)]",
+  // The root moves through `transform:` itself (arbitrary values below), not
+  // Tailwind's standalone `translate`/`scale`, so `transform` is the right
+  // property to name here.
+  "[transition:transform_var(--duration-drawer,400ms)_var(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)),opacity_var(--duration-drawer,400ms)_var(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)),height_var(--duration-fast,125ms)]",
+  // Exit faster than the enter (0.6x): a leaving toast should get out of the way.
+  "data-[ending-style]:[transition:transform_calc(var(--duration-drawer,400ms)*0.6)_var(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)),opacity_calc(var(--duration-drawer,400ms)*0.6)_var(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)),height_var(--duration-fast,125ms)]",
+  // A swiped toast is already moving under the finger; finish it quickly.
+  "data-[ending-style]:data-[swipe-direction]:[transition:transform_var(--duration-slow,250ms)_var(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)),opacity_var(--duration-slow,250ms)_var(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)),height_var(--duration-fast,125ms)]",
   "data-[swiping]:[transition:none]",
   // Invisible gap below for hover continuity between stacked toasts
   "after:absolute after:top-full after:left-0 after:h-[calc(var(--gap)+1px)] after:w-full after:content-['']",
@@ -410,10 +496,18 @@ const TOAST_TOP_CLASSES = [
   "[&[data-ending-style]:not([data-limited]):not([data-swipe-direction])]:[transform:translateY(-150%)]",
 ];
 
+/**
+ * 44px-tall tap target for the 28px action/cancel buttons (28 + 2x8). The
+ * horizontal extension stays under half the 6px gap so neighbours' targets
+ * never overlap.
+ */
+const TOAST_BUTTON_TAP_AREA =
+  "after:absolute after:-inset-x-0.5 after:-inset-y-2 after:content-['']";
+
 /** Content classes: height clipping for varying heights + behind/expanded opacity. */
 const TOAST_CONTENT_CLASSES = [
   "h-full overflow-hidden",
-  "transition-opacity duration-(--duration-slow,250ms)",
+  "transition-opacity duration-(--duration-slow,250ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
   "data-[behind]:pointer-events-none data-[behind]:opacity-0",
   "data-[expanded]:pointer-events-auto data-[expanded]:opacity-100",
 ];
@@ -424,15 +518,20 @@ const TOAST_CONTENT_CLASSES = [
 
 function ToastList({
   closeButton,
-  isTop,
+  position,
 }: {
   closeButton?: boolean;
-  isTop: boolean;
+  position: ToastPosition;
 }) {
   const { toasts } = Toast.useToastManager();
 
   return toasts.map((t) => (
-    <ToastItem closeButton={closeButton} isTop={isTop} key={t.id} toast={t} />
+    <ToastItem
+      closeButton={closeButton}
+      key={t.id}
+      position={position}
+      toast={t}
+    />
   ));
 }
 
@@ -443,14 +542,18 @@ function ToastList({
 function ToastItem({
   toast: t,
   closeButton: globalCloseButton,
-  isTop,
+  position,
 }: {
   toast: ReturnType<typeof Toast.useToastManager>["toasts"][number];
   closeButton?: boolean;
-  isTop: boolean;
+  position: ToastPosition;
 }) {
   const data = (t.data ?? {}) as ToastData;
-  const positionClasses = isTop ? TOAST_TOP_CLASSES : TOAST_BOTTOM_CLASSES;
+  const positionClasses = position.startsWith("top")
+    ? TOAST_TOP_CLASSES
+    : TOAST_BOTTOM_CLASSES;
+  const swipeDirections =
+    data.dismissible === false ? [] : getSwipeDirections(position);
 
   // ---- Custom render ----
   if (data.render) {
@@ -461,7 +564,7 @@ function ToastItem({
           positionClasses,
           "pointer-events-auto select-none"
         )}
-        swipeDirection={data.dismissible === false ? [] : ["down", "right"]}
+        swipeDirection={swipeDirections}
         toast={t}
       >
         <Toast.Content className={cn(TOAST_CONTENT_CLASSES)}>
@@ -504,7 +607,7 @@ function ToastItem({
       )}
       aria-label={ariaLabel}
       data-slot="toast"
-      swipeDirection={isDismissible ? ["down", "right"] : []}
+      swipeDirection={swipeDirections}
       toast={t}
     >
       <Toast.Content
@@ -533,7 +636,7 @@ function ToastItem({
           )}
           {t.description != null && (
             <Toast.Description
-              className="text-muted-foreground text-sm leading-snug"
+              className="wrap-anywhere text-muted-foreground text-sm leading-snug"
               data-slot="toast-description"
             />
           )}
@@ -547,11 +650,14 @@ function ToastItem({
           >
             {data.cancel && (
               <button
-                className="inline-flex h-7 cursor-pointer items-center justify-center rounded-md px-2.5 font-medium text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-accent-foreground"
+                className={cn(
+                  "relative inline-flex h-7 cursor-pointer items-center justify-center rounded-md px-2.5 font-medium text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-accent-foreground",
+                  TOAST_BUTTON_TAP_AREA
+                )}
                 data-slot="toast-cancel"
                 onClick={() => {
                   data.cancel?.onClick?.();
-                  toastManager.close(t.id);
+                  closeManually(t.id);
                 }}
                 type="button"
               >
@@ -560,8 +666,14 @@ function ToastItem({
             )}
             {t.actionProps && (
               <Toast.Action
-                className="inline-flex h-7 cursor-pointer items-center justify-center rounded-md border border-border bg-background px-2.5 font-medium text-xs transition-colors hover:bg-accent hover:text-accent-foreground"
+                className={cn(
+                  "relative inline-flex h-7 cursor-pointer items-center justify-center rounded-md border border-border bg-background px-2.5 font-medium text-xs transition-colors hover:bg-accent hover:text-accent-foreground",
+                  TOAST_BUTTON_TAP_AREA
+                )}
                 data-slot="toast-action"
+                // Runs after the caller's `action.onClick` (Base UI calls the
+                // rightmost handler first), then closes like `cancel` does.
+                onClick={() => closeManually(t.id)}
               />
             )}
           </div>
@@ -584,6 +696,9 @@ function ToastItem({
               "outline-none focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
             )}
             data-slot="toast-close"
+            // Ours runs before Base UI's own close (rightmost handler first),
+            // so the close is attributed to the user; Base UI's then no-ops.
+            onClick={() => closeManually(t.id)}
           >
             <XIcon className="size-4" />
           </Toast.Close>
@@ -628,12 +743,11 @@ function Toaster({
       <Toast.Portal>
         <Toast.Viewport
           className={cn(
-            "fixed z-(--z-toast,80) m-4 outline-none",
-            // Width: fixed on desktop, full on mobile
-            "w-(--width) max-sm:right-0 max-sm:left-0 max-sm:mx-2 max-sm:w-auto",
-            // Respect device safe areas (notch, home bar)
-            "pt-[env(safe-area-inset-top)] pr-[env(safe-area-inset-right)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)]",
-            // Position-specific
+            "fixed z-(--z-toast,80) outline-none",
+            // Width: fixed from `sm` up; below it, span the screen with a
+            // 0.5rem gutter (or the safe-area inset, when larger)
+            "w-(--width) max-sm:right-[max(0.5rem,env(safe-area-inset-right))] max-sm:left-[max(0.5rem,env(safe-area-inset-left))] max-sm:w-auto",
+            // Position-specific edge offsets (safe-area aware)
             VIEWPORT_POSITION_CLASSES[position],
             className
           )}
@@ -641,7 +755,7 @@ function Toaster({
           data-slot="toaster"
           style={{ "--width": "356px" } as CSSProperties}
         >
-          <ToastList closeButton={closeButton} isTop={isTop} />
+          <ToastList closeButton={closeButton} position={position} />
         </Toast.Viewport>
       </Toast.Portal>
     </Toast.Provider>
@@ -662,4 +776,4 @@ export type {
   ToastPosition,
   ToastPromiseOptions,
 };
-export { Toaster, toast };
+export { getSwipeDirections, Toaster, toast };

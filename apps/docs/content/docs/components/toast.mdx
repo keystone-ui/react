@@ -143,14 +143,18 @@ maps to `toast({ description })`.)
 
 | Field | Type | Default | Description |
 | --- | --- | --- | --- |
-| `action` | `ToastAction` | - | Primary action button |
-| `cancel` | `ToastAction` | - | Secondary cancel/dismiss button |
+| `action` | `ToastAction` | - | Primary action button. Runs `onClick`, then closes the toast |
+| `cancel` | `ToastAction` | - | Secondary cancel/dismiss button. Runs `onClick`, then closes the toast |
 | `duration` | `number` | Toaster's `duration` | Milliseconds before auto-dismiss. `Infinity` keeps the toast open. Inert on `toast.loading`, which never auto-dismisses — update it by `id` or use `toast.promise` |
-| `dismissible` | `boolean` | `true` | Whether the toast can be swiped away or closed |
+| `dismissible` | `boolean` | `true` | Whether the toast can be swiped away or closed. Toasts swipe toward their vertical edge, plus their side for corner positions (`bottom-right` swipes down or right; `top-center` only up) |
 | `closeButton` | `boolean` | Toaster's `closeButton` | Show a close button on this specific toast |
 | `id` | `string` | - | Pass an existing toast ID to update it in place |
-| `onAutoClose` | `() => void` | - | Called when the toast auto-closes after its duration |
-| `onDismiss` | `() => void` | - | Called when the toast is manually dismissed |
+| `onAutoClose` | `() => void` | - | Called when the toast closes on its own: its `duration` ran out, or it was swiped away or closed with Escape. Falls back to `onDismiss` when unset |
+| `onDismiss` | `() => void` | - | Called when the toast is closed by its close, `cancel` or `action` button, or by `toast.dismiss()` |
+
+Swipe and Escape closes carry no reason from Base UI, so they are treated as
+unattributed: they call `onAutoClose` when it is set and `onDismiss` otherwise.
+Each close calls exactly one of the two.
 
 Other methods: `toast.promise(promise, { loading, success, error })` — each
 state takes the same message-or-object input; `toast.custom(render, options?)`
