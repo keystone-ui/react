@@ -389,7 +389,7 @@ const TYPE_CLASSES: Record<string, string> = {
 // viewport, so padding never moved them, and a margin shifted the centred
 // positions 16px off-centre. Each edge sits 1rem in, or clear of the device's
 // safe area (notch, home indicator) when that is larger. Below `sm` the
-// viewport spans the screen (see `Toaster`), so centring is `sm:`-only -- an
+// viewport spans the screen (see `Toaster`), so centring is `sm:`-only --
 // an unprefixed half-width translate pushed phone toasts half off-screen.
 const TOP = "top-[max(1rem,env(safe-area-inset-top))]";
 const BOTTOM = "bottom-[max(1rem,env(safe-area-inset-bottom))]";
