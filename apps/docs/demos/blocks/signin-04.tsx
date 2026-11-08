@@ -39,6 +39,8 @@ function SignInForm({ className, ...props }: React.ComponentProps<"div">) {
           <Field>
             <FieldLabel htmlFor="email">Email</FieldLabel>
             <Input
+              autoComplete="email"
+              enterKeyHint="go"
               id="email"
               placeholder="m@example.com"
               required

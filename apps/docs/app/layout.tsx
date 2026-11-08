@@ -1,5 +1,5 @@
 import { RootProvider } from "fumadocs-ui/provider/next";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { IntentLink } from "@/components/intent-link";
@@ -39,6 +39,14 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
   },
+};
+
+// `viewport-fit=cover` makes env(safe-area-inset-*) report real values, so the
+// Drawer, Toast and SelectionBar padding clears the notch and home indicator.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

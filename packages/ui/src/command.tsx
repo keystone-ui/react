@@ -80,6 +80,7 @@ function CommandDialog({
 // =============================================================================
 function CommandInput({
   className,
+  enterKeyHint = "search",
   ...props
 }: React.ComponentProps<typeof CommandPrimitive.Input>) {
   return (
@@ -90,12 +91,13 @@ function CommandInput({
         </InputGroupAddon>
         <CommandPrimitive.Input
           className={cn(
-            "flex h-10 flex-1 rounded-none border-0 bg-transparent px-3 py-1 text-sm shadow-none outline-hidden dark:bg-transparent",
+            "flex h-10 flex-1 rounded-none border-0 bg-transparent px-3 py-1 pointer-fine:text-sm text-base shadow-none outline-hidden dark:bg-transparent",
             "placeholder:text-muted-foreground/70",
             "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
             className
           )}
           data-slot="input-group-control"
+          enterKeyHint={enterKeyHint}
           {...props}
         />
       </InputGroup>

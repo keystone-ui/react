@@ -42,6 +42,8 @@ export function SignupForm({
           <Field>
             <FieldLabel htmlFor="email">Email</FieldLabel>
             <Input
+              autoComplete="email"
+              enterKeyHint="done"
               id="email"
               placeholder="m@example.com"
               required
