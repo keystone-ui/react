@@ -7,20 +7,23 @@
  */
 
 const ROUTE_GROUP = /^\(.*\)$/;
+/** Source files fumadocs collects (`source.config.ts`: `**\/*.{md,mdx}`). */
+const SOURCE_EXT = /\.mdx?$/;
+/** The request-side mirror: `/docs/<page>.mdx` is rewritten to the llms route. */
 const MDX_EXT = /\.mdx$/;
 const TRAILING_SLASH = /\/+$/;
 
 /**
  * fumadocs URL for a file under `content/docs`: route-group segments and
  * the extension are dropped, `index` maps to its directory. Authoring
- * templates (`_*.mdx`) and non-MDX files yield null.
+ * templates (`_*`) and files that are not Markdown yield null.
  */
 export function docsUrlFromFile(relativePath: string): string | null {
-  if (!MDX_EXT.test(relativePath)) {
+  if (!SOURCE_EXT.test(relativePath)) {
     return null;
   }
   const segments = relativePath
-    .replace(MDX_EXT, "")
+    .replace(SOURCE_EXT, "")
     .split("/")
     .filter((segment) => segment && !ROUTE_GROUP.test(segment));
   if (segments.some((segment) => segment.startsWith("_"))) {
@@ -53,8 +56,26 @@ export function buildKnownPaths(input: {
 /** Prefixes with a dynamic segment whose unknown params must not render. */
 const GUARDED = ["/docs", "/blog", "/preview"] as const;
 
+/**
+ * Next matches routes on the decoded path, so `/preview/button%2Ddefault`
+ * reaches the same page as `/preview/button-default` and must be judged the
+ * same way. A malformed escape cannot be a known page; report it as unknown
+ * rather than throwing inside the proxy.
+ */
+function decodePath(pathname: string): string | null {
+  try {
+    return decodeURIComponent(pathname);
+  } catch {
+    return null;
+  }
+}
+
 export function isKnownPath(pathname: string, known: KnownPaths): boolean {
-  const path = pathname.replace(TRAILING_SLASH, "") || "/";
+  const decoded = decodePath(pathname);
+  if (decoded === null) {
+    return false;
+  }
+  const path = decoded.replace(TRAILING_SLASH, "") || "/";
   const guarded = GUARDED.find((p) => path === p || path.startsWith(`${p}/`));
   if (!guarded) {
     return true;
