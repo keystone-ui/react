@@ -8,7 +8,8 @@
       "singularStoryVsPluralDemo": "story WithIcon → demo with-icons. Treat as conceptual match; allowlisted on story side.",
       "basicStoryVsDefaultDemo": "story Basic → demo default. Conceptual match; allowlisted.",
       "regressionFixture": "story exists to host a play() regression test for a fixed bug (date-input callback-ref: forwarded callback ref must still reach the picker button). Not a docs variant; story-only by design.",
-      "cssUtilityFixture": "CSS-only utilities in base.css (scroll-fade, shimmer) have no component and no demo directory; their story hosts the browser play() test, and the docs page is theming/utilities."
+      "cssUtilityFixture": "CSS-only utilities in base.css (scroll-fade, shimmer) have no component and no demo directory; their story hosts the browser play() test, and the docs page is theming/utilities.",
+      "worstCaseFixture": "story feeds realistic worst-case data (80-char unbroken email, four-digit page, counts of 0 and 1) and its play() measures real layout in the browser — overflow, rects inside container and viewport, positioner z-index. A layout regression test, not a docs variant; story-only by design."
     }
   },
   "storyOnly": {
@@ -164,7 +165,8 @@
       "radio-icons",
       "radio-with-icons",
       "shortcuts",
-      "submenu"
+      "submenu",
+      "worst-case"
     ],
     "empty": ["avatar-group", "with-input-group"],
     "field": [
@@ -248,6 +250,7 @@
       "scrollable-content"
     ],
     "native-select": ["field", "field-example", "form", "opaque-options"],
+    "pagination": ["worst-case"],
     "popover": ["basic", "with-close"],
     "progress": ["basic", "custom-value-format", "with-label-and-value"],
     "radio-group": ["basic", "description", "invalid"],
@@ -257,7 +260,8 @@
       "compact-items",
       "form",
       "invalid",
-      "multiple-selection"
+      "multiple-selection",
+      "worst-case"
     ],
     "separator": ["decorative-vs-semantic", "horizontal"],
     "skeleton": ["card-skeleton", "shimmer-card"],
@@ -282,6 +286,7 @@
       "wireless-mouse"
     ],
     "tabs": ["controlled"],
+    "tag": ["worst-case"],
     "tag-group": [
       "alice",
       "amenities",

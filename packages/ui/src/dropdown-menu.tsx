@@ -7,8 +7,43 @@ import {
   Circle as CircleIcon,
 } from "lucide-react";
 import type * as React from "react";
+import { Children } from "react";
 import { Checkbox } from "./checkbox";
 import { cn, POPUP_ITEM_HEIGHT } from "./utils";
+
+/**
+ * Wraps bare text children in a span that can ellipsize. A flex row cannot
+ * ellipsize its own text — it sits in an anonymous flex item — and a
+ * fixed-height row has nowhere to wrap it to. Adjacent strings and numbers
+ * (`{count} items`) share one span; elements pass through untouched.
+ */
+function wrapText(
+  children: React.ReactNode,
+  className: string
+): React.ReactNode {
+  const out: React.ReactNode[] = [];
+  let text = "";
+  const flush = () => {
+    if (text) {
+      out.push(
+        <span className={className} key={`text-${out.length}`}>
+          {text}
+        </span>
+      );
+      text = "";
+    }
+  };
+  for (const child of Children.toArray(children)) {
+    if (typeof child === "string" || typeof child === "number") {
+      text += child;
+    } else {
+      flush();
+      out.push(child);
+    }
+  }
+  flush();
+  return out;
+}
 
 // =============================================================================
 // DropdownMenu (Root)
@@ -89,14 +124,14 @@ function DropdownMenuContent({
       <MenuPrimitive.Positioner
         align={align}
         alignOffset={alignOffset}
-        className="isolate z-50 outline-none"
+        className="z-(--z-dropdown,60) outline-none"
         side={side}
         sideOffset={sideOffset}
       >
         <MenuPrimitive.Popup
           className={cn(
             "bg-popover text-popover-foreground ring-popup-ring",
-            "z-[var(--z-dropdown,60)] max-h-(--available-height) min-w-32 origin-(--transform-origin) overflow-y-auto overflow-x-hidden rounded-lg p-1 shadow-lg outline-none ring-1 data-closed:overflow-hidden",
+            "max-h-(--available-height) min-w-32 max-w-(--available-width) origin-(--transform-origin) overflow-y-auto overflow-x-hidden rounded-lg p-1 shadow-lg outline-none ring-1 data-closed:overflow-hidden",
             className
           )}
           data-size={size}
@@ -164,6 +199,7 @@ export interface DropdownMenuItemProps extends MenuPrimitive.Item.Props {
 
 function DropdownMenuItem({
   className,
+  children,
   inset,
   variant = "default",
   ...props
@@ -174,7 +210,7 @@ function DropdownMenuItem({
         "focus:bg-accent focus:text-accent-foreground",
         "data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:*:[svg]:text-destructive",
         "not-data-[variant=destructive]:focus:*:text-accent-foreground",
-        `group/dropdown-menu-item relative flex ${POPUP_ITEM_HEIGHT} cursor-pointer select-none items-center gap-1.5 rounded-md px-1.5 text-sm outline-hidden`,
+        `group/dropdown-menu-item relative flex ${POPUP_ITEM_HEIGHT} min-w-0 cursor-pointer select-none items-center gap-1.5 rounded-md px-1.5 text-sm outline-hidden`,
         "data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-[inset]:pl-8 data-disabled:opacity-50",
         "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
@@ -183,7 +219,9 @@ function DropdownMenuItem({
       data-slot="dropdown-menu-item"
       data-variant={variant}
       {...props}
-    />
+    >
+      {wrapText(children, "min-w-0 flex-1 truncate")}
+    </MenuPrimitive.Item>
   );
 }
 
@@ -220,7 +258,7 @@ function DropdownMenuSubTrigger({
         "focus:bg-accent focus:text-accent-foreground data-open:bg-accent data-open:text-accent-foreground",
         "not-data-[variant=destructive]:focus:*:text-accent-foreground",
         "data-popup-open:bg-accent data-popup-open:text-accent-foreground",
-        `flex ${POPUP_ITEM_HEIGHT} cursor-pointer select-none items-center gap-1.5 rounded-md px-1.5 text-sm outline-hidden data-[inset]:pl-8`,
+        `flex ${POPUP_ITEM_HEIGHT} min-w-0 cursor-pointer select-none items-center gap-1.5 rounded-md px-1.5 text-sm outline-hidden data-[inset]:pl-8`,
         "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
       )}
@@ -228,7 +266,7 @@ function DropdownMenuSubTrigger({
       data-slot="dropdown-menu-sub-trigger"
       {...props}
     >
-      {children}
+      {wrapText(children, "min-w-0 flex-1 truncate")}
       <ChevronRightIcon className="ml-auto size-4" />
     </MenuPrimitive.SubmenuTrigger>
   );
@@ -277,14 +315,14 @@ function DropdownMenuSubContent({
       <MenuPrimitive.Positioner
         align={align}
         alignOffset={alignOffset}
-        className="isolate z-50 outline-none"
+        className="z-(--z-dropdown,60) outline-none"
         side={side}
         sideOffset={sideOffset}
       >
         <MenuPrimitive.Popup
           className={cn(
             "bg-popover text-popover-foreground ring-popup-ring",
-            "z-[var(--z-dropdown,60)] w-auto min-w-24 origin-(--transform-origin) overflow-hidden rounded-md p-1 shadow-lg ring-1",
+            "w-auto min-w-24 max-w-(--available-width) origin-(--transform-origin) overflow-hidden rounded-md p-1 shadow-lg ring-1",
             className
           )}
           data-slot="dropdown-menu-sub-content"
@@ -322,7 +360,7 @@ function DropdownMenuCheckboxItem({
       className={cn(
         "focus:bg-accent focus:text-accent-foreground",
         variant === "indicator" && "focus:*:text-accent-foreground",
-        `relative flex ${POPUP_ITEM_HEIGHT} cursor-pointer select-none items-center gap-1.5 rounded-md text-sm outline-hidden`,
+        `relative flex ${POPUP_ITEM_HEIGHT} min-w-0 cursor-pointer select-none items-center gap-1.5 rounded-md text-sm outline-hidden`,
         variant === "indicator" ? "pr-8 pl-1.5" : "px-1.5",
         "data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
         "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
@@ -347,7 +385,7 @@ function DropdownMenuCheckboxItem({
           </MenuPrimitive.CheckboxItemIndicator>
         </span>
       )}
-      {children}
+      {wrapText(children, "min-w-0 flex-1 truncate")}
     </MenuPrimitive.CheckboxItem>
   );
 }
@@ -408,7 +446,7 @@ function DropdownMenuRadioItem({
       className={cn(
         "focus:bg-accent focus:text-accent-foreground",
         variant === "indicator" && "focus:*:text-accent-foreground",
-        `relative flex ${POPUP_ITEM_HEIGHT} cursor-pointer select-none items-center gap-1.5 rounded-md text-sm outline-hidden`,
+        `relative flex ${POPUP_ITEM_HEIGHT} min-w-0 cursor-pointer select-none items-center gap-1.5 rounded-md text-sm outline-hidden`,
         variant === "indicator" ? "pr-8 pl-1.5" : "px-1.5",
         "data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
         "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
@@ -442,7 +480,7 @@ function DropdownMenuRadioItem({
           </MenuPrimitive.RadioItemIndicator>
         </span>
       )}
-      {children}
+      {wrapText(children, "min-w-0 flex-1 truncate")}
     </MenuPrimitive.RadioItem>
   );
 }

@@ -8,6 +8,7 @@ import {
   Italic as ItalicIcon,
   Star as StarIcon,
 } from "lucide-react";
+import { expect, within } from "storybook/test";
 
 const meta = {
   title: "Components/Tag",
@@ -174,4 +175,79 @@ export const Disabled: Story = {
       </Tag>
     </div>
   ),
+};
+
+// ---------------------------------------------------------------------------
+// Worst case
+// ---------------------------------------------------------------------------
+
+/**
+ * Realistic worst-case data, not lorem: an 80-character address with no
+ * break opportunity, a four-digit page, counts of exactly 0 and 1. The play
+ * test measures real layout in the browser, so a regression to overflowing
+ * text fails here rather than in a user's account menu.
+ */
+const WORST_EMAIL =
+  "bartholomew.fitzgerald-wisniewska@northwind-industries-holdings-emea.example.com";
+
+/** `inner` lies inside `outer`, with half a pixel for subpixel rounding. */
+function expectInside(inner: DOMRect, outer: { left: number; right: number }) {
+  expect(inner.left).toBeGreaterThanOrEqual(outer.left - 0.5);
+  expect(inner.right).toBeLessThanOrEqual(outer.right + 0.5);
+}
+
+/** The element's content fits its box: nothing spills past the border. */
+function expectNoOverflow(el: Element) {
+  expect(el.scrollWidth).toBeLessThanOrEqual(el.clientWidth);
+}
+
+const viewport = () => ({ left: 0, right: window.innerWidth });
+
+export const WorstCase: Story = {
+  name: "Worst case",
+  render: () => (
+    <div className="flex w-80 flex-wrap gap-2" data-testid="frame">
+      <Tag value="email">
+        {WORST_EMAIL}
+        <TagRemove />
+      </Tag>
+      <Tag value="zero">{0} unread</Tag>
+      <Tag value="one">{1} member</Tag>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const frame = canvas.getByTestId("frame").getBoundingClientRect();
+    const tags = canvasElement.querySelectorAll('[data-slot="tag"]');
+    await expect(tags).toHaveLength(3);
+
+    for (const tag of tags) {
+      expectInside(tag.getBoundingClientRect(), frame);
+    }
+    // TagRemove's hit area is a pseudo-element that deliberately reaches past
+    // the pill, which inflates scrollWidth, so only plain tags are measured.
+    expectNoOverflow(tags[1] as Element);
+    expectNoOverflow(tags[2] as Element);
+
+    // The long label ellipsizes inside the pill, and the remove button stays
+    // inside it rather than being pushed out and clipped away.
+    const email = tags[0] as HTMLElement;
+    const emailRect = email.getBoundingClientRect();
+    const emailLabel = email.querySelector(":scope > span") as HTMLElement;
+    await expect(emailLabel.scrollWidth).toBeGreaterThan(
+      emailLabel.clientWidth
+    );
+    expectInside(emailLabel.getBoundingClientRect(), emailRect);
+    const remove = within(email).getByRole("button", { name: /^Remove$/ });
+    const removeRect = remove.getBoundingClientRect();
+    expectInside(removeRect, emailRect);
+    await expect(emailLabel.getBoundingClientRect().right).toBeLessThanOrEqual(
+      removeRect.left + 0.5
+    );
+
+    // `{1} member` is two text nodes in JSX; they share one label span.
+    const label = (tags[2] as HTMLElement).querySelectorAll(":scope > span");
+    await expect(label).toHaveLength(1);
+    await expect(label[0]).toHaveTextContent("1 member");
+  },
 };

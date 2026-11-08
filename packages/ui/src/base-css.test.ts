@@ -203,6 +203,70 @@ describe("motion tokens", () => {
   });
 });
 
+/**
+ * Keyboard surfaces open and close without motion. The popup and modal rules
+ * are unlayered, so a component's `transition-none` class cannot reach them;
+ * the override has to live here, after the `[data-ending-style]` duration
+ * rules it shares a specificity with, or source order hands those the win.
+ */
+const TRANSITION_NONE = /transition:\s*none/;
+const OPACITY_ONE = /opacity:\s*1;/;
+const SCALE_ONE = /scale:\s*1;/;
+const OVERLAY_MARKED = /\[data-slot="modal-overlay"\]\[data-command\]/;
+const INSTANT_SLOTS = [
+  "dropdown-menu-content",
+  "dropdown-menu-sub-content",
+  "popover-content",
+  "tooltip-content",
+];
+
+/** Index and body of the first rule whose selector list contains `selector`. */
+function ruleWith(selector: string): { index: number; body: string } {
+  const at = css.indexOf(selector);
+  if (at === -1) {
+    throw new Error(`base.css has no rule for ${selector}`);
+  }
+  const open = css.indexOf("{", at);
+  return { index: at, body: blockAfter(open) };
+}
+
+describe("keyboard surfaces", () => {
+  it.each(INSTANT_SLOTS)(
+    "%s drops its transition while Base UI marks it data-instant",
+    (slot) => {
+      const rule = ruleWith(`[data-slot="${slot}"][data-instant]`);
+      expect(rule.body).toMatch(TRANSITION_NONE);
+      expect(depthAt(rule.index)).toBe(0);
+      const endingDuration = css.lastIndexOf(
+        `[data-slot="${slot}"][data-ending-style]`
+      );
+      expect(endingDuration).toBeGreaterThan(-1);
+      expect(rule.index).toBeGreaterThan(endingDuration);
+    }
+  );
+
+  it("shows the command palette's content at once, with no from-values", () => {
+    const content = ruleWith('[data-slot="modal-content"][data-command]');
+    expect(content.body).toMatch(TRANSITION_NONE);
+    expect(depthAt(content.index)).toBe(0);
+    expect(content.index).toBeGreaterThan(
+      css.lastIndexOf('[data-slot="modal-content"][data-ending-style]')
+    );
+
+    for (const state of ["data-starting-style", "data-ending-style"]) {
+      const from = ruleWith(
+        `[data-slot="modal-content"][data-command][${state}]`
+      );
+      expect(from.body, state).toMatch(OPACITY_ONE);
+      expect(from.body, state).toMatch(SCALE_ONE);
+    }
+  });
+
+  it("leaves the overlay's fade alone", () => {
+    expect(css).not.toMatch(OVERLAY_MARKED);
+  });
+});
+
 describe("reduced motion", () => {
   it("is unlayered, so it still beats Tailwind's utilities without !important", () => {
     const { start, body } = reducedMotionBlock();

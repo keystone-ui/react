@@ -21,6 +21,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { StatDelta, StatValue } from "@/components/ui/stat";
+import { useMountOnlyAnimation } from "@/components/use-reduced-motion";
 
 interface AdminOverviewProps {
   hidden: ReadonlySet<string>;
@@ -37,6 +38,7 @@ export function AdminOverview({
   reducedMotion,
   signups,
 }: AdminOverviewProps) {
+  const animation = useMountOnlyAnimation(reducedMotion);
   const shown = SIGNUP_SERIES.filter((item) => !hidden.has(item.key));
 
   const config = Object.fromEntries(
@@ -119,7 +121,7 @@ export function AdminOverview({
                 <Bar
                   dataKey={item.key}
                   fill={`var(--color-${item.key})`}
-                  isAnimationActive={!reducedMotion}
+                  {...animation}
                   key={item.key}
                   // Cap measured against the VISIBLE bands, so hiding the top
                   // series does not leave the stack uncapped.

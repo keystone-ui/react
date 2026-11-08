@@ -145,6 +145,10 @@ function ModalContent({
         modalContentVariants({ size }),
         scrollBehavior === "outside" &&
           "relative top-auto left-auto translate-x-0 translate-y-0",
+        // Inside mode has no scroll wrapper, so the popup itself must stop at
+        // the visible viewport (dvh tracks the mobile URL bar) and scroll.
+        scrollBehavior === "inside" &&
+          "max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain",
         className
       )}
       data-slot="modal-content"

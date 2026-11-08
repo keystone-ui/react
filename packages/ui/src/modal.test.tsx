@@ -139,6 +139,40 @@ describe("Modal", () => {
     await user.click(screen.getByRole("button", { name: "Open" }));
     expect(onOpenChange).toHaveBeenCalledWith(true, expect.anything());
   });
+
+  // Inside mode has no scrolling wrapper, so without its own cap a long
+  // modal runs off the bottom of a phone screen with nothing to scroll.
+  it("caps and scrolls the popup at the visible viewport when scrollBehavior is inside", async () => {
+    render(
+      <Modal defaultOpen>
+        <ModalContent scrollBehavior="inside">
+          <ModalTitle>Inside</ModalTitle>
+        </ModalContent>
+      </Modal>
+    );
+
+    const popup = await screen.findByText("Inside");
+    const content = popup.closest("[data-slot='modal-content']");
+    expect(content).toHaveClass(
+      "max-h-[calc(100dvh-2rem)]",
+      "overflow-y-auto",
+      "overscroll-contain"
+    );
+    expect(
+      document.querySelector("[data-slot='modal-scroll-wrapper']")
+    ).toBeNull();
+  });
+
+  it("leaves the popup uncapped when scrollBehavior is outside", async () => {
+    renderModal({ defaultOpen: true });
+
+    const popup = await screen.findByText("Modal Title");
+    const content = popup.closest("[data-slot='modal-content']");
+    expect(content).not.toHaveClass("max-h-[calc(100dvh-2rem)]");
+    expect(
+      document.querySelector("[data-slot='modal-scroll-wrapper']")
+    ).not.toBeNull();
+  });
 });
 
 // =============================================================================

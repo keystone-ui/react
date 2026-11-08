@@ -28,10 +28,17 @@ const TabsTriggerContext = createContext<{ isActive: boolean }>({
   isActive: false,
 });
 
-// Slightly bouncier + longer than the previous values so the FLIP scale on
-// the layoutId pill is spread across more frames — matches the v0 reference
-// and makes the mid-morph stretching less prominent.
-const MORPH_SPRING = { type: "spring", duration: 0.4, bounce: 0.15 } as const;
+// Long enough that the FLIP scale on the layoutId pill is spread across many
+// frames, which keeps the mid-morph stretching from being prominent. No
+// bounce: tabs switch dozens of times a day, and an overshoot on every switch
+// reads as the UI wobbling rather than settling.
+const MORPH_SPRING = { type: "spring", duration: 0.4, bounce: 0 } as const;
+
+// The morph label's fade runs on its own short tween (the `--ease-ks-out`
+// curve) while its width stays on the spring: text that fades over the full
+// 400ms spring is half-legible for most of a switch.
+const LABEL_FADE = { duration: 0.125, ease: [0.23, 1, 0.32, 1] } as const;
+const LABEL_TRANSITION = { ...MORPH_SPRING, opacity: LABEL_FADE } as const;
 
 // =============================================================================
 // Tabs (Root)
@@ -388,7 +395,7 @@ function TabsTriggerLabel({
       )}
       data-slot="tabs-trigger-label"
       initial={false}
-      transition={shouldReduceMotion ? { duration: 0 } : MORPH_SPRING}
+      transition={shouldReduceMotion ? { duration: 0 } : LABEL_TRANSITION}
       {...(props as ComponentProps<typeof motion.span>)}
     >
       <span className="pl-1.5">{children}</span>

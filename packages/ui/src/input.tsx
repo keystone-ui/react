@@ -35,9 +35,9 @@ export const Input = ({
   return (
     <input
       className={cn(
-        "bg-input-bg text-base md:text-sm",
+        "bg-input-bg pointer-fine:text-sm text-base",
         "rounded-md border border-input",
-        "flex w-full min-w-0 px-3 py-1 shadow-xs outline-none transition-[color,box-shadow] duration-(--duration-fast,125ms) disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+        "flex w-full min-w-0 px-3 py-1 shadow-xs outline-none transition-[color] duration-(--duration-fast,125ms) disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
         size === "default" && "h-(--ks-control-md,2.5rem)",
         size === "sm" && "h-(--ks-control-sm,2rem)",
         "placeholder:text-muted-foreground/70",
@@ -48,7 +48,7 @@ export const Input = ({
         type === "search" &&
           "[&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none [&::-webkit-search-results-button]:appearance-none [&::-webkit-search-results-decoration]:appearance-none",
         type === "file" &&
-          "p-0 pr-3 text-muted-foreground/70 italic file:me-3 file:inline-flex file:h-full file:border-0 file:border-input file:border-r file:border-solid file:bg-transparent file:px-3 file:font-medium file:text-foreground file:text-sm file:not-italic",
+          "p-0 pr-3 text-muted-foreground/70 italic file:me-3 file:inline-flex file:h-full file:border-0 file:border-input file:border-r file:border-solid file:bg-transparent file:px-3 file:font-medium file:text-base file:text-foreground pointer-fine:file:text-sm file:not-italic",
         className
       )}
       data-input=""

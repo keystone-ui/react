@@ -80,7 +80,8 @@ For each component file, check:
 **For popup components specifically** (DropdownMenu, Select, Combobox, Popover):
 
 - [ ] Uses `POPUP_ITEM_HEIGHT` constant — not hardcoded `h-9` or `h-8`
-- [ ] Container uses the full recipe — `bg-popover text-popover-foreground ring-popup-ring ring-1 rounded-lg shadow-lg z-50 overflow-hidden`
+- [ ] Container uses the full recipe — `bg-popover text-popover-foreground ring-popup-ring ring-1 rounded-lg shadow-lg max-w-(--available-width) overflow-hidden`
+- [ ] z-index sits on the `Positioner` as a `--z-*` token (`z-(--z-popover,60)`), not on the popup and never `isolate z-50`
 - [ ] Animation block matches the shared pattern exactly
 - [ ] Separators use `bg-border-muted` — not `bg-border`
 - [ ] Content component accepts `size?: "default" | "compact"` prop
