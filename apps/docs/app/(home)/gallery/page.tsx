@@ -5,6 +5,8 @@ import { IntentLink as Link } from "@/components/intent-link";
 export const metadata: Metadata = {
   title: "Component Gallery",
   description: "Browse all 50+ Keystone UI components.",
+  alternates: { canonical: "/gallery" },
+  openGraph: { url: "/gallery" },
 };
 
 const categories = [

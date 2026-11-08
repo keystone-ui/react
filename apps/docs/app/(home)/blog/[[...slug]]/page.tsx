@@ -119,6 +119,8 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
     return {
       title: "Blog",
       description: "News, updates, and articles about Keystone UI.",
+      alternates: { canonical: "/blog" },
+      openGraph: { url: "/blog" },
     };
   }
 
@@ -128,8 +130,11 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
     notFound();
   }
 
+  const url = `/blog/${postSlug}`;
   return {
     title: post.title,
     description: post.description,
+    alternates: { canonical: url },
+    openGraph: { url },
   };
 }

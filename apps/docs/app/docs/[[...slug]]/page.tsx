@@ -91,5 +91,9 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   return {
     title: page.data.title,
     description: page.data.description,
+    // Per page on purpose: the root layout sets neither, so a value here is
+    // the only one. `metadataBase` resolves them to the production origin.
+    alternates: { canonical: page.url },
+    openGraph: { url: page.url },
   };
 }

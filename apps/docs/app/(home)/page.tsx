@@ -8,7 +8,13 @@ import {
   TreePalm,
   Zap,
 } from "lucide-react";
+import type { Metadata } from "next";
 import { IntentLink as Link } from "@/components/intent-link";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+  openGraph: { url: "/" },
+};
 
 const features = [
   {
