@@ -209,7 +209,7 @@ Blocks are full-page or feature-level compositions registered as `registry:block
   - `betting` — betting/wager UI (keystone-specific)
   - When inventing a new category, prefer single-word lowercase that mirrors shadcn naming where possible
 - `pnpm sync:registry` warns if any block is missing `categories`
-- The installable copy under `registry/default/blocks/<name>/components/` is **generated** by `pnpm sync:blocks` from the demo — never hand-edit it. `pnpm lint:docs` runs `--check` and fails on drift. Only `page.tsx` is hand-written.
+- The installable copy under `registry/default/blocks/<name>/components/` is **generated** by `pnpm sync:blocks` from the demo — never hand-edit it. `pnpm lint:docs` runs `--check` and fails on drift. Only `page.tsx` is hand-written. Single-file blocks (`apps/docs/demos/blocks/<name>.tsx`: sign-in, sign-up, profile-dropdown, betting-panel) are generated too: the demo's default-exported preview shell is dropped, the component it renders is exported by name, and the result is written to the block's one `registry:component` path in `registry.json`. So a single-file demo must end in `export default function …` rendering a component declared in the same file.
 
 **Discoverability via categories**: `keystoneui blocks --category authentication` (CLI) and `search_components({ type: "block", category: "authentication" })` (MCP) both filter by category. Categories also participate in fuzzy-match — searching `"authentication"` finds the auth blocks even if the word isn't in their description.
 

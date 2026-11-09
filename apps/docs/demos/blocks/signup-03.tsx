@@ -15,11 +15,12 @@ import {
   FieldLabel,
 } from "@keystoneui/react/field";
 import { Input } from "@keystoneui/react/input";
+import { cn } from "@keystoneui/react/utils";
 import { GalleryVerticalEnd } from "lucide-react";
 
 function SignupForm({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div className={`flex flex-col gap-6 ${className ?? ""}`} {...props}>
+    <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Create your account</CardTitle>

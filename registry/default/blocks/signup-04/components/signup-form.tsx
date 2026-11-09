@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -127,6 +129,7 @@ export function SignupForm({
             </FieldGroup>
           </form>
           <div className="relative hidden bg-muted md:block">
+            {/* biome-ignore lint/performance/noImgElement: demo block */}
             <img
               alt="Signup cover"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
