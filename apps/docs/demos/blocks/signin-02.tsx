@@ -9,11 +9,12 @@ import {
   FieldSeparator,
 } from "@keystoneui/react/field";
 import { Input } from "@keystoneui/react/input";
+import { cn } from "@keystoneui/react/utils";
 import { GalleryVerticalEnd } from "lucide-react";
 
 function SignInForm({ className, ...props }: React.ComponentProps<"form">) {
   return (
-    <form className={className} {...props}>
+    <form className={cn("flex flex-col gap-6", className)} {...props}>
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="font-bold text-2xl">Sign in to your account</h1>

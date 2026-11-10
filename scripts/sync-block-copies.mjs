@@ -18,6 +18,13 @@
  *   node scripts/sync-block-copies.mjs           write the registry copies
  *   node scripts/sync-block-copies.mjs --check   fail if they are out of date
  *
+ * Single-file blocks (`apps/docs/demos/blocks/<name>.tsx`, e.g. signin-01)
+ * are generated too. The demo wraps the real component in a default-exported
+ * preview shell; the registry copy is that component alone, exported by name
+ * (`export function SignInForm`) and written to the one `registry:component`
+ * path `registry.json` lists for the block. The default export is dropped --
+ * in a consumer's app the hand-written `page.tsx` plays that role.
+ *
  * `page.tsx` is deliberately NOT generated. It is four lines, written once per
  * block, and inferring it from `index.tsx` would mean guessing the exported
  * component name -- so it stays hand-written and is left alone here.
@@ -45,7 +52,7 @@ import {
   statSync,
   writeFileSync,
 } from "node:fs";
-import { join, relative } from "node:path";
+import { basename, dirname, join, relative } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
 const DEMOS_DIR = join(ROOT, "apps/docs/demos/blocks");
@@ -60,6 +67,11 @@ const RELATIVE_IMPORT_RE = /(from\s*["'])\.\/([^"']+)(["'])/g;
 const LUCIDE_BLOCK_RE = /import\s*\{([^}]*)\}\s*from\s*(["'])lucide-react\2/g;
 const LUCIDE_ALIAS_RE = /\b[A-Za-z0-9_]+\s+as\s+([A-Za-z0-9_]+)/g;
 const SOURCE_FILE_RE = /\.(tsx?|ts)$/;
+const REGISTRY_JSON = join(ROOT, "registry.json");
+/** The demo-only preview shell: the default export, always the file's tail. */
+const DEFAULT_EXPORT_RE =
+  /\n(?:\/\*\*[\s\S]*?\*\/\s*)?export default function \w+\([^)]*\)\s*\{[\s\S]*\}\s*$/;
+const JSX_COMPONENT_RE = /<([A-Z][A-Za-z0-9]*)\b/g;
 
 /**
  * Demos import the base name and alias it (`Table as TableIcon`) so the
@@ -90,6 +102,65 @@ function listBlockNames(dir) {
   return readdirSync(dir)
     .filter((entry) => statSync(join(dir, entry)).isDirectory())
     .sort();
+}
+
+function listSingleFileBlockNames(dir) {
+  if (!existsSync(dir)) {
+    return [];
+  }
+  return readdirSync(dir)
+    .filter((entry) => entry.endsWith(".tsx"))
+    .filter((entry) => statSync(join(dir, entry)).isFile())
+    .map((entry) => entry.replace(/\.tsx$/, ""))
+    .sort();
+}
+
+/** The single `registry:component` file `registry.json` lists for a block. */
+function registryComponentPath(blockName) {
+  const registry = JSON.parse(readFileSync(REGISTRY_JSON, "utf-8"));
+  const item = registry.items.find((entry) => entry.name === blockName);
+  if (!item) {
+    throw new Error(`registry.json has no item named "${blockName}"`);
+  }
+  const components = (item.files ?? []).filter(
+    (file) => file.type === "registry:component"
+  );
+  if (components.length !== 1) {
+    throw new Error(
+      `${blockName}: a single-file block needs exactly one registry:component file in registry.json, found ${components.length}`
+    );
+  }
+  return join(ROOT, components[0].path);
+}
+
+/**
+ * Turn a single-file demo into the installable component: drop the default
+ * preview shell and export, by name, the component that shell renders.
+ */
+function toRegistryComponent(source, blockName) {
+  const shell = DEFAULT_EXPORT_RE.exec(source);
+  if (!shell) {
+    throw new Error(
+      `${blockName}: expected the demo to end in \`export default function\``
+    );
+  }
+  const body = source.slice(0, shell.index);
+  const declared = new Set(
+    [...body.matchAll(/^function ([A-Z][A-Za-z0-9]*)\(/gm)].map((m) => m[1])
+  );
+  const rendered = [...shell[0].matchAll(JSX_COMPONENT_RE)]
+    .map((m) => m[1])
+    .find((name) => declared.has(name));
+  if (!rendered) {
+    throw new Error(
+      `${blockName}: the default export must render a component declared in the same file`
+    );
+  }
+  const exported = body.replace(
+    new RegExp(`^function ${rendered}\\(`, "m"),
+    `export function ${rendered}(`
+  );
+  return `${rewriteImports(exported).trimEnd()}\n`;
 }
 
 function listSourceFiles(dir) {
@@ -148,9 +219,19 @@ function generate(blockName, outDir) {
   return files;
 }
 
+function generateSingleFile(blockName, outFile) {
+  const source = readFileSync(join(DEMOS_DIR, `${blockName}.tsx`), "utf-8");
+  mkdirSync(dirname(outFile), { recursive: true });
+  writeFileSync(outFile, toRegistryComponent(source, blockName));
+  format(outFile);
+  return [basename(outFile)];
+}
+
 /** Problems with one block's committed registry copy, if any. */
-function checkBlock(blockName) {
-  const target = join(REGISTRY_DIR, blockName, "components");
+function checkBlock(blockName, single = false) {
+  const target = single
+    ? dirname(registryComponentPath(blockName))
+    : join(REGISTRY_DIR, blockName, "components");
   const problems = [];
 
   // Snapshot, regenerate in place, compare, restore. Generating elsewhere
@@ -165,7 +246,9 @@ function checkBlock(blockName) {
     : new Map();
 
   try {
-    const files = generate(blockName, target);
+    const files = single
+      ? generateSingleFile(blockName, registryComponentPath(blockName))
+      : generate(blockName, target);
 
     for (const file of files) {
       const committed = before.get(file);
@@ -203,8 +286,11 @@ function checkBlock(blockName) {
   return problems;
 }
 
-function runCheck(blocks) {
-  const problems = blocks.flatMap((blockName) => checkBlock(blockName));
+function runCheck(blocks, singles) {
+  const problems = [
+    ...blocks.flatMap((blockName) => checkBlock(blockName)),
+    ...singles.flatMap((blockName) => checkBlock(blockName, true)),
+  ];
 
   if (problems.length > 0) {
     process.stderr.write(
@@ -216,11 +302,11 @@ function runCheck(blocks) {
   }
 
   process.stdout.write(
-    `OK — ${blocks.length} block(s) in sync with their demos.\n`
+    `OK — ${blocks.length + singles.length} block(s) in sync with their demos.\n`
   );
 }
 
-function runSync(blocks) {
+function runSync(blocks, singles) {
   let written = 0;
   for (const blockName of blocks) {
     written += generate(
@@ -228,18 +314,25 @@ function runSync(blocks) {
       join(REGISTRY_DIR, blockName, "components")
     ).length;
   }
+  for (const blockName of singles) {
+    written += generateSingleFile(
+      blockName,
+      registryComponentPath(blockName)
+    ).length;
+  }
   process.stdout.write(
-    `OK — synced ${written} file(s) across ${blocks.length} block(s).\n`
+    `OK — synced ${written} file(s) across ${blocks.length + singles.length} block(s).\n`
   );
 }
 
 function main() {
   const blocks = listBlockNames(DEMOS_DIR);
+  const singles = listSingleFileBlockNames(DEMOS_DIR);
   if (process.argv.includes("--check")) {
-    runCheck(blocks);
+    runCheck(blocks, singles);
     return;
   }
-  runSync(blocks);
+  runSync(blocks, singles);
 }
 
 main();
