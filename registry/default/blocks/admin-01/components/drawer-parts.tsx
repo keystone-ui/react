@@ -7,6 +7,7 @@ import { DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 /**
  * The parts both of this block's filter drawers are built from.
@@ -23,12 +24,21 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
  * them.
  */
 
-/** A drawer step's header, with the control that returns to the menu. */
+/**
+ * A drawer step's header, with the control that returns to the menu and, on a
+ * step whose value takes more than one tap to undo, a `Clear`.
+ *
+ * Pass `onClear` only while the filter holds a value: a `Clear` that clears
+ * nothing is a control that does nothing. The radio steps never take one —
+ * their `All` row is already the way back.
+ */
 export function StepHeader({
   onBack,
+  onClear,
   title,
 }: {
   onBack: () => void;
+  onClear?: () => void;
   title: string;
 }) {
   return (
@@ -44,8 +54,69 @@ export function StepHeader({
           <ArrowLeftIcon className="size-4" />
         </Button>
         <DrawerTitle>{title}</DrawerTitle>
+        {onClear ? (
+          <Button
+            aria-label={`Clear ${title} filter`}
+            className="-mr-2 ml-auto"
+            onClick={onClear}
+            size="xs"
+            variant="ghost"
+          >
+            Clear
+          </Button>
+        ) : null}
       </div>
     </DrawerHeader>
+  );
+}
+
+/**
+ * A step's operator, as a segmented control above its values.
+ *
+ * Only for two to four short options, which fit one row on a phone. More than
+ * that and the step uses a full-width `NativeSelect` instead — the phone's own
+ * picker for one-of-many. Not a segmented strip that scrolls, which hides
+ * whichever options are past the edge, and not a menu, which is a popup inside
+ * a sheet with targets sized for a pointer.
+ */
+export function OperatorToggle({
+  label,
+  onValueChange,
+  options,
+  value,
+}: {
+  label: string;
+  onValueChange: (value: string) => void;
+  options: readonly { label: string; value: string }[];
+  value: string;
+}) {
+  return (
+    <div className="px-4 pb-3">
+      <ToggleGroup
+        aria-label={label}
+        className="w-full"
+        onValueChange={(next) => {
+          // A segmented control always holds one value; pressing the active
+          // segment again would otherwise empty it.
+          if (next[0]) {
+            onValueChange(next[0] as string);
+          }
+        }}
+        size="sm"
+        value={[value]}
+        variant="outline"
+      >
+        {options.map((option) => (
+          <ToggleGroupItem
+            className="flex-1"
+            key={option.value}
+            value={option.value}
+          >
+            {option.label}
+          </ToggleGroupItem>
+        ))}
+      </ToggleGroup>
+    </div>
   );
 }
 

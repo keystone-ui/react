@@ -22,9 +22,11 @@ import { useState } from "react";
 
 import {
   activeCount,
+  CREATED_PRESETS,
   defaultDirection,
   directionLabel,
   FILTERS,
+  filterDef,
   hasActiveFilters,
   OPTIONS,
   type OptionKey,
@@ -34,8 +36,9 @@ import {
   type UserFilters,
   type UserSortKey,
 } from "./admin-filters";
+import { TODAY } from "./date-filter";
+import { DateFilterStep } from "./date-filter-step";
 import {
-  Bound,
   DrilldownList,
   DrilldownRow,
   FilterOption,
@@ -152,23 +155,26 @@ export function AdminFiltersDrawer({
               ))}
 
               <StepperStep>
-                <StepHeader onBack={() => setStep(0)} title="Created" />
-                <div className="grid grid-cols-2 gap-3 px-4 pb-4">
-                  <Bound
-                    id="users-drawer-created-after"
-                    label="After"
-                    onChange={(value) => onChange({ createdAfter: value })}
-                    type="date"
-                    value={filters.createdAfter}
-                  />
-                  <Bound
-                    id="users-drawer-created-before"
-                    label="Before"
-                    onChange={(value) => onChange({ createdBefore: value })}
-                    type="date"
-                    value={filters.createdBefore}
-                  />
-                </div>
+                <StepHeader
+                  onBack={() => setStep(0)}
+                  onClear={
+                    filterDef("created").value(filters) === null
+                      ? undefined
+                      : () => onChange(filterDef("created").clear)
+                  }
+                  title="Created"
+                />
+                <DateFilterStep
+                  bounds={{
+                    after: filters.createdAfter,
+                    before: filters.createdBefore,
+                  }}
+                  onChange={({ after, before }) =>
+                    onChange({ createdAfter: after, createdBefore: before })
+                  }
+                  presets={CREATED_PRESETS}
+                  today={TODAY}
+                />
               </StepperStep>
 
               <StepperStep>

@@ -3,11 +3,14 @@
 import { FilterIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
+import { TODAY } from "@/components/date-filter";
+import { DateFilterStep } from "@/components/date-filter-step";
 import {
   Bound,
   DrilldownList,
   DrilldownRow,
   FilterOption,
+  OperatorToggle,
   Options,
   StepHeader,
 } from "@/components/drawer-parts";
@@ -16,11 +19,13 @@ import {
   AMOUNT_OPERATORS,
   type AmountOperator,
   amountOperatorLabel,
+  CREATED_PRESETS,
   CURRENCY_OPERATORS,
   type CurrencyOperator,
   defaultDirection,
   directionLabel,
   FILTERS,
+  type FilterKey,
   filterDef,
   hasActiveFilters,
   type PaymentFilters,
@@ -50,6 +55,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { Input } from "@/components/ui/input";
 import {
   NativeSelect,
   NativeSelectOption,
@@ -61,7 +67,6 @@ import {
   StepperStep,
   useStepper,
 } from "@/components/ui/stepper";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface PaymentFiltersDrawerProps {
   filters: PaymentFilters;
@@ -184,7 +189,11 @@ export function PaymentFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <StepHeader onBack={() => setStep(0)} title="Currency" />
+                <StepHeader
+                  onBack={() => setStep(0)}
+                  onClear={held("currencies", filters, onChange)}
+                  title="Currency"
+                />
                 <OperatorToggle
                   label="Currency operator"
                   onValueChange={(op) =>
@@ -239,12 +248,19 @@ export function PaymentFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <StepHeader onBack={() => setStep(0)} title="Player" />
-                {/* Six operators do not fit a segmented row on a phone, and a
-                    native select is the phone's own picker for one-of-many. */}
-                <div className="px-4 pb-3">
+                <StepHeader
+                  onBack={() => setStep(0)}
+                  onClear={held("player", filters, onChange)}
+                  title="Player"
+                />
+                {/* Six operators do not fit a segmented row on a phone, so the
+                    phone's own picker — full width, so the operator and the
+                    field below it read as one condition rather than a stray
+                    control beside an input. */}
+                <div className="flex flex-col gap-2 px-4 pb-4">
                   <NativeSelect
                     aria-label="Player operator"
+                    className="w-full"
                     onChange={(event) =>
                       onChange({
                         playerOp: event.target.value as PlayerOperator,
@@ -258,40 +274,51 @@ export function PaymentFiltersDrawer({
                       </NativeSelectOption>
                     ))}
                   </NativeSelect>
-                </div>
-                <div className="px-4 pb-4">
-                  <Bound
+                  {/* Not `Bound`: that is for numbers and dates, and its
+                      decimal keypad cannot type an email. */}
+                  <Input
+                    aria-label="Player email"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    enterKeyHint="done"
                     id="drawer-player"
-                    label="Player email"
-                    onChange={(value) => onChange({ player: value })}
+                    inputMode="email"
+                    onChange={(event) =>
+                      onChange({ player: event.target.value })
+                    }
                     placeholder="e.g. gmail"
+                    spellCheck={false}
                     value={filters.player}
                   />
                 </div>
               </StepperStep>
 
               <StepperStep>
-                <StepHeader onBack={() => setStep(0)} title="Created" />
-                <Bounds>
-                  <Bound
-                    id="drawer-created-after"
-                    label="After"
-                    onChange={(value) => onChange({ createdAfter: value })}
-                    type="date"
-                    value={filters.createdAfter}
-                  />
-                  <Bound
-                    id="drawer-created-before"
-                    label="Before"
-                    onChange={(value) => onChange({ createdBefore: value })}
-                    type="date"
-                    value={filters.createdBefore}
-                  />
-                </Bounds>
+                <StepHeader
+                  onBack={() => setStep(0)}
+                  onClear={held("created", filters, onChange)}
+                  title="Created"
+                />
+                <DateFilterStep
+                  bounds={{
+                    after: filters.createdAfter,
+                    before: filters.createdBefore,
+                  }}
+                  onChange={({ after, before }) =>
+                    onChange({ createdAfter: after, createdBefore: before })
+                  }
+                  presets={CREATED_PRESETS}
+                  today={TODAY}
+                />
               </StepperStep>
 
               <StepperStep>
-                <StepHeader onBack={() => setStep(0)} title="Amount" />
+                <StepHeader
+                  onBack={() => setStep(0)}
+                  onClear={held("amount", filters, onChange)}
+                  title="Amount"
+                />
                 <OperatorToggle
                   label="Amount operator"
                   onValueChange={(op) =>
@@ -463,49 +490,17 @@ function PaymentFilterMenu({
 }
 
 /**
- * A drawer step's operator, as a segmented control above its values: two to
- * four short options fit one row on a phone, where a menu would be a sheet
- * inside a sheet.
+ * The step header's `Clear`, for a filter that holds a value — `undefined`
+ * otherwise, so the header shows no control that would do nothing. Resets to
+ * the same patch the pill's X does, operator included.
  */
-function OperatorToggle({
-  label,
-  onValueChange,
-  options,
-  value,
-}: {
-  label: string;
-  onValueChange: (value: string) => void;
-  options: readonly { label: string; value: string }[];
-  value: string;
-}) {
-  return (
-    <div className="px-4 pb-3">
-      <ToggleGroup
-        aria-label={label}
-        className="w-full"
-        onValueChange={(next) => {
-          // A segmented control always holds one value; pressing the active
-          // segment again would otherwise empty it.
-          if (next[0]) {
-            onValueChange(next[0] as string);
-          }
-        }}
-        size="sm"
-        value={[value]}
-        variant="outline"
-      >
-        {options.map((option) => (
-          <ToggleGroupItem
-            className="flex-1"
-            key={option.value}
-            value={option.value}
-          >
-            {option.label}
-          </ToggleGroupItem>
-        ))}
-      </ToggleGroup>
-    </div>
-  );
+function held(
+  key: FilterKey,
+  filters: PaymentFilters,
+  onChange: (patch: Partial<PaymentFilters>) => void
+): (() => void) | undefined {
+  const def = filterDef(key);
+  return def.value(filters) === null ? undefined : () => onChange(def.clear);
 }
 
 function Bounds({ children }: { children: ReactNode }) {

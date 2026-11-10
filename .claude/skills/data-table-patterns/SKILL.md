@@ -38,6 +38,15 @@ re-run. Note the verification in the commit body.
 **Colour and emphasis guards run in dark mode.** That is the half where
 specificity collisions live; a light-only check passes throughout.
 
+**Date logic runs under a non-UTC zone.** `apps/docs/tests/date-filter.test.ts`
+switches `TZ` to Los Angeles and Kiritimati, because `toISOString()` and
+`new Date("YYYY-MM-DD")` are a day off everywhere but UTC — which is where CI
+runs. Build dates inside the test, not in the `describe` body (that runs before
+`beforeAll` changes the zone), and restore an unset `TZ` with `delete`: assigning
+`undefined` sets the string `"undefined"`, which Node reads as UTC for every
+later test. The phone date step's e2e runs at 375×667 in dark mode and once
+under `hasTouch`, since the sheet swipes to dismiss.
+
 **Dismiss popups explicitly.** A bare `Escape` pressed while a popup is still
 animating open is swallowed, and the next assertion waits out its whole timeout
 against a menu that never closed. Assert visible, press Escape, assert gone.

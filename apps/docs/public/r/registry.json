@@ -1861,6 +1861,7 @@
         "https://keystoneui.io/r/badge.json",
         "https://keystoneui.io/r/breadcrumb.json",
         "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/calendar.json",
         "https://keystoneui.io/r/card.json",
         "https://keystoneui.io/r/checkbox.json",
         "https://keystoneui.io/r/combobox.json",
@@ -1883,6 +1884,7 @@
         "https://keystoneui.io/r/table.json",
         "https://keystoneui.io/r/table-pagination.json",
         "https://keystoneui.io/r/toggle-group.json",
+        "https://keystoneui.io/r/toggle.json",
         "https://keystoneui.io/r/tooltip.json"
       ],
       "files": [
@@ -1953,6 +1955,14 @@
         },
         {
           "path": "registry/default/blocks/admin-01/components/csv.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/date-filter.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/date-filter-step.tsx",
           "type": "registry:component"
         },
         {
@@ -2115,7 +2125,8 @@
         "https://keystoneui.io/r/input.json",
         "https://keystoneui.io/r/label.json",
         "https://keystoneui.io/r/popover.json",
-        "https://keystoneui.io/r/radio-group.json"
+        "https://keystoneui.io/r/radio-group.json",
+        "https://keystoneui.io/r/toggle-group.json"
       ],
       "files": [
         {

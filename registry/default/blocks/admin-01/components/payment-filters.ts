@@ -1,4 +1,5 @@
 import { type CsvColumn, toCsv } from "@/components/csv";
+import { datePresets, dateRangeLabel, TODAY } from "@/components/date-filter";
 import {
   addableKeys as addableKeysOf,
   visibleKeys as visibleKeysOf,
@@ -194,6 +195,19 @@ export function setAmountOp(op: AmountOperator): Partial<PaymentFilters> {
   }
   return { amountOp: op };
 }
+
+/**
+ * The Created presets: a ledger is read from the recent end, by the day and
+ * the month, which is how payments get reconciled.
+ */
+export const CREATED_PRESETS = datePresets([
+  "today",
+  "yesterday",
+  "last7Days",
+  "last30Days",
+  "thisMonth",
+  "lastMonth",
+]);
 
 // ---------------------------------------------------------------------------
 // Sort
@@ -479,7 +493,12 @@ export const FILTERS: readonly FilterDef[] = [
     empty: "Any",
     key: "created",
     label: "Created",
-    value: (f) => rangeValue(f.createdAfter, f.createdBefore),
+    value: (f) =>
+      dateRangeLabel(
+        { after: f.createdAfter, before: f.createdBefore },
+        CREATED_PRESETS,
+        TODAY
+      ),
   },
   {
     clear: { amountMax: "", amountMin: "", amountOp: "between" },

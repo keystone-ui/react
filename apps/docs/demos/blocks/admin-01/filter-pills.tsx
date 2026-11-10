@@ -172,14 +172,16 @@ export function DateRangePill({
               <div className="grid grid-cols-2 gap-3">
                 <Bound
                   id={`${id}-min`}
-                  label="After"
+                  // From / To, not After / Before: both ends are inclusive,
+                  // and "After 1 Jul" would read as excluding the 1st.
+                  label="From"
                   onChange={onAfterChange}
                   type="date"
                   value={after}
                 />
                 <Bound
                   id={`${id}-max`}
-                  label="Before"
+                  label="To"
                   onChange={onBeforeChange}
                   type="date"
                   value={before}

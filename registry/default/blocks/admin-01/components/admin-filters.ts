@@ -1,4 +1,5 @@
 import { type CsvColumn, toCsv } from "@/components/csv";
+import { datePresets, dateRangeLabel, TODAY } from "@/components/date-filter";
 import {
   addableKeys as addableKeysOf,
   visibleKeys as visibleKeysOf,
@@ -112,19 +113,16 @@ function optionLabel(key: OptionKey, value: string): string | null {
     : (OPTIONS[key].find((option) => option.value === value)?.label ?? null);
 }
 
-/** An open-ended range still has to say which end it is open at. */
-function rangeValue(after: string, before: string): string | null {
-  if (after && before) {
-    return `${after} – ${before}`;
-  }
-  if (after) {
-    return `from ${after}`;
-  }
-  if (before) {
-    return `to ${before}`;
-  }
-  return null;
-}
+/**
+ * The Created presets. Sign-ups are read over longer windows than payments —
+ * a month's growth, a year's — so these run to the year rather than the day.
+ */
+export const CREATED_PRESETS = datePresets([
+  "last30Days",
+  "last12Months",
+  "thisYear",
+  "lastYear",
+]);
 
 // ---------------------------------------------------------------------------
 // The pills
@@ -183,7 +181,12 @@ export const FILTERS: readonly FilterDef[] = [
     empty: "Any",
     key: "created",
     label: "Created",
-    value: (f) => rangeValue(f.createdAfter, f.createdBefore),
+    value: (f) =>
+      dateRangeLabel(
+        { after: f.createdAfter, before: f.createdBefore },
+        CREATED_PRESETS,
+        TODAY
+      ),
   },
 ];
 

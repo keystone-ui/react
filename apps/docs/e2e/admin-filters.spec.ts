@@ -18,6 +18,10 @@ const ADD_FILTER = /Add filter/;
 const ROLE_PILL = /^Role:/;
 const ROLE_ROW = /^Role/;
 const SEATS_ROW = /^Seats/;
+const CREATED_ROW = /^Created/;
+const DAY_JANUARY_15 = /January 15th, 2025/;
+const SUMMARY_TOTAL = /of (\d+)/;
+const URL_LAST_YEAR = /from=2025-01-01&to=2025-12-31/;
 const SORT_ROW = /^Sort/;
 const USER_COLUMN = /User/;
 const SEATS_COLUMN = /Seats/;
@@ -74,6 +78,18 @@ async function applyInDrawer(page: Page, row: RegExp, option: string) {
   await drawer.getByRole("radio", { exact: true, name: option }).click();
   await page.keyboard.press("Escape");
   await expect(drawer).toHaveCount(0);
+}
+
+/**
+ * How many users the query found, from the footer's "of N". Read as text
+ * because the footer is `hidden lg:block` on a phone.
+ */
+async function resultTotal(page: Page): Promise<number> {
+  await settled(page);
+  const summary = await page
+    .locator('[data-slot="table-pagination-info"]')
+    .textContent();
+  return Number(summary?.match(SUMMARY_TOTAL)?.[1]);
 }
 
 /**
@@ -188,6 +204,50 @@ test.describe("on a phone the filters fold into a drawer", () => {
     await expect(drawer.getByRole("button", { name: ROLE_ROW })).toContainText(
       "Viewer"
     );
+  });
+
+  test("Created takes a sign-up preset and names it", async ({ page }) => {
+    await openUsers(page);
+    // The total, not the rows on screen: a page holds five, and last year
+    // alone fills one.
+    const total = await resultTotal(page);
+
+    await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
+    const drawer = page.locator('[data-slot="drawer-content"]');
+    await drawer.getByRole("button", { name: CREATED_ROW }).click();
+    await drawer
+      .getByRole("group", { name: "Presets" })
+      .getByRole("button", { exact: true, name: "Last year" })
+      .click();
+
+    await expect(page).toHaveURL(URL_LAST_YEAR);
+    expect(await resultTotal(page)).toBeLessThan(total);
+
+    await drawer.getByRole("button", { name: "Back" }).click();
+    await expect(
+      drawer.getByRole("button", { name: CREATED_ROW })
+    ).toContainText("Last year");
+  });
+
+  test("Created reaches a sign-up from last year in two picks", async ({
+    page,
+  }) => {
+    await openUsers(page);
+    await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
+    const drawer = page.locator('[data-slot="drawer-content"]');
+    await drawer.getByRole("button", { name: CREATED_ROW }).click();
+
+    // The calendar opens on the fixture's today, Aug 2026; the arrows alone
+    // would make January 2025 nineteen taps back.
+    await drawer.getByLabel("Choose the Year").selectOption("2025");
+    await drawer.getByLabel("Choose the Month").selectOption({ label: "Jan" });
+    await drawer.getByRole("button", { name: DAY_JANUARY_15 }).click();
+
+    expect(await resultTotal(page)).toBeGreaterThan(0);
+    await drawer.getByRole("button", { name: "Back" }).click();
+    await expect(
+      drawer.getByRole("button", { name: CREATED_ROW })
+    ).toContainText("2025-01-15");
   });
 
   test("the Filters count ignores sort", async ({ page }) => {

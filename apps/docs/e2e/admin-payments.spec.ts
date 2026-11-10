@@ -31,6 +31,14 @@ const ACTION_PILL_TRIGGER = /^Action:/;
 const URL_VIEW = /view=payments/;
 const URL_TYPE = /type=cashout/;
 const URL_SORT = /sort=amount\.desc/;
+const ROW_CREATED = /^Created/;
+const DAY_JULY_15 = /July 15th, 2026/;
+const DAY_AUGUST_23 = /August 23rd, 2026/;
+const URL_ON_AUGUST_23 = /from=2026-08-23&to=2026-08-23/;
+const ROW_PLAYER = /^Player/;
+const URL_LAST_MONTH = /from=2026-07-01&to=2026-07-31/;
+const URL_FROM_ONLY = /from=2026-07-01/;
+const URL_HAS_TO = /[?&]to=/;
 
 /** Real rows only, once the request has answered — never the skeleton. */
 async function rowCount(page: Page): Promise<number> {
@@ -717,6 +725,217 @@ test.describe("payments filters on a phone", () => {
     await expect(
       page.getByRole("button", { name: ROW_CURRENCY_TWO })
     ).toBeVisible();
+  });
+});
+
+/**
+ * The phone's Created step: a mode, presets and a calendar over the same two
+ * bounds the desktop pill edits.
+ *
+ * A 667px-tall phone in dark mode on purpose — the height is where a calendar
+ * in an 80dvh sheet runs out of room, and dark is where a calendar painting
+ * the page colour onto the sheet shows.
+ */
+test.describe("the Created step on a phone", () => {
+  test.use({ colorScheme: "dark", viewport: { height: 667, width: 375 } });
+
+  function drawer(page: Page) {
+    return page.locator('[data-slot="drawer-content"]');
+  }
+
+  async function openCreated(page: Page, search = "") {
+    if (search) {
+      await gotoPreview(page, "block-admin-01", search);
+      await settled(page);
+    } else {
+      await openPayments(page);
+    }
+    await page.getByRole("button", { name: DRAWER_TRIGGER }).click();
+    await drawer(page).getByRole("button", { name: ROW_CREATED }).click();
+    await expect(modes(page)).toBeVisible();
+  }
+
+  function modes(page: Page) {
+    return drawer(page).getByRole("group", { name: "Created condition" });
+  }
+
+  function preset(page: Page, name: string) {
+    return drawer(page)
+      .getByRole("group", { name: "Presets" })
+      .getByRole("button", { exact: true, name });
+  }
+
+  async function back(page: Page) {
+    await drawer(page).getByRole("button", { name: "Back" }).click();
+    await expect(
+      drawer(page).getByRole("button", { name: ROW_CREATED })
+    ).toBeVisible();
+  }
+
+  test("a preset applies its dates and the row names it", async ({ page }) => {
+    await openCreated(page);
+    const total = await rowCount(page);
+
+    await preset(page, "Last month").click();
+    await expect(preset(page, "Last month")).toHaveAttribute(
+      "aria-pressed",
+      "true"
+    );
+    await expect(page).toHaveURL(URL_LAST_MONTH);
+    expect(await rowCount(page)).toBeLessThan(total);
+
+    await back(page);
+    expect(await drawerRows(page)).toContain("Created Last month");
+
+    // The desktop pill reads the same descriptor, so it says the same thing.
+    await page.getByRole("button", { name: "Apply" }).click();
+    await expect(drawer(page)).toHaveCount(0);
+    await page.setViewportSize({ height: 900, width: 1280 });
+    await expect(pill(page, "Created")).toBeVisible();
+    expect(await pills(page)).toContain("Created: Last month");
+  });
+
+  test("tapping a day after a preset starts again from that day", async ({
+    page,
+  }) => {
+    await openCreated(page);
+    await preset(page, "Last month").click();
+    await drawer(page).getByRole("button", { name: DAY_JULY_15 }).click();
+
+    await expect(preset(page, "Last month")).toHaveAttribute(
+      "aria-pressed",
+      "false"
+    );
+    await back(page);
+    expect(await drawerRows(page)).toContain("Created 2026-07-15");
+  });
+
+  test("switching to From drops the end; Clear empties it", async ({
+    page,
+  }) => {
+    await openCreated(page);
+    await preset(page, "Last month").click();
+    await modes(page)
+      .getByRole("button", { exact: true, name: "From" })
+      .click();
+
+    await expect(page).toHaveURL(URL_FROM_ONLY);
+    await expect(page).not.toHaveURL(URL_HAS_TO);
+    await expect(
+      drawer(page).getByText("From 2026-07-01 to today")
+    ).toBeVisible();
+
+    await drawer(page)
+      .getByRole("button", { name: "Clear Created filter" })
+      .click();
+    // Nothing left to clear, so nothing to clear it with.
+    await expect(
+      drawer(page).getByRole("button", { name: "Clear Created filter" })
+    ).toHaveCount(0);
+    await back(page);
+    expect(await drawerRows(page)).toContain("Created Any");
+  });
+
+  test("an open end set elsewhere opens in the mode that shows it", async ({
+    page,
+  }) => {
+    await openCreated(page, "?view=payments&to=2026-07-22");
+
+    await expect(
+      modes(page).getByRole("button", { exact: true, name: "To" })
+    ).toHaveAttribute("aria-pressed", "true");
+    await expect(
+      drawer(page).getByText("Up to and including 2026-07-22")
+    ).toBeVisible();
+  });
+
+  test("the calendar fits the sheet and paints the sheet's colour", async ({
+    page,
+  }) => {
+    await openCreated(page);
+
+    const metrics = await page.evaluate(() => {
+      const sheet = document.querySelector('[data-slot="drawer-content"]');
+      const calendar = sheet?.querySelector('[data-slot="calendar"]');
+      const days = [
+        ...(sheet?.querySelectorAll('[data-slot="calendar-day-button"]') ?? []),
+      ];
+      const body = sheet?.querySelector(".overflow-y-auto");
+      return {
+        background: calendar ? getComputedStyle(calendar).backgroundColor : "",
+        horizontal: body ? body.scrollWidth - body.clientWidth : -1,
+        smallest: Math.min(
+          ...days.map((day) => day.getBoundingClientRect().width)
+        ),
+      };
+    });
+
+    // Transparent, so the sheet's `bg-popover` shows through rather than
+    // the page colour the calendar paints by default.
+    expect(metrics.background).toBe("rgba(0, 0, 0, 0)");
+    expect(metrics.horizontal).toBeLessThanOrEqual(0);
+    expect(metrics.smallest).toBeGreaterThanOrEqual(40);
+  });
+
+  test("the Player step's operator spans the field it qualifies", async ({
+    page,
+  }) => {
+    await openPayments(page);
+    await page.getByRole("button", { name: DRAWER_TRIGGER }).click();
+    await drawer(page).getByRole("button", { name: ROW_PLAYER }).click();
+
+    const operator = drawer(page).getByLabel("Player operator");
+    const field = drawer(page).getByLabel("Player email");
+    await expect(field).toBeVisible();
+
+    const [select, input] = await Promise.all([
+      operator.boundingBox(),
+      field.boundingBox(),
+    ]);
+    expect(Math.abs((select?.width ?? 0) - (input?.width ?? 0))).toBeLessThan(
+      1
+    );
+    // An email keyboard, not the decimal pad the amount fields use.
+    await expect(field).toHaveAttribute("inputmode", "email");
+  });
+});
+
+/**
+ * The same step driven by taps. Every other check uses a mouse, and this is a
+ * phone-only screen inside a sheet that dismisses on a swipe — a tap that the
+ * sheet read as the start of a drag would close it, or be swallowed.
+ */
+test.describe("the Created step under touch", () => {
+  test.use({
+    colorScheme: "dark",
+    hasTouch: true,
+    viewport: { height: 667, width: 375 },
+  });
+
+  test("presets, modes and days all take a tap", async ({ page }) => {
+    await openPayments(page);
+    const sheet = page.locator('[data-slot="drawer-content"]');
+    await page.getByRole("button", { name: DRAWER_TRIGGER }).tap();
+    await sheet.getByRole("button", { name: ROW_CREATED }).tap();
+
+    const preset = sheet
+      .getByRole("group", { name: "Presets" })
+      .getByRole("button", { exact: true, name: "Last 7 days" });
+    await preset.tap();
+    await expect(preset).toHaveAttribute("aria-pressed", "true");
+
+    const on = sheet
+      .getByRole("group", { name: "Created condition" })
+      .getByRole("button", { exact: true, name: "On" });
+    await on.tap();
+    await expect(on).toHaveAttribute("aria-pressed", "true");
+
+    // The last week with a day in it, beside the rows the 667px sheet
+    // scrolls to reach.
+    await sheet.getByRole("button", { name: DAY_AUGUST_23 }).tap();
+    await expect(sheet.getByText("On 2026-08-23")).toBeVisible();
+    await expect(sheet).toHaveCount(1);
+    await expect(page).toHaveURL(URL_ON_AUGUST_23);
   });
 });
 

@@ -102,7 +102,7 @@ gmail`. Pick by the field's type, not by how powerful the filter could be:
 | a set of values — currencies, tags | operator chip, multi-select | `is` / `is not` (any of / none of). Never `contains`: a row holds one currency, so `contains USDT` matches exactly what `is USDT` does |
 | free text — email, name | operator chip, text field | `contains` (default), `does not contain`, `is`, `is not`, `starts with`, `ends with` |
 | a number — amount, seats | operator chip, number fields | `between` (default), `=`, `>`, `<` |
-| a date | range popover, After / Before | none; add presets (`Last 7 days`) only if the data needs them |
+| a date | range popover, From / To | none on desktop; on a phone, `between` (default), `on`, `from`, `to` over the same two bounds, plus presets (`Last 7 days`) where the data is read by recency |
 
 - **Operators earn their place.** Each one is a menu and a click. Give a field
   operators when people genuinely ask the second question — "everything except
@@ -118,6 +118,16 @@ gmail`. Pick by the field's type, not by how powerful the filter could be:
   values — so the pill opens straight onto what you came to set, and the
   operator is one click away rather than a step in front of it. Where there is
   a single value field, focus lands in it.
+- **A date is two inclusive bounds, whatever the UI calls them.** Label them
+  `From` / `To`, not `After` / `Before`: `After 1 Jul` reads as excluding the
+  1st. Notion's nine date operators reduce to four over those bounds — `is empty`
+  cannot match a field every row has, strict `before` / `after` are a one-day
+  twin of the inclusive pair, and `relative to today` is the presets. A preset
+  writes the dates it resolves to rather than a third kind of state, and the
+  label is derived back: `Created: Last 7 days` while the dates still are the
+  last seven days, the dates themselves once they are not. Convert in local
+  time — `toISOString()` and `new Date("2026-07-01")` are both UTC, a day off
+  anywhere but Greenwich.
 - **Switching operator drops what the new one does not read.** `between 10 –
   500` switched to `>` keeps `10` and drops `500`, or a ceiling no label shows
   keeps narrowing the table.
@@ -352,9 +362,31 @@ anything missing from it is unreachable, not merely inconvenient. Drive each row
 from the same descriptor the desktop control reads, so a row and its control
 cannot disagree.
 
-Both blocks implement this — see `admin-01`'s `payment-filters-drawer.tsx` and
-`admin-filters-drawer.tsx`, or `tickets-01`'s `tickets-filters-drawer.tsx`,
-after installing.
+**A step's operator is a full-width control above its values.** Two to four
+short operators are a segmented control (`is` / `is not`, `between` / `=` / `>`
+/ `<`); more than that is a full-width `NativeSelect`, the phone's own picker
+for one of many. Not a segmented strip that scrolls — it hides whichever
+operators are past the edge — and not a menu, which is a popup inside a sheet
+with targets sized for a pointer. A select left at its content width floats
+beside the field it qualifies instead of reading as one condition with it.
+
+**A step that takes more than one tap to undo gets a `Clear` in its header**,
+shown only while the filter holds a value. A radio step does not need one: its
+`All` row is the way back.
+
+**A date step is a mode, presets and a calendar on one screen**, and every tap
+applies like the rest of the drawer — no Apply button inside the step. One tap
+is a day, a second makes a range, a third starts again; never a range left open
+at one end between taps, since the table behind the sheet is already showing
+the result. Presets wrap onto a second line rather than scrolling off the edge.
+
+**Set the keyboard for the field.** An email filter wants `inputMode="email"`,
+no autocapitalise and no autocorrect; a decimal keypad on a text field leaves
+it untypeable.
+
+Both blocks implement this — see `admin-01`'s `payment-filters-drawer.tsx`,
+`admin-filters-drawer.tsx` and `date-filter-step.tsx`, or `tickets-01`'s
+`tickets-filters-drawer.tsx`, after installing.
 
 ---
 
