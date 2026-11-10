@@ -19,6 +19,8 @@ const ROLE_PILL = /^Role:/;
 const ROLE_ROW = /^Role$/;
 const SEATS_ROW = /^Seats$/;
 const CREATED_ROW = /^Created$/;
+const COLUMNS_ROW = /^Columns/;
+const EXPORT_ROW = /^Export/;
 const DAY_JANUARY_15 = /January 15th, 2025/;
 const SUMMARY_TOTAL = /of (\d+)/;
 const URL_PAST_12_MONTHS = /createdOp=relative&rel=past\.12\.month/;
@@ -192,7 +194,7 @@ test.describe("on a phone the filters fold into a drawer", () => {
     await expect(page.locator("[data-filter-pill]").first()).toBeHidden();
 
     await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
-    expect(await drawerRows(page)).toEqual([
+    expect((await drawerRows(page)).slice(0, 6)).toEqual([
       "Role",
       "Status",
       "Seats",
@@ -200,6 +202,13 @@ test.describe("on a phone the filters fold into a drawer", () => {
       "Created",
       "Sort Name (A–Z)",
     ]);
+    // Columns and Export follow, in a View section of their own.
+    expect(await page.getByRole("button", { name: COLUMNS_ROW }).count()).toBe(
+      1
+    );
+    expect(await page.getByRole("button", { name: EXPORT_ROW }).count()).toBe(
+      1
+    );
   });
 
   test("drills into a filter and applies it", async ({ page }) => {

@@ -34,7 +34,9 @@ import {
   Bound,
   COLLAPSE_MS,
   Collapse,
+  ColumnChecklist,
   DrawerSection,
+  type DrawerView,
   DrilldownList,
   DrilldownRow,
   FILTER_SHEET,
@@ -45,6 +47,7 @@ import {
   Options,
   SetChecklist,
   StepHeader,
+  ViewSection,
 } from "./drawer-parts";
 import { CURRENCIES } from "./mock-payments";
 import {
@@ -73,11 +76,13 @@ import {
 import { directionsFor, type SortDirection } from "./sort";
 import { useReducedMotion } from "./use-reduced-motion";
 
-interface PaymentFiltersDrawerProps {
+interface PaymentFiltersDrawerProps<C extends string> {
   filters: PaymentFilters;
   onChange: (patch: Partial<PaymentFilters>) => void;
   onSortChange: (sort: SortState) => void;
   sort: SortState;
+  /** Columns and Export, which the desktop shows beside Sort. */
+  view: DrawerView<C>;
 }
 
 /** The filters whose comparison can change, Created's date mode among them. */
@@ -119,12 +124,13 @@ interface DrawerOperator {
  * the desktop Sort menu is hidden at this width too, and it is not counted on
  * the trigger: it is not a filter.
  */
-export function PaymentFiltersDrawer({
+export function PaymentFiltersDrawer<C extends string>({
   filters,
   onChange,
   onSortChange,
   sort,
-}: PaymentFiltersDrawerProps) {
+  view,
+}: PaymentFiltersDrawerProps<C>) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
   const activeCount = FILTERS.filter(
@@ -200,6 +206,7 @@ export function PaymentFiltersDrawer({
                   handle={handle}
                   onRemove={(key) => onChange(filterDef(key).clear)}
                   sort={sort}
+                  view={view}
                 />
                 {/* No `Clear all` here: each applied row carries its own ✕,
                     and a button that wipes every filter at once sat one slip
@@ -414,6 +421,11 @@ export function PaymentFiltersDrawer({
                   </RadioGroup>
                 </div>
               </StepperStep>
+
+              <StepperStep>
+                <StepHeader onBack={() => setStep(0)} title="Columns" />
+                <ColumnChecklist view={view} />
+              </StepperStep>
             </StepperContent>
           </Stepper>
           {/* Inside this drawer's content, which is what makes it stack on
@@ -444,6 +456,7 @@ const MENU_STEPS = [
 
 /** After every filter step, so adding a filter never renumbers it. */
 const SORT_STEP = MENU_STEPS.length + 1;
+const COLUMNS_STEP = SORT_STEP + 1;
 
 /**
  * The drilldown menu: what is applied, then everything there is.
@@ -452,16 +465,18 @@ const SORT_STEP = MENU_STEPS.length + 1;
  * so a row and its pill cannot disagree about what is applied. The list below
  * names the filters only — the applied section already says what each holds.
  */
-function PaymentFilterMenu({
+function PaymentFilterMenu<C extends string>({
   filters,
   handle,
   onRemove,
   sort,
+  view,
 }: {
   filters: PaymentFilters;
   handle: (key: DrawerOperatorKey) => OperatorHandle;
   onRemove: (key: FilterKey) => void;
   sort: SortState;
+  view: DrawerView<C>;
 }) {
   const { goTo } = useStepper();
   const applied = MENU_STEPS.flatMap(({ key, step }) => {
@@ -531,21 +546,23 @@ function PaymentFilterMenu({
               onClick={() => goTo(step)}
             />
           ))}
-          <DrilldownRow
-            label="Sort"
-            onClick={() => goTo(SORT_STEP)}
-            value={sortLabel(sort)}
-          />
         </DrilldownList>
       </DrawerSection>
+      <ViewSection
+        onColumns={() => goTo(COLUMNS_STEP)}
+        onSort={() => goTo(SORT_STEP)}
+        sortValue={sortLabel(sort)}
+        view={view}
+      />
     </>
   );
 }
 
 /**
  * The step header's `Clear`, for a filter that holds a value — `undefined`
- * otherwise, so the header shows no control that would do nothing. Resets to
- * the same patch the pill's X does, operator included.
+ * otherwise, so the header shows no control that would do nothing. It clears
+ * the value and keeps the operator, as the desktop popovers' `Clear` does;
+ * removing the filter, operator and all, is the applied row's ✕.
  */
 function held(
   key: FilterKey,
@@ -553,7 +570,9 @@ function held(
   onChange: (patch: Partial<PaymentFilters>) => void
 ): (() => void) | undefined {
   const def = filterDef(key);
-  return def.value(filters) === null ? undefined : () => onChange(def.clear);
+  return def.value(filters) === null
+    ? undefined
+    : () => onChange(def.clearValue ? def.clearValue(filters) : def.clear);
 }
 
 function Bounds({ children }: { children: ReactNode }) {

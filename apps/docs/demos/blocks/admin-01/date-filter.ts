@@ -454,6 +454,20 @@ export function setDateOperator(
 }
 
 /** A new rule for a relative filter. */
+/**
+ * Clearing the value but keeping the operator — what a step's or popover's
+ * `Clear` does, as opposed to removing the filter. Only the single-date
+ * operators have a value apart from their operator to clear; a rule *is* its
+ * value, and `is empty` has none, so those go back to the default filter
+ * rather than keeping an operator that would show a rule while narrowing
+ * nothing.
+ */
+export function clearDateValue(filter: DateFilter): DateFilter {
+  return SINGLE.includes(filter.op)
+    ? { after: "", before: "", op: filter.op, rel: "" }
+    : EMPTY_DATE_FILTER;
+}
+
 export function setRelative(filter: DateFilter, rel: Relative): DateFilter {
   return {
     ...filter,

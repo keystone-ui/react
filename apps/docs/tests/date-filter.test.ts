@@ -10,6 +10,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import {
+  clearDateValue,
   type DateFilter,
   type DateOperator,
   dateFilterFromParams,
@@ -410,5 +411,24 @@ describe("the payments Created filter", () => {
 
     const before = withCreated(f({ after: "2026-07-01", op: "before" }));
     expect(filterDef("created").operator?.(before)).toBe("is before");
+  });
+});
+
+describe("clearing the value", () => {
+  it.each(["is", "before", "after", "onOrBefore", "onOrAfter"] as const)(
+    "keeps %s and drops its date",
+    (op) => {
+      expect(clearDateValue(f({ after: "2026-07-01", op }))).toEqual(f({ op }));
+    }
+  );
+
+  it.each([
+    f({ after: "2026-07-01", before: "2026-07-31" }),
+    // A rule is its value, and keeping `relative` would show "This week"
+    // while narrowing nothing.
+    f({ op: "relative", rel: "past.7.day" }),
+    f({ op: "empty" }),
+  ])("goes back to the default for %j", (filter) => {
+    expect(clearDateValue(filter)).toEqual(EMPTY_DATE_FILTER);
   });
 });

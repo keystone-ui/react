@@ -378,3 +378,28 @@ describe("the operand an applied row shows beside its badge", () => {
     expect(filterDef(key).operand?.(filters)).toBe(expected);
   });
 });
+
+describe("a value-only clear", () => {
+  it.each([
+    ["player", { player: "gmail", playerOp: "endsWith" }, { player: "" }],
+    [
+      "currencies",
+      { currencies: ["BTC"], currencyOp: "isNot" },
+      { currencies: [] },
+    ],
+    ["status", { statusOp: "isNot", statuses: ["failed"] }, { statuses: [] }],
+    [
+      "amount",
+      { amountMin: "10", amountOp: "gt" },
+      { amountMax: "", amountMin: "" },
+    ],
+  ] as const)("%s keeps its operator", (key, patch, expected) => {
+    const filters = filtersWith(patch as Partial<PaymentFilters>);
+    const cleared = filterDef(key).clearValue?.(filters);
+    expect(cleared).toEqual(expected);
+    // …where removing the filter resets the operator as well.
+    expect(Object.keys(filterDef(key).clear).length).toBeGreaterThan(
+      Object.keys(expected).length
+    );
+  });
+});

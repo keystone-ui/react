@@ -1,5 +1,6 @@
 import { type CsvColumn, toCsv } from "@/components/csv";
 import {
+  clearDateValue,
   type DateFilter,
   type DateOperator,
   dateFilterFromParams,
@@ -189,6 +190,13 @@ export type FilterKey = "created" | "role" | "seats" | "status" | "twoFactor";
 export interface FilterDef {
   /** The patch that resets this filter. */
   clear: Partial<UserFilters>;
+  /**
+   * Clearing the value but keeping the operator, for a `Clear` inside the
+   * filter's editor on either surface. Absent where the two are the same —
+   * a filter without an operator. `clear` still resets the operator too: it
+   * is what removing the filter does.
+   */
+  clearValue?: (filters: UserFilters) => Partial<UserFilters>;
   /** What the pill reads when nothing is set. */
   empty: string;
   key: FilterKey;
@@ -217,6 +225,7 @@ export const FILTERS: readonly FilterDef[] = [
   },
   {
     clear: { statuses: [], statusOp: "is" },
+    clearValue: () => ({ statuses: [] }),
     empty: "All",
     key: "status",
     label: "Status",
@@ -250,6 +259,7 @@ export const FILTERS: readonly FilterDef[] = [
   },
   {
     clear: CREATED_CLEAR,
+    clearValue: (f) => createdPatch(clearDateValue(createdOf(f))),
     empty: "Any",
     key: "created",
     label: "Created",

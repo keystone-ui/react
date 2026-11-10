@@ -14,6 +14,7 @@ import {
 } from "@keystoneui/react/popover";
 import { Ellipsis as EllipsisIcon, Trash2 as TrashIcon } from "lucide-react";
 import {
+  clearDateValue,
   DATE_OPERATORS,
   type DateFilter,
   type DateOperator,
@@ -85,12 +86,25 @@ export function DatePill({
                 options={DATE_OPERATORS}
                 value={filter.op}
               />
+              {/* Clears the date and keeps the operator, as Player's and
+                  Amount's popovers do; "Delete filter" removes it outright.
+                  In the header, so it costs the calendar no row. */}
+              <span className="ms-auto" />
+              {value === null ? null : (
+                <Button
+                  onClick={() => onChange(clearDateValue(filter))}
+                  size="xs"
+                  variant="ghost"
+                >
+                  Clear
+                </Button>
+              )}
               <DropdownMenu>
                 <DropdownMenuTrigger
                   render={
                     <Button
                       aria-label="More actions"
-                      className="ms-auto text-muted-foreground"
+                      className="text-muted-foreground"
                       size="icon-xs"
                       variant="ghost"
                     />

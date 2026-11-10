@@ -1,5 +1,6 @@
 import { type CsvColumn, toCsv } from "@/components/csv";
 import {
+  clearDateValue,
   type DateFilter,
   type DateOperator,
   dateFilterFromParams,
@@ -531,6 +532,13 @@ export interface FilterDef {
   /** The patch that resets this filter. */
   clear: Partial<PaymentFilters>;
   /**
+   * Clearing the value but keeping the operator, for a `Clear` inside the
+   * filter's editor on either surface. Absent where the two are the same —
+   * a filter without an operator. `clear` still resets the operator too: it
+   * is what removing the filter does.
+   */
+  clearValue?: (filters: PaymentFilters) => Partial<PaymentFilters>;
+  /**
    * What the pill reads when nothing is set. "All" suits a set of options;
    * a range is not a set, so its bounds read as "Any".
    */
@@ -575,6 +583,7 @@ export const FILTERS: readonly FilterDef[] = [
   },
   {
     clear: { statuses: [], statusOp: "is" },
+    clearValue: () => ({ statuses: [] }),
     empty: "All",
     key: "status",
     label: "Status",
@@ -600,6 +609,7 @@ export const FILTERS: readonly FilterDef[] = [
   },
   {
     clear: { currencies: [], currencyOp: "is" },
+    clearValue: () => ({ currencies: [] }),
     empty: "All",
     key: "currencies",
     label: "Currency",
@@ -634,6 +644,7 @@ export const FILTERS: readonly FilterDef[] = [
   },
   {
     clear: { player: "", playerOp: "contains" },
+    clearValue: () => ({ player: "" }),
     empty: "Any",
     key: "player",
     label: "Player",
@@ -646,6 +657,7 @@ export const FILTERS: readonly FilterDef[] = [
   },
   {
     clear: CREATED_CLEAR,
+    clearValue: (f) => createdPatch(clearDateValue(createdOf(f))),
     empty: "Any",
     key: "created",
     label: "Created",
@@ -655,6 +667,7 @@ export const FILTERS: readonly FilterDef[] = [
   },
   {
     clear: { amountMax: "", amountMin: "", amountOp: "between" },
+    clearValue: () => ({ amountMax: "", amountMin: "" }),
     empty: "Any",
     key: "amount",
     label: "Amount",

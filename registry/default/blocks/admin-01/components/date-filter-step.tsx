@@ -78,34 +78,50 @@ export function DateFilterStep({
   // The gap under each part, inside its collapse so a closed part takes none.
   const gap = sheet ? "pb-3" : "pb-2";
 
+  // On a phone the presets are one swipeable row above the calendar; a mouse
+  // cannot swipe, and most cannot scroll sideways without Shift, so on the
+  // desktop they wrap into a footer under it instead — every one visible, the
+  // way the calendar docs' presets sit.
+  const presetRow = (
+    <fieldset
+      className={
+        sheet
+          ? `min-w-0 ${gap}`
+          : "-mx-2 mt-2 -mb-1 min-w-0 border-border-muted border-t px-3 pt-3 pb-2"
+      }
+    >
+      <legend className="sr-only">Presets</legend>
+      <div
+        className={
+          sheet
+            ? `ks-scroll-fade-x ${gutter} flex gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`
+            : "flex flex-wrap gap-2"
+        }
+      >
+        {presets.map((preset) => (
+          <Toggle
+            className="h-(--ks-control-xs,1.5rem) min-w-0 shrink-0 rounded-sm px-2.5 text-xs"
+            key={preset.label}
+            // Pressing the active preset again keeps it: these are choices.
+            onPressedChange={() => pick(presetFilter(preset))}
+            pressed={active?.label === preset.label}
+            size="sm"
+            variant="outline"
+          >
+            {preset.label}
+          </Toggle>
+        ))}
+      </div>
+    </fieldset>
+  );
+
   // Each part that comes and goes with the operator opens and closes in
   // place (see `Collapse`), so switching to `is relative to today` slides the
   // calendar down under its pickers instead of jumping it 44px, and on the
   // desktop the popover resizes rather than snapping.
   return (
     <div className={sheet ? "pb-4" : "pb-1"}>
-      <fieldset className={`min-w-0 ${gap}`}>
-        <legend className="sr-only">Presets</legend>
-        {/* One row that scrolls, fading where there is more. A margin, not
-            padding, so it clips on the gutter rather than at the edge. */}
-        <div
-          className={`ks-scroll-fade-x ${gutter} flex gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
-        >
-          {presets.map((preset) => (
-            <Toggle
-              className="h-(--ks-control-xs,1.5rem) min-w-0 shrink-0 rounded-sm px-2.5 text-xs"
-              key={preset.label}
-              // Pressing the active preset again keeps it: these are choices.
-              onPressedChange={() => pick(presetFilter(preset))}
-              pressed={active?.label === preset.label}
-              size="sm"
-              variant="outline"
-            >
-              {preset.label}
-            </Toggle>
-          ))}
-        </div>
-      </fieldset>
+      {sheet ? presetRow : null}
 
       <Collapse open={filter.op === "relative"}>
         <RelativePicker
@@ -136,13 +152,7 @@ export function DateFilterStep({
         />
       </Collapse>
 
-      <Collapse open={filter.op === "relative"}>
-        <p
-          className={`${sheet ? "px-4" : "px-2"} pt-2 text-muted-foreground text-xs`}
-        >
-          Updates with the current date.
-        </p>
-      </Collapse>
+      {sheet ? null : presetRow}
     </div>
   );
 }
@@ -179,7 +189,9 @@ function FilterCalendar({
     captionLayout: "dropdown" as const,
     className: sheet
       ? "mx-auto bg-transparent p-0 [--cell-size:min(--spacing(10),calc(100cqw/7))]"
-      : "mx-auto bg-transparent p-0",
+      : // 36px, near the calendar docs' 38: the caption row is one cell
+        // tall, and at the default 30px the 32px month/year selects stuck out.
+        "mx-auto bg-transparent p-0 [--cell-size:--spacing(9)]",
     classNames: sheet
       ? { month: "flex w-full flex-col gap-2", week: "mt-0.5 flex w-full" }
       : undefined,

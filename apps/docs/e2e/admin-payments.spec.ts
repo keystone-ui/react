@@ -38,6 +38,8 @@ const URL_PAST_3_WEEKS = /rel=past\.3\.week/;
 const URL_ON_OR_AFTER = /createdOp=onOrAfter&from=2026-07-01/;
 const URL_HAS_TO = /[?&]to=/;
 const URL_HAS_CURRENCY = /[?&]currency=/;
+const ROW_EXPORT = /^Export/;
+const ROW_COLUMNS = /^Columns/;
 const URL_STATUS_NOT = /status=failed%2Cin-progress&statusOp=isNot/;
 const URL_PLAYER_ENDS_WITH = /playerOp=endsWith/;
 const URL_AMOUNT_GT = /amountOp=gt/;
@@ -691,6 +693,9 @@ test.describe("payments filters on a phone", () => {
       "Created",
       "Amount",
       "Sort Created (Newest first)",
+      // The desktop's view controls, which the phone toolbar has no room for.
+      "Columns 7 of 7",
+      "Export 18 rows",
     ]);
     expect(await appliedRows(page)).toEqual([]);
   });
@@ -729,6 +734,72 @@ test.describe("payments filters on a phone", () => {
         document.documentElement.clientWidth
     );
     expect(overflow).toBeLessThanOrEqual(1);
+  });
+
+  test("Export on a phone writes every filtered row, as the desktop does", async ({
+    page,
+  }) => {
+    await openPayments(page);
+    const summary = await page
+      .locator('[data-slot="table-pagination-info"]')
+      .textContent();
+    const total = Number(summary?.match(SUMMARY_TOTAL)?.[1]);
+
+    await page.getByRole("button", { name: DRAWER_TRIGGER }).click();
+    const [download] = await Promise.all([
+      page.waitForEvent("download"),
+      page.getByRole("button", { name: ROW_EXPORT }).click(),
+    ]);
+    expect(download.suggestedFilename()).toBe("payments.csv");
+    const csv = readFileSync(await download.path(), "utf8")
+      .trim()
+      .split("\r\n");
+    // A header plus one line per payment, not per row on the page.
+    expect(csv).toHaveLength(total + 1);
+  });
+
+  test("Columns on a phone hide a column, as the desktop menu does", async ({
+    page,
+  }) => {
+    await openPayments(page);
+    await expect(
+      page.getByRole("columnheader", { name: "Currency" })
+    ).toHaveCount(1);
+
+    await page.getByRole("button", { name: DRAWER_TRIGGER }).click();
+    await page.getByRole("button", { name: ROW_COLUMNS }).click();
+    await page.getByRole("checkbox", { name: "Currency" }).click();
+    await expect(
+      page.getByRole("columnheader", { name: "Currency" })
+    ).toHaveCount(0);
+
+    await page.getByRole("button", { name: "Back" }).click();
+    expect(await drawerRows(page)).toContain("Columns 6 of 7");
+  });
+
+  test("a step's Clear empties the value and keeps the operator", async ({
+    page,
+  }) => {
+    await gotoPreview(
+      page,
+      "block-admin-01",
+      "?view=payments&player=gmail&playerOp=endsWith"
+    );
+    await settled(page);
+    await page.getByRole("button", { name: DRAWER_TRIGGER }).click();
+    await page.getByRole("button", { name: ROW_PLAYER }).click();
+    await page.getByRole("button", { name: "Clear Player filter" }).click();
+
+    // The value goes; the comparison stays, as the desktop popover's Clear.
+    await expect(page.getByLabel("Player email")).toHaveValue("");
+    // In the step's header: the outgoing menu, still mounted while the
+    // stepper slides, carries the same badge in its applied row.
+    await expect(
+      page
+        .locator('[data-slot="drawer-header"]')
+        .last()
+        .getByRole("button", { name: "Player condition: ends with" })
+    ).toBeVisible();
   });
 
   test("an applied row names its picks, and its X clears the filter", async ({

@@ -36,7 +36,9 @@ import {
   AppliedRow,
   COLLAPSE_MS,
   Collapse,
+  ColumnChecklist,
   DrawerSection,
+  type DrawerView,
   DrilldownList,
   DrilldownRow,
   FILTER_SHEET,
@@ -47,6 +49,7 @@ import {
   Options,
   SetChecklist,
   StepHeader,
+  ViewSection,
 } from "@/components/drawer-parts";
 import { directionsFor, type SortDirection } from "@/components/sort";
 import { Badge } from "@/components/ui/badge";
@@ -68,11 +71,13 @@ import {
 } from "@/components/ui/stepper";
 import { useReducedMotion } from "@/components/use-reduced-motion";
 
-interface AdminFiltersDrawerProps {
+interface AdminFiltersDrawerProps<C extends string> {
   filters: UserFilters;
   onChange: (patch: Partial<UserFilters>) => void;
   onSortChange: (sort: SortState) => void;
   sort: SortState;
+  /** Columns and Export, which the desktop shows beside Sort. */
+  view: DrawerView<C>;
 }
 
 /**
@@ -104,12 +109,13 @@ type UserOperatorKey = "created" | "status";
  * Filters apply live; `Apply` only dismisses. There is no draft state to
  * reconcile, and on a large phone the table is visible behind the sheet.
  */
-export function AdminFiltersDrawer({
+export function AdminFiltersDrawer<C extends string>({
   filters,
   onChange,
   onSortChange,
   sort,
-}: AdminFiltersDrawerProps) {
+  view,
+}: AdminFiltersDrawerProps<C>) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
   const count = activeCount(filters);
@@ -154,10 +160,14 @@ export function AdminFiltersDrawer({
   });
   const sheet = operatorFor(sheetKey);
 
-  const clearFor = (key: FilterKey) =>
-    filterDef(key).value(filters) === null
+  // Clears the value and keeps the operator, as the desktop popovers do; the
+  // applied row's ✕ is what removes the filter outright.
+  const clearFor = (key: FilterKey) => {
+    const def = filterDef(key);
+    return def.value(filters) === null
       ? undefined
-      : () => onChange(filterDef(key).clear);
+      : () => onChange(def.clearValue ? def.clearValue(filters) : def.clear);
+  };
 
   return (
     <Drawer
@@ -193,6 +203,7 @@ export function AdminFiltersDrawer({
                   filters={filters}
                   onRemove={(key) => onChange(filterDef(key).clear)}
                   sort={sort}
+                  view={view}
                 />
                 {/* No `Clear all` here: each applied row carries its own ✕,
                     and a button that wipes every filter at once sat one slip
@@ -305,6 +316,11 @@ export function AdminFiltersDrawer({
                   </RadioGroup>
                 </div>
               </StepperStep>
+
+              <StepperStep>
+                <StepHeader onBack={() => setStep(0)} title="Columns" />
+                <ColumnChecklist view={view} />
+              </StepperStep>
             </StepperContent>
           </Stepper>
           <OperatorSheet
@@ -327,16 +343,18 @@ export function AdminFiltersDrawer({
  * step cannot disagree about their order. Sort is appended by hand because it
  * is not a filter and is not in `FILTERS`.
  */
-function UserFilterMenu({
+function UserFilterMenu<C extends string>({
   filters,
   handle,
   onRemove,
   sort,
+  view,
 }: {
   filters: UserFilters;
   handle: (key: UserOperatorKey) => OperatorHandle;
   onRemove: (key: FilterKey) => void;
   sort: SortState;
+  view: DrawerView<C>;
 }) {
   const { goTo } = useStepper();
   // Step 0 is the menu itself, so the first filter is step 1.
@@ -409,13 +427,15 @@ function UserFilterMenu({
               onClick={() => goTo(step)}
             />
           ))}
-          <DrilldownRow
-            label="Sort"
-            onClick={() => goTo(steps.length + 1)}
-            value={sortLabel(sort)}
-          />
         </DrilldownList>
       </DrawerSection>
+      {/* Sort follows the filter steps, and Columns follows Sort. */}
+      <ViewSection
+        onColumns={() => goTo(steps.length + 2)}
+        onSort={() => goTo(steps.length + 1)}
+        sortValue={sortLabel(sort)}
+        view={view}
+      />
     </>
   );
 }

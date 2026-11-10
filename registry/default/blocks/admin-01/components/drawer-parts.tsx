@@ -4,9 +4,10 @@ import {
   ArrowLeftIcon,
   ChevronDownIcon,
   ChevronRightIcon,
+  DownloadIcon,
   XIcon,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -232,13 +233,41 @@ export function Collapse({
   children: ReactNode;
   open: boolean;
 }) {
+  // Clipped only while it moves. Left on, `overflow: hidden` also cuts off
+  // whatever reaches past the edge of open content — a 32px select in a 30px
+  // calendar caption lost its top border, and an edge focus ring would too.
+  const [settled, setSettled] = useState(open);
+  useEffect(() => {
+    if (!open) {
+      setSettled(false);
+      return;
+    }
+    // `transitionend` settles it; this catches an open that ran no
+    // transition — one made while the step was off-screen — which would
+    // otherwise stay clipped for good.
+    const fallback = window.setTimeout(
+      () => setSettled(true),
+      COLLAPSE_MS + 50
+    );
+    return () => window.clearTimeout(fallback);
+  }, [open]);
+
   return (
     <div
       className={`grid transition-[grid-template-rows,opacity] duration-(--duration-base) ease-(--ease-ks-out) ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
       data-collapse={open ? "open" : "closed"}
       inert={!open}
+      onTransitionEnd={(event) => {
+        if (event.target === event.currentTarget && open) {
+          setSettled(true);
+        }
+      }}
     >
-      <div className="min-h-0 overflow-hidden">{children}</div>
+      <div
+        className={`min-h-0 ${open && settled ? "overflow-visible" : "overflow-hidden"}`}
+      >
+        {children}
+      </div>
     </div>
   );
 }
@@ -490,5 +519,121 @@ export function SetChecklist<T extends string>({
         ))}
       </div>
     </div>
+  );
+}
+
+/**
+ * A menu row that does something rather than opening a step — Export — so it
+ * ends in what it does, not a chevron.
+ */
+export function ActionRow({
+  disabled = false,
+  label,
+  onClick,
+  value,
+}: {
+  disabled?: boolean;
+  label: string;
+  onClick: () => void;
+  value?: string;
+}) {
+  return (
+    <button
+      className="flex h-11 w-full cursor-pointer items-center justify-between gap-3 px-3 text-left active:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+      disabled={disabled}
+      onClick={onClick}
+      type="button"
+    >
+      <span className="font-medium text-sm">{label}</span>
+      <span className="ml-auto inline-flex min-w-0 items-center gap-2 text-muted-foreground text-sm">
+        {value ? <span className="truncate">{value}</span> : null}
+        <DownloadIcon className="size-4 shrink-0" />
+      </span>
+    </button>
+  );
+}
+
+/**
+ * What the drawer needs to offer the toolbar's view controls — Columns and
+ * Export — which the desktop keeps at the toolbar's far end and a phone has
+ * no room for. Handed down by the toolbar, which owns the table; the drawer
+ * stays out of table state.
+ */
+export interface DrawerView<C extends string> {
+  columns: readonly { id: C; label: string }[];
+  /** Off while a request is in flight, or a tap would export the old rows. */
+  exportDisabled: boolean;
+  hiddenColumns: ReadonlySet<C>;
+  onExport: () => void;
+  onToggleColumn: (id: C) => void;
+  /** How many rows an export writes: every filtered row, not the page. */
+  rowCount: number;
+}
+
+/**
+ * The menu's last section: how the rows are shown, not which — Sort, Columns,
+ * Export — apart from the filters, as the desktop keeps them apart.
+ */
+export function ViewSection<C extends string>({
+  onColumns,
+  onSort,
+  sortValue,
+  view,
+}: {
+  onColumns: () => void;
+  onSort: () => void;
+  sortValue: string;
+  view: DrawerView<C>;
+}) {
+  const shown = view.columns.filter(
+    (column) => !view.hiddenColumns.has(column.id)
+  ).length;
+  return (
+    <DrawerSection label="View">
+      <DrilldownList>
+        <DrilldownRow label="Sort" onClick={onSort} value={sortValue} />
+        <DrilldownRow
+          label="Columns"
+          onClick={onColumns}
+          value={`${shown} of ${view.columns.length}`}
+        />
+        <ActionRow
+          disabled={view.exportDisabled}
+          label="Export"
+          onClick={view.onExport}
+          value={`${view.rowCount} ${view.rowCount === 1 ? "row" : "rows"}`}
+        />
+      </DrilldownList>
+    </DrawerSection>
+  );
+}
+
+/** The Columns step: the desktop menu's columns, as checkboxes. */
+export function ColumnChecklist<C extends string>({
+  view,
+}: {
+  view: DrawerView<C>;
+}) {
+  const labels = new Map(
+    view.columns.map((column) => [column.id, column.label])
+  );
+  return (
+    <SetChecklist
+      items={view.columns.map((column) => column.id)}
+      label={(id) => labels.get(id) ?? id}
+      onChange={(next) => {
+        // A checklist reports the whole set; the table toggles one column.
+        const changed = view.columns.find(
+          (column) =>
+            next.includes(column.id) === view.hiddenColumns.has(column.id)
+        );
+        if (changed) {
+          view.onToggleColumn(changed.id);
+        }
+      }}
+      value={view.columns
+        .filter((column) => !view.hiddenColumns.has(column.id))
+        .map((column) => column.id)}
+    />
   );
 }
