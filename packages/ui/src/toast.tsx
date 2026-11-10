@@ -693,7 +693,7 @@ function ToastItem({
               // here — the root's `after:` hover strip is a different element.
               "after:absolute after:-inset-2 after:content-['']",
               // Focus ring matching Button
-              "outline-none focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
+              "focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
             )}
             data-slot="toast-close"
             // Ours runs before Base UI's own close (rightmost handler first),
