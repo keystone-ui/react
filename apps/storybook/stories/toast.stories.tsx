@@ -735,4 +735,44 @@ export const DurationAndClose: Story = {
       </div>
     </div>
   ),
+  // The close button's keyboard focus outline matches Button's. A bare
+  // `outline-none` beside `focus-visible:outline-2` set
+  // `--tw-outline-style: none`, which `outline-2` reads, so the outline
+  // computed to `none` while the class list looked right.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole("button", { name: /close button/i });
+
+    trigger.focus();
+    await expect(trigger.matches(":focus-visible")).toBe(true);
+    // Button transitions outline-color; read the settled value.
+    await new Promise((r) => setTimeout(r, 300));
+    const reference = getComputedStyle(trigger);
+    const expected = {
+      style: reference.outlineStyle,
+      width: reference.outlineWidth,
+      offset: reference.outlineOffset,
+      color: reference.outlineColor,
+    };
+    await expect(expected.style).toBe("solid");
+
+    await userEvent.click(trigger);
+    await new Promise((r) => setTimeout(r, 500));
+    const close = document.querySelector(
+      "[data-slot='toast-close']"
+    ) as HTMLElement;
+    await expect(close).toBeInTheDocument();
+
+    close.focus();
+    await expect(close.matches(":focus-visible")).toBe(true);
+    await new Promise((r) => setTimeout(r, 300));
+    const actual = getComputedStyle(close);
+    await expect({
+      style: actual.outlineStyle,
+      width: actual.outlineWidth,
+      offset: actual.outlineOffset,
+      color: actual.outlineColor,
+    }).toEqual(expected);
+    close.blur();
+  },
 };
