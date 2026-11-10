@@ -2,6 +2,19 @@
 
 This file provides guidance to AI coding agents working with this repository.
 
+## Session gate
+
+Before responding to any task, the team lead (`keystone-ui-lead`) reads
+`~/data/keystone-ui-orchestrator/MEMORY.md`. It is the project's one state file:
+active work, what waits on the owner, durable facts and references. It is a
+dashboard; git, GitHub and this file win on any disagreement.
+
+Workers and reviewers started by the lead read
+`~/data/keystone-ui-orchestrator/claims.md` before writing to a shared resource
+(`main`, the npm release, changesets, generated registry output, the Figma
+library), and report with a file in `~/data/keystone-ui-orchestrator/reports/`.
+Project state is never written into this repository.
+
 ## Repository Overview
 
 Keystone UI is a React component library built as a pnpm monorepo managed by Turborepo.
