@@ -1,19 +1,7 @@
 ---
 date: "2026-11-10"
 description: "What's coming in the next release"
-excerpt: "2 changes queued for the next release."
+excerpt: "No changes since the last release."
 ---
 
-## Minor changes
-
-### Nested bottom drawers now stack. A `Drawer` rendered inside another drawer's `DrawerContent` already nested in Base UI, but nothing showed it: the front drawer simply covered the one behind. Now, while a nested drawer is open, the drawer behind steps back — 5% narrower and 0.75rem higher per drawer in front of it — and takes the front drawer's height, so its top edge peeks out above the front one the way an iOS sheet stacks. Swiping the front drawer down eases the one behind back into place rather than snapping at the end.
-
-`DrawerContent` no longer carries `h-auto`. Its height is still `auto` by default; while a nested drawer is open it follows Base UI's measured heights so the change can animate. That rule lives in `@layer components`, so an `h-*` class you pass to `DrawerContent` still wins.
-
----
-
-### `Stepper` steps move faster, and `StepperContent` can stop animating its height.
-
-The step transition is a 350ms spring, down from 500ms — the length of an iOS push. A step is a drill-in made several times in a session, in and back out, and half a second each way made every edit through a stepped drawer feel slow.
-
-`StepperContent` takes `animateHeight` (default `true`). Turn it off where the container is a fixed height anyway — a sheet pinned to a set height, say — and the measured height would otherwise be animated, on the main thread, for no visible change.
+No changes merged since v1.0.0-beta.11.
