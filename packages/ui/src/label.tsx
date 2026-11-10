@@ -20,6 +20,9 @@ export const Label = ({
     className={cn(
       "select-none font-medium text-foreground text-sm leading-4",
       "peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
+      // Base UI controls (Checkbox, Radio) render a <span>, which never
+      // matches :disabled; they mark themselves with data-disabled instead.
+      "peer-data-disabled:cursor-not-allowed peer-data-disabled:opacity-50",
       className
     )}
     ref={ref}
