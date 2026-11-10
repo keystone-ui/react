@@ -2,7 +2,6 @@
 
 import { Badge } from "@keystoneui/react/badge";
 import { Button } from "@keystoneui/react/button";
-import { Checkbox } from "@keystoneui/react/checkbox";
 import {
   Drawer,
   DrawerContent,
@@ -11,10 +10,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@keystoneui/react/drawer";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@keystoneui/react/native-select";
+import { Input } from "@keystoneui/react/input";
 import { RadioGroup } from "@keystoneui/react/radio-group";
 import {
   Stepper,
@@ -22,88 +18,161 @@ import {
   StepperStep,
   useStepper,
 } from "@keystoneui/react/stepper";
-import { ToggleGroup, ToggleGroupItem } from "@keystoneui/react/toggle-group";
 import { Funnel as FilterIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import {
+  DATE_OPERATORS,
+  type DateOperator,
+  dateOperatorLabel,
+  setDateOperator,
+  TODAY,
+} from "./date-filter";
+import { DateFilterStep } from "./date-filter-step";
+import {
+  AppliedRow,
   Bound,
+  COLLAPSE_MS,
+  Collapse,
+  ColumnChecklist,
+  DrawerSection,
+  type DrawerView,
   DrilldownList,
   DrilldownRow,
+  FILTER_SHEET,
   FilterOption,
+  GROUP,
+  type OperatorHandle,
+  OperatorSheet,
   Options,
+  SetChecklist,
   StepHeader,
+  ViewSection,
 } from "./drawer-parts";
 import { CURRENCIES } from "./mock-payments";
 import {
-  AMOUNT_OPERATORS,
-  type AmountOperator,
-  amountOperatorLabel,
-  CURRENCY_OPERATORS,
-  type CurrencyOperator,
+  CREATED_PRESETS,
+  createdOf,
+  createdPatch,
   defaultDirection,
   directionLabel,
   FILTERS,
+  type FilterKey,
   filterDef,
-  hasActiveFilters,
+  type OperatorKey,
+  operatorChoice,
   type PaymentFilters,
   type PaymentSortKey,
-  PLAYER_OPERATORS,
-  type PlayerOperator,
   PROVIDER_OPTIONS,
   providerLabel,
   SORT_KEYS,
   type SortState,
-  STATUS_OPTIONS,
-  setAmountOp,
+  STATUSES,
   sortLabel,
   statusLabel,
   TYPE_OPTIONS,
   typeLabel,
 } from "./payment-filters";
 import { directionsFor, type SortDirection } from "./sort";
+import { useReducedMotion } from "./use-reduced-motion";
 
-interface PaymentFiltersDrawerProps {
+interface PaymentFiltersDrawerProps<C extends string> {
   filters: PaymentFilters;
   onChange: (patch: Partial<PaymentFilters>) => void;
-  onClear: () => void;
   onSortChange: (sort: SortState) => void;
   sort: SortState;
+  /** Columns and Export, which the desktop shows beside Sort. */
+  view: DrawerView<C>;
+}
+
+/** The filters whose comparison can change, Created's date mode among them. */
+type DrawerOperatorKey = OperatorKey | "created";
+
+const OPERATOR_KEYS: readonly DrawerOperatorKey[] = [
+  "status",
+  "currencies",
+  "player",
+  "created",
+  "amount",
+];
+
+function isOperatorKey(key: FilterKey): key is DrawerOperatorKey {
+  return (OPERATOR_KEYS as readonly string[]).includes(key);
+}
+
+/** A filter's operator, wired to the drawer: what it reads and how to pick. */
+interface DrawerOperator {
+  label: string;
+  options: readonly { label: string; value: string }[];
+  select: (next: string) => void;
+  value: string;
 }
 
 /**
  * The mobile half of the payments toolbar.
  *
- * The same bottom sheet + `Stepper` drilldown the users drawer uses, and for
- * the same reason: a menu of "label + current value" rows that open one screen
- * per filter is how a phone handles a filter set that will not fit, and a
- * block should not answer that question twice in two different ways. This
- * started life as a scrolling column of selects — a desktop panel put on a
- * phone — which is exactly the reinvention the users drawer warns against.
+ * The same bottom sheet + `Stepper` drilldown the users drawer uses: a menu
+ * that opens one screen per filter is how a phone handles a filter set that
+ * will not fit, and a block should not answer that question twice.
  *
- * No `swipeDirection`: the primitive's default is `down`, which is what
- * supplies the bottom-sheet geometry and the drag handle. No `variant` either
- * — `floating` only applies from `md` up, and this drawer is `sm:hidden`, so
- * it could never have taken effect.
+ * The menu reads the way Linear's does — what is applied, as sentences you
+ * can edit in place, above the list of everything you could filter by. A
+ * filter's operator is a badge, in its applied row and beside its step's
+ * title, and tapping it stacks a sheet of operators on this one.
  *
- * Filters apply live; `Apply` only dismisses. Same as the users drawer.
- *
- * Sort is the last row, because the desktop Sort menu is hidden at this width
- * too. It is not counted on the trigger: it is not a filter, and a badge that
- * ticks up when you reorder a column is lying.
+ * Filters apply live; `Apply` only dismisses. Sort is the last row, because
+ * the desktop Sort menu is hidden at this width too, and it is not counted on
+ * the trigger: it is not a filter.
  */
-export function PaymentFiltersDrawer({
+export function PaymentFiltersDrawer<C extends string>({
   filters,
   onChange,
-  onClear,
   onSortChange,
   sort,
-}: PaymentFiltersDrawerProps) {
+  view,
+}: PaymentFiltersDrawerProps<C>) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
   const activeCount = FILTERS.filter(
     (def) => def.value(filters) !== null
   ).length;
+
+  // The key outlives `sheetOpen` so the sheet keeps its options while it
+  // slides away.
+  const [sheetKey, setSheetKey] = useState<DrawerOperatorKey>("player");
+  const [sheetOpen, setSheetOpen] = useState(false);
+
+  const operatorFor = (key: DrawerOperatorKey): DrawerOperator => {
+    if (key === "created") {
+      const created = createdOf(filters);
+      return {
+        label: dateOperatorLabel(created.op),
+        options: DATE_OPERATORS,
+        select: (next) =>
+          onChange(
+            createdPatch(setDateOperator(created, next as DateOperator, TODAY))
+          ),
+        value: created.op,
+      };
+    }
+    const choice = operatorChoice(key, filters);
+    return {
+      label: choice.label,
+      options: choice.options,
+      select: (next) => onChange(choice.patch(next)),
+      value: choice.value,
+    };
+  };
+
+  const handle = (key: DrawerOperatorKey): OperatorHandle => ({
+    label: operatorFor(key).label,
+    onOpen: () => {
+      setSheetKey(key);
+      setSheetOpen(true);
+    },
+  });
+
+  const sheet = operatorFor(sheetKey);
 
   return (
     <Drawer
@@ -122,25 +191,27 @@ export function PaymentFiltersDrawer({
         Filters
         {activeCount > 0 && <Badge variant="secondary">{activeCount}</Badge>}
       </DrawerTrigger>
-      <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
+      <DrawerContent className={FILTER_SHEET}>
+        <div className="w-full">
           <Stepper onValueChange={setStep} value={step}>
-            <StepperContent>
+            {/* The sheet is a fixed height, so a step's height has nothing
+                to animate. */}
+            <StepperContent animateHeight={false}>
               <StepperStep>
                 <DrawerHeader>
                   <DrawerTitle className="text-center">Filters</DrawerTitle>
                 </DrawerHeader>
-                <PaymentFilterMenu filters={filters} sort={sort} />
+                <PaymentFilterMenu
+                  filters={filters}
+                  handle={handle}
+                  onRemove={(key) => onChange(filterDef(key).clear)}
+                  sort={sort}
+                  view={view}
+                />
+                {/* No `Clear all` here: each applied row carries its own ✕,
+                    and a button that wipes every filter at once sat one slip
+                    of the thumb from `Apply`. The toolbar keeps one. */}
                 <DrawerFooter>
-                  {hasActiveFilters(filters) && (
-                    <Button
-                      className="w-full"
-                      onClick={onClear}
-                      variant="ghost"
-                    >
-                      Clear all
-                    </Button>
-                  )}
                   <Button className="w-full" onClick={() => setOpen(false)}>
                     Apply
                   </Button>
@@ -166,58 +237,33 @@ export function PaymentFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <StepHeader onBack={() => setStep(0)} title="Status" />
-                <Options
-                  onValueChange={(value) =>
-                    onChange({ status: value as PaymentFilters["status"] })
-                  }
-                  value={filters.status}
-                >
-                  {STATUS_OPTIONS.map((option) => (
-                    <FilterOption
-                      key={option}
-                      label={statusLabel(option)}
-                      value={option}
-                    />
-                  ))}
-                </Options>
+                <StepHeader
+                  onBack={() => setStep(0)}
+                  onClear={held("status", filters, onChange)}
+                  operator={handle("status")}
+                  title="Status"
+                />
+                <SetChecklist
+                  items={STATUSES}
+                  label={statusLabel}
+                  onChange={(next) => onChange({ statuses: next })}
+                  value={filters.statuses}
+                />
               </StepperStep>
 
               <StepperStep>
-                <StepHeader onBack={() => setStep(0)} title="Currency" />
-                <OperatorToggle
-                  label="Currency operator"
-                  onValueChange={(op) =>
-                    onChange({ currencyOp: op as CurrencyOperator })
-                  }
-                  options={CURRENCY_OPERATORS}
-                  value={filters.currencyOp}
+                <StepHeader
+                  onBack={() => setStep(0)}
+                  onClear={held("currencies", filters, onChange)}
+                  operator={handle("currencies")}
+                  title="Currency"
                 />
-                {/* Checkboxes, not radios: this is the one multi-select in the
-                    set, so it is the one screen you do not leave per pick. */}
-                <div className="divide-y divide-border-muted pb-4">
-                  {CURRENCIES.map((currency) => (
-                    // biome-ignore lint/a11y/noLabelWithoutControl: control is inside label
-                    <label
-                      className="flex h-12 cursor-pointer items-center gap-3 px-4"
-                      key={currency}
-                    >
-                      <Checkbox
-                        checked={filters.currencies.includes(currency)}
-                        onCheckedChange={() =>
-                          onChange({
-                            currencies: filters.currencies.includes(currency)
-                              ? filters.currencies.filter(
-                                  (item) => item !== currency
-                                )
-                              : [...filters.currencies, currency],
-                          })
-                        }
-                      />
-                      <span className="text-sm">{currency}</span>
-                    </label>
-                  ))}
-                </div>
+                <SetChecklist
+                  items={CURRENCIES}
+                  label={(currency) => currency}
+                  onChange={(next) => onChange({ currencies: next })}
+                  value={filters.currencies}
+                />
               </StepperStep>
 
               <StepperStep>
@@ -239,69 +285,56 @@ export function PaymentFiltersDrawer({
               </StepperStep>
 
               <StepperStep>
-                <StepHeader onBack={() => setStep(0)} title="Player" />
-                {/* Six operators do not fit a segmented row on a phone, and a
-                    native select is the phone's own picker for one-of-many. */}
-                <div className="px-4 pb-3">
-                  <NativeSelect
-                    aria-label="Player operator"
-                    onChange={(event) =>
-                      onChange({
-                        playerOp: event.target.value as PlayerOperator,
-                      })
-                    }
-                    value={filters.playerOp}
-                  >
-                    {PLAYER_OPERATORS.map((op) => (
-                      <NativeSelectOption key={op.value} value={op.value}>
-                        {op.label.charAt(0).toUpperCase() + op.label.slice(1)}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelect>
-                </div>
+                <StepHeader
+                  onBack={() => setStep(0)}
+                  onClear={held("player", filters, onChange)}
+                  operator={handle("player")}
+                  title="Player"
+                />
                 <div className="px-4 pb-4">
-                  <Bound
+                  {/* Not `Bound`: that is for numbers and dates, and its
+                      decimal keypad cannot type an email. */}
+                  <Input
+                    aria-label="Player email"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    enterKeyHint="done"
                     id="drawer-player"
-                    label="Player email"
-                    onChange={(value) => onChange({ player: value })}
+                    inputMode="email"
+                    onChange={(event) =>
+                      onChange({ player: event.target.value })
+                    }
                     placeholder="e.g. gmail"
+                    size="sm"
+                    spellCheck={false}
                     value={filters.player}
                   />
                 </div>
               </StepperStep>
 
               <StepperStep>
-                <StepHeader onBack={() => setStep(0)} title="Created" />
-                <Bounds>
-                  <Bound
-                    id="drawer-created-after"
-                    label="After"
-                    onChange={(value) => onChange({ createdAfter: value })}
-                    type="date"
-                    value={filters.createdAfter}
-                  />
-                  <Bound
-                    id="drawer-created-before"
-                    label="Before"
-                    onChange={(value) => onChange({ createdBefore: value })}
-                    type="date"
-                    value={filters.createdBefore}
-                  />
-                </Bounds>
+                <StepHeader
+                  onBack={() => setStep(0)}
+                  onClear={held("created", filters, onChange)}
+                  operator={handle("created")}
+                  title="Created"
+                />
+                <DateFilterStep
+                  filter={createdOf(filters)}
+                  onChange={(next) => onChange(createdPatch(next))}
+                  presets={CREATED_PRESETS}
+                  surface="sheet"
+                  today={TODAY}
+                />
               </StepperStep>
 
               <StepperStep>
-                <StepHeader onBack={() => setStep(0)} title="Amount" />
-                <OperatorToggle
-                  label="Amount operator"
-                  onValueChange={(op) =>
-                    onChange(setAmountOp(op as AmountOperator))
-                  }
-                  options={AMOUNT_OPERATORS.map((op) => ({
-                    label: amountOperatorLabel(op),
-                    value: op,
-                  }))}
-                  value={filters.amountOp}
+                <StepHeader
+                  onBack={() => setStep(0)}
+                  onClear={held("amount", filters, onChange)}
+                  operator={handle("amount")}
+                  title="Amount"
                 />
                 {filters.amountOp === "between" ? (
                   <Bounds>
@@ -347,7 +380,7 @@ export function PaymentFiltersDrawer({
                 <StepHeader onBack={() => setStep(0)} title="Sort" />
                 <div className="pb-4">
                   <RadioGroup
-                    className="gap-0 divide-y divide-border-muted"
+                    className={`gap-0 ${GROUP}`}
                     onValueChange={(value) => {
                       if (value) {
                         const key = value as PaymentSortKey;
@@ -365,7 +398,7 @@ export function PaymentFiltersDrawer({
                     ))}
                   </RadioGroup>
                   <RadioGroup
-                    className="gap-0 divide-y divide-border-muted border-border-muted border-t"
+                    className={`mt-3 gap-0 ${GROUP}`}
                     onValueChange={(value) => {
                       if (value) {
                         onSortChange({
@@ -388,8 +421,23 @@ export function PaymentFiltersDrawer({
                   </RadioGroup>
                 </div>
               </StepperStep>
+
+              <StepperStep>
+                <StepHeader onBack={() => setStep(0)} title="Columns" />
+                <ColumnChecklist view={view} />
+              </StepperStep>
             </StepperContent>
           </Stepper>
+          {/* Inside this drawer's content, which is what makes it stack on
+              this drawer rather than open as a second one beside it. */}
+          <OperatorSheet
+            onOpenChange={setSheetOpen}
+            onSelect={sheet.select}
+            open={sheetOpen}
+            options={sheet.options}
+            title={filterDef(sheetKey).label}
+            value={sheet.value}
+          />
         </div>
       </DrawerContent>
     </Drawer>
@@ -408,104 +456,123 @@ const MENU_STEPS = [
 
 /** After every filter step, so adding a filter never renumbers it. */
 const SORT_STEP = MENU_STEPS.length + 1;
+const COLUMNS_STEP = SORT_STEP + 1;
 
 /**
- * The drilldown menu. Every row's value comes from the same `FILTERS`
- * descriptor the desktop pills read, so a row and its pill cannot disagree
- * about what is applied.
+ * The drilldown menu: what is applied, then everything there is.
+ *
+ * Every applied row reads the same `FILTERS` descriptor the desktop pills do,
+ * so a row and its pill cannot disagree about what is applied. The list below
+ * names the filters only — the applied section already says what each holds.
  */
-function PaymentFilterMenu({
+function PaymentFilterMenu<C extends string>({
   filters,
+  handle,
+  onRemove,
   sort,
+  view,
 }: {
   filters: PaymentFilters;
+  handle: (key: DrawerOperatorKey) => OperatorHandle;
+  onRemove: (key: FilterKey) => void;
   sort: SortState;
+  view: DrawerView<C>;
 }) {
   const { goTo } = useStepper();
-
-  const items = MENU_STEPS.map(({ key, step }) => {
+  const applied = MENU_STEPS.flatMap(({ key, step }) => {
     const def = filterDef(key);
-    const value = def.value(filters);
-    // The same operator the pill shows, so `is not` set on a desktop is not
-    // invisible on a phone — the row would otherwise read "BTC" for a table
-    // that excludes it.
-    const operator = value === null ? null : def.operator?.(filters);
-    // A row has room the pill does not, so a multi-select says what the
-    // number counts rather than leaving a bare "3".
-    const shown =
-      key === "currencies" && filters.currencies.length > 1
-        ? `${filters.currencies.length} selected`
-        : (value ?? def.empty);
-    return {
-      label: def.label,
-      step,
-      value: operator ? `${operator} ${shown}` : shown,
-    };
+    // Listed while it holds a value; shown beside its badge as the operand
+    // where it has one, which `is empty` does not.
+    if (def.value(filters) === null) {
+      return [];
+    }
+    const value = def.operand ? def.operand(filters) : def.value(filters);
+    return [{ def, step, value }];
   });
+  // The row on its way out: it collapses first, and is removed — its filter
+  // cleared — once the collapse is done, so the rows below slide up into its
+  // place instead of jumping.
+  const [leaving, setLeaving] = useState<FilterKey | null>(null);
+  const reduced = useReducedMotion();
+  const remove = (key: FilterKey) => {
+    if (leaving) {
+      return;
+    }
+    setLeaving(key);
+    // Under reduced motion the collapse is instant, so nothing to wait for.
+    window.setTimeout(
+      () => {
+        onRemove(key);
+        setLeaving(null);
+      },
+      reduced ? 0 : COLLAPSE_MS
+    );
+  };
+  // Removing the last one closes the whole section, header and all.
+  const sectionOpen = !(applied.length === 1 && applied[0].def.key === leaving);
 
   return (
-    <DrilldownList>
-      {items.map((item) => (
-        <DrilldownRow
-          key={item.step}
-          label={item.label}
-          onClick={() => goTo(item.step)}
-          value={item.value}
-        />
-      ))}
-      <DrilldownRow
-        label="Sort"
-        onClick={() => goTo(SORT_STEP)}
-        value={sortLabel(sort)}
+    <>
+      {applied.length > 0 && (
+        <Collapse open={sectionOpen}>
+          <DrawerSection label="Applied filters">
+            <DrilldownList>
+              {applied.map(({ def, step, value }) => (
+                <Collapse
+                  key={def.key}
+                  open={def.key !== leaving || !sectionOpen}
+                >
+                  <AppliedRow
+                    label={def.label}
+                    onEdit={() => goTo(step)}
+                    onRemove={() => remove(def.key)}
+                    operator={
+                      isOperatorKey(def.key) ? handle(def.key) : undefined
+                    }
+                    value={value}
+                  />
+                </Collapse>
+              ))}
+            </DrilldownList>
+          </DrawerSection>
+        </Collapse>
+      )}
+      <DrawerSection label="All filters">
+        <DrilldownList>
+          {MENU_STEPS.map(({ key, step }) => (
+            <DrilldownRow
+              key={key}
+              label={filterDef(key).label}
+              onClick={() => goTo(step)}
+            />
+          ))}
+        </DrilldownList>
+      </DrawerSection>
+      <ViewSection
+        onColumns={() => goTo(COLUMNS_STEP)}
+        onSort={() => goTo(SORT_STEP)}
+        sortValue={sortLabel(sort)}
+        view={view}
       />
-    </DrilldownList>
+    </>
   );
 }
 
 /**
- * A drawer step's operator, as a segmented control above its values: two to
- * four short options fit one row on a phone, where a menu would be a sheet
- * inside a sheet.
+ * The step header's `Clear`, for a filter that holds a value — `undefined`
+ * otherwise, so the header shows no control that would do nothing. It clears
+ * the value and keeps the operator, as the desktop popovers' `Clear` does;
+ * removing the filter, operator and all, is the applied row's ✕.
  */
-function OperatorToggle({
-  label,
-  onValueChange,
-  options,
-  value,
-}: {
-  label: string;
-  onValueChange: (value: string) => void;
-  options: readonly { label: string; value: string }[];
-  value: string;
-}) {
-  return (
-    <div className="px-4 pb-3">
-      <ToggleGroup
-        aria-label={label}
-        className="w-full"
-        onValueChange={(next) => {
-          // A segmented control always holds one value; pressing the active
-          // segment again would otherwise empty it.
-          if (next[0]) {
-            onValueChange(next[0] as string);
-          }
-        }}
-        size="sm"
-        value={[value]}
-        variant="outline"
-      >
-        {options.map((option) => (
-          <ToggleGroupItem
-            className="flex-1"
-            key={option.value}
-            value={option.value}
-          >
-            {option.label}
-          </ToggleGroupItem>
-        ))}
-      </ToggleGroup>
-    </div>
-  );
+function held(
+  key: FilterKey,
+  filters: PaymentFilters,
+  onChange: (patch: Partial<PaymentFilters>) => void
+): (() => void) | undefined {
+  const def = filterDef(key);
+  return def.value(filters) === null
+    ? undefined
+    : () => onChange(def.clearValue ? def.clearValue(filters) : def.clear);
 }
 
 function Bounds({ children }: { children: ReactNode }) {

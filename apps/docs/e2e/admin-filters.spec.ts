@@ -16,8 +16,14 @@ const SIDEBAR_TRIGGER = /Toggle Sidebar/i;
 const ROW_ACTIONS = /^Actions for /;
 const ADD_FILTER = /Add filter/;
 const ROLE_PILL = /^Role:/;
-const ROLE_ROW = /^Role/;
-const SEATS_ROW = /^Seats/;
+const ROLE_ROW = /^Role$/;
+const SEATS_ROW = /^Seats$/;
+const CREATED_ROW = /^Created$/;
+const COLUMNS_ROW = /^Columns/;
+const EXPORT_ROW = /^Export/;
+const DAY_JANUARY_15 = /January 15th, 2025/;
+const SUMMARY_TOTAL = /of (\d+)/;
+const URL_PAST_12_MONTHS = /createdOp=relative&rel=past\.12\.month/;
 const SORT_ROW = /^Sort/;
 const USER_COLUMN = /User/;
 const SEATS_COLUMN = /Seats/;
@@ -60,8 +66,23 @@ function drawerRows(page: Page): Promise<string[]> {
         .map((node) =>
           [...node.children]
             .map((child) => child.textContent?.replace(/\s+/g, " ").trim())
+            .filter(Boolean)
             .join(" ")
         )
+    );
+}
+
+/** The applied section's rows, read as sentences: "Role Viewer". */
+function appliedRows(page: Page): Promise<string[]> {
+  return page
+    .locator('[data-slot="drawer-content"] [data-applied-filter]')
+    .evaluateAll((nodes) =>
+      nodes.map((node) =>
+        [...node.children]
+          .map((child) => child.textContent?.replace(/\s+/g, " ").trim())
+          .filter(Boolean)
+          .join(" ")
+      )
     );
 }
 
@@ -74,6 +95,18 @@ async function applyInDrawer(page: Page, row: RegExp, option: string) {
   await drawer.getByRole("radio", { exact: true, name: option }).click();
   await page.keyboard.press("Escape");
   await expect(drawer).toHaveCount(0);
+}
+
+/**
+ * How many users the query found, from the footer's "of N". Read as text
+ * because the footer is `hidden lg:block` on a phone.
+ */
+async function resultTotal(page: Page): Promise<number> {
+  await settled(page);
+  const summary = await page
+    .locator('[data-slot="table-pagination-info"]')
+    .textContent();
+  return Number(summary?.match(SUMMARY_TOTAL)?.[1]);
 }
 
 /**
@@ -161,14 +194,21 @@ test.describe("on a phone the filters fold into a drawer", () => {
     await expect(page.locator("[data-filter-pill]").first()).toBeHidden();
 
     await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
-    expect(await drawerRows(page)).toEqual([
-      "Role All",
-      "Status All",
-      "Seats All",
-      "Two-factor All",
-      "Created Any",
+    expect((await drawerRows(page)).slice(0, 6)).toEqual([
+      "Role",
+      "Status",
+      "Seats",
+      "Two-factor",
+      "Created",
       "Sort Name (A–Z)",
     ]);
+    // Columns and Export follow, in a View section of their own.
+    expect(await page.getByRole("button", { name: COLUMNS_ROW }).count()).toBe(
+      1
+    );
+    expect(await page.getByRole("button", { name: EXPORT_ROW }).count()).toBe(
+      1
+    );
   });
 
   test("drills into a filter and applies it", async ({ page }) => {
@@ -185,9 +225,48 @@ test.describe("on a phone the filters fold into a drawer", () => {
     expect(await rowCount(page)).toBeLessThan(total);
 
     await drawer.getByRole("button", { name: "Back" }).click();
-    await expect(drawer.getByRole("button", { name: ROLE_ROW })).toContainText(
-      "Viewer"
-    );
+    expect(await appliedRows(page)).toEqual(["Role Viewer"]);
+  });
+
+  test("Created takes a sign-up preset and names it", async ({ page }) => {
+    await openUsers(page);
+    // The total, not the rows on screen: a page holds five.
+    const total = await resultTotal(page);
+
+    await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
+    const drawer = page.locator('[data-slot="drawer-content"]');
+    await drawer.getByRole("button", { name: CREATED_ROW }).click();
+    await drawer
+      .getByRole("group", { name: "Presets" })
+      .getByRole("button", { exact: true, name: "Past 12 months" })
+      .click();
+
+    await expect(page).toHaveURL(URL_PAST_12_MONTHS);
+    expect(await resultTotal(page)).toBeLessThan(total);
+
+    await drawer.getByRole("button", { name: "Back" }).click();
+    expect(await appliedRows(page)).toEqual([
+      "Created is relative to today Past 12 months",
+    ]);
+  });
+
+  test("Created reaches a sign-up from last year in two picks", async ({
+    page,
+  }) => {
+    await openUsers(page);
+    await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
+    const drawer = page.locator('[data-slot="drawer-content"]');
+    await drawer.getByRole("button", { name: CREATED_ROW }).click();
+
+    // The calendar opens on the fixture's today, Aug 2026; the arrows alone
+    // would make January 2025 nineteen taps back.
+    await drawer.getByLabel("Choose the Year").selectOption("2025");
+    await drawer.getByLabel("Choose the Month").selectOption({ label: "Jan" });
+    await drawer.getByRole("button", { name: DAY_JANUARY_15 }).click();
+
+    expect(await resultTotal(page)).toBeGreaterThan(0);
+    await drawer.getByRole("button", { name: "Back" }).click();
+    expect(await appliedRows(page)).toEqual(["Created is between 2025-01-15"]);
   });
 
   test("the Filters count ignores sort", async ({ page }) => {

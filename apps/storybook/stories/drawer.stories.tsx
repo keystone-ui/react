@@ -44,8 +44,6 @@ import {
   EyeOff,
   Funnel as FilterIcon,
   LayoutGrid,
-  Minus,
-  Plus,
   Search,
 } from "lucide-react";
 import * as React from "react";
@@ -268,63 +266,62 @@ export const Sides: Story = {
 };
 
 // =============================================================================
-// Nested (Goal Counter)
+// Nested
 // =============================================================================
-function GoalDrawerDemo() {
-  const [goal, setGoal] = React.useState(350);
+const SOUNDS = ["Chime", "Pulse", "Bamboo", "None"];
 
-  function onClick(adjustment: number) {
-    setGoal(Math.max(200, Math.min(400, goal + adjustment)));
-  }
+function NestedDrawerDemo() {
+  const [sound, setSound] = React.useState("Chime");
+  const [picking, setPicking] = React.useState(false);
 
   return (
     <Drawer>
       <DrawerTrigger render={<Button variant="outline" />}>
-        Move Goal
+        Notifications
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
-            <DrawerTitle>Move Goal</DrawerTitle>
-            <DrawerDescription>Set your daily activity goal.</DrawerDescription>
+            <DrawerTitle>Notifications</DrawerTitle>
+            <DrawerDescription>How new activity reaches you.</DrawerDescription>
           </DrawerHeader>
-          <div className="p-4 pb-0">
-            <div className="flex items-center justify-center space-x-2">
-              <Button
-                className="h-8 w-8 shrink-0 rounded-full"
-                disabled={goal <= 200}
-                onClick={() => onClick(-10)}
-                size="icon"
-                variant="outline"
-              >
-                <Minus />
-                <span className="sr-only">Decrease</span>
-              </Button>
-              <div className="flex-1 text-center">
-                <div className="font-bold text-7xl tracking-tighter">
-                  {goal}
-                </div>
-                <div className="text-[0.70rem] text-muted-foreground uppercase">
-                  Calories/day
-                </div>
+          <Drawer onOpenChange={setPicking} open={picking}>
+            <DrawerTrigger className="flex h-12 w-full cursor-pointer items-center justify-between px-4 text-sm">
+              <span className="font-medium">Sound</span>
+              <span className="inline-flex items-center gap-2 text-muted-foreground">
+                {sound}
+                <ChevronRight className="size-4" />
+              </span>
+            </DrawerTrigger>
+            <DrawerContent>
+              <div className="mx-auto w-full max-w-sm pb-4">
+                <DrawerHeader>
+                  <DrawerTitle>Sound</DrawerTitle>
+                </DrawerHeader>
+                <RadioGroup
+                  className="gap-0"
+                  onValueChange={(value) => {
+                    setSound(value as string);
+                    setPicking(false);
+                  }}
+                  value={sound}
+                >
+                  {SOUNDS.map((option) => (
+                    // biome-ignore lint/a11y/noLabelWithoutControl: control is inside label
+                    <label
+                      className="flex h-12 cursor-pointer items-center gap-3 px-4 text-sm"
+                      key={option}
+                    >
+                      <RadioGroupItem value={option} />
+                      {option}
+                    </label>
+                  ))}
+                </RadioGroup>
               </div>
-              <Button
-                className="h-8 w-8 shrink-0 rounded-full"
-                disabled={goal >= 400}
-                onClick={() => onClick(10)}
-                size="icon"
-                variant="outline"
-              >
-                <Plus />
-                <span className="sr-only">Increase</span>
-              </Button>
-            </div>
-          </div>
+            </DrawerContent>
+          </Drawer>
           <DrawerFooter>
-            <DrawerClose render={<Button variant="outline" />}>
-              Cancel
-            </DrawerClose>
-            <Button>Submit</Button>
+            <DrawerClose render={<Button />}>Done</DrawerClose>
           </DrawerFooter>
         </div>
       </DrawerContent>
@@ -333,14 +330,43 @@ function GoalDrawerDemo() {
 }
 
 export const Nested: Story = {
-  render: () => <GoalDrawerDemo />,
+  render: () => <NestedDrawerDemo />,
   parameters: {
     docs: {
       description: {
         story:
-          "A bottom drawer with interactive content. Demonstrates using stateful components inside the drawer body.",
+          "A drawer rendered inside another one nests. The drawer behind steps back — narrower, and peeking out above the front one at the front one's height — and swiping the front one down eases it back.",
       },
     },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: /^Notifications$/ })
+    );
+    await new Promise((r) => setTimeout(r, 500));
+
+    const sheets = () =>
+      document.querySelectorAll<HTMLElement>("[data-slot='drawer-content']");
+    const back = sheets()[0];
+    await userEvent.click(within(back).getByRole("button", { name: /Sound/ }));
+    await new Promise((r) => setTimeout(r, 700));
+
+    // The one behind knows it is stacked, and has stepped back.
+    await expect(back).toHaveAttribute("data-nested-drawer-open");
+    const stacked = new DOMMatrix(getComputedStyle(back).transform);
+    await expect(stacked.a).toBeLessThan(1);
+    await expect(stacked.f).toBeLessThan(0);
+
+    // Picking closes the front one; the back one returns to full size.
+    const front = sheets()[1];
+    await userEvent.click(within(front).getByText("Pulse"));
+    await new Promise((r) => setTimeout(r, 900));
+    await expect(back).not.toHaveAttribute("data-nested-drawer-open");
+    await expect(new DOMMatrix(getComputedStyle(back).transform).a).toBe(1);
+    await expect(
+      within(back).getByRole("button", { name: /Sound/ })
+    ).toHaveTextContent("Pulse");
   },
 };
 

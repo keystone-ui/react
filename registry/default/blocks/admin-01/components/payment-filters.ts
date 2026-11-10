@@ -1,5 +1,19 @@
 import { type CsvColumn, toCsv } from "@/components/csv";
 import {
+  clearDateValue,
+  type DateFilter,
+  type DateOperator,
+  dateFilterFromParams,
+  dateFilterToParams,
+  dateFilterValue,
+  dateOperand,
+  datePresets,
+  dateQualifier,
+  EMPTY_DATE_FILTER,
+  matchesDate,
+  TODAY,
+} from "@/components/date-filter";
+import {
   addableKeys as addableKeysOf,
   visibleKeys as visibleKeysOf,
 } from "@/components/filter-row";
@@ -41,7 +55,6 @@ import type { DataTableQuery } from "@/components/use-data-table";
  */
 
 export type TypeFilter = "all" | PaymentType;
-export type StatusFilter = "all" | PaymentStatus;
 export type ProviderFilter = "all" | Provider;
 
 /**
@@ -52,9 +65,12 @@ export type ProviderFilter = "all" | Provider;
  * `is` / `is not`, not `contains`: a payment holds exactly one currency, so
  * "contains USDT" would match the same rows as "is USDT" — two operators for
  * one result. `contains` belongs to text, which is where the player filter
- * uses it: "gmail" matches every gmail address.
+ * uses it: "gmail" matches every gmail address. Status is a set for the same
+ * reason Currency is — "everything but failed" is the question a ledger asks
+ * of it as often as "only failed".
  */
 export type CurrencyOperator = "is" | "isNot";
+export type StatusOperator = "is" | "isNot";
 export type AmountOperator = "between" | "eq" | "gt" | "lt";
 export type PlayerOperator =
   | "contains"
@@ -70,13 +86,17 @@ export interface PaymentFilters {
   amountOp: AmountOperator;
   createdAfter: string;
   createdBefore: string;
+  createdOp: DateOperator;
+  /** A relative rule, `past.7.day` — see `date-filter.ts`. */
+  createdRel: string;
   currencies: readonly Currency[];
   currencyOp: CurrencyOperator;
   email: string;
   player: string;
   playerOp: PlayerOperator;
   provider: ProviderFilter;
-  status: StatusFilter;
+  statuses: readonly PaymentStatus[];
+  statusOp: StatusOperator;
   type: TypeFilter;
 }
 
@@ -86,18 +106,20 @@ export const EMPTY_FILTERS: PaymentFilters = {
   amountOp: "between",
   createdAfter: "",
   createdBefore: "",
+  createdOp: "between",
+  createdRel: "",
   currencies: [],
   currencyOp: "is",
   email: "",
   player: "",
   playerOp: "contains",
   provider: "all",
-  status: "all",
+  statuses: [],
+  statusOp: "is",
   type: "all",
 };
 
-export const STATUS_OPTIONS: readonly StatusFilter[] = [
-  "all",
+export const STATUSES: readonly PaymentStatus[] = [
   "completed",
   "in-progress",
   "failed",
@@ -128,8 +150,8 @@ export function typeLabel(type: TypeFilter): string {
   return TYPE_LABELS[type];
 }
 
-export function statusLabel(status: StatusFilter): string {
-  return status === "all" ? "All" : paymentStatusLabels[status];
+export function statusLabel(status: PaymentStatus): string {
+  return paymentStatusLabels[status];
 }
 
 export function providerLabel(provider: ProviderFilter): string {
@@ -158,6 +180,11 @@ export const CURRENCY_OPERATORS: readonly {
   { label: "is not", value: "isNot" },
 ];
 
+export const STATUS_OPERATORS: readonly {
+  label: string;
+  value: StatusOperator;
+}[] = CURRENCY_OPERATORS;
+
 export const AMOUNT_OPERATORS: readonly AmountOperator[] = [
   "between",
   "eq",
@@ -175,6 +202,79 @@ const AMOUNT_SYMBOLS: Record<AmountOperator, string> = {
   gt: ">",
   lt: "<",
 };
+
+/** The amount operators as words, for a list where `>` alone reads oddly. */
+const AMOUNT_OPERATOR_NAMES: Record<AmountOperator, string> = {
+  between: "Between",
+  eq: "Equal to",
+  gt: "Greater than",
+  lt: "Less than",
+};
+
+/** The filters that carry a comparison of their own. */
+export type OperatorKey = "amount" | "currencies" | "player" | "status";
+
+export interface OperatorChoice {
+  /** What the badge or menu trigger reads: `is not`, `contains`, `>`. */
+  label: string;
+  /** The choices, as a list reads them: `Is not`, `Greater than`. */
+  options: readonly { label: string; value: string }[];
+  /** Switching to `next`, as a patch — dropping what it no longer reads. */
+  patch: (next: string) => Partial<PaymentFilters>;
+  value: string;
+}
+
+function capitalize(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+/**
+ * A filter's operator: what it currently reads, the alternatives, and what
+ * picking one does. One answer for the desktop chip's header menu and the
+ * phone drawer's operator sheet, so the two cannot offer different lists.
+ */
+export function operatorChoice(
+  key: OperatorKey,
+  filters: PaymentFilters
+): OperatorChoice {
+  if (key === "amount") {
+    return {
+      label: amountOperatorLabel(filters.amountOp),
+      options: AMOUNT_OPERATORS.map((op) => ({
+        label: AMOUNT_OPERATOR_NAMES[op],
+        value: op,
+      })),
+      patch: (next) => setAmountOp(next as AmountOperator),
+      value: filters.amountOp,
+    };
+  }
+  const [operators, value, patch] = {
+    currencies: [
+      CURRENCY_OPERATORS,
+      filters.currencyOp,
+      (next: string) => ({ currencyOp: next as CurrencyOperator }),
+    ] as const,
+    player: [
+      PLAYER_OPERATORS,
+      filters.playerOp,
+      (next: string) => ({ playerOp: next as PlayerOperator }),
+    ] as const,
+    status: [
+      STATUS_OPERATORS,
+      filters.statusOp,
+      (next: string) => ({ statusOp: next as StatusOperator }),
+    ] as const,
+  }[key];
+  return {
+    label: operators.find((item) => item.value === value)?.label ?? "",
+    options: operators.map((item) => ({
+      label: capitalize(item.label),
+      value: item.value,
+    })),
+    patch,
+    value,
+  };
+}
 
 /**
  * Switching the amount operator, as a patch.
@@ -194,6 +294,47 @@ export function setAmountOp(op: AmountOperator): Partial<PaymentFilters> {
   }
   return { amountOp: op };
 }
+
+/**
+ * The Created presets: a ledger is read from the recent end, by the day and
+ * the month, which is how payments get reconciled. Each is a relative rule, so
+ * a link to "past 7 days" still means the past seven days tomorrow.
+ */
+export const CREATED_PRESETS = datePresets([
+  { dir: "this", unit: "day" },
+  { count: 7, dir: "past", unit: "day" },
+  { count: 30, dir: "past", unit: "day" },
+  { dir: "this", unit: "week" },
+  { dir: "this", unit: "month" },
+  { dir: "this", unit: "year" },
+]);
+
+/** The Created filter as the date filter reads it. */
+export function createdOf(f: {
+  createdAfter: string;
+  createdBefore: string;
+  createdOp: DateOperator;
+  createdRel: string;
+}): DateFilter {
+  return {
+    after: f.createdAfter,
+    before: f.createdBefore,
+    op: f.createdOp,
+    rel: f.createdRel,
+  };
+}
+
+/** A date filter back as the fields it is stored in. */
+export function createdPatch(filter: DateFilter) {
+  return {
+    createdAfter: filter.after,
+    createdBefore: filter.before,
+    createdOp: filter.op,
+    createdRel: filter.rel,
+  };
+}
+
+const CREATED_CLEAR = createdPatch(EMPTY_DATE_FILTER);
 
 // ---------------------------------------------------------------------------
 // Sort
@@ -287,17 +428,14 @@ const MATCHERS: readonly PaymentMatcher[] = [
       (filters.currencyOp === "is"),
   (payment, filters) => filters.type === "all" || payment.type === filters.type,
   (payment, filters) =>
-    filters.status === "all" || payment.status === filters.status,
+    filters.statuses.length === 0 ||
+    filters.statuses.includes(payment.status) === (filters.statusOp === "is"),
   (payment, filters) =>
     filters.provider === "all" || payment.provider === filters.provider,
   (payment, filters) => matchesPlayer(payment.playerEmail, filters),
   // The timestamps are ISO, so the date half compares as a string.
   (payment, filters) =>
-    !filters.createdAfter ||
-    payment.createdAt.slice(0, 10) >= filters.createdAfter,
-  (payment, filters) =>
-    !filters.createdBefore ||
-    payment.createdAt.slice(0, 10) <= filters.createdBefore,
+    matchesDate(payment.createdAt.slice(0, 10), createdOf(filters), TODAY),
   (payment, filters) => matchesAmount(Number(payment.amount), filters),
 ];
 
@@ -394,6 +532,13 @@ export interface FilterDef {
   /** The patch that resets this filter. */
   clear: Partial<PaymentFilters>;
   /**
+   * Clearing the value but keeping the operator, for a `Clear` inside the
+   * filter's editor on either surface. Absent where the two are the same —
+   * a filter without an operator. `clear` still resets the operator too: it
+   * is what removing the filter does.
+   */
+  clearValue?: (filters: PaymentFilters) => Partial<PaymentFilters>;
+  /**
    * What the pill reads when nothing is set. "All" suits a set of options;
    * a range is not a set, so its bounds read as "Any".
    */
@@ -401,6 +546,12 @@ export interface FilterDef {
   key: FilterKey;
   /** The dimension, shown muted ahead of the value. */
   label: string;
+  /**
+   * The value with its comparison taken out, for the phone's applied rows,
+   * which show the operator as a badge beside it: `Amount [>] 100`, where the
+   * pill's `> 100` would say it twice. Absent where the two read the same.
+   */
+  operand?: (filters: PaymentFilters) => string | null;
   /**
    * The operator, when it is not the default. Notion's convention: `is` goes
    * unsaid — "Currency: BTC" — and only a qualifier earns words, "Currency is
@@ -431,18 +582,47 @@ export const FILTERS: readonly FilterDef[] = [
     value: (f) => (f.type === "all" ? null : typeLabel(f.type)),
   },
   {
-    clear: { status: "all" },
+    clear: { statuses: [], statusOp: "is" },
+    clearValue: () => ({ statuses: [] }),
     empty: "All",
     key: "status",
     label: "Status",
-    value: (f) => (f.status === "all" ? null : statusLabel(f.status)),
+    operator: (f) => (f.statusOp === "isNot" ? "is not" : null),
+    operand: (f) => {
+      if (f.statuses.length === 0) {
+        return null;
+      }
+      return f.statuses.length <= 2
+        ? f.statuses.map(statusLabel).join(", ")
+        : `${f.statuses.length} statuses`;
+    },
+    // The first pick plus a count of the rest, as Currency reads: "Failed, +1".
+    value: (f) => {
+      if (f.statuses.length === 0) {
+        return null;
+      }
+      const first = statusLabel(f.statuses[0]);
+      return f.statuses.length === 1
+        ? first
+        : `${first}, +${f.statuses.length - 1}`;
+    },
   },
   {
     clear: { currencies: [], currencyOp: "is" },
+    clearValue: () => ({ currencies: [] }),
     empty: "All",
     key: "currencies",
     label: "Currency",
     operator: (f) => (f.currencyOp === "isNot" ? "is not" : null),
+    // Two tickers still read at a glance; past that, a count says how many.
+    operand: (f) => {
+      if (f.currencies.length === 0) {
+        return null;
+      }
+      return f.currencies.length <= 2
+        ? f.currencies.join(", ")
+        : `${f.currencies.length} currencies`;
+    },
     // The first selection plus a count of the rest: "BTC, +2". A bare "3"
     // says how many without saying which, and four tickers side by side stop
     // being scannable and start being a sentence.
@@ -464,6 +644,7 @@ export const FILTERS: readonly FilterDef[] = [
   },
   {
     clear: { player: "", playerOp: "contains" },
+    clearValue: () => ({ player: "" }),
     empty: "Any",
     key: "player",
     label: "Player",
@@ -475,17 +656,32 @@ export const FILTERS: readonly FilterDef[] = [
     value: (f) => f.player.trim() || null,
   },
   {
-    clear: { createdAfter: "", createdBefore: "" },
+    clear: CREATED_CLEAR,
+    clearValue: (f) => createdPatch(clearDateValue(createdOf(f))),
     empty: "Any",
     key: "created",
     label: "Created",
-    value: (f) => rangeValue(f.createdAfter, f.createdBefore),
+    operand: (f) => dateOperand(createdOf(f)),
+    operator: (f) => dateQualifier(createdOf(f)),
+    value: (f) => dateFilterValue(createdOf(f)),
   },
   {
     clear: { amountMax: "", amountMin: "", amountOp: "between" },
+    clearValue: () => ({ amountMax: "", amountMin: "" }),
     empty: "Any",
     key: "amount",
     label: "Amount",
+    operand: (f) => {
+      // An open end reads as one here — `100 – any` — rather than the pill's
+      // `from 100`, which beside a `between` badge would say it twice.
+      if (f.amountOp === "between") {
+        if (!(f.amountMin || f.amountMax)) {
+          return null;
+        }
+        return `${f.amountMin || "0"} – ${f.amountMax || "any"}`;
+      }
+      return (f.amountOp === "lt" ? f.amountMax : f.amountMin) || null;
+    },
     value: (f) => amountValue(f),
   },
 ];
@@ -605,7 +801,6 @@ export function toPaymentsCsv(rows: readonly Payment[]): string {
 export const PAGE_SIZES = [10, 20, 30, 50] as const;
 export const DEFAULT_PAGE_SIZE = 10;
 
-const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const DECIMAL = /^\d+(\.\d+)?$/;
 
 /** The table's query as URL parameters, defaults left out. */
@@ -616,15 +811,15 @@ export function paymentsToParams(
   return {
     q: f.email,
     type: f.type === "all" ? "" : f.type,
-    status: f.status === "all" ? "" : f.status,
+    status: f.statuses.join(","),
+    statusOp: f.statuses.length > 0 && f.statusOp === "isNot" ? "isNot" : "",
     provider: f.provider === "all" ? "" : f.provider,
     currency: f.currencies.join(","),
     currencyOp:
       f.currencies.length > 0 && f.currencyOp === "isNot" ? "isNot" : "",
     player: f.player,
     playerOp: f.player && f.playerOp !== "contains" ? f.playerOp : "",
-    from: f.createdAfter,
-    to: f.createdBefore,
+    ...dateFilterToParams(createdOf(f)),
     amountOp:
       (f.amountMin || f.amountMax) && f.amountOp !== "between"
         ? f.amountOp
@@ -640,10 +835,6 @@ export function paymentsToParams(
 export function paymentsFromParams(
   params: URLSearchParams
 ): Partial<DataTableQuery<PaymentFilters, PaymentSortKey>> {
-  const date = (key: string) => {
-    const value = params.get(key) ?? "";
-    return ISO_DATE.test(value) ? value : "";
-  };
   const decimal = (key: string) => {
     const value = params.get(key) ?? "";
     return DECIMAL.test(value) ? value : "";
@@ -654,13 +845,20 @@ export function paymentsFromParams(
       CURRENCIES.includes(value as Currency)
     );
 
+  // A single `status=failed`, as links written before Status took several
+  // values say it, still reads: a list of one.
+  const statuses = (params.get("status") ?? "")
+    .split(",")
+    .filter((value): value is PaymentStatus =>
+      STATUSES.includes(value as PaymentStatus)
+    );
+
   return {
     filters: {
       amountMax: decimal("max"),
       amountMin: decimal("min"),
       amountOp: oneOf(params.get("amountOp"), AMOUNT_OPERATORS, "between"),
-      createdAfter: date("from"),
-      createdBefore: date("to"),
+      ...createdPatch(dateFilterFromParams(params)),
       currencies,
       currencyOp: oneOf(params.get("currencyOp"), ["is", "isNot"], "is"),
       email: params.get("q") ?? "",
@@ -671,7 +869,8 @@ export function paymentsFromParams(
         "contains"
       ),
       provider: oneOf(params.get("provider"), PROVIDER_OPTIONS, "all"),
-      status: oneOf(params.get("status"), STATUS_OPTIONS, "all"),
+      statuses,
+      statusOp: oneOf(params.get("statusOp"), ["is", "isNot"], "is"),
       type: oneOf(params.get("type"), TYPE_OPTIONS, "all"),
     },
     sort: sortFromParam(

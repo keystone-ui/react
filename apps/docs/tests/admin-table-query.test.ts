@@ -9,6 +9,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  matchesUserFilters,
   minutesAgo,
   sortUsers,
   toUsersCsv,
@@ -52,13 +53,15 @@ describe("payments query ⇄ URL", () => {
       amountMin: "100",
       amountOp: "gt",
       createdAfter: "2026-07-01",
+      createdOp: "onOrAfter",
       currencies: ["BTC", "ETH"],
       currencyOp: "isNot",
       email: "gmail",
       player: "ada",
       playerOp: "startsWith",
       provider: "Stripe",
-      status: "failed",
+      statusOp: "isNot",
+      statuses: ["failed", "in-progress"],
       type: "cashout",
     };
     const query = {
@@ -71,13 +74,19 @@ describe("payments query ⇄ URL", () => {
     expect(paymentsFromParams(search(paymentsToParams(query)))).toEqual(query);
   });
 
+  it("still reads a single status from a link written before it took several", () => {
+    const read = paymentsFromParams(new URLSearchParams("status=failed"));
+    expect(read.filters?.statuses).toEqual(["failed"]);
+    expect(read.filters?.statusOp).toBe("is");
+  });
+
   it("drops values it does not recognise rather than trusting them", () => {
     const read = paymentsFromParams(
       new URLSearchParams(
         "status=bogus&currency=BTC,DOGE&from=yesterday&min=ten&sort=amount.up&page=-1&size=7"
       )
     );
-    expect(read.filters?.status).toBe("all");
+    expect(read.filters?.statuses).toEqual([]);
     expect(read.filters?.currencies).toEqual(["BTC"]);
     expect(read.filters?.createdAfter).toBe("");
     expect(read.filters?.amountMin).toBe("");
@@ -98,14 +107,23 @@ describe("users query ⇄ URL", () => {
     expect(search(params).toString()).toBe("");
   });
 
+  it("reads a single status from an older link as a list of one", () => {
+    const read = usersFromParams(new URLSearchParams("status=invited"));
+    expect(read.filters?.statuses).toEqual(["invited"]);
+    expect(read.filters?.statusOp).toBe("is");
+  });
+
   it("round-trips every filter, the sort and the page", () => {
     const filters: UserFilters = {
       createdAfter: "2024-01-01",
       createdBefore: "2024-12-31",
+      createdOp: "between",
+      createdRel: "",
       role: "Admin",
       search: "ada",
       seats: "many",
-      status: "invited",
+      statusOp: "isNot",
+      statuses: ["invited", "suspended"],
       twoFactor: "off",
     };
     const query = {
@@ -186,5 +204,24 @@ describe("toCsv", () => {
       "User ID,Name,Email,Role,Status,Seats,Two-factor,Created,Last sign-in"
     );
     expect(first).toContain(users[0].id);
+  });
+});
+
+describe("the users Status filter", () => {
+  it("is not excludes every status picked, and nothing picked excludes nothing", () => {
+    const kept = users.filter((user) =>
+      matchesUserFilters(user, {
+        ...USERS_EMPTY,
+        statusOp: "isNot",
+        statuses: ["suspended", "invited"],
+      })
+    );
+    expect(kept.length).toBeGreaterThan(0);
+    expect(kept.every((user) => user.status === "active")).toBe(true);
+    expect(
+      users.filter((user) =>
+        matchesUserFilters(user, { ...USERS_EMPTY, statusOp: "isNot" })
+      )
+    ).toHaveLength(users.length);
   });
 });

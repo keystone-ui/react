@@ -166,11 +166,22 @@ const reducedMotionVariants = {
 };
 
 export interface StepperContentProps {
+  /**
+   * Animate the container's height to each step's. Turn it off where the
+   * container is a fixed height anyway — a sheet pinned to a set height,
+   * say — and the measured height would be animated for nothing.
+   * @default true
+   */
+  animateHeight?: boolean;
   children: ReactNode;
   className?: string;
 }
 
-function StepperContent({ className, children }: StepperContentProps) {
+function StepperContent({
+  animateHeight = true,
+  className,
+  children,
+}: StepperContentProps) {
   const { value, direction } = useStepper();
   const shouldReduceMotion = useReducedMotion();
   const [ref, bounds] = useMeasure();
@@ -193,11 +204,17 @@ function StepperContent({ className, children }: StepperContentProps) {
       transition={
         shouldReduceMotion
           ? { duration: 0.15 }
-          : { duration: 0.5, type: "spring", bounce: 0 }
+          : // 350ms, iOS's push: a step is a drill-in made several times a
+            // session, and half a second each way made every edit feel slow.
+            { duration: 0.35, type: "spring", bounce: 0 }
       }
     >
       <motion.div
-        animate={{ height: bounds.height > 0 ? bounds.height : "auto" }}
+        animate={
+          animateHeight
+            ? { height: bounds.height > 0 ? bounds.height : "auto" }
+            : undefined
+        }
         className={cn("relative overflow-hidden", className)}
         data-direction={direction}
         data-slot="stepper-content"

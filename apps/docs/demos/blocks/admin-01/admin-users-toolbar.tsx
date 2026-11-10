@@ -44,6 +44,12 @@ export function AdminUsersToolbar({
   columns: readonly { id: UserColumnId; label: string }[];
   table: UsersTableState;
 }) {
+  // One export, the same rows wherever it is asked for: every filtered and
+  // sorted row, not the page — and off while a request is in flight, or it
+  // would write the rows the last query returned.
+  const exportCsv = () =>
+    downloadCsv("users.csv", toUsersCsv(table.result.all));
+  const exportDisabled = table.loading || table.result.total === 0;
   const { added, filters, patchFilters } = table;
   const row = usePillRow({
     onAdd: table.addFilter,
@@ -111,8 +117,8 @@ export function AdminUsersToolbar({
           onToggle={table.toggleColumn}
         />
         <Button
-          disabled={table.loading || table.result.total === 0}
-          onClick={() => downloadCsv("users.csv", toUsersCsv(table.result.all))}
+          disabled={exportDisabled}
+          onClick={exportCsv}
           size="sm"
           variant="outline"
         >
@@ -132,9 +138,16 @@ export function AdminUsersToolbar({
         <AdminFiltersDrawer
           filters={filters}
           onChange={patchFilters}
-          onClear={table.clearFilters}
           onSortChange={table.setSort}
           sort={table.sort}
+          view={{
+            columns,
+            exportDisabled,
+            hiddenColumns: table.hiddenColumns,
+            onExport: exportCsv,
+            onToggleColumn: table.toggleColumn,
+            rowCount: table.result.total,
+          }}
         />
       </div>
     </div>

@@ -11,64 +11,66 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@keystoneui/react/drawer";
-import { Minus, Plus } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@keystoneui/react/radio-group";
+import { ChevronRight } from "lucide-react";
 import { useState } from "react";
 
-export default function DrawerNested() {
-  const [goal, setGoal] = useState(350);
+const SOUNDS = ["Chime", "Pulse", "Bamboo", "None"];
 
-  function onClick(adjustment: number) {
-    setGoal(Math.max(200, Math.min(400, goal + adjustment)));
-  }
+export default function DrawerNested() {
+  const [sound, setSound] = useState("Chime");
+  const [picking, setPicking] = useState(false);
 
   return (
     <Drawer>
       <DrawerTrigger render={<Button variant="outline" />}>
-        Move Goal
+        Notifications
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
-            <DrawerTitle>Move Goal</DrawerTitle>
-            <DrawerDescription>Set your daily activity goal.</DrawerDescription>
+            <DrawerTitle>Notifications</DrawerTitle>
+            <DrawerDescription>How new activity reaches you.</DrawerDescription>
           </DrawerHeader>
-          <div className="p-4 pb-0">
-            <div className="flex items-center justify-center space-x-2">
-              <Button
-                className="h-8 w-8 shrink-0 rounded-full"
-                disabled={goal <= 200}
-                onClick={() => onClick(-10)}
-                size="icon"
-                variant="outline"
-              >
-                <Minus />
-                <span className="sr-only">Decrease</span>
-              </Button>
-              <div className="flex-1 text-center">
-                <div className="font-bold text-7xl tracking-tighter">
-                  {goal}
-                </div>
-                <div className="text-[0.70rem] text-muted-foreground uppercase">
-                  Calories/day
-                </div>
+          {/* A drawer rendered inside another one nests: the one behind steps
+              back and peeks out above it. */}
+          <Drawer onOpenChange={setPicking} open={picking}>
+            <DrawerTrigger className="flex h-12 w-full cursor-pointer items-center justify-between px-4 text-sm">
+              <span className="font-medium">Sound</span>
+              <span className="inline-flex items-center gap-2 text-muted-foreground">
+                {sound}
+                <ChevronRight className="size-4" />
+              </span>
+            </DrawerTrigger>
+            <DrawerContent>
+              <div className="mx-auto w-full max-w-sm pb-4">
+                <DrawerHeader>
+                  <DrawerTitle>Sound</DrawerTitle>
+                </DrawerHeader>
+                <RadioGroup
+                  className="gap-0"
+                  onValueChange={(value) => {
+                    setSound(value as string);
+                    setPicking(false);
+                  }}
+                  value={sound}
+                >
+                  {SOUNDS.map((option) => (
+                    // biome-ignore lint/a11y/noLabelWithoutControl: control is inside label
+                    <label
+                      className="flex h-12 cursor-pointer items-center gap-3 px-4 text-sm"
+                      key={option}
+                    >
+                      <RadioGroupItem value={option} />
+                      {option}
+                    </label>
+                  ))}
+                </RadioGroup>
               </div>
-              <Button
-                className="h-8 w-8 shrink-0 rounded-full"
-                disabled={goal >= 400}
-                onClick={() => onClick(10)}
-                size="icon"
-                variant="outline"
-              >
-                <Plus />
-                <span className="sr-only">Increase</span>
-              </Button>
-            </div>
-          </div>
+            </DrawerContent>
+          </Drawer>
           <DrawerFooter>
-            <DrawerClose render={<Button variant="outline" />}>
-              Cancel
-            </DrawerClose>
-            <Button>Submit</Button>
+            <DrawerClose render={<Button />}>Done</DrawerClose>
           </DrawerFooter>
         </div>
       </DrawerContent>

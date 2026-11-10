@@ -49,9 +49,10 @@ import type { PaymentColumnId, PaymentsTableState } from "./use-payments-table";
  * `sort` state, so a header click moves the menu's check and back.
  *
  * Below `sm` the pills and the right-hand group fold away and the drawer
- * carries the whole filter set, with Sort as its last step. A row of pills
- * becomes a column of pills on a phone, which buries the table it is
- * filtering; a CSV download on a phone lands in a files app nobody opens.
+ * carries all of it — every filter, then Sort, Columns and Export in a View
+ * section of their own. A row of pills becomes a column of pills on a phone,
+ * which buries the table it is filtering; and a control the desktop has and a
+ * phone lacks is a capability the phone does not have.
  */
 export function AdminPaymentsToolbar({
   columns,
@@ -60,6 +61,12 @@ export function AdminPaymentsToolbar({
   columns: readonly { id: PaymentColumnId; label: string }[];
   table: PaymentsTableState;
 }) {
+  // One export, the same rows wherever it is asked for: every filtered and
+  // sorted row, not the page — and off while a request is in flight, or it
+  // would write the rows the last query returned.
+  const exportCsv = () =>
+    downloadCsv("payments.csv", toPaymentsCsv(table.result.all));
+  const exportDisabled = table.loading || table.result.total === 0;
   const { added, filters, patchFilters } = table;
   const row = usePillRow({
     onAdd: table.addFilter,
@@ -130,10 +137,8 @@ export function AdminPaymentsToolbar({
           onToggle={table.toggleColumn}
         />
         <Button
-          disabled={table.loading || table.result.total === 0}
-          onClick={() =>
-            downloadCsv("payments.csv", toPaymentsCsv(table.result.all))
-          }
+          disabled={exportDisabled}
+          onClick={exportCsv}
           size="sm"
           variant="outline"
         >
@@ -153,9 +158,16 @@ export function AdminPaymentsToolbar({
         <PaymentFiltersDrawer
           filters={filters}
           onChange={patchFilters}
-          onClear={table.clearFilters}
           onSortChange={table.setSort}
           sort={table.sort}
+          view={{
+            columns,
+            exportDisabled,
+            hiddenColumns: table.hiddenColumns,
+            onExport: exportCsv,
+            onToggleColumn: table.toggleColumn,
+            rowCount: table.result.total,
+          }}
         />
       </div>
     </div>

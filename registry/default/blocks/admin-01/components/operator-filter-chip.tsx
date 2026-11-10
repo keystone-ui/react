@@ -1,46 +1,30 @@
 "use client";
 
-import {
-  ChevronDownIcon,
-  CircleXIcon,
-  EllipsisIcon,
-  TrashIcon,
-} from "lucide-react";
+import { EllipsisIcon, TrashIcon } from "lucide-react";
 import { type RefObject, useRef } from "react";
 import { Bound } from "@/components/drawer-parts";
 import { FilterTrigger } from "@/components/filter-trigger";
-import { CURRENCIES, type Currency } from "@/components/mock-payments";
+import { CURRENCIES } from "@/components/mock-payments";
 import {
-  AMOUNT_OPERATORS,
-  type AmountOperator,
-  amountOperatorLabel,
-  CURRENCY_OPERATORS,
-  type CurrencyOperator,
   type FilterKey,
   filterDef,
+  type OperatorKey,
+  operatorChoice,
   type PaymentFilters,
-  PLAYER_OPERATORS,
-  type PlayerOperator,
-  setAmountOp,
+  STATUSES,
+  statusLabel,
 } from "@/components/payment-filters";
 import { PillShell, PillValue } from "@/components/pill-shell";
-import { Button } from "@/components/ui/button";
 import {
-  Combobox,
-  ComboboxChip,
-  ComboboxChips,
-  ComboboxChipsInput,
-  ComboboxEmpty,
-  ComboboxItem,
-  ComboboxList,
-  ComboboxValue,
-} from "@/components/ui/combobox";
+  OperatorMenu,
+  type OperatorMenuProps,
+  SetOptions,
+} from "@/components/set-pill";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -58,8 +42,6 @@ interface OperatorFilterChipProps {
   onRemove: (key: FilterKey, trigger: HTMLElement | null) => void;
   pillKey: OperatorKey;
 }
-
-type OperatorKey = "amount" | "currencies" | "player";
 
 /**
  * A filter that carries a comparison: `Currency is not: BTC`, `Amount: > 100`.
@@ -149,10 +131,23 @@ export function OperatorFilterChip({
             </div>
 
             {pillKey === "currencies" && (
-              <CurrencyOptions
+              <SetOptions
                 field={field}
-                filters={filters}
-                onChange={onChange}
+                items={CURRENCIES}
+                label={(currency) => currency}
+                noun="currencies"
+                onValueChange={(next) => onChange({ currencies: next })}
+                value={filters.currencies}
+              />
+            )}
+            {pillKey === "status" && (
+              <SetOptions
+                field={field}
+                items={STATUSES}
+                label={statusLabel}
+                noun="statuses"
+                onValueChange={(next) => onChange({ statuses: next })}
+                value={filters.statuses}
               />
             )}
             {pillKey === "amount" && (
@@ -172,183 +167,19 @@ export function OperatorFilterChip({
   );
 }
 
-const AMOUNT_OPERATOR_NAMES: Record<AmountOperator, string> = {
-  between: "Between",
-  eq: "Equal to",
-  gt: "Greater than",
-  lt: "Less than",
-};
-
-function capitalize(text: string): string {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
-
-/** The header's operator menu, per filter: its options and what picking does. */
+/** The header's operator menu: the shared choice, wired to this chip. */
 function operatorMenu(
   key: OperatorKey,
   filters: PaymentFilters,
   onChange: (patch: Partial<PaymentFilters>) => void
 ): OperatorMenuProps {
-  if (key === "amount") {
-    return {
-      label: amountOperatorLabel(filters.amountOp),
-      onValueChange: (next) => onChange(setAmountOp(next as AmountOperator)),
-      options: AMOUNT_OPERATORS.map((op) => ({
-        label: AMOUNT_OPERATOR_NAMES[op],
-        value: op,
-      })),
-      value: filters.amountOp,
-    };
-  }
-  const [operators, value, patch] =
-    key === "currencies"
-      ? ([
-          CURRENCY_OPERATORS,
-          filters.currencyOp,
-          (next: string) => ({ currencyOp: next as CurrencyOperator }),
-        ] as const)
-      : ([
-          PLAYER_OPERATORS,
-          filters.playerOp,
-          (next: string) => ({ playerOp: next as PlayerOperator }),
-        ] as const);
+  const choice = operatorChoice(key, filters);
   return {
-    label: operators.find((item) => item.value === value)?.label ?? "",
-    onValueChange: (next) => onChange(patch(next)),
-    options: operators.map((item) => ({
-      label: capitalize(item.label),
-      value: item.value,
-    })),
-    value,
+    label: choice.label,
+    onValueChange: (next) => onChange(choice.patch(next)),
+    options: choice.options,
+    value: choice.value,
   };
-}
-
-interface OperatorMenuProps {
-  label: string;
-  onValueChange: (value: string) => void;
-  options: readonly { label: string; value: string }[];
-  value: string;
-}
-
-/** The operator in the header: the current one, opening onto the rest. */
-function OperatorMenu({
-  label,
-  onValueChange,
-  options,
-  value,
-}: OperatorMenuProps) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            aria-label={`Operator: ${label}`}
-            className="gap-1 px-1.5 font-semibold text-sm"
-            size="xs"
-            variant="ghost"
-          />
-        }
-      >
-        {label}
-        <ChevronDownIcon className="size-3.5 text-muted-foreground" />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="min-w-36" size="compact">
-        <DropdownMenuRadioGroup
-          onValueChange={(next) => onValueChange(next as string)}
-          value={value}
-        >
-          {options.map((option) => (
-            <DropdownMenuRadioItem key={option.value} value={option.value}>
-              {option.label}
-            </DropdownMenuRadioItem>
-          ))}
-        </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-
-/**
- * The selection as chips in a field, the options not yet picked listed under
- * it — Notion's multi-select. The chips are the answer to "what is held", read
- * in place rather than counted, and the field filters the list as you type.
- *
- * An inline `Combobox` — `inline open` keeps its list in this popover instead
- * of opening a popup of its own on top of it. So `ComboboxList` and
- * `ComboboxItem` are used bare: `ComboboxContent` always portals.
- *
- * Picked options stay in the list and gain a check, as Notion's do. Removing
- * them would shuffle every row below the one just clicked, so the next pick
- * lands on the wrong option; and clicking a checked one again unpicks it,
- * which a list of only the unpicked could never offer.
- *
- * The round X clears every chip but keeps the operator — you emptied the
- * list, not the comparison.
- */
-function CurrencyOptions({
-  field,
-  filters,
-  onChange,
-}: {
-  field: RefObject<HTMLInputElement | null>;
-  filters: PaymentFilters;
-  onChange: (patch: Partial<PaymentFilters>) => void;
-}) {
-  const held = filters.currencies;
-
-  return (
-    <Combobox
-      autoHighlight
-      inline
-      items={CURRENCIES}
-      multiple
-      onValueChange={(next: Currency[]) => onChange({ currencies: next })}
-      open
-      value={[...held]}
-    >
-      <div className="px-1 pb-2">
-        {/* 32px: the toolbar's tier. `ComboboxChips` defaults to the 40px
-            form-field height, which towers over the compact rows below. */}
-        <ComboboxChips className="min-h-8 py-0.5 pe-1">
-          <ComboboxValue>
-            {(values: Currency[]) => (
-              <>
-                {values.map((value) => (
-                  <ComboboxChip key={value}>{value}</ComboboxChip>
-                ))}
-                <ComboboxChipsInput
-                  aria-label="Search currencies"
-                  ref={field}
-                  placeholder={values.length > 0 ? "" : "Search…"}
-                />
-              </>
-            )}
-          </ComboboxValue>
-          {held.length > 0 && (
-            <Button
-              aria-label="Clear currencies"
-              className="ms-auto shrink-0 rounded-full text-muted-foreground"
-              onClick={() => onChange({ currencies: [] })}
-              size="icon-xs"
-              variant="ghost"
-            >
-              <CircleXIcon />
-            </Button>
-          )}
-        </ComboboxChips>
-      </div>
-      <ComboboxEmpty className="px-2 py-1.5 text-muted-foreground text-sm">
-        No match
-      </ComboboxEmpty>
-      <ComboboxList className="max-h-none p-0" data-size="compact">
-        {(currency: Currency) => (
-          <ComboboxItem key={currency} value={currency}>
-            {currency}
-          </ComboboxItem>
-        )}
-      </ComboboxList>
-    </Combobox>
-  );
 }
 
 /**

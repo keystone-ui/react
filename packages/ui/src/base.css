@@ -215,7 +215,9 @@
 
 /* --- Popup (drawer-content) --- */
 [data-slot="drawer-content"] {
-  transition: transform calc(var(--duration-drawer) * 1.25) var(--ease-drawer);
+  transition:
+    transform calc(var(--duration-drawer) * 1.25) var(--ease-drawer),
+    height calc(var(--duration-drawer) * 1.25) var(--ease-drawer);
 }
 [data-slot="drawer-content"][data-swiping] {
   transition: none;
@@ -245,9 +247,29 @@
   transform: translateX(-100%);
 }
 
-/* Bottom drawer (swipeDirection="down") */
+/* Bottom drawer (swipeDirection="down")
+
+   Nested bottom drawers stack. While a drawer opened from inside this one is
+   up, this one steps back: 5% narrower and 0.75rem higher per drawer in front
+   of it, so its top edge peeks out above the front one, the way an iOS sheet
+   stacks. Base UI counts the drawers in front (`--nested-drawers`) and reports
+   the front one's swipe as `--drawer-swipe-progress`, so dragging the front
+   drawer down eases this one back into place rather than snapping at the end.
+   Scaling from the top keeps the peeking edge where the offset put it. */
 [data-slot="drawer-content"][data-swipe-direction="down"] {
-  transform: translateY(var(--drawer-swipe-movement-y, 0px));
+  --ks-drawer-stack: max(
+    0,
+    calc(var(--nested-drawers, 0) - var(--drawer-swipe-progress, 0))
+  );
+  transform: translateY(
+      calc(
+        var(--drawer-swipe-movement-y, 0px) -
+        var(--ks-drawer-stack) *
+        0.75rem
+      )
+    )
+    scale(calc(1 - var(--ks-drawer-stack) * 0.05));
+  transform-origin: 50% 0;
 }
 [data-slot="drawer-content"][data-swipe-direction="down"][data-starting-style],
 [data-slot="drawer-content"][data-swipe-direction="down"][data-ending-style] {
@@ -261,6 +283,25 @@
 [data-slot="drawer-content"][data-swipe-direction="up"][data-starting-style],
 [data-slot="drawer-content"][data-swipe-direction="up"][data-ending-style] {
   transform: translateY(-100%);
+}
+
+/* The stacked drawer takes the front one's height, so it peeks out by the
+   offset above rather than by however much taller it happens to be. Base UI
+   measures both heights into `--drawer-height` / `--drawer-frontmost-height`
+   while a nested drawer is present, which is what lets the change animate —
+   `auto` cannot be transitioned.
+
+   In `@layer components` on purpose. Unlayered, this `height` would beat every
+   utility and silently undo a consumer's `h-[90dvh]` on `DrawerContent`; in
+   the layer, their class wins and the stack still lines up by its offset. */
+@layer components {
+  [data-slot="drawer-content"][data-swipe-direction="down"] {
+    height: var(--drawer-height, auto);
+  }
+  [data-slot="drawer-content"][data-swipe-direction="down"][data-nested-drawer-open] {
+    height: var(--drawer-frontmost-height, var(--drawer-height, auto));
+    overflow: hidden;
+  }
 }
 
 /* Floating side drawers at md+ — start fully off-screen accounting for the

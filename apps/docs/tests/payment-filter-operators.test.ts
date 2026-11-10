@@ -20,6 +20,7 @@ import {
   EMPTY_FILTERS,
   filterDef,
   matchesPaymentFilters,
+  operatorChoice,
   type PaymentFilters,
   setAmountOp,
   sortPayments,
@@ -289,5 +290,116 @@ describe("toPaymentsCsv", () => {
       { ...payment("1", "EUR"), playerEmail: 'a,"b"@c.d' },
     ]);
     expect(row).toContain('"a,""b""@c.d"');
+  });
+});
+
+describe("status operators", () => {
+  it.each([
+    ["is", "completed", true],
+    ["is", "failed", false],
+    ["isNot", "completed", false],
+    ["isNot", "failed", true],
+  ] as const)("%s completed matches %s → %s", (op, status, expected) => {
+    expect(
+      matchesPaymentFilters(
+        { ...payment("1", "BTC"), status },
+        filtersWith({ statusOp: op, statuses: ["completed"] })
+      )
+    ).toBe(expected);
+  });
+
+  it("matches everything with nothing picked, whatever the operator", () => {
+    expect(
+      matchesPaymentFilters(
+        payment("1", "BTC"),
+        filtersWith({ statusOp: "isNot" })
+      )
+    ).toBe(true);
+  });
+
+  it("names the statuses the way the pill and the row read them", () => {
+    const two = filtersWith({ statuses: ["failed", "in-progress"] });
+    expect(filterDef("status").value(two)).toBe("Failed, +1");
+    expect(filterDef("status").operand?.(two)).toBe("Failed, In progress");
+    expect(
+      filterDef("status").operand?.(
+        filtersWith({ statuses: ["failed", "in-progress", "completed"] })
+      )
+    ).toBe("3 statuses");
+    expect(
+      filterDef("status").operator?.(
+        filtersWith({ statusOp: "isNot", statuses: ["failed"] })
+      )
+    ).toBe("is not");
+  });
+});
+
+describe("the operator choice both surfaces read", () => {
+  it("offers the same comparisons the matcher understands", () => {
+    expect(
+      operatorChoice("currencies", EMPTY_FILTERS).options.map((o) => o.value)
+    ).toEqual(["is", "isNot"]);
+    expect(
+      operatorChoice("amount", EMPTY_FILTERS).options.map((o) => o.label)
+    ).toEqual(["Between", "Equal to", "Greater than", "Less than"]);
+    expect(operatorChoice("player", EMPTY_FILTERS).options).toHaveLength(6);
+  });
+
+  it("reads the current operator the way the badge shows it", () => {
+    expect(
+      operatorChoice("player", filtersWith({ playerOp: "endsWith" })).label
+    ).toBe("ends with");
+    expect(
+      operatorChoice("amount", filtersWith({ amountOp: "gt" })).label
+    ).toBe(">");
+  });
+
+  it("switching amount through it drops the bound the new one does not read", () => {
+    const between = filtersWith({ amountMax: "500", amountMin: "10" });
+    expect(operatorChoice("amount", between).patch("gt")).toEqual({
+      amountMax: "",
+      amountOp: "gt",
+    });
+  });
+});
+
+describe("the operand an applied row shows beside its badge", () => {
+  it.each([
+    [{ currencies: ["BTC"] }, "currencies", "BTC"],
+    [{ currencies: ["BTC", "ETH"] }, "currencies", "BTC, ETH"],
+    [{ currencies: ["BTC", "ETH", "EUR"] }, "currencies", "3 currencies"],
+    [{ amountMin: "100" }, "amount", "100 – any"],
+    [{ amountMax: "500" }, "amount", "0 – 500"],
+    [{ amountMin: "100", amountOp: "gt" }, "amount", "100"],
+    [{ amountMax: "50", amountOp: "lt" }, "amount", "50"],
+    [{}, "amount", null],
+  ] as const)("%j %s reads %j", (patch, key, expected) => {
+    const filters = filtersWith(patch as Partial<PaymentFilters>);
+    expect(filterDef(key).operand?.(filters)).toBe(expected);
+  });
+});
+
+describe("a value-only clear", () => {
+  it.each([
+    ["player", { player: "gmail", playerOp: "endsWith" }, { player: "" }],
+    [
+      "currencies",
+      { currencies: ["BTC"], currencyOp: "isNot" },
+      { currencies: [] },
+    ],
+    ["status", { statusOp: "isNot", statuses: ["failed"] }, { statuses: [] }],
+    [
+      "amount",
+      { amountMin: "10", amountOp: "gt" },
+      { amountMax: "", amountMin: "" },
+    ],
+  ] as const)("%s keeps its operator", (key, patch, expected) => {
+    const filters = filtersWith(patch as Partial<PaymentFilters>);
+    const cleared = filterDef(key).clearValue?.(filters);
+    expect(cleared).toEqual(expected);
+    // …where removing the filter resets the operator as well.
+    expect(Object.keys(filterDef(key).clear).length).toBeGreaterThan(
+      Object.keys(expected).length
+    );
   });
 });
