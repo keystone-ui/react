@@ -1,12 +1,12 @@
 /**
- * The date filter's arithmetic, shared by both tables' `Created` filters.
+ * The date filter, shared by both tables' `Created` filters: Notion's nine
+ * operators, relative rules, presets, and the arithmetic under them.
  *
- * The model stays two inclusive bounds, `after` and `before`, as `YYYY-MM-DD`
- * strings — the URL, the matchers and the desktop pill all read that shape. A
- * preset is not a third kind of state: picking `Last 7 days` writes the two
- * dates it resolves to, and the label is derived back from them. The pill reads
- * `Last 7 days` while the dates still are the last seven days, and the dates
- * themselves once they are not, which is what the filter then means.
+ * A filter is an operator plus what that operator reads: one date (`is`,
+ * `is before`, …), two (`is between`), a rule (`is relative to today` —
+ * `Past 7 days`, `This month`), or nothing (`is empty`). A rule is stored as a
+ * rule and resolved against today each time, so a link to "the past 7 days"
+ * still means the past 7 days tomorrow; the presets are rules too.
  *
  * Every conversion here is in local time. `toISOString()` is UTC, so it turns
  * the evening of the 1st into the 2nd anywhere west of Greenwich, and
@@ -14,62 +14,86 @@
  * west of it. Both bugs pass every test run in UTC.
  */
 
-/** `YYYY-MM-DD`, or `""` for an open end. */
-export interface DateBounds {
-  after: string;
-  before: string;
+export type DateOperator =
+  | "after"
+  | "before"
+  | "between"
+  | "empty"
+  | "is"
+  | "notEmpty"
+  | "onOrAfter"
+  | "onOrBefore"
+  | "relative";
+
+/** Notion's list, in Notion's order. */
+export const DATE_OPERATORS: readonly { label: string; value: DateOperator }[] =
+  [
+    { label: "Is", value: "is" },
+    { label: "Is before", value: "before" },
+    { label: "Is after", value: "after" },
+    { label: "Is on or before", value: "onOrBefore" },
+    { label: "Is on or after", value: "onOrAfter" },
+    { label: "Is between", value: "between" },
+    { label: "Is relative to today", value: "relative" },
+    { label: "Is empty", value: "empty" },
+    { label: "Is not empty", value: "notEmpty" },
+  ];
+
+/** An operator as a badge or trigger reads it: `is before`. */
+export function dateOperatorLabel(op: DateOperator): string {
+  const label = DATE_OPERATORS.find((item) => item.value === op)?.label ?? "";
+  return label.charAt(0).toLowerCase() + label.slice(1);
 }
 
-/**
- * The phone step's four ways of reading the two bounds.
- *
- * Notion offers nine date operators. `is empty` / `is not empty` cannot match a
- * creation date, which every row has. Strict `is before` / `is after` are each a
- * one-day twin of the inclusive pair, and offering both asks someone to decide
- * which side of midnight they meant. `is relative to today` is the presets. What
- * is left is four, which is what a segmented control holds on a phone.
- */
-export type DateMode = "between" | "on" | "from" | "to";
-
-export const DATE_MODES: readonly { label: string; value: DateMode }[] = [
-  { label: "Between", value: "between" },
-  { label: "On", value: "on" },
-  { label: "From", value: "from" },
-  { label: "To", value: "to" },
+/** The operators that compare against one date. */
+const SINGLE: readonly DateOperator[] = [
+  "is",
+  "before",
+  "after",
+  "onOrBefore",
+  "onOrAfter",
 ];
 
-export type DatePresetKey =
-  | "last12Months"
-  | "last30Days"
-  | "last7Days"
-  | "lastMonth"
-  | "lastYear"
-  | "thisMonth"
-  | "thisYear"
-  | "today"
-  | "yesterday";
+export type RelativeUnit = "day" | "month" | "week" | "year";
 
-export interface DatePreset {
-  key: DatePresetKey;
-  label: string;
+/**
+ * A rule relative to today. `Past` counts back from today, today included;
+ * `This` is the calendar period today falls in. There is no `Next`: nothing is
+ * created in the future, so it could only ever match nothing.
+ */
+export type Relative =
+  | { count: number; dir: "past"; unit: RelativeUnit }
+  | { dir: "this"; unit: RelativeUnit };
+
+export const RELATIVE_UNITS: readonly RelativeUnit[] = [
+  "day",
+  "week",
+  "month",
+  "year",
+];
+
+/** The filter, whole. `after` is the date the single-date operators read. */
+export interface DateFilter {
+  after: string;
+  before: string;
+  op: DateOperator;
+  /** A relative rule as the URL writes it — `past.7.day`, `this.week` — or `""`. */
+  rel: string;
 }
 
-const PRESET_LABELS: Record<DatePresetKey, string> = {
-  last12Months: "Last 12 months",
-  last30Days: "Last 30 days",
-  last7Days: "Last 7 days",
-  lastMonth: "Last month",
-  lastYear: "Last year",
-  thisMonth: "This month",
-  thisYear: "This year",
-  today: "Today",
-  yesterday: "Yesterday",
+export const EMPTY_DATE_FILTER: DateFilter = {
+  after: "",
+  before: "",
+  op: "between",
+  rel: "",
 };
 
-/** The presets a table offers, in the order given. */
-export function datePresets(keys: readonly DatePresetKey[]): DatePreset[] {
-  return keys.map((key) => ({ key, label: PRESET_LABELS[key] }));
-}
+/** The rule a relative filter starts with when nothing else says. */
+export const DEFAULT_RELATIVE: Relative = { dir: "this", unit: "week" };
+
+// ---------------------------------------------------------------------------
+// Local dates
+// ---------------------------------------------------------------------------
 
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
@@ -108,127 +132,336 @@ function daysInMonth(year: number, month: number): number {
   return new Date(year, month + 1, 0).getDate();
 }
 
-/** The bounds a preset stands for on `today`, both ends inclusive. */
-export function resolvePreset(key: DatePresetKey, today: Date): DateBounds {
-  const year = today.getFullYear();
-  const month = today.getMonth();
-  const range = (from: Date, to: Date): DateBounds => ({
+/** The same day `months` back, clamped: 31 Mar minus a month is 28/29 Feb. */
+function monthsBack(date: Date, months: number): Date {
+  const target = new Date(date.getFullYear(), date.getMonth() - months, 1);
+  const day = Math.min(
+    date.getDate(),
+    daysInMonth(target.getFullYear(), target.getMonth())
+  );
+  return new Date(target.getFullYear(), target.getMonth(), day);
+}
+
+// ---------------------------------------------------------------------------
+// Relative rules
+// ---------------------------------------------------------------------------
+
+const RELATIVE_PARAM =
+  /^(past)\.(\d{1,3})\.(day|week|month|year)$|^(this)\.(day|week|month|year)$/;
+
+/** `past.7.day` / `this.week` as a rule, or `null` when it is not one. */
+export function parseRelative(value: string): Relative | null {
+  const match = RELATIVE_PARAM.exec(value);
+  if (!match) {
+    return null;
+  }
+  if (match[1]) {
+    const count = Number(match[2]);
+    return count >= 1
+      ? { count, dir: "past", unit: match[3] as RelativeUnit }
+      : null;
+  }
+  return { dir: "this", unit: match[5] as RelativeUnit };
+}
+
+export function relativeToParam(rel: Relative): string {
+  return rel.dir === "past"
+    ? `past.${rel.count}.${rel.unit}`
+    : `this.${rel.unit}`;
+}
+
+/** `Past 7 days`, `Past week`, `This month`, `Today`. */
+export function relativeLabel(rel: Relative): string {
+  if (rel.dir === "this") {
+    return rel.unit === "day" ? "Today" : `This ${rel.unit}`;
+  }
+  return rel.count === 1
+    ? `Past ${rel.unit}`
+    : `Past ${rel.count} ${rel.unit}s`;
+}
+
+/**
+ * The days a rule covers on `today`, both ends included.
+ *
+ * `Past 7 days` is seven calendar days ending today. Notion's runs eight — its
+ * "past week" on the 10th starts on the 3rd — which is a day more than the
+ * label says. Weeks start on Monday, as the calendar does.
+ */
+export function resolveRelative(
+  rel: Relative,
+  today: Date
+): { after: string; before: string } {
+  const range = (from: Date, to: Date) => ({
     after: toIsoDate(from),
     before: toIsoDate(to),
   });
+  const year = today.getFullYear();
+  const month = today.getMonth();
 
-  switch (key) {
-    case "today":
-      return range(today, today);
-    case "yesterday": {
-      const yesterday = addDays(today, -1);
-      return range(yesterday, yesterday);
+  if (rel.dir === "this") {
+    switch (rel.unit) {
+      case "day":
+        return range(today, today);
+      case "week": {
+        // getDay() is 0 for Sunday; Monday starts the week.
+        const monday = addDays(today, -((today.getDay() + 6) % 7));
+        return range(monday, addDays(monday, 6));
+      }
+      case "month":
+        return range(new Date(year, month, 1), new Date(year, month + 1, 0));
+      default:
+        return range(new Date(year, 0, 1), new Date(year, 11, 31));
     }
-    // "Last 7 days" counts today, so it starts six days back.
-    case "last7Days":
-      return range(addDays(today, -6), today);
-    case "last30Days":
-      return range(addDays(today, -29), today);
-    case "last12Months": {
-      // The same day a year back, clamped (29 Feb has no twin), then one on.
-      const day = Math.min(today.getDate(), daysInMonth(year - 1, month));
-      return range(addDays(new Date(year - 1, month, day), 1), today);
-    }
-    case "thisMonth":
-      return range(new Date(year, month, 1), today);
-    case "lastMonth":
-      return range(new Date(year, month - 1, 1), new Date(year, month, 0));
-    case "thisYear":
-      return range(new Date(year, 0, 1), today);
-    case "lastYear":
-      return range(new Date(year - 1, 0, 1), new Date(year - 1, 11, 31));
+  }
+
+  switch (rel.unit) {
+    case "day":
+      return range(addDays(today, -(rel.count - 1)), today);
+    case "week":
+      return range(addDays(today, -(7 * rel.count - 1)), today);
+    case "month":
+      return range(addDays(monthsBack(today, rel.count), 1), today);
     default:
-      throw new Error(`Unknown date preset: ${key satisfies never}`);
+      return range(addDays(monthsBack(today, 12 * rel.count), 1), today);
   }
 }
 
-/** The preset whose resolution the bounds are exactly, if any. */
+// ---------------------------------------------------------------------------
+// Presets
+// ---------------------------------------------------------------------------
+
+export interface DatePreset {
+  label: string;
+  rel: Relative;
+}
+
+/** Presets are rules: a label and the relative filter it sets. */
+export function datePresets(rules: readonly Relative[]): DatePreset[] {
+  return rules.map((rel) => ({ label: relativeLabel(rel), rel }));
+}
+
+/** The preset a filter is exactly, if any. */
 export function presetFor(
-  bounds: DateBounds,
-  presets: readonly DatePreset[],
-  today: Date
+  filter: DateFilter,
+  presets: readonly DatePreset[]
 ): DatePreset | null {
+  if (filter.op !== "relative") {
+    return null;
+  }
   return (
-    presets.find((preset) => {
-      const resolved = resolvePreset(preset.key, today);
-      return (
-        resolved.after === bounds.after && resolved.before === bounds.before
-      );
-    }) ?? null
+    presets.find((preset) => relativeToParam(preset.rel) === filter.rel) ?? null
   );
 }
 
+/** A preset as a filter. */
+export function presetFilter(preset: DatePreset): DateFilter {
+  return {
+    after: "",
+    before: "",
+    op: "relative",
+    rel: relativeToParam(preset.rel),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Reading a filter
+// ---------------------------------------------------------------------------
+
+/** The rule a relative filter holds, falling back to the default one. */
+export function relativeOf(filter: DateFilter): Relative {
+  return parseRelative(filter.rel) ?? DEFAULT_RELATIVE;
+}
+
+/** Whether the filter narrows anything. */
+export function isDateFilterSet(filter: DateFilter): boolean {
+  switch (filter.op) {
+    case "empty":
+    case "notEmpty":
+      return true;
+    case "relative":
+      return parseRelative(filter.rel) !== null;
+    case "between":
+      return Boolean(filter.after || filter.before);
+    default:
+      return Boolean(filter.after);
+  }
+}
+
 /**
- * What the pill and the drawer row read: the preset's name while the dates
- * still are that preset, otherwise the dates. An open end says which end it is
- * open at; a single day is just the day.
+ * The days a filter highlights on a calendar — the range a rule resolves to,
+ * or the picked dates — or `null` when there is nothing to show.
  */
-export function dateRangeLabel(
-  bounds: DateBounds,
-  presets: readonly DatePreset[],
+export function highlightOf(
+  filter: DateFilter,
   today: Date
-): string | null {
-  const { after, before } = bounds;
-  if (!(after || before)) {
+): { after: string; before: string } | null {
+  if (filter.op === "relative") {
+    const rel = parseRelative(filter.rel);
+    return rel ? resolveRelative(rel, today) : null;
+  }
+  if (filter.op === "between") {
+    return filter.after || filter.before
+      ? {
+          after: filter.after || filter.before,
+          before: filter.before || filter.after,
+        }
+      : null;
+  }
+  if (SINGLE.includes(filter.op) && filter.after) {
+    return { after: filter.after, before: filter.after };
+  }
+  return null;
+}
+
+/**
+ * Whether a row's date (`YYYY-MM-DD`, or `""` for none) passes. An operator
+ * with nothing picked narrows nothing, the same as every other filter.
+ */
+export function matchesDate(
+  value: string,
+  filter: DateFilter,
+  today: Date
+): boolean {
+  const { after, before, op } = filter;
+  switch (op) {
+    case "empty":
+      return value === "";
+    case "notEmpty":
+      return value !== "";
+    case "relative": {
+      const rel = parseRelative(filter.rel);
+      if (!rel) {
+        return true;
+      }
+      const range = resolveRelative(rel, today);
+      return value >= range.after && value <= range.before;
+    }
+    case "between":
+      return (!after || value >= after) && (!before || value <= before);
+    default:
+      if (!after) {
+        return true;
+      }
+      if (op === "is") {
+        return value === after;
+      }
+      if (op === "before") {
+        return value !== "" && value < after;
+      }
+      if (op === "after") {
+        return value > after;
+      }
+      if (op === "onOrBefore") {
+        return value !== "" && value <= after;
+      }
+      return value >= after;
+  }
+}
+
+/**
+ * What the pill reads after its label, or `null` when unset. `is`,
+ * `is between` and a rule go unsaid — a single date, a range and `Past 7 days`
+ * each say what they are — so only a qualifier earns words, which is
+ * `dateQualifier`'s job.
+ */
+export function dateFilterValue(filter: DateFilter): string | null {
+  if (!isDateFilterSet(filter)) {
     return null;
   }
-  const preset = presetFor(bounds, presets, today);
-  if (preset) {
-    return preset.label;
-  }
-  if (after && before) {
-    return after === before ? after : `${after} – ${before}`;
-  }
-  return after ? `from ${after}` : `to ${before}`;
-}
-
-/**
- * The mode a step opens in, read off the bounds — so a range set on a desktop
- * opens on a phone as the mode that can show it, rather than as `Between` with
- * an end missing.
- */
-export function modeFromBounds(bounds: DateBounds): DateMode {
-  const { after, before } = bounds;
-  if (after && before) {
-    return after === before ? "on" : "between";
-  }
-  if (after) {
-    return "from";
-  }
-  if (before) {
-    return "to";
-  }
-  return "between";
-}
-
-/**
- * Switching mode, as new bounds.
- *
- * Each mode drops the bound it does not read, so nothing narrows the table
- * that the label no longer mentions — the same rule `setAmountOp` keeps. What
- * survives is the date you were looking at: `From` keeps the start (or the only
- * date there is), `To` keeps the end, `On` keeps the start as its one day.
- * `From Jul 22` flipped to `To` is far more often a corrected direction than a
- * wish to start over, so the date crosses rather than being dropped.
- */
-export function setDateMode(bounds: DateBounds, mode: DateMode): DateBounds {
-  const start = bounds.after || bounds.before;
-  const end = bounds.before || bounds.after;
-  switch (mode) {
-    case "on":
-      return { after: start, before: start };
-    case "from":
-      return { after: start, before: "" };
-    case "to":
-      return { after: "", before: end };
+  switch (filter.op) {
+    case "empty":
+      return "Empty";
+    case "notEmpty":
+      return "Not empty";
+    case "relative":
+      return relativeLabel(relativeOf(filter));
     default:
-      return bounds;
+      return dateOperand(filter);
   }
+}
+
+/** The operator the pill names, when it is not one that goes unsaid. */
+export function dateQualifier(filter: DateFilter): string | null {
+  if (!isDateFilterSet(filter)) {
+    return null;
+  }
+  return ["before", "after", "onOrBefore", "onOrAfter"].includes(filter.op)
+    ? dateOperatorLabel(filter.op)
+    : null;
+}
+
+/**
+ * The value with its operator taken out, for a row that shows the operator as
+ * a badge of its own — `Created [is before] 2026-07-01`. `null` where there is
+ * no value to show beside the badge (`is empty`).
+ */
+export function dateOperand(filter: DateFilter): string | null {
+  if (!isDateFilterSet(filter)) {
+    return null;
+  }
+  switch (filter.op) {
+    case "empty":
+    case "notEmpty":
+      return null;
+    case "relative":
+      return relativeLabel(relativeOf(filter));
+    case "between": {
+      const { after, before } = filter;
+      if (after && before) {
+        return after === before ? after : `${after} – ${before}`;
+      }
+      return after ? `${after} – any` : `any – ${before}`;
+    }
+    default:
+      return filter.after;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Changing a filter
+// ---------------------------------------------------------------------------
+
+/**
+ * Switching operator, as the new filter. Each drops what it does not read, so
+ * nothing narrows the table that the label no longer mentions — the rule
+ * `setAmountOp` keeps — but the date you were looking at carries over: a range
+ * switched to `is before` keeps its start, a rule switched to `is between`
+ * becomes the dates it covers today.
+ */
+export function setDateOperator(
+  filter: DateFilter,
+  op: DateOperator,
+  today: Date
+): DateFilter {
+  const shown = highlightOf(filter, today);
+  if (op === "empty" || op === "notEmpty") {
+    return { after: "", before: "", op, rel: "" };
+  }
+  if (op === "relative") {
+    const rel =
+      filter.op === "relative" ? filter.rel : relativeToParam(DEFAULT_RELATIVE);
+    return { after: "", before: "", op, rel };
+  }
+  if (op === "between") {
+    return {
+      after: shown?.after ?? "",
+      before: shown?.before ?? "",
+      op,
+      rel: "",
+    };
+  }
+  return { after: shown?.after ?? "", before: "", op, rel: "" };
+}
+
+/** A new rule for a relative filter. */
+export function setRelative(filter: DateFilter, rel: Relative): DateFilter {
+  return {
+    ...filter,
+    after: "",
+    before: "",
+    op: "relative",
+    rel: relativeToParam(rel),
+  };
 }
 
 /**
@@ -242,7 +475,10 @@ export function setDateMode(bounds: DateBounds, mode: DateMode): DateBounds {
  * that day until the second tap. This never leaves an end open that you did
  * not open.
  */
-export function nextBetween(bounds: DateBounds, day: string): DateBounds {
+export function nextBetween(
+  bounds: { after: string; before: string },
+  day: string
+): { after: string; before: string } {
   const { after, before } = bounds;
   if (after && before && after !== before) {
     return { after: day, before: day };
@@ -252,8 +488,6 @@ export function nextBetween(bounds: DateBounds, day: string): DateBounds {
     return { after: day, before: day };
   }
   if (held === day) {
-    // Only a single day can be tapped off; an open end tapped on its own
-    // date closes into that day.
     return after && before
       ? { after: "", before: "" }
       : { after: day, before: day };
@@ -264,34 +498,93 @@ export function nextBetween(bounds: DateBounds, day: string): DateBounds {
 }
 
 /**
- * A tap on the calendar, in any mode. The single-date modes set their one
- * bound, and tapping the date already set takes it off again — the same as
- * tapping a lone day off in `Between`.
+ * A tap on the calendar. The single-date operators set their date, and
+ * tapping the date already set takes it off; a rule gives way to the day
+ * tapped, as `is` — the calendar is where you go to name a day.
  */
-export function tapDay(
-  bounds: DateBounds,
-  mode: DateMode,
-  day: string
-): DateBounds {
-  switch (mode) {
-    case "on":
-      return bounds.after === day && bounds.before === day
-        ? { after: "", before: "" }
-        : { after: day, before: day };
-    case "from":
-      return { after: bounds.after === day ? "" : day, before: "" };
-    case "to":
-      return { after: "", before: bounds.before === day ? "" : day };
+export function tapDay(filter: DateFilter, day: string): DateFilter {
+  switch (filter.op) {
+    case "between":
+      return { ...nextBetween(filter, day), op: "between", rel: "" };
+    case "relative":
+    case "empty":
+    case "notEmpty":
+      return { after: day, before: "", op: "is", rel: "" };
     default:
-      return nextBetween(bounds, day);
+      return {
+        after: filter.after === day ? "" : day,
+        before: "",
+        op: filter.op,
+        rel: "",
+      };
   }
+}
+
+// ---------------------------------------------------------------------------
+// The URL
+// ---------------------------------------------------------------------------
+
+const OPERATOR_VALUES = DATE_OPERATORS.map((item) => item.value);
+
+/** The filter as URL parameters, defaults left out. */
+export function dateFilterToParams(filter: DateFilter): Record<string, string> {
+  if (!isDateFilterSet(filter)) {
+    return { createdOp: "", from: "", rel: "", to: "" };
+  }
+  return {
+    // `between` goes unsaid only with both ends: an open one would read back
+    // as the `on or after` an older link means.
+    createdOp:
+      filter.op === "between" && filter.after && filter.before ? "" : filter.op,
+    from: filter.op === "relative" ? "" : filter.after,
+    rel: filter.op === "relative" ? filter.rel : "",
+    to: filter.op === "between" ? filter.before : "",
+  };
+}
+
+/**
+ * The inverse, validating every value. Links written before the operators
+ * existed carry only `from` / `to`; they read as the range they always meant —
+ * both ends `is between`, one end `is on or after` / `is on or before`.
+ */
+export function dateFilterFromParams(params: URLSearchParams): DateFilter {
+  const date = (key: string) => {
+    const value = params.get(key) ?? "";
+    return fromIsoDate(value) ? value : "";
+  };
+  const from = date("from");
+  const to = date("to");
+  const named = params.get("createdOp");
+  const op = OPERATOR_VALUES.includes(named as DateOperator)
+    ? (named as DateOperator)
+    : null;
+
+  if (op === "relative") {
+    const rel = params.get("rel") ?? "";
+    return parseRelative(rel)
+      ? { after: "", before: "", op, rel }
+      : EMPTY_DATE_FILTER;
+  }
+  if (op === "empty" || op === "notEmpty") {
+    return { after: "", before: "", op, rel: "" };
+  }
+  if (op && op !== "between") {
+    return { after: from, before: "", op, rel: "" };
+  }
+  if (!op && from && !to) {
+    return { after: from, before: "", op: "onOrAfter", rel: "" };
+  }
+  if (!op && to && !from) {
+    return { after: to, before: "", op: "onOrBefore", rel: "" };
+  }
+  return { after: from, before: to, op: "between", rel: "" };
 }
 
 /**
  * The fixture's today.
  *
  * The mock rows end on 28 Aug 2026, so against the real date every recent
- * preset — `Today`, `Last 7 days` — would open onto an empty table, and every
+ * preset — `Today`, `Past 7 days` — would open onto an empty table, and every
  * test that picks one would start failing the day the data aged out of it. In
  * your app this is `new Date()`.
  */

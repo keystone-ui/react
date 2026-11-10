@@ -1,15 +1,18 @@
 "use client";
 
-import { DateRangePill, OptionPill } from "./filter-pills";
+import { TODAY } from "./date-filter";
+import { DatePill } from "./date-pill";
+import { OptionPill } from "./filter-pills";
 import { OperatorFilterChip } from "./operator-filter-chip";
 import {
+  CREATED_PRESETS,
+  createdOf,
+  createdPatch,
   type FilterKey,
   filterDef,
   type PaymentFilters,
   PROVIDER_OPTIONS,
   providerLabel,
-  STATUS_OPTIONS,
-  statusLabel,
   TYPE_OPTIONS,
   typeLabel,
 } from "./payment-filters";
@@ -40,15 +43,14 @@ const OPTIONS = {
     label: providerLabel(value),
     value,
   })),
-  status: STATUS_OPTIONS.map((value) => ({ label: statusLabel(value), value })),
   type: TYPE_OPTIONS.map((value) => ({ label: typeLabel(value), value })),
 } as const;
 
 /**
  * One payment filter as a pill, in one of three kinds.
  *
- * Action, Status and Provider are `OptionPill`s — one dimension, one value.
- * Created is a `DateRangePill`. Currency, Amount and Player carry a comparison
+ * Action and Provider are `OptionPill`s — one dimension, one value. Created
+ * is a `DatePill`. Status, Currency, Amount and Player carry a comparison
  * as well — `Currency is not: BTC` — so they are operator chips, which keep
  * their chevron and put "Delete filter" behind the `⋯` in their popover
  * header, Notion's arrangement; see `operator-filter-chip.tsx`.
@@ -81,6 +83,7 @@ export function PaymentFilterPill({
 
   if (
     pillKey === "currencies" ||
+    pillKey === "status" ||
     pillKey === "amount" ||
     pillKey === "player"
   ) {
@@ -97,14 +100,13 @@ export function PaymentFilterPill({
 
   if (pillKey === "created") {
     return (
-      <DateRangePill
+      <DatePill
         {...shared}
-        after={filters.createdAfter}
-        before={filters.createdBefore}
-        id="created"
-        onAfterChange={(next) => change({ createdAfter: next })}
-        onBeforeChange={(next) => change({ createdBefore: next })}
-        onClear={() => change(def.clear)}
+        filter={createdOf(filters)}
+        onChange={(next) => change(createdPatch(next))}
+        presets={CREATED_PRESETS}
+        qualifier={def.operator?.(filters) ?? null}
+        today={TODAY}
       />
     );
   }

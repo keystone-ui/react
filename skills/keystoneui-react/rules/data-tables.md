@@ -102,7 +102,7 @@ gmail`. Pick by the field's type, not by how powerful the filter could be:
 | a set of values — currencies, tags | operator chip, multi-select | `is` / `is not` (any of / none of). Never `contains`: a row holds one currency, so `contains USDT` matches exactly what `is USDT` does |
 | free text — email, name | operator chip, text field | `contains` (default), `does not contain`, `is`, `is not`, `starts with`, `ends with` |
 | a number — amount, seats | operator chip, number fields | `between` (default), `=`, `>`, `<` |
-| a date | range popover, From / To | none on desktop; on a phone, `between` (default), `on`, `from`, `to` over the same two bounds, plus presets (`Last 7 days`) where the data is read by recency |
+| a date | operator chip with a calendar | Notion's nine: `is`, `is before`, `is after`, `is on or before`, `is on or after`, `is between` (default), `is relative to today`, `is empty`, `is not empty` — plus presets (`Past 7 days`) where the data is read by recency |
 
 - **Operators earn their place.** Each one is a menu and a click. Give a field
   operators when people genuinely ask the second question — "everything except
@@ -118,16 +118,18 @@ gmail`. Pick by the field's type, not by how powerful the filter could be:
   values — so the pill opens straight onto what you came to set, and the
   operator is one click away rather than a step in front of it. Where there is
   a single value field, focus lands in it.
-- **A date is two inclusive bounds, whatever the UI calls them.** Label them
-  `From` / `To`, not `After` / `Before`: `After 1 Jul` reads as excluding the
-  1st. Notion's nine date operators reduce to four over those bounds — `is empty`
-  cannot match a field every row has, strict `before` / `after` are a one-day
-  twin of the inclusive pair, and `relative to today` is the presets. A preset
-  writes the dates it resolves to rather than a third kind of state, and the
-  label is derived back: `Created: Last 7 days` while the dates still are the
-  last seven days, the dates themselves once they are not. Convert in local
-  time — `toISOString()` and `new Date("2026-07-01")` are both UTC, a day off
-  anywhere but Greenwich.
+- **A relative date is stored as a rule, not as the dates it resolves to.**
+  `is relative to today` — `Past [7] [days]`, `This [week]` — writes
+  `?createdOp=relative&rel=past.7.day`, so a link or a reload tomorrow still
+  means the past seven days; the presets are rules too. `Past N` counts today
+  (seven calendar days, not eight), weeks start on Monday and the calendar
+  agrees, and `Next` is left out on a creation date, which nothing has in the
+  future. The calendar shows what a rule covers today; tapping a day there
+  turns it into `is` that day. Links written as bare `from` / `to` read as the
+  range they meant — both ends `is between`, one end `is on or after` /
+  `is on or before` — so an open `between` names its operator, or it would
+  read back as the other. Convert in local time — `toISOString()` and
+  `new Date("2026-07-01")` are both UTC, a day off anywhere but Greenwich.
 - **Switching operator drops what the new one does not read.** `between 10 –
   500` switched to `>` keeps `10` and drops `500`, or a ceiling no label shows
   keeps narrowing the table.
@@ -135,9 +137,12 @@ gmail`. Pick by the field's type, not by how powerful the filter could be:
   Backspace on the focused pill, and `Delete filter` on touch (in the menu for a
   simple pill, behind the popover's `⋯` for an operator chip).
 
-`admin-01`'s payments table has one of each kind: Action, Status and Provider
-are simple pills, Created a range, Currency, Amount and Player operator chips —
-see `operator-filter-chip.tsx` after installing.
+`admin-01`'s payments table has one of each kind: Action and Provider are
+simple pills, Created a range, Status, Currency, Amount and Player operator
+chips — see `operator-filter-chip.tsx` after installing. Status is a set for
+the reason Currency is: "everything but failed" is asked as often as "only
+failed", and a status the radio menu could not exclude meant picking the other
+two by hand.
 
 ## View controls sit apart from the filters
 
@@ -349,9 +354,11 @@ Render nothing at zero results — the empty row already says nothing matched.
 ## The mobile fold
 
 Below `sm`, collapse the toolbar to search plus a `Filters` button opening a
-**bottom-sheet `Drawer` whose body is a `Stepper`**: a menu of `label ⋯ value ›`
-rows drilling into one screen per filter, with a back arrow and an Apply footer.
-Filters apply live; Apply only dismisses.
+**bottom-sheet `Drawer` whose body is a `Stepper`**: a menu drilling into one
+screen per filter, with a back arrow and an Apply footer. Filters apply live;
+Apply only dismisses. No `Clear all` in the sheet: each applied row's ✕
+clears its filter, and a wipe-everything button one slip of the thumb from
+Apply is the worst neighbour it could have.
 
 A row of controls becomes a column of controls on a phone, burying the table it
 filters. A scrolling column of selects is the same mistake with extra steps — a
@@ -362,31 +369,45 @@ anything missing from it is unreachable, not merely inconvenient. Drive each row
 from the same descriptor the desktop control reads, so a row and its control
 cannot disagree.
 
-**A step's operator is a full-width control above its values.** Two to four
-short operators are a segmented control (`is` / `is not`, `between` / `=` / `>`
-/ `<`); more than that is a full-width `NativeSelect`, the phone's own picker
-for one of many. Not a segmented strip that scrolls — it hides whichever
-operators are past the edge — and not a menu, which is a popup inside a sheet
-with targets sized for a pointer. A select left at its content width floats
-beside the field it qualifies instead of reading as one condition with it.
+**The menu is what is applied, then everything there is.** An `Applied filters`
+section lists each filter holding a value as a sentence you can edit in place —
+`Currency [is not] [BTC, ETH] ✕`: the value opens the filter's step, the
+operator badge its operator sheet, the ✕ clears it. Below it, `All filters`
+names every filter and nothing more; repeating each value there would be the
+same fact in two places. A filter without operators gets no operator badge — a
+badge that looks tappable and does nothing is the one dead control on the
+screen. Rows that are not filters, like Sort, keep their value.
+
+**The operator is a badge beside the step's title**, `Player [contains ⌄]`, and
+tapping it stacks a sheet of operators — one radio row each, closing on the
+pick — on the filter drawer. The same badge, and the same sheet, in the applied
+row. Not a segmented control above the values (it costs the values a row of
+height, and stops fitting at five operators), not a segmented strip that
+scrolls (it hides whichever operators are past the edge), and not a menu (a
+popup sized for a pointer, inside a sheet). A drawer rendered inside another
+drawer's content nests, and the one behind steps back.
 
 **A step that takes more than one tap to undo gets a `Clear` in its header**,
 shown only while the filter holds a value. A radio step does not need one: its
 `All` row is the way back.
 
-**A date step is a mode, presets and a calendar on one screen**, and every tap
-applies like the rest of the drawer — no Apply button inside the step. One tap
-is a day, a second makes a range, a third starts again; never a range left open
-at one end between taps, since the table behind the sheet is already showing
-the result. Presets wrap onto a second line rather than scrolling off the edge.
+**A date step is presets, the relative pickers when the operator is a rule,
+and a boxed calendar**, its operator the badge, every tap applied like the rest
+of the drawer — no Apply button inside the step. Under `is between` one tap is
+a day, a second makes a range, a third starts again; never a range left open at
+one end between taps, since the table behind the sheet is already showing the
+result. Presets are one scrolling row whose edges fade (`ks-scroll-fade-x`),
+clipped on the gutter rather than the sheet's edge. The desktop pill opens the
+same body under a `Created [is ⌄]` header, so the two surfaces cannot offer
+different operators.
 
 **Set the keyboard for the field.** An email filter wants `inputMode="email"`,
 no autocapitalise and no autocorrect; a decimal keypad on a text field leaves
 it untypeable.
 
 Both blocks implement this — see `admin-01`'s `payment-filters-drawer.tsx`,
-`admin-filters-drawer.tsx` and `date-filter-step.tsx`, or `tickets-01`'s
-`tickets-filters-drawer.tsx`, after installing.
+`admin-filters-drawer.tsx`, `drawer-parts.tsx` and `date-filter-step.tsx`, or
+`tickets-01`'s `tickets-filters-drawer.tsx`, after installing.
 
 ---
 

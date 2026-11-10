@@ -131,7 +131,6 @@ export function AdminUsersToolbar({
         <AdminFiltersDrawer
           filters={filters}
           onChange={patchFilters}
-          onClear={table.clearFilters}
           onSortChange={table.setSort}
           sort={table.sort}
         />

@@ -2,143 +2,224 @@
 
 import { useState } from "react";
 import {
-  DATE_MODES,
-  type DateBounds,
-  type DateMode,
+  type DateFilter,
   type DatePreset,
   fromIsoDate,
-  modeFromBounds,
+  highlightOf,
+  presetFilter,
   presetFor,
-  resolvePreset,
-  setDateMode,
+  RELATIVE_UNITS,
+  type Relative,
+  type RelativeUnit,
+  relativeOf,
+  setRelative,
   tapDay,
   toIsoDate,
 } from "@/components/date-filter";
-import { OperatorToggle } from "@/components/drawer-parts";
+import { Collapse } from "@/components/drawer-parts";
 import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
 import { Toggle } from "@/components/ui/toggle";
 
 interface DateFilterStepProps {
-  bounds: DateBounds;
-  onChange: (bounds: DateBounds) => void;
+  filter: DateFilter;
+  onChange: (filter: DateFilter) => void;
   presets: readonly DatePreset[];
+  /**
+   * Where it sits. A phone sheet gives it the drawer's 16px gutters and boxes
+   * the calendar like the sheet's lists; a desktop popover has its own padding
+   * and surface, so it takes neither.
+   */
+  surface: "popover" | "sheet";
   today: Date;
 }
 
 /**
- * A date filter's drawer step: a mode, the table's presets, and a calendar.
+ * The body of a date filter, on either surface: the presets, the pickers for
+ * a relative rule, and a calendar.
  *
- * Every tap applies at once, like the rest of the drawer — so there is no
- * `Apply` here, and nothing a half-finished pick can leave behind that the
- * label does not show (see `nextBetween`).
+ * The operator is not in here — it is the header's, a badge on the phone and a
+ * menu on the desktop — and every change applies at once, so there is no
+ * `Apply` either.
  *
- * The presets are a wrapped row rather than a swipeable strip. A strip that
- * runs off the edge hides whichever presets are past it, and there are few
- * enough to show them all in two lines.
- *
- * The mode is local and is read off the bounds when the step opens (the
- * stepper mounts only the active step), so a range set on a desktop opens in
- * the mode that shows it.
+ * The calendar always shows what the filter covers: the picked day or range,
+ * or the days a rule resolves to today, so `Past 7 days` is something you can
+ * see. Tapping a day under a rule turns it into `is` that day.
  */
 export function DateFilterStep({
-  bounds,
+  filter,
   onChange,
   presets,
+  surface,
   today,
 }: DateFilterStepProps) {
-  const [mode, setMode] = useState<DateMode>(() => modeFromBounds(bounds));
+  const shown = highlightOf(filter, today);
   const [month, setMonth] = useState<Date>(
-    () => fromIsoDate(bounds.before || bounds.after) ?? today
+    () => fromIsoDate(shown?.before ?? "") ?? today
   );
-  const active = presetFor(bounds, presets, today);
+  const active = presetFor(filter, presets);
+  const sheet = surface === "sheet";
+  const gutter = sheet ? "mx-4" : "";
 
-  const pickPreset = (preset: DatePreset) => {
-    const next = resolvePreset(preset.key, today);
-    // `Today` is one day, so it opens `On`; `Last 7 days` is a range.
-    setMode(modeFromBounds(next));
-    setMonth(fromIsoDate(next.before) ?? today);
+  const pick = (next: DateFilter) => {
+    const range = highlightOf(next, today);
+    const end = fromIsoDate(range?.before ?? "");
+    if (end) {
+      setMonth(end);
+    }
     onChange(next);
   };
 
-  const pickDay = (date: Date | undefined) => {
+  const blank = filter.op === "empty" || filter.op === "notEmpty";
+  // The gap under each part, inside its collapse so a closed part takes none.
+  const gap = sheet ? "pb-3" : "pb-2";
+
+  // Each part that comes and goes with the operator opens and closes in
+  // place (see `Collapse`), so switching to `is relative to today` slides the
+  // calendar down under its pickers instead of jumping it 44px, and on the
+  // desktop the popover resizes rather than snapping.
+  return (
+    <div className={sheet ? "pb-4" : "pb-1"}>
+      <fieldset className={`min-w-0 ${gap}`}>
+        <legend className="sr-only">Presets</legend>
+        {/* One row that scrolls, fading where there is more. A margin, not
+            padding, so it clips on the gutter rather than at the edge. */}
+        <div
+          className={`ks-scroll-fade-x ${gutter} flex gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
+        >
+          {presets.map((preset) => (
+            <Toggle
+              className="h-(--ks-control-xs,1.5rem) min-w-0 shrink-0 rounded-sm px-2.5 text-xs"
+              key={preset.label}
+              // Pressing the active preset again keeps it: these are choices.
+              onPressedChange={() => pick(presetFilter(preset))}
+              pressed={active?.label === preset.label}
+              size="sm"
+              variant="outline"
+            >
+              {preset.label}
+            </Toggle>
+          ))}
+        </div>
+      </fieldset>
+
+      <Collapse open={filter.op === "relative"}>
+        <RelativePicker
+          className={`${gutter} ${gap}`}
+          onChange={(rel) => pick(setRelative(filter, rel))}
+          rel={relativeOf(filter)}
+        />
+      </Collapse>
+
+      <Collapse open={blank}>
+        <p
+          className={`${sheet ? "px-4" : "px-2"} ${gap} text-muted-foreground text-sm`}
+        >
+          {filter.op === "notEmpty"
+            ? "Matches every row with a date."
+            : "Matches rows with no date."}
+        </p>
+      </Collapse>
+
+      <Collapse open={!blank}>
+        <FilterCalendar
+          filter={filter}
+          month={month}
+          onChange={onChange}
+          onMonthChange={setMonth}
+          sheet={sheet}
+          today={today}
+        />
+      </Collapse>
+
+      <Collapse open={filter.op === "relative"}>
+        <p
+          className={`${sheet ? "px-4" : "px-2"} pt-2 text-muted-foreground text-xs`}
+        >
+          Updates with the current date.
+        </p>
+      </Collapse>
+    </div>
+  );
+}
+
+/**
+ * The calendar: a range for `is between` and for a rule, a single day for the
+ * rest, always showing what the filter covers today.
+ */
+function FilterCalendar({
+  filter,
+  month,
+  onChange,
+  onMonthChange,
+  sheet,
+  today,
+}: {
+  filter: DateFilter;
+  month: Date;
+  onChange: (filter: DateFilter) => void;
+  onMonthChange: (month: Date) => void;
+  sheet: boolean;
+  today: Date;
+}) {
+  const shown = highlightOf(filter, today);
+  const start = fromIsoDate(shown?.after ?? "") ?? undefined;
+  const end = fromIsoDate(shown?.before ?? "") ?? undefined;
+  const onDay = (date: Date | undefined) => {
     if (date) {
-      onChange(tapDay(bounds, mode, toIsoDate(date)));
+      onChange(tapDay(filter, toIsoDate(date)));
     }
   };
-
   // Both kinds of calendar share everything but their selection.
   const calendar = {
-    className:
-      "mx-auto bg-transparent p-0 [--cell-size:min(--spacing(10),calc(100cqw/7))]",
-    // Tighter rows than the popover calendar's: a sheet is capped at 80dvh,
-    // and the 8px between weeks is what pushed the last one below the fold
-    // on a 667px phone. The 40px cells stay — they are the touch targets.
-    classNames: {
-      month: "flex w-full flex-col gap-2",
-      week: "mt-0.5 flex w-full",
-    },
-    // Month and year as the phone's own pickers. With only arrows, a sign-up
-    // from two years back is two dozen taps away; the dropdowns make any
-    // month two. Ten years is a generous window for a creation date.
     captionLayout: "dropdown" as const,
-    startMonth: new Date(today.getFullYear() - 10, 0, 1),
+    className: sheet
+      ? "mx-auto bg-transparent p-0 [--cell-size:min(--spacing(10),calc(100cqw/7))]"
+      : "mx-auto bg-transparent p-0",
+    classNames: sheet
+      ? { month: "flex w-full flex-col gap-2", week: "mt-0.5 flex w-full" }
+      : undefined,
     // Nothing is created tomorrow.
     disabled: { after: today },
     endMonth: today,
-    // Six rows always, so paging months does not resize the sheet.
     fixedWeeks: true,
     month,
-    onMonthChange: setMonth,
+    onMonthChange,
+    startMonth: new Date(today.getFullYear() - 10, 0, 1),
     today,
+    // Monday, so "This week" and the calendar agree on where a week starts.
+    weekStartsOn: 1 as const,
   };
-  const start = fromIsoDate(bounds.after || bounds.before) ?? undefined;
-  const end = fromIsoDate(bounds.before || bounds.after) ?? undefined;
 
   return (
-    <div className="pb-4">
-      <OperatorToggle
-        label="Created condition"
-        onValueChange={(next) => {
-          const nextMode = next as DateMode;
-          setMode(nextMode);
-          onChange(setDateMode(bounds, nextMode));
-        }}
-        options={DATE_MODES}
-        value={mode}
-      />
-      <fieldset className="flex flex-wrap gap-2 px-4 pb-2">
-        <legend className="sr-only">Presets</legend>
-        {presets.map((preset) => (
-          <Toggle
-            className="rounded-full"
-            key={preset.key}
-            // Pressing the active preset again keeps it: these are choices,
-            // like the other steps' radios, not switches.
-            onPressedChange={() => pickPreset(preset)}
-            pressed={active?.key === preset.key}
-            size="sm"
-            variant="outline"
-          >
-            {preset.label}
-          </Toggle>
-        ))}
-      </fieldset>
-      <p aria-live="polite" className="px-4 pb-1 text-muted-foreground text-sm">
-        {dateHint(bounds, mode)}
-      </p>
-      <div className="@container px-4">
-        {mode === "between" ? (
+    <div
+      className={
+        sheet ? "mx-4 rounded-xl bg-muted p-3 dark:bg-muted/50" : undefined
+      }
+    >
+      {/* On the sheet's `muted` box, light mode remaps `muted` to the page
+          colour so today and a range's middle stay visible on it. */}
+      <div
+        className={
+          sheet ? "@container not-dark:[--muted:var(--background)]" : undefined
+        }
+      >
+        {filter.op === "between" || filter.op === "relative" ? (
           <Calendar
             {...calendar}
             mode="range"
-            onSelect={(_range, date) => pickDay(date)}
+            onSelect={(_range, date) => onDay(date)}
             selected={start ? { from: start, to: end } : undefined}
           />
         ) : (
           <Calendar
             {...calendar}
             mode="single"
-            onSelect={(_day, date) => pickDay(date)}
+            onSelect={(_day, date) => onDay(date)}
             selected={start}
           />
         )}
@@ -147,25 +228,77 @@ export function DateFilterStep({
   );
 }
 
+const UNIT_LABELS: Record<RelativeUnit, [string, string]> = {
+  day: ["day", "days"],
+  month: ["month", "months"],
+  week: ["week", "weeks"],
+  year: ["year", "years"],
+};
+
 /**
- * The line above the calendar: what the next tap does, until there is
- * something to read back, then what is set.
+ * `Past [7] [days]` / `This [week]` — Notion's pickers, minus `Next`, which on
+ * a creation date could only match nothing.
  */
-function dateHint(bounds: DateBounds, mode: DateMode): string {
-  const { after, before } = bounds;
-  switch (mode) {
-    case "on":
-      return after ? `On ${after}` : "Tap a day";
-    case "from":
-      return after ? `From ${after} to today` : "Tap the first day";
-    case "to":
-      return before ? `Up to and including ${before}` : "Tap the last day";
-    default:
-      if (after && before && after !== before) {
-        return `${after} – ${before}`;
-      }
-      return after || before
-        ? "Tap another day to make it a range"
-        : "Tap a day, or two for a range";
-  }
+function RelativePicker({
+  className,
+  onChange,
+  rel,
+}: {
+  className: string;
+  onChange: (rel: Relative) => void;
+  rel: Relative;
+}) {
+  const plural = rel.dir === "past" && rel.count !== 1 ? 1 : 0;
+  return (
+    <div className={`flex items-center gap-2 ${className}`}>
+      <NativeSelect
+        aria-label="Relative to today"
+        className="w-24"
+        onChange={(event) =>
+          onChange(
+            event.target.value === "this"
+              ? { dir: "this", unit: rel.unit }
+              : { count: 1, dir: "past", unit: rel.unit }
+          )
+        }
+        size="sm"
+        value={rel.dir}
+      >
+        <NativeSelectOption value="past">Past</NativeSelectOption>
+        <NativeSelectOption value="this">This</NativeSelectOption>
+      </NativeSelect>
+      {rel.dir === "past" && (
+        <Input
+          aria-label="How many"
+          className="w-16"
+          inputMode="numeric"
+          min={1}
+          onChange={(event) => {
+            const count = Number.parseInt(event.target.value, 10);
+            if (count >= 1 && count <= 999) {
+              onChange({ ...rel, count });
+            }
+          }}
+          size="sm"
+          type="number"
+          value={rel.count}
+        />
+      )}
+      <NativeSelect
+        aria-label="Unit"
+        className="flex-1"
+        onChange={(event) =>
+          onChange({ ...rel, unit: event.target.value as RelativeUnit })
+        }
+        size="sm"
+        value={rel.unit}
+      >
+        {RELATIVE_UNITS.map((unit) => (
+          <NativeSelectOption key={unit} value={unit}>
+            {UNIT_LABELS[unit][plural]}
+          </NativeSelectOption>
+        ))}
+      </NativeSelect>
+    </div>
+  );
 }

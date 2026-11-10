@@ -35,8 +35,8 @@ async function rowCount(page: Page): Promise<number> {
 test.describe("admin-01 payment filters", () => {
   /**
    * Retargeted from the users toolbar, whose two filter dropdowns moved into a
-   * drawer. The payments pills are the better home anyway: two adjacent
-   * single-select menus *and* a multi-select one, so both halves of the
+   * drawer. The payments pills are the better home anyway: a single-select
+   * menu beside popovers that hold several picks, so both halves of the
    * `closeOnClick` asymmetry are pinned against the same table.
    */
   test.beforeEach(async ({ page }) => {
@@ -64,9 +64,12 @@ test.describe("admin-01 payment filters", () => {
     await page.getByRole("button", { name: ACTION_PILL }).click();
     await page.getByRole("menuitemradio", { name: "Cashout" }).click();
 
-    // This is the click the inert backdrop used to eat.
+    // This is the click the inert backdrop used to eat. Status is an
+    // operator chip now — a popover of options rather than a menu — but the
+    // click that opens it is the same click on the next pill along.
     await page.getByRole("button", { name: STATUS_PILL }).click();
-    await page.getByRole("menuitemradio", { name: "Completed" }).click();
+    await page.getByRole("option", { name: "Completed" }).click();
+    await page.keyboard.press("Escape");
 
     await expect(page.getByRole("button", { name: ACTION_PILL })).toContainText(
       "Cashout"

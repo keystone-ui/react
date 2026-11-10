@@ -16,12 +16,12 @@ const SIDEBAR_TRIGGER = /Toggle Sidebar/i;
 const ROW_ACTIONS = /^Actions for /;
 const ADD_FILTER = /Add filter/;
 const ROLE_PILL = /^Role:/;
-const ROLE_ROW = /^Role/;
-const SEATS_ROW = /^Seats/;
-const CREATED_ROW = /^Created/;
+const ROLE_ROW = /^Role$/;
+const SEATS_ROW = /^Seats$/;
+const CREATED_ROW = /^Created$/;
 const DAY_JANUARY_15 = /January 15th, 2025/;
 const SUMMARY_TOTAL = /of (\d+)/;
-const URL_LAST_YEAR = /from=2025-01-01&to=2025-12-31/;
+const URL_PAST_12_MONTHS = /createdOp=relative&rel=past\.12\.month/;
 const SORT_ROW = /^Sort/;
 const USER_COLUMN = /User/;
 const SEATS_COLUMN = /Seats/;
@@ -64,8 +64,23 @@ function drawerRows(page: Page): Promise<string[]> {
         .map((node) =>
           [...node.children]
             .map((child) => child.textContent?.replace(/\s+/g, " ").trim())
+            .filter(Boolean)
             .join(" ")
         )
+    );
+}
+
+/** The applied section's rows, read as sentences: "Role Viewer". */
+function appliedRows(page: Page): Promise<string[]> {
+  return page
+    .locator('[data-slot="drawer-content"] [data-applied-filter]')
+    .evaluateAll((nodes) =>
+      nodes.map((node) =>
+        [...node.children]
+          .map((child) => child.textContent?.replace(/\s+/g, " ").trim())
+          .filter(Boolean)
+          .join(" ")
+      )
     );
 }
 
@@ -178,11 +193,11 @@ test.describe("on a phone the filters fold into a drawer", () => {
 
     await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
     expect(await drawerRows(page)).toEqual([
-      "Role All",
-      "Status All",
-      "Seats All",
-      "Two-factor All",
-      "Created Any",
+      "Role",
+      "Status",
+      "Seats",
+      "Two-factor",
+      "Created",
       "Sort Name (A–Z)",
     ]);
   });
@@ -201,15 +216,12 @@ test.describe("on a phone the filters fold into a drawer", () => {
     expect(await rowCount(page)).toBeLessThan(total);
 
     await drawer.getByRole("button", { name: "Back" }).click();
-    await expect(drawer.getByRole("button", { name: ROLE_ROW })).toContainText(
-      "Viewer"
-    );
+    expect(await appliedRows(page)).toEqual(["Role Viewer"]);
   });
 
   test("Created takes a sign-up preset and names it", async ({ page }) => {
     await openUsers(page);
-    // The total, not the rows on screen: a page holds five, and last year
-    // alone fills one.
+    // The total, not the rows on screen: a page holds five.
     const total = await resultTotal(page);
 
     await page.getByRole("button", { name: FILTERS_TRIGGER }).click();
@@ -217,16 +229,16 @@ test.describe("on a phone the filters fold into a drawer", () => {
     await drawer.getByRole("button", { name: CREATED_ROW }).click();
     await drawer
       .getByRole("group", { name: "Presets" })
-      .getByRole("button", { exact: true, name: "Last year" })
+      .getByRole("button", { exact: true, name: "Past 12 months" })
       .click();
 
-    await expect(page).toHaveURL(URL_LAST_YEAR);
+    await expect(page).toHaveURL(URL_PAST_12_MONTHS);
     expect(await resultTotal(page)).toBeLessThan(total);
 
     await drawer.getByRole("button", { name: "Back" }).click();
-    await expect(
-      drawer.getByRole("button", { name: CREATED_ROW })
-    ).toContainText("Last year");
+    expect(await appliedRows(page)).toEqual([
+      "Created is relative to today Past 12 months",
+    ]);
   });
 
   test("Created reaches a sign-up from last year in two picks", async ({
@@ -245,9 +257,7 @@ test.describe("on a phone the filters fold into a drawer", () => {
 
     expect(await resultTotal(page)).toBeGreaterThan(0);
     await drawer.getByRole("button", { name: "Back" }).click();
-    await expect(
-      drawer.getByRole("button", { name: CREATED_ROW })
-    ).toContainText("2025-01-15");
+    expect(await appliedRows(page)).toEqual(["Created is between 2025-01-15"]);
   });
 
   test("the Filters count ignores sort", async ({ page }) => {

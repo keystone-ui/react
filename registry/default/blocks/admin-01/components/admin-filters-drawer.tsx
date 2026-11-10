@@ -5,26 +5,47 @@ import { useState } from "react";
 import {
   activeCount,
   CREATED_PRESETS,
+  createdOf,
+  createdPatch,
   defaultDirection,
   directionLabel,
   FILTERS,
+  type FilterKey,
   filterDef,
-  hasActiveFilters,
   OPTIONS,
   type OptionKey,
   SORT_KEYS,
   type SortState,
+  STATUS_OPERATORS,
+  STATUSES,
+  type StatusOperator,
   sortLabel,
+  statusLabel,
   type UserFilters,
   type UserSortKey,
 } from "@/components/admin-filters";
-import { TODAY } from "@/components/date-filter";
+import {
+  DATE_OPERATORS,
+  type DateOperator,
+  dateOperatorLabel,
+  setDateOperator,
+  TODAY,
+} from "@/components/date-filter";
 import { DateFilterStep } from "@/components/date-filter-step";
 import {
+  AppliedRow,
+  COLLAPSE_MS,
+  Collapse,
+  DrawerSection,
   DrilldownList,
   DrilldownRow,
+  FILTER_SHEET,
   FilterOption,
+  GROUP,
+  type OperatorHandle,
+  OperatorSheet,
   Options,
+  SetChecklist,
   StepHeader,
 } from "@/components/drawer-parts";
 import { directionsFor, type SortDirection } from "@/components/sort";
@@ -45,22 +66,28 @@ import {
   StepperStep,
   useStepper,
 } from "@/components/ui/stepper";
+import { useReducedMotion } from "@/components/use-reduced-motion";
 
 interface AdminFiltersDrawerProps {
   filters: UserFilters;
   onChange: (patch: Partial<UserFilters>) => void;
-  onClear: () => void;
   onSortChange: (sort: SortState) => void;
   sort: SortState;
 }
 
-/** The single-select filters, in `FILTERS` order; Created and Sort follow. */
-const OPTION_STEPS: readonly OptionKey[] = [
+/**
+ * The steps before Created, in `FILTERS` order — the menu's rows drill into
+ * them by position. Status is a set with an operator; the rest are radios.
+ */
+const LIST_STEPS: readonly (OptionKey | "status")[] = [
   "role",
   "status",
   "seats",
   "twoFactor",
 ];
+
+/** The filters here with a comparison to choose. */
+type UserOperatorKey = "created" | "status";
 
 /**
  * The phone half of the users toolbar — the same bottom sheet and `Stepper`
@@ -80,13 +107,57 @@ const OPTION_STEPS: readonly OptionKey[] = [
 export function AdminFiltersDrawer({
   filters,
   onChange,
-  onClear,
   onSortChange,
   sort,
 }: AdminFiltersDrawerProps) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
   const count = activeCount(filters);
+
+  // The key outlives `sheetOpen` so the sheet keeps its options while it
+  // slides away.
+  const [sheetKey, setSheetKey] = useState<UserOperatorKey>("status");
+  const [sheetOpen, setSheetOpen] = useState(false);
+
+  const operatorFor = (key: UserOperatorKey) =>
+    key === "created"
+      ? {
+          label: dateOperatorLabel(createdOf(filters).op),
+          options: DATE_OPERATORS,
+          select: (next: string) =>
+            onChange(
+              createdPatch(
+                setDateOperator(createdOf(filters), next as DateOperator, TODAY)
+              )
+            ),
+          value: createdOf(filters).op as string,
+        }
+      : {
+          label:
+            STATUS_OPERATORS.find((item) => item.value === filters.statusOp)
+              ?.label ?? "",
+          options: STATUS_OPERATORS.map((item) => ({
+            label: item.label.charAt(0).toUpperCase() + item.label.slice(1),
+            value: item.value,
+          })),
+          select: (next: string) =>
+            onChange({ statusOp: next as StatusOperator }),
+          value: filters.statusOp as string,
+        };
+
+  const handle = (key: UserOperatorKey): OperatorHandle => ({
+    label: operatorFor(key).label,
+    onOpen: () => {
+      setSheetKey(key);
+      setSheetOpen(true);
+    },
+  });
+  const sheet = operatorFor(sheetKey);
+
+  const clearFor = (key: FilterKey) =>
+    filterDef(key).value(filters) === null
+      ? undefined
+      : () => onChange(filterDef(key).clear);
 
   return (
     <Drawer
@@ -107,71 +178,84 @@ export function AdminFiltersDrawer({
         Filters
         {count > 0 && <Badge variant="secondary">{count}</Badge>}
       </DrawerTrigger>
-      <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
+      <DrawerContent className={FILTER_SHEET}>
+        <div className="w-full">
           <Stepper onValueChange={setStep} value={step}>
-            <StepperContent>
+            {/* The sheet is a fixed height, so a step's height has nothing
+                to animate. */}
+            <StepperContent animateHeight={false}>
               <StepperStep>
                 <DrawerHeader>
                   <DrawerTitle className="text-center">Filters</DrawerTitle>
                 </DrawerHeader>
-                <UserFilterMenu filters={filters} sort={sort} />
+                <UserFilterMenu
+                  handle={handle}
+                  filters={filters}
+                  onRemove={(key) => onChange(filterDef(key).clear)}
+                  sort={sort}
+                />
+                {/* No `Clear all` here: each applied row carries its own ✕,
+                    and a button that wipes every filter at once sat one slip
+                    of the thumb from `Apply`. The toolbar keeps one. */}
                 <DrawerFooter>
-                  {hasActiveFilters(filters) && (
-                    <Button
-                      className="w-full"
-                      onClick={onClear}
-                      variant="ghost"
-                    >
-                      Clear all
-                    </Button>
-                  )}
                   <Button className="w-full" onClick={() => setOpen(false)}>
                     Apply
                   </Button>
                 </DrawerFooter>
               </StepperStep>
 
-              {OPTION_STEPS.map((key) => (
-                <StepperStep key={key}>
-                  <StepHeader
-                    onBack={() => setStep(0)}
-                    title={FILTERS.find((def) => def.key === key)?.label ?? key}
-                  />
-                  <Options
-                    onValueChange={(value) => onChange({ [key]: value })}
-                    value={filters[key]}
-                  >
-                    {OPTIONS[key].map((option) => (
-                      <FilterOption
-                        key={option.value}
-                        label={option.label}
-                        value={option.value}
-                      />
-                    ))}
-                  </Options>
-                </StepperStep>
-              ))}
+              {LIST_STEPS.map((key) =>
+                key === "status" ? (
+                  <StepperStep key={key}>
+                    <StepHeader
+                      onBack={() => setStep(0)}
+                      onClear={clearFor("status")}
+                      operator={handle("status")}
+                      title="Status"
+                    />
+                    <SetChecklist
+                      items={STATUSES}
+                      label={statusLabel}
+                      onChange={(next) => onChange({ statuses: next })}
+                      value={filters.statuses}
+                    />
+                  </StepperStep>
+                ) : (
+                  <StepperStep key={key}>
+                    <StepHeader
+                      onBack={() => setStep(0)}
+                      title={
+                        FILTERS.find((def) => def.key === key)?.label ?? key
+                      }
+                    />
+                    <Options
+                      onValueChange={(value) => onChange({ [key]: value })}
+                      value={filters[key]}
+                    >
+                      {OPTIONS[key].map((option) => (
+                        <FilterOption
+                          key={option.value}
+                          label={option.label}
+                          value={option.value}
+                        />
+                      ))}
+                    </Options>
+                  </StepperStep>
+                )
+              )}
 
               <StepperStep>
                 <StepHeader
                   onBack={() => setStep(0)}
-                  onClear={
-                    filterDef("created").value(filters) === null
-                      ? undefined
-                      : () => onChange(filterDef("created").clear)
-                  }
+                  onClear={clearFor("created")}
+                  operator={handle("created")}
                   title="Created"
                 />
                 <DateFilterStep
-                  bounds={{
-                    after: filters.createdAfter,
-                    before: filters.createdBefore,
-                  }}
-                  onChange={({ after, before }) =>
-                    onChange({ createdAfter: after, createdBefore: before })
-                  }
+                  filter={createdOf(filters)}
+                  onChange={(next) => onChange(createdPatch(next))}
                   presets={CREATED_PRESETS}
+                  surface="sheet"
                   today={TODAY}
                 />
               </StepperStep>
@@ -180,7 +264,7 @@ export function AdminFiltersDrawer({
                 <StepHeader onBack={() => setStep(0)} title="Sort" />
                 <div className="pb-4">
                   <RadioGroup
-                    className="gap-0 divide-y divide-border-muted"
+                    className={`gap-0 ${GROUP}`}
                     onValueChange={(value) => {
                       if (value) {
                         const key = value as UserSortKey;
@@ -198,7 +282,7 @@ export function AdminFiltersDrawer({
                     ))}
                   </RadioGroup>
                   <RadioGroup
-                    className="gap-0 divide-y divide-border-muted border-border-muted border-t"
+                    className={`mt-3 gap-0 ${GROUP}`}
                     onValueChange={(value) => {
                       if (value) {
                         onSortChange({
@@ -223,6 +307,14 @@ export function AdminFiltersDrawer({
               </StepperStep>
             </StepperContent>
           </Stepper>
+          <OperatorSheet
+            onOpenChange={setSheetOpen}
+            onSelect={sheet.select}
+            open={sheetOpen}
+            options={sheet.options}
+            title={filterDef(sheetKey).label}
+            value={sheet.value}
+          />
         </div>
       </DrawerContent>
     </Drawer>
@@ -230,38 +322,100 @@ export function AdminFiltersDrawer({
 }
 
 /**
- * The drilldown menu, generated from the descriptors so a row and its step
- * cannot disagree about their order. Sort is appended by hand because it is
- * not a filter and is not in `FILTERS`.
+ * The drilldown menu: what is applied, then everything there is — the same
+ * shape as the payments menu. Generated from the descriptors so a row and its
+ * step cannot disagree about their order. Sort is appended by hand because it
+ * is not a filter and is not in `FILTERS`.
  */
 function UserFilterMenu({
   filters,
+  handle,
+  onRemove,
   sort,
 }: {
   filters: UserFilters;
+  handle: (key: UserOperatorKey) => OperatorHandle;
+  onRemove: (key: FilterKey) => void;
   sort: SortState;
 }) {
   const { goTo } = useStepper();
-  const items = [
-    ...FILTERS.map((def) => ({
-      key: def.key as string,
-      label: def.label,
-      value: def.value(filters) ?? def.empty,
-    })),
-    { key: "sort", label: "Sort", value: sortLabel(sort) },
-  ];
+  // Step 0 is the menu itself, so the first filter is step 1.
+  const steps = FILTERS.map((def, index) => ({ def, step: index + 1 }));
+  const applied = steps.flatMap(({ def, step }) => {
+    // Listed while it holds a value; shown beside its badge as the operand
+    // where it has one, which `is empty` does not.
+    if (def.value(filters) === null) {
+      return [];
+    }
+    const value = def.operand ? def.operand(filters) : def.value(filters);
+    return [{ def, step, value }];
+  });
+  // The row on its way out: it collapses first, and is removed — its filter
+  // cleared — once the collapse is done, so the rows below slide up into its
+  // place instead of jumping.
+  const [leaving, setLeaving] = useState<FilterKey | null>(null);
+  const reduced = useReducedMotion();
+  const remove = (key: FilterKey) => {
+    if (leaving) {
+      return;
+    }
+    setLeaving(key);
+    // Under reduced motion the collapse is instant, so nothing to wait for.
+    window.setTimeout(
+      () => {
+        onRemove(key);
+        setLeaving(null);
+      },
+      reduced ? 0 : COLLAPSE_MS
+    );
+  };
+  // Removing the last one closes the whole section, header and all.
+  const sectionOpen = !(applied.length === 1 && applied[0].def.key === leaving);
 
   return (
-    <DrilldownList>
-      {items.map((item, index) => (
-        <DrilldownRow
-          key={item.key}
-          label={item.label}
-          // Step 0 is the menu itself, so the first row is step 1.
-          onClick={() => goTo(index + 1)}
-          value={item.value}
-        />
-      ))}
-    </DrilldownList>
+    <>
+      {applied.length > 0 && (
+        <Collapse open={sectionOpen}>
+          <DrawerSection label="Applied filters">
+            <DrilldownList>
+              {applied.map(({ def, step, value }) => (
+                <Collapse
+                  key={def.key}
+                  open={def.key !== leaving || !sectionOpen}
+                >
+                  <AppliedRow
+                    label={def.label}
+                    onEdit={() => goTo(step)}
+                    onRemove={() => remove(def.key)}
+                    operator={
+                      def.key === "created" || def.key === "status"
+                        ? handle(def.key)
+                        : undefined
+                    }
+                    value={value}
+                  />
+                </Collapse>
+              ))}
+            </DrilldownList>
+          </DrawerSection>
+        </Collapse>
+      )}
+      <DrawerSection label="All filters">
+        <DrilldownList>
+          {steps.map(({ def, step }) => (
+            <DrilldownRow
+              key={def.key}
+              label={def.label}
+              onClick={() => goTo(step)}
+            />
+          ))}
+          <DrilldownRow
+            label="Sort"
+            onClick={() => goTo(steps.length + 1)}
+            value={sortLabel(sort)}
+          />
+        </DrilldownList>
+      </DrawerSection>
+    </>
   );
 }

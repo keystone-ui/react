@@ -17,13 +17,11 @@ const ADD_FILTER = /Add filter/;
 const SIDEBAR_TRIGGER = /Toggle Sidebar/i;
 const DRAWER_TRIGGER = /Filters/;
 const FILTERS_WITH_ONE = /Filters\s*1/;
-const ROW_ACTION = /^Action/;
-const ROW_ACTION_CASHOUT = /^Action Cashout/;
-const ROW_CURRENCY = /^Currency/;
-const ROW_PROVIDER = /^Provider/;
+const ROW_ACTION = /^Action$/;
+const ROW_CURRENCY = /^Currency$/;
+const ROW_PROVIDER = /^Provider$/;
 const NEXT_PAGE = /next page/i;
 const ROW_ACTIONS = /^Actions for payment/;
-const ROW_CURRENCY_TWO = /^Currency 2 selected/;
 const OPERATOR = /^Operator:/;
 const SORT_TRIGGER = /^Sort:/;
 const SUMMARY_TOTAL = /of (\d+)/;
@@ -31,14 +29,18 @@ const ACTION_PILL_TRIGGER = /^Action:/;
 const URL_VIEW = /view=payments/;
 const URL_TYPE = /type=cashout/;
 const URL_SORT = /sort=amount\.desc/;
-const ROW_CREATED = /^Created/;
-const DAY_JULY_15 = /July 15th, 2026/;
+const DAY_AUGUST_15 = /August 15th, 2026/;
 const DAY_AUGUST_23 = /August 23rd, 2026/;
-const URL_ON_AUGUST_23 = /from=2026-08-23&to=2026-08-23/;
-const ROW_PLAYER = /^Player/;
-const URL_LAST_MONTH = /from=2026-07-01&to=2026-07-31/;
-const URL_FROM_ONLY = /from=2026-07-01/;
+const URL_ON_AUGUST_23 = /createdOp=is&from=2026-08-23/;
+const ROW_PLAYER = /^Player$/;
+const URL_PAST_30 = /createdOp=relative&rel=past\.30\.day/;
+const URL_PAST_3_WEEKS = /rel=past\.3\.week/;
+const URL_ON_OR_AFTER = /createdOp=onOrAfter&from=2026-07-01/;
 const URL_HAS_TO = /[?&]to=/;
+const URL_HAS_CURRENCY = /[?&]currency=/;
+const URL_STATUS_NOT = /status=failed%2Cin-progress&statusOp=isNot/;
+const URL_PLAYER_ENDS_WITH = /playerOp=endsWith/;
+const URL_AMOUNT_GT = /amountOp=gt/;
 
 /** Real rows only, once the request has answered — never the skeleton. */
 async function rowCount(page: Page): Promise<number> {
@@ -150,8 +152,26 @@ function drawerRows(page: Page): Promise<string[]> {
         .map((node) =>
           [...node.children]
             .map((child) => child.textContent?.replace(/\s+/g, " ").trim())
+            .filter(Boolean)
             .join(" ")
         )
+    );
+}
+
+/**
+ * The applied section's rows, read as the sentence each one is: "Currency is
+ * not BTC" — the label, the operator badge (if any) and the value badge.
+ */
+function appliedRows(page: Page): Promise<string[]> {
+  return page
+    .locator('[data-slot="drawer-content"] [data-applied-filter]')
+    .evaluateAll((nodes) =>
+      nodes.map((node) =>
+        [...node.children]
+          .map((child) => child.textContent?.replace(/\s+/g, " ").trim())
+          .filter(Boolean)
+          .join(" ")
+      )
     );
 }
 
@@ -162,6 +182,16 @@ function drawerRows(page: Page): Promise<string[]> {
  */
 function pill(page: Page, label: string) {
   return page.locator(`[data-filter-pill][data-filter-label="${label}"]`);
+}
+
+/**
+ * Pick one status on the Status chip and close it. Status is a set with an
+ * operator, like Currency, so its options live in the chip's popover.
+ */
+async function pickStatus(page: Page, name: string) {
+  await pill(page, "Status").click();
+  await popover(page).getByRole("option", { name }).click();
+  await closePopover(page);
 }
 
 /** An operator chip's popover. */
@@ -439,11 +469,7 @@ test.describe("payments filter pills", () => {
     // — `Page 2 of 2` says nothing about holding eight rows rather than ten.
     await expect(summary).toHaveText("Showing 11–18 of 18 payments");
 
-    await pill(page, "Status").click();
-    await page
-      .locator('[data-slot="dropdown-menu-content"]')
-      .getByRole("menuitemradio", { name: "Failed" })
-      .click();
+    await pickStatus(page, "Failed");
     await expect(summary).toHaveText("Showing 1–5 of 5 payments");
 
     // The empty row already says nothing matched; a summary reading "0 of 0"
@@ -609,11 +635,7 @@ test.describe("an applied pill reads differently from an unset one", () => {
   }) => {
     await openPayments(page);
 
-    await pill(page, "Status").click();
-    await page
-      .locator('[data-slot="dropdown-menu-content"]')
-      .getByRole("menuitemradio", { name: "Failed" })
-      .click();
+    await pickStatus(page, "Failed");
     // Somewhere else, so nothing is left focused.
     await page.getByLabel("Search payments by email").click();
 
@@ -646,7 +668,7 @@ test.describe("an applied pill reads differently from an unset one", () => {
 test.describe("payments filters on a phone", () => {
   test.use({ viewport: { height: 900, width: 375 } });
 
-  test("the drawer menu lists every filter with its current value", async ({
+  test("the drawer menu lists every filter, and Sort with its order", async ({
     page,
   }) => {
     await openPayments(page);
@@ -658,22 +680,22 @@ test.describe("payments filters on a phone", () => {
     await expect(pill(page, "Action")).toBeHidden();
     await page.getByRole("button", { name: DRAWER_TRIGGER }).click();
 
-    const labels = await drawerRows(page);
-
-    for (const expected of [
-      "Action All",
-      "Status All",
-      "Currency All",
-      "Provider All",
-      "Created Any",
-      "Amount Any",
+    // Names only: what a filter holds is the applied section's to say, and
+    // nothing is applied yet, so there is no applied section.
+    expect(await drawerRows(page)).toEqual([
+      "Action",
+      "Status",
+      "Currency",
+      "Provider",
+      "Player",
+      "Created",
+      "Amount",
       "Sort Created (Newest first)",
-    ]) {
-      expect(labels).toContain(expected);
-    }
+    ]);
+    expect(await appliedRows(page)).toEqual([]);
   });
 
-  test("drilling into a filter narrows the table and updates its row", async ({
+  test("drilling into a filter narrows the table and lists it as applied", async ({
     page,
   }) => {
     await openPayments(page);
@@ -691,9 +713,8 @@ test.describe("payments filters on a phone", () => {
     await page.getByRole("button", { name: "Back" }).click();
 
     expect(await rowCount(page)).toBeLessThan(total);
-    await expect(
-      page.getByRole("button", { name: ROW_ACTION_CASHOUT })
-    ).toBeVisible();
+    // No operator to choose, so no badge for one.
+    expect(await appliedRows(page)).toEqual(["Action Cashout"]);
 
     // The trigger carries the count, because nothing else at this width says
     // the table is filtered.
@@ -710,7 +731,7 @@ test.describe("payments filters on a phone", () => {
     expect(overflow).toBeLessThanOrEqual(1);
   });
 
-  test("a multi-select row spells out what the pill abbreviates", async ({
+  test("an applied row names its picks, and its X clears the filter", async ({
     page,
   }) => {
     await openPayments(page);
@@ -721,16 +742,84 @@ test.describe("payments filters on a phone", () => {
     await page.getByRole("checkbox", { name: "ETH" }).click();
     await page.getByRole("button", { name: "Back" }).click();
 
-    // "2" alone would leave the row saying a number with no unit.
-    await expect(
-      page.getByRole("button", { name: ROW_CURRENCY_TWO })
-    ).toBeVisible();
+    // Two tickers still read at a glance, where the pill abbreviates.
+    expect(await appliedRows(page)).toEqual(["Currency is BTC, ETH"]);
+
+    await page.getByRole("button", { name: "Remove Currency filter" }).click();
+    // The row collapses before its filter is cleared.
+    await expect.poll(() => appliedRows(page)).toEqual([]);
+    await expect(page).not.toHaveURL(URL_HAS_CURRENCY);
   });
 });
 
 /**
- * The phone's Created step: a mode, presets and a calendar over the same two
- * bounds the desktop pill edits.
+ * The operator, on a phone: a badge beside the step's title and in the
+ * applied row, opening a sheet stacked on the filter drawer.
+ */
+test.describe("operators on a phone", () => {
+  test.use({ colorScheme: "dark", viewport: { height: 844, width: 390 } });
+
+  function sheets(page: Page) {
+    return page.locator('[data-slot="drawer-content"]');
+  }
+
+  test("the step's badge stacks a sheet of operators on the drawer", async ({
+    page,
+  }) => {
+    await openPayments(page);
+    await page.getByRole("button", { name: DRAWER_TRIGGER }).click();
+    await sheets(page).getByRole("button", { name: ROW_PLAYER }).click();
+    await sheets(page).getByLabel("Player email").fill("gmail");
+
+    await sheets(page)
+      .getByRole("button", { name: "Player condition: contains" })
+      .click();
+    await expect(sheets(page)).toHaveCount(2);
+    // The drawer behind knows it is stacked, and steps back.
+    await expect(sheets(page).first()).toHaveAttribute(
+      "data-nested-drawer-open"
+    );
+
+    await sheets(page).nth(1).getByRole("radio", { name: "Ends with" }).click();
+    await expect(sheets(page)).toHaveCount(1);
+    await expect(
+      sheets(page).getByRole("button", { name: "Player condition: ends with" })
+    ).toBeVisible();
+    await expect(page).toHaveURL(URL_PLAYER_ENDS_WITH);
+
+    // An email keyboard, not the decimal pad the amount fields use.
+    await expect(sheets(page).getByLabel("Player email")).toHaveAttribute(
+      "inputmode",
+      "email"
+    );
+  });
+
+  test("the applied row's badge changes the operator in place", async ({
+    page,
+  }) => {
+    await gotoPreview(page, "block-admin-01", "?view=payments&min=100");
+    await settled(page);
+    await page.getByRole("button", { name: DRAWER_TRIGGER }).click();
+    expect(await appliedRows(page)).toEqual(["Amount between 100 – any"]);
+
+    await sheets(page)
+      .getByRole("button", { name: "Amount condition: between" })
+      .click();
+    await sheets(page)
+      .nth(1)
+      .getByRole("radio", { name: "Greater than" })
+      .click();
+    await expect(sheets(page)).toHaveCount(1);
+
+    // Still on the menu, and the row reads the new comparison.
+    expect(await appliedRows(page)).toEqual(["Amount > 100"]);
+    await expect(page).toHaveURL(URL_AMOUNT_GT);
+  });
+});
+
+/**
+ * The phone's Created step: an operator badge, presets and a calendar over the
+ * same two bounds the desktop pill edits.
  *
  * A 667px-tall phone in dark mode on purpose — the height is where a calendar
  * in an 80dvh sheet runs out of room, and dark is where a calendar painting
@@ -740,7 +829,7 @@ test.describe("the Created step on a phone", () => {
   test.use({ colorScheme: "dark", viewport: { height: 667, width: 375 } });
 
   function drawer(page: Page) {
-    return page.locator('[data-slot="drawer-content"]');
+    return page.locator('[data-slot="drawer-content"]').first();
   }
 
   async function openCreated(page: Page, search = "") {
@@ -751,12 +840,27 @@ test.describe("the Created step on a phone", () => {
       await openPayments(page);
     }
     await page.getByRole("button", { name: DRAWER_TRIGGER }).click();
-    await drawer(page).getByRole("button", { name: ROW_CREATED }).click();
-    await expect(modes(page)).toBeVisible();
+    await drawer(page)
+      .getByRole("button", { exact: true, name: "Created" })
+      .click();
+    await expect(
+      drawer(page).getByRole("group", { name: "Presets" })
+    ).toBeVisible();
   }
 
-  function modes(page: Page) {
-    return drawer(page).getByRole("group", { name: "Created condition" });
+  async function pickMode(page: Page, current: string, next: string) {
+    // In the step's header: the menu's applied row carries the same badge,
+    // and the stepper keeps the outgoing menu mounted while it slides.
+    await header(page)
+      .getByRole("button", { name: `Created condition: ${current}` })
+      .click();
+    const sheet = page.locator('[data-slot="drawer-content"]').nth(1);
+    await sheet.getByRole("radio", { name: next }).click();
+    await expect(page.locator('[data-slot="drawer-content"]')).toHaveCount(1);
+  }
+
+  function header(page: Page) {
+    return drawer(page).locator('[data-slot="drawer-header"]').last();
   }
 
   function preset(page: Page, name: string) {
@@ -768,62 +872,70 @@ test.describe("the Created step on a phone", () => {
   async function back(page: Page) {
     await drawer(page).getByRole("button", { name: "Back" }).click();
     await expect(
-      drawer(page).getByRole("button", { name: ROW_CREATED })
+      drawer(page).getByRole("button", { exact: true, name: "Created" })
     ).toBeVisible();
   }
 
-  test("a preset applies its dates and the row names it", async ({ page }) => {
+  test("a preset sets a rule, and every surface names it", async ({ page }) => {
     await openCreated(page);
     const total = await rowCount(page);
 
-    await preset(page, "Last month").click();
-    await expect(preset(page, "Last month")).toHaveAttribute(
+    await preset(page, "Past 30 days").click();
+    await expect(preset(page, "Past 30 days")).toHaveAttribute(
       "aria-pressed",
       "true"
     );
-    await expect(page).toHaveURL(URL_LAST_MONTH);
+    // A rule, not two dates: the link still means the past 30 days tomorrow.
+    await expect(page).toHaveURL(URL_PAST_30);
     expect(await rowCount(page)).toBeLessThan(total);
 
     await back(page);
-    expect(await drawerRows(page)).toContain("Created Last month");
+    expect(await appliedRows(page)).toEqual([
+      "Created is relative to today Past 30 days",
+    ]);
 
     // The desktop pill reads the same descriptor, so it says the same thing.
     await page.getByRole("button", { name: "Apply" }).click();
     await expect(drawer(page)).toHaveCount(0);
     await page.setViewportSize({ height: 900, width: 1280 });
     await expect(pill(page, "Created")).toBeVisible();
-    expect(await pills(page)).toContain("Created: Last month");
+    expect(await pills(page)).toContain("Created: Past 30 days");
   });
 
-  test("tapping a day after a preset starts again from that day", async ({
-    page,
-  }) => {
+  test("the relative pickers change the rule", async ({ page }) => {
     await openCreated(page);
-    await preset(page, "Last month").click();
-    await drawer(page).getByRole("button", { name: DAY_JULY_15 }).click();
+    await preset(page, "Past 7 days").click();
+    await drawer(page).getByLabel("How many").fill("3");
+    await drawer(page).getByLabel("Unit").selectOption("week");
 
-    await expect(preset(page, "Last month")).toHaveAttribute(
+    await expect(page).toHaveURL(URL_PAST_3_WEEKS);
+    await expect(preset(page, "Past 7 days")).toHaveAttribute(
+      "aria-pressed",
+      "false"
+    );
+  });
+
+  test("tapping a day under a rule names that day", async ({ page }) => {
+    await openCreated(page);
+    await preset(page, "This month").click();
+    await drawer(page).getByRole("button", { name: DAY_AUGUST_15 }).click();
+
+    await expect(preset(page, "This month")).toHaveAttribute(
       "aria-pressed",
       "false"
     );
     await back(page);
-    expect(await drawerRows(page)).toContain("Created 2026-07-15");
+    expect(await appliedRows(page)).toEqual(["Created is 2026-08-15"]);
   });
 
-  test("switching to From drops the end; Clear empties it", async ({
+  test("switching operator drops what it does not read; Clear empties it", async ({
     page,
   }) => {
-    await openCreated(page);
-    await preset(page, "Last month").click();
-    await modes(page)
-      .getByRole("button", { exact: true, name: "From" })
-      .click();
+    await openCreated(page, "?view=payments&from=2026-07-01&to=2026-07-31");
+    await pickMode(page, "is between", "Is on or after");
 
-    await expect(page).toHaveURL(URL_FROM_ONLY);
+    await expect(page).toHaveURL(URL_ON_OR_AFTER);
     await expect(page).not.toHaveURL(URL_HAS_TO);
-    await expect(
-      drawer(page).getByText("From 2026-07-01 to today")
-    ).toBeVisible();
 
     await drawer(page)
       .getByRole("button", { name: "Clear Created filter" })
@@ -833,20 +945,37 @@ test.describe("the Created step on a phone", () => {
       drawer(page).getByRole("button", { name: "Clear Created filter" })
     ).toHaveCount(0);
     await back(page);
-    expect(await drawerRows(page)).toContain("Created Any");
+    expect(await appliedRows(page)).toEqual([]);
   });
 
-  test("an open end set elsewhere opens in the mode that shows it", async ({
+  test("an older link with one end opens as the operator it meant", async ({
     page,
   }) => {
     await openCreated(page, "?view=payments&to=2026-07-22");
 
     await expect(
-      modes(page).getByRole("button", { exact: true, name: "To" })
-    ).toHaveAttribute("aria-pressed", "true");
-    await expect(
-      drawer(page).getByText("Up to and including 2026-07-22")
+      header(page).getByRole("button", {
+        name: "Created condition: is on or before",
+      })
     ).toBeVisible();
+  });
+
+  test("is empty has nothing to pick, and a ledger has no empty dates", async ({
+    page,
+  }) => {
+    await openCreated(page);
+    await pickMode(page, "is between", "Is empty");
+
+    await expect(
+      drawer(page).getByText("Matches rows with no date.")
+    ).toBeVisible();
+    await settled(page);
+    await expect(
+      page.getByText("No payments match these filters")
+    ).toBeVisible();
+    await back(page);
+    // An operator with no value beside it: the badge and the X.
+    expect(await appliedRows(page)).toEqual(["Created is empty"]);
   });
 
   test("the calendar fits the sheet and paints the sheet's colour", async ({
@@ -860,7 +989,7 @@ test.describe("the Created step on a phone", () => {
       const days = [
         ...(sheet?.querySelectorAll('[data-slot="calendar-day-button"]') ?? []),
       ];
-      const body = sheet?.querySelector(".overflow-y-auto");
+      const body = sheet?.querySelector('[data-slot="drawer-inner-content"]');
       return {
         background: calendar ? getComputedStyle(calendar).backgroundColor : "",
         horizontal: body ? body.scrollWidth - body.clientWidth : -1,
@@ -870,33 +999,22 @@ test.describe("the Created step on a phone", () => {
       };
     });
 
+    // The sheet is a fixed height, so the stepper leaves its own height
+    // alone: motion would write the measured height inline while animating.
+    // Measured after the drill-in's spring has had time to run.
+    await page.waitForTimeout(500);
+    expect(
+      await page
+        .locator('[data-slot="drawer-content"] [data-slot="stepper-content"]')
+        .first()
+        .evaluate((node) => (node as HTMLElement).style.height)
+    ).toBe("");
+
     // Transparent, so the sheet's `bg-popover` shows through rather than
     // the page colour the calendar paints by default.
     expect(metrics.background).toBe("rgba(0, 0, 0, 0)");
     expect(metrics.horizontal).toBeLessThanOrEqual(0);
     expect(metrics.smallest).toBeGreaterThanOrEqual(40);
-  });
-
-  test("the Player step's operator spans the field it qualifies", async ({
-    page,
-  }) => {
-    await openPayments(page);
-    await page.getByRole("button", { name: DRAWER_TRIGGER }).click();
-    await drawer(page).getByRole("button", { name: ROW_PLAYER }).click();
-
-    const operator = drawer(page).getByLabel("Player operator");
-    const field = drawer(page).getByLabel("Player email");
-    await expect(field).toBeVisible();
-
-    const [select, input] = await Promise.all([
-      operator.boundingBox(),
-      field.boundingBox(),
-    ]);
-    expect(Math.abs((select?.width ?? 0) - (input?.width ?? 0))).toBeLessThan(
-      1
-    );
-    // An email keyboard, not the decimal pad the amount fields use.
-    await expect(field).toHaveAttribute("inputmode", "email");
   });
 });
 
@@ -912,29 +1030,33 @@ test.describe("the Created step under touch", () => {
     viewport: { height: 667, width: 375 },
   });
 
-  test("presets, modes and days all take a tap", async ({ page }) => {
+  test("presets, the operator sheet and days all take a tap", async ({
+    page,
+  }) => {
     await openPayments(page);
-    const sheet = page.locator('[data-slot="drawer-content"]');
+    const sheets = page.locator('[data-slot="drawer-content"]');
     await page.getByRole("button", { name: DRAWER_TRIGGER }).tap();
-    await sheet.getByRole("button", { name: ROW_CREATED }).tap();
+    await sheets.getByRole("button", { exact: true, name: "Created" }).tap();
 
-    const preset = sheet
+    const preset = sheets
       .getByRole("group", { name: "Presets" })
-      .getByRole("button", { exact: true, name: "Last 7 days" });
+      .getByRole("button", { exact: true, name: "Past 7 days" });
     await preset.tap();
     await expect(preset).toHaveAttribute("aria-pressed", "true");
 
-    const on = sheet
-      .getByRole("group", { name: "Created condition" })
-      .getByRole("button", { exact: true, name: "On" });
-    await on.tap();
-    await expect(on).toHaveAttribute("aria-pressed", "true");
+    await sheets
+      .getByRole("button", { name: "Created condition: is relative to today" })
+      .tap();
+    await sheets.nth(1).getByRole("radio", { exact: true, name: "Is" }).tap();
+    await expect(sheets).toHaveCount(1);
+    await expect(
+      sheets.getByRole("button", { name: "Created condition: is" })
+    ).toBeVisible();
 
     // The last week with a day in it, beside the rows the 667px sheet
     // scrolls to reach.
-    await sheet.getByRole("button", { name: DAY_AUGUST_23 }).tap();
-    await expect(sheet.getByText("On 2026-08-23")).toBeVisible();
-    await expect(sheet).toHaveCount(1);
+    await sheets.getByRole("button", { name: DAY_AUGUST_23 }).tap();
+    await expect(sheets).toHaveCount(1);
     await expect(page).toHaveURL(URL_ON_AUGUST_23);
   });
 });
@@ -1018,8 +1140,7 @@ test.describe("removing a filter", () => {
     const total = await rowCount(page);
 
     // Holding a value: the X clears it and takes the pill off the row.
-    await pill(page, "Status").click();
-    await page.getByRole("menuitemradio", { name: "Failed" }).click();
+    await pickStatus(page, "Failed");
     await pill(page, "Status").hover();
     await page.getByRole("button", { name: "Remove Status filter" }).click();
 
@@ -1033,8 +1154,7 @@ test.describe("removing a filter", () => {
 
     // Both are back on offer, and Clear all restores the starting row.
     await addFilter(page, "Status");
-    await pill(page, "Status").click();
-    await page.getByRole("menuitemradio", { name: "Failed" }).click();
+    await pickStatus(page, "Failed");
     await page.getByRole("button", { name: "Clear all" }).click();
     expect(await pills(page)).toEqual(["Action: All", "Status: All"]);
   });
@@ -1131,6 +1251,31 @@ test.describe("operator filters", () => {
     expect(amounts.some((value) => value > 500)).toBe(true);
   });
 
+  test("Status takes several values, and is not excludes them", async ({
+    page,
+  }) => {
+    await openPayments(page);
+    const total = await rowCount(page);
+
+    await pill(page, "Status").click();
+    await popover(page).getByRole("option", { name: "Failed" }).click();
+    await popover(page).getByRole("option", { name: "In progress" }).click();
+    await popover(page).getByRole("button", { name: OPERATOR }).click();
+    await page.getByRole("menuitemradio", { name: "Is not" }).click();
+    await closePopover(page);
+
+    expect(await pills(page)).toContain("Status is not: Failed, +1");
+    await expect(page).toHaveURL(URL_STATUS_NOT);
+    const left = await rowCount(page);
+    expect(left).toBeGreaterThan(0);
+    expect(left).toBeLessThan(total);
+    // Only completed payments survive excluding the other two.
+    const body = page.locator('[data-slot="table-body"]');
+    await expect(body).not.toContainText("Failed");
+    await expect(body).not.toContainText("In progress");
+    await expect(body).toContainText("Completed");
+  });
+
   test("the phone drawer shows the operator", async ({ page }) => {
     await openPayments(page);
     await addFilter(page, "Currency");
@@ -1142,7 +1287,7 @@ test.describe("operator filters", () => {
 
     await page.setViewportSize({ height: 900, width: 375 });
     await page.getByRole("button", { name: DRAWER_TRIGGER }).click();
-    expect(await drawerRows(page)).toContain("Currency is not BTC");
+    expect(await appliedRows(page)).toEqual(["Currency is not BTC"]);
   });
 });
 
@@ -1200,9 +1345,9 @@ test.describe("removing a filter on a touch screen", () => {
     await expect(pill(page, "Provider")).toHaveCount(0);
 
     // The starting pills carry it too.
-    await pill(page, "Status").click();
+    await pill(page, "Action").click();
     await page.getByRole("menuitem", { name: "Delete filter" }).click();
-    await expect(pill(page, "Status")).toHaveCount(0);
+    await expect(pill(page, "Action")).toHaveCount(0);
   });
 });
 

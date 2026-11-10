@@ -153,7 +153,6 @@ export function AdminPaymentsToolbar({
         <PaymentFiltersDrawer
           filters={filters}
           onChange={patchFilters}
-          onClear={table.clearFilters}
           onSortChange={table.setSort}
           sort={table.sort}
         />

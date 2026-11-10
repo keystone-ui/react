@@ -1,5 +1,17 @@
 import { type CsvColumn, toCsv } from "@/components/csv";
-import { datePresets, dateRangeLabel, TODAY } from "@/components/date-filter";
+import {
+  type DateFilter,
+  type DateOperator,
+  dateFilterFromParams,
+  dateFilterToParams,
+  dateFilterValue,
+  dateOperand,
+  datePresets,
+  dateQualifier,
+  EMPTY_DATE_FILTER,
+  matchesDate,
+  TODAY,
+} from "@/components/date-filter";
 import {
   addableKeys as addableKeysOf,
   visibleKeys as visibleKeysOf,
@@ -33,7 +45,12 @@ import type { DataTableQuery } from "@/components/use-data-table";
  */
 
 export type RoleFilter = "all" | Role;
-export type StatusFilter = "all" | Status;
+/**
+ * Status is a set with an operator, the same as the payments Status: "every
+ * account but the suspended ones" is the question as often as "only the
+ * suspended ones".
+ */
+export type StatusOperator = "is" | "isNot";
 export type SeatsFilter = "all" | "none" | "one" | "many";
 export type TwoFactorFilter = "all" | "off" | "on";
 
@@ -53,22 +70,41 @@ export const STATUS_VARIANT: Record<
 export interface UserFilters {
   createdAfter: string;
   createdBefore: string;
+  createdOp: DateOperator;
+  /** A relative rule, `past.7.day` — see `date-filter.ts`. */
+  createdRel: string;
   role: RoleFilter;
   search: string;
   seats: SeatsFilter;
-  status: StatusFilter;
+  statuses: readonly Status[];
+  statusOp: StatusOperator;
   twoFactor: TwoFactorFilter;
 }
 
 export const EMPTY_FILTERS: UserFilters = {
   createdAfter: "",
   createdBefore: "",
+  createdOp: "between",
+  createdRel: "",
   role: "all",
   search: "",
   seats: "all",
-  status: "all",
+  statuses: [],
+  statusOp: "is",
   twoFactor: "all",
 };
+
+export const STATUS_OPERATORS: readonly {
+  label: string;
+  value: StatusOperator;
+}[] = [
+  { label: "is", value: "is" },
+  { label: "is not", value: "isNot" },
+];
+
+export function statusLabel(status: Status): string {
+  return statusLabels[status];
+}
 
 /**
  * Each single-select filter's options, `All` first. The pills and the drawer
@@ -88,20 +124,13 @@ export const OPTIONS = {
     { label: "One seat", value: "one" },
     { label: "More than one", value: "many" },
   ],
-  status: [
-    { label: "All", value: "all" },
-    ...STATUSES.map((status) => ({
-      label: statusLabels[status],
-      value: status,
-    })),
-  ],
   twoFactor: [
     { label: "All", value: "all" },
     { label: "Enabled", value: "on" },
     { label: "Not enabled", value: "off" },
   ],
 } as const satisfies Record<
-  "role" | "seats" | "status" | "twoFactor",
+  "role" | "seats" | "twoFactor",
   readonly { label: string; value: string }[]
 >;
 
@@ -118,11 +147,38 @@ function optionLabel(key: OptionKey, value: string): string | null {
  * a month's growth, a year's — so these run to the year rather than the day.
  */
 export const CREATED_PRESETS = datePresets([
-  "last30Days",
-  "last12Months",
-  "thisYear",
-  "lastYear",
+  { count: 30, dir: "past", unit: "day" },
+  { count: 90, dir: "past", unit: "day" },
+  { count: 12, dir: "past", unit: "month" },
+  { dir: "this", unit: "year" },
 ]);
+
+/** The Created filter as the date filter reads it. */
+export function createdOf(f: {
+  createdAfter: string;
+  createdBefore: string;
+  createdOp: DateOperator;
+  createdRel: string;
+}): DateFilter {
+  return {
+    after: f.createdAfter,
+    before: f.createdBefore,
+    op: f.createdOp,
+    rel: f.createdRel,
+  };
+}
+
+/** A date filter back as the fields it is stored in. */
+export function createdPatch(filter: DateFilter) {
+  return {
+    createdAfter: filter.after,
+    createdBefore: filter.before,
+    createdOp: filter.op,
+    createdRel: filter.rel,
+  };
+}
+
+const CREATED_CLEAR = createdPatch(EMPTY_DATE_FILTER);
 
 // ---------------------------------------------------------------------------
 // The pills
@@ -138,6 +194,10 @@ export interface FilterDef {
   key: FilterKey;
   /** The dimension, shown muted ahead of the value. */
   label: string;
+  /** The value without its comparison, for the phone's applied rows. */
+  operand?: (filters: UserFilters) => string | null;
+  /** The operator, when it is not the default: "Status is not: Suspended". */
+  operator?: (filters: UserFilters) => string | null;
   /** The value, or `null` when the filter is unset. */
   value: (filters: UserFilters) => string | null;
 }
@@ -156,11 +216,23 @@ export const FILTERS: readonly FilterDef[] = [
     value: (f) => optionLabel("role", f.role),
   },
   {
-    clear: { status: "all" },
+    clear: { statuses: [], statusOp: "is" },
     empty: "All",
     key: "status",
     label: "Status",
-    value: (f) => optionLabel("status", f.status),
+    operator: (f) => (f.statusOp === "isNot" ? "is not" : null),
+    operand: (f) =>
+      f.statuses.length === 0 ? null : f.statuses.map(statusLabel).join(", "),
+    // The first pick plus a count of the rest, as the payments pills read.
+    value: (f) => {
+      if (f.statuses.length === 0) {
+        return null;
+      }
+      const first = statusLabel(f.statuses[0]);
+      return f.statuses.length === 1
+        ? first
+        : `${first}, +${f.statuses.length - 1}`;
+    },
   },
   {
     clear: { seats: "all" },
@@ -177,16 +249,13 @@ export const FILTERS: readonly FilterDef[] = [
     value: (f) => optionLabel("twoFactor", f.twoFactor),
   },
   {
-    clear: { createdAfter: "", createdBefore: "" },
+    clear: CREATED_CLEAR,
     empty: "Any",
     key: "created",
     label: "Created",
-    value: (f) =>
-      dateRangeLabel(
-        { after: f.createdAfter, before: f.createdBefore },
-        CREATED_PRESETS,
-        TODAY
-      ),
+    operand: (f) => dateOperand(createdOf(f)),
+    operator: (f) => dateQualifier(createdOf(f)),
+    value: (f) => dateFilterValue(createdOf(f)),
   },
 ];
 
@@ -242,7 +311,9 @@ const MATCHERS: readonly UserMatcher[] = [
     );
   },
   (user, filters) => filters.role === "all" || user.role === filters.role,
-  (user, filters) => filters.status === "all" || user.status === filters.status,
+  (user, filters) =>
+    filters.statuses.length === 0 ||
+    filters.statuses.includes(user.status) === (filters.statusOp === "is"),
   (user, filters) => {
     if (filters.seats === "all") {
       return true;
@@ -256,10 +327,7 @@ const MATCHERS: readonly UserMatcher[] = [
     filters.twoFactor === "all" ||
     user.twoFactor === (filters.twoFactor === "on"),
   // `createdAt` is an ISO date, so it compares as a string.
-  (user, filters) =>
-    !filters.createdAfter || user.createdAt >= filters.createdAfter,
-  (user, filters) =>
-    !filters.createdBefore || user.createdAt <= filters.createdBefore,
+  (user, filters) => matchesDate(user.createdAt, createdOf(filters), TODAY),
 ];
 
 export function matchesUserFilters(user: User, filters: UserFilters): boolean {
@@ -386,8 +454,6 @@ export function sortUsers(rows: readonly User[], sort: SortState): User[] {
 export const PAGE_SIZES = [5, 10, 20, 50] as const;
 export const DEFAULT_PAGE_SIZE = 5;
 
-const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
-
 /** The table's query as URL parameters, defaults left out. */
 export function usersToParams(
   query: DataTableQuery<UserFilters, UserSortKey>
@@ -396,11 +462,11 @@ export function usersToParams(
   return {
     q: f.search,
     role: f.role === "all" ? "" : f.role,
-    status: f.status === "all" ? "" : f.status,
+    status: f.statuses.join(","),
+    statusOp: f.statuses.length > 0 && f.statusOp === "isNot" ? "isNot" : "",
     seats: f.seats === "all" ? "" : f.seats,
     twoFactor: f.twoFactor === "all" ? "" : f.twoFactor,
-    from: f.createdAfter,
-    to: f.createdBefore,
+    ...dateFilterToParams(createdOf(f)),
     sort: sortToParam(query.sort, DEFAULT_SORT),
     ...pageToParams(query.pageIndex, query.pageSize, DEFAULT_PAGE_SIZE),
   };
@@ -410,10 +476,6 @@ export function usersToParams(
 export function usersFromParams(
   params: URLSearchParams
 ): Partial<DataTableQuery<UserFilters, UserSortKey>> {
-  const date = (key: string) => {
-    const value = params.get(key) ?? "";
-    return ISO_DATE.test(value) ? value : "";
-  };
   const option = <K extends OptionKey>(key: K) =>
     oneOf(
       params.get(key),
@@ -421,14 +483,19 @@ export function usersFromParams(
       "all"
     );
 
+  // A single `status=invited`, as older links say it, reads as a list of one.
+  const statuses = (params.get("status") ?? "")
+    .split(",")
+    .filter((value): value is Status => STATUSES.includes(value as Status));
+
   return {
     filters: {
-      createdAfter: date("from"),
-      createdBefore: date("to"),
+      ...createdPatch(dateFilterFromParams(params)),
       role: option("role") as RoleFilter,
       search: params.get("q") ?? "",
       seats: option("seats") as SeatsFilter,
-      status: option("status") as StatusFilter,
+      statuses,
+      statusOp: oneOf(params.get("statusOp"), ["is", "isNot"], "is"),
       twoFactor: option("twoFactor") as TwoFactorFilter,
     },
     sort: sortFromParam(

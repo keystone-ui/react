@@ -1,17 +1,27 @@
 "use client";
 
 import {
+  CREATED_PRESETS,
+  createdOf,
+  createdPatch,
   type FilterKey,
   filterDef,
   OPTIONS,
+  STATUS_OPERATORS,
+  STATUSES,
+  type StatusOperator,
+  statusLabel,
   type UserFilters,
 } from "@/components/admin-filters";
-import { DateRangePill, OptionPill } from "@/components/filter-pills";
+import { TODAY } from "@/components/date-filter";
+import { DatePill } from "@/components/date-pill";
+import { OptionPill } from "@/components/filter-pills";
+import { SetPill } from "@/components/set-pill";
 
 /**
- * One user filter as a pill: a `DateRangePill` for Created, an `OptionPill`
- * for the rest. The same parts the payments row uses — this table simply has
- * no filter that needs an operator.
+ * One user filter as a pill: a `SetPill` for Status, a `DatePill` for
+ * Created, an `OptionPill` for the rest — the same parts the payments row
+ * uses, so the two tables' Status pills are one control.
  *
  * See `PaymentFilterPill` for why every change also pins the pill.
  */
@@ -43,16 +53,39 @@ export function UserFilterPill({
     value: def.value(filters),
   };
 
+  if (pillKey === "status") {
+    const op = filters.statusOp;
+    return (
+      <SetPill
+        {...shared}
+        itemLabel={statusLabel}
+        items={STATUSES}
+        noun="statuses"
+        onSelectedChange={(next) => change({ statuses: next })}
+        operator={{
+          label:
+            STATUS_OPERATORS.find((item) => item.value === op)?.label ?? "",
+          onValueChange: (next) => change({ statusOp: next as StatusOperator }),
+          options: STATUS_OPERATORS.map((item) => ({
+            label: item.label.charAt(0).toUpperCase() + item.label.slice(1),
+            value: item.value,
+          })),
+          value: op,
+        }}
+        selected={filters.statuses}
+      />
+    );
+  }
+
   if (pillKey === "created") {
     return (
-      <DateRangePill
+      <DatePill
         {...shared}
-        after={filters.createdAfter}
-        before={filters.createdBefore}
-        id="users-created"
-        onAfterChange={(next) => change({ createdAfter: next })}
-        onBeforeChange={(next) => change({ createdBefore: next })}
-        onClear={() => change(def.clear)}
+        filter={createdOf(filters)}
+        onChange={(next) => change(createdPatch(next))}
+        presets={CREATED_PRESETS}
+        qualifier={def.operator?.(filters) ?? null}
+        today={TODAY}
       />
     );
   }
