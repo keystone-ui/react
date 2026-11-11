@@ -25,15 +25,21 @@ const SOURCE_FILE = /\.tsx?$/;
 // Bare, or under a variant that is also active while :focus-visible is.
 const BARE_NONE =
   /(?<![\w:/-])(?:focus:|focus-visible:)?outline-(?:none|hidden)(?![\w-])/;
-const VARIANT_WIDTH = /:outline-(?:\d+|\[[^\]]+\]|\([^)]+\))(?![\w-])/;
-const VARIANT_STYLE = /:outline-(?:solid|dashed|dotted|double)(?![\w-])/;
+// A width: a number, an arbitrary length (`[3px]`, `[0.125rem]`), or an
+// explicit `length:` hint. `[color:…]`, `[#f00]` and bare `(--var)` are colours.
+const VARIANT_WIDTH =
+  /:outline-(?:\d+|\[(?:\d*\.?\d+(?:px|r?em|ch|ex|vh|vw)?|length:[^\]]+)\]|\(length:[^)]+\))(?![\w-])/;
+// Only a style that also applies on keyboard focus overrides the variable:
+// bare, `focus:` or `focus-visible:`. `hover:outline-solid` does not.
+const FOCUS_STYLE =
+  /(?<![\w:/-])(?:focus:|focus-visible:)?outline-(?:solid|dashed|dotted|double)(?![\w-])/;
 const STRING_LITERAL = /"([^"\n]*)"|`([^`]*)`|'([^'\n]*)'/g;
 
 function hidesItsOwnOutline(classes: string): boolean {
   return (
     BARE_NONE.test(classes) &&
     VARIANT_WIDTH.test(classes) &&
-    !VARIANT_STYLE.test(classes)
+    !FOCUS_STYLE.test(classes)
   );
 }
 
@@ -90,6 +96,38 @@ describe("focus outline", () => {
     // Colour and offset are not widths.
     expect(
       hidesItsOwnOutline("outline-none focus-visible:outline-offset-2")
+    ).toBe(false);
+    // Only a style that applies on keyboard focus exempts the pair: a
+    // hover-only style leaves the focused outline at `none`.
+    expect(
+      hidesItsOwnOutline(
+        "outline-none focus-visible:outline-2 hover:outline-solid"
+      )
+    ).toBe(true);
+    expect(
+      hidesItsOwnOutline(
+        "outline-none focus:outline-solid focus-visible:outline-2"
+      )
+    ).toBe(false);
+    // An arbitrary colour is not a width; arbitrary lengths still are.
+    expect(
+      hidesItsOwnOutline(
+        "outline-none focus-visible:outline-[color:var(--ring)] focus-visible:ring-1"
+      )
+    ).toBe(false);
+    expect(hidesItsOwnOutline("outline-none focus-visible:outline-[3px]")).toBe(
+      true
+    );
+    expect(
+      hidesItsOwnOutline("outline-none focus-visible:outline-[0.125rem]")
+    ).toBe(true);
+    expect(
+      hidesItsOwnOutline(
+        "outline-none focus-visible:outline-[length:var(--ring-width)]"
+      )
+    ).toBe(true);
+    expect(
+      hidesItsOwnOutline("outline-none focus-visible:outline-[#f00]")
     ).toBe(false);
   });
 
