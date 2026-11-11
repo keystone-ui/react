@@ -95,8 +95,11 @@ function SliderThumb({ className, ...props }: SliderThumbProps) {
         // Active state: slightly grow + slightly deeper shadow
         "transition-[scale,box-shadow] duration-(--duration-fast,125ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
         "data-[dragging]:scale-105 data-[dragging]:shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_2px_6px_rgba(0,0,0,0.12)] data-[dragging]:ring-2 data-[dragging]:ring-ring/20",
-        // Disabled (reduced motion handled globally by base.css)
-        "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        // Disabled (reduced motion handled globally by base.css). No opacity
+        // here: Base UI sets the thumb's data-disabled only from the root, so
+        // SliderControl is dimmed whenever it is, and the thumb (always inside
+        // the control) inherits that 50%.
+        "data-[disabled]:pointer-events-none",
         className
       )}
       data-slot="slider-thumb"
