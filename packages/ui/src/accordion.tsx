@@ -55,6 +55,20 @@ type RenderProp = ReactElement | ((props: any, state: any) => ReactElement);
 type ClassNameProp = string | ((state: any) => string);
 // biome-ignore-end lint/suspicious/noExplicitAny: render/className accept Base UI's state generic, which varies per part
 
+/**
+ * Merge a part's own classes with a consumer `className`. `cn()` drops a
+ * function, so a state function is wrapped instead: Base UI calls it with the
+ * part's state and the result is merged with the same tailwind-merge order as
+ * a string.
+ */
+const mergeClassName = (
+  base: string,
+  className: ClassNameProp | undefined
+): ClassNameProp =>
+  typeof className === "function"
+    ? (state) => cn(base, className(state))
+    : cn(base, className);
+
 export type AccordionProps = AccordionRootBaseProps & {
   /** The visual style variant of the accordion @default "underline" */
   variant?: AccordionVariant;
@@ -148,7 +162,7 @@ const Accordion = ({
     <AccordionVariantContext.Provider value={variant}>
       <AccordionLeadingIconContext.Provider value={false}>
         <AccordionPrimitive.Root
-          className={cn(baseClasses, classNameProp)}
+          className={mergeClassName(baseClasses, classNameProp)}
           defaultValue={defaultValue}
           disabled={disabled}
           hiddenUntilFound={hiddenUntilFound}
@@ -194,7 +208,7 @@ const AccordionItem = ({
 
   return (
     <AccordionPrimitive.Item
-      className={cn(baseClasses, classNameProp)}
+      className={mergeClassName(baseClasses, classNameProp)}
       ref={ref}
       {...props}
     />
@@ -245,7 +259,7 @@ const AccordionTrigger = ({
 
   return (
     <AccordionPrimitive.Trigger
-      className={cn(baseClasses, classNameProp)}
+      className={mergeClassName(baseClasses, classNameProp)}
       ref={ref}
       {...props}
     >
@@ -302,7 +316,7 @@ const AccordionPanel = ({
 
   return (
     <AccordionPrimitive.Panel
-      className={cn(baseClasses, classNameProp)}
+      className={mergeClassName(baseClasses, classNameProp)}
       keepMounted
       ref={ref}
       {...props}
