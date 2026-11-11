@@ -70,10 +70,13 @@ test.describe("admin-01 sidebar motion", () => {
       "padding",
       "background-color",
       "color",
-      "box-shadow",
     ]) {
       durationOf(buttonMotion, name);
     }
+    // The focus ring is a box-shadow and must appear instantly (D33).
+    expect(buttonMotion.property.split(",").map((p) => p.trim())).not.toContain(
+      "box-shadow"
+    );
     durationOf(await motion(badge), "color");
     durationOf(await motion(rail, "::after"), "background-color");
   });
