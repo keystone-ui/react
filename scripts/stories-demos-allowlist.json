@@ -286,7 +286,7 @@
       "wireless-mouse"
     ],
     "tabs": ["controlled"],
-    "tag": ["worst-case"],
+    "tag": ["whitespace-between-parts", "worst-case"],
     "tag-group": [
       "alice",
       "amenities",
@@ -297,6 +297,7 @@
       "fred",
       "jane",
       "michael",
+      "whitespace-between-parts",
       "with-list-data",
       "worst-case"
     ],

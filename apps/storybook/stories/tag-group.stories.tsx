@@ -479,3 +479,98 @@ export const WorstCase: Story = {
     );
   },
 };
+
+// ---------------------------------------------------------------------------
+// Whitespace between parts
+// ---------------------------------------------------------------------------
+
+/** A non-breaking space: content, unlike an ordinary JSX space. */
+const NBSP = "\u00a0";
+
+const rect = (root: HTMLElement, testId: string) =>
+  within(root).getByTestId(testId).getBoundingClientRect();
+
+/** Pills `a` and `b` have the same width, with half a pixel for rounding. */
+function expectSameWidth(root: HTMLElement, a: string, b: string) {
+  expect(Math.abs(rect(root, a).width - rect(root, b).width)).toBeLessThan(0.5);
+}
+
+/**
+ * JSX puts a `{" "}` between an icon and a label. That space is collapsible
+ * whitespace: as a bare string it is an anonymous flex item that layout
+ * ignores, so the pill must look the same with or without it. A non-breaking
+ * space is content and stays part of the label.
+ */
+export const WhitespaceBetweenParts: Story = {
+  name: "Whitespace between parts",
+  render: () => (
+    <div className="flex flex-col items-start gap-2">
+      <TagGroup>
+        <TagGroupItem data-testid="spaced" value="spaced">
+          <NewspaperIcon /> <strong>News</strong>
+        </TagGroupItem>
+        <TagGroupItem data-testid="tight" value="tight">
+          <NewspaperIcon />
+          <strong>News</strong>
+        </TagGroupItem>
+        <TagGroupItem data-testid="nbsp" value="nbsp">
+          <NewspaperIcon />
+          {NBSP}
+          <strong>News</strong>
+        </TagGroupItem>
+      </TagGroup>
+      <TagGroup>
+        <TagGroupItem data-testid="leading" value="leading">
+          {" "}
+          <strong>News</strong>
+        </TagGroupItem>
+        <TagGroupItem data-testid="trailing" value="trailing">
+          <strong>News</strong>{" "}
+        </TagGroupItem>
+        <TagGroupItem data-testid="bare" value="bare">
+          <strong>News</strong>
+        </TagGroupItem>
+      </TagGroup>
+      <TagGroup onRemove={() => undefined}>
+        <TagGroupItem data-testid="blank-removable" value="blank">
+          {" "}
+        </TagGroupItem>
+        <TagGroupItem data-testid="empty-removable" value="empty" />
+      </TagGroup>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const spaced = within(canvasElement).getByTestId("spaced");
+    const gap = Number.parseFloat(getComputedStyle(spaced).columnGap);
+    await expect(gap).toBe(4);
+
+    // `<Icon />{" "}<strong>` is spaced exactly like `<Icon /><strong>`.
+    expectSameWidth(canvasElement, "spaced", "tight");
+    const icon = spaced.querySelector("svg") as SVGElement;
+    const label = spaced.querySelector("strong") as HTMLElement;
+    await expect(
+      label.getBoundingClientRect().left - icon.getBoundingClientRect().right
+    ).toBeCloseTo(gap, 1);
+
+    // A leading or trailing ordinary space adds nothing either.
+    expectSameWidth(canvasElement, "leading", "bare");
+    expectSameWidth(canvasElement, "trailing", "bare");
+
+    // A whitespace-only removable item is as wide as an empty one.
+    expectSameWidth(canvasElement, "blank-removable", "empty-removable");
+
+    // A non-breaking space is content: it keeps its own label span and
+    // takes room, so the pill is wider than the tight one by more than a gap.
+    const nbsp = within(canvasElement).getByTestId("nbsp");
+    const nbspSpan = Array.from(
+      nbsp.querySelectorAll<HTMLElement>(":scope > span")
+    ).find((s) => s.textContent === NBSP);
+    await expect(nbspSpan).toBeDefined();
+    await expect(
+      (nbspSpan as HTMLElement).getBoundingClientRect().width
+    ).toBeGreaterThan(0);
+    await expect(rect(canvasElement, "nbsp").width).toBeGreaterThan(
+      rect(canvasElement, "tight").width + gap
+    );
+  },
+};

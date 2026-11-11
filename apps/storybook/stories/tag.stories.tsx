@@ -251,3 +251,46 @@ export const WorstCase: Story = {
     await expect(label[0]).toHaveTextContent("1 member");
   },
 };
+
+// ---------------------------------------------------------------------------
+// Whitespace between parts
+// ---------------------------------------------------------------------------
+
+/**
+ * JSX puts a `{" "}` between an icon and a label. That space is collapsible
+ * whitespace and must not become a flex item of its own: the pill looks the
+ * same with or without it, with one 4px gap between icon and label.
+ */
+export const WhitespaceBetweenParts: Story = {
+  name: "Whitespace between parts",
+  render: () => (
+    <div className="flex flex-wrap gap-2">
+      <Tag data-testid="spaced" value="spaced">
+        <BellIcon /> <strong>Alerts</strong>
+      </Tag>
+      <Tag data-testid="tight" value="tight">
+        <BellIcon />
+        <strong>Alerts</strong>
+      </Tag>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const spaced = canvas.getByTestId("spaced");
+    const tight = canvas.getByTestId("tight");
+    const gap = Number.parseFloat(getComputedStyle(spaced).columnGap);
+    await expect(gap).toBe(4);
+
+    await expect(
+      Math.abs(
+        spaced.getBoundingClientRect().width -
+          tight.getBoundingClientRect().width
+      )
+    ).toBeLessThan(0.5);
+    const icon = spaced.querySelector("svg") as SVGElement;
+    const label = spaced.querySelector("strong") as HTMLElement;
+    await expect(
+      label.getBoundingClientRect().left - icon.getBoundingClientRect().right
+    ).toBeCloseTo(gap, 1);
+  },
+};
