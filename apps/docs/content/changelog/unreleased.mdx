@@ -1,7 +1,7 @@
 ---
 date: "2026-11-11"
 description: "What's coming in the next release"
-excerpt: "7 changes queued for the next release."
+excerpt: "8 changes queued for the next release."
 ---
 
 ## Patch changes
@@ -39,6 +39,14 @@ Both paired `outline-none` with `focus-visible:outline-2`. In Tailwind v4, `outl
 ### Disabled Slider thumb no longer dimmed twice
 
 A disabled `Slider` dimmed its thumb to 50% on top of the 50% already applied to `SliderControl`, so the thumb showed at 25% opacity, fainter than the track and range around it. The thumb now inherits the control's dimming only and matches the rest of the disabled slider at 50%. Cursor, track and range are unchanged.
+
+---
+
+### Long TagGroupItem labels end in an ellipsis
+
+A `TagGroupItem` label too long for its container now ends in an ellipsis, as a `Tag` label does, and the remove button from `onRemove` stays visible inside the pill. Before, the label was cut off with no ellipsis and pushed the remove button out of view. Short labels look the same as before, including a `{" "}` between an icon and the label.
+
+This also fixes `Tag`: an ordinary space on its own between parts, such as `<Icon />{" "}<strong>Label</strong>`, no longer adds a second 4px gap and widens the pill. A non-breaking space is still part of the label.
 
 ---
 
