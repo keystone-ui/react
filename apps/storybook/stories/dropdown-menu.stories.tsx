@@ -273,6 +273,20 @@ export const Basic: Story = {
 // =============================================================================
 // Submenu
 // =============================================================================
+/** The open menu row with this accessible name (popups are portalled). */
+function menuItem(name: RegExp) {
+  return within(document.body).findByRole("menuitem", { name });
+}
+
+/**
+ * Layout height of the menu row with this accessible name. `offsetHeight`,
+ * not the bounding rect: the popup opens with a scale transform, so a rect
+ * read mid-animation reports a shrunken row.
+ */
+async function itemHeight(name: RegExp) {
+  return ((await menuItem(name)) as HTMLElement).offsetHeight;
+}
+
 export const Submenu: Story = {
   render: () => (
     <DropdownMenu>
@@ -310,11 +324,68 @@ export const Submenu: Story = {
       </DropdownMenuContent>
     </DropdownMenu>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: /^open$/i }));
+
+    // With no `size`, parent and submenu rows share the 36px popup item tier.
+    await expect(await itemHeight(/^team$/i)).toBe(36);
+    await userEvent.click(await menuItem(/invite users/i));
+    await waitFor(async () => {
+      await expect(await itemHeight(/^email$/i)).toBe(36);
+    });
+  },
   parameters: {
     docs: {
       description: {
         story:
           "Use `DropdownMenuSub` to nest secondary actions. Submenus can be nested multiple levels deep.",
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Compact submenu
+// =============================================================================
+
+export const CompactSubmenu: Story = {
+  name: "Compact submenu",
+  render: () => (
+    <DropdownMenu>
+      <DropdownMenuTrigger render={<Button variant="outline">Open</Button>} />
+      <DropdownMenuContent size="compact">
+        <DropdownMenuItem>Team</DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent size="compact">
+              <DropdownMenuItem>Email</DropdownMenuItem>
+              <DropdownMenuItem>Message</DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: /^open$/i }));
+    await expect(await itemHeight(/^team$/i)).toBe(32);
+
+    // A submenu is portalled out of its parent popup, so it takes its own
+    // `size`: an explicit compact submenu matches the 32px parent rows. The
+    // default 36px tier is pinned by the Submenu story.
+    await userEvent.click(await menuItem(/invite users/i));
+    await waitFor(async () => {
+      await expect(await itemHeight(/^email$/i)).toBe(32);
+    });
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'A submenu does not inherit its parent\'s `size`: pass `size="compact"` to `DropdownMenuSubContent` too.',
       },
     },
   },
