@@ -158,6 +158,16 @@ type Story = StoryObj<typeof meta>;
 // Default
 // ---------------------------------------------------------------------------
 
+/** Button's `transition-[…]` list (`packages/ui/src/button.tsx`). */
+const BUTTON_TRANSITION_PROPERTIES = [
+  "scale",
+  "background-color",
+  "color",
+  "border-color",
+  "box-shadow",
+  "outline-color",
+];
+
 export const Default: Story = {
   render: () => (
     <div className="mx-auto max-w-lg">
@@ -181,6 +191,9 @@ export const Default: Story = {
 
     const nextButton = canvas.getByRole("button", { name: /next/i });
     await expect(nextButton).toBeInTheDocument();
+    await expect(
+      getComputedStyle(nextButton).transitionProperty.split(/,\s*/)
+    ).toEqual(BUTTON_TRANSITION_PROPERTIES);
   },
 };
 
@@ -345,6 +358,23 @@ export const AutoHideArrows: Story = {
           "The `autoHideArrows` prop hides prev/next buttons by default and reveals them when the carousel is hovered. Uses the `group/carousel` pattern for CSS-only show/hide.",
       },
     },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // The fade adds `opacity` to Button's own transition list; it must not
+    // replace it, or hover colour and press scale snap on auto-hide arrows.
+    const arrows = [/previous/i, /next/i].map((name) =>
+      getComputedStyle(canvas.getByRole("button", { name }))
+    );
+    await expect(
+      arrows.map((style) => style.transitionProperty.split(/,\s*/))
+    ).toEqual([
+      expect.arrayContaining(["opacity", ...BUTTON_TRANSITION_PROPERTIES]),
+      expect.arrayContaining(["opacity", ...BUTTON_TRANSITION_PROPERTIES]),
+    ]);
+    await expect(arrows.map((style) => style.transitionDuration)).not.toContain(
+      "0s"
+    );
   },
 };
 
