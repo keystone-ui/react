@@ -23,8 +23,9 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
         "aria-invalid:border-destructive aria-invalid:transition-none dark:aria-invalid:border-destructive/50",
         "aria-invalid:focus-visible:outline-destructive/50",
         "aria-invalid:data-checked:border-destructive aria-invalid:data-checked:bg-destructive aria-invalid:data-checked:text-destructive-foreground",
-        // Disabled styles
-        "disabled:cursor-not-allowed disabled:opacity-50 group-has-disabled/field:opacity-50",
+        // Disabled styles. Base UI renders a <span>, so :disabled never matches;
+        // data-disabled is what dims it outside a Field.
+        "disabled:cursor-not-allowed disabled:opacity-50 group-has-disabled/field:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50",
         className
       )}
       data-slot="checkbox"

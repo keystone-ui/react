@@ -12,6 +12,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
 
@@ -248,5 +251,41 @@ describe("DropdownMenu close-on-click", () => {
     await user.click(screen.getByText("Status"));
 
     expect(screen.getByText("Assignee")).toBeInTheDocument();
+  });
+});
+
+// =============================================================================
+// DropdownMenuSubContent size
+// =============================================================================
+describe("DropdownMenuSubContent size", () => {
+  function renderSubmenu(size?: "default" | "compact") {
+    return render(
+      <DropdownMenu defaultOpen>
+        <DropdownMenuTrigger>Open Menu</DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuSub defaultOpen>
+            <DropdownMenuSubTrigger>More</DropdownMenuSubTrigger>
+            <DropdownMenuSubContent size={size}>
+              <DropdownMenuItem>Nested</DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+
+  const subContent = () =>
+    document.querySelector('[data-slot="dropdown-menu-sub-content"]');
+
+  it("sets data-size from an explicit size, as DropdownMenuContent does", async () => {
+    renderSubmenu("compact");
+    await waitFor(() => expect(subContent()).not.toBeNull());
+    expect(subContent()).toHaveAttribute("data-size", "compact");
+  });
+
+  it("defaults data-size to default", async () => {
+    renderSubmenu();
+    await waitFor(() => expect(subContent()).not.toBeNull());
+    expect(subContent()).toHaveAttribute("data-size", "default");
   });
 });

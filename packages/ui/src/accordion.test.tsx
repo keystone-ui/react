@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { ComponentProps } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import {
@@ -625,5 +626,203 @@ describe("AccordionPanel", () => {
     const panel = panelContent.closest('[role="region"][aria-labelledby]');
     expect(panel).toBeInTheDocument();
     expect(panel).toHaveAttribute("aria-labelledby");
+  });
+});
+
+// =============================================================================
+// Function className (Base UI contract: called with the part's state)
+// =============================================================================
+describe("function className", () => {
+  function renderWithFns() {
+    const fns = {
+      root: vi.fn((s: { disabled: boolean }) =>
+        s.disabled ? "fn-root-disabled" : "fn-root-enabled"
+      ),
+      item: vi.fn((s: { open: boolean }) =>
+        s.open ? "fn-item-open" : "fn-item-closed"
+      ),
+      trigger: vi.fn((s: { open: boolean }) =>
+        // py-4 must override the trigger's own py-2.5, as a string would
+        s.open ? "fn-trigger-open py-4" : "fn-trigger-closed py-4"
+      ),
+      panel: vi.fn((s: { open: boolean }) =>
+        s.open ? "fn-panel-open" : "fn-panel-closed"
+      ),
+    };
+    render(
+      <Accordion className={fns.root} data-testid="root">
+        <AccordionItem className={fns.item} data-testid="item" value="a">
+          <AccordionHeader>
+            <AccordionTrigger className={fns.trigger}>Toggle</AccordionTrigger>
+          </AccordionHeader>
+          <AccordionPanel className={fns.panel} data-testid="panel">
+            Body
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+    );
+    return fns;
+  }
+
+  it("calls each part's function with its Base UI state", () => {
+    const fns = renderWithFns();
+    expect(fns.root).toHaveBeenCalledWith(
+      expect.objectContaining({ disabled: false })
+    );
+    for (const fn of [fns.item, fns.trigger, fns.panel]) {
+      expect(fn).toHaveBeenCalledWith(expect.objectContaining({ open: false }));
+    }
+  });
+
+  it("lands the function's classes on each element, merged with the part's own", () => {
+    renderWithFns();
+    const root = screen.getByTestId("root");
+    expect(root).toHaveClass("fn-root-enabled", "flex", "w-full");
+
+    const item = screen.getByTestId("item");
+    expect(item).toHaveClass("fn-item-closed", "group");
+
+    const trigger = screen.getByRole("button", { name: "Toggle" });
+    expect(trigger).toHaveClass("fn-trigger-closed", "py-4", "cursor-pointer");
+    expect(trigger).not.toHaveClass("py-2.5");
+
+    const panel = screen.getByTestId("panel");
+    expect(panel).toHaveClass("fn-panel-closed", "overflow-hidden");
+  });
+
+  it("re-evaluates the function when the state changes", async () => {
+    const user = userEvent.setup();
+    renderWithFns();
+    await user.click(screen.getByRole("button", { name: "Toggle" }));
+
+    expect(screen.getByTestId("item")).toHaveClass("fn-item-open");
+    expect(screen.getByRole("button", { name: "Toggle" })).toHaveClass(
+      "fn-trigger-open"
+    );
+    expect(screen.getByTestId("panel")).toHaveClass(
+      "fn-panel-open",
+      "overflow-hidden"
+    );
+    expect(screen.getByTestId("item")).not.toHaveClass("fn-item-closed");
+  });
+
+  it("still merges a string className over the part's own classes", () => {
+    render(
+      <Accordion className="str-root" data-testid="root">
+        <AccordionItem className="str-item" data-testid="item" value="a">
+          <AccordionHeader>
+            <AccordionTrigger className="py-4">Toggle</AccordionTrigger>
+          </AccordionHeader>
+          <AccordionPanel className="str-panel" data-testid="panel">
+            Body
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+    );
+    expect(screen.getByTestId("root")).toHaveClass("str-root", "flex");
+    expect(screen.getByTestId("item")).toHaveClass("str-item", "group");
+    const trigger = screen.getByRole("button", { name: "Toggle" });
+    expect(trigger).toHaveClass("py-4", "cursor-pointer");
+    expect(trigger).not.toHaveClass("py-2.5");
+    expect(screen.getByTestId("panel")).toHaveClass(
+      "str-panel",
+      "overflow-hidden"
+    );
+  });
+});
+
+// =============================================================================
+// Function className: AccordionHeader and the full contract
+// =============================================================================
+describe("function className contract", () => {
+  function renderHeader(
+    className?: Parameters<typeof AccordionHeader>[0]["className"]
+  ) {
+    const { container } = render(
+      <Accordion defaultValue={["a"]}>
+        <AccordionItem value="a">
+          <AccordionHeader className={className}>
+            <AccordionTrigger>Toggle</AccordionTrigger>
+          </AccordionHeader>
+          <AccordionPanel>Body</AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+    );
+    return container.querySelector("h3") as HTMLElement;
+  }
+
+  it("AccordionHeader calls a function className with its state and lands the class on the h3", () => {
+    const fn = vi.fn((s: { open: boolean }) =>
+      s.open ? "fn-header-open" : "fn-header-closed"
+    );
+    const header = renderHeader(fn);
+    expect(fn).toHaveBeenCalledWith(expect.objectContaining({ open: true }));
+    expect(header.getAttribute("class")).toBe("fn-header-open");
+  });
+
+  it("AccordionHeader keeps today's output for a string and for undefined", () => {
+    expect(renderHeader("str-h").getAttribute("class")).toBe("str-h");
+    // Today `cn(undefined)` is "", which Base UI omits: no class attribute.
+    expect(renderHeader(undefined).hasAttribute("class")).toBe(false);
+  });
+
+  it("a function returning undefined leaves exactly the part's own classes", () => {
+    const own = () =>
+      screen.getByRole("button", { name: "Toggle" }).getAttribute("class");
+    const { unmount } = render(
+      <Accordion>
+        <AccordionItem value="a">
+          <AccordionHeader>
+            <AccordionTrigger>Toggle</AccordionTrigger>
+          </AccordionHeader>
+        </AccordionItem>
+      </Accordion>
+    );
+    const baseline = own();
+    unmount();
+    const returnsUndefined = () => undefined as unknown as string;
+    render(
+      <Accordion>
+        <AccordionItem value="a">
+          <AccordionHeader>
+            <AccordionTrigger className={returnsUndefined}>
+              Toggle
+            </AccordionTrigger>
+          </AccordionHeader>
+        </AccordionItem>
+      </Accordion>
+    );
+    expect(baseline).toBeTruthy();
+    expect(own()).toBe(baseline);
+  });
+
+  it("passes the consumer function the same state object Base UI passes to render", () => {
+    const fromClassName: unknown[] = [];
+    const fromRender: unknown[] = [];
+    const recordClassName = (s: unknown) => {
+      fromClassName.push(s);
+      return "x";
+    };
+    const recordRender = (props: ComponentProps<"div">, s: unknown) => {
+      fromRender.push(s);
+      return <div {...props} />;
+    };
+    render(
+      <Accordion>
+        <AccordionItem
+          className={recordClassName}
+          disabled
+          render={recordRender}
+          value="a"
+        >
+          <AccordionHeader>
+            <AccordionTrigger>Toggle</AccordionTrigger>
+          </AccordionHeader>
+        </AccordionItem>
+      </Accordion>
+    );
+    const last = fromClassName.at(-1);
+    expect(last).toBe(fromRender.at(-1));
+    expect(last).toEqual(expect.objectContaining({ disabled: true }));
   });
 });

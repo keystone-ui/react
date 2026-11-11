@@ -158,6 +158,38 @@ export const WithRemove: Story = {
       </Tag>
     </div>
   ),
+  // TagRemove's keyboard focus outline matches the Tag it sits in (and
+  // Button). A bare `outline-none` beside `focus-visible:outline-2` set
+  // `--tw-outline-style: none`, which `outline-2` reads, so the outline
+  // computed to `none` while the class list looked right.
+  play: async ({ canvasElement }) => {
+    const tag = canvasElement.querySelector('[data-slot="tag"]') as HTMLElement;
+    const remove = tag.querySelector('[data-slot="tag-remove"]') as HTMLElement;
+
+    tag.focus();
+    await expect(tag.matches(":focus-visible")).toBe(true);
+    // Tag transitions outline-color; read the settled value.
+    await new Promise((r) => setTimeout(r, 300));
+    const reference = getComputedStyle(tag);
+    const expected = {
+      style: reference.outlineStyle,
+      width: reference.outlineWidth,
+      offset: reference.outlineOffset,
+      color: reference.outlineColor,
+    };
+    await expect(expected.style).toBe("solid");
+
+    remove.focus();
+    await expect(remove.matches(":focus-visible")).toBe(true);
+    const actual = getComputedStyle(remove);
+    await expect({
+      style: actual.outlineStyle,
+      width: actual.outlineWidth,
+      offset: actual.outlineOffset,
+      color: actual.outlineColor,
+    }).toEqual(expected);
+    remove.blur();
+  },
 };
 
 // ---------------------------------------------------------------------------

@@ -7,7 +7,7 @@
       "perSizeStoriesVsSizesDemo": "stories Small/Medium/Large → demo sizes.tsx. Story-only by design.",
       "singularStoryVsPluralDemo": "story WithIcon → demo with-icons. Treat as conceptual match; allowlisted on story side.",
       "basicStoryVsDefaultDemo": "story Basic → demo default. Conceptual match; allowlisted.",
-      "regressionFixture": "story exists to host a play() regression test for a fixed bug (date-input callback-ref: forwarded callback ref must still reach the picker button). Not a docs variant; story-only by design.",
+      "regressionFixture": "story exists to host a play() regression test for a fixed bug (date-input callback-ref: forwarded callback ref must still reach the picker button; checkbox and radio-group disabled-dimming: a disabled Base UI span must dim outside a Field; label disabled-peer-scope: in a flat layout a disabled control never dims an enabled control's label). Not a docs variant; story-only by design.",
       "cssUtilityFixture": "CSS-only utilities in base.css (scroll-fade, shimmer) have no component and no demo directory; their story hosts the browser play() test, and the docs page is theming/utilities.",
       "worstCaseFixture": "story feeds realistic worst-case data (80-char unbroken email, four-digit page, counts of 0 and 1) and its play() measures real layout in the browser — overflow, rects inside container and viewport, positioner z-index. A layout regression test, not a docs variant; story-only by design."
     }
@@ -64,6 +64,7 @@
       "basic",
       "checked-state",
       "description",
+      "disabled-dimming",
       "invalid",
       "pill-checkbox-group"
     ],
@@ -155,6 +156,7 @@
       "checkboxes-control",
       "checkboxes-icons",
       "checkboxes-with-icons",
+      "compact-submenu",
       "complex",
       "default",
       "destructive",
@@ -242,7 +244,7 @@
       "variant"
     ],
     "kbd": ["complex-shortcut", "single-key", "windows-style"],
-    "label": ["examples"],
+    "label": ["disabled-peer-scope", "examples"],
     "modal": [
       "custom-close-button",
       "footer-with-close-button",
@@ -253,7 +255,7 @@
     "pagination": ["worst-case"],
     "popover": ["basic", "with-close"],
     "progress": ["basic", "custom-value-format", "with-label-and-value"],
-    "radio-group": ["basic", "description", "invalid"],
+    "radio-group": ["basic", "description", "disabled-dimming", "invalid"],
     "resizable": ["handle"],
     "select": [
       "align-item-with-trigger",

@@ -16,6 +16,20 @@ type RenderProp =
 type ClassNameProp = string | ((state: any) => string);
 // biome-ignore-end lint/suspicious/noExplicitAny: render/className accept Base UI's state generic, which varies per part
 
+/**
+ * Merge a part's own classes with a consumer `className`. `cn()` drops a
+ * function, so a state function is wrapped instead: Base UI calls it with the
+ * part's state and the result is merged with the same tailwind-merge order as
+ * a string.
+ */
+const mergeClassName = (
+  base: string,
+  className: ClassNameProp | undefined
+): ClassNameProp =>
+  typeof className === "function"
+    ? (state) => cn(base, className(state))
+    : cn(base, className);
+
 type CollapsibleRootBaseProps = Omit<
   React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Root>,
   "className" | "render"
@@ -125,7 +139,7 @@ const CollapsibleContent = ({
 
   return (
     <CollapsiblePrimitive.Panel
-      className={cn(baseClasses, className)}
+      className={mergeClassName(baseClasses, className)}
       data-slot="collapsible-content"
       keepMounted
       ref={ref}
