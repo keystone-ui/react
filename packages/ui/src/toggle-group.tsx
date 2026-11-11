@@ -84,6 +84,9 @@ function ToggleGroup({
       )}
       data-orientation={orientation}
       data-slot="toggle-group"
+      // Base UI picks the roving-focus arrow keys from this prop: without it
+      // a vertical group still moved on ArrowLeft/ArrowRight.
+      orientation={orientation}
       style={
         spacing > 0
           ? ({ ...style, gap: `${spacing * 0.25}rem` } as CSSProperties)
