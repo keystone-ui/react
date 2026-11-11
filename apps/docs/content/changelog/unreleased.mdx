@@ -1,7 +1,11 @@
 ---
-date: "2026-11-10"
+date: "2026-11-11"
 description: "What's coming in the next release"
-excerpt: "No changes since the last release."
+excerpt: "1 change queued for the next release."
 ---
 
-No changes merged since v1.0.0-beta.11.
+## Patch changes
+
+### Function `className` now works on Accordion parts and `CollapsibleContent`.
+
+`Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionPanel` and `CollapsibleContent` accept `className` as a function of the part's state (`className={(state) => state.open ? "…" : "…"}`), as their types already declared. Before this, the function was silently dropped and none of its classes reached the element. The function is now called with the Base UI state and its result is merged over the part's own classes, exactly as a string `className` is. A string `className` behaves as before.
