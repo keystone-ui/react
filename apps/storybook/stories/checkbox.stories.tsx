@@ -192,9 +192,10 @@ const effectiveOpacity = (el: Element | null) => {
 
 /**
  * Base UI renders the checkbox as a `<span>`, so `:disabled` never matches it;
- * the dimming has to come from `data-disabled`. A bare checkbox and its
- * sibling `Label` dim on their own, and inside a disabled `Field` nothing dims
- * twice.
+ * the dimming has to come from `data-disabled`. A bare checkbox dims on its
+ * own, and inside a disabled `Field` the control and its `FieldLabel` stay at
+ * 0.5 (nothing dims twice). A sibling `Label` is deliberately not asserted:
+ * Label has no safe way to know its control is disabled.
  */
 export const DisabledDimming: Story = {
   name: "Disabled dimming",
@@ -202,9 +203,7 @@ export const DisabledDimming: Story = {
     <div className="mx-auto flex w-56 flex-col gap-6">
       <div className="flex items-center gap-2">
         <Checkbox data-testid="bare" disabled id="bare-disabled" />
-        <Label data-testid="bare-label" htmlFor="bare-disabled">
-          Outside a Field
-        </Label>
+        <Label htmlFor="bare-disabled">Outside a Field</Label>
       </div>
       <Field data-disabled orientation="horizontal">
         <Checkbox data-testid="in-field" disabled id="field-disabled" />
@@ -227,10 +226,6 @@ export const DisabledDimming: Story = {
     await expect(bare).toHaveAttribute("data-disabled");
     await expect(effectiveOpacity(bare)).toBe(0.5);
     await expect(getComputedStyle(bare).cursor).toBe("not-allowed");
-
-    const bareLabel = canvas.getByTestId("bare-label");
-    await expect(effectiveOpacity(bareLabel)).toBe(0.5);
-    await expect(getComputedStyle(bareLabel).cursor).toBe("not-allowed");
 
     const inField = canvas.getByTestId("in-field");
     await expect(effectiveOpacity(inField)).toBe(0.5);

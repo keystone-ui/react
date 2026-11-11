@@ -190,70 +190,71 @@ const effectiveOpacity = (el: Element | null) => {
 };
 
 /**
- * A label dims only for the control directly before it. Base UI renders
- * `span.peer`, a hidden `<input>`, then the label, so in a flat layout a
- * disabled control must not dim the label of an enabled one further along.
+ * Flat layouts of Base UI controls and labels under one parent. A disabled
+ * Checkbox, RadioGroupItem or Switch dims itself (0.5, not-allowed) inside and
+ * outside a `Field`, and never dims the label of an enabled control further
+ * along: Base UI renders `span.peer`, hidden `<input>`(s), then the label, so
+ * a sibling rule on Label cannot tell its own control from a neighbour's.
  */
 export const DisabledPeerScope: Story = {
   name: "Disabled peer scope",
   render: () => (
     <div className="flex w-72 flex-col gap-6">
       <div className="grid grid-cols-[auto_1fr] items-center gap-3">
-        <Checkbox disabled id="cb-locked" />
-        <Label data-testid="cb-locked-label" htmlFor="cb-locked">
-          Locked checkbox
-        </Label>
+        <Checkbox data-testid="cb-locked" disabled id="cb-locked" />
+        <Label htmlFor="cb-locked">Locked checkbox</Label>
         <Checkbox data-testid="cb-open" id="cb-open" />
         <Label data-testid="cb-open-label" htmlFor="cb-open">
           Available checkbox
         </Label>
       </div>
       <RadioGroup className="grid grid-cols-[auto_1fr] items-center gap-3">
-        <RadioGroupItem disabled id="radio-locked" value="locked" />
-        <Label data-testid="radio-locked-label" htmlFor="radio-locked">
-          Locked radio
-        </Label>
+        <RadioGroupItem
+          data-testid="radio-locked"
+          disabled
+          id="radio-locked"
+          value="locked"
+        />
+        <Label htmlFor="radio-locked">Locked radio</Label>
         <RadioGroupItem data-testid="radio-open" id="radio-open" value="open" />
         <Label data-testid="radio-open-label" htmlFor="radio-open">
           Available radio
         </Label>
       </RadioGroup>
       <div className="grid grid-cols-[auto_1fr] items-center gap-3">
-        <Switch disabled id="switch-locked" />
-        <Label data-testid="switch-locked-label" htmlFor="switch-locked">
-          Locked switch
-        </Label>
+        <Switch data-testid="switch-locked" disabled id="switch-locked" />
+        <Label htmlFor="switch-locked">Locked switch</Label>
         <Checkbox data-testid="after-switch" id="after-switch" />
         <Label data-testid="after-switch-label" htmlFor="after-switch">
           Available after a switch
         </Label>
       </div>
       <Field orientation="horizontal">
-        <Checkbox disabled id="cb-field" />
-        <FieldLabel data-testid="cb-field-label" htmlFor="cb-field">
-          Checkbox in a Field
-        </FieldLabel>
+        <Checkbox data-testid="cb-field" disabled id="cb-field" />
+        <FieldLabel htmlFor="cb-field">Checkbox in a Field</FieldLabel>
       </Field>
       <RadioGroup>
         <Field orientation="horizontal">
-          <RadioGroupItem disabled id="radio-field" value="field" />
-          <FieldLabel data-testid="radio-field-label" htmlFor="radio-field">
-            Radio in a Field
-          </FieldLabel>
+          <RadioGroupItem
+            data-testid="radio-field"
+            disabled
+            id="radio-field"
+            value="field"
+          />
+          <FieldLabel htmlFor="radio-field">Radio in a Field</FieldLabel>
         </Field>
       </RadioGroup>
       <Field orientation="horizontal">
-        <Switch disabled id="switch-field" />
-        <FieldLabel data-testid="switch-field-label" htmlFor="switch-field">
-          Switch in a Field
-        </FieldLabel>
+        <Switch data-testid="switch-field" disabled id="switch-field" />
+        <FieldLabel htmlFor="switch-field">Switch in a Field</FieldLabel>
       </Field>
       <Field data-disabled orientation="horizontal">
-        <Switch disabled id="switch-disabled-field" />
-        <FieldLabel
-          data-testid="switch-disabled-field-label"
-          htmlFor="switch-disabled-field"
-        >
+        <Switch
+          data-testid="switch-disabled-field"
+          disabled
+          id="switch-disabled-field"
+        />
+        <FieldLabel htmlFor="switch-disabled-field">
           Switch in a disabled Field
         </FieldLabel>
       </Field>
@@ -262,25 +263,25 @@ export const DisabledPeerScope: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const measure = (id: string) => {
-      const label = canvas.getByTestId(id);
+      const el = canvas.getByTestId(id);
       return {
         id,
-        opacity: effectiveOpacity(label),
-        notAllowed: getComputedStyle(label).cursor === "not-allowed",
+        opacity: effectiveOpacity(el),
+        notAllowed: getComputedStyle(el).cursor === "not-allowed",
       };
     };
 
-    const disabledLabels = [
-      "cb-locked-label",
-      "radio-locked-label",
-      "switch-locked-label",
-      "cb-field-label",
-      "radio-field-label",
-      "switch-field-label",
-      "switch-disabled-field-label",
+    const disabledControls = [
+      "cb-locked",
+      "radio-locked",
+      "switch-locked",
+      "cb-field",
+      "radio-field",
+      "switch-field",
+      "switch-disabled-field",
     ];
-    await expect(disabledLabels.map(measure)).toEqual(
-      disabledLabels.map((id) => ({ id, opacity: 0.5, notAllowed: true }))
+    await expect(disabledControls.map(measure)).toEqual(
+      disabledControls.map((id) => ({ id, opacity: 0.5, notAllowed: true }))
     );
 
     const enabledLabels = [

@@ -325,8 +325,10 @@ const effectiveOpacity = (el: Element | null) => {
 /**
  * Base UI renders each radio as a `<span>`, so `:disabled` never matches it;
  * the dimming has to come from `data-disabled`. A bare item, an item in a
- * disabled group, and a sibling `Label` dim on their own, and inside a
- * disabled `Field` nothing dims twice.
+ * disabled group dim on their own, and inside a disabled `Field` the item and
+ * its `FieldLabel` stay at 0.5 (nothing dims twice). A sibling `Label` is
+ * deliberately not asserted: Label has no safe way to know its control is
+ * disabled.
  */
 export const DisabledDimming: Story = {
   name: "Disabled dimming",
@@ -340,9 +342,7 @@ export const DisabledDimming: Story = {
             id="bare-disabled"
             value="bare"
           />
-          <Label data-testid="bare-label" htmlFor="bare-disabled">
-            Outside a Field
-          </Label>
+          <Label htmlFor="bare-disabled">Outside a Field</Label>
         </div>
         <Field data-disabled orientation="horizontal">
           <RadioGroupItem
@@ -378,10 +378,6 @@ export const DisabledDimming: Story = {
     await expect(bare).toHaveAttribute("data-disabled");
     await expect(effectiveOpacity(bare)).toBe(0.5);
     await expect(getComputedStyle(bare).cursor).toBe("not-allowed");
-
-    const bareLabel = canvas.getByTestId("bare-label");
-    await expect(effectiveOpacity(bareLabel)).toBe(0.5);
-    await expect(getComputedStyle(bareLabel).cursor).toBe("not-allowed");
 
     const inField = canvas.getByTestId("in-field");
     await expect(effectiveOpacity(inField)).toBe(0.5);
