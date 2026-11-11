@@ -20,9 +20,13 @@ export const Label = ({
     className={cn(
       "select-none font-medium text-foreground text-sm leading-4",
       "peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
-      // Base UI controls (Checkbox, Radio) render a <span>, which never
-      // matches :disabled; they mark themselves with data-disabled instead.
-      "peer-data-disabled:cursor-not-allowed peer-data-disabled:opacity-50",
+      // Base UI controls (Checkbox, Radio, Switch) render a <span>, which
+      // never matches :disabled; they mark themselves with data-disabled. Only
+      // the label right after its own control dims (adjacent `+`, not peer's
+      // `~`), with or without Base UI's hidden <input> between them, so a
+      // disabled control never dims a later control's label.
+      "[.peer[data-disabled]+&]:cursor-not-allowed [.peer[data-disabled]+&]:opacity-50",
+      "[.peer[data-disabled]+input+&]:cursor-not-allowed [.peer[data-disabled]+input+&]:opacity-50",
       className
     )}
     ref={ref}
