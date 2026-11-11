@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { ComponentProps } from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import {
@@ -727,5 +728,101 @@ describe("function className", () => {
       "str-panel",
       "overflow-hidden"
     );
+  });
+});
+
+// =============================================================================
+// Function className: AccordionHeader and the full contract
+// =============================================================================
+describe("function className contract", () => {
+  function renderHeader(
+    className?: Parameters<typeof AccordionHeader>[0]["className"]
+  ) {
+    const { container } = render(
+      <Accordion defaultValue={["a"]}>
+        <AccordionItem value="a">
+          <AccordionHeader className={className}>
+            <AccordionTrigger>Toggle</AccordionTrigger>
+          </AccordionHeader>
+          <AccordionPanel>Body</AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+    );
+    return container.querySelector("h3") as HTMLElement;
+  }
+
+  it("AccordionHeader calls a function className with its state and lands the class on the h3", () => {
+    const fn = vi.fn((s: { open: boolean }) =>
+      s.open ? "fn-header-open" : "fn-header-closed"
+    );
+    const header = renderHeader(fn);
+    expect(fn).toHaveBeenCalledWith(expect.objectContaining({ open: true }));
+    expect(header.getAttribute("class")).toBe("fn-header-open");
+  });
+
+  it("AccordionHeader keeps today's output for a string and for undefined", () => {
+    expect(renderHeader("str-h").getAttribute("class")).toBe("str-h");
+    // Today `cn(undefined)` is "", which Base UI omits: no class attribute.
+    expect(renderHeader(undefined).hasAttribute("class")).toBe(false);
+  });
+
+  it("a function returning undefined leaves exactly the part's own classes", () => {
+    const own = () =>
+      screen.getByRole("button", { name: "Toggle" }).getAttribute("class");
+    const { unmount } = render(
+      <Accordion>
+        <AccordionItem value="a">
+          <AccordionHeader>
+            <AccordionTrigger>Toggle</AccordionTrigger>
+          </AccordionHeader>
+        </AccordionItem>
+      </Accordion>
+    );
+    const baseline = own();
+    unmount();
+    const returnsUndefined = () => undefined as unknown as string;
+    render(
+      <Accordion>
+        <AccordionItem value="a">
+          <AccordionHeader>
+            <AccordionTrigger className={returnsUndefined}>
+              Toggle
+            </AccordionTrigger>
+          </AccordionHeader>
+        </AccordionItem>
+      </Accordion>
+    );
+    expect(baseline).toBeTruthy();
+    expect(own()).toBe(baseline);
+  });
+
+  it("passes the consumer function the same state object Base UI passes to render", () => {
+    const fromClassName: unknown[] = [];
+    const fromRender: unknown[] = [];
+    const recordClassName = (s: unknown) => {
+      fromClassName.push(s);
+      return "x";
+    };
+    const recordRender = (props: ComponentProps<"div">, s: unknown) => {
+      fromRender.push(s);
+      return <div {...props} />;
+    };
+    render(
+      <Accordion>
+        <AccordionItem
+          className={recordClassName}
+          disabled
+          render={recordRender}
+          value="a"
+        >
+          <AccordionHeader>
+            <AccordionTrigger>Toggle</AccordionTrigger>
+          </AccordionHeader>
+        </AccordionItem>
+      </Accordion>
+    );
+    const last = fromClassName.at(-1);
+    expect(last).toBe(fromRender.at(-1));
+    expect(last).toEqual(expect.objectContaining({ disabled: true }));
   });
 });

@@ -227,7 +227,11 @@ const AccordionHeader = ({
   ...props
 }: AccordionHeaderProps &
   RefAttributes<ComponentRef<typeof AccordionPrimitive.Header>>) => (
-  <AccordionPrimitive.Header className={cn(className)} ref={ref} {...props} />
+  <AccordionPrimitive.Header
+    className={mergeClassName("", className)}
+    ref={ref}
+    {...props}
+  />
 );
 
 AccordionHeader.displayName = "AccordionHeader";
