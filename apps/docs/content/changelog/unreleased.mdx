@@ -1,5 +1,5 @@
 ---
-date: "2026-11-10"
+date: "2026-11-11"
 description: "What's coming in the next release"
 excerpt: "1 change queued for the next release."
 ---
@@ -8,4 +8,8 @@ excerpt: "1 change queued for the next release."
 
 ### Disabled Checkbox and RadioGroupItem dim outside a Field
 
-A disabled `Checkbox` or `RadioGroupItem` now dims to 50% opacity and shows the not-allowed cursor on its own, not only inside a disabled `Field`. Base UI renders both controls as a `<span>`, which `:disabled` never matches, so the `disabled:` styles did nothing; they now key on Base UI's `data-disabled` attribute as well. A `Label` placed right after a disabled Checkbox or RadioGroupItem dims with it the same way. Inside a disabled `Field` the control and its label stay at 50%: nothing dims twice.
+A disabled `Checkbox` or `RadioGroupItem` now dims to 50% opacity and shows the not-allowed cursor on its own, not only inside a disabled `Field`. Base UI renders both controls as a `<span>`, which `:disabled` never matches, so the `disabled:` styles did nothing; they now key on Base UI's `data-disabled` attribute as well.
+
+A `Label` (or `FieldLabel`) placed directly after a disabled Checkbox, RadioGroupItem or Switch now dims with it. Only the label right after its own control is affected, so in a row of options a disabled one never dims the label of an enabled one.
+
+When the label sits next to the control inside a disabled `Field`, the control and its label stay at 50%; they do not dim twice.
