@@ -10,10 +10,41 @@ import {
   EmptyTitle,
 } from "./empty";
 
-// Any Tailwind border-width utility: `border`, `border-2`, `border-x`,
-// `border-s-4`, `border-[3px]`. Style/colour utilities (`border-dashed`,
-// `border-border`) do not match.
-const BORDER_WIDTH_CLASS = /^border(-[xytrblse])?(-\d+|-\[[^\]]+\])?$/;
+// A Tailwind border-width utility: `border`, `border-2`, `border-x`,
+// `border-s-4`, and arbitrary lengths (`border-[3px]`, `border-[length:…]`).
+// Style and colour utilities (`border-dashed`, `border-border`,
+// `border-[#f00]`, `border-[color:…]`, `border-[var(--x)]`) emit no width in
+// Tailwind 4 and do not match. Pinned by the table test below.
+const BORDER_WIDTH_CLASS =
+  /^border(-[xytrblse])?(-\d+|-\[(?:length:[^\]]+|\d*\.?\d+[a-z%]*)\])?$/;
+
+describe("BORDER_WIDTH_CLASS", () => {
+  it.each([
+    "border",
+    "border-2",
+    "border-x",
+    "border-t-4",
+    "border-s-2",
+    "border-[3px]",
+    "border-[0.5rem]",
+    "border-b-[2px]",
+    "border-[length:var(--w)]",
+  ])("classifies %s as a width", (c) => {
+    expect(BORDER_WIDTH_CLASS.test(c)).toBe(true);
+  });
+
+  it.each([
+    "border-dashed",
+    "border-solid",
+    "border-border",
+    "border-[color:var(--border)]",
+    "border-t-[color:var(--border)]",
+    "border-[#f00]",
+    "border-[var(--border)]",
+  ])("does not classify %s as a width", (c) => {
+    expect(BORDER_WIDTH_CLASS.test(c)).toBe(false);
+  });
+});
 
 // =============================================================================
 // Empty
