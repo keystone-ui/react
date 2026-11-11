@@ -74,9 +74,10 @@ Add helper text below the input:
 
 ### Disabled
 
-`Label` does not follow the disabled state of a Checkbox, RadioGroupItem or Switch beside it, and keeps full opacity. To dim the label with the control, use `FieldLabel` inside a `Field` marked `data-disabled`:
+With the default rendering of `Checkbox`, `RadioGroupItem` and `Switch`, a sibling `Label` does not automatically dim when the control is disabled. Use `FieldLabel` inside `<Field data-disabled>` to dim the label, and pass `disabled` to the control:
 
 ```tsx
+import { Checkbox } from "@keystoneui/react/checkbox";
 import { Field, FieldLabel } from "@keystoneui/react/field";
 
 <Field data-disabled orientation="horizontal">
@@ -84,6 +85,8 @@ import { Field, FieldLabel } from "@keystoneui/react/field";
   <FieldLabel htmlFor="terms">Accept terms</FieldLabel>
 </Field>
 ```
+
+<ComponentPreview name="checkbox-disabled" />
 
 ## RTL
 
