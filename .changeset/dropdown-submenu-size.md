@@ -1,0 +1,7 @@
+---
+"@keystoneui/react": patch
+---
+
+DropdownMenuSubContent honours its size prop
+
+`<DropdownMenuSubContent size="compact">` now renders 32px items, as `<DropdownMenuContent size="compact">` does. The prop was typed but never reached the popup, so a compact submenu kept 36px rows. A submenu still does not inherit its parent menu's size: pass `size="compact"` to both.
