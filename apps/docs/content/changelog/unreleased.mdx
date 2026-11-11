@@ -1,7 +1,11 @@
 ---
-date: "2026-11-10"
+date: "2026-11-11"
 description: "What's coming in the next release"
-excerpt: "No changes since the last release."
+excerpt: "1 change queued for the next release."
 ---
 
-No changes merged since v1.0.0-beta.11.
+## Patch changes
+
+### DropdownMenuSubContent honours its size prop
+
+`<DropdownMenuSubContent size="compact">` now renders 32px items, as `<DropdownMenuContent size="compact">` does. The prop was typed but never reached the popup, so a compact submenu kept 36px rows. A submenu still does not inherit its parent menu's size: pass `size="compact"` to both.
