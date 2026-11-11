@@ -11,6 +11,7 @@ import {
   X as XIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { expect, within } from "storybook/test";
 
 const meta = {
   title: "Components/TagGroup",
@@ -424,4 +425,57 @@ export const Disabled: Story = {
       </div>
     </div>
   ),
+};
+
+// ---------------------------------------------------------------------------
+// Worst case
+// ---------------------------------------------------------------------------
+
+/** `inner` lies inside `outer`, with half a pixel for subpixel rounding. */
+function expectInside(inner: DOMRect, outer: DOMRect) {
+  expect(inner.left).toBeGreaterThanOrEqual(outer.left - 0.5);
+  expect(inner.right).toBeLessThanOrEqual(outer.right + 0.5);
+}
+
+/**
+ * A label far wider than its 90px box. Like `Tag`, a removable item must
+ * ellipsize the label and keep its remove button inside the pill, rather than
+ * clipping the text and pushing the button out of view.
+ */
+export const WorstCase: Story = {
+  name: "Worst case",
+  render: () => (
+    <div className="w-[90px]" data-testid="frame">
+      <TagGroup onRemove={() => undefined}>
+        <TagGroupItem value="long">
+          Professional photography studio
+        </TagGroupItem>
+        <TagGroupItem value="news">News</TagGroupItem>
+      </TagGroup>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const items = canvasElement.querySelectorAll<HTMLElement>(
+      '[data-slot="tag-group-item"]'
+    );
+    await expect(items).toHaveLength(2);
+    const item = items[0] as HTMLElement;
+    const itemRect = item.getBoundingClientRect();
+
+    // Measured on the label, not the item: TagRemove's hit-area
+    // pseudo-element reaches past the pill and inflates the item's scrollWidth.
+    const label = item.querySelector<HTMLElement>(":scope > span");
+    await expect(label).not.toBeNull();
+    const labelEl = label as HTMLElement;
+    await expect(labelEl.scrollWidth).toBeGreaterThan(labelEl.clientWidth);
+    await expect(getComputedStyle(labelEl).textOverflow).toBe("ellipsis");
+    expectInside(labelEl.getBoundingClientRect(), itemRect);
+
+    const remove = within(item).getByRole("button", { name: /^Remove$/ });
+    const removeRect = remove.getBoundingClientRect();
+    expectInside(removeRect, itemRect);
+    await expect(labelEl.getBoundingClientRect().right).toBeLessThanOrEqual(
+      removeRect.left + 0.5
+    );
+  },
 };

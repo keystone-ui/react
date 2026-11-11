@@ -297,7 +297,8 @@
       "fred",
       "jane",
       "michael",
-      "with-list-data"
+      "with-list-data",
+      "worst-case"
     ],
     "textarea": ["with-label", "with-placeholder"],
     "toast": [
