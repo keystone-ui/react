@@ -243,7 +243,7 @@ function ScrollableTabsList({
       {canScrollLeft && (
         <button
           aria-label="Scroll tabs left"
-          className="absolute top-0 left-0 z-10 flex h-full cursor-pointer items-center justify-center pr-1 pl-0.5"
+          className="absolute top-0 left-0 z-10 flex h-full cursor-pointer items-center justify-center pr-1 pl-0.5 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
           data-slot="tabs-scroll-button"
           onClick={scrollLeft}
           type="button"
@@ -274,7 +274,7 @@ function ScrollableTabsList({
       {canScrollRight && (
         <button
           aria-label="Scroll tabs right"
-          className="absolute top-0 right-0 z-10 flex h-full cursor-pointer items-center justify-center pr-0.5 pl-1"
+          className="absolute top-0 right-0 z-10 flex h-full cursor-pointer items-center justify-center pr-0.5 pl-1 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
           data-slot="tabs-scroll-button"
           onClick={scrollRight}
           type="button"
