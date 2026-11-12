@@ -33,7 +33,7 @@ import {
   Users as UsersIcon,
 } from "lucide-react";
 import { useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 
 const meta = {
   title: "Components/Tabs",
@@ -766,7 +766,13 @@ export const Scrollable: Story = {
       "Scroll tabs left": LIBRARY_OUTLINE,
       "Scroll tabs right": LIBRARY_OUTLINE,
     });
+    // Back at the start: wait for the left arrow to unmount.
     scroller.scrollLeft = 0;
+    await waitFor(() =>
+      expect(
+        canvasElement.querySelectorAll("[data-slot='tabs-scroll-button']")
+      ).toHaveLength(1)
+    );
   },
 };
 

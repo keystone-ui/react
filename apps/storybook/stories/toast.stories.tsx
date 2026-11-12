@@ -3,7 +3,7 @@ import type { ToasterProps } from "@keystoneui/react/toast";
 import { Toaster, toast } from "@keystoneui/react/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Users as UsersIcon } from "lucide-react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 
 // ---------------------------------------------------------------------------
 // Helpers for promise / loading stories
@@ -489,7 +489,9 @@ export const WithAction: Story = {
       action: LIBRARY_OUTLINE,
       cancel: LIBRARY_OUTLINE,
     });
+    // Leave nothing mid-exit for the snapshot.
     toast.dismiss();
+    await waitFor(() => expect(root).not.toBeInTheDocument());
   },
 };
 
