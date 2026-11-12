@@ -1,5 +1,10 @@
 import { defineConfig, devices } from "@playwright/test";
 
+// Said once so `baseURL`, both server commands and the readiness `url`
+// cannot drift apart.
+const PORT = 3410;
+const BASE_URL = `http://127.0.0.1:${PORT}`;
+
 /**
  * Browser tests for the block previews.
  *
@@ -20,7 +25,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? "github" : "list",
   use: {
-    baseURL: "http://127.0.0.1:3210",
+    baseURL: BASE_URL,
     // Charts animate SVG attributes from JS, which moves geometry while a
     // measurement is being taken. The blocks honour this setting through
     // `useReducedMotion`, so the tests exercise a real code path rather than a
@@ -38,9 +43,9 @@ export default defineConfig({
     // back un-prefetched content in e2e/instant-navigation.spec.ts. Deploy
     // builds never set it.
     command: process.env.PLAYWRIGHT_SKIP_BUILD
-      ? "pnpm start --port 3210"
-      : "EXPOSE_TESTING_API=1 pnpm build && pnpm start --port 3210",
-    url: "http://127.0.0.1:3210",
+      ? `pnpm start --port ${PORT}`
+      : `EXPOSE_TESTING_API=1 pnpm build && pnpm start --port ${PORT}`,
+    url: BASE_URL,
     // Reusing a dev server here would hand the tests differently-timed markup
     // and they would pass while testing something else.
     reuseExistingServer: false,
