@@ -136,12 +136,14 @@ function TagToggle({
   state: TogglePrimitive.State;
 }) {
   const { ref, ...rest } = props;
-  return useRender({
+  // `useRender` types its state as a record; Toggle's is an interface.
+  type RenderState = TogglePrimitive.State & Record<string, unknown>;
+  return useRender<RenderState, HTMLElement>({
     defaultTagName: "button",
     props: rest,
     ref,
-    render,
-    state,
+    render: render as useRender.RenderProp<RenderState> | undefined,
+    state: { ...state },
   });
 }
 
