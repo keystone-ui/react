@@ -753,8 +753,9 @@ export const RemovePointer: Story = {
 
     const user = realUser();
     if (!user) {
-      // Only Storybook's own runner lacks it; under Vitest it must be there.
-      await expect(navigator.webdriver).toBe(false);
+      // Storybook's own runner and Chromatic run plays without Vitest, and
+      // their browsers may be automated: skip the real-input checks there.
+      // Under Vitest `vitest.setup.ts` always provides it.
       return;
     }
     const removed = canvas.getByTestId("removed");
