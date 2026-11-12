@@ -108,7 +108,12 @@ function useToggleRef(
     (node: HTMLButtonElement) => {
       if (hadFocus.current) {
         hadFocus.current = false;
-        node.focus({ preventScroll: true });
+        // Only when focus is nowhere: the same commit may have focused
+        // something else (an `autoFocus` input, a layout effect).
+        const active = node.ownerDocument.activeElement;
+        if (!active || active === node.ownerDocument.body) {
+          node.focus({ preventScroll: true });
+        }
       }
       let cleanup: (() => void) | undefined;
       if (typeof ref === "function") {

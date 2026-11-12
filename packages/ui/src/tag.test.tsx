@@ -522,6 +522,42 @@ describe("remove switched at runtime", () => {
     expect(screen.getByTestId("t")).toHaveFocus();
   });
 
+  // Second reviewer, round 2, finding B: the same commit that switches
+  // `remove` focuses an element earlier in the tree. The app's focus wins;
+  // the Tag only restores focus when nothing else has it.
+  for (const initial of [false, true]) {
+    it(`does not take focus from an element focused in the same commit (remove goes ${initial ? "away" : "on"})`, async () => {
+      let flip: () => void = noop;
+      function Harness() {
+        const [switched, setSwitched] = useState(false);
+        flip = () => setSwitched(true);
+        const removable = switched ? !initial : initial;
+        return (
+          <>
+            {/* biome-ignore lint/a11y/noAutofocus: the reproduction */}
+            {switched ? <input autoFocus data-testid="editor" /> : null}
+            <Tag
+              data-testid="t"
+              remove={removable ? <TagRemove /> : null}
+              value="a"
+            >
+              React
+            </Tag>
+          </>
+        );
+      }
+      render(<Harness />);
+      act(() => screen.getByTestId("t").focus());
+      await act(async () => {
+        flip();
+      });
+      expect(
+        screen.getByTestId("t").parentElement?.dataset.slot === "tag"
+      ).toBe(!initial);
+      expect(screen.getByTestId("editor")).toHaveFocus();
+    });
+  }
+
   // The focus kept across a `remove` switch is for that one commit. A
   // Suspense boundary or an Activity that hides the Tag also detaches its
   // ref; showing it again later must not pull focus back from where the
