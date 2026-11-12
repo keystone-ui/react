@@ -8,14 +8,14 @@ New: pass the remove button as `remove`, `<Tag remove={<TagRemove onClick={…} 
 
 On a Tag with `remove`, `className`, `style`, `dir` and `hidden` go to the pill, so layout and hiding classes act on the whole pill, X included. `ref`, `aria-*`, other `data-*` attributes and event handlers go to the toggle button. The pill carries `data-pressed` and `data-disabled`: style its states with `data-pressed:` and `data-disabled:`, because `aria-pressed:`, `disabled:` and `focus-visible:` classes do not match a `span`.
 
-`remove` is typed `Exclude<ReactNode, true>`. `null`, `undefined`, `false` and `""` render a plain Tag, so `remove={canRemove && <TagRemove />}` works; a bare `<Tag remove>` is a type error (and a plain Tag at runtime). Any other value renders the pill, even one that renders nothing. A wrapper that forwards the prop should type it `TagProps["remove"]`, since a `ReactNode` may be `true`. Pass one remove control per Tag: two `TagRemove`s overlap.
+`remove` is typed `Exclude<ReactNode, true>`. `null`, `undefined`, `false` and `""` render a plain Tag, so `remove={canRemove && <TagRemove />}` works (but `0` is given: `remove={count && <TagRemove />}` renders a pill reading "0"); a bare `<Tag remove>` is a type error (and a plain Tag at runtime). Any other value renders the pill, even one that renders nothing. A wrapper that forwards the prop should type it `TagProps["remove"]`, since a `ReactNode` may be `true`. Pass one remove control per Tag: two `TagRemove`s overlap.
 
 What a removable Tag costs compared with the child form:
 
 - `justify-*`, `gap-*` and `cursor-*` classes act on the pill, not on the label row inside the toggle. In a stretched pill the label stays centred; `[&>[data-slot=tag-toggle]]:justify-start` puts it at the start (the X stays at the end).
 - `ref` lands on the toggle and `style` on the pill, so a library that measures the ref and moves the styled element (drag and drop, an anchored popup) sees two different elements.
 - A custom control that is not a `TagRemove` is not disabled with the Tag: it stays tabbable and clickable.
-- A `Tag remove` placed directly in a plain Base UI `ToggleGroup` gets none of the X's key handling: an arrow pressed on the X moves from the group's current item rather than from the X's own Tag, Home and End do nothing, and Shift+Tab goes to the previous tab stop rather than to the X's own toggle. Inside a group, use `TagGroup` with `onRemove`.
+- A `Tag remove` placed directly in a plain Base UI `ToggleGroup` gets none of the X's key handling: arrows, Home and End pressed on the X act from the group's current item rather than from the X's own Tag, and Shift+Tab goes to the previous tab stop rather than to the X's own toggle. Inside a group, use `TagGroup` with `onRemove`.
 
 Unchanged: a Tag without `remove` renders exactly as before, and `<Tag>React<TagRemove /></Tag>` (the X as a child) still works and still renders the X inside the toggle. Use `remove` in new code.
 

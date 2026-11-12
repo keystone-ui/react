@@ -72,13 +72,13 @@ Pass the remove button as the `remove` prop. Tag then renders it beside the togg
 - `ref` is the toggle button, not the pill.
 - When the Tag is disabled (itself, or through a disabled TagGroup or Toolbar), its `TagRemove` is disabled too, whatever `disabled` the `TagRemove` is given.
 - Clicking the X does not toggle the Tag, and an `onClick` on the Tag does not fire for it.
-- If `remove` changes at runtime, the toggle keeps its pressed state and focus, but the label's children are mounted again.
+- If `remove` changes at runtime, the toggle keeps its pressed state and focus, but the label's children are mounted again. Focus is kept only within that one update, and only when nothing else took it: it is lost if the switch shows a Suspense fallback (wrap it in `startTransition` to keep it), and inside a shadow root.
 - In a pill stretched by its parent (`w-full`, a column or a grid), the label stays centred and the X sits at the pill's end. `justify-*`, `gap-*` and `cursor-*` classes act on the pill, not on the label row inside the toggle; to put the label at the start, add `[&>[data-slot=tag-toggle]]:justify-start`.
 - `ref` and `style` land on different elements (the toggle and the pill). A library that measures the ref and moves the styled element, such as drag and drop or an anchored popup, sees two elements.
 - Pass one remove control per Tag; two `TagRemove`s overlap. A custom control that is not a `TagRemove` is not disabled with the Tag.
-- Inside a group, use [`TagGroup`](/docs/components/tag-group) with `onRemove`. A `Tag` with `remove` placed directly in a plain Base UI `ToggleGroup` gets none of the X's key handling: an arrow pressed on the X moves from the group's current item rather than from its own Tag, Home and End do nothing, and Shift+Tab does not go to its own toggle.
+- Inside a group, use [`TagGroup`](/docs/components/tag-group) with `onRemove`. A `Tag` with `remove` placed directly in a plain Base UI `ToggleGroup` gets none of the X's key handling: arrows, Home and End pressed on the X act from the group's current item rather than from the X's own Tag, and Shift+Tab does not go to its own toggle.
 
-**What counts as given.** `null`, `undefined`, `false` and `""` render a plain Tag, so `remove={canRemove && <TagRemove />}` works. A bare `<Tag remove>` is a type error (and a plain Tag at runtime). Any other value renders the pill, even one that renders nothing. A wrapper that forwards the prop should type it `TagProps["remove"]`, since a `ReactNode` may be `true`.
+**What counts as given.** `null`, `undefined`, `false` and `""` render a plain Tag, so `remove={canRemove && <TagRemove />}` works. `0` is given, so `remove={count && <TagRemove />}` renders a pill reading "0"; write `count > 0 && …`. A bare `<Tag remove>` is a type error (and a plain Tag at runtime). Any other value renders the pill, even one that renders nothing. A wrapper that forwards the prop should type it `TagProps["remove"]`, since a `ReactNode` may be `true`.
 
 **The old form.** A `TagRemove` written as a child, `<Tag>React<TagRemove /></Tag>`, still works exactly as before: it renders the X *inside* the toggle button. That is a button inside a button, which is invalid HTML (React warns about it, and it can break hydration), so use `remove` in new code.
 
