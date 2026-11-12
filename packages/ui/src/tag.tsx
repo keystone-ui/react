@@ -72,17 +72,19 @@ const tagVariants = cva(
  * The chip when Tag is given `remove`: the toggle and the remove control sit
  * side by side inside it. Same look as `tagVariants`, keyed on `data-pressed`
  * and `data-disabled` (mirrored from the toggle) since the chip is a `span`.
- * It owns the end padding; the toggle owns the start padding and fills the
- * rest, and the X keeps TagRemove's own margins, so the geometry is the
- * nested pill's, in spacing units. `overflow-hidden` clips the X's enlarged
- * hit area to the pill, as the toggle did when the X was inside it. The focus
- * ring is drawn here, around the whole pill, when the toggle has focus.
+ * It has the pill's padding (so a consumer `px-*` acts as it did), the
+ * toggle fills the rest and the X keeps TagRemove's own margins, so the
+ * geometry is the nested pill's, in spacing units. The toggle's `::before`
+ * reaches back over the start padding, so a click anywhere before the X
+ * toggles. `overflow-hidden` clips both enlarged hit areas to the pill, as
+ * the toggle did when the X was inside it. The focus ring is drawn here,
+ * around the whole pill, when the toggle has focus.
  */
 const tagChipClassName =
-  "inline-flex h-6 min-w-0 max-w-full touch-manipulation select-none items-center overflow-hidden whitespace-nowrap rounded-full bg-secondary pe-2.5 font-medium text-secondary-foreground text-xs transition-colors hover:bg-secondary-hover has-[[data-slot=tag-toggle]:focus-visible]:outline-2 has-[[data-slot=tag-toggle]:focus-visible]:outline-ring/50 has-[[data-slot=tag-toggle]:focus-visible]:outline-offset-2 data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50 data-pressed:bg-primary/10 data-pressed:text-primary dark:data-pressed:bg-primary/15 [&_svg:not([class*='size-'])]:size-3 [&_svg]:pointer-events-none [&_svg]:shrink-0";
+  "inline-flex h-6 min-w-0 max-w-full touch-manipulation select-none items-center overflow-hidden whitespace-nowrap rounded-full bg-secondary px-2.5 font-medium text-secondary-foreground text-xs transition-colors hover:bg-secondary-hover has-[[data-slot=tag-toggle]:focus-visible]:outline-2 has-[[data-slot=tag-toggle]:focus-visible]:outline-ring/50 has-[[data-slot=tag-toggle]:focus-visible]:outline-offset-2 data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50 data-pressed:bg-primary/10 data-pressed:text-primary dark:data-pressed:bg-primary/15 [&_svg:not([class*='size-'])]:size-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 has-[[data-slot=avatar]]:ps-1";
 
 const tagToggleClassName =
-  "inline-flex min-w-0 flex-1 cursor-pointer items-center justify-center gap-1 self-stretch ps-2.5 pe-1 outline-none disabled:cursor-not-allowed has-[[data-slot=avatar]]:ps-1";
+  "relative inline-flex min-w-0 flex-1 cursor-pointer items-center justify-center gap-1 self-stretch pe-1 outline-none before:absolute before:inset-y-0 before:-start-96 before:end-0 before:content-[''] disabled:cursor-not-allowed";
 
 /** The toggle's effective disabled state, for a `TagRemove` given as `remove`. */
 const TagRemoveDisabledContext = createContext(false);
