@@ -1,7 +1,7 @@
 ---
-date: "2026-11-11"
+date: "2026-11-12"
 description: "What's coming in the next release"
-excerpt: "8 changes queued for the next release."
+excerpt: "9 changes queued for the next release."
 ---
 
 ## Patch changes
@@ -27,6 +27,12 @@ A disabled `Checkbox` or `RadioGroupItem` now dims to 50% opacity and shows the 
 ### DropdownMenuSubContent honours its size prop
 
 `<DropdownMenuSubContent size="compact">` now renders 32px items, as `<DropdownMenuContent size="compact">` does. The prop was typed but never reached the popup, so a compact submenu kept 36px rows. A submenu still does not inherit its parent menu's size: pass `size="compact"` to both.
+
+---
+
+### Breadcrumb links, carousel dots, Tabs scroll buttons, Toast action and cancel buttons, and the CodeBlock scroll region show the library's keyboard focus outline
+
+They showed the browser's own 1px focus ring. They now draw the same 2px `ring/50` outline as `Button`, offset 2px. `CodeBlockContent` draws it 2px inside its edge, because the `CodeBlock` root clips anything outside. A mouse click still shows no outline.
 
 ---
 
