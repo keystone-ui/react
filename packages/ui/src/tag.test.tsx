@@ -1,7 +1,9 @@
+import { DirectionProvider } from "@base-ui/react/direction-provider";
 import { Toolbar } from "@base-ui/react/toolbar";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
+  type ComponentProps,
   type ComponentType,
   createRef,
   lazy,
@@ -687,4 +689,177 @@ describe("TagGroupItem with onRemove", () => {
     await user.tab({ shift: true });
     expect(screen.getByRole("button", { name: "Gamma" })).toHaveFocus();
   });
+});
+
+// ---------------------------------------------------------------------------
+// Keyboard from an X in a TagGroup, against the base behaviour as oracle
+// ---------------------------------------------------------------------------
+
+const GREEK = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon"] as const;
+
+/**
+ * The same group in two forms. "child" is the old form (TagRemove nested in
+ * each item, as on the base), whose keyboard behaviour is the reference;
+ * "prop" is `onRemove`, which now renders each X beside its toggle. Gamma is
+ * disabled in both.
+ */
+function GreekGroup({
+  form,
+  ...props
+}: { form: "child" | "prop" } & Omit<
+  ComponentProps<typeof TagGroup>,
+  "children"
+>) {
+  return (
+    <TagGroup onRemove={form === "prop" ? noop : undefined} {...props}>
+      {GREEK.map((label) => (
+        <TagGroupItem disabled={label === "Gamma"} key={label} value={label}>
+          {label}
+          {form === "child" && <TagRemove />}
+        </TagGroupItem>
+      ))}
+    </TagGroup>
+  );
+}
+
+function itemParts(label: string) {
+  const item = Array.from(
+    document.querySelectorAll<HTMLElement>('[data-slot="tag-group-item"]')
+  ).find((el) => el.textContent === label) as HTMLElement;
+  const toggle = item.matches("button")
+    ? item
+    : (item.querySelector('[data-slot="tag-toggle"]') as HTMLElement);
+  const x = item.querySelector('[data-slot="tag-remove"]') as HTMLElement;
+  return { toggle, x };
+}
+
+/** "x:Beta" or "toggle:Beta": what has focus, and in which item. */
+function focusedPart() {
+  const active = document.activeElement as HTMLElement;
+  const item = active.closest('[data-slot="tag-group-item"]');
+  const part = active.dataset.slot === "tag-remove" ? "x" : "toggle";
+  return `${part}:${item?.textContent ?? active.tagName}`;
+}
+
+type Wrap = (group: ReactNode) => ReactNode;
+
+/** Focus Alpha (the group's current item), then `from`'s X, then press `key`. */
+async function pressOnX(
+  form: "child" | "prop",
+  groupProps: Omit<ComponentProps<typeof TagGroup>, "children">,
+  wrap: Wrap,
+  from: string,
+  key: string
+) {
+  const user = userEvent.setup();
+  let unmount!: () => void;
+  await consoleErrors(() => {
+    ({ unmount } = render(
+      <>{wrap(<GreekGroup form={form} {...groupProps} />)}</>
+    ));
+  });
+  act(() => itemParts("Alpha").toggle.focus());
+  act(() => itemParts(from).x.focus());
+  await user.keyboard(key);
+  // Base UI moves focus in a microtask.
+  await act(async () => {
+    await Promise.resolve();
+  });
+  const result = focusedPart();
+  unmount();
+  return result;
+}
+
+const SCENARIOS: [
+  string,
+  Omit<ComponentProps<typeof TagGroup>, "children">,
+  Wrap,
+  [string, string][],
+][] = [
+  [
+    "horizontal",
+    {},
+    (g) => g,
+    [
+      ["Beta", "{ArrowRight}"],
+      ["Delta", "{ArrowLeft}"],
+      ["Delta", "{Home}"],
+      ["Beta", "{End}"],
+      ["Epsilon", "{ArrowRight}"],
+      ["Alpha", "{ArrowLeft}"],
+      ["Delta", "{Shift>}{Tab}{/Shift}"],
+      ["Beta", "{ArrowDown}"],
+    ],
+  ],
+  [
+    "vertical",
+    { orientation: "vertical" },
+    (g) => g,
+    [
+      ["Beta", "{ArrowDown}"],
+      ["Delta", "{ArrowUp}"],
+      ["Beta", "{ArrowRight}"],
+    ],
+  ],
+  [
+    "rtl",
+    {},
+    (g) => (
+      <DirectionProvider direction="rtl">
+        <div dir="rtl">{g}</div>
+      </DirectionProvider>
+    ),
+    [
+      ["Beta", "{ArrowLeft}"],
+      ["Delta", "{ArrowRight}"],
+    ],
+  ],
+  [
+    "no loop",
+    { loopFocus: false },
+    (g) => g,
+    [
+      ["Delta", "{ArrowRight}"],
+      ["Delta", "{ArrowLeft}"],
+    ],
+  ],
+  [
+    "toolbar",
+    {},
+    (g) => <Toolbar.Root>{g}</Toolbar.Root>,
+    [
+      ["Beta", "{ArrowRight}"],
+      ["Delta", "{ArrowLeft}"],
+    ],
+  ],
+];
+
+describe("keys pressed on an X in a TagGroup act from its own toggle, as when it was nested", () => {
+  for (const [name, groupProps, wrap, presses] of SCENARIOS) {
+    for (const [from, key] of presses) {
+      it(`${name}: ${key} on ${from}'s X`, async () => {
+        const reference = await pressOnX("child", groupProps, wrap, from, key);
+        const actual = await pressOnX("prop", groupProps, wrap, from, key);
+        expect(actual).toBe(reference);
+      });
+    }
+  }
+
+  // The one difference: when the group does not move (no loop, at either
+  // end), focus is left on the X's own toggle, where the nested X kept it.
+  for (const [from, key] of [
+    ["Epsilon", "{ArrowRight}"],
+    ["Alpha", "{ArrowLeft}"],
+  ] as const) {
+    it(`no loop: ${key} on ${from}'s X leaves focus on its toggle`, async () => {
+      const args = [
+        { loopFocus: false },
+        (g: ReactNode) => g,
+        from,
+        key,
+      ] as const;
+      expect(await pressOnX("child", ...args)).toBe(`x:${from}`);
+      expect(await pressOnX("prop", ...args)).toBe(`toggle:${from}`);
+    });
+  }
 });
