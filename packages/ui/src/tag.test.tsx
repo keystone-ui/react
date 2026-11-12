@@ -229,15 +229,41 @@ describe("Tag with remove", () => {
         </Tag>
       </Suspense>
     );
+    // Tag renders while the remove control's module is pending; the server
+    // retries only the suspended child, so Tag's markup is decided then.
     const html = await streamToString(ui, load);
     expect(html).toContain('data-slot="tag-remove"');
     expect(NESTED_BUTTON.test(html)).toBe(false);
     const { host, errors } = await hydrateStreamed(html, ui);
     expect(errors).toEqual([]);
-    const toggle = host.querySelector('[data-slot="tag-toggle"]');
-    expect(toggle?.nextElementSibling?.getAttribute("data-slot")).toBe(
+    // Really hydrated: the fallback is gone and the toggle responds.
+    expect(host.querySelector("i")).toBeNull();
+    const toggle = host.querySelector(
+      '[data-slot="tag-toggle"]'
+    ) as HTMLElement;
+    expect(toggle.nextElementSibling?.getAttribute("data-slot")).toBe(
       "tag-remove"
     );
+    act(() => toggle.click());
+    expect(toggle).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("(control) the same harness catches the nested child form", async () => {
+    // The old form still nests, so this harness must see nested markup and a
+    // hydration error; if it did not, the test above would prove nothing.
+    const { Lazy, load } = deferredModule();
+    const ui = (
+      <Suspense fallback={<i>loading</i>}>
+        <Tag value="react">
+          React
+          <Lazy />
+        </Tag>
+      </Suspense>
+    );
+    const html = await streamToString(ui, load);
+    expect(NESTED_BUTTON.test(html)).toBe(true);
+    const { errors } = await hydrateStreamed(html, ui);
+    expect(errors.length).toBeGreaterThan(0);
   });
 
   it("streams sibling markup for a server-component style client reference", async () => {
