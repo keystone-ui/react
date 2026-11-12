@@ -131,6 +131,61 @@ import {
 export default meta;
 type Story = StoryObj<typeof Tabs>;
 
+/**
+ * A focused part's outline as the user sees it: the computed style, and any
+ * ancestor that hides overflow and would clip it. The library's outline is
+ * Button's: 2px solid at offset 2px (the browser's own ring is `auto` 1px).
+ */
+function readFocusOutline(el: HTMLElement) {
+  const style = getComputedStyle(el);
+  const reach =
+    Number.parseFloat(style.outlineOffset) +
+    Number.parseFloat(style.outlineWidth);
+  const box = el.getBoundingClientRect();
+  const clippedBy: string[] = [];
+  for (let a = el.parentElement; a; a = a.parentElement) {
+    const s = getComputedStyle(a);
+    if (s.overflowX === "visible" && s.overflowY === "visible") {
+      continue;
+    }
+    const b = a.getBoundingClientRect();
+    const left = b.left + a.clientLeft;
+    const top = b.top + a.clientTop;
+    if (
+      box.left - reach < left - 0.5 ||
+      box.top - reach < top - 0.5 ||
+      box.right + reach > left + a.clientWidth + 0.5 ||
+      box.bottom + reach > top + a.clientHeight + 0.5
+    ) {
+      clippedBy.push(a.dataset.slot ?? a.tagName.toLowerCase());
+    }
+  }
+  return {
+    focusVisible: el.matches(":focus-visible"),
+    style: style.outlineStyle,
+    width: style.outlineWidth,
+    offset: style.outlineOffset,
+    clippedBy,
+  };
+}
+
+/** Focus `el`, let its colour transition settle, read, and blur. */
+async function focusAndRead(el: HTMLElement) {
+  el.focus();
+  await new Promise((r) => setTimeout(r, 300));
+  const outline = readFocusOutline(el);
+  el.blur();
+  return outline;
+}
+
+const LIBRARY_OUTLINE = {
+  focusVisible: true,
+  style: "solid",
+  width: "2px",
+  offset: "2px",
+  clippedBy: [],
+};
+
 // Basic tabs with Card content panels
 export const Default: Story = {
   render: () => (
@@ -687,6 +742,31 @@ export const Scrollable: Story = {
           "Use the `scrollable` prop on `TabsList` when you have many tabs that may overflow the container. This enables horizontal scrolling with CSS scroll-driven gradient fades (Chrome 115+, gracefully degrades) and arrow buttons for navigation. On mobile, users can also swipe to scroll.",
       },
     },
+  },
+  // Both scroll arrows draw the library's keyboard focus outline, not the
+  // browser's 1px `auto` ring.
+  play: async ({ canvasElement }) => {
+    const scroller = canvasElement.querySelector(
+      "[data-slot='tabs-list-scroll']"
+    ) as HTMLElement;
+    // Off the start, so the left arrow mounts too.
+    scroller.scrollLeft = 100;
+    await new Promise((r) => setTimeout(r, 300));
+    const arrows = canvasElement.querySelectorAll<HTMLElement>(
+      "[data-slot='tabs-scroll-button']"
+    );
+    await expect(arrows.length).toBe(2);
+    const [left, right] = arrows as unknown as [HTMLElement, HTMLElement];
+    // One at a time: both are read while focused, and only one can be.
+    const measured = {
+      [left.getAttribute("aria-label") ?? ""]: await focusAndRead(left),
+      [right.getAttribute("aria-label") ?? ""]: await focusAndRead(right),
+    };
+    await expect(measured).toEqual({
+      "Scroll tabs left": LIBRARY_OUTLINE,
+      "Scroll tabs right": LIBRARY_OUTLINE,
+    });
+    scroller.scrollLeft = 0;
   },
 };
 
