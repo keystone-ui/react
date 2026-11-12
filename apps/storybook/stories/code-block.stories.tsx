@@ -81,6 +81,17 @@ const LIBRARY_OUTLINE = {
   clippedBy: [],
 };
 
+/** Corner radii, clockwise from top-left. */
+function cornerRadii(el: HTMLElement) {
+  const s = getComputedStyle(el);
+  return [
+    s.borderTopLeftRadius,
+    s.borderTopRightRadius,
+    s.borderBottomRightRadius,
+    s.borderBottomLeftRadius,
+  ];
+}
+
 const SOURCE = `import { Button } from "@/components/ui/button";
 
 export function SaveButton() {
@@ -111,6 +122,19 @@ export const Default: Story = {
       ...LIBRARY_OUTLINE,
       offset: "-2px",
     });
+    // The inset outline follows the root's corners where the region meets
+    // them, so the root's rounding does not cut it; the edge under the
+    // header stays square.
+    const [, , rootBottom] = cornerRadii(
+      region.closest("[data-slot='code-block']") as HTMLElement
+    );
+    await expect(rootBottom).not.toBe("0px");
+    await expect(cornerRadii(region)).toEqual([
+      "0px",
+      "0px",
+      rootBottom,
+      rootBottom,
+    ]);
   },
 };
 
@@ -122,6 +146,14 @@ export const LineNumbers: Story = {
     </CodeBlock>
   ),
   play: async ({ canvasElement }) => {
+    // Without a header the region shares all four corners with the root.
+    const region = canvasElement.querySelector(
+      "[data-slot='code-block-content']"
+    ) as HTMLElement;
+    const root = region.closest("[data-slot='code-block']") as HTMLElement;
+    await expect(cornerRadii(root)[0]).not.toBe("0px");
+    await expect(cornerRadii(region)).toEqual(cornerRadii(root));
+
     const lines = canvasElement.querySelectorAll<HTMLElement>("[data-line]");
     // The number is generated content, so the line's own text never holds it
     // and a copy of the selection never includes it.
