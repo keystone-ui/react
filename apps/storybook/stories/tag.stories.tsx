@@ -14,9 +14,12 @@ import {
   type ComponentProps,
   type HTMLAttributes,
   type ReactNode,
+  Suspense,
+  use,
+  useRef,
   useState,
 } from "react";
-import { expect, within } from "storybook/test";
+import { expect, waitFor, within } from "storybook/test";
 
 const meta = {
   title: "Components/Tag",
@@ -801,5 +804,92 @@ export const RemovePointer: Story = {
     await settle();
     await expect(bg(chipOf("custom"))).toBe(destructive);
     await user.unhover(xOf("custom"));
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Focus across a Suspense boundary
+// ---------------------------------------------------------------------------
+
+function SuspendingResults({ wait }: { wait: Promise<void> | null }) {
+  if (wait) {
+    use(wait);
+  }
+  return <span className="text-muted-foreground text-xs">Results</span>;
+}
+
+/**
+ * A sibling in the Tags' Suspense boundary suspends (no transition), so React
+ * hides the Tags behind the fallback and shows them again when the data
+ * arrives. A Tag that had focus before must not take it back from wherever
+ * the user went meanwhile, plain or removable.
+ */
+export const FocusAcrossSuspense: Story = {
+  name: "Focus Across Suspense",
+  render: () => {
+    const [wait, setWait] = useState<Promise<void> | null>(null);
+    const resolve = useRef<() => void>(() => undefined);
+    const fetch = () =>
+      setWait(
+        new Promise<void>((r) => {
+          resolve.current = r;
+        })
+      );
+    return (
+      <div className="flex flex-col items-start gap-3">
+        <div className="flex gap-2">
+          <button onClick={fetch} type="button">
+            Fetch
+          </button>
+          <button onClick={() => resolve.current()} type="button">
+            Resolve
+          </button>
+        </div>
+        <input
+          aria-label="Search"
+          className="rounded-md border px-2 py-1 text-sm"
+          data-testid="search"
+        />
+        <Suspense
+          fallback={
+            <span className="text-muted-foreground text-xs">Loading…</span>
+          }
+        >
+          <div className="flex gap-2">
+            <Tag data-testid="plain" value="plain">
+              Plain
+            </Tag>
+            <Tag
+              data-testid="removable"
+              remove={<TagRemove />}
+              value="removable"
+            >
+              Removable
+            </Tag>
+          </div>
+          <SuspendingResults wait={wait} />
+        </Suspense>
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const search = canvas.getByTestId("search");
+    const hideFocusShow = async (id: string) => {
+      canvas.getByTestId(id).focus();
+      await expect(canvas.getByTestId(id)).toHaveFocus();
+      // `click()` dispatches the event without moving focus.
+      canvas.getByText("Fetch").click();
+      await waitFor(() => expect(canvas.getByText("Loading…")).toBeVisible());
+      search.focus();
+      canvas.getByText("Resolve").click();
+      await waitFor(() =>
+        expect(canvas.queryByText("Loading…")).not.toBeInTheDocument()
+      );
+      await expect(canvas.getByTestId(id)).toBeVisible();
+      await expect(search).toHaveFocus();
+    };
+    await hideFocusShow("plain");
+    await hideFocusShow("removable");
   },
 };

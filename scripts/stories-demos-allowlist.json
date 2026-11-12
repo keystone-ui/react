@@ -289,6 +289,7 @@
     ],
     "tabs": ["controlled"],
     "tag": [
+      "focus-across-suspense",
       "remove-layout",
       "remove-layout-classes",
       "remove-pointer",
