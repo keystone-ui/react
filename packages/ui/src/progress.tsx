@@ -3,7 +3,7 @@
 import { Progress as ProgressPrimitive } from "@base-ui/react/progress";
 import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Variants
@@ -55,9 +55,8 @@ function Progress({
 }: ProgressProps) {
   return (
     <ProgressPrimitive.Root
-      className={cn(
-        "flex w-full flex-col gap-2",
-        progressVariants({ color }),
+      className={mergeClassName(
+        cn("flex w-full flex-col gap-2", progressVariants({ color })),
         className
       )}
       data-slot="progress"
@@ -79,7 +78,7 @@ function Progress({
 function ProgressTrack({ className, ...props }: ProgressTrackProps) {
   return (
     <ProgressPrimitive.Track
-      className={cn(
+      className={mergeClassName(
         "relative h-1 w-full overflow-hidden rounded-full bg-muted",
         className
       )}
@@ -96,15 +95,17 @@ function ProgressTrack({ className, ...props }: ProgressTrackProps) {
 function ProgressIndicator({ className, ...props }: ProgressIndicatorProps) {
   return (
     <ProgressPrimitive.Indicator
-      className={cn(
-        "h-full rounded-full bg-[var(--progress-indicator)]",
-        // Smooth fill animation (reduced motion handled globally by base.css).
-        // This stays a `width` transition: Base UI sets the percentage as an
-        // inline `width` and does not expose it as a variable, so there is
-        // nothing a transform could read.
-        "transition-[width] duration-(--duration-slow,250ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
-        // Indeterminate: animated sliding bar
-        "data-[indeterminate]:w-1/3 data-[indeterminate]:animate-progress-indeterminate",
+      className={mergeClassName(
+        cn(
+          "h-full rounded-full bg-[var(--progress-indicator)]",
+          // Smooth fill animation (reduced motion handled globally by base.css).
+          // This stays a `width` transition: Base UI sets the percentage as an
+          // inline `width` and does not expose it as a variable, so there is
+          // nothing a transform could read.
+          "transition-[width] duration-(--duration-slow,250ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
+          // Indeterminate: animated sliding bar
+          "data-[indeterminate]:w-1/3 data-[indeterminate]:animate-progress-indeterminate"
+        ),
         className
       )}
       data-slot="progress-indicator"
@@ -120,7 +121,7 @@ function ProgressIndicator({ className, ...props }: ProgressIndicatorProps) {
 function ProgressLabel({ className, ...props }: ProgressLabelProps) {
   return (
     <ProgressPrimitive.Label
-      className={cn("font-medium text-sm leading-none", className)}
+      className={mergeClassName("font-medium text-sm leading-none", className)}
       data-slot="progress-label"
       {...props}
     />
@@ -134,7 +135,10 @@ function ProgressLabel({ className, ...props }: ProgressLabelProps) {
 function ProgressValue({ className, ...props }: ProgressValueProps) {
   return (
     <ProgressPrimitive.Value
-      className={cn("text-muted-foreground text-sm tabular-nums", className)}
+      className={mergeClassName(
+        "text-muted-foreground text-sm tabular-nums",
+        className
+      )}
       data-slot="progress-value"
       {...props}
     />

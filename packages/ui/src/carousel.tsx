@@ -19,7 +19,7 @@ import {
   useState,
 } from "react";
 import { Button } from "./button";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -340,13 +340,15 @@ function CarouselPrevious({
 
   return (
     <Button
-      className={cn(
-        CAROUSEL_ARROW_BASE,
-        orientation === "horizontal"
-          ? "top-1/2 -left-8 -translate-y-1/2"
-          : "-top-8 left-1/2 -translate-x-1/2 rotate-90",
-        autoHideArrows &&
-          "opacity-0 pointer-coarse:opacity-100 transition-[opacity,scale,background-color,color,border-color,box-shadow,outline-color] focus-visible:opacity-100 group-hover/carousel:opacity-100",
+      className={mergeClassName(
+        cn(
+          CAROUSEL_ARROW_BASE,
+          orientation === "horizontal"
+            ? "top-1/2 -left-8 -translate-y-1/2"
+            : "-top-8 left-1/2 -translate-x-1/2 rotate-90",
+          autoHideArrows &&
+            "opacity-0 pointer-coarse:opacity-100 transition-[opacity,scale,background-color,color,border-color,box-shadow,outline-color] focus-visible:opacity-100 group-hover/carousel:opacity-100"
+        ),
         className
       )}
       data-slot="carousel-previous"
@@ -377,13 +379,15 @@ function CarouselNext({
 
   return (
     <Button
-      className={cn(
-        CAROUSEL_ARROW_BASE,
-        orientation === "horizontal"
-          ? "top-1/2 -right-8 -translate-y-1/2"
-          : "-bottom-8 left-1/2 -translate-x-1/2 rotate-90",
-        autoHideArrows &&
-          "opacity-0 pointer-coarse:opacity-100 transition-[opacity,scale,background-color,color,border-color,box-shadow,outline-color] focus-visible:opacity-100 group-hover/carousel:opacity-100",
+      className={mergeClassName(
+        cn(
+          CAROUSEL_ARROW_BASE,
+          orientation === "horizontal"
+            ? "top-1/2 -right-8 -translate-y-1/2"
+            : "-bottom-8 left-1/2 -translate-x-1/2 rotate-90",
+          autoHideArrows &&
+            "opacity-0 pointer-coarse:opacity-100 transition-[opacity,scale,background-color,color,border-color,box-shadow,outline-color] focus-visible:opacity-100 group-hover/carousel:opacity-100"
+        ),
         className
       )}
       data-slot="carousel-next"

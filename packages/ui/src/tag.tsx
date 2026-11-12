@@ -6,7 +6,7 @@ import { X as XIcon } from "lucide-react";
 import type * as React from "react";
 import { Children } from "react";
 
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 /** Spaces, tabs and line breaks: what CSS collapses. Not `\s`, which has NBSP. */
 const COLLAPSIBLE_WHITESPACE = /^[ \t\n\r\f]+$/;
@@ -70,7 +70,7 @@ export interface TagProps extends TogglePrimitive.Props {}
 function Tag({ className, children, ...props }: TagProps) {
   return (
     <TogglePrimitive
-      className={cn(tagVariants(), className)}
+      className={mergeClassName(cn(tagVariants()), className)}
       data-slot="tag"
       {...props}
     >

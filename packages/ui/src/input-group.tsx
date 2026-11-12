@@ -13,7 +13,7 @@ import {
 import { Button } from "./button";
 import { Input } from "./input";
 import { Textarea } from "./textarea";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // =============================================================================
 // InputGroupContext
@@ -240,7 +240,10 @@ export const InputGroupButton = ({
   ...props
 }: InputGroupButtonProps & RefAttributes<HTMLButtonElement>) => (
   <Button
-    className={cn(inputGroupButtonVariants({ size }), className)}
+    className={mergeClassName(
+      cn(inputGroupButtonVariants({ size })),
+      className
+    )}
     data-size={size}
     ref={ref}
     type={type}

@@ -2,7 +2,7 @@
 
 import { Popover as PopoverPrimitive } from "@base-ui/react/popover";
 import type * as React from "react";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // =============================================================================
 // Popover (Root)
@@ -70,9 +70,11 @@ function PopoverContent({
         sideOffset={sideOffset}
       >
         <PopoverPrimitive.Popup
-          className={cn(
-            "bg-popover text-popover-foreground ring-popup-ring",
-            "w-72 max-w-(--available-width) origin-(--transform-origin) rounded-lg p-4 shadow-lg outline-none ring-1",
+          className={mergeClassName(
+            cn(
+              "bg-popover text-popover-foreground ring-popup-ring",
+              "w-72 max-w-(--available-width) origin-(--transform-origin) rounded-lg p-4 shadow-lg outline-none ring-1"
+            ),
             className
           )}
           data-slot="popover-content"
@@ -106,7 +108,7 @@ export interface PopoverTitleProps extends PopoverPrimitive.Title.Props {}
 function PopoverTitle({ className, ...props }: PopoverTitleProps) {
   return (
     <PopoverPrimitive.Title
-      className={cn("font-medium text-sm", className)}
+      className={mergeClassName("font-medium text-sm", className)}
       data-slot="popover-title"
       {...props}
     />
@@ -122,7 +124,7 @@ export interface PopoverDescriptionProps
 function PopoverDescription({ className, ...props }: PopoverDescriptionProps) {
   return (
     <PopoverPrimitive.Description
-      className={cn("text-muted-foreground text-sm", className)}
+      className={mergeClassName("text-muted-foreground text-sm", className)}
       data-slot="popover-description"
       {...props}
     />
@@ -152,7 +154,7 @@ export interface PopoverArrowProps extends PopoverPrimitive.Arrow.Props {}
 function PopoverArrow({ className, children, ...props }: PopoverArrowProps) {
   return (
     <PopoverPrimitive.Arrow
-      className={cn(
+      className={mergeClassName(
         "data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=top]:bottom-[-8px] data-[side=right]:left-[-13px] data-[side=left]:rotate-90 data-[side=right]:-rotate-90 data-[side=top]:rotate-180",
         className
       )}

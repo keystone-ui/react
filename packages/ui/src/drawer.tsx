@@ -3,7 +3,7 @@
 import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer";
 import type * as React from "react";
 
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // =============================================================================
 // Drawer (Root)
@@ -47,7 +47,10 @@ export interface DrawerOverlayProps extends DrawerPrimitive.Backdrop.Props {}
 function DrawerOverlay({ className, ...props }: DrawerOverlayProps) {
   return (
     <DrawerPrimitive.Backdrop
-      className={cn("fixed inset-0 z-(--z-drawer,40) bg-black/50", className)}
+      className={mergeClassName(
+        "fixed inset-0 z-(--z-drawer,40) bg-black/50",
+        className
+      )}
       data-slot="drawer-overlay"
       {...props}
     />
@@ -91,21 +94,23 @@ function DrawerContent({
         data-slot="drawer-viewport"
       >
         <DrawerPrimitive.Popup
-          className={cn(
-            "group/drawer-content fixed z-(--z-drawer,40) flex flex-col bg-popover text-popover-foreground text-sm outline-none",
-            // Bottom (swipeDirection="down", default) — pad for home indicator
-            "data-[swipe-direction=down]:inset-x-0 data-[swipe-direction=down]:bottom-0 data-[swipe-direction=down]:mt-24 data-[swipe-direction=down]:max-h-[80dvh] data-[swipe-direction=down]:rounded-t-xl data-[swipe-direction=down]:border-t data-[swipe-direction=down]:pb-[env(safe-area-inset-bottom)]",
-            // Top (swipeDirection="up") — pad for notch
-            "data-[swipe-direction=up]:inset-x-0 data-[swipe-direction=up]:top-0 data-[swipe-direction=up]:mb-24 data-[swipe-direction=up]:max-h-[80dvh] data-[swipe-direction=up]:rounded-b-xl data-[swipe-direction=up]:border-b data-[swipe-direction=up]:pt-[env(safe-area-inset-top)]",
-            // Left (swipeDirection="left")
-            "data-[swipe-direction=left]:inset-y-0 data-[swipe-direction=left]:left-0 data-[swipe-direction=left]:w-3/4 data-[swipe-direction=left]:rounded-r-xl data-[swipe-direction=left]:border-r data-[swipe-direction=left]:pl-[env(safe-area-inset-left)] data-[swipe-direction=left]:sm:max-w-sm",
-            // Right (swipeDirection="right")
-            "data-[swipe-direction=right]:inset-y-0 data-[swipe-direction=right]:right-0 data-[swipe-direction=right]:w-3/4 data-[swipe-direction=right]:rounded-l-xl data-[swipe-direction=right]:border-l data-[swipe-direction=right]:pr-[env(safe-area-inset-right)] data-[swipe-direction=right]:sm:max-w-sm",
-            // Floating variant — overrides for side drawers at md+ only.
-            // Right + floating: detach from right edge, all four corners rounded, full border (the always-on `border-l` already covers the inner edge), shadow, wider cap.
-            "data-[variant=floating]:data-[swipe-direction=right]:md:top-3 data-[variant=floating]:data-[swipe-direction=right]:md:right-3 data-[variant=floating]:data-[swipe-direction=right]:md:bottom-3 data-[variant=floating]:data-[swipe-direction=right]:md:max-w-md data-[variant=floating]:data-[swipe-direction=right]:md:rounded-xl data-[variant=floating]:data-[swipe-direction=right]:md:border data-[variant=floating]:data-[swipe-direction=right]:md:shadow-lg",
-            // Left + floating: same, mirrored.
-            "data-[variant=floating]:data-[swipe-direction=left]:md:top-3 data-[variant=floating]:data-[swipe-direction=left]:md:bottom-3 data-[variant=floating]:data-[swipe-direction=left]:md:left-3 data-[variant=floating]:data-[swipe-direction=left]:md:max-w-md data-[variant=floating]:data-[swipe-direction=left]:md:rounded-xl data-[variant=floating]:data-[swipe-direction=left]:md:border data-[variant=floating]:data-[swipe-direction=left]:md:shadow-lg",
+          className={mergeClassName(
+            cn(
+              "group/drawer-content fixed z-(--z-drawer,40) flex flex-col bg-popover text-popover-foreground text-sm outline-none",
+              // Bottom (swipeDirection="down", default) — pad for home indicator
+              "data-[swipe-direction=down]:inset-x-0 data-[swipe-direction=down]:bottom-0 data-[swipe-direction=down]:mt-24 data-[swipe-direction=down]:max-h-[80dvh] data-[swipe-direction=down]:rounded-t-xl data-[swipe-direction=down]:border-t data-[swipe-direction=down]:pb-[env(safe-area-inset-bottom)]",
+              // Top (swipeDirection="up") — pad for notch
+              "data-[swipe-direction=up]:inset-x-0 data-[swipe-direction=up]:top-0 data-[swipe-direction=up]:mb-24 data-[swipe-direction=up]:max-h-[80dvh] data-[swipe-direction=up]:rounded-b-xl data-[swipe-direction=up]:border-b data-[swipe-direction=up]:pt-[env(safe-area-inset-top)]",
+              // Left (swipeDirection="left")
+              "data-[swipe-direction=left]:inset-y-0 data-[swipe-direction=left]:left-0 data-[swipe-direction=left]:w-3/4 data-[swipe-direction=left]:rounded-r-xl data-[swipe-direction=left]:border-r data-[swipe-direction=left]:pl-[env(safe-area-inset-left)] data-[swipe-direction=left]:sm:max-w-sm",
+              // Right (swipeDirection="right")
+              "data-[swipe-direction=right]:inset-y-0 data-[swipe-direction=right]:right-0 data-[swipe-direction=right]:w-3/4 data-[swipe-direction=right]:rounded-l-xl data-[swipe-direction=right]:border-l data-[swipe-direction=right]:pr-[env(safe-area-inset-right)] data-[swipe-direction=right]:sm:max-w-sm",
+              // Floating variant — overrides for side drawers at md+ only.
+              // Right + floating: detach from right edge, all four corners rounded, full border (the always-on `border-l` already covers the inner edge), shadow, wider cap.
+              "data-[variant=floating]:data-[swipe-direction=right]:md:top-3 data-[variant=floating]:data-[swipe-direction=right]:md:right-3 data-[variant=floating]:data-[swipe-direction=right]:md:bottom-3 data-[variant=floating]:data-[swipe-direction=right]:md:max-w-md data-[variant=floating]:data-[swipe-direction=right]:md:rounded-xl data-[variant=floating]:data-[swipe-direction=right]:md:border data-[variant=floating]:data-[swipe-direction=right]:md:shadow-lg",
+              // Left + floating: same, mirrored.
+              "data-[variant=floating]:data-[swipe-direction=left]:md:top-3 data-[variant=floating]:data-[swipe-direction=left]:md:bottom-3 data-[variant=floating]:data-[swipe-direction=left]:md:left-3 data-[variant=floating]:data-[swipe-direction=left]:md:max-w-md data-[variant=floating]:data-[swipe-direction=left]:md:rounded-xl data-[variant=floating]:data-[swipe-direction=left]:md:border data-[variant=floating]:data-[swipe-direction=left]:md:shadow-lg"
+            ),
             className
           )}
           data-slot="drawer-content"
@@ -204,7 +209,10 @@ export interface DrawerTitleProps extends DrawerPrimitive.Title.Props {}
 function DrawerTitle({ className, ...props }: DrawerTitleProps) {
   return (
     <DrawerPrimitive.Title
-      className={cn("font-medium text-base text-foreground", className)}
+      className={mergeClassName(
+        "font-medium text-base text-foreground",
+        className
+      )}
       data-slot="drawer-title"
       {...props}
     />
@@ -220,7 +228,7 @@ export interface DrawerDescriptionProps
 function DrawerDescription({ className, ...props }: DrawerDescriptionProps) {
   return (
     <DrawerPrimitive.Description
-      className={cn("text-muted-foreground text-sm", className)}
+      className={mergeClassName("text-muted-foreground text-sm", className)}
       data-slot="drawer-description"
       {...props}
     />

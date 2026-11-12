@@ -7,7 +7,7 @@ import {
   ChevronUp as ChevronUpIcon,
 } from "lucide-react";
 import type * as React from "react";
-import { cn, POPUP_ITEM_HEIGHT } from "./utils";
+import { cn, mergeClassName, POPUP_ITEM_HEIGHT } from "./utils";
 
 // =============================================================================
 // Select (Root)
@@ -22,7 +22,7 @@ export interface SelectGroupProps extends SelectPrimitive.Group.Props {}
 function SelectGroup({ className, ...props }: SelectGroupProps) {
   return (
     <SelectPrimitive.Group
-      className={cn("scroll-my-1 px-1", className)}
+      className={mergeClassName("scroll-my-1 px-1", className)}
       data-slot="select-group"
       {...props}
     />
@@ -37,10 +37,7 @@ export interface SelectValueProps extends SelectPrimitive.Value.Props {}
 function SelectValue({ className, ...props }: SelectValueProps) {
   return (
     <SelectPrimitive.Value
-      className={cn(
-        // Block, not flex: an ellipsis is drawn by the box whose own line
-        // overflows, and a flex container's text sits in an anonymous item it
-        // cannot ellipsize. Icons stay inline beside the label instead.
+      className={mergeClassName(
         "block min-w-0 flex-1 truncate text-left [&>svg]:me-1.5 [&>svg]:inline-block [&>svg]:align-[-0.2em]",
         className
       )}
@@ -69,7 +66,7 @@ function SelectTrigger({
 }: SelectTriggerProps) {
   return (
     <SelectPrimitive.Trigger
-      className={cn(
+      className={mergeClassName(
         "group flex w-fit min-w-0 max-w-full select-none items-center justify-between gap-1.5 whitespace-nowrap rounded-md border border-input bg-input-bg py-2 pr-2 pl-3 text-sm shadow-xs outline-none transition-[color] focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive data-[size=default]:h-(--ks-control-md,2.5rem) data-[size=sm]:h-(--ks-control-sm,2rem) data-[popup-open]:border-ring data-placeholder:text-muted-foreground/70 data-[popup-open]:ring-1 data-[popup-open]:ring-ring data-[popup-open]:ring-inset dark:aria-invalid:ring-destructive [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className
       )}
@@ -145,7 +142,7 @@ function SelectContent({
         sideOffset={sideOffset}
       >
         <SelectPrimitive.Popup
-          className={cn(
+          className={mergeClassName(
             "relative isolate max-h-(--available-height) w-(--anchor-width) min-w-36 max-w-(--available-width) origin-(--transform-origin) overflow-hidden rounded-lg bg-popover text-popover-foreground shadow-lg ring-1 ring-popup-ring",
             className
           )}
@@ -173,7 +170,10 @@ export interface SelectLabelProps extends SelectPrimitive.GroupLabel.Props {}
 function SelectLabel({ className, ...props }: SelectLabelProps) {
   return (
     <SelectPrimitive.GroupLabel
-      className={cn("px-1.5 py-1 text-muted-foreground text-xs", className)}
+      className={mergeClassName(
+        "px-1.5 py-1 text-muted-foreground text-xs",
+        className
+      )}
       data-slot="select-label"
       {...props}
     />
@@ -204,9 +204,11 @@ function SelectItem({
 
   return (
     <SelectPrimitive.Item
-      className={cn(
-        `relative flex focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:*:text-accent-foreground ${POPUP_ITEM_HEIGHT} w-full cursor-pointer select-none items-center gap-1.5 rounded-md text-sm outline-hidden data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2`,
-        showDefaultIndicator ? "pr-8 pl-1.5" : "px-2",
+      className={mergeClassName(
+        cn(
+          `relative flex focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:*:text-accent-foreground ${POPUP_ITEM_HEIGHT} w-full cursor-pointer select-none items-center gap-1.5 rounded-md text-sm outline-hidden data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2`,
+          showDefaultIndicator ? "pr-8 pl-1.5" : "px-2"
+        ),
         className
       )}
       data-slot="select-item"
@@ -244,7 +246,7 @@ export interface SelectSeparatorProps extends SelectPrimitive.Separator.Props {}
 function SelectSeparator({ className, ...props }: SelectSeparatorProps) {
   return (
     <SelectPrimitive.Separator
-      className={cn(
+      className={mergeClassName(
         "pointer-events-none -mx-1 my-1 h-px bg-border-muted",
         className
       )}

@@ -5,7 +5,7 @@ import type * as React from "react";
 import { useEffect, useRef, useState } from "react";
 
 import { Button } from "./button";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 const RESET_DELAY_MS = 2000;
 
@@ -80,7 +80,7 @@ function CopyButton({
   return (
     <Button
       aria-label={copied ? "Copied" : "Copy"}
-      className={cn("text-muted-foreground", className)}
+      className={mergeClassName("text-muted-foreground", className)}
       data-copied={copied || undefined}
       data-slot="copy-button"
       onClick={handleCopy}
