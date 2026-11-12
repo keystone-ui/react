@@ -204,7 +204,7 @@ function CodeBlockContent({
   return (
     <pre
       className={cn(
-        "m-0 overflow-x-auto py-(--code-block-pad) font-mono leading-relaxed [counter-reset:code-line] focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:-outline-offset-2",
+        "m-0 overflow-x-auto py-(--code-block-pad) font-mono leading-relaxed [counter-reset:code-line] first:rounded-t-[inherit] last:rounded-b-[inherit] focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:-outline-offset-2",
         wrap ? "whitespace-pre-wrap break-words" : "whitespace-pre",
         className
       )}
