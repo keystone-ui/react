@@ -38,6 +38,9 @@ function SelectValue({ className, ...props }: SelectValueProps) {
   return (
     <SelectPrimitive.Value
       className={mergeClassName(
+        // Block, not flex: an ellipsis is drawn by the box whose own line
+        // overflows, and a flex container's text sits in an anonymous item it
+        // cannot ellipsize. Icons stay inline beside the label instead.
         "block min-w-0 flex-1 truncate text-left [&>svg]:me-1.5 [&>svg]:inline-block [&>svg]:align-[-0.2em]",
         className
       )}
