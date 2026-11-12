@@ -114,11 +114,17 @@ function ComboboxClear({ className, ...props }: ComboboxClearProps) {
 // =============================================================================
 // ComboboxInput
 // =============================================================================
-export interface ComboboxInputProps extends ComboboxPrimitive.Input.Props {
+export interface ComboboxInputProps
+  extends Omit<ComboboxPrimitive.Input.Props, "className"> {
   /**
    * Children to render inside the input group (e.g., InputGroupAddon)
    */
   children?: ReactNode;
+  /**
+   * Classes for the `InputGroup` wrapper. A string only: the wrapper is a
+   * plain element, so Base UI's function form has no state to call it with.
+   */
+  className?: string;
   /**
    * Show the clear button when a value is selected
    * @default false
