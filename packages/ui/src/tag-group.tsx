@@ -52,19 +52,45 @@ function TagGroup({ className, onRemove, children, ...props }: TagGroupProps) {
 // TagGroupItem
 // ---------------------------------------------------------------------------
 
-/** The keys the group's own handler moves focus with, per orientation. */
+/** The keys a group's own handler moves focus with, per orientation. */
 const NAVIGATION_KEYS: Record<Orientation, readonly string[]> = {
   horizontal: ["ArrowLeft", "ArrowRight", "Home", "End"],
   vertical: ["ArrowUp", "ArrowDown", "Home", "End"],
 };
 
 /**
+ * Inside a Base UI Toolbar the group has no key handler of its own: the
+ * Toolbar's root moves focus, with the Toolbar's orientation and without
+ * Home or End. Base UI has no public way to ask whether a group sits in its
+ * Toolbar, so this reads the DOM: its root is `role="toolbar"` with a
+ * `data-orientation`. A hand-written `role="toolbar"` (usually with
+ * `aria-orientation` only) is not one, and the group keeps its own keys.
+ */
+const TOOLBAR_KEYS: Record<Orientation, readonly string[]> = {
+  horizontal: ["ArrowLeft", "ArrowRight"],
+  vertical: ["ArrowUp", "ArrowDown"],
+};
+
+function navigationKeys(toggle: HTMLElement, orientation: Orientation) {
+  const toolbar = toggle.closest('[role="toolbar"][data-orientation]');
+  if (!toolbar) {
+    return NAVIGATION_KEYS[orientation];
+  }
+  return TOOLBAR_KEYS[
+    toolbar.getAttribute("data-orientation") === "vertical"
+      ? "vertical"
+      : "horizontal"
+  ];
+}
+
+/**
  * Keys pressed on an item's remove button act from that item's toggle, as
  * they did when the X sat inside it. Shift+Tab goes to the toggle. For the
- * group's navigation keys the toggle is focused first, synchronously, so that
- * Base UI's own focus handling makes it the group's current item; the event
- * then reaches the group's key handler, which moves on from it with the
- * group's orientation, direction, disabled items and `loopFocus`.
+ * group's navigation keys (a Toolbar's, when the group sits in one) the
+ * toggle is focused first, synchronously, so that Base UI's own focus
+ * handling makes it the current item; the event then reaches the group's (or
+ * the Toolbar's) key handler, which moves on from it with its orientation,
+ * direction, disabled items and `loopFocus`.
  */
 function handleRemoveKeyDown(
   event: React.KeyboardEvent<HTMLButtonElement>,
@@ -84,7 +110,10 @@ function handleRemoveKeyDown(
     toggle.focus();
     return;
   }
-  if (!event.shiftKey && NAVIGATION_KEYS[orientation].includes(event.key)) {
+  if (
+    !event.shiftKey &&
+    navigationKeys(toggle, orientation).includes(event.key)
+  ) {
     flushSync(() => toggle.focus());
   }
 }

@@ -1,8 +1,15 @@
 import { DirectionProvider } from "@base-ui/react/direction-provider";
 import { Toolbar } from "@base-ui/react/toolbar";
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
+  Activity,
   type ComponentProps,
   type ComponentType,
   createRef,
@@ -10,13 +17,14 @@ import {
   memo,
   type ReactNode,
   Suspense,
+  use,
   useState,
 } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { renderToReadableStream, renderToString } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { Tag, TagRemove } from "./tag";
+import { Tag, type TagProps, TagRemove } from "./tag";
 import { TagGroup, TagGroupItem } from "./tag-group";
 
 const noop = () => undefined;
@@ -130,7 +138,8 @@ describe("Tag without remove (unchanged)", () => {
     expect(plain).toMatchInlineSnapshot(
       `"<button type="button" tabindex="0" aria-pressed="false" data-slot="tag" class="inline-flex h-6 min-w-0 max-w-full cursor-pointer touch-manipulation select-none items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full bg-secondary px-2.5 font-medium text-secondary-foreground text-xs transition-colors hover:bg-secondary-hover focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 has-[[data-slot=avatar]]:pl-1 aria-pressed:bg-primary/10 aria-pressed:text-primary dark:aria-pressed:bg-primary/15 [&amp;_svg:not([class*=&#x27;size-&#x27;])]:size-3 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0"><span class="min-w-0 truncate">React</span></button>"`
     );
-    for (const remove of [null, undefined, false]) {
+    // `""` renders nothing as a child, so it is "not given" too.
+    for (const remove of [null, undefined, false, ""] as const) {
       expect(
         renderToString(
           <Tag remove={remove} value="react">
@@ -139,6 +148,18 @@ describe("Tag without remove (unchanged)", () => {
         )
       ).toBe(plain);
     }
+  });
+
+  it("rejects a bare remove in the types, and renders a plain Tag for it", () => {
+    const plain = renderToString(<Tag value="react">React</Tag>);
+    expect(
+      renderToString(
+        // @ts-expect-error `remove` is a control, not a switch.
+        <Tag remove value="react">
+          React
+        </Tag>
+      )
+    ).toBe(plain);
   });
 
   it("keeps the child form as on the base: TagRemove nested in the toggle", async () => {
@@ -501,6 +522,93 @@ describe("remove switched at runtime", () => {
     expect(screen.getByTestId("t")).toHaveFocus();
   });
 
+  // The focus kept across a `remove` switch is for that one commit. A
+  // Suspense boundary or an Activity that hides the Tag also detaches its
+  // ref; showing it again later must not pull focus back from where the
+  // user went meanwhile.
+  for (const removable of [false, true]) {
+    const shape = removable ? "removable" : "plain";
+    it(`${shape}: does not take focus back when its Suspense boundary shows it again`, async () => {
+      let resolve!: () => void;
+      const promise = new Promise<void>((r) => {
+        resolve = r;
+      });
+      let suspend!: () => void;
+      function Results({ wait }: { wait: Promise<void> | null }) {
+        if (wait) {
+          use(wait);
+        }
+        return <p>results</p>;
+      }
+      function App() {
+        const [wait, setWait] = useState<Promise<void> | null>(null);
+        suspend = () => setWait(promise);
+        return (
+          <>
+            <input data-testid="search" />
+            <Suspense fallback={<i>loading</i>}>
+              <Tag
+                data-testid="t"
+                remove={removable ? <TagRemove /> : undefined}
+                value="react"
+              >
+                React
+              </Tag>
+              <Results wait={wait} />
+            </Suspense>
+          </>
+        );
+      }
+      render(<App />);
+      act(() => screen.getByTestId("t").focus());
+      await act(async () => {
+        suspend();
+      });
+      expect(screen.getByText("loading")).toBeTruthy();
+      const search = screen.getByTestId("search");
+      act(() => search.focus());
+      await act(async () => {
+        resolve();
+        await promise;
+        await new Promise((r) => setTimeout(r, 50));
+      });
+      await waitFor(() => expect(screen.queryByText("loading")).toBeNull());
+      expect(search).toHaveFocus();
+    });
+
+    it(`${shape}: does not take focus back when an Activity shows it again`, async () => {
+      function App({ mode }: { mode: "visible" | "hidden" }) {
+        return (
+          <>
+            <input data-testid="search" />
+            <Activity mode={mode}>
+              <Tag
+                data-testid="t"
+                remove={removable ? <TagRemove /> : undefined}
+                value="react"
+              >
+                React
+              </Tag>
+            </Activity>
+          </>
+        );
+      }
+      const { rerender } = render(<App mode="visible" />);
+      act(() => screen.getByTestId("t").focus());
+      await act(async () => {
+        rerender(<App mode="hidden" />);
+        await Promise.resolve();
+      });
+      const search = screen.getByTestId("search");
+      act(() => search.focus());
+      await act(async () => {
+        rerender(<App mode="visible" />);
+        await Promise.resolve();
+      });
+      expect(search).toHaveFocus();
+    });
+  }
+
   it("follows a controlled pressed prop in both shapes", () => {
     const { rerender } = render(<Switchable initial={false} pressed />);
     expect(screen.getByTestId("t")).toHaveAttribute("aria-pressed", "true");
@@ -561,7 +669,7 @@ describe("disabled", () => {
 
   it("disables any TagRemove composition: fragment, memo, wrapper component, lazy", async () => {
     const LoadedLazy = lazy(async () => ({ default: TagRemove }));
-    const removes: [string, ReactNode][] = [
+    const removes: [string, TagProps["remove"]][] = [
       [
         "fragment",
         <>
@@ -856,6 +964,53 @@ const SCENARIOS: [
     [
       ["Beta", "{ArrowRight}"],
       ["Delta", "{ArrowLeft}"],
+    ],
+  ],
+  // Inside a Toolbar the Toolbar's root handles the keys, with the
+  // Toolbar's orientation and no Home or End.
+  [
+    "vertical toolbar",
+    {},
+    (g) => <Toolbar.Root orientation="vertical">{g}</Toolbar.Root>,
+    [
+      ["Beta", "{ArrowDown}"],
+      ["Delta", "{ArrowUp}"],
+      ["Beta", "{ArrowRight}"],
+    ],
+  ],
+  [
+    "toolbar, vertical group",
+    { orientation: "vertical" },
+    (g) => <Toolbar.Root>{g}</Toolbar.Root>,
+    [
+      ["Beta", "{ArrowRight}"],
+      ["Delta", "{ArrowLeft}"],
+      ["Beta", "{ArrowDown}"],
+    ],
+  ],
+  // A hand-written role="toolbar" is not a Base UI Toolbar: the group keeps
+  // its own key handling there.
+  [
+    "plain role=toolbar, vertical group",
+    { orientation: "vertical" },
+    (g) => (
+      <div aria-orientation="horizontal" role="toolbar">
+        {g}
+      </div>
+    ),
+    [
+      ["Beta", "{ArrowDown}"],
+      ["Delta", "{Home}"],
+      ["Beta", "{End}"],
+    ],
+  ],
+  [
+    "toolbar home/end",
+    {},
+    (g) => <Toolbar.Root>{g}</Toolbar.Root>,
+    [
+      ["Delta", "{Home}"],
+      ["Beta", "{End}"],
     ],
   ],
 ];

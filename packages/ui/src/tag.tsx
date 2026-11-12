@@ -93,7 +93,11 @@ const TagRemoveDisabledContext = createContext(false);
  * A ref that also keeps focus on the toggle when its DOM node is replaced,
  * which happens when `remove` is added or taken away (the button moves into
  * or out of the chip). The old node's ref cleanup runs before React removes
- * it, so it can still see that it has focus.
+ * it, so it can still see that it has focus; the new node's ref attaches in
+ * the same commit. A Suspense boundary or an `<Activity>` that hides the Tag
+ * also runs the cleanup, and attaches again only when it shows the Tag,
+ * maybe seconds later: so the flag lasts until the end of the commit (a
+ * microtask), and a Tag shown again never pulls focus back to itself.
  */
 function useToggleRef(
   ref: React.Ref<HTMLButtonElement> | undefined
@@ -117,7 +121,12 @@ function useToggleRef(
         };
       }
       return () => {
-        hadFocus.current = node.ownerDocument.activeElement === node;
+        if (node.ownerDocument.activeElement === node) {
+          hadFocus.current = true;
+          queueMicrotask(() => {
+            hadFocus.current = false;
+          });
+        }
         cleanup?.();
       };
     },
@@ -155,14 +164,27 @@ export interface TagProps extends TogglePrimitive.Props {
   /**
    * The remove control, usually `<TagRemove onClick={…} />`. When given, Tag
    * renders it beside the toggle inside the pill, not inside the toggle.
+   *
+   * Not given: `null`, `undefined`, `false` and `""` render a plain Tag, so
+   * `remove={canRemove && <TagRemove />}` works. A bare `remove` (`true`) is
+   * a type error, and a plain Tag at runtime. Any other value is given and
+   * renders the pill, even one that renders nothing (`[]`, `<></>`). To
+   * forward the prop from a wrapper, type it `TagProps["remove"]`: a
+   * `ReactNode` may be `true`. Pass one control: each `TagRemove` carries
+   * the pill's end margins.
    */
-  remove?: React.ReactNode;
+  remove?: Exclude<React.ReactNode, true>;
+}
+
+/** Whether `remove` renders anything (see `TagProps.remove`). */
+function isGiven(remove: React.ReactNode): boolean {
+  return remove != null && typeof remove !== "boolean" && remove !== "";
 }
 
 function Tag({ className, children, remove, ref, ...props }: TagProps) {
   const toggleRef = useToggleRef(ref);
 
-  if (remove == null || remove === false) {
+  if (!isGiven(remove)) {
     return (
       <TogglePrimitive
         className={cn(tagVariants(), className)}

@@ -465,7 +465,7 @@ const LAYOUT_CASES: {
   frame?: HTMLAttributes<HTMLDivElement>;
   tag?: Partial<ComponentProps<typeof Tag>>;
   label: ReactNode;
-  x?: ReactNode;
+  x?: ComponentProps<typeof Tag>["remove"];
 }[] = [
   { id: "default", label: "React" },
   { id: "pressed", label: "React", tag: { defaultPressed: true } },
