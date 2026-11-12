@@ -42,7 +42,25 @@ const TABS_SCROLL_BUTTON = /^absolute top-0 (?:left|right)-0 z-10 /;
 const TOAST_BUTTON = /inline-flex h-7 cursor-pointer/;
 const CODE_BLOCK_CONTENT = /\[counter-reset:code-line\]/;
 const WHITESPACE = /\s+/;
-const FOCUS_RING = /focus-visible:ring-/;
+// A ring of real width, bare or under a variant active on keyboard focus:
+// `ring` (1px), a non-zero number, an arbitrary length, or a `length:` hint.
+// Zero-width resets (`focus:ring-0`), colours, `ring-offset-*` and
+// `ring-inset` paint no ring.
+const FOCUS_RING =
+  /(?<![\w:/-])(?:focus:|focus-visible:)?ring(?:-(?:0*[1-9]\d*|\[(?!0*\.?0*(?:px|r?em)?\])(?:\d*\.?\d+(?:px|r?em|ch|ex|vh|vw)?|length:[^\]]+)\]|\(length:[^)]+\)))?(?![\w-])/;
+
+/** Draws a ring of real width while focused by keyboard. */
+function mixesInAFocusRing(classes: string): boolean {
+  return FOCUS_RING.test(classes);
+}
+
+/** The string literals in `file` that `anchor` picks. */
+function literalsOf(file: string, anchor: RegExp): string[] {
+  const source = readFileSync(join(SRC_DIR, file), "utf-8");
+  return [...source.matchAll(STRING_LITERAL)]
+    .map((m) => m[1] ?? m[2] ?? m[3] ?? "")
+    .filter((classes) => anchor.test(classes));
+}
 
 function hidesItsOwnOutline(classes: string): boolean {
   return (
@@ -140,6 +158,51 @@ describe("focus outline", () => {
     ).toBe(false);
   });
 
+  it("the mixed-ring check catches real ring widths", () => {
+    // A covered part's real class literal with a ring added must fail: the
+    // ring-based controls use `focus:ring-1`, which is also active on
+    // keyboard focus and paints a box-shadow ring beside the outline.
+    const [breadcrumbLink] = literalsOf("breadcrumb.tsx", BREADCRUMB_LINK);
+    expect(mixesInAFocusRing(breadcrumbLink)).toBe(false);
+    expect(mixesInAFocusRing(`${breadcrumbLink} focus:ring-1`)).toBe(true);
+
+    for (const ring of [
+      "ring",
+      "ring-1",
+      "ring-2",
+      "ring-[3px]",
+      "ring-[0.125rem]",
+      "ring-(length:--ring-width)",
+      "focus:ring",
+      "focus:ring-1",
+      "focus:ring-[3px]",
+      "focus-visible:ring",
+      "focus-visible:ring-2",
+      "focus-visible:ring-[length:var(--ring-width)]",
+    ]) {
+      expect(mixesInAFocusRing(`p-0 ${ring} text-sm`), ring).toBe(true);
+    }
+    // Zero-width resets (Button's `focus:ring-0`), colours, offsets, inset,
+    // and variants that are not active on keyboard focus draw no ring.
+    for (const notARing of [
+      "focus:ring-0 focus:ring-offset-0",
+      "ring-0",
+      "focus-visible:ring-[0px]",
+      "focus-visible:ring-ring/50",
+      "focus-visible:ring-[color:var(--ring)]",
+      "focus-visible:ring-offset-2",
+      "focus-visible:ring-inset",
+      "aria-invalid:ring-destructive/20",
+      "hover:ring-2",
+      "data-open:ring-1",
+      "outline-ring/50 focus-visible:outline-ring/50",
+    ]) {
+      expect(mixesInAFocusRing(`p-0 ${notARing} text-sm`), notARing).toBe(
+        false
+      );
+    }
+  });
+
   it("never pairs a bare outline-none with a variant outline width", () => {
     expect(offenders()).toEqual([]);
   });
@@ -202,10 +265,7 @@ describe("focus outline", () => {
 
     const missing: string[] = [];
     for (const { part, file, anchor, count, outline } of parts) {
-      const source = readFileSync(join(SRC_DIR, file), "utf-8");
-      const literals = [...source.matchAll(STRING_LITERAL)]
-        .map((m) => m[1] ?? m[2] ?? m[3] ?? "")
-        .filter((classes) => anchor.test(classes));
+      const literals = literalsOf(file, anchor);
       expect(literals, part).toHaveLength(count);
       for (const classes of literals) {
         const tokens = classes.split(WHITESPACE);
@@ -214,7 +274,7 @@ describe("focus outline", () => {
           missing.push(`${part}: ${absent.join(" ")}`);
         }
         // Outline-based, so never mixed with the ring-based pattern.
-        if (FOCUS_RING.test(classes)) {
+        if (mixesInAFocusRing(classes)) {
           missing.push(`${part}: mixes in a focus ring`);
         }
       }
