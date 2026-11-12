@@ -534,7 +534,6 @@ describe("remove switched at runtime", () => {
         const removable = switched ? !initial : initial;
         return (
           <>
-            {/* biome-ignore lint/a11y/noAutofocus: the reproduction */}
             {switched ? <input autoFocus data-testid="editor" /> : null}
             <Tag
               data-testid="t"
@@ -814,6 +813,51 @@ describe("TagGroupItem with onRemove", () => {
     expect(onValueChange).not.toHaveBeenCalled();
     await user.click(screen.getByRole("button", { name: "Alpha" }));
     expect(onValueChange).toHaveBeenCalledWith(["a"], expect.anything());
+  });
+
+  // Codex review round 1, P2: the X's click must not reach an enclosing
+  // row's or the group's onClick, as on the base where the handler called
+  // stopPropagation. onRemove gets only the value, so it cannot stop it.
+  it("keeps a click or key on the X from reaching the group's or an enclosing row's onClick", async () => {
+    const user = userEvent.setup();
+    const onRemove = vi.fn();
+    const onValueChange = vi.fn();
+    const onGroupClick = vi.fn();
+    const onRowClick = vi.fn();
+    render(
+      // biome-ignore lint/a11y/noStaticElementInteractions: a clickable row
+      <div onClick={onRowClick}>
+        <TagGroup
+          multiple
+          onClick={onGroupClick}
+          onRemove={onRemove}
+          onValueChange={onValueChange}
+        >
+          <TagGroupItem value="a">Alpha</TagGroupItem>
+          <TagGroupItem value="b">Beta</TagGroupItem>
+        </TagGroup>
+      </div>
+    );
+    const remove = screen.getAllByRole("button", {
+      name: "Remove",
+    })[0] as HTMLElement;
+    await user.click(remove);
+    expect(document.activeElement).toBe(remove);
+    await user.keyboard("{Enter}");
+    await user.keyboard(" ");
+    expect(onRemove.mock.calls).toEqual([["a"], ["a"], ["a"]]);
+    expect({
+      row: onRowClick.mock.calls.length,
+      group: onGroupClick.mock.calls.length,
+      selection: onValueChange.mock.calls.length,
+    }).toEqual({ row: 0, group: 0, selection: 0 });
+
+    await user.click(screen.getByRole("button", { name: "Alpha" }));
+    expect(onValueChange).toHaveBeenCalledWith(["a"], expect.anything());
+    expect({
+      row: onRowClick.mock.calls.length,
+      group: onGroupClick.mock.calls.length,
+    }).toEqual({ row: 1, group: 1 });
   });
 
   it("keeps the group's pressed value when onRemove is switched on and off", () => {

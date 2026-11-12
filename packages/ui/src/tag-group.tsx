@@ -141,7 +141,12 @@ function TagGroupItem({
       remove={
         onRemove ? (
           <TagRemove
-            onClick={() => onRemove(value)}
+            onClick={(event) => {
+              // As on the base: the X's click (Enter and Space included)
+              // must not reach the group's or an enclosing row's onClick.
+              event.stopPropagation();
+              onRemove(value);
+            }}
             onKeyDown={(event) => handleRemoveKeyDown(event, orientation)}
           />
         ) : undefined
