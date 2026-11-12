@@ -160,7 +160,7 @@ export const Default: Story = {
   // BreadcrumbLink draws the library's keyboard focus outline, not the
   // browser's 1px `auto` ring.
   play: async ({ canvasElement }) => {
-    const link = within(canvasElement).getByRole("link", { name: "Home" });
+    const link = within(canvasElement).getByRole("link", { name: /^home$/i });
     await expect(await focusAndRead(link)).toEqual(LIBRARY_OUTLINE);
   },
 };
