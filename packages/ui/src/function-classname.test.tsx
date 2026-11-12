@@ -11,7 +11,7 @@
  */
 import { render, screen } from "@testing-library/react";
 import type { ReactElement } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
 import {
   Accordion,
@@ -31,7 +31,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./alert-dialog";
-import { Avatar, AvatarFallback } from "./avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { Button } from "./button";
 import {
   Carousel,
@@ -296,7 +296,7 @@ const CASES: Case[] = [
     state: { open: true },
   },
 
-  // --- Avatar (AvatarImage is in the report: it never mounts in jsdom)
+  // --- Avatar
   {
     name: "Avatar",
     render: (c) => (
@@ -304,6 +304,15 @@ const CASES: Case[] = [
         <AvatarFallback>AB</AvatarFallback>
       </Avatar>
     ),
+  },
+  {
+    name: "AvatarImage",
+    render: (c) => (
+      <Avatar>
+        <AvatarImage alt="" className={c} src="/a.png" {...probe} />
+      </Avatar>
+    ),
+    state: { imageLoadingStatus: "loaded" },
   },
   {
     name: "AvatarFallback",
@@ -1013,6 +1022,26 @@ const CASES: Case[] = [
 ];
 
 const TOKEN = "probe-class";
+
+/**
+ * jsdom never loads an image, so AvatarImage would never mount. Base UI takes
+ * an image that is `complete` with a width as already decoded.
+ */
+class DecodedImage {
+  complete = true;
+  naturalWidth = 1;
+  crossOrigin: string | null = null;
+  onerror: (() => void) | null = null;
+  onload: (() => void) | null = null;
+  src = "";
+}
+const realImage = window.Image;
+beforeAll(() => {
+  window.Image = DecodedImage as unknown as typeof window.Image;
+});
+afterAll(() => {
+  window.Image = realImage;
+});
 
 function classOf(testCase: Case, className: ClassNameArg) {
   const { unmount } = render(testCase.render(className));

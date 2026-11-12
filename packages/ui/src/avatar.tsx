@@ -37,7 +37,7 @@ export interface AvatarImageProps extends AvatarPrimitive.Image.Props {}
 function AvatarImage({ className, ...props }: AvatarImageProps) {
   return (
     <AvatarPrimitive.Image
-      className={cn(
+      className={mergeClassName(
         "aspect-square size-full rounded-full object-cover",
         className
       )}
