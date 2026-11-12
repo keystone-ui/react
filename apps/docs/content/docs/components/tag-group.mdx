@@ -68,7 +68,7 @@ Display icons alongside tag labels:
 
 ### Removable
 
-Allow tags to be removed from the group:
+Pass `onRemove` to the group to give every item a remove button. Each item renders as a pill (`span[data-slot="tag-group-item"]`) holding its toggle button (`data-slot="tag-toggle"`) and the remove button side by side, as Tag does with `remove` (see [Tag → Composition](/docs/components/tag#composition)). Arrow keys, Home and End pressed on a remove button move from its own item, and Shift+Tab goes back to that item:
 
 <ComponentPreview name="tag-group-removable" />
 
@@ -105,4 +105,5 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 | `selectionMode` | `"single" \| "multiple"` | `"multiple"` | Selection behavior |
 | `value` | `string[]` | - | Controlled selected values |
 | `onValueChange` | `(value: string[]) => void` | - | Callback when selection changes |
+| `onRemove` | `(value: string) => void` | - | Gives every item a remove button beside its toggle; called with the item's value |
 | `className` | `string` | - | Additional CSS classes |

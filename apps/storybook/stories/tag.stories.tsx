@@ -235,7 +235,7 @@ export const WithRemove: Story = {
  * button inside a button). Kept to pin that; new code passes `remove`.
  */
 export const WithRemoveAsChild: Story = {
-  name: "With Remove as child (old form)",
+  name: "With Remove As Child",
   render: () => (
     <div className="flex flex-wrap items-center gap-2">
       <Tag value="bold">
@@ -460,17 +460,17 @@ function expectClose(a: unknown, b: unknown, path: string) {
 
 /** Each case twice: the old child form (the reference) and `remove`. */
 const LAYOUT_CASES: {
-  name: string;
+  id: string;
   className?: string;
   frame?: HTMLAttributes<HTMLDivElement>;
   tag?: Partial<ComponentProps<typeof Tag>>;
   label: ReactNode;
   x?: ReactNode;
 }[] = [
-  { name: "default", label: "React" },
-  { name: "pressed", label: "React", tag: { defaultPressed: true } },
+  { id: "default", label: "React" },
+  { id: "pressed", label: "React", tag: { defaultPressed: true } },
   {
-    name: "icon",
+    id: "icon",
     label: (
       <>
         <StarIcon />
@@ -478,16 +478,16 @@ const LAYOUT_CASES: {
       </>
     ),
   },
-  { name: "long", label: WORST_EMAIL, frame: { style: { width: 160 } } },
-  { name: "ancestor rtl", label: "React", frame: { dir: "rtl" } },
-  { name: "dir on Tag", label: "React", tag: { dir: "rtl" } },
+  { id: "long", label: WORST_EMAIL, frame: { style: { width: 160 } } },
+  { id: "ancestor rtl", label: "React", frame: { dir: "rtl" } },
+  { id: "dir on Tag", label: "React", tag: { dir: "rtl" } },
   {
-    name: "long rtl",
+    id: "long rtl",
     label: WORST_EMAIL,
     frame: { dir: "rtl", style: { width: 160 } },
   },
   {
-    name: "unsized custom icon",
+    id: "unsized custom icon",
     label: "React",
     x: (
       <TagRemove aria-label="Remove">
@@ -495,9 +495,9 @@ const LAYOUT_CASES: {
       </TagRemove>
     ),
   },
-  { name: "larger X", label: "React", x: <TagRemove className="size-5" /> },
+  { id: "larger X", label: "React", x: <TagRemove className="size-5" /> },
   {
-    name: "avatar",
+    id: "avatar",
     label: (
       <>
         <Avatar className="size-4">
@@ -507,8 +507,8 @@ const LAYOUT_CASES: {
       </>
     ),
   },
-  { name: "margin", label: "React", tag: { className: "me-2" } },
-  { name: "skin", label: "React", tag: { className: "h-8 px-3 text-sm" } },
+  { id: "margin", label: "React", tag: { className: "me-2" } },
+  { id: "skin", label: "React", tag: { className: "h-8 px-3 text-sm" } },
 ];
 
 const layoutTag = (
@@ -517,12 +517,12 @@ const layoutTag = (
 ) => {
   const x = c.x ?? <TagRemove />;
   return form === "child" ? (
-    <Tag value={c.name} {...c.tag}>
+    <Tag value={c.id} {...c.tag}>
       {c.label}
       {x}
     </Tag>
   ) : (
-    <Tag remove={x} value={c.name} {...c.tag}>
+    <Tag remove={x} value={c.id} {...c.tag}>
       {c.label}
     </Tag>
   );
@@ -534,11 +534,11 @@ const layoutTag = (
  * at three root font sizes, since everything is in spacing units.
  */
 export const RemoveLayout: Story = {
-  name: "Remove layout",
+  name: "Remove Layout",
   render: () => (
     <div className="flex flex-col items-start gap-3">
       {LAYOUT_CASES.map((c) => (
-        <div className="flex items-start gap-6" data-case={c.name} key={c.name}>
+        <div className="flex items-start gap-6" data-case={c.id} key={c.id}>
           <div data-form="child" {...c.frame}>
             {layoutTag("child", c)}
           </div>
@@ -560,7 +560,7 @@ export const RemoveLayout: Story = {
         await new Promise((r) => requestAnimationFrame(() => r(null)));
         for (const c of LAYOUT_CASES) {
           const row = canvasElement.querySelector(
-            `[data-case="${c.name}"]`
+            `[data-case="${c.id}"]`
           ) as HTMLElement;
           const child = row.querySelector('[data-form="child"] > *');
           const prop = row.querySelector('[data-form="prop"] > *');
@@ -568,7 +568,7 @@ export const RemoveLayout: Story = {
           expectClose(
             measureChip(prop as HTMLElement),
             measureChip(child as HTMLElement),
-            `${font} ${c.name}`
+            `${font} ${c.id}`
           );
         }
       }
@@ -588,7 +588,7 @@ export const RemoveLayout: Story = {
  * items (column flex, grid). A stretched pill puts its X at its end.
  */
 export const RemoveLayoutClasses: Story = {
-  name: "Remove with layout classes",
+  name: "Remove Layout Classes",
   render: () => (
     <div className="flex w-80 flex-col gap-4">
       <div data-case="hidden">
@@ -679,7 +679,7 @@ const bg = (el: Element) => getComputedStyle(el).backgroundColor;
  * reaches the whole pill and its X.
  */
 export const RemovePointer: Story = {
-  name: "Remove with a real pointer",
+  name: "Remove Pointer",
   render: () => {
     const [removed, setRemoved] = useState(0);
     const count = () => setRemoved((n) => n + 1);

@@ -586,7 +586,7 @@ export const WhitespaceBetweenParts: Story = {
  * and each item's X stays inside it, 4px from its end.
  */
 export const RemovableStretched: Story = {
-  name: "Removable, stretched",
+  name: "Removable Stretched",
   render: () => (
     <div className="flex w-80 flex-col gap-4">
       <TagGroup
@@ -642,10 +642,12 @@ const GREEK = ["Alpha", "Beta", "Gamma", "Delta"];
  * Gamma), Shift+Tab goes to its own toggle, Tab goes on to the next X.
  */
 export const RemovableKeyboard: Story = {
-  name: "Removable, keyboard",
+  name: "Removable Keyboard",
   render: () => (
     <div className="flex flex-col items-start gap-2">
-      <button type="button">before</button>
+      <button data-testid="before" type="button">
+        before
+      </button>
       <TagGroup onRemove={() => undefined}>
         {GREEK.map((label) => (
           <TagGroupItem disabled={label === "Gamma"} key={label} value={label}>
@@ -668,9 +670,7 @@ export const RemovableKeyboard: Story = {
       const part = active.dataset.slot === "tag-remove" ? "x" : "toggle";
       return `${part}:${item?.textContent ?? active.textContent}`;
     };
-    const before = within(canvasElement).getByRole("button", {
-      name: "before",
-    });
+    const before = within(canvasElement).getByTestId("before");
 
     before.focus();
     const forward: string[] = [];
