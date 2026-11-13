@@ -165,10 +165,17 @@ describe("fetcher errors", () => {
   });
 
   it("does not echo a secret on a network failure", async () => {
+    // A real refused connection: port 1 would stop at fetch's blocked-port
+    // check and never reach the network.
+    const closed = createServer();
+    await new Promise<void>((done) => closed.listen(0, "127.0.0.1", done));
+    const { port } = closed.address() as AddressInfo;
+    await new Promise((done) => closed.close(done));
     const error = await fetchManifest(
-      `http://127.0.0.1:1/r?token=${SECRET}`
+      `http://127.0.0.1:${port}/r?token=${SECRET}`
     ).catch((e: unknown) => e);
-    expect(error).toBeInstanceOf(Error);
+    expect(error).toBeInstanceOf(TypeError);
+    expect(fullText(error)).toContain("ECONNREFUSED");
     expect(fullText(error)).not.toContain(SECRET);
   });
 
