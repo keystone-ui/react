@@ -169,6 +169,25 @@ describe("displayUrl", () => {
   });
 });
 
+describe("displayUrl keeps path data the URL parser keeps", () => {
+  // `String#trim` drops U+00A0 and U+FEFF; `URL` keeps them as path data.
+  it.each([
+    ["https://host.test/r\u00a0", "https://host.test/r\u00a0"],
+    ["file:///tmp/r\ufeff", "file:///tmp/r\ufeff"],
+    [`https://user:${SECRET}@host.test/r\u00a0`, "https://host.test/r%C2%A0"],
+  ])("%j", (raw, expected) => {
+    const out = displayUrl(raw);
+    expect(out).toBe(expected);
+    expect(new URL(out).pathname).toBe(new URL(raw).pathname);
+  });
+
+  it("returns a clean whitespace-padded URL exactly as given", () => {
+    expect(displayUrl(" https://host.test/r \n")).toBe(
+      " https://host.test/r \n"
+    );
+  });
+});
+
 describe("redactUrlInError with a real fetch rejection", () => {
   async function rejection(url: string): Promise<unknown> {
     return await fetch(url).then(
@@ -211,23 +230,27 @@ describe("redactUrlInError with a real fetch rejection", () => {
     expect(fullText(safe)).not.toContain(SECRET);
   });
 
-  it("never returns an error that still holds a secret, even in a cause", () => {
-    const url = `https://user:${SECRET}@host.test/r?t=${SECRET}`;
-    // Quotes the secret but not the URL: no exact match to rely on.
-    const error = new TypeError("fetch failed", {
-      cause: new Error(`bad credentials ${SECRET}`),
-    });
-    const safe = redactUrlInError(error, url);
-    expect(fullText(safe)).not.toContain(SECRET);
-  });
-
-  it("names no URL when a secret also reads as part of the shown URL", () => {
+  it("shows the URL redacted even when a query value reads as its path", () => {
     const url = "https://host.test/registry?k=registry";
     const safe = redactUrlInError(new TypeError(`bad ${url}`), url);
     expect(safe).toBeInstanceOf(TypeError);
     expect((safe as Error).message).toBe(
-      "Request to the configured URL failed"
+      "bad https://host.test/registry?k=REDACTED"
     );
+  });
+
+  it("redacts a full URL with a short password and query value", () => {
+    const url = "http://u:p@host.test/r?v=2";
+    const error = new TypeError(`cannot fetch ${url}`, {
+      cause: new Error(`inner ${url}`),
+    });
+    const safe = redactUrlInError(error, url);
+    expect(safe).toBeInstanceOf(TypeError);
+    expect((safe as Error).message).toBe(
+      "cannot fetch http://host.test/r?v=REDACTED"
+    );
+    expect(fullText(safe)).not.toContain(url);
+    expect(fullText(safe)).not.toContain("u:p@");
   });
 
   it("returns an unrelated error unchanged", () => {
@@ -239,16 +262,38 @@ describe("redactUrlInError with a real fetch rejection", () => {
     expect(redactUrlInError(error, url)).toBe(error);
   });
 
-  // Deliberate trade-off: a short query value (here "2") also matches stack
-  // line numbers, so the error is replaced and its cause dropped.
-  it("fails closed when a short query value appears anywhere", () => {
-    const error = new TypeError("fetch failed", {
-      cause: Object.assign(new Error("refused"), { code: "ECONNREFUSED" }),
+  // Fixed stacks, so the test does not depend on its own line number or the
+  // checkout path. A URL part that shows up only in a stack frame is not the
+  // URL being quoted: the network cause and its code must survive.
+  function refused(frame: string): TypeError {
+    const cause = Object.assign(new Error("refused"), {
+      code: "ECONNREFUSED",
     });
-    const safe = redactUrlInError(error, "https://host.test/r?v=2");
-    expect(safe).not.toBe(error);
-    expect(safe).toBeInstanceOf(TypeError);
-    expect((safe as Error).cause).toBeUndefined();
+    cause.stack = "Error: refused\n    at connect (/tmp/net.js:1:1)";
+    const error = new TypeError("fetch failed", { cause });
+    error.stack = `TypeError: fetch failed\n    at request (${frame})`;
+    return error;
+  }
+
+  it.each([
+    [
+      "a query value matches a line number",
+      "https://host.test/r?v=2",
+      "/tmp/client.js:2:1",
+    ],
+    [
+      "a username matches a directory",
+      `https://user:${SECRET}@host.test/r`,
+      "/Users/user/project/client.js:1:1",
+    ],
+  ])("keeps the original error when %s", (_name, url, frame) => {
+    const error = refused(frame);
+    const safe = redactUrlInError(error, url);
+    expect(safe).toBe(error);
+    expect((safe as Error).cause).toBe(error.cause);
+    expect(((safe as Error).cause as { code: string }).code).toBe(
+      "ECONNREFUSED"
+    );
   });
 });
 
@@ -303,6 +348,30 @@ describe("fetcher errors", () => {
       expect(connections).toBeGreaterThan(0);
       expect(error).toBeInstanceOf(TypeError);
       expect(fullText(error)).not.toContain(SECRET);
+    } finally {
+      await new Promise((done) => dropper.close(done));
+    }
+  }, 5000);
+
+  it("keeps the network cause when a short query value is not quoted", async () => {
+    let connections = 0;
+    const dropper = createServer();
+    dropper.on("connection", (socket) => {
+      connections += 1;
+      socket.destroy();
+    });
+    await new Promise<void>((done) => dropper.listen(0, "127.0.0.1", done));
+    const { port } = dropper.address() as AddressInfo;
+    try {
+      const error = await fetchManifest(
+        `http://127.0.0.1:${port}/r?v=2&format=json`
+      ).catch((e: unknown) => e);
+      expect(connections).toBeGreaterThan(0);
+      expect(error).toBeInstanceOf(TypeError);
+      // The code is platform-dependent (ECONNRESET here); it must survive.
+      expect(typeof ((error as Error).cause as { code?: unknown }).code).toBe(
+        "string"
+      );
     } finally {
       await new Promise((done) => dropper.close(done));
     }
