@@ -223,6 +223,7 @@ When adding a new block, also: register the demo in `apps/docs/demos/index.ts` a
 - **No raw color values** in component base styles — always use semantic tokens (exception: Badge color variants)
 - **Explicit `cursor-pointer`** on all interactive elements — Tailwind v4 changed the default
 - **Update `_registry.ts`**, `package.json` exports, and `tsup.config.ts` entryPoints when adding new components
+- **`mergeClassName`, not `cn`, for a Base UI part's `className`** — `className={mergeClassName("…", className)}`. Base UI lets `className` be a function of state, and `cn()` silently drops a function. `function-classname-guard.test.ts` fails on `cn(…, className)` where `className` can be a function or the target accepts one.
 
 <!-- BEGIN:turborepo-agent-rules -->
 

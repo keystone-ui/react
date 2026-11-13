@@ -3,7 +3,7 @@
 import { AlertDialog as AlertDialogPrimitive } from "@base-ui/react/alert-dialog";
 import type * as React from "react";
 import { Button } from "./button";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // =============================================================================
 // AlertDialog (Root)
@@ -45,7 +45,7 @@ export interface AlertDialogOverlayProps
 function AlertDialogOverlay({ className, ...props }: AlertDialogOverlayProps) {
   return (
     <AlertDialogPrimitive.Backdrop
-      className={cn(
+      className={mergeClassName(
         "fixed inset-0 z-[var(--z-modal,50)] bg-black/50",
         className
       )}
@@ -78,7 +78,7 @@ function AlertDialogContent({
     <AlertDialogPortal>
       <AlertDialogOverlay />
       <AlertDialogPrimitive.Popup
-        className={cn(
+        className={mergeClassName(
           "group/alert-dialog-content fixed top-[50%] left-[50%] z-[var(--z-modal,50)] grid w-full -translate-x-[50%] -translate-y-[50%] gap-4 rounded-xl bg-popover p-4 text-popover-foreground shadow-lg outline-none ring-1 ring-popup-ring data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm",
           className
         )}
@@ -153,7 +153,7 @@ export interface AlertDialogTitleProps
 function AlertDialogTitle({ className, ...props }: AlertDialogTitleProps) {
   return (
     <AlertDialogPrimitive.Title
-      className={cn(
+      className={mergeClassName(
         "font-medium text-base sm:group-data-[size=default]/alert-dialog-content:group-has-data-[slot=alert-dialog-media]/alert-dialog-content:col-start-2",
         className
       )}
@@ -175,7 +175,7 @@ function AlertDialogDescription({
 }: AlertDialogDescriptionProps) {
   return (
     <AlertDialogPrimitive.Description
-      className={cn(
+      className={mergeClassName(
         "text-balance text-muted-foreground text-sm md:text-pretty *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
         className
       )}
@@ -194,7 +194,7 @@ export interface AlertDialogActionProps
 function AlertDialogAction({ className, ...props }: AlertDialogActionProps) {
   return (
     <Button
-      className={cn(className)}
+      className={mergeClassName("", className)}
       data-slot="alert-dialog-action"
       {...props}
     />
@@ -216,7 +216,7 @@ function AlertDialogCancel({
 }: AlertDialogCancelProps) {
   return (
     <AlertDialogPrimitive.Close
-      className={cn(className)}
+      className={mergeClassName("", className)}
       data-slot="alert-dialog-cancel"
       render={<Button size={size} variant={variant} />}
       {...props}

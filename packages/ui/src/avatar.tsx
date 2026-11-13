@@ -2,7 +2,7 @@
 
 import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar";
 import type * as React from "react";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // =============================================================================
 // Avatar (Root)
@@ -18,7 +18,7 @@ export interface AvatarProps extends AvatarPrimitive.Root.Props {
 function Avatar({ className, size = "default", ...props }: AvatarProps) {
   return (
     <AvatarPrimitive.Root
-      className={cn(
+      className={mergeClassName(
         "group/avatar relative flex size-8 shrink-0 select-none rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6 data-[size=xs]:size-4",
         className
       )}
@@ -37,7 +37,7 @@ export interface AvatarImageProps extends AvatarPrimitive.Image.Props {}
 function AvatarImage({ className, ...props }: AvatarImageProps) {
   return (
     <AvatarPrimitive.Image
-      className={cn(
+      className={mergeClassName(
         "aspect-square size-full rounded-full object-cover",
         className
       )}
@@ -55,7 +55,7 @@ export interface AvatarFallbackProps extends AvatarPrimitive.Fallback.Props {}
 function AvatarFallback({ className, ...props }: AvatarFallbackProps) {
   return (
     <AvatarPrimitive.Fallback
-      className={cn(
+      className={mergeClassName(
         "flex size-full items-center justify-center rounded-full bg-muted text-muted-foreground text-sm group-data-[size=sm]/avatar:text-xs group-data-[size=xs]/avatar:text-[8px]",
         className
       )}

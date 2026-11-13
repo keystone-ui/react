@@ -18,7 +18,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 type TabsValue = string | number | null;
 type TabsListVariant = "default" | "line";
@@ -69,7 +69,7 @@ function Tabs({
   return (
     <TabsActiveContext.Provider value={activeValue}>
       <TabsPrimitive.Root
-        className={cn(
+        className={mergeClassName(
           "group/tabs flex gap-2 data-[orientation=horizontal]:flex-col",
           className
         )}
@@ -165,7 +165,7 @@ function TabsList({
   return (
     <TabsListContext.Provider value={contextValue}>
       <TabsPrimitive.List
-        className={cn(tabsListVariants({ variant }), className)}
+        className={mergeClassName(cn(tabsListVariants({ variant })), className)}
         data-morphing={morphing || undefined}
         data-shape={shape}
         data-slot="tabs-list"
@@ -259,7 +259,10 @@ function ScrollableTabsList({
         ref={scrollRef}
       >
         <TabsPrimitive.List
-          className={cn(tabsListVariants({ variant }), className)}
+          className={mergeClassName(
+            cn(tabsListVariants({ variant })),
+            className
+          )}
           data-morphing={morphing || undefined}
           data-shape={shape}
           data-slot="tabs-list"
@@ -307,20 +310,22 @@ function TabsTrigger({
   return (
     <TabsTriggerContext.Provider value={triggerContext}>
       <TabsPrimitive.Tab
-        className={cn(
-          // Base styles
-          "group/tabs-trigger relative z-[1] inline-flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-transparent px-2 py-0.5 font-medium text-muted-foreground text-sm transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-          // Shape-aware styles
-          "group-data-[shape=pill]/tabs-list:rounded-full group-data-[shape=pill]/tabs-list:px-3",
-          // Orientation-aware styles
-          "group-data-[orientation=vertical]/tabs:h-8 group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:flex-initial group-data-[orientation=vertical]/tabs:justify-start",
-          // Active state (text color only — background/shadow handled by indicator/pill)
-          "data-active:text-foreground dark:data-active:text-foreground",
-          // Morphing: triggers size to content so the active one can grow to
-          // fit its label. Width animation lives on TabsTriggerLabel (motion).
-          // Gap collapses to 0 — the label carries its own left padding so the
-          // icon→label spacing animates with the motion spring.
-          "data-[morphing]:flex-initial data-[morphing]:gap-0",
+        className={mergeClassName(
+          cn(
+            // Base styles
+            "group/tabs-trigger relative z-[1] inline-flex h-8 flex-1 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-transparent px-2 py-0.5 font-medium text-muted-foreground text-sm transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+            // Shape-aware styles
+            "group-data-[shape=pill]/tabs-list:rounded-full group-data-[shape=pill]/tabs-list:px-3",
+            // Orientation-aware styles
+            "group-data-[orientation=vertical]/tabs:h-8 group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:flex-initial group-data-[orientation=vertical]/tabs:justify-start",
+            // Active state (text color only — background/shadow handled by indicator/pill)
+            "data-active:text-foreground dark:data-active:text-foreground",
+            // Morphing: triggers size to content so the active one can grow to
+            // fit its label. Width animation lives on TabsTriggerLabel (motion).
+            // Gap collapses to 0 — the label carries its own left padding so the
+            // icon→label spacing animates with the motion spring.
+            "data-[morphing]:flex-initial data-[morphing]:gap-0"
+          ),
           className
         )}
         data-morphing={morphing || undefined}
@@ -411,25 +416,27 @@ export interface TabsIndicatorProps extends TabsPrimitive.Indicator.Props {}
 function TabsIndicator({ className, ...props }: TabsIndicatorProps) {
   return (
     <TabsPrimitive.Indicator
-      className={cn(
-        // Positioned at the list's origin and moved to the active tab with a
-        // translate, from Base UI's `--active-tab-*` variables. Animating
-        // `translate` keeps the slide on the compositor; animating `top` /
-        // `left` relaid out the list on every frame.
-        "absolute top-0 left-0 h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) translate-y-(--active-tab-top)",
-        // Sliding animation (reduced motion handled globally by base.css)
-        "transition-[translate,width,height] duration-(--duration-base,180ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
-        // Default variant: pill/card sliding behind active tab
-        "group-data-[variant=default]/tabs-list:rounded-md group-data-[variant=default]/tabs-list:bg-background group-data-[variant=default]/tabs-list:shadow-sm",
-        "group-data-[variant=default]/tabs-list:group-data-[shape=pill]/tabs-list:rounded-full",
-        "dark:group-data-[variant=default]/tabs-list:bg-input-bg",
-        // Line variant (horizontal): 2px bar pinned to the list's bottom edge,
-        // so only x follows the tab
-        "group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:top-auto group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:bottom-0 group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:h-0.5 group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:translate-y-0",
-        "group-data-[variant=line]/tabs-list:bg-foreground",
-        // Line variant (vertical): 2px bar pinned to the list's right edge,
-        // so only y follows the tab
-        "group-data-[variant=line]/tabs-list:data-[orientation=vertical]:-right-1 group-data-[variant=line]/tabs-list:data-[orientation=vertical]:left-auto group-data-[variant=line]/tabs-list:data-[orientation=vertical]:w-0.5 group-data-[variant=line]/tabs-list:data-[orientation=vertical]:translate-x-0",
+      className={mergeClassName(
+        cn(
+          // Positioned at the list's origin and moved to the active tab with a
+          // translate, from Base UI's `--active-tab-*` variables. Animating
+          // `translate` keeps the slide on the compositor; animating `top` /
+          // `left` relaid out the list on every frame.
+          "absolute top-0 left-0 h-(--active-tab-height) w-(--active-tab-width) translate-x-(--active-tab-left) translate-y-(--active-tab-top)",
+          // Sliding animation (reduced motion handled globally by base.css)
+          "transition-[translate,width,height] duration-(--duration-base,180ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
+          // Default variant: pill/card sliding behind active tab
+          "group-data-[variant=default]/tabs-list:rounded-md group-data-[variant=default]/tabs-list:bg-background group-data-[variant=default]/tabs-list:shadow-sm",
+          "group-data-[variant=default]/tabs-list:group-data-[shape=pill]/tabs-list:rounded-full",
+          "dark:group-data-[variant=default]/tabs-list:bg-input-bg",
+          // Line variant (horizontal): 2px bar pinned to the list's bottom edge,
+          // so only x follows the tab
+          "group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:top-auto group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:bottom-0 group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:h-0.5 group-data-[variant=line]/tabs-list:data-[orientation=horizontal]:translate-y-0",
+          "group-data-[variant=line]/tabs-list:bg-foreground",
+          // Line variant (vertical): 2px bar pinned to the list's right edge,
+          // so only y follows the tab
+          "group-data-[variant=line]/tabs-list:data-[orientation=vertical]:-right-1 group-data-[variant=line]/tabs-list:data-[orientation=vertical]:left-auto group-data-[variant=line]/tabs-list:data-[orientation=vertical]:w-0.5 group-data-[variant=line]/tabs-list:data-[orientation=vertical]:translate-x-0"
+        ),
         className
       )}
       data-slot="tabs-indicator"
@@ -447,7 +454,7 @@ export interface TabsContentProps extends TabsPrimitive.Panel.Props {}
 function TabsContent({ className, ...props }: TabsContentProps) {
   return (
     <TabsPrimitive.Panel
-      className={cn("flex-1 text-sm outline-none", className)}
+      className={mergeClassName("flex-1 text-sm outline-none", className)}
       data-slot="tabs-content"
       {...props}
     />

@@ -2,30 +2,32 @@
 
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox";
 import { Check as CheckIcon } from "lucide-react";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
   return (
     <CheckboxPrimitive.Root
-      className={cn(
-        // Base styles
-        "peer relative flex size-4 shrink-0 items-center justify-center rounded-sm border",
-        "border-input bg-input-bg",
-        // Smooth color transitions
-        "transition-colors duration-(--duration-fast,125ms)",
-        // Click area extension — bumped toward AAA touch target (~36×24)
-        "after:absolute after:-inset-x-4 after:-inset-y-3",
-        // Checked state
-        "data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary",
-        // Focus styles - outside border like buttons
-        "focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
-        // Invalid styles - border change always, outline only on focus, no transition
-        "aria-invalid:border-destructive aria-invalid:transition-none dark:aria-invalid:border-destructive/50",
-        "aria-invalid:focus-visible:outline-destructive/50",
-        "aria-invalid:data-checked:border-destructive aria-invalid:data-checked:bg-destructive aria-invalid:data-checked:text-destructive-foreground",
-        // Disabled styles. Base UI renders a <span>, so :disabled never matches;
-        // data-disabled is what dims it outside a Field.
-        "disabled:cursor-not-allowed disabled:opacity-50 group-has-disabled/field:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50",
+      className={mergeClassName(
+        cn(
+          // Base styles
+          "peer relative flex size-4 shrink-0 items-center justify-center rounded-sm border",
+          "border-input bg-input-bg",
+          // Smooth color transitions
+          "transition-colors duration-(--duration-fast,125ms)",
+          // Click area extension — bumped toward AAA touch target (~36×24)
+          "after:absolute after:-inset-x-4 after:-inset-y-3",
+          // Checked state
+          "data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary",
+          // Focus styles - outside border like buttons
+          "focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
+          // Invalid styles - border change always, outline only on focus, no transition
+          "aria-invalid:border-destructive aria-invalid:transition-none dark:aria-invalid:border-destructive/50",
+          "aria-invalid:focus-visible:outline-destructive/50",
+          "aria-invalid:data-checked:border-destructive aria-invalid:data-checked:bg-destructive aria-invalid:data-checked:text-destructive-foreground",
+          // Disabled styles. Base UI renders a <span>, so :disabled never matches;
+          // data-disabled is what dims it outside a Field.
+          "disabled:cursor-not-allowed disabled:opacity-50 group-has-disabled/field:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50"
+        ),
         className
       )}
       data-slot="checkbox"

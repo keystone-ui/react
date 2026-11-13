@@ -6,7 +6,7 @@ import type * as React from "react";
 import { createContext, useContext, useMemo } from "react";
 import { flushSync } from "react-dom";
 import { Tag, TagRemove } from "./tag";
-import { cn } from "./utils";
+import { mergeClassName } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Context
@@ -37,7 +37,7 @@ function TagGroup({ className, onRemove, children, ...props }: TagGroupProps) {
 
   return (
     <ToggleGroupPrimitive
-      className={cn("flex flex-wrap gap-1.5", className)}
+      className={mergeClassName("flex flex-wrap gap-1.5", className)}
       data-slot="tag-group"
       {...props}
     >

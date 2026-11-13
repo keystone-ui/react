@@ -6,7 +6,7 @@ import {
   Minus as MinusIcon,
 } from "lucide-react";
 import type * as React from "react";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 export type InputOTPProps = Omit<OTPField.Root.Props, "render"> & {
   /**
@@ -24,7 +24,7 @@ const InputOTP = ({
 }: InputOTPProps) => (
   <div className="inline-flex items-center gap-2">
     <OTPField.Root
-      className={cn(
+      className={mergeClassName(
         "cn-input-otp flex items-center has-disabled:opacity-50",
         className
       )}
@@ -67,18 +67,20 @@ export type InputOTPSlotProps = OTPField.Input.Props;
 
 export const InputOTPSlot = ({ className, ...props }: InputOTPSlotProps) => (
   <OTPField.Input
-    className={cn(
-      // 16px on touch (any width — iPads are wide) to prevent iOS focus zoom
-      "bg-input-bg text-center pointer-fine:text-sm text-base tabular-nums",
-      "relative h-10 w-10 outline-none transition-[color]",
-      "rounded-md border border-input shadow-xs",
-      // Focus ring matching the Input component
-      "focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset",
-      // Invalid states — `aria-invalid` for keystone Field, `data-[invalid]` from Base UI Field.Root
-      "aria-invalid:border-destructive aria-invalid:ring-destructive",
-      "data-[invalid]:border-destructive data-[invalid]:ring-destructive",
-      // Disabled
-      "disabled:cursor-not-allowed",
+    className={mergeClassName(
+      cn(
+        // 16px on touch (any width — iPads are wide) to prevent iOS focus zoom
+        "bg-input-bg text-center pointer-fine:text-sm text-base tabular-nums",
+        "relative h-10 w-10 outline-none transition-[color]",
+        "rounded-md border border-input shadow-xs",
+        // Focus ring matching the Input component
+        "focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset",
+        // Invalid states — `aria-invalid` for keystone Field, `data-[invalid]` from Base UI Field.Root
+        "aria-invalid:border-destructive aria-invalid:ring-destructive",
+        "data-[invalid]:border-destructive data-[invalid]:ring-destructive",
+        // Disabled
+        "disabled:cursor-not-allowed"
+      ),
       className
     )}
     data-slot="input-otp-slot"
@@ -96,7 +98,7 @@ export const InputOTPSeparator = ({
   ...props
 }: InputOTPSeparatorProps) => (
   <OTPField.Separator
-    className={cn(
+    className={mergeClassName(
       "flex items-center [&_svg:not([class*='size-'])]:size-4",
       className
     )}

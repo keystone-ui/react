@@ -4,7 +4,7 @@ import { Progress as ProgressPrimitive } from "@base-ui/react/progress";
 import { cva, type VariantProps } from "class-variance-authority";
 import { createContext, useContext, useMemo } from "react";
 
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -107,9 +107,11 @@ function CircularProgress({
 
   return (
     <ProgressPrimitive.Root
-      className={cn(
-        "group/circular-progress relative inline-flex shrink-0 items-center justify-center",
-        circularProgressVariants({ color, size }),
+      className={mergeClassName(
+        cn(
+          "group/circular-progress relative inline-flex shrink-0 items-center justify-center",
+          circularProgressVariants({ color, size })
+        ),
         className
       )}
       data-size={size}
@@ -216,11 +218,13 @@ function CircularProgressValue({
 }: CircularProgressValueProps) {
   return (
     <ProgressPrimitive.Value
-      className={cn(
-        "relative font-semibold text-foreground tabular-nums",
-        "group-data-[size=sm]/circular-progress:text-xs",
-        "group-data-[size=default]/circular-progress:text-sm",
-        "group-data-[size=lg]/circular-progress:text-base",
+      className={mergeClassName(
+        cn(
+          "relative font-semibold text-foreground tabular-nums",
+          "group-data-[size=sm]/circular-progress:text-xs",
+          "group-data-[size=default]/circular-progress:text-sm",
+          "group-data-[size=lg]/circular-progress:text-base"
+        ),
         className
       )}
       data-slot="circular-progress-value"
@@ -239,11 +243,13 @@ function CircularProgressLabel({
 }: CircularProgressLabelProps) {
   return (
     <ProgressPrimitive.Label
-      className={cn(
-        "relative text-muted-foreground",
-        "group-data-[size=sm]/circular-progress:text-[10px]",
-        "group-data-[size=default]/circular-progress:text-xs",
-        "group-data-[size=lg]/circular-progress:text-sm",
+      className={mergeClassName(
+        cn(
+          "relative text-muted-foreground",
+          "group-data-[size=sm]/circular-progress:text-[10px]",
+          "group-data-[size=default]/circular-progress:text-xs",
+          "group-data-[size=lg]/circular-progress:text-sm"
+        ),
         className
       )}
       data-slot="circular-progress-label"
