@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 
 import { loadProjectConfig } from "./config.js";
+import { displayUrl, redactUrlInError } from "./display-url.js";
 import { runInfo } from "./info.js";
 import { init } from "./init.js";
 import { detectProjectContext } from "./project-context.js";
@@ -204,12 +205,17 @@ async function runDocs(args: string[]): Promise<void> {
   const name = positional[0];
   const siteUrl = process.env.KEYSTONEUI_URL ?? "https://keystoneui.io";
   const url = `${siteUrl}/llms.mdx/docs/components/${name}`;
-  const response = await fetch(url, {
-    headers: { "User-Agent": "keystoneui-cli/0.1" },
-  });
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      headers: { "User-Agent": "keystoneui-cli/0.1" },
+    });
+  } catch (error) {
+    throw redactUrlInError(error, url);
+  }
   if (!response.ok) {
     console.error(
-      `Failed to fetch ${url}: ${response.status} ${response.statusText}`
+      `Failed to fetch ${displayUrl(url)}: ${response.status} ${response.statusText}`
     );
     process.exitCode = 1;
     return;

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { ProjectConfig } from "./config.js";
+import { displayUrl } from "./display-url.js";
 import { fetchExamples, fetchItem, fetchManifest } from "./fetcher.js";
 import {
   detectProjectContext,
@@ -388,7 +389,7 @@ export async function getDocsTool(
     }
     return await response.text();
   } catch {
-    return `**${input.name}**: could not reach ${url}.`;
+    return `**${input.name}**: could not reach ${displayUrl(url)}.`;
   }
 }
 
