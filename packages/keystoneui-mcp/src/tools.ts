@@ -168,7 +168,9 @@ export function getAddCommandTool(
   config: ProjectConfig,
   input: z.infer<typeof getAddCommandSchema>
 ) {
-  const urls = input.names.map((name) => `${config.registry.url}/${name}.json`);
+  const urls = input.names.map((name) =>
+    displayUrl(`${config.registry.url}/${name}.json`)
+  );
 
   const lines = [
     "Install these components with the shadcn CLI:",
@@ -226,7 +228,8 @@ export async function getExamplesTool(
 }
 
 export function getThemeInfoTool(config: ProjectConfig) {
-  const registryUrl = config.registry.url;
+  const registryUrl = displayUrl(config.registry.url);
+  const docsUrl = displayUrl(config.docsUrl);
   const themeCtx = detectProjectContext();
 
   return `# Keystone UI Theme
@@ -290,7 +293,7 @@ npx shadcn@latest add ${registryUrl}/default.json
 
 ## Custom themes
 
-The theme builder (${config.docsUrl}/theme-builder) encodes a theme as a code,
+The theme builder (${docsUrl}/theme-builder) encodes a theme as a code,
 \`k1_<base>_<L>_<C>_<H>_<radius>_<font>\`, served as a \`registry:theme\` item.
 Install one, or only its colours (\`?only=theme\`) or font (\`?only=font\`):
 \`\`\`bash

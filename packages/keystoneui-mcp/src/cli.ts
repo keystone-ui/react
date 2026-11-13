@@ -300,7 +300,9 @@ function runTheme(args: string[]): void {
     process.exitCode = 1;
     return;
   }
-  const siteUrl = process.env.KEYSTONEUI_URL ?? "https://keystoneui.io";
+  const siteUrl = displayUrl(
+    process.env.KEYSTONEUI_URL ?? "https://keystoneui.io"
+  );
   const only = parseThemeParts(flags.only);
   console.log(`Theme ${code}`);
   console.log(
