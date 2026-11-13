@@ -97,6 +97,20 @@ describe("displayUrl", () => {
     ).toBe("http://host.test:8443/private/r?k=REDACTED");
   });
 
+  // KEYSTONEUI_URL is an origin that callers append `/r/...` to, so a
+  // trailing slash added by `URL#href` would print `//r`.
+  it("does not add a trailing slash to a bare origin", () => {
+    expect(displayUrl(`https://user:${SECRET}@docs.test`)).toBe(
+      "https://docs.test"
+    );
+    expect(displayUrl(`https://docs.test?t=${SECRET}`)).toBe(
+      "https://docs.test?t=REDACTED"
+    );
+    expect(displayUrl(`https://user:${SECRET}@docs.test/`)).toBe(
+      "https://docs.test/"
+    );
+  });
+
   it("handles an IPv6 host", () => {
     expect(displayUrl(`http://user:${SECRET}@[::1]:8080/r`)).toBe(
       "http://[::1]:8080/r"
@@ -200,7 +214,7 @@ describe("info", () => {
     expect(data.environment.registryUrl).toBe(
       "https://reg.test/r?token=REDACTED"
     );
-    expect(data.environment.docsUrl).toBe("https://docs.test/");
+    expect(data.environment.docsUrl).toBe("https://docs.test");
     expect(JSON.stringify(data)).not.toContain(SECRET);
   });
 

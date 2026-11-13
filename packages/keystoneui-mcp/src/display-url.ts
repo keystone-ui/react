@@ -1,5 +1,7 @@
 import { inspect } from "node:util";
 
+const PATH_AFTER_AUTHORITY = /^[a-z][a-z\d+.-]*:\/\/[^/?#]*\//i;
+
 /**
  * A configured URL made safe to print: in logs, errors, `info` output, or an
  * agent's context. Registry and docs URLs come from env vars or
@@ -30,6 +32,11 @@ export function displayUrl(raw: string): string {
   url.search = keys
     .map((key) => `${encodeURIComponent(key)}=REDACTED`)
     .join("&");
+  // `URL` reports a bare origin's path as "/". Keep the input's form, since
+  // callers append `/r/...` to an origin and would otherwise print `//r`.
+  if (url.host && url.pathname === "/" && !PATH_AFTER_AUTHORITY.test(raw)) {
+    return `${url.protocol}//${url.host}${url.search}`;
+  }
   return url.href;
 }
 
