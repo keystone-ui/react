@@ -213,3 +213,96 @@ export const Terminal: Story = {
     await expect(pre.tabIndex).toBe(0);
   },
 };
+
+/** A token with no break opportunity: a URL, a hash or a base64 string. */
+const LONG_TOKEN = `https://example.com/${"a".repeat(180)}`;
+
+/** The top of a line's first character, relative to the line's own box. */
+function firstCharTop(line: HTMLElement) {
+  const text = [...line.childNodes].find((n) => n.nodeType === Node.TEXT_NODE);
+  const range = document.createRange();
+  range.setStart(text as Text, 0);
+  range.setEnd(text as Text, 1);
+  return range.getBoundingClientRect().top - line.getBoundingClientRect().top;
+}
+
+/**
+ * `wrap` wraps a line that has no break opportunity instead of scrolling, and
+ * a wrapped line keeps its number beside its first row and its background on
+ * every row. Without `wrap` the same line still scrolls, and its highlight
+ * still reaches the end of the scroll.
+ */
+export const WrapLongToken: Story = {
+  args: { code: `${LONG_TOKEN}\nshort`, highlightLines: [1] },
+  render: (args) => (
+    // A block parent, so the width is fixed and no grid or flex item minimum
+    // stretches the blocks.
+    <div style={{ width: 320 }}>
+      <CodeBlock {...args} data-testid="wrap" wrap>
+        <CodeBlockContent />
+      </CodeBlock>
+      <CodeBlock
+        {...args}
+        className="mt-4"
+        data-testid="numbered"
+        lineNumbers
+        wrap
+      >
+        <CodeBlockContent />
+      </CodeBlock>
+      <CodeBlock {...args} className="mt-4" data-testid="scroll">
+        <CodeBlockContent />
+      </CodeBlock>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const parts = (id: string) => {
+      const root = canvasElement.querySelector(
+        `[data-testid='${id}']`
+      ) as HTMLElement;
+      const pre = root.querySelector("pre") as HTMLElement;
+      const [long, short] = root.querySelectorAll<HTMLElement>("[data-line]");
+      return { pre, long, short };
+    };
+
+    // Wrapped: nothing overflows sideways, the long line takes several rows,
+    // and its highlight spans the region's width on all of them.
+    const wrap = parts("wrap");
+    await expect(wrap.pre.scrollWidth).toBeLessThanOrEqual(
+      wrap.pre.clientWidth
+    );
+    const longBox = wrap.long.getBoundingClientRect();
+    await expect(longBox.height).toBeGreaterThan(
+      wrap.short.getBoundingClientRect().height * 2
+    );
+    await expect(longBox.width).toBe(wrap.pre.clientWidth);
+    await expect(getComputedStyle(wrap.long).backgroundColor).not.toBe(
+      "rgba(0, 0, 0, 0)"
+    );
+
+    // Numbered and wrapped: the code starts on the same row as its number,
+    // as it does on a short line.
+    const numbered = parts("numbered");
+    await expect(numbered.pre.scrollWidth).toBeLessThanOrEqual(
+      numbered.pre.clientWidth
+    );
+    await expect(firstCharTop(numbered.long)).toBe(
+      firstCharTop(numbered.short)
+    );
+
+    // Not wrapped: the line scrolls, and at the end of the scroll the
+    // highlight still reaches the region's right edge.
+    const scroll = parts("scroll");
+    await expect(scroll.pre.scrollWidth).toBeGreaterThan(
+      scroll.pre.clientWidth
+    );
+    scroll.pre.scrollLeft = scroll.pre.scrollWidth;
+    const preBox = scroll.pre.getBoundingClientRect();
+    await expect(
+      Math.round(scroll.long.getBoundingClientRect().right)
+    ).toBeGreaterThanOrEqual(
+      Math.round(preBox.left + scroll.pre.clientLeft + scroll.pre.clientWidth)
+    );
+    scroll.pre.scrollLeft = 0;
+  },
+};
