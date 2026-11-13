@@ -219,11 +219,19 @@ const LONG_TOKEN = `https://example.com/${"a".repeat(180)}`;
 
 /** The top of a line's first character, relative to the line's own box. */
 function firstCharTop(line: HTMLElement) {
-  const text = [...line.childNodes].find((n) => n.nodeType === Node.TEXT_NODE);
+  const text = document
+    .createTreeWalker(line, NodeFilter.SHOW_TEXT)
+    .nextNode() as Text;
   const range = document.createRange();
-  range.setStart(text as Text, 0);
-  range.setEnd(text as Text, 1);
-  return range.getBoundingClientRect().top - line.getBoundingClientRect().top;
+  range.setStart(text, 0);
+  range.setEnd(text, 1);
+  const charBox = range.getBoundingClientRect();
+  const lineBox = line.getBoundingClientRect();
+  // Two empty rectangles would compare equal; the line must be rendered.
+  expect(charBox.width).toBeGreaterThan(0);
+  expect(charBox.height).toBeGreaterThan(0);
+  expect(lineBox.height).toBeGreaterThan(0);
+  return charBox.top - lineBox.top;
 }
 
 /**
@@ -275,7 +283,10 @@ export const WrapLongToken: Story = {
     await expect(longBox.height).toBeGreaterThan(
       wrap.short.getBoundingClientRect().height * 2
     );
-    await expect(longBox.width).toBe(wrap.pre.clientWidth);
+    // `clientWidth` is rounded, so allow a pixel.
+    await expect(
+      Math.abs(longBox.width - wrap.pre.clientWidth)
+    ).toBeLessThanOrEqual(1);
     await expect(getComputedStyle(wrap.long).backgroundColor).not.toBe(
       "rgba(0, 0, 0, 0)"
     );

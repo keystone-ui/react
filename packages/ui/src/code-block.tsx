@@ -248,7 +248,10 @@ function CodeBlockContent({
                 // biome-ignore lint/suspicious/noArrayIndexKey: a line's index is its identity
                 key={index}
               >
-                {line || " "}
+                {/* In the grid the text needs its own element: a grid drops
+                    a bare whitespace-only text run, so a line of spaces or
+                    a tab would vanish from a selection. */}
+                {lineNumbers && wrap ? <span>{line || " "}</span> : line || " "}
               </span>
             );
           })}
