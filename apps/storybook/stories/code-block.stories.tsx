@@ -306,3 +306,53 @@ export const WrapLongToken: Story = {
     scroll.pre.scrollLeft = 0;
   },
 };
+
+/** Spaces only, a tab only, then a truly empty line (highlighted). */
+const WHITESPACE_LINES = "alpha\n   \n\t\n\nomega";
+
+/** What a user's drag-select over the block's code would copy. */
+function selectedText(root: HTMLElement) {
+  const selection = window.getSelection() as Selection;
+  selection.selectAllChildren(root.querySelector("code") as HTMLElement);
+  const text = selection.toString();
+  selection.removeAllRanges();
+  return text;
+}
+
+/**
+ * Wrapped and numbered, a line of only spaces or only a tab still selects and
+ * copies its white space, exactly as the same block does unwrapped, and a
+ * truly empty highlighted line keeps its height and background.
+ */
+export const WrapWhitespaceLines: Story = {
+  args: { code: WHITESPACE_LINES, highlightLines: [4] },
+  render: (args) => (
+    <div style={{ width: 320 }}>
+      <CodeBlock {...args} data-testid="wrapped" lineNumbers wrap>
+        <CodeBlockContent />
+      </CodeBlock>
+      <CodeBlock {...args} className="mt-4" data-testid="unwrapped" lineNumbers>
+        <CodeBlockContent />
+      </CodeBlock>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const root = (id: string) =>
+      canvasElement.querySelector(`[data-testid='${id}']`) as HTMLElement;
+    const wrapped = selectedText(root("wrapped"));
+    const unwrapped = selectedText(root("unwrapped"));
+
+    await expect(JSON.stringify(wrapped)).toBe(JSON.stringify(unwrapped));
+    await expect(wrapped).toContain("   ");
+    await expect(wrapped).toContain("\t");
+    await expect(wrapped).not.toMatch(/\d/);
+
+    const empty = root("wrapped").querySelector<HTMLElement>(
+      "[data-line='4']"
+    ) as HTMLElement;
+    await expect(empty.getBoundingClientRect().height).toBeGreaterThan(0);
+    await expect(getComputedStyle(empty).backgroundColor).not.toBe(
+      "rgba(0, 0, 0, 0)"
+    );
+  },
+};
