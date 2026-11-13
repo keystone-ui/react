@@ -16,7 +16,7 @@ import type { ProjectConfig } from "../config.js";
 import { displayUrl } from "../display-url.js";
 import { clearCache, fetchManifest } from "../fetcher.js";
 import { runInfo } from "../info.js";
-import { getAddCommandTool, getDocsTool, getThemeInfoTool } from "../tools.js";
+import { getDocsTool } from "../tools.js";
 
 // Obviously fake: never a real credential.
 const SECRET = "FAKE_SECRET_not_a_real_token";
@@ -271,60 +271,5 @@ describe("cli docs", () => {
     const error = await runCli(["docs", "button"]).catch((e: unknown) => e);
     expect(error).toBeInstanceOf(TypeError);
     expect(fullText(error)).not.toContain(SECRET);
-  });
-});
-
-// These print commands the user copies and runs. Redacting them means the
-// printed command no longer authenticates against a credentialed registry:
-// kept as its own commit so the lead can drop it (see the report).
-describe("copy-paste command sites", () => {
-  const secretConfig: ProjectConfig = {
-    docsUrl: `https://user:${SECRET}@docs.test`,
-    registry: { url: `https://user:${SECRET}@reg.test/r` },
-  };
-
-  it("get_add_command does not echo registry credentials", () => {
-    const out = getAddCommandTool(secretConfig, { names: ["button"] });
-    expect(out).toContain(
-      "npx shadcn@latest add https://reg.test/r/button.json"
-    );
-    expect(out).not.toContain(SECRET);
-  });
-
-  it("get_theme_info does not echo registry or docs credentials", () => {
-    const out = getThemeInfoTool(secretConfig);
-    expect(out).toContain(
-      "npx shadcn@latest add https://reg.test/r/default.json"
-    );
-    expect(out).toContain("https://docs.test/theme-builder");
-    expect(out).not.toContain(SECRET);
-  });
-
-  async function captureTheme(args: string[]): Promise<string> {
-    const log = vi.spyOn(console, "log").mockImplementation(() => undefined);
-    await runCli(["theme", ...args]);
-    return log.mock.calls.map((c) => c.join(" ")).join("\n");
-  }
-
-  const CODE = "k1_zinc_0.6_0.2_250_md_inter";
-
-  it("cli theme does not echo KEYSTONEUI_URL credentials", async () => {
-    process.env.KEYSTONEUI_URL = `https://user:${SECRET}@docs.test`;
-    const out = await captureTheme([CODE, "--only", "theme"]);
-    expect(out).toContain(
-      `npx shadcn@latest add https://docs.test/r/theme/${CODE}.json?only=theme`
-    );
-    expect(out).not.toContain(SECRET);
-  });
-
-  it("cli theme prints the default site unchanged", async () => {
-    delete process.env.KEYSTONEUI_URL;
-    const out = await captureTheme([CODE, "--only", "theme"]);
-    expect(out).toContain(
-      `npx shadcn@latest add https://keystoneui.io/r/theme/${CODE}.json?only=theme`
-    );
-    expect(out).toContain(
-      "Edit: https://keystoneui.io/theme-builder?base=zinc"
-    );
   });
 });
