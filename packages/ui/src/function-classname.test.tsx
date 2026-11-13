@@ -155,7 +155,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "./tabs";
-import { Tag } from "./tag";
+import { Tag, TagRemove } from "./tag";
 import { TagGroup, TagGroupItem } from "./tag-group";
 import { Toggle } from "./toggle";
 import { ToggleGroup, ToggleGroupItem } from "./toggle-group";
@@ -167,12 +167,18 @@ type ClassNameArg = string | ((state: any) => string) | undefined;
 interface Case {
   /** Exported part under test; it receives `data-testid="probe"`. */
   name: string;
+  /**
+   * The className lands on the probe's parent: Tag given `remove` puts
+   * `data-testid` on the toggle and `className` on the chip around it.
+   */
+  onParent?: boolean;
   render: (className: ClassNameArg) => ReactElement;
   /** Keys the state passed to the function must contain. */
   state?: Record<string, unknown>;
 }
 
 const probe = { "data-testid": "probe" } as const;
+const ignoreRemove = (_value: string) => undefined;
 
 const CASES: Case[] = [
   // --- Accordion (fixed on the base branch; kept as a regression guard)
@@ -470,6 +476,16 @@ const CASES: Case[] = [
     state: { pressed: false },
   },
   {
+    name: "Tag with remove",
+    render: (c) => (
+      <Tag className={c} remove={<TagRemove />} {...probe}>
+        T
+      </Tag>
+    ),
+    state: { pressed: false },
+    onParent: true,
+  },
+  {
     name: "TagGroup",
     render: (c) => (
       <TagGroup className={c} {...probe}>
@@ -487,6 +503,18 @@ const CASES: Case[] = [
       </TagGroup>
     ),
     state: { pressed: false },
+  },
+  {
+    name: "TagGroupItem with onRemove",
+    render: (c) => (
+      <TagGroup onRemove={ignoreRemove}>
+        <TagGroupItem className={c} value="a" {...probe}>
+          A
+        </TagGroupItem>
+      </TagGroup>
+    ),
+    state: { pressed: false },
+    onParent: true,
   },
   {
     name: "InputOTP",
@@ -1045,7 +1073,9 @@ afterAll(() => {
 
 function classOf(testCase: Case, className: ClassNameArg) {
   const { unmount } = render(testCase.render(className));
-  const value = screen.getByTestId("probe").getAttribute("class") ?? "";
+  const probed = screen.getByTestId("probe");
+  const target = testCase.onParent ? probed.parentElement : probed;
+  const value = target?.getAttribute("class") ?? "";
   unmount();
   return value;
 }
