@@ -13,7 +13,7 @@ import {
   useRef,
 } from "react";
 
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 /** Spaces, tabs and line breaks: what CSS collapses. Not `\s`, which has NBSP. */
 const COLLAPSIBLE_WHITESPACE = /^[ \t\n\r\f]+$/;
@@ -192,7 +192,7 @@ function Tag({ className, children, remove, ref, ...props }: TagProps) {
   if (!isGiven(remove)) {
     return (
       <TogglePrimitive
-        className={cn(tagVariants(), className)}
+        className={mergeClassName(cn(tagVariants()), className)}
         data-slot="tag"
         {...props}
         ref={toggleRef}
