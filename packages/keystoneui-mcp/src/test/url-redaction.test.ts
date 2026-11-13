@@ -234,9 +234,21 @@ describe("redactUrlInError with a real fetch rejection", () => {
     const error = new TypeError("fetch failed", {
       cause: Object.assign(new Error("refused"), { code: "ECONNREFUSED" }),
     });
-    expect(redactUrlInError(error, `https://user:${SECRET}@host.test/r`)).toBe(
-      error
-    );
+    // A username that cannot occur in a stack path (`/Users/user/...`).
+    const url = `https://FAKE_USER_not_real:${SECRET}@host.test/r`;
+    expect(redactUrlInError(error, url)).toBe(error);
+  });
+
+  // Deliberate trade-off: a short query value (here "2") also matches stack
+  // line numbers, so the error is replaced and its cause dropped.
+  it("fails closed when a short query value appears anywhere", () => {
+    const error = new TypeError("fetch failed", {
+      cause: Object.assign(new Error("refused"), { code: "ECONNREFUSED" }),
+    });
+    const safe = redactUrlInError(error, "https://host.test/r?v=2");
+    expect(safe).not.toBe(error);
+    expect(safe).toBeInstanceOf(TypeError);
+    expect((safe as Error).cause).toBeUndefined();
   });
 });
 
