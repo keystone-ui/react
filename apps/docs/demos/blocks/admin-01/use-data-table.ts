@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { SortState } from "./sort";
 
 /**
@@ -179,22 +179,55 @@ function toggled<T>(set: ReadonlySet<T>, item: T): ReadonlySet<T> {
 /**
  * A number that moves when `rows` holds different rows than before.
  *
- * Compared row by row rather than by the array, so `rows: data.filter(…)`
- * written inline — a new array every render over the same rows — is not a new
- * answer. Kept in a ref, not state: bumping state during render would turn
- * such an array into an endless re-render.
+ * Compared row by row rather than by the array, so `rows: data.filter(…)` or
+ * `rows: data.map(toUser)` written inline — a new array every render, over the
+ * same rows or over fresh objects with the same fields — is not a new answer.
+ *
+ * Kept in state and adjusted while rendering, React's documented pattern for
+ * state that follows a prop: a render React throws away (a transition that
+ * suspends, say) leaves nothing behind. Rows whose objects hold fresh nested
+ * objects or arrays every render still differ every render, and end in React's
+ * "Too many re-renders" error; build those in a `useMemo`.
  */
 function useRowsVersion(rows: readonly unknown[]): number {
-  const seen = useRef({ rows, version: 0 });
-  if (!sameRows(seen.current.rows, rows)) {
-    seen.current = { rows, version: seen.current.version + 1 };
+  const [snapshot, setSnapshot] = useState({ rows, version: 0 });
+  if (!sameRows(snapshot.rows, rows)) {
+    setSnapshot({ rows, version: snapshot.version + 1 });
   }
-  return seen.current.version;
+  return snapshot.version;
 }
 
 function sameRows(a: readonly unknown[], b: readonly unknown[]): boolean {
   return (
-    a === b || (a.length === b.length && a.every((row, i) => row === b[i]))
+    a === b ||
+    (a.length === b.length && a.every((row, i) => sameRow(row, b[i])))
+  );
+}
+
+/** The same object, or one with the same own keys holding the same values. */
+function sameRow(a: unknown, b: unknown): boolean {
+  if (Object.is(a, b)) {
+    return true;
+  }
+  if (
+    typeof a !== "object" ||
+    typeof b !== "object" ||
+    a === null ||
+    b === null
+  ) {
+    return false;
+  }
+  const keys = Object.keys(a);
+  return (
+    keys.length === Object.keys(b).length &&
+    keys.every(
+      (key) =>
+        Object.hasOwn(b, key) &&
+        Object.is(
+          (a as Record<string, unknown>)[key],
+          (b as Record<string, unknown>)[key]
+        )
+    )
   );
 }
 
