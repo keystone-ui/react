@@ -1,7 +1,7 @@
 ---
-date: "2026-11-12"
+date: "2026-11-13"
 description: "What's coming in the next release"
-excerpt: "9 changes queued for the next release."
+excerpt: "10 changes queued for the next release."
 ---
 
 ## Patch changes
@@ -15,6 +15,12 @@ excerpt: "9 changes queued for the next release."
 ### Carousel auto-hide arrows keep Button's transitions
 
 With `autoHideArrows`, the previous and next arrows transitioned only `opacity`: the fade's `transition-opacity` replaced Button's own transition list, so the hover colour and press scale snapped. The arrows now fade and keep every transition Button has.
+
+---
+
+### CodeBlock `wrap` wraps unbreakable tokens
+
+With `wrap`, a line with no break opportunity (a URL, a hash, a base64 string) now wraps instead of scrolling sideways. With `lineNumbers` as well, a wrapped line starts beside its number and its later rows indent past the gutter. Blocks without `wrap` are unchanged.
 
 ---
 

@@ -213,3 +213,157 @@ export const Terminal: Story = {
     await expect(pre.tabIndex).toBe(0);
   },
 };
+
+/** A token with no break opportunity: a URL, a hash or a base64 string. */
+const LONG_TOKEN = `https://example.com/${"a".repeat(180)}`;
+
+/** The top of a line's first character, relative to the line's own box. */
+function firstCharTop(line: HTMLElement) {
+  const text = document
+    .createTreeWalker(line, NodeFilter.SHOW_TEXT)
+    .nextNode() as Text;
+  const range = document.createRange();
+  range.setStart(text, 0);
+  range.setEnd(text, 1);
+  const charBox = range.getBoundingClientRect();
+  const lineBox = line.getBoundingClientRect();
+  // Two empty rectangles would compare equal; the line must be rendered.
+  expect(charBox.width).toBeGreaterThan(0);
+  expect(charBox.height).toBeGreaterThan(0);
+  expect(lineBox.height).toBeGreaterThan(0);
+  return charBox.top - lineBox.top;
+}
+
+/**
+ * `wrap` wraps a line that has no break opportunity instead of scrolling, and
+ * a wrapped line keeps its number beside its first row and its background on
+ * every row. Without `wrap` the same line still scrolls, and its highlight
+ * still reaches the end of the scroll.
+ */
+export const WrapLongToken: Story = {
+  args: { code: `${LONG_TOKEN}\nshort`, highlightLines: [1] },
+  render: (args) => (
+    // A block parent, so the width is fixed and no grid or flex item minimum
+    // stretches the blocks.
+    <div style={{ width: 320 }}>
+      <CodeBlock {...args} data-testid="wrap" wrap>
+        <CodeBlockContent />
+      </CodeBlock>
+      <CodeBlock
+        {...args}
+        className="mt-4"
+        data-testid="numbered"
+        lineNumbers
+        wrap
+      >
+        <CodeBlockContent />
+      </CodeBlock>
+      <CodeBlock {...args} className="mt-4" data-testid="scroll">
+        <CodeBlockContent />
+      </CodeBlock>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const parts = (id: string) => {
+      const root = canvasElement.querySelector(
+        `[data-testid='${id}']`
+      ) as HTMLElement;
+      const pre = root.querySelector("pre") as HTMLElement;
+      const [long, short] = root.querySelectorAll<HTMLElement>("[data-line]");
+      return { pre, long, short };
+    };
+
+    // Wrapped: nothing overflows sideways, the long line takes several rows,
+    // and its highlight spans the region's width on all of them.
+    const wrap = parts("wrap");
+    await expect(wrap.pre.scrollWidth).toBeLessThanOrEqual(
+      wrap.pre.clientWidth
+    );
+    const longBox = wrap.long.getBoundingClientRect();
+    await expect(longBox.height).toBeGreaterThan(
+      wrap.short.getBoundingClientRect().height * 2
+    );
+    // `clientWidth` is rounded, so allow a pixel.
+    await expect(
+      Math.abs(longBox.width - wrap.pre.clientWidth)
+    ).toBeLessThanOrEqual(1);
+    await expect(getComputedStyle(wrap.long).backgroundColor).not.toBe(
+      "rgba(0, 0, 0, 0)"
+    );
+
+    // Numbered and wrapped: the code starts on the same row as its number,
+    // as it does on a short line.
+    const numbered = parts("numbered");
+    await expect(numbered.pre.scrollWidth).toBeLessThanOrEqual(
+      numbered.pre.clientWidth
+    );
+    await expect(firstCharTop(numbered.long)).toBe(
+      firstCharTop(numbered.short)
+    );
+
+    // Not wrapped: the line scrolls, and at the end of the scroll the
+    // highlight still reaches the region's right edge.
+    const scroll = parts("scroll");
+    await expect(scroll.pre.scrollWidth).toBeGreaterThan(
+      scroll.pre.clientWidth
+    );
+    scroll.pre.scrollLeft = scroll.pre.scrollWidth;
+    const preBox = scroll.pre.getBoundingClientRect();
+    await expect(
+      Math.round(scroll.long.getBoundingClientRect().right)
+    ).toBeGreaterThanOrEqual(
+      Math.round(preBox.left + scroll.pre.clientLeft + scroll.pre.clientWidth)
+    );
+    scroll.pre.scrollLeft = 0;
+  },
+};
+
+/** Spaces only, a tab only, then a truly empty line (highlighted). */
+const WHITESPACE_LINES = "alpha\n   \n\t\n\nomega";
+
+/** What a user's drag-select over the block's code would copy. */
+function selectedText(root: HTMLElement) {
+  const selection = window.getSelection() as Selection;
+  selection.selectAllChildren(root.querySelector("code") as HTMLElement);
+  const text = selection.toString();
+  selection.removeAllRanges();
+  return text;
+}
+
+/**
+ * Wrapped and numbered, a line of only spaces or only a tab still selects and
+ * copies its white space, exactly as the same block does unwrapped, and a
+ * truly empty highlighted line keeps its height and background.
+ */
+export const WrapWhitespaceLines: Story = {
+  args: { code: WHITESPACE_LINES, highlightLines: [4] },
+  render: (args) => (
+    <div style={{ width: 320 }}>
+      <CodeBlock {...args} data-testid="wrapped" lineNumbers wrap>
+        <CodeBlockContent />
+      </CodeBlock>
+      <CodeBlock {...args} className="mt-4" data-testid="unwrapped" lineNumbers>
+        <CodeBlockContent />
+      </CodeBlock>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const root = (id: string) =>
+      canvasElement.querySelector(`[data-testid='${id}']`) as HTMLElement;
+    const wrapped = selectedText(root("wrapped"));
+    const unwrapped = selectedText(root("unwrapped"));
+
+    await expect(JSON.stringify(wrapped)).toBe(JSON.stringify(unwrapped));
+    await expect(wrapped).toContain("   ");
+    await expect(wrapped).toContain("\t");
+    await expect(wrapped).not.toMatch(/\d/);
+
+    const empty = root("wrapped").querySelector<HTMLElement>(
+      "[data-line='4']"
+    ) as HTMLElement;
+    await expect(empty.getBoundingClientRect().height).toBeGreaterThan(0);
+    await expect(getComputedStyle(empty).backgroundColor).not.toBe(
+      "rgba(0, 0, 0, 0)"
+    );
+  },
+};
