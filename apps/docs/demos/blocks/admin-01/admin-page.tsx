@@ -114,7 +114,11 @@ export function AdminPage() {
           ) : null}
 
           {section === "users" && !openUser ? (
-            <AdminUsersTable onOpenUser={setOpenUserId} table={usersTable} />
+            <AdminUsersTable
+              onOpenUser={setOpenUserId}
+              table={usersTable}
+              users={users}
+            />
           ) : null}
 
           {section === "overview" ? (
