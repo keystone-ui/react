@@ -1,0 +1,108 @@
+---
+title: Users 01
+description: The users view from admin-01 on its own — a filterable, sortable users table with row selection, CSV export, loading states and URL-synced filters, and a record page for each user. No sidebar, overview or payments.
+---
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/users-01.json
+```
+
+<BlockPreview name="block-users-01" />
+
+## Features
+
+- **Toolbar** with search, filter pills (`Role: Admin`, `Status is not: Suspended`, a created-date range) and `+ Add filter`, then `Columns`, `Export` and `Sort` at the far end of the row.
+- **Sorting** from the `Sort` menu or the column headers, in words that fit the column (`A–Z`, `Newest first`, `Most first`).
+- **Row selection** with a [`SelectionBar`](/docs/components/selection-bar) whose actions — export the selection, copy its ids — run. A selection outlives filters and pages.
+- **Loading** — [`Skeleton`](/docs/components/skeleton) rows at the real rows' height while a query settles, and an [`Empty`](/docs/components/empty) state that offers `Clear filters` when nothing matches.
+- **Shareable views** — search, filters, sort and page live in the URL, so a link or a reload lands on the same rows.
+- **User record** — a name opens a read-only record page built from [`DescriptionList`](/docs/components/description-list), with [`CopyButton`](/docs/components/copy-button) on the values that exist to be pasted elsewhere.
+- **Mobile filters** — below `sm` the pills, view controls and sort fold into a bottom-sheet [`Drawer`](/docs/components/drawer) with a [`Stepper`](/docs/components/stepper) drilldown.
+
+## Same files as admin-01
+
+This is the users section of [`admin-01`](/docs/blocks/admin-01), installable without the sidebar, overview and payments. It installs **the same files** `admin-01` does — `admin-users-table.tsx`, `admin-filters.ts`, `use-data-table.ts` and the rest — which is why they keep their `admin-` names. Both items are built from one source, so an app that installs both gets identical bytes at identical paths, and nothing collides.
+
+The only file of its own is `users-view.tsx`: the page shell that holds the table state, the open user, and the URL. The page lands at `app/users/page.tsx`.
+
+## Use it with your data
+
+The rows enter in one place. `use-users-table.ts` hands them to `useDataTable`, and `users-view.tsx` looks up the open user and passes the same rows to the table for its selection bar:
+
+```tsx title="components/use-users-table.ts"
+export function useUsersTable(rows: readonly User[]) {
+  return useDataTable<User, UserFilters, FilterKey, UserSortKey, UserColumnId>({
+    clearFor: (key) => filterDef(key).clear,
+    defaultKeys: DEFAULT_KEYS,
+    defaultPageSize: DEFAULT_PAGE_SIZE,
+    defaultSort: DEFAULT_SORT,
+    emptyFilters: EMPTY_FILTERS,
+    latency: 0,
+    matches: matchesUserFilters,
+    rows,
+    sortRows: sortUsers,
+  });
+}
+```
+
+As installed, `useUsersTable()` reads the fixture from `mock-users.ts`. Replace that file, or take the rows as an argument as above and pass them from `users-view.tsx`.
+
+**What `DataTableConfig` asks for:** `rows`, a `matches(row, filters)` predicate and a `sortRows(rows, sort)` function — the users versions live in `admin-filters.ts` — plus the starting filters, sort and page size. `latency` is how long the stand-in request takes (300 ms by default); set it to `0` when your rows are already in memory.
+
+**Rows that arrive later are fine.** Pass an empty array while you fetch, then the loaded array: a new `rows` array is a new answer even when the query has not changed.
+
+**What it does not do:** it filters, sorts and pages in the browser, over every row it is given. There is no server paging, no request error state, and `Export` writes every matching row from `rows`. That suits hundreds or a few thousand users, not an unbounded table.
+
+### Paging on the server
+
+When the server does the filtering, keep everything above the request and swap the request itself. In `use-data-table.ts`, `run()` is what a server would do with the query and `useSimulatedFetch` stands in for the network:
+
+1. Replace the `run(config, query)` call with your request, sending `query` — filters, sort, `pageIndex`, `pageSize` — and returning `{ page, total, pageCount }`. `usersToParams(query)` in `admin-filters.ts` already turns a query into flat string parameters.
+2. Replace `useSimulatedFetch` with your data layer's query hook, keyed on the same `query`, keeping the last answer while the next one loads so the pagination does not collapse to zero.
+3. `result.all` no longer holds every matching row. Point `Export` at an endpoint that exports the query, or remove it.
+4. The selection bar resolves selected ids against the `users` prop. Pass the rows you have loaded, or fetch the selected records by id.
+
+## Components Used
+
+- [Avatar](/docs/components/avatar)
+- [Badge](/docs/components/badge)
+- [Button](/docs/components/button)
+- [Calendar](/docs/components/calendar)
+- [Card](/docs/components/card)
+- [Checkbox](/docs/components/checkbox)
+- [Combobox](/docs/components/combobox)
+- [Copy Button](/docs/components/copy-button)
+- [Description List](/docs/components/description-list)
+- [Drawer](/docs/components/drawer)
+- [Dropdown Menu](/docs/components/dropdown-menu)
+- [Empty](/docs/components/empty)
+- [Input](/docs/components/input)
+- [Input Group](/docs/components/input-group)
+- [Label](/docs/components/label)
+- [Native Select](/docs/components/native-select)
+- [Popover](/docs/components/popover)
+- [Radio Group](/docs/components/radio-group)
+- [Selection Bar](/docs/components/selection-bar)
+- [Skeleton](/docs/components/skeleton)
+- [Stepper](/docs/components/stepper)
+- [Table](/docs/components/table)
+- [Table Pagination](/docs/components/table-pagination)
+- [Toggle](/docs/components/toggle)
+
+## Composition
+
+```text
+UsersView
+├── AdminUserDetail                         (a user is open)
+│   └── Card › DescriptionList › CopyButton
+└── AdminUsersTable                         (otherwise)
+    ├── AdminUsersToolbar
+    │   ├── InputGroup › InputGroupInput
+    │   ├── UserFilterPill × n              (hidden below sm)
+    │   ├── AddFilterMenu
+    │   ├── ColumnsMenu · Button (Export) · SortMenu   (sm+)
+    │   └── AdminFiltersDrawer              (sm:hidden)
+    ├── Table › SortableHead · SkeletonRows · FilteredEmpty
+    ├── TablePagination
+    └── SelectionBar
+```

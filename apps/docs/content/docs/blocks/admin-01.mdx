@@ -51,6 +51,20 @@ It writes the same four files this block uses (`filter-trigger.tsx`,
 step: the item is built from this block's source. The payments table's
 operator chip stays in the block, since it is written against payment fields.
 
+## Reusing the users view
+
+The users section — table, toolbar, filter pills, sort and column menus,
+selection bar, URL state and the user record page — installs on its own as
+[`users-01`](/docs/blocks/users-01), without the sidebar, overview or payments:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/users-01.json
+```
+
+It installs the same files as this block, built from the same source, plus a
+`users-view.tsx` page shell. Installing both writes identical files to the
+same paths.
+
 ## Shared with dashboard-01, byte for byte
 
 Four files — `chart.tsx`, `chart-formatters.ts`, `series-legend.tsx`, `use-reduced-motion.ts` — are duplicated verbatim from [`dashboard-01`](/docs/blocks/dashboard-01) rather than shared through a common registry item.
