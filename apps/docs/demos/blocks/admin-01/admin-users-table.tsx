@@ -53,7 +53,7 @@ import {
 import { AdminUsersToolbar } from "./admin-users-toolbar";
 import { downloadCsv } from "./csv";
 import { FilteredEmpty } from "./filtered-empty";
-import { statusLabels, type User, users } from "./mock-admin";
+import { statusLabels, type User, users } from "./mock-users";
 import { ResultSummary } from "./result-summary";
 import { SkeletonRows } from "./skeleton-rows";
 import { SortableHead } from "./sort-menu";

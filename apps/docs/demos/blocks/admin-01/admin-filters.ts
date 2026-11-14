@@ -17,7 +17,7 @@ import {
   addableKeys as addableKeysOf,
   visibleKeys as visibleKeysOf,
 } from "./filter-row";
-import { type Role, type Status, statusLabels, type User } from "./mock-admin";
+import { type Role, type Status, statusLabels, type User } from "./mock-users";
 import type { SortState as BaseSortState, SortDirection } from "./sort";
 import {
   oneOf,
