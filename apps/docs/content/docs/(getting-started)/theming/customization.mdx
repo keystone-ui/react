@@ -160,6 +160,12 @@ Below is the full theme CSS. Copy this into your `globals.css` after `@import "@
   proper contrast in both modes.
 </Callout>
 
+<Callout type="warn">
+  Keep the `*` rule in `@layer base`: components that draw a border without a
+  colour depend on it, and `base.css` does not ship it. See [Manual
+  Setup](/docs/installation/quick-start#manual-setup).
+</Callout>
+
 ## Control density
 
 Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle and TableHead

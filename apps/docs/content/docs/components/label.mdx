@@ -71,6 +71,23 @@ Add helper text below the input:
 
 <ComponentPreview name="label-with-description" />
 
+
+### Disabled
+
+With the default rendering of `Checkbox`, `RadioGroupItem` and `Switch`, a sibling `Label` does not automatically dim when the control is disabled. Use `FieldLabel` inside `<Field data-disabled>` to dim the label, and pass `disabled` to the control:
+
+```tsx
+import { Checkbox } from "@keystoneui/react/checkbox";
+import { Field, FieldLabel } from "@keystoneui/react/field";
+
+<Field data-disabled orientation="horizontal">
+  <Checkbox disabled id="terms" />
+  <FieldLabel htmlFor="terms">Accept terms</FieldLabel>
+</Field>
+```
+
+<ComponentPreview name="checkbox-disabled" />
+
 ## RTL
 
 RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/rtl) for what works today.

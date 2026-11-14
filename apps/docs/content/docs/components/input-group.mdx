@@ -167,6 +167,22 @@ Input with text suffix:
 
 <ComponentPreview name="input-group-text-suffix" />
 
+
+### Disabled
+
+A disabled control dims only itself; set `data-disabled="true"` on `InputGroup` to dim the addons with it.
+
+```tsx
+<InputGroup data-disabled="true">
+  <InputGroupAddon>
+    <InputGroupText>https://</InputGroupText>
+  </InputGroupAddon>
+  <InputGroupInput disabled placeholder="example.com" />
+</InputGroup>
+```
+
+The attribute only changes opacity: pass `disabled` to any `InputGroupButton` in an addon yourself.
+
 ## RTL
 
 RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/rtl) for what works today.
