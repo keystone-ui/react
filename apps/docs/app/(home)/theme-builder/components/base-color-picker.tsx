@@ -29,7 +29,7 @@ export function BaseColorPicker({ state, setState }: BaseColorPickerProps) {
     <div className="flex flex-col gap-2">
       <span className="font-medium text-foreground text-xs">Base Color</span>
       <Popover>
-        <PopoverTrigger className="flex h-8 cursor-pointer items-center gap-2 rounded-md border border-border bg-background px-2.5 text-foreground text-xs outline-none focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2">
+        <PopoverTrigger className="flex h-8 cursor-pointer items-center gap-2 rounded-md border border-border bg-background px-2.5 text-foreground text-xs focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2">
           <span
             className="size-4 shrink-0 rounded-full border border-border"
             style={{ backgroundColor: currentSwatch.swatch }}

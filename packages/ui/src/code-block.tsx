@@ -204,7 +204,7 @@ function CodeBlockContent({
   return (
     <pre
       className={cn(
-        "m-0 overflow-x-auto py-(--code-block-pad) font-mono leading-relaxed [counter-reset:code-line]",
+        "m-0 overflow-x-auto py-(--code-block-pad) font-mono leading-relaxed [counter-reset:code-line] first:rounded-t-[inherit] last:rounded-b-[inherit] focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:-outline-offset-2",
         wrap ? "whitespace-pre-wrap break-words" : "whitespace-pre",
         className
       )}
@@ -217,7 +217,10 @@ function CodeBlockContent({
       tabIndex={0}
       {...props}
     >
-      <code className="block min-w-fit">
+      {/* `min-w-fit` lets a scrolled line's background span the whole scroll.
+          Under `wrap` it would hold the code at its longest unbreakable
+          token (overflow-wrap does not shrink min-content), so it is off. */}
+      <code className={cn("block", !wrap && "min-w-fit")}>
         {children ??
           lines.map((line, index) => {
             const number = index + 1;
@@ -230,6 +233,10 @@ function CodeBlockContent({
                   // the code never picks them up.
                   lineNumbers &&
                     "before:me-4 before:inline-block before:w-[2ch] before:select-none before:text-end before:text-muted-foreground/70 before:content-[counter(code-line)] before:[counter-increment:code-line]",
+                  // Wrapped, the number and the code are two columns: the
+                  // code starts beside its number even when its first token
+                  // is too long for the row, and its later rows indent.
+                  lineNumbers && wrap && "grid grid-cols-[auto_minmax(0,1fr)]",
                   highlight.has(number) && "bg-accent",
                   mark === "add" && "bg-success/10",
                   mark === "remove" && "bg-destructive/10"
@@ -241,7 +248,10 @@ function CodeBlockContent({
                 // biome-ignore lint/suspicious/noArrayIndexKey: a line's index is its identity
                 key={index}
               >
-                {line || " "}
+                {/* In the grid the text needs its own element: a grid drops
+                    a bare whitespace-only text run, so a line of spaces or
+                    a tab would vanish from a selection. */}
+                {lineNumbers && wrap ? <span>{line || " "}</span> : line || " "}
               </span>
             );
           })}
