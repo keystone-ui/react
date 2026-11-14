@@ -62,6 +62,18 @@ describe("useDataTable", () => {
     expect(result.current.result.total).toBe(3);
   });
 
+  it("settles when the rows array is rebuilt every render over the same rows", () => {
+    // `rows: data.filter(…)` inline is a new array on every render. Keying on
+    // the array itself crashed with "Too many re-renders"; the rows inside
+    // are what identify the answer.
+    const { result } = renderHook(() => useTable(ROWS.filter(() => true)));
+    act(() => {
+      vi.advanceTimersByTime(60);
+    });
+    expect(result.current.loading).toBe(false);
+    expect(result.current.result.total).toBe(3);
+  });
+
   it("does not reload when the same rows are passed again", () => {
     const { rerender, result } = renderHook(({ rows }) => useTable(rows), {
       initialProps: { rows: ROWS },
