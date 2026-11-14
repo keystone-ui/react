@@ -7,7 +7,7 @@
       "perSizeStoriesVsSizesDemo": "stories Small/Medium/Large → demo sizes.tsx. Story-only by design.",
       "singularStoryVsPluralDemo": "story WithIcon → demo with-icons. Treat as conceptual match; allowlisted on story side.",
       "basicStoryVsDefaultDemo": "story Basic → demo default. Conceptual match; allowlisted.",
-      "regressionFixture": "story exists to host a play() regression test for a fixed bug (date-input callback-ref: forwarded callback ref must still reach the picker button; checkbox and radio-group disabled-dimming: a disabled Base UI span must dim outside a Field; label disabled-peer-scope: in a flat layout a disabled control never dims an enabled control's label; code-block wrap-long-token: under wrap an unbreakable token wraps, a numbered wrapped line starts beside its number, and the unwrapped block still scrolls with its highlight to the end; code-block wrap-whitespace-lines: a numbered wrapped line of only spaces or a tab keeps its white space in a selection). Not a docs variant; story-only by design.",
+      "regressionFixture": "story exists to host a play() regression test for a fixed bug (tag remove-layout / remove-layout-classes / remove-pointer and tag-group removable-keyboard / removable-stretched: the remove prop renders the X beside the toggle and must match the old child form's layout, keys and pointer behaviour; tag with-remove-as-child pins that the old child form still nests; date-input callback-ref: forwarded callback ref must still reach the picker button; checkbox and radio-group disabled-dimming: a disabled Base UI span must dim outside a Field; label disabled-peer-scope: in a flat layout a disabled control never dims an enabled control's label; code-block wrap-long-token: under wrap an unbreakable token wraps, a numbered wrapped line starts beside its number, and the unwrapped block still scrolls with its highlight to the end; code-block wrap-whitespace-lines: a numbered wrapped line of only spaces or a tab keeps its white space in a selection). Not a docs variant; story-only by design.",
       "cssUtilityFixture": "CSS-only utilities in base.css (scroll-fade, shimmer) have no component and no demo directory; their story hosts the browser play() test, and the docs page is theming/utilities.",
       "worstCaseFixture": "story feeds realistic worst-case data (80-char unbroken email, four-digit page, counts of 0 and 1) and its play() measures real layout in the browser — overflow, rects inside container and viewport, positioner z-index. A layout regression test, not a docs variant; story-only by design."
     }
@@ -289,7 +289,15 @@
       "wireless-mouse"
     ],
     "tabs": ["controlled"],
-    "tag": ["whitespace-between-parts", "worst-case"],
+    "tag": [
+      "focus-across-suspense",
+      "remove-layout",
+      "remove-layout-classes",
+      "remove-pointer",
+      "whitespace-between-parts",
+      "with-remove-as-child",
+      "worst-case"
+    ],
     "tag-group": [
       "alice",
       "amenities",
@@ -300,6 +308,8 @@
       "fred",
       "jane",
       "michael",
+      "removable-keyboard",
+      "removable-stretched",
       "whitespace-between-parts",
       "with-list-data",
       "worst-case"

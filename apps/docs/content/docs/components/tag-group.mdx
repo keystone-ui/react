@@ -68,7 +68,9 @@ Display icons alongside tag labels:
 
 ### Removable
 
-Allow tags to be removed from the group:
+Pass `onRemove` to the group to give every item a remove button. Each item renders as a pill (`span[data-slot="tag-group-item"]`) holding its toggle button (`data-slot="tag-toggle"`) and the remove button side by side, as Tag does with `remove` (see [Tag → Composition](/docs/components/tag#composition)). Arrow keys, Home and End pressed on a remove button move from its own item, and Shift+Tab goes back to that item. Inside a Base UI `Toolbar` the Toolbar's orientation decides which arrows move, and Home and End do nothing, as for the toggles. The group finds the Toolbar in the DOM (`role="toolbar"` with `data-orientation`), so a toolbar from another library that renders those attributes is treated as a Toolbar too, and a group portaled out of a Toolbar (into a popup, say) is not.
+
+The item's `className` lands on the pill, so `justify-*`, `gap-*` and `cursor-*` no longer reach the label row, and the toggle's accessible name is its label alone; the X is a separate button named "Remove". A custom remove control still goes in as a child, `<TagGroupItem>Alpha<TagRemove>…</TagRemove></TagGroupItem>`: that form nests a button inside the toggle, as before.
 
 <ComponentPreview name="tag-group-removable" />
 
@@ -105,4 +107,5 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 | `selectionMode` | `"single" \| "multiple"` | `"multiple"` | Selection behavior |
 | `value` | `string[]` | - | Controlled selected values |
 | `onValueChange` | `(value: string[]) => void` | - | Callback when selection changes |
+| `onRemove` | `(value: string) => void` | - | Gives every item a remove button beside its toggle; called with the item's value |
 | `className` | `string` | - | Additional CSS classes |

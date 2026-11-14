@@ -464,7 +464,9 @@ export const WorstCase: Story = {
 
     // Measured on the label, not the item: TagRemove's hit-area
     // pseudo-element reaches past the pill and inflates the item's scrollWidth.
-    const label = item.querySelector<HTMLElement>(":scope > span");
+    const label = item.querySelector<HTMLElement>(
+      ':scope > [data-slot="tag-toggle"] > span'
+    );
     await expect(label).not.toBeNull();
     const labelEl = label as HTMLElement;
     await expect(labelEl.scrollWidth).toBeGreaterThan(labelEl.clientWidth);
@@ -572,5 +574,141 @@ export const WhitespaceBetweenParts: Story = {
     await expect(rect(canvasElement, "nbsp").width).toBeGreaterThan(
       rect(canvasElement, "tight").width + gap
     );
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Removable items: layout and keyboard
+// ---------------------------------------------------------------------------
+
+/**
+ * A group that stretches its items (column, grid) stretches the whole pill,
+ * and each item's X stays inside it, 4px from its end.
+ */
+export const RemovableStretched: Story = {
+  name: "Removable Stretched",
+  render: () => (
+    <div className="flex w-80 flex-col gap-4">
+      <TagGroup
+        className="flex-col"
+        data-testid="column"
+        onRemove={() => undefined}
+      >
+        <TagGroupItem value="news">News</TagGroupItem>
+        <TagGroupItem value="travel">Travel</TagGroupItem>
+      </TagGroup>
+      <TagGroup
+        className="grid grid-cols-2"
+        data-testid="grid"
+        onRemove={() => undefined}
+      >
+        <TagGroupItem value="news">News</TagGroupItem>
+        <TagGroupItem value="travel">Travel</TagGroupItem>
+        <TagGroupItem value="gaming">Gaming</TagGroupItem>
+      </TagGroup>
+    </div>
+  ),
+  play: ({ canvasElement }) => {
+    for (const id of ["column", "grid"]) {
+      const group = within(canvasElement).getByTestId(id);
+      const columns = id === "grid" ? 2 : 1;
+      const gap = Number.parseFloat(getComputedStyle(group).columnGap) || 0;
+      const cell = (group.clientWidth - gap * (columns - 1)) / columns;
+      for (const chip of group.querySelectorAll<HTMLElement>(
+        '[data-slot="tag-group-item"]'
+      )) {
+        const c = chip.getBoundingClientRect();
+        const x = (
+          chip.querySelector('[data-slot="tag-remove"]') as HTMLElement
+        ).getBoundingClientRect();
+        expect(Math.abs(c.width - cell)).toBeLessThan(0.5);
+        expect(Math.abs(c.right - x.right - 4)).toBeLessThan(0.5);
+      }
+    }
+  },
+};
+
+type RealUser = typeof import("vitest/browser").userEvent;
+
+/** Vitest's real (Playwright) input; absent when Storybook runs the play. */
+const realUser = () =>
+  (globalThis as { __realUserEvent?: RealUser }).__realUserEvent;
+
+const GREEK = ["Alpha", "Beta", "Gamma", "Delta"];
+
+/**
+ * Real keys from an item's X act from that item, as when the X sat inside
+ * it: arrows move to the neighbours of its own toggle (skipping the disabled
+ * Gamma), Shift+Tab goes to its own toggle, Tab goes on to the next X.
+ */
+export const RemovableKeyboard: Story = {
+  name: "Removable Keyboard",
+  render: () => (
+    <div className="flex flex-col items-start gap-2">
+      <button data-testid="before" type="button">
+        before
+      </button>
+      <TagGroup onRemove={() => undefined}>
+        {GREEK.map((label) => (
+          <TagGroupItem disabled={label === "Gamma"} key={label} value={label}>
+            {label}
+          </TagGroupItem>
+        ))}
+      </TagGroup>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const user = realUser();
+    if (!user) {
+      // Storybook's own runner and Chromatic run plays without Vitest, and
+      // their browsers may be automated: skip the real-input checks there.
+      // Under Vitest `vitest.setup.ts` always provides it.
+      return;
+    }
+    const focused = () => {
+      const active = document.activeElement as HTMLElement;
+      const item = active.closest('[data-slot="tag-group-item"]');
+      const part = active.dataset.slot === "tag-remove" ? "x" : "toggle";
+      return `${part}:${item?.textContent ?? active.textContent}`;
+    };
+    const before = within(canvasElement).getByTestId("before");
+
+    before.focus();
+    const forward: string[] = [];
+    for (const _ of [1, 2, 3, 4]) {
+      // biome-ignore lint/performance/noAwaitInLoops: one key at a time
+      await user.keyboard("{Tab}");
+      forward.push(focused());
+    }
+    await expect(forward).toEqual([
+      "toggle:Alpha",
+      "x:Alpha",
+      "x:Beta",
+      "x:Delta",
+    ]);
+
+    // From Delta's X: Shift+Tab to Delta's toggle (as when nested), not to
+    // Beta's X.
+    await user.keyboard("{Shift>}{Tab}{/Shift}");
+    await expect(focused()).toBe("toggle:Delta");
+
+    // With Alpha the group's current item, arrows on Beta's X move from
+    // Beta (skipping the disabled Gamma), not from Alpha.
+    const part = (label: string, slot: string) =>
+      Array.from(
+        canvasElement.querySelectorAll<HTMLElement>(
+          '[data-slot="tag-group-item"]'
+        )
+      )
+        .find((item) => item.textContent === label)
+        ?.querySelector(`[data-slot="${slot}"]`) as HTMLElement;
+    part("Alpha", "tag-toggle").focus();
+    part("Beta", "tag-remove").focus();
+    await user.keyboard("{ArrowRight}");
+    await expect(focused()).toBe("toggle:Delta");
+    part("Alpha", "tag-toggle").focus();
+    part("Delta", "tag-remove").focus();
+    await user.keyboard("{ArrowLeft}");
+    await expect(focused()).toBe("toggle:Beta");
   },
 };

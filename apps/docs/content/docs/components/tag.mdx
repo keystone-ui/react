@@ -13,6 +13,15 @@ import { Tag, TagRemove } from "@keystoneui/react/tag";
 
 <ComponentPreview name="tag-default" />
 
+```tsx
+<Tag value="react">React</Tag>
+
+// Removable: pass the remove button as `remove`
+<Tag remove={<TagRemove onClick={() => removeTag("react")} />} value="react">
+  React
+</Tag>
+```
+
 ## Installation
 
 <CodeBlockTabs items={["CLI", "Manual"]}>
@@ -47,8 +56,31 @@ pnpm add @keystoneui/react@beta @base-ui/react
 
 ```text
 Tag
-└── TagRemove
+└── remove={<TagRemove />}
 ```
+
+Pass the remove button as the `remove` prop. Tag then renders it beside the toggle button, inside the pill:
+
+```html
+<span data-slot="tag">            <!-- the pill: className, style, dir, hidden -->
+  <button data-slot="tag-toggle">React</button>   <!-- ref, aria-*, data-*, handlers -->
+  <button data-slot="tag-remove" aria-label="Remove">…</button>
+</span>
+```
+
+- The pill gets `data-pressed` and `data-disabled`. Style a removable Tag's states with `data-pressed:` and `data-disabled:`; `aria-pressed:`, `disabled:` and `focus-visible:` classes do not match the pill, because those states belong to the toggle button inside it.
+- `ref` is the toggle button, not the pill.
+- When the Tag is disabled (itself, or through a disabled TagGroup or Toolbar), its `TagRemove` is disabled too, whatever `disabled` the `TagRemove` is given.
+- Clicking the X does not toggle the Tag, and an `onClick` on the Tag does not fire for it.
+- If `remove` changes at runtime, the toggle keeps its pressed state and focus, but the label's children are mounted again. Focus is kept only within that one update, and only when nothing else took it: it is lost if the switch shows a Suspense fallback (wrap it in `startTransition` to keep it), and inside a shadow root.
+- In a pill stretched by its parent (`w-full`, a column or a grid), the label stays centred and the X sits at the pill's end. `justify-*`, `gap-*` and `cursor-*` classes act on the pill, not on the label row inside the toggle; to put the label at the start, add `[&>[data-slot=tag-toggle]]:justify-start`.
+- `ref` and `style` land on different elements (the toggle and the pill). A library that measures the ref and moves the styled element, such as drag and drop or an anchored popup, sees two elements.
+- Pass one remove control per Tag; two `TagRemove`s overlap. A custom control that is not a `TagRemove` is not disabled with the Tag.
+- Inside a group, use [`TagGroup`](/docs/components/tag-group) with `onRemove`. A `Tag` with `remove` placed directly in a plain Base UI `ToggleGroup` gets none of the X's key handling: arrows, Home and End pressed on the X act from the group's current item rather than from the X's own Tag, and Shift+Tab does not go to its own toggle.
+
+**What counts as given.** `null`, `undefined`, `false` and `""` render a plain Tag, so `remove={canRemove && <TagRemove />}` works. `0` is given, so `remove={count && <TagRemove />}` renders a pill reading "0"; write `count > 0 && …`. A bare `<Tag remove>` is a type error (and a plain Tag at runtime). Any other value renders the pill, even one that renders nothing. A wrapper that forwards the prop should type it `TagProps["remove"]`, since a `ReactNode` may be `true`.
+
+**The old form.** A `TagRemove` written as a child, `<Tag>React<TagRemove /></Tag>`, still works exactly as before: it renders the X *inside* the toggle button. That is a button inside a button, which is invalid HTML (React warns about it, and it can break hydration), so use `remove` in new code.
 
 ## Examples
 
@@ -61,7 +93,7 @@ Add an icon before the tag label:
 
 ### With Remove
 
-Add a remove button for dismissible tags:
+Pass a `TagRemove` as `remove` for a dismissible tag. The X sits beside the toggle, so clicking it does not toggle the tag:
 
 <ComponentPreview name="tag-with-remove" />
 
@@ -83,8 +115,23 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 
 ## API Reference
 
+### Tag
+
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `variant` | `"default" \| "secondary" \| "outline"` | `"default"` | Visual style variant |
-| `disabled` | `boolean` | `false` | Whether the tag is disabled |
+| `remove` | `Exclude<ReactNode, true>` | - | The remove control, usually `<TagRemove onClick={…} />`. Rendered beside the toggle inside the pill. Leave it out (or pass `null`, `false` or `""`) for a plain tag |
+| `value` | `string` | - | Identifies the tag inside a toggle group |
+| `pressed` | `boolean` | - | Controlled pressed state |
+| `defaultPressed` | `boolean` | `false` | Initial pressed state (uncontrolled) |
+| `onPressedChange` | `(pressed: boolean) => void` | - | Called when the pressed state changes |
+| `disabled` | `boolean` | `false` | Whether the tag is disabled; also disables the `remove` control |
+| `className` | `string` | - | Additional CSS classes, or a function `(state) => string`. With `remove`, applied to the pill |
+
+### TagRemove
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `onClick` | `(event) => void` | - | Called when the remove button is clicked |
+| `aria-label` | `string` | `"Remove"` | Accessible name. Defaults to `"Remove"` when there are no custom children |
+| `children` | `ReactNode` | X icon | A custom icon |
 | `className` | `string` | - | Additional CSS classes |

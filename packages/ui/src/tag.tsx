@@ -1,10 +1,17 @@
 "use client";
 
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
+import { useRender } from "@base-ui/react/use-render";
 import { cva } from "class-variance-authority";
 import { X as XIcon } from "lucide-react";
 import type * as React from "react";
-import { Children } from "react";
+import {
+  Children,
+  createContext,
+  useCallback,
+  useContext,
+  useRef,
+} from "react";
 
 import { cn, mergeClassName } from "./utils";
 
@@ -61,18 +68,177 @@ const tagVariants = cva(
   "inline-flex h-6 min-w-0 max-w-full cursor-pointer touch-manipulation select-none items-center justify-center gap-1 overflow-hidden whitespace-nowrap rounded-full bg-secondary px-2.5 font-medium text-secondary-foreground text-xs transition-colors hover:bg-secondary-hover focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 has-[[data-slot=avatar]]:pl-1 aria-pressed:bg-primary/10 aria-pressed:text-primary dark:aria-pressed:bg-primary/15 [&_svg:not([class*='size-'])]:size-3 [&_svg]:pointer-events-none [&_svg]:shrink-0"
 );
 
+/**
+ * The chip when Tag is given `remove`: the toggle and the remove control sit
+ * side by side inside it. Same look as `tagVariants`, keyed on `data-pressed`
+ * and `data-disabled` (mirrored from the toggle) since the chip is a `span`.
+ * It has the pill's padding (so a consumer `px-*` acts as it did), the
+ * toggle fills the rest and the X keeps TagRemove's own margins, so the
+ * geometry is the nested pill's, in spacing units. The toggle's `::before`
+ * reaches back over the start padding, so a click anywhere before the X
+ * toggles. `overflow-hidden` clips both enlarged hit areas to the pill, as
+ * the toggle did when the X was inside it. The focus ring is drawn here,
+ * around the whole pill, when the toggle has focus.
+ */
+const tagChipClassName =
+  "inline-flex h-6 min-w-0 max-w-full touch-manipulation select-none items-center overflow-hidden whitespace-nowrap rounded-full bg-secondary px-2.5 font-medium text-secondary-foreground text-xs transition-colors hover:bg-secondary-hover has-[[data-slot=tag-toggle]:focus-visible]:outline-2 has-[[data-slot=tag-toggle]:focus-visible]:outline-ring/50 has-[[data-slot=tag-toggle]:focus-visible]:outline-offset-2 data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50 data-pressed:bg-primary/10 data-pressed:text-primary dark:data-pressed:bg-primary/15 [&_svg:not([class*='size-'])]:size-3 [&_svg]:pointer-events-none [&_svg]:shrink-0 has-[[data-slot=avatar]]:ps-1";
+
+const tagToggleClassName =
+  "relative inline-flex min-w-0 flex-1 cursor-pointer items-center justify-center gap-1 self-stretch pe-1 outline-none before:absolute before:inset-y-0 before:-start-96 before:end-0 before:content-[''] disabled:cursor-not-allowed";
+
+/** The toggle's effective disabled state, for a `TagRemove` given as `remove`. */
+const TagRemoveDisabledContext = createContext(false);
+
+/**
+ * A ref that also keeps focus on the toggle when its DOM node is replaced,
+ * which happens when `remove` is added or taken away (the button moves into
+ * or out of the chip). The old node's ref cleanup runs before React removes
+ * it, so it can still see that it has focus; the new node's ref attaches in
+ * the same commit. A Suspense boundary or an `<Activity>` that hides the Tag
+ * also runs the cleanup, and attaches again only when it shows the Tag,
+ * maybe seconds later: so the flag lasts until the end of the commit (a
+ * microtask), and a Tag shown again never pulls focus back to itself.
+ */
+function useToggleRef(
+  ref: React.Ref<HTMLButtonElement> | undefined
+): React.RefCallback<HTMLButtonElement> {
+  const hadFocus = useRef<boolean>(false);
+  return useCallback(
+    // Never called with null: it always returns a cleanup (React 19).
+    (node: HTMLButtonElement) => {
+      if (hadFocus.current) {
+        hadFocus.current = false;
+        // Only when focus is nowhere: the same commit may have focused
+        // something else (an `autoFocus` input, a layout effect).
+        const active = node.ownerDocument.activeElement;
+        if (!active || active === node.ownerDocument.body) {
+          node.focus({ preventScroll: true });
+        }
+      }
+      let cleanup: (() => void) | undefined;
+      if (typeof ref === "function") {
+        const result = ref(node);
+        cleanup = () => (typeof result === "function" ? result() : ref(null));
+      } else if (ref) {
+        ref.current = node;
+        cleanup = () => {
+          ref.current = null;
+        };
+      }
+      return () => {
+        if (node.ownerDocument.activeElement === node) {
+          hadFocus.current = true;
+          queueMicrotask(() => {
+            hadFocus.current = false;
+          });
+        }
+        cleanup?.();
+      };
+    },
+    [ref]
+  );
+}
+
+/** Renders the toggle inside the chip, applying a consumer's `render`. */
+function TagToggle({
+  render,
+  props,
+  state,
+}: {
+  render: TogglePrimitive.Props["render"];
+  props: React.HTMLAttributes<HTMLElement> & { ref?: React.Ref<HTMLElement> };
+  state: TogglePrimitive.State;
+}) {
+  const { ref, ...rest } = props;
+  // `useRender` types its state as a record; Toggle's is an interface.
+  type RenderState = TogglePrimitive.State & Record<string, unknown>;
+  return useRender<RenderState, HTMLElement>({
+    defaultTagName: "button",
+    props: rest,
+    ref,
+    render: render as useRender.RenderProp<RenderState> | undefined,
+    state: { ...state },
+  });
+}
+
 // ---------------------------------------------------------------------------
 // Tag
 // ---------------------------------------------------------------------------
 
-export interface TagProps extends TogglePrimitive.Props {}
+export interface TagProps extends TogglePrimitive.Props {
+  /**
+   * The remove control, usually `<TagRemove onClick={…} />`. When given, Tag
+   * renders it beside the toggle inside the pill, not inside the toggle.
+   *
+   * Not given: `null`, `undefined`, `false` and `""` render a plain Tag, so
+   * `remove={canRemove && <TagRemove />}` works. A bare `remove` (`true`) is
+   * a type error, and a plain Tag at runtime. Any other value is given and
+   * renders the pill, even one that renders nothing (`[]`, `<></>`). To
+   * forward the prop from a wrapper, type it `TagProps["remove"]`: a
+   * `ReactNode` may be `true`. Pass one control: each `TagRemove` carries
+   * the pill's end margins.
+   */
+  remove?: Exclude<React.ReactNode, true>;
+}
 
-function Tag({ className, children, ...props }: TagProps) {
+/** Whether `remove` renders anything (see `TagProps.remove`). */
+function isGiven(remove: React.ReactNode): boolean {
+  return remove != null && typeof remove !== "boolean" && remove !== "";
+}
+
+function Tag({ className, children, remove, ref, ...props }: TagProps) {
+  const toggleRef = useToggleRef(ref);
+
+  if (!isGiven(remove)) {
+    return (
+      <TogglePrimitive
+        className={mergeClassName(cn(tagVariants()), className)}
+        data-slot="tag"
+        {...props}
+        ref={toggleRef}
+      >
+        {wrapText(children, "min-w-0 truncate")}
+      </TogglePrimitive>
+    );
+  }
+
+  // Same element at the same place as above, so the toggle's own state (an
+  // uncontrolled `pressed`) survives `remove` coming and going. Its `render`
+  // builds the chip around the toggle from the toggle's effective state,
+  // which includes a disabled TagGroup, ToggleGroup or Toolbar.
+  const {
+    "data-slot": slot = "tag",
+    dir,
+    hidden,
+    render,
+    style,
+    ...toggleProps
+  } = props as TogglePrimitive.Props & { "data-slot"?: string };
   return (
     <TogglePrimitive
-      className={mergeClassName(cn(tagVariants()), className)}
-      data-slot="tag"
-      {...props}
+      {...toggleProps}
+      className={tagToggleClassName}
+      data-slot="tag-toggle"
+      ref={toggleRef}
+      render={(renderProps, state) => (
+        <span
+          className={cn(
+            tagChipClassName,
+            typeof className === "function" ? className(state) : className
+          )}
+          data-disabled={state.disabled ? "" : undefined}
+          data-pressed={state.pressed ? "" : undefined}
+          data-slot={slot}
+          dir={dir}
+          hidden={hidden}
+          style={typeof style === "function" ? style(state) : style}
+        >
+          <TagToggle props={renderProps} render={render} state={state} />
+          <TagRemoveDisabledContext.Provider value={state.disabled}>
+            {remove}
+          </TagRemoveDisabledContext.Provider>
+        </span>
+      )}
     >
       {wrapText(children, "min-w-0 truncate")}
     </TogglePrimitive>
@@ -89,8 +255,11 @@ function TagRemove({
   className,
   children,
   "aria-label": ariaLabel,
+  disabled,
   ...props
 }: TagRemoveProps) {
+  // Given as Tag's `remove`, a disabled toggle disables its X too.
+  const toggleDisabled = useContext(TagRemoveDisabledContext);
   const hasCustomChildren = !!children;
   return (
     <button
@@ -100,6 +269,7 @@ function TagRemove({
         className
       )}
       data-slot="tag-remove"
+      disabled={toggleDisabled || disabled}
       type="button"
       {...props}
     >
