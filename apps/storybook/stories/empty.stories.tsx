@@ -24,6 +24,7 @@ import {
   RefreshCcw as RefreshCcwIcon,
   Search as SearchIcon,
 } from "lucide-react";
+import { expect } from "storybook/test";
 
 const meta = {
   title: "Components/Empty",
@@ -162,6 +163,41 @@ export const Outline: Story = {
       </EmptyContent>
     </Empty>
   ),
+};
+
+// Regression fixture, not a docs variant: pins that the outline is opt-in.
+// The root presets `border-dashed` with no width, so the default draws no
+// border, `border` draws a dashed one, and `border border-solid` a solid one.
+export const BorderOptIn: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      {[undefined, "border", "border border-solid"].map((className) => (
+        <Empty
+          className={className}
+          data-testid={className ?? "default"}
+          key={className ?? "default"}
+        >
+          <EmptyHeader>
+            <EmptyTitle>{className ?? "default"}</EmptyTitle>
+          </EmptyHeader>
+        </Empty>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const style = (id: string) =>
+      getComputedStyle(
+        canvasElement.querySelector(`[data-testid="${id}"]`) as HTMLElement
+      );
+
+    await expect(style("default").borderTopWidth).toBe("0px");
+
+    await expect(style("border").borderTopWidth).toBe("1px");
+    await expect(style("border").borderTopStyle).toBe("dashed");
+
+    await expect(style("border border-solid").borderTopWidth).toBe("1px");
+    await expect(style("border border-solid").borderTopStyle).toBe("solid");
+  },
 };
 
 export const Background: Story = {

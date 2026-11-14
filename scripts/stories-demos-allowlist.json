@@ -171,7 +171,7 @@
       "submenu",
       "worst-case"
     ],
-    "empty": ["avatar-group", "with-input-group"],
+    "empty": ["avatar-group", "border-opt-in", "with-input-group"],
     "field": [
       "checkbox",
       "checkbox-example",

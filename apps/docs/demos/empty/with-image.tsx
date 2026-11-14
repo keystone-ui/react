@@ -13,7 +13,7 @@ import { Cloud as CloudIcon } from "lucide-react";
 
 export default function EmptyWithImage() {
   return (
-    <Empty className="max-w-md border border-dashed">
+    <Empty className="max-w-md border">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <CloudIcon />

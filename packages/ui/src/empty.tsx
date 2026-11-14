@@ -16,6 +16,8 @@ const Empty = ({
 }: EmptyProps & React.RefAttributes<HTMLDivElement>) => (
   <div
     className={cn(
+      // `border-dashed` with no width is deliberate: no border by default, and
+      // a consumer's `className="border"` draws a dashed outline (opt-in).
       "flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-4 text-balance rounded-xl border-dashed p-6 text-center",
       className
     )}
