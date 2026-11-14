@@ -186,8 +186,11 @@ function toggled<T>(set: ReadonlySet<T>, item: T): ReadonlySet<T> {
  * Kept in state and adjusted while rendering, React's documented pattern for
  * state that follows a prop: a render React throws away (a transition that
  * suspends, say) leaves nothing behind. Rows whose objects hold fresh nested
- * objects or arrays every render still differ every render, and end in React's
- * "Too many re-renders" error; build those in a `useMemo`.
+ * objects or arrays every render still differ every render: rebuilt in the
+ * component that calls this hook, they end in React's "Too many re-renders"
+ * error; rebuilt in a parent, the table reloads on each of the parent's renders
+ * and stays on its skeleton while the parent renders more often than `latency`.
+ * Build those in a `useMemo`.
  */
 function useRowsVersion(rows: readonly unknown[]): number {
   const [snapshot, setSnapshot] = useState({ rows, version: 0 });
