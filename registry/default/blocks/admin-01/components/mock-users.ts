@@ -2,9 +2,11 @@
  * Fixture users. Deterministic — no `Math.random()`, so Chromatic and the
  * layout tests get stable output.
  *
- * The users view reads these in one place: `use-users-table.ts` hands them
- * to the table, and `users-view.tsx` (or admin-01's `admin-page.tsx`) looks
- * up the open user. Swap this file for your own rows.
+ * One file, read in two places: `use-users-table.ts` hands `users` to the
+ * table, and `users-view.tsx` (or admin-01's `admin-page.tsx`) looks up the
+ * open user. Swap the `users` array for your own rows, and keep `User`,
+ * `Role`, `Status` and `statusLabels`: the table, filters and record import
+ * them.
  */
 
 export type Role = "Admin" | "Billing" | "Member" | "Viewer";

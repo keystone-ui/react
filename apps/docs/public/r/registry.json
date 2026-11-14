@@ -2085,7 +2085,7 @@
       "name": "users-01",
       "type": "registry:block",
       "title": "Users 01",
-      "description": "The users view from admin-01 on its own: a users table with search, filter pills, sort and column menus, row selection with export, loading skeletons, a filtered-empty state and URL-synced filters, and a record page for each user.",
+      "description": "The users view from admin-01 on its own: a users table with search, filter pills, sort and column menus, row selection with export, loading skeletons, a filtered-empty state and URL-synced filters, and a record view for each user.",
       "dependencies": [
         "lucide-react"
       ],
