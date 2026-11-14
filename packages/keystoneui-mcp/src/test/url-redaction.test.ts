@@ -253,6 +253,51 @@ describe("redactUrlInError with a real fetch rejection", () => {
     expect(fullText(safe)).not.toContain("u:p@");
   });
 
+  // `$&`, `$$`, `$'` and `` $` `` are replacement patterns in a string passed
+  // to `replaceAll`; in the displayed path they must print as-is. The URL
+  // parser percent-encodes a backtick in a path, so `` $` `` displays `$%60`.
+  it.each([
+    ["$&", "$&"],
+    ["$$", "$$"],
+    ["$'", "$'"],
+    ["$`", "$%60"],
+  ])("prints a literal %s path and no secret", (marker, shownPath) => {
+    const url = `http://user:${SECRET}@host.test/${marker}/r?token=${SECRET}#${SECRET}`;
+    const shown = `http://host.test/${shownPath}/r?token=REDACTED`;
+    const error = new TypeError(`first ${url} then ${url}`, {
+      cause: new Error(`inner ${url}`),
+    });
+    const safe = redactUrlInError(error, url);
+    expect(safe).toBeInstanceOf(TypeError);
+    expect((safe as Error).message).toBe(`first ${shown} then ${shown}`);
+    expect((safe as Error).message).not.toContain(SECRET);
+    expect(fullText(safe)).not.toContain(SECRET);
+  });
+
+  it.each([
+    [
+      "a $& path",
+      `http://user:${SECRET}@host.test/$&/registry.json?token=${SECRET}#${SECRET}`,
+    ],
+    [
+      "a $& path and a lone surrogate",
+      `http://user:${SECRET}@host.test/$&${LONE}/registry.json?token=${SECRET}#${SECRET}`,
+    ],
+  ])("leaves no secret when Request refuses %s", (_name, url) => {
+    let error: unknown;
+    try {
+      error = new Request(url);
+    } catch (e) {
+      error = e;
+    }
+    // Precondition: the native error quotes the secret.
+    expect(fullText(error)).toContain(SECRET);
+    const safe = redactUrlInError(error, url);
+    expect(safe).toBeInstanceOf(TypeError);
+    expect((safe as Error).message).not.toContain(SECRET);
+    expect(fullText(safe)).not.toContain(SECRET);
+  });
+
   it("returns an unrelated error unchanged", () => {
     const error = new TypeError("fetch failed", {
       cause: Object.assign(new Error("refused"), { code: "ECONNREFUSED" }),
@@ -318,6 +363,29 @@ describe("fetcher errors", () => {
       "Request cannot be constructed from a URL that includes credentials"
     );
     expect(fullText(error)).not.toContain(SECRET);
+  });
+
+  it("does not echo userinfo when the registry base ends in $&", async () => {
+    const error = await fetchManifest(
+      `http://user:${SECRET}@127.0.0.1:1/$&`
+    ).catch((e: unknown) => e);
+    expect(error).toBeInstanceOf(TypeError);
+    expect((error as Error).message).toContain(
+      "http://127.0.0.1:1/$&/registry.json"
+    );
+    expect(fullText(error)).not.toContain(SECRET);
+  });
+
+  it("does not echo a short password or query value after a $& path", async () => {
+    const error = await fetchManifest("http://u:p@host.test/$&?v=2").catch(
+      (e: unknown) => e
+    );
+    expect(error).toBeInstanceOf(TypeError);
+    expect((error as Error).message).toContain(
+      "http://host.test/$&?v=REDACTED"
+    );
+    expect(fullText(error)).not.toContain("u:p@");
+    expect(fullText(error)).not.toContain("v=2");
   });
 
   it("passes the unredacted URL to fetch", async () => {

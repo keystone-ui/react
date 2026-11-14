@@ -79,7 +79,9 @@ export function redactUrlInError(error: unknown, url: string): unknown {
   let message =
     error instanceof Error ? error.message : String(error ?? "Unknown error");
   for (const form of forms) {
-    message = message.replaceAll(form, shown);
+    // A function, so `$&`, `$$` or `$'` in the displayed path is not read
+    // as a replacement pattern that puts the original URL back.
+    message = message.replaceAll(form, () => shown);
   }
   return error instanceof TypeError
     ? new TypeError(message)
