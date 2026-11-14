@@ -58,8 +58,8 @@ The other 18 files are not imported by the users table. Each group below can go 
 
 - **Overview:** `admin-overview.tsx`, `chart.tsx`, `chart-formatters.ts`. Also remove `adminMetrics` and `signupsByMonth` from the import of `mock-admin.ts`.
 - **Payments:** `admin-payments-table.tsx`, `admin-payments-toolbar.tsx`, `use-payments-table.ts`, `payment-filters.ts`, `payment-filter-pills.tsx`, `payment-filters-drawer.tsx`, `operator-filter-chip.tsx`, `payment-detail-drawer.tsx`, `mock-payments.ts`.
-- **Sidebar shell:** `admin-sidebar.tsx`, `admin-topbar.tsx`, `sidebar.tsx`. `admin-topbar.tsx` imports `admin-sidebar.tsx`, so these go together.
-- **Page wiring:** `admin-page.tsx`, `use-url-state.ts`, `admin-user-detail.tsx`. Keep them if `admin-page.tsx` stays your page. Without them, your page calls `useUsersTable()` itself, renders `<AdminUsersTable table={…} onOpenUser={…} />`, and loses the URL sync and the user record view. `payment-detail-drawer.tsx` also imports `admin-user-detail.tsx`.
+- **Sidebar shell:** `admin-sidebar.tsx`, `admin-topbar.tsx`, `sidebar.tsx`. `admin-topbar.tsx` imports `admin-sidebar.tsx`, so these go together. `admin-page.tsx` also takes its `AdminSection` type from `admin-sidebar.tsx`, so its section state needs a type of its own.
+- **Page wiring:** `admin-page.tsx`, `use-url-state.ts`, `admin-user-detail.tsx`. Keep them if `admin-page.tsx` stays your page. Without them, a client component of yours (`"use client"`; the installed `page.tsx` is not one) calls `useUsersTable()` itself, renders `<AdminUsersTable table={…} onOpenUser={…} />`, and loses the URL sync and the user record view. `payment-detail-drawer.tsx` also imports `admin-user-detail.tsx`.
 
 ### Where the fixture rows come in
 
@@ -80,7 +80,7 @@ export function useUsersTable() {
 }
 ```
 
-Give the hook your rows instead, as a parameter or from your own query:
+Give the hook your rows instead, for example as a parameter:
 
 ```ts title="components/use-users-table.ts"
 import type { User } from "@/components/mock-admin";
@@ -94,14 +94,17 @@ export function useUsersTable(rows: readonly User[]) {
 }
 ```
 
+The rows must be complete when the hook first renders: fetch them on the server and pass them down, or mount the table once they have loaded. The hook works out its answer again only when the filters, sort or page change, not when `rows` changes, so rows that arrive or refresh later stay out of the table until the next filter change. To follow changing rows, edit `useSimulatedFetch` (below).
+
 **The selection bar.** In `admin-users-table.tsx`, `UserSelectionBar` builds the rows for its Export and Copy ids actions from the fixture, `users.filter((user) => selected.has(user.id))`. Change it to filter your rows. If you leave it, those two actions read the fixture.
 
 **The user record.** `admin-page.tsx` finds the open user, and the user who invited them, with `users.find`. Point both at your rows, or drop them with the page wiring above.
 
 Your rows must have the `User` shape from `mock-admin.ts`. The table's columns read its fields, and so do the filters, sort and CSV in `admin-filters.ts`: `name` and `email` for search, `role`, `status`, `seats`, `twoFactor` and `createdAt` for the pills. If your records differ, change `User`, the columns and those functions together.
 
-Two fixture details to change with them:
+Three fixture details to change with them:
 
+- `createdAt` is a `YYYY-MM-DD` string, or `""` for none. The date filter compares it as text, so a timestamp or a `Date` needs converting first.
 - `TODAY` in `date-filter.ts` is a fixed date, so the date presets match the fixture. With live data it is `new Date()`.
 - `lastActive` is the text the table shows, such as `2 hours ago`. `sortUsers` parses that text back into minutes to sort it. With a timestamp, sort on the timestamp.
 
