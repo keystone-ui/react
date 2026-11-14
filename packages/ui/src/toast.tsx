@@ -651,7 +651,7 @@ function ToastItem({
             {data.cancel && (
               <button
                 className={cn(
-                  "relative inline-flex h-7 cursor-pointer items-center justify-center rounded-md px-2.5 font-medium text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-accent-foreground",
+                  "relative inline-flex h-7 cursor-pointer items-center justify-center rounded-md px-2.5 font-medium text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
                   TOAST_BUTTON_TAP_AREA
                 )}
                 data-slot="toast-cancel"
@@ -667,7 +667,7 @@ function ToastItem({
             {t.actionProps && (
               <Toast.Action
                 className={cn(
-                  "relative inline-flex h-7 cursor-pointer items-center justify-center rounded-md border border-border bg-background px-2.5 font-medium text-xs transition-colors hover:bg-accent hover:text-accent-foreground",
+                  "relative inline-flex h-7 cursor-pointer items-center justify-center rounded-md border border-border bg-background px-2.5 font-medium text-xs transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
                   TOAST_BUTTON_TAP_AREA
                 )}
                 data-slot="toast-action"
