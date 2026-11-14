@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { SortState } from "@/components/sort";
 
 /**
@@ -72,7 +72,7 @@ export function useDataTable<
   // New rows are a new answer even when the query has not moved: rows that
   // arrive after mount (fetched, then handed in) would otherwise be ignored
   // until someone touched a filter.
-  const rowsVersion = useIdentityVersion(config.rows);
+  const rowsVersion = useRowsVersion(config.rows);
   const { loading, result } = useSimulatedFetch(
     [query, rowsVersion],
     () => run(config, query),
@@ -176,15 +176,26 @@ function toggled<T>(set: ReadonlySet<T>, item: T): ReadonlySet<T> {
   return next;
 }
 
-/** A number that moves whenever `value` is a different object than before. */
-function useIdentityVersion(value: unknown): number {
-  const [seen, setSeen] = useState({ value, version: 0 });
-  if (seen.value === value) {
-    return seen.version;
+/**
+ * A number that moves when `rows` holds different rows than before.
+ *
+ * Compared row by row rather than by the array, so `rows: data.filter(…)`
+ * written inline — a new array every render over the same rows — is not a new
+ * answer. Kept in a ref, not state: bumping state during render would turn
+ * such an array into an endless re-render.
+ */
+function useRowsVersion(rows: readonly unknown[]): number {
+  const seen = useRef({ rows, version: 0 });
+  if (!sameRows(seen.current.rows, rows)) {
+    seen.current = { rows, version: seen.current.version + 1 };
   }
-  const next = { value, version: seen.version + 1 };
-  setSeen(next);
-  return next.version;
+  return seen.current.version;
+}
+
+function sameRows(a: readonly unknown[], b: readonly unknown[]): boolean {
+  return (
+    a === b || (a.length === b.length && a.every((row, i) => row === b[i]))
+  );
 }
 
 /** What a server would do with the query: filter, sort, count, slice. */
