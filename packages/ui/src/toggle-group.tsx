@@ -5,7 +5,7 @@ import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group
 import type { VariantProps } from "class-variance-authority";
 import { type CSSProperties, createContext, useContext, useMemo } from "react";
 import { toggleVariants } from "./toggle";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Context
@@ -70,16 +70,18 @@ function ToggleGroup({
 
   return (
     <ToggleGroupPrimitive
-      className={cn(
-        "group/toggle-group flex w-fit items-center",
-        // One radius for every size, because the items now have one too. The
-        // `sm` tier used to clamp the container to `min(var(--radius-md),10px)`
-        // while the first and last items stayed at `rounded-l-lg`/`rounded-r-lg`
-        // — 8px around 10px, so the item corners overhung the group by 2px.
-        // Container and items are separate declarations, so nothing but this
-        // comment and `control-ladder.spec.ts` keeps them agreeing.
-        spacing === 0 && "rounded-md",
-        orientation === "vertical" && "flex-col items-stretch",
+      className={mergeClassName(
+        cn(
+          "group/toggle-group flex w-fit items-center",
+          // One radius for every size, because the items now have one too. The
+          // `sm` tier used to clamp the container to `min(var(--radius-md),10px)`
+          // while the first and last items stayed at `rounded-l-lg`/`rounded-r-lg`
+          // — 8px around 10px, so the item corners overhung the group by 2px.
+          // Container and items are separate declarations, so nothing but this
+          // comment and `control-ladder.spec.ts` keeps them agreeing.
+          spacing === 0 && "rounded-md",
+          orientation === "vertical" && "flex-col items-stretch"
+        ),
         className
       )}
       data-orientation={orientation}
@@ -129,14 +131,16 @@ function ToggleGroupItem({
 
   return (
     <TogglePrimitive
-      className={cn(
-        toggleVariants({ variant: resolvedVariant, size: resolvedSize }),
-        "shrink-0 focus:z-10 focus-visible:z-10",
-        isJoined && "rounded-none",
-        isJoined && isHorizontal && "first:rounded-l-md last:rounded-r-md",
-        isJoined && !isHorizontal && "first:rounded-t-md last:rounded-b-md",
-        isJoined && isOutline && isHorizontal && "border-l-0 first:border-l",
-        isJoined && isOutline && !isHorizontal && "border-t-0 first:border-t",
+      className={mergeClassName(
+        cn(
+          toggleVariants({ variant: resolvedVariant, size: resolvedSize }),
+          "shrink-0 focus:z-10 focus-visible:z-10",
+          isJoined && "rounded-none",
+          isJoined && isHorizontal && "first:rounded-l-md last:rounded-r-md",
+          isJoined && !isHorizontal && "first:rounded-t-md last:rounded-b-md",
+          isJoined && isOutline && isHorizontal && "border-l-0 first:border-l",
+          isJoined && isOutline && !isHorizontal && "border-t-0 first:border-t"
+        ),
         className
       )}
       data-slot="toggle-group-item"

@@ -12,7 +12,7 @@ import {
   useContext,
 } from "react";
 
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -54,20 +54,6 @@ export type AccordionVariant = "box" | "underline" | "ghost" | "table";
 type RenderProp = ReactElement | ((props: any, state: any) => ReactElement);
 type ClassNameProp = string | ((state: any) => string);
 // biome-ignore-end lint/suspicious/noExplicitAny: render/className accept Base UI's state generic, which varies per part
-
-/**
- * Merge a part's own classes with a consumer `className`. `cn()` drops a
- * function, so a state function is wrapped instead: Base UI calls it with the
- * part's state and the result is merged with the same tailwind-merge order as
- * a string.
- */
-const mergeClassName = (
-  base: string,
-  className: ClassNameProp | undefined
-): ClassNameProp =>
-  typeof className === "function"
-    ? (state) => cn(base, className(state))
-    : cn(base, className);
 
 export type AccordionProps = AccordionRootBaseProps & {
   /** The visual style variant of the accordion @default "underline" */

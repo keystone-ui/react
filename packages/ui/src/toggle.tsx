@@ -3,7 +3,7 @@
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
 import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Variants
@@ -61,7 +61,10 @@ export interface ToggleProps
 function Toggle({ className, variant, size, ...props }: ToggleProps) {
   return (
     <TogglePrimitive
-      className={cn(toggleVariants({ variant, size }), className)}
+      className={mergeClassName(
+        cn(toggleVariants({ variant, size })),
+        className
+      )}
       data-slot="toggle"
       {...props}
     />

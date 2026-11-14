@@ -2,7 +2,7 @@
 
 import { Slider as SliderPrimitive } from "@base-ui/react/slider";
 
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -22,7 +22,7 @@ export interface SliderValueProps extends SliderPrimitive.Value.Props {}
 function Slider({ className, ...props }: SliderProps) {
   return (
     <SliderPrimitive.Root
-      className={cn("flex w-full flex-col gap-2", className)}
+      className={mergeClassName("flex w-full flex-col gap-2", className)}
       data-slot="slider"
       {...props}
     />
@@ -36,10 +36,12 @@ function Slider({ className, ...props }: SliderProps) {
 function SliderControl({ className, ...props }: SliderControlProps) {
   return (
     <SliderPrimitive.Control
-      className={cn(
-        "flex touch-none select-none items-center py-2",
-        // Cursor
-        "cursor-pointer data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
+      className={mergeClassName(
+        cn(
+          "flex touch-none select-none items-center py-2",
+          // Cursor
+          "cursor-pointer data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50"
+        ),
         className
       )}
       data-slot="slider-control"
@@ -55,7 +57,10 @@ function SliderControl({ className, ...props }: SliderControlProps) {
 function SliderTrack({ className, ...props }: SliderTrackProps) {
   return (
     <SliderPrimitive.Track
-      className={cn("relative h-1 w-full rounded-full bg-muted", className)}
+      className={mergeClassName(
+        "relative h-1 w-full rounded-full bg-muted",
+        className
+      )}
       data-slot="slider-track"
       {...props}
     />
@@ -69,7 +74,7 @@ function SliderTrack({ className, ...props }: SliderTrackProps) {
 function SliderIndicator({ className, ...props }: SliderIndicatorProps) {
   return (
     <SliderPrimitive.Indicator
-      className={cn("h-full rounded-full bg-primary", className)}
+      className={mergeClassName("h-full rounded-full bg-primary", className)}
       data-slot="slider-indicator"
       {...props}
     />
@@ -83,23 +88,25 @@ function SliderIndicator({ className, ...props }: SliderIndicatorProps) {
 function SliderThumb({ className, ...props }: SliderThumbProps) {
   return (
     <SliderPrimitive.Thumb
-      className={cn(
-        // Horizontal pill / capsule shape (20x13), centered on track
-        "h-[0.8125rem] w-[1.25rem] -translate-y-1/2 rounded-full bg-background dark:bg-white",
-        // Soft elevated shadow
-        "shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.08)]",
-        // Hover ring
-        "hover:ring-2 hover:ring-ring/20",
-        // Focus ring
-        "focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
-        // Active state: slightly grow + slightly deeper shadow
-        "transition-[scale,box-shadow] duration-(--duration-fast,125ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
-        "data-[dragging]:scale-105 data-[dragging]:shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_2px_6px_rgba(0,0,0,0.12)] data-[dragging]:ring-2 data-[dragging]:ring-ring/20",
-        // Disabled (reduced motion handled globally by base.css). No opacity
-        // here: Base UI sets the thumb's data-disabled only from the root, so
-        // SliderControl is dimmed whenever it is, and the thumb (always inside
-        // the control) inherits that 50%.
-        "data-[disabled]:pointer-events-none",
+      className={mergeClassName(
+        cn(
+          // Horizontal pill / capsule shape (20x13), centered on track
+          "h-[0.8125rem] w-[1.25rem] -translate-y-1/2 rounded-full bg-background dark:bg-white",
+          // Soft elevated shadow
+          "shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_1px_3px_rgba(0,0,0,0.08)]",
+          // Hover ring
+          "hover:ring-2 hover:ring-ring/20",
+          // Focus ring
+          "focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
+          // Active state: slightly grow + slightly deeper shadow
+          "transition-[scale,box-shadow] duration-(--duration-fast,125ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1))",
+          "data-[dragging]:scale-105 data-[dragging]:shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_2px_6px_rgba(0,0,0,0.12)] data-[dragging]:ring-2 data-[dragging]:ring-ring/20",
+          // Disabled (reduced motion handled globally by base.css). No opacity
+          // here: Base UI sets the thumb's data-disabled only from the root, so
+          // SliderControl is dimmed whenever it is, and the thumb (always inside
+          // the control) inherits that 50%.
+          "data-[disabled]:pointer-events-none"
+        ),
         className
       )}
       data-slot="slider-thumb"
@@ -115,7 +122,10 @@ function SliderThumb({ className, ...props }: SliderThumbProps) {
 function SliderValue({ className, ...props }: SliderValueProps) {
   return (
     <SliderPrimitive.Value
-      className={cn("text-muted-foreground text-sm tabular-nums", className)}
+      className={mergeClassName(
+        "text-muted-foreground text-sm tabular-nums",
+        className
+      )}
       data-slot="slider-value"
       {...props}
     />

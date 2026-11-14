@@ -3,12 +3,12 @@
 import { Radio as RadioPrimitive } from "@base-ui/react/radio";
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group";
 import { Circle as CircleIcon } from "lucide-react";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 function RadioGroup({ className, ...props }: RadioGroupPrimitive.Props) {
   return (
     <RadioGroupPrimitive
-      className={cn("grid w-full gap-2", className)}
+      className={mergeClassName("grid w-full gap-2", className)}
       data-slot="radio-group"
       {...props}
     />
@@ -18,26 +18,28 @@ function RadioGroup({ className, ...props }: RadioGroupPrimitive.Props) {
 function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
   return (
     <RadioPrimitive.Root
-      className={cn(
-        // Base styles
-        "peer relative flex aspect-square size-4 shrink-0 items-center justify-center rounded-full border",
-        "border-input bg-input-bg text-primary",
-        // Smooth color transitions
-        "transition-colors duration-(--duration-fast,125ms)",
-        // Click area extension — bumped toward AAA touch target
-        "after:absolute after:-inset-x-4 after:-inset-y-3",
-        // Checked state - primary bg with white indicator
-        "data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground",
-        // Focus styles - outside border like buttons/checkbox
-        "focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
-        // Invalid styles - border and indicator red, outline only on focus, no transition
-        "aria-invalid:border-destructive aria-invalid:text-destructive aria-invalid:transition-none dark:aria-invalid:border-destructive/50",
-        "aria-invalid:focus-visible:outline-destructive/50",
-        // Invalid + checked - red bg with white indicator (like checked but red)
-        "aria-invalid:data-checked:border-destructive aria-invalid:data-checked:bg-destructive aria-invalid:data-checked:text-destructive-foreground",
-        // Disabled styles. Base UI renders a <span>, so :disabled never matches;
-        // data-disabled is what dims it outside a Field.
-        "disabled:cursor-not-allowed disabled:opacity-50 group-has-disabled/field:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50",
+      className={mergeClassName(
+        cn(
+          // Base styles
+          "peer relative flex aspect-square size-4 shrink-0 items-center justify-center rounded-full border",
+          "border-input bg-input-bg text-primary",
+          // Smooth color transitions
+          "transition-colors duration-(--duration-fast,125ms)",
+          // Click area extension — bumped toward AAA touch target
+          "after:absolute after:-inset-x-4 after:-inset-y-3",
+          // Checked state - primary bg with white indicator
+          "data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground",
+          // Focus styles - outside border like buttons/checkbox
+          "focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
+          // Invalid styles - border and indicator red, outline only on focus, no transition
+          "aria-invalid:border-destructive aria-invalid:text-destructive aria-invalid:transition-none dark:aria-invalid:border-destructive/50",
+          "aria-invalid:focus-visible:outline-destructive/50",
+          // Invalid + checked - red bg with white indicator (like checked but red)
+          "aria-invalid:data-checked:border-destructive aria-invalid:data-checked:bg-destructive aria-invalid:data-checked:text-destructive-foreground",
+          // Disabled styles. Base UI renders a <span>, so :disabled never matches;
+          // data-disabled is what dims it outside a Field.
+          "disabled:cursor-not-allowed disabled:opacity-50 group-has-disabled/field:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50"
+        ),
         className
       )}
       data-slot="radio-group-item"
