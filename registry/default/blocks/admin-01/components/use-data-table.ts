@@ -69,8 +69,12 @@ export function useDataTable<
   const [hiddenColumns, setHiddenColumns] = useState<ReadonlySet<C>>(new Set());
 
   const query: DataTableQuery<F, S> = { filters, pageIndex, pageSize, sort };
+  // New rows are a new answer even when the query has not moved: rows that
+  // arrive after mount (fetched, then handed in) would otherwise be ignored
+  // until someone touched a filter.
+  const rowsVersion = useIdentityVersion(config.rows);
   const { loading, result } = useSimulatedFetch(
-    query,
+    [query, rowsVersion],
     () => run(config, query),
     config.latency ?? 300,
     EMPTY_RESULT as DataTableResult<Row>
@@ -170,6 +174,17 @@ function toggled<T>(set: ReadonlySet<T>, item: T): ReadonlySet<T> {
     next.add(item);
   }
   return next;
+}
+
+/** A number that moves whenever `value` is a different object than before. */
+function useIdentityVersion(value: unknown): number {
+  const [seen, setSeen] = useState({ value, version: 0 });
+  if (seen.value === value) {
+    return seen.version;
+  }
+  const next = { value, version: seen.version + 1 };
+  setSeen(next);
+  return next.version;
 }
 
 /** What a server would do with the query: filter, sort, count, slice. */
