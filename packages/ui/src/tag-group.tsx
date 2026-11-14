@@ -1,9 +1,9 @@
 "use client";
 
-import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
+import type { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
 import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group";
 import { createContext, useContext, useMemo } from "react";
-import { TagRemove, tagVariants } from "./tag";
+import { Tag, TagRemove } from "./tag";
 import { cn } from "./utils";
 
 // ---------------------------------------------------------------------------
@@ -56,9 +56,11 @@ function TagGroupItem({
 }: TagGroupItemProps) {
   const { onRemove } = useContext(TagGroupContext);
 
+  // Rendered through Tag so a long label gets Tag's ellipsizing span and the
+  // remove button stays inside the pill. `data-slot` overrides Tag's own.
   return (
-    <TogglePrimitive
-      className={cn(tagVariants(), className)}
+    <Tag
+      className={className}
       data-slot="tag-group-item"
       value={value}
       {...props}
@@ -72,7 +74,7 @@ function TagGroupItem({
           }}
         />
       )}
-    </TogglePrimitive>
+    </Tag>
   );
 }
 

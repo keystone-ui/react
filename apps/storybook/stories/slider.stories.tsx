@@ -216,6 +216,15 @@ export const Range: Story = {
   },
 };
 
+/** Opacity the user sees: the element's own times every ancestor's. */
+const effectiveOpacity = (el: Element | null) => {
+  let opacity = 1;
+  for (let node = el; node; node = node.parentElement) {
+    opacity *= Number(getComputedStyle(node).opacity);
+  }
+  return opacity;
+};
+
 // Disabled
 export const Disabled: Story = {
   name: "Disabled",
@@ -231,6 +240,20 @@ export const Disabled: Story = {
       </Slider>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const part = (slot: string) =>
+      canvasElement.querySelector(`[data-slot="${slot}"]`);
+
+    // The control dims the whole slider once. The thumb sits inside it, so
+    // dimming the thumb as well would leave it at 0.25, darker than the rest.
+    await expect(part("slider-control")).toHaveAttribute("data-disabled");
+    await expect(effectiveOpacity(part("slider-thumb"))).toBe(0.5);
+    await expect(effectiveOpacity(part("slider-track"))).toBe(0.5);
+    await expect(effectiveOpacity(part("slider-indicator"))).toBe(0.5);
+    await expect(
+      getComputedStyle(part("slider-control") as Element).cursor
+    ).toBe("not-allowed");
+  },
   parameters: {
     docs: {
       description: {

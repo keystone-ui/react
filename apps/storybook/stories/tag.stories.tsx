@@ -158,6 +158,38 @@ export const WithRemove: Story = {
       </Tag>
     </div>
   ),
+  // TagRemove's keyboard focus outline matches the Tag it sits in (and
+  // Button). A bare `outline-none` beside `focus-visible:outline-2` set
+  // `--tw-outline-style: none`, which `outline-2` reads, so the outline
+  // computed to `none` while the class list looked right.
+  play: async ({ canvasElement }) => {
+    const tag = canvasElement.querySelector('[data-slot="tag"]') as HTMLElement;
+    const remove = tag.querySelector('[data-slot="tag-remove"]') as HTMLElement;
+
+    tag.focus();
+    await expect(tag.matches(":focus-visible")).toBe(true);
+    // Tag transitions outline-color; read the settled value.
+    await new Promise((r) => setTimeout(r, 300));
+    const reference = getComputedStyle(tag);
+    const expected = {
+      style: reference.outlineStyle,
+      width: reference.outlineWidth,
+      offset: reference.outlineOffset,
+      color: reference.outlineColor,
+    };
+    await expect(expected.style).toBe("solid");
+
+    remove.focus();
+    await expect(remove.matches(":focus-visible")).toBe(true);
+    const actual = getComputedStyle(remove);
+    await expect({
+      style: actual.outlineStyle,
+      width: actual.outlineWidth,
+      offset: actual.outlineOffset,
+      color: actual.outlineColor,
+    }).toEqual(expected);
+    remove.blur();
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -249,5 +281,48 @@ export const WorstCase: Story = {
     const label = (tags[2] as HTMLElement).querySelectorAll(":scope > span");
     await expect(label).toHaveLength(1);
     await expect(label[0]).toHaveTextContent("1 member");
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Whitespace between parts
+// ---------------------------------------------------------------------------
+
+/**
+ * JSX puts a `{" "}` between an icon and a label. That space is collapsible
+ * whitespace and must not become a flex item of its own: the pill looks the
+ * same with or without it, with one 4px gap between icon and label.
+ */
+export const WhitespaceBetweenParts: Story = {
+  name: "Whitespace between parts",
+  render: () => (
+    <div className="flex flex-wrap gap-2">
+      <Tag data-testid="spaced" value="spaced">
+        <BellIcon /> <strong>Alerts</strong>
+      </Tag>
+      <Tag data-testid="tight" value="tight">
+        <BellIcon />
+        <strong>Alerts</strong>
+      </Tag>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const spaced = canvas.getByTestId("spaced");
+    const tight = canvas.getByTestId("tight");
+    const gap = Number.parseFloat(getComputedStyle(spaced).columnGap);
+    await expect(gap).toBe(4);
+
+    await expect(
+      Math.abs(
+        spaced.getBoundingClientRect().width -
+          tight.getBoundingClientRect().width
+      )
+    ).toBeLessThan(0.5);
+    const icon = spaced.querySelector("svg") as SVGElement;
+    const label = spaced.querySelector("strong") as HTMLElement;
+    await expect(
+      label.getBoundingClientRect().left - icon.getBoundingClientRect().right
+    ).toBeCloseTo(gap, 1);
   },
 };

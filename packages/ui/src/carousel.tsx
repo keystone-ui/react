@@ -346,7 +346,7 @@ function CarouselPrevious({
           ? "top-1/2 -left-8 -translate-y-1/2"
           : "-top-8 left-1/2 -translate-x-1/2 rotate-90",
         autoHideArrows &&
-          "opacity-0 pointer-coarse:opacity-100 transition-opacity focus-visible:opacity-100 group-hover/carousel:opacity-100",
+          "opacity-0 pointer-coarse:opacity-100 transition-[opacity,scale,background-color,color,border-color,box-shadow,outline-color] focus-visible:opacity-100 group-hover/carousel:opacity-100",
         className
       )}
       data-slot="carousel-previous"
@@ -383,7 +383,7 @@ function CarouselNext({
           ? "top-1/2 -right-8 -translate-y-1/2"
           : "-bottom-8 left-1/2 -translate-x-1/2 rotate-90",
         autoHideArrows &&
-          "opacity-0 pointer-coarse:opacity-100 transition-opacity focus-visible:opacity-100 group-hover/carousel:opacity-100",
+          "opacity-0 pointer-coarse:opacity-100 transition-[opacity,scale,background-color,color,border-color,box-shadow,outline-color] focus-visible:opacity-100 group-hover/carousel:opacity-100",
         className
       )}
       data-slot="carousel-next"

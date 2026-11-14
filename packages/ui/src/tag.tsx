@@ -8,11 +8,19 @@ import { Children } from "react";
 
 import { cn } from "./utils";
 
+/** Spaces, tabs and line breaks: what CSS collapses. Not `\s`, which has NBSP. */
+const COLLAPSIBLE_WHITESPACE = /^[ \t\n\r\f]+$/;
+
 /**
  * Wraps bare text children in a span that can ellipsize. A flex row cannot
  * ellipsize its own text — it sits in an anonymous flex item — and a
  * fixed-height row has nowhere to wrap it to. Adjacent strings and numbers
  * (`{count} items`) share one span; elements pass through untouched.
+ *
+ * A run of only collapsible whitespace (the `{" "}` JSX puts between an icon
+ * and a label) passes through bare: as an anonymous flex item layout ignores
+ * it, whereas a span would be one more item and add a second gap. A
+ * non-breaking space is content, so it is not in the pattern and stays wrapped.
  */
 function wrapText(
   children: React.ReactNode,
@@ -21,7 +29,10 @@ function wrapText(
   const out: React.ReactNode[] = [];
   let text = "";
   const flush = () => {
-    if (text) {
+    if (COLLAPSIBLE_WHITESPACE.test(text)) {
+      out.push(text);
+      text = "";
+    } else if (text) {
       out.push(
         <span className={className} key={`text-${out.length}`}>
           {text}
@@ -85,7 +96,7 @@ function TagRemove({
     <button
       aria-label={ariaLabel ?? (hasCustomChildren ? undefined : "Remove")}
       className={cn(
-        "relative -my-px -ms-0.5 -me-1.5 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full p-0 text-current/60 outline-none transition-[color] before:absolute before:-inset-3.5 before:content-[''] hover:text-current focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
+        "relative -my-px -ms-0.5 -me-1.5 inline-flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-full p-0 text-current/60 transition-[color] before:absolute before:-inset-3.5 before:content-[''] hover:text-current focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
         className
       )}
       data-slot="tag-remove"

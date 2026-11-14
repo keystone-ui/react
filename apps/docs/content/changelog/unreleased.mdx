@@ -1,7 +1,55 @@
 ---
-date: "2026-11-10"
+date: "2026-11-11"
 description: "What's coming in the next release"
-excerpt: "No changes since the last release."
+excerpt: "8 changes queued for the next release."
 ---
 
-No changes merged since v1.0.0-beta.11.
+## Patch changes
+
+### Function `className` now works on every Accordion part and on `CollapsibleContent`.
+
+`Accordion`, `AccordionItem`, `AccordionHeader`, `AccordionTrigger`, `AccordionPanel` and `CollapsibleContent` accept `className` as a function of the part's state (`className={(state) => state.open ? "…" : "…"}`), as their types already declared. Before this, the function was silently dropped and none of its classes reached the element. The function is now called with the Base UI state and its result is merged over the part's own classes, exactly as a string `className` is. A string `className` behaves as before.
+
+---
+
+### Carousel auto-hide arrows keep Button's transitions
+
+With `autoHideArrows`, the previous and next arrows transitioned only `opacity`: the fade's `transition-opacity` replaced Button's own transition list, so the hover colour and press scale snapped. The arrows now fade and keep every transition Button has.
+
+---
+
+### Disabled Checkbox and RadioGroupItem dim outside a Field
+
+A disabled `Checkbox` or `RadioGroupItem` now dims to 50% opacity and shows the not-allowed cursor on its own, not only inside a disabled `Field`. Base UI renders both controls as a `<span>`, which `:disabled` never matches, so the `disabled:` styles did nothing; they now key on Base UI's `data-disabled` attribute as well. Inside a disabled `Field` the control stays at 50%: it does not dim twice.
+
+---
+
+### DropdownMenuSubContent honours its size prop
+
+`<DropdownMenuSubContent size="compact">` now renders 32px items, as `<DropdownMenuContent size="compact">` does. The prop was typed but never reached the popup, so a compact submenu kept 36px rows. A submenu still does not inherit its parent menu's size: pass `size="compact"` to both.
+
+---
+
+### `TagRemove` and the `Toast` close button show a keyboard focus outline again
+
+Both paired `outline-none` with `focus-visible:outline-2`. In Tailwind v4, `outline-none` also sets `--tw-outline-style: none`, and `outline-2` reads that variable, so the focus outline computed to `none`. They now draw the same 2px `ring/50` outline, offset 2px, as `Button`. A mouse click still shows no outline.
+
+---
+
+### Disabled Slider thumb no longer dimmed twice
+
+A disabled `Slider` dimmed its thumb to 50% on top of the 50% already applied to `SliderControl`, so the thumb showed at 25% opacity, fainter than the track and range around it. The thumb now inherits the control's dimming only and matches the rest of the disabled slider at 50%. Cursor, track and range are unchanged.
+
+---
+
+### Long TagGroupItem labels end in an ellipsis
+
+A `TagGroupItem` label too long for its container now ends in an ellipsis, as a `Tag` label does, and the remove button from `onRemove` stays visible inside the pill. Before, the label was cut off with no ellipsis and pushed the remove button out of view. Short labels look the same as before, including a `{" "}` between an icon and the label.
+
+This also fixes `Tag`: an ordinary space on its own between parts, such as `<Icon />{" "}<strong>Label</strong>`, no longer adds a second 4px gap and widens the pill. A non-breaking space is still part of the label.
+
+---
+
+### ToggleGroup: vertical groups move focus with the Up and Down arrows
+
+`<ToggleGroup orientation="vertical">` stacked its items but still moved focus with ArrowLeft and ArrowRight, because `orientation` only set `data-orientation` and never reached the Base UI primitive. It is now passed through, so a vertical group responds to ArrowUp and ArrowDown. Horizontal groups, including their mirrored arrows under `dir="rtl"`, are unchanged.

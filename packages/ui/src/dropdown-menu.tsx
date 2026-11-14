@@ -307,6 +307,7 @@ function DropdownMenuSubContent({
   alignOffset = -3,
   side = "right",
   sideOffset = 0,
+  size = "default",
   className,
   ...props
 }: DropdownMenuSubContentProps) {
@@ -325,6 +326,7 @@ function DropdownMenuSubContent({
             "w-auto min-w-24 max-w-(--available-width) origin-(--transform-origin) overflow-hidden rounded-md p-1 shadow-lg ring-1",
             className
           )}
+          data-size={size}
           data-slot="dropdown-menu-sub-content"
           {...props}
         />
