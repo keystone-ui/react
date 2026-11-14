@@ -54,12 +54,12 @@ The block installs 45 files under `components/` and one page at `app/admin/page.
 
 `mock-admin.ts` stays even with your own rows: the `User`, `Role` and `Status` types and `statusLabels` live there, and `admin-filters.ts` and the table import them.
 
-The other 18 files are not imported by the users table. Each group below can go together. `admin-page.tsx` imports every group, so remove the matching imports and JSX there too:
+The other 18 files are not imported by the users table. They are reached through `admin-page.tsx`, which wires every view together. Removing its imports and JSX is not enough: it also calls `usePaymentsTable()`, restores and writes the payments filters in the URL, and opens on the `"overview"` section, falling back to it for a bare URL. So to drop the other views, replace `AdminPage` with a users-only client component of your own (`"use client"`; the installed `page.tsx` is not one). It calls `useUsersTable()`, renders `<AdminUsersTable table={…} onOpenUser={…} />`, and `app/admin/page.tsx` renders it in place of `AdminPage`. Then these files can go:
 
-- **Overview:** `admin-overview.tsx`, `chart.tsx`, `chart-formatters.ts`. Also remove `adminMetrics` and `signupsByMonth` from the import of `mock-admin.ts`.
+- **Overview:** `admin-overview.tsx`, `chart.tsx`, `chart-formatters.ts`.
 - **Payments:** `admin-payments-table.tsx`, `admin-payments-toolbar.tsx`, `use-payments-table.ts`, `payment-filters.ts`, `payment-filter-pills.tsx`, `payment-filters-drawer.tsx`, `operator-filter-chip.tsx`, `payment-detail-drawer.tsx`, `mock-payments.ts`.
-- **Sidebar shell:** `admin-sidebar.tsx`, `admin-topbar.tsx`, `sidebar.tsx`. `admin-topbar.tsx` imports `admin-sidebar.tsx`, so these go together. `admin-page.tsx` also takes its `AdminSection` type from `admin-sidebar.tsx`, so its section state needs a type of its own.
-- **Page wiring:** `admin-page.tsx`, `use-url-state.ts`, `admin-user-detail.tsx`. Keep them if `admin-page.tsx` stays your page. Without them, a client component of yours (`"use client"`; the installed `page.tsx` is not one) calls `useUsersTable()` itself, renders `<AdminUsersTable table={…} onOpenUser={…} />`, and loses the URL sync and the user record view. `payment-detail-drawer.tsx` also imports `admin-user-detail.tsx`.
+- **Sidebar shell:** `admin-sidebar.tsx`, `admin-topbar.tsx`, `sidebar.tsx`.
+- **Page wiring:** `admin-page.tsx`, `use-url-state.ts`, `admin-user-detail.tsx`. Without them you lose the URL sync and the user record view. Keep `use-url-state.ts` or `admin-user-detail.tsx` if your component wires them in; neither imports a file from the other groups.
 
 ### Where the fixture rows come in
 
@@ -94,6 +94,8 @@ export function useUsersTable(rows: readonly User[]) {
 }
 ```
 
+Its caller then becomes `useUsersTable(rows)`.
+
 The rows must be complete when the hook first renders: fetch them on the server and pass them down, or mount the table once they have loaded. The hook works out its answer again only when the filters, sort or page change, not when `rows` changes, so rows that arrive or refresh later stay out of the table until the next filter change. To follow changing rows, edit `useSimulatedFetch` (below).
 
 **The selection bar.** In `admin-users-table.tsx`, `UserSelectionBar` builds the rows for its Export and Copy ids actions from the fixture, `users.filter((user) => selected.has(user.id))`. Change it to filter your rows. If you leave it, those two actions read the fixture.
@@ -126,11 +128,11 @@ Three fixture details to change with them:
 
 Filtering, sorting and paging all run in the browser, over the whole `rows` array. The function `run` in `use-data-table.ts` filters with `matches`, sorts with `sortRows`, and slices out the current page. There is no request: `useSimulatedFetch`, in the same file, stands in for one. It computes `run` and hands the answer back after `latency`, so the skeleton rows have a loading state to show.
 
-For server-side filtering, sorting or paging, replace `useSimulatedFetch` with your data layer. It is not exported, so you edit `use-data-table.ts` itself. Send `query` (`filters`, `sort`, `pageIndex`, `pageSize`), and give the rest of the hook back `{ loading, result }`, where `result` is a `DataTableResult`:
+For server-side filtering, sorting or paging, replace `useSimulatedFetch` with your data layer. It is not exported, so you edit `use-data-table.ts` itself. Send `query` (`filters`, `sort`, `pageIndex`, `pageSize`; `pageIndex` counts from 0), and give the rest of the hook back `{ loading, result }`, where `result` is a `DataTableResult`:
 
 - `page` — the rows on the current page.
 - `total` — the row count across every page.
-- `pageCount` — the number of pages.
+- `pageCount` — the number of pages, at least 1 even when nothing matches: `Math.max(1, Math.ceil(total / query.pageSize))`. An empty result is `{ all: [], page: [], total: 0, pageCount: 1 }`.
 - `all` — every row that passes the filters, in sort order. The toolbar's Export writes this to CSV, so with a paged API it needs its own request.
 
 What you lose when you replace it:
