@@ -49,7 +49,7 @@ As installed, `useUsersTable()` reads the fixture from `mock-users.ts`. Replace 
 
 **What `DataTableConfig` asks for:** `rows`, a `matches(row, filters)` predicate and a `sortRows(rows, sort)` function — the users versions live in `admin-filters.ts` — plus the starting filters, sort and page size. `latency` is how long the stand-in request takes (300 ms by default); set it to `0` when your rows are already in memory.
 
-**Rows that arrive later are fine.** Pass an empty array while you fetch, then the loaded array: a new `rows` array is a new answer even when the query has not changed.
+**Rows that arrive later are fine.** Pass an empty array while you fetch, then the loaded array: different rows are a new answer even when the query has not changed. Rows are compared one by one, so an array rebuilt inline each render over the same row objects (`data.filter(…)`) is not new — but one that creates new row objects each render (`data.map((row) => ({ ...row }))`) is, and keeps the table reloading. Build those in a `useMemo`.
 
 **What it does not do:** it filters, sorts and pages in the browser, over every row it is given. There is no server paging, no request error state, and `Export` writes every matching row from `rows`. That suits hundreds or a few thousand users, not an unbounded table.
 
