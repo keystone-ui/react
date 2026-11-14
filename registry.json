@@ -1981,6 +1981,10 @@
           "type": "registry:component"
         },
         {
+          "path": "registry/default/blocks/admin-01/components/mock-users.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "registry/default/blocks/admin-01/components/mock-payments.ts",
           "type": "registry:component"
         },
@@ -2074,6 +2078,168 @@
         }
       ],
       "categories": [
+        "admin"
+      ]
+    },
+    {
+      "name": "users-01",
+      "type": "registry:block",
+      "title": "Users 01",
+      "description": "The users view from admin-01 on its own: a users table with search, filter pills, sort and column menus, row selection with export, loading skeletons, a filtered-empty state and URL-synced filters, and a record page for each user.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://keystoneui.io/r/avatar.json",
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/calendar.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/checkbox.json",
+        "https://keystoneui.io/r/combobox.json",
+        "https://keystoneui.io/r/copy-button.json",
+        "https://keystoneui.io/r/description-list.json",
+        "https://keystoneui.io/r/drawer.json",
+        "https://keystoneui.io/r/dropdown-menu.json",
+        "https://keystoneui.io/r/empty.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/input-group.json",
+        "https://keystoneui.io/r/label.json",
+        "https://keystoneui.io/r/native-select.json",
+        "https://keystoneui.io/r/popover.json",
+        "https://keystoneui.io/r/radio-group.json",
+        "https://keystoneui.io/r/selection-bar.json",
+        "https://keystoneui.io/r/skeleton.json",
+        "https://keystoneui.io/r/stepper.json",
+        "https://keystoneui.io/r/table.json",
+        "https://keystoneui.io/r/table-pagination.json",
+        "https://keystoneui.io/r/toggle.json"
+      ],
+      "files": [
+        {
+          "path": "registry/default/blocks/users-01/page.tsx",
+          "type": "registry:page",
+          "target": "app/users/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/users-view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-users-table.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-users-toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-user-detail.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-filters.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/admin-filters-drawer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/user-filter-pills.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/use-users-table.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/mock-users.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/use-data-table.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/use-url-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/url-params.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/sort.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/sort-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/columns-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/csv.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/filter-row.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/filtered-empty.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/result-summary.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/skeleton-rows.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/filter-pills.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/filter-trigger.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/pill-shell.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/drawer-parts.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/set-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/date-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/date-filter.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/date-filter-step.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/default/blocks/admin-01/components/use-reduced-motion.ts",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "data",
         "admin"
       ]
     },

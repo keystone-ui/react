@@ -261,12 +261,18 @@ describe("what a consumer installs", () => {
     expect(drift).toEqual([]);
   });
 
-  it("ships registry:component kits that import only their own files", () => {
+  it("ships kits and blocks that import only their own files", () => {
     // A kit lifted out of a block (filter-pills from admin-01) must not reach
-    // back into the block for a sibling it does not ship.
+    // back into the block for a sibling it does not ship, and neither may a
+    // block built from another block's files (users-01 from admin-01): every
+    // file lands flat in the consumer's components directory, so a sibling
+    // the item does not list resolves to nothing.
     const leaks: string[] = [];
     for (const item of registry.items) {
-      if (item.type !== "registry:component") {
+      if (
+        item.type !== "registry:component" &&
+        item.type !== "registry:block"
+      ) {
         continue;
       }
       const shipped = new Set(
