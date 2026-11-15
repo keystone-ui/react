@@ -88,7 +88,7 @@ Auth is npm **Trusted Publishing** (OIDC): the job needs `id-token: write`, npm 
 
 ## Phase 3 — optional: level the npm dist-tags (needs the user's npm login)
 
-`changeset publish` sets one dist-tag per package — `@keystoneui/react` → `beta`, `@keystoneui/mcp` → `latest` — and a Trusted Publishing credential can't manage dist-tags. Releases don't need this step: the docs install `@keystoneui/react@beta` and `npx @keystoneui/mcp` (`latest`), which are the tags CI moves. Leveling the other tag only matters for someone installing without a tag. The Release run's job summary lists the commands; they are, per published package:
+`changeset publish` sets one dist-tag per package — `@keystoneui/react` → `beta`, `@keystoneui/mcp` → `latest` — and a Trusted Publishing credential can't manage dist-tags. Releases don't need this step: the docs install `@keystoneui/react@beta` and `npx @keystoneui/mcp@latest`, which are the tags CI moves. Leveling the other tag only matters for someone installing without a tag. The Release run's job summary lists the commands; they are, per published package:
 
 ```
 npm dist-tag add <name>@<version> latest

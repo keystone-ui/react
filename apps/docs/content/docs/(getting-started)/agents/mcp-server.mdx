@@ -12,23 +12,23 @@ For example, you can ask an AI assistant to "Add a button and card from Keystone
 Run the init command for your AI client:
 
 ```bash tab="Cursor"
-npx @keystoneui/mcp init --client cursor
+npx @keystoneui/mcp@latest init --client cursor
 ```
 
 ```bash tab="Claude Code"
-npx @keystoneui/mcp init --client claude
+npx @keystoneui/mcp@latest init --client claude
 ```
 
 ```bash tab="VS Code"
-npx @keystoneui/mcp init --client vscode
+npx @keystoneui/mcp@latest init --client vscode
 ```
 
 ```bash tab="OpenCode"
-npx @keystoneui/mcp init --client opencode
+npx @keystoneui/mcp@latest init --client opencode
 ```
 
 ```bash tab="Codex"
-npx @keystoneui/mcp init --client codex
+npx @keystoneui/mcp@latest init --client codex
 ```
 
 This writes the correct MCP config file for your editor. Restart your editor, then try these prompts:
@@ -67,7 +67,7 @@ This writes the correct MCP config file for your editor. Restart your editor, th
 
 The MCP server runs locally on your machine as a background process managed by your editor.
 
-1. **Editor Spawns Process** -- Your editor reads the MCP config and runs `npx @keystoneui/mcp`
+1. **Editor Spawns Process** -- Your editor reads the MCP config and runs `npx @keystoneui/mcp@latest`
 2. **Natural Language** -- You describe what you need to the AI assistant
 3. **AI Calls Tools** -- The assistant picks the right MCP tool (search, view, install, etc.)
 4. **Registry Fetch** -- The tool fetches component data from `keystoneui.io/r/` and returns it to the assistant
@@ -96,7 +96,7 @@ The MCP server exposes 9 tools that AI assistants can call:
 
 ## Configuration
 
-If you prefer to configure manually instead of using `npx @keystoneui/mcp init`, add the config for your editor:
+If you prefer to configure manually instead of using `npx @keystoneui/mcp@latest init`, add the config for your editor:
 
 ### Cursor
 

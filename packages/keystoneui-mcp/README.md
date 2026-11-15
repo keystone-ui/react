@@ -12,7 +12,7 @@ The single binary runs in two modes:
 ### As an MCP server
 
 ```bash
-npx -y @keystoneui/mcp init --client claude
+npx -y @keystoneui/mcp@latest init --client claude
 ```
 
 Supported clients: `claude`, `cursor`, `vscode`, `opencode`, `codex`. The `init` command writes the appropriate config file for the chosen client and points it at `npx @keystoneui/mcp@latest`.
