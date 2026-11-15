@@ -41,6 +41,12 @@ This writes the correct MCP config file for your editor. Restart your editor, th
   For Cursor, enable the MCP server in **Cursor Settings > MCP Servers** after running the init command.
 </Callout>
 
+<Callout type="warn">
+  The server runs with the settings of the project it starts in. Before using
+  it in a project you have not reviewed, read
+  [Projects you do not trust](#projects-you-do-not-trust).
+</Callout>
+
 ---
 
 ## What is MCP?
@@ -150,6 +156,38 @@ args = ["@keystoneui/mcp@latest"]
 ```
 
 After adding the configuration, restart Codex.
+
+---
+
+## Projects you do not trust
+
+Your editor starts the MCP server on your machine, usually with a package
+runner such as `npx`, inside the project you have open. The runner and the
+server then work with that project's settings: its package-manager
+configuration, the programs installed in its dependencies, the runtime
+version a version manager picks for the folder, and its `components.json`.
+They also inherit whatever environment your editor or shell has loaded for
+that folder. Through these, a project can run its own code when the server
+starts, or point the server at a different host for components and docs.
+
+Treat starting the server like running the project's own scripts: do it in
+projects you trust. Adding a version or a tag to the command does not change
+this.
+
+Before you open a fresh clone, a pull request or a download you have not
+reviewed:
+
+- If the server is in a configuration that applies to every project (for
+  example `~/.codex/config.toml`), turn it off first.
+- Do not approve an MCP server the project configures itself (`.mcp.json`,
+  `.cursor/mcp.json`, `.vscode/mcp.json`, `opencode.json`). A command you
+  recognise still runs with that project's settings.
+- To look something up meanwhile, read this site or use
+  [`/llms.txt`](/docs/agents/llms-txt) as reference material. Neither requires
+  starting the local MCP server or running a project command.
+
+If the server has already started in such a project, changing the command
+afterwards does not undo that.
 
 ---
 
