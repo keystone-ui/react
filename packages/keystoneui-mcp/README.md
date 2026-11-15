@@ -27,23 +27,23 @@ Once configured, ask your agent things like:
 
 ```bash
 # Discover
-npx keystoneui search "table pagination"
-npx keystoneui list --type example
-npx keystoneui blocks signin
+npx @keystoneui/mcp search "table pagination"
+npx @keystoneui/mcp list --type example
+npx @keystoneui/mcp blocks signin
 
 # Inspect
-npx keystoneui view button
-npx keystoneui docs button             # /llms.mdx/docs/components/button
-npx keystoneui examples table          # all demo files for the table component
+npx @keystoneui/mcp view button
+npx @keystoneui/mcp docs button             # /llms.mdx/docs/components/button
+npx @keystoneui/mcp examples table          # all demo files for the table component
 
 # Install (delegates to shadcn CLI)
 npx shadcn@latest add https://keystoneui.io/r/table-with-pagination.json
 
 # Verify
-npx keystoneui audit
+npx @keystoneui/mcp audit
 
 # Theme (a code from https://keystoneui.io/theme-builder)
-npx keystoneui theme k1_slate_0.55_0.2_262.5_large_inter
+npx @keystoneui/mcp theme k1_slate_0.55_0.2_262.5_large_inter
 ```
 
 ## Verbs

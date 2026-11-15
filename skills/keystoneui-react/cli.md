@@ -33,7 +33,7 @@ keystoneui init --client claude    # or cursor | vscode | codex | opencode
 
 The CLI/MCP modes share the same registry data and search behavior. Use the CLI when working in a shell or non-MCP environment; the MCP server when working in Claude Code, Cursor, VS Code Copilot, OpenCode, or Codex.
 
-When `@keystoneui/mcp` is published, the same verbs work as `npx keystoneui <verb>` for downstream users.
+In a project without `@keystoneui/mcp` installed, the same verbs work as the scoped command `npx -y @keystoneui/mcp@latest <verb>`, which always runs this package.
 
 ## Installing components
 
