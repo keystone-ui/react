@@ -205,11 +205,17 @@ the changelog.
 
 ## Interoperating with shadcn
 
-Keystone and shadcn can coexist, and `admin-01` deliberately ships shadcn's
+Keystone and shadcn can coexist, and Keystone deliberately ships shadcn's
 sidebar (adapted onto Keystone primitives, installed as
-`components/sidebar.tsx`) because Keystone intentionally has no app shell. Never
-run `shadcn add sidebar` into a Keystone app — its dependencies replace
-Keystone's Button, Input and Tooltip. Two things bite:
+`components/sidebar.tsx`) as a registry item because Keystone intentionally has
+no app shell in the library. It comes with `admin-01`, or on its own:
+`npx shadcn@latest add https://keystoneui.io/r/sidebar.json`. Always use that
+full URL — the bare `shadcn add sidebar` selects shadcn's item, whose
+dependencies install to the same paths as Keystone's Button, Input and
+Tooltip; accepting an overwrite (or `--overwrite`) replaces Keystone's files.
+The sidebar reads six `--sidebar-*` tokens (the default style declares all
+eight of the set), imports Keystone's components through the `components.json`
+UI alias, and has no package flavour. Two things bite:
 
 1. **Both registries install to the same path.** `components/ui/button.tsx` is
    one file. Installing shadcn's `button` over Keystone's replaces it. Bare
