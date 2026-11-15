@@ -13,6 +13,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
+  listItemFiles,
   rewriteContent,
   UTILS_SOURCE,
   utilsInlinables,
@@ -158,5 +159,22 @@ describe("built registry items that use mergeClassName", () => {
       .map(({ name, path }) => join(name, path));
 
     expect(offenders).toEqual([]);
+  });
+});
+
+describe("package-flavour items", () => {
+  it("are never rewritten: their files import the package, not `./utils`", () => {
+    // `npm/*` items ship the demo sources byte for byte (pinned in
+    // npm-flavour-items.test.ts); the `./utils` rewrite is for vendored ui.
+    const packageNames = listBuiltItemNames().filter((name) =>
+      name.startsWith("npm/")
+    );
+    expect(packageNames.length).toBeGreaterThan(0);
+    const listed = listItemFiles();
+    expect(listed.length).toBeGreaterThan(0);
+    expect(listed.filter((file) => file.startsWith("npm/"))).toEqual([]);
+    expect(listItemFiles(["button.json", "npm/users-01.json"])).toEqual([
+      "button.json",
+    ]);
   });
 });

@@ -25,6 +25,29 @@ This is the users section of [`admin-01`](/docs/blocks/admin-01), installable wi
 
 The only file of its own is `users-view.tsx`: the page shell that holds the table state, the open user, and the URL. The page lands at `app/users/page.tsx`. The view is meant to be the whole page: `useUrlState` owns the whole query string, so a parameter it does not know (a tab, a locale, `utm_*`) is removed as soon as the view loads.
 
+## Apps that use the npm package
+
+The command at the top copies the components the block uses into `components/ui/` and imports them from there. If your app imports components from the `@keystoneui/react` package instead, install the package flavour. It has the same files, importing `@keystoneui/react/*`:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/npm/users-01.json
+```
+
+- **It needs `@keystoneui/react` 1.0.0-beta.11 or later** (`pnpm add @keystoneui/react@beta`). It does not install or upgrade the package. Its only dependency is `lucide-react`, and shadcn leaves a version you already have alone.
+- **`components.json`.** shadcn needs one to install anything. If your app already has a valid one, keep it. Without one, `shadcn add` offers to run `shadcn init`, which writes shadcn's own theme into your CSS and adds its own dependencies. A package app needs only this, written by hand. It is the Next App Router form: `"rsc": true` keeps the `"use client"` boundaries. In a Vite app, set `tailwind.css` to `src/index.css` and leave out `rsc`. Adding this item leaves the file and your CSS unchanged:
+
+  ```json title="components.json"
+  {
+    "style": "new-york",
+    "rsc": true,
+    "tailwind": { "css": "app/globals.css", "baseColor": "neutral" },
+    "aliases": { "components": "@/components", "utils": "@/lib/utils" }
+  }
+  ```
+
+- **Where the files land:** flat in the directory the `components` alias names: `components/`, or `src/components/` in a Vite app with `src/`. In a Next.js App Router project with `app/` at the root, the page lands at `app/users/page.tsx`. Other project shapes place it differently. In a Vite app shadcn skips the page, so render `<UsersView />` from `@/components/users-view` in your own route.
+- **One flavour per app.** Both flavours write the same file names with different imports. Adding one over the other asks before overwriting each file that differs, and `--overwrite` replaces them without asking. A file you decline keeps the other flavour's imports.
+
 ## Use it with your data
 
 The rows come from one file, read in two places. `use-users-table.ts` hands them to `useDataTable`, and `users-view.tsx` looks up the open user and passes the same rows to the table for its selection bar:

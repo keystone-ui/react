@@ -73,9 +73,20 @@ export function utilsInlinables(source) {
 
 const checkOnly = process.argv.includes("--check");
 
-function listItemFiles() {
-  return readdirSync(BUILD_OUTPUT_DIR)
-    .filter((name) => name.endsWith(".json") && name !== "registry.json")
+/**
+ * The built item files to rewrite: the top level of the output directory.
+ * Package-flavour items (`npm/*`) are excluded on purpose, not only because
+ * they sit in a subdirectory: their files import `@keystoneui/react/*` and
+ * must reach the consumer byte for byte as the demo sources.
+ */
+export function listItemFiles(names = readdirSync(BUILD_OUTPUT_DIR)) {
+  return names
+    .filter(
+      (name) =>
+        name.endsWith(".json") &&
+        name !== "registry.json" &&
+        !name.startsWith("npm/")
+    )
     .sort();
 }
 

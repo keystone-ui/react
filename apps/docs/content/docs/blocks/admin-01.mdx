@@ -51,6 +51,20 @@ It writes the same four files this block uses (`filter-trigger.tsx`,
 step: the item is built from this block's source. The payments table's
 operator chip stays in the block, since it is written against payment fields.
 
+In an app that imports components from the `@keystoneui/react` package rather
+than copying them into `components/ui/`, install the package flavour instead.
+It has the same four files, importing `@keystoneui/react/*`:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/npm/filter-pills.json
+```
+
+It is tested with `@keystoneui/react` 1.0.0-beta.11. It needs a
+`components.json`: keep a valid one your app already has, or write the one
+[Apps that use the npm package](/docs/blocks/users-01#apps-that-use-the-npm-package)
+gives. Pick one flavour per app: both write the same file names with different
+imports.
+
 ## Reusing the users view
 
 The users section — table, toolbar, filter pills, sort and column menus,
