@@ -369,6 +369,66 @@ if (tree) {
 }
 
 // ---------------------------------------------------------------------------
+// 7. Loading the skill runs nothing, and the skill pre-approves nothing.
+//
+// The skill loads on a signal the project controls (`@keystoneui/react` in its
+// dependencies), so a command that runs at load time, or one the skill
+// pre-approves, runs inside a project the agent may not have reviewed. Project
+// context comes from reading files instead. These checks are deliberately
+// narrow: they do not require any documented command to be pre-approved.
+// ---------------------------------------------------------------------------
+const SKILL_MD = "skills/keystoneui-react/SKILL.md";
+
+skillMd.split("\n").forEach((line, i) => {
+  if (line.startsWith("!`")) {
+    fail(
+      `${SKILL_MD}:${i + 1}`,
+      `runs a shell command when the skill loads: ${line.trim().slice(0, 110)}`
+    );
+  }
+});
+
+const frontMatter = skillMd.match(/^---\n([\s\S]*?)\n---\n/);
+if (frontMatter) {
+  const fmLines = frontMatter[1].split("\n");
+  const at = fmLines.findIndex((line) => line.startsWith("allowed-tools:"));
+  if (at !== -1) {
+    const inline = fmLines[at].slice("allowed-tools:".length).trim();
+    const listed = [];
+    for (const line of fmLines.slice(at + 1)) {
+      if (!/^\s+-/.test(line)) {
+        break;
+      }
+      listed.push(line.trim());
+    }
+    const empty =
+      (inline === "" || inline === "[]" || inline === '""') &&
+      listed.length === 0;
+    if (!empty) {
+      fail(
+        `${SKILL_MD}:${at + 2}`,
+        "pre-approves commands; the allowed-tools list must be empty"
+      );
+    }
+  }
+} else {
+  fail(SKILL_MD, "no front matter found");
+}
+
+// The old fallback ran a bare `keystoneui`, which resolves whatever executable
+// the project provides under that name.
+for (const file of [
+  SKILL_MD,
+  "skills/keystoneui-react/cli.md",
+  "skills/keystoneui-react/mcp.md",
+]) {
+  const prose = read(file).replace(/\s+/g, " ");
+  if (/\brun `keystoneui info`/.test(prose)) {
+    fail(file, "still tells the agent to run `keystoneui info` as a fallback");
+  }
+}
+
+// ---------------------------------------------------------------------------
 if (failures.length) {
   console.error(`\n✖ lint-skill: ${failures.length} problem(s)\n`);
   for (const { file, message } of failures) {
