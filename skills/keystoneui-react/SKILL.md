@@ -11,7 +11,7 @@ metadata:
 
 A production-ready React component library built on **Tailwind CSS v4** and **Base UI** (`@base-ui/react`), with 50+ accessible components, OKLCH semantic tokens, and dark mode.
 
-Run the shell commands in this file only when executing tools in this project is already within the user's authorized task. In a repository you cloned or downloaded in this session, or were asked to review, run none of them: read the files and the fetched docs under Sources of Truth instead.
+Run the shell commands in this skill (this file and the files it links to) only when executing tools in this project is already within the user's authorized task. In a repository you cloned or downloaded in this session, or were asked to review, run none of them: read the files and the fetched docs under Sources of Truth instead.
 
 ## Current Project Context
 
