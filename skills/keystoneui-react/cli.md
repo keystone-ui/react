@@ -2,6 +2,8 @@
 
 Two paths reach the same Keystone UI registry: the **`keystoneui` CLI** (unified verb-based interface, and the MCP server's own binary), and the **shadcn CLI** (for installing source into a project).
 
+Run the commands on this page only when executing tools in this project is already within the user's authorized task. In a repository you cloned or downloaded in this session, or were asked to review, run none of them: read the files and the [direct MDX URLs](#direct-mdx-urls) instead.
+
 ## `keystoneui` CLI (preferred)
 
 The `@keystoneui/mcp` package ships a single binary that runs in two modes — without arguments it launches the MCP stdio server, with a verb it acts as a CLI. Available as `keystoneui` (alias) or `keystoneui-mcp` (canonical).
@@ -53,7 +55,7 @@ npx shadcn@latest add \
 npx shadcn@latest add https://keystoneui.io/r/default.json
 ```
 
-Use the project's package runner — `pnpm dlx shadcn@latest`, `bunx --bun shadcn@latest`, or `yarn dlx shadcn@latest` — based on `packageManager` in `package.json`.
+Use the project's package runner (`pnpm dlx shadcn@latest`, `bunx --bun shadcn@latest` or `yarn dlx shadcn@latest`, based on `packageManager` in `package.json`), only when executing tools in this project is already within the user's authorized task.
 
 To get the right URL for one or more components without typing it by hand, use the MCP `get_add_command` tool (see [mcp.md](./mcp.md)) or the CLI:
 

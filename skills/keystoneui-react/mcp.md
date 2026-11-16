@@ -43,7 +43,7 @@ You can also run the init helper from the `@keystoneui/mcp` package to write the
 2. **Discover** — `list_components` (broad) or `search_components` (targeted) to find the right component.
 3. **Inspect** — `view_component({ names: [...] })` for source, and `get_docs({ name })` for the API Reference table. Props are documented only in the docs page.
 4. **See real usage** — `get_examples({ name })` to fetch demo TSX files. Especially useful for blocks (`signin-01`, `tickets-01`) and complex components.
-5. **Install** — `get_add_command({ names: [...] })` to get the install command. Run it.
+5. **Install** — `get_add_command({ names: [...] })` to get the install command. Run it only when executing tools in this project is already within the user's authorized task.
 6. **Verify** — `audit_checklist` after first install to confirm CSS, Tailwind, and theme tokens are wired correctly.
 
 ## When to use MCP vs the CLI
