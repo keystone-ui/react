@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "filter-chips-under-tabs",
+  "title": "Filter Chips Under Tabs",
+  "description": "Filter Chips example: Under Tabs.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/filter-chips.json",
+    "https://keystoneui.io/r/tabs.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/filter-chips/under-tabs.tsx",
+      "content": "\"use client\";\n\nimport { FilterChip, FilterChips } from \"@keystoneui/react/filter-chips\";\nimport { Tabs, TabsList, TabsTrigger } from \"@keystoneui/react/tabs\";\n\nexport default function FilterChipsUnderTabs() {\n  return (\n    <Tabs className=\"w-fit\" defaultValue=\"articles\">\n      <TabsList>\n        <TabsTrigger value=\"articles\">Articles</TabsTrigger>\n        <TabsTrigger value=\"videos\">Videos</TabsTrigger>\n      </TabsList>\n      <FilterChips aria-label=\"Topic\" className=\"mt-3\" defaultValue=\"all\">\n        <FilterChip count={6} value=\"all\">\n          All\n        </FilterChip>\n        <FilterChip count={3} value=\"typography\">\n          Typography\n        </FilterChip>\n        <FilterChip count={2} value=\"color\">\n          Color\n        </FilterChip>\n        <FilterChip count={0} value=\"motion\">\n          Motion\n        </FilterChip>\n      </FilterChips>\n    </Tabs>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

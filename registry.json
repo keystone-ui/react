@@ -1568,6 +1568,23 @@
       ]
     },
     {
+      "name": "filter-chips",
+      "type": "registry:ui",
+      "title": "Filter Chips",
+      "description": "Pill-shaped choices that filter one list in place, with at most one selected and an optional result count.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/filter-chips.tsx",
+          "target": "@ui/filter-chips.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "signin-01",
       "type": "registry:block",
       "title": "Sign in 01",
@@ -5928,6 +5945,82 @@
       "files": [
         {
           "path": "apps/docs/demos/field/with-switch.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "filter-chips-controlled",
+      "type": "registry:example",
+      "title": "Filter Chips Controlled",
+      "description": "Filter Chips example: Controlled.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/filter-chips.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/filter-chips/controlled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "filter-chips-counts",
+      "type": "registry:example",
+      "title": "Filter Chips Counts",
+      "description": "Filter Chips example: Counts.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/filter-chips.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/filter-chips/counts.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "filter-chips-default",
+      "type": "registry:example",
+      "title": "Filter Chips Default",
+      "description": "Filter Chips example: Default.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/filter-chips.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/filter-chips/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "filter-chips-sizes",
+      "type": "registry:example",
+      "title": "Filter Chips Sizes",
+      "description": "Filter Chips example: Sizes.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/filter-chips.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/filter-chips/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "filter-chips-under-tabs",
+      "type": "registry:example",
+      "title": "Filter Chips Under Tabs",
+      "description": "Filter Chips example: Under Tabs.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/filter-chips.json",
+        "https://keystoneui.io/r/tabs.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/filter-chips/under-tabs.tsx",
           "type": "registry:example"
         }
       ]

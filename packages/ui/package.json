@@ -88,7 +88,8 @@
     "./stat": "./src/stat.tsx",
     "./table-pagination": "./src/table-pagination.tsx",
     "./copy-button": "./src/copy-button.tsx",
-    "./code-block": "./src/code-block.tsx"
+    "./code-block": "./src/code-block.tsx",
+    "./filter-chips": "./src/filter-chips.tsx"
   },
   "scripts": {
     "build": "tsup",
@@ -367,6 +368,10 @@
       "./code-block": {
         "types": "./dist/code-block.d.ts",
         "default": "./dist/code-block.js"
+      },
+      "./filter-chips": {
+        "types": "./dist/filter-chips.d.ts",
+        "default": "./dist/filter-chips.js"
       }
     }
   },

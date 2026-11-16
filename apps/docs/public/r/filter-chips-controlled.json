@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "filter-chips-controlled",
+  "title": "Filter Chips Controlled",
+  "description": "Filter Chips example: Controlled.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/filter-chips.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/filter-chips/controlled.tsx",
+      "content": "\"use client\";\n\nimport { FilterChip, FilterChips } from \"@keystoneui/react/filter-chips\";\nimport { useState } from \"react\";\n\nconst articles = [\n  { title: \"Choosing a type scale\", topic: \"typography\" },\n  { title: \"Line height for long text\", topic: \"typography\" },\n  { title: \"Tinted neutrals\", topic: \"color\" },\n  { title: \"Contrast on coloured surfaces\", topic: \"color\" },\n  { title: \"Picking a typeface pair\", topic: \"typography\" },\n];\n\nconst topics = [\n  { value: \"all\", label: \"All\" },\n  { value: \"typography\", label: \"Typography\" },\n  { value: \"color\", label: \"Color\" },\n  { value: \"motion\", label: \"Motion\" },\n];\n\nfunction countFor(value: string) {\n  return value === \"all\"\n    ? articles.length\n    : articles.filter((article) => article.topic === value).length;\n}\n\nexport default function FilterChipsControlled() {\n  const [topic, setTopic] = useState<string | null>(\"all\");\n  const shown = articles.filter(\n    (article) => topic === \"all\" || article.topic === topic\n  );\n\n  return (\n    <div className=\"flex w-full max-w-sm flex-col gap-3\">\n      <FilterChips aria-label=\"Topic\" onValueChange={setTopic} value={topic}>\n        {topics.map((t) => (\n          <FilterChip count={countFor(t.value)} key={t.value} value={t.value}>\n            {t.label}\n          </FilterChip>\n        ))}\n      </FilterChips>\n      <ul className=\"flex flex-col gap-1 text-sm\">\n        {shown.map((article) => (\n          <li key={article.title}>{article.title}</li>\n        ))}\n      </ul>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

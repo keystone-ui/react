@@ -41,6 +41,9 @@ const CAROUSEL_DOT = /after:-inset-x-\[3px\]/;
 const TABS_SCROLL_BUTTON = /^absolute top-0 (?:left|right)-0 z-10 /;
 const TOAST_BUTTON = /inline-flex h-7 cursor-pointer/;
 const CODE_BLOCK_CONTENT = /\[counter-reset:code-line\]/;
+// The chip composes its base from several literals; this picks the one that
+// holds its focus classes, so a second outline literal fails the count.
+const FILTER_CHIP_OUTLINE = /focus-visible:outline/;
 const WHITESPACE = /\s+/;
 // A ring of real width, bare or under a variant active on keyboard focus:
 // `ring` (1px), a non-zero number, an arbitrary length, or a `length:` hint.
@@ -260,6 +263,13 @@ describe("focus outline", () => {
         anchor: CODE_BLOCK_CONTENT,
         count: 1,
         outline: INSET_OUTLINE,
+      },
+      {
+        part: "FilterChip",
+        file: "filter-chips.tsx",
+        anchor: FILTER_CHIP_OUTLINE,
+        count: 1,
+        outline: BUTTON_OUTLINE,
       },
     ];
 

@@ -1,0 +1,238 @@
+---
+title: FilterChips
+description: Pill-shaped choices that filter one list in place, with at most one selected and an optional result count.
+---
+
+<ComponentPreview name="filter-chips-default" />
+
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/filter-chips.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react@beta @base-ui/react
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="filter-chips-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Usage
+
+```tsx
+import { FilterChip, FilterChips } from "@keystoneui/react/filter-chips";
+```
+
+```tsx
+<FilterChips aria-label="Topic" value={topic} onValueChange={setTopic}>
+  <FilterChip value="all" count={6}>All</FilterChip>
+  <FilterChip value="typography" count={3}>Typography</FilterChip>
+  <FilterChip value="color" count={2}>Color</FilterChip>
+  <FilterChip value="motion" count={0}>Motion</FilterChip>
+</FilterChips>
+```
+
+A row of FilterChips narrows one list on the same page. It is a radio group: at most one chip is selected, picking a chip does not navigate anywhere, and the selected chip cannot be switched off by clicking it again. Give the row a name with `aria-label` or `aria-labelledby`; a row without one logs a warning in development.
+
+### What it is not
+
+- **Not the `filter-pills` kit.** Filter pills are per-dimension triggers (`Status: All`) that open a menu or popover; the block's operator chips (`OperatorFilterChip`, `Amount: > 100`) are the same idea with an operator. FilterChips is one row of values for one dimension, all visible at once.
+- **Not a multi-select.** One value or none. For several values at once, use [ToggleGroup](/docs/components/toggle-group) or [TagGroup](/docs/components/tag-group) with `multiple`.
+- **Not tabs.** [Tabs](/docs/components/tabs) switch between panels; FilterChips filter the list that is already showing. They often sit together: tabs choose the list, chips filter it.
+- **A chip is not a link or a button.** A chip only selects. Rendering one as an `<a>` or a `<button>`, putting a remove control inside it, or placing the row inside a `role="toolbar"` is not supported.
+
+### Which to use
+
+| You need | Use |
+| --- | --- |
+| A general or form choice, with a `name` and validation | [RadioGroup](/docs/components/radio-group) |
+| Switching between panels | [Tabs](/docs/components/tabs) |
+| Pressable choices that can be cleared, or several at once | [ToggleGroup](/docs/components/toggle-group) or [TagGroup](/docs/components/tag-group) |
+| A display-only count or readout | [Badge](/docs/components/badge) |
+| A filter per dimension that opens a menu | the `filter-pills` kit, or the `OperatorFilterChip` in [admin-01](/docs/blocks/admin-01) |
+| One non-clearable filter with result counts | **FilterChips** |
+
+### Selection
+
+- `value` (controlled, `string | null`) or `defaultValue` (uncontrolled). `null`, no value, or a value no chip has selects nothing, and nothing is reported. Do not switch a row between controlled and uncontrolled.
+- `onValueChange(value, details)` fires when the user picks a chip: a click, Space, or an arrow key. Count updates, removing chips and focus moves never fire it. `details` is Base UI's change details; `details.cancel()` keeps the current choice.
+- In controlled mode the `value` you pass always wins: if you ignore a change, the old chip stays selected.
+- Removing the selected chip leaves the value unmatched; the row never picks a new value itself.
+- Values are strings and must be unique within a row; a duplicate logs an error in development.
+
+### Counts
+
+`count` draws a pill after the label. It must be a non-negative safe integer; anything else (negative, fractional, `NaN`, infinite, unsafe) draws no pill and logs a warning in development.
+
+- **Zero rule.** An unselected chip with `count={0}` is disabled. The selected chip is never disabled by the rule, so a row whose counts all drop to 0 keeps its current choice reachable. `disableEmpty={false}` on the row turns the rule off; `disabled={false}` on a chip does not re-enable it. With nothing selected, a row whose every count is 0 has no Tab stop.
+- **Printing.** By default the pill shows plain digits (`String(count)`), the same on the server and the client. `formatCount` on the row formats every pill, for example `1.2K` or `999+`; make it deterministic (a fixed locale), or server and client text will differ. The zero rule and `data-empty` always read the raw number. Digits are monospaced with tabular numbers, so counts with the same number of digits stay aligned.
+- **Name.** A chip is read as its label, a space, then the printed count: "Typography 3". For other wording pass `aria-label`, and include the count in it. The row adds no live region: announce result updates yourself if they matter.
+- `All` has no special meaning: pass its count like any other chip.
+
+### Server-backed results
+
+Update the selection at once and debounce or cancel the request, not the value setter, so the chosen chip responds immediately. Ignore responses for a value that is no longer selected.
+
+### Filters in the URL
+
+A chip is not a link, so keep the filter in the URL by updating the route in `onValueChange`:
+
+```tsx
+"use client";
+
+import { FilterChip, FilterChips } from "@keystoneui/react/filter-chips";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+export function TopicFilter({ counts }: { counts: Record<string, number> }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useSearchParams();
+  const topic = params.get("topic") ?? "all";
+
+  return (
+    <FilterChips
+      aria-label="Topic"
+      value={topic}
+      onValueChange={(next) => {
+        const query = new URLSearchParams(params);
+        if (next === "all") {
+          query.delete("topic");
+        } else {
+          query.set("topic", next);
+        }
+        router.replace(`${pathname}?${query}`, { scroll: false });
+      }}
+    >
+      <FilterChip value="all" count={counts.all}>All</FilterChip>
+      <FilterChip value="typography" count={counts.typography}>Typography</FilterChip>
+      <FilterChip value="color" count={counts.color}>Color</FilterChip>
+    </FilterChips>
+  );
+}
+```
+
+### Keyboard and focus
+
+- Tab enters the row on the selected chip, or on the first available chip when nothing is selected or the selected chip is disabled or hidden. Tab never selects.
+- Left/Right and Up/Down move focus and the choice together, skip disabled and hidden chips and wrap at the ends. Ctrl, Alt or Meta with an arrow does nothing. Space picks the focused chip; Enter does nothing; there is no Home or End.
+- The row handles arrow keys itself. `preventDefault()` in your own key handler does not stop them; call `event.preventBaseUIHandler()` to take an arrow key over.
+- A hidden chip (by `hidden`, `display: none`, `visibility: hidden`, `inert` or a media query) keeps its selection but is skipped. The row recomputes its Tab stop when Tab is pressed, so stylesheet and media changes are seen by keyboard users; something that reads `tabindex` between keys, such as a screen reader's virtual cursor, can see it out of date after a stylesheet-only change.
+- A value changed from outside while focus is in the row leaves focus where it is.
+- If the focused chip is removed or hidden, or its element is replaced, focus moves to the chip Tab would enter on, without selecting it. If there is none, focus returns to the document. If focus has already gone elsewhere, the row leaves it there.
+- A focused chip that becomes disabled keeps focus. The next arrow key moves to the nearest available chip in that direction, without wrapping from the disabled chip: at an end, the outward arrow does nothing. Tab still leaves the row.
+- Focusing a chip from code, or from a focus callback, never selects it; only an arrow key selects the chip it moves to.
+- A row nested inside another row's element is a row of its own: its arrow keys never move or select in the outer row.
+- Focusing a chip from code while the row is mounting or hydrating leaves the Tab stop on the entry chip until focus next moves; focus a chip after mount instead.
+
+Chips must be ordinary light-DOM descendants of their row. Portalled chips outside the row and chip hosts inside a shadow root are not supported. Keyboard entry uses the DOM and CSS already committed when the row's document-capture Tab listener runs; changes made later during that same key dispatch are outside that snapshot. In browsers without `Element.checkVisibility()`, the display fallback checks the chip's own display and cannot detect an ancestor hidden only with `display: none`.
+
+### Layout
+
+Chips wrap between each other with an 8px gap; a chip's label never wraps. A label wider than the row overflows it: shorten the label or give the row more room. The focus outline reaches 4px outside a chip, and the row adds no padding of its own, so give a clipping (`overflow`) container at least 4px of padding (`p-1`).
+
+Sizes sit one rung below the control tiers on purpose: `sm`, `default` and `lg` are 24, 32 and 40px, and 24, 28 and 32px under the compact density. A chip row is a secondary row of its own, under a toolbar or a tabs list; the tabs list keeps its 40px under compact density, so do not expect a compact chip row to line up with it.
+
+### Looks and motion
+
+A chip's label is medium weight. An unselected chip has the outline button's surface: the input border, the page fill (the input fill in dark mode) and the same hairline shadow, which it keeps when hovered or disabled; the selected chip has no shadow, like the solid button. The count pill is a faint tint of the chip's text colour laid over the chip's fill, so it stays just visible on an idle, hovered or disabled chip, on any surface: a step darker in light mode and a step lighter in dark mode. The selected chip's pill follows the same rule with its own text colour, at a weaker tint, so it does not read as a hard gray patch on the solid fill. A press changes only colour: chips never scale or move. Background, border, text colour and shadow ease together over the base duration with the in-out curve, and the pill recolours in step with its chip; under reduced motion the change is immediate.
+
+### Styling hooks
+
+The contract is `data-slot="filter-chips"`, `data-size` and `data-disabled` on the row; `data-slot="filter-chip"`, `data-selected`, `data-disabled` and `data-empty` on a chip; and `data-slot="filter-chip-count"` on the pill. Base UI also emits its own attributes on a chip (`data-checked`, `data-unchecked` and others); they are not part of this contract, so style the selected chip from `data-selected`. `className` and `render` accept functions of the component's own state. The chip's `group/filter-chip` class is internal, not a supported hook.
+
+### Inside a Field
+
+Inside a labelled Base UI `Field`, a chip without its own `aria-label` takes the Field's label as its name and loses its own text. Using the row inside a `Field` is not supported; label the row with `aria-label` or `aria-labelledby` instead.
+
+## Composition
+
+```text
+FilterChips
+└── FilterChip
+    └── count pill (drawn from the count prop)
+```
+
+## Examples
+
+### Sizes
+
+`sm`, `default` and `lg` are 24, 32 and 40px tall.
+
+<ComponentPreview name="filter-chips-sizes" />
+
+### Counts
+
+An unselected chip with a count of 0 is disabled, a chip without `count` draws no pill, and `formatCount` prints compact numbers.
+
+<ComponentPreview name="filter-chips-counts" />
+
+### Controlled
+
+The row's value filters the list below it; the counts come from the same data.
+
+<ComponentPreview name="filter-chips-controlled" />
+
+### Under Tabs
+
+Tabs choose the list and the chips filter it.
+
+<ComponentPreview name="filter-chips-under-tabs" />
+
+## RTL
+
+The pill sits at the end of the chip, so it moves to the left in right-to-left text. Arrow keys follow the reading direction only inside a `DirectionProvider direction="rtl"`; with `dir="rtl"` alone, ArrowRight still moves to the next chip in DOM order. See [the RTL guide](/docs/rtl).
+
+## API Reference
+
+### FilterChips
+
+The row. Renders a `<div role="radiogroup">`; the ref points to it.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string \| null` | - | The selected chip's value. `null` selects none. Controlled. |
+| `defaultValue` | `string \| null` | `null` | The initially selected chip's value. Uncontrolled. |
+| `onValueChange` | `(value: string, details: FilterChipsChangeEventDetails) => void` | - | Called when the user picks a chip. `details.cancel()` keeps the current choice. |
+| `disabled` | `boolean` | `false` | Disables every chip; the row leaves the Tab order. |
+| `size` | `"sm" \| "default" \| "lg"` | `"default"` | The size of every chip: 24, 32 or 40px. |
+| `disableEmpty` | `boolean` | `true` | Disable unselected chips whose count is 0. |
+| `formatCount` | `(count: number) => string` | - | Formats every pill. Must give the same text on server and client. |
+| `className` | `string \| ((state: FilterChipsState) => string \| undefined)` | - | Classes for the row. `state` is `{ disabled, size }`. |
+| `render` | `ReactElement \| ((props, state: FilterChipsState) => ReactElement)` | - | A non-interactive element to render instead of the `<div>`. It must forward the props, ref and children. |
+
+Also passes through `id`, `style` (an object), `aria-label`, `aria-labelledby`, `aria-describedby`, `dir`, `title`, `data-*` and DOM event handlers (merged with the row's own).
+
+### FilterChip
+
+A chip. Renders a `<span role="radio">` with a hidden radio input beside it; the ref points to the visible `<span>`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | - | Required. Unique within the row. |
+| `children` | `ReactNode` | - | The label. Icons take the usual 16px size. |
+| `count` | `number` | - | A non-negative safe integer drawn in a pill after the label. |
+| `disabled` | `boolean` | - | Disables this chip, selected or not. |
+| `className` | `string \| ((state: FilterChipState) => string \| undefined)` | - | Classes for the chip. `state` is `{ selected, disabled, empty, size }`. |
+| `render` | `ReactElement \| ((props, state: FilterChipState) => ReactElement)` | - | A non-interactive element to render instead of the `<span>`. It must forward the props, ref and children; children of the element you pass replace the label and pill, and you then own their visible and accessible text. |
+
+Also passes through `id` (placed on the hidden input, as Base UI does), `style` (an object), `aria-label`, `aria-labelledby`, `aria-describedby`, `title`, `data-*` and DOM event handlers (merged).
+
+Form props (`name`, `form`, `required`, `readOnly`, `inputRef`, `nativeButton`) are not part of FilterChips. A chip takes no `tabIndex`: the row owns the Tab stop.

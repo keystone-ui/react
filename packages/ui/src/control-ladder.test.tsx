@@ -11,6 +11,12 @@
  * and it has its own density switch (`size="compact"`). Pinned below so nobody
  * "fixes" it into alignment.
  *
+ * Filter chips sit one rung below by design: their `sm` / `default` / `lg` read
+ * the `xs` / `sm` / `default` rungs (24 / 32 / 40). A chip row is a secondary
+ * row of its own, under a toolbar or a tabs list, not a neighbour of a button
+ * or an input, so the size names describe the chip and not the rung. Pinned
+ * below like the rest.
+ *
  * These are *declaration* assertions. This project runs jsdom with no CSS
  * (`src/test/setup.ts` imports none), so `getComputedStyle` returns nothing
  * meaningful and no test here can prove two families render the same pixels.
@@ -34,6 +40,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { buttonVariants } from "./button";
+import { FilterChip, FilterChips } from "./filter-chips";
 import { Input } from "./input";
 import { InputGroup } from "./input-group";
 import { NativeSelect } from "./native-select";
@@ -165,6 +172,26 @@ describe("ladder: CVA families", () => {
         radiusTokens(buttonVariants({ size }))
       );
     }
+  });
+});
+
+// =============================================================================
+// Filter chips — one rung below, by design
+// =============================================================================
+describe("ladder: filter chips", () => {
+  it.each([
+    ["sm", XS],
+    ["default", SM],
+    ["lg", MD],
+  ] as const)("FilterChip %s is %s", (size, expected) => {
+    render(
+      <FilterChips aria-label="Topic" size={size}>
+        <FilterChip value="a">A</FilterChip>
+      </FilterChips>
+    );
+    expect(heightTokens(screen.getByRole("radio").className)).toEqual([
+      expected,
+    ]);
   });
 });
 
@@ -361,6 +388,7 @@ describe("ladder: no literal rungs", () => {
   const LADDER_FILES = [
     "button.tsx",
     "combobox.tsx",
+    "filter-chips.tsx",
     "input-group.tsx",
     "input.tsx",
     "native-select.tsx",
