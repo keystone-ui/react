@@ -8,8 +8,9 @@ import { type AdminSection, AdminSidebar } from "@/components/admin-sidebar";
 import { AdminTopbar } from "@/components/admin-topbar";
 import { AdminUserDetail } from "@/components/admin-user-detail";
 import { AdminUsersTable } from "@/components/admin-users-table";
-import { adminMetrics, signupsByMonth, users } from "@/components/mock-admin";
+import { adminMetrics, signupsByMonth } from "@/components/mock-admin";
 import { payments } from "@/components/mock-payments";
+import { users } from "@/components/mock-users";
 import { PaymentDetailDrawer } from "@/components/payment-detail-drawer";
 import {
   paymentsFromParams,
@@ -116,7 +117,11 @@ export function AdminPage() {
           ) : null}
 
           {section === "users" && !openUser ? (
-            <AdminUsersTable onOpenUser={setOpenUserId} table={usersTable} />
+            <AdminUsersTable
+              onOpenUser={setOpenUserId}
+              table={usersTable}
+              users={users}
+            />
           ) : null}
 
           {section === "overview" ? (

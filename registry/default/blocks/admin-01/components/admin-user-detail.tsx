@@ -3,7 +3,7 @@
 import { ArchiveIcon, ArrowLeftIcon, PencilIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { STATUS_VARIANT } from "@/components/admin-filters";
-import { statusLabels, type User } from "@/components/mock-admin";
+import { statusLabels, type User } from "@/components/mock-users";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

@@ -10,6 +10,9 @@ import { defineConfig } from "vitest/config";
  *             right after the production build.
  */
 export default defineConfig({
+  // tsconfig keeps JSX for Next (`jsx: preserve`); tests that render a block
+  // demo need it compiled.
+  oxc: { jsx: { runtime: "automatic" } },
   resolve: {
     alias: {
       "@": resolve(import.meta.dirname, "."),

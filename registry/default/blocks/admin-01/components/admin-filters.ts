@@ -22,7 +22,7 @@ import {
   type Status,
   statusLabels,
   type User,
-} from "@/components/mock-admin";
+} from "@/components/mock-users";
 import type {
   SortState as BaseSortState,
   SortDirection,

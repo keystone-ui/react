@@ -303,6 +303,11 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("block-tickets-01", m.default),
     }))
   ),
+  "block-users-01": dynamic(() =>
+    import("./blocks/users-01/index").then((m) => ({
+      default: hydrated("block-users-01", m.default),
+    }))
+  ),
   "breadcrumb-collapsed": dynamic(() =>
     import("./breadcrumb/collapsed").then((m) => ({
       default: hydrated("breadcrumb-collapsed", m.default),

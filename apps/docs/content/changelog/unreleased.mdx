@@ -1,7 +1,7 @@
 ---
 date: "2026-11-14"
 description: "What's coming in the next release"
-excerpt: "12 changes queued for the next release."
+excerpt: "13 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -104,3 +104,9 @@ This also fixes `Tag`: an ordinary space on its own between parts, such as `<Ico
 ### ToggleGroup: vertical groups move focus with the Up and Down arrows
 
 `<ToggleGroup orientation="vertical">` stacked its items but still moved focus with ArrowLeft and ArrowRight, because `orientation` only set `data-orientation` and never reached the Base UI primitive. It is now passed through, so a vertical group responds to ArrowUp and ArrowDown. Horizontal groups, including their mirrored arrows under `dir="rtl"`, are unchanged.
+
+---
+
+### Add the users-01 block
+
+The admin users table on its own — filter pills, sort and columns menus, a selection bar, a user record view and URL-synced state — installing the same files as `admin-01`. The `admin-01` tables now also show rows that arrive after mount.
