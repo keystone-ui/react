@@ -3,6 +3,7 @@ import { homedir } from "node:os";
 import { resolve } from "node:path";
 
 import { loadProjectConfig } from "./config.js";
+import { displayUrl } from "./display-url.js";
 import { readPackageVersion } from "./package-version.js";
 import {
   detectProjectContext,
@@ -127,15 +128,15 @@ function collect(): InfoData {
       node: process.version,
       platform: process.platform,
       cwd,
-      registryUrl: config.registry.url,
-      docsUrl,
+      registryUrl: displayUrl(config.registry.url),
+      docsUrl: displayUrl(docsUrl),
     },
     mcpClients: detectMcpClients(cwd),
     installedPackages: detectInstalledPackages(cwd),
     links: {
-      docs: docsUrl,
-      registry: `${config.registry.url}/registry.json`,
-      llms: `${docsUrl}/llms.txt`,
+      docs: displayUrl(docsUrl),
+      registry: displayUrl(`${config.registry.url}/registry.json`),
+      llms: displayUrl(`${docsUrl}/llms.txt`),
     },
   };
 }

@@ -1,3 +1,4 @@
+import { displayUrl, redactUrlInError } from "./display-url.js";
 import type { RegistryItem, RegistryManifest } from "./types.js";
 
 const cache = new Map<string, { data: unknown; timestamp: number }>();
@@ -9,9 +10,14 @@ async function fetchJson<T>(url: string): Promise<T> {
     return cached.data as T;
   }
 
-  const response = await fetch(url);
+  let response: Response;
+  try {
+    response = await fetch(url);
+  } catch (error) {
+    throw redactUrlInError(error, url);
+  }
   if (!response.ok) {
-    throw new Error(`Failed to fetch ${url}: ${response.status}`);
+    throw new Error(`Failed to fetch ${displayUrl(url)}: ${response.status}`);
   }
 
   const data = (await response.json()) as T;
