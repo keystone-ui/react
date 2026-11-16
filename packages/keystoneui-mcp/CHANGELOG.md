@@ -1,5 +1,18 @@
 # @keystoneui/mcp
 
+## 0.2.0-beta.5
+
+### Patch Changes
+
+- 8a969f9: `init` points to the docs on projects you do not trust
+  
+  After writing a client configuration, or printing the Codex entry, `init` prints one line linking to the docs section to read before using the server in a project you have not reviewed. The usage text now names `@keystoneui/mcp@latest`; what `init` writes is unchanged.
+- f6cba6f: Stop printing credentials from configured URLs in errors and `info`
+  
+  Error messages, `get_docs`'s unreachable message and `keystoneui info` (text and `--json`) no longer echo the username, password, query values or fragment of a registry or docs URL set through `KEYSTONEUI_URL`, `KEYSTONEUI_REGISTRY_URL` or `components.json`. A URL that is not `http`, `https` or `file` (such as `user:secret@host`, missing its scheme) is shown as a placeholder. The URL actually fetched is unchanged.
+  
+  Install commands and theme links are printed as configured.
+
 ## 0.2.0-beta.4
 
 ### Minor Changes
