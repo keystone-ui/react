@@ -204,7 +204,7 @@ The pill sits at the end of the chip, so it moves to the left in right-to-left t
 
 ### FilterChips
 
-The row. Renders a `<div role="radiogroup">`; the ref points to it.
+The row. Renders a `<div role="radiogroup">`; the ref (`Ref<HTMLElement>`, since `render` can swap the element) points to it.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -222,7 +222,7 @@ Also passes through `id`, `style` (an object), `aria-label`, `aria-labelledby`, 
 
 ### FilterChip
 
-A chip. Renders a `<span role="radio">` with a hidden radio input beside it; the ref points to the visible `<span>`.
+A chip. Renders a `<span role="radio">` with a hidden radio input beside it; the ref (`Ref<HTMLElement>`) points to the visible `<span>`, or to the element `render` puts in its place.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -235,4 +235,6 @@ A chip. Renders a `<span role="radio">` with a hidden radio input beside it; the
 
 Also passes through `id` (placed on the hidden input, as Base UI does), `style` (an object), `aria-label`, `aria-labelledby`, `aria-describedby`, `title`, `data-*` and DOM event handlers (merged).
 
-Form props (`name`, `form`, `required`, `readOnly`, `inputRef`, `nativeButton`) are not part of FilterChips. A chip takes no `tabIndex`: the row owns the Tab stop.
+Form props (`name`, `form`, `required`, `readOnly`, `inputRef`, `nativeButton`) are not part of FilterChips. Neither the row nor a chip takes `tabIndex`: the row owns its one Tab stop.
+
+The `render` type is exported as `FilterChipsRenderProp<State>`: `FilterChipsRenderProp<FilterChipsState>` on the row, `FilterChipsRenderProp<FilterChipState>` on a chip.

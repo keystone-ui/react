@@ -5,6 +5,7 @@ import {
   FilterChip,
   type FilterChipState,
   FilterChips,
+  type FilterChipsRenderProp,
   type FilterChipsSize,
   type FilterChipsState,
 } from "@keystoneui/react/filter-chips";
@@ -21,6 +22,7 @@ import {
   memo,
   Profiler,
   type ReactElement,
+  type RefObject,
   useMemo,
   useState,
 } from "react";
@@ -4128,6 +4130,21 @@ const typedChipClass = (state: FilterChipState) =>
   state.selected ? "on" : "off";
 const typedRowClass = (state: FilterChipsState) => `size-${state.size}`;
 const typedSize: FilterChipsSize = "sm";
+const typedRowRef: RefObject<HTMLElement | null> = { current: null };
+const typedChipRef: RefObject<HTMLDivElement | null> = { current: null };
+const typedRowRender: FilterChipsRenderProp<FilterChipsState> = (props) => (
+  <div {...props} />
+);
+const typedChipRender: FilterChipsRenderProp<FilterChipState> = (props) => (
+  <div {...props} />
+);
+const wrongStateRender: FilterChipsRenderProp<FilterChipState> = (
+  props,
+  state
+) => (
+  // @ts-expect-error a chip's state has no `checked`
+  <div {...props} data-checked={state.checked} />
+);
 
 export const typeContract = [
   // @ts-expect-error a form name is not part of the row's contract
@@ -4146,6 +4163,17 @@ export const typeContract = [
   <FilterChip key="tabIndex" tabIndex={0} value="a" />,
   // @ts-expect-error a function style would receive the primitive's state
   <FilterChip key="chip-style" style={functionStyle} value="a" />,
+  // @ts-expect-error the row owns its one Tab stop
+  <FilterChips aria-label="Topic" key="row-tabIndex" tabIndex={0} />,
+  <FilterChips
+    aria-label="Topic"
+    key="row-ref"
+    ref={typedRowRef}
+    render={typedRowRender}
+  >
+    <FilterChip ref={typedChipRef} render={typedChipRender} value="a" />
+  </FilterChips>,
+  <FilterChip key="wrong-state" render={wrongStateRender} value="a" />,
   <FilterChips
     aria-label="Topic"
     className={typedRowClass}

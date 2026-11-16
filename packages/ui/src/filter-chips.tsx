@@ -3,6 +3,7 @@
 import { useDirection } from "@base-ui/react/direction-provider";
 import { Radio as RadioPrimitive } from "@base-ui/react/radio";
 import { RadioGroup as RadioGroupPrimitive } from "@base-ui/react/radio-group";
+import type { ComponentRenderFn, HTMLProps } from "@base-ui/react/types";
 import { cva } from "class-variance-authority";
 import type * as React from "react";
 import {
@@ -44,14 +45,13 @@ interface FilterChipState {
 /** The details object passed to `onValueChange`. Base UI's own. */
 type FilterChipsChangeEventDetails = RadioGroupPrimitive.ChangeEventDetails;
 
-type RenderProp<State> =
+/**
+ * What `render` accepts on the row and on a chip: an element, or a function
+ * of the props and the component's own state.
+ */
+type FilterChipsRenderProp<State> =
   | React.ReactElement
-  | ((
-      props: React.HTMLAttributes<HTMLElement> & {
-        ref?: React.Ref<HTMLElement>;
-      },
-      state: State
-    ) => React.ReactElement);
+  | ComponentRenderFn<HTMLProps, State>;
 
 interface FilterChipsProps
   extends Omit<
@@ -68,6 +68,7 @@ interface FilterChipsProps
     | "render"
     | "required"
     | "style"
+    | "tabIndex"
     | "value"
   > {
   className?: string | ((state: FilterChipsState) => string | undefined);
@@ -87,8 +88,8 @@ interface FilterChipsProps
     value: string,
     details: FilterChipsChangeEventDetails
   ) => void;
-  ref?: React.Ref<HTMLDivElement>;
-  render?: RenderProp<FilterChipsState>;
+  ref?: React.Ref<HTMLElement>;
+  render?: FilterChipsRenderProp<FilterChipsState>;
   /**
    * The size of every chip.
    * @default "default"
@@ -122,8 +123,8 @@ interface FilterChipProps
   count?: number;
   /** Disables this chip. */
   disabled?: boolean;
-  ref?: React.Ref<HTMLSpanElement>;
-  render?: RenderProp<FilterChipState>;
+  ref?: React.Ref<HTMLElement>;
+  render?: FilterChipsRenderProp<FilterChipState>;
   style?: React.CSSProperties;
   /** The chip's value. Unique within its row. */
   value: string;
@@ -240,7 +241,15 @@ function isValidCount(count: unknown): count is number {
  * Props the primitives accept that are not part of this component's contract. The types
  * leave them out; this drops them at run time too, for untyped callers.
  */
-const ROW_DROPPED = ["form", "inputRef", "name", "readOnly", "required"];
+const ROW_DROPPED = [
+  "form",
+  "inputRef",
+  "name",
+  "readOnly",
+  "required",
+  // The row manages its one Tab stop itself; a group tabIndex adds a second.
+  "tabIndex",
+];
 const CHIP_DROPPED = [
   "inputRef",
   "nativeButton",
@@ -296,7 +305,7 @@ function attachRef<T>(ref: React.Ref<T> | undefined, node: T): () => void {
 }
 
 function mapRender<State>(
-  render: RenderProp<State> | undefined,
+  render: FilterChipsRenderProp<State> | undefined,
   state: State
 ): React.ReactElement | ((props: object) => React.ReactElement) | undefined {
   if (typeof render !== "function") {
@@ -1007,6 +1016,7 @@ export type {
   FilterChipState,
   FilterChipsChangeEventDetails,
   FilterChipsProps,
+  FilterChipsRenderProp,
   FilterChipsSize,
   FilterChipsState,
 };

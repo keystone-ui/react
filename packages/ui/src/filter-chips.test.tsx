@@ -19,6 +19,7 @@ import {
   type FilterChipState,
   FilterChips,
   type FilterChipsChangeEventDetails,
+  type FilterChipsRenderProp,
   type FilterChipsState,
 } from "./filter-chips";
 
@@ -631,6 +632,59 @@ describe("FilterChips surface", () => {
     expect(chipRef.current).toBe(a);
   });
 
+  test("a render prop can be named by its public type", () => {
+    const rowRef = React.createRef<HTMLElement>();
+    const chipRef = React.createRef<HTMLDivElement>();
+    const rowRender: FilterChipsRenderProp<FilterChipsState> = (props) => (
+      <div {...props} />
+    );
+    const chipRender: FilterChipsRenderProp<FilterChipState> = (props) => (
+      <div {...props} />
+    );
+    render(
+      <FilterChips aria-label="Topic" ref={rowRef} render={rowRender} value="a">
+        <FilterChip count={4} ref={chipRef} render={chipRender} value="a">
+          A
+        </FilterChip>
+      </FilterChips>
+    );
+    const group = screen.getByRole("radiogroup");
+    expect(group.tagName).toBe("DIV");
+    expect(rowRef.current).toBe(group);
+    const a = screen.getByRole("radio");
+    expect(a.tagName).toBe("DIV");
+    expect(chipRef.current).toBe(a);
+    expect(a).toHaveAttribute("aria-checked", "true");
+    expect(a).toHaveTextContent("A 4");
+    expect(
+      a.querySelector('[data-slot="filter-chip-count"]')
+    ).toHaveTextContent("4");
+  });
+
+  test("a ref can be typed for the element render swaps in", () => {
+    // `render` can replace the row's <div> and the chip's <span>, so the
+    // refs accept any HTMLElement, including one typed for the new element.
+    // Only the row's case can fail to compile: a span adds no members to
+    // HTMLElement, so any element ref already fits the chip's.
+    const rowRef = React.createRef<HTMLElement>();
+    const chipRef = React.createRef<HTMLDivElement>();
+    render(
+      <FilterChips
+        aria-label="Topic"
+        ref={rowRef}
+        render={<section />}
+        value="a"
+      >
+        <FilterChip ref={chipRef} render={<div />} value="a">
+          A
+        </FilterChip>
+      </FilterChips>
+    );
+    expect(rowRef.current?.tagName).toBe("SECTION");
+    expect(chipRef.current).toBe(screen.getByRole("radio"));
+    expect(chipRef.current?.tagName).toBe("DIV");
+  });
+
   test("a render function receives the component's own state", () => {
     const rowRender = (
       props: React.HTMLAttributes<HTMLElement>,
@@ -783,6 +837,28 @@ describe("FilterChips surface", () => {
     expect(chip("A").tagName).toBe("SPAN");
     expect(container.querySelector("input#chip-a")).not.toBeNull();
     expect(chip("A")).not.toHaveAttribute("id", "chip-a");
+  });
+
+  test("a row's tabIndex does not reach the DOM", () => {
+    // The row owns the one Tab stop; a tabIndex on the group would add a
+    // second one beside it.
+    const extra = { tabIndex: 7 } as object;
+    const { container } = render(
+      <FilterChips aria-label="Topic" defaultValue="a" {...extra}>
+        <FilterChip value="a">A</FilterChip>
+        <FilterChip value="b">B</FilterChip>
+      </FilterChips>
+    );
+    expect(container.querySelector('[tabindex="7"]')).toBeNull();
+    expect(screen.getByRole("radiogroup")).not.toHaveAttribute("tabindex");
+  });
+
+  test("the types reject a row tabIndex", () => {
+    const elements = [
+      // @ts-expect-error the row owns the Tab stop
+      <FilterChips aria-label="Topic" key="tabIndex" tabIndex={0} />,
+    ];
+    expect(elements).toHaveLength(1);
   });
 
   test("the types accept no form props and only an object style", () => {
