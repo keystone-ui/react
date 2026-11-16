@@ -18,10 +18,20 @@ const { parse: parseYaml } = createRequire(
   new URL("../../apps/docs/package.json", import.meta.url)
 )("yaml");
 
-/** The inline form at the start of a line or right after whitespace. */
-const INLINE_AT_LOAD = /(?:^|\s)!`/;
-/** A fence of three or more backticks or tildes followed directly by `!`. */
-const FENCE_AT_LOAD = /^\s*(?:`{3,}|~{3,})!/;
+/**
+ * The rule, in one place. A line fails if it contains, ANYWHERE:
+ *
+ *  1. the inline form: an exclamation mark directly followed by a backtick;
+ *  2. the fence form: three or more backticks, or three or more tildes,
+ *     directly followed by an exclamation mark.
+ *
+ * Neither is anchored to the start of the line or to whitespace, so every
+ * position is covered: after a list marker, a numbered marker, a blockquote
+ * marker with or without a space, any nesting of them, or mid-line. This is
+ * deliberately broader than any one host's parser: a false alarm on an odd
+ * documented line is acceptable, a miss is not.
+ */
+const RUNS_AT_LOAD = /!`|`{3}!|~{3}!/;
 
 /**
  * Lines that run a shell command when the skill loads.
@@ -32,7 +42,7 @@ const FENCE_AT_LOAD = /^\s*(?:`{3,}|~{3,})!/;
 export function loadTimeCommandProblems(skillMd) {
   const problems = [];
   skillMd.split("\n").forEach((text, i) => {
-    if (INLINE_AT_LOAD.test(text) || FENCE_AT_LOAD.test(text)) {
+    if (RUNS_AT_LOAD.test(text)) {
       problems.push({
         line: i + 1,
         message: `runs a shell command when the skill loads: ${text.trim().slice(0, 110)}`,
