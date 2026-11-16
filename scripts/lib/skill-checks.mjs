@@ -11,6 +11,13 @@
  * scripts/lint-skill.mjs and its tests.
  */
 
+import { createRequire } from "node:module";
+
+// The YAML parser the docs app already depends on; no new dependency.
+const { parse: parseYaml } = createRequire(
+  new URL("../../apps/docs/package.json", import.meta.url)
+)("yaml");
+
 /**
  * Lines that run a shell command when the skill loads.
  *
@@ -31,39 +38,53 @@ export function loadTimeCommandProblems(skillMd) {
 }
 
 /**
- * Front-matter keys that pre-approve commands.
+ * Front-matter keys that pre-approve commands. The value is judged as a YAML
+ * parser reads it, so every spelling of a non-empty value fails: an absent
+ * key, null, an empty string and an empty list are the only values that pass.
+ * Only the front matter is read; commands documented in the body do not count.
  *
  * @param {string} skillMd
  * @returns {{ line: number, message: string }[]}
  */
 export function frontMatterProblems(skillMd) {
-  const frontMatter = skillMd.match(/^---\n([\s\S]*?)\n---\n/);
+  const frontMatter = skillMd.match(FRONT_MATTER);
   if (!frontMatter) {
     return [{ line: 1, message: "no front matter found" }];
   }
-  const fmLines = frontMatter[1].split("\n");
-  const at = fmLines.findIndex((line) => line.startsWith("allowed-tools:"));
-  if (at === -1) {
-    return [];
+  let data;
+  try {
+    data = parseYaml(frontMatter[1]);
+  } catch (error) {
+    return [
+      { line: 1, message: `front matter is not valid YAML: ${error.message}` },
+    ];
   }
-  const inline = fmLines[at].slice("allowed-tools:".length).trim();
-  const listed = [];
-  for (const line of fmLines.slice(at + 1)) {
-    if (!/^\s+-/.test(line)) {
-      break;
-    }
-    listed.push(line.trim());
+  if (data === null || typeof data !== "object" || Array.isArray(data)) {
+    return [{ line: 1, message: "front matter is not a YAML mapping" }];
   }
+
+  const problems = [];
+  const value = data["allowed-tools"];
   const empty =
-    (inline === "" || inline === "[]" || inline === '""') &&
-    listed.length === 0;
-  return empty
-    ? []
-    : [
-        {
-          line: at + 2,
-          message:
-            "pre-approves commands; the allowed-tools list must be empty",
-        },
-      ];
+    value === undefined ||
+    value === null ||
+    value === "" ||
+    (Array.isArray(value) && value.length === 0);
+  if (!empty) {
+    problems.push({
+      line: keyLine(frontMatter[1], "allowed-tools"),
+      message: "pre-approves commands; the allowed-tools list must be empty",
+    });
+  }
+  return problems;
+}
+
+const FRONT_MATTER = /^---\n([\s\S]*?)\n---\n/;
+
+/** 1-based line of a top-level key in SKILL.md (front matter starts on 2). */
+function keyLine(frontMatter, key) {
+  const at = frontMatter
+    .split("\n")
+    .findIndex((line) => line.startsWith(`${key}:`));
+  return at === -1 ? 1 : at + 2;
 }
