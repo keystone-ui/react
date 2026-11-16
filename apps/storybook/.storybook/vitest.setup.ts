@@ -17,7 +17,6 @@ const _annotations = setProjectAnnotations([
 (globalThis as { __realUserEvent?: typeof userEvent }).__realUserEvent =
   userEvent;
 
-// A held press and a touch screen's `hover: none` (custom commands in
-// vitest.config.ts), for plays that must see `:active` while the pointer is
-// still down. Absent under Storybook.
+// A held press (custom commands in vitest.config.ts), for plays that must
+// see `:active` while the pointer is still down. Absent under Storybook.
 (globalThis as { __realCommands?: typeof commands }).__realCommands = commands;

@@ -576,7 +576,6 @@ export const Custom: Story = {
 
 /** The custom browser commands registered in vitest.config.ts. */
 interface RealCommands {
-  emulateNoHover: (on: boolean) => Promise<void>;
   pointerDown: () => Promise<void>;
   pointerMoveAway: () => Promise<void>;
   pointerMoveTo: (selector: string) => Promise<void>;
@@ -741,28 +740,53 @@ interface Held {
   background: string;
   color: string;
   gap?: number;
+  /** Whether the pointer was over the item while it was measured. */
+  hovered: boolean;
   rect: DOMRect;
   scale: number;
 }
 
-/** Holds a real mouse down on the element, measures, then lets go off it. */
+/** Waits (a frame at a time, up to about a second) until `test` holds. */
+async function until(test: () => boolean) {
+  for (let i = 0; i < 60 && !test(); i++) {
+    // biome-ignore lint/performance/noAwaitInLoops: one frame at a time
+    await nextFrame();
+  }
+  return test();
+}
+
+/**
+ * Holds a real mouse down on the element, measures, then lets go off it.
+ * With `pointer: "off"` the pointer slides off the item while the button is
+ * still down, so the item stays `:active` but is not `:hover`: a press
+ * without hover, as a touch press gives the CSS. Each hold moves the pointer
+ * itself and waits for the hover state it needs, so it never depends on where
+ * an earlier play left the pointer.
+ */
 async function hold(
   commands: RealCommands,
   root: HTMLElement,
   id: string,
   neighbour: string | undefined,
-  orientation: "horizontal" | "vertical"
+  orientation: "horizontal" | "vertical",
+  pointer: "over" | "off" = "over"
 ): Promise<Held> {
   const el = byTestId(root, id);
   await commands.pointerMoveTo(`[data-testid="${id}"]`);
+  await until(() => el.matches(":hover"));
   await commands.pointerDown();
   try {
+    if (pointer === "off") {
+      await commands.pointerMoveAway();
+      await until(() => !el.matches(":hover"));
+    }
     await settled(el);
     const rect = el.getBoundingClientRect();
     return {
       active: el.matches(":active"),
       background: getComputedStyle(el).backgroundColor,
       color: getComputedStyle(el).color,
+      hovered: el.matches(":hover"),
       gap: neighbour
         ? facingGap(
             rect,
@@ -789,9 +813,14 @@ async function hoverStyle(
   const el = byTestId(root, id);
   await commands.pointerMoveTo(`[data-testid="${id}"]`);
   try {
+    await until(() => el.matches(":hover"));
     await settled(el);
     const style = getComputedStyle(el);
-    return { background: style.backgroundColor, color: style.color };
+    return {
+      background: style.backgroundColor,
+      color: style.color,
+      hovered: el.matches(":hover"),
+    };
   } finally {
     await commands.pointerMoveAway();
     await settled(el);
@@ -819,39 +848,32 @@ async function checkConsumerFills(commands: RealCommands, root: HTMLElement) {
       const id = `consumer-${v}${theme}-0`;
       for (const noHover of [false, true]) {
         // biome-ignore lint/performance/noAwaitInLoops: one real pointer at a time
-        await commands.emulateNoHover(noHover);
-        try {
-          const held = await hold(commands, root, id, undefined, "horizontal");
-          const label = `consumer ${v}${theme}${noHover ? " (no hover)" : ""}`;
-          console.log(
-            `[press] ${label}: ${JSON.stringify({
-              expected,
-              held: held.background,
-              scale: held.scale,
-            })}`
-          );
-          await expect(held.active, `${label}: :active`).toBe(true);
-          await expect(held.background, `${label}: consumer fill`).toBe(
-            expected
-          );
-        } finally {
-          await commands.emulateNoHover(false);
-        }
+        const held = await hold(
+          commands,
+          root,
+          id,
+          undefined,
+          "horizontal",
+          noHover ? "off" : "over"
+        );
+        const label = `consumer ${v}${theme}${noHover ? " (no hover)" : ""}`;
+        console.log(
+          `[press] ${label}: ${JSON.stringify({
+            expected,
+            held: held.background,
+            scale: held.scale,
+          })}`
+        );
+        await expect(held.active, `${label}: :active`).toBe(true);
+        await expect(held.hovered, `${label}: :hover`).toBe(!noHover);
+        await expect(held.background, `${label}: consumer fill`).toBe(expected);
       }
     }
   }
 }
 
-/**
- * Holds a real pointer down on an item without letting go. In a joined group
- * (`spacing` 0) the held item must not shrink, so no gap opens beside its
- * neighbour; the press shows as the variant's hover fill instead, which a
- * touch screen (no hover) is checked for. A spaced group and a standalone
- * Toggle keep the press scale.
- */
-export const PressFeedback: Story = {
-  name: "Press Feedback",
-  render: () => (
+function PressFeedbackScene() {
+  return (
     <div className="flex flex-col items-start gap-6">
       <PressGroup id="joined-default" variant="default" />
       <PressGroup id="joined-outline" variant="outline" />
@@ -900,7 +922,19 @@ export const PressFeedback: Story = {
         Standalone
       </Toggle>
     </div>
-  ),
+  );
+}
+
+/**
+ * Holds a real pointer down on an item without letting go. In a joined group
+ * (`spacing` 0) the held item must not shrink, so no gap opens beside its
+ * neighbour; the press shows as the variant's hover fill instead, also
+ * without hover (the pointer slid off the held item). A spaced group and a
+ * standalone Toggle keep the press scale.
+ */
+export const PressFeedback: Story = {
+  name: "Press Feedback",
+  render: () => <PressFeedbackScene />,
   play: async ({ canvasElement }) => {
     const commands = realCommands();
     if (!commands) {
@@ -958,70 +992,68 @@ export const PressFeedback: Story = {
         `${c.label}: gap to neighbour`
       ).toBeLessThan(0.1);
 
-      // The pressed fill, on a screen without hover: the variant's hover fill
-      // for an item that is off; an item that is on keeps its on fill.
+      // The pressed fill without hover (the pointer slid off the held item,
+      // as a touch press gives the CSS): the variant's hover fill for an item
+      // that is off; an item that is on keeps its on fill.
       const hover = await hoverStyle(commands, canvasElement, c.item);
+      await expect(hover.hovered, `${c.label}: :hover for the hover fill`).toBe(
+        true
+      );
       const hoverFill = hover.background;
       const onEl = byTestId(canvasElement, c.on as string);
       const onFill = getComputedStyle(onEl).backgroundColor;
       const onColor = getComputedStyle(onEl).color;
-      await commands.emulateNoHover(true);
-      await nextFrame();
-      try {
-        await expect(
-          window.matchMedia("(hover: hover)").matches,
-          "hover emulated off"
-        ).toBe(false);
-        const pressedOff = await hold(
-          commands,
-          canvasElement,
-          c.item,
-          undefined,
-          c.orientation
-        );
-        const pressedOn = await hold(
-          commands,
-          canvasElement,
-          c.on as string,
-          undefined,
-          c.orientation
-        );
-        console.log(
-          `[press] ${c.label} fill (hover: none): ${JSON.stringify({
-            hoverFill,
-            pressedOff: pressedOff.background,
-            onFill,
-            pressedOn: pressedOn.background,
-          })}`
-        );
-        await expect(pressedOff.active, `${c.label}: :active (touch)`).toBe(
-          true
-        );
-        await expect(pressedOn.active, `${c.label}: :active on item`).toBe(
-          true
-        );
-        await expect(
-          pressedOff.background,
-          `${c.label}: pressed fill of an off item`
-        ).toBe(hoverFill);
-        await expect(
-          pressedOn.background,
-          `${c.label}: pressed fill of an on item`
-        ).toBe(onFill);
-        await expect(
-          pressedOff.color,
-          `${c.label}: pressed text of an off item`
-        ).toBe(hover.color);
-        await expect(
-          pressedOn.color,
-          `${c.label}: pressed text of an on item`
-        ).toBe(onColor);
-      } finally {
-        await commands.emulateNoHover(false);
-      }
+      const pressedOff = await hold(
+        commands,
+        canvasElement,
+        c.item,
+        undefined,
+        c.orientation,
+        "off"
+      );
+      const pressedOn = await hold(
+        commands,
+        canvasElement,
+        c.on as string,
+        undefined,
+        c.orientation,
+        "off"
+      );
+      console.log(
+        `[press] ${c.label} fill (no hover): ${JSON.stringify({
+          hoverFill,
+          pressedOff: pressedOff.background,
+          onFill,
+          pressedOn: pressedOn.background,
+        })}`
+      );
+      await expect(pressedOff.active, `${c.label}: :active (no hover)`).toBe(
+        true
+      );
+      await expect(pressedOn.active, `${c.label}: :active on item`).toBe(true);
+      await expect(pressedOff.hovered, `${c.label}: off item not :hover`).toBe(
+        false
+      );
+      await expect(pressedOn.hovered, `${c.label}: on item not :hover`).toBe(
+        false
+      );
+      await expect(
+        pressedOff.background,
+        `${c.label}: pressed fill of an off item`
+      ).toBe(hoverFill);
+      await expect(
+        pressedOn.background,
+        `${c.label}: pressed fill of an on item`
+      ).toBe(onFill);
+      await expect(
+        pressedOff.color,
+        `${c.label}: pressed text of an off item`
+      ).toBe(hover.color);
+      await expect(
+        pressedOn.color,
+        `${c.label}: pressed text of an on item`
+      ).toBe(onColor);
     }
-
-    await checkConsumerFills(commands, canvasElement);
   },
   parameters: {
     docs: {
@@ -1030,6 +1062,23 @@ export const PressFeedback: Story = {
           "Holding the pointer on a joined item leaves it in place and shows the hover fill; spaced items and a standalone Toggle keep the press scale.",
       },
     },
+  },
+};
+
+/**
+ * A consumer's own press fill on a joined item, held with and without hover.
+ * Its own story so that neither play runs near the per-test time limit: a
+ * play that times out keeps running and moves the pointer under the next one.
+ */
+export const PressFeedbackConsumer: Story = {
+  name: "Press Feedback Consumer",
+  render: () => <PressFeedbackScene />,
+  play: async ({ canvasElement }) => {
+    const commands = realCommands();
+    if (!commands) {
+      return;
+    }
+    await checkConsumerFills(commands, canvasElement);
   },
 };
 
@@ -1220,30 +1269,32 @@ async function measureMatrix(
     for (const state of ["off", "on"] as const) {
       for (const noHover of [false, true]) {
         const id = `m-${theme}-${consumer}-${state}`;
+        const rest = getComputedStyle(byTestId(root, id)).backgroundColor;
         // biome-ignore lint/performance/noAwaitInLoops: one real pointer at a time
-        await commands.emulateNoHover(noHover);
-        try {
-          await nextFrame();
-          const rest = getComputedStyle(byTestId(root, id)).backgroundColor;
-          const held = await hold(commands, root, id, undefined, "horizontal");
-          const label = `${variant} ${theme} ${state} ${consumer} ${noHover ? "no-hover" : "hover"}`;
-          cells.push(
-            `${label}: rest=${tokenOf(root, theme, rest)} held=${tokenOf(root, theme, held.background)}`
-          );
-          await expect(held.active, `${label}: :active`).toBe(true);
-          const token = expectedToken(variant, theme, state, consumer, noHover);
-          await expect(held.background, `${label}: held fill (${token})`).toBe(
-            getComputedStyle(byTestId(root, `swatch-${theme}-${token}`))
-              .backgroundColor
-          );
-          // Compare unchanged on items with their own fill before the press.
-          // The panel gives accent a distinct value so default's hover and on
-          // fills cannot pass this check merely because the theme aliases them.
-          if (state === "on" && token === onToken(variant, theme)) {
-            await expect(held.background, `${label}: on fill kept`).toBe(rest);
-          }
-        } finally {
-          await commands.emulateNoHover(false);
+        const held = await hold(
+          commands,
+          root,
+          id,
+          undefined,
+          "horizontal",
+          noHover ? "off" : "over"
+        );
+        const label = `${variant} ${theme} ${state} ${consumer} ${noHover ? "no-hover" : "hover"}`;
+        cells.push(
+          `${label}: rest=${tokenOf(root, theme, rest)} held=${tokenOf(root, theme, held.background)}`
+        );
+        await expect(held.active, `${label}: :active`).toBe(true);
+        await expect(held.hovered, `${label}: :hover`).toBe(!noHover);
+        const token = expectedToken(variant, theme, state, consumer, noHover);
+        await expect(held.background, `${label}: held fill (${token})`).toBe(
+          getComputedStyle(byTestId(root, `swatch-${theme}-${token}`))
+            .backgroundColor
+        );
+        // Compare unchanged on items with their own fill before the press.
+        // The panel gives accent a distinct value so default's hover and on
+        // fills cannot pass this check merely because the theme aliases them.
+        if (state === "on" && token === onToken(variant, theme)) {
+          await expect(held.background, `${label}: on fill kept`).toBe(rest);
         }
       }
     }
