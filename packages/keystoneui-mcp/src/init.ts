@@ -9,6 +9,9 @@ interface ClientConfig {
   type: "json" | "toml";
 }
 
+const TRUST_POINTER =
+  "The server runs with this project's settings. Before using it in a project you have not reviewed, read https://keystoneui.io/docs/agents/mcp-server#projects-you-do-not-trust";
+
 const SERVER_ENTRY = {
   command: "npx",
   args: ["@keystoneui/mcp@latest"],
@@ -104,6 +107,7 @@ function writeJsonClient(client: ClientConfig): void {
 
   console.log(`Created ${client.configPath}`);
   console.log(`Keystone UI MCP server configured for ${client.name}.`);
+  console.log(TRUST_POINTER);
 }
 
 function printCodexInstructions(): void {
@@ -116,18 +120,19 @@ function printCodexInstructions(): void {
   console.log('  args = ["@keystoneui/mcp@latest"]');
   console.log("");
   console.log("Then restart Codex.");
+  console.log(TRUST_POINTER);
 }
 
 function printUsage(): void {
   const names = CLIENTS.map((c) => c.name).join(", ");
-  console.log("Usage: npx @keystoneui/mcp init --client <name>");
+  console.log("Usage: npx @keystoneui/mcp@latest init --client <name>");
   console.log("");
   console.log(`Supported clients: ${names}`);
   console.log("");
   console.log("Examples:");
-  console.log("  npx @keystoneui/mcp init --client cursor");
-  console.log("  npx @keystoneui/mcp init --client claude");
-  console.log("  npx @keystoneui/mcp init --client vscode");
+  console.log("  npx @keystoneui/mcp@latest init --client cursor");
+  console.log("  npx @keystoneui/mcp@latest init --client claude");
+  console.log("  npx @keystoneui/mcp@latest init --client vscode");
 }
 
 export function init(): void {
