@@ -1,7 +1,7 @@
 ---
 date: "2026-11-16"
 description: "What's coming in the next release"
-excerpt: "15 changes queued for the next release."
+excerpt: "16 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -110,6 +110,12 @@ A disabled `Slider` dimmed its thumb to 50% on top of the 50% already applied to
 A `TagGroupItem` label too long for its container now ends in an ellipsis, as a `Tag` label does, and the remove button from `onRemove` stays visible inside the pill. Before, the label was cut off with no ellipsis and pushed the remove button out of view. Short labels look the same as before, including a `{" "}` between an icon and the label.
 
 This also fixes `Tag`: an ordinary space on its own between parts, such as `<Icon />{" "}<strong>Label</strong>`, no longer adds a second 4px gap and widens the pill. A non-breaking space is still part of the label.
+
+---
+
+### Joined ToggleGroup items no longer shrink while pressed
+
+Joined items (`spacing` 0, the default) no longer shrink while held and gain press feedback using their variant's hover tokens; spaced groups and a single `Toggle` keep their press scale. Your `hover:` fill can give way while held, and `dark:hover:` does so in dark `outline` (including on items); `dark:hover:` in `default` and `secondary` retains its previous precedence, other on-item appearance is unchanged, and press fills can be customized with `active:` or with `dark:active:` to override dark rules.
 
 ---
 

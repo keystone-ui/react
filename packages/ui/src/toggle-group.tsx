@@ -107,6 +107,38 @@ function ToggleGroup({
 // ToggleGroupItem
 // ---------------------------------------------------------------------------
 
+// A joined item cannot shrink on press like a lone Toggle: its neighbour
+// shares its edge, so the scale opens a gap between them. It shows the press
+// with its variant's hover fill instead (the same tokens as `toggleVariants`'
+// `hover:`), which also gives a touch press, where hover never applies,
+// something to see. An item that is already on keeps its on fill.
+//
+// Every press class uses a chain a consumer would write themselves
+// (`active:`, `dark:active:`), so their own `active:bg-*` or
+// `dark:active:bg-*` in `className` replaces it through the class merge. An
+// item that is on keeps its on fill while held, because Tailwind emits
+// `aria-pressed:` after `active:` at equal specificity.
+//
+// Dark outline needs a `dark:active:` fill to outrank Toggle's own
+// `dark:bg-input-bg`, and that fill would also cover an item that is on.
+// So its colour comes from `--ks-toggle-press` (internal to this component:
+// not a theme token, not documented API): the hover fill
+// (`input/50`) for an off item, and for an on item exactly what Toggle shows
+// it while held without this rule (`input-bg`, or `input/50` under a
+// hovering pointer). The setters only set the property, so a consumer's
+// `dark:active:bg-*` still replaces the fill itself.
+const joinedPressVariants = {
+  default: "active:bg-muted active:text-foreground",
+  outline: [
+    "active:bg-accent active:text-accent-foreground",
+    "dark:active:bg-(color:--ks-toggle-press)",
+    "dark:[--ks-toggle-press:color-mix(in_oklab,var(--input)_50%,transparent)]",
+    "dark:aria-pressed:[--ks-toggle-press:var(--input-bg)]",
+    "dark:aria-pressed:hover:[--ks-toggle-press:color-mix(in_oklab,var(--input)_50%,transparent)]",
+  ].join(" "),
+  secondary: "active:bg-secondary-hover active:text-secondary-foreground",
+} as const;
+
 export interface ToggleGroupItemProps
   extends TogglePrimitive.Props,
     VariantProps<typeof toggleVariants> {
@@ -135,7 +167,8 @@ function ToggleGroupItem({
         cn(
           toggleVariants({ variant: resolvedVariant, size: resolvedSize }),
           "shrink-0 focus:z-10 focus-visible:z-10",
-          isJoined && "rounded-none",
+          isJoined && "rounded-none active:scale-100",
+          isJoined && joinedPressVariants[resolvedVariant ?? "default"],
           isJoined && isHorizontal && "first:rounded-l-md last:rounded-r-md",
           isJoined && !isHorizontal && "first:rounded-t-md last:rounded-b-md",
           isJoined && isOutline && isHorizontal && "border-l-0 first:border-l",
