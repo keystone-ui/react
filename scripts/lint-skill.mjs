@@ -18,6 +18,11 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import {
+  frontMatterProblems,
+  loadTimeCommandProblems,
+} from "./lib/skill-checks.mjs";
+
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SKILL_DIR = join(ROOT, "skills/keystoneui-react");
 const AGENTS_DOCS = join(
@@ -369,6 +374,37 @@ if (tree) {
     "apps/docs/.../agents/skills.mdx",
     "no skills/keystoneui-react/ tree block"
   );
+}
+
+// ---------------------------------------------------------------------------
+// 7. Loading the skill runs nothing, and the skill pre-approves nothing.
+//
+// The skill loads on a signal the project controls (`@keystoneui/react` in its
+// dependencies), so a command that runs at load time, or one the skill
+// pre-approves, runs inside a project the agent may not have reviewed. Project
+// context comes from reading files instead. These checks are deliberately
+// narrow: they do not require any documented command to be pre-approved.
+// ---------------------------------------------------------------------------
+const SKILL_MD = "skills/keystoneui-react/SKILL.md";
+
+for (const { line, message } of [
+  ...loadTimeCommandProblems(skillMd),
+  ...frontMatterProblems(skillMd),
+]) {
+  fail(`${SKILL_MD}:${line}`, message);
+}
+
+// The old fallback ran a bare `keystoneui`, which resolves whatever executable
+// the project provides under that name.
+for (const file of [
+  SKILL_MD,
+  "skills/keystoneui-react/cli.md",
+  "skills/keystoneui-react/mcp.md",
+]) {
+  const prose = read(file).replace(/\s+/g, " ");
+  if (/\brun `keystoneui info`/.test(prose)) {
+    fail(file, "still tells the agent to run `keystoneui info` as a fallback");
+  }
 }
 
 // ---------------------------------------------------------------------------
