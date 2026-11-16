@@ -1113,6 +1113,31 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("field-with-switch", m.default),
     }))
   ),
+  "filter-chips-controlled": dynamic(() =>
+    import("./filter-chips/controlled").then((m) => ({
+      default: hydrated("filter-chips-controlled", m.default),
+    }))
+  ),
+  "filter-chips-counts": dynamic(() =>
+    import("./filter-chips/counts").then((m) => ({
+      default: hydrated("filter-chips-counts", m.default),
+    }))
+  ),
+  "filter-chips-default": dynamic(() =>
+    import("./filter-chips/default").then((m) => ({
+      default: hydrated("filter-chips-default", m.default),
+    }))
+  ),
+  "filter-chips-sizes": dynamic(() =>
+    import("./filter-chips/sizes").then((m) => ({
+      default: hydrated("filter-chips-sizes", m.default),
+    }))
+  ),
+  "filter-chips-under-tabs": dynamic(() =>
+    import("./filter-chips/under-tabs").then((m) => ({
+      default: hydrated("filter-chips-under-tabs", m.default),
+    }))
+  ),
   "form-default": dynamic(() =>
     import("./form/default").then((m) => ({
       default: hydrated("form-default", m.default),

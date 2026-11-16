@@ -293,6 +293,11 @@ const categories = [
         slug: "toggle-group",
         description: "Group of toggle buttons",
       },
+      {
+        name: "Filter Chips",
+        slug: "filter-chips",
+        description: "Single-choice filter row with result counts",
+      },
     ],
   },
   {

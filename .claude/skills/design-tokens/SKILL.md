@@ -326,6 +326,8 @@ only exists between two components.
 Button and Toggle only — no input-family control has one, so do not try to
 build a 48px row containing an input. `xs` is Button-only.
 
+Filter chips sit one rung below by design: FilterChips `sm` / `default` / `lg` read the `xs` / `sm` / `default` rungs (24 / 32 / 40px), because a chip row is a secondary row of its own under a toolbar or tabs list, not a neighbour of a button or an input.
+
 Use `size-*` (not `h-*`) for square controls: Checkbox (`size-4`), Radio
 (`size-4`), Button icon-xs (`size-6`), icon-sm (`size-8`), icon (`size-10`),
 icon-lg (`size-12`).

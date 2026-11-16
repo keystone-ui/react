@@ -55,14 +55,15 @@ trigger's text changes with state.
 ## Two filter layouts, and how to choose
 
 **Inline pills** — every filter a control on the toolbar, each naming its own
-dimension. **Drawer and chips** — all filters behind one `Filters` button, with
-the applied ones as removable `Key: value` chips underneath.
+dimension. **Drawer and applied-filter chips** — all filters behind one `Filters`
+button, with the applied ones as removable `Key: value` applied-filter chips
+underneath.
 
-| | drawer + chips | inline pills |
+| | drawer + applied-filter chips | inline pills |
 |---|---|---|
 | change a filter | 3–4 clicks | 2 |
 | remove one | 1 click on its ✕ | 1, on the pill's ✕ |
-| read what is applied | the chip row is the answer | the pills are the answer |
+| read what is applied | the applied-filter chip row is the answer | the pills are the answer |
 | see what is filterable | open the drawer | already on screen |
 | desktop vs mobile | one surface | two, kept in step by a shared descriptor |
 
@@ -73,7 +74,7 @@ open. Start the row with the two most common filters and offer the rest from
 that holds a value always shows its pill, so applied state is never invisible.
 `admin-01` implements this on both of its tables.
 
-Drawer and chips remain the better fit for a table filtered once and then read,
+Drawer and applied-filter chips remain the better fit for a table filtered once and then read,
 or one with more filters than a row can hold even on demand. Its shell should
 suit its width — a bottom sheet on a phone, a side panel on a desktop — and,
 since `swipeDirection` is a prop rather than a class, render it twice behind a
@@ -82,7 +83,7 @@ runtime.
 
 **Both are renderings of one model.** Whichever you pick, declare each filter
 once as a descriptor — `{ key, label, empty, value(filters), clear }` — and
-derive the pills or chips, the drawer's rows and steps, the active count, the
+derive the pills or applied-filter chips, the drawer's rows and steps, the active count, the
 URL and the predicate from that list. Switching layouts is then a change of
 presentation, and a new filter is one entry rather than a control, a row, a step
 index and a count that all have to agree. It is also what keeps the phone
@@ -174,17 +175,21 @@ number when the data lands make the page jump under the pointer.
 
 ## One representation of applied state
 
-Do not pair a visible control with a chip repeating it. Two representations of
-one fact can disagree, and keeping them in step buys nothing.
+Do not pair a visible control with an applied-filter chip repeating it. Two
+representations of one fact can disagree, and keeping them in step buys nothing.
 
-Chips are for state a panel has **hidden**.
+Applied-filter chips are for state a panel has **hidden**.
 
-Build a chip from `Badge` — a polymorphic `<span>` — with the remove button
+Build an applied-filter chip from `Badge` — a polymorphic `<span>` — with the remove button
 nested inside it, and label that button for its filter (`Remove Role filter`).
 Not `TagGroup`: a `TagGroupItem` body is a toggle button (its remove control
 sits beside it), so the label becomes a focusable control that toggles a
 pressed state the filter does not have. If every filter is a visible,
-self-describing control, there is nothing for a chip to add.
+self-describing control, there is nothing for an applied-filter chip to add.
+
+An applied-filter chip is not `FilterChips` either. `FilterChips` is itself a
+visible control: one row of values for one dimension that filters the list in
+place, one value at a time, with result counts.
 
 When filters are added on demand, derive which controls show:
 
@@ -466,7 +471,7 @@ A filter whose value names its own dimension — a date range — takes no label
 
 ### One representation of applied state
 
-**Incorrect** — the control and a chip both report the same filter, so clearing
+**Incorrect** — the control and an applied-filter chip both report the same filter, so clearing
 one leaves the other stale:
 
 ```tsx
@@ -480,8 +485,8 @@ one leaves the other stale:
 <Select value={status}>…</Select>
 ```
 
-Reach for chips only when the controls are hidden behind a drawer, and then the
-chips are the only representation, not a second one.
+Reach for applied-filter chips only when the controls are hidden behind a
+drawer, and then those chips are the only representation, not a second one.
 
 ### `aria-sort` belongs only on sortable columns
 
