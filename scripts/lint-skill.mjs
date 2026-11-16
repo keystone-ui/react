@@ -18,6 +18,11 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import {
+  frontMatterProblems,
+  loadTimeCommandProblems,
+} from "./lib/skill-checks.mjs";
+
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SKILL_DIR = join(ROOT, "skills/keystoneui-react");
 const AGENTS_DOCS = join(
@@ -379,40 +384,11 @@ if (tree) {
 // ---------------------------------------------------------------------------
 const SKILL_MD = "skills/keystoneui-react/SKILL.md";
 
-skillMd.split("\n").forEach((line, i) => {
-  if (line.startsWith("!`")) {
-    fail(
-      `${SKILL_MD}:${i + 1}`,
-      `runs a shell command when the skill loads: ${line.trim().slice(0, 110)}`
-    );
-  }
-});
-
-const frontMatter = skillMd.match(/^---\n([\s\S]*?)\n---\n/);
-if (frontMatter) {
-  const fmLines = frontMatter[1].split("\n");
-  const at = fmLines.findIndex((line) => line.startsWith("allowed-tools:"));
-  if (at !== -1) {
-    const inline = fmLines[at].slice("allowed-tools:".length).trim();
-    const listed = [];
-    for (const line of fmLines.slice(at + 1)) {
-      if (!/^\s+-/.test(line)) {
-        break;
-      }
-      listed.push(line.trim());
-    }
-    const empty =
-      (inline === "" || inline === "[]" || inline === '""') &&
-      listed.length === 0;
-    if (!empty) {
-      fail(
-        `${SKILL_MD}:${at + 2}`,
-        "pre-approves commands; the allowed-tools list must be empty"
-      );
-    }
-  }
-} else {
-  fail(SKILL_MD, "no front matter found");
+for (const { line, message } of [
+  ...loadTimeCommandProblems(skillMd),
+  ...frontMatterProblems(skillMd),
+]) {
+  fail(`${SKILL_MD}:${line}`, message);
 }
 
 // The old fallback ran a bare `keystoneui`, which resolves whatever executable
