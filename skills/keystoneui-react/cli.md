@@ -35,7 +35,7 @@ keystoneui init --client claude    # or cursor | vscode | codex | opencode
 
 The CLI/MCP modes share the same registry data and search behavior. Use the CLI when working in a shell or non-MCP environment; the MCP server when working in Claude Code, Cursor, VS Code Copilot, OpenCode, or Codex.
 
-In a project without `@keystoneui/mcp` installed, the same verbs work as the scoped command `npx -y @keystoneui/mcp@latest <verb>`, which always runs this package.
+In a project without `@keystoneui/mcp` installed, the same verbs work as the scoped command `npx -y @keystoneui/mcp@latest <verb>`, which names the package instead of a bare `keystoneui`.
 
 ## Installing components
 
@@ -111,7 +111,7 @@ Always fetch component docs **before** writing complex components. The MDX inclu
 
 ## Choosing a path
 
-- Claude Code, Cursor, VS Code Copilot, OpenCode, Codex → MCP (auto-loads via `.mcp.json`).
+- Claude Code, Cursor, VS Code Copilot, OpenCode, Codex → MCP, configured by the client's MCP file (`.mcp.json` for Claude Code; see [mcp.md](./mcp.md)).
 - Shell, CI, or a non-MCP client → `keystoneui <verb>`, via `npx -y @keystoneui/mcp@latest <verb>` if it is not installed.
 - Need raw MDX → fetch the `.mdx` URLs directly, or use `keystoneui docs <name>` for the LLM-resolved version.
 
