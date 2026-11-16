@@ -18,6 +18,11 @@ const { parse: parseYaml } = createRequire(
   new URL("../../apps/docs/package.json", import.meta.url)
 )("yaml");
 
+/** The inline form at the start of a line or right after whitespace. */
+const INLINE_AT_LOAD = /(?:^|\s)!`/;
+/** A fence of three or more backticks or tildes followed directly by `!`. */
+const FENCE_AT_LOAD = /^\s*(?:`{3,}|~{3,})!/;
+
 /**
  * Lines that run a shell command when the skill loads.
  *
@@ -27,7 +32,7 @@ const { parse: parseYaml } = createRequire(
 export function loadTimeCommandProblems(skillMd) {
   const problems = [];
   skillMd.split("\n").forEach((text, i) => {
-    if (text.startsWith("!`")) {
+    if (INLINE_AT_LOAD.test(text) || FENCE_AT_LOAD.test(text)) {
       problems.push({
         line: i + 1,
         message: `runs a shell command when the skill loads: ${text.trim().slice(0, 110)}`,
@@ -74,6 +79,12 @@ export function frontMatterProblems(skillMd) {
     problems.push({
       line: keyLine(frontMatter[1], "allowed-tools"),
       message: "pre-approves commands; the allowed-tools list must be empty",
+    });
+  }
+  if (Object.hasOwn(data, "hooks")) {
+    problems.push({
+      line: keyLine(frontMatter[1], "hooks"),
+      message: "registers hooks, which run commands; remove the hooks key",
     });
   }
   return problems;
