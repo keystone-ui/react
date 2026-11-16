@@ -118,3 +118,164 @@ export function misplacedUiFiles(writtenFiles, fixture) {
       !file.startsWith(`${fixture.expectedUiDir}/`)
   );
 }
+
+/**
+ * Items whose name starts with this are the package flavour of an item: their
+ * files import `@keystoneui/react/*` and ship no ui components, so they only
+ * work in an app that depends on the package, and the vendored fixtures above
+ * (which link no `@keystoneui/react`) cannot typecheck them.
+ */
+export const PACKAGE_PREFIX = "npm/";
+
+/** "recharts@^3" -> "recharts". */
+const VERSION_RANGE = /(?<=.)@.*$/;
+
+/**
+ * Apps that use the npm package: no `components/ui`, no `lib/utils.ts`, and
+ * the smallest `components.json` shadcn accepts, plus `rsc` in Next (see
+ * packageComponentsJson). Next gets a `registry:page`; shadcn skips it in
+ * Vite.
+ */
+export const PACKAGE_FIXTURES = [
+  { name: "package-next", srcDir: "", flavour: "package", framework: "next" },
+  {
+    name: "package-vite",
+    srcDir: "src",
+    flavour: "package",
+    framework: "vite",
+  },
+];
+
+/**
+ * The components.json the docs tell a package consumer to write by hand.
+ * shadcn 4.21–4.23 rejects a file without `style`, `tailwind.css` or
+ * `tailwind.baseColor` ("Invalid configuration"); with no file at all, `add`
+ * runs `init`, which rewrites the app's CSS with shadcn's own theme.
+ */
+export function packageComponentsJson(fixture) {
+  return {
+    style: "new-york",
+    // A Next App Router app keeps `"use client"` boundaries with `rsc: true`.
+    ...(fixture.framework === "next" ? { rsc: true } : {}),
+    tailwind: {
+      css: fixture.srcDir ? `${fixture.srcDir}/index.css` : "app/globals.css",
+      baseColor: "neutral",
+    },
+    aliases: { components: "@/components", utils: "@/lib/utils" },
+  };
+}
+
+/** The fixtures a group installs into. */
+export function fixturesFor(group) {
+  return group.flavour === "package" ? PACKAGE_FIXTURES : FIXTURES;
+}
+
+/**
+ * ui items install together, as an app that adds components one by one ends
+ * up with all of them. Each block installs alone into its own project:
+ * blocks share file names (admin-01 and dashboard-01 both ship chart.tsx),
+ * and nobody installs every block into one app. Each package-flavour item
+ * installs alone too, into the package fixtures only: it writes the same
+ * file names as its vendored twin, with different imports.
+ */
+export function installGroups(registry, names) {
+  const byName = new Map(registry.items.map((i) => [i.name, i]));
+  const isPackage = (n) => n.startsWith(PACKAGE_PREFIX);
+  const isBlock = (n) => byName.get(n)?.type === "registry:block";
+  const ui = names.filter((n) => !(isPackage(n) || isBlock(n)));
+  const blocks = names.filter((n) => !isPackage(n) && isBlock(n));
+  const packages = names.filter(isPackage);
+  return [
+    ...(ui.length > 0 ? [{ flavour: "vendored", label: "ui", items: ui }] : []),
+    ...blocks.map((name) => ({
+      flavour: "vendored",
+      label: name,
+      items: [name],
+    })),
+    ...packages.map((name) => ({
+      flavour: "package",
+      label: name.replace("/", "-"),
+      items: [name],
+    })),
+  ];
+}
+
+/**
+ * Every file a package-flavour install must write, relative to the fixture:
+ * each component flat in `components/`, and the page at its target in Next.
+ */
+export function expectedPackageFiles(item, fixture) {
+  return (item.files ?? [])
+    .map((file) => installedPath(file, fixture))
+    .filter((path) => path !== null)
+    .sort();
+}
+
+/**
+ * Where an item file lands in a package fixture: flat in the components
+ * alias's directory, or at its target for a page, which shadcn writes only
+ * into a Next app (null elsewhere).
+ */
+export function installedPath(file, fixture) {
+  if (file.type === "registry:page") {
+    return fixture.framework === "next" ? file.target : null;
+  }
+  const components = fixture.srcDir
+    ? `${fixture.srcDir}/components`
+    : "components";
+  return `${components}/${file.path.split("/").pop()}`;
+}
+
+/**
+ * The package as npm serves it, from the workspace's packages/ui/package.json.
+ * In the workspace, `exports` maps every subpath to `src`; packing replaces
+ * it with `publishConfig.exports`, which maps to `dist`. A package fixture
+ * installs this manifest beside a link to packages/ui/dist, so it typechecks
+ * against the built declaration files a consumer gets.
+ */
+export function publishedManifest(pkg) {
+  const { publishConfig, ...rest } = pkg;
+  return { ...rest, exports: publishConfig.exports };
+}
+
+/** The packages a package fixture links: React, its types, the item's own. */
+export function packageFixtureDependencies(item) {
+  const own = (item.dependencies ?? []).map((dep) =>
+    dep.replace(VERSION_RANGE, "")
+  );
+  return [
+    ...new Set([
+      "react",
+      "react-dom",
+      "@types/react",
+      "@types/react-dom",
+      ...own,
+    ]),
+  ].sort();
+}
+
+/**
+ * Which of the app's own files an install changed, compared byte for byte:
+ * `css` and `components.json`, each as [before, after].
+ */
+export function setupChanges({ css, config }) {
+  return [
+    ...(css[0] === css[1] ? [] : ["css"]),
+    ...(config[0] === config[1] ? [] : ["components.json"]),
+  ];
+}
+
+const USE_CLIENT = /^\s*["']use client["']/;
+
+/**
+ * Installed files whose source starts with a `"use client"` directive and
+ * that no longer do: each entry is { path, source, installed }.
+ */
+export function lostClientDirectives(files) {
+  return files
+    .filter(
+      ({ source, installed }) =>
+        USE_CLIENT.test(source) && !USE_CLIENT.test(installed)
+    )
+    .map(({ path }) => path);
+}

@@ -24,7 +24,7 @@ import {
 import type { ReactNode } from "react";
 
 import { STATUS_VARIANT } from "./admin-filters";
-import { statusLabels, type User } from "./mock-admin";
+import { statusLabels, type User } from "./mock-users";
 
 interface AdminUserDetailProps {
   /** The user who sent the invite, resolved from `user.invitedBy`. */

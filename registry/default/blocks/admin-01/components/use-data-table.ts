@@ -69,8 +69,12 @@ export function useDataTable<
   const [hiddenColumns, setHiddenColumns] = useState<ReadonlySet<C>>(new Set());
 
   const query: DataTableQuery<F, S> = { filters, pageIndex, pageSize, sort };
+  // New rows are a new answer even when the query has not moved: rows that
+  // arrive after mount (fetched, then handed in) would otherwise be ignored
+  // until someone touched a filter.
+  const rowsVersion = useRowsVersion(config.rows);
   const { loading, result } = useSimulatedFetch(
-    query,
+    [query, rowsVersion],
     () => run(config, query),
     config.latency ?? 300,
     EMPTY_RESULT as DataTableResult<Row>
@@ -170,6 +174,64 @@ function toggled<T>(set: ReadonlySet<T>, item: T): ReadonlySet<T> {
     next.add(item);
   }
   return next;
+}
+
+/**
+ * A number that moves when `rows` holds different rows than before.
+ *
+ * Compared row by row rather than by the array, so `rows: data.filter(…)` or
+ * `rows: data.map(toUser)` written inline — a new array every render, over the
+ * same rows or over fresh objects with the same fields — is not a new answer.
+ *
+ * Kept in state and adjusted while rendering, React's documented pattern for
+ * state that follows a prop: a render React throws away (a transition that
+ * suspends, say) leaves nothing behind. Rows whose objects hold fresh nested
+ * objects or arrays every render still differ every render: rebuilt in the
+ * component that calls this hook, they end in React's "Too many re-renders"
+ * error; rebuilt in a parent, the table reloads on each of the parent's renders
+ * and stays on its skeleton while the parent renders more often than `latency`.
+ * Build those in a `useMemo`.
+ */
+function useRowsVersion(rows: readonly unknown[]): number {
+  const [snapshot, setSnapshot] = useState({ rows, version: 0 });
+  if (!sameRows(snapshot.rows, rows)) {
+    setSnapshot({ rows, version: snapshot.version + 1 });
+  }
+  return snapshot.version;
+}
+
+function sameRows(a: readonly unknown[], b: readonly unknown[]): boolean {
+  return (
+    a === b ||
+    (a.length === b.length && a.every((row, i) => sameRow(row, b[i])))
+  );
+}
+
+/** The same object, or one with the same own keys holding the same values. */
+function sameRow(a: unknown, b: unknown): boolean {
+  if (Object.is(a, b)) {
+    return true;
+  }
+  if (
+    typeof a !== "object" ||
+    typeof b !== "object" ||
+    a === null ||
+    b === null
+  ) {
+    return false;
+  }
+  const keys = Object.keys(a);
+  return (
+    keys.length === Object.keys(b).length &&
+    keys.every(
+      (key) =>
+        Object.hasOwn(b, key) &&
+        Object.is(
+          (a as Record<string, unknown>)[key],
+          (b as Record<string, unknown>)[key]
+        )
+    )
+  );
 }
 
 /** What a server would do with the query: filter, sort, count, slice. */

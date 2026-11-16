@@ -8,8 +8,9 @@ import { type AdminSection, AdminSidebar } from "./admin-sidebar";
 import { AdminTopbar } from "./admin-topbar";
 import { AdminUserDetail } from "./admin-user-detail";
 import { AdminUsersTable } from "./admin-users-table";
-import { adminMetrics, signupsByMonth, users } from "./mock-admin";
+import { adminMetrics, signupsByMonth } from "./mock-admin";
 import { payments } from "./mock-payments";
+import { users } from "./mock-users";
 import { PaymentDetailDrawer } from "./payment-detail-drawer";
 import { paymentsFromParams, paymentsToParams } from "./payment-filters";
 import { SidebarInset, SidebarProvider } from "./sidebar";
@@ -113,7 +114,11 @@ export function AdminPage() {
           ) : null}
 
           {section === "users" && !openUser ? (
-            <AdminUsersTable onOpenUser={setOpenUserId} table={usersTable} />
+            <AdminUsersTable
+              onOpenUser={setOpenUserId}
+              table={usersTable}
+              users={users}
+            />
           ) : null}
 
           {section === "overview" ? (

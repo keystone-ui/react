@@ -12,7 +12,7 @@ import {
   type UserFilters,
   type UserSortKey,
 } from "./admin-filters";
-import { type User, users } from "./mock-admin";
+import { type User, users } from "./mock-users";
 import { useDataTable } from "./use-data-table";
 
 /** The user columns a person can hide. Name, selection and actions stay. */
