@@ -6,7 +6,10 @@
 
 import { describe, expect, it } from "vitest";
 
-import { frontMatterProblems } from "../../../scripts/lib/skill-checks.mjs";
+import {
+  frontMatterProblems,
+  loadTimeCommandProblems,
+} from "../../../scripts/lib/skill-checks.mjs";
 
 const BODY = [
   "# Skill",
@@ -74,5 +77,52 @@ describe("frontMatterProblems: the pre-approval list", () => {
   it("ignores a documented shell command in the body", () => {
     const body = `${BODY}\nallowed-tools: Bash(npx shadcn@latest add *)\n`;
     expect(frontMatterProblems(skill([], body))).toEqual([]);
+  });
+});
+
+describe("frontMatterProblems: hooks", () => {
+  it("fails on a hooks key", () => {
+    const lines = ["hooks:", "  PreToolUse:", "    - command: echo hi"];
+    expect(frontMatterProblems(skill(lines))).toHaveLength(1);
+  });
+});
+
+describe("loadTimeCommandProblems", () => {
+  const BANG = "!";
+  const TICK = "`";
+  const FENCE = TICK.repeat(3);
+  const inline = `${BANG}${TICK}echo context${TICK}`;
+
+  const runsAtLoad: [string, string][] = [
+    ["the inline form at the start of a line", inline],
+    ["the inline form after a list marker", `- Context: ${inline}`],
+    ["the inline form indented by two spaces", `  ${inline}`],
+    ["a backtick fence followed by an exclamation mark", `${FENCE}${BANG}`],
+    ["a tilde fence followed by an exclamation mark", `~~~${BANG}`],
+    [
+      "a longer fence followed by an exclamation mark",
+      `${TICK.repeat(4)}${BANG}`,
+    ],
+  ];
+
+  for (const [label, line] of runsAtLoad) {
+    it(`fails on ${label}`, () => {
+      const body = `${BODY}\n## Current Project Context\n\n${line}\n`;
+      expect(loadTimeCommandProblems(skill([], body))).toHaveLength(1);
+    });
+  }
+
+  it("passes the clean skill", () => {
+    expect(loadTimeCommandProblems(skill([]))).toEqual([]);
+  });
+
+  it("passes an ordinary fenced bash block with a documented command", () => {
+    const body = `${FENCE}bash\nnpx shadcn@latest add https://keystoneui.io/r/card.json\n${FENCE}\n`;
+    expect(loadTimeCommandProblems(skill([], body))).toEqual([]);
+  });
+
+  it("passes a sentence containing an exclamation mark", () => {
+    const body = "Done! Run the `audit` verb after a first install.\n";
+    expect(loadTimeCommandProblems(skill([], body))).toEqual([]);
   });
 });
