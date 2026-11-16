@@ -1,6 +1,6 @@
 import * as a11yAddonAnnotations from "@storybook/addon-a11y/preview";
 import { setProjectAnnotations } from "@storybook/react-vite";
-import { userEvent } from "vitest/browser";
+import { commands, userEvent } from "vitest/browser";
 import * as previewAnnotations from "./preview";
 
 // The a11y annotations register the axe check that `parameters.a11y.test`
@@ -16,3 +16,8 @@ const _annotations = setProjectAnnotations([
 // so Storybook itself never imports `vitest/browser`.
 (globalThis as { __realUserEvent?: typeof userEvent }).__realUserEvent =
   userEvent;
+
+// A held press and a touch screen's `hover: none` (custom commands in
+// vitest.config.ts), for plays that must see `:active` while the pointer is
+// still down. Absent under Storybook.
+(globalThis as { __realCommands?: typeof commands }).__realCommands = commands;
