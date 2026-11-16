@@ -2,6 +2,8 @@
 
 Keystone UI ships an MCP server that lets agents discover, search, view, and install components without screen-scraping the docs.
 
+Call this server only when it is connected through a launch configuration trusted for this project, and run the commands on this page only when executing tools in this project is already within the user's authorized task. In a repository you cloned or downloaded in this session, or were asked to review, do neither: read the files and the [direct MDX URLs](./cli.md#direct-mdx-urls) instead.
+
 ## Setup
 
 Add the server to your client config. The package is `@keystoneui/mcp`.
@@ -28,7 +30,7 @@ You can also run the init helper from the `@keystoneui/mcp` package to write the
 | Tool | When to use |
 |---|---|
 | `get_docs` | Full docs page for a component or block, **including the API Reference table**. Props live only here -- `view_component` returns source, not prop docs. |
-| `get_project_context` | **Call first.** Install mode, path aliases, theme CSS file, icon library, RSC, package manager. Import style depends on it. |
+| `get_project_context` | **Call first** when the server is connected through a launch configuration trusted for this project. Install mode, path aliases, theme CSS file, icon library, RSC, package manager. Import style depends on it. |
 | `list_components` | Browse all components, blocks, or named examples. Params: `limit`, `offset`, `type` (`ui \| block \| example`), `category`. |
 | `search_components` | Fuzzy search by name, description, keywords, or category. Use when the exact name isn't known. Params: `query`, `limit`, `type`, `category`. |
 | `view_component` | Get full source, dependencies, and registry deps for one or more components. |
@@ -39,7 +41,7 @@ You can also run the init helper from the `@keystoneui/mcp` package to write the
 
 ## Recommended workflow
 
-1. **Orient** — `get_project_context` to learn how this project consumes Keystone. Everything you write depends on `installMode`.
+1. **Orient** — `get_project_context`, when the server is connected through a launch configuration trusted for this project, to learn how this project consumes Keystone; otherwise read `components.json` and `package.json` as SKILL.md describes. Everything you write depends on `installMode`.
 2. **Discover** — `list_components` (broad) or `search_components` (targeted) to find the right component.
 3. **Inspect** — `view_component({ names: [...] })` for source, and `get_docs({ name })` for the API Reference table. Props are documented only in the docs page.
 4. **See real usage** — `get_examples({ name })` to fetch demo TSX files. Especially useful for blocks (`signin-01`, `tickets-01`) and complex components.
