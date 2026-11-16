@@ -26,15 +26,11 @@ npx shadcn@latest add https://keystoneui.io/r/admin-01.json
 
 ## Requirements
 
-The sidebar is **shadcn's, adapted onto keystone's primitives** and shipped inside the block as `components/sidebar.tsx`. Keystone deliberately ships no app shell — see [Using shadcn Components](/docs/interop) for why. Do not also run `shadcn add sidebar`: its dependencies are shadcn's Button, Input and Tooltip, and they replace keystone's.
+The sidebar is **shadcn's, adapted onto keystone's primitives** and shipped inside the block as `components/sidebar.tsx`. Keystone deliberately ships no app shell in the library — see [Using shadcn Components](/docs/interop) for why, and for how the sidebar behaves: its keyboard shortcut, its `sidebar_state` cookie and its drawer on phones. Do not also run `shadcn add sidebar`: the bare name selects shadcn's item, whose dependencies install to the same paths as keystone's Button, Input and Tooltip, and accepting an overwrite (or passing `--overwrite`) replaces keystone's files with the selected shadcn style's versions.
 
-It reads the eight `--sidebar-*` tokens, which keystone's style item declares as aliases of your theme tokens — so the sidebar follows whichever keystone theme is active.
+It reads six `--sidebar-*` tokens (`--sidebar`, `--sidebar-foreground`, `--sidebar-accent`, `--sidebar-accent-foreground`, `--sidebar-border`, `--sidebar-ring`). Keystone's style item declares all eight of the set as aliases of your theme tokens, so the sidebar follows whichever keystone theme is active.
 
-**`SidebarInset` needs `min-w-0`.** Not cosmetic: without it the wide users table pushes the inset open and the whole document gains a horizontal scrollbar. Keystone bakes this into components it owns; it cannot for a file it does not.
-
-```tsx
-<SidebarInset className="min-w-0">
-```
+**`SidebarInset` carries `min-w-0`.** The sidebar file sets it, so the wide users table shrinks inside the inset instead of giving the whole document a horizontal scrollbar. Keep it if you restyle the inset.
 
 ## Use it with your data
 
@@ -170,6 +166,27 @@ It is tested with `@keystoneui/react` 1.0.0-beta.11. It needs a
 [Apps that use the npm package](/docs/blocks/users-01#apps-that-use-the-npm-package)
 gives. Pick one flavour per app: both write the same file names with different
 imports.
+
+## Reusing the sidebar
+
+The collapsible sidebar installs on its own, without the rest of the admin
+panel:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/sidebar.json
+```
+
+It writes the same `components/sidebar.tsx` this block uses, built from the
+same source. Use the full URL: the bare name `sidebar` selects shadcn's item,
+whose dependencies share paths with keystone's files. A later `add` of
+`sidebar` or of this block offers to overwrite a `components/sidebar.tsx` you
+have edited; accepting discards your edits. The
+navigation itself is this block's content, so `admin-sidebar.tsx` and
+`admin-topbar.tsx` stay here; [Using shadcn Components](/docs/interop#the-sidebar-item)
+has a composition to start from, what the sidebar does and does not include,
+and the tokens it needs. It is the vendored version: it imports your local
+keystone components through the UI alias in `components.json` (normally
+`@/components/ui`). No version that imports from the npm package is provided.
 
 ## Reusing the users view
 

@@ -98,7 +98,7 @@ Keystone UI defines a few extra tokens used by specific components.
 - `--popup-ring` — subtle ring on popup containers (`border` at 10% opacity). Use `ring-popup-ring`.
 - `--border-muted` — popup separators (lower contrast than `--border`), and Card's filled surface ring.
 - `--success` / `--success-foreground`, `--warning` / `--warning-foreground`, `--info` / `--info-foreground` — status tones. Use `text-success`, `bg-warning` and friends; never raw `emerald`/`amber`, and never a `dark:` override (the tokens re-step for dark themselves). `--warning-foreground` is intentionally dark, because near-white on amber-500 fails WCAG.
-- `--sidebar` + 7 `--sidebar-*` — read by an imported shadcn sidebar. Keystone ships no sidebar of its own; these are declared as aliases of the theme tokens so the sidebar follows your keystone theme rather than shadcn's neutral palette.
+- `--sidebar` + 7 `--sidebar-*` — read by an imported shadcn sidebar. Keystone ships no sidebar in the library (its adapted shadcn sidebar is a registry item, `https://keystoneui.io/r/sidebar.json`, which reads six of them); these are declared as aliases of the theme tokens so the sidebar follows your keystone theme rather than shadcn's neutral palette.
 
 **Where they come from depends on install path:**
 

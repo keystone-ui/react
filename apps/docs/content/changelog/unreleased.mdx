@@ -1,7 +1,7 @@
 ---
-date: "2026-11-14"
+date: "2026-11-15"
 description: "What's coming in the next release"
-excerpt: "14 changes queued for the next release."
+excerpt: "15 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -90,6 +90,12 @@ Base UI lets `className` be a function of the part's state (`className={(state) 
 ### Add package flavours of users-01 and filter-pills
 
 For apps that use the `@keystoneui/react` package instead of vendored components: `r/npm/users-01.json` and `r/npm/filter-pills.json` install the same files, importing `@keystoneui/react/*`. `npm/users-01` needs 1.0.0-beta.11 or later; `npm/filter-pills` is tested with 1.0.0-beta.11. Both need a `components.json`. Existing items are unchanged.
+
+---
+
+### Install the sidebar on its own
+
+The collapsible sidebar from `admin-01` is now its own registry item, installed with `npx shadcn@latest add https://keystoneui.io/r/sidebar.json`. It writes the same `components/sidebar.tsx` the block ships. The docs now say that `SidebarInset` already sets `min-w-0`, and that passing `open` and `onOpenChange` does not stop the `sidebar_state` cookie from being written.
 
 ---
 

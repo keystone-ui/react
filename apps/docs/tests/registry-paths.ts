@@ -25,6 +25,7 @@ export const REGISTRY_JSON = join(REPO_ROOT, "registry.json");
 export const BUILD_OUTPUT_DIR = join(REPO_ROOT, "apps", "docs", "public", "r");
 
 export interface RegistryItem {
+  categories?: string[];
   css?: Record<string, unknown>;
   cssVars?: Record<string, Record<string, string>>;
   dependencies?: string[];

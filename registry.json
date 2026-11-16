@@ -2459,6 +2459,34 @@
       ]
     },
     {
+      "name": "sidebar",
+      "type": "registry:component",
+      "title": "Sidebar",
+      "description": "The collapsible app sidebar from admin-01, installable on its own: shadcn's sidebar adapted onto Keystone's Button, Drawer, Input, Separator, Skeleton and Tooltip, with an icon rail, a drawer on phones and a Cmd/Ctrl+B shortcut. Your theme must declare the six --sidebar-* tokens it reads (the default style declares all eight of the set). Install it by its full URL, https://keystoneui.io/r/sidebar.json: the bare name `sidebar` selects shadcn's item. Docs: https://keystoneui.io/docs/interop#the-sidebar-item",
+      "categories": [
+        "navigation"
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/drawer.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/separator.json",
+        "https://keystoneui.io/r/skeleton.json",
+        "https://keystoneui.io/r/tooltip.json"
+      ],
+      "files": [
+        {
+          "path": "registry/default/blocks/admin-01/components/sidebar.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
       "name": "npm/filter-pills",
       "type": "registry:component",
       "title": "Filter Pills (package)",
