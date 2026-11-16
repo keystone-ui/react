@@ -81,6 +81,15 @@ jobs:
       # stubbed. Unit tests check registry.json; this checks what a consumer
       # gets -- bare registry dependencies installing shadcn's Button beside
       # keystone's combobox passed every unit test.
+      # The package-flavour items (`npm/*`) install into apps that depend on
+      # @keystoneui/react as npm serves it: the package's manifest with
+      # `publishConfig.exports` promoted to `exports`, beside a link to this
+      # build's packages/ui/dist. Their types come from the built declaration
+      # files, as a consumer's do. The smoke run fails without the build
+      # rather than skipping them.
+      - name: Build @keystoneui/react for the package fixtures
+        run: pnpm --filter @keystoneui/react build
+
       - name: Registry install smoke
         run: pnpm smoke:install
 

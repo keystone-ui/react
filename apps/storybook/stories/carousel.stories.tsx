@@ -154,9 +154,74 @@ Pass plugins via the \`plugins\` prop (e.g. \`plugins={[Autoplay({ delay: 2000 }
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * A focused part's outline as the user sees it: the computed style, and any
+ * ancestor that hides overflow and would clip it. The library's outline is
+ * Button's: 2px solid at offset 2px (the browser's own ring is `auto` 1px).
+ */
+function readFocusOutline(el: HTMLElement) {
+  const style = getComputedStyle(el);
+  const reach =
+    Number.parseFloat(style.outlineOffset) +
+    Number.parseFloat(style.outlineWidth);
+  const box = el.getBoundingClientRect();
+  const clippedBy: string[] = [];
+  for (let a = el.parentElement; a; a = a.parentElement) {
+    const s = getComputedStyle(a);
+    if (s.overflowX === "visible" && s.overflowY === "visible") {
+      continue;
+    }
+    const b = a.getBoundingClientRect();
+    const left = b.left + a.clientLeft;
+    const top = b.top + a.clientTop;
+    if (
+      box.left - reach < left - 0.5 ||
+      box.top - reach < top - 0.5 ||
+      box.right + reach > left + a.clientWidth + 0.5 ||
+      box.bottom + reach > top + a.clientHeight + 0.5
+    ) {
+      clippedBy.push(a.dataset.slot ?? a.tagName.toLowerCase());
+    }
+  }
+  return {
+    focusVisible: el.matches(":focus-visible"),
+    style: style.outlineStyle,
+    width: style.outlineWidth,
+    offset: style.outlineOffset,
+    clippedBy,
+  };
+}
+
+/** Focus `el`, let its colour transition settle, read, and blur. */
+async function focusAndRead(el: HTMLElement) {
+  el.focus();
+  await new Promise((r) => setTimeout(r, 300));
+  const outline = readFocusOutline(el);
+  el.blur();
+  return outline;
+}
+
+const LIBRARY_OUTLINE = {
+  focusVisible: true,
+  style: "solid",
+  width: "2px",
+  offset: "2px",
+  clippedBy: [],
+};
+
 // ---------------------------------------------------------------------------
 // Default
 // ---------------------------------------------------------------------------
+
+/** Button's `transition-[…]` list (`packages/ui/src/button.tsx`). */
+const BUTTON_TRANSITION_PROPERTIES = [
+  "scale",
+  "background-color",
+  "color",
+  "border-color",
+  "box-shadow",
+  "outline-color",
+];
 
 export const Default: Story = {
   render: () => (
@@ -181,6 +246,9 @@ export const Default: Story = {
 
     const nextButton = canvas.getByRole("button", { name: /next/i });
     await expect(nextButton).toBeInTheDocument();
+    await expect(
+      getComputedStyle(nextButton).transitionProperty.split(/,\s*/)
+    ).toEqual(BUTTON_TRANSITION_PROPERTIES);
   },
 };
 
@@ -211,6 +279,16 @@ export const WithDots: Story = {
           "Use `CarouselDots` for dot-style pagination. The active dot becomes a wider pill shape. Clicking a dot navigates to that slide.",
       },
     },
+  },
+  // Each dot draws the library's keyboard focus outline, not the browser's
+  // 1px `auto` ring.
+  play: async ({ canvasElement }) => {
+    const dots = canvasElement.querySelectorAll<HTMLElement>(
+      "[data-slot='carousel-dots'] button"
+    );
+    await expect(dots.length).toBe(8);
+    const dot = dots[1] as HTMLElement;
+    await expect(await focusAndRead(dot)).toEqual(LIBRARY_OUTLINE);
   },
 };
 
@@ -345,6 +423,23 @@ export const AutoHideArrows: Story = {
           "The `autoHideArrows` prop hides prev/next buttons by default and reveals them when the carousel is hovered. Uses the `group/carousel` pattern for CSS-only show/hide.",
       },
     },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // The fade adds `opacity` to Button's own transition list; it must not
+    // replace it, or hover colour and press scale snap on auto-hide arrows.
+    const arrows = [/previous/i, /next/i].map((name) =>
+      getComputedStyle(canvas.getByRole("button", { name }))
+    );
+    await expect(
+      arrows.map((style) => style.transitionProperty.split(/,\s*/))
+    ).toEqual([
+      expect.arrayContaining(["opacity", ...BUTTON_TRANSITION_PROPERTIES]),
+      expect.arrayContaining(["opacity", ...BUTTON_TRANSITION_PROPERTIES]),
+    ]);
+    await expect(arrows.map((style) => style.transitionDuration)).not.toContain(
+      "0s"
+    );
   },
 };
 

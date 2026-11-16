@@ -12,7 +12,7 @@ import {
 } from "react";
 
 import { Button, type ButtonProps } from "./button";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 function clearTimer(ref: { current: number | null }) {
   if (ref.current !== null) {
@@ -198,7 +198,7 @@ const linkClass =
 function SelectionBarLink({ className, ...props }: ButtonProps) {
   return (
     <Button
-      className={cn(linkClass, className)}
+      className={mergeClassName(cn(linkClass), className)}
       data-slot="selection-bar-link"
       size="sm"
       variant="ghost"
@@ -272,7 +272,10 @@ const SelectionBarButton = ({
   ...props
 }: SelectionBarButtonProps & RefAttributes<HTMLButtonElement>) => (
   <Button
-    className={cn(selectionBarButtonVariants({ shape, tone }), className)}
+    className={mergeClassName(
+      cn(selectionBarButtonVariants({ shape, tone })),
+      className
+    )}
     data-slot="selection-bar-button"
     ref={ref}
     size={shape === "icon" ? "icon-sm" : "sm"}

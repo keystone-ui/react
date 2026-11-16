@@ -53,6 +53,7 @@
   "block-signup-04": "blocks/signup-04.tsx",
   "block-signup-05": "blocks/signup-05.tsx",
   "block-tickets-01": "blocks/tickets-01/index.tsx",
+  "block-users-01": "blocks/users-01/index.tsx",
   "breadcrumb-collapsed": "breadcrumb/collapsed.tsx",
   "breadcrumb-custom-separator": "breadcrumb/custom-separator.tsx",
   "breadcrumb-default": "breadcrumb/default.tsx",

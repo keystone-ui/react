@@ -10,6 +10,42 @@ import {
   EmptyTitle,
 } from "./empty";
 
+// A Tailwind border-width utility: `border`, `border-2`, `border-x`,
+// `border-s-4`, and arbitrary lengths (`border-[3px]`, `border-[length:…]`).
+// Style and colour utilities (`border-dashed`, `border-border`,
+// `border-[#f00]`, `border-[color:…]`, `border-[var(--x)]`) emit no width in
+// Tailwind 4 and do not match. Pinned by the table test below.
+const BORDER_WIDTH_CLASS =
+  /^border(-[xytrblse])?(-\d+|-\[(?:length:[^\]]+|\d*\.?\d+[a-z%]*)\])?$/;
+
+describe("BORDER_WIDTH_CLASS", () => {
+  it.each([
+    "border",
+    "border-2",
+    "border-x",
+    "border-t-4",
+    "border-s-2",
+    "border-[3px]",
+    "border-[0.5rem]",
+    "border-b-[2px]",
+    "border-[length:var(--w)]",
+  ])("classifies %s as a width", (c) => {
+    expect(BORDER_WIDTH_CLASS.test(c)).toBe(true);
+  });
+
+  it.each([
+    "border-dashed",
+    "border-solid",
+    "border-border",
+    "border-[color:var(--border)]",
+    "border-t-[color:var(--border)]",
+    "border-[#f00]",
+    "border-[var(--border)]",
+  ])("does not classify %s as a width", (c) => {
+    expect(BORDER_WIDTH_CLASS.test(c)).toBe(false);
+  });
+});
+
 // =============================================================================
 // Empty
 // =============================================================================
@@ -42,6 +78,31 @@ describe("Empty", () => {
     expect(el).toHaveClass("flex-col");
     expect(el).toHaveClass("items-center");
     expect(el).toHaveClass("justify-center");
+  });
+
+  // The outline is opt-in: the root presets `border-dashed` but declares no
+  // border width, so nothing draws until a consumer adds `border`. These are
+  // declaration checks (jsdom has no CSS); the computed-style proof is the
+  // `BorderOptIn` story's play() in apps/storybook/stories/empty.stories.tsx.
+  it("presets a dashed style but declares no border width", () => {
+    render(<Empty data-testid="empty" />);
+    const classes = [...screen.getByTestId("empty").classList];
+    expect(classes).toContain("border-dashed");
+    expect(classes.filter((c) => BORDER_WIDTH_CLASS.test(c))).toEqual([]);
+  });
+
+  it("keeps the dashed preset when a consumer adds `border`", () => {
+    render(<Empty className="border" data-testid="empty" />);
+    const el = screen.getByTestId("empty");
+    expect(el).toHaveClass("border");
+    expect(el).toHaveClass("border-dashed");
+  });
+
+  it("lets `border-solid` replace the dashed preset", () => {
+    render(<Empty className="border border-solid" data-testid="empty" />);
+    const el = screen.getByTestId("empty");
+    expect(el).toHaveClass("border-solid");
+    expect(el).not.toHaveClass("border-dashed");
   });
 
   it("forwards ref", () => {

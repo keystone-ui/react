@@ -12,7 +12,7 @@ import {
   useContext,
 } from "react";
 
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -148,7 +148,7 @@ const Accordion = ({
     <AccordionVariantContext.Provider value={variant}>
       <AccordionLeadingIconContext.Provider value={false}>
         <AccordionPrimitive.Root
-          className={cn(baseClasses, classNameProp)}
+          className={mergeClassName(baseClasses, classNameProp)}
           defaultValue={defaultValue}
           disabled={disabled}
           hiddenUntilFound={hiddenUntilFound}
@@ -194,7 +194,7 @@ const AccordionItem = ({
 
   return (
     <AccordionPrimitive.Item
-      className={cn(baseClasses, classNameProp)}
+      className={mergeClassName(baseClasses, classNameProp)}
       ref={ref}
       {...props}
     />
@@ -213,7 +213,11 @@ const AccordionHeader = ({
   ...props
 }: AccordionHeaderProps &
   RefAttributes<ComponentRef<typeof AccordionPrimitive.Header>>) => (
-  <AccordionPrimitive.Header className={cn(className)} ref={ref} {...props} />
+  <AccordionPrimitive.Header
+    className={mergeClassName("", className)}
+    ref={ref}
+    {...props}
+  />
 );
 
 AccordionHeader.displayName = "AccordionHeader";
@@ -245,7 +249,7 @@ const AccordionTrigger = ({
 
   return (
     <AccordionPrimitive.Trigger
-      className={cn(baseClasses, classNameProp)}
+      className={mergeClassName(baseClasses, classNameProp)}
       ref={ref}
       {...props}
     >
@@ -302,7 +306,7 @@ const AccordionPanel = ({
 
   return (
     <AccordionPrimitive.Panel
-      className={cn(baseClasses, classNameProp)}
+      className={mergeClassName(baseClasses, classNameProp)}
       keepMounted
       ref={ref}
       {...props}

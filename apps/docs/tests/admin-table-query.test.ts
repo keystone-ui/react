@@ -20,7 +20,7 @@ import {
   usersToParams,
 } from "@/demos/blocks/admin-01/admin-filters";
 import { type CsvColumn, toCsv } from "@/demos/blocks/admin-01/csv";
-import { type User, users } from "@/demos/blocks/admin-01/mock-admin";
+import { type User, users } from "@/demos/blocks/admin-01/mock-users";
 import {
   DEFAULT_SORT as PAYMENTS_DEFAULT_SORT,
   EMPTY_FILTERS as PAYMENTS_EMPTY,

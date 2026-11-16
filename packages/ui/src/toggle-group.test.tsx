@@ -1,3 +1,4 @@
+import { DirectionProvider } from "@base-ui/react/direction-provider";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
@@ -146,5 +147,77 @@ describe("ToggleGroup", () => {
     );
 
     expect(screen.getByRole("button")).toHaveClass("border");
+  });
+  // Arrow-key roving focus follows `orientation`. Base UI only knows the
+  // orientation if the prop reaches the primitive; `data-orientation` alone
+  // changed the layout but left the arrows horizontal.
+  describe("keyboard navigation", () => {
+    function renderGroup(
+      orientation?: "horizontal" | "vertical",
+      wrap: (node: React.ReactNode) => React.ReactNode = (n) => n
+    ) {
+      render(
+        wrap(
+          <ToggleGroup orientation={orientation}>
+            <ToggleGroupItem value="one">One</ToggleGroupItem>
+            <ToggleGroupItem value="two">Two</ToggleGroupItem>
+            <ToggleGroupItem value="three">Three</ToggleGroupItem>
+          </ToggleGroup>
+        )
+      );
+      return {
+        one: screen.getByRole("button", { name: "One" }),
+        two: screen.getByRole("button", { name: "Two" }),
+      };
+    }
+
+    it("moves focus with ArrowDown and ArrowUp in a vertical group", async () => {
+      const user = userEvent.setup();
+      const { one, two } = renderGroup("vertical");
+
+      one.focus();
+      await user.keyboard("{ArrowDown}");
+      expect(two).toHaveFocus();
+
+      await user.keyboard("{ArrowUp}");
+      expect(one).toHaveFocus();
+    });
+
+    it("ignores ArrowRight in a vertical group", async () => {
+      const user = userEvent.setup();
+      const { one } = renderGroup("vertical");
+
+      one.focus();
+      await user.keyboard("{ArrowRight}");
+      expect(one).toHaveFocus();
+    });
+
+    it("moves focus with ArrowRight, not ArrowDown, in a horizontal group", async () => {
+      const user = userEvent.setup();
+      const { one, two } = renderGroup();
+
+      one.focus();
+      await user.keyboard("{ArrowDown}");
+      expect(one).toHaveFocus();
+
+      await user.keyboard("{ArrowRight}");
+      expect(two).toHaveFocus();
+    });
+
+    it("mirrors horizontal arrows under dir=rtl", async () => {
+      const user = userEvent.setup();
+      const { one, two } = renderGroup("horizontal", (node) => (
+        <DirectionProvider direction="rtl">
+          <div dir="rtl">{node}</div>
+        </DirectionProvider>
+      ));
+
+      one.focus();
+      await user.keyboard("{ArrowLeft}");
+      expect(two).toHaveFocus();
+
+      await user.keyboard("{ArrowRight}");
+      expect(one).toHaveFocus();
+    });
   });
 });

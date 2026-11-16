@@ -10,20 +10,17 @@ import {
 export default function TagWithRemove() {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Tag value="bold">
+      <Tag remove={<TagRemove />} value="bold">
         <BoldIcon />
         Bold
-        <TagRemove />
       </Tag>
-      <Tag value="italic">
+      <Tag remove={<TagRemove />} value="italic">
         <ItalicIcon />
         Italic
-        <TagRemove />
       </Tag>
-      <Tag defaultPressed value="star">
+      <Tag defaultPressed remove={<TagRemove />} value="star">
         <StarIcon />
         Star
-        <TagRemove />
       </Tag>
     </div>
   );

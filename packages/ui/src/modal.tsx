@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { X as XIcon } from "lucide-react";
 import { type ComponentProps, useRef } from "react";
 import { Button } from "./button";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // =============================================================================
 // Modal (Root)
@@ -61,7 +61,7 @@ export interface ModalOverlayProps extends DialogPrimitive.Backdrop.Props {}
 function ModalOverlay({ className, ...props }: ModalOverlayProps) {
   return (
     <DialogPrimitive.Backdrop
-      className={cn(
+      className={mergeClassName(
         "fixed inset-0 z-[var(--z-modal,50)] bg-black/50",
         className
       )}
@@ -141,14 +141,16 @@ function ModalContent({
 
   const popup = (
     <DialogPrimitive.Popup
-      className={cn(
-        modalContentVariants({ size }),
-        scrollBehavior === "outside" &&
-          "relative top-auto left-auto translate-x-0 translate-y-0",
-        // Inside mode has no scroll wrapper, so the popup itself must stop at
-        // the visible viewport (dvh tracks the mobile URL bar) and scroll.
-        scrollBehavior === "inside" &&
-          "max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain",
+      className={mergeClassName(
+        cn(
+          modalContentVariants({ size }),
+          scrollBehavior === "outside" &&
+            "relative top-auto left-auto translate-x-0 translate-y-0",
+          // Inside mode has no scroll wrapper, so the popup itself must stop at
+          // the visible viewport (dvh tracks the mobile URL bar) and scroll.
+          scrollBehavior === "inside" &&
+            "max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain"
+        ),
         className
       )}
       data-slot="modal-content"
@@ -245,7 +247,10 @@ export interface ModalTitleProps extends DialogPrimitive.Title.Props {}
 function ModalTitle({ className, ...props }: ModalTitleProps) {
   return (
     <DialogPrimitive.Title
-      className={cn("font-semibold text-lg leading-none", className)}
+      className={mergeClassName(
+        "font-semibold text-lg leading-none",
+        className
+      )}
       data-slot="modal-title"
       {...props}
     />
@@ -261,7 +266,7 @@ export interface ModalDescriptionProps
 function ModalDescription({ className, ...props }: ModalDescriptionProps) {
   return (
     <DialogPrimitive.Description
-      className={cn("text-muted-foreground text-sm", className)}
+      className={mergeClassName("text-muted-foreground text-sm", className)}
       data-slot="modal-description"
       {...props}
     />

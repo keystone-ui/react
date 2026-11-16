@@ -313,6 +313,90 @@ export const Disabled: Story = {
   },
 };
 
+/** Opacity the user sees: the element's own times every ancestor's. */
+const effectiveOpacity = (el: Element | null) => {
+  let opacity = 1;
+  for (let node = el; node; node = node.parentElement) {
+    opacity *= Number(getComputedStyle(node).opacity);
+  }
+  return opacity;
+};
+
+/**
+ * Base UI renders each radio as a `<span>`, so `:disabled` never matches it;
+ * the dimming has to come from `data-disabled`. A bare item, an item in a
+ * disabled group dim on their own, and inside a disabled `Field` the item and
+ * its `FieldLabel` stay at 0.5 (nothing dims twice). A sibling `Label` is
+ * deliberately not asserted: Label has no safe way to know its control is
+ * disabled.
+ */
+export const DisabledDimming: Story = {
+  name: "Disabled dimming",
+  render: () => (
+    <div className="flex w-fit flex-col gap-6">
+      <RadioGroup defaultValue="enabled">
+        <div className="flex items-center gap-2">
+          <RadioGroupItem
+            data-testid="bare"
+            disabled
+            id="bare-disabled"
+            value="bare"
+          />
+          <Label htmlFor="bare-disabled">Outside a Field</Label>
+        </div>
+        <Field data-disabled orientation="horizontal">
+          <RadioGroupItem
+            data-testid="in-field"
+            disabled
+            id="field-disabled"
+            value="field"
+          />
+          <FieldLabel data-testid="in-field-label" htmlFor="field-disabled">
+            Inside a disabled Field
+          </FieldLabel>
+        </Field>
+        <div className="flex items-center gap-2">
+          <RadioGroupItem data-testid="enabled" id="enabled" value="enabled" />
+          <Label data-testid="enabled-label" htmlFor="enabled">
+            Enabled
+          </Label>
+        </div>
+      </RadioGroup>
+      <RadioGroup disabled>
+        <RadioGroupItem
+          aria-label="In a disabled group"
+          data-testid="group-disabled"
+          value="group"
+        />
+      </RadioGroup>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const bare = canvas.getByTestId("bare");
+
+    await expect(bare).toHaveAttribute("data-disabled");
+    await expect(effectiveOpacity(bare)).toBe(0.5);
+    await expect(getComputedStyle(bare).cursor).toBe("not-allowed");
+
+    const inField = canvas.getByTestId("in-field");
+    await expect(effectiveOpacity(inField)).toBe(0.5);
+    await expect(getComputedStyle(inField).cursor).toBe("not-allowed");
+    await expect(effectiveOpacity(canvas.getByTestId("in-field-label"))).toBe(
+      0.5
+    );
+
+    const groupDisabled = canvas.getByTestId("group-disabled");
+    await expect(effectiveOpacity(groupDisabled)).toBe(0.5);
+    await expect(getComputedStyle(groupDisabled).cursor).toBe("not-allowed");
+
+    const enabled = canvas.getByTestId("enabled");
+    await expect(effectiveOpacity(enabled)).toBe(1);
+    await expect(getComputedStyle(enabled).cursor).not.toBe("not-allowed");
+    await expect(effectiveOpacity(canvas.getByTestId("enabled-label"))).toBe(1);
+  },
+};
+
 // Invalid Example
 export const Invalid: Story = {
   name: "Invalid",

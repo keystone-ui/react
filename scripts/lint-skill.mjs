@@ -290,9 +290,12 @@ if (listSection) {
 // 4. The Block Selection table names blocks that exist.
 // ---------------------------------------------------------------------------
 const registryJson = JSON.parse(read("registry.json"));
+// A package-flavour item (`npm/users-01`) is the same block for apps on the
+// npm package; the table names the block once, and the note below it names
+// the package flavour.
 const actualBlocks = new Set(
   registryJson.items
-    .filter((i) => i.type === "registry:block")
+    .filter((i) => i.type === "registry:block" && !i.name.startsWith("npm/"))
     .map((i) => i.name)
 );
 const blockSection = skillMd.match(/## Block Selection\n([\s\S]*?)(?=\n## )/);

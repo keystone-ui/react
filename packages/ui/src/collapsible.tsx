@@ -3,7 +3,7 @@
 import { Collapsible as CollapsiblePrimitive } from "@base-ui/react/collapsible";
 import type * as React from "react";
 
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -125,7 +125,7 @@ const CollapsibleContent = ({
 
   return (
     <CollapsiblePrimitive.Panel
-      className={cn(baseClasses, className)}
+      className={mergeClassName(baseClasses, className)}
       data-slot="collapsible-content"
       keepMounted
       ref={ref}

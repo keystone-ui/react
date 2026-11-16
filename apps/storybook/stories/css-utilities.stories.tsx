@@ -59,19 +59,34 @@ export const ScrollFade: Story = {
 
     await expect(getComputedStyle(scrolls).maskImage).toContain("gradient");
 
+    // The keyframes ramp each fade over the outer 10% of the scroll range, so
+    // one pixel of offset moves a fade by 10 / range: 10 / 666 ≈ 0.015 here,
+    // the value CI once saw. `toBeCloseTo(x, 1)` allows |diff| < 0.05, about
+    // three pixels; a broken animation leaves the properties at 0 or 1.
+    // Both reads share one `waitFor`: the end fade stays 1 for the first 90%
+    // of the range, so only the start fade proves the list is at the top.
+
     // At the top: no start fade, an end fade because there is more below.
-    await waitFor(() => expect(fade(scrolls, "--ks-scroll-fade-end")).toBe(1));
-    await expect(fade(scrolls, "--ks-scroll-fade-start")).toBe(0);
+    await waitFor(async () => {
+      await expect(fade(scrolls, "--ks-scroll-fade-start")).toBeCloseTo(0, 1);
+      await expect(fade(scrolls, "--ks-scroll-fade-end")).toBeCloseTo(1, 1);
+    });
 
     // At the bottom: the start fade appears and the end fade clears.
     scrolls.scrollTop = scrolls.scrollHeight;
-    await waitFor(() => expect(fade(scrolls, "--ks-scroll-fade-end")).toBe(0));
-    await expect(fade(scrolls, "--ks-scroll-fade-start")).toBe(1);
+    await waitFor(async () => {
+      await expect(fade(scrolls, "--ks-scroll-fade-start")).toBeCloseTo(1, 1);
+      await expect(fade(scrolls, "--ks-scroll-fade-end")).toBeCloseTo(0, 1);
+    });
 
-    // A container with nothing to scroll has an inactive timeline: no fade.
+    // A container with nothing to scroll has an inactive timeline, so the
+    // animation applies nothing and both properties keep their exact initial
+    // value of 0.
     const fits = canvas.getByTestId("fits");
-    await expect(fade(fits, "--ks-scroll-fade-start")).toBe(0);
-    await expect(fade(fits, "--ks-scroll-fade-end")).toBe(0);
+    await waitFor(async () => {
+      await expect(fade(fits, "--ks-scroll-fade-start")).toBe(0);
+      await expect(fade(fits, "--ks-scroll-fade-end")).toBe(0);
+    });
   },
 };
 

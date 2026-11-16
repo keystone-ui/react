@@ -71,6 +71,23 @@ Add helper text below the input:
 
 <ComponentPreview name="label-with-description" />
 
+
+### Disabled
+
+With the default rendering of `Checkbox`, `RadioGroupItem` and `Switch`, a sibling `Label` does not automatically dim when the control is disabled. Use `FieldLabel` inside `<Field data-disabled>` to dim the label, and pass `disabled` to the control:
+
+```tsx
+import { Checkbox } from "@keystoneui/react/checkbox";
+import { Field, FieldLabel } from "@keystoneui/react/field";
+
+<Field data-disabled orientation="horizontal">
+  <Checkbox disabled id="terms" />
+  <FieldLabel htmlFor="terms">Accept terms</FieldLabel>
+</Field>
+```
+
+<ComponentPreview name="checkbox-disabled" />
+
 ## RTL
 
 RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/rtl) for what works today.
@@ -81,6 +98,7 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 ## Related Blocks
 
 - [Admin 01](/docs/blocks/admin-01) — An admin panel — collapsible sidebar shell, topbar with breadcrumb, an overview with KPI tiles and a signups chart, and users and payments tables sharing one toolbar design.
+- [Users 01](/docs/blocks/users-01) — The users view from admin-01 on its own — a filterable, sortable users table with row selection, CSV export, loading states and URL-synced filters, and a record view for each user. No sidebar, overview or payments.
 
 {/* backlinks:end */}
 ## API Reference

@@ -53,7 +53,7 @@ import {
 import { AdminUsersToolbar } from "./admin-users-toolbar";
 import { downloadCsv } from "./csv";
 import { FilteredEmpty } from "./filtered-empty";
-import { statusLabels, type User, users } from "./mock-admin";
+import { statusLabels, type User } from "./mock-users";
 import { ResultSummary } from "./result-summary";
 import { SkeletonRows } from "./skeleton-rows";
 import { SortableHead } from "./sort-menu";
@@ -163,9 +163,16 @@ const USER_COLUMNS = COLUMNS.flatMap((column) =>
 export function AdminUsersTable({
   onOpenUser,
   table,
+  users,
 }: {
   onOpenUser: (id: string) => void;
   table: UsersTableState;
+  /**
+   * Every user the table was built from. A selection outlives filters and
+   * pages, so the selection bar resolves its ids against these rather than
+   * against the rows on show.
+   */
+  users: readonly User[];
 }) {
   const { loading, result, selected } = table;
   const visible = COLUMNS.filter(
@@ -327,7 +334,11 @@ export function AdminUsersTable({
         </Card>
       </div>
 
-      <UserSelectionBar onClear={table.clearSelection} selected={selected} />
+      <UserSelectionBar
+        onClear={table.clearSelection}
+        selected={selected}
+        users={users}
+      />
     </>
   );
 }
@@ -340,9 +351,11 @@ export function AdminUsersTable({
 function UserSelectionBar({
   onClear,
   selected,
+  users,
 }: {
   onClear: () => void;
   selected: ReadonlySet<string>;
+  users: readonly User[];
 }) {
   const [copied, setCopied] = useState(false);
   const rows = users.filter((user) => selected.has(user.id));

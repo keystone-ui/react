@@ -19,7 +19,7 @@ import {
   useState,
 } from "react";
 import { Button } from "./button";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -340,13 +340,15 @@ function CarouselPrevious({
 
   return (
     <Button
-      className={cn(
-        CAROUSEL_ARROW_BASE,
-        orientation === "horizontal"
-          ? "top-1/2 -left-8 -translate-y-1/2"
-          : "-top-8 left-1/2 -translate-x-1/2 rotate-90",
-        autoHideArrows &&
-          "opacity-0 pointer-coarse:opacity-100 transition-opacity focus-visible:opacity-100 group-hover/carousel:opacity-100",
+      className={mergeClassName(
+        cn(
+          CAROUSEL_ARROW_BASE,
+          orientation === "horizontal"
+            ? "top-1/2 -left-8 -translate-y-1/2"
+            : "-top-8 left-1/2 -translate-x-1/2 rotate-90",
+          autoHideArrows &&
+            "opacity-0 pointer-coarse:opacity-100 transition-[opacity,scale,background-color,color,border-color,box-shadow,outline-color] focus-visible:opacity-100 group-hover/carousel:opacity-100"
+        ),
         className
       )}
       data-slot="carousel-previous"
@@ -377,13 +379,15 @@ function CarouselNext({
 
   return (
     <Button
-      className={cn(
-        CAROUSEL_ARROW_BASE,
-        orientation === "horizontal"
-          ? "top-1/2 -right-8 -translate-y-1/2"
-          : "-bottom-8 left-1/2 -translate-x-1/2 rotate-90",
-        autoHideArrows &&
-          "opacity-0 pointer-coarse:opacity-100 transition-opacity focus-visible:opacity-100 group-hover/carousel:opacity-100",
+      className={mergeClassName(
+        cn(
+          CAROUSEL_ARROW_BASE,
+          orientation === "horizontal"
+            ? "top-1/2 -right-8 -translate-y-1/2"
+            : "-bottom-8 left-1/2 -translate-x-1/2 rotate-90",
+          autoHideArrows &&
+            "opacity-0 pointer-coarse:opacity-100 transition-[opacity,scale,background-color,color,border-color,box-shadow,outline-color] focus-visible:opacity-100 group-hover/carousel:opacity-100"
+        ),
         className
       )}
       data-slot="carousel-next"
@@ -423,7 +427,7 @@ function CarouselDots({ className, ...props }: ComponentProps<"div">) {
             // 8px dot, 24px-tall hit area. Horizontally the pseudo stops at
             // the gap midpoint (3px each side) so a neighbour never steals
             // taps that land on this dot's visible pixels.
-            "relative h-2 cursor-pointer rounded-full transition-[width,background-color] duration-(--duration-base,180ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)) after:absolute after:-inset-x-[3px] after:-inset-y-2",
+            "relative h-2 cursor-pointer rounded-full transition-[width,background-color,outline-color] duration-(--duration-base,180ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)) after:absolute after:-inset-x-[3px] after:-inset-y-2 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
             index === selectedIndex
               ? "w-4 bg-foreground"
               : "w-2 bg-foreground/25 hover:bg-foreground/50"

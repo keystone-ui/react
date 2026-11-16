@@ -2,7 +2,7 @@
 
 import { Switch as SwitchPrimitive } from "@base-ui/react/switch";
 import type * as React from "react";
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 export interface SwitchProps extends SwitchPrimitive.Root.Props {
   /**
@@ -20,22 +20,24 @@ export const Switch = ({
 }: SwitchProps & React.RefAttributes<HTMLButtonElement>) => {
   return (
     <SwitchPrimitive.Root
-      className={cn(
-        "peer group/switch relative inline-flex shrink-0 cursor-pointer touch-manipulation items-center rounded-full border border-transparent transition-[background-color,border-color] duration-(--duration-fast,125ms)",
-        // Size variants
-        "data-[size=default]:h-4.5 data-[size=default]:w-8",
-        "data-[size=sm]:h-3.5 data-[size=sm]:w-6",
-        // State colors
-        "data-checked:bg-primary data-unchecked:bg-input",
-        "dark:data-unchecked:bg-input/80",
-        // Focus styles - outside outline like buttons
-        "focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
-        // Invalid styles
-        "aria-invalid:border-destructive aria-invalid:transition-none aria-invalid:focus-visible:outline-destructive/50 dark:aria-invalid:border-destructive/50",
-        // Disabled styles
-        "data-disabled:cursor-not-allowed data-disabled:opacity-50",
-        // Click area extension — bumped toward AAA touch target
-        "after:absolute after:-inset-x-4 after:-inset-y-3",
+      className={mergeClassName(
+        cn(
+          "peer group/switch relative inline-flex shrink-0 cursor-pointer touch-manipulation items-center rounded-full border border-transparent transition-[background-color,border-color] duration-(--duration-fast,125ms)",
+          // Size variants
+          "data-[size=default]:h-4.5 data-[size=default]:w-8",
+          "data-[size=sm]:h-3.5 data-[size=sm]:w-6",
+          // State colors
+          "data-checked:bg-primary data-unchecked:bg-input",
+          "dark:data-unchecked:bg-input/80",
+          // Focus styles - outside outline like buttons
+          "focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2",
+          // Invalid styles
+          "aria-invalid:border-destructive aria-invalid:transition-none aria-invalid:focus-visible:outline-destructive/50 dark:aria-invalid:border-destructive/50",
+          // Disabled styles
+          "data-disabled:cursor-not-allowed data-disabled:opacity-50",
+          // Click area extension — bumped toward AAA touch target
+          "after:absolute after:-inset-x-4 after:-inset-y-3"
+        ),
         className
       )}
       data-size={size}

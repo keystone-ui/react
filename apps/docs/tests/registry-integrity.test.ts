@@ -35,10 +35,60 @@ const UI_ALIAS_IMPORT = /["']@\/components\/ui\/([a-z0-9-]+)["']/g;
 const KEYSTONE_ADDRESS = /^https:\/\/keystoneui\.io\/r\/([a-z0-9-]+)\.json$/;
 /** ui files a block ships itself rather than pulling from the registry. */
 const BLOCK_LOCAL_UI = new Set<string>();
+/**
+ * Known gaps, each to be fixed in its own change and then removed here.
+ * filter-pills' drawer-parts.tsx imports Checkbox without declaring it. It
+ * installs today only because its declared dropdown-menu depends on
+ * checkbox, so a change to dropdown-menu's dependencies would break the kit
+ * silently. Declaring it changes the published filter-pills.json, so it is
+ * left to a change of its own.
+ */
+const KNOWN_UNDECLARED = new Set(["filter-pills imports checkbox"]);
 
 /** How an item names a Keystone sibling: its full registry URL. */
 const keystoneAddress = (name: string) =>
   `https://keystoneui.io/r/${name}.json`;
+
+/**
+ * For every block and kit: the ui components it imports without declaring
+ * them ("<item> imports <component>"), and those it declares but never
+ * imports.
+ */
+function uiDeclarations(): { undeclared: string[]; unused: string[] } {
+  const undeclared: string[] = [];
+  const unused: string[] = [];
+  for (const item of registry.items) {
+    if (item.type !== "registry:block" && item.type !== "registry:component") {
+      continue;
+    }
+    const used = new Set<string>();
+    for (const file of item.files ?? []) {
+      const source = readFileSync(join(REPO_ROOT, file.path), "utf-8");
+      for (const match of source.matchAll(UI_ALIAS_IMPORT)) {
+        used.add(match[1]);
+      }
+    }
+    const declared = new Set(
+      (item.registryDependencies ?? [])
+        .map((dep) => KEYSTONE_ADDRESS.exec(dep)?.[1])
+        .filter((name): name is string => name !== undefined)
+    );
+    for (const name of used) {
+      if (!(declared.has(name) || BLOCK_LOCAL_UI.has(name))) {
+        undeclared.push(`${item.name} imports ${name}`);
+      }
+    }
+    for (const name of declared) {
+      if (
+        !used.has(name) &&
+        registry.items.some((i) => i.name === name && i.type === "registry:ui")
+      ) {
+        unused.push(`${item.name} declares ${name} but never imports it`);
+      }
+    }
+  }
+  return { undeclared, unused };
+}
 
 describe("registry.json", () => {
   it("declares at least one item", () => {
@@ -221,52 +271,44 @@ describe("what a consumer installs", () => {
     expect(undeclared).toEqual([]);
   });
 
-  it("declares exactly the ui components each block imports", () => {
+  it("declares exactly the ui components each block and kit imports", () => {
     // profile-dropdown-01 imported circular-progress without declaring it, so
     // a consumer's install did not typecheck; three blocks also declared
     // components they never used. Found by scripts/smoke-install.mjs.
-    const drift: string[] = [];
-    for (const item of registry.items) {
-      if (item.type !== "registry:block") {
-        continue;
-      }
-      const used = new Set<string>();
-      for (const file of item.files ?? []) {
-        const source = readFileSync(join(REPO_ROOT, file.path), "utf-8");
-        for (const match of source.matchAll(UI_ALIAS_IMPORT)) {
-          used.add(match[1]);
-        }
-      }
-      const declared = new Set(
-        (item.registryDependencies ?? [])
-          .map((dep) => KEYSTONE_ADDRESS.exec(dep)?.[1])
-          .filter((name): name is string => name !== undefined)
-      );
-      for (const name of used) {
-        if (!(declared.has(name) || BLOCK_LOCAL_UI.has(name))) {
-          drift.push(`${item.name} imports ${name} but does not declare it`);
-        }
-      }
-      for (const name of declared) {
-        if (
-          !used.has(name) &&
-          registry.items.some(
-            (i) => i.name === name && i.type === "registry:ui"
-          )
-        ) {
-          drift.push(`${item.name} declares ${name} but never imports it`);
-        }
-      }
-    }
-    expect(drift).toEqual([]);
+    // Kits (registry:component items such as filter-pills and sidebar) are
+    // held to the same rule: the install smoke puts every non-block item in
+    // one shared project, where a component a kit forgot to declare is
+    // present anyway, so only this test can see the gap.
+    const { undeclared, unused } = uiDeclarations();
+    expect([
+      ...undeclared
+        .filter((gap) => !KNOWN_UNDECLARED.has(gap))
+        .map((gap) => `${gap} but does not declare it`),
+      ...unused,
+    ]).toEqual([]);
   });
 
-  it("ships registry:component kits that import only their own files", () => {
+  it("keeps no known gap that is no longer a gap", () => {
+    // Compared with the gaps that remain, so any fix retires the entry:
+    // declaring the component, dropping the import or removing the item.
+    const remaining = new Set(uiDeclarations().undeclared);
+    expect([...KNOWN_UNDECLARED].filter((gap) => !remaining.has(gap))).toEqual(
+      []
+    );
+  });
+
+  it("ships kits and blocks that import only their own files", () => {
     // A kit lifted out of a block (filter-pills from admin-01) must not reach
-    // back into the block for a sibling it does not ship.
+    // back into the block for a sibling it does not ship, and neither may a
+    // block built from another block's files (users-01 from admin-01): every
+    // file lands flat in the consumer's components directory, so a sibling
+    // the item does not list resolves to nothing.
     const leaks: string[] = [];
     for (const item of registry.items) {
-      if (item.type !== "registry:component") {
+      if (
+        item.type !== "registry:component" &&
+        item.type !== "registry:block"
+      ) {
         continue;
       }
       const shipped = new Set(

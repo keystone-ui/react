@@ -167,6 +167,22 @@ Input with text suffix:
 
 <ComponentPreview name="input-group-text-suffix" />
 
+
+### Disabled
+
+A disabled control dims only itself; set `data-disabled="true"` on `InputGroup` to dim the addons with it.
+
+```tsx
+<InputGroup data-disabled="true">
+  <InputGroupAddon>
+    <InputGroupText>https://</InputGroupText>
+  </InputGroupAddon>
+  <InputGroupInput disabled placeholder="example.com" />
+</InputGroup>
+```
+
+The attribute only changes opacity: pass `disabled` to any `InputGroupButton` in an addon yourself.
+
 ## RTL
 
 RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/rtl) for what works today.
@@ -181,6 +197,7 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 - [Betting Panel 01](/docs/blocks/betting-panel-01) — A betting panel with inline ½ / 2× multipliers inside the bet amount field and risk-level toggles.
 - [Betting Panel 03](/docs/blocks/betting-panel-03) — A betting panel with quick-pick preset amounts for rapid bet placement.
 - [Tickets 01](/docs/blocks/tickets-01) — A sortable, filterable tickets table with inline cell editing, a new-ticket modal, and a floating bulk-edit action bar.
+- [Users 01](/docs/blocks/users-01) — The users view from admin-01 on its own — a filterable, sortable users table with row selection, CSV export, loading states and URL-synced filters, and a record view for each user. No sidebar, overview or payments.
 
 {/* backlinks:end */}
 

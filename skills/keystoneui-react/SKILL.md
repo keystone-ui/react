@@ -205,11 +205,17 @@ the changelog.
 
 ## Interoperating with shadcn
 
-Keystone and shadcn can coexist, and `admin-01` deliberately ships shadcn's
+Keystone and shadcn can coexist, and Keystone deliberately ships shadcn's
 sidebar (adapted onto Keystone primitives, installed as
-`components/sidebar.tsx`) because Keystone intentionally has no app shell. Never
-run `shadcn add sidebar` into a Keystone app — its dependencies replace
-Keystone's Button, Input and Tooltip. Two things bite:
+`components/sidebar.tsx`) as a registry item because Keystone intentionally has
+no app shell in the library. It comes with `admin-01`, or on its own:
+`npx shadcn@latest add https://keystoneui.io/r/sidebar.json`. Always use that
+full URL — the bare `shadcn add sidebar` selects shadcn's item, whose
+dependencies install to the same paths as Keystone's Button, Input and
+Tooltip; accepting an overwrite (or `--overwrite`) replaces Keystone's files.
+The sidebar reads six `--sidebar-*` tokens (the default style declares all
+eight of the set), imports Keystone's components through the `components.json`
+UI alias, and has no package flavour. Two things bite:
 
 1. **Both registries install to the same path.** `components/ui/button.tsx` is
    one file. Installing shadcn's `button` over Keystone's replaces it. Bare
@@ -256,11 +262,14 @@ Blocks are full-page or feature-level compositions, not primitives. **If the use
 | Analytics dashboard / KPIs + charts | `dashboard-01` | `dashboard` |
 | Admin panel / app shell with sidebar | `admin-01` | `admin` |
 | Account settings (profile form, notifications, sessions, delete account) | `settings-01` | `admin`, `settings` |
-
-Just the filter row from `admin-01` (pills that name their dimension, Add filter, focus-safe removal): install the `filter-pills` kit — `npx shadcn@latest add https://keystoneui.io/r/filter-pills.json`.
 | Filterable data table (transactions, payments, records) | `admin-01`, `tickets-01` | `admin`, `data` |
+| Users table with filters, selection and a user record page, without an app shell | `users-01` | `data`, `admin` |
 | Betting panel / wager UI | `betting-panel-01`, `betting-panel-02`, `betting-panel-03`, `betting-panel-04` | `betting` |
 | Sportsbook bet slip (singles/accumulator, odds changes, deposit limits) | `bet-slip-01` | `betting` |
+
+Just the filter row from `admin-01` (pills that name their dimension, Add filter, focus-safe removal): install the `filter-pills` kit — `npx shadcn@latest add https://keystoneui.io/r/filter-pills.json`. Just the users view, without the sidebar, overview or payments: `users-01`, which installs the same files as `admin-01`.
+
+In an app that uses the `@keystoneui/react` package (no vendored `components/ui`), install the package flavour of those two instead: `npx shadcn@latest add https://keystoneui.io/r/npm/users-01.json` or `…/r/npm/filter-pills.json`. They have the same file names and import `@keystoneui/react/*`. `npm/users-01` needs `@keystoneui/react` 1.0.0-beta.11 or later; `npm/filter-pills` is tested with 1.0.0-beta.11. Both need a `components.json` (the `users-01` docs give one to write by hand). Only these two have a package flavour. Use one flavour per app.
 
 Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or via the unified CLI: `keystoneui blocks` to list, `keystoneui blocks --category authentication` to filter, `keystoneui blocks <name>` to view source. The `--category` flag works on `list` and `search` too.
 

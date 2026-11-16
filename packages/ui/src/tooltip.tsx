@@ -2,7 +2,7 @@
 
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
 
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // =============================================================================
 // TooltipProvider
@@ -86,9 +86,11 @@ function TooltipContent({
         sideOffset={sideOffset}
       >
         <TooltipPrimitive.Popup
-          className={cn(
-            "bg-foreground text-background",
-            "wrap-anywhere w-fit max-w-xs origin-(--transform-origin) rounded-md px-3 py-1.5 text-xs",
+          className={mergeClassName(
+            cn(
+              "bg-foreground text-background",
+              "wrap-anywhere w-fit max-w-xs origin-(--transform-origin) rounded-md px-3 py-1.5 text-xs"
+            ),
             className
           )}
           data-slot="tooltip-content"

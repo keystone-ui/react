@@ -181,9 +181,9 @@ Chips are for state a panel has **hidden**.
 
 Build a chip from `Badge` — a polymorphic `<span>` — with the remove button
 nested inside it, and label that button for its filter (`Remove Role filter`).
-Not `TagGroup`: `TagGroupItem` with `onRemove` renders its body as a toggle
-button and appends the remove control *inside* it, emitting a button within a
-button — invalid, and the label stays focusable. If every filter is a visible,
+Not `TagGroup`: a `TagGroupItem` body is a toggle button (its remove control
+sits beside it), so the label becomes a focusable control that toggles a
+pressed state the filter does not have. If every filter is a visible,
 self-describing control, there is nothing for a chip to add.
 
 When filters are added on demand, derive which controls show:

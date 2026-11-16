@@ -396,10 +396,11 @@ function warnOnUncategorizedBlocks(passthroughItems) {
  * Button with a different API, and nothing errored. Found by
  * `scripts/smoke-install.mjs`.
  *
- * Names that are not Keystone items (`sidebar`, which admin-01 takes from
- * shadcn on purpose) and anything already an address (URL, `@ns/x`,
- * `owner/repo/x`) pass through untouched, so this is idempotent over the
- * hand-maintained block entries.
+ * Names that are not Keystone items (an item meant to come from shadcn's
+ * registry) and anything already an address (URL, `@ns/x`, `owner/repo/x`)
+ * pass through untouched, so this is idempotent over the hand-maintained
+ * block entries. Keystone has its own `sidebar` item, so a bare `"sidebar"`
+ * becomes Keystone's URL here.
  */
 function qualifyRegistryDependencies(items, homepage) {
   const keystoneNames = new Set(items.map((i) => i.name));
@@ -424,7 +425,10 @@ const exampleItems = buildExampleItems(registryEntries.map((e) => e.name));
 const themeItems = buildThemeItems();
 
 const existing = JSON.parse(readFileSync(REGISTRY_JSON, "utf-8"));
-// Blocks are hand-maintained in registry.json and passed through. Style/theme
+// Blocks are hand-maintained in registry.json and passed through, and so are
+// the package-flavour items (`npm/users-01`, `npm/filter-pills`): their files
+// are the demo sources, built to apps/docs/public/r/npm/ (the directory is
+// created by ensureNestedOutputDirs). `--check` fails if one is dropped. Style/theme
 // items are owned by packages/ui/registry/ and regenerated here, so drop any
 // stale copies before merging.
 const blockItems = existing.items.filter(

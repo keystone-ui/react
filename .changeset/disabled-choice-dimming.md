@@ -1,0 +1,7 @@
+---
+"@keystoneui/react": patch
+---
+
+Disabled Checkbox and RadioGroupItem dim outside a Field
+
+A disabled `Checkbox` or `RadioGroupItem` now dims to 50% opacity and shows the not-allowed cursor on its own, not only inside a disabled `Field`. Base UI renders both controls as a `<span>`, which `:disabled` never matches, so the `disabled:` styles did nothing; they now key on Base UI's `data-disabled` attribute as well. Inside a disabled `Field` the control stays at 50%: it does not dim twice.

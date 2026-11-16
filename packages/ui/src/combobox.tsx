@@ -21,7 +21,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "./input-group";
-import { cn, POPUP_ITEM_HEIGHT } from "./utils";
+import { cn, mergeClassName, POPUP_ITEM_HEIGHT } from "./utils";
 
 /**
  * Wraps bare text children in a span that can ellipsize. A flex row cannot
@@ -80,7 +80,10 @@ function ComboboxTrigger({
 }: ComboboxTriggerProps) {
   return (
     <ComboboxPrimitive.Trigger
-      className={cn("[&_svg:not([class*='size-'])]:size-4", className)}
+      className={mergeClassName(
+        "[&_svg:not([class*='size-'])]:size-4",
+        className
+      )}
       data-slot="combobox-trigger"
       {...props}
     >
@@ -98,7 +101,7 @@ export interface ComboboxClearProps extends ComboboxPrimitive.Clear.Props {}
 function ComboboxClear({ className, ...props }: ComboboxClearProps) {
   return (
     <ComboboxPrimitive.Clear
-      className={cn(className)}
+      className={mergeClassName("", className)}
       data-slot="combobox-clear"
       render={<InputGroupButton size="icon-xs" variant="ghost" />}
       {...props}
@@ -111,11 +114,17 @@ function ComboboxClear({ className, ...props }: ComboboxClearProps) {
 // =============================================================================
 // ComboboxInput
 // =============================================================================
-export interface ComboboxInputProps extends ComboboxPrimitive.Input.Props {
+export interface ComboboxInputProps
+  extends Omit<ComboboxPrimitive.Input.Props, "className"> {
   /**
    * Children to render inside the input group (e.g., InputGroupAddon)
    */
   children?: ReactNode;
+  /**
+   * Classes for the `InputGroup` wrapper. A string only: the wrapper is a
+   * plain element, so Base UI's function form has no state to call it with.
+   */
+  className?: string;
   /**
    * Show the clear button when a value is selected
    * @default false
@@ -217,12 +226,14 @@ function ComboboxContent({
         sideOffset={sideOffset}
       >
         <ComboboxPrimitive.Popup
-          className={cn(
-            "bg-popover text-popover-foreground ring-popup-ring",
-            "group/combobox-content relative max-h-(--available-height) w-(--anchor-width) min-w-[calc(var(--anchor-width)+--spacing(7))] max-w-(--available-width)",
-            "origin-(--transform-origin) overflow-hidden rounded-lg shadow-lg ring-1",
-            "data-[chips=true]:min-w-(--anchor-width)",
-            "*:data-[slot=input-group]:!border-0 *:data-[slot=input-group]:!shadow-none *:data-[slot=input-group]:!ring-0 *:data-[slot=input-group]:rounded-none *:data-[slot=input-group]:bg-transparent",
+          className={mergeClassName(
+            cn(
+              "bg-popover text-popover-foreground ring-popup-ring",
+              "group/combobox-content relative max-h-(--available-height) w-(--anchor-width) min-w-[calc(var(--anchor-width)+--spacing(7))] max-w-(--available-width)",
+              "origin-(--transform-origin) overflow-hidden rounded-lg shadow-lg ring-1",
+              "data-[chips=true]:min-w-(--anchor-width)",
+              "*:data-[slot=input-group]:!border-0 *:data-[slot=input-group]:!shadow-none *:data-[slot=input-group]:!ring-0 *:data-[slot=input-group]:rounded-none *:data-[slot=input-group]:bg-transparent"
+            ),
             className
           )}
           data-chips={!!anchor}
@@ -245,7 +256,7 @@ export interface ComboboxListProps extends ComboboxPrimitive.List.Props {}
 function ComboboxList({ className, ...props }: ComboboxListProps) {
   return (
     <ComboboxPrimitive.List
-      className={cn(
+      className={mergeClassName(
         "no-scrollbar max-h-[min(calc(--spacing(72)---spacing(9)),calc(var(--available-height)---spacing(9)))] scroll-py-1 overflow-y-auto overscroll-contain p-1 data-empty:p-0",
         className
       )}
@@ -265,11 +276,13 @@ export interface ComboboxItemProps extends ComboboxPrimitive.Item.Props {
 function ComboboxItem({ className, children, ...props }: ComboboxItemProps) {
   return (
     <ComboboxPrimitive.Item
-      className={cn(
-        "data-highlighted:bg-accent data-highlighted:text-accent-foreground not-data-[variant=destructive]:data-highlighted:*:text-accent-foreground",
-        `relative flex ${POPUP_ITEM_HEIGHT} w-full min-w-0 cursor-pointer select-none items-center gap-1.5 rounded-md pr-8 pl-1.5 text-sm outline-hidden`,
-        "data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50",
-        "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+      className={mergeClassName(
+        cn(
+          "data-highlighted:bg-accent data-highlighted:text-accent-foreground not-data-[variant=destructive]:data-highlighted:*:text-accent-foreground",
+          `relative flex ${POPUP_ITEM_HEIGHT} w-full min-w-0 cursor-pointer select-none items-center gap-1.5 rounded-md pr-8 pl-1.5 text-sm outline-hidden`,
+          "data-disabled:pointer-events-none data-disabled:cursor-not-allowed data-disabled:opacity-50",
+          "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0"
+        ),
         className
       )}
       data-slot="combobox-item"
@@ -295,7 +308,7 @@ export interface ComboboxGroupProps extends ComboboxPrimitive.Group.Props {}
 function ComboboxGroup({ className, ...props }: ComboboxGroupProps) {
   return (
     <ComboboxPrimitive.Group
-      className={cn(className)}
+      className={mergeClassName("", className)}
       data-slot="combobox-group"
       {...props}
     />
@@ -311,7 +324,10 @@ export interface ComboboxLabelProps
 function ComboboxLabel({ className, ...props }: ComboboxLabelProps) {
   return (
     <ComboboxPrimitive.GroupLabel
-      className={cn("px-1.5 py-1 text-muted-foreground text-xs", className)}
+      className={mergeClassName(
+        "px-1.5 py-1 text-muted-foreground text-xs",
+        className
+      )}
       data-slot="combobox-label"
       {...props}
     />
@@ -338,7 +354,7 @@ export interface ComboboxEmptyProps extends ComboboxPrimitive.Empty.Props {}
 function ComboboxEmpty({ className, ...props }: ComboboxEmptyProps) {
   return (
     <ComboboxPrimitive.Empty
-      className={cn(
+      className={mergeClassName(
         "hidden w-full justify-center py-2 text-center text-muted-foreground text-sm group-data-empty/combobox-content:flex",
         className
       )}
@@ -357,7 +373,7 @@ export interface ComboboxSeparatorProps
 function ComboboxSeparator({ className, ...props }: ComboboxSeparatorProps) {
   return (
     <ComboboxPrimitive.Separator
-      className={cn("-mx-1 my-1 h-px bg-border-muted", className)}
+      className={mergeClassName("-mx-1 my-1 h-px bg-border-muted", className)}
       data-slot="combobox-separator"
       {...props}
     />
@@ -377,11 +393,13 @@ const ComboboxChips = ({
   ...props
 }: ComboboxChipsProps & RefAttributes<HTMLDivElement>) => (
   <ComboboxPrimitive.Chips
-    className={cn(
-      "flex min-h-(--ks-control-md,2.5rem) flex-wrap items-center gap-1 rounded-md border border-input bg-input-bg bg-clip-padding px-2.5 py-1 pointer-fine:text-sm text-base shadow-xs transition-colors",
-      "focus-within:border-ring focus-within:ring-1 focus-within:ring-ring/50",
-      "has-aria-invalid:border-destructive has-aria-invalid:ring-1 has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40",
-      "has-data-[slot=combobox-chip]:px-1",
+    className={mergeClassName(
+      cn(
+        "flex min-h-(--ks-control-md,2.5rem) flex-wrap items-center gap-1 rounded-md border border-input bg-input-bg bg-clip-padding px-2.5 py-1 pointer-fine:text-sm text-base shadow-xs transition-colors",
+        "focus-within:border-ring focus-within:ring-1 focus-within:ring-ring/50",
+        "has-aria-invalid:border-destructive has-aria-invalid:ring-1 has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:border-destructive/50 dark:has-aria-invalid:ring-destructive/40",
+        "has-data-[slot=combobox-chip]:px-1"
+      ),
       className
     )}
     data-slot="combobox-chips"
@@ -410,10 +428,12 @@ function ComboboxChip({
 }: ComboboxChipProps) {
   return (
     <ComboboxPrimitive.Chip
-      className={cn(
-        "flex h-5.5 w-fit min-w-0 max-w-full items-center justify-center gap-1 whitespace-nowrap rounded-sm bg-muted px-1.5 font-medium text-foreground text-xs",
-        "has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50",
-        "has-data-[slot=combobox-chip-remove]:pr-0",
+      className={mergeClassName(
+        cn(
+          "flex h-5.5 w-fit min-w-0 max-w-full items-center justify-center gap-1 whitespace-nowrap rounded-sm bg-muted px-1.5 font-medium text-foreground text-xs",
+          "has-disabled:pointer-events-none has-disabled:cursor-not-allowed has-disabled:opacity-50",
+          "has-data-[slot=combobox-chip-remove]:pr-0"
+        ),
         className
       )}
       data-slot="combobox-chip"
@@ -442,7 +462,7 @@ export interface ComboboxChipsInputProps
 function ComboboxChipsInput({ className, ...props }: ComboboxChipsInputProps) {
   return (
     <ComboboxPrimitive.Input
-      className={cn("min-w-16 flex-1 outline-none", className)}
+      className={mergeClassName("min-w-16 flex-1 outline-none", className)}
       data-slot="combobox-chips-input"
       {...props}
     />

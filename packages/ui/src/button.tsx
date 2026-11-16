@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { LoaderCircle as LoaderCircleIcon } from "lucide-react";
 import type * as React from "react";
 
-import { cn } from "./utils";
+import { cn, mergeClassName } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Variants
@@ -109,9 +109,11 @@ const Button = ({
 
   return (
     <ButtonPrimitive
-      className={cn(
-        buttonVariants({ variant, size, fullWidth }),
-        isLoading && "relative",
+      className={mergeClassName(
+        cn(
+          buttonVariants({ variant, size, fullWidth }),
+          isLoading && "relative"
+        ),
         className
       )}
       data-loading={isLoading || undefined}
