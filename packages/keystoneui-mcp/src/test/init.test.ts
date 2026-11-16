@@ -1,5 +1,4 @@
 import {
-  existsSync,
   mkdirSync,
   mkdtempSync,
   readdirSync,
@@ -33,7 +32,10 @@ function project(files: Record<string, unknown> = {}): string {
   dirs.push(dir);
   for (const [name, contents] of Object.entries(files)) {
     mkdirSync(dirname(join(dir, name)), { recursive: true });
-    writeFileSync(join(dir, name), JSON.stringify(contents));
+    writeFileSync(
+      join(dir, name),
+      typeof contents === "string" ? contents : JSON.stringify(contents)
+    );
   }
   return dir;
 }
@@ -122,6 +124,26 @@ describe("init for clients with a JSON config", () => {
       });
     });
 
+    it(`${client}: replaces an existing keystoneui entry in ${file}`, () => {
+      const old = { command: "node", args: ["old-keystoneui.js"] };
+      const dir = project({ [file]: { [key]: { keystoneui: old } } });
+      run(dir, "--client", client);
+
+      expect(readJson(dir, file)).toEqual({ [key]: { keystoneui: entry } });
+    });
+
+    it(`${client}: overwrites a malformed ${file} and reports it as created`, () => {
+      const dir = project({ [file]: "{ not json" });
+      run(dir, "--client", client);
+
+      expect(readJson(dir, file)).toEqual({ [key]: { keystoneui: entry } });
+      expect(logged).toEqual([
+        `Created ${file}`,
+        `Keystone UI MCP server configured for ${client}.`,
+        TRUST_POINTER,
+      ]);
+    });
+
     it(`${client}: prints the written file, then the trust pointer once`, () => {
       run(project(), "--client", client);
 
@@ -154,7 +176,6 @@ describe("init for codex", () => {
 
     expect(logged.slice(0, TOML_OUTPUT.length)).toEqual(TOML_OUTPUT);
     expect(readdirSync(dir)).toEqual([]);
-    expect(existsSync(join(dir, "~"))).toBe(false);
     expect(process.exitCode).toBeUndefined();
   });
 
