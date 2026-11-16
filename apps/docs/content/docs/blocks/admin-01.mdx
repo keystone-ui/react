@@ -217,13 +217,13 @@ So they are duplicated and the duplication is enforced: `apps/docs/tests/block-s
 
 **One toolbar design for both tables.** Users and Payments are built from the same parts — `filter-pills.tsx`, `sort-menu.tsx`, `columns-menu.tsx`, `skeleton-rows.tsx`, `filtered-empty.tsx` — over a state hook they also share, `useDataTable`. What differs is each table's vocabulary file (`admin-filters.ts`, `payment-filters.ts`): its filters, options, sort labels, URL parameters and CSV columns. A change to how a pill behaves, how a page resets or how a selection survives paging is made once.
 
-This block used to show two filter layouts side by side — the users filters in a drawer at every width with the applied ones as a chip row, the payments filters inline as pills. The pills won on the measure that matters for an admin table: changing a filter is two clicks rather than three or four, and what is filterable is on screen rather than behind a button. The drawer is still the right shell on a phone, so both tables keep one there.
+This block used to show two filter layouts side by side — the users filters in a drawer at every width with the applied ones as a row of applied-filter chips, the payments filters inline as pills. The pills won on the measure that matters for an admin table: changing a filter is two clicks rather than three or four, and what is filterable is on screen rather than behind a button. The drawer is still the right shell on a phone, so both tables keep one there.
 
 **Every filter names the dimension it filters.** A pill reads `Action: Deposit`, not `Deposit`. A bare value turns ambiguous the moment it sits next to another one — is "Deposit" a type or a status? — and the toolbar previously had exactly that pair: one control naming a value without its dimension, beside one naming a dimension without a value.
 
 The exception is a value that names its own dimension. A date range reads as `Last 24h`; `Period: Last 24h` only says it twice.
 
-**Self-describing pills are why there is no chip row.** Chips exist to surface filters a panel has hidden. When the control itself says what it is and what it holds, a chip repeating it is a second representation of the same fact — and two representations can disagree. The pills are the record of what is applied, so there is nothing to keep in sync.
+**Self-describing pills are why there is no applied-filter chip row.** Applied-filter chips exist to surface filters a panel has hidden. When the control itself says what it is and what it holds, an applied-filter chip repeating it is a second representation of the same fact — and two representations can disagree. The pills are the record of what is applied, so there is nothing to keep in sync.
 
 The invariant that makes that safe lives in `visibleKeys`: a pill is shown if it is on the row — the starting two, plus any added by hand — **or if its filter holds a value**. That last term means applied state cannot be invisible — a filter narrowing the table with no pill on the row is structurally impossible rather than merely tested for.
 

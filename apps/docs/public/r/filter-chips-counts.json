@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "filter-chips-counts",
+  "title": "Filter Chips Counts",
+  "description": "Filter Chips example: Counts.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/filter-chips.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/filter-chips/counts.tsx",
+      "content": "\"use client\";\n\nimport { FilterChip, FilterChips } from \"@keystoneui/react/filter-chips\";\n\nconst compact = new Intl.NumberFormat(\"en-US\", { notation: \"compact\" });\n\nfunction formatCount(count: number) {\n  return compact.format(count);\n}\n\nexport default function FilterChipsCounts() {\n  return (\n    <div className=\"flex flex-col items-start gap-4\">\n      <FilterChips aria-label=\"Topic\" defaultValue=\"all\">\n        <FilterChip count={6} value=\"all\">\n          All\n        </FilterChip>\n        <FilterChip count={3} value=\"typography\">\n          Typography\n        </FilterChip>\n        <FilterChip count={0} value=\"motion\">\n          Motion\n        </FilterChip>\n        <FilterChip value=\"saved\">Saved</FilterChip>\n      </FilterChips>\n      <FilterChips\n        aria-label=\"Region\"\n        defaultValue=\"all\"\n        formatCount={formatCount}\n      >\n        <FilterChip count={12_840} value=\"all\">\n          All\n        </FilterChip>\n        <FilterChip count={1200} value=\"europe\">\n          Europe\n        </FilterChip>\n        <FilterChip count={940} value=\"asia\">\n          Asia\n        </FilterChip>\n      </FilterChips>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

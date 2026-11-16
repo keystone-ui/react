@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "filter-chips-sizes",
+  "title": "Filter Chips Sizes",
+  "description": "Filter Chips example: Sizes.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/filter-chips.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/filter-chips/sizes.tsx",
+      "content": "\"use client\";\n\nimport { FilterChip, FilterChips } from \"@keystoneui/react/filter-chips\";\n\nconst topics = [\n  { value: \"all\", label: \"All\", count: 6 },\n  { value: \"typography\", label: \"Typography\", count: 3 },\n  { value: \"color\", label: \"Color\", count: 2 },\n];\n\nexport default function FilterChipsSizes() {\n  return (\n    <div className=\"flex flex-col items-start gap-4\">\n      {([\"sm\", \"default\", \"lg\"] as const).map((size) => (\n        <FilterChips\n          aria-label={`Topic, ${size}`}\n          defaultValue=\"all\"\n          key={size}\n          size={size}\n        >\n          {topics.map((topic) => (\n            <FilterChip\n              count={topic.count}\n              key={topic.value}\n              value={topic.value}\n            >\n              {topic.label}\n            </FilterChip>\n          ))}\n        </FilterChips>\n      ))}\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

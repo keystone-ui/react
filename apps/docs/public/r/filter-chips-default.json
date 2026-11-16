@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "filter-chips-default",
+  "title": "Filter Chips Default",
+  "description": "Filter Chips example: Default.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/filter-chips.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/filter-chips/default.tsx",
+      "content": "\"use client\";\n\nimport { FilterChip, FilterChips } from \"@keystoneui/react/filter-chips\";\n\nexport default function FilterChipsDefault() {\n  return (\n    <FilterChips aria-label=\"Topic\" defaultValue=\"all\">\n      <FilterChip count={6} value=\"all\">\n        All\n      </FilterChip>\n      <FilterChip count={3} value=\"typography\">\n        Typography\n      </FilterChip>\n      <FilterChip count={2} value=\"color\">\n        Color\n      </FilterChip>\n      <FilterChip count={0} value=\"motion\">\n        Motion\n      </FilterChip>\n    </FilterChips>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

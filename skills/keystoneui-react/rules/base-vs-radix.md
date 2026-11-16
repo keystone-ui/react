@@ -107,6 +107,8 @@ Not Radix-style `data-state="open"` / `data-state="closed"`.
 
 Base UI's group primitives expose `value` (single selection) or `value` as an array (multi-selection on `ToggleGroup` with `type="multiple"`-like behavior). The exact API may differ from Radix; always check the component's documentation via `keystoneui docs <component>` before assuming.
 
+`FilterChips` is single-choice only: `value` and `defaultValue` are `string | null` (`null` selects none), and `onValueChange` receives a `string`.
+
 ---
 
 ## When in doubt, check the source

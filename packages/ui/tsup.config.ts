@@ -62,6 +62,7 @@ export default defineConfig((options) => ({
     "src/hooks/index.ts",
     "src/utils.ts",
     "src/selection-bar.tsx",
+    "src/filter-chips.tsx",
   ],
   format: ["esm"],
   // tsup's dts step needs the TypeScript JS API, which TS 7 doesn't ship, so

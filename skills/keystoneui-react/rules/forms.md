@@ -163,6 +163,8 @@ For labelled groups, wrap with `Field` (rich pattern):
 
 > **Note:** `ToggleGroup`'s controlled-state and multi-select props differ from Radix. See [base-vs-radix.md](./base-vs-radix.md).
 
+> A row that filters a list already on screen, one value at a time with result counts, is `FilterChips`, not `ToggleGroup`. It is not a form field: it takes no `name`, `required` or `form`; use `RadioGroup` for a form choice.
+
 ---
 
 ## `FieldSet` + `FieldLegend` for grouped controls

@@ -133,7 +133,7 @@ These are always enforced. Each links to a file with code pairs.
 ### Data tables → [rules/data-tables.md](./rules/data-tables.md)
 
 - **Filter triggers name their dimension.** `Status: All`, never `All Statuses` — a bare value is ambiguous beside another one. A value that names its own dimension (a date range) takes no label.
-- **One representation of applied state.** Do not pair a visible control with a chip repeating it; a filter holding a value must always show its control.
+- **One representation of applied state.** Do not pair a visible control with an applied-filter chip repeating it; a filter holding a value must always show its control.
 - **Sorting lives in the column headers**, and `aria-sort` only on columns that actually sort.
 - **The pagination footer reports the visible range**, not the page index or a selection count stated elsewhere.
 - **Below `sm`, fold the toolbar into a bottom-sheet `Drawer` + `Stepper`** holding *every* filter — at that width it is the only way in.
@@ -252,6 +252,7 @@ Full guidance, including which tokens the shadcn sidebar reads:
 | Text input | `Input`, `Textarea`, `InputGroup` (with addons), `InputOTP` |
 | Choice (one of many) | `Select`, `Combobox` (searchable), `RadioGroup`, `NativeSelect` |
 | Choice (toggle) | `ToggleGroup` (2–5 options), `Switch` (boolean), `Checkbox` |
+| Filter a list in place | `FilterChips` for one non-clearable value with result counts; `ToggleGroup` or `TagGroup` (`multiple`) when the choice can be cleared or several are picked at once |
 | Date / time | `DateInput`, `Calendar` |
 | Overlays | `Modal`, `Drawer`, `AlertDialog`, `Popover`, `Tooltip` |
 | Menus | `DropdownMenu`, `Command` (palette) |
@@ -289,9 +290,9 @@ Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or
 
 ## Component List
 
-58 components, all importable from `@keystoneui/react/{kebab-case-name}`:
+59 components, all importable from `@keystoneui/react/{kebab-case-name}`:
 
-`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `button-group`, `calendar`, `card`, `carousel`, `checkbox`, `circular-progress`, `code-block`, `collapsible`, `combobox`, `command`, `copy-button`, `date-input`, `description-list`, `drawer`, `dropdown-menu`, `empty`, `field`, `form`, `input`, `input-group`, `input-otp`, `item`, `kbd`, `label`, `modal`, `native-select`, `pagination`, `popover`, `progress`, `radio-group`, `resizable`, `select`, `selection-bar`, `separator`, `skeleton`, `slider`, `spinner`, `stat`, `stepper`, `switch`, `table`, `table-pagination`, `tabs`, `tag`, `tag-group`, `textarea`, `toast`, `toggle`, `toggle-group`, `tooltip`.
+`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `button-group`, `calendar`, `card`, `carousel`, `checkbox`, `circular-progress`, `code-block`, `collapsible`, `combobox`, `command`, `copy-button`, `date-input`, `description-list`, `drawer`, `dropdown-menu`, `empty`, `field`, `filter-chips`, `form`, `input`, `input-group`, `input-otp`, `item`, `kbd`, `label`, `modal`, `native-select`, `pagination`, `popover`, `progress`, `radio-group`, `resizable`, `select`, `selection-bar`, `separator`, `skeleton`, `slider`, `spinner`, `stat`, `stepper`, `switch`, `table`, `table-pagination`, `tabs`, `tag`, `tag-group`, `textarea`, `toast`, `toggle`, `toggle-group`, `tooltip`.
 
 ## Workflow
 
