@@ -105,6 +105,25 @@ describe("loadTimeCommandProblems", () => {
     ],
   ];
 
+  const containers: [string, string][] = [
+    ["a list item", "- "],
+    ["a numbered item", "1. "],
+    ["a blockquote", "> "],
+    ["a blockquote with no space", ">"],
+    ["a blockquote inside a list item", "- > "],
+    ["a list item inside a blockquote", "> 1. "],
+  ];
+  for (const [where, prefix] of containers) {
+    runsAtLoad.push(
+      [`the inline form in ${where}`, `${prefix}${inline}`],
+      [`a backtick fence with ! in ${where}`, `${prefix}${FENCE}${BANG}`]
+    );
+  }
+  runsAtLoad.push(
+    ["a tilde fence with ! in a list item", `- ~~~${BANG}`],
+    ["a long tilde fence with ! in a numbered item", `1. ~~~~${BANG}`]
+  );
+
   for (const [label, line] of runsAtLoad) {
     it(`fails on ${label}`, () => {
       const body = `${BODY}\n## Current Project Context\n\n${line}\n`;
@@ -118,6 +137,16 @@ describe("loadTimeCommandProblems", () => {
 
   it("passes an ordinary fenced bash block with a documented command", () => {
     const body = `${FENCE}bash\nnpx shadcn@latest add https://keystoneui.io/r/card.json\n${FENCE}\n`;
+    expect(loadTimeCommandProblems(skill([], body))).toEqual([]);
+  });
+
+  it("passes an ordinary fence inside a list item", () => {
+    const body = `- Install:\n\n  ${FENCE}bash\n  npx shadcn@latest add https://keystoneui.io/r/card.json\n  ${FENCE}\n`;
+    expect(loadTimeCommandProblems(skill([], body))).toEqual([]);
+  });
+
+  it("passes inline code followed by an exclamation mark", () => {
+    const body = `Then run ${TICK}keystoneui audit${TICK}! It checks the CSS.\n`;
     expect(loadTimeCommandProblems(skill([], body))).toEqual([]);
   });
 
