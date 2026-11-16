@@ -36,6 +36,112 @@ It reads the eight `--sidebar-*` tokens, which keystone's style item declares as
 <SidebarInset className="min-w-0">
 ```
 
+## Use it with your data
+
+The block installs 45 files under `components/` and one page at `app/admin/page.tsx`. Every table reads fixture rows. This section shows how to keep one view, the users table, and give it your own rows.
+
+### Which files make the users view
+
+`admin-users-table.tsx` and the files it imports, directly or through others, are 27 files:
+
+| Role | Files |
+| --- | --- |
+| Table and toolbar | `admin-users-table.tsx`, `admin-users-toolbar.tsx`, `admin-filters-drawer.tsx`, `user-filter-pills.tsx` |
+| State and vocabulary | `use-users-table.ts`, `use-data-table.ts`, `admin-filters.ts`, `mock-admin.ts` |
+| Shared table parts | `columns-menu.tsx`, `sort-menu.tsx`, `skeleton-rows.tsx`, `filtered-empty.tsx`, `result-summary.tsx`, `csv.ts`, `sort.ts`, `url-params.ts`, `filter-row.ts` |
+| Filter pills and dates | `filter-pills.tsx`, `filter-trigger.tsx`, `pill-shell.tsx`, `set-pill.tsx`, `date-pill.tsx`, `date-filter.ts`, `date-filter-step.tsx`, `drawer-parts.tsx` |
+| Imported for one thing | `use-reduced-motion.ts` (the filters drawer), `series-legend.tsx` (a type `mock-admin.ts` imports) |
+
+`mock-admin.ts` stays even with your own rows: the `User`, `Role` and `Status` types and `statusLabels` live there, and `admin-filters.ts` and the table import them.
+
+The other 18 files are not imported by the users table. They are reached through `admin-page.tsx`, which wires every view together. Removing its imports and JSX is not enough: it also calls `usePaymentsTable()`, restores and writes the payments filters in the URL, and opens on the `"overview"` section, falling back to it for a bare URL. So to drop the other views, replace `AdminPage` with a users-only client component of your own (`"use client"`; the installed `page.tsx` is not one). It calls `useUsersTable()`, renders `<AdminUsersTable table={…} onOpenUser={…} />`, and `app/admin/page.tsx` renders it in place of `AdminPage`. Then these files can go:
+
+- **Overview:** `admin-overview.tsx`, `chart.tsx`, `chart-formatters.ts`.
+- **Payments:** `admin-payments-table.tsx`, `admin-payments-toolbar.tsx`, `use-payments-table.ts`, `payment-filters.ts`, `payment-filter-pills.tsx`, `payment-filters-drawer.tsx`, `operator-filter-chip.tsx`, `payment-detail-drawer.tsx`, `mock-payments.ts`.
+- **Sidebar shell:** `admin-sidebar.tsx`, `admin-topbar.tsx`, `sidebar.tsx`.
+- **Page wiring:** `admin-page.tsx`, `use-url-state.ts`, `admin-user-detail.tsx`. Without them you lose the URL sync and the user record view. Keep `use-url-state.ts` or `admin-user-detail.tsx` if your component wires them in; neither imports a file from the other groups.
+
+### Where the fixture rows come in
+
+The rows enter in three places. All three import `users` from `mock-admin.ts`.
+
+**The table's rows.** `use-users-table.ts` passes them to `useDataTable`:
+
+```ts title="components/use-users-table.ts"
+import { type User, users } from "@/components/mock-admin";
+import { useDataTable } from "@/components/use-data-table";
+
+export function useUsersTable() {
+  return useDataTable<User, UserFilters, FilterKey, UserSortKey, UserColumnId>({
+    // …
+    rows: users,
+    sortRows: sortUsers,
+  });
+}
+```
+
+Give the hook your rows instead, for example as a parameter:
+
+```ts title="components/use-users-table.ts"
+import type { User } from "@/components/mock-admin";
+
+export function useUsersTable(rows: readonly User[]) {
+  return useDataTable<User, UserFilters, FilterKey, UserSortKey, UserColumnId>({
+    // …
+    rows,
+    sortRows: sortUsers,
+  });
+}
+```
+
+Its caller then becomes `useUsersTable(rows)`.
+
+The rows must be complete when the hook first renders: fetch them on the server and pass them down, or mount the table once they have loaded. The hook works out its answer again only when the filters, sort or page change, not when `rows` changes, so rows that arrive or refresh later stay out of the table until the next filter change. To follow changing rows, edit `useSimulatedFetch` (below).
+
+**The selection bar.** In `admin-users-table.tsx`, `UserSelectionBar` builds the rows for its Export and Copy ids actions from the fixture, `users.filter((user) => selected.has(user.id))`. Change it to filter your rows. If you leave it, those two actions read the fixture.
+
+**The user record.** `admin-page.tsx` finds the open user, and the user who invited them, with `users.find`. Point both at your rows, or drop them with the page wiring above.
+
+Your rows must have the `User` shape from `mock-admin.ts`. The table's columns read its fields, and so do the filters, sort and CSV in `admin-filters.ts`: `name` and `email` for search, `role`, `status`, `seats`, `twoFactor` and `createdAt` for the pills. If your records differ, change `User`, the columns and those functions together.
+
+Three fixture details to change with them:
+
+- `createdAt` is a `YYYY-MM-DD` string, or `""` for none. The date filter compares it as text, so a timestamp or a `Date` needs converting first.
+- `TODAY` in `date-filter.ts` is a fixed date, so the date presets match the fixture. With live data it is `new Date()`.
+- `lastActive` is the text the table shows, such as `2 hours ago`. `sortUsers` parses that text back into minutes to sort it. With a timestamp, sort on the timestamp.
+
+### What `useDataTable` asks for
+
+`DataTableConfig` in `use-data-table.ts`. Each row needs a string `id`; selection is keyed on it.
+
+- `rows` — every row the table can show.
+- `matches(row, filters)` — whether one row passes the current filters.
+- `sortRows(rows, sort)` — returns the rows in `sort` order.
+- `emptyFilters` — the filter state with nothing applied. The table starts on it, and `Clear all` returns to it.
+- `defaultKeys` — the pills on a fresh row. `Clear all` puts these back.
+- `defaultSort` — the sort the table opens on.
+- `defaultPageSize` — the page size the table opens on.
+- `clearFor(key)` — a filter's reset patch, applied when its pill is removed.
+- `latency` — how long the stand-in request takes, in milliseconds. Optional; 300 when left out.
+
+### What it does not do
+
+Filtering, sorting and paging all run in the browser, over the whole `rows` array. The function `run` in `use-data-table.ts` filters with `matches`, sorts with `sortRows`, and slices out the current page. There is no request: `useSimulatedFetch`, in the same file, stands in for one. It computes `run` and hands the answer back after `latency`, so the skeleton rows have a loading state to show.
+
+For server-side filtering, sorting or paging, replace `useSimulatedFetch` with your data layer. It is not exported, so you edit `use-data-table.ts` itself. Send `query` (`filters`, `sort`, `pageIndex`, `pageSize`; `pageIndex` counts from 0), and give the rest of the hook back `{ loading, result }`, where `result` is a `DataTableResult`:
+
+- `page` — the rows on the current page.
+- `total` — the row count across every page.
+- `pageCount` — the number of pages, at least 1 even when nothing matches: `Math.max(1, Math.ceil(total / query.pageSize))`. An empty result is `{ all: [], page: [], total: 0, pageCount: 1 }`.
+- `all` — every row that passes the filters, in sort order. The toolbar's Export writes this to CSV, so with a paged API it needs its own request.
+
+What you lose when you replace it:
+
+- `useSimulatedFetch` restarts its wait on every change, so search waits for typing to stop. Your data layer needs its own debounce.
+- There is no error state. A request that fails has nowhere to show.
+
+If you only want the filter row and not the table, the [`filter-pills`](#reusing-the-filter-pills) item below installs it on its own.
+
 ## Reusing the filter pills
 
 The filter row — `FilterTrigger`, `OptionPill`, `DateRangePill`, `AddFilterMenu`
