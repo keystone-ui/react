@@ -316,7 +316,7 @@ CI runs `.github/workflows/release.yml` on push to `main`. While unconsumed chan
 
 `changeset publish` sets only one dist-tag per package, and picks differently for each: `@keystoneui/react` lands on `beta`, while `@keystoneui/mcp` (which has only ever published prereleases) lands on `latest`. It refuses a custom `--tag` in pre mode, and a Trusted Publishing credential can't move tags afterwards (`E403 … This trusted publisher cannot manage dist-tags`).
 
-So the docs install from the tag CI does move: every install command says `@keystoneui/react@beta`, and the MCP server runs via `npx @keystoneui/mcp` (`latest`). `apps/docs/tests/install-dist-tag.test.ts` enforces this while in pre mode — and requires `@beta` to be dropped once you exit it.
+So the docs install from the tag CI does move: every install command says `@keystoneui/react@beta`, and the MCP server runs via `npx @keystoneui/mcp@latest`. `apps/docs/tests/install-dist-tag.test.ts` enforces this while in pre mode — and requires `@beta` to be dropped once you exit it.
 
 Optional: the other tag (react's `latest`, mcp's `beta`) stays on an older version unless you move it. The Release run lists the commands in its job summary; run them with your own npm login:
 

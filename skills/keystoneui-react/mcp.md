@@ -13,7 +13,7 @@ Add the server to your client config. The package is `@keystoneui/mcp`.
   "mcpServers": {
     "keystoneui": {
       "command": "npx",
-      "args": ["-y", "@keystoneui/mcp"]
+      "args": ["-y", "@keystoneui/mcp@latest"]
     }
   }
 }

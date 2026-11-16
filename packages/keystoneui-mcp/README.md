@@ -12,10 +12,12 @@ The single binary runs in two modes:
 ### As an MCP server
 
 ```bash
-npx -y @keystoneui/mcp init --client claude
+npx -y @keystoneui/mcp@latest init --client claude
 ```
 
 Supported clients: `claude`, `cursor`, `vscode`, `opencode`, `codex`. The `init` command writes the appropriate config file for the chosen client and points it at `npx @keystoneui/mcp@latest`.
+
+The server runs with the settings of the project it starts in. Before using it in a project you have not reviewed, read [Projects you do not trust](https://keystoneui.io/docs/agents/mcp-server#projects-you-do-not-trust).
 
 Once configured, ask your agent things like:
 
