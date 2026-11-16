@@ -1,7 +1,7 @@
 ---
 date: "2026-11-14"
 description: "What's coming in the next release"
-excerpt: "13 changes queued for the next release."
+excerpt: "14 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -84,6 +84,12 @@ Base UI lets `className` be a function of the part's state (`className={(state) 
 `ComboboxInput`'s `className` type now accepts only a string. It applies `className` to its `InputGroup` wrapper, which is a plain element, so the function its type used to accept was silently dropped; passing one is now a type error. Props typed with Base UI's wider type (for example `ComboboxPrimitive.Input.Props`) no longer spread into `ComboboxInput` without a type error, even when their `className` is a string; type them as `ComboboxInputProps` instead, or omit or narrow `className`.
 
 `@keystoneui/react/utils` gains `mergeClassName(base, className)`, the helper these parts use. A registry install receives it inlined into each component file that needs it, so `@/lib/utils` still only has to provide `cn`.
+
+---
+
+### Add package flavours of users-01 and filter-pills
+
+For apps that use the `@keystoneui/react` package instead of vendored components: `r/npm/users-01.json` and `r/npm/filter-pills.json` install the same files, importing `@keystoneui/react/*`. `npm/users-01` needs 1.0.0-beta.11 or later; `npm/filter-pills` is tested with 1.0.0-beta.11. Both need a `components.json`. Existing items are unchanged.
 
 ---
 

@@ -2244,6 +2244,142 @@
       ]
     },
     {
+      "name": "npm/users-01",
+      "type": "registry:block",
+      "title": "Users 01 (package)",
+      "description": "The users-01 block, for apps that use the `@keystoneui/react` package instead of vendored components: the same files as users-01, importing `@keystoneui/react/*` rather than `@/components/ui/*`. Needs `@keystoneui/react` 1.0.0-beta.11 or later.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "registry/default/blocks/users-01/page.tsx",
+          "type": "registry:page",
+          "target": "app/users/page.tsx"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/users-view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/admin-users-table.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/admin-users-toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/admin-user-detail.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/admin-filters.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/admin-filters-drawer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/user-filter-pills.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/use-users-table.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/mock-users.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/use-data-table.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/use-url-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/url-params.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/sort.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/sort-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/columns-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/csv.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/filter-row.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/filtered-empty.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/result-summary.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/skeleton-rows.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/filter-pills.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/filter-trigger.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/pill-shell.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/drawer-parts.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/set-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/date-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/date-filter.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/date-filter-step.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/use-reduced-motion.ts",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "data",
+        "admin"
+      ]
+    },
+    {
       "name": "settings-01",
       "type": "registry:block",
       "title": "Settings 01",
@@ -2315,6 +2451,36 @@
         },
         {
           "path": "registry/default/blocks/admin-01/components/drawer-parts.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "data"
+      ]
+    },
+    {
+      "name": "npm/filter-pills",
+      "type": "registry:component",
+      "title": "Filter Pills (package)",
+      "description": "The filter pills, for apps that use the `@keystoneui/react` package instead of vendored components: the same files as filter-pills, importing `@keystoneui/react/*` rather than `@/components/ui/*`. Tested with `@keystoneui/react` 1.0.0-beta.11.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/blocks/admin-01/filter-trigger.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/pill-shell.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/filter-pills.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "apps/docs/demos/blocks/admin-01/drawer-parts.tsx",
           "type": "registry:component"
         }
       ],

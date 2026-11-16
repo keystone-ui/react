@@ -424,7 +424,10 @@ const exampleItems = buildExampleItems(registryEntries.map((e) => e.name));
 const themeItems = buildThemeItems();
 
 const existing = JSON.parse(readFileSync(REGISTRY_JSON, "utf-8"));
-// Blocks are hand-maintained in registry.json and passed through. Style/theme
+// Blocks are hand-maintained in registry.json and passed through, and so are
+// the package-flavour items (`npm/users-01`, `npm/filter-pills`): their files
+// are the demo sources, built to apps/docs/public/r/npm/ (the directory is
+// created by ensureNestedOutputDirs). `--check` fails if one is dropped. Style/theme
 // items are owned by packages/ui/registry/ and regenerated here, so drop any
 // stale copies before merging.
 const blockItems = existing.items.filter(

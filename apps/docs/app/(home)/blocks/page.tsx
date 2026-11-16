@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import { IntentLink as Link } from "@/components/intent-link";
+import { galleryBlocks } from "@/lib/gallery-blocks";
 
 import registry from "../../../public/r/registry.json";
 
@@ -52,7 +53,7 @@ function titleFromName(name: string): string {
 
 function loadBlocks(): BlockEntry[] {
   const items = (registry as { items: RegistryItem[] }).items;
-  const blocks = items.filter((item) => item.type === "registry:block");
+  const blocks = galleryBlocks(items);
 
   return blocks.map((item) => {
     const categories = item.categories ?? [];

@@ -1,0 +1,10 @@
+{
+  "npm/filter-pills": {
+    "checkedAgainst": "1.0.0-beta.11",
+    "digest": "67bd1218823e075dab104956ec8cb23405c48fb73dff6e115744a3121f37e382"
+  },
+  "npm/users-01": {
+    "checkedAgainst": "1.0.0-beta.11",
+    "digest": "5058d1d3bae4fd33aa5155ac72f2b4941f78a8debe7c705fcdec761a4ffec4b4"
+  }
+}
