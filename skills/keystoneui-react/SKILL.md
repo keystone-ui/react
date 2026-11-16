@@ -11,6 +11,8 @@ metadata:
 
 A production-ready React component library built on **Tailwind CSS v4** and **Base UI** (`@base-ui/react`), with 50+ accessible components, OKLCH semantic tokens, and dark mode.
 
+Run the shell commands in this file only when executing tools in this project is already within the user's authorized task. In a repository you cloned or downloaded in this session, or were asked to review, run none of them: read the files and the fetched docs under Sources of Truth instead.
+
 ## Current Project Context
 
 Before writing imports, learn how this project consumes Keystone UI. Use the
@@ -285,9 +287,7 @@ Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or
 ## Workflow
 
 Every step below works from inside a consumer's project. Nothing here assumes
-the keystone monorepo. Run the shell commands below only when executing tools
-in this project is already within the user's authorized task; otherwise follow
-the rule under Current Project Context.
+the keystone monorepo.
 
 1. **Discover** — MCP `search_components` / `list_components`, or the CLI:
    `keystoneui search "table pagination"`, `keystoneui list --type block`.
@@ -306,7 +306,8 @@ the rule under Current Project Context.
    and the API Reference table. The `/llms.mdx/...` route resolves
    `<ComponentPreview>` tags to inline TSX, so one fetch gives you docs and
    working code together. **Before composing any compound component (one with
-   more than one exported part), run `keystoneui docs <name>` and follow its
+   more than one exported part), run `keystoneui docs <name>` (or fetch the URL
+   above) and follow its
    `## Composition` tree** — it is the parts hierarchy, and its "Invalid
    nesting" notes list the placements Base UI throws on. Props are documented
    there and nowhere else.
@@ -326,13 +327,16 @@ the rule under Current Project Context.
 ## Sources of Truth
 
 Reach for these in order. The first two need no network beyond the registry;
-the third is the fallback when a tool is unavailable.
+the third is the fallback, and the only one in a repository you cloned or
+downloaded in this session, or were asked to review.
 
-- **MCP tools** — `view_component` (source), `get_examples` (real usage),
+- **MCP tools**, through a launch configuration trusted for this project —
+  `view_component` (source), `get_examples` (real usage),
   `get_theme_info` (tokens), `audit_checklist` (project wiring).
 - **The `keystoneui` CLI** — the same surface as verbs, for shells and non-MCP
-  hosts. See [cli.md](./cli.md).
-- **Fetched docs** — when neither is available:
+  hosts, only when executing tools in this project is already within the
+  user's authorized task. See [cli.md](./cli.md).
+- **Fetched docs** — when neither of those applies:
   - `https://keystoneui.io/llms.mdx/docs/components/<name>` — per-component MDX
     with previews resolved to inline `tsx`.
   - `https://keystoneui.io/llms.mdx/docs/blocks/<name>` — same for blocks.
