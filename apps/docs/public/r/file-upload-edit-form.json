@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "file-upload-edit-form",
+  "title": "File Upload Edit Form",
+  "description": "File Upload example: Edit Form.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/file-upload.json",
+    "https://keystoneui.io/r/item.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/file-upload/edit-form.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  FileUpload,\n  FileUploadDropzone,\n  FileUploadError,\n  FileUploadItem,\n  FileUploadItemName,\n  FileUploadItemRemove,\n  FileUploadItemSize,\n  FileUploadList,\n  FileUploadTrigger,\n} from \"@keystoneui/react/file-upload\";\nimport {\n  Item,\n  ItemActions,\n  ItemContent,\n  ItemDescription,\n  ItemGroup,\n  ItemTitle,\n} from \"@keystoneui/react/item\";\nimport { X } from \"lucide-react\";\nimport { useState } from \"react\";\n\nconst LIMIT = 3;\n\ninterface SavedAttachment {\n  id: string;\n  name: string;\n}\n\nexport default function FileUploadEditForm() {\n  const [saved, setSaved] = useState<SavedAttachment[]>([\n    { id: \"att_1\", name: \"contract.pdf\" },\n    { id: \"att_2\", name: \"invoice.pdf\" },\n  ]);\n  const [files, setFiles] = useState<File[]>([]);\n  const remaining = Math.max(0, LIMIT - saved.length);\n\n  return (\n    <form\n      className=\"flex max-w-md flex-col gap-3\"\n      onSubmit={(event) => event.preventDefault()}\n    >\n      {/* Saved attachments: the app's own list, never inside FileUploadList. */}\n      <ItemGroup>\n        {saved.map((attachment) => (\n          <Item key={attachment.id} role=\"listitem\" size=\"sm\">\n            <ItemContent>\n              <ItemTitle>{attachment.name}</ItemTitle>\n              <ItemDescription>Saved</ItemDescription>\n            </ItemContent>\n            <ItemActions>\n              <Button\n                aria-label={`Delete ${attachment.name}`}\n                onClick={() =>\n                  setSaved((all) => all.filter((a) => a.id !== attachment.id))\n                }\n                size=\"icon-xs\"\n                variant=\"ghost\"\n              >\n                <X aria-hidden />\n              </Button>\n            </ItemActions>\n            <input name=\"keep[]\" type=\"hidden\" value={attachment.id} />\n          </Item>\n        ))}\n      </ItemGroup>\n\n      {/* New files only: limits and required count these. */}\n      <FileUpload\n        aria-label=\"New attachments\"\n        maxFiles={remaining}\n        multiple\n        name=\"attachments\"\n        onValueChange={setFiles}\n        required={saved.length === 0}\n        value={files}\n      >\n        <FileUploadDropzone>\n          <p>\n            {remaining === 0\n              ? \"Delete a saved file to add another.\"\n              : `Add up to ${remaining} more.`}\n          </p>\n          {/* Disable the trigger, never the root: a disabled root would stop\n              the chosen files from submitting. */}\n          <FileUploadTrigger\n            disabled={remaining === 0}\n            render={<Button size=\"sm\" variant=\"outline\" />}\n          >\n            Choose files\n          </FileUploadTrigger>\n        </FileUploadDropzone>\n        <FileUploadList>\n          {() => (\n            <FileUploadItem>\n              <ItemContent>\n                <FileUploadItemName />\n                <FileUploadItemSize />\n              </ItemContent>\n              <ItemActions>\n                <FileUploadItemRemove />\n              </ItemActions>\n            </FileUploadItem>\n          )}\n        </FileUploadList>\n        <FileUploadError />\n      </FileUpload>\n      <Button className=\"self-start\" type=\"submit\">\n        Save\n      </Button>\n    </form>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

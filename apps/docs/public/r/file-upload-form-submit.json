@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "file-upload-form-submit",
+  "title": "File Upload Form Submit",
+  "description": "File Upload example: Form Submit.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/file-upload.json",
+    "https://keystoneui.io/r/item.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/file-upload/form-submit.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  FileUpload,\n  FileUploadDropzone,\n  FileUploadError,\n  FileUploadItem,\n  FileUploadItemName,\n  FileUploadItemRemove,\n  FileUploadItemSize,\n  FileUploadList,\n  FileUploadTrigger,\n} from \"@keystoneui/react/file-upload\";\nimport { ItemActions, ItemContent } from \"@keystoneui/react/item\";\nimport { type FormEvent, useState } from \"react\";\n\nexport default function FileUploadFormSubmit() {\n  const [files, setFiles] = useState<File[]>([]);\n  const [sent, setSent] = useState<string | null>(null);\n  const [missing, setMissing] = useState(false);\n\n  function onSubmit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    const form = event.currentTarget;\n    const data = new FormData(form);\n    // Where the browser cannot set a file input's files, the component\n    // drops its `name` and `required` and marks itself: check emptiness and\n    // submit from `value` instead. The entries are then absent, so\n    // appending them sends each file once.\n    if (form.querySelector('[data-form-bridge=\"unsupported\"]')) {\n      if (files.length === 0) {\n        setMissing(true);\n        return;\n      }\n      for (const file of files) {\n        data.append(\"attachments\", file);\n      }\n    }\n    // A real form posts `data` (or uses action/method with\n    // encType=\"multipart/form-data\"). Nothing is sent here.\n    const names = (data.getAll(\"attachments\") as File[]).map((f) => f.name);\n    setSent(names.join(\", \"));\n  }\n\n  return (\n    <form\n      className=\"flex max-w-md flex-col gap-3\"\n      encType=\"multipart/form-data\"\n      onReset={() => {\n        setSent(null);\n        setMissing(false);\n      }}\n      onSubmit={onSubmit}\n    >\n      <FileUpload\n        aria-label=\"Attachments\"\n        multiple\n        name=\"attachments\"\n        onValueChange={(next) => {\n          setFiles(next);\n          if (next.length > 0) {\n            setMissing(false);\n          }\n        }}\n        required\n        value={files}\n      >\n        <FileUploadDropzone>\n          <p>Drag files here, or</p>\n          <FileUploadTrigger render={<Button size=\"sm\" variant=\"outline\" />}>\n            Choose files\n          </FileUploadTrigger>\n        </FileUploadDropzone>\n        <FileUploadList>\n          {() => (\n            <FileUploadItem>\n              <ItemContent>\n                <FileUploadItemName />\n                <FileUploadItemSize />\n              </ItemContent>\n              <ItemActions>\n                <FileUploadItemRemove />\n              </ItemActions>\n            </FileUploadItem>\n          )}\n        </FileUploadList>\n        <FileUploadError />\n      </FileUpload>\n      {missing ? (\n        <p className=\"text-destructive text-sm\" role=\"alert\">\n          Choose at least one file.\n        </p>\n      ) : null}\n      <div className=\"flex gap-2\">\n        <Button type=\"reset\" variant=\"outline\">\n          Reset\n        </Button>\n        <Button type=\"submit\">Submit</Button>\n      </div>\n      {sent === null ? null : (\n        <p className=\"text-muted-foreground text-sm\">Would send: {sent}</p>\n      )}\n    </form>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

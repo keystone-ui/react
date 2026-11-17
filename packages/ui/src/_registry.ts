@@ -379,6 +379,17 @@ export const ui: RegistryItem[] = [
     files: [{ path: "ui/code-block.tsx", type: "registry:ui" }],
   },
   {
+    name: "file-upload",
+    type: "registry:ui",
+    dependencies: [
+      "@base-ui/react",
+      "class-variance-authority",
+      "lucide-react",
+    ],
+    registryDependencies: ["button", "progress", "item"],
+    files: [{ path: "ui/file-upload.tsx", type: "registry:ui" }],
+  },
+  {
     name: "filter-chips",
     type: "registry:ui",
     dependencies: ["@base-ui/react", "class-variance-authority"],

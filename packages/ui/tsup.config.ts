@@ -62,6 +62,7 @@ export default defineConfig((options) => ({
     "src/hooks/index.ts",
     "src/utils.ts",
     "src/selection-bar.tsx",
+    "src/file-upload.tsx",
     "src/filter-chips.tsx",
   ],
   format: ["esm"],

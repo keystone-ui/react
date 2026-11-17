@@ -1568,6 +1568,29 @@
       ]
     },
     {
+      "name": "file-upload",
+      "type": "registry:ui",
+      "title": "File Upload",
+      "description": "Chooses files by picker, drop or paste, validates them and keeps the list, with rows for the app's upload status. It never uploads.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/item.json",
+        "https://keystoneui.io/r/progress.json"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/file-upload.tsx",
+          "target": "@ui/file-upload.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "filter-chips",
       "type": "registry:ui",
       "title": "Filter Chips",
@@ -5945,6 +5968,109 @@
       "files": [
         {
           "path": "apps/docs/demos/field/with-switch.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "file-upload-default",
+      "type": "registry:example",
+      "title": "File Upload Default",
+      "description": "File Upload example: Default.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/file-upload.json",
+        "https://keystoneui.io/r/item.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/file-upload/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "file-upload-eager-upload",
+      "type": "registry:example",
+      "title": "File Upload Eager Upload",
+      "description": "File Upload example: Eager Upload.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/file-upload.json",
+        "https://keystoneui.io/r/item.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/file-upload/eager-upload.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "file-upload-edit-form",
+      "type": "registry:example",
+      "title": "File Upload Edit Form",
+      "description": "File Upload example: Edit Form.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/file-upload.json",
+        "https://keystoneui.io/r/item.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/file-upload/edit-form.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "file-upload-form-submit",
+      "type": "registry:example",
+      "title": "File Upload Form Submit",
+      "description": "File Upload example: Form Submit.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/file-upload.json",
+        "https://keystoneui.io/r/item.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/file-upload/form-submit.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "file-upload-single",
+      "type": "registry:example",
+      "title": "File Upload Single",
+      "description": "File Upload example: Single.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/file-upload.json",
+        "https://keystoneui.io/r/item.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/file-upload/single.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "file-upload-with-field",
+      "type": "registry:example",
+      "title": "File Upload With Field",
+      "description": "File Upload example: With Field.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/file-upload.json",
+        "https://keystoneui.io/r/item.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/file-upload/with-field.tsx",
           "type": "registry:example"
         }
       ]

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "file-upload-with-field",
+  "title": "File Upload With Field",
+  "description": "File Upload example: With Field.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/file-upload.json",
+    "https://keystoneui.io/r/item.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/file-upload/with-field.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Field,\n  FieldDescription,\n  FieldError,\n  FieldLabel,\n} from \"@keystoneui/react/field\";\nimport {\n  FileUpload,\n  FileUploadDropzone,\n  FileUploadItem,\n  FileUploadItemName,\n  FileUploadItemRemove,\n  FileUploadItemSize,\n  FileUploadList,\n  FileUploadTrigger,\n} from \"@keystoneui/react/file-upload\";\nimport { ItemActions, ItemContent } from \"@keystoneui/react/item\";\nimport { Upload } from \"lucide-react\";\nimport { useState } from \"react\";\n\nexport default function FileUploadWithField() {\n  const [files, setFiles] = useState<File[]>([]);\n  const [errors, setErrors] = useState<{ message: string }[]>([]);\n\n  return (\n    <Field className=\"max-w-md\">\n      <FieldLabel id=\"attachments-label\">Attachments</FieldLabel>\n      <FileUpload\n        accept=\".pdf,image/*\"\n        aria-describedby=\"attachments-hint attachments-error\"\n        aria-invalid={errors.length > 0}\n        aria-labelledby=\"attachments-label\"\n        maxFiles={3}\n        maxSize={10_000_000}\n        // FieldError below is the only voice for rejections.\n        messages={{ rejected: null }}\n        multiple\n        onFilesRejected={(rejections) =>\n          setErrors(rejections.flatMap((rejection) => rejection.errors))\n        }\n        onValueChange={(next) => {\n          setFiles(next);\n          setErrors([]);\n        }}\n        value={files}\n      >\n        <FileUploadDropzone>\n          <Upload aria-hidden className=\"size-5\" />\n          <p>Drag files here, or</p>\n          <FileUploadTrigger render={<Button size=\"sm\" variant=\"outline\" />}>\n            Choose files\n          </FileUploadTrigger>\n        </FileUploadDropzone>\n        <FileUploadList>\n          {() => (\n            <FileUploadItem>\n              <ItemContent>\n                <FileUploadItemName />\n                <FileUploadItemSize />\n              </ItemContent>\n              <ItemActions>\n                <FileUploadItemRemove />\n              </ItemActions>\n            </FileUploadItem>\n          )}\n        </FileUploadList>\n      </FileUpload>\n      <FieldDescription id=\"attachments-hint\">\n        PDF or images, up to 3 files of 10 MB each.\n      </FieldDescription>\n      <FieldError errors={errors} id=\"attachments-error\" />\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

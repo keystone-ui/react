@@ -1,7 +1,11 @@
 ---
 date: "2026-11-16"
 description: "What's coming in the next release"
-excerpt: "No changes since the last release."
+excerpt: "1 change queued for the next release."
 ---
 
-No changes merged since v1.0.0-beta.12.
+## Minor changes
+
+### Add FileUpload
+
+`@keystoneui/react/file-upload` chooses files by picker, drop or opt-in paste, validates them and keeps a `File[]` of new files, with rows that show the app's upload status, progress and errors. It never uploads: the app does, and a hidden form input mirrors the value for native submit, reset and `required`.

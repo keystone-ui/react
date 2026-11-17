@@ -89,13 +89,14 @@
     "./table-pagination": "./src/table-pagination.tsx",
     "./copy-button": "./src/copy-button.tsx",
     "./code-block": "./src/code-block.tsx",
+    "./file-upload": "./src/file-upload.tsx",
     "./filter-chips": "./src/filter-chips.tsx"
   },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "clean": "rm -rf .turbo node_modules dist",
-    "test": "vitest run",
+    "test": "tsc6 -p tsconfig.type-tests.json && vitest run",
     "test:watch": "vitest"
   },
   "devDependencies": {
@@ -368,6 +369,10 @@
       "./code-block": {
         "types": "./dist/code-block.d.ts",
         "default": "./dist/code-block.js"
+      },
+      "./file-upload": {
+        "types": "./dist/file-upload.d.ts",
+        "default": "./dist/file-upload.js"
       },
       "./filter-chips": {
         "types": "./dist/filter-chips.d.ts",
