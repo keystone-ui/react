@@ -29,14 +29,16 @@ import {
 } from "./registry-paths";
 
 /** The only package-flavour items, deliberately. Widening is a decision. */
-const PACKAGE_ITEMS = ["npm/filter-pills", "npm/users-01"];
+const PACKAGE_ITEMS = ["npm/filter-pills", "npm/sidebar", "npm/users-01"];
 const PACKAGE_PREFIX = "npm/";
 /**
  * What each item says about the package version. users-01 needs beta.11
- * (Stepper's `animateHeight`); filter-pills was only tested with it.
+ * (Stepper's `animateHeight`); filter-pills and sidebar were only tested
+ * with it.
  */
 const VERSION_STATEMENT: Record<string, string> = {
   "npm/filter-pills": "Tested with `@keystoneui/react` 1.0.0-beta.11.",
+  "npm/sidebar": "Tested with `@keystoneui/react` 1.0.0-beta.11.",
   "npm/users-01": "Needs `@keystoneui/react` 1.0.0-beta.11 or later.",
 };
 
@@ -68,7 +70,7 @@ const localFile = (spec: string): string | null => {
 const specifiers = importSpecifiers;
 
 describe("package-flavour items", () => {
-  it("are exactly npm/users-01 and npm/filter-pills", () => {
+  it("are exactly npm/filter-pills, npm/sidebar and npm/users-01", () => {
     expect(packageItems.map((item) => item.name).sort()).toEqual(PACKAGE_ITEMS);
   });
 
@@ -137,9 +139,13 @@ describe("package-flavour items", () => {
   it("import only the package, react, their siblings and their declared dependencies", () => {
     const stray: string[] = [];
     for (const item of packageItems) {
-      const allowed = new Set(
-        (item.dependencies ?? []).map((dep) => dep.replace(VERSION_RANGE, ""))
+      const allowed = (item.dependencies ?? []).map((dep) =>
+        dep.replace(VERSION_RANGE, "")
       );
+      // A declared dependency, or a subpath of one
+      // (`@base-ui/react/merge-props` under `@base-ui/react`).
+      const declared = (spec: string) =>
+        allowed.some((dep) => spec === dep || spec.startsWith(`${dep}/`));
       for (const file of item.files ?? []) {
         for (const spec of specifiers(source(file.path))) {
           const ok =
@@ -147,7 +153,7 @@ describe("package-flavour items", () => {
             spec.startsWith("@/components/") ||
             spec.startsWith("@keystoneui/react/") ||
             spec === "react" ||
-            allowed.has(spec);
+            declared(spec);
           if (!ok) {
             stray.push(`${item.name}: ${file.path} imports ${spec}`);
           }
