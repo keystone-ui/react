@@ -10,6 +10,10 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  // Don't upload the source map: it embeds the adapter's already-minified
+  // server bundle, so it never maps a frame to repository source, and its
+  // size counts against the 60 MiB source-map limit, which refuses the deploy.
+  "upload_source_maps": false,
   // Keep Workers Logs so an uncaught exception in the server function is
   // visible; the smoke test's failure message points operators here.
   "observability": {
