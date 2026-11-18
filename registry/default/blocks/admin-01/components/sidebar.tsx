@@ -1,14 +1,14 @@
 /**
- * shadcn's Sidebar, adapted onto keystone primitives and shipped with
- * `admin-01`.
+ * shadcn's Sidebar, adapted onto keystone primitives. It ships with
+ * `admin-01` and is also installed on its own as the `sidebar` registry item.
  *
  * Keystone deliberately has no app shell, so this is not a keystone component:
- * it is not in `packages/ui`, not in the component count, and not covered by
- * the library's tests. It ships inside the block (as `components/sidebar.tsx`)
- * rather than as a dependency on shadcn's `sidebar` item, because that item's
- * own dependencies are shadcn's Button, Input, Separator, Skeleton, Tooltip
- * and Sheet — installing it replaced keystone's files at those paths with
- * Radix ones. Found by scripts/smoke-install.mjs.
+ * it is not in `packages/ui` and not in the component count. Both the block
+ * and the `sidebar` item install this one file (as `components/sidebar.tsx`)
+ * rather than depending on shadcn's `sidebar` item, because that item's own
+ * dependencies are shadcn's Button, Input, Separator, Skeleton, Tooltip and
+ * Sheet — installing it replaced keystone's files at those paths with Radix
+ * ones. Found by scripts/smoke-install.mjs.
  *
  * Adapted from the upstream file in five ways:
  *
@@ -254,7 +254,9 @@ function Sidebar({
         swipeDirection={side}
       >
         <DrawerContent
-          className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground sm:max-w-none"
+          // Same modifiers as the Drawer's own `w-3/4` and `sm:max-w-sm`, so
+          // tailwind-merge drops those and the 18rem variable sets the width.
+          className="bg-sidebar p-0 text-sidebar-foreground data-[swipe-direction=left]:w-(--sidebar-width) data-[swipe-direction=right]:w-(--sidebar-width) data-[swipe-direction=left]:sm:max-w-none data-[swipe-direction=right]:sm:max-w-none"
           data-mobile="true"
           data-sidebar="sidebar"
           data-slot="sidebar"

@@ -13,6 +13,9 @@
 /* Tell Tailwind where to scan for class usage */
 @source "../../../packages/ui/src/**/*.{ts,tsx}";
 @source "../stories/**/*.{ts,tsx}";
+/* admin-01's sidebar is not a keystone component, but a story measures its
+   phone drawer, so its classes must exist here too. */
+@source "../../docs/demos/blocks/admin-01/sidebar.tsx";
 
 @import "@keystoneui/react/base.css";
 
