@@ -98,8 +98,8 @@ async function applyInDrawer(page: Page, row: RegExp, option: string) {
 }
 
 /**
- * How many users the query found, from the footer's "of N". Read as text
- * because the footer is `hidden lg:block` on a phone.
+ * How many users the query found, from the footer's "of N". Read as text,
+ * the same way at every width.
  */
 async function resultTotal(page: Page): Promise<number> {
   await settled(page);

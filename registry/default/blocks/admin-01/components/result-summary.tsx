@@ -6,8 +6,7 @@
  *
  * It is not what the pagination status says: `Page 2 of 2` reads the same
  * whether that page holds ten rows or the three left over. Nor is it the
- * selection count — `SelectionBar` already states that, at every width, where
- * `TablePaginationInfo` is `hidden lg:block`.
+ * selection count — `SelectionBar` already states that.
  *
  * Deliberately a block file rather than a library prop. `TablePaginationInfo`
  * already accepts `children`, which is the composition answer, and the whole

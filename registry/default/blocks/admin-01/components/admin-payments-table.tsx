@@ -288,8 +288,7 @@ export function AdminPaymentsTable({
 
             {/* Composed rather than props-driven: the info slot's only
                 props-driven content is a selection count, which the
-                `SelectionBar` already states — at every width, where this slot
-                is `hidden lg:block`. */}
+                `SelectionBar` already states. */}
             <TablePagination
               pageCount={result.pageCount}
               pageIndex={table.pageIndex}

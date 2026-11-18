@@ -49,7 +49,7 @@ TablePagination
 
 Give `TablePagination` the props and it renders that composition for you. Pass `children` and it renders exactly what you give it instead — the same shape as [`Progress`](/docs/components/progress).
 
-`TablePaginationControls` is the grouping the last three sit in: full width below `lg` so they fill the row once the info slot is hidden, intrinsic above it so they sit at the end. It is named because `children` replaces the default composition entirely, and without it there is no way to reproduce that grouping except by copying its classes.
+`TablePaginationControls` is the grouping the last three sit in: full width below `lg` so they fill the row under the info slot, intrinsic above it so they sit at the end. It is named because `children` replaces the default composition entirely, and without it there is no way to reproduce that grouping except by copying its classes.
 
 ## Examples
 
@@ -78,7 +78,7 @@ onPageSizeChange={(size) => {
 }}
 ```
 
-`TablePaginationInfo` and `TablePaginationPageSize` are hidden below the `lg` breakpoint, as are the first/last buttons, so the footer stays usable on a phone without wrapping.
+`TablePaginationInfo` shows at every width. Below the `lg` breakpoint it takes its own row above the controls, so the count reads on one line instead of being squeezed beside the buttons; an empty slot takes no room, so a footer without one stays a single row. `TablePaginationPageSize` and the first/last buttons are hidden below `lg`, so the controls fit one row on a phone.
 
 
 {/* backlinks:start */}

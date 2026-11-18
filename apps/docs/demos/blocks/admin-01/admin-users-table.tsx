@@ -298,8 +298,7 @@ export function AdminUsersTable({
             </Table>
 
             {/* Composed: the info slot's only props-driven content is a
-                selection count, which the `SelectionBar` already states — and
-                states at every width, where this slot is `hidden lg:block`. */}
+                selection count, which the `SelectionBar` already states. */}
             <TablePagination
               pageCount={result.pageCount}
               pageIndex={table.pageIndex}
