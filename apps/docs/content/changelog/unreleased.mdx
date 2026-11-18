@@ -1,7 +1,7 @@
 ---
 date: "2026-11-18"
 description: "What's coming in the next release"
-excerpt: "3 changes queued for the next release."
+excerpt: "4 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -21,3 +21,9 @@ excerpt: "3 changes queued for the next release."
 ### Add a package flavour of the sidebar
 
 For apps that use the `@keystoneui/react` package instead of vendored components: `npx shadcn@latest add https://keystoneui.io/r/npm/sidebar.json` installs the same `sidebar.tsx`, importing `@keystoneui/react/*`, and is tested with 1.0.0-beta.11. It installs `@base-ui/react` unpinned, so keep yours at the version `@keystoneui/react` pins.
+
+---
+
+### Use the sidebar's 18rem phone drawer width
+
+The sidebar installed by `admin-01`, `sidebar` and `npm/sidebar` now opens an 18rem drawer on either side at phone widths.

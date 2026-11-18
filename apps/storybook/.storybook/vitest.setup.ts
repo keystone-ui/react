@@ -23,3 +23,7 @@ const _annotations = setProjectAnnotations([
 // A held press (custom commands in vitest.config.ts), for plays that must
 // see `:active` while the pointer is still down. Absent under Storybook.
 (globalThis as { __realCommands?: typeof commands }).__realCommands = commands;
+
+// The tester iframe's size, for plays that must measure a layout at a given
+// viewport width (media queries and `useIsMobile`). Absent under Storybook.
+(globalThis as { __realPage?: typeof page }).__realPage = page;
