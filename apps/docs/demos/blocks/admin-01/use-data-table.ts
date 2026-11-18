@@ -4,6 +4,21 @@ import { useEffect, useMemo, useState } from "react";
 import type { SortState } from "./sort";
 
 /**
+ * What a table's controls set — filters, sort, page, page size, the pills on
+ * show — before any rows are involved. `useTableState` needs only this, so a
+ * table whose rows come from somewhere else can keep the same controls.
+ */
+export interface TableStateConfig<F, K extends string, S extends string> {
+  /** A filter's reset patch, for removing its pill. */
+  clearFor: (key: K) => Partial<F>;
+  /** The pills on a fresh row; `Clear all` puts these back. */
+  defaultKeys: readonly K[];
+  defaultPageSize: number;
+  defaultSort: SortState<S>;
+  emptyFilters: F;
+}
+
+/**
  * Everything a filterable, sortable, paged, selectable table holds, for both of
  * this block's tables.
  *
@@ -12,14 +27,8 @@ import type { SortState } from "./sort";
  * selection. What differs — the rows, the filter vocabulary, how a row matches
  * and sorts — comes in through `config`.
  */
-export interface DataTableConfig<Row, F, K extends string, S extends string> {
-  /** A filter's reset patch, for removing its pill. */
-  clearFor: (key: K) => Partial<F>;
-  /** The pills on a fresh row; `Clear all` puts these back. */
-  defaultKeys: readonly K[];
-  defaultPageSize: number;
-  defaultSort: SortState<S>;
-  emptyFilters: F;
+export interface DataTableConfig<Row, F, K extends string, S extends string>
+  extends TableStateConfig<F, K, S> {
   /**
    * How long the stand-in request takes. The rows are local, so without one
    * the loading state would never be seen — a real table swaps
@@ -48,13 +57,16 @@ export interface DataTableResult<Row> {
   total: number;
 }
 
-export function useDataTable<
-  Row extends { id: string },
+/**
+ * The table's state with no rows in it: the query a request would send, the
+ * pills on show, the selection and the hidden columns.
+ */
+export function useTableState<
   F,
   K extends string,
   S extends string,
   C extends string = string,
->(config: DataTableConfig<Row, F, K, S>) {
+>(config: TableStateConfig<F, K, S>) {
   const [filters, setFilters] = useState<F>(config.emptyFilters);
   const [sort, setSortState] = useState(config.defaultSort);
   const [pageIndex, setPageIndex] = useState(0);
@@ -69,24 +81,6 @@ export function useDataTable<
   const [hiddenColumns, setHiddenColumns] = useState<ReadonlySet<C>>(new Set());
 
   const query: DataTableQuery<F, S> = { filters, pageIndex, pageSize, sort };
-  // New rows are a new answer even when the query has not moved: rows that
-  // arrive after mount (fetched, then handed in) would otherwise be ignored
-  // until someone touched a filter.
-  const rowsVersion = useRowsVersion(config.rows);
-  const { loading, result } = useSimulatedFetch(
-    [query, rowsVersion],
-    () => run(config, query),
-    config.latency ?? 300,
-    EMPTY_RESULT as DataTableResult<Row>
-  );
-
-  // A page that no longer exists — `?page=9` on a link, or the last row of the
-  // last page deleted elsewhere — snaps to the last page that does.
-  useEffect(() => {
-    if (!loading && pageIndex > result.pageCount - 1) {
-      setPageIndex(result.pageCount - 1);
-    }
-  }, [loading, pageIndex, result.pageCount]);
 
   // Every change that can shrink the result goes back to the first page:
   // page 2 of the unfiltered list usually does not exist once a filter is on,
@@ -110,7 +104,6 @@ export function useDataTable<
     clearSelection: () => setSelected(new Set()),
     filters,
     hiddenColumns,
-    loading,
     pageIndex,
     pageSize,
     patchFilters,
@@ -134,7 +127,6 @@ export function useDataTable<
         setPageIndex(next.pageIndex);
       }
     },
-    result,
     selected,
     setPageIndex,
     setPageSize: (size: number) => {
@@ -142,6 +134,19 @@ export function useDataTable<
       // Page 3 of a 5-per-page list does not exist at 50 per page.
       setPageIndex(0);
     },
+    /** Selects or clears exactly these rows; the rest of the selection stays. */
+    setRowsSelected: (ids: readonly string[], checked: boolean) =>
+      setSelected((current) => {
+        const next = new Set(current);
+        for (const id of ids) {
+          if (checked) {
+            next.add(id);
+          } else {
+            next.delete(id);
+          }
+        }
+        return next;
+      }),
     setSort: (next: SortState<S>) => {
       setSortState(next);
       setPageIndex(0);
@@ -149,20 +154,49 @@ export function useDataTable<
     sort,
     toggleColumn: (id: C) =>
       setHiddenColumns((current) => toggled(current, id)),
+    toggleRow: (id: string) => setSelected((current) => toggled(current, id)),
+  };
+}
+
+export function useDataTable<
+  Row extends { id: string },
+  F,
+  K extends string,
+  S extends string,
+  C extends string = string,
+>(config: DataTableConfig<Row, F, K, S>) {
+  const { setRowsSelected, ...state } = useTableState<F, K, S, C>(config);
+  const { pageIndex, query, setPageIndex } = state;
+
+  // New rows are a new answer even when the query has not moved: rows that
+  // arrive after mount (fetched, then handed in) would otherwise be ignored
+  // until someone touched a filter.
+  const rowsVersion = useRowsVersion(config.rows);
+  const { loading, result } = useSimulatedFetch(
+    [query, rowsVersion],
+    () => run(config, query),
+    config.latency ?? 300,
+    EMPTY_RESULT as DataTableResult<Row>
+  );
+
+  // A page that no longer exists — `?page=9` on a link, or the last row of the
+  // last page deleted elsewhere — snaps to the last page that does.
+  useEffect(() => {
+    if (!loading && pageIndex > result.pageCount - 1) {
+      setPageIndex(result.pageCount - 1);
+    }
+  }, [loading, pageIndex, result.pageCount, setPageIndex]);
+
+  return {
+    ...state,
+    loading,
+    result,
     /** Selects or clears every row on the current page. */
     togglePage: (checked: boolean) =>
-      setSelected((current) => {
-        const next = new Set(current);
-        for (const row of result.page) {
-          if (checked) {
-            next.add(row.id);
-          } else {
-            next.delete(row.id);
-          }
-        }
-        return next;
-      }),
-    toggleRow: (id: string) => setSelected((current) => toggled(current, id)),
+      setRowsSelected(
+        result.page.map((row) => row.id),
+        checked
+      ),
   };
 }
 
