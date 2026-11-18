@@ -395,4 +395,11 @@ export const ui: RegistryItem[] = [
     dependencies: ["@base-ui/react", "class-variance-authority"],
     files: [{ path: "ui/filter-chips.tsx", type: "registry:ui" }],
   },
+  {
+    name: "reel",
+    type: "registry:ui",
+    dependencies: ["lucide-react"],
+    registryDependencies: ["button"],
+    files: [{ path: "ui/reel.tsx", type: "registry:ui" }],
+  },
 ];

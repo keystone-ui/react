@@ -1608,6 +1608,25 @@
       ]
     },
     {
+      "name": "reel",
+      "type": "registry:ui",
+      "title": "Reel",
+      "description": "A native sideways scroller for one row of controls, with edge fades where there is more to scroll and arrows for mouse and trackpad users.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/reel.tsx",
+          "target": "@ui/reel.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "signin-01",
       "type": "registry:block",
       "title": "Sign in 01",
@@ -1880,6 +1899,28 @@
       "files": [
         {
           "path": "registry/default/blocks/profile-dropdown-01/components/profile-dropdown.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "navigation"
+      ]
+    },
+    {
+      "name": "category-nav-01",
+      "type": "registry:block",
+      "title": "Category Nav 01",
+      "description": "A bar of category links that scrolls sideways in a Reel, with the current page marked and scrolled into view.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/reel.json"
+      ],
+      "files": [
+        {
+          "path": "registry/default/blocks/category-nav-01/components/category-nav.tsx",
           "type": "registry:component"
         }
       ],
@@ -7780,6 +7821,70 @@
       "files": [
         {
           "path": "apps/docs/demos/radio-group/with-description.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "reel-custom-chips",
+      "type": "registry:example",
+      "title": "Reel Custom Chips",
+      "description": "Reel example: Custom Chips.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/filter-chips.json",
+        "https://keystoneui.io/r/reel.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/reel/custom-chips.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "reel-default",
+      "type": "registry:example",
+      "title": "Reel Default",
+      "description": "Reel example: Default.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/reel.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/reel/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "reel-rtl",
+      "type": "registry:example",
+      "title": "Reel Rtl",
+      "description": "Reel example: Rtl.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/reel.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/reel/rtl.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "reel-with-filter-chips",
+      "type": "registry:example",
+      "title": "Reel With Filter Chips",
+      "description": "Reel example: With Filter Chips.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/filter-chips.json",
+        "https://keystoneui.io/r/reel.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/reel/with-filter-chips.tsx",
           "type": "registry:example"
         }
       ]

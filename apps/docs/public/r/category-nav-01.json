@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "category-nav-01",
+  "title": "Category Nav 01",
+  "description": "A bar of category links that scrolls sideways in a Reel, with the current page marked and scrolled into view.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/reel.json"
+  ],
+  "files": [
+    {
+      "path": "registry/default/blocks/category-nav-01/components/category-nav.tsx",
+      "content": "\"use client\";\n\nimport {\n  BookOpen,\n  Clapperboard,\n  Gamepad2,\n  LayoutGrid,\n  type LucideIcon,\n  Music,\n  Newspaper,\n  Palette,\n  Sparkles,\n  Trophy,\n} from \"lucide-react\";\nimport { buttonVariants } from \"@/components/ui/button\";\nimport { Reel } from \"@/components/ui/reel\";\nimport { cn } from \"@/lib/utils\";\n\ninterface Category {\n  href: string;\n  icon: LucideIcon;\n  label: string;\n}\n\nconst categories: Category[] = [\n  { href: \"/browse\", icon: LayoutGrid, label: \"All\" },\n  { href: \"/browse/featured\", icon: Sparkles, label: \"Featured\" },\n  { href: \"/browse/games\", icon: Gamepad2, label: \"Games\" },\n  { href: \"/browse/music\", icon: Music, label: \"Music\" },\n  { href: \"/browse/film\", icon: Clapperboard, label: \"Film & TV\" },\n  { href: \"/browse/books\", icon: BookOpen, label: \"Books\" },\n  { href: \"/browse/sport\", icon: Trophy, label: \"Sport\" },\n  { href: \"/browse/art\", icon: Palette, label: \"Art & Design\" },\n  { href: \"/browse/news\", icon: Newspaper, label: \"News\" },\n];\n\n/**\n * A bar of category links that scrolls sideways when it does not fit. The\n * links are real links (`<a href>`), styled with `buttonVariants`, and the\n * current one carries `aria-current=\"page\"`; the Reel scrolls it into view.\n * Swap the `<a>` for your router's link component if it renders an `<a>`.\n */\nexport function CategoryNav({\n  currentHref,\n  items = categories,\n  label = \"Categories\",\n}: {\n  currentHref: string;\n  items?: Category[];\n  label?: string;\n}) {\n  return (\n    <nav aria-label={label}>\n      <Reel>\n        {/* `w-max` keeps the row's natural width; `mx-auto` centres it when\n            everything fits. */}\n        <ul className=\"mx-auto flex w-max gap-1\">\n          {items.map((item) => {\n            const isCurrent = item.href === currentHref;\n            return (\n              <li key={item.href}>\n                <a\n                  aria-current={isCurrent ? \"page\" : undefined}\n                  className={cn(\n                    buttonVariants({\n                      variant: isCurrent ? \"secondary\" : \"ghost\",\n                    }),\n                    \"rounded-full\",\n                    !isCurrent && \"text-muted-foreground hover:text-foreground\"\n                  )}\n                  href={item.href}\n                >\n                  <item.icon aria-hidden=\"true\" />\n                  {item.label}\n                </a>\n              </li>\n            );\n          })}\n        </ul>\n      </Reel>\n    </nav>\n  );\n}\n",
+      "type": "registry:component"
+    }
+  ],
+  "categories": [
+    "navigation"
+  ],
+  "type": "registry:block"
+}

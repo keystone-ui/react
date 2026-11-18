@@ -52,7 +52,7 @@ Every block must carry at least one category. Current values in use:
 | `authentication` | sign-in + sign-up blocks | ✅ |
 | `login` | `signin-0X` (alongside `authentication`) | ✅ |
 | `signup` | `signup-0X` (alongside `authentication`) | ✅ |
-| `navigation` | `profile-dropdown-01` | new |
+| `navigation` | `profile-dropdown-01`, `category-nav-01` | new |
 | `data` | `tickets-01` | new |
 | `dashboard` | `dashboard-01` | new |
 | `admin` | `admin-01` | new |

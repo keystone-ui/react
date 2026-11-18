@@ -796,6 +796,20 @@
   initial-value: 0;
 }
 
+/* Direction for `ks-scroll-fade-x` and the Reel's chevrons, declared on
+   every explicit `dir` boundary and inherited from there, so the nearest
+   `dir` wins: a left-to-right island inside a right-to-left page, and back. */
+@layer base {
+  :where([dir="ltr"]) {
+    --ks-scroll-fade-x-to: right;
+    --ks-reel-chevron-x: 1;
+  }
+  :where([dir="rtl"]) {
+    --ks-scroll-fade-x-to: left;
+    --ks-reel-chevron-x: -1;
+  }
+}
+
 @keyframes ks-scroll-fade-edges {
   0% {
     --ks-scroll-fade-start: 0;
@@ -832,10 +846,17 @@
   }
 }
 
+/* The timeline runs from the inline start, which is the right edge in
+   right-to-left, so the gradient runs from there too. The direction comes
+   from the nearest element with an explicit `dir` (see the base-layer rule
+   above), through an inherited property: no `:dir()` selector, which a
+   production optimizer may rewrite into language matches. Without any `dir`
+   the gradient runs `to right`. */
 @utility ks-scroll-fade-x {
   @supports (animation-timeline: scroll()) {
     mask-image: linear-gradient(
-      to right,
+      /* biome-ignore lint/correctness/noInvalidDirectionInLinearGradient: the direction is a custom property, substituted before the gradient is parsed */
+      to var(--ks-scroll-fade-x-to, right),
       transparent,
       black
         calc(var(--ks-scroll-fade-start) * var(--ks-scroll-fade-size, 1.5rem)),

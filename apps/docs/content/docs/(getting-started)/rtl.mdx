@@ -15,7 +15,7 @@ RTL product, rather than discovering the gaps after you have built on it.
 | Keystone's own spacing and positioning CSS | Mostly physical, does **not** mirror |
 | Explicit `rtl:` handling in the library | One component (`calendar`) |
 | i18n / locale / message layer | None |
-| RTL tests or visual baselines | None |
+| RTL tests or visual baselines | Chromium Storybook and docs tests cover Reel and the horizontal scroll fade |
 
 ## What works
 
@@ -46,15 +46,16 @@ CSS, the provider drives Base UI's JavaScript. You generally want both.
 
 **Keystone's own styling is written with physical direction utilities.** The
 library source contains 106 physical direction utility occurrences (`pl-`, `pr-`,
-`left-`, `right-`, `ml-`, `mr-`, `text-left`, `text-right`) across 30 of its 60
-components, against 23 logical occurrences (`ps-`, `pe-`, `ms-`, `me-`, `start-`,
+`left-`, `right-`, `ml-`, `mr-`, `text-left`, `text-right`) across 30 of its 61
+components, against 25 logical occurrences (`ps-`, `pe-`, `ms-`, `me-`, `start-`,
 `end-`, `text-end`). Physical utilities do not respond to `dir`, so
 under `dir="rtl"` you should expect asymmetric padding, icon gutters, absolute
 offsets, and chevron placement to stay on their left-to-right side.
 
-The only component with explicit RTL handling is `calendar`, which flips the
-day-picker navigation chevrons with two `rtl:` variants. Nothing else in the
-library carries an `rtl:` or `ltr:` variant. The only `dir` attribute is
+Calendar flips its navigation chevrons with two `rtl:` variants. Reel uses
+logical positioning for its arrows and the scroller's computed direction for
+paging. Its chevrons and the horizontal fade follow the nearest explicit
+`dir="ltr"` or `dir="rtl"`. The only `dir` attribute is
 `dir="auto"` on `FileUploadItemName`, so a file name keeps its own direction.
 
 **There is no i18n layer.** Keystone ships no locale plumbing, no message
@@ -62,9 +63,10 @@ catalog, and no `Intl` formatting helpers. Date, number, and currency formatting
 in components such as `calendar` and `date-input` is the consumer's
 responsibility.
 
-**RTL is not covered by tests.** There are no RTL unit tests, no RTL Storybook
-stories, and no RTL visual regression baselines, so RTL rendering is not
-protected against regression.
+**RTL test coverage is partial.** Chromium Storybook tests check Reel paging
+and sample the painted fade in both directions. The docs end-to-end tests check
+the built stylesheet, arrow placement and paging across nested direction
+settings.
 
 ## Working around it today
 

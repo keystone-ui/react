@@ -1,0 +1,130 @@
+---
+title: Reel
+description: A native sideways scroller for one row of controls, with edge fades where there is more to scroll and arrows for mouse and trackpad users.
+---
+
+<ComponentPreview name="reel-default" />
+
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/reel.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react@beta @base-ui/react lucide-react
+```
+
+<Step>Copy this usage example into your app.</Step>
+
+<ComponentSource name="reel-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Usage
+
+```tsx
+import { Reel } from "@keystoneui/react/reel";
+```
+
+```tsx
+<nav aria-label="Categories">
+  <Reel>
+    <ul className="mx-auto flex w-max gap-1">
+      <li>
+        <a aria-current="page" href="/browse">All</a>
+      </li>
+      {/* … */}
+    </ul>
+  </Reel>
+</nav>
+```
+
+A Reel scrolls one row of controls sideways when it is wider than its container: a bar of category links, or a row of [FilterChips](/docs/components/filter-chips). It is ordinary native scrolling, so touch momentum, trackpad scrolling and the browser's own scrolling of a focused item all work as they do anywhere else.
+
+The Reel takes exactly one child, the row, and adds no semantics of its own. The label (`<nav aria-label>`), the list, which item is current and how the items look stay with you. Give the row `w-max` so it keeps its natural width, and `mx-auto` to centre it when everything fits.
+
+### Reel or Carousel
+
+[Carousel](/docs/components/carousel) shows content cards: slides that snap, with previous and next buttons, dots and a counter, moved by JavaScript (embla). A Reel is for a row of *controls* that should behave like plain scrolling: it is the browser's own scroller, it does not snap, and it adds no Tab stops.
+
+### Edges and arrows
+
+- Each edge fades only where there is more to scroll. The fade is a mask on the row itself (the [`ks-scroll-fade-x`](/docs/theming/utilities) utility), so it works on any surface: a card, a muted panel or the page.
+- With `arrows="pointer"` (the default), an arrow appears at each end that has more to scroll, but only on a device with a mouse or trackpad (`hover: hover` and `pointer: fine`). A touch screen swipes, and the fade is its cue. Where an arrow can show, the fade is 3rem deep so the arrow sits on faded content; otherwise it is 1.5rem.
+- A press on an arrow scrolls 80% of the visible width.
+- Arrows are never Tab stops and are hidden from assistive technology, and a press on one does not take focus: Tab already reaches every item, and the Reel brings each one into view.
+- Browsers without scroll-driven animations show no fade; the row still scrolls and the arrows still show.
+
+### Keyboard and focus
+
+- Reel clears a keyboard-focused or current item by the greater of 48px and the fade depth wherever the available scroll range allows. An item wider than the clear space aligns at inline start.
+- Reel treats as current the first item in document order that carries `data-selected` (present, with any value except `false` in any letter case) or an `aria-current` that is neither empty nor `false` in any letter case. To reveal it, Reel scrolls the row just far enough to clear the item as described above, and does nothing if it already is clear. Reel checks the current item whenever the Reel comes to have room (at mount if its content width is positive, and whenever it regains positive content width) and whenever a different item becomes current (or the same item is unmarked and, in a later update, marked again). Reel reveals that item only if the Reel's last measured content width and the item's bounding-box width are both positive. A reveal on coming to have room, and the first reveal after mount, jump; later ones glide, or jump under `prefers-reduced-motion`. A reveal replaces a scroll already in progress, such as an arrow press, a swipe or an earlier glide. Reel skips a current item whose bounding box has zero width at that moment, even if a later marked item has width. Giving the item width later, resizing the Reel while it still has room, or shifting the row's layout does not trigger another reveal. Reel never moves focus or scrolls the page.
+- If the current item gets its width later, or is moved to another row, give the Reel a new `key` or unmark the item and mark it again in a later update.
+- With `prefers-reduced-motion`, arrow presses and current-item scrolls jump instead of gliding.
+- The row has 4px of padding inside the scroller, at any root font size, so a focus outline is not clipped.
+
+### Styling hooks
+
+`data-slot="reel"` and `data-arrows` on the root, `data-slot="reel-viewport"` on the scroller, and `data-slot="reel-arrow"` with `data-side="start"` or `"end"` on each arrow. Each arrow is an inert button inside a plain `span` (with the same `data-side`) that takes the press, so no arrow can receive focus, even by script. `className` goes on the root, which is `position: relative`.
+
+## Composition
+
+```text
+Reel
+└── your row (one element)
+```
+
+## Examples
+
+### With FilterChips
+
+A row of FilterChips that filters in place keeps to one line instead of wrapping (`className="w-max flex-nowrap"`).
+
+<ComponentPreview name="reel-with-filter-chips" />
+
+### Custom chips
+
+FilterChips restyled through `FilterChip`'s `className` state function to match a link bar: no border or shadow, muted idle text, and the quiet `secondary` fill on the selected chip.
+
+<ComponentPreview name="reel-custom-chips" />
+
+## RTL
+
+In right-to-left text the fades and the arrows mirror: the end arrow sits on the left and scrolls towards the end, and the chevrons point the way they scroll. To align the arrows' sides and paging (computed direction) with the fade and chevrons (the nearest explicit `dir="ltr"` or `dir="rtl"` on the Reel or an ancestor), put the explicit direction on an ancestor of the whole Reel and let the scroller and arrows inherit it. See [the RTL guide](/docs/rtl).
+
+<ComponentPreview name="reel-rtl" />
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Category Nav 01](/docs/blocks/category-nav-01) — A bar of category links that scrolls sideways in a Reel, with the current page marked and scrolled into view.
+
+{/* backlinks:end */}
+
+## API Reference
+
+### Reel
+
+Renders a `<div>` around a scroller holding your row, and two arrow buttons.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `ReactElement` | - | Required. Exactly one element: the row to scroll. |
+| `arrows` | `"pointer" \| "always" \| "none"` | `"pointer"` | When the arrows can show: only with a mouse or trackpad, on every device, or never. An arrow only ever shows at an end with more to scroll. |
+| `className` | `string` | - | Classes for the root. |

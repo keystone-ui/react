@@ -260,12 +260,12 @@ Full guidance, including which tokens the shadcn sidebar reads:
 | Files | `FileUpload` (picker, drop, opt-in paste; the app uploads and sets each row's status) |
 | Overlays | `Modal`, `Drawer`, `AlertDialog`, `Popover`, `Tooltip` |
 | Menus | `DropdownMenu`, `Command` (palette) |
-| Navigation | `Tabs`, `Breadcrumb`, `Pagination`, `Stepper` |
+| Navigation | `Tabs`, `Breadcrumb`, `Pagination`, `Stepper`; `Reel` around a row of links that can be wider than its container |
 | Data display | `Table` (+ `TableSortButton`, `TableEmpty`, `numeric`), `Card`, `DescriptionList`, `Avatar`, `Badge`, `Tag`, `TagGroup` |
 | Table footer | `TablePagination` for rows-per-page + "page N of M" + navigation. `Pagination` is for page *links* with their own URLs — do not use it as a data-table footer. |
 | Metrics / KPI | `StatValue` + `StatDelta` inside `Card` + `CardContent`. `StatDelta` takes a `direction` (`up-is-good` / `down-is-good` / `neutral`) — never colour a delta from its sign alone. Use `Card variant="outline"` for a panel row. |
 | Feedback | `Toast`, `Alert`, `Progress`, `CircularProgress`, `Skeleton`, `Spinner`, `Empty` |
-| Layout | `Card`, `Separator`, `Resizable`, `Accordion`, `Collapsible`, `AspectRatio`, `Carousel` |
+| Layout | `Card`, `Separator`, `Resizable`, `Accordion`, `Collapsible`, `AspectRatio`, `Carousel` (content cards that snap; a row of controls that scrolls sideways is a `Reel`) |
 | Bulk-action bar | `SelectionBar` |
 
 ## Block Selection
@@ -277,6 +277,7 @@ Blocks are full-page or feature-level compositions, not primitives. **If the use
 | Sign-in form / login page | `signin-01`, `signin-02`, `signin-03`, `signin-04` | `authentication`, `login` |
 | Signup / registration page | `signup-01`, `signup-02`, `signup-03`, `signup-04`, `signup-05` | `authentication`, `signup` |
 | Profile dropdown / user menu | `profile-dropdown-01` | `navigation` |
+| Category bar / a scrolling row of links to category pages | `category-nav-01` | `navigation` |
 | Tickets / CRM / data management table | `tickets-01` | `data` |
 | Analytics dashboard / KPIs + charts | `dashboard-01` | `dashboard` |
 | Admin panel / app shell with sidebar | `admin-01` | `admin` |
@@ -294,9 +295,9 @@ Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or
 
 ## Component List
 
-60 components, all importable from `@keystoneui/react/{kebab-case-name}`:
+61 components, all importable from `@keystoneui/react/{kebab-case-name}`:
 
-`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `button-group`, `calendar`, `card`, `carousel`, `checkbox`, `circular-progress`, `code-block`, `collapsible`, `combobox`, `command`, `copy-button`, `date-input`, `description-list`, `drawer`, `dropdown-menu`, `empty`, `field`, `file-upload`, `filter-chips`, `form`, `input`, `input-group`, `input-otp`, `item`, `kbd`, `label`, `modal`, `native-select`, `pagination`, `popover`, `progress`, `radio-group`, `resizable`, `select`, `selection-bar`, `separator`, `skeleton`, `slider`, `spinner`, `stat`, `stepper`, `switch`, `table`, `table-pagination`, `tabs`, `tag`, `tag-group`, `textarea`, `toast`, `toggle`, `toggle-group`, `tooltip`.
+`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `button-group`, `calendar`, `card`, `carousel`, `checkbox`, `circular-progress`, `code-block`, `collapsible`, `combobox`, `command`, `copy-button`, `date-input`, `description-list`, `drawer`, `dropdown-menu`, `empty`, `field`, `file-upload`, `filter-chips`, `form`, `input`, `input-group`, `input-otp`, `item`, `kbd`, `label`, `modal`, `native-select`, `pagination`, `popover`, `progress`, `radio-group`, `reel`, `resizable`, `select`, `selection-bar`, `separator`, `skeleton`, `slider`, `spinner`, `stat`, `stepper`, `switch`, `table`, `table-pagination`, `tabs`, `tag`, `tag-group`, `textarea`, `toast`, `toggle`, `toggle-group`, `tooltip`.
 
 ## Workflow
 

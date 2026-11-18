@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "reel-rtl",
+  "title": "Reel Rtl",
+  "description": "Reel example: Rtl.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/reel.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/reel/rtl.tsx",
+      "content": "\"use client\";\n\nimport { buttonVariants } from \"@keystoneui/react/button\";\nimport { Reel } from \"@keystoneui/react/reel\";\nimport { cn } from \"@keystoneui/react/utils\";\n\nconst categories = [\n  \"الكل\",\n  \"مميز\",\n  \"ألعاب\",\n  \"موسيقى\",\n  \"أفلام\",\n  \"كتب\",\n  \"رياضة\",\n  \"فنون وتصميم\",\n  \"أخبار\",\n];\n\nexport default function ReelRtl() {\n  const current = categories[0];\n  return (\n    <nav aria-label=\"الفئات\" className=\"w-full max-w-md\" dir=\"rtl\">\n      <Reel>\n        <ul className=\"mx-auto flex w-max gap-1\">\n          {categories.map((category, index) => {\n            const isCurrent = category === current;\n            return (\n              <li key={category}>\n                <a\n                  aria-current={isCurrent ? \"page\" : undefined}\n                  className={cn(\n                    buttonVariants({\n                      variant: isCurrent ? \"secondary\" : \"ghost\",\n                    }),\n                    \"rounded-full\",\n                    !isCurrent && \"text-muted-foreground hover:text-foreground\"\n                  )}\n                  href={`#category-${index}`}\n                >\n                  {category}\n                </a>\n              </li>\n            );\n          })}\n        </ul>\n      </Reel>\n    </nav>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

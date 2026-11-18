@@ -12,6 +12,7 @@ How Keystone UI components are composed and how to extend them.
 - Modal, Drawer, AlertDialog need a title
 - Footer actions: cancel first, primary last
 - Drawer bodies scroll — use `DrawerBody`
+- A row that scrolls sideways — `Reel`, not `Carousel`
 - Use full Card composition
 - `Button` has no loading prop — compose with `Spinner`
 - `data-slot` for stable styling targets
@@ -283,6 +284,45 @@ while only the middle scrolls, reach for `DrawerBody`.
 
 `DrawerBody` ships `px-4` only — `DrawerHeader` and `DrawerFooter` supply their
 own vertical padding, so add `py-*` yourself only when the body stands alone.
+
+---
+
+## A row that scrolls sideways — `Reel`, not `Carousel`
+
+A row of controls that can be wider than its container (category links, a
+FilterChips row that should stay on one line) goes in a `Reel`: native
+scrolling, edge fades where there is more, and arrows only for mouse and
+trackpad users that are never Tab stops. `Carousel` is for content cards
+(slides that snap, with previous/next buttons, dots and a counter); it moves
+its track with JavaScript (embla) instead of native scrolling, and is wrong for
+a row of links or chips.
+
+A plain scroller with the `ks-scroll-fade-x` utility
+(`<div className="ks-scroll-fade-x flex overflow-x-auto">`) is still fine for a
+row that needs no arrows and no keeping of the focused or current item in view.
+
+**Incorrect** — a carousel of links:
+
+```tsx
+<Carousel>
+  <CarouselContent>{links.map((l) => <CarouselItem key={l.href}>{l}</CarouselItem>)}</CarouselContent>
+</Carousel>
+```
+
+**Correct** — one row, its semantics yours, inside a Reel:
+
+```tsx
+<nav aria-label="Categories">
+  <Reel>
+    <ul className="mx-auto flex w-max gap-1">{links}</ul>
+  </Reel>
+</nav>
+```
+
+The Reel takes exactly one child and adds no roles: the `nav` label, the list
+and `aria-current` on the current link are yours. Style navigation links with
+`buttonVariants` on an `<a href>`. Button's non-native mode assigns the button
+role. The `category-nav-01` block is the full bar.
 
 ---
 
