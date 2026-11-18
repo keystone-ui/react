@@ -6,6 +6,7 @@ import {
   detectProjectContext,
   formatProjectContext,
 } from "./project-context.js";
+import { registryItemUrl } from "./registry-url.js";
 import { listItems, searchItems } from "./search.js";
 import type { RegistryItem } from "./types.js";
 
@@ -70,7 +71,7 @@ export async function listComponentsTool(
   config: ProjectConfig,
   input: z.infer<typeof listComponentsSchema>
 ) {
-  const manifest = await fetchManifest(config.registry.url);
+  const manifest = await fetchManifest(config.registry);
   const { items, total } = listItems(manifest, input);
 
   const lines = items.map(formatItemSummary);
@@ -108,7 +109,7 @@ export async function searchComponentsTool(
   config: ProjectConfig,
   input: z.infer<typeof searchComponentsSchema>
 ) {
-  const manifest = await fetchManifest(config.registry.url);
+  const manifest = await fetchManifest(config.registry);
   const { results, total } = searchItems(manifest, input.query, {
     limit: input.limit,
     type: input.type,
@@ -142,7 +143,7 @@ export async function viewComponentTool(
   const results = await Promise.all(
     input.names.map(async (name) => {
       try {
-        const item = await fetchItem(config.registry.url, name);
+        const item = await fetchItem(config.registry, name);
         return formatItemDetail(item);
       } catch {
         return `**${name}**: Not found in registry.`;
@@ -168,7 +169,9 @@ export function getAddCommandTool(
   config: ProjectConfig,
   input: z.infer<typeof getAddCommandSchema>
 ) {
-  const urls = input.names.map((name) => `${config.registry.url}/${name}.json`);
+  const urls = input.names.map((name) =>
+    registryItemUrl(config.registry, name)
+  );
 
   const lines = [
     "Install these components with the shadcn CLI:",
@@ -201,7 +204,7 @@ export async function getExamplesTool(
   input: z.infer<typeof getExamplesSchema>
 ) {
   try {
-    const bundle = await fetchExamples(config.registry.url, input.name);
+    const bundle = await fetchExamples(config.registry, input.name);
 
     if (!bundle.files.length) {
       return `**${input.name}**: no example files found.`;
@@ -226,7 +229,8 @@ export async function getExamplesTool(
 }
 
 export function getThemeInfoTool(config: ProjectConfig) {
-  const registryUrl = config.registry.url;
+  const defaultStyleUrl = registryItemUrl(config.registry, "default");
+  const themeUrl = registryItemUrl(config.registry, "theme/<code>");
   const themeCtx = detectProjectContext();
 
   return `# Keystone UI Theme
@@ -285,7 +289,7 @@ Add the \`dark\` class to a parent element.
 
 Get the full style definition:
 \`\`\`bash
-npx shadcn@latest add ${registryUrl}/default.json
+npx shadcn@latest add ${defaultStyleUrl}
 \`\`\`
 
 ## Custom themes
@@ -294,7 +298,7 @@ The theme builder (${config.docsUrl}/theme-builder) encodes a theme as a code,
 \`k1_<base>_<L>_<C>_<H>_<radius>_<font>\`, served as a \`registry:theme\` item.
 Install one, or only its colours (\`?only=theme\`) or font (\`?only=font\`):
 \`\`\`bash
-npx shadcn@latest add ${registryUrl}/theme/<code>.json
+npx shadcn@latest add ${themeUrl}
 \`\`\`
 \`keystoneui theme <code>\` prints the decoded settings and this command.`;
 }

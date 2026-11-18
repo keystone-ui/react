@@ -351,7 +351,7 @@ describe("fetcher errors", () => {
     expect((error as Error).message).toMatch(FETCHER_500);
     expect(fullText(error)).not.toContain(SECRET);
     // The request itself is unchanged: the server got the real token.
-    expect(requests).toEqual([`/fail?token=${SECRET}/registry.json`]);
+    expect(requests).toEqual([`/fail/registry.json?token=${SECRET}`]);
   });
 
   it("does not echo userinfo when fetch refuses the URL", async () => {
@@ -382,7 +382,7 @@ describe("fetcher errors", () => {
     );
     expect(error).toBeInstanceOf(TypeError);
     expect((error as Error).message).toContain(
-      "http://host.test/$&?v=REDACTED"
+      "http://host.test/$&/registry.json?v=REDACTED"
     );
     expect(fullText(error)).not.toContain("u:p@");
     expect(fullText(error)).not.toContain("v=2");
@@ -483,8 +483,8 @@ describe("fetcher errors", () => {
     await fetchManifest(`${origin}/ok?token=other`);
     // Same token is cached; a different token (same redacted form) is not.
     expect(requests).toEqual([
-      `/ok?token=${SECRET}/registry.json`,
-      "/ok?token=other/registry.json",
+      `/ok/registry.json?token=${SECRET}`,
+      "/ok/registry.json?token=other",
     ]);
   });
 });

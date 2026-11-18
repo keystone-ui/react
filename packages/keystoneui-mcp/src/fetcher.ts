@@ -1,4 +1,10 @@
 import { displayUrl, redactUrlInError } from "./display-url.js";
+import {
+  type RegistrySource,
+  registryCatalogueUrl,
+  registryDemosUrl,
+  registryItemUrl,
+} from "./registry-url.js";
 import type { RegistryItem, RegistryManifest } from "./types.js";
 
 const cache = new Map<string, { data: unknown; timestamp: number }>();
@@ -25,15 +31,17 @@ async function fetchJson<T>(url: string): Promise<T> {
   return data;
 }
 
-export function fetchManifest(registryUrl: string): Promise<RegistryManifest> {
-  return fetchJson<RegistryManifest>(`${registryUrl}/registry.json`);
+export function fetchManifest(
+  registry: RegistrySource | string
+): Promise<RegistryManifest> {
+  return fetchJson<RegistryManifest>(registryCatalogueUrl(registry));
 }
 
 export function fetchItem(
-  registryUrl: string,
+  registry: RegistrySource | string,
   name: string
 ): Promise<RegistryItem> {
-  return fetchJson<RegistryItem>(`${registryUrl}/${name}.json`);
+  return fetchJson<RegistryItem>(registryItemUrl(registry, name));
 }
 
 export interface DemoFile {
@@ -47,10 +55,10 @@ export interface DemoBundle {
 }
 
 export function fetchExamples(
-  registryUrl: string,
+  registry: RegistrySource | string,
   name: string
 ): Promise<DemoBundle> {
-  return fetchJson<DemoBundle>(`${registryUrl}/demos/${name}`);
+  return fetchJson<DemoBundle>(registryDemosUrl(registry, name));
 }
 
 export function clearCache(): void {

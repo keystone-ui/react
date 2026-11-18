@@ -9,6 +9,7 @@ import {
   detectProjectContext,
   type ProjectContext,
 } from "./project-context.js";
+import { registryCatalogueUrl } from "./registry-url.js";
 
 interface McpClientStatus {
   configPath: string;
@@ -135,7 +136,7 @@ function collect(): InfoData {
     installedPackages: detectInstalledPackages(cwd),
     links: {
       docs: displayUrl(docsUrl),
-      registry: displayUrl(`${config.registry.url}/registry.json`),
+      registry: displayUrl(registryCatalogueUrl(config.registry)),
       llms: displayUrl(`${docsUrl}/llms.txt`),
     },
   };
