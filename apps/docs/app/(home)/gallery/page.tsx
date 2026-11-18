@@ -158,6 +158,11 @@ const categories = [
         slug: "stepper",
         description: "Multi-step progress indicator",
       },
+      {
+        name: "Reel",
+        slug: "reel",
+        description: "Sideways-scrolling row of links or chips",
+      },
     ],
   },
   {

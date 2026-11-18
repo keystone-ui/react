@@ -61,6 +61,36 @@ export default mergeConfig(
                 pointerUp: async (ctx) => {
                   await ctx.page.mouse.up();
                 },
+                // Real `prefers-reduced-motion`, for plays that compare a
+                // smooth scroll with an instant one.
+                emulateReducedMotion: async (ctx, reduce: boolean) => {
+                  await ctx.page.emulateMedia({
+                    reducedMotion: reduce ? "reduce" : "no-preference",
+                  });
+                },
+                // A real wheel (or trackpad) scroll over an element.
+                wheelOver: async (
+                  ctx,
+                  selector: string,
+                  deltaX: number,
+                  deltaY: number
+                ) => {
+                  const box = await ctx.iframe.locator(selector).boundingBox();
+                  if (!box) {
+                    throw new Error(`wheelOver: no box for ${selector}`);
+                  }
+                  await ctx.page.mouse.move(
+                    box.x + box.width / 2,
+                    box.y + box.height / 2
+                  );
+                  await ctx.page.mouse.wheel(deltaX, deltaY);
+                },
+                // The element's painted pixels as a base64 PNG, for plays
+                // that must see what a mask or a gradient really draws.
+                screenshotBase64: async (ctx, selector: string) => {
+                  const png = await ctx.iframe.locator(selector).screenshot();
+                  return png.toString("base64");
+                },
               },
             },
             exclude: ["**/node_modules/**"],

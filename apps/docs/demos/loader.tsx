@@ -238,6 +238,11 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("block-betting-panel-04", m.default),
     }))
   ),
+  "block-category-nav-01": dynamic(() =>
+    import("./blocks/category-nav-01").then((m) => ({
+      default: hydrated("block-category-nav-01", m.default),
+    }))
+  ),
   "block-dashboard-01": dynamic(() =>
     import("./blocks/dashboard-01/index").then((m) => ({
       default: hydrated("block-dashboard-01", m.default),
@@ -1681,6 +1686,26 @@ const loaders: Record<string, ComponentType> = {
   "radio-group-with-description": dynamic(() =>
     import("./radio-group/with-description").then((m) => ({
       default: hydrated("radio-group-with-description", m.default),
+    }))
+  ),
+  "reel-custom-chips": dynamic(() =>
+    import("./reel/custom-chips").then((m) => ({
+      default: hydrated("reel-custom-chips", m.default),
+    }))
+  ),
+  "reel-default": dynamic(() =>
+    import("./reel/default").then((m) => ({
+      default: hydrated("reel-default", m.default),
+    }))
+  ),
+  "reel-rtl": dynamic(() =>
+    import("./reel/rtl").then((m) => ({
+      default: hydrated("reel-rtl", m.default),
+    }))
+  ),
+  "reel-with-filter-chips": dynamic(() =>
+    import("./reel/with-filter-chips").then((m) => ({
+      default: hydrated("reel-with-filter-chips", m.default),
     }))
   ),
   "resizable-collapsible": dynamic(() =>

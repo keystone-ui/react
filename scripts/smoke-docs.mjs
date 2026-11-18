@@ -67,6 +67,8 @@ export const DEFAULT_CHECKS = [
   { path: "/r/theme/k1_smoke-docs-invalid.json", status: 404 },
   { path: "/__smoke-docs-missing-route", status: 404 },
   { path: "/docs/components/__smoke-docs-missing.mdx", status: 404 },
+  // A test-only fixture: served by the e2e build alone, closed everywhere else.
+  { path: "/e2e/reel-arrows", status: 404 },
 ];
 
 const defaultSleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

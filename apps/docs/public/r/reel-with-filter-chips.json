@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "reel-with-filter-chips",
+  "title": "Reel With Filter Chips",
+  "description": "Reel example: With Filter Chips.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/filter-chips.json",
+    "https://keystoneui.io/r/reel.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/reel/with-filter-chips.tsx",
+      "content": "\"use client\";\n\nimport { FilterChip, FilterChips } from \"@keystoneui/react/filter-chips\";\nimport { Reel } from \"@keystoneui/react/reel\";\nimport { useState } from \"react\";\n\nconst topics = [\n  { value: \"all\", label: \"All\", count: 42 },\n  { value: \"typography\", label: \"Typography\", count: 9 },\n  { value: \"color\", label: \"Color\", count: 7 },\n  { value: \"motion\", label: \"Motion\", count: 6 },\n  { value: \"layout\", label: \"Layout\", count: 8 },\n  { value: \"forms\", label: \"Forms\", count: 5 },\n  { value: \"icons\", label: \"Icons\", count: 4 },\n  { value: \"charts\", label: \"Charts\", count: 3 },\n];\n\nexport default function ReelWithFilterChips() {\n  const [topic, setTopic] = useState(\"all\");\n  return (\n    <div className=\"w-full max-w-md\">\n      <Reel>\n        <FilterChips\n          aria-label=\"Topic\"\n          className=\"mx-auto w-max flex-nowrap\"\n          onValueChange={setTopic}\n          value={topic}\n        >\n          {topics.map((t) => (\n            <FilterChip count={t.count} key={t.value} value={t.value}>\n              {t.label}\n            </FilterChip>\n          ))}\n        </FilterChips>\n      </Reel>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

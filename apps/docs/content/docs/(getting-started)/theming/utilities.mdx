@@ -33,6 +33,14 @@ It is a scroll-driven animation reading a mask, so there is no scroll listener
 and no overlay element to click through. Browsers without scroll-driven
 animations show no fade and still scroll.
 
+The horizontal fade follows the nearest `dir="ltr"` or `dir="rtl"` on the
+scroller or an ancestor. A CSS direction or `dir="auto"` inherits the fade
+setting from that boundary. With neither boundary the fade defaults to LTR.
+Explicit LTR rows and the default LTR gradient render as before. The vertical
+fade is unchanged. For a row of controls that also needs arrows
+and keeps the focused and current items clear of the fade, use
+[Reel](/docs/components/reel), which is built on this utility.
+
 ## ks-shimmer
 
 A light sweep across text, for live status — "Thinking…", a running tool, a

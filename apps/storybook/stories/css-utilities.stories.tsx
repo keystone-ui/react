@@ -90,6 +90,124 @@ export const ScrollFade: Story = {
   },
 };
 
+/** The custom browser commands registered in vitest.config.ts. */
+interface RealCommands {
+  screenshotBase64: (selector: string) => Promise<string>;
+}
+
+/** Vitest's Playwright commands; absent when Storybook runs the play. */
+const realCommands = () =>
+  (globalThis as { __realCommands?: RealCommands }).__realCommands;
+
+/**
+ * Mean luminance (0 black … 255 white) of the painted pixels at the far
+ * left, far right, top and bottom of an element, read from a real
+ * screenshot. A masked-out edge shows the white page behind it; an unmasked
+ * edge shows the black content.
+ */
+async function edgeLuminance(testId: string) {
+  const commands = realCommands();
+  if (!commands) {
+    return null;
+  }
+  const base64 = await commands.screenshotBase64(`[data-testid="${testId}"]`);
+  const blob = await (await fetch(`data:image/png;base64,${base64}`)).blob();
+  const bitmap = await createImageBitmap(blob);
+  const canvas = document.createElement("canvas");
+  canvas.width = bitmap.width;
+  canvas.height = bitmap.height;
+  const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+  ctx.drawImage(bitmap, 0, 0);
+  const at = (x: number, y: number) => {
+    const [r, g, b] = ctx.getImageData(x, y, 1, 1).data;
+    return Math.round((r + g + b) / 3);
+  };
+  const midX = Math.floor(bitmap.width / 2);
+  const midY = Math.floor(bitmap.height / 2);
+  return {
+    left: at(1, midY),
+    right: at(bitmap.width - 2, midY),
+    top: at(midX, 1),
+    bottom: at(midX, bitmap.height - 2),
+  };
+}
+
+const FADED = 200;
+const SOLID = 60;
+
+/**
+ * The fade must sit on the edge with more content beyond it, in either
+ * writing direction. In right-to-left the inline start is the RIGHT edge:
+ * at the start, more content lies to the LEFT, so only the left edge fades.
+ * Pixels from a real screenshot, so a gradient pointing the wrong way fails
+ * whatever the computed properties say.
+ */
+export const ScrollFadeDirections: Story = {
+  tags: ["!dev", "!autodocs"],
+  render: () => (
+    <div className="flex flex-col gap-4 bg-white p-4">
+      <div
+        className="ks-scroll-fade-x h-8 w-56 overflow-x-auto [scrollbar-width:none]"
+        data-testid="ltr-x"
+      >
+        <div className="h-full w-[800px] bg-black" />
+      </div>
+      <div
+        className="ks-scroll-fade-x h-8 w-56 overflow-x-auto [scrollbar-width:none]"
+        data-testid="rtl-x"
+        dir="rtl"
+      >
+        <div className="h-full w-[800px] bg-black" />
+      </div>
+      <div
+        className="ks-scroll-fade h-32 w-8 overflow-y-auto [scrollbar-width:none]"
+        data-testid="y"
+      >
+        <div className="h-[600px] w-full bg-black" />
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const fade = (el: HTMLElement, prop: string) =>
+      Number.parseFloat(getComputedStyle(el).getPropertyValue(prop));
+    const rtl = canvas.getByTestId("rtl-x");
+
+    // The timeline itself is direction-aware: at the start, no start fade.
+    await waitFor(async () => {
+      await expect(fade(rtl, "--ks-scroll-fade-start")).toBeCloseTo(0, 1);
+      await expect(fade(rtl, "--ks-scroll-fade-end")).toBeCloseTo(1, 1);
+    });
+
+    if (!realCommands()) {
+      return;
+    }
+
+    // At the start of each scroller.
+    const ltrStart = await edgeLuminance("ltr-x");
+    await expect(ltrStart?.left).toBeLessThan(SOLID);
+    await expect(ltrStart?.right).toBeGreaterThan(FADED);
+
+    const rtlStart = await edgeLuminance("rtl-x");
+    await expect(rtlStart?.right).toBeLessThan(SOLID);
+    await expect(rtlStart?.left).toBeGreaterThan(FADED);
+
+    const yStart = await edgeLuminance("y");
+    await expect(yStart?.top).toBeLessThan(SOLID);
+    await expect(yStart?.bottom).toBeGreaterThan(FADED);
+
+    // At the end: right-to-left scrolls to a negative scrollLeft.
+    rtl.scrollLeft = -(rtl.scrollWidth - rtl.clientWidth);
+    await waitFor(async () => {
+      await expect(fade(rtl, "--ks-scroll-fade-start")).toBeCloseTo(1, 1);
+      await expect(fade(rtl, "--ks-scroll-fade-end")).toBeCloseTo(0, 1);
+    });
+    const rtlEnd = await edgeLuminance("rtl-x");
+    await expect(rtlEnd?.right).toBeGreaterThan(FADED);
+    await expect(rtlEnd?.left).toBeLessThan(SOLID);
+  },
+};
+
 export const Shimmer: Story = {
   render: () => (
     <p className="ks-shimmer font-medium text-sm" data-testid="ks-shimmer">

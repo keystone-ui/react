@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "reel-custom-chips",
+  "title": "Reel Custom Chips",
+  "description": "Reel example: Custom Chips.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/filter-chips.json",
+    "https://keystoneui.io/r/reel.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/reel/custom-chips.tsx",
+      "content": "\"use client\";\n\nimport { FilterChip, FilterChips } from \"@keystoneui/react/filter-chips\";\nimport { Reel } from \"@keystoneui/react/reel\";\nimport {\n  BookOpen,\n  Clapperboard,\n  Gamepad2,\n  LayoutGrid,\n  Music,\n  Newspaper,\n  Palette,\n  Sparkles,\n  Trophy,\n} from \"lucide-react\";\nimport { useState } from \"react\";\n\nconst categories = [\n  { value: \"all\", label: \"All\", icon: LayoutGrid },\n  { value: \"featured\", label: \"Featured\", icon: Sparkles },\n  { value: \"games\", label: \"Games\", icon: Gamepad2 },\n  { value: \"music\", label: \"Music\", icon: Music },\n  { value: \"film\", label: \"Film & TV\", icon: Clapperboard },\n  { value: \"books\", label: \"Books\", icon: BookOpen },\n  { value: \"sport\", label: \"Sport\", icon: Trophy },\n  { value: \"art\", label: \"Art & Design\", icon: Palette },\n  { value: \"news\", label: \"News\", icon: Newspaper },\n];\n\n// FilterChips restyled to the link bar's look through FilterChip's\n// className state function: no border or shadow, muted idle text, and the\n// quiet secondary fill on the selected chip.\nexport default function ReelCustomChips() {\n  const [category, setCategory] = useState(\"all\");\n  return (\n    <div className=\"w-full max-w-md\">\n      <Reel>\n        <FilterChips\n          aria-label=\"Filter by category\"\n          className=\"mx-auto w-max flex-nowrap gap-1\"\n          onValueChange={setCategory}\n          size=\"lg\"\n          value={category}\n        >\n          {categories.map((c) => (\n            <FilterChip\n              className={({ selected }) =>\n                selected\n                  ? \"border-transparent bg-secondary text-secondary-foreground\"\n                  : \"border-transparent bg-transparent text-muted-foreground shadow-none hover:text-foreground dark:bg-transparent\"\n              }\n              key={c.value}\n              value={c.value}\n            >\n              <c.icon aria-hidden=\"true\" />\n              {c.label}\n            </FilterChip>\n          ))}\n        </FilterChips>\n      </Reel>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

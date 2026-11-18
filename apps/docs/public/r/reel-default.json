@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "reel-default",
+  "title": "Reel Default",
+  "description": "Reel example: Default.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/reel.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/reel/default.tsx",
+      "content": "\"use client\";\n\nimport { buttonVariants } from \"@keystoneui/react/button\";\nimport { Reel } from \"@keystoneui/react/reel\";\nimport { cn } from \"@keystoneui/react/utils\";\n\nconst categories = [\n  \"All\",\n  \"Featured\",\n  \"Games\",\n  \"Music\",\n  \"Film & TV\",\n  \"Books\",\n  \"Sport\",\n  \"Art & Design\",\n  \"News\",\n];\n\nexport default function ReelDefault() {\n  const current = \"All\";\n  return (\n    <nav aria-label=\"Categories\" className=\"w-full max-w-md\">\n      <Reel>\n        <ul className=\"mx-auto flex w-max gap-1\">\n          {categories.map((category) => {\n            const isCurrent = category === current;\n            return (\n              <li key={category}>\n                <a\n                  aria-current={isCurrent ? \"page\" : undefined}\n                  className={cn(\n                    buttonVariants({\n                      variant: isCurrent ? \"secondary\" : \"ghost\",\n                    }),\n                    \"rounded-full\",\n                    !isCurrent && \"text-muted-foreground hover:text-foreground\"\n                  )}\n                  href={`#${category.toLowerCase().replace(/[^a-z]+/g, \"-\")}`}\n                >\n                  {category}\n                </a>\n              </li>\n            );\n          })}\n        </ul>\n      </Reel>\n    </nav>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

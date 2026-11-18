@@ -90,7 +90,8 @@
     "./copy-button": "./src/copy-button.tsx",
     "./code-block": "./src/code-block.tsx",
     "./file-upload": "./src/file-upload.tsx",
-    "./filter-chips": "./src/filter-chips.tsx"
+    "./filter-chips": "./src/filter-chips.tsx",
+    "./reel": "./src/reel.tsx"
   },
   "scripts": {
     "build": "tsup",
@@ -377,6 +378,10 @@
       "./filter-chips": {
         "types": "./dist/filter-chips.d.ts",
         "default": "./dist/filter-chips.js"
+      },
+      "./reel": {
+        "types": "./dist/reel.d.ts",
+        "default": "./dist/reel.js"
       }
     }
   },

@@ -148,6 +148,8 @@ Chips must be ordinary light-DOM descendants of their row. Portalled chips outsi
 
 Chips wrap between each other with an 8px gap; a chip's label never wraps. A label wider than the row overflows it: shorten the label or give the row more room. The focus outline reaches 4px outside a chip, and the row adds no padding of its own, so give a clipping (`overflow`) container at least 4px of padding (`p-1`).
 
+For one line that scrolls sideways instead of wrapping, put the row in a [Reel](/docs/components/reel) with `className="w-max flex-nowrap"` on the row; the Reel brings the selected chip into view.
+
 Sizes sit one rung below the control tiers on purpose: `sm`, `default` and `lg` are 24, 32 and 40px, and 24, 28 and 32px under the compact density. A chip row is a secondary row of its own, under a toolbar or a tabs list; the tabs list keeps its 40px under compact density, so do not expect a compact chip row to line up with it.
 
 ### Looks and motion
@@ -199,6 +201,14 @@ Tabs choose the list and the chips filter it.
 ## RTL
 
 The pill sits at the end of the chip, so it moves to the left in right-to-left text. Arrow keys follow the reading direction only inside a `DirectionProvider direction="rtl"`; with `dir="rtl"` alone, ArrowRight still moves to the next chip in DOM order. See [the RTL guide](/docs/rtl).
+
+{/* backlinks:start */}
+
+## Related Blocks
+
+- [Category Nav 01](/docs/blocks/category-nav-01) — A bar of category links that scrolls sideways in a Reel, with the current page marked and scrolled into view.
+
+{/* backlinks:end */}
 
 ## API Reference
 
