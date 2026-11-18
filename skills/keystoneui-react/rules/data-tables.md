@@ -333,8 +333,10 @@ button is the fast path, the menu item is the labelled one.
 
 That is not what the page status says — `Page 2 of 2` reads the same whether
 that page holds ten rows or the three left over. Nor is it the selection count,
-which `SelectionBar` already reports at every width, where this slot is
-`hidden lg:block`.
+which `SelectionBar` already reports.
+
+The slot shows at every width: below `lg` it takes its own row above the
+controls, and an empty slot takes no room.
 
 The props API only ever renders a selection count into that slot, so compose the
 parts:

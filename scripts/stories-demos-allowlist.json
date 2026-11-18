@@ -344,6 +344,7 @@
       "usb-c-hub",
       "wireless-mouse"
     ],
+    "table-pagination": ["phone-layout", "phone-layout-empty-slot"],
     "tabs": ["controlled"],
     "tag": [
       "focus-across-suspense",

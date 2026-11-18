@@ -592,10 +592,9 @@ export function TicketsPage() {
  * How much of the result set is on screen.
  *
  * The footer's info slot used to carry "N of M row(s) selected", which the
- * `SelectionBar` already says — and says at every width, where this slot is
- * `hidden lg:block`. The page status next to it answers a different question:
- * `Page 2 of 2` reads the same whether that page holds ten rows or the three
- * left over.
+ * `SelectionBar` already says. The page status next to it answers a different
+ * question: `Page 2 of 2` reads the same whether that page holds ten rows or
+ * the three left over.
  */
 function ResultSummary({
   pageIndex,

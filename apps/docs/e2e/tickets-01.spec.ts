@@ -9,8 +9,7 @@ const ROW_ACTIONS = /^Actions for ticket/;
  * The footer says how much of the result set is on screen.
  *
  * It used to say "N of M row(s) selected", which the `SelectionBar` already
- * says — and says at every width, where this slot is `hidden lg:block`. So
- * the footer was spending its one line repeating something better stated
+ * says. So the footer was spending its one line repeating something stated
  * elsewhere, and stating nothing about the size of the result set.
  */
 test.describe("tickets pagination footer", () => {

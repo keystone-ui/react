@@ -62,7 +62,7 @@ export const TablePaginationInfo = ({
     // entirely, so it has to announce itself.
     aria-live="polite"
     className={cn(
-      "hidden flex-1 text-muted-foreground text-sm lg:block",
+      "w-full text-muted-foreground text-sm max-lg:empty:hidden lg:w-auto lg:flex-1",
       className
     )}
     data-slot="table-pagination-info"
@@ -288,8 +288,8 @@ export interface TablePaginationControlsProps
  * unnamed structural element among five named parts, and all three blocks in
  * this repo had copied the string verbatim.
  *
- * Full width below `lg` so the controls fill the row once the info slot is
- * hidden, and intrinsic above it so they sit at the end.
+ * Full width below `lg`, where the footer wraps and the info slot takes its
+ * own row above them, and intrinsic above it so they sit at the end.
  */
 export const TablePaginationControls = ({
   className,
@@ -353,7 +353,10 @@ export const TablePagination = ({
   ...props
 }: TablePaginationProps & React.RefAttributes<HTMLDivElement>) => (
   <div
-    className={cn("flex items-center justify-between gap-4 px-2", className)}
+    className={cn(
+      "flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-2 lg:flex-nowrap",
+      className
+    )}
     data-slot="table-pagination"
     ref={ref}
     {...props}
