@@ -45,17 +45,17 @@ CSS, the provider drives Base UI's JavaScript. You generally want both.
 ## What does not work
 
 **Keystone's own styling is written with physical direction utilities.** The
-library source uses roughly 125 physical direction utilities (`pl-`, `pr-`,
-`left-`, `right-`, `ml-`, `mr-`, `text-left`, `text-right`) across 30 of its 57
-components, against 21 logical ones (`ms-`, `me-`, `start-`, `end-`,
-`text-end`). Physical utilities do not respond to `dir`, so
+library source contains 106 physical direction utility occurrences (`pl-`, `pr-`,
+`left-`, `right-`, `ml-`, `mr-`, `text-left`, `text-right`) across 30 of its 60
+components, against 23 logical occurrences (`ps-`, `pe-`, `ms-`, `me-`, `start-`,
+`end-`, `text-end`). Physical utilities do not respond to `dir`, so
 under `dir="rtl"` you should expect asymmetric padding, icon gutters, absolute
 offsets, and chevron placement to stay on their left-to-right side.
 
 The only component with explicit RTL handling is `calendar`, which flips the
 day-picker navigation chevrons with two `rtl:` variants. Nothing else in the
-library carries an `rtl:` or `ltr:` variant, and no component sets a `dir`
-attribute.
+library carries an `rtl:` or `ltr:` variant. The only `dir` attribute is
+`dir="auto"` on `FileUploadItemName`, so a file name keeps its own direction.
 
 **There is no i18n layer.** Keystone ships no locale plumbing, no message
 catalog, and no `Intl` formatting helpers. Date, number, and currency formatting

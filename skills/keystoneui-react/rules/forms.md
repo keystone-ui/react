@@ -90,6 +90,9 @@ You can use `<Form>` (the `<form>` element) on the outside and the rich `Field` 
 | OTP / verification code | `InputOTP` |
 | Date | `DateInput` |
 | Calendar picker | `Calendar` |
+| Files (picker, drop, paste) | `FileUpload` + `FileUploadDropzone` + `FileUploadTrigger` + `FileUploadList` |
+
+> A file field with a list of the chosen files, a drop, a paste or validation is `FileUpload`. A bare `<Input type="file">` is for a single plain picker with no list.
 
 ---
 

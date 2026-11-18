@@ -84,6 +84,11 @@ const categories = [
         description: "Form field with label, description, error",
       },
       {
+        name: "File Upload",
+        slug: "file-upload",
+        description: "Choose, drop and list files",
+      },
+      {
         name: "Form",
         slug: "form",
         description: "Form with validation integration",

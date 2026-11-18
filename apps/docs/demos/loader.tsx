@@ -1113,6 +1113,36 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("field-with-switch", m.default),
     }))
   ),
+  "file-upload-default": dynamic(() =>
+    import("./file-upload/default").then((m) => ({
+      default: hydrated("file-upload-default", m.default),
+    }))
+  ),
+  "file-upload-eager-upload": dynamic(() =>
+    import("./file-upload/eager-upload").then((m) => ({
+      default: hydrated("file-upload-eager-upload", m.default),
+    }))
+  ),
+  "file-upload-edit-form": dynamic(() =>
+    import("./file-upload/edit-form").then((m) => ({
+      default: hydrated("file-upload-edit-form", m.default),
+    }))
+  ),
+  "file-upload-form-submit": dynamic(() =>
+    import("./file-upload/form-submit").then((m) => ({
+      default: hydrated("file-upload-form-submit", m.default),
+    }))
+  ),
+  "file-upload-single": dynamic(() =>
+    import("./file-upload/single").then((m) => ({
+      default: hydrated("file-upload-single", m.default),
+    }))
+  ),
+  "file-upload-with-field": dynamic(() =>
+    import("./file-upload/with-field").then((m) => ({
+      default: hydrated("file-upload-with-field", m.default),
+    }))
+  ),
   "filter-chips-controlled": dynamic(() =>
     import("./filter-chips/controlled").then((m) => ({
       default: hydrated("filter-chips-controlled", m.default),

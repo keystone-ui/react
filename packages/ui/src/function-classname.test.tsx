@@ -94,6 +94,14 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
+import {
+  FileUpload,
+  FileUploadItem,
+  FileUploadItemProgress,
+  FileUploadItemRemove,
+  FileUploadList,
+  FileUploadTrigger,
+} from "./file-upload";
 import { InputGroup, InputGroupButton } from "./input-group";
 import { InputOTP, InputOTPSeparator, InputOTPSlot } from "./input-otp";
 import {
@@ -564,6 +572,49 @@ const CASES: Case[] = [
         );
       },
       state: { open: true },
+    })
+  ),
+
+  // --- FileUpload: the trigger, and the row's progress bar and remove button
+  {
+    name: "FileUploadTrigger",
+    render: (c) => (
+      <FileUpload aria-label="Files">
+        <FileUploadTrigger className={c} {...probe}>
+          Choose
+        </FileUploadTrigger>
+      </FileUpload>
+    ),
+    state: { disabled: false },
+  },
+  ...(
+    [
+      ["FileUploadItemProgress", { status: "progressing" }],
+      ["FileUploadItemRemove", { disabled: false }],
+    ] as const
+  ).map(
+    ([name, state]): Case => ({
+      name,
+      render: (c) => {
+        const on = (n: string) =>
+          n === name ? { className: c, ...probe } : {};
+        return (
+          <FileUpload
+            aria-label="Files"
+            defaultValue={[new File(["x"], "a.txt", { type: "text/plain" })]}
+          >
+            <FileUploadList>
+              {() => (
+                <FileUploadItem progress={40} status="uploading">
+                  <FileUploadItemProgress {...on("FileUploadItemProgress")} />
+                  <FileUploadItemRemove {...on("FileUploadItemRemove")} />
+                </FileUploadItem>
+              )}
+            </FileUploadList>
+          </FileUpload>
+        );
+      },
+      state,
     })
   ),
 
