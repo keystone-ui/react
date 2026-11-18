@@ -186,7 +186,18 @@ navigation itself is this block's content, so `admin-sidebar.tsx` and
 has a composition to start from, what the sidebar does and does not include,
 and the tokens it needs. It is the vendored version: it imports your local
 keystone components through the UI alias in `components.json` (normally
-`@/components/ui`). No version that imports from the npm package is provided.
+`@/components/ui`). In an app that uses the `@keystoneui/react` package, install
+the package flavour instead, which writes the same file importing
+`@keystoneui/react/*`:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/npm/sidebar.json
+```
+
+It is tested with `@keystoneui/react` 1.0.0-beta.11 and needs a
+`components.json` ([Apps that use the npm package](/docs/blocks/users-01#apps-that-use-the-npm-package)
+gives one). It installs `@base-ui/react` unpinned: keep your
+`@base-ui/react` at the version `@keystoneui/react` pins.
 
 ## Reusing the users view
 

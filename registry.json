@@ -2527,6 +2527,26 @@
       ]
     },
     {
+      "name": "npm/sidebar",
+      "type": "registry:component",
+      "title": "Sidebar (package)",
+      "description": "The sidebar, for apps that use the `@keystoneui/react` package instead of vendored components: the same file as sidebar, importing `@keystoneui/react/*` rather than `@/components/ui/*`. Keep your `@base-ui/react` at the version `@keystoneui/react` pins. Tested with `@keystoneui/react` 1.0.0-beta.11.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/blocks/admin-01/sidebar.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "navigation"
+      ]
+    },
+    {
       "name": "npm/filter-pills",
       "type": "registry:component",
       "title": "Filter Pills (package)",

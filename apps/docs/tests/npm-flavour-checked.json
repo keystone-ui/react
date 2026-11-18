@@ -3,6 +3,10 @@
     "checkedAgainst": "1.0.0-beta.11",
     "digest": "67bd1218823e075dab104956ec8cb23405c48fb73dff6e115744a3121f37e382"
   },
+  "npm/sidebar": {
+    "checkedAgainst": "1.0.0-beta.11",
+    "digest": "dca924f5f132244357f7f46f5951d914560df71134be76cf56a05a1752ae6638"
+  },
   "npm/users-01": {
     "checkedAgainst": "1.0.0-beta.11",
     "digest": "7641a9e43402d23648b89740db83ea2b602a0ff96335034e7cc3cc088ca438c5"

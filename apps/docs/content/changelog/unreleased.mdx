@@ -1,7 +1,7 @@
 ---
 date: "2026-11-18"
 description: "What's coming in the next release"
-excerpt: "2 changes queued for the next release."
+excerpt: "3 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -15,3 +15,9 @@ excerpt: "2 changes queued for the next release."
 ### TablePagination shows the row count on phones
 
 `TablePaginationInfo` now shows at every width: below `lg` it sits on its own row above the controls instead of being hidden, so a footer that renders a count grows from 32px to 60px on phones, and from `lg` up the default layout does not change. Because the component now sets `lg:` layout classes, an unprefixed layout class of your own, such as `flex-wrap` on `TablePagination` or `flex-none` or a `w-*` width on `TablePaginationInfo`, now loses to them from `lg` up; prefix it with `lg:` to keep it there. A footer with an empty info slot is unchanged at every width; a slot that holds only whitespace or an empty wrapper element is not empty, so that footer keeps the extra row. To keep the old behaviour in a composed footer, pass `className="hidden lg:block"` to `TablePaginationInfo`; a props-driven footer has no info element to take a class, so pass `className="[&_[data-slot=table-pagination-info]]:max-lg:hidden"` to `TablePagination` instead.
+
+## Patch changes
+
+### Add a package flavour of the sidebar
+
+For apps that use the `@keystoneui/react` package instead of vendored components: `npx shadcn@latest add https://keystoneui.io/r/npm/sidebar.json` installs the same `sidebar.tsx`, importing `@keystoneui/react/*`, and is tested with 1.0.0-beta.11. It installs `@base-ui/react` unpinned, so keep yours at the version `@keystoneui/react` pins.
