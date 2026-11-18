@@ -1,6 +1,7 @@
 "use client";
 
 import { SearchXIcon } from "lucide-react";
+import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -24,15 +25,18 @@ import { TableEmpty } from "@/components/ui/table";
  * "No … match these filters" is the only state the fixture can reach. A real
  * table also needs the unfiltered version — "No payments yet" with no clear
  * button, because there is nothing to clear — which is why `filtered` is a
- * prop rather than assumed.
+ * prop rather than assumed. `emptyTitle` says that in the caller's own words.
  */
 export function FilteredEmpty({
   colSpan,
+  emptyTitle,
   filtered,
   noun,
   onClear,
 }: {
   colSpan: number;
+  /** The title when nothing is filtered; "No … yet" without one. */
+  emptyTitle?: ReactNode;
   filtered: boolean;
   noun: string;
   onClear: () => void;
@@ -45,7 +49,9 @@ export function FilteredEmpty({
             <SearchXIcon />
           </EmptyMedia>
           <EmptyTitle>
-            {filtered ? `No ${noun} match these filters` : `No ${noun} yet`}
+            {filtered
+              ? `No ${noun} match these filters`
+              : (emptyTitle ?? `No ${noun} yet`)}
           </EmptyTitle>
           {filtered ? (
             <EmptyDescription>

@@ -11,6 +11,7 @@ import {
 } from "@keystoneui/react/empty";
 import { TableEmpty } from "@keystoneui/react/table";
 import { SearchX as SearchXIcon } from "lucide-react";
+import type { ReactNode } from "react";
 
 /**
  * The table body when the filters leave nothing — shared by this block's two
@@ -24,15 +25,18 @@ import { SearchX as SearchXIcon } from "lucide-react";
  * "No … match these filters" is the only state the fixture can reach. A real
  * table also needs the unfiltered version — "No payments yet" with no clear
  * button, because there is nothing to clear — which is why `filtered` is a
- * prop rather than assumed.
+ * prop rather than assumed. `emptyTitle` says that in the caller's own words.
  */
 export function FilteredEmpty({
   colSpan,
+  emptyTitle,
   filtered,
   noun,
   onClear,
 }: {
   colSpan: number;
+  /** The title when nothing is filtered; "No … yet" without one. */
+  emptyTitle?: ReactNode;
   filtered: boolean;
   noun: string;
   onClear: () => void;
@@ -45,7 +49,9 @@ export function FilteredEmpty({
             <SearchXIcon />
           </EmptyMedia>
           <EmptyTitle>
-            {filtered ? `No ${noun} match these filters` : `No ${noun} yet`}
+            {filtered
+              ? `No ${noun} match these filters`
+              : (emptyTitle ?? `No ${noun} yet`)}
           </EmptyTitle>
           {filtered ? (
             <EmptyDescription>
