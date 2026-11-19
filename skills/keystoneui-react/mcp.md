@@ -29,13 +29,13 @@ You can also run the init helper from the `@keystoneui/mcp` package to write the
 
 | Tool | When to use |
 |---|---|
-| `get_docs` | Full docs page for a component or block, **including the API Reference table**. Props live only here -- `view_component` returns source, not prop docs. |
+| `get_docs` | Full docs page for a component, block, kit, or package flavour (a kit or flavour resolves to the page section that documents it), **including the API Reference table**. Props live only here -- `view_component` returns source, not prop docs. |
 | `get_project_context` | **Call first** when the server is connected through a launch configuration trusted for this project. Install mode, path aliases, theme CSS file, icon library, RSC, package manager. Import style depends on it. |
-| `list_components` | Browse all components, blocks, or named examples. Params: `limit`, `offset`, `type` (`ui \| block \| example`), `category`. |
+| `list_components` | Browse all components, blocks, kits, or named examples. Params: `limit`, `offset`, `type` (`ui \| block \| example \| kit \| style \| theme \| item`), `category`. A package flavour (`npm/users-01`) is its own entry with a `Flavour of:` line; a kit has `Kind: kit` and `Part of:` lines. |
 | `search_components` | Fuzzy search by name, description, keywords, or category. Use when the exact name isn't known. Params: `query`, `limit`, `type`, `category`. |
-| `view_component` | Get full source, dependencies, and registry deps for one or more components. |
+| `view_component` | Get full source, dependencies, and registry deps for one or more components, blocks, kits, or package flavours. |
 | `get_examples` | Fetch live demo files (TSX source) for a component or block. Use to see real-world usage. |
-| `get_add_command` | Generate the `npx shadcn@latest add` command for one or more components. |
+| `get_add_command` | Generate the `npx shadcn@latest add` command for one or more components. Params: `names`, `flavour` (`vendored \| package`). In a project whose install mode is `package`, pass `flavour: "package"`: a block or kit with a package flavour installs that flavour, and a UI component gets conditional package-import guidance instead of an install URL; a third-party registry may not provide that component in `@keystoneui/react`. |
 | `get_theme_info` | Theme configuration: CSS setup, OKLCH semantic tokens, radius scale, dark mode, custom tokens. |
 | `audit_checklist` | Post-install checklist verifying CSS setup, Tailwind config, dependencies, imports, and common issues. |
 
@@ -45,7 +45,7 @@ You can also run the init helper from the `@keystoneui/mcp` package to write the
 2. **Discover** — `list_components` (broad) or `search_components` (targeted) to find the right component.
 3. **Inspect** — `view_component({ names: [...] })` for source, and `get_docs({ name })` for the API Reference table. Props are documented only in the docs page.
 4. **See real usage** — `get_examples({ name })` to fetch demo TSX files. Especially useful for blocks (`signin-01`, `tickets-01`) and complex components.
-5. **Install** — `get_add_command({ names: [...] })` to get the install command. Run it only when executing tools in this project is already within the user's authorized task.
+5. **Install** — `get_add_command({ names: [...] })` to get the install command; add `flavour: "package"` when `get_project_context` says `package`. Run it only when executing tools in this project is already within the user's authorized task.
 6. **Verify** — `audit_checklist` after first install to confirm CSS, Tailwind, and theme tokens are wired correctly.
 
 ## When to use MCP vs the CLI

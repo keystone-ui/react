@@ -19,6 +19,7 @@ own registry that depends on Keystone items.
 - The explicit `target` rule
 - `registry:style` vs `registry:theme`
 - Block categories
+- Kit and package-flavour metadata (`meta.keystoneui`)
 - Registry dependencies across registries
 
 ---
@@ -118,23 +119,47 @@ So when you add a token: classify it first, then add it.
 
 ## Block categories
 
-Blocks carry `categories`, which drive `list_components({ type: "block", category })`
-and `keystoneui blocks --category`. The taxonomy in use:
+Blocks and kits carry `categories`; components and examples do not. They
+drive `list_components({ type: "block", category })` (or `type: "kit"`) and
+`keystoneui blocks --category`, which lists blocks only. The taxonomy in use:
 
-| Category | Blocks |
-|---|---|
-| `authentication` | 9 — every `signin-*` and `signup-*` |
-| `login` | 4 |
-| `signup` | 5 |
-| `navigation` | 1 |
-| `admin` | 1 |
-| `dashboard` | 1 |
-| `data` | 1 |
-| `betting` | 4 |
+| Category | Blocks | Kits |
+|---|---|---|
+| `authentication` | 9 — every `signin-*` and `signup-*` | |
+| `login` | 4 | |
+| `signup` | 5 | |
+| `navigation` | 2 | `sidebar`, `npm/sidebar` |
+| `admin` | 4 | |
+| `settings` | 1 | |
+| `dashboard` | 1 | |
+| `data` | 3 | `filter-pills`, `npm/filter-pills` |
+| `betting` | 5 | |
 
 A block usually carries two: a broad one and a specific one (`authentication` +
 `login`). Add to this taxonomy rather than inventing a synonym — a category with
 one member that duplicates an existing one makes search worse, not better.
+
+---
+
+## Kit and package-flavour metadata (`meta.keystoneui`)
+
+Kit and flavour metadata comes from `meta.keystoneui`. Each key is checked
+independently. A malformed value is ignored and the other valid keys still
+apply. A name prefix or description supplies no metadata.
+
+| Key | Accepted shape | Read as |
+|---|---|---|
+| `docs` | a string matching `^/docs/[a-z0-9/-]+(#[a-z0-9-]+)?$` (a lower-case site path, optional section anchor) | the page section that documents the item |
+| `flavourOf` | a non-empty string, not the item's own name | the item this one is the package flavour of |
+| `minPackageVersion` | a non-empty string | the lowest `@keystoneui/react` version the flavour supports (printed, never compared) |
+| `partOf` | a non-empty array of non-empty strings | the blocks a kit was taken from |
+
+- When two items name the same `flavourOf`, the first in index order is the
+  package flavour.
+- Relations go one hop: a flavour of a flavour is not followed.
+- Docs lookup tries the item's own page first. Only on a 404 does it use
+  the item's `docs`, or else its `flavourOf` parent's `docs`, or else the
+  parent's own page by type (`block` → `blocks/`, `ui` → `components/`).
 
 ---
 

@@ -159,6 +159,13 @@
       "type": "registry:component"
     }
   ],
+  "meta": {
+    "keystoneui": {
+      "flavourOf": "users-01",
+      "minPackageVersion": "1.0.0-beta.11",
+      "docs": "/docs/blocks/users-01#apps-that-use-the-npm-package"
+    }
+  },
   "categories": [
     "data",
     "admin"

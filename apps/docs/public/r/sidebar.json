@@ -23,6 +23,14 @@
       "type": "registry:component"
     }
   ],
+  "meta": {
+    "keystoneui": {
+      "docs": "/docs/interop#the-sidebar-item",
+      "partOf": [
+        "admin-01"
+      ]
+    }
+  },
   "categories": [
     "navigation"
   ],

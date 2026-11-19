@@ -289,7 +289,7 @@ Blocks are full-page or feature-level compositions, not primitives. **If the use
 
 Just the filter row from `admin-01` (pills that name their dimension, Add filter, focus-safe removal): install the `filter-pills` kit — `npx shadcn@latest add https://keystoneui.io/r/filter-pills.json`. Just the users view, without the sidebar, overview or payments: `users-01`, which installs the same files as `admin-01`.
 
-In an app that uses the `@keystoneui/react` package (no vendored `components/ui`), install the package flavour of those two instead: `npx shadcn@latest add https://keystoneui.io/r/npm/users-01.json` or `…/r/npm/filter-pills.json`. They have the same file names and import `@keystoneui/react/*`. `npm/users-01` needs `@keystoneui/react` 1.0.0-beta.11 or later; `npm/filter-pills` is tested with 1.0.0-beta.11. Both need a `components.json` (the `users-01` docs give one to write by hand). Of the blocks and kits, only these two and the sidebar (above) have a package flavour. Use one flavour per app.
+In an app that uses the `@keystoneui/react` package (no vendored `components/ui`), install the package flavour of those two instead: `npx shadcn@latest add https://keystoneui.io/r/npm/users-01.json` or `…/r/npm/filter-pills.json`. They have the same file names and import `@keystoneui/react/*`. `get_add_command({ names, flavour: "package" })` picks the flavour for you, and `keystoneui list --type kit` lists the kits. `npm/users-01` needs `@keystoneui/react` 1.0.0-beta.11 or later. `npm/filter-pills` was tested with 1.0.0-beta.11. Both need a `components.json` (the `users-01` docs give one to write by hand). Of the blocks and kits, only these two and the sidebar (above) have a package flavour. Use one flavour per app.
 
 Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or via the unified CLI: `keystoneui blocks` to list, `keystoneui blocks --category authentication` to filter, `keystoneui blocks <name>` to view source. The `--category` flag works on `list` and `search` too.
 
@@ -306,7 +306,7 @@ the keystone monorepo.
 
 1. **Discover** — MCP `search_components` / `list_components`, or the CLI:
    `keystoneui search "table pagination"`, `keystoneui list --type block`.
-   Filter with `--type ui|block|example` and `--category`.
+   Filter with `--type ui|block|example|kit|style|theme|item` and `--category`.
 2. **Find an example** — for "X with Y" patterns ("table with pagination",
    "card with image"), use `get_examples({ name: "table" })` over MCP or
    `keystoneui examples table`. Both return every demo file for that name as a

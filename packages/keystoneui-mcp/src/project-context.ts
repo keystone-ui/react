@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { inlineCode, shown, tableCell } from "./render.js";
 
 /**
  * What an agent needs to know about the host project before it writes a line
@@ -135,12 +136,14 @@ export function importLineFor(name: string, ctx: ProjectContext): string {
 /** One line describing how Keystone reaches this project, and what it implies. */
 function describeInstallMode(ctx: ProjectContext): string {
   if (ctx.installMode === "package") {
-    const version = ctx.keystoneVersion ? ` (${ctx.keystoneVersion})` : "";
+    const version = ctx.keystoneVersion
+      ? ` (${shown(String(ctx.keystoneVersion))})`
+      : "";
     return `**package** -- \`@keystoneui/react\`${version} is a dependency. Import from subpaths.`;
   }
   if (ctx.installMode === "registry") {
     const ui = ctx.aliases?.ui ?? "@/components/ui";
-    return `**registry** -- source is vendored via shadcn. Import from \`${ui}\`.`;
+    return `**registry** -- source is vendored via shadcn. Import from ${inlineCode(String(ui))}.`;
   }
   return "**unknown** -- neither `@keystoneui/react` in dependencies nor a `components.json`. Ask before writing imports.";
 }
@@ -152,24 +155,42 @@ function describeRsc(isRSC: boolean | null): string {
   return isRSC ? 'yes -- interactive files need `"use client"`' : "no";
 }
 
-/** Human-readable context block, shared by the CLI and the MCP tool. */
+/** A value read from a project file, as prose, or the fallback when absent. */
+function valueOr(value: unknown, fallback: string): string {
+  return value === null || value === undefined
+    ? fallback
+    : shown(String(value));
+}
+
+/**
+ * Human-readable context block, shared by the CLI and the MCP tool. Values
+ * read from project files are rendered through render.ts.
+ */
 export function formatProjectContext(ctx: ProjectContext): string {
   const rows = [
-    `| install mode | ${describeInstallMode(ctx)} |`,
-    `| ui alias | ${ctx.aliases?.ui ?? "_unknown_"} |`,
-    `| theme CSS file | ${ctx.tailwindCssFile ?? "_unknown_ -- ask which file owns the tokens"} |`,
-    `| icon library | ${ctx.iconLibrary ?? "_unknown_ -- ask before importing icons"} |`,
-    `| RSC | ${describeRsc(ctx.isRSC)} |`,
-    `| package manager | ${ctx.packageManager ?? "_unknown_"} |`,
+    `| install mode | ${tableCell(describeInstallMode(ctx))} |`,
+    `| ui alias | ${tableCell(valueOr(ctx.aliases?.ui, "_unknown_"))} |`,
+    `| theme CSS file | ${tableCell(valueOr(ctx.tailwindCssFile, "_unknown_ -- ask which file owns the tokens"))} |`,
+    `| icon library | ${tableCell(valueOr(ctx.iconLibrary, "_unknown_ -- ask before importing icons"))} |`,
+    `| RSC | ${tableCell(describeRsc(ctx.isRSC))} |`,
+    `| package manager | ${tableCell(valueOr(ctx.packageManager, "_unknown_"))} |`,
   ];
 
-  return [
+  const lines = [
     "# Project context",
     "",
     "| field | value |",
     "|---|---|",
     ...rows,
     "",
-    `Example import: \`${importLineFor("button", ctx)}\``,
-  ].join("\n");
+    `Example import: ${inlineCode(importLineFor("button", ctx))}`,
+  ];
+  if (ctx.installMode === "package") {
+    // Read by every package-mode caller, whatever registry is configured.
+    lines.push(PACKAGE_INSTALL_ADVICE);
+  }
+  return lines.join("\n");
 }
+
+const PACKAGE_INSTALL_ADVICE =
+  'Installing a block or kit: pass flavour: "package" to get_add_command; it uses the registry\'s package flavour where one exists, and vendors source where none does.';

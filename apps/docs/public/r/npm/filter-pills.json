@@ -28,6 +28,12 @@
       "type": "registry:component"
     }
   ],
+  "meta": {
+    "keystoneui": {
+      "flavourOf": "filter-pills",
+      "docs": "/docs/blocks/admin-01#reusing-the-filter-pills"
+    }
+  },
   "categories": [
     "data"
   ],

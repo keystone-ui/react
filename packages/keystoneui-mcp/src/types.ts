@@ -3,6 +3,8 @@ export interface RegistryItem {
   dependencies?: string[];
   description?: string;
   files?: RegistryFile[];
+  /** Free-form in the registry schema; this package reads `meta.keystoneui`. */
+  meta?: Record<string, unknown>;
   name: string;
   registryDependencies?: string[];
   title?: string;

@@ -85,8 +85,25 @@ async function requestsFor(name: string): Promise<string[]> {
   return calls;
 }
 
+/**
+ * A configured URL holding a line break or control character: no command is
+ * printed from it, only the guidance, since it cannot be one command line.
+ */
+// biome-ignore lint/suspicious/noControlCharactersInRegex: the characters tested
+const BREAK_OR_CONTROL = /[\u0000-\u001f\u007f]/;
+
 function printedAdd(name: string): string {
   return getAddCommandTool(loadProjectConfig(), { names: [name] });
+}
+
+/**
+ * A URL printed in an install command, as the shell reads it: one with a
+ * character the shell treats specially is printed in single quotes.
+ */
+function unquoted(word: string): string {
+  return word.startsWith("'") && word.endsWith("'")
+    ? word.slice(1, -1).replaceAll("'\\''", "'")
+    : word;
 }
 
 function registryLink(): string {
@@ -121,18 +138,19 @@ describe("a base URL with a query", () => {
   it("prints an install command whose path is the item's", () => {
     envRegistry(base);
     expect(printedAdd("button")).toContain(
-      `npx shadcn@latest add https://reg.example.test/r/button.json?token=${FAKE}\n`
+      `npx shadcn@latest add 'https://reg.example.test/r/button.json?token=${FAKE}'\n`
     );
   });
 
   it("prints theme commands whose paths are the items'", () => {
     envRegistry(base);
     const text = getThemeInfoTool(loadProjectConfig());
+    // A URL with a query is one quoted word, as in get_add_command.
     expect(text).toContain(
-      `npx shadcn@latest add https://reg.example.test/r/default.json?token=${FAKE}\n`
+      `npx shadcn@latest add 'https://reg.example.test/r/default.json?token=${FAKE}'\n`
     );
     expect(text).toContain(
-      `npx shadcn@latest add https://reg.example.test/r/theme/<code>.json?token=${FAKE}\n`
+      `npx shadcn@latest add 'https://reg.example.test/r/theme/<code>.json?token=${FAKE}'\n`
     );
   });
 
@@ -273,7 +291,7 @@ describe("a {name} template's query and params", () => {
       `https://tpl.example.test/r/demos/button${query}`,
     ]);
     expect(printedAdd("button")).toContain(
-      `npx shadcn@latest add https://tpl.example.test/r/button.json${query}\n`
+      `npx shadcn@latest add 'https://tpl.example.test/r/button.json${query}'\n`
     );
   });
 
@@ -306,7 +324,7 @@ describe("a {name} template's query and params", () => {
       `https://tpl.example.test/r/demos/button${query}`,
     ]);
     expect(printedAdd("button")).toContain(
-      `npx shadcn@latest add https://tpl.example.test/r/button.json${query}\n`
+      `npx shadcn@latest add 'https://tpl.example.test/r/button.json${query}'\n`
     );
   });
 
@@ -349,8 +367,8 @@ describe("a URL whose authority is spelled unusually", () => {
     const text = [printedAdd("button"), getThemeInfoTool(config)]
       .join("\n")
       .replaceAll(head, head.replace(/[\t\n\r]/g, ""));
-    const added = [...text.matchAll(/shadcn@latest add (\S+)/g)].map(
-      (m) => m[1]
+    const added = [...text.matchAll(/shadcn@latest add (\S+)/g)].map((m) =>
+      unquoted(m[1])
     );
     return [...added, registryLink()];
   }
@@ -361,7 +379,12 @@ describe("a URL whose authority is spelled unusually", () => {
     const requests = await requestsFor("button");
     expect(requests).toHaveLength(3);
     const printed = printedUrls(url);
-    expect(printed.length).toBeGreaterThanOrEqual(4);
+    if (BREAK_OR_CONTROL.test(url)) {
+      expect(printedAdd("button")).toContain("No install command");
+      expect(printed).toEqual([registryLink()]);
+    } else {
+      expect(printed.length).toBeGreaterThanOrEqual(4);
+    }
     for (const sent of [...requests, ...printed]) {
       expect(new URL(sent).origin).toBe(origin);
     }
@@ -431,15 +454,19 @@ describe("a registry derived from the docs-site URL", () => {
       `${base}/button.json${query}`,
       `${base}/demos/button${query}`,
     ]);
+    const word = `${base}/button.json${query}`;
     expect(printedAdd("button")).toContain(
-      `npx shadcn@latest add ${base}/button.json${query}\n`
+      `npx shadcn@latest add ${query ? `'${word}'` : word}\n`
     );
     const text = getThemeInfoTool(loadProjectConfig());
+    // A URL with a query is one quoted word, as in get_add_command.
+    const style = `${base}/default.json${query}`;
+    const theme = `${base}/theme/<code>.json${query}`;
     expect(text).toContain(
-      `npx shadcn@latest add ${base}/default.json${query}\n`
+      `npx shadcn@latest add ${query ? `'${style}'` : style}\n`
     );
     expect(text).toContain(
-      `npx shadcn@latest add ${base}/theme/<code>.json${query}\n`
+      `npx shadcn@latest add ${query ? `'${theme}'` : theme}\n`
     );
     const hidden = query.replace("=1", "=REDACTED");
     expect(info()).toEqual({
@@ -464,12 +491,22 @@ describe("a registry derived from the docs-site URL", () => {
       `${base}/button.json`,
       `${base}/demos/button`,
     ]);
-    expect(printedAdd("button")).toContain(
-      `npx shadcn@latest add ${base}/button.json\n`
-    );
     const text = getThemeInfoTool(loadProjectConfig());
-    expect(text).toContain(`npx shadcn@latest add ${base}/default.json\n`);
-    expect(text).toContain(`npx shadcn@latest add ${base}/theme/<code>.json\n`);
+    if (BREAK_OR_CONTROL.test(url)) {
+      // No command line can hold a control character: the guidance alone.
+      expect(printedAdd("button")).toContain("No install command");
+      expect(text).not.toContain("npx shadcn@latest add");
+      expect(text).toContain("(No command:");
+    } else {
+      // The space makes the printed word quoted.
+      expect(printedAdd("button")).toContain(
+        `npx shadcn@latest add '${base}/button.json'\n`
+      );
+      expect(text).toContain(`npx shadcn@latest add '${base}/default.json'\n`);
+      expect(text).toContain(
+        `npx shadcn@latest add '${base}/theme/<code>.json'\n`
+      );
+    }
     expect(info()).toEqual({
       registryUrl: displayUrl(base),
       registry: displayUrl(`${base}/registry.json`),
@@ -588,7 +625,7 @@ describe("composing from the configured URL", () => {
 
   function printed(text: string): string[] {
     return [...text.matchAll(/npx shadcn@latest add ([\s\S]*?)\n```/g)].map(
-      (m) => m[1]
+      (m) => unquoted(m[1])
     );
   }
 
@@ -613,7 +650,14 @@ describe("composing from the configured URL", () => {
           ]
         ),
       ];
-      expect(resources).toHaveLength(7);
+      // A URL with a line break or control character prints no command.
+      const printable = !BREAK_OR_CONTROL.test(c.url);
+      expect(resources).toHaveLength(printable ? 7 : 3);
+      if (!printable) {
+        expect(getAddCommandTool(config, { names: ["button"] })).toContain(
+          "No install command"
+        );
+      }
       const plain = resources.map(([path, sent]) => [
         path,
         sent === `${configured}/${path}`,

@@ -2,19 +2,25 @@ import { existsSync, readFileSync } from "node:fs";
 
 import { loadProjectConfig } from "./config.js";
 import { displayUrl, redactUrlInError } from "./display-url.js";
+import { resolveDocs } from "./docs.js";
+import { lookupManifest } from "./fetcher.js";
 import { runInfo } from "./info.js";
 import { init } from "./init.js";
+import { nameRefusal } from "./item-name.js";
 import { detectProjectContext } from "./project-context.js";
+import { escapedError, isCommandSafe, shown } from "./render.js";
 import {
   parseThemeCode,
   parseThemeParts,
   themeBuilderUrl,
   themeInstallCommand,
+  themeInstallUrl,
 } from "./theme.js";
 import { auditTheme, formatAudit, readThemeTokens } from "./theme-audit.js";
 import {
   auditChecklistTool,
   getExamplesTool,
+  type ItemType,
   listComponentsTool,
   searchComponentsTool,
   viewComponentTool,
@@ -69,18 +75,41 @@ function parseArgs(args: string[]): ParsedArgs {
   return { flags, positional };
 }
 
-function parseType(
-  value: string | undefined
-): "ui" | "block" | "example" | undefined {
+const TYPES: readonly ItemType[] = [
+  "ui",
+  "block",
+  "example",
+  "kit",
+  "style",
+  "theme",
+  "item",
+];
+
+function parseType(value: string | undefined): ItemType | undefined {
   if (value === undefined) {
     return;
   }
-  if (value === "ui" || value === "block" || value === "example") {
-    return value;
+  if ((TYPES as readonly string[]).includes(value)) {
+    return value as ItemType;
   }
   throw new Error(
-    `Invalid --type value "${value}". Expected one of: ui, block, example.`
+    `Invalid --type value "${shown(value)}". Expected one of: ${TYPES.join(", ")}.`
   );
+}
+
+/** Prints each refusal to stderr and sets exit 1; the names that remain. */
+function refuseInvalid(names: string[]): string[] {
+  const valid: string[] = [];
+  for (const name of names) {
+    const refusal = nameRefusal(name);
+    if (refusal) {
+      console.error(refusal);
+      process.exitCode = 1;
+    } else {
+      valid.push(name);
+    }
+  }
+  return valid;
 }
 
 function parseInt10(value: string | undefined, fallback: number): number {
@@ -89,7 +118,7 @@ function parseInt10(value: string | undefined, fallback: number): number {
   }
   const n = Number.parseInt(value, 10);
   if (Number.isNaN(n)) {
-    throw new Error(`Expected an integer, got "${value}".`);
+    throw new Error(`Expected an integer, got "${shown(value)}".`);
   }
   return n;
 }
@@ -104,24 +133,26 @@ function printUsage(): void {
   );
   console.log("  search <query> [--type T] [--category C] [--limit N]");
   console.log(
-    "                                       Fuzzy search components, blocks, examples"
+    "                                       Fuzzy search components, blocks, kits, examples"
   );
   console.log("  list [--type T] [--category C] [--limit N] [--offset N]");
   console.log(
-    "                                       List items (T = ui|block|example)"
+    "                                       List items (T = ui|block|example|kit|style|theme|item)"
   );
-  console.log("  view <name> [<name>...]              Show component source");
+  console.log(
+    "  view <name> [<name>...]              Show source of components, blocks, kits"
+  );
   console.log(
     "  examples <name>                      Show all demos for a component/block"
   );
   console.log(
-    "  docs <name>                          Fetch /llms.mdx/docs/components/<name>"
+    "  docs <name> [--type component|block] Fetch /llms.mdx/docs/{components|blocks}/<name>"
   );
   console.log(
     "  audit [--theme [css]] [--strict]     Post-install checklist, or measure your theme's contrast"
   );
   console.log(
-    "  blocks [<filter>] [--category C]     List or filter full-page blocks"
+    "  blocks [<filter>] [--category C]     List or filter full-page blocks; an exact block name views it (kits: list --type kit)"
   );
   console.log(
     "  theme <code> [--only theme,font]     Install a theme-builder code via shadcn"
@@ -134,7 +165,7 @@ async function runSearch(args: string[]): Promise<void> {
   const { flags, positional } = parseArgs(args);
   if (positional.length === 0) {
     console.error(
-      "Usage: keystoneui search <query> [--type ui|block|example] [--category C] [--limit N]"
+      "Usage: keystoneui search <query> [--type ui|block|example|kit|style|theme|item] [--category C] [--limit N]"
     );
     process.exitCode = 1;
     return;
@@ -178,8 +209,14 @@ async function runView(args: string[]): Promise<void> {
     process.exitCode = 1;
     return;
   }
+  // Valid names keep their results on stdout; each invalid one is refused
+  // on stderr, and the exit code says something was refused.
+  const names = refuseInvalid(positional);
+  if (names.length === 0) {
+    return;
+  }
   const config = loadProjectConfig();
-  const text = await viewComponentTool(config, { names: positional });
+  const text = await viewComponentTool(config, { names });
   console.log(text);
 }
 
@@ -190,37 +227,42 @@ async function runExamples(args: string[]): Promise<void> {
     process.exitCode = 1;
     return;
   }
+  if (refuseInvalid([positional[0]]).length === 0) {
+    return;
+  }
   const config = loadProjectConfig();
   const text = await getExamplesTool(config, { name: positional[0] });
   console.log(text);
 }
 
 async function runDocs(args: string[]): Promise<void> {
-  const { positional } = parseArgs(args);
+  const { flags, positional } = parseArgs(args);
   if (positional.length === 0) {
-    console.error("Usage: keystoneui docs <name>");
+    console.error("Usage: keystoneui docs <name> [--type component|block]");
     process.exitCode = 1;
     return;
   }
   const name = positional[0];
-  const siteUrl = process.env.KEYSTONEUI_URL ?? "https://keystoneui.io";
-  const url = `${siteUrl}/llms.mdx/docs/components/${name}`;
-  let response: Response;
-  try {
-    response = await fetch(url, {
-      headers: { "User-Agent": "keystoneui-cli/0.1" },
-    });
-  } catch (error) {
-    throw redactUrlInError(error, url);
+  if (refuseInvalid([name]).length === 0) {
+    return;
   }
-  if (!response.ok) {
+  // `--type` was read by nothing before, so only `block` selects anything
+  // new: every other value keeps the components route.
+  const section = flags.type === "block" ? "blocks" : "components";
+  const result = await resolveDocs(loadProjectConfig(), name, section, () => ({
+    headers: { "User-Agent": "keystoneui-cli/0.1" },
+  }));
+  if (result.kind === "unreachable") {
+    throw escapedError(redactUrlInError(result.error, result.url));
+  }
+  if (result.kind === "status") {
     console.error(
-      `Failed to fetch ${displayUrl(url)}: ${response.status} ${response.statusText}`
+      `Failed to fetch ${shown(displayUrl(result.url))}: ${result.status} ${shown(result.statusText)}`
     );
     process.exitCode = 1;
     return;
   }
-  console.log(await response.text());
+  console.log(result.text);
 }
 
 function runAudit(args: string[]): void {
@@ -242,7 +284,14 @@ function runAudit(args: string[]): void {
     process.exitCode = 1;
     return;
   }
-  const results = auditTheme(readThemeTokens(readFileSync(file, "utf-8")));
+  let css: string;
+  try {
+    css = readFileSync(file, "utf-8");
+  } catch (error) {
+    // The platform's message quotes the path.
+    throw escapedError(error);
+  }
+  const results = auditTheme(readThemeTokens(css));
   console.log(formatAudit(file, results));
   if (flags.strict === "true" && results.some((r) => r.status === "fail")) {
     process.exitCode = 1;
@@ -279,6 +328,19 @@ async function runBlocks(args: string[]): Promise<void> {
     return;
   }
 
+  // Otherwise, one positional that is exactly a block's name in the index
+  // (`npm/users-01`) views it. Blocks only: a kit name stays a search. If
+  // the index cannot be read, today's search runs.
+  if (positional.length === 1 && (await isBlockName(config, filter))) {
+    // The CLI's refusal policy: stderr and exit 1, as for `view`.
+    if (refuseInvalid([filter]).length === 0) {
+      return;
+    }
+    const text = await viewComponentTool(config, { names: [filter] });
+    console.log(text);
+    return;
+  }
+
   const text = await searchComponentsTool(config, {
     query: filter,
     limit: 20,
@@ -286,6 +348,20 @@ async function runBlocks(args: string[]): Promise<void> {
     category,
   });
   console.log(text);
+}
+
+async function isBlockName(
+  config: ReturnType<typeof loadProjectConfig>,
+  name: string
+): Promise<boolean> {
+  try {
+    const { items } = await lookupManifest(config.registry);
+    return items.some(
+      (item) => item.name === name && item.type === "registry:block"
+    );
+  } catch {
+    return false;
+  }
 }
 
 function runTheme(args: string[]): void {
@@ -308,9 +384,13 @@ function runTheme(args: string[]): void {
   );
   console.log("");
   console.log("Install (writes the tokens into your global CSS):");
-  console.log(`  ${themeInstallCommand(code, siteUrl, only)}`);
+  console.log(
+    isCommandSafe(themeInstallUrl(code, siteUrl, only))
+      ? `  ${themeInstallCommand(code, siteUrl, only)}`
+      : `  (no command: ${shown(displayUrl(siteUrl))} holds a line break or control character)`
+  );
   console.log("");
-  console.log(`Edit: ${themeBuilderUrl(code, siteUrl)}`);
+  console.log(`Edit: ${shown(themeBuilderUrl(code, siteUrl))}`);
 }
 
 export async function runCli(args: string[]): Promise<void> {
@@ -323,7 +403,7 @@ export async function runCli(args: string[]): Promise<void> {
   }
 
   if (!isCliVerb(verb)) {
-    console.error(`Unknown verb: "${verb}".`);
+    console.error(`Unknown verb: "${shown(verb)}".`);
     console.error("");
     printUsage();
     process.exitCode = 1;

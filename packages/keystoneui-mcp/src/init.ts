@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
+import { escapedError, shown } from "./render.js";
 
 interface ClientConfig {
   config: Record<string, unknown>;
@@ -91,7 +92,12 @@ function writeJsonClient(client: ClientConfig): void {
   const targetPath = resolve(process.cwd(), client.configPath);
   const dir = dirname(targetPath);
 
-  mkdirSync(dir, { recursive: true });
+  // A failure's message quotes the path: escaped where it is rethrown.
+  try {
+    mkdirSync(dir, { recursive: true });
+  } catch (error) {
+    throw escapedError(error);
+  }
 
   let existing: Record<string, unknown> = {};
   if (existsSync(targetPath)) {
@@ -103,7 +109,11 @@ function writeJsonClient(client: ClientConfig): void {
   }
 
   const merged = mergeJsonConfig(existing, client);
-  writeFileSync(targetPath, `${JSON.stringify(merged, null, 2)}\n`);
+  try {
+    writeFileSync(targetPath, `${JSON.stringify(merged, null, 2)}\n`);
+  } catch (error) {
+    throw escapedError(error);
+  }
 
   console.log(`Created ${client.configPath}`);
   console.log(`Keystone UI MCP server configured for ${client.name}.`);
@@ -146,7 +156,7 @@ export function init(): void {
 
   const client = CLIENTS.find((c) => c.name === clientName);
   if (!client) {
-    console.error(`Unknown client: "${clientName}"`);
+    console.error(`Unknown client: "${shown(clientName)}"`);
     console.error("");
     printUsage();
     process.exitCode = 1;

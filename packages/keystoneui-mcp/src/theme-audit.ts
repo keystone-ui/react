@@ -11,6 +11,8 @@
  * (`var()`, `color-mix()`, alpha) are reported as skipped, never guessed.
  */
 
+import { shown } from "./render.js";
+
 export type Mode = "dark" | "light";
 export type Tokens = Record<Mode, Record<string, string>>;
 
@@ -192,7 +194,7 @@ export function auditTheme(tokens: Tokens): PairResult[] {
 
 export function formatAudit(file: string, results: PairResult[]): string {
   if (results.length === 0) {
-    return `No keystone token pairs found in ${file}. Pass the CSS file that holds :root and .dark.`;
+    return `No keystone token pairs found in ${shown(file)}. Pass the CSS file that holds :root and .dark.`;
   }
   const lines = results.map((r) => {
     const mark = { fail: "✖", pass: "✔", skip: "–" }[r.status];
@@ -202,7 +204,7 @@ export function formatAudit(file: string, results: PairResult[]): string {
   });
   const failed = results.filter((r) => r.status === "fail").length;
   return [
-    `Theme contrast — ${file} (WCAG AA for text: ${AA_TEXT}:1)`,
+    `Theme contrast — ${shown(file)} (WCAG AA for text: ${AA_TEXT}:1)`,
     "",
     ...lines,
     "",
