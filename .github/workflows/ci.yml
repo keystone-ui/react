@@ -22,6 +22,12 @@ defaults:
     # command on the left of a pipe would leave the step green.
     shell: bash
 
+env:
+  # Disable Next.js telemetry for the docs builds and the Playwright server.
+  # Turborepo passes this variable through in strict mode and excludes its
+  # value from the docs build task hash.
+  NEXT_TELEMETRY_DISABLED: "1"
+
 jobs:
   lint:
     name: Lint & Format
