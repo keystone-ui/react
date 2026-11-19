@@ -1899,13 +1899,17 @@ function triggerBox(s: ReturnType<typeof scrollParts>, name: string): Box {
 }
 
 /**
- * Every frame: the scrolled row's pill exists, matches the row that does
- * not scroll within 1px on every edge, lies within the span of the two
- * triggers, and keeps its shape (the filled pill inside the triggers' 1px
- * border; the line 2px high, 1px above their bottom). It passes through at
- * least three distinct in-between positions, and ends on `end`.
+ * What is wrong with one frame's pill, if anything: the scrolled row's pill
+ * exists, matches the row that does not scroll within 1px on every edge, and
+ * keeps its shape (the filled pill inside the triggers' 1px border at top
+ * and bottom; the line 2px high, 1px above their bottom).
+ *
+ * Its horizontal path is measured against the row that does not scroll,
+ * not against the two triggers: the morphing pill's spring and the growing
+ * label's spring are separate, so in any Tabs list the pill can pass a
+ * little outside the two triggers while a wide label grows (more with wider
+ * fonts). What Reel must not change is that path.
  */
-/** What is wrong with one frame's pill, if anything. */
 function frameFailures(f: PillFrame, line: boolean): string[] {
   if (!(f.scrolled && f.still)) {
     return ["a pill is missing"];
@@ -1918,11 +1922,6 @@ function frameFailures(f: PillFrame, line: boolean): string[] {
         `${edge} ${pill[edge].toFixed(1)} vs ${f.still[edge].toFixed(1)}`
       );
     }
-  }
-  const lo = Math.min(f.from.left, f.to.left);
-  const hi = Math.max(f.from.right, f.to.right);
-  if (pill.left < lo + 0.5 || pill.right > hi - 0.5) {
-    out.push(`outside ${lo.toFixed(1)}..${hi.toFixed(1)}`);
   }
   if (Math.abs(pill.bottom - (f.to.bottom - 1)) > 0.5) {
     out.push(`bottom ${pill.bottom.toFixed(1)}`);
@@ -1938,11 +1937,8 @@ function frameFailures(f: PillFrame, line: boolean): string[] {
 }
 
 /**
- * Every frame: the scrolled row's pill exists, matches the row that does
- * not scroll within 1px on every edge, lies within the span of the two
- * triggers, and keeps its shape (the filled pill inside the triggers' 1px
- * border; the line 2px high, 1px above their bottom). It passes through at
- * least three distinct in-between positions, and ends on `end`.
+ * Every frame passes `frameFailures`; the pill passes through at least three
+ * distinct in-between positions, and ends on `end`.
  */
 function pillFailures(
   frames: PillFrame[],

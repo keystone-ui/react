@@ -571,13 +571,22 @@ test.describe("Scrollable Tabs on a touch-primary device (T-TOUCH-TABS)", () => 
     if (!box) {
       throw new Error("no end chevron");
     }
-    // The chevron's colour every animation frame, and whether the touch has
-    // ended by then. Chromium applies :active to a touch press when the
-    // touch ends, so the frame after touchend shows the pressed colour.
+    // The chevron's colour every animation frame, whether the touch has
+    // ended by then, and whether the hit area is `:active`. Chromium applies
+    // :active to a touch press when the touch ends and holds it for a short
+    // minimum. The colour transition starts from the muted colour, so which
+    // frame first shows the foreground depends on how the frames fall around
+    // the tap: on the Linux CI runner the first frame after touchend still
+    // read the transition's starting value. The promise is that the press
+    // shows the foreground while it holds, not on one particular frame.
     await svg.evaluate((el) => {
       const w = window as unknown as {
-        __frames: { ended: boolean; colour: string }[];
+        __frames: { active: boolean; ended: boolean; colour: string }[];
       };
+      const hit = el.closest('[data-slot="reel"] > span[data-side]');
+      if (!hit) {
+        throw new Error("no hit area around the chevron");
+      }
       let ended = false;
       w.__frames = [];
       window.addEventListener(
@@ -588,7 +597,11 @@ test.describe("Scrollable Tabs on a touch-primary device (T-TOUCH-TABS)", () => 
         { capture: true, once: true }
       );
       const tick = () => {
-        w.__frames.push({ ended, colour: getComputedStyle(el).color });
+        w.__frames.push({
+          active: hit.matches(":active"),
+          ended,
+          colour: getComputedStyle(el).color,
+        });
         if (w.__frames.length < 60) {
           requestAnimationFrame(tick);
         }
@@ -610,13 +623,22 @@ test.describe("Scrollable Tabs on a touch-primary device (T-TOUCH-TABS)", () => 
       () =>
         (
           window as unknown as {
-            __frames: { ended: boolean; colour: string }[];
+            __frames: { active: boolean; ended: boolean; colour: string }[];
           }
         ).__frames
     );
-    const firstAfter = frames.find((f) => f.ended);
-    expect(firstAfter?.colour).toBe(colours.foreground);
-    expect(frames.at(-1)?.colour).toBe(colours.muted);
+    // Muted before the touch ends; the foreground on a frame while the
+    // press holds; muted again once it has let go.
+    expect(frames.filter((f) => !f.ended).map((f) => f.colour)).toContain(
+      colours.muted
+    );
+    expect(
+      frames.filter((f) => f.ended && f.active).map((f) => f.colour)
+    ).toContain(colours.foreground);
+    expect(frames.at(-1)).toMatchObject({
+      active: false,
+      colour: colours.muted,
+    });
   });
 
   test("show the end chevron at scroll 0, and a tap pages", async ({
