@@ -20,7 +20,7 @@ Scrollable Tabs scroll in a Reel
 - Combining `scrollable` with vertical Tabs still scrolls horizontally.
 - To choose when the arrows show or how they look, leave `scrollable` off and wrap the `TabsList` in your own `Reel`. Reel finds the active tab by its `aria-selected`.
 - Change the fade's depth with `--ks-reel-fade-size` on `Tabs` or any ancestor, for example `className="[--ks-reel-fade-size:1rem]"`.
-- Every import of `@keystoneui/react/tabs` now loads Reel and Button, a few kB, whether or not `scrollable` is set. From the registry, `tabs` now installs `reel` and `button` with it.
+- The `@keystoneui/react/tabs` entry point now statically imports Reel, which imports Button, whether or not `scrollable` is set. Installing `tabs` from the registry also installs `reel` and its `button` dependency.
 - **Breaking for anyone who styles or tests the scrollable list:**
   - `data-slot="tabs-list-wrapper"`, `"tabs-list-scroll"` and `"tabs-scroll-button"` are removed. Use `reel`, `reel-viewport` and `reel-arrow`. `reel-arrow` is the chevron's picture, a `span`. The element that takes the press is its parent, `[data-slot="reel"] > span[data-side]`.
   - Both arrows are always in the DOM, hidden with `visibility`, and come after the scroller. Selectors relying on the old buttons, their labels, their order or their focus no longer match.
