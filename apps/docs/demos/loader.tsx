@@ -1743,6 +1743,26 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("resizable-with-handle", m.default),
     }))
   ),
+  "rolling-number-currency": dynamic(() =>
+    import("./rolling-number/currency").then((m) => ({
+      default: hydrated("rolling-number-currency", m.default),
+    }))
+  ),
+  "rolling-number-default": dynamic(() =>
+    import("./rolling-number/default").then((m) => ({
+      default: hydrated("rolling-number-default", m.default),
+    }))
+  ),
+  "rolling-number-locales": dynamic(() =>
+    import("./rolling-number/locales").then((m) => ({
+      default: hydrated("rolling-number-locales", m.default),
+    }))
+  ),
+  "rolling-number-stat": dynamic(() =>
+    import("./rolling-number/stat").then((m) => ({
+      default: hydrated("rolling-number-stat", m.default),
+    }))
+  ),
   "select-controlled": dynamic(() =>
     import("./select/controlled").then((m) => ({
       default: hydrated("select-controlled", m.default),

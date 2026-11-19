@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "rolling-number-locales",
+  "title": "Rolling Number Locales",
+  "description": "Rolling Number example: Locales.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/rolling-number.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/rolling-number/locales.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { RollingNumber } from \"@keystoneui/react/rolling-number\";\nimport { useState } from \"react\";\n\nconst locales = [\"en-US\", \"de-DE\", \"en-IN\"];\n\nexport default function RollingNumberLocales() {\n  const [value, setValue] = useState(1_234_567.89);\n  return (\n    <div className=\"flex flex-col items-center gap-4\">\n      <dl className=\"grid grid-cols-[auto_auto] items-baseline gap-x-6 gap-y-2\">\n        {locales.map((locale) => (\n          <div className=\"contents\" key={locale}>\n            <dt className=\"text-muted-foreground text-sm\">{locale}</dt>\n            <dd className=\"font-semibold text-2xl\">\n              <RollingNumber locale={locale} value={value} />\n            </dd>\n          </div>\n        ))}\n      </dl>\n      <Button\n        onClick={() => setValue((v) => v + 11.11)}\n        size=\"sm\"\n        variant=\"outline\"\n      >\n        +11.11\n      </Button>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

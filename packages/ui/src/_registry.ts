@@ -403,4 +403,10 @@ export const ui: RegistryItem[] = [
     registryDependencies: ["button"],
     files: [{ path: "ui/reel.tsx", type: "registry:ui" }],
   },
+  {
+    name: "rolling-number",
+    type: "registry:ui",
+    dependencies: [],
+    files: [{ path: "ui/rolling-number.tsx", type: "registry:ui" }],
+  },
 ];

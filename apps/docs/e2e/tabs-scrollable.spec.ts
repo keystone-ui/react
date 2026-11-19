@@ -544,10 +544,19 @@ test.describe("Scrollable Tabs on a touch-primary device (T-TOUCH-TABS)", () => 
     viewport: { height: 812, width: 375 },
   });
 
-  test("turn the chevron to the foreground colour on a touch press", async ({
+  // What the component promises is a CSS rule, not how a browser turns an
+  // emulated touch into `:active` (that differs between macOS and headless
+  // Linux, and no real finger runs here): with hover gated off, the plain
+  // chevron is muted at rest, takes the foreground colour while its hit area
+  // is `:active`, and lets go to muted. The states are forced through the
+  // DevTools protocol so each one is read deterministically.
+  test("turn the chevron to the foreground colour while its hit area is active", async ({
     page,
   }) => {
     await gotoFixture(page);
+    expect(
+      await page.evaluate(() => matchMedia("(hover: hover)").matches)
+    ).toBe(false);
     await scrollTo(page, "phone", 0);
     const colours = await page.evaluate(() => {
       const probe = (className: string) => {
@@ -564,81 +573,51 @@ test.describe("Scrollable Tabs on a touch-primary device (T-TOUCH-TABS)", () => 
       };
     });
     expect(colours.foreground).not.toBe(colours.muted);
-    const svg = page
-      .getByTestId("phone")
-      .locator('[data-slot="reel-arrow"][data-side="end"] svg');
+    const host = page.getByTestId("phone");
+    const svg = host.locator('[data-slot="reel-arrow"][data-side="end"] svg');
+    const colour = () => svg.evaluate((el) => getComputedStyle(el).color);
+    await expect.poll(colour).toBe(colours.muted);
+
+    const cdp = await page.context().newCDPSession(page);
+    await cdp.send("DOM.enable");
+    await cdp.send("CSS.enable");
+    const { root } = await cdp.send("DOM.getDocument", { depth: 0 });
+    const { nodeId } = await cdp.send("DOM.querySelector", {
+      nodeId: root.nodeId,
+      selector:
+        '[data-testid="phone"] [data-slot="reel"] > span[data-side="end"]',
+    });
+    expect(nodeId).toBeGreaterThan(0);
+    const force = (forcedPseudoClasses: string[]) =>
+      cdp.send("CSS.forcePseudoState", { nodeId, forcedPseudoClasses });
+
+    // Hover alone does nothing here: the hover rule is gated on
+    // `(hover: hover)`. Two frames outlast the colour transition, which runs
+    // 0.01ms under the config's reduced motion.
+    await force(["hover"]);
+    await twoFrames(page);
+    expect(await colour()).toBe(colours.muted);
+    await force([]);
+
+    await force(["active"]);
+    await expect.poll(colour).toBe(colours.foreground);
+    await force([]);
+    await expect.poll(colour).toBe(colours.muted);
+    await cdp.detach();
+
+    // A real tap still pages the row by one press; its colour is not asserted.
     const box = await svg.boundingBox();
     if (!box) {
       throw new Error("no end chevron");
     }
-    // The chevron's colour every animation frame, whether the touch has
-    // ended by then, and whether the hit area is `:active`. Chromium applies
-    // :active to a touch press when the touch ends and holds it for a short
-    // minimum. The colour transition starts from the muted colour, so which
-    // frame first shows the foreground depends on how the frames fall around
-    // the tap: on the Linux CI runner the first frame after touchend still
-    // read the transition's starting value. The promise is that the press
-    // shows the foreground while it holds, not on one particular frame.
-    await svg.evaluate((el) => {
-      const w = window as unknown as {
-        __frames: { active: boolean; ended: boolean; colour: string }[];
-      };
-      const hit = el.closest('[data-slot="reel"] > span[data-side]');
-      if (!hit) {
-        throw new Error("no hit area around the chevron");
-      }
-      let ended = false;
-      w.__frames = [];
-      window.addEventListener(
-        "touchend",
-        () => {
-          ended = true;
-        },
-        { capture: true, once: true }
-      );
-      const tick = () => {
-        w.__frames.push({
-          active: hit.matches(":active"),
-          ended,
-          colour: getComputedStyle(el).color,
-        });
-        if (w.__frames.length < 60) {
-          requestAnimationFrame(tick);
-        }
-      };
-      requestAnimationFrame(tick);
-    });
-    const point = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
-    const cdp = await page.context().newCDPSession(page);
-    await cdp.send("Input.dispatchTouchEvent", {
-      type: "touchStart",
-      touchPoints: [point],
-    });
-    await cdp.send("Input.dispatchTouchEvent", {
-      type: "touchEnd",
-      touchPoints: [],
-    });
-    await page.waitForTimeout(1200);
-    const frames = await page.evaluate(
-      () =>
-        (
-          window as unknown as {
-            __frames: { active: boolean; ended: boolean; colour: string }[];
-          }
-        ).__frames
-    );
-    // Muted before the touch ends; the foreground on a frame while the
-    // press holds; muted again once it has let go.
-    expect(frames.filter((f) => !f.ended).map((f) => f.colour)).toContain(
-      colours.muted
-    );
-    expect(
-      frames.filter((f) => f.ended && f.active).map((f) => f.colour)
-    ).toContain(colours.foreground);
-    expect(frames.at(-1)).toMatchObject({
-      active: false,
-      colour: colours.muted,
-    });
+    await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+    await expect
+      .poll(() =>
+        host
+          .locator('[data-slot="reel-viewport"]')
+          .evaluate((el) => el.scrollLeft)
+      )
+      .toBeGreaterThan(100);
   });
 
   test("show the end chevron at scroll 0, and a tap pages", async ({

@@ -263,7 +263,7 @@ Full guidance, including which tokens the shadcn sidebar reads:
 | Navigation | `Tabs`, `Breadcrumb`, `Pagination`, `Stepper`; `Reel` around a row of links that can be wider than its container |
 | Data display | `Table` (+ `TableSortButton`, `TableEmpty`, `numeric`), `Card`, `DescriptionList`, `Avatar`, `Badge`, `Tag`, `TagGroup` |
 | Table footer | `TablePagination` for rows-per-page + "page N of M" + navigation. `Pagination` is for page *links* with their own URLs — do not use it as a data-table footer. |
-| Metrics / KPI | `StatValue` + `StatDelta` inside `Card` + `CardContent`. `StatDelta` takes a `direction` (`up-is-good` / `down-is-good` / `neutral`) — never colour a delta from its sign alone. Use `Card variant="outline"` for a panel row. |
+| Metrics / KPI | `StatValue` + `StatDelta` inside `Card` + `CardContent`; `RollingNumber` inside `StatValue` for a value that changes while the user watches (formats with `Intl.NumberFormat`, rolls only the changed digits). `StatDelta` takes a `direction` (`up-is-good` / `down-is-good` / `neutral`) — never colour a delta from its sign alone. Use `Card variant="outline"` for a panel row. |
 | Feedback | `Toast`, `Alert`, `Progress`, `CircularProgress`, `Skeleton`, `Spinner`, `Empty` |
 | Layout | `Card`, `Separator`, `Resizable`, `Accordion`, `Collapsible`, `AspectRatio`, `Carousel` (content cards that snap; a row of controls that scrolls sideways is a `Reel`) |
 | Bulk-action bar | `SelectionBar` |
@@ -295,9 +295,9 @@ Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or
 
 ## Component List
 
-61 components, all importable from `@keystoneui/react/{kebab-case-name}`:
+62 components, all importable from `@keystoneui/react/{kebab-case-name}`:
 
-`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `button-group`, `calendar`, `card`, `carousel`, `checkbox`, `circular-progress`, `code-block`, `collapsible`, `combobox`, `command`, `copy-button`, `date-input`, `description-list`, `drawer`, `dropdown-menu`, `empty`, `field`, `file-upload`, `filter-chips`, `form`, `input`, `input-group`, `input-otp`, `item`, `kbd`, `label`, `modal`, `native-select`, `pagination`, `popover`, `progress`, `radio-group`, `reel`, `resizable`, `select`, `selection-bar`, `separator`, `skeleton`, `slider`, `spinner`, `stat`, `stepper`, `switch`, `table`, `table-pagination`, `tabs`, `tag`, `tag-group`, `textarea`, `toast`, `toggle`, `toggle-group`, `tooltip`.
+`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `button-group`, `calendar`, `card`, `carousel`, `checkbox`, `circular-progress`, `code-block`, `collapsible`, `combobox`, `command`, `copy-button`, `date-input`, `description-list`, `drawer`, `dropdown-menu`, `empty`, `field`, `file-upload`, `filter-chips`, `form`, `input`, `input-group`, `input-otp`, `item`, `kbd`, `label`, `modal`, `native-select`, `pagination`, `popover`, `progress`, `radio-group`, `reel`, `resizable`, `rolling-number`, `select`, `selection-bar`, `separator`, `skeleton`, `slider`, `spinner`, `stat`, `stepper`, `switch`, `table`, `table-pagination`, `tabs`, `tag`, `tag-group`, `textarea`, `toast`, `toggle`, `toggle-group`, `tooltip`.
 
 ## Workflow
 
