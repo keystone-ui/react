@@ -7,6 +7,8 @@
  * theme data.
  */
 
+import { shellWord } from "./render.js";
+
 const THEME_CODE_RE =
   /^k1_([a-z]+)_(\d+(?:\.\d+)?)_(\d+(?:\.\d+)?)_(\d+(?:\.\d+)?)_([a-z]+)_([a-z-]+)$/;
 
@@ -28,13 +30,23 @@ export function parseThemeCode(code: string): ThemeCodeFields | null {
   return { base, font, primary: `oklch(${l} ${c} ${h})`, radius };
 }
 
-export function themeInstallCommand(
+/** The theme item's URL, joined as it always was. */
+export function themeInstallUrl(
   code: string,
   siteUrl: string,
   only: ThemePart[] = []
 ): string {
   const query = only.length > 0 ? `?only=${only.join(",")}` : "";
-  return `npx shadcn@latest add ${siteUrl}/r/theme/${code}.json${query}`;
+  return `${siteUrl}/r/theme/${code}.json${query}`;
+}
+
+/** The install command, with the complete URL as one shell word. */
+export function themeInstallCommand(
+  code: string,
+  siteUrl: string,
+  only: ThemePart[] = []
+): string {
+  return `npx shadcn@latest add ${shellWord(themeInstallUrl(code, siteUrl, only))}`;
 }
 
 /** Re-open the theme in the builder, whose URL state uses these keys. */

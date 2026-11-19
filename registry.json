@@ -2458,7 +2458,14 @@
       "categories": [
         "data",
         "admin"
-      ]
+      ],
+      "meta": {
+        "keystoneui": {
+          "flavourOf": "users-01",
+          "minPackageVersion": "1.0.0-beta.11",
+          "docs": "/docs/blocks/users-01#apps-that-use-the-npm-package"
+        }
+      }
     },
     {
       "name": "settings-01",
@@ -2537,7 +2544,15 @@
       ],
       "categories": [
         "data"
-      ]
+      ],
+      "meta": {
+        "keystoneui": {
+          "docs": "/docs/blocks/admin-01#reusing-the-filter-pills",
+          "partOf": [
+            "admin-01"
+          ]
+        }
+      }
     },
     {
       "name": "sidebar",
@@ -2565,7 +2580,15 @@
           "path": "registry/default/blocks/admin-01/components/sidebar.tsx",
           "type": "registry:component"
         }
-      ]
+      ],
+      "meta": {
+        "keystoneui": {
+          "docs": "/docs/interop#the-sidebar-item",
+          "partOf": [
+            "admin-01"
+          ]
+        }
+      }
     },
     {
       "name": "npm/sidebar",
@@ -2585,7 +2608,13 @@
       ],
       "categories": [
         "navigation"
-      ]
+      ],
+      "meta": {
+        "keystoneui": {
+          "flavourOf": "sidebar",
+          "docs": "/docs/interop#the-sidebar-item"
+        }
+      }
     },
     {
       "name": "npm/filter-pills",
@@ -2615,7 +2644,13 @@
       ],
       "categories": [
         "data"
-      ]
+      ],
+      "meta": {
+        "keystoneui": {
+          "flavourOf": "filter-pills",
+          "docs": "/docs/blocks/admin-01#reusing-the-filter-pills"
+        }
+      }
     },
     {
       "name": "dashboard-01",

@@ -191,27 +191,42 @@ describe("a plain base URL", () => {
     );
   });
 
-  // Names come from the agent. Whatever an awkward name does to the URL
-  // today, it still does: checking names is a separate change.
+  // Names come from the agent. A name that can be a registry path is sent
+  // exactly as before; the printed command quotes its URL where the shell
+  // would otherwise split or expand it.
   it.each([
-    "theme/k1_slate_0.55_0.2_250_md_inter",
-    "a?b",
-    "a#b",
-    "a b",
-    "../x",
-    "%2e%2e/x",
-    "a\\b",
-    "@evil.example/x",
-  ])("sends the name %j exactly as before", async (name) => {
+    ["theme/k1_slate_0.55_0.2_250_md_inter", false],
+    ["a b", true],
+    ["@evil.example/x", false],
+  ])("sends the name %j exactly as before", async (name, quoted) => {
     project(undefined);
     process.env.KEYSTONEUI_REGISTRY_URL = base;
     const config = loadProjectConfig();
     await viewComponentTool(config, { names: [name] });
-    expect(calls.map((call) => call.url)).toEqual([`${base}/${name}.json`]);
+    const url = `${base}/${name}.json`;
+    expect(calls.map((call) => call.url)).toEqual([url]);
     expect(getAddCommandTool(config, { names: [name] })).toContain(
-      `npx shadcn@latest add ${base}/${name}.json\n`
+      `npx shadcn@latest add ${quoted ? `'${url}'` : url}\n`
     );
   });
+
+  // A name that cannot be a registry path (a query or fragment delimiter, a
+  // dot segment, a backslash) is refused before any request.
+  it.each(["a?b", "a#b", "../x", "%2e%2e/x", "a\\b"])(
+    "refuses the name %j with no request",
+    async (name) => {
+      project(undefined);
+      process.env.KEYSTONEUI_REGISTRY_URL = base;
+      const config = loadProjectConfig();
+      expect(await viewComponentTool(config, { names: [name] })).toContain(
+        "not a valid registry item name"
+      );
+      expect(calls).toEqual([]);
+      expect(getAddCommandTool(config, { names: [name] })).toContain(
+        "No install command: every name must be a registry item name."
+      );
+    }
+  );
 });
 
 describe("where the registry comes from", () => {
@@ -332,9 +347,10 @@ describe("a template the composer does not handle", () => {
       "x/../../..//evil.example",
     ];
     await requestsFor(names);
-    // The catalogue, then every item and every demo bundle: none of them is
-    // dropped before it reaches fetch.
-    expect(calls).toHaveLength(1 + 2 * names.length);
+    // The catalogue, then the item and demo bundle of the one name that can
+    // be a registry path; the others (an empty segment, a backslash, a dot
+    // segment) are refused before fetch.
+    expect(calls).toHaveLength(1 + 2);
     for (const call of calls) {
       expect(new URL(call.url).origin).toBe("https://tpl.example.test");
     }

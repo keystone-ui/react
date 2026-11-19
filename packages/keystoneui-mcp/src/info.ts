@@ -10,6 +10,7 @@ import {
   type ProjectContext,
 } from "./project-context.js";
 import { registryCatalogueUrl } from "./registry-url.js";
+import { shown } from "./render.js";
 
 interface McpClientStatus {
   configPath: string;
@@ -149,6 +150,12 @@ function pad(label: string, width = 18): string {
   return label.padEnd(width, " ");
 }
 
+/** A project value as text (render.ts), or "(unknown)" when absent. */
+function shownOr(value: unknown): string {
+  return value === null || value === undefined ? "(unknown)" : shown(value);
+}
+
+/** Text output: values from the project and environment through render.ts. */
 function printText(data: InfoData): void {
   const lines: string[] = [];
 
@@ -158,21 +165,21 @@ function printText(data: InfoData): void {
   const p = data.project;
   lines.push("Project");
   lines.push(`  ${pad("Install mode")}${p.installMode}`);
-  lines.push(`  ${pad("UI alias")}${p.aliases?.ui ?? "(unknown)"}`);
-  lines.push(`  ${pad("Theme CSS")}${p.tailwindCssFile ?? "(unknown)"}`);
-  lines.push(`  ${pad("Icon library")}${p.iconLibrary ?? "(unknown)"}`);
+  lines.push(`  ${pad("UI alias")}${shownOr(p.aliases?.ui)}`);
+  lines.push(`  ${pad("Theme CSS")}${shownOr(p.tailwindCssFile)}`);
+  lines.push(`  ${pad("Icon library")}${shownOr(p.iconLibrary)}`);
   lines.push(
     `  ${pad("RSC")}${p.isRSC === null ? "(unknown)" : String(p.isRSC)}`
   );
-  lines.push(`  ${pad("Package manager")}${p.packageManager ?? "(unknown)"}`);
+  lines.push(`  ${pad("Package manager")}${shownOr(p.packageManager)}`);
   lines.push("");
 
   lines.push("Environment");
-  lines.push(`  ${pad("Node")}${data.environment.node}`);
-  lines.push(`  ${pad("Platform")}${data.environment.platform}`);
-  lines.push(`  ${pad("Project root")}${data.environment.cwd}`);
-  lines.push(`  ${pad("Registry URL")}${data.environment.registryUrl}`);
-  lines.push(`  ${pad("Docs URL")}${data.environment.docsUrl}`);
+  lines.push(`  ${pad("Node")}${shown(data.environment.node)}`);
+  lines.push(`  ${pad("Platform")}${shown(data.environment.platform)}`);
+  lines.push(`  ${pad("Project root")}${shown(data.environment.cwd)}`);
+  lines.push(`  ${pad("Registry URL")}${shown(data.environment.registryUrl)}`);
+  lines.push(`  ${pad("Docs URL")}${shown(data.environment.docsUrl)}`);
   lines.push("");
 
   lines.push("MCP clients");
@@ -181,7 +188,7 @@ function printText(data: InfoData): void {
     lines.push("  (none configured for keystoneui)");
   } else {
     for (const client of configured) {
-      lines.push(`  ${pad(client.name)}${client.configPath}`);
+      lines.push(`  ${pad(client.name)}${shown(client.configPath)}`);
     }
   }
   lines.push("");
@@ -191,15 +198,15 @@ function printText(data: InfoData): void {
     lines.push("  (none detected in this project)");
   } else {
     for (const pkg of data.installedPackages) {
-      lines.push(`  ${pad(pkg.name, 28)}v${pkg.version}`);
+      lines.push(`  ${pad(shown(pkg.name), 28)}v${shown(pkg.version)}`);
     }
   }
   lines.push("");
 
   lines.push("Links");
-  lines.push(`  ${pad("Docs")}${data.links.docs}`);
-  lines.push(`  ${pad("Registry")}${data.links.registry}`);
-  lines.push(`  ${pad("llms.txt")}${data.links.llms}`);
+  lines.push(`  ${pad("Docs")}${shown(data.links.docs)}`);
+  lines.push(`  ${pad("Registry")}${shown(data.links.registry)}`);
+  lines.push(`  ${pad("llms.txt")}${shown(data.links.llms)}`);
 
   console.log(lines.join("\n"));
 }

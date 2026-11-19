@@ -15,6 +15,12 @@
       "type": "registry:component"
     }
   ],
+  "meta": {
+    "keystoneui": {
+      "flavourOf": "sidebar",
+      "docs": "/docs/interop#the-sidebar-item"
+    }
+  },
   "categories": [
     "navigation"
   ],

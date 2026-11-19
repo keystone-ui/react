@@ -13,10 +13,12 @@ The `@keystoneui/mcp` package ships a single binary that runs in two modes — w
 keystoneui search "table pagination"
 keystoneui search signin --type block
 keystoneui list --type example --limit 20
+keystoneui list --type kit           # pieces taken from a block: sidebar, filter-pills
 
 # Inspect
 keystoneui view button
 keystoneui docs button             # fetches /llms.mdx/docs/components/button
+keystoneui docs admin-01 --type block   # /llms.mdx/docs/blocks/admin-01
 keystoneui examples table          # all demo files for the table component
 
 # Install (delegates to shadcn CLI; see below)

@@ -159,6 +159,14 @@ function joinBase(raw: string, path: string): string {
 }
 
 /**
+ * A page path (`docs/interop`, `llms.mdx/docs/interop`) composed into the
+ * docs URL by the same rules as a resource into a base URL.
+ */
+export function docsResourceUrl(docsUrl: string, path: string): string {
+  return joinBase(docsUrl, path);
+}
+
+/**
  * The registry a docs site serves at `/r`, composed into the docs URL by the
  * same rules as a resource into a base URL.
  */

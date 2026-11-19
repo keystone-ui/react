@@ -33,8 +33,9 @@ describe("theme codes", () => {
     expect(themeInstallCommand(CODE, SITE)).toBe(
       `npx shadcn@latest add ${SITE}/r/theme/${CODE}.json`
     );
+    // A URL with a query is one quoted word.
     expect(themeInstallCommand(CODE, SITE, ["font"])).toBe(
-      `npx shadcn@latest add ${SITE}/r/theme/${CODE}.json?only=font`
+      `npx shadcn@latest add '${SITE}/r/theme/${CODE}.json?only=font'`
     );
   });
 

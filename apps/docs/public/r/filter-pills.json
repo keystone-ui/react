@@ -37,6 +37,14 @@
       "type": "registry:component"
     }
   ],
+  "meta": {
+    "keystoneui": {
+      "docs": "/docs/blocks/admin-01#reusing-the-filter-pills",
+      "partOf": [
+        "admin-01"
+      ]
+    }
+  },
   "categories": [
     "data"
   ],

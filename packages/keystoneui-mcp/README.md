@@ -53,13 +53,13 @@ npx @keystoneui/mcp theme k1_slate_0.55_0.2_262.5_large_inter
 | Verb | Purpose |
 |---|---|
 | `init [--client <name>]` | Configure MCP client |
-| `search <query> [--type T] [--limit N]` | Fuzzy search components, blocks, named examples |
-| `list [--type T] [--limit N] [--offset N]` | List items (`T` = `ui` \| `block` \| `example`) |
-| `view <name> [<name>...]` | Show component source |
+| `search <query> [--type T] [--limit N]` | Fuzzy search components, blocks, kits, named examples |
+| `list [--type T] [--limit N] [--offset N]` | List items (`T` = `ui` \| `block` \| `example` \| `kit` \| `style` \| `theme` \| `item`) |
+| `view <name> [<name>...]` | Show the source of components, blocks, kits or package flavours |
 | `examples <name>` | All demo files for a component or block |
-| `docs <name>` | Fetch the LLM-resolved MDX page (`/llms.mdx/docs/components/<name>`) |
+| `docs <name> [--type component\|block]` | Fetch the LLM-resolved MDX page (`/llms.mdx/docs/{components\|blocks}/<name>`); a kit or package flavour resolves to the section that documents it |
 | `audit [--theme [css]] [--strict]` | Print the post-install checklist, or measure every text/surface token pair in your theme against WCAG AA |
-| `blocks [<filter>]` | List or filter full-page blocks |
+| `blocks [<filter>]` | List or filter full-page blocks; an exact block name views it. Kits are listed with `list --type kit` |
 | `theme <code> [--only theme,font]` | Decode a theme-builder code and print its `shadcn add` command |
 
 Run `keystoneui help` for the full list. Without any verb the binary launches the MCP stdio server.
@@ -68,12 +68,12 @@ Run `keystoneui help` for the full list. Without any verb the binary launches th
 
 When run without arguments the server exposes nine tools to MCP clients:
 
-- `get_docs` — full docs page for a component or block, including its API Reference
+- `get_docs` — full docs page for a component, block, kit, or package flavour, including its API Reference
 - `get_project_context` — install mode, aliases, theme CSS file, icon library, RSC
-- `list_components` — list components, blocks, or examples with pagination
-- `search_components` — fuzzy search across components, blocks, and examples
-- `view_component` — full source for one or more components
-- `get_add_command` — generate the shadcn CLI command for installing components
+- `list_components` — list components, blocks, kits, or examples with pagination
+- `search_components` — fuzzy search across components, blocks, kits, and examples
+- `view_component` — full source for one or more components, blocks, kits, or package flavours
+- `get_add_command` — generate the shadcn CLI command for installing components; `flavour: "package"` picks a block's or kit's package flavour for an app on `@keystoneui/react`
 - `get_examples` — fetch live demo files for a component or block
 - `get_theme_info` — semantic color tokens, radius scale, dark-mode setup
 - `audit_checklist` — post-install verification checklist

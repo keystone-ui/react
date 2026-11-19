@@ -26,7 +26,7 @@ export const server = new McpServer(
       tools: {},
     },
     instructions:
-      "Keystone UI MCP server. Use these tools to discover, search, view, and install Keystone UI components. Start with list_components or search_components to explore available components, then view_component to get full source code.",
+      "Keystone UI MCP server. Use these tools to discover, search, view, and install Keystone UI components, blocks, and kits. Call get_project_context first: install mode decides imports and, for a package-mode project, the flavour to pass to get_add_command. Then use list_components or search_components to explore, and view_component to get full source code.",
   }
 );
 
@@ -65,7 +65,7 @@ server.tool(
   "get_add_command",
   TOOL_SPECS.get_add_command.description,
   TOOL_SPECS.get_add_command.schema.shape,
-  (input) => text(getAddCommandTool(config, input))
+  async (input) => text(await getAddCommandTool(config, input))
 );
 
 server.tool(
