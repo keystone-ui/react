@@ -30,10 +30,14 @@ export function CountdownFixture() {
       <p className="text-5xl" data-testid="large">
         <Countdown now={now} size="lg" target={TARGET} />
       </p>
-      {/* The 2ch floor removed: only the reservation holds the width. */}
+      {/* The 2ch floor removed: only the reservation holds the width.
+          geometricPrecision, as the docs advise without the floor: where
+          glyphs are rounded to whole pixels (hinted text on Linux) tabular
+          digits differ by a pixel or two, and the row would move for that
+          reason instead of a missing reservation. */}
       <p className="text-5xl" data-testid="nofloor">
         <Countdown
-          className="[&_[data-slot=countdown-value]]:min-w-0"
+          className="[text-rendering:geometricPrecision] [&_[data-slot=countdown-value]]:min-w-0"
           now={now}
           size="lg"
           target={TARGET}

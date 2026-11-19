@@ -179,11 +179,29 @@ const frame = () =>
   new Promise<void>((resolve) =>
     requestAnimationFrame(() => setTimeout(resolve, 0))
   );
-/** Fonts loaded and one frame painted: geometry is measured in the real font. */
+/**
+ * The digits' face loaded and one frame painted: geometry is measured in the
+ * real font, or the play fails naming the face. Only the first family of the
+ * list is loaded, as in the docs e2e: `document.fonts.load` on a whole list
+ * rejects if any face in it fails, including a `local()` fallback that a
+ * machine without that system font cannot load.
+ */
 const settled = async () => {
-  const family = getComputedStyle(document.body).fontFamily;
-  await document.fonts.load(`400 48px ${family}`, "0123456789:-");
+  const family = getComputedStyle(document.body)
+    .fontFamily.split(",")[0]
+    .trim();
+  const faces = await document.fonts.load(`400 48px ${family}`, "0123456789:-");
   await document.fonts.ready;
+  if (
+    faces.length === 0 ||
+    faces.some((fontFace) => fontFace.status !== "loaded")
+  ) {
+    throw new Error(
+      `the digits' face ${family} did not load: ${faces.length} face(s), ${faces
+        .map((fontFace) => fontFace.status)
+        .join(", ")}`
+    );
+  }
   await frame();
 };
 const nextFrame = () =>

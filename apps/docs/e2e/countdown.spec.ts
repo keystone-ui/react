@@ -14,13 +14,51 @@ test.use({ reducedMotion: "no-preference" });
 const PARTS =
   '[data-slot="countdown-value"], [data-slot="countdown-separator"], [data-slot="countdown-label"]';
 
-/** The page's font, digits included, before any box is read. */
+/**
+ * The face the digits are drawn in, loaded before any box is read, or a
+ * failure naming every face of that family and its status.
+ *
+ * Only the first family of the body's list is loaded. The one after it is
+ * `next/font`'s metric fallback, `src: local(Arial)`, which cannot load where
+ * Arial is not installed (the Ubuntu CI runner); `document.fonts.load` on the
+ * whole list rejects with a NetworkError when any face in it fails, which
+ * says nothing about the face the digits use.
+ */
 async function fontsLoaded(page: Page) {
-  await page.evaluate(async () => {
-    const family = getComputedStyle(document.body).fontFamily;
-    await document.fonts.load(`400 48px ${family}`, "0123456789:-");
+  const font = await page.evaluate(async () => {
+    const family = getComputedStyle(document.body)
+      .fontFamily.split(",")[0]
+      .trim();
+    const unquoted = family.replaceAll('"', "");
+    let faces: FontFace[] = [];
+    let error = "";
+    try {
+      faces = await document.fonts.load(`400 48px ${family}`, "0123456789:-");
+    } catch (reason) {
+      error = String(reason);
+    }
     await document.fonts.ready;
+    return {
+      family,
+      loaded:
+        error === "" &&
+        faces.length > 0 &&
+        faces.every((face) => face.status === "loaded"),
+      detail: [
+        error || `${faces.length} face(s) matched the digits`,
+        ...[...document.fonts]
+          .filter((face) => face.family.replaceAll('"', "") === unquoted)
+          .map(
+            (face) =>
+              `${face.family} ${face.unicodeRange.slice(0, 24)} → ${face.status}`
+          ),
+      ].join("\n"),
+    };
   });
+  expect(
+    font.loaded,
+    `the digits' face ${font.family} did not load:\n${font.detail}`
+  ).toBe(true);
 }
 
 function boxes(page: Page) {
