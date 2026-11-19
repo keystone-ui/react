@@ -1,5 +1,57 @@
 # @keystoneui/react
 
+## 1.0.0-beta.14
+
+### Major Changes
+
+- 6b938a5: Scrollable Tabs scroll in a Reel
+  
+  `<TabsList scrollable>` keeps its look (a bare chevron at each edge with more tabs, and an edge fade) and is now built on [Reel](/docs/components/reel). For users of `scrollable`:
+  
+  - The scroll arrows are no longer buttons. They are not Tab stops, so the tab order loses up to two stops: none when the tabs fit, one at either end, two in between. They are not in the accessibility tree, and a press does not take focus. Tab enters the list at its one roving tab stop, and the arrow keys, Home and End move between tabs as before.
+  - A press on an arrow scrolls 80% of the visible width instead of 150px. Under `prefers-reduced-motion` it jumps instead of gliding.
+  - Arrows still show on every device, phones included. Each arrow shows when more than 1px remains in its direction. Previously the left arrow appeared at any positive scroll offset in left-to-right layouts.
+  - The chevron no longer draws over a tab. While an arrow shows, the first five spacing units (1.25rem with the default spacing scale) of the row on that side are hidden, track included. At the default 16px root and spacing scale this leaves 20px of clear surface, including at the end before any scrolling. The fade beyond that strip is 2rem deep where scroll-driven animations are supported. Browsers without scroll-driven animations also hide the row beneath each visible chevron and draw a fixed gradient after the strip. Previously they showed the tab at full opacity beneath the chevron. The arrow and its hidden strip appear and disappear together, at once.
+  - Hovering or pressing an arrow turns the chevron to the foreground colour. At the default 16px root and spacing scale, the press target is 24px wide (previously 22px) and spans the list's height.
+  - The active tab is brought into view when the list appears and when another tab becomes active, if the list has room and the tab has width at that moment. A later resize does not bring it into view again. The first reveal, and a reveal when the list regains room after being hidden, jump; later ones glide, or jump under reduced motion. A tab that is already clear issues no scroll, so a glide in flight continues. A change of the active tab from code scrolls the list to it as well, replacing a scroll in progress, including the user's swipe. A tab focused from the keyboard is moved clear the same way, instantly. At those defaults the reveal aims for 52px of clearance, as far as the scroll range allows. A tab wider than the space aligns at its start. None of this moves focus or scrolls the page.
+  - In `morphing` mode, Reel uses the trigger's width at the time of the reveal. If its label grows afterwards, part of the label can remain under the fade or outside the viewport. This is most likely on a tab near the end of the row.
+  - The scroller contains horizontal overscroll (`overscroll-behavior-x: contain`), so a sideways swipe at either end no longer scrolls or navigates the page.
+  - In right-to-left, a scrollable list's fade, arrows and paging mirror, as described for Reel. Put the explicit `dir` on an ancestor of the whole list (the `Tabs` root works); `dir` on `TabsList` alone is below the arrows. The arrows' sides and the paging follow the computed direction, and the fade and the chevrons follow the nearest explicit `dir`. Base UI's `DirectionProvider` still sets the arrow keys' direction. The rest of Tabs' right-to-left support is unchanged.
+  - Arrow availability now also updates when tabs are added, removed or relabelled without the list changing size.
+  - At root font sizes below 16px the list keeps at least 4px of padding so focus outlines are not clipped; at a 10px root it is 3px taller.
+  - Combining `scrollable` with vertical Tabs still scrolls horizontally.
+  - To choose when the arrows show or how they look, leave `scrollable` off and wrap the `TabsList` in your own `Reel`. Reel finds the active tab by its `aria-selected`.
+  - Change the fade's depth with `--ks-reel-fade-size` on `Tabs` or any ancestor, for example `className="[--ks-reel-fade-size:1rem]"`.
+  - The `@keystoneui/react/tabs` entry point now statically imports Reel, which imports Button, whether or not `scrollable` is set. Installing `tabs` from the registry also installs `reel` and its `button` dependency.
+  - **Breaking for anyone who styles or tests the scrollable list:**
+    - `data-slot="tabs-list-wrapper"`, `"tabs-list-scroll"` and `"tabs-scroll-button"` are removed. Use `reel`, `reel-viewport` and `reel-arrow`. `reel-arrow` is the chevron's picture, a `span`. The element that takes the press is its parent, `[data-slot="reel"] > span[data-side]`.
+    - Both arrows are always in the DOM, hidden with `visibility`, and come after the scroller. Selectors relying on the old buttons, their labels, their order or their focus no longer match.
+    - The accessible names "Scroll tabs left" and "Scroll tabs right" are gone, so `getByRole("button", { name: "Scroll tabs right" })` no longer finds anything.
+    - `[data-scrollable]` moves from the scroller to `[data-slot="tabs-list"]`.
+    - The registered lengths `--tabs-fade-left` and `--tabs-fade-right` and the `tabs-scroll-fade` keyframes are removed. `--ks-reel-fade-size` sets one depth for both edges; it does not replace two independently animated lengths.
+  
+  Tabs now stores a function-valued selection or `defaultValue` without invoking the function. Previously, initializing or updating Tabs' internal state could call it. In uncontrolled morphing lists this could put the pill and expanded label on the tab matching the return value, or leave them without a matching tab. Morphing lists also keep the pill and label on the previous selection when a user activation is canceled and clear them for a controlled null selection.
+
+### Minor Changes
+
+- 8bd6f76: Add Countdown and useCountdown, the time left until a deadline
+  
+  `@keystoneui/react/countdown` shows the time left until `target` (a `Date` or epoch milliseconds) as compact digits (`01:36:53`, or `2d 04:12:33` with days) or as labelled groups (`variant="labelled"`), in three sizes. It rounds up to the smallest unit it displays and works the value out from the clock on every tick, so a late tick, a background tab or a sleeping device may skip values but the next tick shows the right one. With matching props and compatible Intl locale data, the server and the hydrating client render the same `--` placeholders. After hydration, a valid target and a finite clock reading produce the live value. `onComplete` runs once when the current run completes. Changing to another target and back starts a new run. The root defaults to `role="timer"` and the accessible name "Time remaining". Countdown leaves `aria-live` unset. Visually hidden text exposes the remaining time in words using `locale`, which defaults to `en-US`. `animated` renders each value as a RollingNumber that rolls down, so every Countdown build includes RollingNumber's code. `useCountdown` returns the same parts as numbers for a custom layout. Copying the compact form gives its text once; copying the labelled form gives each label and value once, on separate lines (tested in Chromium).
+- 6b938a5: Reel: plain arrows and an adjustable fade
+  
+  - `arrowVariant="plain"` draws each arrow as a bare chevron in the muted text colour, with no fill, border or shadow, for a row with its own track, such as tabs. A bare chevron cannot cover what is under it, so while a plain arrow shows, Reel hides the first five spacing units (1.25rem with the default spacing scale) of the row on that side, and the fade starts after that. This also holds in browsers without scroll-driven animations. `arrowVariant="default"` (the default) is the round outlined arrow. `arrows` still decides when either style can show.
+  - Set `--ks-reel-fade-size` (a length with a unit) on the Reel or an ancestor to choose the depth of the soft fade. Unset, it is 3rem where an arrow can show (2rem for plain arrows) and 1.5rem elsewhere.
+  - Reel clears a keyboard-focused or current item by the greater of 48px, the arrow's width, and any hidden strip plus the fade depth, wherever the available scroll range allows.
+  - The scroller is its own stacking context in every browser, so an arrow stays above row items that set a `z-index`.
+  - Reel also treats `aria-selected="true"` as current. A row that already contains an element with `aria-selected="true"` (a tab, a listbox option) is now scrolled to it when the Reel gains room or the selection changes; when several items are marked, the first in DOM order is used, so an earlier selected element takes precedence over a later `aria-current` or `data-selected` item.
+- fe1420f: Add RollingNumber, a formatted number whose changed digits roll
+  
+  `@keystoneui/react/rolling-number` prints `value` exactly as `Intl.NumberFormat(locale, format)` does and, when `value` changes, rolls only the digits that changed, one row each, up when the value rose and down when it fell (`trend` fixes the direction). The roll is a CSS transition timed by `--duration-slow` and is skipped under `prefers-reduced-motion` and with `animated={false}`. In animated mode, assistive technology receives one visually hidden formatted value and the moving digits are hidden. With `animated={false}`, the visible text is the accessible value. Copying the number gives the same text as copying the plain formatted number, once (tested in Chromium). The default locale is `en-US`; for consistent server and client text, use the same value and formatting options, a locale supported by both runtimes, and compatible Intl locale data. A number that gains or loses a digit changes width at once, and in mixed-direction text, the placement of digit groups, signs, currency and percent symbols can differ from plain text.
+  
+  RollingNumber passes `locale` and `format` untouched to `new Intl.NumberFormat(locale, format)` each time React calls it, so the text and any error are Intl's. It compares the options Intl resolved (`resolvedOptions()`) with those of the render before. When they are the same, changed digits roll, even if you pass a new object every render. When they differ, the number snaps to the new text.
+  
+  `format` and `locale` must be plain data. When the number or its resolved formatting changes, React calls the component again and Intl reads the inputs again. StrictMode adds another call during development. A digit that rolls adds one more call two frames later. An options object or locale whose getters return a different value, or throw, on a later read is not supported. An object edited in place is read again the next time the component renders.
+
 ## 1.0.0-beta.13
 
 ### Minor Changes
