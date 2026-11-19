@@ -71,6 +71,7 @@ export const DEFAULT_CHECKS = [
   { path: "/e2e/reel-arrows", status: 404 },
   { path: "/e2e/reel-plain", status: 404 },
   { path: "/e2e/rolling-number", status: 404 },
+  { path: "/e2e/countdown", status: 404 },
   { path: "/e2e/tabs-scrollable", status: 404 },
 ];
 

@@ -92,7 +92,8 @@
     "./file-upload": "./src/file-upload.tsx",
     "./filter-chips": "./src/filter-chips.tsx",
     "./reel": "./src/reel.tsx",
-    "./rolling-number": "./src/rolling-number.tsx"
+    "./rolling-number": "./src/rolling-number.tsx",
+    "./countdown": "./src/countdown.tsx"
   },
   "scripts": {
     "build": "tsup",
@@ -387,6 +388,10 @@
       "./rolling-number": {
         "types": "./dist/rolling-number.d.ts",
         "default": "./dist/rolling-number.js"
+      },
+      "./countdown": {
+        "types": "./dist/countdown.d.ts",
+        "default": "./dist/countdown.js"
       }
     }
   },

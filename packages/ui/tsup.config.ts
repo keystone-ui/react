@@ -66,6 +66,7 @@ export default defineConfig((options) => ({
     "src/filter-chips.tsx",
     "src/reel.tsx",
     "src/rolling-number.tsx",
+    "src/countdown.tsx",
   ],
   format: ["esm"],
   // tsup's dts step needs the TypeScript JS API, which TS 7 doesn't ship, so

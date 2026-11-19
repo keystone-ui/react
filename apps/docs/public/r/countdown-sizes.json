@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "countdown-sizes",
+  "title": "Countdown Sizes",
+  "description": "Countdown example: Sizes.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/countdown.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/countdown/sizes.tsx",
+      "content": "\"use client\";\n\nimport { Countdown } from \"@keystoneui/react/countdown\";\nimport { useEffect, useState } from \"react\";\n\nexport default function CountdownSizes() {\n  const [endsAt, setEndsAt] = useState<number | null>(null);\n  useEffect(() => {\n    setEndsAt(Date.now() + (1 * 3600 + 36 * 60 + 53) * 1000);\n  }, []);\n  return (\n    <div className=\"flex flex-col items-center gap-6\">\n      <Countdown size=\"sm\" target={endsAt} variant=\"labelled\" />\n      <Countdown target={endsAt} variant=\"labelled\" />\n      <Countdown size=\"lg\" target={endsAt} variant=\"labelled\" />\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

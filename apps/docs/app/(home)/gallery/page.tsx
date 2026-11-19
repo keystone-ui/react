@@ -288,6 +288,11 @@ const categories = [
         slug: "rolling-number",
         description: "Formatted number whose changed digits roll",
       },
+      {
+        name: "Countdown",
+        slug: "countdown",
+        description: "Time left until a deadline, compact or labelled",
+      },
     ],
   },
   {

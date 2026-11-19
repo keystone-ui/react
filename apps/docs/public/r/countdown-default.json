@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "countdown-default",
+  "title": "Countdown Default",
+  "description": "Countdown example: Default.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/countdown.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/countdown/default.tsx",
+      "content": "\"use client\";\n\nimport { Countdown } from \"@keystoneui/react/countdown\";\nimport { useEffect, useState } from \"react\";\n\nexport default function CountdownDefault() {\n  const [endsAt, setEndsAt] = useState<number | null>(null);\n  useEffect(() => {\n    // Set after mount: the server and the hydrating client show the placeholder.\n    setEndsAt(Date.now() + (1 * 3600 + 36 * 60 + 53) * 1000);\n  }, []);\n  return (\n    <p className=\"text-muted-foreground text-sm\">\n      Offer ends in{\" \"}\n      <Countdown\n        className=\"font-medium text-foreground\"\n        size=\"sm\"\n        target={endsAt}\n      />\n    </p>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

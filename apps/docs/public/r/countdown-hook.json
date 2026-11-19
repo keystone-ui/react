@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "countdown-hook",
+  "title": "Countdown Hook",
+  "description": "Countdown example: Hook.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/countdown.json",
+    "https://keystoneui.io/r/progress.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/countdown/hook.tsx",
+      "content": "\"use client\";\n\nimport { useCountdown } from \"@keystoneui/react/countdown\";\nimport { Progress } from \"@keystoneui/react/progress\";\nimport { useEffect, useState } from \"react\";\n\nconst HOLD_SECONDS = 5 * 60;\n\nexport default function CountdownHook() {\n  const [heldUntil, setHeldUntil] = useState<number | null>(null);\n  useEffect(() => {\n    setHeldUntil(Date.now() + HOLD_SECONDS * 1000);\n  }, []);\n  const { isComplete, isPending, minutes, seconds, totalSeconds } =\n    useCountdown({ target: heldUntil, units: [\"minutes\", \"seconds\"] });\n  let message = \"Holding your seats…\";\n  if (isComplete) {\n    message = \"Your hold has expired.\";\n  } else if (!isPending) {\n    message = `Seats held for ${minutes} min ${seconds} s`;\n  }\n  return (\n    <div className=\"flex w-full max-w-xs flex-col gap-2\">\n      <p className=\"text-sm\">{message}</p>\n      <Progress value={((totalSeconds ?? HOLD_SECONDS) / HOLD_SECONDS) * 100} />\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

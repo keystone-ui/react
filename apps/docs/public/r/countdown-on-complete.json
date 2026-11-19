@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "countdown-on-complete",
+  "title": "Countdown On Complete",
+  "description": "Countdown example: On Complete.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/badge.json",
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/countdown.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/countdown/on-complete.tsx",
+      "content": "\"use client\";\n\nimport { Badge } from \"@keystoneui/react/badge\";\nimport { Button } from \"@keystoneui/react/button\";\nimport { Countdown } from \"@keystoneui/react/countdown\";\nimport { useState } from \"react\";\n\nexport default function CountdownOnComplete() {\n  const [target, setTarget] = useState<number | null>(null);\n  const [done, setDone] = useState(false);\n  return (\n    <div className=\"flex items-center gap-4\">\n      <Countdown\n        onComplete={() => setDone(true)}\n        target={target}\n        units={[\"minutes\", \"seconds\"]}\n      />\n      {done ? (\n        <Badge>Doors open</Badge>\n      ) : (\n        <Button\n          onClick={() => {\n            // \"Five seconds from this click\" is computed in the handler.\n            setTarget(Date.now() + 5000);\n          }}\n          size=\"sm\"\n          variant=\"outline\"\n        >\n          Start\n        </Button>\n      )}\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

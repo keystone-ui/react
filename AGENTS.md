@@ -106,6 +106,7 @@ For full conventions, see `.cursor/rules/component-architecture.mdc`.
 - **`data-slot` attributes**: Every exported component part gets a `data-slot` for stable targeting
 - **Named exports**: Compound component parts exported individually at the bottom of the file
 - **Internal imports**: Relative sibling imports only (`./utils`, `./button`) — no barrel imports
+- **Phrasing roots for inline values**: a component that can sit inside a sentence (a number, a countdown, a badge-like value) renders a `<span>` root with phrasing content only, because a block root inside a `<p>` breaks server rendering
 
 ## Styling Conventions (Summary)
 
@@ -126,6 +127,7 @@ For full conventions, see `.cursor/rules/design-tokens.mdc`.
 - **CSS utilities are `ks-`-namespaced**: `ks-typeset`, `ks-scroll-fade(-x)`, `ks-shimmer`, `ks-scrollbar`. shadcn's `shadcn/tailwind.css` (in every `shadcn init` project) defines `scroll-fade` and `shimmer`, and Tailwind applies both rules when two `@utility` blocks share a name. `base-css.test.ts` reads the installed shadcn stylesheet and fails on any overlapping `@utility`, `@keyframes`, `@property` or `@custom-variant`.
 - **A row of controls that can overflow goes in `Reel`**: a single row wider than its container (category links, a FilterChips row) goes in `Reel`, never `Carousel`, which is for content cards that snap. Reel takes exactly one child and adds no roles. To align the arrows' sides and paging (computed direction) with the `ks-scroll-fade-x` fade and chevrons (the nearest explicit `dir="ltr"` or `dir="rtl"` on the Reel or an ancestor), put the explicit direction on an ancestor of the whole Reel and let the scroller and arrows inherit it. When the Reel gains room or a different item becomes current, Reel reveals the current item (`aria-current`, `aria-selected="true"` or FilterChips' `data-selected`) if the Reel's last measured content width and the item's bounding-box width are both positive, without moving focus or scrolling the page. Giving the item width later does not trigger a reveal. Reel's `arrowVariant="plain"` is a bare chevron with the row hidden beneath it; scrollable Tabs uses it. Set the fade's depth with `--ks-reel-fade-size` on the Reel or an ancestor, never `--ks-scroll-fade-size`, which Reel owns on its viewport. Don't wrap a `scrollable` TabsList in a Reel. To change when the arrows show or how they look, drop `scrollable` and wrap the `TabsList` in your own Reel.
 - A number that changes while the user watches (a balance, a live KPI) is a `RollingNumber`, inside `StatValue` in a stat tile; never animate digits by hand.
+- The time left until a deadline (an offer, a session expiry) is a `Countdown`, or `useCountdown` for a custom layout; never tick a timer by hand.
 
 ## Icon Library
 

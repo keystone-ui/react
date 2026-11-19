@@ -256,7 +256,7 @@ Full guidance, including which tokens the shadcn sidebar reads:
 | Choice (one of many) | `Select`, `Combobox` (searchable), `RadioGroup`, `NativeSelect` |
 | Choice (toggle) | `ToggleGroup` (2–5 options), `Switch` (boolean), `Checkbox` |
 | Filter a list in place | `FilterChips` for one non-clearable value with result counts; `ToggleGroup` or `TagGroup` (`multiple`) when the choice can be cleared or several are picked at once |
-| Date / time | `DateInput`, `Calendar` |
+| Date / time | `DateInput`, `Calendar`; `Countdown` for the time left until a deadline, such as an offer or a bet closing (compact `01:36:53` or `variant="labelled"`; set `target` in an effect or an event handler, never during render; a deadline that matters must be enforced on the server); `useCountdown` returns the same parts as numbers, for a layout of your own |
 | Files | `FileUpload` (picker, drop, opt-in paste; the app uploads and sets each row's status) |
 | Overlays | `Modal`, `Drawer`, `AlertDialog`, `Popover`, `Tooltip` |
 | Menus | `DropdownMenu`, `Command` (palette) |
@@ -295,9 +295,9 @@ Install a block: `npx shadcn@latest add https://keystoneui.io/r/<name>.json`. Or
 
 ## Component List
 
-62 components, all importable from `@keystoneui/react/{kebab-case-name}`:
+63 components, all importable from `@keystoneui/react/{kebab-case-name}`:
 
-`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `button-group`, `calendar`, `card`, `carousel`, `checkbox`, `circular-progress`, `code-block`, `collapsible`, `combobox`, `command`, `copy-button`, `date-input`, `description-list`, `drawer`, `dropdown-menu`, `empty`, `field`, `file-upload`, `filter-chips`, `form`, `input`, `input-group`, `input-otp`, `item`, `kbd`, `label`, `modal`, `native-select`, `pagination`, `popover`, `progress`, `radio-group`, `reel`, `resizable`, `rolling-number`, `select`, `selection-bar`, `separator`, `skeleton`, `slider`, `spinner`, `stat`, `stepper`, `switch`, `table`, `table-pagination`, `tabs`, `tag`, `tag-group`, `textarea`, `toast`, `toggle`, `toggle-group`, `tooltip`.
+`accordion`, `alert`, `alert-dialog`, `aspect-ratio`, `avatar`, `badge`, `breadcrumb`, `button`, `button-group`, `calendar`, `card`, `carousel`, `checkbox`, `circular-progress`, `code-block`, `collapsible`, `combobox`, `command`, `copy-button`, `countdown`, `date-input`, `description-list`, `drawer`, `dropdown-menu`, `empty`, `field`, `file-upload`, `filter-chips`, `form`, `input`, `input-group`, `input-otp`, `item`, `kbd`, `label`, `modal`, `native-select`, `pagination`, `popover`, `progress`, `radio-group`, `reel`, `resizable`, `rolling-number`, `select`, `selection-bar`, `separator`, `skeleton`, `slider`, `spinner`, `stat`, `stepper`, `switch`, `table`, `table-pagination`, `tabs`, `tag`, `tag-group`, `textarea`, `toast`, `toggle`, `toggle-group`, `tooltip`.
 
 ## Workflow
 

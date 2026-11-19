@@ -823,6 +823,36 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("copy-button-variants", m.default),
     }))
   ),
+  "countdown-default": dynamic(() =>
+    import("./countdown/default").then((m) => ({
+      default: hydrated("countdown-default", m.default),
+    }))
+  ),
+  "countdown-hook": dynamic(() =>
+    import("./countdown/hook").then((m) => ({
+      default: hydrated("countdown-hook", m.default),
+    }))
+  ),
+  "countdown-labelled": dynamic(() =>
+    import("./countdown/labelled").then((m) => ({
+      default: hydrated("countdown-labelled", m.default),
+    }))
+  ),
+  "countdown-on-complete": dynamic(() =>
+    import("./countdown/on-complete").then((m) => ({
+      default: hydrated("countdown-on-complete", m.default),
+    }))
+  ),
+  "countdown-sizes": dynamic(() =>
+    import("./countdown/sizes").then((m) => ({
+      default: hydrated("countdown-sizes", m.default),
+    }))
+  ),
+  "countdown-with-days": dynamic(() =>
+    import("./countdown/with-days").then((m) => ({
+      default: hydrated("countdown-with-days", m.default),
+    }))
+  ),
   "date-input-controlled": dynamic(() =>
     import("./date-input/controlled").then((m) => ({
       default: hydrated("date-input-controlled", m.default),
