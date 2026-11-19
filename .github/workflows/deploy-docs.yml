@@ -22,6 +22,12 @@ defaults:
     # reported tee's exit code, and a rejected deploy left the step green.
     shell: bash
 
+env:
+  # Next.js telemetry off for every Next command in this workflow (the
+  # OpenNext build runs `next build`). Workflow-level so a job added later
+  # is covered too.
+  NEXT_TELEMETRY_DISABLED: "1"
+
 jobs:
   deploy:
     name: Deploy Docs
