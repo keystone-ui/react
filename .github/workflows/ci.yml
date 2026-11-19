@@ -27,6 +27,9 @@ env:
   # Turborepo passes this variable through in strict mode and excludes its
   # value from the docs build task hash.
   NEXT_TELEMETRY_DISABLED: "1"
+  # Turborepo telemetry off for every turbo command in this workflow
+  # (the root `pnpm build` and `pnpm test` scripts run `turbo run`).
+  TURBO_TELEMETRY_DISABLED: "1"
 
 jobs:
   lint:
