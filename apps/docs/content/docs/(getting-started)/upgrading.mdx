@@ -91,6 +91,30 @@ classes in tests, match `bg-success/10` (and so on) instead. Add the `--info`
 token to your theme from [Customization](/docs/theming/customization) —
 without it, info falls back to the light-mode blue in dark mode.
 
+{/* changeset: tabs-scrollable-reel */}
+
+### Scrollable `TabsList` is built on Reel
+
+`<TabsList scrollable>` keeps its look and now scrolls in a
+[Reel](/docs/components/reel). If you style or test the scrollable list:
+
+- `data-slot="tabs-list-wrapper"`, `"tabs-list-scroll"` and
+  `"tabs-scroll-button"` are removed. Use `reel`, `reel-viewport` and
+  `reel-arrow`. `reel-arrow` is the chevron's picture, a `span`; the element
+  that takes the press is its parent, `[data-slot="reel"] > span[data-side]`.
+- The arrows are no longer buttons: they are not Tab stops, have no accessible
+  names, are always in the DOM (hidden with `visibility` when there is nothing to
+  scroll that way) and come after the scroller. `getByRole("button", { name: "Scroll tabs right" })` no longer
+  finds anything.
+- `[data-scrollable]` moves from the scroller to `[data-slot="tabs-list"]`.
+- `--tabs-fade-left`, `--tabs-fade-right` and the `tabs-scroll-fade` keyframes
+  are removed. Set one depth for both edges with `--ks-reel-fade-size`.
+
+For a registry installation, update `@keystoneui/react` or re-copy your
+vendored `base.css` when updating `tabs` and `reel`. The stylesheet draws the
+clear strip. An older copy can leave the track or tab content visible beneath a
+chevron.
+
 ### Popups and overlays
 
 - `PopoverContent` has no `max-height`; cap long content with `className`.

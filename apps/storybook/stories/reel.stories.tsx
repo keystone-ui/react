@@ -203,6 +203,50 @@ export const Rtl: Story = {
   ),
 };
 
+/** A row on its own muted track, as tabs are: the plain arrows' use case. */
+function TrackRow({
+  arrows = "always",
+  testId,
+}: {
+  arrows?: ReelProps["arrows"];
+  testId?: string;
+}) {
+  return (
+    <nav aria-label="Sections" data-testid={testId}>
+      <Reel arrowVariant="plain" arrows={arrows}>
+        <ul className="flex w-max gap-1 rounded-lg bg-muted p-1">
+          {CATEGORIES.map((item, index) => (
+            <li key={item.href}>
+              <a
+                aria-current={index === 0 ? "page" : undefined}
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "sm" }),
+                  index === 0
+                    ? "bg-background text-foreground shadow-sm hover:bg-background"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+                href={item.href}
+                onClick={(event) => event.preventDefault()}
+              >
+                <item.icon aria-hidden="true" />
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </Reel>
+    </nav>
+  );
+}
+
+export const PlainArrows: Story = {
+  render: () => (
+    <div className="w-full max-w-md">
+      <TrackRow />
+    </div>
+  ),
+};
+
 // ---------------------------------------------------------------------------
 // Real-browser fixtures: one story per behaviour of the design
 // ---------------------------------------------------------------------------
@@ -1037,7 +1081,7 @@ export const OpaqueArrows: Story = {
 };
 
 // ---------------------------------------------------------------------------
-// Fix round 1: rows that arrive late, change, or measure differently
+// Rows that arrive late, change, or measure differently
 // ---------------------------------------------------------------------------
 
 /** The clearance the Reel promises: its fade depth, and at least 48px. */
@@ -1133,7 +1177,7 @@ async function expectPageHeld(held: { outside: HTMLElement; pageY: number }) {
 const currentLink = (host: HTMLElement) =>
   host.querySelector('[aria-current="page"]') as HTMLElement;
 
-// Item 2a. Mounted inside `display: none`, revealed once it is shown.
+// Mounted inside `display: none`, revealed once it is shown.
 export const RevealWhenShown: Story = {
   tags: TEST_ONLY,
   render: () => (
@@ -1177,7 +1221,7 @@ function InsertedFixture() {
   );
 }
 
-// Item 2b. The row is filled after mount, its current link already marked.
+// The row is filled after mount, its current link already marked.
 export const RevealInserted: Story = {
   tags: TEST_ONLY,
   render: () => <InsertedFixture />,
@@ -1213,7 +1257,7 @@ function ReplacedFixture() {
   );
 }
 
-// Item 2c. The row element is replaced by one holding the current link.
+// The row element is replaced by one holding the current link.
 export const RevealReplacedRow: Story = {
   tags: TEST_ONLY,
   render: () => <ReplacedFixture />,
@@ -1270,7 +1314,7 @@ function EmptyMarkerFixture() {
   );
 }
 
-// Item 2d. Earlier links marked aria-current="" and "false" do not win.
+// Earlier links marked aria-current="" and "false" do not win.
 export const RevealIgnoresEmptyMarkers: Story = {
   tags: TEST_ONLY,
   render: () => <EmptyMarkerFixture />,
@@ -1312,7 +1356,7 @@ function UnrelatedUpdateFixture() {
   );
 }
 
-// Item 2. An update that does not change the current link leaves the
+// An update that does not change the current link leaves the
 // user's scroll position alone.
 export const NoDragBack: Story = {
   tags: TEST_ONLY,
@@ -1355,7 +1399,7 @@ function SwapThenGrowFixture() {
   );
 }
 
-// Item 3. The size observer follows a replaced row: appending and removing
+// The size observer follows a replaced row: appending and removing
 // links on the new row shows and hides the end arrow, with no scroll.
 export const ObservesReplacedRow: Story = {
   tags: TEST_ONLY,
@@ -1422,7 +1466,7 @@ async function atRootFontSize(px: number, body: () => Promise<void>) {
   }
 }
 
-// Item 4. At a 24px root the fade is 72px deep; the current link and every
+// At a 24px root the fade is 72px deep; the current link and every
 // tabbed-to link clear it.
 export const ClearanceAt24px: Story = {
   tags: TEST_ONLY,
@@ -1462,7 +1506,7 @@ export const ClearanceAt24px: Story = {
   },
 };
 
-// Item 4. At a small root the 4px outline allowance is still four pixels on
+// At a small root the 4px outline allowance is still four pixels on
 // all four sides.
 export const OutlineAllowanceSmallRoot: Story = {
   tags: TEST_ONLY,
@@ -1515,7 +1559,7 @@ function WideItemFixture() {
   );
 }
 
-// Item 4. An item wider than the clear band is aligned by its start edge.
+// An item wider than the clear band is aligned by its start edge.
 export const WideItemAlignsStart: Story = {
   tags: TEST_ONLY,
   render: () => <WideItemFixture />,
@@ -1541,7 +1585,7 @@ export const WideItemAlignsStart: Story = {
   },
 };
 
-// Item 5. A visible arrow cannot take focus by script either, and a click at
+// A visible arrow cannot take focus by script either, and a click at
 // its painted position still pages and keeps focus where it was.
 export const ArrowsRefuseScriptedFocus: Story = {
   tags: TEST_ONLY,
@@ -1620,7 +1664,7 @@ function OverscrollFixture() {
   );
 }
 
-// Item 6. An offset outside the scroll range (an elastic bounce) is clamped:
+// An offset outside the scroll range (an elastic bounce) is clamped:
 // it never advertises an edge that is not there.
 export const OverscrollEdges: Story = {
   tags: TEST_ONLY,
@@ -1665,8 +1709,8 @@ export const OverscrollEdges: Story = {
 };
 
 // ---------------------------------------------------------------------------
-// Fix round 2: the reveal reselected (rows N2 and N3 of the specification),
-// the row's size subscriptions, and the arrow's touch press
+// The current item marked again after an empty marker, the row's size
+// subscriptions, and the arrow's touch press
 // ---------------------------------------------------------------------------
 
 function ReselectFixture() {
@@ -1696,10 +1740,10 @@ function ReselectFixture() {
   );
 }
 
-// N3 then N2. A → no selection → the same node A, each step its own
+// A → no selection → the same node A, each step its own
 // observer delivery: A is revealed again. Then the row holding A is removed
-// (a delivery with no match, N3) and the same row put back (a new match,
-// N2): A is revealed again.
+// (a delivery with no match) and the same row put back (a new match): A is
+// revealed again.
 // `NoDragBack` stays the control for an unrelated update.
 export const RevealReselectedAfterEmpty: Story = {
   name: "N2 N3 Reveal reselected after empty",
@@ -1753,7 +1797,7 @@ function mark(host: HTMLElement, href: string) {
 }
 
 // ---------------------------------------------------------------------------
-// The narrow reveal: one story per row N1–N8 of the specification
+// When the current item is revealed: one story per rule
 // ---------------------------------------------------------------------------
 
 /** Vitest's real browser commands; a reveal story fails without them. */
@@ -1951,7 +1995,7 @@ async function mountRecorded(canvasElement: HTMLElement, testId: string) {
   return { commands, held, recorder };
 }
 
-// N1. With no room the Reel waits; when it comes to have room (at mount, or
+// With no room the Reel waits; when it comes to have room (at mount, or
 // shown, or widened from nothing) it evaluates the current match once and
 // jumps. A hidden Reel whose marker moved reveals the new item when shown,
 // once; so does a Reel squeezed to its own padding when it is widened.
@@ -2064,7 +2108,7 @@ export const RevealOnRoom: Story = {
   },
 };
 
-// N1's setup rejects without the real browser commands, and the query
+// The room story's setup rejects without the real browser commands, and the query
 // counter it installed first is restored.
 export const RevealOnRoomRestoresCounter: Story = {
   name: "N1 Reveal on room restores counter",
@@ -2144,7 +2188,7 @@ function MixedMarkersFixture() {
   );
 }
 
-// N2. One delivery fills the row: the first item in document order that is
+// One delivery fills the row: the first item in document order that is
 // current wins, so `data-selected="false"` and `aria-current="FALSE"` lose to
 // the distant selected chip, and the later current link loses to it too.
 export const RevealFirstMatch: Story = {
@@ -2186,7 +2230,7 @@ export const RevealFirstMatch: Story = {
   },
 };
 
-// N3. A, then no match, then the same A, each in its own delivery: a new
+// A, then no match, then the same A, each in its own delivery: a new
 // selection, revealed again (smoothly: the first reveal was spent at mount).
 export const RevealSameAfterNone: Story = {
   name: "N3 Reveal same after none",
@@ -2225,7 +2269,7 @@ export const RevealSameAfterNone: Story = {
   },
 };
 
-// N4. A current item already clear at mount spends the first reveal with no
+// A current item already clear at mount spends the first reveal with no
 // request; the next selection follows the motion preference.
 export const FirstRevealSpentWhenClear: Story = {
   name: "N4 First reveal spent when clear",
@@ -2276,7 +2320,7 @@ export const FirstRevealSpentWhenClear: Story = {
   },
 };
 
-// N5. A match that cannot be measured is remembered and never evaluated
+// A match that cannot be measured is remembered and never evaluated
 // again by a later delivery: shown, moved into a new row, or the Reel
 // resized. The next different match is revealed, and it is the first reveal.
 export const SameMatchNotRetried: Story = {
@@ -2345,7 +2389,7 @@ export const SameMatchNotRetried: Story = {
   },
 };
 
-// N6. No busy state: a selection made while the row is still moving (Reel's
+// No busy state: a selection made while the row is still moving (Reel's
 // own glide, or an arrow's page) replaces that scroll and ends clear.
 export const SelectionWhileMoving: Story = {
   name: "N6 Selection while moving",
@@ -2421,7 +2465,7 @@ export const SelectionWhileMoving: Story = {
   },
 };
 
-// N7. A selection already clear leaves the scroll alone: no request at all.
+// A selection already clear leaves the scroll alone: no request at all.
 export const ClearSelectionNoRequest: Story = {
   name: "N7 Clear selection no request",
   tags: TEST_ONLY,
@@ -2454,7 +2498,7 @@ export const ClearSelectionNoRequest: Story = {
   },
 };
 
-// N8. Under StrictMode's replay the viewport ends up watched by exactly one
+// Under StrictMode's replay the viewport ends up watched by exactly one
 // mutation observer and one size observer of the reveal, beside the edges'
 // own; unmounted while hidden, by none.
 export const ObserversReleased: Story = {
@@ -2671,6 +2715,147 @@ export const ArrowTouchPress: Story = {
   },
 };
 
+// T-PAD. The clearance is a constant of the variant and the gate: the
+// greater of 48px, the arrow's width, and any hidden strip plus the fade. It
+// never reads the arrows' state, so a row that does not overflow (no arrow
+// shown, no strip drawn) already has it, and the first reveal at mount clears
+// the whole zone.
+export const PlainScrollPadding: Story = {
+  tags: TEST_ONLY,
+  render: () => (
+    <div className="flex flex-col gap-4">
+      {/* Wide enough that nothing overflows: no arrow, no strip. */}
+      <div className="w-[1400px]">
+        <TrackRow testId="plain-fits" />
+      </div>
+      <div className="w-[320px]">
+        <TrackRow testId="plain" />
+      </div>
+      <div className="w-[320px]" data-testid="default">
+        <Reel arrows="always">
+          <ul className="flex w-max gap-1">
+            <li>
+              <a href="#one">One</a>
+            </li>
+          </ul>
+        </Reel>
+      </div>
+      <div
+        className="w-[320px] [--ks-control-sm:4rem]"
+        data-testid="default-4rem"
+      >
+        <Reel arrows="always">
+          <ul className="flex w-max gap-1">
+            <li>
+              <a href="#one">One</a>
+            </li>
+          </ul>
+        </Reel>
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const padding = (testId: string) => {
+      const style = getComputedStyle(parts(canvasElement, testId).viewport);
+      return [style.scrollPaddingInlineStart, style.scrollPaddingInlineEnd];
+    };
+    // Before any scroll, and with no arrow shown.
+    const fits = parts(canvasElement, "plain-fits");
+    await expect(maxScroll(fits.viewport)).toBe(0);
+    await expect(shown(hitArea(fits.arrow("end")))).toBe(false);
+    await expect(padding("plain-fits")).toEqual(["52px", "52px"]);
+    const plain = parts(canvasElement, "plain");
+    await expect(plain.viewport.scrollLeft).toBe(0);
+    await expect(padding("plain")).toEqual(["52px", "52px"]);
+    await expect(padding("default")).toEqual(["48px", "48px"]);
+    await expect(padding("default-4rem")).toEqual(["64px", "64px"]);
+  },
+};
+
+// A row whose items mark the selected one with `aria-selected`, as tabs do:
+// Reel reveals it at mount (instantly) and when the selection moves (a
+// glide); an item with aria-selected="false" is not current.
+function AriaSelectedFixture() {
+  const [mounted, setMounted] = useState(false);
+  const [selected, setSelected] = useState("art");
+  return (
+    <ScrolledPage>
+      <button
+        data-testid="mount"
+        onClick={() => setMounted(true)}
+        type="button"
+      >
+        Mount
+      </button>
+      <button
+        data-testid="select-news"
+        onClick={() => setSelected("news")}
+        type="button"
+      >
+        News
+      </button>
+      {mounted ? (
+        <div className="w-[320px]" data-testid="bar">
+          <Reel>
+            <div className="flex w-max gap-1" role="tablist">
+              {CATEGORIES.map((item) => (
+                <button
+                  aria-selected={item.value === selected}
+                  role="tab"
+                  className={buttonVariants({ variant: "ghost" })}
+                  data-value={item.value}
+                  key={item.value}
+                  type="button"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </Reel>
+        </div>
+      ) : null}
+    </ScrolledPage>
+  );
+}
+
+export const RevealAriaSelected: Story = {
+  tags: TEST_ONLY,
+  render: () => <AriaSelectedFixture />,
+  play: async ({ canvasElement }) => {
+    // Real input is required: without it the play fails before mounting.
+    const commands = requireCommands();
+    await commands.emulateReducedMotion(false);
+    const held = holdPage(canvasElement);
+    const recorder = recordScrollRequests();
+    try {
+      within(canvasElement).getByTestId("mount").click();
+      await eventually(() =>
+        expect(within(canvasElement).queryByTestId("bar")).not.toBeNull()
+      );
+      const bar = parts(canvasElement, "bar");
+      const item = (value: string) =>
+        bar.host.querySelector(`[data-value="${value}"]`) as HTMLElement;
+      // The first item carries aria-selected="false": not current.
+      await expect(item("all")).toHaveAttribute("aria-selected", "false");
+      await eventually(() =>
+        expect(isClear(bar.viewport, item("art"))).toBe(true)
+      );
+      await expect(recorder.of(bar.viewport)).toEqual(["instant"]);
+      within(canvasElement).getByTestId("select-news").click();
+      await eventually(() =>
+        expect(
+          isClear(bar.viewport, item("news")) ||
+            bar.viewport.scrollLeft >= maxScroll(bar.viewport) - 0.5
+        ).toBe(true)
+      );
+      await expect(recorder.of(bar.viewport)).toEqual(["instant", "smooth"]);
+      await expectPageHeld(held);
+    } finally {
+      recorder.restore();
+    }
+  },
+};
+
 // ---------------------------------------------------------------------------
 // Type contract (checked by tsc, never rendered)
 // ---------------------------------------------------------------------------
@@ -2705,6 +2890,13 @@ export const typeContract = [
   </Reel>,
   // @ts-expect-error arrows is one of "pointer", "always", "none"
   <Reel arrows="hover" key="hover">
+    <ul />
+  </Reel>,
+  <Reel arrowVariant="plain" key="plain">
+    <ul />
+  </Reel>,
+  // @ts-expect-error arrowVariant is "default" or "plain"
+  <Reel arrowVariant="button" key="button">
     <ul />
   </Reel>,
 ];

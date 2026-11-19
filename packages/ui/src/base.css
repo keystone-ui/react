@@ -125,54 +125,6 @@
   }
 }
 
-/* Scrollable TabsList: gradient fade via scroll-driven animations.
-   Pure CSS — no JavaScript needed for the fade effect.
-   Gracefully degrades on unsupported browsers (no fade, still scrollable). */
-
-@property --tabs-fade-left {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0;
-}
-
-@property --tabs-fade-right {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0;
-}
-
-@keyframes tabs-scroll-fade {
-  0% {
-    --tabs-fade-left: 0;
-  }
-  10%,
-  100% {
-    --tabs-fade-left: 2rem;
-  }
-  /* biome-ignore lint/suspicious/noDuplicateSelectorsKeyframeBlock: 0% is intentionally reused for left/right fade initialization */
-  0%,
-  90% {
-    --tabs-fade-right: 2rem;
-  }
-  100% {
-    --tabs-fade-right: 0;
-  }
-}
-
-@supports (animation-timeline: scroll()) {
-  [data-slot="tabs-list-scroll"][data-scrollable] {
-    mask: linear-gradient(
-      to right,
-      transparent,
-      black var(--tabs-fade-left),
-      black calc(100% - var(--tabs-fade-right)),
-      transparent
-    );
-    animation: tabs-scroll-fade linear;
-    animation-timeline: scroll(self inline);
-  }
-}
-
 /* Morphing tabs: hide the leaving (inert) panel during Base UI's exit
    transition. Base UI keeps the previous panel mounted for one frame after
    the new one mounts so consumers can drive an exit transition. The
@@ -870,6 +822,141 @@
     );
     animation: ks-scroll-fade-edges linear both;
     animation-timeline: scroll(self inline);
+  }
+}
+
+/* ==========================================================================
+ * Reel's plain arrows: a bare chevron cannot cover the row beneath it, so the
+ * row is hidden under it. While a plain arrow shows, Reel sets the hidden
+ * strip on that physical side (--spacing(5)); the row is fully hidden there,
+ * then ramps in over at least min(1.6 × strip, fade depth), so it never ends
+ * in a hard cut beside the chevron. Where scroll-driven animations run, the
+ * ramp beyond the strip grows to the whole fade depth with that side's scroll
+ * progress, so a deep fade is measured from the end of the strip. The strips
+ * are multiplied with the ks-scroll-fade-x gradient (a verbatim copy of the
+ * utility's, which itself stays unchanged). Without scroll-driven animations
+ * only the strips draw, with their minimum ramp.
+ *
+ * --_ks-reel-inset-left / --_ks-reel-inset-right, and
+ * --_ks-reel-progress-left / --_ks-reel-progress-right (that physical side's
+ * scroll progress, which Reel points at the fade's start or end by the
+ * computed direction): set by Reel; not a public hook. The insets are
+ * registered and not inherited, so a ks-scroll-fade-x row nested inside a
+ * Reel cannot pick a strip up; a progress is zero except beside a strip.
+ * ========================================================================== */
+@property --_ks-reel-inset-left {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --_ks-reel-inset-right {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@layer utilities {
+  [data-slot="reel"][data-arrow-variant="plain"] > [data-slot="reel-viewport"] {
+    mask-image:
+      linear-gradient(
+        to right,
+        transparent var(--_ks-reel-inset-left),
+        black
+          calc(
+            var(--_ks-reel-inset-left) +
+            min(
+              var(--_ks-reel-inset-left) *
+              1.6,
+              var(--ks-scroll-fade-size, 1.5rem)
+            )
+          )
+      ),
+      linear-gradient(
+        to left,
+        transparent var(--_ks-reel-inset-right),
+        black
+          calc(
+            var(--_ks-reel-inset-right) +
+            min(
+              var(--_ks-reel-inset-right) *
+              1.6,
+              var(--ks-scroll-fade-size, 1.5rem)
+            )
+          )
+      );
+    mask-composite: intersect;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    /* Each plain viewport starts its sides at zero progress, so a plain Reel
+       nested in another does not inherit the outer one's (the progress
+       lengths are not registered, so they inherit). Zero specificity: the
+       class Reel sets beside a strip wins. */
+    :where(
+        [data-slot="reel"][data-arrow-variant="plain"]
+          > [data-slot="reel-viewport"]
+      ) {
+      --_ks-reel-progress-left: 0;
+      --_ks-reel-progress-right: 0;
+    }
+
+    [data-slot="reel"][data-arrow-variant="plain"]
+      > [data-slot="reel-viewport"] {
+      mask-image:
+        linear-gradient(
+          to right,
+          transparent var(--_ks-reel-inset-left),
+          black
+            calc(
+              var(--_ks-reel-inset-left) +
+              max(
+                min(
+                  var(--_ks-reel-inset-left) *
+                  1.6,
+                  var(--ks-scroll-fade-size, 1.5rem)
+                ),
+                var(--ks-scroll-fade-size, 1.5rem) *
+                var(--_ks-reel-progress-left, 0)
+              )
+            )
+        ),
+        linear-gradient(
+          to left,
+          transparent var(--_ks-reel-inset-right),
+          black
+            calc(
+              var(--_ks-reel-inset-right) +
+              max(
+                min(
+                  var(--_ks-reel-inset-right) *
+                  1.6,
+                  var(--ks-scroll-fade-size, 1.5rem)
+                ),
+                var(--ks-scroll-fade-size, 1.5rem) *
+                var(--_ks-reel-progress-right, 0)
+              )
+            )
+        ),
+        linear-gradient(
+          /* biome-ignore lint/correctness/noInvalidDirectionInLinearGradient: the direction is a custom property, substituted before the gradient is parsed */
+          to var(--ks-scroll-fade-x-to, right),
+          transparent,
+          black
+            calc(
+              var(--ks-scroll-fade-start) *
+              var(--ks-scroll-fade-size, 1.5rem)
+            ),
+          black
+            calc(
+              100% -
+              var(--ks-scroll-fade-end) *
+              var(--ks-scroll-fade-size, 1.5rem)
+            ),
+          transparent
+        );
+      mask-composite: intersect;
+    }
   }
 }
 

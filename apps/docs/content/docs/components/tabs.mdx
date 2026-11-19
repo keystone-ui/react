@@ -117,7 +117,11 @@ Rounded pill-shaped tabs:
 
 ### Scrollable
 
-Horizontally scrollable tabs:
+`scrollable` puts the list in a [Reel](/docs/components/reel). It scrolls sideways when the tabs do not fit, on desktop and touch. Each edge fades where there is more to scroll, and a bare chevron at that edge scrolls the list by 80% of its visible width. The chevrons are not buttons: they are not Tab stops and are not announced, because Tab enters the list at its roving tab stop, and the arrow keys, Home and End reach every tab with as much edge clearance as the scroll range allows. The row is hidden for five spacing units (1.25rem with the default spacing scale) under each visible chevron, so it never draws over a tab. Reel brings the active tab into view when the list gains room or the selection changes, if the Reel's last measured content width and the tab's width are positive. Focus stays where it is. In `morphing` mode, Reel uses the trigger's width at the time of the reveal; if its label grows afterwards, part of it can remain under the fade.
+
+To choose when the arrows show or how they look, leave `scrollable` off and wrap the `TabsList` in your own Reel. Reel finds the active tab by its `aria-selected`. A tab earlier in the list that carries your own `aria-current` or `data-selected` would be brought into view instead of the active tab.
+
+Change the fade's depth with `--ks-reel-fade-size` on `Tabs`: `className="[--ks-reel-fade-size:1rem]"`.
 
 <ComponentPreview name="tabs-scrollable" />
 
@@ -137,7 +141,7 @@ Vertical tabs with line variant:
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/rtl) for what works today.
+RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/rtl) for what works today. A scrollable list's fade, arrows and paging mirror as described for Reel; put the explicit `dir` on an ancestor of the whole list, such as the `Tabs` root.
 
 
 {/* backlinks:start */}
@@ -158,9 +162,11 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `defaultValue` | `string` | - | Default active tab value |
-| `value` | `string` | - | Controlled active tab value |
-| `onValueChange` | `(value: string) => void` | - | Callback when active tab changes |
+| `defaultValue` | `BaseTabs.Tab.Value` | - | Default active tab value |
+| `value` | `BaseTabs.Tab.Value` | - | Controlled active tab value |
+| `onValueChange` | `(value: BaseTabs.Tab.Value, eventDetails: BaseTabs.Root.ChangeEventDetails) => void` | - | Callback when active tab changes |
+
+`BaseTabs` is Base UI's `Tabs` namespace (`import { Tabs as BaseTabs } from "@base-ui/react/tabs"`).
 
 ### TabsList
 
@@ -169,14 +175,14 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 | `variant` | `"default" \| "line"` | `"default"` | Visual style variant |
 | `shape` | `"rounded" \| "pill"` | `"rounded"` | Trigger corner radius |
 | `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Tab list orientation |
-| `scrollable` | `boolean` | `false` | Enable horizontal scroll with arrow buttons and gradient fades |
+| `scrollable` | `boolean` | `false` | Scroll horizontally in a Reel, with edge fades and bare chevrons. |
 | `morphing` | `boolean` | `false` | Collapse inactive triggers to icon-only; only the active trigger shows its `TabsTriggerLabel` |
 
 ### TabsTrigger
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `value` | `string` | - | Unique tab identifier |
+| `value` | `BaseTabs.Tab.Value` | - | Unique tab identifier |
 | `disabled` | `boolean` | `false` | Whether the tab is disabled |
 
 ### TabsTriggerLabel
