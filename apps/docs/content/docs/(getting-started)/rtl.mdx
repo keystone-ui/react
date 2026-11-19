@@ -15,7 +15,7 @@ RTL product, rather than discovering the gaps after you have built on it.
 | Keystone's own spacing and positioning CSS | Mostly physical, does **not** mirror |
 | Explicit `rtl:` handling in the library | One component (`calendar`) |
 | i18n / locale / message layer | None |
-| RTL tests or visual baselines | Chromium Storybook and docs tests cover Reel and the horizontal scroll fade |
+| RTL tests or visual baselines | Chromium covers Reel and the horizontal scroll fade. Storybook also checks RollingNumber’s visual order in LTR and RTL paragraphs. |
 
 ## What works
 
@@ -45,8 +45,8 @@ CSS, the provider drives Base UI's JavaScript. You generally want both.
 ## What does not work
 
 **Keystone's own styling is written with physical direction utilities.** The
-library source contains 106 physical direction utility occurrences (`pl-`, `pr-`,
-`left-`, `right-`, `ml-`, `mr-`, `text-left`, `text-right`) across 30 of its 61
+library source contains 107 physical direction utility occurrences (`pl-`, `pr-`,
+`left-`, `right-`, `ml-`, `mr-`, `text-left`, `text-right`) across 31 of its 62
 components, against 25 logical occurrences (`ps-`, `pe-`, `ms-`, `me-`, `start-`,
 `end-`, `text-end`). Physical utilities do not respond to `dir`, so
 under `dir="rtl"` you should expect asymmetric padding, icon gutters, absolute
@@ -55,13 +55,16 @@ offsets, and chevron placement to stay on their left-to-right side.
 Calendar flips its navigation chevrons with two `rtl:` variants. Reel uses
 logical positioning for its arrows and the scroller's computed direction for
 paging. Its chevrons and the horizontal fade follow the nearest explicit
-`dir="ltr"` or `dir="rtl"`. The only `dir` attribute is
-`dir="auto"` on `FileUploadItemName`, so a file name keeps its own direction.
+`dir="ltr"` or `dir="rtl"`. `FileUploadItemName` sets `dir="auto"` so a file
+name keeps its own direction.
+RollingNumber's direction and numbering systems are covered in
+[its RTL section](/docs/components/rolling-number#rtl).
 
-**There is no i18n layer.** Keystone ships no locale plumbing, no message
-catalog, and no `Intl` formatting helpers. Date, number, and currency formatting
-in components such as `calendar` and `date-input` is the consumer's
-responsibility.
+**There is no i18n layer.** Keystone ships no locale plumbing and no message
+catalog. `RollingNumber` formats its number with `Intl.NumberFormat` and the
+`locale` you pass. The default locale is `en-US`. Other components have their
+own defaults, such as the month formatter in `Calendar` and the byte formatter
+in `FileUploadItemSize`.
 
 **RTL test coverage is partial.** Chromium Storybook tests check Reel paging
 and sample the painted fade in both directions. The docs end-to-end tests check

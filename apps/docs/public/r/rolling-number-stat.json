@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "rolling-number-stat",
+  "title": "Rolling Number Stat",
+  "description": "Rolling Number example: Stat.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/card.json",
+    "https://keystoneui.io/r/rolling-number.json",
+    "https://keystoneui.io/r/stat.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/rolling-number/stat.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { Card, CardContent } from \"@keystoneui/react/card\";\nimport { RollingNumber } from \"@keystoneui/react/rolling-number\";\nimport { StatValue } from \"@keystoneui/react/stat\";\nimport { useState } from \"react\";\n\nexport default function RollingNumberStat() {\n  const [revenue, setRevenue] = useState(48_210);\n  return (\n    <Card className=\"w-full max-w-xs\" size=\"sm\">\n      <CardContent className=\"flex flex-col gap-1\">\n        <div className=\"font-medium text-muted-foreground text-xs\">\n          Revenue this month\n        </div>\n        <StatValue>\n          <RollingNumber\n            format={{\n              style: \"currency\",\n              currency: \"USD\",\n              maximumFractionDigits: 0,\n            }}\n            value={revenue}\n          />\n        </StatValue>\n        <Button\n          className=\"mt-2 self-start\"\n          onClick={() => setRevenue((v) => v + 137)}\n          size=\"sm\"\n          variant=\"outline\"\n        >\n          Record a sale\n        </Button>\n      </CardContent>\n    </Card>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

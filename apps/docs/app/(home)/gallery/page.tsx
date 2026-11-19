@@ -283,6 +283,11 @@ const categories = [
         slug: "calendar",
         description: "Date calendar picker",
       },
+      {
+        name: "Rolling Number",
+        slug: "rolling-number",
+        description: "Formatted number whose changed digits roll",
+      },
     ],
   },
   {
