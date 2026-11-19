@@ -1,0 +1,152 @@
+---
+title: Countdown
+description: The time left until a deadline, in a compact or a labelled form, ticking on the boundary of the smallest unit it shows.
+---
+
+<ComponentPreview name="countdown-default" />
+
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/countdown.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+```bash
+pnpm add @keystoneui/react@beta
+```
+
+<Step>Copy this usage example into your app.</Step>
+
+<ComponentSource name="countdown-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Usage
+
+```tsx
+import { Countdown } from "@keystoneui/react/countdown";
+```
+
+```tsx
+<Countdown target={endsAt} />
+<Countdown animated size="lg" target={endsAt} variant="labelled" />
+```
+
+Countdown shows the time left until `target`, rounded up to the smallest unit it displays, and works it out from the clock on every tick: after a late tick, a background tab or a sleeping device it may skip values, but the next tick shows the right one. With matching props and compatible Intl locale data, the server and the hydrating client render the same `--` placeholders. After hydration, a valid target and a finite clock reading produce the live value. The placeholder and live two-digit numeric cells keep the same width in a font with tabular figures. The compact day count includes its unit, and a folded value can exceed two digits. Either can widen a cell. The first tick at or after the deadline marks the run complete. `onComplete` runs once when the current run completes. Changing to another target and back starts a new run. A timeout or resume event calls it directly. A completion found during layout is delivered from a passive effect (straight after mount if it has already passed). A hidden tab or a sleeping device can delay the tick. Countdown uses the device clock by default and accepts a custom clock through `now`. Its default timer role has an implicit live setting of `off`. Countdown has no pause or count-up mode, and the remaining time has a lower bound of zero. A backward clock change before the deadline increases the remaining time. A completed run stays at zero. Copying the compact form gives its text once; copying the labelled form gives each label and value once, on separate lines (tested in Chromium).
+
+### Time and the server
+
+- `target` is an absolute instant: a `Date` or epoch milliseconds. `null` or `undefined` (a deadline not known yet) shows `--` in every value and starts no timer; so does an invalid `Date`, a non-finite number, or a number beyond the range a `Date` can represent (more than 8.64e15 ms from the epoch), each of which also warns in development. An unsupported runtime value, such as an ISO date string from JSON, also shows `--` in every value, starts no timer and warns in development. Two targets with the same epoch milliseconds are the same target, so an inline `new Date(ms)` restarts nothing.
+- Countdown uses the device clock by default and accepts a custom clock through `now`. A deadline that matters, such as an offer or a bet closing, must be enforced on the server.
+- Set `target` in an effect or an event handler, never during render: compute "five minutes from this click" in the click handler, and pass a serialised deadline (epoch milliseconds, or a `Date` made from it) for a prerendered page.
+- While a Suspense fallback hides a Countdown that was already showing, its timer is off: the value is not updated and `onComplete` is not called. When it is shown again it catches up with the current value and, if the deadline passed while it was hidden, calls `onComplete` once. If its `target` or `units` were replaced while it was hidden, it can show the previous second for a frame first. If it is removed while still hidden, `onComplete` is not called.
+- The placeholder stays when JavaScript is off. A Countdown first mounted on the client, such as in a modal, shows its value on its first render.
+- The placeholder and live two-digit numeric cells keep the same width in a font with tabular figures. The compact day count includes its unit, and a folded value can exceed two digits. Either can widen a cell. Hours past 99 with no `"days"` unit print in full (`100`, `1080`) and widen their group; list `"days"` for long countdowns, or reserve the width on `[data-unit=hours] [data-slot=countdown-value]`, for example `className="[&_[data-unit=hours]_[data-slot=countdown-value]]:min-w-[3ch]"` (whether `3ch` holds three digits depends on the font).
+
+### Accessibility
+
+- By default, the root has `role="timer"` and the accessible name "Time remaining". You can supply a name with `aria-label` or `aria-labelledby`. The timer role has an implicit live setting of `off`. Leave `aria-live` unset to keep that setting.
+- Visually hidden text gives the remaining time in words using `locale`, for example "1 hour, 36 minutes" in `en-US`. The `labels` prop changes only the visible labels. Seconds are omitted while a larger listed unit is nonzero. With the default units, the text changes by the minute until the final minute, then by the second. At zero, the text gives the smallest listed unit, for example "0 seconds". While pending, the timer retains its accessible name and the time text is empty.
+- The component hides the visible digits, labels and separators from assistive technology with `aria-hidden="true"`.
+- For a countdown that is not essential to the task, consider a way to pause, stop or hide it ([WCAG 2.2.2](https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html)).
+
+### Animation
+
+`animated` renders each value as a [RollingNumber](/docs/components/rolling-number) that rolls down, so only the digits that changed move, one row each. Every Countdown build includes RollingNumber's code; neither depends on `motion`. On every render with live values, Countdown builds one number formatter for its digits, one more for a compact day count when animation is off, and one for each unit in the visually hidden time text. An `Intl.ListFormat` joins those unit strings. With `animated`, each value is also a RollingNumber that builds its own each time React renders it, whether its digits changed or not; a value whose number changed is rendered a second time in the same update, and a third time two frames later if a digit rolled. For a page with many countdowns, read the numbers from `useCountdown` and print them yourself. Under `prefers-reduced-motion` the digits change in place.
+
+## Composition
+
+```text
+Countdown                    data-slot="countdown"
+└── countdown-group          data-unit="days" | "hours" | "minutes" | "seconds"
+    ├── countdown-label      labelled form only
+    └── countdown-value      digits, or a RollingNumber when animated
+countdown-separator          between groups
+```
+
+`className` reaches the root only. Style the parts from the root through their slots, for example a tile per group: `className="[&_[data-slot=countdown-group]]:rounded-md [&_[data-slot=countdown-group]]:bg-muted"`. The root carries `data-variant`, `data-size`, and `data-pending` or `data-complete` while it is in that state.
+
+## Examples
+
+### Labelled
+
+Labels sit above two-digit values. This example uses light numerals, medium-weight labels and muted colons on the value row.
+
+<ComponentPreview name="countdown-labelled" />
+
+### With days
+
+List `"days"` to show a day count: the compact form reads `2d 04:12:33` and the labelled form adds a Days group. Time of an unlisted larger unit folds into the next smaller listed unit.
+
+<ComponentPreview name="countdown-with-days" />
+
+### Custom layout
+
+`useCountdown` returns the same parts as numbers, for a layout of your own.
+
+<ComponentPreview name="countdown-hook" />
+
+### On complete
+
+`onComplete` runs once when the target is reached; here a Badge replaces the button.
+
+<ComponentPreview name="countdown-on-complete" />
+
+### Sizes
+
+`sm`, `default` and `lg` set the size of the values and colons, and of the labels with them.
+
+<ComponentPreview name="countdown-sizes" />
+
+## RTL
+
+The unit groups stay in largest-to-smallest order from left to right. Digits follow their numbering system, and each label takes its own text direction.
+
+## API Reference
+
+### Countdown
+
+Renders a `<span>`, so it can sit inside a sentence or a heading; give it `className="flex"` or wrap it for a block layout. Other span props, including `ref`, events and ARIA attributes, are forwarded to the root. The component owns its children and excludes `dangerouslySetInnerHTML`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `target` | `Date \| number \| null \| undefined` | - | Required. The instant to count down to; a number is epoch milliseconds. Nullish, an invalid `Date`, a non-finite number or one beyond the range of a `Date` is pending. |
+| `variant` | `"compact" \| "labelled"` | `"compact"` | `compact`: `01:36:53`. `labelled`: each value under its label. |
+| `size` | `"sm" \| "default" \| "lg"` | `"default"` | Values and colons `text-sm`, `text-2xl` or `text-5xl`; labels `text-xs`, `text-sm` or `text-base`. A display size, not a control height. |
+| `units` | `readonly ("days" \| "hours" \| "minutes" \| "seconds")[]` | `["hours", "minutes", "seconds"]` | Shown largest first, whatever the order; duplicates are ignored, and an empty array or one with no known unit means the default. A listed group is always shown, a leading `00` included. |
+| `labels` | `Partial<Record<CountdownUnit, string>>` | `Days`, `Hours`, `Minutes`, `Seconds` | The visible labels of the labelled form; a partial record replaces only the units it names. Never used for the visually hidden time text. |
+| `aria-label` | `string` | `"Time remaining"` | The default applies only when neither `aria-label` nor `aria-labelledby` is passed. |
+| `animated` | `boolean` | `false` | Each value is a RollingNumber whose changed digits roll down. |
+| `now` | `() => number` | `Date.now` | The clock, in the same epoch and unit as `target`. A new function takes effect at the next tick; to switch clocks, remount with a `key`. |
+| `locale` | `Intl.LocalesArgument` | `"en-US"` | The digits and the visually hidden time text. Defaults to `en-US`. For consistent server and client markup, pass the same locale and use compatible Intl locale data. |
+| `onComplete` | `() => void` | - | Called once per completed run. A timeout or resume event calls the latest callback directly. A completion found during layout is delivered from a passive effect after layout. |
+| `className` | `string` | - | Classes for the root, merged with its own. |
+
+### useCountdown
+
+```ts
+function useCountdown(options: UseCountdownOptions): CountdownSnapshot;
+```
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `target` | `Date \| number \| null \| undefined` | - | Required. As on Countdown. |
+| `units` | `readonly CountdownUnit[]` | `["hours", "minutes", "seconds"]` | Which units the time is split into. |
+| `now` | `() => number` | `Date.now` | As on Countdown. |
+| `onComplete` | `() => void` | - | As on Countdown. |
+
+The snapshot is `isPending`, `isComplete`, `days`, `hours`, `minutes`, `seconds` and `totalSeconds`. While pending (on the server, during hydration, for a pending target, or while `now()` is not finite) the numbers are `null`. Otherwise units not listed are `0`, listed units carry the folded values (49 hours without days is `hours: 49`), and `totalSeconds` is the remaining time after rounding up to the smallest listed unit. The same object is returned until the time shown changes.

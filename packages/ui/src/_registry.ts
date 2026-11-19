@@ -409,4 +409,11 @@ export const ui: RegistryItem[] = [
     dependencies: [],
     files: [{ path: "ui/rolling-number.tsx", type: "registry:ui" }],
   },
+  {
+    name: "countdown",
+    type: "registry:ui",
+    dependencies: ["class-variance-authority"],
+    registryDependencies: ["rolling-number"],
+    files: [{ path: "ui/countdown.tsx", type: "registry:ui" }],
+  },
 ];

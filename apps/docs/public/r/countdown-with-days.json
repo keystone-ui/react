@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "countdown-with-days",
+  "title": "Countdown With Days",
+  "description": "Countdown example: With Days.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/countdown.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/countdown/with-days.tsx",
+      "content": "\"use client\";\n\nimport { Countdown } from \"@keystoneui/react/countdown\";\nimport { useEffect, useState } from \"react\";\n\nconst UNITS = [\"days\", \"hours\", \"minutes\", \"seconds\"] as const;\n\nexport default function CountdownWithDays() {\n  const [endsAt, setEndsAt] = useState<number | null>(null);\n  useEffect(() => {\n    setEndsAt(Date.now() + ((2 * 24 + 4) * 3600 + 12 * 60 + 33) * 1000);\n  }, []);\n  return (\n    <div className=\"flex flex-col items-center gap-6\">\n      <Countdown target={endsAt} units={UNITS} />\n      <Countdown target={endsAt} units={UNITS} variant=\"labelled\" />\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

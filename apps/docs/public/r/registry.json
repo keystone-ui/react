@@ -1643,6 +1643,25 @@
       ]
     },
     {
+      "name": "countdown",
+      "type": "registry:ui",
+      "title": "Countdown",
+      "description": "The time left until a deadline, in a compact or a labelled form, ticking on the boundary of the smallest unit it shows.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://keystoneui.io/r/rolling-number.json"
+      ],
+      "files": [
+        {
+          "path": "packages/ui/src/countdown.tsx",
+          "target": "@ui/countdown.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "signin-01",
       "type": "registry:block",
       "title": "Sign in 01",
@@ -5100,6 +5119,99 @@
       "files": [
         {
           "path": "apps/docs/demos/copy-button/variants.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "countdown-default",
+      "type": "registry:example",
+      "title": "Countdown Default",
+      "description": "Countdown example: Default.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/countdown.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/countdown/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "countdown-hook",
+      "type": "registry:example",
+      "title": "Countdown Hook",
+      "description": "Countdown example: Hook.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/countdown.json",
+        "https://keystoneui.io/r/progress.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/countdown/hook.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "countdown-labelled",
+      "type": "registry:example",
+      "title": "Countdown Labelled",
+      "description": "Countdown example: Labelled.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/countdown.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/countdown/labelled.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "countdown-on-complete",
+      "type": "registry:example",
+      "title": "Countdown On Complete",
+      "description": "Countdown example: On Complete.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/badge.json",
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/countdown.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/countdown/on-complete.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "countdown-sizes",
+      "type": "registry:example",
+      "title": "Countdown Sizes",
+      "description": "Countdown example: Sizes.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/countdown.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/countdown/sizes.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "countdown-with-days",
+      "type": "registry:example",
+      "title": "Countdown With Days",
+      "description": "Countdown example: With Days.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/countdown.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/countdown/with-days.tsx",
           "type": "registry:example"
         }
       ]
