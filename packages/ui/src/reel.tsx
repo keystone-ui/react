@@ -25,9 +25,16 @@ import { cn } from "./utils";
 type ReelArrows = "pointer" | "always" | "none";
 
 /**
- * The whole public API: when the arrows show, a class for the root, and the
- * row. Semantics (a `nav` and its label, the list, the current item) stay
- * with the row and its container.
+ * How an arrow looks. `default`: a round outlined arrow that sits on the
+ * faded end of the row. `plain`: a bare chevron in the muted text colour, for
+ * a row with its own track (tabs); the row is hidden beneath it.
+ */
+type ReelArrowVariant = "default" | "plain";
+
+/**
+ * The whole public API: when the arrows show, how they look, a class for
+ * the root, and the row. Semantics (a `nav` and its label, the list, the
+ * current item) stay with the row and its container.
  */
 interface ReelProps {
   /**
@@ -37,6 +44,14 @@ interface ReelProps {
    * @default "pointer"
    */
   arrows?: ReelArrows;
+  /**
+   * How an arrow looks: the round outlined arrow, or a bare chevron with the
+   * first five spacing units (1.25rem with the default spacing scale) of the
+   * row hidden beneath it while it shows. `arrows` decides when either style
+   * can show.
+   * @default "default"
+   */
+  arrowVariant?: ReelArrowVariant;
   /** Exactly one child: the row to scroll (a list of links, FilterChips…). */
   children: ReactElement;
   /** Classes for the root, which is `position: relative`. */
@@ -49,11 +64,12 @@ interface ReelProps {
 
 /**
  * The row's current item: a link with a meaningful `aria-current` (not empty,
- * not "false" in any case) or a selected chip (`data-selected` with any value
- * but "false", which React renders for `data-selected={false}`).
+ * not "false" in any case), a selected tab (`aria-selected="true"`), or a
+ * selected chip (`data-selected` with any value but "false", which React
+ * renders for `data-selected={false}`). The first in DOM order wins.
  */
 const CURRENT_ITEM =
-  '[aria-current]:not([aria-current=""], [aria-current="false" i]), [data-selected]:not([data-selected="false" i])';
+  '[aria-current]:not([aria-current=""], [aria-current="false" i]), [aria-selected="true"], [data-selected]:not([data-selected="false" i])';
 
 /**
  * A press on an arrow must not take focus: the arrow is hidden from
@@ -74,8 +90,9 @@ function scrollBehavior(): ScrollBehavior {
 
 /**
  * Scroll the viewport sideways just enough that `item` clears the viewport's
- * inline scroll padding, which the Reel sets to the fade's rendered depth (and
- * at least 48px), so neither the fade nor an arrow covers it. An item too wide
+ * inline scroll padding, which the Reel sets to the greater of 48px, the
+ * arrow's width, and any hidden strip plus the fade, so neither the fade nor
+ * an arrow covers it. An item too wide
  * for both margins is aligned by its start edge, with the inset capped to the
  * room it leaves. The distance is limited to the scroll range, and under half
  * a pixel nothing is requested at all, so a clear item, or one at the very
@@ -140,19 +157,114 @@ const ARROW_GATE: Record<ReelArrows, string> = {
 };
 
 /**
- * The fade under an arrow is deeper (3rem) so the arrow sits on faded
- * content; without arrows it is the utility's own 1.5rem.
+ * The fade's depth, which `--ks-reel-fade-size` overrides. Unset, the fade
+ * under a default arrow is deeper (3rem) so the arrow sits on faded content;
+ * behind a plain arrow it is 2rem after the hidden strip; without arrows it
+ * is the utility's own 1.5rem. Reel owns `--ks-scroll-fade-size` here.
  */
-const FADE_SIZE: Record<ReelArrows, string> = {
-  pointer:
-    "[--ks-scroll-fade-size:1.5rem] [@media(hover:hover)_and_(pointer:fine)]:[--ks-scroll-fade-size:3rem]",
-  always: "[--ks-scroll-fade-size:3rem]",
-  none: "[--ks-scroll-fade-size:1.5rem]",
+const FADE_SIZE: Record<ReelArrowVariant, Record<ReelArrows, string>> = {
+  default: {
+    pointer:
+      "[--ks-scroll-fade-size:var(--ks-reel-fade-size,1.5rem)] [@media(hover:hover)_and_(pointer:fine)]:[--ks-scroll-fade-size:var(--ks-reel-fade-size,3rem)]",
+    always: "[--ks-scroll-fade-size:var(--ks-reel-fade-size,3rem)]",
+    none: "[--ks-scroll-fade-size:var(--ks-reel-fade-size,1.5rem)]",
+  },
+  plain: {
+    pointer:
+      "[--ks-scroll-fade-size:var(--ks-reel-fade-size,1.5rem)] [@media(hover:hover)_and_(pointer:fine)]:[--ks-scroll-fade-size:var(--ks-reel-fade-size,2rem)]",
+    always: "[--ks-scroll-fade-size:var(--ks-reel-fade-size,2rem)]",
+    none: "[--ks-scroll-fade-size:var(--ks-reel-fade-size,1.5rem)]",
+  },
 };
 
-function Reel({ arrows = "pointer", children, className }: ReelProps) {
+/**
+ * The clearance a revealed or focused item keeps from each edge: at least
+ * 48px, the arrow's width, and any hidden strip plus the fade. It never
+ * reads state, so the first reveal at mount already clears the whole zone.
+ */
+const SCROLL_PADDING: Record<ReelArrowVariant, Record<ReelArrows, string>> = {
+  default: {
+    pointer:
+      "[scroll-padding-inline:max(48px,var(--ks-scroll-fade-size))] [@media(hover:hover)_and_(pointer:fine)]:[scroll-padding-inline:max(48px,var(--ks-control-sm,2rem),var(--ks-scroll-fade-size))]",
+    always:
+      "[scroll-padding-inline:max(48px,var(--ks-control-sm,2rem),var(--ks-scroll-fade-size))]",
+    none: "[scroll-padding-inline:max(48px,var(--ks-scroll-fade-size))]",
+  },
+  plain: {
+    pointer:
+      "[scroll-padding-inline:max(48px,var(--ks-scroll-fade-size))] [@media(hover:hover)_and_(pointer:fine)]:[scroll-padding-inline:max(48px,24px,--spacing(6),calc(--spacing(5)+var(--ks-scroll-fade-size)))]",
+    always:
+      "[scroll-padding-inline:max(48px,24px,--spacing(6),calc(--spacing(5)+var(--ks-scroll-fade-size)))]",
+    none: "[scroll-padding-inline:max(48px,var(--ks-scroll-fade-size))]",
+  },
+};
+
+/**
+ * A plain arrow's hidden strip, per physical side, through the same gate as
+ * the arrow: a side has a strip only while its arrow can show. The lengths
+ * are private (registered in base.css), read by the plain-variant mask rule.
+ */
+const BAND: Record<ReelArrows, { left: string; right: string }> = {
+  pointer: {
+    left: "[@media(hover:hover)_and_(pointer:fine)]:[--_ks-reel-inset-left:--spacing(5)]",
+    right:
+      "[@media(hover:hover)_and_(pointer:fine)]:[--_ks-reel-inset-right:--spacing(5)]",
+  },
+  always: {
+    left: "[--_ks-reel-inset-left:--spacing(5)]",
+    right: "[--_ks-reel-inset-right:--spacing(5)]",
+  },
+  none: { left: "", right: "" },
+};
+
+/**
+ * Beside a strip, how far that side's ramp has grown: the fade's scroll
+ * progress at that physical side, which is the start in left-to-right and
+ * the end in right-to-left (the computed direction, as for the strips).
+ * Read only where scroll-driven animations run; unset, the ramp keeps its
+ * minimum.
+ */
+const PROGRESS: Record<
+  ReelArrows,
+  Record<"ltr" | "rtl", { left: string; right: string }>
+> = {
+  pointer: {
+    ltr: {
+      left: "[@media(hover:hover)_and_(pointer:fine)]:[--_ks-reel-progress-left:var(--ks-scroll-fade-start)]",
+      right:
+        "[@media(hover:hover)_and_(pointer:fine)]:[--_ks-reel-progress-right:var(--ks-scroll-fade-end)]",
+    },
+    rtl: {
+      left: "[@media(hover:hover)_and_(pointer:fine)]:[--_ks-reel-progress-left:var(--ks-scroll-fade-end)]",
+      right:
+        "[@media(hover:hover)_and_(pointer:fine)]:[--_ks-reel-progress-right:var(--ks-scroll-fade-start)]",
+    },
+  },
+  always: {
+    ltr: {
+      left: "[--_ks-reel-progress-left:var(--ks-scroll-fade-start)]",
+      right: "[--_ks-reel-progress-right:var(--ks-scroll-fade-end)]",
+    },
+    rtl: {
+      left: "[--_ks-reel-progress-left:var(--ks-scroll-fade-end)]",
+      right: "[--_ks-reel-progress-right:var(--ks-scroll-fade-start)]",
+    },
+  },
+  none: { ltr: { left: "", right: "" }, rtl: { left: "", right: "" } },
+};
+
+function Reel({
+  arrows = "pointer",
+  arrowVariant = "default",
+  children,
+  className,
+}: ReelProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
-  const [overflow, setOverflow] = useState({ start: false, end: false });
+  const [overflow, setOverflow] = useState({
+    start: false,
+    end: false,
+    rtl: false,
+  });
 
   // Which ends have more content beyond them: on scroll, and whenever the
   // viewport or the row changes size.
@@ -172,7 +284,9 @@ function Reel({ arrows = "pointer", children, className }: ReelProps) {
       const start = position > 1;
       const end = position < max - 1;
       setOverflow((prev) =>
-        prev.start === start && prev.end === end ? prev : { start, end }
+        prev.start === start && prev.end === end && prev.rtl === rtl
+          ? prev
+          : { start, end, rtl }
       );
     };
     update();
@@ -252,7 +366,7 @@ function Reel({ arrows = "pointer", children, className }: ReelProps) {
       }
     });
     markers.observe(viewport, {
-      attributeFilter: ["aria-current", "data-selected"],
+      attributeFilter: ["aria-current", "aria-selected", "data-selected"],
       childList: true,
       subtree: true,
     });
@@ -304,57 +418,108 @@ function Reel({ arrows = "pointer", children, className }: ReelProps) {
     });
   }, []);
 
+  const plain = arrowVariant === "plain";
+  // The physical side of each arrow: start is on the right in rtl.
+  const bandLeft = overflow[overflow.rtl ? "end" : "start"];
+  const bandRight = overflow[overflow.rtl ? "start" : "end"];
+
   return (
     <div
       className={cn("relative", className)}
+      data-arrow-variant={arrowVariant}
       data-arrows={arrows}
       data-slot="reel"
     >
       <div
         className={cn(
-          "ks-scroll-fade-x overflow-x-auto overscroll-x-contain p-[4px] [scroll-padding-inline:max(48px,var(--ks-scroll-fade-size,1.5rem))] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
-          FADE_SIZE[arrows]
+          "ks-scroll-fade-x isolate overflow-x-auto overscroll-x-contain p-[4px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+          FADE_SIZE[arrowVariant][arrows],
+          SCROLL_PADDING[arrowVariant][arrows],
+          plain && bandLeft && BAND[arrows].left,
+          plain && bandRight && BAND[arrows].right,
+          plain &&
+            bandLeft &&
+            PROGRESS[arrows][overflow.rtl ? "rtl" : "ltr"].left,
+          plain &&
+            bandRight &&
+            PROGRESS[arrows][overflow.rtl ? "rtl" : "ltr"].right
         )}
         data-slot="reel-viewport"
         ref={viewportRef}
       >
         {children}
       </div>
-      {(["start", "end"] as const).map((side) => (
-        // The hit area: a plain span, so no arrow can take focus, not even by
-        // script. It carries the press, the position and the visibility gate;
-        // the button inside is only the picture of one.
-        <span
-          aria-hidden="true"
-          className={cn(
-            "group/reel-arrow absolute inset-y-0 my-auto h-fit cursor-pointer touch-manipulation select-none rounded-full transition-[opacity,visibility] duration-(--duration-fast,125ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)) [-webkit-tap-highlight-color:transparent]",
-            side === "start" ? "start-0" : "end-0",
-            ARROW_GATE[arrows],
-            !overflow[side] && "invisible opacity-0"
-          )}
-          data-side={side}
-          key={side}
-          onClick={onArrowClick}
-          onMouseDown={keepFocus}
-        >
-          <Button
-            className={
-              // The arrow sits on the faded end of the row, so its fill must
-              // be opaque: the outline variant's dark fills are translucent.
-              // Hover and press come from the hit area around it.
-              "pointer-events-none rounded-full group-hover/reel-arrow:bg-accent group-hover/reel-arrow:text-foreground group-active/reel-arrow:scale-[0.98] group-active/reel-arrow:bg-accent group-active/reel-arrow:text-foreground dark:bg-background dark:group-active/reel-arrow:bg-accent dark:group-hover/reel-arrow:bg-accent [&_svg]:[scale:var(--ks-reel-chevron-x,1)_1]"
-            }
+      {(["start", "end"] as const).map((side) =>
+        plain ? (
+          // The hit area: a plain span, so no arrow can take focus. It is the
+          // full height of the row, at least the 24px target size wide, and
+          // shows, takes presses and hides the strip beneath it in the same
+          // frame: no transition at all, not even the near-zero one the
+          // reduced-motion rule gives every property, which would leave the
+          // arrow hidden for a frame after its strip appears.
+          <span
+            aria-hidden="true"
+            className={cn(
+              "group/reel-arrow absolute inset-y-0 w-[max(24px,--spacing(6))] cursor-pointer touch-manipulation select-none items-center transition-none [-webkit-tap-highlight-color:transparent]",
+              side === "start"
+                ? "start-0 justify-start ps-0.5"
+                : "end-0 justify-end pe-0.5",
+              ARROW_GATE[arrows],
+              !overflow[side] && "invisible"
+            )}
             data-side={side}
-            data-slot="reel-arrow"
-            inert
-            size="icon-sm"
-            tabIndex={-1}
-            variant="outline"
+            key={side}
+            onClick={onArrowClick}
+            onMouseDown={keepFocus}
           >
-            {side === "start" ? <ChevronLeft /> : <ChevronRight />}
-          </Button>
-        </span>
-      ))}
+            <span
+              className="pointer-events-none inline-flex text-muted-foreground transition-[color] duration-(--duration-fast,125ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)) group-hover/reel-arrow:text-foreground group-active/reel-arrow:text-foreground [&_svg]:[scale:var(--ks-reel-chevron-x,1)_1]"
+              data-side={side}
+              data-slot="reel-arrow"
+            >
+              {side === "start" ? (
+                <ChevronLeft className="size-4" />
+              ) : (
+                <ChevronRight className="size-4" />
+              )}
+            </span>
+          </span>
+        ) : (
+          // The hit area: a plain span, so no arrow can take focus, not even by
+          // script. It carries the press, the position and the visibility gate;
+          // the button inside is only the picture of one.
+          <span
+            aria-hidden="true"
+            className={cn(
+              "group/reel-arrow absolute inset-y-0 my-auto h-fit cursor-pointer touch-manipulation select-none rounded-full transition-[opacity,visibility] duration-(--duration-fast,125ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)) [-webkit-tap-highlight-color:transparent]",
+              side === "start" ? "start-0" : "end-0",
+              ARROW_GATE[arrows],
+              !overflow[side] && "invisible opacity-0"
+            )}
+            data-side={side}
+            key={side}
+            onClick={onArrowClick}
+            onMouseDown={keepFocus}
+          >
+            <Button
+              className={
+                // The arrow sits on the faded end of the row, so its fill must
+                // be opaque: the outline variant's dark fills are translucent.
+                // Hover and press come from the hit area around it.
+                "pointer-events-none rounded-full group-hover/reel-arrow:bg-accent group-hover/reel-arrow:text-foreground group-active/reel-arrow:scale-[0.98] group-active/reel-arrow:bg-accent group-active/reel-arrow:text-foreground dark:bg-background dark:group-active/reel-arrow:bg-accent dark:group-hover/reel-arrow:bg-accent [&_svg]:[scale:var(--ks-reel-chevron-x,1)_1]"
+              }
+              data-side={side}
+              data-slot="reel-arrow"
+              inert
+              size="icon-sm"
+              tabIndex={-1}
+              variant="outline"
+            >
+              {side === "start" ? <ChevronLeft /> : <ChevronRight />}
+            </Button>
+          </span>
+        )
+      )}
     </div>
   );
 }

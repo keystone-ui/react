@@ -437,3 +437,152 @@ describe("component token fallbacks", () => {
     expect(missing).toEqual([]);
   });
 });
+
+/**
+ * Reel's plain arrows hide the row under a visible chevron with a rule of
+ * their own, so the shared utility is untouched: a direct user of
+ * `ks-scroll-fade-x` computes exactly the mask it always did. The plain rule
+ * multiplies its two strips with a copy of the utility's gradient, which must
+ * not drift from it. The strips' lengths are Reel's private business.
+ */
+const RAW_CSS = readFileSync(join(SRC_DIR, "base.css"), "utf-8");
+
+/** The text of the block that opens at `start`, braces balanced. */
+function blockAt(source: string, start: number): string {
+  const open = source.indexOf("{", start);
+  let depth = 0;
+  for (let i = open; i < source.length; i++) {
+    if (source[i] === "{") {
+      depth++;
+    } else if (source[i] === "}") {
+      depth--;
+      if (depth === 0) {
+        return source.slice(start, i + 1);
+      }
+    }
+  }
+  throw new Error("unbalanced block");
+}
+
+/** Every `linear-gradient(…)` call in `source`, parens balanced, in order. */
+function gradientsIn(source: string): string[] {
+  const found: string[] = [];
+  let at = source.indexOf("linear-gradient(");
+  while (at !== -1) {
+    let depth = 0;
+    let end = at;
+    for (let i = source.indexOf("(", at); i < source.length; i++) {
+      if (source[i] === "(") {
+        depth++;
+      } else if (source[i] === ")") {
+        depth--;
+        if (depth === 0) {
+          end = i + 1;
+          break;
+        }
+      }
+    }
+    if (end === at) {
+      throw new Error("unbalanced linear-gradient");
+    }
+    found.push(source.slice(at, end));
+    at = source.indexOf("linear-gradient(", end);
+  }
+  return found;
+}
+
+/** Comments out, whitespace collapsed: the gradient as the browser reads it. */
+const normalise = (text: string) =>
+  text.replace(CSS_COMMENT, "").replace(/\s+/g, "").trim();
+
+/** The ks-scroll-fade-x utility exactly as Reel shipped it (681a513f). */
+const SCROLL_FADE_X_AT_REEL = `@utility ks-scroll-fade-x {
+  @supports (animation-timeline: scroll()) {
+    mask-image: linear-gradient(
+      /* biome-ignore lint/correctness/noInvalidDirectionInLinearGradient: the direction is a custom property, substituted before the gradient is parsed */
+      to var(--ks-scroll-fade-x-to, right),
+      transparent,
+      black
+        calc(var(--ks-scroll-fade-start) * var(--ks-scroll-fade-size, 1.5rem)),
+      black
+        calc(
+          100% -
+          var(--ks-scroll-fade-end) *
+          var(--ks-scroll-fade-size, 1.5rem)
+        ),
+      transparent
+    );
+    animation: ks-scroll-fade-edges linear both;
+    animation-timeline: scroll(self inline);
+  }
+}`;
+
+/** A ramp's growth with its side's scroll progress, in a normalised gradient. */
+const PROGRESS_TERM =
+  /max\((min\(.*?\)),var\(--ks-scroll-fade-size,1\.5rem\)\*var\(--_ks-reel-progress-(?:left|right),0\)\)/;
+const PRIVATE_NAMES = /_ks-reel-(?:inset|progress)/;
+
+const PLAIN_RULE =
+  /\[data-slot="reel"\]\[data-arrow-variant="plain"\]\s*>\s*\[data-slot="reel-viewport"\]\s*\{/g;
+
+describe("Reel's plain arrows and the ks-scroll-fade-x utility", () => {
+  const utilityStart = RAW_CSS.indexOf("@utility ks-scroll-fade-x {");
+  const utility = blockAt(RAW_CSS, utilityStart);
+
+  it("leaves the utility byte-for-byte as Reel shipped it (T-UTILITY-UNCHANGED)", () => {
+    expect(utility).toBe(SCROLL_FADE_X_AT_REEL);
+  });
+
+  it("copies the utility's gradient verbatim into the plain rule's scroll-timeline branch (T-COPY)", () => {
+    const rules = [...css.matchAll(PLAIN_RULE)].map((m) =>
+      blockAt(css, m.index)
+    );
+    // One rule outside @supports (the strips alone), one inside it.
+    expect(rules).toHaveLength(2);
+    const supports = css.lastIndexOf(
+      "@supports (animation-timeline: scroll())",
+      [...css.matchAll(PLAIN_RULE)][1].index
+    );
+    expect(supports).toBeGreaterThan(utilityStart);
+    const withTimeline = gradientsIn(rules[1]);
+    expect(withTimeline).toHaveLength(3);
+    const [utilityGradient] = gradientsIn(utility);
+    expect(normalise(withTimeline[2])).toBe(normalise(utilityGradient));
+    // The strips are the same in both branches, except that where
+    // scroll-driven animations run each ramp also grows with its side's
+    // progress: max(minimum ramp, fade depth × progress).
+    const withoutProgress = (gradient: string) =>
+      normalise(gradient).replace(PROGRESS_TERM, "$1");
+    const supported = withTimeline.slice(0, 2);
+    expect(supported.map(normalise)).not.toEqual(
+      supported.map(withoutProgress)
+    );
+    expect(gradientsIn(rules[0]).map(normalise)).toEqual(
+      supported.map(withoutProgress)
+    );
+  });
+
+  it("registers the strip lengths privately and keeps them out of the docs (T-PRIVATE)", () => {
+    for (const side of ["left", "right"]) {
+      const at = css.indexOf(`@property --_ks-reel-inset-${side} {`);
+      expect(at, side).toBeGreaterThan(-1);
+      const body = normalise(blockAt(css, at));
+      expect(body).toContain('syntax:"<length>";');
+      expect(body).toContain("inherits:false;");
+      expect(body).toContain("initial-value:0px;");
+    }
+    // The progress lengths are set only beside a strip and never registered.
+    for (const side of ["left", "right"]) {
+      expect(css).not.toContain(`@property --_ks-reel-progress-${side}`);
+    }
+    const docs = join(SRC_DIR, "../../../apps/docs/content");
+    const mentions = (
+      readdirSync(docs, { recursive: true, encoding: "utf-8" }) as string[]
+    )
+      .filter((file) => file.endsWith(".mdx"))
+      .filter((file) =>
+        PRIVATE_NAMES.test(readFileSync(join(docs, file), "utf-8"))
+      );
+    expect(mentions).toEqual([]);
+  });
+});

@@ -1698,6 +1698,11 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("reel-default", m.default),
     }))
   ),
+  "reel-plain-arrows": dynamic(() =>
+    import("./reel/plain-arrows").then((m) => ({
+      default: hydrated("reel-plain-arrows", m.default),
+    }))
+  ),
   "reel-rtl": dynamic(() =>
     import("./reel/rtl").then((m) => ({
       default: hydrated("reel-rtl", m.default),

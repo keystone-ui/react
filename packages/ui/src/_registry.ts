@@ -295,6 +295,7 @@ export const ui: RegistryItem[] = [
       "lucide-react",
       "motion",
     ],
+    registryDependencies: ["reel"],
     files: [{ path: "ui/tabs.tsx", type: "registry:ui" }],
   },
   {

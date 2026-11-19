@@ -324,6 +324,30 @@ and `aria-current` on the current link are yours. Style navigation links with
 `buttonVariants` on an `<a href>`. Button's non-native mode assigns the button
 role. The `category-nav-01` block is the full bar.
 
+Reel checks on mount when the viewport has positive content width, when that
+width goes from zero to positive, or when a different item becomes current; it
+scrolls the current item into view without moving focus. It finds that item by
+a nonempty `aria-current` other than `false`, `aria-selected="true"`, or
+`data-selected` with any value but `false`, and takes the first such item in
+DOM order. So a `TabsList` in your own Reel reveals the active tab, and an
+earlier item carrying your own `aria-current` or `data-selected` is revealed
+instead.
+
+Reel's `arrowVariant="plain"` is a bare chevron with the row hidden beneath it;
+scrollable Tabs uses it. Set the fade's depth with `--ks-reel-fade-size` on the
+Reel or an ancestor, never `--ks-scroll-fade-size`, which Reel owns on its
+viewport. Don't wrap a `scrollable` TabsList in a Reel. To change when the
+arrows show or how they look, drop `scrollable` and wrap the `TabsList` in your
+own Reel:
+
+```tsx
+<Tabs defaultValue="all">
+  <Reel arrows="pointer">
+    <TabsList className="w-max">{triggers}</TabsList>
+  </Reel>
+</Tabs>
+```
+
 ---
 
 ## Use full Card composition

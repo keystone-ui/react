@@ -1342,6 +1342,9 @@
         "lucide-react",
         "motion"
       ],
+      "registryDependencies": [
+        "https://keystoneui.io/r/reel.json"
+      ],
       "files": [
         {
           "path": "packages/ui/src/tabs.tsx",
@@ -7901,6 +7904,22 @@
       "files": [
         {
           "path": "apps/docs/demos/reel/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "reel-plain-arrows",
+      "type": "registry:example",
+      "title": "Reel Plain Arrows",
+      "description": "Reel example: Plain Arrows.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/reel.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/reel/plain-arrows.tsx",
           "type": "registry:example"
         }
       ]

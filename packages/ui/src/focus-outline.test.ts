@@ -38,7 +38,6 @@ const STRING_LITERAL = /"([^"\n]*)"|`([^`]*)`|'([^'\n]*)'/g;
 // Anchors that pick each library-painted part's own class literal.
 const BREADCRUMB_LINK = /hover:text-foreground/;
 const CAROUSEL_DOT = /after:-inset-x-\[3px\]/;
-const TABS_SCROLL_BUTTON = /^absolute top-0 (?:left|right)-0 z-10 /;
 const TOAST_BUTTON = /inline-flex h-7 cursor-pointer/;
 const CODE_BLOCK_CONTENT = /\[counter-reset:code-line\]/;
 // The chip composes its base from several literals; this picks the one that
@@ -244,13 +243,6 @@ describe("focus outline", () => {
         file: "carousel.tsx",
         anchor: CAROUSEL_DOT,
         count: 1,
-        outline: BUTTON_OUTLINE,
-      },
-      {
-        part: "Tabs scroll buttons",
-        file: "tabs.tsx",
-        anchor: TABS_SCROLL_BUTTON,
-        count: 2,
         outline: BUTTON_OUTLINE,
       },
       {

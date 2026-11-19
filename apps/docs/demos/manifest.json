@@ -332,6 +332,7 @@
   "radio-group-with-description": "radio-group/with-description.tsx",
   "reel-custom-chips": "reel/custom-chips.tsx",
   "reel-default": "reel/default.tsx",
+  "reel-plain-arrows": "reel/plain-arrows.tsx",
   "reel-rtl": "reel/rtl.tsx",
   "reel-with-filter-chips": "reel/with-filter-chips.tsx",
   "resizable-collapsible": "resizable/collapsible.tsx",

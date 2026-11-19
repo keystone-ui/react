@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "reel-plain-arrows",
+  "title": "Reel Plain Arrows",
+  "description": "Reel example: Plain Arrows.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/reel.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/reel/plain-arrows.tsx",
+      "content": "\"use client\";\n\nimport { buttonVariants } from \"@keystoneui/react/button\";\nimport { Reel } from \"@keystoneui/react/reel\";\nimport { cn } from \"@keystoneui/react/utils\";\n\nconst sections = [\n  \"Overview\",\n  \"Activity\",\n  \"Members\",\n  \"Projects\",\n  \"Billing\",\n  \"Invoices\",\n  \"Integrations\",\n  \"Audit log\",\n  \"Settings\",\n];\n\nexport default function ReelPlainArrows() {\n  const current = \"Overview\";\n  return (\n    <nav aria-label=\"Sections\" className=\"w-full max-w-md\">\n      <Reel arrowVariant=\"plain\" arrows=\"always\">\n        <ul className=\"flex w-max gap-1 rounded-lg bg-muted p-1\">\n          {sections.map((section) => {\n            const isCurrent = section === current;\n            return (\n              <li key={section}>\n                <a\n                  aria-current={isCurrent ? \"page\" : undefined}\n                  className={cn(\n                    buttonVariants({ variant: \"ghost\", size: \"sm\" }),\n                    isCurrent\n                      ? \"bg-background text-foreground shadow-sm hover:bg-background\"\n                      : \"text-muted-foreground hover:text-foreground\"\n                  )}\n                  href={`#${section.toLowerCase().replace(/[^a-z]+/g, \"-\")}`}\n                >\n                  {section}\n                </a>\n              </li>\n            );\n          })}\n        </ul>\n      </Reel>\n    </nav>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

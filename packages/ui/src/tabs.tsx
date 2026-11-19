@@ -2,22 +2,16 @@
 
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs";
 import { cva, type VariantProps } from "class-variance-authority";
-import {
-  ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon,
-} from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import {
   type ComponentProps,
   createContext,
-  useCallback,
   useContext,
-  useEffect,
   useId,
   useMemo,
-  useRef,
   useState,
 } from "react";
+import { Reel } from "./reel";
 import { cn, mergeClassName } from "./utils";
 
 type TabsValue = string | number | null;
@@ -53,17 +47,26 @@ function Tabs({
   onValueChange,
   ...props
 }: TabsProps) {
+  // Lazily, and through an updater below: a tab's value may be a function,
+  // which React would otherwise call.
   const [internalValue, setInternalValue] = useState<TabsValue>(
-    defaultValue ?? null
+    () => defaultValue ?? null
   );
-  const activeValue = value ?? internalValue;
+  // `null` is a real controlled value (no tab active); only `undefined` means
+  // uncontrolled.
+  const activeValue = value === undefined ? internalValue : value;
 
   const handleValueChange: TabsPrimitive.Root.Props["onValueChange"] = (
     next,
     eventDetails
   ) => {
-    setInternalValue(next);
     onValueChange?.(next, eventDetails);
+    // Only a user's activation (reason "none") can be cancelled; Base UI
+    // commits automatic changes ("initial", "missing", "disabled") before
+    // notifying.
+    if (eventDetails.reason !== "none" || !eventDetails.isCanceled) {
+      setInternalValue(() => next);
+    }
   };
 
   return (
@@ -120,7 +123,12 @@ export interface TabsListProps
    * active tab. Each trigger should pair an icon with `<TabsTriggerLabel>`.
    */
   morphing?: boolean;
-  /** Enable horizontal scroll with gradient fades and arrow navigation */
+  /**
+   * Scroll horizontally in a Reel, with edge fades and bare chevrons. Reel
+   * brings the active tab into view when the list gains room or the
+   * selection changes, if the Reel's last measured content width and the
+   * tab's width are positive.
+   */
   scrollable?: boolean;
   /**
    * Shape of the tab list and its triggers
@@ -182,9 +190,12 @@ function TabsList({
 // =============================================================================
 // ScrollableTabsList (internal)
 // =============================================================================
-/** Pixels to scroll per arrow click in scrollable tabs */
-const SCROLL_AMOUNT = 150;
-
+/**
+ * The list in a Reel with plain arrows: a bare chevron at each edge with more
+ * tabs, on every device, and the row hidden beneath it. The Reel's own
+ * padding is zeroed so the list keeps its box; the list's padding keeps the
+ * triggers' focus outlines clear of the scroller's clip at any root size.
+ */
 function ScrollableTabsList({
   className,
   variant = "default",
@@ -193,99 +204,31 @@ function ScrollableTabsList({
   children,
   ...props
 }: Omit<TabsListProps, "scrollable">) {
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
-
-  const updateScrollState = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) {
-      return;
-    }
-    setCanScrollLeft(el.scrollLeft > 0);
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
-  }, []);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) {
-      return;
-    }
-
-    updateScrollState();
-
-    el.addEventListener("scroll", updateScrollState, { passive: true });
-    const observer = new ResizeObserver(updateScrollState);
-    observer.observe(el);
-
-    // Also observe the inner list so we detect when items are added/removed
-    const list = el.firstElementChild;
-    if (list) {
-      observer.observe(list);
-    }
-
-    return () => {
-      el.removeEventListener("scroll", updateScrollState);
-      observer.disconnect();
-    };
-  }, [updateScrollState]);
-
-  const scrollLeft = () => {
-    scrollRef.current?.scrollBy({ left: -SCROLL_AMOUNT, behavior: "smooth" });
-  };
-
-  const scrollRight = () => {
-    scrollRef.current?.scrollBy({ left: SCROLL_AMOUNT, behavior: "smooth" });
-  };
-
   return (
-    <div className="relative" data-slot="tabs-list-wrapper">
-      {canScrollLeft && (
-        <button
-          aria-label="Scroll tabs left"
-          className="absolute top-0 left-0 z-10 flex h-full cursor-pointer items-center justify-center pr-1 pl-0.5 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
-          data-slot="tabs-scroll-button"
-          onClick={scrollLeft}
-          type="button"
-        >
-          <ChevronLeftIcon className="size-4 text-muted-foreground" />
-        </button>
-      )}
-
-      <div
-        className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    <Reel
+      arrowVariant="plain"
+      arrows="always"
+      className="[&>[data-slot=reel-viewport]]:p-0"
+    >
+      <TabsPrimitive.List
+        className={mergeClassName(
+          cn(
+            tabsListVariants({ variant }),
+            "p-[max(4px,var(--spacing,0.25rem))]"
+          ),
+          className
+        )}
+        data-morphing={morphing || undefined}
         data-scrollable
-        data-slot="tabs-list-scroll"
-        ref={scrollRef}
+        data-shape={shape}
+        data-slot="tabs-list"
+        data-variant={variant}
+        {...props}
       >
-        <TabsPrimitive.List
-          className={mergeClassName(
-            cn(tabsListVariants({ variant })),
-            className
-          )}
-          data-morphing={morphing || undefined}
-          data-shape={shape}
-          data-slot="tabs-list"
-          data-variant={variant}
-          {...props}
-        >
-          {!morphing && <TabsIndicator />}
-          {children}
-        </TabsPrimitive.List>
-      </div>
-
-      {canScrollRight && (
-        <button
-          aria-label="Scroll tabs right"
-          className="absolute top-0 right-0 z-10 flex h-full cursor-pointer items-center justify-center pr-0.5 pl-1 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2"
-          data-slot="tabs-scroll-button"
-          onClick={scrollRight}
-          type="button"
-        >
-          <ChevronRightIcon className="size-4 text-muted-foreground" />
-        </button>
-      )}
-    </div>
+        {!morphing && <TabsIndicator />}
+        {children}
+      </TabsPrimitive.List>
+    </Reel>
   );
 }
 

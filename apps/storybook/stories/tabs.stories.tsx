@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@keystoneui/react/card";
+import { Reel } from "@keystoneui/react/reel";
 import {
   Tabs,
   TabsContent,
@@ -32,7 +33,7 @@ import {
   Shield as ShieldIcon,
   Users as UsersIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 
 const meta = {
@@ -87,7 +88,7 @@ import {
   </TabsList>
 </Tabs>
 
-// Scrollable (with arrow buttons and gradient fades)
+// Scrollable (edge fades and bare chevrons, built on Reel)
 <Tabs defaultValue="tab1">
   <TabsList scrollable>
     <TabsTrigger value="tab1">Tab 1</TabsTrigger>
@@ -103,7 +104,7 @@ import {
 - Default and line style variants
 - Rounded and pill shapes
 - Horizontal and vertical orientations
-- Scrollable mode with arrow buttons and CSS scroll-driven gradient fades
+- Scrollable mode with edge fades and bare chevrons, built on Reel
 - Disabled tab support
 - Icon support in triggers
 - Controlled and uncontrolled usage
@@ -130,61 +131,6 @@ import {
 
 export default meta;
 type Story = StoryObj<typeof Tabs>;
-
-/**
- * A focused part's outline as the user sees it: the computed style, and any
- * ancestor that hides overflow and would clip it. The library's outline is
- * Button's: 2px solid at offset 2px (the browser's own ring is `auto` 1px).
- */
-function readFocusOutline(el: HTMLElement) {
-  const style = getComputedStyle(el);
-  const reach =
-    Number.parseFloat(style.outlineOffset) +
-    Number.parseFloat(style.outlineWidth);
-  const box = el.getBoundingClientRect();
-  const clippedBy: string[] = [];
-  for (let a = el.parentElement; a; a = a.parentElement) {
-    const s = getComputedStyle(a);
-    if (s.overflowX === "visible" && s.overflowY === "visible") {
-      continue;
-    }
-    const b = a.getBoundingClientRect();
-    const left = b.left + a.clientLeft;
-    const top = b.top + a.clientTop;
-    if (
-      box.left - reach < left - 0.5 ||
-      box.top - reach < top - 0.5 ||
-      box.right + reach > left + a.clientWidth + 0.5 ||
-      box.bottom + reach > top + a.clientHeight + 0.5
-    ) {
-      clippedBy.push(a.dataset.slot ?? a.tagName.toLowerCase());
-    }
-  }
-  return {
-    focusVisible: el.matches(":focus-visible"),
-    style: style.outlineStyle,
-    width: style.outlineWidth,
-    offset: style.outlineOffset,
-    clippedBy,
-  };
-}
-
-/** Focus `el`, let its colour transition settle, read, and blur. */
-async function focusAndRead(el: HTMLElement) {
-  el.focus();
-  await new Promise((r) => setTimeout(r, 300));
-  const outline = readFocusOutline(el);
-  el.blur();
-  return outline;
-}
-
-const LIBRARY_OUTLINE = {
-  focusVisible: true,
-  style: "solid",
-  width: "2px",
-  offset: "2px",
-  clippedBy: [],
-};
 
 // Basic tabs with Card content panels
 export const Default: Story = {
@@ -591,7 +537,7 @@ export const Scrollable: Story = {
       style={{ maxWidth: 480 }}
     >
       <p className="mb-3 text-muted-foreground text-xs">
-        Constrained to 480px &mdash; use the arrow buttons to navigate
+        Constrained to 480px &mdash; use the chevrons to navigate
       </p>
       <Tabs defaultValue="dashboard">
         <TabsList scrollable>
@@ -739,40 +685,9 @@ export const Scrollable: Story = {
     docs: {
       description: {
         story:
-          "Use the `scrollable` prop on `TabsList` when you have many tabs that may overflow the container. This enables horizontal scrolling with CSS scroll-driven gradient fades (Chrome 115+, gracefully degrades) and arrow buttons for navigation. On mobile, users can also swipe to scroll.",
+          "Use the `scrollable` prop on `TabsList` when you have many tabs that may overflow the container. This puts the list in a Reel: it scrolls sideways with edge fades (CSS scroll-driven animations, Chrome 115+, gracefully degrades) and bare chevrons built on Reel. Reel brings the active tab into view when the list gains room or the selection changes, if the Reel's last measured content width and the tab's width are positive. On mobile, users can also swipe to scroll.",
       },
     },
-  },
-  // Both scroll arrows draw the library's keyboard focus outline, not the
-  // browser's 1px `auto` ring.
-  play: async ({ canvasElement }) => {
-    const scroller = canvasElement.querySelector(
-      "[data-slot='tabs-list-scroll']"
-    ) as HTMLElement;
-    // Off the start, so the left arrow mounts too.
-    scroller.scrollLeft = 100;
-    await new Promise((r) => setTimeout(r, 300));
-    const arrows = canvasElement.querySelectorAll<HTMLElement>(
-      "[data-slot='tabs-scroll-button']"
-    );
-    await expect(arrows.length).toBe(2);
-    const [left, right] = arrows as unknown as [HTMLElement, HTMLElement];
-    // One at a time: both are read while focused, and only one can be.
-    const measured = {
-      [left.getAttribute("aria-label") ?? ""]: await focusAndRead(left),
-      [right.getAttribute("aria-label") ?? ""]: await focusAndRead(right),
-    };
-    await expect(measured).toEqual({
-      "Scroll tabs left": LIBRARY_OUTLINE,
-      "Scroll tabs right": LIBRARY_OUTLINE,
-    });
-    // Back at the start: wait for the left arrow to unmount.
-    scroller.scrollLeft = 0;
-    await waitFor(() =>
-      expect(
-        canvasElement.querySelectorAll("[data-slot='tabs-scroll-button']")
-      ).toHaveLength(1)
-    );
   },
 };
 
@@ -990,6 +905,1378 @@ export const MorphingLine: Story = {
       description: {
         story:
           'Combines `morphing` with `variant="line"`. The underline indicator slides and resizes to match the active trigger\'s expanded width.',
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Scrollable mode on Reel: behaviour tests (hidden from the sidebar and the
+// docs page, still run by Vitest in a real browser)
+// =============================================================================
+
+const TEST_ONLY: Story["tags"] = ["!dev", "!autodocs"];
+
+const SCROLL_TABS = [
+  { icon: LayoutDashboardIcon, label: "Dashboard", value: "dashboard" },
+  { icon: BarChartIcon, label: "Analytics", value: "analytics" },
+  { icon: UsersIcon, label: "Users", value: "users" },
+  { icon: MessageSquareIcon, label: "Messages", value: "messages" },
+  { icon: MailIcon, label: "Email", value: "email" },
+  { icon: ShieldIcon, label: "Security", value: "security" },
+  { icon: GlobeIcon, label: "Domains", value: "domains" },
+  { icon: SettingsIcon, label: "Settings", value: "settings" },
+];
+
+/** A role query option, kept out of story-name scans. */
+const named = (accessibleName: string) => ({ name: accessibleName });
+
+/** The custom browser commands registered in vitest.config.ts. */
+interface RealCommands {
+  emulateReducedMotion: (reduce: boolean) => Promise<void>;
+  pointerDown: () => Promise<void>;
+  pointerMoveAway: () => Promise<void>;
+  pointerMoveTo: (selector: string) => Promise<void>;
+  pointerUp: () => Promise<void>;
+}
+type RealUser = typeof import("vitest/browser").userEvent;
+
+/** Vitest's real (Playwright) input. Absent when Storybook runs the play. */
+function real() {
+  const g = globalThis as {
+    __realCommands?: RealCommands;
+    __realUserEvent?: RealUser;
+  };
+  return { commands: g.__realCommands, user: g.__realUserEvent };
+}
+
+/** Real input is required: a play that cannot drive it fails, not skips. */
+function requireReal() {
+  const { commands, user } = real();
+  if (!(commands && user)) {
+    throw new Error("real browser input is required (run under Vitest)");
+  }
+  return { commands, user };
+}
+
+const nextFrame = () =>
+  new Promise<void>((resolve) =>
+    requestAnimationFrame(() => setTimeout(resolve, 0))
+  );
+const pause = (ms: number) =>
+  new Promise<void>((resolve) => setTimeout(resolve, ms));
+const settle = (check: () => unknown) =>
+  waitFor(async () => check(), { timeout: 3000 });
+
+/** Records every scroll request made on a Reel viewport, until restored. */
+function recordScrollRequests() {
+  const proto = Element.prototype as unknown as Record<
+    "scroll" | "scrollBy" | "scrollTo",
+    (...args: unknown[]) => void
+  >;
+  const original = {
+    scroll: proto.scroll,
+    scrollBy: proto.scrollBy,
+    scrollTo: proto.scrollTo,
+  };
+  const requests: {
+    at: {
+      from: number;
+      item: DOMRect | undefined;
+      range: number;
+      viewport: DOMRect;
+    };
+    behavior: string;
+    left: number | undefined;
+    viewport: Element;
+  }[] = [];
+  for (const method of ["scroll", "scrollBy", "scrollTo"] as const) {
+    proto[method] = function (this: Element, ...args: unknown[]) {
+      if (
+        this instanceof HTMLElement &&
+        this.dataset.slot === "reel-viewport"
+      ) {
+        const options =
+          typeof args[0] === "object" && args[0] !== null
+            ? (args[0] as ScrollToOptions)
+            : undefined;
+        requests.push({
+          at: {
+            from: this.scrollLeft,
+            item: this.querySelector(
+              '[aria-selected="true"]'
+            )?.getBoundingClientRect(),
+            range: this.scrollWidth - this.clientWidth,
+            viewport: this.getBoundingClientRect(),
+          },
+          behavior: options?.behavior ?? "auto",
+          left: options?.left,
+          viewport: this,
+        });
+      }
+      return original[method].apply(this, args);
+    };
+  }
+  return {
+    of: (viewport: Element) =>
+      requests.filter((r) => r.viewport === viewport).map((r) => r.behavior),
+    /** The requests made on `viewport`, with what was measured as each was made. */
+    calls: (viewport: Element) =>
+      requests.filter((r) => r.viewport === viewport),
+    restore() {
+      Object.assign(proto, original);
+    },
+  };
+}
+
+function scrollParts(root: HTMLElement, testId: string) {
+  const host = within(root).getByTestId(testId);
+  const q = (selector: string) => host.querySelector(selector) as HTMLElement;
+  return {
+    host,
+    reel: q('[data-slot="reel"]'),
+    viewport: q('[data-slot="reel-viewport"]'),
+    list: q('[data-slot="tabs-list"]'),
+    area: (side: "start" | "end") =>
+      q(`[data-slot="reel"] > span[data-side="${side}"]`),
+    picture: (side: "start" | "end") =>
+      q(`[data-slot="reel-arrow"][data-side="${side}"]`),
+    tab: (name: string) =>
+      within(host).getByRole("tab", { name }) as HTMLElement,
+  };
+}
+
+/** The gaps between a tab and the viewport's edges, left to right. */
+function tabGaps(viewport: HTMLElement, tab: HTMLElement) {
+  const v = viewport.getBoundingClientRect();
+  const a = tab.getBoundingClientRect();
+  return { fromStart: a.left - v.left, fromEnd: v.right - a.right };
+}
+
+/** Clear of both edges by `by`, or against an edge the range cannot pass. */
+function clearOrAtEnd(viewport: HTMLElement, tab: HTMLElement, by = 52) {
+  const { fromStart, fromEnd } = tabGaps(viewport, tab);
+  const max = viewport.scrollWidth - viewport.clientWidth;
+  const atStart = viewport.scrollLeft <= 0.5;
+  const atEnd = viewport.scrollLeft >= max - 0.5;
+  return (fromStart >= by - 0.5 || atStart) && (fromEnd >= by - 0.5 || atEnd);
+}
+
+/** A colour as the browser computes it, through a probe element. */
+function tokenColor(className: string) {
+  const probe = document.createElement("span");
+  probe.className = className;
+  document.body.append(probe);
+  const color = getComputedStyle(probe).color;
+  probe.remove();
+  return color;
+}
+
+function ScrollTabs({
+  activateOnFocus,
+  defaultValue = "dashboard",
+  lastLabel,
+  morphing,
+  onValueChange,
+  panels = false,
+  testId,
+  value,
+  variant,
+  width = 480,
+}: {
+  activateOnFocus?: boolean;
+  defaultValue?: string;
+  /** A label for the last tab, longer than the others. */
+  lastLabel?: string;
+  morphing?: boolean;
+  onValueChange?: (value: string) => void;
+  panels?: boolean;
+  testId: string;
+  value?: string;
+  variant?: "default" | "line";
+  width?: number;
+}) {
+  return (
+    <div data-testid={testId} style={{ width }}>
+      <Tabs
+        defaultValue={value === undefined ? defaultValue : undefined}
+        onValueChange={(next) => onValueChange?.(next as string)}
+        value={value}
+      >
+        <TabsList
+          activateOnFocus={activateOnFocus}
+          morphing={morphing}
+          scrollable
+          variant={variant}
+        >
+          {SCROLL_TABS.map(({ icon: Icon, label: name, value: v }) => {
+            const label = v === "settings" && lastLabel ? lastLabel : name;
+            return (
+              <TabsTrigger key={v} value={v}>
+                <Icon />
+                {morphing ? (
+                  <TabsTriggerLabel>{label}</TabsTriggerLabel>
+                ) : (
+                  label
+                )}
+              </TabsTrigger>
+            );
+          })}
+        </TabsList>
+        {panels
+          ? SCROLL_TABS.map(({ value: v }) => (
+              <TabsContent key={v} value={v}>
+                {`Panel ${v}`}
+              </TabsContent>
+            ))
+          : null}
+      </Tabs>
+    </div>
+  );
+}
+
+/** A page scrolled down, with a focused button outside the tabs. */
+function OutsidePage({ children }: { children: ReactNode }) {
+  return (
+    <div className="pt-[40vh] pb-[150vh]">
+      <button data-testid="outside" type="button">
+        Outside the tabs
+      </button>
+      <div className="mt-4 flex flex-col gap-4">{children}</div>
+    </div>
+  );
+}
+
+function holdOutside(canvasElement: HTMLElement) {
+  window.scrollTo(0, 120);
+  const outside = within(canvasElement).getByTestId("outside");
+  outside.focus({ preventScroll: true });
+  return { outside, pageY: window.scrollY };
+}
+
+async function expectOutsideHeld(held: {
+  outside: HTMLElement;
+  pageY: number;
+}) {
+  await expect(held.pageY).toBeGreaterThan(0);
+  await expect(document.activeElement).toBe(held.outside);
+  await expect(window.scrollY).toBe(held.pageY);
+}
+
+// T-BOX. The list keeps its box: the Reel is the list's 40px, the list sits
+// flush at its top-left, and the first trigger is where it is in a list that
+// does not scroll.
+export const ScrollableKeepsItsBox: Story = {
+  tags: TEST_ONLY,
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <ScrollTabs testId="scroll" />
+      <div data-testid="still" style={{ width: 1400 }}>
+        <Tabs defaultValue="dashboard">
+          <TabsList>
+            {SCROLL_TABS.map(({ icon: Icon, label, value }) => (
+              <TabsTrigger key={value} value={value}>
+                <Icon />
+                {label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    await expect(
+      Number.parseFloat(getComputedStyle(document.documentElement).fontSize)
+    ).toBe(16);
+    const s = scrollParts(canvasElement, "scroll");
+    await expect(s.viewport.scrollLeft).toBe(0);
+    const root = s.reel.getBoundingClientRect();
+    const list = s.list.getBoundingClientRect();
+    await expect(root.height).toBe(40);
+    await expect({
+      top: list.top,
+      left: list.left,
+      height: list.height,
+    }).toEqual({ top: root.top, left: root.left, height: root.height });
+    // scrollWidth is rounded to a whole pixel.
+    await expect(Math.abs(list.width - s.viewport.scrollWidth)).toBeLessThan(1);
+    const still = within(canvasElement).getByTestId("still");
+    const stillList = still.querySelector(
+      '[data-slot="tabs-list"]'
+    ) as HTMLElement;
+    const relative = (tab: HTMLElement, to: HTMLElement) => {
+      const a = tab.getBoundingClientRect();
+      const b = to.getBoundingClientRect();
+      return [a.left - b.left, a.top - b.top, a.width, a.height];
+    };
+    await expect(relative(s.tab("Dashboard"), s.list)).toEqual(
+      relative(within(still).getByRole("tab", named("Dashboard")), stillList)
+    );
+  },
+};
+
+// T-ARROW-VS-TODAY. The plain arrow keeps the earlier chevron: 16px, muted, its
+// centre 10px from the Reel's edge and vertically centred, with no fill,
+// border, shadow or scale; the press lands on a 24 × 40px area.
+export const ScrollableChevronGeometry: Story = {
+  tags: TEST_ONLY,
+  render: () => <ScrollTabs testId="scroll" />,
+  play: async ({ canvasElement }) => {
+    const s = scrollParts(canvasElement, "scroll");
+    s.viewport.scrollLeft = 100;
+    await settle(() =>
+      expect(getComputedStyle(s.area("start")).visibility).toBe("visible")
+    );
+    const root = s.reel.getBoundingClientRect();
+    const muted = tokenColor("text-muted-foreground");
+    for (const side of ["start", "end"] as const) {
+      const svg = s.picture(side).querySelector("svg") as SVGElement;
+      const glyph = svg.getBoundingClientRect();
+      // biome-ignore lint/performance/noAwaitInLoops: two sides, in order
+      await expect([glyph.width, glyph.height]).toEqual([16, 16]);
+      await expect(getComputedStyle(svg).color).toBe(muted);
+      const centre = glyph.left + glyph.width / 2;
+      const fromEdge =
+        side === "start" ? centre - root.left : root.right - centre;
+      await expect(Math.abs(fromEdge - 10)).toBeLessThanOrEqual(0.5);
+      await expect(
+        Math.abs(glyph.top + glyph.height / 2 - (root.top + root.height / 2))
+      ).toBeLessThanOrEqual(0.5);
+      const picture = getComputedStyle(s.picture(side));
+      await expect(s.picture(side).tagName).toBe("SPAN");
+      await expect([
+        picture.borderTopWidth,
+        picture.borderRightWidth,
+        picture.borderBottomWidth,
+        picture.borderLeftWidth,
+        picture.backgroundColor,
+        picture.boxShadow,
+        picture.scale,
+      ]).toEqual([
+        "0px",
+        "0px",
+        "0px",
+        "0px",
+        "rgba(0, 0, 0, 0)",
+        "none",
+        "none",
+      ]);
+      const area = s.area(side).getBoundingClientRect();
+      await expect([area.width, area.height]).toEqual([24, 40]);
+    }
+  },
+};
+
+// T-HOVER. Hovering or pressing an arrow turns the chevron to the foreground
+// colour; at rest it is muted.
+export const ScrollableChevronHover: Story = {
+  tags: TEST_ONLY,
+  render: () => <ScrollTabs testId="scroll" />,
+  play: async ({ canvasElement }) => {
+    const { commands } = requireReal();
+    await commands.emulateReducedMotion(true);
+    try {
+      const s = scrollParts(canvasElement, "scroll");
+      const svg = s.picture("end").querySelector("svg") as SVGElement;
+      const muted = tokenColor("text-muted-foreground");
+      const foreground = tokenColor("text-foreground");
+      await expect(muted).not.toBe(foreground);
+      await expect(getComputedStyle(svg).color).toBe(muted);
+      await commands.pointerMoveTo(
+        '[data-testid="scroll"] [data-slot="reel"] > span[data-side="end"]'
+      );
+      await settle(() => expect(getComputedStyle(svg).color).toBe(foreground));
+      await commands.pointerDown();
+      await expect(getComputedStyle(svg).color).toBe(foreground);
+      await commands.pointerUp();
+      await commands.pointerMoveAway();
+      await settle(() => expect(getComputedStyle(svg).color).toBe(muted));
+      // Pressed without hover, as a touch press is: press, then slide off
+      // while still held. The chevron stays in the foreground colour while
+      // held, and turns muted once released. (The first press paged to the
+      // end, where the end arrow hides: back to the start first.)
+      s.viewport.scrollLeft = 0;
+      await settle(() =>
+        expect(getComputedStyle(s.area("end")).visibility).toBe("visible")
+      );
+      await commands.pointerMoveTo(
+        '[data-testid="scroll"] [data-slot="reel"] > span[data-side="end"]'
+      );
+      await commands.pointerDown();
+      await commands.pointerMoveAway();
+      await expect(s.area("end").matches(":hover")).toBe(false);
+      await expect(getComputedStyle(svg).color).toBe(foreground);
+      await commands.pointerUp();
+      await settle(() => expect(getComputedStyle(svg).color).toBe(muted));
+    } finally {
+      await commands.emulateReducedMotion(false);
+    }
+  },
+};
+
+function MountLater({ defaultValue }: { defaultValue: string }) {
+  const [mounted, setMounted] = useState(false);
+  return (
+    <OutsidePage>
+      <button
+        data-testid="mount"
+        onClick={() => setMounted(true)}
+        type="button"
+      >
+        Mount
+      </button>
+      {mounted ? (
+        <ScrollTabs defaultValue={defaultValue} testId="scroll" width={320} />
+      ) : null}
+    </OutsidePage>
+  );
+}
+
+/** Mount from the play with the recorder already installed. */
+async function mountRecorded(canvasElement: HTMLElement, testId = "scroll") {
+  // Outside focus and page position first, then the recorder, then the
+  // mount: anything the mount does to either shows up afterwards.
+  const held = holdOutside(canvasElement);
+  const recorder = recordScrollRequests();
+  try {
+    within(canvasElement).getByTestId("mount").click();
+    await settle(() =>
+      expect(within(canvasElement).queryByTestId(testId)).not.toBeNull()
+    );
+    await pause(300);
+    const s = scrollParts(canvasElement, testId);
+    return { held, recorder, requests: recorder.of(s.viewport), s };
+  } finally {
+    recorder.restore();
+  }
+}
+
+// T-MOUNT-MID. A middle tab off-screen at mount is brought into view with one
+// instant request, 52px clear of both edges.
+export const ScrollableMountMiddle: Story = {
+  tags: TEST_ONLY,
+  render: () => <MountLater defaultValue="email" />,
+  play: async ({ canvasElement }) => {
+    const { held, requests, s } = await mountRecorded(canvasElement);
+    await expect(requests).toEqual(["instant"]);
+    const { fromStart, fromEnd } = tabGaps(s.viewport, s.tab("Email"));
+    await expect(fromStart).toBeGreaterThanOrEqual(52 - 0.5);
+    await expect(fromEnd).toBeGreaterThanOrEqual(52 - 0.5);
+    await expectOutsideHeld(held);
+  },
+};
+
+// T-MOUNT-LAST. The last tab at mount: one instant request, clear or at the
+// end of the range.
+export const ScrollableMountLast: Story = {
+  tags: TEST_ONLY,
+  render: () => <MountLater defaultValue="settings" />,
+  play: async ({ canvasElement }) => {
+    const { held, requests, s } = await mountRecorded(canvasElement);
+    await expect(requests).toEqual(["instant"]);
+    await expect(clearOrAtEnd(s.viewport, s.tab("Settings"))).toBe(true);
+    await expectOutsideHeld(held);
+  },
+};
+
+function SwitchFixture() {
+  const [mounted, setMounted] = useState(false);
+  const [value, setValue] = useState("dashboard");
+  const [hidden, setHidden] = useState(false);
+  return (
+    <OutsidePage>
+      <button
+        data-testid="mount"
+        onClick={() => setMounted(true)}
+        type="button"
+      >
+        Mount
+      </button>
+      <button
+        data-testid="to-settings"
+        onClick={() => setValue("settings")}
+        type="button"
+      >
+        Settings
+      </button>
+      <button data-testid="hide" onClick={() => setHidden(true)} type="button">
+        Hide
+      </button>
+      <button data-testid="show" onClick={() => setHidden(false)} type="button">
+        Show
+      </button>
+      <div style={{ display: hidden ? "none" : undefined }}>
+        {mounted ? (
+          <ScrollTabs
+            onValueChange={setValue}
+            testId="scroll"
+            value={value}
+            width={320}
+          />
+        ) : null}
+      </div>
+    </OutsidePage>
+  );
+}
+
+/** Click a fixture button without moving focus from the outside button. */
+function pressButton(canvasElement: HTMLElement, testId: string) {
+  within(canvasElement).getByTestId(testId).click();
+}
+
+/**
+ * Mounted with the first tab clear, recorded from before the mount: no
+ * request at mount, then one request for a switch to a distant tab, glided
+ * or (under reduced motion) jumped. Outside focus and the page stay put.
+ */
+async function switchFromCode(canvasElement: HTMLElement, reduce: boolean) {
+  const { commands } = requireReal();
+  await commands.emulateReducedMotion(reduce);
+  const held = holdOutside(canvasElement);
+  const recorder = recordScrollRequests();
+  try {
+    pressButton(canvasElement, "mount");
+    await settle(() =>
+      expect(within(canvasElement).queryByTestId("scroll")).not.toBeNull()
+    );
+    await pause(300);
+    const s = scrollParts(canvasElement, "scroll");
+    await expect(recorder.of(s.viewport)).toEqual([]);
+    await expect(s.viewport.scrollLeft).toBe(0);
+    pressButton(canvasElement, "to-settings");
+    await settle(() =>
+      expect(clearOrAtEnd(s.viewport, s.tab("Settings"))).toBe(true)
+    );
+    await pause(100);
+    await expect(recorder.of(s.viewport)).toEqual([
+      reduce ? "instant" : "smooth",
+    ]);
+    await expectOutsideHeld(held);
+  } finally {
+    recorder.restore();
+    await commands.emulateReducedMotion(false);
+  }
+}
+
+// T-SWITCH. A controlled switch to a distant tab glides there in one request.
+export const ScrollableSwitchFromCode: Story = {
+  tags: TEST_ONLY,
+  render: () => <SwitchFixture />,
+  play: ({ canvasElement }) => switchFromCode(canvasElement, false),
+};
+
+// T-SWITCH under reduced motion: the same request jumps.
+export const ScrollableSwitchFromCodeReducedMotion: Story = {
+  tags: TEST_ONLY,
+  render: () => <SwitchFixture />,
+  play: ({ canvasElement }) => switchFromCode(canvasElement, true),
+};
+
+// T-HIDDEN. A change made while the list is not displayed makes no request
+// while hidden, and is revealed with one instant request once it is shown.
+export const ScrollableChangedWhileHidden: Story = {
+  tags: TEST_ONLY,
+  render: () => <SwitchFixture />,
+  play: async ({ canvasElement }) => {
+    const held = holdOutside(canvasElement);
+    const recorder = recordScrollRequests();
+    try {
+      pressButton(canvasElement, "mount");
+      await settle(() =>
+        expect(within(canvasElement).queryByTestId("scroll")).not.toBeNull()
+      );
+      await pause(300);
+      const s = scrollParts(canvasElement, "scroll");
+      await expect(recorder.of(s.viewport)).toEqual([]);
+      pressButton(canvasElement, "hide");
+      await settle(() => expect(s.viewport.getClientRects()).toHaveLength(0));
+      pressButton(canvasElement, "to-settings");
+      await pause(300);
+      await expect(recorder.of(s.viewport)).toEqual([]);
+      pressButton(canvasElement, "show");
+      await settle(() =>
+        expect(clearOrAtEnd(s.viewport, s.tab("Settings"))).toBe(true)
+      );
+      await pause(100);
+      await expect(recorder.of(s.viewport)).toEqual(["instant"]);
+      await expectOutsideHeld(held);
+    } finally {
+      recorder.restore();
+    }
+  },
+};
+
+const KEY_PATH: [key: string, tab: string][] = [
+  ["{ArrowRight}", "Analytics"],
+  ["{ArrowRight}", "Users"],
+  ["{ArrowRight}", "Messages"],
+  ["{ArrowRight}", "Email"],
+  ["{End}", "Settings"],
+  ["{Home}", "Dashboard"],
+];
+
+/** The tab marked active by every hook at once, and the panel on show. */
+function activeState(s: ReturnType<typeof scrollParts>) {
+  const tabs = [...s.list.querySelectorAll<HTMLElement>('[role="tab"]')];
+  const marked = (pick: (tab: HTMLElement) => boolean) =>
+    tabs.filter(pick).map((tab) => tab.textContent);
+  const panel = [
+    ...s.host.querySelectorAll<HTMLElement>('[data-slot="tabs-content"]'),
+  ].find((p) => !p.hidden);
+  return {
+    aria: marked((tab) => tab.getAttribute("aria-selected") === "true"),
+    panel: panel?.textContent,
+  };
+}
+
+/**
+ * Puts the list on screen at a nonzero page offset and focuses the button
+ * before it without scrolling; returns that page offset.
+ */
+function enterAtY(
+  canvasElement: HTMLElement,
+  testId: string,
+  s: ReturnType<typeof scrollParts>
+) {
+  window.scrollTo(0, s.host.getBoundingClientRect().top + window.scrollY - 200);
+  within(canvasElement)
+    .getByTestId(`before-${testId}`)
+    .focus({ preventScroll: true });
+  return window.scrollY;
+}
+
+/**
+ * Tab into a list, then walk it with the arrow keys, End and Home. Each key
+ * focuses exactly the expected tab, clear of the edges, with one roving Tab
+ * stop and never an arrow; the active tab follows focus only when
+ * `activateOnFocus` is on.
+ */
+async function walkKeys(canvasElement: HTMLElement, testId: string) {
+  const { user } = requireReal();
+  const s = scrollParts(canvasElement, testId);
+  const automatic = testId === "auto";
+  const failures: string[] = [];
+  const pageY = enterAtY(canvasElement, testId, s);
+  await user.keyboard("{Tab}");
+  await expect(document.activeElement).toBe(s.tab("Dashboard"));
+  for (const [key, name] of KEY_PATH) {
+    // biome-ignore lint/performance/noAwaitInLoops: one key at a time
+    await user.keyboard(key);
+    await nextFrame();
+    const focused = document.activeElement as HTMLElement;
+    if (focused !== s.tab(name)) {
+      failures.push(`${key}: focus on ${focused.textContent}, not ${name}`);
+      continue;
+    }
+    if (!clearOrAtEnd(s.viewport, focused)) {
+      const g = tabGaps(s.viewport, focused);
+      failures.push(`${key}: ${name} ${g.fromStart}/${g.fromEnd}`);
+    }
+    const stops = [...s.list.querySelectorAll('[role="tab"]')].filter(
+      (tab) => (tab as HTMLElement).tabIndex === 0
+    );
+    if (stops.length !== 1) {
+      failures.push(`${key}: ${stops.length} tab stops`);
+    }
+    const active = automatic ? name : "Dashboard";
+    const state = activeState(s);
+    const expected = {
+      aria: [active],
+      panel: `Panel ${active.toLowerCase()}`,
+    };
+    if (JSON.stringify(state) !== JSON.stringify(expected)) {
+      failures.push(`${key}: active ${JSON.stringify(state)}`);
+    }
+    if (window.scrollY !== pageY) {
+      failures.push(`${key}: page moved ${pageY} → ${window.scrollY}`);
+    }
+  }
+  return { failures, s };
+}
+
+/** With manual activation, `key` on the focused tab marks it, scroll-free. */
+async function activateWith(
+  canvasElement: HTMLElement,
+  testId: string,
+  key: string
+) {
+  const { user } = requireReal();
+  const s = scrollParts(canvasElement, testId);
+  const pageY = enterAtY(canvasElement, testId, s);
+  await expect(pageY).toBeGreaterThan(0);
+  await user.keyboard("{Tab}");
+  await expect(document.activeElement).toBe(s.tab("Dashboard"));
+  // Focus Messages (off the start), then activate it.
+  await user.keyboard("{ArrowRight}{ArrowRight}{ArrowRight}");
+  await nextFrame();
+  await expect(document.activeElement).toBe(s.tab("Messages"));
+  await expect(window.scrollY).toBe(pageY);
+  const recorder = recordScrollRequests();
+  try {
+    await user.keyboard(key);
+    await pause(200);
+    await expect(activeState(s)).toEqual({
+      aria: ["Messages"],
+      panel: "Panel messages",
+    });
+    await expect(recorder.of(s.viewport)).toEqual([]);
+    await expect(window.scrollY).toBe(pageY);
+  } finally {
+    recorder.restore();
+  }
+}
+
+// T-KEYS. The keyboard reaches every tab, in order, clear of the edges.
+export const ScrollableKeyboard: Story = {
+  tags: TEST_ONLY,
+  render: () => (
+    // Room to scroll the page, so a page move would show.
+    <div className="flex flex-col gap-4 pt-[40vh] pb-[150vh]">
+      {(["enter", "space", "auto"] as const).map((id) => (
+        <div key={id}>
+          <button data-testid={`before-${id}`} type="button">
+            Before
+          </button>
+          <ScrollTabs
+            activateOnFocus={id === "auto"}
+            panels
+            testId={id}
+            width={320}
+          />
+        </div>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    for (const id of ["enter", "space", "auto"]) {
+      // biome-ignore lint/performance/noAwaitInLoops: one list at a time
+      const { failures } = await walkKeys(canvasElement, id);
+      await expect(failures, id).toEqual([]);
+    }
+    await activateWith(canvasElement, "enter", "{Enter}");
+    await activateWith(canvasElement, "space", " ");
+  },
+};
+
+// T-ARROW-INERT. Tab never lands on an arrow, the arrows are not in the
+// accessibility tree, and a press on one leaves focus where it was.
+export const ScrollableArrowsInert: Story = {
+  tags: TEST_ONLY,
+  render: () => (
+    <div className="flex flex-col gap-2">
+      <button data-testid="before" type="button">
+        Before
+      </button>
+      <ScrollTabs testId="scroll" />
+      <button data-testid="after" type="button">
+        After
+      </button>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const { commands, user } = requireReal();
+    const s = scrollParts(canvasElement, "scroll");
+    for (const side of ["start", "end"] as const) {
+      // biome-ignore lint/performance/noAwaitInLoops: two sides, in order
+      await expect(s.area(side)).toHaveAttribute("aria-hidden", "true");
+      await expect(s.area(side)).not.toHaveAttribute("role");
+      await expect(s.picture(side)).not.toHaveAttribute("role");
+      await expect(s.area(side).tabIndex).toBe(-1);
+    }
+    within(canvasElement).getByTestId("before").focus();
+    const visited: string[] = [];
+    for (let i = 0; i < 2; i++) {
+      // biome-ignore lint/performance/noAwaitInLoops: one key at a time
+      await user.keyboard("{Tab}");
+      const el = document.activeElement as HTMLElement;
+      visited.push(el.dataset.testid ?? el.getAttribute("role") ?? el.tagName);
+    }
+    // Into the list at its one roving stop, then straight out of it.
+    await expect(visited).toEqual(["tab", "after"]);
+    // A press on the end arrow keeps focus on the focused tab.
+    s.tab("Dashboard").focus();
+    await commands.pointerMoveTo(
+      '[data-testid="scroll"] [data-slot="reel"] > span[data-side="end"]'
+    );
+    await commands.pointerDown();
+    await commands.pointerUp();
+    await commands.pointerMoveAway();
+    await expect(document.activeElement).toBe(s.tab("Dashboard"));
+    await settle(() => expect(s.viewport.scrollLeft).toBeGreaterThan(0));
+  },
+};
+
+// T-ESC. The escape hatch: a plain TabsList in the consumer's own Reel, as
+// written in the docs (`w-max`) and without it. Base UI marks the active tab
+// with aria-selected, so the Reel reveals it.
+function OwnReelFixture() {
+  const [mounted, setMounted] = useState(false);
+  return (
+    <OutsidePage>
+      <button
+        data-testid="mount"
+        onClick={() => setMounted(true)}
+        type="button"
+      >
+        Mount
+      </button>
+      {mounted
+        ? (["scroll", "scroll-fit"] as const).map((id) => (
+            <div data-testid={id} key={id} style={{ width: 320 }}>
+              <Tabs defaultValue="settings">
+                <Reel arrows="pointer">
+                  <TabsList className={id === "scroll" ? "w-max" : undefined}>
+                    {SCROLL_TABS.map(({ icon: Icon, label, value }) => (
+                      <TabsTrigger key={value} value={value}>
+                        <Icon />
+                        {label}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </Reel>
+              </Tabs>
+            </div>
+          ))
+        : null}
+    </OutsidePage>
+  );
+}
+
+export const TabsInOwnReelReveals: Story = {
+  tags: TEST_ONLY,
+  render: () => <OwnReelFixture />,
+  play: async ({ canvasElement }) => {
+    const { held, recorder } = await mountRecorded(canvasElement);
+    for (const id of ["scroll", "scroll-fit"]) {
+      const s = scrollParts(canvasElement, id);
+      const max = s.viewport.scrollWidth - s.viewport.clientWidth;
+      // biome-ignore lint/performance/noAwaitInLoops: two rows, in order
+      await expect(max, id).toBeGreaterThan(0);
+      await expect(recorder.of(s.viewport), id).toEqual(["instant"]);
+      await expect(clearOrAtEnd(s.viewport, s.tab("Settings"), 48), id).toBe(
+        true
+      );
+      await expect(s.viewport.scrollLeft, id).toBeGreaterThan(0);
+    }
+    await expectOutsideHeld(held);
+  },
+};
+
+/** The indicator matches its trigger, in either variant. */
+function indicatorMatches(
+  s: ReturnType<typeof scrollParts>,
+  name: string,
+  line: boolean
+) {
+  const indicator = s.list
+    .querySelector('[data-slot="tabs-indicator"]')
+    ?.getBoundingClientRect();
+  const tab = s.tab(name).getBoundingClientRect();
+  const list = s.list.getBoundingClientRect();
+  if (!indicator) {
+    return "no indicator";
+  }
+  const near = (a: number, b: number) => Math.abs(a - b) <= 0.5;
+  const ok = line
+    ? near(indicator.left, tab.left) &&
+      near(indicator.right, tab.right) &&
+      near(indicator.height, 2) &&
+      near(indicator.bottom, list.bottom)
+    : near(indicator.left, tab.left) &&
+      near(indicator.right, tab.right) &&
+      near(indicator.top, tab.top) &&
+      near(indicator.bottom, tab.bottom);
+  return ok
+    ? "matches"
+    : `indicator ${indicator.left},${indicator.right},${indicator.top},${indicator.bottom} tab ${tab.left},${tab.right},${tab.top},${tab.bottom}`;
+}
+
+// T-INDICATOR. The indicator follows the selected trigger in a scrolled list,
+// and still matches it after a manual scroll at a fixed selection.
+export const ScrollableIndicator: Story = {
+  tags: TEST_ONLY,
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <ScrollTabs testId="default" />
+      <ScrollTabs testId="line" variant="line" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    for (const id of ["default", "line"]) {
+      const s = scrollParts(canvasElement, id);
+      s.viewport.scrollLeft = 100;
+      // biome-ignore lint/performance/noAwaitInLoops: one list at a time
+      await pause(100);
+      s.tab("Email").click();
+      await settle(() =>
+        expect(indicatorMatches(s, "Email", id === "line")).toBe("matches")
+      );
+      await pause(500);
+      await expect(indicatorMatches(s, "Email", id === "line")).toBe("matches");
+      s.viewport.scrollLeft += 60;
+      await nextFrame();
+      await expect(indicatorMatches(s, "Email", id === "line")).toBe("matches");
+    }
+  },
+};
+
+interface Box {
+  bottom: number;
+  left: number;
+  right: number;
+  top: number;
+}
+
+/**
+ * Both rows' pills, and the scrolled row's two triggers, in their own
+ * tablist's coordinates, in one frame.
+ */
+interface PillFrame {
+  from: Box;
+  scroll: number;
+  scrolled: Box | null;
+  still: Box | null;
+  t: number;
+  to: Box;
+}
+
+function boxOf(el: Element, list: HTMLElement): Box {
+  const r = el.getBoundingClientRect();
+  const l = list.getBoundingClientRect();
+  return {
+    left: r.left - l.left,
+    right: r.right - l.left,
+    top: r.top - l.top,
+    bottom: r.bottom - l.top,
+  };
+}
+
+function boxIn(list: HTMLElement): Box | null {
+  const pill = list.querySelector('[data-slot="tabs-morphing-pill"]');
+  return pill ? boxOf(pill, list) : null;
+}
+
+/**
+ * Both rows, read in the same animation-frame callback every frame for
+ * `ms`. Both switch from one state change, so frame for frame their pills
+ * are at the same point of the same transition.
+ */
+function recordPills(
+  scrolled: ReturnType<typeof scrollParts>,
+  still: ReturnType<typeof scrollParts>,
+  names: [from: string, to: string],
+  ms: number,
+  onFrame?: (frame: PillFrame) => void
+) {
+  const frames: PillFrame[] = [];
+  const start = performance.now();
+  return new Promise<PillFrame[]>((resolve) => {
+    const tick = () => {
+      const frame = {
+        t: performance.now() - start,
+        scroll: scrolled.viewport.scrollLeft,
+        scrolled: boxIn(scrolled.list),
+        still: boxIn(still.list),
+        from: boxOf(scrolled.tab(names[0]), scrolled.list),
+        to: boxOf(scrolled.tab(names[1]), scrolled.list),
+      };
+      frames.push(frame);
+      onFrame?.(frame);
+      if (frame.t < ms) {
+        requestAnimationFrame(tick);
+      } else {
+        resolve(frames);
+      }
+    };
+    requestAnimationFrame(tick);
+  });
+}
+
+/** A trigger's box in its tablist's coordinates. */
+function triggerBox(s: ReturnType<typeof scrollParts>, name: string): Box {
+  return boxOf(s.tab(name), s.list);
+}
+
+/**
+ * What is wrong with one frame's pill, if anything: the scrolled row's pill
+ * exists, matches the row that does not scroll within 1px on every edge, and
+ * keeps its shape (the filled pill inside the triggers' 1px border at top
+ * and bottom; the line 2px high, 1px above their bottom).
+ *
+ * Its horizontal path is measured against the row that does not scroll,
+ * not against the two triggers: the morphing pill's spring and the growing
+ * label's spring are separate, so in any Tabs list the pill can pass a
+ * little outside the two triggers while a wide label grows (more with wider
+ * fonts). What Reel must not change is that path.
+ */
+function frameFailures(f: PillFrame, line: boolean): string[] {
+  if (!(f.scrolled && f.still)) {
+    return ["a pill is missing"];
+  }
+  const pill = f.scrolled;
+  const out: string[] = [];
+  for (const edge of ["left", "right", "top", "bottom"] as const) {
+    if (Math.abs(pill[edge] - f.still[edge]) > 1) {
+      out.push(
+        `${edge} ${pill[edge].toFixed(1)} vs ${f.still[edge].toFixed(1)}`
+      );
+    }
+  }
+  if (Math.abs(pill.bottom - (f.to.bottom - 1)) > 0.5) {
+    out.push(`bottom ${pill.bottom.toFixed(1)}`);
+  }
+  const height = pill.bottom - pill.top;
+  if (line && Math.abs(height - 2) > 0.5) {
+    out.push(`height ${height.toFixed(1)}`);
+  }
+  if (!line && Math.abs(pill.top - (f.to.top + 1)) > 0.5) {
+    out.push(`top ${pill.top.toFixed(1)}`);
+  }
+  return out;
+}
+
+/**
+ * Every frame passes `frameFailures`; the pill passes through at least three
+ * distinct in-between positions, and ends on `end`.
+ */
+function pillFailures(
+  frames: PillFrame[],
+  line: boolean,
+  end: "from" | "to",
+  label: string
+) {
+  const failures: string[] = [];
+  const between = new Set<number>();
+  for (const f of frames) {
+    for (const what of frameFailures(f, line)) {
+      failures.push(`${label} ${f.t.toFixed(0)}ms: ${what}`);
+    }
+    const a = Math.min(f.from.left, f.to.left) + 2;
+    const b = Math.max(f.from.left, f.to.left) - 2;
+    if (f.scrolled && f.scrolled.left > a && f.scrolled.left < b) {
+      between.add(Math.round(f.scrolled.left));
+    }
+  }
+  if (between.size < 3) {
+    failures.push(`${label}: only ${between.size} positions in between`);
+  }
+  const last = frames.at(-1) as PillFrame;
+  const target = last[end];
+  if (
+    !last.scrolled ||
+    Math.abs(last.scrolled.left - target.left - 1) > 0.5 ||
+    Math.abs(last.scrolled.right - target.right + 1) > 0.5
+  ) {
+    failures.push(
+      `${label}: ends at ${JSON.stringify(last.scrolled)}, trigger ${JSON.stringify(target)}`
+    );
+  }
+  return failures;
+}
+
+const LONG_LABEL = "Settings and preferences for everything";
+
+function PillFixture({ line }: { line: boolean }) {
+  const [value, setValue] = useState("users");
+  return (
+    <div className="flex flex-col gap-4">
+      <button
+        data-testid="go-settings"
+        onClick={() => setValue("settings")}
+        type="button"
+      >
+        Settings
+      </button>
+      <button
+        data-testid="go-users"
+        onClick={() => setValue("users")}
+        type="button"
+      >
+        Users
+      </button>
+      {(
+        [
+          ["scroll", 260],
+          ["still", 1400],
+        ] as const
+      ).map(([id, width]) => (
+        <ScrollTabs
+          key={id}
+          lastLabel={LONG_LABEL}
+          morphing
+          onValueChange={setValue}
+          testId={id}
+          value={value}
+          variant={line ? "line" : "default"}
+          width={width}
+        />
+      ))}
+    </div>
+  );
+}
+
+/**
+ * What went wrong in a reversed switch: every frame's pill checks, the
+ * pill's return (late only), where it ends, and the row coming back towards
+ * Users through a sample strictly between the reversal's offset and `back`.
+ */
+function reversalFailures(
+  all: PillFrame[],
+  reversed: { t: number; scroll: number; pill: number },
+  when: "late" | "early",
+  line: boolean,
+  back: number
+) {
+  const out: string[] = [];
+  // Every frame of the run, before and after the reversal.
+  for (const f of all) {
+    for (const what of frameFailures(f, line)) {
+      out.push(`${when} ${f.t.toFixed(0)}ms: ${what}`);
+    }
+  }
+  const after = all.filter((f) => f.t > reversed.t);
+  if (when === "late") {
+    const between = new Set<number>();
+    for (const f of after) {
+      if (
+        f.scrolled &&
+        f.scrolled.left > f.from.left + 2 &&
+        f.scrolled.left < f.to.left - 2
+      ) {
+        between.add(Math.round(f.scrolled.left));
+      }
+    }
+    if (between.size < 3) {
+      out.push(`late: only ${between.size} positions on the way back`);
+    }
+  }
+  const last = all.at(-1) as PillFrame;
+  if (
+    !last.scrolled ||
+    Math.abs(last.scrolled.left - last.from.left - 1) > 0.5
+  ) {
+    out.push(`${when}: ends at ${JSON.stringify(last.scrolled)}`);
+  }
+  // The row comes back towards Users, through a sample strictly between
+  // the offset at the reversal and where it ends.
+  if (back > reversed.scroll - 2) {
+    out.push(`${when}: ends at ${back}, not 2px back from ${reversed.scroll}`);
+  } else if (
+    !after.some(
+      (f, i) =>
+        f.scroll < reversed.scroll &&
+        f.scroll > back &&
+        (i === 0 || f.scroll < after[i - 1].scroll)
+    )
+  ) {
+    out.push(`${when}: no sample on the way back`);
+  }
+  return out;
+}
+
+async function pillPlay(canvasElement: HTMLElement, line: boolean) {
+  const { commands } = requireReal();
+  await commands.emulateReducedMotion(false);
+  const s = scrollParts(canvasElement, "scroll");
+  const still = scrollParts(canvasElement, "still");
+  const goSettings = within(canvasElement).getByTestId("go-settings");
+  const goUsers = within(canvasElement).getByTestId("go-users");
+  await pause(500);
+  // Start from a nonzero offset.
+  s.viewport.scrollLeft = 30;
+  await pause(200);
+  await expect(s.viewport.scrollLeft).toBe(30);
+
+  // Forward: the scrolled row glides while its pill moves.
+  goSettings.click();
+  const forward = await recordPills(s, still, ["Users", LONG_LABEL], 900);
+  const destination = s.viewport.scrollLeft;
+  await expect(destination).toBeGreaterThan(30);
+  const failures = pillFailures(forward, line, "to", "forward");
+  if (!forward.some((f) => f.scroll > 31 && f.scroll < destination - 1)) {
+    failures.push("forward: the row did not glide");
+  }
+
+  /** One reversed switch; what went wrong, if anything. */
+  const reversal = async (when: "late" | "early") => {
+    goUsers.click();
+    await pause(900);
+    s.viewport.scrollLeft = 30;
+    await pause(200);
+    const usersLeft = triggerBox(s, "Users").left;
+    let at: { t: number; scroll: number; pill: number } | null = null;
+    goSettings.click();
+    const all = await recordPills(
+      s,
+      still,
+      ["Users", LONG_LABEL],
+      1100,
+      (f) => {
+        const row = (f.scroll - 30) / (destination - 30);
+        const pill = f.scrolled
+          ? (f.scrolled.left - usersLeft) / (f.to.left - usersLeft)
+          : 0;
+        const ready =
+          when === "late"
+            ? row > 0.5 && pill > 0.3
+            : row > 0.3 && f.scroll < destination - 1 && pill > 0 && pill < 1;
+        if (at === null && ready) {
+          at = { t: f.t, scroll: f.scroll, pill };
+          goUsers.click();
+        }
+      }
+    );
+    const reversed = at as { t: number; scroll: number; pill: number } | null;
+    if (reversed === null) {
+      return [`${when}: never reversed; forward ${trace}`];
+    }
+    s.host.dataset[`${when}Reversal`] = JSON.stringify(reversed);
+    return reversalFailures(all, reversed, when, line, s.viewport.scrollLeft);
+  };
+  const trace = forward
+    .slice(0, 20)
+    .map(
+      (f) =>
+        `${f.t.toFixed(0)}:${((f.scroll - 30) / (destination - 30)).toFixed(2)}`
+    )
+    .join(" ");
+  // Reversed twice from a fresh start: late, once both the row and the pill
+  // have moved far enough for the pill's return to show; and early, while
+  // the row is still gliding and the pill short of its tab.
+  for (const when of ["late", "early"] as const) {
+    // biome-ignore lint/performance/noAwaitInLoops: one pass at a time
+    failures.push(...(await reversal(when)));
+  }
+  await expect(failures.slice(0, 8)).toEqual([]);
+}
+
+// T-PILL. The morphing pill glides from the old tab to the new one while Reel
+// glides the row to reveal it: frame for frame it matches the same switch in
+// a row that does not scroll, through in-between frames, also when reversed
+// mid-glide.
+export const ScrollableMorphingPillGlide: Story = {
+  tags: TEST_ONLY,
+  render: () => <PillFixture line={false} />,
+  play: ({ canvasElement }) => pillPlay(canvasElement, false),
+};
+
+export const ScrollableMorphingLinePillGlide: Story = {
+  tags: TEST_ONLY,
+  render: () => <PillFixture line />,
+  play: ({ canvasElement }) => pillPlay(canvasElement, true),
+};
+
+// T-MORPH-LIMIT. Reel reveals the trigger at the width it has when it becomes
+// active, by the distance that clears it at that width (within the range),
+// and issues no further request while the long label grows.
+export const ScrollableMorphingLabelLimit: Story = {
+  tags: TEST_ONLY,
+  render: () => <PillFixture line={false} />,
+  play: async ({ canvasElement }) => {
+    const { commands } = requireReal();
+    await commands.emulateReducedMotion(false);
+    const s = scrollParts(canvasElement, "scroll");
+    await pause(500);
+    const recorder = recordScrollRequests();
+    try {
+      within(canvasElement).getByTestId("go-settings").click();
+      await nextFrame();
+      const calls = recorder.calls(s.viewport);
+      await expect(calls.map((c) => c.behavior)).toEqual(["smooth"]);
+      // Measured as the request was made: the active trigger, the viewport,
+      // the offset, the range and the requested distance.
+      const [{ at, left }] = calls;
+      const item = at.item as DOMRect;
+      await expect(item).toBeTruthy();
+      const projected = Math.min(at.range, Math.max(0, at.from + (left ?? 0)));
+      const moved = projected - at.from;
+      const fromStart = item.left - at.viewport.left - moved;
+      const fromEnd = at.viewport.right - item.right + moved;
+      await expect(fromStart >= 52 - 0.5 || projected <= 0.5).toBe(true);
+      await expect(fromEnd >= 52 - 0.5 || projected >= at.range - 0.5).toBe(
+        true
+      );
+      // The label grows over the next 400ms; no further request follows.
+      await pause(900);
+      const after = s.tab(LONG_LABEL).getBoundingClientRect();
+      await expect(after.width).toBeGreaterThan(item.width + 20);
+      await expect(recorder.of(s.viewport)).toEqual(["smooth"]);
+      const v = s.viewport.getBoundingClientRect();
+      // Where the grown label ends: recorded, not constrained.
+      s.host.dataset.labelEnd = JSON.stringify({
+        trigger: [item.width, after.width],
+        fromStart: after.left - v.left,
+        fromEnd: v.right - after.right,
+      });
+    } finally {
+      recorder.restore();
+    }
+  },
+};
+
+function ScrollableRow({
+  line,
+  morphing,
+}: {
+  line?: boolean;
+  morphing?: boolean;
+}) {
+  return (
+    // Narrow enough that a morphing row, mostly icons, still scrolls.
+    <div style={{ maxWidth: morphing ? 260 : 480 }}>
+      <Tabs defaultValue="dashboard">
+        <TabsList
+          morphing={morphing}
+          scrollable
+          variant={line ? "line" : "default"}
+        >
+          {SCROLL_TABS.map(({ icon: Icon, label, value }) => (
+            <TabsTrigger key={value} value={value}>
+              <Icon />
+              {morphing ? <TabsTriggerLabel>{label}</TabsTriggerLabel> : label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+    </div>
+  );
+}
+
+export const ScrollableLine: Story = {
+  render: () => <ScrollableRow line />,
+};
+
+export const ScrollableMorphing: Story = {
+  render: () => <ScrollableRow morphing />,
+};
+
+export const ScrollableMorphingLine: Story = {
+  render: () => <ScrollableRow line morphing />,
+};
+
+export const TabsInOwnReel: Story = {
+  render: () => (
+    <div style={{ maxWidth: 480 }}>
+      <Tabs defaultValue="dashboard">
+        <Reel arrows="pointer">
+          <TabsList className="w-max">
+            {SCROLL_TABS.map(({ icon: Icon, label, value }) => (
+              <TabsTrigger key={value} value={value}>
+                <Icon />
+                {label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Reel>
+      </Tabs>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "To choose when the arrows show or how they look, leave `scrollable` off and wrap the `TabsList` in your own Reel. Reel finds the active tab by its `aria-selected`.",
       },
     },
   },

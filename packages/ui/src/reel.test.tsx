@@ -59,6 +59,32 @@ describe("Reel", () => {
     expect(screen.queryAllByRole("button")).toHaveLength(0);
   });
 
+  it('defaults arrowVariant to "default" and reflects it on the root', () => {
+    renderReel();
+    expect(root()).toHaveAttribute("data-arrow-variant", "default");
+    expect(arrows()[0].tagName).toBe("BUTTON");
+  });
+
+  it("draws a plain arrow as a bare chevron in a span, never a Tab stop", () => {
+    renderReel({ arrowVariant: "plain", arrows: "always" });
+    expect(root()).toHaveAttribute("data-arrow-variant", "plain");
+    expect(arrows().map((arrow) => arrow.dataset.side)).toEqual([
+      "start",
+      "end",
+    ]);
+    for (const arrow of arrows()) {
+      expect(arrow.tagName).toBe("SPAN");
+      expect(arrow).not.toHaveAttribute("tabindex");
+      expect(arrow.querySelector("svg")).not.toBeNull();
+      const hitArea = arrow.parentElement as HTMLElement;
+      expect(hitArea.tagName).toBe("SPAN");
+      expect(hitArea).toHaveAttribute("aria-hidden", "true");
+      expect(hitArea).not.toHaveAttribute("tabindex");
+      expect(hitArea.dataset.side).toBe(arrow.dataset.side);
+    }
+    expect(screen.queryAllByRole("button")).toHaveLength(0);
+  });
+
   it("merges className onto the root", () => {
     renderReel({ className: "max-w-sm" });
     expect(root()).toHaveClass("relative", "max-w-sm");
