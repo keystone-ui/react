@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "rolling-number-default",
+  "title": "Rolling Number Default",
+  "description": "Rolling Number example: Default.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/rolling-number.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/rolling-number/default.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { RollingNumber } from \"@keystoneui/react/rolling-number\";\nimport { useState } from \"react\";\n\nexport default function RollingNumberDefault() {\n  const [value, setValue] = useState(1284);\n  return (\n    <div className=\"flex flex-col items-center gap-4\">\n      <RollingNumber className=\"font-semibold text-4xl\" value={value} />\n      <div className=\"flex gap-2\">\n        <Button\n          onClick={() => setValue((v) => v + 1)}\n          size=\"sm\"\n          variant=\"outline\"\n        >\n          +1\n        </Button>\n        <Button\n          onClick={() => setValue((v) => v + 100)}\n          size=\"sm\"\n          variant=\"outline\"\n        >\n          +100\n        </Button>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

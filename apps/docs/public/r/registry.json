@@ -1627,6 +1627,19 @@
       ]
     },
     {
+      "name": "rolling-number",
+      "type": "registry:ui",
+      "title": "Rolling Number",
+      "description": "A number formatted by Intl.NumberFormat whose changed digits roll one step when the value changes.",
+      "files": [
+        {
+          "path": "packages/ui/src/rolling-number.tsx",
+          "target": "@ui/rolling-number.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "signin-01",
       "type": "registry:block",
       "title": "Sign in 01",
@@ -8010,6 +8023,72 @@
       "files": [
         {
           "path": "apps/docs/demos/resizable/with-handle.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "rolling-number-currency",
+      "type": "registry:example",
+      "title": "Rolling Number Currency",
+      "description": "Rolling Number example: Currency.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/rolling-number.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/rolling-number/currency.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "rolling-number-default",
+      "type": "registry:example",
+      "title": "Rolling Number Default",
+      "description": "Rolling Number example: Default.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/rolling-number.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/rolling-number/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "rolling-number-locales",
+      "type": "registry:example",
+      "title": "Rolling Number Locales",
+      "description": "Rolling Number example: Locales.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/rolling-number.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/rolling-number/locales.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "rolling-number-stat",
+      "type": "registry:example",
+      "title": "Rolling Number Stat",
+      "description": "Rolling Number example: Stat.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/card.json",
+        "https://keystoneui.io/r/rolling-number.json",
+        "https://keystoneui.io/r/stat.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/rolling-number/stat.tsx",
           "type": "registry:example"
         }
       ]

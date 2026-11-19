@@ -91,7 +91,8 @@
     "./code-block": "./src/code-block.tsx",
     "./file-upload": "./src/file-upload.tsx",
     "./filter-chips": "./src/filter-chips.tsx",
-    "./reel": "./src/reel.tsx"
+    "./reel": "./src/reel.tsx",
+    "./rolling-number": "./src/rolling-number.tsx"
   },
   "scripts": {
     "build": "tsup",
@@ -382,6 +383,10 @@
       "./reel": {
         "types": "./dist/reel.d.ts",
         "default": "./dist/reel.js"
+      },
+      "./rolling-number": {
+        "types": "./dist/rolling-number.d.ts",
+        "default": "./dist/rolling-number.js"
       }
     }
   },
