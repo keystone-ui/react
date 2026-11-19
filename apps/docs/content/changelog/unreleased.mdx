@@ -1,51 +1,7 @@
 ---
-date: "2026-11-18"
+date: "2026-11-19"
 description: "What's coming in the next release"
-excerpt: "7 changes queued for the next release."
+excerpt: "No changes since the last release."
 ---
 
-## Minor changes
-
-### Add FileUpload
-
-`@keystoneui/react/file-upload` chooses files by picker, drop or opt-in paste, validates them and keeps a `File[]` of new files, with rows that show the app's upload status, progress and errors. It never uploads: the app does, and a hidden form input mirrors the value for native submit, reset and `required`.
-
----
-
-### Add Reel, a native sideways scroller for one row of controls
-
-`@keystoneui/react/reel` wraps exactly one row (a list of links, FilterChips) and scrolls it sideways when it is wider than its container. Each edge fades only where there is more to scroll, through a mask on the row (`ks-scroll-fade-x`), so it works on any surface. With `arrows="pointer"` (the default) an arrow appears at each end that has more to scroll, only on a device with a mouse or trackpad; `"always"` and `"none"` override that. A press scrolls 80% of the visible width.
-
-- Arrows are never Tab stops, are hidden from assistive technology, and a press on one does not take focus.
-- Reel clears a keyboard-focused or current item by the greater of 48px and the fade depth wherever the available scroll range allows. An item wider than the clear space aligns at inline start. Reel reveals the current item (the first with a nonempty `aria-current` other than `false`, or with FilterChips' `data-selected` present and other than `false`, comparing each value case-insensitively) at mount, on regaining room, and when a different item becomes current, provided the Reel's last measured content width and the item's bounding-box width are both positive. Reel preserves focus and the page's scroll position. Giving the item width later does not by itself trigger a reveal. If the current item gets its width later, or is moved to another row, give the Reel a new `key` or unmark the item and mark it again in a later update.
-- Reduced motion turns the glide into a jump. To align the arrows' sides and paging (computed direction) with the fade and chevrons (the nearest explicit `dir="ltr"` or `dir="rtl"` on the Reel or an ancestor), put the explicit direction on an ancestor of the whole Reel and let the scroller and arrows inherit it.
-
----
-
-### TablePagination shows the row count on phones
-
-`TablePaginationInfo` now shows at every width: below `lg` it sits on its own row above the controls instead of being hidden, so a footer that renders a count grows from 32px to 60px on phones, and from `lg` up the default layout does not change. Because the component now sets `lg:` layout classes, an unprefixed layout class of your own, such as `flex-wrap` on `TablePagination` or `flex-none` or a `w-*` width on `TablePaginationInfo`, now loses to them from `lg` up; prefix it with `lg:` to keep it there. A footer with an empty info slot is unchanged at every width; a slot that holds only whitespace or an empty wrapper element is not empty, so that footer keeps the extra row. To keep the old behaviour in a composed footer, pass `className="hidden lg:block"` to `TablePaginationInfo`; a props-driven footer has no info element to take a class, so pass `className="[&_[data-slot=table-pagination-info]]:max-lg:hidden"` to `TablePagination` instead.
-
-## Patch changes
-
-### Table state without rows in the admin-01 table files
-
-The installed `use-data-table.ts` now also exports `useTableState`, which holds the table's filters, sort, page, page size, selection and hidden columns without any rows. `useDataTable` accepts the same config and returns the same named fields. `FilteredEmpty` takes an optional `emptyTitle`, shown when nothing is filtered in place of "No … yet". Existing copies behave as before. The files ship in `admin-01`, `users-01` and `npm/users-01`.
-
----
-
-### Add a package flavour of the sidebar
-
-For apps that use the `@keystoneui/react` package instead of vendored components: `npx shadcn@latest add https://keystoneui.io/r/npm/sidebar.json` installs the same `sidebar.tsx`, importing `@keystoneui/react/*`, and is tested with 1.0.0-beta.11. It installs `@base-ui/react` unpinned, so keep yours at the version `@keystoneui/react` pins.
-
----
-
-### Fix `ks-scroll-fade-x` fading the wrong edges in right-to-left
-
-In a right-to-left container the inline start is the right edge, but the mask was always drawn from the left, so at the start of the row the visible right edge faded and the left edge, with more content beyond it, did not. The horizontal fade follows the nearest `dir="ltr"` or `dir="rtl"` on the scroller or an ancestor. A CSS direction or `dir="auto"` inherits the fade setting from that boundary. With neither boundary the fade defaults to LTR. Explicit LTR rows and the default LTR gradient render as before. The vertical fade is unchanged.
-
----
-
-### Use the sidebar's 18rem phone drawer width
-
-The sidebar installed by `admin-01`, `sidebar` and `npm/sidebar` now opens an 18rem drawer on either side at phone widths.
+No changes merged since v1.0.0-beta.13.

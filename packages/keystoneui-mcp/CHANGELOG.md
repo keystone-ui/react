@@ -1,5 +1,30 @@
 # @keystoneui/mcp
 
+## 0.2.0-beta.6
+
+### Minor Changes
+
+- cf1970e: Describe kits and package flavours, with explicit item-name rules
+  
+  The MCP server and CLI read `meta.keystoneui` on registry items. List and search append metadata to each entry. A parent can show `Package flavour:` for a flavour declared elsewhere in the index. View places the fetched item’s own metadata between its summary and source. Existing filters use the same result order, totals and paging. Registries can omit the metadata. The new list and search `type` values are `kit`, `style`, `theme` and `item`. `kit` selects `registry:component`.
+  
+  `get_add_command` generates shadcn commands. The default and `flavour: "vendored"` use the supplied names without a per-call project or network lookup. `flavour: "package"` gives the registry-index lookup ten seconds. On success it reads the project, selects advertised package flavours and prints any declared version minimum alongside the project declaration. UI items without a selected flavour get conditional package-import advice. Blocks, kits and examples without a package flavour keep their vendored targets. If the index lookup fails, the tool uses the supplied names. Package-mode `get_project_context` adds a line about this option.
+  
+  - Names with empty segments, `.` or `..` segments (including mixed-case `%2e` forms), `?`, `#`, backslashes, C0 controls or DEL are refused. An empty name and a final segment that becomes empty, `.` or `..` after trailing ASCII spaces are removed are also refused. Accepted names still include nested paths, spaces and shell metacharacters.
+  - `view_component` returns a refusal in the affected slot. `get_docs` and `get_examples` return it directly. CLI `view`, `docs` and `examples` put refusals on stderr and exit 1. A mixed CLI view keeps valid results on stdout. `get_add_command` refuses the whole call for invalid input before any lookup, and also refuses an invalid flavour selected from the index. A caller-supplied `?only=` without C0 controls or DEL gets instructions to append the parameter to the printed URL.
+  - `get_add_command` quotes each complete install URL as one shell word when it contains characters outside `A-Z a-z 0-9 @ % + = : , . _ / -`. If any target URL contains a line break or control character, guidance replaces the commands. This includes C1 controls and U+2028/U+2029, which the name validator accepts. Concrete install URLs in `get_theme_info` and CLI `theme` also use shell quoting, including queries such as `?only=font`.
+  - `get_docs` and CLI `docs` resolve an initial 404 through an item’s docs pointer, its flavour parent’s pointer or its valid block/UI parent’s own page. A successful fallback returns the full page and identifies the optional section. CLI `docs` exits 0 on that success and accepts `--type component|block`. On a demos 404, `get_examples` can suggest a containing block or flavour parent from the index.
+  - `keystoneui blocks <name>` extends its existing hyphenated-name shortcut to a single exact block name found in the index. This adds direct viewing for `npm/users-01` in the first-party registry.
+  - Prose escapes line breaks, controls and leading fence markers. Inline-code delimiters are longer than any embedded backtick run. Project-table cells escape pipes, including those in package version ranges. Message escaping preserves the kind, code and cause of the error it receives after URL redaction.
+  - Source in `view_component` and `get_examples` uses a fence longer than any backtick run in the body. A demo file’s extension is escaped on the fence line. The `table` source and `filter-trigger.tsx` in `admin-01`, `users-01`, `filter-pills`, `npm/users-01` and `npm/filter-pills` use four-backtick fences. `view_component` adds a separator before the closing fence if source lacks a final line break. The first-party registry sources already have a final line break.
+  - `get_theme_info` identifies the sidebar item that reads the sidebar tokens. The tool descriptions and server instructions describe kits and package-flavour selection.
+
+### Patch Changes
+
+- 3e5698f: Compose registry URLs correctly when they have a query, a fragment, a trailing slash or a `{name}` template
+  
+  A registry URL set through `KEYSTONEUI_REGISTRY_URL` or a `components.json` `@keystoneui` `{ "url": … }` object is now composed with the path before its query: `https://host/r?v=1` requests `https://host/r/registry.json?v=1` instead of `https://host/r?v=1/registry.json`. A fragment is dropped instead of the path, and a trailing slash no longer doubles (`https://host/r/` requests `https://host/r/button.json`). An `@keystoneui` object whose `url` is a `{name}` template (`https://host/r/{name}.json`) has the item name put into it, with its `params` appended after the template's own query; its catalogue and demos are read from beside the item file when the template ends in `/{name}.json`. `get_add_command`, `get_theme_info` and the catalogue link in `keystoneui info` print the same composed URLs. The default registry and plain base URLs are requested and printed exactly as before, and headers in a `components.json` entry are still not sent.
+
 ## 0.2.0-beta.5
 
 ### Patch Changes
