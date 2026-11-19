@@ -22,6 +22,11 @@ const config: StorybookConfig = {
   docs: {
     defaultName: "Documentation",
   },
+  // The Vitest addon reads this setting. The dev and build scripts also pass
+  // the CLI flag so configuration-load errors are covered.
+  core: {
+    disableTelemetry: true,
+  },
 
   viteFinal: async (config) => {
     const { default: tailwindcss } = await import("@tailwindcss/vite");
