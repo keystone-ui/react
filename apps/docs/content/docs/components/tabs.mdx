@@ -95,8 +95,25 @@ Add icons alongside tab labels:
 Collapse inactive triggers to icon-only and reveal the label only on the active
 tab. Set `morphing` on `TabsList` and wrap each trigger's text in
 `<TabsTriggerLabel>`. Every trigger should include an icon so the collapsed
-state still reads. The pill and label morph together via a single spring, and
-rapid clicks carry velocity instead of restarting.
+state still reads. The pill and the label width use the same spring settings. A
+rapid selection starts the next glide from the pill's current box, clipped to
+the span of the tabs after the selection commits. If the boxes no longer
+overlap, the pill appears on the selected tab. The filled pill keeps its round
+caps.
+
+On each frame the controller can measure a connected list with positive width
+and height, the pill stays within the outer edges of the tabs taking part in the
+glide, to within one CSS pixel. These include the tabs involved in earlier
+selections during the same glide. This holds under positive, axis-aligned
+ancestor scales. The pill's inset and minimum-size rules must allow it to fit.
+Changes after the controller's frame pass, rotations, skews, perspective,
+reflections, transforms between the list and its tabs, and CSS animation or
+transitions on pill geometry fall outside it. Tabs moved between lists by DOM
+manipulation, a tab rendered through a portal into a container that another
+component removes, and glides between tabs more than about 100,000 CSS pixels
+apart are also outside it.
+If a participating tab is disconnected or belongs to another list when the
+controller next checks, the glide ends and the pill returns to its CSS position.
 
 <ComponentPreview name="tabs-morphing" />
 

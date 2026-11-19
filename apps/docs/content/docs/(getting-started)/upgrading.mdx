@@ -56,6 +56,48 @@ copied.
 
 ## Markup and behaviour changes
 
+{/* changeset: tabs-morphing-pill-span */}
+
+### Morphing `Tabs` — the pill is not a `layoutId` element
+
+The morphing pill no longer joins your `LayoutGroup` or a parent `motion`
+element's `layout` animation. If an ancestor animates its layout, the pill now
+moves and scales with that ancestor like the tab around it.
+
+During a glide the pill sets inline `left`, `top`, `width`, `height`,
+`right: auto` and `bottom: auto`. At rest it removes its geometry and preserves
+unrelated inline declarations. Update style snapshots or read the bounding box.
+Motion previously supplied transform, transform origin and shared-layout
+opacity and pointer-event styles. A `ResizeObserver` on the pill now sees its
+animated layout size. The controller samples author insets when the switch
+starts, and its inline geometry takes precedence while moving. Percentage
+insets and the line's bar height are sampled when the switch starts; a change
+to them during the switch shows when it ends. Remove positional and size
+transitions, including `transition-all`, from the pill slot. Color and opacity
+transitions can remain.
+
+At rest, inserting, reordering or closing tabs moves the pill with its tab
+immediately. Removing the active tab as its neighbour becomes active places the
+pill directly on the neighbour.
+
+A rapid selection starts the next glide from the pill's current box, clipped to
+the span of the tabs after the selection commits. If the boxes no longer
+overlap, the pill appears on the selected tab. If a participating tab
+is disconnected or belongs to another list when the controller next checks, the
+glide ends and the pill returns to its CSS position.
+
+On each frame the controller can measure a connected list with positive width
+and height, the pill stays within the outer edges of the tabs taking part in the
+glide, to within one CSS pixel. These include the tabs involved in earlier
+selections during the same glide. This holds under positive, axis-aligned
+ancestor scales. The pill's inset and minimum-size rules must allow it to fit.
+Changes after the controller's frame pass, rotations, skews, perspective,
+reflections, transforms between the list and its tabs, and CSS animation or
+transitions on pill geometry fall outside it. Tabs moved between lists by DOM
+manipulation, a tab rendered through a portal into a container that another
+component removes, and glides between tabs more than about 100,000 CSS pixels
+apart are also outside it.
+
 {/* changeset: form-renders-form-element */}
 
 ### `<Form>` renders a real `<form>`
