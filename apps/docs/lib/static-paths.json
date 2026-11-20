@@ -475,6 +475,8 @@
     "select-form-example",
     "select-groups",
     "select-multiple",
+    "select-multiple-select-all",
+    "select-responsive",
     "select-scrollable",
     "select-sizes",
     "select-with-icons",

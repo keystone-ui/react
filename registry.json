@@ -8481,6 +8481,22 @@
       ]
     },
     {
+      "name": "select-multiple-select-all",
+      "type": "registry:example",
+      "title": "Select Multiple Select All",
+      "description": "Select example: Multiple Select All.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/label.json",
+        "https://keystoneui.io/r/select.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/select/multiple-select-all.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
       "name": "select-multiple",
       "type": "registry:example",
       "title": "Select Multiple",
@@ -8491,6 +8507,23 @@
       "files": [
         {
           "path": "apps/docs/demos/select/multiple.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "select-responsive",
+      "type": "registry:example",
+      "title": "Select Responsive",
+      "description": "Select example: Responsive.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/drawer.json",
+        "https://keystoneui.io/r/label.json",
+        "https://keystoneui.io/r/select.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/select/responsive.tsx",
           "type": "registry:example"
         }
       ]

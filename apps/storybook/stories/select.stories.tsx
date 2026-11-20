@@ -26,7 +26,11 @@ import {
   Grape as GrapeIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { hydrateRoot } from "react-dom/client";
+import { renderToString } from "react-dom/server";
 import { expect, userEvent, waitFor, within } from "storybook/test";
+import SelectMultipleSelectAll from "../../docs/demos/select/multiple-select-all";
+import SelectResponsive from "../../docs/demos/select/responsive";
 
 // Custom checkbox indicator for multiple selection
 function CheckboxIndicator() {
@@ -1048,4 +1052,672 @@ export const WorstCase: Story = {
 
     await userEvent.keyboard("{Escape}");
   },
+};
+
+// ---------------------------------------------------------------------------
+// Docs examples: responsive (Drawer on phones) and select-all
+// ---------------------------------------------------------------------------
+
+/** Runs under the test runner only: hidden from the sidebar and the docs. */
+const TEST_ONLY: Story["tags"] = ["!dev", "!autodocs"];
+
+/** Vitest's tester page; absent when Storybook itself runs the play. */
+interface RealPage {
+  viewport: (width: number, height: number) => Promise<void>;
+}
+const realPage = () => (globalThis as { __realPage?: RealPage }).__realPage;
+
+/** Vitest browser mode's default tester size, restored after each play. */
+const TESTER_VIEWPORT = { width: 414, height: 896 } as const;
+const PHONE = { width: 390, height: 844 } as const;
+const DESKTOP = { width: 1280, height: 800 } as const;
+
+/** Whether the page's viewport scroller is locked (Base UI's scroll lock). */
+function pageScrollLocked() {
+  const html = document.documentElement;
+  return [html, document.body].some((el) =>
+    /hidden|clip/.test(getComputedStyle(el).overflowY)
+  );
+}
+
+/** The box a visitor sees, compared between the two branches' triggers. */
+function triggerLook(el: HTMLElement) {
+  const s = getComputedStyle(el);
+  const r = el.getBoundingClientRect();
+  return {
+    width: Math.round(r.width),
+    height: Math.round(r.height),
+    left: Math.round(r.left),
+    top: Math.round(r.top),
+    border: `${s.borderTopWidth} ${s.borderTopStyle} ${s.borderTopColor}`,
+    radius: s.borderTopLeftRadius,
+    background: s.backgroundColor,
+    padding: `${s.paddingTop} ${s.paddingRight} ${s.paddingBottom} ${s.paddingLeft}`,
+    font: `${s.fontSize} ${s.fontWeight} ${s.lineHeight}`,
+    color: s.color,
+    shadow: s.boxShadow,
+  };
+}
+
+/** Whether Base UI has hidden the canvas from assistive tech or made it inert. */
+const outsideHidden = (canvas: HTMLElement) =>
+  canvas.closest("[aria-hidden='true'], [inert], [data-base-ui-inert]") !==
+  null;
+
+const phoneTrigger = (root: HTMLElement) =>
+  root.querySelector<HTMLButtonElement>('[data-slot="drawer-trigger"]');
+const desktopTrigger = (root: HTMLElement) =>
+  root.querySelector<HTMLButtonElement>('[data-slot="select-trigger"]');
+
+function settle<T>(check: () => T | Promise<T>): Promise<T> {
+  return waitFor(check, { timeout: 5000 });
+}
+
+/**
+ * The `select-responsive` docs example: a Select from 768px up, a Drawer with
+ * a listbox below it, one value shared by both.
+ */
+export const Responsive: Story = {
+  render: () => <SelectResponsive />,
+  play: async ({ canvasElement }) => {
+    const page = realPage();
+    const body = within(document.body);
+    try {
+      if (page) {
+        await page.viewport(PHONE.width, PHONE.height);
+      } else if (window.innerWidth >= 768) {
+        // Storybook's own canvas at desktop width: the phone branch is not
+        // there to drive. The test runner sets the viewport itself.
+        return;
+      }
+      // Phone branch: a button that opens a dialog, never a combobox.
+      const trigger = await settle(() => {
+        const el = phoneTrigger(canvasElement);
+        expect(el).not.toBeNull();
+        return el as HTMLButtonElement;
+      });
+      await expect(desktopTrigger(canvasElement)).toBeNull();
+      await expect(trigger).toHaveAttribute("aria-haspopup", "dialog");
+      await expect(trigger).toHaveAccessibleName("Timezone UTC");
+      const phoneLook = triggerLook(trigger);
+      const unlocked = pageScrollLocked();
+      // The chevron turns like the Select's: read once its transition settles.
+      const chevronRotate = () =>
+        getComputedStyle(trigger.querySelector("svg") as SVGElement).rotate;
+      await settle(() => expect(chevronRotate()).toBe("none"));
+
+      // Keyboard: open, the chosen option is marked and focused.
+      trigger.focus();
+      await userEvent.keyboard("{Enter}");
+      const listbox = await settle(() =>
+        expect(body.getByRole("listbox", { name: /^Timezone$/ })).toBeVisible()
+      ).then(() => body.getByRole("listbox", { name: /^Timezone$/ }));
+      const utc = within(listbox).getByRole("option", { name: /^UTC$/ });
+      await expect(utc).toHaveAttribute("aria-selected", "true");
+      await settle(() => expect(document.activeElement).toBe(utc));
+      await settle(() => expect(chevronRotate()).toBe("180deg"));
+
+      // Arrows move focus without choosing; Enter chooses, closes, refocuses.
+      await userEvent.keyboard("{ArrowDown}");
+      const cet = within(listbox).getByRole("option", {
+        name: /^Central European Time$/,
+      });
+      await expect(document.activeElement).toBe(cet);
+      await expect(utc).toHaveAttribute("aria-selected", "true");
+      await userEvent.keyboard("{Enter}");
+      await settle(() => expect(body.queryByRole("listbox")).toBeNull());
+      await settle(() => expect(document.activeElement).toBe(trigger));
+      await expect(trigger).toHaveAccessibleName(
+        "Timezone Central European Time"
+      );
+      await settle(() => expect(chevronRotate()).toBe("none"));
+
+      // Home/End reach the ends; Escape closes without a change.
+      await userEvent.keyboard("{Enter}");
+      await settle(() =>
+        expect(
+          body.getByRole("option", { name: /^Central European Time$/ })
+        ).toHaveFocus()
+      );
+      await userEvent.keyboard("{End}");
+      await expect(
+        body.getByRole("option", { name: /^Japan Standard Time$/ })
+      ).toHaveFocus();
+      await userEvent.keyboard("{Home}");
+      await expect(body.getByRole("option", { name: /^UTC$/ })).toHaveFocus();
+      await userEvent.keyboard("{Escape}");
+      await settle(() => expect(body.queryByRole("listbox")).toBeNull());
+      await settle(() => expect(document.activeElement).toBe(trigger));
+      await expect(trigger).toHaveAccessibleName(
+        "Timezone Central European Time"
+      );
+
+      // Pointer: a tap chooses and closes.
+      await userEvent.click(trigger);
+      await userEvent.click(
+        await settle(() => body.getByRole("option", { name: /^Eastern Time$/ }))
+      );
+      await settle(() => expect(body.queryByRole("listbox")).toBeNull());
+      await expect(trigger).toHaveAccessibleName("Timezone Eastern Time");
+
+      if (!page) {
+        return;
+      }
+
+      // Crossing the breakpoint while the Drawer is open: it unmounts, the
+      // value survives, nothing stays open or scroll-locked.
+      await userEvent.click(trigger);
+      await settle(() => expect(body.getByRole("listbox")).toBeVisible());
+      // Positive controls: the open Drawer locks the page and hides the rest.
+      await expect(unlocked).toBe(false);
+      await settle(() => expect(pageScrollLocked()).toBe(true));
+      await expect(outsideHidden(canvasElement)).toBe(true);
+      await page.viewport(DESKTOP.width, DESKTOP.height);
+      const combobox = await settle(() => {
+        const el = desktopTrigger(canvasElement);
+        expect(el).not.toBeNull();
+        return el as HTMLButtonElement;
+      });
+      await settle(() => expect(body.queryByRole("dialog")).toBeNull());
+      await expect(body.queryByRole("listbox")).toBeNull();
+      await expect(combobox).toHaveTextContent("Eastern Time");
+      await expect(combobox).toHaveAttribute("aria-expanded", "false");
+      await settle(() => expect(pageScrollLocked()).toBe(unlocked));
+      await settle(() => expect(outsideHidden(canvasElement)).toBe(false));
+      await expect(combobox).toHaveAccessibleName("Timezone");
+
+      // The two triggers look the same, so the server's phone markup does
+      // not jump when a desktop visitor hydrates.
+      await expect(triggerLook(combobox)).toEqual({
+        ...phoneLook,
+        left: triggerLook(combobox).left,
+        top: triggerLook(combobox).top,
+      });
+
+      // And back: the open Select unmounts on the way down.
+      await userEvent.click(combobox);
+      await settle(() =>
+        expect(body.getByRole("option", { name: /^UTC$/ })).toBeVisible()
+      );
+      await settle(() => expect(pageScrollLocked()).toBe(true));
+      await expect(outsideHidden(canvasElement)).toBe(true);
+      await page.viewport(PHONE.width, PHONE.height);
+      const again = await settle(() => {
+        const el = phoneTrigger(canvasElement);
+        expect(el).not.toBeNull();
+        return el as HTMLButtonElement;
+      });
+      await settle(() =>
+        expect(
+          document.querySelector('[data-slot="select-content"]')
+        ).toBeNull()
+      );
+      await expect(body.queryByRole("dialog")).toBeNull();
+      await expect(again).toHaveAccessibleName("Timezone Eastern Time");
+      await settle(() => expect(pageScrollLocked()).toBe(unlocked));
+      await settle(() => expect(outsideHidden(canvasElement)).toBe(false));
+    } finally {
+      await page?.viewport(TESTER_VIEWPORT.width, TESTER_VIEWPORT.height);
+    }
+  },
+};
+
+/**
+ * First paint of `select-responsive` for a desktop visitor: the server has no
+ * viewport, so its HTML is the phone branch. Hydrating it at 1280px must not
+ * warn, and the trigger must not move or resize when it swaps to the Select.
+ */
+export const ResponsiveFirstPaint: Story = {
+  tags: TEST_ONLY,
+  render: () => <div data-testid="host" />,
+  play: async ({ canvasElement }) => {
+    const page = realPage();
+    if (!page) {
+      return;
+    }
+    const host = canvasElement.querySelector(
+      '[data-testid="host"]'
+    ) as HTMLElement;
+    const errors: string[] = [];
+    const error = console.error;
+    console.error = (...args: unknown[]) => {
+      errors.push(String(args[0]));
+      error(...args);
+    };
+    let root: ReturnType<typeof hydrateRoot> | undefined;
+    try {
+      await page.viewport(DESKTOP.width, DESKTOP.height);
+      host.innerHTML = renderToString(<SelectResponsive />);
+      const server = phoneTrigger(host);
+      await expect(server).not.toBeNull();
+      await expect(desktopTrigger(host)).toBeNull();
+      const serverLook = triggerLook(server as HTMLElement);
+      const serverHeight = host.getBoundingClientRect().height;
+
+      root = hydrateRoot(host, <SelectResponsive />, {
+        onRecoverableError: (e) => errors.push(String(e)),
+      });
+      const client = await settle(() => {
+        const el = desktopTrigger(host);
+        expect(el).not.toBeNull();
+        return el as HTMLElement;
+      });
+      await expect(triggerLook(client)).toEqual(serverLook);
+      await expect(host.getBoundingClientRect().height).toBe(serverHeight);
+      await expect(client).toHaveTextContent("UTC");
+      await expect(errors).toEqual([]);
+    } finally {
+      root?.unmount();
+      console.error = error;
+      await page.viewport(TESTER_VIEWPORT.width, TESTER_VIEWPORT.height);
+    }
+  },
+};
+
+/** The select-all demo's language ids, disabled one included. */
+const languageIds = [
+  "javascript",
+  "typescript",
+  "python",
+  "java",
+  "rust",
+  "go",
+  "swift",
+];
+
+/** Everything the select-all demo's change handler hands on, per play. */
+const selectAllChanges: string[][] = [];
+
+/** The handler's calls so far: exactly `count`, the last one `ids`. */
+async function expectChanges(
+  changes: string[][],
+  count: number,
+  ids: string[]
+) {
+  await settle(() => expect(changes.length).toBe(count));
+  await expect([...(changes.at(-1) ?? [])].sort()).toEqual(ids);
+}
+
+/**
+ * The `select-multiple-select-all` docs example: "Select all" has three
+ * states and toggles every enabled option, never a disabled one.
+ */
+export const MultipleSelectAll: Story = {
+  render: () => (
+    <form>
+      <SelectMultipleSelectAll
+        onValueChange={(value) => selectAllChanges.push(value)}
+      />
+    </form>
+  ),
+  play: async ({ canvasElement }) => {
+    selectAllChanges.length = 0;
+    const canvas = within(canvasElement);
+    const body = within(document.body);
+    const form = canvasElement.querySelector("form") as HTMLFormElement;
+    const submitted = () => new FormData(form).getAll("languages").sort();
+    // A stable name; the value is asserted apart from it.
+    const trigger = canvas.getByRole("combobox", { name: /^Languages$/ });
+    const enabled = [
+      "JavaScript",
+      "TypeScript",
+      "Python",
+      "Rust",
+      "Go",
+      "Swift",
+    ];
+    const enabledIds = [
+      "go",
+      "javascript",
+      "python",
+      "rust",
+      "swift",
+      "typescript",
+    ];
+    const row = () => body.getByRole("option", { name: /^Select all$/ });
+    // The row exposes one state: selected only when every enabled language
+    // is, with the count as its description. Never aria-checked.
+    const rowState = () => ({
+      selected: row().getAttribute("aria-selected"),
+      checked: row().getAttribute("aria-checked"),
+      mark: row()
+        .querySelector("[data-select-all]")
+        ?.getAttribute("data-select-all"),
+    });
+    const selected = () =>
+      body
+        .getAllByRole("option")
+        .filter((o) => o.getAttribute("aria-selected") === "true")
+        .map((o) => o.textContent?.trim());
+
+    // Some: two of six enabled options start selected.
+    await expect(trigger).toHaveTextContent("JavaScript (+1 more)");
+    await expect(submitted()).toEqual(["javascript", "typescript"]);
+    trigger.focus();
+    await userEvent.keyboard("{ArrowDown}");
+    await settle(() => expect(row()).toBeVisible());
+    await expect(rowState()).toEqual({
+      selected: "false",
+      checked: null,
+      mark: "some",
+    });
+    await expect(row()).toHaveAccessibleDescription(
+      "2 of 6 languages selected"
+    );
+
+    // The row's mark sits where the options' checkmarks do: same column,
+    // centred on its own row.
+    const center = (r: DOMRect) => r.top + r.height / 2;
+    const rowBox = row().getBoundingClientRect();
+    const markBox = (
+      row().querySelector("[data-select-all]") as HTMLElement
+    ).getBoundingClientRect();
+    const checkBox = (
+      body
+        .getByRole("option", { name: /^JavaScript$/ })
+        .querySelector("svg") as SVGElement
+    ).getBoundingClientRect();
+    await expect(Math.abs(center(markBox) - center(rowBox))).toBeLessThan(1);
+    await expect(Math.abs(markBox.right - checkBox.right)).toBeLessThan(1);
+
+    // Keyboard to the row, Enter: all enabled options, the disabled one stays.
+    await settle(() =>
+      expect(
+        document.querySelector('[role="option"][data-highlighted]')
+      ).not.toBeNull()
+    );
+    await userEvent.keyboard("{Home}");
+    await settle(() => expect(row()).toHaveAttribute("data-highlighted"));
+    await userEvent.keyboard("{Enter}");
+    await settle(() => expect(rowState().mark).toBe("all"));
+    await expect(rowState()).toEqual({
+      selected: "true",
+      checked: null,
+      mark: "all",
+    });
+    await expect(row()).toHaveAccessibleDescription(
+      "6 of 6 languages selected"
+    );
+    await expect(selected()).toEqual(["Select all", ...enabled]);
+    await expect(
+      body.getByRole("option", { name: /Java \(legacy\)/ })
+    ).toHaveAttribute("aria-selected", "false");
+    await expect(trigger).toHaveTextContent("All languages");
+    await settle(() => expect(submitted()).toEqual(enabledIds));
+    await expectChanges(selectAllChanges, 1, enabledIds);
+
+    // All → none, with Space this time.
+    await userEvent.keyboard(" ");
+    await settle(() => expect(rowState().mark).toBe("none"));
+    await expect(rowState()).toEqual({
+      selected: "false",
+      checked: null,
+      mark: "none",
+    });
+    await expect(row()).toHaveAccessibleDescription(
+      "0 of 6 languages selected"
+    );
+    await expect(selected()).toEqual([]);
+    await expect(trigger).toHaveTextContent("Select languages…");
+    await settle(() => expect(submitted()).toEqual([]));
+    await expectChanges(selectAllChanges, 2, []);
+
+    // One option by pointer → some again; the list stays open.
+    await userEvent.click(body.getByRole("option", { name: /^Rust$/ }));
+    await settle(() => expect(rowState().mark).toBe("some"));
+    await expect(selected()).toEqual(["Rust"]);
+    await expect(trigger).toHaveTextContent("Rust");
+
+    // Selecting the rest one by one reaches "all" without the row.
+    for (const name of enabled.filter((n) => n !== "Rust")) {
+      // biome-ignore lint/performance/noAwaitInLoops: one click at a time
+      await userEvent.click(body.getByRole("option", { name }));
+    }
+    await settle(() => expect(rowState().selected).toBe("true"));
+    await expect(trigger).toHaveTextContent("All languages");
+    await settle(() => expect(submitted()).toEqual(enabledIds));
+
+    // Deselecting one language from "all" → some, and only language ids go
+    // to the form.
+    await userEvent.click(body.getByRole("option", { name: /^Go$/ }));
+    await settle(() => expect(rowState().mark).toBe("some"));
+    await expect(rowState().selected).toBe("false");
+    await settle(() =>
+      expect(submitted()).toEqual(enabledIds.filter((id) => id !== "go"))
+    );
+    // Rust, then five more, then Go: one call each.
+    await expectChanges(
+      selectAllChanges,
+      9,
+      enabledIds.filter((id) => id !== "go")
+    );
+
+    // Typeahead still reaches the row.
+    await userEvent.keyboard("{End}");
+    await settle(() =>
+      expect(body.getByRole("option", { name: /^Swift$/ })).toHaveAttribute(
+        "data-highlighted"
+      )
+    );
+    await userEvent.keyboard("sel");
+    await settle(() => expect(row()).toHaveAttribute("data-highlighted"));
+
+    // The change handler only ever handed on language ids.
+    await expect(selectAllChanges.length).toBeGreaterThan(0);
+    await expect(
+      selectAllChanges.flat().filter((v) => !languageIds.includes(v))
+    ).toEqual([]);
+
+    await userEvent.keyboard("{Escape}");
+    await settle(() =>
+      expect(body.queryByRole("option", { name: /^Select all$/ })).toBeNull()
+    );
+  },
+};
+
+/** Vitest's real input; absent when Storybook itself runs the play. */
+interface RealInput {
+  click: (element: Element) => Promise<void>;
+  keyboard: (text: string) => Promise<void>;
+}
+interface RealCommands {
+  pointerDown: () => Promise<void>;
+  pointerMoveTo: (selector: string) => Promise<void>;
+  pointerUp: () => Promise<void>;
+}
+const realInput = () =>
+  (globalThis as { __realUserEvent?: RealInput }).__realUserEvent;
+const realCommands = () =>
+  (globalThis as { __realCommands?: RealCommands }).__realCommands;
+
+const gestureChanges: string[][] = [];
+
+const gestureRender = () => (
+  <form>
+    <SelectMultipleSelectAll
+      onValueChange={(value) => gestureChanges.push(value)}
+    />
+  </form>
+);
+
+/** What the gesture plays share: real input, the form, the row. */
+function gestureFixture(canvasElement: HTMLElement) {
+  gestureChanges.length = 0;
+  const body = within(document.body);
+  const form = canvasElement.querySelector("form") as HTMLFormElement;
+  const trigger = within(canvasElement).getByRole("combobox", {
+    name: /^Languages$/,
+  });
+  return {
+    body,
+    trigger,
+    submitted: () => new FormData(form).getAll("languages").sort(),
+    row: () => body.getByRole("option", { name: /^Select all$/ }),
+    open: () => expect(trigger).toHaveAttribute("aria-expanded", "true"),
+    closed: () => expect(trigger).toHaveAttribute("aria-expanded", "false"),
+    enabledIds: ["go", "javascript", "python", "rust", "swift", "typescript"],
+  };
+}
+
+/** A click on the visible "Languages" label opens its own Select. */
+export const MultipleSelectAllLabelClick: Story = {
+  tags: TEST_ONLY,
+  render: gestureRender,
+  play: async ({ canvasElement }) => {
+    const user = realInput();
+    if (!user) {
+      return;
+    }
+    const f = gestureFixture(canvasElement);
+    try {
+      await user.click(canvasElement.querySelector("label") as HTMLElement);
+      await settle(f.open);
+      await settle(() => expect(f.row()).toBeVisible());
+    } finally {
+      await user.keyboard("{Escape}");
+    }
+  },
+};
+
+/**
+ * A pointer-free click on the row while Swift has focus moves focus to the
+ * row, so the next Space acts on the row (clears all), not on Swift.
+ */
+export const MultipleSelectAllVirtualClick: Story = {
+  tags: TEST_ONLY,
+  render: gestureRender,
+  play: async ({ canvasElement }) => {
+    const user = realInput();
+    if (!user) {
+      return;
+    }
+    const f = gestureFixture(canvasElement);
+    try {
+      f.trigger.focus();
+      await user.keyboard("{ArrowDown}");
+      await settle(() => expect(f.row()).toBeVisible());
+      await user.keyboard("{End}");
+      const swift = f.body.getByRole("option", { name: /^Swift$/ });
+      await settle(() => expect(swift).toHaveFocus());
+      f.row().click();
+      await expectChanges(gestureChanges, 1, f.enabledIds);
+      await settle(() => expect(f.row()).toHaveFocus());
+      await user.keyboard(" ");
+      await expectChanges(gestureChanges, 2, []);
+      await settle(() => expect(f.submitted()).toEqual([]));
+    } finally {
+      await user.keyboard("{Escape}");
+    }
+  },
+};
+
+/**
+ * Two direct clicks on the row (all, then none), close, then a real drag
+ * from the trigger released on the row: one change, to all.
+ */
+export const MultipleSelectAllDragAfterClicks: Story = {
+  tags: TEST_ONLY,
+  render: gestureRender,
+  play: async ({ canvasElement }) => {
+    const user = realInput();
+    const commands = realCommands();
+    if (!(user && commands)) {
+      return;
+    }
+    const f = gestureFixture(canvasElement);
+    let held = false;
+    try {
+      await user.click(f.trigger);
+      await settle(() => expect(f.row()).toBeVisible());
+      await user.click(f.row());
+      await expectChanges(gestureChanges, 1, f.enabledIds);
+      await user.click(f.row());
+      await expectChanges(gestureChanges, 2, []);
+      await user.keyboard("{Escape}");
+      await settle(f.closed);
+
+      await commands.pointerMoveTo('[data-slot="select-trigger"]');
+      await commands.pointerDown();
+      held = true;
+      await settle(f.open);
+      await settle(() => expect(f.row()).toBeVisible());
+      // One step onto the row: a real pointermove with the button held, far
+      // enough for the item to accept the release before the 400ms guard.
+      await commands.pointerMoveTo('[role="option"]:has([data-select-all])');
+      await commands.pointerUp();
+      held = false;
+      await expectChanges(gestureChanges, 3, f.enabledIds);
+      await settle(() => expect(f.submitted()).toEqual(f.enabledIds));
+    } finally {
+      // Release only a button this play still holds: a second release over
+      // the open list would activate the row again.
+      if (held) {
+        await commands.pointerUp();
+      }
+      await user.keyboard("{Escape}");
+    }
+    await expectChanges(gestureChanges, 3, f.enabledIds);
+  },
+};
+
+/**
+ * A real click on the responsive example's visible "Timezone" label opens
+ * whichever control is shown. One id serves both triggers: only one branch
+ * is mounted at a time.
+ */
+async function clickTimezoneLabel(
+  canvasElement: HTMLElement,
+  size: { width: number; height: number }
+) {
+  const page = realPage();
+  const user = realInput();
+  if (!(page && user)) {
+    return;
+  }
+  const body = within(document.body);
+  try {
+    await page.viewport(size.width, size.height);
+    const phone = size.width < 768;
+    const trigger = await settle(() => {
+      const el = phone
+        ? phoneTrigger(canvasElement)
+        : desktopTrigger(canvasElement);
+      expect(el).not.toBeNull();
+      return el as HTMLButtonElement;
+    });
+    await expect(
+      document.querySelectorAll(`[id="${trigger.id}"]`)
+    ).toHaveLength(1);
+    await user.click(canvasElement.querySelector("label") as HTMLElement);
+    if (phone) {
+      await settle(() =>
+        expect(body.getByRole("listbox", { name: /^Timezone$/ })).toBeVisible()
+      );
+    } else {
+      await settle(() =>
+        expect(trigger).toHaveAttribute("aria-expanded", "true")
+      );
+      await settle(() =>
+        expect(body.getByRole("option", { name: /^UTC$/ })).toBeVisible()
+      );
+    }
+    await user.keyboard("{Escape}");
+    await settle(() => expect(body.queryByRole("option")).toBeNull());
+  } finally {
+    await page.viewport(TESTER_VIEWPORT.width, TESTER_VIEWPORT.height);
+  }
+}
+
+/** The label opens the Drawer at a phone width. */
+export const ResponsiveLabelClickPhone: Story = {
+  tags: TEST_ONLY,
+  render: () => <SelectResponsive />,
+  play: ({ canvasElement }) => clickTimezoneLabel(canvasElement, PHONE),
+};
+
+/** The label opens the Select at a desktop width. */
+export const ResponsiveLabelClickDesktop: Story = {
+  tags: TEST_ONLY,
+  render: () => <SelectResponsive />,
+  play: ({ canvasElement }) => clickTimezoneLabel(canvasElement, DESKTOP),
 };

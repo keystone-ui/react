@@ -1873,6 +1873,16 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("select-multiple", m.default),
     }))
   ),
+  "select-multiple-select-all": dynamic(() =>
+    import("./select/multiple-select-all").then((m) => ({
+      default: hydrated("select-multiple-select-all", m.default),
+    }))
+  ),
+  "select-responsive": dynamic(() =>
+    import("./select/responsive").then((m) => ({
+      default: hydrated("select-responsive", m.default),
+    }))
+  ),
   "select-scrollable": dynamic(() =>
     import("./select/scrollable").then((m) => ({
       default: hydrated("select-scrollable", m.default),
