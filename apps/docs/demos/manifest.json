@@ -367,6 +367,8 @@
   "select-form-example": "select/form-example.tsx",
   "select-groups": "select/groups.tsx",
   "select-multiple": "select/multiple.tsx",
+  "select-multiple-select-all": "select/multiple-select-all.tsx",
+  "select-responsive": "select/responsive.tsx",
   "select-scrollable": "select/scrollable.tsx",
   "select-sizes": "select/sizes.tsx",
   "select-with-icons": "select/with-icons.tsx",

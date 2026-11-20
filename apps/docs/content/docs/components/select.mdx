@@ -127,6 +127,22 @@ Select multiple values:
 <ComponentPreview name="select-multiple" />
 
 
+### Multiple with Select All
+
+A "Select all" row above the options shows none, some (a dash) or all, and toggles every enabled option while leaving disabled ones as they are:
+
+<ComponentPreview name="select-multiple-select-all" />
+
+
+### Responsive
+
+A Select from 768px up and a Drawer with a list of options on phones, sharing one value:
+
+<ComponentPreview name="select-responsive" />
+
+`useMediaQuery` cannot see a viewport on the server, so the server HTML is the phone branch: a desktop visitor sees the phone trigger until hydration, then the Select's. Both triggers share one look, so the swap moves nothing and hydration does not warn. Each branch keeps its own open state, so if the viewport crosses the breakpoint while the Drawer or the Select is open, it closes with its branch: the value is kept and the page is not left scroll-locked.
+
+
 ### Disabled
 
 <ComponentPreview name="select-disabled" />
