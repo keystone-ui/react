@@ -1778,11 +1778,16 @@
       "type": "registry:block",
       "title": "Signup 01",
       "description": "A simple signup form inside a card with name, email, and password fields.",
+      "dependencies": [
+        "lucide-react"
+      ],
       "registryDependencies": [
         "https://keystoneui.io/r/button.json",
         "https://keystoneui.io/r/card.json",
         "https://keystoneui.io/r/field.json",
-        "https://keystoneui.io/r/input.json"
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/input-group.json",
+        "https://keystoneui.io/r/progress.json"
       ],
       "files": [
         {
