@@ -3444,6 +3444,21 @@
       ]
     },
     {
+      "name": "badge-destructive",
+      "type": "registry:example",
+      "title": "Badge Destructive",
+      "description": "Badge example: Destructive.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/badge.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/badge/destructive.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
       "name": "badge-removable",
       "type": "registry:example",
       "title": "Badge Removable",
@@ -3484,6 +3499,21 @@
       "files": [
         {
           "path": "apps/docs/demos/badge/stats.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "badge-status",
+      "type": "registry:example",
+      "title": "Badge Status",
+      "description": "Badge example: Status.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/badge.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/badge/status.tsx",
           "type": "registry:example"
         }
       ]

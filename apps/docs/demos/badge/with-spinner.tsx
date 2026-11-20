@@ -6,7 +6,7 @@ import { Spinner } from "@keystoneui/react/spinner";
 export default function BadgeWithSpinner() {
   return (
     <div className="flex flex-wrap gap-2">
-      <Badge variant="destructive">
+      <Badge appearance="soft" variant="error">
         <Spinner data-icon="inline-start" />
         Deleting
       </Badge>

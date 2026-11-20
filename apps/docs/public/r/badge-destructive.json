@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge-destructive",
+  "title": "Badge Destructive",
+  "description": "Badge example: Destructive.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/badge.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/badge/destructive.tsx",
+      "content": "\"use client\";\n\nimport { Badge } from \"@keystoneui/react/badge\";\n\nexport default function BadgeDestructive() {\n  return (\n    <div className=\"flex flex-wrap items-center gap-4\">\n      <div className=\"flex flex-col items-start gap-1.5\">\n        {/* The classes `variant=\"destructive\"` drew before it followed `appearance`. */}\n        <Badge className=\"bg-destructive/10 text-destructive dark:bg-destructive/20\">\n          Destructive\n        </Badge>\n        <span className=\"text-muted-foreground text-xs\">\n          Earlier destructive\n        </span>\n      </div>\n      <div className=\"flex flex-col items-start gap-1.5\">\n        <Badge appearance=\"soft\" variant=\"error\">\n          Error\n        </Badge>\n        <span className=\"text-muted-foreground text-xs\">error, soft</span>\n      </div>\n      <div className=\"flex flex-col items-start gap-1.5\">\n        <Badge variant=\"error\">Error</Badge>\n        <span className=\"text-muted-foreground text-xs\">\n          error (solid, the default)\n        </span>\n      </div>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

@@ -116,7 +116,7 @@ const COLUMNS: readonly PaymentColumn[] = [
   },
   {
     cell: (row) => (
-      <Badge variant={PAYMENT_STATUS_VARIANT[row.status]}>
+      <Badge appearance="soft" variant={PAYMENT_STATUS_VARIANT[row.status]}>
         {paymentStatusLabels[row.status]}
       </Badge>
     ),

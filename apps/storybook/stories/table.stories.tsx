@@ -271,7 +271,7 @@ const statusBadgeVariant = (status: string) => {
     case "Pending":
       return "outline" as const;
     case "Unpaid":
-      return "destructive" as const;
+      return "error" as const;
     default:
       return "secondary" as const;
   }
@@ -294,7 +294,10 @@ export const WithBadges: Story = {
           <TableRow key={invoice.invoice}>
             <TableCell className="font-medium">{invoice.invoice}</TableCell>
             <TableCell>
-              <Badge variant={statusBadgeVariant(invoice.paymentStatus)}>
+              <Badge
+                appearance="soft"
+                variant={statusBadgeVariant(invoice.paymentStatus)}
+              >
                 {invoice.paymentStatus}
               </Badge>
             </TableCell>
@@ -479,7 +482,7 @@ const txStatusBadgeVariant = (status: TransactionStatus) => {
     case "Pending":
       return "outline" as const;
     case "Failed":
-      return "destructive" as const;
+      return "error" as const;
   }
 };
 
@@ -528,7 +531,10 @@ export const CryptoTransactions: Story = {
             <TableCell className="font-medium">{tx.asset}</TableCell>
             <TableCell className="font-mono text-xs">{tx.amount}</TableCell>
             <TableCell>
-              <Badge variant={txStatusBadgeVariant(tx.status)}>
+              <Badge
+                appearance="soft"
+                variant={txStatusBadgeVariant(tx.status)}
+              >
                 {tx.status}
               </Badge>
             </TableCell>
@@ -617,6 +623,7 @@ export const Compact: Story = {
             <TableCell>
               <Badge
                 size="sm"
+                appearance="soft"
                 variant={statusBadgeVariant(invoice.paymentStatus)}
               >
                 {invoice.paymentStatus}
@@ -741,7 +748,10 @@ function SelectedRowsExample() {
             </TableCell>
             <TableCell className="font-medium">{invoice.invoice}</TableCell>
             <TableCell>
-              <Badge variant={statusBadgeVariant(invoice.paymentStatus)}>
+              <Badge
+                appearance="soft"
+                variant={statusBadgeVariant(invoice.paymentStatus)}
+              >
                 {invoice.paymentStatus}
               </Badge>
             </TableCell>
@@ -959,7 +969,10 @@ export const CardWithBadges: Story = {
           <TableRow key={invoice.invoice}>
             <TableCell className="font-medium">{invoice.invoice}</TableCell>
             <TableCell>
-              <Badge variant={statusBadgeVariant(invoice.paymentStatus)}>
+              <Badge
+                appearance="soft"
+                variant={statusBadgeVariant(invoice.paymentStatus)}
+              >
                 {invoice.paymentStatus}
               </Badge>
             </TableCell>
@@ -1090,7 +1103,7 @@ const playerStatusBadgeVariant = (status: PlayerStatus) => {
     case "Pending":
       return "outline" as const;
     case "Suspended":
-      return "destructive" as const;
+      return "error" as const;
   }
 };
 
@@ -1148,7 +1161,10 @@ function ExchangePlayersTable({
               {player.balance}
             </TableCell>
             <TableCell>
-              <Badge variant={playerStatusBadgeVariant(player.status)}>
+              <Badge
+                appearance="soft"
+                variant={playerStatusBadgeVariant(player.status)}
+              >
                 {player.status}
               </Badge>
             </TableCell>
@@ -1231,7 +1247,10 @@ function PaginatedTableExample() {
             <TableRow key={invoice.invoice}>
               <TableCell className="font-medium">{invoice.invoice}</TableCell>
               <TableCell>
-                <Badge variant={statusBadgeVariant(invoice.paymentStatus)}>
+                <Badge
+                  appearance="soft"
+                  variant={statusBadgeVariant(invoice.paymentStatus)}
+                >
                   {invoice.paymentStatus}
                 </Badge>
               </TableCell>
