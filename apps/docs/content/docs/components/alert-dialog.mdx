@@ -120,6 +120,14 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 | `open` | `boolean` | - | Controlled open state |
 | `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
 
+### AlertDialogContent
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"default" \| "sm"` | `"default"` | Dialog width |
+| `overlayClassName` | `string` | - | Classes merged onto the built-in overlay; yours win over the defaults (`bg-black/20` lightens it, `hidden` removes it). Visual only: an alert dialog always leaves the page behind inert and scroll-locked |
+| `className` | `string \| ((state: DialogPopupState) => string \| undefined)` | - | Additional CSS classes |
+
 ### AlertDialogAction
 
 | Prop | Type | Default | Description |

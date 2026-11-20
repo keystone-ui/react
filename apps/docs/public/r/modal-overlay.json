@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "modal-overlay",
+  "title": "Modal Overlay",
+  "description": "Modal example: Overlay.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/modal.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/modal/overlay.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Modal,\n  ModalClose,\n  ModalContent,\n  ModalDescription,\n  ModalFooter,\n  ModalHeader,\n  ModalTitle,\n  ModalTrigger,\n} from \"@keystoneui/react/modal\";\n\nexport default function ModalLighterOverlay() {\n  return (\n    <Modal>\n      <ModalTrigger render={<Button variant=\"outline\" />}>\n        Lighter overlay\n      </ModalTrigger>\n      <ModalContent overlayClassName=\"bg-black/20 backdrop-blur-sm\">\n        <ModalHeader>\n          <ModalTitle>Lighter overlay</ModalTitle>\n          <ModalDescription>\n            The page behind stays visible through a light, blurred tint.\n          </ModalDescription>\n        </ModalHeader>\n        <ModalFooter>\n          <ModalClose render={<Button variant=\"outline\" />}>Cancel</ModalClose>\n          <ModalClose render={<Button />}>Done</ModalClose>\n        </ModalFooter>\n      </ModalContent>\n    </Modal>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

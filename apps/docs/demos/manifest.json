@@ -315,6 +315,7 @@
   "modal-long-content": "modal/long-content.tsx",
   "modal-multi-step": "modal/multi-step.tsx",
   "modal-nested": "modal/nested.tsx",
+  "modal-overlay": "modal/overlay.tsx",
   "modal-scrollable": "modal/scrollable.tsx",
   "modal-sign-up-form": "modal/sign-up-form.tsx",
   "modal-sizes": "modal/sizes.tsx",

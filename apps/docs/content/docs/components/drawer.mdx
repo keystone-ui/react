@@ -159,13 +159,14 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 | `onOpenChange` | `(open: boolean) => void` | - | Callback when open state changes |
 | `swipeDirection` | `"up" \| "right" \| "down" \| "left"` | `"down"` | The edge the drawer slides from, and the direction that swipes to dismiss |
 | `snapPoints` | `(string \| number)[]` | - | Heights the drawer settles at when dragged |
-| `modal` | `boolean \| "trap-focus"` | `true` | Whether the drawer blocks interaction with the page behind it |
+| `modal` | `boolean \| "trap-focus"` | `true` | `true` traps keyboard focus and locks document scrolling. `false` disables both. `"trap-focus"` keeps keyboard focus inside without locking document scrolling. The full-screen Drawer viewport can still intercept outside clicks. |
 
 ### DrawerContent
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `variant` | `"flush" \| "floating"` | `"flush"` | Visual style for `left` / `right` drawers at `md+`. `floating` detaches from the edge with a gap, full radius, and shadow. No effect on `top` / `bottom` or below `md`. |
+| `overlayClassName` | `string` | - | Classes merged onto the built-in overlay; yours win over the defaults (`bg-black/20` lightens it, `hidden` removes it). Hiding the backdrop is visual only. By default, the page behind is inert and scroll-locked. On the root, `modal={false}` turns off the focus trap and document scroll lock. `modal="trap-focus"` releases the scroll lock and keeps keyboard focus inside. The full-screen Drawer viewport can still intercept outside clicks. |
 | `className` | `string` | - | Additional CSS classes |
 
 ### DrawerBody

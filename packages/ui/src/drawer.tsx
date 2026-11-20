@@ -64,6 +64,18 @@ export type DrawerVariant = "flush" | "floating";
 
 export interface DrawerContentProps extends DrawerPrimitive.Popup.Props {
   /**
+   * Classes for the overlay (backdrop) this part renders behind itself,
+   * merged over its defaults so yours win: `bg-black/20` lightens it,
+   * `hidden` removes it.
+   *
+   * Hiding the backdrop is visual only. By default, the page behind is inert
+   * and scroll-locked. On the root, `modal={false}` turns off the focus trap
+   * and document scroll lock. `modal="trap-focus"` releases the scroll lock
+   * and keeps keyboard focus inside. The full-screen Drawer viewport can
+   * still intercept outside clicks.
+   */
+  overlayClassName?: string;
+  /**
    * Visual style for side drawers (`left` / `right`) on `md+` viewports.
    *
    * - `flush` (default): edges to the viewport, only the inner corners rounded.
@@ -84,11 +96,12 @@ function DrawerContent({
   className,
   children,
   variant = "flush",
+  overlayClassName,
   ...props
 }: DrawerContentProps) {
   return (
     <DrawerPortal>
-      <DrawerOverlay />
+      <DrawerOverlay className={overlayClassName} />
       <DrawerPrimitive.Viewport
         className="fixed inset-0 z-(--z-drawer,40)"
         data-slot="drawer-viewport"

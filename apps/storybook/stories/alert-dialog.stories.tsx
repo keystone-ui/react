@@ -17,7 +17,7 @@ import {
   CircleFadingPlus as CircleFadingPlusIcon,
   Trash2 as Trash2Icon,
 } from "lucide-react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 
 const meta = {
   title: "Components/AlertDialog",
@@ -300,6 +300,116 @@ export const Destructive: Story = {
       description: {
         story:
           'Use the `variant="destructive"` prop on `AlertDialogAction` and custom destructive colors on `AlertDialogMedia` to create a destructive confirmation dialog.',
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Overlay (overlayClassName)
+// =============================================================================
+/** Alpha of a computed `background-color`, in either `rgba()` or `oklab()` form. */
+function backgroundAlpha(el: Element) {
+  const color = getComputedStyle(el).backgroundColor;
+  const match = color.match(/[/,]\s*([\d.]+)\s*\)$/);
+  return match ? Number(match[1]) : 1;
+}
+
+export const Overlay: Story = {
+  render: () => (
+    <div className="flex gap-2">
+      <AlertDialog>
+        <AlertDialogTrigger render={<Button variant="outline" />}>
+          Lighter overlay
+        </AlertDialogTrigger>
+        <AlertDialogContent overlayClassName="bg-black/20">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Lighter overlay</AlertDialogTitle>
+            <AlertDialogDescription>
+              The page behind stays visible through a 20% tint.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Close</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <AlertDialog>
+        <AlertDialogTrigger render={<Button variant="outline" />}>
+          Hidden overlay
+        </AlertDialogTrigger>
+        <AlertDialogContent overlayClassName="hidden">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Hidden overlay</AlertDialogTitle>
+            <AlertDialogDescription>
+              No tint, but the page behind is still inert until the dialog
+              closes.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Close</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    // Open one instance and return its own portal and overlay, read only
+    // once the enter animations have finished. Nothing in a `waitFor`
+    // touches the DOM.
+    const open = async (title: string) => {
+      await userEvent.click(canvas.getByRole("button", { name: title }));
+      const popup = await body.findByRole("alertdialog", { name: title });
+      const portal = popup.closest<HTMLElement>(
+        "[data-slot='alert-dialog-portal']"
+      );
+      const overlay = portal?.querySelector<HTMLElement>(
+        "[data-slot='alert-dialog-overlay']"
+      );
+      if (!(portal && overlay)) {
+        throw new Error(`no portal or overlay for "${title}"`);
+      }
+      await waitFor(() => {
+        for (const el of [popup, overlay]) {
+          expect(el).toHaveAttribute("data-open");
+          expect(el).not.toHaveAttribute("data-starting-style");
+        }
+      });
+      await Promise.all(
+        [popup, overlay].flatMap((el) =>
+          el.getAnimations().map((a) => a.finished)
+        )
+      );
+      return { portal, overlay };
+    };
+    const dismiss = async (portal: HTMLElement) => {
+      await userEvent.click(
+        within(portal).getByRole("button", { name: /^close$/i })
+      );
+    };
+    const unmounted = (portal: HTMLElement) =>
+      waitFor(() => expect(portal.isConnected).toBe(false), {
+        timeout: 5000,
+      });
+
+    const lighter = await open("Lighter overlay");
+    await expect(getComputedStyle(lighter.overlay).display).toBe("block");
+    await expect(backgroundAlpha(lighter.overlay)).toBeCloseTo(0.2, 2);
+    await dismiss(lighter.portal);
+    await unmounted(lighter.portal);
+
+    const hidden = await open("Hidden overlay");
+    await expect(getComputedStyle(hidden.overlay).display).toBe("none");
+    await dismiss(hidden.portal);
+    await unmounted(hidden.portal);
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "`overlayClassName` styles the built-in overlay: `bg-black/20` lightens it, `hidden` removes it from view. Hiding it is visual only: an alert dialog always blocks the page behind it.",
       },
     },
   },

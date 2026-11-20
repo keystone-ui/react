@@ -47,7 +47,7 @@ import {
   Search,
 } from "lucide-react";
 import * as React from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 
 const meta = {
   title: "Components/Drawer",
@@ -1394,6 +1394,116 @@ export const FloatingVsFlush: Story = {
       description: {
         story:
           "Side-by-side comparison of the `flush` (default) and `floating` variants. Useful for visual regression — open each and compare the corner treatment, inset, and shadow.",
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Overlay (overlayClassName)
+// =============================================================================
+/** Alpha of a computed `background-color`, in either `rgba()` or `oklab()` form. */
+function backgroundAlpha(el: Element) {
+  const color = getComputedStyle(el).backgroundColor;
+  const match = color.match(/[/,]\s*([\d.]+)\s*\)$/);
+  return match ? Number(match[1]) : 1;
+}
+
+export const Overlay: Story = {
+  render: () => (
+    <div className="flex gap-2">
+      <Drawer>
+        <DrawerTrigger render={<Button variant="outline" />}>
+          Lighter overlay
+        </DrawerTrigger>
+        <DrawerContent overlayClassName="bg-black/20">
+          <DrawerHeader>
+            <DrawerTitle>Lighter overlay</DrawerTitle>
+            <DrawerDescription>
+              The page behind stays visible through a 20% tint.
+            </DrawerDescription>
+          </DrawerHeader>
+          <DrawerFooter>
+            <DrawerClose render={<Button variant="outline" />}>
+              Close
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+      <Drawer>
+        <DrawerTrigger render={<Button variant="outline" />}>
+          Hidden overlay
+        </DrawerTrigger>
+        <DrawerContent overlayClassName="hidden">
+          <DrawerHeader>
+            <DrawerTitle>Hidden overlay</DrawerTitle>
+            <DrawerDescription>
+              No tint, but the page behind is still inert until the drawer
+              closes.
+            </DrawerDescription>
+          </DrawerHeader>
+          <DrawerFooter>
+            <DrawerClose render={<Button variant="outline" />}>
+              Close
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    // Open one instance and return its own portal and overlay, read only
+    // once the enter animations have finished. Nothing in a `waitFor`
+    // touches the DOM.
+    const open = async (title: string) => {
+      await userEvent.click(canvas.getByRole("button", { name: title }));
+      const popup = await body.findByRole("dialog", { name: title });
+      const portal = popup.closest<HTMLElement>("[data-slot='drawer-portal']");
+      const overlay = portal?.querySelector<HTMLElement>(
+        "[data-slot='drawer-overlay']"
+      );
+      if (!(portal && overlay)) {
+        throw new Error(`no portal or overlay for "${title}"`);
+      }
+      await waitFor(() => {
+        for (const el of [popup, overlay]) {
+          expect(el).toHaveAttribute("data-open");
+          expect(el).not.toHaveAttribute("data-starting-style");
+        }
+      });
+      await Promise.all(
+        [popup, overlay].flatMap((el) =>
+          el.getAnimations().map((a) => a.finished)
+        )
+      );
+      return { portal, overlay };
+    };
+    const dismiss = async () => {
+      await userEvent.keyboard("{Escape}");
+    };
+    const unmounted = (portal: HTMLElement) =>
+      waitFor(() => expect(portal.isConnected).toBe(false), {
+        timeout: 5000,
+      });
+
+    const lighter = await open("Lighter overlay");
+    await expect(getComputedStyle(lighter.overlay).display).toBe("block");
+    await expect(backgroundAlpha(lighter.overlay)).toBeCloseTo(0.2, 2);
+    await dismiss();
+    await unmounted(lighter.portal);
+
+    const hidden = await open("Hidden overlay");
+    await expect(getComputedStyle(hidden.overlay).display).toBe("none");
+    await dismiss();
+    await unmounted(hidden.portal);
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "`overlayClassName` styles the built-in overlay: `bg-black/20` lightens it, `hidden` removes it from view. Hiding it is visual only: the drawer still blocks the page behind it. The root's `modal` prop controls focus trapping and document scroll locking.",
       },
     },
   },

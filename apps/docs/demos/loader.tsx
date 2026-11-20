@@ -1613,6 +1613,11 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("modal-nested", m.default),
     }))
   ),
+  "modal-overlay": dynamic(() =>
+    import("./modal/overlay").then((m) => ({
+      default: hydrated("modal-overlay", m.default),
+    }))
+  ),
   "modal-scrollable": dynamic(() =>
     import("./modal/scrollable").then((m) => ({
       default: hydrated("modal-scrollable", m.default),
