@@ -893,6 +893,41 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("date-input-with-time", m.default),
     }))
   ),
+  "date-picker-date-of-birth": dynamic(() =>
+    import("./date-picker/date-of-birth").then((m) => ({
+      default: hydrated("date-picker-date-of-birth", m.default),
+    }))
+  ),
+  "date-picker-default": dynamic(() =>
+    import("./date-picker/default").then((m) => ({
+      default: hydrated("date-picker-default", m.default),
+    }))
+  ),
+  "date-picker-form": dynamic(() =>
+    import("./date-picker/form").then((m) => ({
+      default: hydrated("date-picker-form", m.default),
+    }))
+  ),
+  "date-picker-quick-picks": dynamic(() =>
+    import("./date-picker/quick-picks").then((m) => ({
+      default: hydrated("date-picker-quick-picks", m.default),
+    }))
+  ),
+  "date-picker-range": dynamic(() =>
+    import("./date-picker/range").then((m) => ({
+      default: hydrated("date-picker-range", m.default),
+    }))
+  ),
+  "date-picker-with-input": dynamic(() =>
+    import("./date-picker/with-input").then((m) => ({
+      default: hydrated("date-picker-with-input", m.default),
+    }))
+  ),
+  "date-picker-with-time": dynamic(() =>
+    import("./date-picker/with-time").then((m) => ({
+      default: hydrated("date-picker-with-time", m.default),
+    }))
+  ),
   "description-list-card-variant": dynamic(() =>
     import("./description-list/card-variant").then((m) => ({
       default: hydrated("description-list-card-variant", m.default),

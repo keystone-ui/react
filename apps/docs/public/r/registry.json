@@ -5352,6 +5352,132 @@
       ]
     },
     {
+      "name": "date-picker-date-of-birth",
+      "type": "registry:example",
+      "title": "Date Picker Date Of Birth",
+      "description": "Date Picker example: Date Of Birth.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/calendar.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/popover.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-picker/date-of-birth.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "date-picker-default",
+      "type": "registry:example",
+      "title": "Date Picker Default",
+      "description": "Date Picker example: Default.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/calendar.json",
+        "https://keystoneui.io/r/popover.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-picker/default.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "date-picker-form",
+      "type": "registry:example",
+      "title": "Date Picker Form",
+      "description": "Date Picker example: Form.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/calendar.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/popover.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-picker/form.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "date-picker-quick-picks",
+      "type": "registry:example",
+      "title": "Date Picker Quick Picks",
+      "description": "Date Picker example: Quick Picks.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/calendar.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/popover.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-picker/quick-picks.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "date-picker-range",
+      "type": "registry:example",
+      "title": "Date Picker Range",
+      "description": "Date Picker example: Range.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/calendar.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/popover.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-picker/range.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "date-picker-with-input",
+      "type": "registry:example",
+      "title": "Date Picker With Input",
+      "description": "Date Picker example: With Input.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/calendar.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input-group.json",
+        "https://keystoneui.io/r/popover.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-picker/with-input.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "date-picker-with-time",
+      "type": "registry:example",
+      "title": "Date Picker With Time",
+      "description": "Date Picker example: With Time.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/calendar.json",
+        "https://keystoneui.io/r/field.json",
+        "https://keystoneui.io/r/input.json",
+        "https://keystoneui.io/r/popover.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/date-picker/with-time.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
       "name": "description-list-card-variant",
       "type": "registry:example",
       "title": "Description List Card Variant",

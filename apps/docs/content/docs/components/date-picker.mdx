@@ -1,0 +1,104 @@
+---
+title: Date Picker
+description: Compose a date picker from Popover, Calendar and Button — single dates, ranges, typed entry and forms.
+---
+
+<ComponentPreview name="date-picker-default" />
+
+## Usage
+
+There is no `DatePicker` export. A date picker is a `Calendar` inside a `Popover`, opened by a `Button` (or an `InputGroupButton` beside a text field). Copy the example closest to what you need and own it: the trigger, the date format and whether picking closes the popup are yours to change.
+
+```tsx
+import { Button } from "@keystoneui/react/button";
+import { Calendar } from "@keystoneui/react/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@keystoneui/react/popover";
+import { format } from "date-fns";
+import { useState } from "react";
+```
+
+```tsx
+const [open, setOpen] = useState(false);
+const [date, setDate] = useState<Date>();
+
+<Popover onOpenChange={setOpen} open={open}>
+  <PopoverTrigger
+    render={
+      <Button variant="outline">
+        {date ? format(date, "PPP") : "Pick a date"}
+      </Button>
+    }
+  />
+  <PopoverContent
+    align="start"
+    aria-label="Choose a date"
+    className="w-auto overflow-hidden p-0"
+  >
+    <Calendar
+      mode="single"
+      onSelect={(d) => {
+        setDate(d);
+        setOpen(false);
+      }}
+      selected={date}
+    />
+  </PopoverContent>
+</Popover>
+```
+
+Install the parts with `npx shadcn@latest add https://keystoneui.io/r/popover.json https://keystoneui.io/r/calendar.json`, or install a single example below by its name (for instance `https://keystoneui.io/r/date-picker-range.json`). Install `date-fns` alongside `@keystoneui/react`.
+
+## Composition
+
+```text
+Popover
+├── PopoverTrigger (render={<Button />} or <InputGroupButton />)
+└── PopoverContent
+    └── Calendar (mode="single" | "range")
+```
+
+## Examples
+
+### Range
+
+A `mode="range"` calendar showing two months; the popup stays open so both ends can be picked.
+
+<ComponentPreview name="date-picker-range" />
+
+### Date of Birth
+
+Month and year dropdowns (`captionLayout="dropdown"`) with `startMonth` reaching back to 1900, so a year decades ago is two picks away.
+
+<ComponentPreview name="date-picker-date-of-birth" />
+
+### With Input
+
+A text field with a calendar button: typing a valid date moves the calendar, picking a date fills the field, and text that is not a date is flagged on blur.
+
+<ComponentPreview name="date-picker-with-input" />
+
+### With Time
+
+A date picker beside a native time input that keeps its value when the date changes.
+
+<ComponentPreview name="date-picker-with-time" />
+
+### Quick Picks
+
+Shortcuts such as "Tomorrow" or "Next week" beside the calendar, each resolved to a date when clicked.
+
+<ComponentPreview name="date-picker-quick-picks" />
+
+### Form
+
+The picker inside a `Field` with a label, a description, and a `FieldError` when the form is submitted without a date.
+
+<ComponentPreview name="date-picker-form" />
+
+## API Reference
+
+A date picker has no props of its own. See [Popover](/docs/components/popover#api-reference) for popup placement and [Calendar](/docs/components/calendar#api-reference) for selection modes and disabled dates.
