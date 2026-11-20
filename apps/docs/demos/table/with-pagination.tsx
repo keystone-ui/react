@@ -34,7 +34,7 @@ const statusVariant = (status: string) => {
     case "Pending":
       return "outline" as const;
     case "Unpaid":
-      return "destructive" as const;
+      return "error" as const;
     default:
       return "secondary" as const;
   }
@@ -65,7 +65,10 @@ export default function TableWithPagination() {
             <TableRow key={invoice.invoice}>
               <TableCell className="font-medium">{invoice.invoice}</TableCell>
               <TableCell>
-                <Badge variant={statusVariant(invoice.status)}>
+                <Badge
+                  appearance="soft"
+                  variant={statusVariant(invoice.status)}
+                >
                   {invoice.status}
                 </Badge>
               </TableCell>

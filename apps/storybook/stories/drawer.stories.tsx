@@ -1208,9 +1208,9 @@ const FLOATING_CUSTOMERS: FloatingCustomer[] = [
 
 const FLOATING_STATUS_VARIANT: Record<
   FloatingCustomer["status"],
-  "destructive" | "default" | "secondary"
+  "error" | "default" | "secondary"
 > = {
-  "At risk": "destructive",
+  "At risk": "error",
   Healthy: "default",
   Paused: "secondary",
 };
@@ -1239,7 +1239,10 @@ function FloatingDrawerDemo() {
                 {customer.company} · {customer.email}
               </span>
             </div>
-            <Badge variant={FLOATING_STATUS_VARIANT[customer.status]}>
+            <Badge
+              appearance="soft"
+              variant={FLOATING_STATUS_VARIANT[customer.status]}
+            >
               {customer.status}
             </Badge>
           </button>
@@ -1277,7 +1280,10 @@ function FloatingDrawerDemo() {
               <DrawerBody className="flex flex-col gap-5 py-4">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">Owner · {active.owner}</Badge>
-                  <Badge variant={FLOATING_STATUS_VARIANT[active.status]}>
+                  <Badge
+                    appearance="soft"
+                    variant={FLOATING_STATUS_VARIANT[active.status]}
+                  >
                     {active.status}
                   </Badge>
                   <Badge variant="secondary">{active.responseTime}</Badge>

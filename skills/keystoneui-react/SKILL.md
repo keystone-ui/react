@@ -181,8 +181,10 @@ import { Modal, ModalTrigger, ModalContent, ModalTitle } from "@keystoneui/react
 // Spacing: gap, not space-y
 <div className="flex flex-col gap-4">...</div>
 
-// Status: Badge or semantic tokens, not raw colors
+// Status: Badge or semantic tokens, not raw colors (rules/styling.md, status indicators)
 <Badge variant="secondary">+20.1%</Badge>
+<Badge variant="success">Paid</Badge>
+<Badge variant="error" appearance="soft">Failed</Badge>
 
 // Loading: compose, no isLoading prop
 <Button disabled={isPending}>

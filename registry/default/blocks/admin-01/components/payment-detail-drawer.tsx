@@ -73,7 +73,10 @@ export function PaymentDetailDrawer({
                   {paymentTypeLabels[shown.type]} · {shown.playerEmail}
                 </DrawerDescription>
               </div>
-              <Badge variant={PAYMENT_STATUS_VARIANT[shown.status]}>
+              <Badge
+                appearance="soft"
+                variant={PAYMENT_STATUS_VARIANT[shown.status]}
+              >
                 {paymentStatusLabels[shown.status]}
               </Badge>
               <DrawerClose

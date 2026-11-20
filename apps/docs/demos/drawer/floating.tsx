@@ -82,9 +82,9 @@ const CUSTOMERS: Customer[] = [
 
 const STATUS_VARIANT: Record<
   Customer["status"],
-  "destructive" | "default" | "secondary"
+  "error" | "default" | "secondary"
 > = {
-  "At risk": "destructive",
+  "At risk": "error",
   Healthy: "default",
   Paused: "secondary",
 };
@@ -113,7 +113,7 @@ export default function DrawerFloating() {
                 {customer.company} · {customer.email}
               </span>
             </div>
-            <Badge variant={STATUS_VARIANT[customer.status]}>
+            <Badge appearance="soft" variant={STATUS_VARIANT[customer.status]}>
               {customer.status}
             </Badge>
           </button>
@@ -151,7 +151,10 @@ export default function DrawerFloating() {
               <DrawerBody className="flex flex-col gap-5 py-4">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">Owner · {active.owner}</Badge>
-                  <Badge variant={STATUS_VARIANT[active.status]}>
+                  <Badge
+                    appearance="soft"
+                    variant={STATUS_VARIANT[active.status]}
+                  >
                     {active.status}
                   </Badge>
                   <Badge variant="secondary">{active.responseTime}</Badge>

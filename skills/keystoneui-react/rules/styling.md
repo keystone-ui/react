@@ -41,7 +41,7 @@ Use semantic tokens. Never raw Tailwind colors in component or app code.
 </div>
 ```
 
-For status indicators, prefer `Badge` variants or semantic tokens. All five status tones are tokenized: `text-success` / `bg-success`, `text-warning` / `bg-warning`, `text-info` / `bg-info`, `text-destructive`, and `text-muted-foreground` for neutral. Never reach for `text-emerald-600` or `text-amber-500` — and never pair a status token with a `dark:` override, since the tokens already re-step for a dark surface.
+For status indicators, prefer `Badge` variants or semantic tokens. Badge's status tones are `success`, `warning`, `info` and `error`, solid by default; `appearance="soft"` gives a tinted fill with a border for dense lists. An existing `variant="destructive"` Badge now draws solid red by default. Prefer `variant="error"`. Add `appearance="soft"` for the tinted look, which now has a border, a slightly deeper red in light mode and a slightly fainter tint in dark mode. For status indicators styled outside Badge, use the semantic utilities: `text-success` / `bg-success`, `text-warning` / `bg-warning`, `text-info` / `bg-info`, `text-destructive`, and `text-muted-foreground` for neutral. Never reach for `text-emerald-600` or `text-amber-500` — and never pair a status token with a `dark:` override, since the tokens already re-step for a dark surface.
 
 Note `--success-foreground` and `--warning-foreground` are deliberately **dark** rather than near-white: near-white measures 3.10:1 on the success green and 1.97:1 on the warning amber, both WCAG failures. Use `text-success-foreground` / `text-warning-foreground` on a filled chip, never `text-white`.
 
@@ -63,7 +63,7 @@ Prefer logical properties for anything new: `text-end` over `text-right`, `start
 
 `Card` has two surface tiers: `filled` (default, paints `bg-card`) and `outline` (no fill, for chart and table panels). A table goes in `CardContent`, which shares the card's horizontal padding with the title so the heading, the row separators and the cell text line up. All spacing resolves from `--card-spacing`, and `<Card className="[--card-spacing:0px]">` is for the narrower case of a card that is *only* a table — never under a padded `CardHeader`, which leaves the heading indented three times further than the columns.
 
-**Exception:** Badge color variants (`bg-red-500/15`, `text-red-700`) intentionally use raw Tailwind colors because each variant maps to a distinct hue.
+**Exception:** Badge color variants (`bg-red-500/15`, `text-red-700`) intentionally use raw Tailwind colors because each variant maps to a distinct hue. Badge's own status tones are palette steps for the same reason, so use the `variant` and `appearance` props rather than copying their classes.
 
 ---
 
@@ -233,8 +233,10 @@ Tailwind v4 changed the default cursor. Always set it explicitly on interactive 
 // Square: size-, not w-/h-
 <Avatar className="size-10" />
 
-// Status: Badge or semantic tokens, not raw colors
+// Status: Badge or semantic tokens, not raw colors (the status paragraph above)
 <Badge variant="secondary">+20.1%</Badge>
+<Badge variant="success">Paid</Badge>
+<Badge variant="error" appearance="soft">Failed</Badge>
 <span className="text-success">+20.1%</span>
 <span className="text-destructive">-3.2%</span>
 

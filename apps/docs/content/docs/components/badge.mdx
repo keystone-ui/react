@@ -53,10 +53,38 @@ pnpm add @keystoneui/react@beta @base-ui/react
 | --- | --- |
 | `default` | Primary emphasis badges |
 | `secondary` | Subtle secondary labels |
-| `destructive` | Error or danger indicators |
+| `success` | Positive status, such as completed or active |
+| `warning` | Needs attention, such as pending or expiring |
+| `info` | Neutral, informational status |
+| `error` | Failed or blocked status |
+| `destructive` | Deprecated: use `error`, which it draws |
 | `outline` | Bordered minimal badges |
 | `ghost` | Low-emphasis hover-revealed badges |
 | `link` | Underlined text-style badges |
+
+### Status
+
+The four status tones, `success`, `warning`, `info` and `error`, each come in two appearances. Solid is the default. `appearance="soft"` tints the fill with the tone's colour and adds a border in the same colour, for a quieter badge in dense lists and tables. A status Badge rendered as a link underlines on hover and keeps its fill.
+
+<ComponentPreview name="badge-status" />
+
+```tsx
+<Badge variant="success">Paid</Badge>
+<Badge variant="error" appearance="soft">
+  <CircleXIcon data-icon="inline-start" />
+  Failed
+</Badge>
+```
+
+`appearance` only affects the status tones; `default`, `secondary`, `outline`, `ghost` and `link` ignore it.
+
+The red fill, text and soft border use Tailwind's red palette. A customised `--destructive` still supplies the focus-ring colour.
+
+### Destructive (deprecated)
+
+`variant="destructive"` is a deprecated alias of `error` and draws exactly what `error` draws. A Badge with `variant="destructive"` now draws the solid red by default. Use `appearance="soft"` for the tinted look, which now has a border, a slightly deeper red in light mode and a slightly fainter tint in dark mode. Prefer `variant="error"`: `destructive` is deprecated on Badge and will be removed in a later release. Button's `destructive` variant is unchanged.
+
+<ComponentPreview name="badge-destructive" />
 
 
 ### Sizes
@@ -127,6 +155,7 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `variant` | `"default" \| "secondary" \| "destructive" \| "outline" \| "ghost" \| "link"` | `"default"` | Visual style variant |
+| `variant` | `"default" \| "secondary" \| "success" \| "warning" \| "info" \| "error" \| "destructive" \| "outline" \| "ghost" \| "link"` | `"default"` | Visual style variant. `destructive` is deprecated: use `error`, which it draws. |
+| `appearance` | `"solid" \| "soft"` | `"solid"` | How a status tone is filled: solid, or a soft tint with a border. Applies to `success`, `warning`, `info`, `error` and the deprecated `destructive` alias. Other variants ignore it. |
 | `size` | `"default" \| "sm"` | `"default"` | Size of the badge |
 | `className` | `string` | - | Additional CSS classes |

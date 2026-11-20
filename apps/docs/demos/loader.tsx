@@ -178,6 +178,11 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("badge-default", m.default),
     }))
   ),
+  "badge-destructive": dynamic(() =>
+    import("./badge/destructive").then((m) => ({
+      default: hydrated("badge-destructive", m.default),
+    }))
+  ),
   "badge-removable": dynamic(() =>
     import("./badge/removable").then((m) => ({
       default: hydrated("badge-removable", m.default),
@@ -191,6 +196,11 @@ const loaders: Record<string, ComponentType> = {
   "badge-stats": dynamic(() =>
     import("./badge/stats").then((m) => ({
       default: hydrated("badge-stats", m.default),
+    }))
+  ),
+  "badge-status": dynamic(() =>
+    import("./badge/status").then((m) => ({
+      default: hydrated("badge-status", m.default),
     }))
   ),
   "badge-variants": dynamic(() =>

@@ -44,10 +44,10 @@ export const paymentTypeLabels: Record<PaymentType, string> = {
  */
 export const PAYMENT_STATUS_VARIANT: Record<
   PaymentStatus,
-  "destructive" | "outline" | "secondary"
+  "error" | "outline" | "secondary"
 > = {
   completed: "secondary",
-  failed: "destructive",
+  failed: "error",
   "in-progress": "outline",
 };
 

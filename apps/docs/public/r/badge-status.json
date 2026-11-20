@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge-status",
+  "title": "Badge Status",
+  "description": "Badge example: Status.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/badge.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/badge/status.tsx",
+      "content": "\"use client\";\n\nimport { Badge } from \"@keystoneui/react/badge\";\nimport {\n  CircleCheck as CircleCheckIcon,\n  CircleX as CircleXIcon,\n  Info as InfoIcon,\n  TriangleAlert as TriangleAlertIcon,\n} from \"lucide-react\";\n\nconst tones = [\n  { variant: \"success\", label: \"Success\", Icon: CircleCheckIcon },\n  { variant: \"warning\", label: \"Warning\", Icon: TriangleAlertIcon },\n  { variant: \"info\", label: \"Info\", Icon: InfoIcon },\n  { variant: \"error\", label: \"Error\", Icon: CircleXIcon },\n] as const;\n\nexport default function BadgeStatus() {\n  return (\n    <div className=\"flex flex-col gap-3\">\n      {tones.map(({ variant, label, Icon }) => (\n        <div className=\"flex flex-wrap items-center gap-2\" key={variant}>\n          <Badge variant={variant}>{label}</Badge>\n          <Badge variant={variant}>\n            <Icon aria-hidden=\"true\" data-icon=\"inline-start\" />\n            {label}\n          </Badge>\n          <Badge appearance=\"soft\" variant={variant}>\n            {label}\n          </Badge>\n          <Badge appearance=\"soft\" variant={variant}>\n            <Icon aria-hidden=\"true\" data-icon=\"inline-start\" />\n            {label}\n          </Badge>\n        </div>\n      ))}\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}
