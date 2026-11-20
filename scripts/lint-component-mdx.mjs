@@ -49,6 +49,8 @@ const PROTECTED_HEADINGS = new Set([
 const STRUCTURE_EXEMPT = new Set([
   // utility-class reference, not a component — no Usage/API Reference applies
   "typography",
+  // a page of composition examples: no component and no registry item of its own
+  "date-picker",
 ]);
 
 function loadDemoNames() {

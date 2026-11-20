@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-picker-range",
+  "title": "Date Picker Range",
+  "description": "Date Picker example: Range.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/calendar.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/popover.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/date-picker/range.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { Calendar } from \"@keystoneui/react/calendar\";\nimport { Field, FieldLabel } from \"@keystoneui/react/field\";\nimport {\n  Popover,\n  PopoverContent,\n  PopoverTrigger,\n} from \"@keystoneui/react/popover\";\nimport { addDays, format } from \"date-fns\";\nimport { Calendar as CalendarIcon } from \"lucide-react\";\nimport { useId, useState } from \"react\";\n\n// The shape Calendar's range mode selects. Declared here rather than imported\n// from react-day-picker, which is Calendar's dependency, not this file's.\ninterface DateRange {\n  from: Date | undefined;\n  to?: Date | undefined;\n}\n\n// A fixed initial range: the demo is prerendered, so render must not read\n// the clock.\nconst initialRange: DateRange = {\n  from: new Date(2025, 0, 20),\n  to: addDays(new Date(2025, 0, 20), 20),\n};\n\nfunction formatRange(range: DateRange | undefined) {\n  if (!range?.from) {\n    return \"Pick a date range\";\n  }\n  if (!range.to) {\n    return format(range.from, \"LLL dd, y\");\n  }\n  return `${format(range.from, \"LLL dd, y\")} – ${format(range.to, \"LLL dd, y\")}`;\n}\n\nexport default function DatePickerRange() {\n  const [range, setRange] = useState<DateRange | undefined>(initialRange);\n  const id = useId();\n\n  return (\n    <Field className=\"w-auto\">\n      <FieldLabel htmlFor={id} id={`${id}-label`}>\n        Stay\n      </FieldLabel>\n      <Popover>\n        <PopoverTrigger\n          render={\n            <Button\n              className=\"w-64 justify-start font-normal\"\n              aria-labelledby={`${id}-label ${id}`}\n              id={id}\n              variant=\"outline\"\n            >\n              <CalendarIcon data-icon=\"inline-start\" />\n              {formatRange(range)}\n            </Button>\n          }\n        />\n        <PopoverContent\n          align=\"start\"\n          aria-label=\"Choose stay dates\"\n          className=\"w-auto overflow-hidden p-0\"\n        >\n          <Calendar\n            defaultMonth={range?.from}\n            mode=\"range\"\n            numberOfMonths={2}\n            onSelect={setRange}\n            resetOnSelect\n            selected={range}\n          />\n        </PopoverContent>\n      </Popover>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

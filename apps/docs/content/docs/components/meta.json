@@ -23,6 +23,7 @@
     "combobox",
     "command",
     "date-input",
+    "date-picker",
     "input-otp",
     "input-group",
     "file-upload",

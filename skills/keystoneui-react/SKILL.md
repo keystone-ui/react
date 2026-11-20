@@ -256,7 +256,7 @@ Full guidance, including which tokens the shadcn sidebar reads:
 | Choice (one of many) | `Select`, `Combobox` (searchable), `RadioGroup`, `NativeSelect` |
 | Choice (toggle) | `ToggleGroup` (2–5 options), `Switch` (boolean), `Checkbox` |
 | Filter a list in place | `FilterChips` for one non-clearable value with result counts; `ToggleGroup` or `TagGroup` (`multiple`) when the choice can be cleared or several are picked at once |
-| Date / time | `DateInput`, `Calendar`; `Countdown` for the time left until a deadline, such as an offer or a bet closing (compact `01:36:53` or `variant="labelled"`; set `target` in an effect or an event handler, never during render; a deadline that matters must be enforced on the server); `useCountdown` returns the same parts as numbers, for a layout of your own |
+| Date / time | `DateInput` (native browser field), `Calendar`; a date picker is not a component: compose `Popover` + `Calendar` (+ `Button` or `InputGroup`), see the Date Picker page (`https://keystoneui.io/llms.mdx/docs/components/date-picker`); `Countdown` for the time left until a deadline, such as an offer or a bet closing (compact `01:36:53` or `variant="labelled"`; set `target` in an effect or an event handler, never during render; a deadline that matters must be enforced on the server); `useCountdown` returns the same parts as numbers, for a layout of your own |
 | Files | `FileUpload` (picker, drop, opt-in paste; the app uploads and sets each row's status) |
 | Overlays | `Modal`, `Drawer`, `AlertDialog`, `Popover`, `Tooltip` |
 | Menus | `DropdownMenu`, `Command` (palette) |

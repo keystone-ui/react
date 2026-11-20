@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-picker-date-of-birth",
+  "title": "Date Picker Date Of Birth",
+  "description": "Date Picker example: Date Of Birth.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/calendar.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/popover.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/date-picker/date-of-birth.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { Calendar } from \"@keystoneui/react/calendar\";\nimport { Field, FieldLabel } from \"@keystoneui/react/field\";\nimport {\n  Popover,\n  PopoverContent,\n  PopoverTrigger,\n} from \"@keystoneui/react/popover\";\nimport { format } from \"date-fns\";\nimport { ChevronDown as ChevronDownIcon } from \"lucide-react\";\nimport { useId, useState } from \"react\";\n\n// The year dropdown starts here, so a birth year decades back is two picks\n// away instead of dozens of month clicks.\nconst firstMonth = new Date(1900, 0);\n\nexport default function DatePickerDateOfBirth() {\n  const [open, setOpen] = useState(false);\n  const id = useId();\n  const [date, setDate] = useState<Date | undefined>(undefined);\n  // Read when the popup opens, not during render: the demo is prerendered,\n  // and a birth date can be today but never later.\n  const [today, setToday] = useState<Date>();\n\n  return (\n    <Field className=\"w-auto\">\n      <FieldLabel htmlFor={id} id={`${id}-label`}>\n        Date of birth\n      </FieldLabel>\n      <Popover\n        onOpenChange={(next) => {\n          if (next) {\n            setToday(new Date());\n          }\n          setOpen(next);\n        }}\n        open={open}\n      >\n        <PopoverTrigger\n          render={\n            <Button\n              className=\"w-48 justify-between font-normal data-[empty=true]:text-muted-foreground\"\n              data-empty={!date}\n              aria-labelledby={`${id}-label ${id}`}\n              id={id}\n              variant=\"outline\"\n            >\n              {date ? format(date, \"PP\") : \"Select date\"}\n              <ChevronDownIcon className=\"text-muted-foreground\" />\n            </Button>\n          }\n        />\n        <PopoverContent\n          align=\"start\"\n          aria-label=\"Choose date of birth\"\n          className=\"w-auto overflow-hidden p-0\"\n        >\n          <Calendar\n            captionLayout=\"dropdown\"\n            defaultMonth={date}\n            disabled={today && { after: today }}\n            endMonth={today}\n            mode=\"single\"\n            onSelect={(d) => {\n              setDate(d);\n              setOpen(false);\n            }}\n            selected={date}\n            startMonth={firstMonth}\n          />\n        </PopoverContent>\n      </Popover>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

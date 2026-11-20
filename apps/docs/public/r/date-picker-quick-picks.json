@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-picker-quick-picks",
+  "title": "Date Picker Quick Picks",
+  "description": "Date Picker example: Quick Picks.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/calendar.json",
+    "https://keystoneui.io/r/field.json",
+    "https://keystoneui.io/r/popover.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/date-picker/quick-picks.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport { Calendar } from \"@keystoneui/react/calendar\";\nimport { Field, FieldLabel } from \"@keystoneui/react/field\";\nimport {\n  Popover,\n  PopoverContent,\n  PopoverTrigger,\n} from \"@keystoneui/react/popover\";\nimport { addDays, addWeeks, format, nextMonday } from \"date-fns\";\nimport { Calendar as CalendarIcon } from \"lucide-react\";\nimport { useId, useState } from \"react\";\n\n// Each pick is resolved on click. Reading the clock at module scope would\n// run during prerendering, where the current time is not a stable input.\nconst picks = [\n  { label: \"Tomorrow\", pick: (now: Date) => addDays(now, 1) },\n  { label: \"Next week\", pick: (now: Date) => addWeeks(now, 1) },\n  { label: \"Next Monday\", pick: (now: Date) => nextMonday(now) },\n  { label: \"In 2 weeks\", pick: (now: Date) => addWeeks(now, 2) },\n];\n\nexport default function DatePickerQuickPicks() {\n  const [open, setOpen] = useState(false);\n  const id = useId();\n  const [date, setDate] = useState<Date | undefined>(undefined);\n\n  return (\n    <Field className=\"w-auto\">\n      <FieldLabel htmlFor={id} id={`${id}-label`}>\n        Publish on\n      </FieldLabel>\n      <Popover onOpenChange={setOpen} open={open}>\n        <PopoverTrigger\n          render={\n            <Button\n              className=\"w-56 justify-start font-normal data-[empty=true]:text-muted-foreground\"\n              data-empty={!date}\n              aria-labelledby={`${id}-label ${id}`}\n              id={id}\n              variant=\"outline\"\n            >\n              <CalendarIcon data-icon=\"inline-start\" />\n              {date ? format(date, \"PPP\") : \"Pick a date\"}\n            </Button>\n          }\n        />\n        <PopoverContent\n          align=\"start\"\n          aria-label=\"Choose publication date\"\n          className=\"flex w-auto overflow-hidden p-0\"\n          sideOffset={8}\n        >\n          <div className=\"flex flex-col gap-1 border-r p-3\">\n            {picks.map((item) => (\n              <Button\n                className=\"justify-start\"\n                key={item.label}\n                onClick={() => {\n                  setDate(item.pick(new Date()));\n                  setOpen(false);\n                }}\n                size=\"sm\"\n                variant=\"ghost\"\n              >\n                {item.label}\n              </Button>\n            ))}\n          </div>\n          <Calendar\n            defaultMonth={date}\n            mode=\"single\"\n            onSelect={(d) => {\n              setDate(d);\n              setOpen(false);\n            }}\n            selected={date}\n          />\n        </PopoverContent>\n      </Popover>\n    </Field>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

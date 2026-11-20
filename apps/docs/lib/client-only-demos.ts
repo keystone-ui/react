@@ -11,5 +11,9 @@
  * Checked against the demo sources by tests/client-only-demos.test.ts.
  */
 export function isClientOnlyDemo(name: string): boolean {
-  return name.startsWith("calendar-") || name.startsWith("date-input-");
+  return (
+    name.startsWith("calendar-") ||
+    name.startsWith("date-input-") ||
+    name.startsWith("date-picker-")
+  );
 }
