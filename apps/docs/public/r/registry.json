@@ -7672,6 +7672,22 @@
       ]
     },
     {
+      "name": "modal-overlay",
+      "type": "registry:example",
+      "title": "Modal Overlay",
+      "description": "Modal example: Overlay.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/modal.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/modal/overlay.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
       "name": "modal-scrollable",
       "type": "registry:example",
       "title": "Modal Scrollable",

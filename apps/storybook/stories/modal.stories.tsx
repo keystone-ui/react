@@ -20,7 +20,7 @@ import {
 } from "@keystoneui/react/stepper";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 
 const meta = {
   title: "Components/Modal",
@@ -927,6 +927,112 @@ export const LongContent: Story = {
       description: {
         story:
           'Long content is handled out of the box — the modal grows with its content and the viewport scrolls. This is the default `scrollBehavior` (`"outside"`). Ideal for long-form content like terms of service or privacy policies.',
+      },
+    },
+  },
+};
+
+// =============================================================================
+// Overlay (overlayClassName)
+// =============================================================================
+/** Alpha of a computed `background-color`, in either `rgba()` or `oklab()` form. */
+function backgroundAlpha(el: Element) {
+  const color = getComputedStyle(el).backgroundColor;
+  const match = color.match(/[/,]\s*([\d.]+)\s*\)$/);
+  return match ? Number(match[1]) : 1;
+}
+
+export const Overlay: Story = {
+  render: () => (
+    <div className="flex gap-2">
+      <Modal>
+        <ModalTrigger render={<Button variant="outline" />}>
+          Lighter overlay
+        </ModalTrigger>
+        <ModalContent overlayClassName="bg-black/20">
+          <ModalHeader>
+            <ModalTitle>Lighter overlay</ModalTitle>
+            <ModalDescription>
+              The page behind stays visible through a 20% tint.
+            </ModalDescription>
+          </ModalHeader>
+          <ModalFooter>
+            <ModalClose render={<Button variant="outline" />}>Close</ModalClose>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal>
+        <ModalTrigger render={<Button variant="outline" />}>
+          Hidden overlay
+        </ModalTrigger>
+        <ModalContent overlayClassName="hidden">
+          <ModalHeader>
+            <ModalTitle>Hidden overlay</ModalTitle>
+            <ModalDescription>
+              No tint, but the page behind is still inert until the modal
+              closes.
+            </ModalDescription>
+          </ModalHeader>
+          <ModalFooter>
+            <ModalClose render={<Button variant="outline" />}>Close</ModalClose>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    // Open one instance and return its own portal and overlay, read only
+    // once the enter animations have finished. Nothing in a `waitFor`
+    // touches the DOM.
+    const open = async (title: string) => {
+      await userEvent.click(canvas.getByRole("button", { name: title }));
+      const popup = await body.findByRole("dialog", { name: title });
+      const portal = popup.closest<HTMLElement>("[data-slot='modal-portal']");
+      const overlay = portal?.querySelector<HTMLElement>(
+        "[data-slot='modal-overlay']"
+      );
+      if (!(portal && overlay)) {
+        throw new Error(`no portal or overlay for "${title}"`);
+      }
+      await waitFor(() => {
+        for (const el of [popup, overlay]) {
+          expect(el).toHaveAttribute("data-open");
+          expect(el).not.toHaveAttribute("data-starting-style");
+        }
+      });
+      await Promise.all(
+        [popup, overlay].flatMap((el) =>
+          el.getAnimations().map((a) => a.finished)
+        )
+      );
+      return { portal, overlay };
+    };
+    const dismiss = async () => {
+      await userEvent.keyboard("{Escape}");
+    };
+    const unmounted = (portal: HTMLElement) =>
+      waitFor(() => expect(portal.isConnected).toBe(false), {
+        timeout: 5000,
+      });
+
+    const lighter = await open("Lighter overlay");
+    await expect(getComputedStyle(lighter.overlay).display).toBe("block");
+    await expect(backgroundAlpha(lighter.overlay)).toBeCloseTo(0.2, 2);
+    await dismiss();
+    await unmounted(lighter.portal);
+
+    const hidden = await open("Hidden overlay");
+    await expect(getComputedStyle(hidden.overlay).display).toBe("none");
+    await dismiss();
+    await unmounted(hidden.portal);
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "`overlayClassName` styles the built-in overlay: `bg-black/20` lightens it, `hidden` removes it from view. Hiding it is visual only: the modal still blocks the page behind it. The root's `modal` prop controls focus trapping and document scroll locking.",
       },
     },
   },

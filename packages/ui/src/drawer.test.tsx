@@ -271,3 +271,59 @@ describe("DrawerFooter", () => {
     });
   });
 });
+
+// =============================================================================
+// DrawerContent overlayClassName
+// =============================================================================
+describe("DrawerContent overlayClassName", () => {
+  // The overlay's classes on main: omitting the prop must leave them
+  // byte-identical.
+  const DEFAULT_OVERLAY = "fixed inset-0 z-(--z-drawer,40) bg-black/50";
+
+  function renderWithOverlay(overlayClassName?: string) {
+    render(
+      <Drawer defaultOpen>
+        <DrawerContent
+          {...(overlayClassName === undefined ? {} : { overlayClassName })}
+        >
+          <DrawerTitle>Title</DrawerTitle>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
+  async function findOverlay() {
+    await screen.findByText("Title");
+    const overlay = document.querySelector<HTMLElement>(
+      "[data-slot='drawer-overlay']"
+    );
+    expect(overlay).not.toBeNull();
+    return overlay as HTMLElement;
+  }
+
+  it("leaves the overlay classes unchanged when omitted", async () => {
+    renderWithOverlay();
+    const overlay = await findOverlay();
+    expect(overlay.getAttribute("class")).toBe(DEFAULT_OVERLAY);
+  });
+
+  it("adds the class to the portalled overlay", async () => {
+    renderWithOverlay("backdrop-blur-sm");
+    const overlay = await findOverlay();
+    expect(overlay).toHaveClass("backdrop-blur-sm", "fixed", "inset-0");
+    expect(overlay).toHaveAttribute("data-slot", "drawer-overlay");
+  });
+
+  it("lets a conflicting utility win over the default tint", async () => {
+    renderWithOverlay("bg-black/20");
+    const overlay = await findOverlay();
+    expect(overlay).toHaveClass("bg-black/20");
+    expect(overlay).not.toHaveClass("bg-black/50");
+  });
+
+  it("carries hidden to the overlay", async () => {
+    renderWithOverlay("hidden");
+    const overlay = await findOverlay();
+    expect(overlay).toHaveClass("hidden");
+  });
+});

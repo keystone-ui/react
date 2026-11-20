@@ -61,6 +61,16 @@ function AlertDialogOverlay({ className, ...props }: AlertDialogOverlayProps) {
 export interface AlertDialogContentProps
   extends AlertDialogPrimitive.Popup.Props {
   /**
+   * Classes for the overlay (backdrop) this part renders behind itself,
+   * merged over its defaults so yours win: `bg-black/20` lightens it,
+   * `hidden` removes it.
+   *
+   * Hiding it is visual only. An alert dialog is always modal: the
+   * page behind stays inert and scroll-locked while it is open, with or
+   * without the overlay.
+   */
+  overlayClassName?: string;
+  /**
    * The size of the alert dialog.
    * - `"default"` — standard width (max-w-xs on mobile, sm:max-w-sm on desktop)
    * - `"sm"` — compact width (max-w-xs at all breakpoints)
@@ -72,11 +82,12 @@ export interface AlertDialogContentProps
 function AlertDialogContent({
   className,
   size = "default",
+  overlayClassName,
   ...props
 }: AlertDialogContentProps) {
   return (
     <AlertDialogPortal>
-      <AlertDialogOverlay />
+      <AlertDialogOverlay className={overlayClassName} />
       <AlertDialogPrimitive.Popup
         className={mergeClassName(
           "group/alert-dialog-content fixed top-[50%] left-[50%] z-[var(--z-modal,50)] grid w-full -translate-x-[50%] -translate-y-[50%] gap-4 rounded-xl bg-popover p-4 text-popover-foreground shadow-lg outline-none ring-1 ring-popup-ring data-[size=default]:max-w-xs data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-sm",

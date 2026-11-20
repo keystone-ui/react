@@ -101,6 +101,18 @@ export interface ModalContentProps
   extends DialogPrimitive.Popup.Props,
     ModalContentVariantsProps {
   /**
+   * Classes for the overlay (backdrop) this part renders behind itself,
+   * merged over its defaults so yours win: `bg-black/20` lightens it,
+   * `hidden` removes it.
+   *
+   * Hiding the backdrop is visual only. By default, the page behind is inert
+   * and scroll-locked. On the root, `modal={false}` turns off the focus trap
+   * and document scroll lock. `modal="trap-focus"` releases the scroll lock
+   * and keeps keyboard focus inside. For clicks to reach the page behind a
+   * hidden backdrop, also use `scrollBehavior="inside"`.
+   */
+  overlayClassName?: string;
+  /**
    * Where scrolling happens when content exceeds the viewport.
    * - `"outside"` — the entire viewport scrolls, modal grows to fit (default)
    * - `"inside"` — content scrolls within the modal
@@ -120,6 +132,7 @@ function ModalContent({
   size = "default",
   showCloseButton = true,
   scrollBehavior = "outside",
+  overlayClassName,
   ...props
 }: ModalContentProps) {
   // When scrolling outside, focus the popup container itself on open
@@ -166,7 +179,7 @@ function ModalContent({
   if (scrollBehavior === "outside") {
     return (
       <ModalPortal>
-        <ModalOverlay />
+        <ModalOverlay className={overlayClassName} />
         <div
           className="fixed inset-0 z-[var(--z-modal,50)] overflow-y-auto"
           data-slot="modal-scroll-wrapper"
@@ -181,7 +194,7 @@ function ModalContent({
 
   return (
     <ModalPortal>
-      <ModalOverlay />
+      <ModalOverlay className={overlayClassName} />
       {popup}
     </ModalPortal>
   );
