@@ -359,7 +359,7 @@ jobs:
         run: pnpm build --filter=@keystoneui/storybook
 
       - name: Run Chromatic
-        uses: chromaui/action@1efa9d9b64308fe98fcf1eb4629f12639ffac902 # v18.14.1
+        uses: chromaui/action@86505fc3fa3b2ed5f39eda89f34f4051ea8ff0c8 # v18.14.6
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           storybookBaseDir: apps/storybook
