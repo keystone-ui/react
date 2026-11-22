@@ -59,7 +59,7 @@ const STATUS_COLORS = {
 
 /**
  * A linked status Badge keeps its fill on hover and underlines instead. The
- * offset is 2px, not the link variant's 4px: Badge clips overflow, and at
+ * offset is 2px, as for the link variant: Badge clips overflow, and at
  * size="sm" a 4px offset puts the underline outside the 16px box.
  */
 const STATUS_LINK = "underline-offset-2 [a]:hover:underline";
@@ -115,7 +115,7 @@ const badgeClasses = cva(
         outline: "border-border text-foreground [a]:hover:bg-muted",
         ghost:
           "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
-        link: "text-primary underline-offset-4 hover:underline",
+        link: "text-primary underline-offset-2 hover:underline",
       },
       appearance: {
         [SOLID]: "",

@@ -159,6 +159,7 @@ describe("Badge", () => {
     render(<Badge variant="link">Link</Badge>);
     const badge = screen.getByText("Link");
     expect(badge).toHaveClass("text-primary");
+    expect(badge).toHaveClass("underline-offset-2");
   });
 
   // ---------------------------------------------------------------------------
@@ -199,7 +200,7 @@ describe("Badge", () => {
           expect(badge).toHaveClass(cls);
         }
         // A linked status Badge keeps its fill on hover and is underlined. The
-        // offset is 2px, not the link variant's 4px: Badge clips overflow, and at
+        // offset is 2px, as for the link variant: Badge clips overflow, and at
         // size="sm" a 4px offset puts the underline outside the 16px box.
         expect(badge).toHaveClass("[a]:hover:underline");
         expect(badge).toHaveClass("underline-offset-2");

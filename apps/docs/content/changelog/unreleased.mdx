@@ -1,7 +1,11 @@
 ---
-date: "2026-11-20"
+date: "2026-11-22"
 description: "What's coming in the next release"
-excerpt: "No changes since the last release."
+excerpt: "1 change queued for the next release."
 ---
 
-No changes merged since v1.0.0-beta.15.
+## Patch changes
+
+### Badge: the link variant's hover underline shows at `size="sm"`
+
+A `<Badge variant="link" size="sm">` painted no hover underline: the 4px offset put the line outside the 16px box, where the Badge's overflow clip removed it. The link variant now uses `underline-offset-2`, like a linked status Badge, so the underline is visible at `size="sm"`; at the default size it sits 2px higher than before. Measured in Chromium.
