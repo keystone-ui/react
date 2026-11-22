@@ -684,16 +684,11 @@ async function settle(element: HTMLElement) {
 }
 
 /**
- * Hovers a linked status Badge with the real pointer: the fill stays the
- * same, and an underline is painted inside the Badge's clipped box.
+ * Hovers a linked Badge with the real pointer: the fill stays the same, and
+ * an underline is painted inside the Badge's clipped box.
  */
-async function expectLinkHover(
-  canvasElement: HTMLElement,
-  tone: StatusTone,
-  appearance: Appearance,
-  size: BadgeSize
-) {
-  const selector = `[data-testid="status-link-${tone}-${appearance}-${size}"]`;
+async function expectLinkHover(canvasElement: HTMLElement, testId: string) {
+  const selector = `[data-testid="${testId}"]`;
   const badge = canvasElement.querySelector<HTMLElement>(selector);
   await expect(badge?.tagName).toBe("A");
   const commands = realCommands();
@@ -741,7 +736,8 @@ async function expectLinkHover(
 const LINK_SIZES = ["sm", "default"] as const;
 
 /**
- * A linked status Badge keeps its fill on hover and underlines instead.
+ * A linked status Badge keeps its fill on hover and underlines instead; the
+ * last row is the link variant, whose underline must also be painted at sm.
  * The Vitest browser test moves the pointer over each link.
  */
 export const StatusAsLink: Story = {
@@ -769,6 +765,19 @@ export const StatusAsLink: Story = {
           </div>
         ))
       )}
+      <div className="flex flex-wrap items-center gap-2">
+        {LINK_SIZES.map((size) => (
+          <Badge
+            data-testid={`link-variant-${size}`}
+            key={size}
+            render={<a href="#link" />}
+            size={size}
+            variant="link"
+          >
+            Link variant
+          </Badge>
+        ))}
+      </div>
     </div>
   ),
   play: async ({ canvasElement }) => {
@@ -776,9 +785,16 @@ export const StatusAsLink: Story = {
       for (const size of LINK_SIZES) {
         for (const tone of STATUS_TONES) {
           // biome-ignore lint/performance/noAwaitInLoops: one real pointer, one link at a time
-          await expectLinkHover(canvasElement, tone, appearance, size);
+          await expectLinkHover(
+            canvasElement,
+            `status-link-${tone}-${appearance}-${size}`
+          );
         }
       }
+    }
+    for (const size of LINK_SIZES) {
+      // biome-ignore lint/performance/noAwaitInLoops: one real pointer, one link at a time
+      await expectLinkHover(canvasElement, `link-variant-${size}`);
     }
   },
 };
