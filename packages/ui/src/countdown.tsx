@@ -20,7 +20,7 @@ interface UseCountdownOptions {
   now?: () => number;
   /** Called once per completed run. A timeout or resume event calls the latest callback directly. A completion found during layout is delivered from a passive effect after layout. */
   onComplete?: () => void;
-  /** An absolute instant; a number is epoch milliseconds. `null`, `undefined`, an invalid `Date`, a non-finite number or one beyond the range of a `Date` is pending. */
+  /** An absolute instant; a number is epoch milliseconds. `null`, `undefined`, an invalid `Date`, a non-finite number or one beyond the range of a `Date` is pending. Strings also render pending without being parsed. Convert an ISO timestamp once with `Date.parse(value)` or `new Date(value)`. In development, the client warns when the target becomes invalid and non-nullish, including on mount. */
   target: Date | number | null | undefined;
   /** The units shown, largest first whatever the order. Default `["hours", "minutes", "seconds"]`. */
   units?: readonly CountdownUnit[];
