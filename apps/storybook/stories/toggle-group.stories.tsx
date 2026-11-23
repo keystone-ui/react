@@ -926,14 +926,22 @@ function PressFeedbackScene() {
 }
 
 /**
+ * For an export the press-story split added: its scene is already
+ * snapshotted by the export it was split from.
+ */
+const NO_SNAPSHOT = { chromatic: { disableSnapshot: true } };
+
+/**
  * Holds a real pointer down on an item without letting go. In a joined group
  * (`spacing` 0) the held item must not shrink, so no gap opens beside its
  * neighbour; the press shows as the variant's hover fill instead, also
  * without hover (the pointer slid off the held item). A spaced group and a
  * standalone Toggle keep the press scale.
+ *
+ * One export per case (spaced and standalone share one), so that each play
+ * has the per-test time limit to itself.
  */
-export const PressFeedback: Story = {
-  name: "Press Feedback",
+const pressFeedbackStory = (cases: PressCase[], snapshot = true): Story => ({
   render: () => <PressFeedbackScene />,
   play: async ({ canvasElement }) => {
     const commands = realCommands();
@@ -941,7 +949,7 @@ export const PressFeedback: Story = {
       return;
     }
 
-    for (const c of PRESS_CASES) {
+    for (const c of cases) {
       const el = byTestId(canvasElement, c.item);
       const rest = el.getBoundingClientRect();
       const restGap = c.neighbour
@@ -1056,6 +1064,7 @@ export const PressFeedback: Story = {
     }
   },
   parameters: {
+    ...(snapshot ? {} : NO_SNAPSHOT),
     docs: {
       description: {
         story:
@@ -1063,6 +1072,31 @@ export const PressFeedback: Story = {
       },
     },
   },
+});
+
+export const PressFeedback: Story = {
+  ...pressFeedbackStory(PRESS_CASES.slice(0, 1)),
+  name: "Press Feedback",
+};
+export const PressFeedbackJoinedOutline: Story = {
+  ...pressFeedbackStory(PRESS_CASES.slice(1, 2), false),
+  name: "Press Feedback Joined Outline",
+};
+export const PressFeedbackJoinedSecondary: Story = {
+  ...pressFeedbackStory(PRESS_CASES.slice(2, 3), false),
+  name: "Press Feedback Joined Secondary",
+};
+export const PressFeedbackJoinedOutlineDark: Story = {
+  ...pressFeedbackStory(PRESS_CASES.slice(3, 4), false),
+  name: "Press Feedback Joined Outline Dark",
+};
+export const PressFeedbackJoinedVertical: Story = {
+  ...pressFeedbackStory(PRESS_CASES.slice(4, 5), false),
+  name: "Press Feedback Joined Vertical",
+};
+export const PressFeedbackSpacedStandalone: Story = {
+  ...pressFeedbackStory(PRESS_CASES.slice(5), false),
+  name: "Press Feedback Spaced Standalone",
 };
 
 /**
@@ -1262,12 +1296,13 @@ async function measureMatrix(
   commands: RealCommands,
   root: HTMLElement,
   variant: PressVariant,
-  theme: MatrixTheme
+  theme: MatrixTheme,
+  noHovers: boolean[]
 ) {
   const cells: string[] = [];
   for (const consumer of Object.keys(MATRIX_CONSUMERS) as MatrixConsumer[]) {
     for (const state of ["off", "on"] as const) {
-      for (const noHover of [false, true]) {
+      for (const noHover of noHovers) {
         const id = `m-${theme}-${consumer}-${state}`;
         const rest = getComputedStyle(byTestId(root, id)).backgroundColor;
         // biome-ignore lint/performance/noAwaitInLoops: one real pointer at a time
@@ -1302,38 +1337,71 @@ async function measureMatrix(
   console.log(`[matrix]\n${cells.join("\n")}`);
 }
 
-const matrixStory = (variant: PressVariant, theme: MatrixTheme): Story => ({
+/**
+ * One press matrix half: held with hover, or (`noHover`) slid off while held.
+ * Each half is its own export so each has the per-test time limit to itself.
+ */
+const matrixStory = (
+  variant: PressVariant,
+  theme: MatrixTheme,
+  noHover = false
+): Story => ({
   render: () => <MatrixPanel theme={theme} variant={variant} />,
   play: async ({ canvasElement }) => {
     const commands = realCommands();
     if (!commands) {
       return;
     }
-    await measureMatrix(commands, canvasElement, variant, theme);
+    await measureMatrix(commands, canvasElement, variant, theme, [noHover]);
   },
+  ...(noHover ? { parameters: NO_SNAPSHOT } : {}),
 });
 
 export const PressMatrixDefaultLight: Story = {
   ...matrixStory("default", "light"),
   name: "Press Matrix Default Light",
 };
+export const PressMatrixDefaultLightNoHover: Story = {
+  ...matrixStory("default", "light", true),
+  name: "Press Matrix Default Light No Hover",
+};
 export const PressMatrixDefaultDark: Story = {
   ...matrixStory("default", "dark"),
   name: "Press Matrix Default Dark",
+};
+export const PressMatrixDefaultDarkNoHover: Story = {
+  ...matrixStory("default", "dark", true),
+  name: "Press Matrix Default Dark No Hover",
 };
 export const PressMatrixOutlineLight: Story = {
   ...matrixStory("outline", "light"),
   name: "Press Matrix Outline Light",
 };
+export const PressMatrixOutlineLightNoHover: Story = {
+  ...matrixStory("outline", "light", true),
+  name: "Press Matrix Outline Light No Hover",
+};
 export const PressMatrixOutlineDark: Story = {
   ...matrixStory("outline", "dark"),
   name: "Press Matrix Outline Dark",
+};
+export const PressMatrixOutlineDarkNoHover: Story = {
+  ...matrixStory("outline", "dark", true),
+  name: "Press Matrix Outline Dark No Hover",
 };
 export const PressMatrixSecondaryLight: Story = {
   ...matrixStory("secondary", "light"),
   name: "Press Matrix Secondary Light",
 };
+export const PressMatrixSecondaryLightNoHover: Story = {
+  ...matrixStory("secondary", "light", true),
+  name: "Press Matrix Secondary Light No Hover",
+};
 export const PressMatrixSecondaryDark: Story = {
   ...matrixStory("secondary", "dark"),
   name: "Press Matrix Secondary Dark",
+};
+export const PressMatrixSecondaryDarkNoHover: Story = {
+  ...matrixStory("secondary", "dark", true),
+  name: "Press Matrix Secondary Dark No Hover",
 };
