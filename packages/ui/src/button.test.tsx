@@ -60,11 +60,32 @@ describe("Button", () => {
     expect(button).toHaveAttribute("data-loading", "true");
   });
 
-  it("hides children content when loading", () => {
+  // The name is only computed for real in a browser, where the hidden label's
+  // CSS applies: `button.stories.tsx` (LoadingNames) proves it there. jsdom
+  // loads no stylesheet, so here only the attributes are pinned.
+  it("is busy while loading and keeps its label's name", () => {
     render(<Button isLoading>Save</Button>);
-    const button = screen.getByRole("button");
-    const childrenSpan = button.querySelector("span.invisible");
-    expect(childrenSpan).toBeInTheDocument();
+    const button = screen.getByRole("button", { name: "Save" });
+    expect(button).toHaveAttribute("aria-busy", "true");
+  });
+
+  it("is not marked busy when not loading", () => {
+    render(<Button>Save</Button>);
+    expect(screen.getByRole("button", { name: "Save" })).not.toHaveAttribute(
+      "aria-busy"
+    );
+  });
+
+  it("a loading icon-only button keeps its explicit aria-label", () => {
+    render(
+      <Button aria-label="Add item" isLoading size="icon">
+        <svg aria-hidden="true" />
+      </Button>
+    );
+    expect(screen.getByRole("button", { name: "Add item" })).toHaveAttribute(
+      "aria-busy",
+      "true"
+    );
   });
 
   it("applies custom className", () => {
