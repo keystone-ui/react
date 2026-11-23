@@ -417,23 +417,33 @@ function useCountdown({
 // Countdown
 // ---------------------------------------------------------------------------
 
-const countdownVariants = cva("tabular-nums", {
-  variants: {
-    variant: {
-      compact: "inline-block",
-      labelled: "inline-flex",
+/**
+ * `geometricPrecision` matches RollingNumber's default and the animated
+ * digits inherit it, so the placeholder, the plain and animated digits, the
+ * separators and the labels all render one way. Where text is hinted (common
+ * on Linux), mixing the two renderings moved values and separators by a pixel
+ * between the server HTML and the hydrated value.
+ */
+const countdownVariants = cva(
+  "tabular-nums [text-rendering:geometricPrecision]",
+  {
+    variants: {
+      variant: {
+        compact: "inline-block",
+        labelled: "inline-flex",
+      },
+      size: {
+        sm: "text-sm",
+        default: "text-2xl",
+        lg: "text-5xl",
+      },
     },
-    size: {
-      sm: "text-sm",
-      default: "text-2xl",
-      lg: "text-5xl",
+    defaultVariants: {
+      variant: "compact",
+      size: "default",
     },
-  },
-  defaultVariants: {
-    variant: "compact",
-    size: "default",
-  },
-});
+  }
+);
 
 const LABEL_SIZE: Record<CountdownSize, string> = {
   sm: "text-xs",
@@ -525,6 +535,9 @@ function Countdown({
     if (animated) {
       return (
         <RollingNumber
+          // Takes the Countdown's text rendering, so a consumer's value on
+          // the Countdown reaches the rolling digits too.
+          className="[text-rendering:inherit]"
           format={isCompactDay ? DAYS_FORMAT : VALUE_FORMAT}
           locale={locale}
           trend="down"

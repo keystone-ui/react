@@ -189,7 +189,7 @@ Sticky headers work only in this bounded-height mode. A header that sticks to th
 
 ### Numeric Columns
 
-`numeric` right-aligns with tabular figures. It uses `text-end` rather than `text-right`, so the column flips with the writing direction — and `tabular-nums` matters as much as the alignment, because proportional digits read ragged even when flush.
+`numeric` right-aligns with tabular figures. It uses `text-end` rather than `text-right`, so the column flips with the writing direction — and `tabular-nums` matters as much as the alignment, because proportional digits read ragged even when flush. Where the system rounds each glyph to whole pixels (hinted text, common on Linux), tabular digits can still differ by a pixel, so the digits of a right-aligned column can start a pixel apart; set `text-rendering: geometricPrecision` on the cells if that matters.
 
 ```tsx
 <TableHead numeric>Deploys</TableHead>

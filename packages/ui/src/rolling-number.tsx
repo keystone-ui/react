@@ -485,8 +485,15 @@ function RollingNumber({
     []
   );
 
+  /**
+   * `geometricPrecision` keeps each digit at the font's true advance: where
+   * text is hinted (common on Linux) glyphs are rounded to whole pixels, so
+   * tabular digits would differ by a pixel or two and the number would change
+   * width as its digits change. A consumer `[text-rendering:auto]` restores the
+   * browser's default.
+   */
   const rootClassName = cn(
-    "inline-block whitespace-nowrap tabular-nums",
+    "inline-block whitespace-nowrap tabular-nums [text-rendering:geometricPrecision]",
     className
   );
 

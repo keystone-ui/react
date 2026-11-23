@@ -106,7 +106,7 @@ Pass your own `aria-label` to replace it entirely:
 </StatDelta>
 ```
 
-`StatValue` and `StatDelta` both use `tabular-nums`. That is not cosmetic: with proportional digits a live-updating figure changes width on every tick and the whole row jitters.
+`StatValue` and `StatDelta` both use `tabular-nums`. That is not cosmetic: with proportional digits a live-updating figure changes width on every tick and the whole row jitters. Where the system rounds each glyph to whole pixels (hinted text, common on Linux), tabular digits can still differ by a pixel or two each, so a live figure can move what follows it by a few pixels. If it must not, reserve the figure's width (`min-w-[…ch]` on a RollingNumber) or set `text-rendering: geometricPrecision` on it.
 
 
 {/* backlinks:start */}
