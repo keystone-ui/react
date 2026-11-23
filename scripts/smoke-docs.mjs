@@ -73,6 +73,8 @@ export const DEFAULT_CHECKS = [
   { path: "/e2e/rolling-number", status: 404 },
   { path: "/e2e/countdown", status: 404 },
   { path: "/e2e/tabs-scrollable", status: 404 },
+  { path: "/e2e/bottom-nav-round-trip", status: 404 },
+  { path: "/e2e/bottom-nav-round-trip/bar", status: 404 },
 ];
 
 const defaultSleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

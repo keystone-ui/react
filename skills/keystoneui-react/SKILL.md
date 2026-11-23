@@ -280,6 +280,7 @@ Blocks are full-page or feature-level compositions, not primitives. **If the use
 | Signup / registration page | `signup-01`, `signup-02`, `signup-03`, `signup-04`, `signup-05` | `authentication`, `signup` |
 | Profile dropdown / user menu | `profile-dropdown-01` | `navigation` |
 | Category bar / a scrolling row of links to category pages | `category-nav-01` | `navigation` |
+| Mobile bottom navigation / tab bar fixed to the bottom of a phone screen | `bottom-nav-01` | `navigation` |
 | Tickets / CRM / data management table | `tickets-01` | `data` |
 | Analytics dashboard / KPIs + charts | `dashboard-01` | `dashboard` |
 | Admin panel / app shell with sidebar | `admin-01` | `admin` |

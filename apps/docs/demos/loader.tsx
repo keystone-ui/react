@@ -248,6 +248,11 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("block-betting-panel-04", m.default),
     }))
   ),
+  "block-bottom-nav-01": dynamic(() =>
+    import("./blocks/bottom-nav-01").then((m) => ({
+      default: hydrated("block-bottom-nav-01", m.default),
+    }))
+  ),
   "block-category-nav-01": dynamic(() =>
     import("./blocks/category-nav-01").then((m) => ({
       default: hydrated("block-category-nav-01", m.default),
