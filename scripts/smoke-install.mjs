@@ -9,6 +9,12 @@
  *   node scripts/smoke-install.mjs button combobox only these items
  *   pnpm smoke:install
  *
+ * A run of every item, or one that names `strings` or `modal`, starts with a
+ * clean build of the package (`pnpm --filter @keystoneui/react build`) and
+ * also runs the strings provider's build-backed checks (B1 to B4 in
+ * scripts/lib/strings-build-checks.mjs), which read packages/ui/dist. CI's
+ * smoke step is this full run, so it is CI's package build as well.
+ *
  * Unit tests check registry.json; this checks what a consumer gets. Every
  * install bug so far passed the unit tests: `./utils` imports that resolved to
  * nothing, a doubled `components/ui/src/` path, and bare registry
@@ -22,9 +28,9 @@
  * and the item's own dependencies linked. The package is installed as npm
  * serves it: its manifest with `publishConfig.exports` promoted to `exports`,
  * beside a link to this workspace's packages/ui/dist, so the item typechecks
- * against the built declaration files (run `pnpm --filter @keystoneui/react
- * build` first; the run fails without them, and a stale local dist gives a
- * stale answer). Unpublished exports therefore pass here: the minimum
+ * against the built declaration files (a full run builds them; a run naming
+ * other items only fails without them, and a stale local dist gives a stale
+ * answer). Unpublished exports therefore pass here: the minimum
  * package version an item states is checked by hand against npm (see
  * apps/docs/tests/npm-flavour-minimum.test.ts).
  *
@@ -58,6 +64,7 @@ import { promisify } from "node:util";
 import {
   componentsJson,
   expectedPackageFiles,
+  FIXTURES,
   fixturesFor,
   installedPath,
   installGroups,
@@ -70,6 +77,18 @@ import {
   setupChanges,
   tsconfigJson,
 } from "./lib/smoke-install.mjs";
+import {
+  bundleHarness,
+  checkClientBoundary,
+  checkServerRender,
+  distProblem,
+  filesIn,
+  harnessPaths,
+  MODAL_ONLY_UI_FILES,
+  renderFailures,
+  renderHarness,
+  runHarness,
+} from "./lib/strings-build-checks.mjs";
 
 const run = promisify(execFile);
 
@@ -369,13 +388,173 @@ function checkPackageInstall({ dir, fixture, item, label }) {
   }
 }
 
+/** Items whose presence in a run selects the build and the strings checks. */
+const STRINGS_ITEMS = new Set(["strings", "modal"]);
+
+/** A full run, or one naming `strings` or `modal`: build, then B1 to B4. */
+function runsStringsChecks(requested) {
+  return (
+    requested.length === 0 || requested.some((name) => STRINGS_ITEMS.has(name))
+  );
+}
+
+/**
+ * The package's own clean build (tsup empties dist first), with this
+ * process's PATH: the fixtures' env puts stub package managers first. Exits
+ * the run when the build fails.
+ */
+async function buildPackage() {
+  const started = Date.now();
+  try {
+    await run("pnpm", ["--filter", "@keystoneui/react", "build"], {
+      cwd: ROOT,
+      env: process.env,
+      maxBuffer: 64 * 1024 * 1024,
+    });
+  } catch (error) {
+    console.error(
+      `✖ pnpm --filter @keystoneui/react build exited ${error.code}\n${error.stdout ?? ""}${error.stderr ?? ""}`
+    );
+    process.exit(1);
+  }
+  console.log(
+    `✔ built @keystoneui/react in ${((Date.now() - started) / 1000).toFixed(1)}s`
+  );
+}
+
+/**
+ * B1 to B4 (scripts/lib/strings-build-checks.mjs). B3 installs only `modal`
+ * into a fresh vendored fixture, so the strings item must arrive as Modal's
+ * own registry dependency, and renders what landed; B4 renders the two
+ * published entries a package consumer imports.
+ */
+async function stringsChecks({ work, port, env, deps }) {
+  const problem = distProblem(PACKAGE_DIR);
+  if (problem) {
+    fail(`strings checks: ${problem} after the build.`);
+    return;
+  }
+  const paths = harnessPaths(ROOT);
+  const report = (label, failures) => {
+    for (const failure of failures) {
+      fail(`${label}: ${failure}`);
+    }
+    if (failures.length === 0) {
+      console.log(`✔ ${label}`);
+    }
+  };
+
+  report(
+    "strings B1 client boundary",
+    checkClientBoundary(join(PACKAGE_DIR, "dist"))
+  );
+
+  // The published-layout fixture B2 and B4 import from: the package as npm
+  // serves it, its public subpaths resolved through the `exports` map.
+  const b4 = join(work, "strings-b4");
+  mkdirSync(b4, { recursive: true });
+  writeFileSync(
+    join(b4, "package.json"),
+    JSON.stringify({
+      name: "ks-smoke-strings-b4",
+      private: true,
+      type: "module",
+    })
+  );
+  writePublishedPackage(b4);
+  for (const dep of ["react", "react-dom"]) {
+    symlinkSync(packageDir(dep), join(b4, "node_modules", dep));
+  }
+
+  try {
+    report(
+      "strings B2 server render",
+      await checkServerRender({ root: ROOT, fixtureDir: b4 })
+    );
+  } catch (error) {
+    fail(`strings B2 server render: ${error.message}`);
+  }
+
+  // B3: vendored, modal only.
+  const fixture = FIXTURES[0];
+  const b3 = join(work, "strings-b3");
+  const missing = writeFixture(b3, fixture, deps);
+  if (missing.length > 0) {
+    fail(`strings B3: cannot link ${missing.join(", ")} from the workspace`);
+  } else {
+    try {
+      await run(
+        SHADCN,
+        ["add", `http://127.0.0.1:${port}/modal.json`, "--yes", "--silent"],
+        { cwd: b3, env, maxBuffer: 64 * 1024 * 1024 }
+      );
+      const uiDir = join(b3, fixture.expectedUiDir);
+      const written = filesIn(uiDir);
+      if (written.join(",") !== MODAL_ONLY_UI_FILES.join(",")) {
+        fail(
+          `strings B3: a modal-only install wrote [${written.join(", ")}] to ${fixture.expectedUiDir}, not exactly [${MODAL_ONLY_UI_FILES.join(", ")}]`
+        );
+      }
+      const entry = join(b3, fixture.srcDir, "strings-check.tsx");
+      writeFileSync(
+        entry,
+        renderHarness({
+          imports: [
+            'import { Modal, ModalContent, ModalFooter, ModalTitle } from "@/components/ui/modal";',
+            'import { StringsProvider } from "@/components/ui/strings";',
+          ].join("\n"),
+          paths,
+        })
+      );
+      const bundled = join(b3, "strings-check.mjs");
+      await bundleHarness({ root: ROOT, entry, outfile: bundled });
+      report(
+        "strings B3 vendored modal",
+        renderFailures("vendored", await runHarness(bundled, paths))
+      );
+    } catch (error) {
+      fail(
+        `strings B3: ${error.message}\n${error.stdout ?? ""}${error.stderr ?? ""}`
+      );
+    }
+  }
+
+  // B4: the published entries, two subpaths sharing one context.
+  const harness = join(b4, "strings-check.mjs");
+  writeFileSync(
+    harness,
+    renderHarness({
+      imports: [
+        'import { Modal, ModalContent, ModalFooter, ModalTitle } from "@keystoneui/react/modal";',
+        'import { StringsProvider } from "@keystoneui/react/strings";',
+      ].join("\n"),
+      paths,
+    })
+  );
+  try {
+    report(
+      "strings B4 published entries",
+      renderFailures("package", await runHarness(harness, paths))
+    );
+  } catch (error) {
+    fail(
+      `strings B4: ${error.message}\n${error.stdout ?? ""}${error.stderr ?? ""}`
+    );
+  }
+}
+
 async function main() {
   const registry = JSON.parse(
     readFileSync(join(ROOT, "registry.json"), "utf-8")
   );
-  const items = selectItems(registry, process.argv.slice(2));
+  const requested = process.argv.slice(2);
+  const items = selectItems(registry, requested);
   const byName = (name) => registry.items.find((i) => i.name === name);
   const deps = npmDependencies(registry);
+
+  if (runsStringsChecks(requested)) {
+    await buildPackage();
+  }
 
   const work = mkdtempSync(join(tmpdir(), "ks-smoke-"));
   const shims = join(work, ".bin");
@@ -469,6 +648,9 @@ async function main() {
 
   try {
     await runPool(tasks, CONCURRENCY, smoke);
+    if (runsStringsChecks(requested)) {
+      await stringsChecks({ work, port, env, deps });
+    }
   } finally {
     server.close();
   }

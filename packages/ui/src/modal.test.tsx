@@ -12,6 +12,12 @@ import {
   ModalTitle,
   ModalTrigger,
 } from "./modal";
+import {
+  defaultStrings,
+  type StringsOverrides,
+  StringsProvider,
+  useStrings,
+} from "./strings";
 
 function renderModal({
   defaultOpen = false,
@@ -302,4 +308,240 @@ describe("ModalContent overlayClassName", () => {
       });
     });
   }
+});
+
+// =============================================================================
+// Modal strings (`modal.close`, `modal.footerClose`)
+// =============================================================================
+describe("Modal strings", () => {
+  const CLOSE = "SENTINEL corner close";
+  const FOOTER = "SENTINEL footer close";
+
+  /** The corner X (ModalContent) and the footer button (ModalFooter). */
+  function ModalWithBothCloses({
+    showCloseButton = true,
+    showFooterClose = true,
+  }: {
+    showCloseButton?: boolean;
+    showFooterClose?: boolean;
+  }) {
+    return (
+      <Modal defaultOpen>
+        <ModalContent showCloseButton={showCloseButton}>
+          <ModalTitle>Title</ModalTitle>
+          <ModalFooter showCloseButton={showFooterClose}>
+            <button type="button">Save</button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    );
+  }
+
+  function cornerClose() {
+    return document.querySelector<HTMLElement>(
+      '[data-slot="modal-content"] > [data-slot="modal-close"]'
+    );
+  }
+
+  function footerClose() {
+    return document.querySelector<HTMLElement>(
+      '[data-slot="modal-footer"] > button:first-child'
+    );
+  }
+
+  it("names both close buttons in English with no provider", async () => {
+    render(<ModalWithBothCloses />);
+
+    await waitFor(() => expect(cornerClose()).not.toBeNull());
+    expect(cornerClose()).toHaveAccessibleName("Close");
+    expect(cornerClose()?.querySelector(".sr-only")).toHaveTextContent("Close");
+    expect(footerClose()).toHaveTextContent("Close");
+    expect(footerClose()).toHaveAccessibleName("Close");
+  });
+
+  it("puts each provider string where it lands", async () => {
+    render(
+      <StringsProvider
+        strings={{ modal: { close: CLOSE, footerClose: FOOTER } }}
+      >
+        <ModalWithBothCloses />
+      </StringsProvider>
+    );
+
+    await waitFor(() => expect(cornerClose()).not.toBeNull());
+    expect(cornerClose()).toHaveAccessibleName(CLOSE);
+    expect(footerClose()).toHaveTextContent(FOOTER);
+    expect(footerClose()).toHaveAccessibleName(FOOTER);
+    expect(screen.queryByText("Close")).not.toBeInTheDocument();
+  });
+
+  it("renders no corner close under a provider when showCloseButton is false", async () => {
+    render(
+      <StringsProvider
+        strings={{ modal: { close: CLOSE, footerClose: FOOTER } }}
+      >
+        <ModalWithBothCloses showCloseButton={false} />
+      </StringsProvider>
+    );
+
+    await waitFor(() => expect(footerClose()).not.toBeNull());
+    expect(cornerClose()).toBeNull();
+    expect(screen.queryByText(CLOSE)).not.toBeInTheDocument();
+  });
+
+  it("renders no footer close under a provider unless the footer asks for one", async () => {
+    render(
+      <StringsProvider
+        strings={{ modal: { close: CLOSE, footerClose: FOOTER } }}
+      >
+        <ModalWithBothCloses showFooterClose={false} />
+      </StringsProvider>
+    );
+
+    await waitFor(() => expect(cornerClose()).not.toBeNull());
+    expect(screen.queryByText(FOOTER)).not.toBeInTheDocument();
+    expect(footerClose()).toHaveTextContent("Save");
+  });
+
+  it("lets your own ModalClose win over the provider when the built-in one is off", async () => {
+    render(
+      <StringsProvider
+        strings={{ modal: { close: CLOSE, footerClose: FOOTER } }}
+      >
+        <Modal defaultOpen>
+          <ModalContent showCloseButton={false}>
+            <ModalTitle>Title</ModalTitle>
+            <ModalFooter>
+              <ModalClose>Dismiss</ModalClose>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </StringsProvider>
+    );
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole("button", { name: "Dismiss" })
+      ).toBeInTheDocument()
+    );
+    expect(screen.queryByText(CLOSE)).not.toBeInTheDocument();
+    expect(screen.queryByText(FOOTER)).not.toBeInTheDocument();
+  });
+
+  it("follows a changed parent under a stable inner override", async () => {
+    const inner = { modal: { footerClose: FOOTER } };
+    function Tree({ outer }: { outer: string }) {
+      return (
+        <StringsProvider strings={{ modal: { close: outer } }}>
+          <StringsProvider strings={inner}>
+            <ModalWithBothCloses />
+          </StringsProvider>
+        </StringsProvider>
+      );
+    }
+    const { rerender } = render(<Tree outer="Fermer" />);
+    await waitFor(() => expect(cornerClose()).not.toBeNull());
+    expect(cornerClose()).toHaveAccessibleName("Fermer");
+
+    rerender(<Tree outer="Schließen" />);
+
+    expect(cornerClose()).toHaveAccessibleName("Schließen");
+    expect(footerClose()).toHaveTextContent(FOOTER);
+  });
+
+  it("keeps English for an omitted, an undefined and an explicitly undefined string", async () => {
+    render(
+      <StringsProvider>
+        <StringsProvider strings={undefined}>
+          <StringsProvider strings={{ modal: undefined }}>
+            <StringsProvider
+              strings={{ modal: { close: undefined, footerClose: undefined } }}
+            >
+              <ModalWithBothCloses />
+            </StringsProvider>
+          </StringsProvider>
+        </StringsProvider>
+      </StringsProvider>
+    );
+
+    await waitFor(() => expect(cornerClose()).not.toBeNull());
+    expect(cornerClose()).toHaveAccessibleName("Close");
+    expect(footerClose()).toHaveTextContent("Close");
+  });
+
+  it("keeps both close buttons named when a translation file says null", async () => {
+    const inner = JSON.parse(
+      '{"modal":{"close":null,"footerClose":null}}'
+    ) as StringsOverrides;
+    render(
+      <StringsProvider
+        strings={{ modal: { close: CLOSE, footerClose: FOOTER } }}
+      >
+        <StringsProvider strings={inner}>
+          <ModalWithBothCloses />
+        </StringsProvider>
+      </StringsProvider>
+    );
+
+    expect(
+      await screen.findByRole("button", { name: CLOSE })
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: FOOTER })).toBeInTheDocument();
+  });
+
+  it("inherits the parent's string through an explicitly undefined one", async () => {
+    render(
+      <StringsProvider strings={{ modal: { close: CLOSE } }}>
+        <StringsProvider strings={{ modal: { close: undefined } }}>
+          <ModalWithBothCloses />
+        </StringsProvider>
+      </StringsProvider>
+    );
+
+    await waitFor(() => expect(cornerClose()).not.toBeNull());
+    expect(cornerClose()).toHaveAccessibleName(CLOSE);
+  });
+
+  it("keeps an empty string", async () => {
+    render(
+      <StringsProvider strings={{ modal: { close: "", footerClose: "" } }}>
+        <ModalWithBothCloses />
+      </StringsProvider>
+    );
+
+    await waitFor(() => expect(cornerClose()).not.toBeNull());
+    expect(cornerClose()?.querySelector(".sr-only")?.textContent).toBe("");
+    expect(footerClose()?.textContent).toBe("");
+  });
+
+  it("never freezes or changes the consumer's object or the English", async () => {
+    const mine = { modal: { close: CLOSE } };
+    let seen: unknown;
+    function Reader() {
+      seen = useStrings("modal");
+      return null;
+    }
+    render(
+      <StringsProvider strings={mine}>
+        <Reader />
+        <ModalWithBothCloses />
+      </StringsProvider>
+    );
+
+    await waitFor(() => expect(cornerClose()).not.toBeNull());
+    expect(Object.isFrozen(seen)).toBe(true);
+    expect(() => {
+      (seen as { close: string }).close = "mutated";
+    }).toThrow(TypeError);
+    expect(Object.isFrozen(mine)).toBe(false);
+    expect(Object.isFrozen(mine.modal)).toBe(false);
+    expect(mine).toEqual({ modal: { close: CLOSE } });
+    expect(defaultStrings.modal).toEqual({
+      close: "Close",
+      footerClose: "Close",
+    });
+    expect(() => {
+      (defaultStrings.modal as { close: string }).close = "mutated";
+    }).toThrow(TypeError);
+  });
 });

@@ -93,13 +93,14 @@
     "./filter-chips": "./src/filter-chips.tsx",
     "./reel": "./src/reel.tsx",
     "./rolling-number": "./src/rolling-number.tsx",
-    "./countdown": "./src/countdown.tsx"
+    "./countdown": "./src/countdown.tsx",
+    "./strings": "./src/strings.tsx"
   },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
     "clean": "rm -rf .turbo node_modules dist",
-    "test": "tsc6 -p tsconfig.type-tests.json && vitest run",
+    "test": "tsc6 -p tsconfig.type-tests.json && tsc6 -p tsconfig.type-tests-exact.json && vitest run",
     "test:watch": "vitest"
   },
   "devDependencies": {
@@ -392,6 +393,10 @@
       "./countdown": {
         "types": "./dist/countdown.d.ts",
         "default": "./dist/countdown.js"
+      },
+      "./strings": {
+        "types": "./dist/strings.d.ts",
+        "default": "./dist/strings.js"
       }
     }
   },

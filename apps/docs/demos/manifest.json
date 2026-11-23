@@ -402,6 +402,7 @@
   "stepper-controlled": "stepper/controlled.tsx",
   "stepper-default": "stepper/default.tsx",
   "stepper-with-indicator": "stepper/with-indicator.tsx",
+  "strings-default": "strings/default.tsx",
   "switch-choice-card": "switch/choice-card.tsx",
   "switch-default": "switch/default.tsx",
   "switch-disabled": "switch/disabled.tsx",
