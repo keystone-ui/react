@@ -1065,3 +1065,28 @@ describe("equal-text updates and per-face start deadlines", () => {
     expect(window.cancelAnimationFrame).toHaveBeenCalled();
   });
 });
+
+// Pins the class only: jsdom has no text rasteriser, and the width it protects
+// only drifts where glyphs are hinted (Linux). The behaviour is measured by the
+// docs probe in a Linux container, not here.
+describe("text-rendering", () => {
+  const GP = "[text-rendering:geometricPrecision]";
+  const classes = () => root().className.split(WHITESPACE);
+
+  it.each([true, false])(
+    "sets geometricPrecision on the root (animated=%s)",
+    (animated) => {
+      render(<RollingNumber animated={animated} value={1284} />);
+      expect(classes()).toContain(GP);
+    }
+  );
+
+  it.each(["[text-rendering:auto]", "[text-rendering:optimizeLegibility]"])(
+    "a consumer %s replaces it",
+    (override) => {
+      render(<RollingNumber className={override} value={1284} />);
+      expect(classes()).toContain(override);
+      expect(classes()).not.toContain(GP);
+    }
+  );
+});

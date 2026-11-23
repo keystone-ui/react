@@ -203,6 +203,7 @@ export interface TableHeadProps extends React.ComponentProps<"th"> {
    * `text-end` rather than `text-right` so the column flips with the writing
    * direction. `tabular-nums` matters as much as the alignment: with
    * proportional digits a column of numbers reads ragged even when flush.
+   * Hinted text (common on Linux) can still start a tabular digit a pixel off.
    *
    * @default false
    */

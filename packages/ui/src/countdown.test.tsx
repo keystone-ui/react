@@ -1953,3 +1953,45 @@ describe("debts", () => {
     expect(onA).not.toHaveBeenCalled();
   });
 });
+
+// Pins the class only: jsdom has no text rasteriser. The root sets
+// geometricPrecision and everything inside inherits it: the placeholder, the
+// plain digits, the separators, the labels and, through
+// [text-rendering:inherit], the animated digits. Mixing two renderings moved
+// values and separators by a pixel where text is hinted. Measured in the docs
+// e2e and Storybook suites in a Linux container.
+const WHITESPACE = /\s+/;
+
+describe("text-rendering", () => {
+  const GP = "[text-rendering:geometricPrecision]";
+  const classes = () => root().className.split(WHITESPACE);
+
+  it.each([
+    ["pending", undefined],
+    ["running", T0 + hms(1, 36, 53)],
+  ] as const)("sets geometricPrecision on the root (%s)", (_, target) => {
+    render(<Countdown target={target} />);
+    expect(classes()).toContain(GP);
+  });
+
+  it("the animated digits inherit the root's value instead of their own", () => {
+    render(<Countdown animated target={T0 + hms(1, 36, 53)} />);
+    const digitRoots = [
+      ...root().querySelectorAll('[data-slot="rolling-number"]'),
+    ];
+    expect(digitRoots).toHaveLength(3);
+    for (const el of digitRoots) {
+      const own = el.className.split(WHITESPACE);
+      expect(own).toContain("[text-rendering:inherit]");
+      expect(own).not.toContain(GP);
+    }
+  });
+
+  it("a consumer [text-rendering:auto] replaces it on the root", () => {
+    render(
+      <Countdown className="[text-rendering:auto]" target={T0 + hms(0, 1, 0)} />
+    );
+    expect(classes()).toContain("[text-rendering:auto]");
+    expect(classes()).not.toContain(GP);
+  });
+});

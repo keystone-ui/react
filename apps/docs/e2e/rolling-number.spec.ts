@@ -1,5 +1,7 @@
 import { expect, type Page, test } from "@playwright/test";
 
+import { gotoPreview } from "./preview";
+
 /**
  * B9: hydration geometry. The fixture renders RollingNumbers with literal
  * values and fixed locales. The server HTML (JavaScript off) and the
@@ -193,4 +195,31 @@ test("copying the number gives the same text as copying the plain formatted numb
   expect(offsetNow).toBeLessThan(held?.row ?? 0);
   expect(await copyNumber()).toEqual(plainHeld);
   await context.close();
+});
+
+/**
+ * Same length, same width. Where text is hinted (common on Linux), each glyph
+ * is rounded to whole pixels and tabular digits differ by a pixel; without
+ * `text-rendering: geometricPrecision` on the root, 1,284 → 1,285 in the
+ * default demo went from 98 to 97px. On macOS text is not hinted, so this
+ * passes there either way: it can only fail on a hinted platform.
+ */
+test("a roll at the same length keeps the number's width", async ({ page }) => {
+  await gotoPreview(page, "rolling-number-default");
+  await page.evaluate(() => document.fonts.ready);
+  const root = page.locator('[data-slot="rolling-number"]').first();
+  const width = () => root.evaluate((el) => el.getBoundingClientRect().width);
+  await expect(root.locator(".sr-only")).toHaveText("1,284");
+  const before = await width();
+  await page.getByRole("button", { name: "+1", exact: true }).click();
+  await expect(root.locator(".sr-only")).toHaveText("1,285");
+  // The outgoing glyph is out of flow, so the width is final from the first
+  // frame of the new value; read it two frames in, once.
+  await page.evaluate(
+    () =>
+      new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve))
+      )
+  );
+  expect(await width()).toBeCloseTo(before, 2);
 });

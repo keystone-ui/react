@@ -88,6 +88,7 @@ export interface StatValueProps extends React.ComponentProps<"div"> {}
 /**
  * The headline number. `tabular-nums` is not cosmetic here: with proportional
  * digits a live-updating figure changes width on every tick and the row jitters.
+ * Hinted text (common on Linux) can still differ by a pixel per digit.
  */
 export const StatValue = ({
   className,
