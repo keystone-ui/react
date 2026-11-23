@@ -200,3 +200,83 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 | --- | --- | --- | --- |
 | `value` | `string` | - | The value of the item |
 | `disabled` | `boolean` | `false` | Whether the item is disabled |
+
+### ComboboxInput
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `showTrigger` | `boolean` | `true` | Shows the chevron button, named "Options" with its open state in `aria-expanded`; a Base UI `Field.Label` or `Combobox.Label` names it instead (a `FieldLabel` names the input only) |
+| `showClear` | `boolean` | `false` | Shows a clear button, named "Clear selection", while a value is selected |
+
+The chevron and clear button inside `ComboboxInput` take no props. To give them your own names, turn them off and compose your own:
+
+```tsx
+import { InputGroupAddon } from "@keystoneui/react/input-group";
+
+const cities = ["Alba", "Arad", "Cluj"];
+
+export function CityPicker() {
+  return (
+    <Combobox defaultValue="Alba" items={cities}>
+      <ComboboxInput aria-label="City" showClear={false} showTrigger={false}>
+        <InputGroupAddon align="inline-end">
+          <ComboboxClear aria-label="Clear city" />
+          <ComboboxTrigger aria-label="City list" />
+        </InputGroupAddon>
+      </ComboboxInput>
+      <ComboboxContent>
+        <ComboboxList>
+          {(city: string) => (
+            <ComboboxItem key={city} value={city}>
+              {city}
+            </ComboboxItem>
+          )}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
+  );
+}
+```
+
+### ComboboxClear
+
+`ComboboxClear` is named "Clear selection" by visually hidden text inside the button, and no `title` is added. `<label for>`, `title`, `aria-label` or `aria-labelledby` each replace it, on `ComboboxClear` or on the element you pass as `render`, and so does visible text inside the element you pass as `render`. Children given to `ComboboxClear` itself are not rendered; `aria-label={undefined}` and `title={undefined}` keep it. Clear omits its hidden fallback when the title contains non-whitespace text, using the render element's `title` prop if present and Clear's own `title` otherwise. To keep the chosen `title` on the final button, forward it unchanged through every nested `render`.
+
+If you replace the button's content through `render`: Name icon-only replacements with `aria-label` or `aria-labelledby`. For visible text, replace the rendered button's children. For a title-based name, forward the supplied title unchanged.
+
+```tsx
+import { Trash2 as Trash2Icon } from "lucide-react";
+
+<ComboboxClear
+  render={
+    <button aria-label="Clear city" type="button">
+      <Trash2Icon />
+    </button>
+  }
+/>
+```
+
+For tests: a query by role and name finds "Remove …" and "Clear selection". Clear's `textContent` includes "Clear selection" while the fallback is present. With library CSS in Chromium and WebKit, Playwright's `isVisible()` is true for the loading label and jest-dom's `toBeVisible()` is false. Without CSS both are true. In jsdom 30.1.2 jest-dom returns true with or without the compiled CSS.
+
+### ComboboxChip
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `showRemove` | `boolean` | `true` | Shows the remove button on the chip |
+| `removeLabel` | `string` | `"Remove {chip}"` | Replaces the remove button's whole name with a plain `aria-label`. A blank `removeLabel` keeps the default. |
+
+The remove button is named "Remove" followed by what the chip shows ("Remove Next.js"). Use "Remove" alone when the chip contributes no accessible text. The browser computes the name from the chip itself, so it follows the chip's content when that changes, leaves out text hidden by CSS and icons hidden with `aria-hidden`, and is in server-rendered HTML.
+
+The chip's children and layout are unchanged. `showRemove` adds a root ID if needed. Only the default name adds the word and ID references. Forward the root `id` when referenced. Set `aria-labelledby` on the chip or render element and forward it unchanged, or supply `removeLabel`. With the default name, the remove button gains `aria-labelledby` and, before its icon, a hidden, empty `<span role="img" aria-label="Remove">`.
+
+If you label the chip yourself, the remove button follows: with `aria-label` it is "Remove" plus your label; with `aria-labelledby` it is "Remove" plus the elements you reference. Give a chip you name with `aria-label` a role that can be named, such as `role="group"`:
+
+```tsx
+<ComboboxChip aria-label="Paris, France" role="group">
+  Paris
+</ComboboxChip>
+```
+
+Each render reads children once. Use a repeatable iterable or array across renders, including development Strict Mode.
+
+The chip's `textContent` is unchanged.

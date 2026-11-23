@@ -9,9 +9,13 @@ import {
 import {
   Children,
   type ComponentPropsWithRef,
+  cloneElement,
+  isValidElement,
+  type ReactElement,
   type ReactNode,
   type RefAttributes,
   type RefObject,
+  useId,
   useRef,
 } from "react";
 import { Button } from "./button";
@@ -99,6 +103,17 @@ function ComboboxTrigger({
 export interface ComboboxClearProps extends ComboboxPrimitive.Clear.Props {}
 
 function ComboboxClear({ className, ...props }: ComboboxClearProps) {
+  // The fallback name is visually hidden text inside the button, so every
+  // name the browser ranks above content (aria-labelledby, aria-label,
+  // <label for>, visible text through render) replaces it. Only a title
+  // ranks below content, so the text is left out when the final button
+  // carries a non-blank one. Base UI merges a render element's props last,
+  // and a key present as undefined still wins.
+  const renderProps = isValidElement<{ title?: string }>(props.render)
+    ? props.render.props
+    : undefined;
+  const title =
+    renderProps && "title" in renderProps ? renderProps.title : props.title;
   return (
     <ComboboxPrimitive.Clear
       className={mergeClassName("", className)}
@@ -107,6 +122,7 @@ function ComboboxClear({ className, ...props }: ComboboxClearProps) {
       {...props}
     >
       <XIcon className="pointer-events-none" />
+      {title?.trim() ? null : <span className="sr-only">Clear selection</span>}
     </ComboboxPrimitive.Clear>
   );
 }
@@ -154,6 +170,10 @@ function ComboboxInput({
       <InputGroupAddon align="inline-end">
         {showTrigger && (
           <InputGroupButton
+            // A noun, true whether the list is open or closed (the button
+            // carries `aria-expanded`). A Base UI field or combobox label
+            // reaches it as `aria-labelledby`, which takes precedence.
+            aria-label="Options"
             className="group-has-data-[slot=combobox-clear]/input-group:hidden data-pressed:bg-transparent"
             data-slot="combobox-trigger-button"
             disabled={disabled}
@@ -414,6 +434,13 @@ ComboboxChips.displayName = "ComboboxChips";
 // =============================================================================
 export interface ComboboxChipProps extends ComboboxPrimitive.Chip.Props {
   /**
+   * The remove button's accessible name, as a plain `aria-label`. A blank
+   * value keeps the default.
+   * @default "Remove" followed by the chip's accessible text, or "Remove"
+   * when the chip contributes none
+   */
+  removeLabel?: string;
+  /**
    * Show the remove button on the chip
    * @default true
    */
@@ -423,9 +450,38 @@ export interface ComboboxChipProps extends ComboboxPrimitive.Chip.Props {
 function ComboboxChip({
   className,
   children,
+  removeLabel,
   showRemove = true,
   ...props
 }: ComboboxChipProps) {
+  const ownId = useId();
+  // Each prop is resolved the way Base UI merges it: a render element's
+  // props win, even a key present as undefined.
+  const renderProps = isValidElement<{
+    id?: string;
+    "aria-labelledby"?: string;
+  }>(props.render)
+    ? props.render.props
+    : undefined;
+  const chipId =
+    (renderProps && "id" in renderProps ? renderProps.id : props.id) ||
+    `${ownId}chip`;
+  // A consumer's own label for the chip is referenced directly: through the
+  // chip root, engines disagree on whether to follow it.
+  const chipLabelledBy =
+    renderProps && "aria-labelledby" in renderProps
+      ? renderProps["aria-labelledby"]
+      : props["aria-labelledby"];
+  // The root must carry the id the button references, whatever a render
+  // element says.
+  const render =
+    showRemove && isValidElement(props.render)
+      ? cloneElement(props.render as ReactElement<{ id?: string }>, {
+          id: chipId,
+        })
+      : props.render;
+  const label = removeLabel?.trim() ? removeLabel : undefined;
+  const wordId = `${ownId}remove`;
   return (
     <ComboboxPrimitive.Chip
       className={mergeClassName(
@@ -438,14 +494,27 @@ function ComboboxChip({
       )}
       data-slot="combobox-chip"
       {...props}
+      id={showRemove ? chipId : props.id}
+      render={render}
     >
       {wrapText(children, "min-w-0 truncate")}
       {showRemove && (
         <ComboboxPrimitive.ChipRemove
+          // By default "Remove" and then the chip, so the browser computes
+          // the name from what the chip shows; a removeLabel replaces both.
+          aria-label={label}
+          aria-labelledby={
+            label ? undefined : `${wordId} ${chipLabelledBy?.trim() || chipId}`
+          }
           className="-ml-1 size-5 shrink-0 opacity-50 hover:opacity-100"
           data-slot="combobox-chip-remove"
           render={<Button size="icon" variant="ghost" />}
         >
+          {/* The word has no text node, so the chip's textContent stays
+              unchanged; aria-label is not allowed on a plain span. */}
+          {label ? null : (
+            <span aria-label="Remove" hidden id={wordId} role="img" />
+          )}
           <XIcon className="pointer-events-none size-3" />
         </ComboboxPrimitive.ChipRemove>
       )}

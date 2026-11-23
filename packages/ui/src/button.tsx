@@ -116,6 +116,7 @@ const Button = ({
         ),
         className
       )}
+      aria-busy={isLoading || undefined}
       data-loading={isLoading || undefined}
       data-slot="button"
       disabled={isDisabled}
@@ -132,7 +133,7 @@ const Button = ({
         laid over; it is shrink-to-fit there too, so the button keeps its width.
       */}
       {isLoading ? (
-        <span className="invisible inline-flex items-center justify-center gap-2">
+        <span className="inline-flex items-center justify-center gap-2 opacity-0">
           {children}
         </span>
       ) : (

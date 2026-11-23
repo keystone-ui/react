@@ -351,6 +351,121 @@ export const Loading: Story = {
   },
 };
 
+// Regression fixture: a loading button keeps its name, is busy, and does not
+// move. Each loading button sits beside an idle twin of the same content.
+const loadingCases = [
+  { id: "default", size: "default", icon: false },
+  { id: "default-icon", size: "default", icon: true },
+  { id: "sm", size: "sm", icon: false },
+  { id: "sm-icon", size: "sm", icon: true },
+] as const;
+
+// Kept out of quoted name literals, which the stories-vs-demos lint reads as
+// story names.
+const loadingNames = ["Save disabled", "Open docs", "Add item"] as const;
+
+export const LoadingNames: Story = {
+  render: () => (
+    <div className="flex flex-col items-start gap-4">
+      {loadingCases.map(({ id, size, icon }) => (
+        <div className="flex gap-4" key={id}>
+          {[false, true].map((loading) => (
+            <Button
+              data-testid={`${id}-${loading ? "loading" : "idle"}`}
+              isLoading={loading}
+              key={String(loading)}
+              size={size}
+            >
+              {icon && <Mail />}
+              {`Save ${id}`}
+            </Button>
+          ))}
+        </div>
+      ))}
+      <Button disabled isLoading>
+        Save disabled
+      </Button>
+      <Button isLoading nativeButton={false} render={<a href="#docs" />}>
+        Open docs
+      </Button>
+      <Button aria-label="Add item" isLoading size="icon">
+        <Plus />
+      </Button>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const box = (el: Element) => {
+      const r = el.getBoundingClientRect();
+      return {
+        width: r.width,
+        height: r.height,
+        cx: r.x + r.width / 2,
+        cy: r.y + r.height / 2,
+      };
+    };
+    for (const { id } of loadingCases) {
+      const idle = canvas.getByTestId(`${id}-idle`);
+      const loading = canvas.getByTestId(`${id}-loading`);
+      // A rotating svg keeps its bounding-box centre, so the centre is
+      // compared, not the width and height.
+      const spinner = loading.querySelector("svg.animate-spin") as Element;
+      const b = box(loading);
+      const o = box(spinner);
+      // biome-ignore lint/performance/noAwaitInLoops: one case at a time
+      await expect(b.width).toBe(box(idle).width);
+      await expect(b.height).toBe(box(idle).height);
+      await expect(o.cx).toBeCloseTo(b.cx, 1);
+      await expect(o.cy).toBeCloseTo(b.cy, 1);
+    }
+    // The label still names the button but is not painted: the product of
+    // its own and its ancestors' opacity, up to the button, is 0.
+    const paintedOpacity = (el: Element, stop: Element) => {
+      let opacity = 1;
+      for (let node: Element | null = el; node; node = node.parentElement) {
+        opacity *= Number(getComputedStyle(node).opacity);
+        if (node === stop) {
+          break;
+        }
+      }
+      return opacity;
+    };
+    for (const { id } of loadingCases) {
+      const idle = canvas.getByTestId(`${id}-idle`);
+      const loading = canvas.getByTestId(`${id}-loading`);
+      // biome-ignore lint/performance/noAwaitInLoops: one case at a time
+      await expect(
+        paintedOpacity(within(loading).getByText(`Save ${id}`), loading)
+      ).toBe(0);
+      await expect(
+        paintedOpacity(within(idle).getByText(`Save ${id}`), idle)
+      ).toBe(1);
+    }
+
+    for (const { id } of loadingCases) {
+      // The idle twin shares the name; the loading one must have it too.
+      const loading = canvas.getByTestId(`${id}-loading`);
+      // biome-ignore lint/performance/noAwaitInLoops: one case at a time
+      await expect(
+        canvas.getAllByRole("button", { name: `Save ${id}` })
+      ).toContain(loading);
+      await expect(loading).toHaveAttribute("aria-busy", "true");
+      await expect(canvas.getByTestId(`${id}-idle`)).not.toHaveAttribute(
+        "aria-busy"
+      );
+    }
+    await expect(
+      canvas.getByRole("button", { name: loadingNames[0] })
+    ).toHaveAttribute("aria-busy", "true");
+    await expect(
+      canvas.getByRole("button", { name: loadingNames[1] })
+    ).toHaveAttribute("aria-busy", "true");
+    await expect(
+      canvas.getByRole("button", { name: loadingNames[2] })
+    ).toHaveAttribute("aria-busy", "true");
+  },
+};
+
 // ButtonGroup example
 export const ButtonGroups: Story = {
   name: "Button Group",
