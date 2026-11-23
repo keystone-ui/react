@@ -2048,6 +2048,11 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("stepper-with-indicator", m.default),
     }))
   ),
+  "strings-default": dynamic(() =>
+    import("./strings/default").then((m) => ({
+      default: hydrated("strings-default", m.default),
+    }))
+  ),
   "switch-choice-card": dynamic(() =>
     import("./switch/choice-card").then((m) => ({
       default: hydrated("switch-choice-card", m.default),

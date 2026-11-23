@@ -275,6 +275,12 @@ export const ui: RegistryItem[] = [
     files: [{ path: "ui/stepper.tsx", type: "registry:ui" }],
   },
   {
+    name: "strings",
+    type: "registry:ui",
+    dependencies: [],
+    files: [{ path: "ui/strings.tsx", type: "registry:ui" }],
+  },
+  {
     name: "switch",
     type: "registry:ui",
     dependencies: ["@base-ui/react"],

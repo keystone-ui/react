@@ -1,0 +1,153 @@
+---
+title: Strings
+description: Replace the library's built-in English, such as Modal's Close button, once for a whole app with a StringsProvider.
+---
+
+<ComponentPreview name="strings-default" />
+
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+```bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/strings.json
+```
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install the package.</Step>
+
+```bash
+pnpm add @keystoneui/react@beta
+```
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="strings-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Usage
+
+Wrap your app once. Every component inside reads its text from the nearest provider; anything you leave out stays English.
+
+```tsx
+import {
+  StringsProvider,
+  type StringsOverrides,
+} from "@keystoneui/react/strings";
+```
+
+```tsx
+const strings: StringsOverrides = {
+  modal: { close: "Fermer", footerClose: "Fermer" },
+};
+
+<StringsProvider strings={strings}>
+  <App />
+</StringsProvider>
+```
+
+- **With no provider nothing changes.** Every component renders the same English as before.
+- **A part's own prop or children still win** over the provider, and the provider replaces only the English. Modal's close buttons have no text prop: to word one modal differently, set `showCloseButton={false}` and render your own `ModalClose`.
+- **Nested providers merge.** The nearest provider wins per key. A key set to `undefined`, or left out, inherits from the provider above, or the English. An empty string `""` is kept.
+- **Pass a stable object.** Every change in the `strings` object's identity re-renders every component that reads strings, so declare it outside the component or build it with `useMemo`. An inline `strings={{ … }}` literal re-renders them all on every parent render.
+
+### With a translation library
+
+Build the overrides from your own messages, memoised on the translator. This example uses [next-intl](https://next-intl.dev); any library that returns strings works the same way.
+
+```tsx
+"use client";
+
+import { useMemo, type ReactNode } from "react";
+import {
+  StringsProvider,
+  type StringsOverrides,
+} from "@keystoneui/react/strings";
+import { useTranslations } from "next-intl";
+
+export function UiStrings({ children }: { children: ReactNode }) {
+  const t = useTranslations("ui");
+  const strings = useMemo<StringsOverrides>(
+    () => ({ modal: { close: t("close"), footerClose: t("close") } }),
+    [t]
+  );
+  return <StringsProvider strings={strings}>{children}</StringsProvider>;
+}
+```
+
+### Server Components
+
+`StringsProvider` is a client component. A Server Component can render it directly with overrides that are plain strings, since those serialise. A dictionary that holds functions must be built in a `"use client"` file, as above.
+
+`defaultStrings` lives in the same client file. Do not read its fields in a Server Component. Pass `defaultStrings` whole to a provider, or read it in a `"use client"` file.
+
+### Typing your dictionary
+
+Type your translations as `StringsOverrides`. Adding a key in a later release is not a breaking change for it. A dictionary typed as the full `KeystoneStrings` can fail to compile when a key is added; renaming or removing a key is a breaking change.
+
+### Copied components
+
+A registry copy of a component and the npm package are separate: a copied `components/ui/modal.tsx` reads the copied `strings.tsx`, and a component imported from `@keystoneui/react` reads the package's provider. Wrap each with its own provider, or use one source for both.
+
+Copies drift. `strings.tsx` changes in every release that teaches another component to read it. Keep translations in the provider's `strings` prop. When adding a newer adopter, refresh the standalone Keystone `strings` item or accept the update for that file. Review its diff and merge any local edits. For agent-driven updates, follow the skill's existing approval rule for `--overwrite`. A component or multi-item install with that flag can replace other customized files.
+
+A component newer than its copied `strings.tsx` throws an error that names the missing namespace: re-add `strings` to fix it.
+
+## Examples
+
+### Translated Modal
+
+A `StringsProvider` renders Modal's corner close button and its footer close button in French; the dialog's own content is yours.
+
+<ComponentPreview name="strings-default" />
+
+## English
+
+Every key and the English it replaces. Generated from `defaultStrings`.
+
+{/* strings:english:start */}
+
+| Key | English |
+| --- | --- |
+| `modal.close` | Close |
+| `modal.footerClose` | Close |
+
+{/* strings:english:end */}
+
+Only Modal reads the provider; other components keep their built-in English. Spinner and Pagination render from Server Components and stay English in every tree: `Loading`, `pagination`, `Previous`, `Next`, `Go to previous page`, `Go to next page`, `Go to first page`, `Go to last page`, and `More pages` when exposed. Their own props still replace each of these except `More pages`: PaginationEllipsis renders it as fixed English and drops any `children` you pass it.
+
+## API Reference
+
+### StringsProvider
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `strings` | `StringsOverrides` | - | The strings to replace. Omitted or `undefined` keys inherit from the provider above, or the English. Pass a stable object |
+| `children` | `ReactNode` | - | The tree that reads these strings |
+
+### useStrings
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `namespace` | `keyof KeystoneStrings` | The component's namespace, such as `"modal"`. Returns that namespace of the strings in effect, read-only |
+
+### defaultStrings
+
+The built-in English as a frozen, read-only `KeystoneStrings`. Readable in `"use client"` files only.
+
+### Types
+
+| Type | Description |
+| --- | --- |
+| `KeystoneStrings` | Every key, required and read-only: the shape of `defaultStrings` |
+| `StringsOverrides` | What `strings` accepts: every namespace and key optional, each also accepting `undefined` |

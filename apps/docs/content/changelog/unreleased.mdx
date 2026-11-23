@@ -1,7 +1,7 @@
 ---
 date: "2026-11-23"
 description: "What's coming in the next release"
-excerpt: "6 changes queued for the next release."
+excerpt: "7 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -29,6 +29,28 @@ Which of your own names win:
 - The chevron and clear button inside `ComboboxInput` take no props, so their defaults cannot be replaced there. To name them yourself, set `showTrigger={false}` and `showClear={false}` and compose your own named `ComboboxTrigger` and `ComboboxClear`.
 
 For tests: a query by role and name finds these buttons, for example a button named "Options", "Clear selection" or "Remove …". The chip's `textContent` is unchanged. Clear's `textContent` includes "Clear selection" while the fallback is present. A loading button's label is now transparent (`opacity: 0`) instead of `visibility: hidden`. With library CSS in Chromium and WebKit, Playwright's `isVisible()` is true for the loading label and jest-dom's `toBeVisible()` is false. Without CSS both are true. In jsdom 30.1.2 jest-dom returns true with or without the compiled CSS. Snapshots of these buttons may gain `aria-label`, `aria-busy` or `aria-labelledby`, the clear button gains a visually hidden span, a chip's remove button gains its hidden word, and the chip root an `id`.
+
+---
+
+### Strings: replace the built-in English with a StringsProvider
+
+`@keystoneui/react/strings` adds `StringsProvider`, which replaces the library's built-in English for everything inside it. Wrap your app once:
+
+```tsx
+import { StringsProvider, type StringsOverrides } from "@keystoneui/react/strings";
+
+const strings: StringsOverrides = { modal: { close: "Fermer", footerClose: "Fermer" } };
+
+<StringsProvider strings={strings}>
+  <App />
+</StringsProvider>
+```
+
+With no provider nothing changes: every component renders the same English as before. A part's own prop or children still win over the provider. Nested providers merge, the nearest winning per key; a key left out or set to `undefined` inherits, and `""` is kept. Pass a stable object (a module constant or `useMemo`), since every new `strings` object re-renders the components that read it.
+
+In this release Modal reads it: `modal.close` names ModalContent's corner close button and `modal.footerClose` is the text of ModalFooter's close button. Other components keep their built-in English.
+
+The subpath also exports `useStrings(namespace)`, the frozen English as `defaultStrings` (readable in `"use client"` files only), and the types `KeystoneStrings` and `StringsOverrides`; type your translations as `StringsOverrides`. The registry adds a `strings` item, installed with Modal.
 
 ## Patch changes
 

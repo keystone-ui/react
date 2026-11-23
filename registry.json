@@ -1096,7 +1096,8 @@
         "lucide-react"
       ],
       "registryDependencies": [
-        "https://keystoneui.io/r/button.json"
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/strings.json"
       ],
       "files": [
         {
@@ -1294,6 +1295,19 @@
         {
           "path": "packages/ui/src/stepper.tsx",
           "target": "@ui/stepper.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "strings",
+      "type": "registry:ui",
+      "title": "Strings",
+      "description": "Replace the library's built-in English, such as Modal's Close button, once for a whole app with a StringsProvider.",
+      "files": [
+        {
+          "path": "packages/ui/src/strings.tsx",
+          "target": "@ui/strings.tsx",
           "type": "registry:ui"
         }
       ]
@@ -9030,6 +9044,23 @@
       "files": [
         {
           "path": "apps/docs/demos/stepper/with-indicator.tsx",
+          "type": "registry:example"
+        }
+      ]
+    },
+    {
+      "name": "strings-default",
+      "type": "registry:example",
+      "title": "Strings Default",
+      "description": "Strings example: Default.",
+      "registryDependencies": [
+        "https://keystoneui.io/r/button.json",
+        "https://keystoneui.io/r/modal.json",
+        "https://keystoneui.io/r/strings.json"
+      ],
+      "files": [
+        {
+          "path": "apps/docs/demos/strings/default.tsx",
           "type": "registry:example"
         }
       ]

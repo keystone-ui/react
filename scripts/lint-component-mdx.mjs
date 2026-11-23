@@ -51,6 +51,8 @@ const STRUCTURE_EXEMPT = new Set([
   "typography",
   // a page of composition examples: no component and no registry item of its own
   "date-picker",
+  // a provider that renders no UI: its page centres on the generated English table, not on parts
+  "strings",
 ]);
 
 function loadDemoNames() {

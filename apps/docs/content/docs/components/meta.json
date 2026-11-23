@@ -75,6 +75,7 @@
     "typography",
     "selection-bar",
     "copy-button",
-    "code-block"
+    "code-block",
+    "strings"
   ]
 }

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "strings-default",
+  "title": "Strings Default",
+  "description": "Strings example: Default.",
+  "registryDependencies": [
+    "https://keystoneui.io/r/button.json",
+    "https://keystoneui.io/r/modal.json",
+    "https://keystoneui.io/r/strings.json"
+  ],
+  "files": [
+    {
+      "path": "apps/docs/demos/strings/default.tsx",
+      "content": "\"use client\";\n\nimport { Button } from \"@keystoneui/react/button\";\nimport {\n  Modal,\n  ModalContent,\n  ModalDescription,\n  ModalFooter,\n  ModalHeader,\n  ModalTitle,\n  ModalTrigger,\n} from \"@keystoneui/react/modal\";\nimport {\n  type StringsOverrides,\n  StringsProvider,\n} from \"@keystoneui/react/strings\";\n\n// Declared once, outside the component, so the provider sees the same object\n// on every render.\nconst french: StringsOverrides = {\n  modal: { close: \"Fermer\", footerClose: \"Fermer\" },\n};\n\nexport default function StringsDefault() {\n  return (\n    <StringsProvider strings={french}>\n      <Modal>\n        <ModalTrigger render={<Button variant=\"outline\" />}>\n          Ouvrir\n        </ModalTrigger>\n        <ModalContent>\n          <ModalHeader>\n            <ModalTitle>Modifications enregistrées</ModalTitle>\n            <ModalDescription>\n              Le bouton de fermeture et son nom pour les lecteurs d’écran\n              viennent du fournisseur.\n            </ModalDescription>\n          </ModalHeader>\n          <ModalFooter showCloseButton />\n        </ModalContent>\n      </Modal>\n    </StringsProvider>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "type": "registry:example"
+}

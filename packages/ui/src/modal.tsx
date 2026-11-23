@@ -5,6 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { X as XIcon } from "lucide-react";
 import { type ComponentProps, useRef } from "react";
 import { Button } from "./button";
+import { useStrings } from "./strings";
 import { cn, mergeClassName } from "./utils";
 
 // =============================================================================
@@ -140,6 +141,7 @@ function ModalContent({
   // the first button (often at the bottom of long content), and the browser
   // auto-scrolls the overflow wrapper to reveal it — jumping to the bottom.
   const popupRef = useRef<HTMLDivElement>(null);
+  const s = useStrings("modal");
 
   const closeButton = showCloseButton && (
     <DialogPrimitive.Close
@@ -148,7 +150,7 @@ function ModalContent({
       render={<Button size="icon-xs" variant="ghost" />}
     >
       <XIcon />
-      <span className="sr-only">Close</span>
+      <span className="sr-only">{s.close}</span>
     </DialogPrimitive.Close>
   );
 
@@ -233,6 +235,7 @@ function ModalFooter({
   children,
   ...props
 }: ModalFooterProps) {
+  const s = useStrings("modal");
   return (
     <div
       className={cn(
@@ -244,7 +247,7 @@ function ModalFooter({
     >
       {showCloseButton && (
         <DialogPrimitive.Close render={<Button variant="outline" />}>
-          Close
+          {s.footerClose}
         </DialogPrimitive.Close>
       )}
       {children}
