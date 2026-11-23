@@ -1,0 +1,7 @@
+---
+"@keystoneui/react": patch
+---
+
+Slide the sidebar's phone drawer open and closed
+
+The sidebar installed by `admin-01`, `sidebar` and `npm/sidebar` now slides its phone drawer open and closed like a Drawer, and a swipe to close no longer snaps it back open for a frame. If you already installed the sidebar, re-add the same registry item or remove `data-slot="sidebar"` from the phone `<DrawerContent>` in your `components/sidebar.tsx`.

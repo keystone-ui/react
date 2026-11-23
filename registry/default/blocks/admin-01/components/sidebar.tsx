@@ -259,7 +259,6 @@ function Sidebar({
           className="bg-sidebar p-0 text-sidebar-foreground data-[swipe-direction=left]:w-(--sidebar-width) data-[swipe-direction=right]:w-(--sidebar-width) data-[swipe-direction=left]:sm:max-w-none data-[swipe-direction=right]:sm:max-w-none"
           data-mobile="true"
           data-sidebar="sidebar"
-          data-slot="sidebar"
           dir={dir}
           style={
             {
