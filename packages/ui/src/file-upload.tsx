@@ -1703,9 +1703,11 @@ function FileUploadList({
     });
   }
 
+  // While it has no rows the list is sr-only: out of flow, so it takes none of
+  // the root's gap, yet still exposed (its name, aria-live, aria-controls).
   return (
     <ul
-      className={cn("flex w-full flex-col gap-2", className)}
+      className={cn("flex w-full flex-col gap-2 empty:sr-only", className)}
       data-slot="file-upload-list"
       // biome-ignore lint/a11y/noRedundantRoles: list-style: none drops list semantics in some screen readers
       role="list"

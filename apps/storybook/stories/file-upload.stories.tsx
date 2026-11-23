@@ -216,10 +216,28 @@ function Basic(props: FileUploadProps) {
  * `--primary`. Synthetic events prove the handlers, not the OS defaults.
  */
 export const Default: Story = {
-  render: () => <Basic multiple />,
+  render: () => (
+    <FileUpload aria-label="Attachments" className="w-96" multiple>
+      <Zone />
+      <FileUploadList aria-label="Chosen files">{() => <Row />}</FileUploadList>
+      <FileUploadError />
+    </FileUpload>
+  ),
   play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
     const zone = slot(canvasElement, "file-upload-dropzone");
     const child = within(zone).getByText("Drag files here, or");
+    // With no files, the empty list takes no gap: the root ends at the zone.
+    const root = slot(canvasElement, "file-upload");
+    await expect(root.getBoundingClientRect().height).toBeCloseTo(
+      zone.getBoundingClientRect().height,
+      1
+    );
+    // ...and a list the consumer named is still exposed while empty.
+    const listName = "Chosen files";
+    const named = () => canvas.getByRole("list", { name: listName });
+    const list = slot(canvasElement, "file-upload-list");
+    await expect(named()).toBe(list);
 
     const textDrag = new DataTransfer();
     textDrag.setData("text/plain", "hello");
@@ -248,6 +266,24 @@ export const Default: Story = {
     dispatchDrag(zone, "drop", dt);
     await waitFor(() => expect(rowNames(canvasElement)).toEqual(["a.txt"]));
     await expect(zone).not.toHaveAttribute("data-dragging");
+    // The list sits 12px (the root's gap) under the dropzone.
+    await expect(
+      list.getBoundingClientRect().top - zone.getBoundingClientRect().bottom
+    ).toBeCloseTo(12, 1);
+    await expect(root.getBoundingClientRect().bottom).toBeCloseTo(
+      list.getBoundingClientRect().bottom,
+      1
+    );
+    await expect(named()).toBe(list);
+
+    // Removing the last file: the gap goes again, the named list stays.
+    button(canvas, "Remove a.txt").click();
+    await waitFor(() => expect(rowNames(canvasElement)).toEqual([]));
+    await expect(root.getBoundingClientRect().height).toBeCloseTo(
+      zone.getBoundingClientRect().height,
+      1
+    );
+    await expect(named()).toBe(list);
   },
 };
 
