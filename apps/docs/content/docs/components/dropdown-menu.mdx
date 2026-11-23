@@ -188,6 +188,15 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 | `size` | `"default" \| "compact"` | `"default"` | Item height density |
 | `className` | `string` | - | Additional CSS classes |
 
+### DropdownMenuSubContent
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `side` | `"top" \| "right" \| "bottom" \| "left" \| "inline-start" \| "inline-end"` | `"right"`, `"left"` inside a right-to-left `DirectionProvider` | Preferred side of the row. Unset, it follows Base UI's `DirectionProvider`: `"left"` when its direction is `rtl`, else `"right"`. Base UI can flip the side when there is no room. Set `side="right"` to keep the former placement |
+| `align` | `"start" \| "center" \| "end"` | `"start"` | Alignment along the side axis |
+| `size` | `"default" \| "compact"` | `"default"` | Item height density; not inherited from the parent menu |
+| `className` | `string` | - | Additional CSS classes |
+
 ### DropdownMenuItem
 
 | Prop | Type | Default | Description |

@@ -49,8 +49,9 @@ import { expect, userEvent, waitFor } from "storybook/test";
  * Popover, the root Dropdown menu, Select, Combobox and Tooltip open below the
  * upper trigger, above the bottom trigger and below the RTL trigger. Their
  * origins meet the facing trigger edge at its centre or inline-start corner.
- * The submenu opens to the right in all three cases, with start, end and start
- * alignment respectively. Its origin shares the row's right-edge x coordinate
+ * The submenu opens on the row's inline end: to the right for the upper and
+ * bottom triggers, to the left for the RTL one, with start, end and start
+ * alignment respectively. Its origin shares the row's facing edge x coordinate
  * and sits 3px above the row's top or below its bottom. The coordinate checks
  * allow 1px.
  */
@@ -72,7 +73,14 @@ type Place = "below" | "above" | "rtl";
  * room below, so a vertical popup flips above and the submenu aligns to its
  * end), and an RTL one, where an inline-start corner is the trigger's right.
  */
-function Stage({ render }: { render: (place: Place) => React.ReactNode }) {
+function Stage({
+  extra,
+  render,
+}: {
+  /** More fixtures, rendered under the RTL trigger. */
+  extra?: React.ReactNode;
+  render: (place: Place) => React.ReactNode;
+}) {
   return (
     <div className="min-h-svh p-6">
       <div className="flex justify-center" data-place="below">
@@ -81,6 +89,7 @@ function Stage({ render }: { render: (place: Place) => React.ReactNode }) {
       <div className="mt-6 flex justify-center" data-place="rtl" dir="rtl">
         <DirectionProvider direction="rtl">{render("rtl")}</DirectionProvider>
       </div>
+      {extra}
       <div
         className="fixed inset-x-0 bottom-4 flex justify-center"
         data-place="above"
@@ -162,7 +171,7 @@ function expectOriginOnTrigger(
     cross: Cross;
     direction: "ltr" | "rtl";
     place: Place;
-    side: "top" | "bottom" | "right";
+    side: "top" | "bottom" | "left" | "right";
   }
 ) {
   const { direction, place } = expected;
@@ -184,8 +193,8 @@ function expectOriginOnTrigger(
       `${what}: origin ${actual.toFixed(2)} vs ${target.toFixed(2)}`
     ).toBeLessThanOrEqual(TOLERANCE);
 
-  if (side === "right") {
-    near(origin.x, t.right, "origin on the trigger's right edge");
+  if (side === "right" || side === "left") {
+    near(origin.x, t[side], `origin on the trigger's ${side} edge`);
     const align = place === "above" ? "end" : "start";
     expect(popup.getAttribute("data-align"), "submenu alignment").toBe(align);
     const end = align === "end";
@@ -216,6 +225,8 @@ interface OriginCase {
   open: (place: Place) => Promise<HTMLElement>;
   /** A popup that stays open after this one closes (the submenu's parent). */
   parentSlot?: string;
+  /** The side the popup opens on from the RTL trigger, when it differs. */
+  rtlSide?: "left";
   /** The side the popup opens on when there is room (the "below" trigger). */
   side?: "bottom" | "right";
   slot: string;
@@ -228,6 +239,9 @@ interface OriginCase {
  * `<body>`, so a `dir` on a wrapper never reaches it, and Base UI places it
  * and mirrors its origin from the popup's own direction.
  */
+const rtlSideFor = (place: Place, c: OriginCase) =>
+  place === "rtl" ? c.rtlSide : undefined;
+
 async function playOrigin(c: OriginCase) {
   const near = c.side ?? "bottom";
   const flipped = near === "bottom" ? "top" : "right";
@@ -250,7 +264,7 @@ async function playOrigin(c: OriginCase) {
         cross: c.cross,
         direction,
         place,
-        side: place === "above" ? flipped : near,
+        side: place === "above" ? flipped : (rtlSideFor(place, c) ?? near),
       });
       await closeAll(c.slot);
       if (c.parentSlot) {
@@ -336,14 +350,187 @@ export const DropdownMenuOrigin: Story = {
   ),
 };
 
+/** A dropdown whose submenu is pinned to an explicit side, or left default. */
+function SubFixture({ id, side }: { id: string; side?: "left" | "right" }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        data-testid={`trigger-${id}`}
+        render={<Button variant="outline" />}
+      >
+        Submenu {id}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger data-testid={`subtrigger-${id}`}>
+            Invite users
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent side={side}>
+            <DropdownMenuItem>Email</DropdownMenuItem>
+            <DropdownMenuItem>Message</DropdownMenuItem>
+            <DropdownMenuItem>More…</DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+interface Slide {
+  duration: number;
+  easing: string;
+  from: string;
+  side: string | null;
+  to: string;
+}
+
+/**
+ * Records every `translate` transition the submenu starts, from the
+ * `transitionrun` event itself: a poll can miss a 120ms transition on a busy
+ * machine, an event cannot.
+ */
+function watchSlides() {
+  const runs: Slide[] = [];
+  const onRun = (event: TransitionEvent) => {
+    const el = event.target as HTMLElement;
+    if (
+      event.propertyName !== "translate" ||
+      el.getAttribute("data-slot") !== "dropdown-menu-sub-content"
+    ) {
+      return;
+    }
+    const run = el
+      .getAnimations()
+      .find(
+        (a): a is CSSTransition =>
+          a instanceof CSSTransition && a.transitionProperty === "translate"
+      );
+    const effect = run?.effect as KeyframeEffect | null | undefined;
+    if (!effect) {
+      return;
+    }
+    const frames = effect.getKeyframes();
+    runs.push({
+      side: el.getAttribute("data-side"),
+      from: String(frames[0]?.translate),
+      to: String(frames.at(-1)?.translate),
+      duration: Number(effect.getComputedTiming().duration),
+      easing: String(effect.getTiming().easing),
+    });
+  };
+  document.addEventListener("transitionrun", onRun, true);
+  return {
+    runs,
+    stop: () => document.removeEventListener("transitionrun", onRun, true),
+  };
+}
+
+/** The x offset of a computed `translate` value, `NaN` for `none`. */
+const slideX = (value: string) => Number.parseFloat(value);
+
+async function withDir(direction: "ltr" | "rtl", body: () => Promise<void>) {
+  const html = document.documentElement;
+  const previous = html.getAttribute("dir");
+  html.setAttribute("dir", direction);
+  try {
+    await body();
+  } finally {
+    if (previous === null) {
+      html.removeAttribute("dir");
+    } else {
+      html.setAttribute("dir", previous);
+    }
+  }
+}
+
+/** Opens fixture `id`'s submenu by pointer and returns it at rest. */
+async function openSub(id: string) {
+  await userEvent.click(byTestId(`trigger-${id}`));
+  await settledPopup("dropdown-menu-content");
+  const trigger = await waitFor(() => byTestId(`subtrigger-${id}`));
+  await userEvent.click(trigger);
+  return { trigger, popup: await settledPopup("dropdown-menu-sub-content") };
+}
+
+/**
+ * Closes the submenu with the arrow key for the reading direction (ArrowLeft
+ * in LTR, ArrowRight in RTL, whatever side the submenu is on), then the menu.
+ * Not by Escape or a submenu item press: neither runs an exit transition here.
+ * Base UI marks an Escape close (and, it seems, a close with no reason, which
+ * is how a submenu closes with its menu) as a dismissal, sets `data-instant`,
+ * and base.css skips the transition.
+ */
+async function closeSubByArrow(direction: "ltr" | "rtl") {
+  const sub = openPopup("dropdown-menu-sub-content");
+  const item = sub?.querySelector<HTMLElement>('[role="menuitem"]');
+  if (!item) {
+    throw new Error("no item in the open submenu");
+  }
+  item.focus();
+  await waitFor(() => expect(document.activeElement).toBe(item));
+  await userEvent.keyboard(
+    direction === "ltr" ? "{ArrowLeft}" : "{ArrowRight}"
+  );
+  await waitFor(
+    () => expect(openPopup("dropdown-menu-sub-content")).toBeNull(),
+    { timeout: 5000 }
+  );
+  await userEvent.keyboard("{Escape}");
+  await waitFor(() => expect(openPopup("dropdown-menu-content")).toBeNull(), {
+    timeout: 5000,
+  });
+}
+
+/**
+ * Opens and closes fixture `id`'s submenu and checks its side, its rectangle
+ * against the row and its open and close slide: 4px from the row toward the
+ * popup's side, the full base duration in and two thirds of it out.
+ */
+async function checkSub(id: string, side: "left" | "right") {
+  const watch = watchSlides();
+  try {
+    const { trigger, popup } = await openSub(id);
+    expect(popup.getAttribute("data-side"), `${id}: side`).toBe(side);
+    const box = popup.getBoundingClientRect();
+    const t = trigger.getBoundingClientRect();
+    const right = side === "right";
+    expect(
+      Math.abs((right ? box.left : box.right) - (right ? t.right : t.left)),
+      `${id}: popup flush with the row's ${side} edge`
+    ).toBeLessThanOrEqual(TOLERANCE);
+    await closeSubByArrow(
+      document.documentElement.getAttribute("dir") === "rtl" ? "rtl" : "ltr"
+    );
+    const base = Number.parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue(
+        "--duration-base"
+      )
+    );
+    const [open, close] = watch.runs;
+    // The popup slides in from the row: from x -4px on the right, +4px on
+    // the left, and back out the same way.
+    const toward = right ? -4 : 4;
+    expect(open, `${id}: open slide ran`).toBeDefined();
+    expect(slideX(open.from), `${id}: open slide from`).toBe(toward);
+    expect(open.duration, `${id}: open duration`).toBe(base);
+    expect(close, `${id}: close slide ran`).toBeDefined();
+    expect(slideX(close.to), `${id}: close slide to`).toBe(toward);
+    expect(close.duration, `${id}: close duration`).toBeCloseTo((base * 2) / 3);
+  } finally {
+    watch.stop();
+  }
+}
+
 export const DropdownMenuSubOrigin: Story = {
-  play: () =>
-    playOrigin({
+  play: async () => {
+    await playOrigin({
       slot: "dropdown-menu-sub-content",
       cross: "aligned-edge",
-      // Physical `side="right"`: it opens to the right in all three cases,
-      // with start, end and start alignment respectively.
+      // With no `side`, it opens on the row's inline end: right for the
+      // upper and bottom triggers (start and end alignment), left for RTL.
       side: "right",
+      rtlSide: "left",
       parentSlot: "dropdown-menu-content",
       open: async (place) => {
         await clickTrigger(place);
@@ -355,32 +542,57 @@ export const DropdownMenuSubOrigin: Story = {
         await userEvent.click(sub);
         return sub;
       },
-    }),
+    });
+
+    // The slide runs for the default side in both directions.
+    await withDir("ltr", () => checkSub("below", "right"));
+    await withDir("rtl", () => checkSub("rtl", "left"));
+
+    // An explicit physical side is kept in either direction.
+    await withDir("rtl", () => checkSub("rtl-right", "right"));
+    await withDir("ltr", () => checkSub("ltr-left", "left"));
+
+    // Keyboard under RTL: ArrowLeft opens the submenu, ArrowRight closes it.
+    await withDir("rtl", async () => {
+      await userEvent.click(byTestId("trigger-rtl"));
+      await settledPopup("dropdown-menu-content");
+      const row = await waitFor(() => byTestId("subtrigger-rtl"));
+      row.focus();
+      await waitFor(() => expect(document.activeElement).toBe(row));
+      await userEvent.keyboard("{ArrowLeft}");
+      const sub = await settledPopup("dropdown-menu-sub-content");
+      expect(sub.getAttribute("data-side"), "keyboard-opened side").toBe(
+        "left"
+      );
+      await waitFor(() =>
+        expect(sub.contains(document.activeElement)).toBe(true)
+      );
+      await userEvent.keyboard("{ArrowRight}");
+      await waitFor(
+        () => expect(openPopup("dropdown-menu-sub-content")).toBeNull(),
+        { timeout: 5000 }
+      );
+      await waitFor(() => expect(document.activeElement).toBe(row));
+      await userEvent.keyboard("{Escape}");
+      await waitFor(
+        () => expect(openPopup("dropdown-menu-content")).toBeNull(),
+        { timeout: 5000 }
+      );
+    });
+  },
   render: () => (
     <Stage
-      render={(place) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            data-testid={`trigger-${place}`}
-            render={<Button variant="outline" />}
-          >
-            Submenu {place}
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuSub>
-              <DropdownMenuSubTrigger data-testid={`subtrigger-${place}`}>
-                Invite users
-              </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent>
-                <DropdownMenuItem>Email</DropdownMenuItem>
-                <DropdownMenuItem>Message</DropdownMenuItem>
-                <DropdownMenuItem>More…</DropdownMenuItem>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )}
+      extra={
+        <div className="mt-6 flex justify-center gap-6">
+          <div dir="rtl">
+            <DirectionProvider direction="rtl">
+              <SubFixture id="rtl-right" side="right" />
+            </DirectionProvider>
+          </div>
+          <SubFixture id="ltr-left" side="left" />
+        </div>
+      }
+      render={(place) => <SubFixture id={place} />}
     />
   ),
 };

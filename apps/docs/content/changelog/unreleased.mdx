@@ -1,7 +1,7 @@
 ---
 date: "2026-11-23"
 description: "What's coming in the next release"
-excerpt: "3 changes queued for the next release."
+excerpt: "4 changes queued for the next release."
 ---
 
 ## Patch changes
@@ -21,3 +21,9 @@ Four soft status text colours are slightly adjusted, on every surface: in light 
 ### FileUpload: an empty list no longer adds a gap under the dropzone
 
 An empty `FileUploadList` no longer adds a gap beneath the dropzone (12px with the default spacing). While it has no rows the list is visually hidden (`sr-only`) instead of a 0px flex item: it stays in the DOM, with its `ref`, `role="list"` and your `className`, and stays exposed to assistive technology, so its accessible name and references to it remain available while it is empty. To keep the old gap, add `empty:not-sr-only` to its `className`. A negative margin you added to cancel the gap can go. With files, the list's layout is unchanged.
+
+---
+
+### A dropdown submenu prefers the left side inside a right-to-left DirectionProvider
+
+Inside a right-to-left Base UI `DirectionProvider`, `DropdownMenuSubContent` with no `side` now prefers the left: when there is room, it opens to the left of its row and slides out from the row. Before, it preferred the right. For a horizontal row laid out right to left, the left edge is its inline end. Menus without a right-to-left `DirectionProvider` are unchanged, including under `dir="rtl"` on the document alone. An explicit `side` sets the preference in either direction, and Base UI can flip it to the other side when there is no room, as it does the default; set `side="right"` to keep the former placement. The submenu's chevron still points right under RTL.

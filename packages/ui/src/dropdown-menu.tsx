@@ -1,5 +1,6 @@
 "use client";
 
+import { useDirection } from "@base-ui/react/direction-provider";
 import { Menu as MenuPrimitive } from "@base-ui/react/menu";
 import {
   Check as CheckIcon,
@@ -297,8 +298,12 @@ export interface DropdownMenuSubContentProps
    */
   alignOffset?: number;
   /**
-   * Side of the trigger to position the popup
-   * @default "right"
+   * Preferred side of the trigger to position the popup. When `side` is
+   * omitted, the submenu prefers `"left"` inside a right-to-left Base UI
+   * `DirectionProvider` and `"right"` otherwise. An explicit side sets the
+   * preference. Base UI can flip either to the other side when there is no
+   * room. Set `side="right"` to keep the former placement.
+   * @default "right" ("left" inside a right-to-left `DirectionProvider`)
    */
   side?: "top" | "bottom" | "left" | "right" | "inline-start" | "inline-end";
   /**
@@ -311,19 +316,24 @@ export interface DropdownMenuSubContentProps
 function DropdownMenuSubContent({
   align = "start",
   alignOffset = -3,
-  side = "right",
+  side,
   sideOffset = 0,
   size = "default",
   className,
   ...props
 }: DropdownMenuSubContentProps) {
+  // The physical side, not "inline-end": Base UI would then report
+  // `data-side="inline-end"`, which no slide rule in base.css (or a
+  // consumer's `data-[side=right]` style) matches.
+  const direction = useDirection();
+  const resolvedSide = side ?? (direction === "rtl" ? "left" : "right");
   return (
     <MenuPrimitive.Portal>
       <MenuPrimitive.Positioner
         align={align}
         alignOffset={alignOffset}
         className="z-(--z-dropdown,60) outline-none"
-        side={side}
+        side={resolvedSide}
         sideOffset={sideOffset}
       >
         <MenuPrimitive.Popup
