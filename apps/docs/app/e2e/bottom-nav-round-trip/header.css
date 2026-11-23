@@ -1,0 +1,8 @@
+/* Each fixture page's own clearance for its 72px sticky header, as an app
+   stylesheet would set it: in the base layer, on the root while that page
+   is mounted. */
+@layer base {
+  html:where(:has(#reader, #bar-page)) {
+    scroll-padding-block-start: 72px;
+  }
+}

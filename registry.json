@@ -1983,6 +1983,32 @@
       ]
     },
     {
+      "name": "bottom-nav-01",
+      "type": "registry:block",
+      "title": "Bottom Nav 01",
+      "description": "A phone's main navigation: four or five labelled links in a bar fixed to the bottom of the screen, the current page marked, hidden from md up.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://keystoneui.io/r/badge.json"
+      ],
+      "files": [
+        {
+          "path": "registry/default/blocks/bottom-nav-01/page.tsx",
+          "type": "registry:page",
+          "target": "app/bottom-nav/page.tsx"
+        },
+        {
+          "path": "registry/default/blocks/bottom-nav-01/components/bottom-nav.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "categories": [
+        "navigation"
+      ]
+    },
+    {
       "name": "admin-01",
       "type": "registry:block",
       "title": "Admin 01",
