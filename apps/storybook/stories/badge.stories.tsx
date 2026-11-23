@@ -209,7 +209,8 @@ const STEP = {
   "green-800": "0.448 0.119 151.328",
   "green-950": "0.266 0.065 152.934",
   "amber-400": "0.828 0.189 84.429",
-  "amber-700": "0.555 0.163 48.998",
+  // Soft text only: amber-700 at L 53.6% (from 55.5%), chroma and hue kept.
+  "amber-700-soft": "0.536 0.163 48.998",
   "amber-950": "0.279 0.077 45.635",
   "blue-50": "0.97 0.014 254.604",
   "blue-400": "0.707 0.165 254.624",
@@ -220,6 +221,11 @@ const STEP = {
   "red-400": "0.704 0.191 22.216",
   "red-700": "0.505 0.213 27.518",
   "red-950": "0.258 0.092 26.042",
+  // Soft text only: a palette step moved by lightness, chroma and hue kept, so
+  // the text clears 4.5:1 on a selected table row (`bg-muted`).
+  "blue-400-soft": "0.721 0.165 254.624",
+  "red-400-soft": "0.755 0.191 22.216",
+  "red-700-soft": "0.491 0.213 27.518",
 } as const;
 type Step = keyof typeof STEP;
 
@@ -237,10 +243,10 @@ const EXPECTED: Record<
     warning: {
       fill: "amber-400",
       solidText: "amber-950",
-      softText: "amber-700",
+      softText: "amber-700-soft",
     },
     info: { fill: "blue-600", solidText: "blue-50", softText: "blue-700" },
-    [RED]: { fill: "red-700", solidText: "red-50", softText: "red-700" },
+    [RED]: { fill: "red-700", solidText: "red-50", softText: "red-700-soft" },
   },
   dark: {
     success: {
@@ -253,8 +259,16 @@ const EXPECTED: Record<
       solidText: "amber-950",
       softText: "amber-400",
     },
-    info: { fill: "blue-400", solidText: "blue-950", softText: "blue-400" },
-    [RED]: { fill: "red-400", solidText: "red-950", softText: "red-400" },
+    info: {
+      fill: "blue-400",
+      solidText: "blue-950",
+      softText: "blue-400-soft",
+    },
+    [RED]: {
+      fill: "red-400",
+      solidText: "red-950",
+      softText: "red-400-soft",
+    },
   },
 };
 

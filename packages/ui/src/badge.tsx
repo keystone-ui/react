@@ -33,6 +33,13 @@ const STATUS_TONE_NAMES: readonly string[] = [
  * one component allowed a palette of its own (`status-tokens.test.ts`).
  * Soft takes the solid fill's colour at 15% for the fill and 30% for the
  * border, with a text step that stays legible on that tint.
+ *
+ * Four soft text colours are a palette step moved by OKLCH lightness only
+ * (chroma and hue kept): light warning (amber-700) and error (red-700) a
+ * little darker, dark info (blue-400) and error (red-400) a little lighter.
+ * The plain steps fall under 4.5:1 on a selected or hovered table row
+ * (`bg-muted`, `bg-muted/50`); `apps/docs/tests/badge-soft-contrast.test.ts`
+ * holds every soft tone to 4.5:1 on all three rows.
  */
 const STATUS_COLORS = {
   success: {
@@ -43,17 +50,17 @@ const STATUS_COLORS = {
   warning: {
     [SOLID]: "bg-amber-400 text-amber-950",
     [SOFT]:
-      "border-amber-400/30 bg-amber-400/15 text-amber-700 dark:text-amber-400",
+      "border-amber-400/30 bg-amber-400/15 text-[oklch(53.6%_0.163_48.998)] dark:text-amber-400",
   },
   info: {
     [SOLID]: "bg-blue-600 text-blue-50 dark:bg-blue-400 dark:text-blue-950",
     [SOFT]:
-      "border-blue-600/30 bg-blue-600/15 text-blue-700 dark:border-blue-400/30 dark:bg-blue-400/15 dark:text-blue-400",
+      "border-blue-600/30 bg-blue-600/15 text-blue-700 dark:border-blue-400/30 dark:bg-blue-400/15 dark:text-[oklch(72.1%_0.165_254.624)]",
   },
   red: {
     [SOLID]: "bg-red-700 text-red-50 dark:bg-red-400 dark:text-red-950",
     [SOFT]:
-      "border-red-700/30 bg-red-700/15 text-red-700 dark:border-red-400/30 dark:bg-red-400/15 dark:text-red-400",
+      "border-red-700/30 bg-red-700/15 text-[oklch(49.1%_0.213_27.518)] dark:border-red-400/30 dark:bg-red-400/15 dark:text-[oklch(75.5%_0.191_22.216)]",
   },
 } as const;
 

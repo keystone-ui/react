@@ -15,7 +15,9 @@ const STATUS_NAMES = ["success", "warning", "info", ...RED_NAMES] as const;
 const TINTED_FILL = /(^|\s)(dark:)?bg-[a-z]+-\d+\//;
 
 /** A class that paints a palette step, with or without a `dark:` prefix. */
-const PALETTE_CLASS = /(^|:)(bg|text|border)-(green|amber|blue|red)-\d/;
+/** A palette step, or a soft text colour given as an arbitrary OKLCH value. */
+const PALETTE_CLASS =
+  /(^|:)((bg|text|border)-(green|amber|blue|red)-\d|text-\[oklch\()/;
 
 /**
  * The red tone keeps the focus-ring colour the old `destructive` Badge gave a
@@ -72,7 +74,7 @@ const PALETTE: Record<Hue, Record<(typeof APPEARANCES)[number], string[]>> = {
     [SOFT]: [
       "bg-amber-400/15",
       "border-amber-400/30",
-      "text-amber-700",
+      "text-[oklch(53.6%_0.163_48.998)]",
       "dark:text-amber-400",
     ],
   },
@@ -89,7 +91,7 @@ const PALETTE: Record<Hue, Record<(typeof APPEARANCES)[number], string[]>> = {
       "text-blue-700",
       "dark:bg-blue-400/15",
       "dark:border-blue-400/30",
-      "dark:text-blue-400",
+      "dark:text-[oklch(72.1%_0.165_254.624)]",
     ],
   },
   red: {
@@ -102,10 +104,10 @@ const PALETTE: Record<Hue, Record<(typeof APPEARANCES)[number], string[]>> = {
     [SOFT]: [
       "bg-red-700/15",
       "border-red-700/30",
-      "text-red-700",
+      "text-[oklch(49.1%_0.213_27.518)]",
       "dark:bg-red-400/15",
       "dark:border-red-400/30",
-      "dark:text-red-400",
+      "dark:text-[oklch(75.5%_0.191_22.216)]",
     ],
   },
 };
