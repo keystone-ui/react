@@ -11,7 +11,7 @@ RTL product, rather than discovering the gaps after you have built on it.
 
 | Area | Status |
 | --- | --- |
-| Base UI keyboard nav and popup positioning | Works, but only if *you* render a `DirectionProvider` |
+| Base UI keyboard nav and popup positioning | Popup alignment follows `dir` on `<html>`; arrow keys and `inline-*` sides work only if *you* render a `DirectionProvider` |
 | Keystone's own spacing and positioning CSS | Mostly physical, does **not** mirror |
 | Explicit `rtl:` handling in the library | One component (`calendar`) |
 | i18n / locale / message layer | None |
@@ -24,23 +24,33 @@ direction-aware behavior: arrow-key navigation, popup side and alignment
 resolution, and slider/drawer axis handling. Base UI reads the reading direction
 from its own context, which defaults to `ltr`.
 
-To turn that on you must wrap your tree yourself. Keystone does not render this
-provider for you and does not re-export it:
+Set the direction on the root element (`<html dir="rtl">`), and wrap your app
+in Base UI's `DirectionProvider`:
 
 ```tsx
 import { DirectionProvider } from "@base-ui/react/direction-provider";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div dir="rtl">
-      <DirectionProvider direction="rtl">{children}</DirectionProvider>
-    </div>
+    <html dir="rtl">
+      <body>
+        <DirectionProvider direction="rtl">{children}</DirectionProvider>
+      </body>
+    </html>
   );
 }
 ```
 
-`dir="rtl"` alone is not enough for the Base UI behaviors — the attribute drives
-CSS, the provider drives Base UI's JavaScript. You generally want both.
+The two do different jobs. `dir` drives CSS: text direction, and which edge
+`align="start"` means. The provider drives Base UI's JavaScript: arrow keys
+(including the key that opens a submenu) and the `inline-start`/`inline-end`
+sides.
+
+**A `dir` on a wrapper element is not enough for popups.** Menus, selects,
+comboboxes, popovers, tooltips, modals and drawers render in a portal at the end
+of `<body>`, outside your wrapper, so they lay out left to right, even with the
+provider. If only one region of an LTR page is RTL, its popups will lay out left
+to right.
 
 ## What does not work
 
