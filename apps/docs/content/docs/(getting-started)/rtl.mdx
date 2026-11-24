@@ -3,29 +3,38 @@ title: RTL
 description: The current state of right-to-left support in Keystone UI, and what you need to do yourself.
 ---
 
-Keystone UI does **not** have systematic right-to-left support yet. This page
-describes exactly what works today so you can judge whether the library fits an
-RTL product, rather than discovering the gaps after you have built on it.
+Keystone UI has partial right-to-left support. This guide covers app setup and
+known component limitations, so you can judge whether the library fits an RTL
+product before you build on it.
 
 ## Summary
 
 | Area | Status |
 | --- | --- |
-| Base UI keyboard nav and popup positioning | Popup alignment follows `dir` on `<html>`; arrow keys and `inline-*` sides work only if *you* render a `DirectionProvider` |
-| Keystone's own spacing and positioning CSS | Mostly physical, does **not** mirror |
-| Explicit `rtl:` handling in the library | One component (`calendar`) |
-| i18n / locale / message layer | None |
-| RTL tests or visual baselines | Chromium covers Reel and the horizontal scroll fade. Storybook also checks RollingNumber’s visual order in LTR and RTL paragraphs. |
+| Base UI keyboard nav and popup positioning | Popups normally inherit direction from the root. Above or below the trigger, `start`/`end` follow the positioner's computed direction. A `DirectionProvider` maps horizontal arrow keys and `inline-*` sides |
+| Keystone's own spacing and positioning CSS | Many one-sided gutters, offsets and text alignments keep their physical side |
+| Explicit `rtl:` handling in the library | Calendar's default month navigation chevrons |
+| i18n / locale / message layer | No locale layer; [`StringsProvider`](/docs/components/strings) replaces some built-in English |
+| RTL tests or visual baselines | Targeted right-to-left checks for some components; Storybook snapshot comparison of RTL examples such as Reel |
 
 ## What works
 
-The 28 components built on [Base UI](https://base-ui.com) inherit its
-direction-aware behavior: arrow-key navigation, popup side and alignment
-resolution, and slider/drawer axis handling. Base UI reads the reading direction
-from its own context, which defaults to `ltr`.
+Components built on [Base UI](https://base-ui.com) inherit its
+direction-aware behavior where it applies: horizontal arrow-key navigation, the
+`inline-start`/`inline-end` popup sides, and slider axis handling. Base UI reads
+the reading direction for these from its own context, which defaults to `ltr`.
+Popup alignment works differently. Above or below the trigger, `start` and `end`
+use the positioner's computed direction, normally inherited from the root.
+Beside the trigger, `start` uses the top edge in either reading direction.
+Alignment offsets and collision handling can move the popup from that edge.
+Select's item-aligned mode uses the provider's direction. Drawer swipe
+directions stay physical (`left`, `right`, `up`, `down`), so choose
+`swipeDirection` for your layout.
 
 Set the direction on the root element (`<html dir="rtl">`), and wrap your app
-in Base UI's `DirectionProvider`:
+in Base UI's `DirectionProvider`. For a package install, add `@base-ui/react`
+as a direct dependency at the version Keystone uses. Make sure your app's
+provider and Keystone's components load the same Base UI module instance.
 
 ```tsx
 import { DirectionProvider } from "@base-ui/react/direction-provider";
@@ -41,28 +50,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-The two do different jobs. `dir` drives CSS: text direction, and which edge
-`align="start"` means. The provider drives Base UI's JavaScript: arrow keys
-(including the key that opens a submenu) and the `inline-start`/`inline-end`
-sides.
+The two do different jobs. Set the root direction for popup layout and the
+provider direction for Base UI's horizontal arrow navigation (including the key
+that opens a submenu) and logical popup sides. Pass `dir="rtl"` to Calendar
+itself for its day-grid arrow keys.
 
-**A `dir` on a wrapper element is not enough for popups.** Menus, selects,
-comboboxes, popovers, tooltips, modals and drawers render in a portal at the end
-of `<body>`, outside your wrapper, so they lay out left to right, even with the
-provider. If only one region of an LTR page is RTL, its popups will lay out left
-to right.
+**A `dir` on a wrapper element is not enough for popups.** A top-level popup (a
+menu, select, combobox, popover, tooltip, modal or drawer) uses a body portal by
+default. If only the trigger's wrapper is RTL on an LTR page, that portal still
+inherits LTR, even with the provider.
 
 ## What does not work
 
-**Keystone's own styling is written with physical direction utilities.** The
-library source contains 107 physical direction utility occurrences (`pl-`, `pr-`,
-`left-`, `right-`, `ml-`, `mr-`, `text-left`, `text-right`) across 31 of its 63
-components, against 25 logical occurrences (`ps-`, `pe-`, `ms-`, `me-`, `start-`,
-`end-`, `text-end`). Physical utilities do not respond to `dir`, so
-under `dir="rtl"` you should expect asymmetric padding, icon gutters, absolute
-offsets, and chevron placement to stay on their left-to-right side.
+**Many one-sided gutters, offsets and text alignments keep their physical side
+in RTL.** They use physical utilities (`pl-`, `pr-`, `ml-`, `mr-`, `left-`,
+`right-`, `text-left`, `text-right`), which do not respond to `dir`. For
+example, from `sm` up, the Modal header stays left-aligned and the footer
+actions align at the inline end.
 
-Calendar flips its navigation chevrons with two `rtl:` variants. Reel uses
+Calendar uses `rtl:` variants for its default month navigation chevrons. Reel uses
 logical positioning for its arrows and the scroller's computed direction for
 paging. Its chevrons and the horizontal fade follow the nearest explicit
 `dir="ltr"` or `dir="rtl"`. `FileUploadItemName` sets `dir="auto"` so a file
@@ -70,32 +76,44 @@ name keeps its own direction.
 RollingNumber's direction and numbering systems are covered in
 [its RTL section](/docs/components/rolling-number#rtl).
 
-**There is no i18n layer.** Keystone ships no locale plumbing and no message
-catalog. `RollingNumber` formats its number with `Intl.NumberFormat` and the
+**There is no full i18n layer.** Keystone ships no locale plumbing.
+[`StringsProvider`](/docs/components/strings) replaces some of the library's
+built-in English; its page lists the text it covers. For package installs, check
+that your version exports `@keystoneui/react/strings`.
+`RollingNumber` formats its number with `Intl.NumberFormat` and the
 `locale` you pass. The default locale is `en-US`. Other components have their
 own defaults, such as the month formatter in `Calendar` and the byte formatter
 in `FileUploadItemSize`.
 
-**RTL test coverage is partial.** Chromium Storybook tests check Reel paging
-and sample the painted fade in both directions. The docs end-to-end tests check
-the built stylesheet, arrow placement and paging across nested direction
-settings.
+**RTL test coverage is partial.** Unit tests press arrow keys inside a
+right-to-left `DirectionProvider` for FilterChips, ToggleGroup and TagGroup.
+Chromium Storybook tests check, among others, Reel paging and the painted fade in
+both directions, a DropdownMenu submenu's side and keys, and the layout of Tag,
+Countdown and TablePagination in a right-to-left container. The docs end-to-end
+tests check Reel's built stylesheet, arrow placement and paging across nested
+direction settings, and scrollable Tabs in right-to-left. Storybook is
+configured to compare snapshots of RTL examples such as Reel.
 
 ## Working around it today
 
-Until the library is converted to logical properties, the practical options are:
+Use these options where a component keeps its physical layout:
 
-- Override the affected utilities per component through the `className` prop.
-  Every component forwards `className` and merges it with `tailwind-merge`, so a
-  logical utility you pass in wins over the physical default.
+- When the part that owns a utility exposes `className`, pass the override
+  there. For an internal element with a `data-slot`, target that slot in your
+  CSS. On `ModalHeader`, `sm:text-start` replaces `sm:text-left`. For single
+  edges, `ps-4` leaves `pl-4` in place. To move that padding to the right in an
+  RTL-only layout, use `pl-0 pr-4`.
 - Restrict RTL to layouts you compose yourself and keep Keystone components in
   direction-neutral positions.
-- Set `dir="rtl"` plus `DirectionProvider` so that at least keyboard navigation
-  and popup positioning behave correctly, and accept the visual mirroring gaps.
+- Set the root direction for popup layout and the provider direction for Base
+  UI's horizontal arrow navigation and logical popup sides, as shown above. Pass
+  `dir="rtl"` to Calendar itself for its day-grid arrow keys, and accept the
+  visual mirroring gaps.
 
 ## Contributing
 
-Converting the library's physical direction utilities to logical ones
-(`pl-`/`pr-` to `ps-`/`pe-`, `ml-`/`mr-` to `ms-`/`me-`, `left-`/`right-` to
-`start-`/`end-`) is a well-scoped, high-value contribution. See
+Convert spacing and offsets that should follow reading order (`pl-`/`pr-` to
+`ps-`/`pe-`, `ml-`/`mr-` to `ms-`/`me-`, `left-`/`right-` to `start-`/`end-`).
+Keep offsets tied to a physical gesture on that edge, such as a Drawer's swipe
+side. See
 [CONTRIBUTING.md](https://github.com/keystone-ui/react/blob/main/CONTRIBUTING.md).
