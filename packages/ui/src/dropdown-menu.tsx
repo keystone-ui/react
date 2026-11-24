@@ -4,6 +4,7 @@ import { useDirection } from "@base-ui/react/direction-provider";
 import { Menu as MenuPrimitive } from "@base-ui/react/menu";
 import {
   Check as CheckIcon,
+  ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
   Circle as CircleIcon,
 } from "lucide-react";
@@ -257,6 +258,13 @@ function DropdownMenuSubTrigger({
   children,
   ...props
 }: DropdownMenuSubTriggerProps) {
+  // The chevron points where DropdownMenuSubContent opens by default, so it
+  // reads the same signal: the provider's direction. A `rtl:` variant would
+  // follow the nearest `dir` attribute instead, which a portaled menu does not
+  // inherit from a wrapper. Its place (`ms-auto`) stays with the row's own
+  // layout direction, like the label beside it.
+  const ChevronIcon =
+    useDirection() === "rtl" ? ChevronLeftIcon : ChevronRightIcon;
   return (
     <MenuPrimitive.SubmenuTrigger
       className={mergeClassName(
@@ -274,7 +282,7 @@ function DropdownMenuSubTrigger({
       {...props}
     >
       {wrapText(children, "min-w-0 flex-1 truncate")}
-      <ChevronRightIcon className="ml-auto size-4" />
+      <ChevronIcon className="ms-auto size-4" />
     </MenuPrimitive.SubmenuTrigger>
   );
 }
