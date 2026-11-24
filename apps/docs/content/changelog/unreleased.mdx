@@ -1,7 +1,7 @@
 ---
-date: "2026-11-23"
+date: "2026-11-24"
 description: "What's coming in the next release"
-excerpt: "8 changes queued for the next release."
+excerpt: "9 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -63,6 +63,16 @@ The sidebar installed by `admin-01`, `sidebar` and `npm/sidebar` now slides its 
 ### Badge: soft status text stays readable on a selected or hovered table row
 
 Four soft status text colours are slightly adjusted, on every surface: in light mode the warning and error text is a little darker, and in dark mode the info and error text is a little lighter. Only lightness changes; the hue, the tinted fill and the border are unchanged, and success, light-mode info and dark-mode warning are untouched. A soft Badge's text now reaches a 4.5:1 contrast ratio on a selected or hovered table row (`bg-muted`, `bg-muted/50`) as well as on the page background; before, light warning and error and dark info and error fell just short on a selected row.
+
+---
+
+### Outline Button text colour at rest and when disabled
+
+At rest, the default text colour for an enabled outline Button has changed from its parent's text colour to `text-foreground`. In the FileUpload form example, the "Choose files" label now appears in the foreground colour at rest beside the muted dropzone instructions. To keep that muted look at rest, put `className="text-muted-foreground"` on the enabled Button itself.
+
+In light and dark themes, a disabled outline Button defaults to `text-foreground/50` at rest, on hover, while pressed and with `aria-expanded="true"`. This covers the `disabled` prop, a Button disabled by a `<fieldset disabled>`, a disabled native button passed to `render`, `disabled` with `focusableWhenDisabled`, and a disabled Button rendered as a link.
+
+Previously, the focusable and link forms defaulted to their parent's text colour at rest, and a native button with the `disabled` prop defaulted to full-strength foreground when expanded.
 
 ---
 
