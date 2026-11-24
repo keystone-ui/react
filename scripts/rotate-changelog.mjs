@@ -42,7 +42,7 @@ import {
   renameSync,
   writeFileSync,
 } from "node:fs";
-import { join } from "node:path";
+import path, { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 // The header sync-unreleased.mjs writes, line by line: what to call each
@@ -73,6 +73,15 @@ export function releasedDescription(version) {
 /** Excerpt of a released page, e.g. "3 changes in this release.". */
 export function releasedExcerpt(count) {
   return `${count} change${count === 1 ? "" : "s"} in this release.`;
+}
+
+/**
+ * `file` relative to `root`, with forward slashes on every platform, for
+ * the paths the CLI prints. `pathApi` is `node:path` unless a test passes
+ * `path.win32` or `path.posix`.
+ */
+export function displayPath(root, file, pathApi = path) {
+  return pathApi.relative(root, file).split(pathApi.sep).join("/");
 }
 
 function refuse(what) {
@@ -145,7 +154,7 @@ No changes merged since v${version}.
 }
 
 function main() {
-  const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
+  const ROOT = fileURLToPath(new URL("..", import.meta.url)).replace(/\/$/, "");
   const UI_PKG = join(ROOT, "packages/ui/package.json");
   const CHANGELOG_DIR = join(ROOT, "apps/docs/content/changelog");
   const UNRELEASED = join(CHANGELOG_DIR, "unreleased.mdx");
@@ -194,9 +203,9 @@ function main() {
 
   console.log("✓ rotated changelog");
   console.log(
-    `  ${UNRELEASED.replace(`${ROOT}/`, "")} → ${target.replace(`${ROOT}/`, "")}`
+    `  ${displayPath(ROOT, UNRELEASED)} → ${displayPath(ROOT, target)}`
   );
-  console.log(`  fresh stub at ${UNRELEASED.replace(`${ROOT}/`, "")}`);
+  console.log(`  fresh stub at ${displayPath(ROOT, UNRELEASED)}`);
   console.log("  review with: git status apps/docs/content/changelog/");
 }
 
