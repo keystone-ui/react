@@ -25,7 +25,7 @@ const buttonVariants = cva(
         ghost:
           "bg-transparent hover:bg-accent active:bg-accent disabled:bg-transparent disabled:text-foreground/50",
         outline:
-          "border border-input bg-background shadow-xs hover:bg-accent hover:text-foreground active:bg-accent active:text-foreground disabled:border-border/50 disabled:bg-transparent disabled:text-foreground/50 aria-expanded:bg-accent aria-expanded:text-foreground dark:border-input dark:bg-input-bg dark:active:bg-input/50 dark:hover:bg-input/50",
+          "border border-input bg-background text-foreground shadow-xs hover:bg-accent hover:text-foreground active:bg-accent active:text-foreground disabled:border-border/50 disabled:bg-transparent disabled:text-foreground/50 aria-expanded:bg-accent aria-expanded:text-foreground aria-expanded:disabled:text-foreground/50 data-disabled:text-foreground/50 dark:border-input dark:bg-input-bg dark:active:bg-input/50 dark:hover:bg-input/50",
         link: "text-primary underline-offset-4 hover:underline active:scale-100",
       },
       // Only the 24px rung restates the radius. `rounded-md` on a 24px box

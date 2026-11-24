@@ -175,6 +175,273 @@ export const Outline: Story = {
   } as any,
 };
 
+// An outline Button paints the foreground colour at rest, whatever text colour
+// its parent sets; a consumer's colour class and the disabled colour still win.
+const outlineThemes = ["light", "dark"] as const;
+
+// Every way an outline Button is disabled: the `disabled` prop, a disabled
+// fieldset (`:disabled`, no `data-disabled`), `disabled` on the native button
+// passed to `render` (the same), a focusable disabled button and a disabled
+// link (`data-disabled`, not `:disabled`).
+const outlineDisabledRows = [
+  "prop",
+  "fieldset",
+  "render",
+  "focusable",
+  "link",
+] as const;
+type OutlineDisabledRow = (typeof outlineDisabledRows)[number];
+
+function OutlineDisabled({
+  row,
+  theme,
+  expanded,
+}: {
+  row: OutlineDisabledRow;
+  theme: string;
+  expanded?: boolean;
+}) {
+  const id = `${theme}-off-${row}${expanded ? "-x" : ""}`;
+  const shared = {
+    "aria-expanded": expanded || undefined,
+    "data-testid": id,
+    variant: "outline" as const,
+  };
+  switch (row) {
+    case "fieldset":
+      return (
+        <fieldset className="m-0 min-w-0 border-0 p-0" disabled>
+          <Button {...shared}>Off</Button>
+        </fieldset>
+      );
+    case "render":
+      return (
+        <Button {...shared} render={<button disabled type="button" />}>
+          Off
+        </Button>
+      );
+    case "link":
+      return (
+        <Button
+          {...shared}
+          disabled
+          nativeButton={false}
+          render={<a href="#help" />}
+        >
+          Help
+        </Button>
+      );
+    default:
+      return (
+        <Button
+          {...shared}
+          disabled
+          focusableWhenDisabled={row === "focusable"}
+        >
+          Off
+        </Button>
+      );
+  }
+}
+
+/** The custom browser commands registered in vitest.config.ts. */
+interface OutlineCommands {
+  pointerDown: () => Promise<void>;
+  pointerMoveAway: () => Promise<void>;
+  pointerMoveTo: (selector: string) => Promise<void>;
+  pointerUp: () => Promise<void>;
+}
+
+const outlineFrame = () =>
+  new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+
+/** Waits for a state the pointer gives, one frame at a time. */
+async function outlineUntil(test: () => boolean) {
+  for (let i = 0; i < 60 && !test(); i++) {
+    // biome-ignore lint/performance/noAwaitInLoops: one frame at a time
+    await outlineFrame();
+  }
+  return test();
+}
+
+/** Waits until the element's colour and fill have stopped moving. */
+async function outlineSettled(el: Element) {
+  let last = "";
+  let stable = 0;
+  for (let i = 0; i < 120 && stable < 4; i++) {
+    // biome-ignore lint/performance/noAwaitInLoops: one frame at a time
+    await outlineFrame();
+    const style = getComputedStyle(el);
+    const now = `${style.color}|${style.backgroundColor}`;
+    stable = now === last ? stable + 1 : 0;
+    last = now;
+  }
+}
+
+export const OutlineForeground: Story = {
+  // The light panel's class resets nothing: pin the light theme so the
+  // toolbar's dark theme cannot paint both panels dark. The suite has no
+  // toolbar: start from the dark theme so that the pin, not the default, is
+  // what keeps the light panel light.
+  globals: { theme: "dark" },
+  parameters: {
+    themes: { themeOverride: "light" },
+    docs: { story: { inline: false, height: "720px" } },
+  },
+  render: () => (
+    <div className="flex flex-col items-start gap-4">
+      {outlineThemes.map((theme) => (
+        <div
+          className={cn(
+            "flex flex-col items-start gap-2 rounded-md bg-background p-3 text-foreground",
+            theme === "dark" && "dark"
+          )}
+          key={theme}
+        >
+          <span className="text-foreground" data-testid={`${theme}-fg`}>
+            foreground
+          </span>
+          <span className="text-foreground/50" data-testid={`${theme}-fg-50`}>
+            foreground at half
+          </span>
+          <span className="text-destructive" data-testid={`${theme}-red`}>
+            destructive
+          </span>
+          <Button data-testid={`${theme}-outside`} variant="outline">
+            Outside
+          </Button>
+          <div
+            className="flex flex-wrap gap-2 text-muted-foreground"
+            data-testid={`${theme}-muted`}
+          >
+            <Button data-testid={`${theme}-inside`} variant="outline">
+              Inside
+            </Button>
+            <Button
+              className="text-destructive"
+              data-testid={`${theme}-inside-red`}
+              variant="outline"
+            >
+              Inside red
+            </Button>
+            <Button
+              data-testid={`${theme}-render-red`}
+              nativeButton={false}
+              render={<a className="text-destructive" href="#details" />}
+              variant="outline"
+            >
+              Details
+            </Button>
+          </div>
+          <div className="flex flex-wrap gap-2 text-muted-foreground">
+            {outlineDisabledRows.map((row) => (
+              <OutlineDisabled key={row} row={row} theme={theme} />
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-2 text-muted-foreground">
+            {outlineDisabledRows.map((row) => (
+              <OutlineDisabled expanded key={row} row={row} theme={theme} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // The theme pin switches the page's theme after the first paint: let
+    // the colour transitions it starts finish before reading colours.
+    await Promise.all(document.getAnimations().map((a) => a.finished));
+    const style = (id: string) => getComputedStyle(canvas.getByTestId(id));
+    const color = (id: string) => style(id).color;
+    for (const theme of outlineThemes) {
+      const fg = color(`${theme}-fg`);
+      // The fixture is only meaningful if the parent's colour differs.
+      // biome-ignore lint/performance/noAwaitInLoops: one theme at a time
+      await expect(color(`${theme}-muted`)).not.toBe(fg);
+      await expect(color(`${theme}-outside`)).toBe(fg);
+      await expect(color(`${theme}-inside`)).toBe(fg);
+      // A colour class on the Button wins over the variant's colour.
+      await expect(color(`${theme}-inside-red`)).toBe(color(`${theme}-red`));
+      // The same class on the element passed to `render` can lose: here the
+      // variant's colour wins, so the class belongs on the Button.
+      await expect(color(`${theme}-render-red`)).toBe(fg);
+    }
+    // Dark resolves its own foreground, not the light one.
+    await expect(
+      color("dark-inside"),
+      "the light panel must stay light"
+    ).not.toBe(color("light-inside"));
+
+    // Every disabled row, at rest and expanded: half-strength text. Rows
+    // that are `:disabled` without `data-disabled` keep the fill of the prop
+    // row when expanded.
+    for (const theme of outlineThemes) {
+      const half = color(`${theme}-fg-50`);
+      for (const row of outlineDisabledRows) {
+        // biome-ignore lint/performance/noAwaitInLoops: one control at a time
+        await expect(color(`${theme}-off-${row}`), `${theme} ${row}`).toBe(
+          half
+        );
+      }
+      for (const row of outlineDisabledRows) {
+        // biome-ignore lint/performance/noAwaitInLoops: one control at a time
+        await expect(
+          color(`${theme}-off-${row}-x`),
+          `${theme} ${row} expanded`
+        ).toBe(half);
+        await expect(
+          style(`${theme}-off-${row}-x`).backgroundColor,
+          `${theme} ${row} expanded fill`
+        ).toBe(style(`${theme}-off-prop-x`).backgroundColor);
+      }
+    }
+
+    // Hovered and held: a real pointer, each colour read once its
+    // transition has settled.
+    const commands = (globalThis as { __realCommands?: OutlineCommands })
+      .__realCommands;
+    if (!commands) {
+      // Vitest always provides the commands; Storybook's own runner has none.
+      const underVitest =
+        (globalThis as { __vitest_browser__?: boolean }).__vitest_browser__ ===
+          true ||
+        Boolean((import.meta as { env?: Record<string, unknown> }).env?.VITEST);
+      if (underVitest) {
+        throw new Error("Real pointer commands are missing.");
+      }
+      return;
+    }
+    for (const theme of outlineThemes) {
+      const half = color(`${theme}-fg-50`);
+      for (const row of outlineDisabledRows) {
+        const id = `${theme}-off-${row}`;
+        const el = canvas.getByTestId(id);
+        // biome-ignore lint/performance/noAwaitInLoops: one control at a time
+        await commands.pointerMoveTo(`[data-testid="${id}"]`);
+        await expect(
+          await outlineUntil(() => el.matches(":hover")),
+          `${id} :hover`
+        ).toBe(true);
+        await outlineSettled(el);
+        await expect(color(id), `${id} hovered`).toBe(half);
+        await commands.pointerDown();
+        try {
+          await expect(
+            await outlineUntil(() => el.matches(":active")),
+            `${id} :active`
+          ).toBe(true);
+          await outlineSettled(el);
+          await expect(color(id), `${id} pressed`).toBe(half);
+        } finally {
+          await commands.pointerUp();
+          await commands.pointerMoveAway();
+        }
+      }
+    }
+  },
+};
+
 // Link variant with back icon
 export const Link: Story = {
   render: () => (
