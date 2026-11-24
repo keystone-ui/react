@@ -31,13 +31,16 @@ import {
 } from "node:fs";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { dirname, join, posix, win32 } from "node:path";
 import { pathToFileURL } from "node:url";
 import { frontmatter as siteFrontmatter } from "fumadocs-core/content/md/frontmatter";
 import { afterEach, describe, expect, it } from "vitest";
 import { parse } from "yaml";
 
-import { rotateChangelog } from "../../../scripts/rotate-changelog.mjs";
+import {
+  displayPath,
+  rotateChangelog,
+} from "../../../scripts/rotate-changelog.mjs";
 
 const REPO_ROOT = join(import.meta.dirname, "../../..");
 const SCRIPT = join(REPO_ROOT, "scripts/rotate-changelog.mjs");
@@ -529,6 +532,36 @@ Body.
   });
 });
 
+// The CLI prints the files it wrote relative to the checkout, with forward
+// slashes on every platform. Windows paths are exercised through
+// node:path's win32 functions, the ones node uses there.
+describe("displayPath", () => {
+  it.each([
+    [
+      "a Windows root with a space",
+      win32,
+      "C:\\work\\my checkout",
+      "C:\\work\\my checkout\\apps\\docs\\content\\changelog\\unreleased.mdx",
+    ],
+    [
+      "a Windows drive root",
+      win32,
+      "D:\\",
+      "D:\\apps\\docs\\content\\changelog\\unreleased.mdx",
+    ],
+    [
+      "a POSIX root with a space",
+      posix,
+      "/work/my checkout",
+      "/work/my checkout/apps/docs/content/changelog/unreleased.mdx",
+    ],
+  ])("shortens a file under %s", (_label, pathApi, root, file) => {
+    expect(displayPath(root, file, pathApi)).toBe(
+      "apps/docs/content/changelog/unreleased.mdx"
+    );
+  });
+});
+
 describe("rotate-changelog CLI", () => {
   const temps: string[] = [];
   const version = "0.0.0-rotate-test.0";
@@ -544,10 +577,10 @@ describe("rotate-changelog CLI", () => {
    * and a changelog folder holding only the given Unreleased file. No
    * committed page is copied, so no run can collide with one.
    */
-  function scratchRepo(source = unreleased(1)) {
+  function scratchRepo(source = unreleased(1), repoName = "repo") {
     const base = mkdtempSync(join(tmpdir(), "ks-rotate-changelog-"));
     temps.push(base);
-    const repo = join(base, "repo");
+    const repo = join(base, repoName);
     const changelog = join(repo, "apps/docs/content/changelog");
     mkdirSync(join(repo, "scripts"), { recursive: true });
     mkdirSync(join(repo, "packages/ui"), { recursive: true });
@@ -614,6 +647,55 @@ describe("rotate-changelog CLI", () => {
     expect(
       frontmatter(readFileSync(join(changelog, "unreleased.mdx"), "utf8"))
     ).toMatchObject({ excerpt: PENDING_EMPTY_EXCERPT });
+  });
+
+  // A checkout folder whose name a file URL percent-encodes: the script must
+  // find its files under the real name, not under `my%20checkout`.
+  it.each([
+    ["a space", "my checkout"],
+    ["a percent sign and a hash", "100% #1"],
+  ])("rotates from a checkout path holding %s", (_label, repoName) => {
+    const { repo, changelog } = scratchRepo(unreleased(1), repoName);
+
+    const result = run([join(repo, "scripts/rotate-changelog.mjs")]);
+
+    expect(result.status, result.stderr).toBe(0);
+    expect(readdirSync(changelog)).toHaveLength(2);
+    expect(result.stdout).toContain(
+      "apps/docs/content/changelog/unreleased.mdx →"
+    );
+    expect(result.stdout).not.toContain(repo);
+  });
+
+  // The sentinel is the header's excerpt alone: a released change whose
+  // notes quote the empty stub's excerpt line is still a release.
+  it("rotates a release whose body quotes the empty stub's excerpt line", () => {
+    const source = `${syncHeader("1 change queued for the next release.")}
+## Patch changes
+
+### Skip rotation for an empty stub.
+
+A stub reads:
+
+    excerpt: "No changes since the last release."
+
+and quoted at the start of a line:
+
+excerpt: "No changes since the last release."
+`;
+    const { repo, changelog } = scratchRepo(source);
+
+    const result = run([join(repo, "scripts/rotate-changelog.mjs")]);
+
+    expect(result.status, result.stderr).toBe(0);
+    expect(result.stdout).not.toContain("skipping");
+    const dated = readdirSync(changelog).find((n) =>
+      n.endsWith(`-v${version}.mdx`)
+    );
+    expect(dated).toBeDefined();
+    const page = readFileSync(join(changelog, dated as string), "utf8");
+    expect(frontmatter(page).excerpt).toBe("1 change in this release.");
+    expect(body(page)).toBe(body(source));
   });
 
   it("skips the empty stub and leaves the folder as it was", () => {
