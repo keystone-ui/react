@@ -32,15 +32,22 @@ import { pathToFileURL } from "node:url";
 /**
  * Routes that must reach the Next server, plus what their bodies must say.
  *
- * `/api/search` is the dynamic canary: it reads the query string, so it can
- * never be served from assets, and it exercises the Next server plus the
- * in-memory search index. `bodyIncludes` guards against a 200 that is an
- * error page or a stale handler. `/r/demos/button` is prerendered, but it
- * is the route the MCP `get_examples` tool depends on and it 404'd in
- * production for ten days while CI was green, so it stays pinned here. The
- * two 404 checks always reach the server: an unknown path is never in
- * assets, and a throwing Worker turns them into 500s. The `.mdx` one also
- * proves the llms route answers a miss with 404, not the 500 it used to.
+ * `/api/search` is the dynamic canary and the check that proves the Next
+ * server function runs: it reads the query string, so it can never be
+ * served from assets, and it exercises the Next server plus the in-memory
+ * search index. `bodyIncludes` guards against a 200 that is an error page
+ * or a stale handler. `/r/demos/button` is prerendered, but it is the route
+ * the MCP `get_examples` tool depends on and it 404'd in production for ten
+ * days while CI was green, so it stays pinned here.
+ *
+ * The misses pin the public 404 each path gets. `/docs/` and `/preview/`
+ * are in proxy.ts's matcher, so the unknown `.mdx` page and the unknown
+ * demo name are rewritten to `/__not-found` before any route handler runs
+ * and get Next's not-found page, the same page as the unknown top-level
+ * path. The `/preview/` miss pins that rule for an unknown demo name: the
+ * Worker cannot resume the route's fallback shell, so such a path served an
+ * empty 200 on workerd, and the e2e suite on `next start` never sees that.
+ * The `/r/` and `/e2e/` misses are outside the matcher.
  */
 /** @typedef {{ path: string, status: number, bodyIncludes?: string }} Check */
 /** @type {Check[]} */
@@ -67,6 +74,7 @@ export const DEFAULT_CHECKS = [
   { path: "/r/theme/k1_smoke-docs-invalid.json", status: 404 },
   { path: "/__smoke-docs-missing-route", status: 404 },
   { path: "/docs/components/__smoke-docs-missing.mdx", status: 404 },
+  { path: "/preview/__smoke-docs-missing", status: 404 },
   // A test-only fixture: served by the e2e build alone, closed everywhere else.
   { path: "/e2e/reel-arrows", status: 404 },
   { path: "/e2e/reel-plain", status: 404 },

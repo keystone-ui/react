@@ -69,6 +69,17 @@ describe("DEFAULT_CHECKS", () => {
     }
   });
 
+  it("checks that an unknown preview name answers 404", () => {
+    // proxy.ts rewrites a `/preview/<x>` that is not a known demo to the
+    // static 404, because the Worker cannot resume the fallback shell: such a
+    // path used to answer an empty 200 on workerd. CI's e2e runs on
+    // `next start`, where that failure never shows, so only this check sees it.
+    const miss = DEFAULT_CHECKS.find(
+      (c) => c.path.startsWith("/preview/") && c.status === 404
+    );
+    expect(miss?.path).toBe("/preview/__smoke-docs-missing");
+  });
+
   it("covers the sitemap and the icon", () => {
     // Both are generated routes that only exist if their handlers ran at
     // build time; a deploy that lost either would otherwise pass silently.
