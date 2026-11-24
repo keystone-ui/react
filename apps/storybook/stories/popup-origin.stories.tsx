@@ -350,8 +350,20 @@ export const DropdownMenuOrigin: Story = {
   ),
 };
 
-/** A dropdown whose submenu is pinned to an explicit side, or left default. */
-function SubFixture({ id, side }: { id: string; side?: "left" | "right" }) {
+/**
+ * A dropdown whose submenu is pinned to an explicit side, or left default.
+ * With `element`, the row's label is an element of its own, so no flex-1
+ * text span fills the row and the chevron's own margin places it.
+ */
+function SubFixture({
+  element,
+  id,
+  side,
+}: {
+  element?: boolean;
+  id: string;
+  side?: "left" | "right";
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -364,7 +376,7 @@ function SubFixture({ id, side }: { id: string; side?: "left" | "right" }) {
         <DropdownMenuItem>Profile</DropdownMenuItem>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger data-testid={`subtrigger-${id}`}>
-            Invite users
+            {element ? <span>Invite users</span> : "Invite users"}
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent side={side}>
             <DropdownMenuItem>Email</DropdownMenuItem>
@@ -594,6 +606,89 @@ export const DropdownMenuSubOrigin: Story = {
       }
       render={(place) => <SubFixture id={place} />}
     />
+  ),
+};
+
+/**
+ * Which way the rendered chevron points on screen: the x of its apex (the
+ * middle of the stroke) against the x midpoint of its two ends, all read
+ * through the path's screen matrix, so a swapped icon and a mirroring
+ * transform both count.
+ */
+function chevronPoints(svg: SVGSVGElement): "left" | "right" {
+  const path = svg.querySelector<SVGGeometryElement>("path, polyline");
+  const matrix = path?.getScreenCTM();
+  if (!(path && matrix)) {
+    throw new Error("the sub-trigger chevron has no drawn stroke");
+  }
+  const length = path.getTotalLength();
+  const at = (distance: number) =>
+    new DOMPoint(
+      path.getPointAtLength(distance).x,
+      path.getPointAtLength(distance).y
+    ).matrixTransform(matrix);
+  const apex = at(length / 2);
+  const ends = (at(0).x + at(length).x) / 2;
+  return apex.x < ends ? "left" : "right";
+}
+
+/**
+ * Opens fixture `id`'s submenu and checks that the row's chevron points to
+ * the side the submenu really opened on, by its `data-side` and its edge
+ * against the row's, and that the chevron sits at the row's inline end, its
+ * padding away from the row's edge in the row's own direction.
+ */
+async function checkChevron(id: string, expected: "left" | "right") {
+  const { trigger, popup } = await openSub(id);
+  const row = trigger.getBoundingClientRect();
+  const sub = popup.getBoundingClientRect();
+  expect(popup.getAttribute("data-side"), `${id}: submenu side`).toBe(expected);
+  // The fixture's side offset is 0, so the submenu's facing edge meets the
+  // row's outer edge on that side; a submenu above or below the row fails.
+  expect(
+    Math.abs(expected === "left" ? sub.right - row.left : sub.left - row.right),
+    `${id}: submenu flush with the row's ${expected} edge`
+  ).toBeLessThanOrEqual(TOLERANCE);
+  const svg = trigger.querySelector<SVGSVGElement>(":scope > svg");
+  if (!svg) {
+    throw new Error(`${id}: no chevron in the row`);
+  }
+  expect(chevronPoints(svg), `${id}: chevron points`).toBe(expected);
+  const style = getComputedStyle(trigger);
+  const icon = svg.getBoundingClientRect();
+  const end =
+    style.direction === "rtl"
+      ? icon.left - row.left - Number.parseFloat(style.paddingLeft)
+      : row.right - icon.right - Number.parseFloat(style.paddingRight);
+  expect(
+    Math.abs(end),
+    `${id}: chevron at the row's inline end (${style.direction})`
+  ).toBeLessThanOrEqual(TOLERANCE);
+  // Base UI's arrow keys follow the provider, not the row's CSS direction.
+  await closeSubByArrow(expected === "left" ? "rtl" : "ltr");
+}
+
+export const DropdownMenuSubChevron: Story = {
+  play: async () => {
+    // The documented set-up: `dir="rtl"` on the page and the provider.
+    await withDir("rtl", () => checkChevron("chevron-rtl", "left"));
+    // The same with an element label: the chevron's own margin places it.
+    await withDir("rtl", () => checkChevron("chevron-rtl-element", "left"));
+    // The provider alone on an LTR page: the submenu still opens on the left.
+    await withDir("ltr", () => checkChevron("chevron-rtl", "left"));
+    // No provider: unchanged.
+    await withDir("ltr", () => checkChevron("chevron-ltr", "right"));
+  },
+  render: () => (
+    <div className="flex min-h-svh justify-center gap-6 p-6">
+      <DirectionProvider direction="rtl">
+        <SubFixture id="chevron-rtl" />
+      </DirectionProvider>
+      <DirectionProvider direction="rtl">
+        <SubFixture element id="chevron-rtl-element" />
+      </DirectionProvider>
+      <SubFixture id="chevron-ltr" />
+    </div>
   ),
 };
 

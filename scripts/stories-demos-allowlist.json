@@ -334,6 +334,7 @@
     "popup origin": [
       "combobox-origin",
       "dropdown-menu-origin",
+      "dropdown-menu-sub-chevron",
       "dropdown-menu-sub-origin",
       "popover-origin",
       "select-origin",
