@@ -6,7 +6,26 @@ import { defineConfig, mergeConfig } from "vitest/config";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
+import type { Page } from "playwright";
+import { HeldPress, OFFSCREEN } from "./.storybook/held-press";
 import viteConfig from "./vite.config";
+
+// The press record (`.storybook/held-press.ts`) of each page, keyed by page
+// because one config serves every browser page (one per worker). It records
+// only the presses `pointerDown` sends.
+const heldPages = new WeakMap<Page, HeldPress>();
+function heldPress(page: Page): HeldPress {
+  let press = heldPages.get(page);
+  if (!press) {
+    press = new HeldPress({
+      down: () => page.mouse.down(),
+      move: (x, y) => page.mouse.move(x, y),
+      up: () => page.mouse.up(),
+    });
+    heldPages.set(page, press);
+  }
+  return press;
+}
 
 export default mergeConfig(
   viteConfig,
@@ -55,12 +74,27 @@ export default mergeConfig(
                 pointerMoveAway: async (ctx) => {
                   await ctx.page.mouse.move(0, 0);
                 },
+                // Moves the pointer outside the viewport, where it hovers
+                // nothing (`pointerMoveAway` goes to the corner, which a
+                // control can occupy).
+                pointerMoveOffscreen: async (ctx) => {
+                  await ctx.page.mouse.move(OFFSCREEN.x, OFFSCREEN.y);
+                },
                 pointerDown: async (ctx) => {
-                  await ctx.page.mouse.down();
+                  await heldPress(ctx.page).down();
                 },
                 pointerUp: async (ctx) => {
-                  await ctx.page.mouse.up();
+                  await heldPress(ctx.page).up();
                 },
+                // Lets go of a press `pointerDown` left held (a play that
+                // failed or timed out before its `pointerUp`): moves the
+                // pointer outside the viewport, then sends an up. Resolves
+                // false and sends nothing when the record holds no press
+                // (no down sent since the last successful up or release),
+                // because an unpaired `mouse.up()` still sends the page a
+                // trusted pointerup and mouseup.
+                pointerRelease: async (ctx) =>
+                  await heldPress(ctx.page).release(),
                 // Real `prefers-reduced-motion`, for plays that compare a
                 // smooth scroll with an instant one.
                 emulateReducedMotion: async (ctx, reduce: boolean) => {
