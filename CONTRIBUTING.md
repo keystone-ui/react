@@ -12,7 +12,7 @@ This guide covers the end-to-end workflow for adding and maintaining components 
 | Registry metadata | `packages/ui/src/_registry.ts` |
 | Storybook stories | `apps/storybook/stories/{name}.stories.tsx` |
 | Fumadocs demos | `apps/docs/demos/{name}/` |
-| Demo registry | `apps/docs/demos/index.ts` |
+| Demo registry (generated) | `apps/docs/demos/manifest.json`, `apps/docs/demos/loader.tsx` |
 | MDX documentation | `apps/docs/content/docs/components/{name}.mdx` |
 | Component navigation | `apps/docs/content/docs/components/meta.json` |
 
@@ -26,7 +26,7 @@ Run the scaffolding command from the workspace root:
 pnpm add:component MyComponent
 ```
 
-This creates all files and updates all registries automatically:
+The scaffold creates the component, story, default demo and MDX page. It updates the package exports, tsup entry, `_registry.ts` and docs navigation. It regenerates `apps/docs/demos/manifest.json` and `apps/docs/demos/loader.tsx`. The new docs page and standalone preview return 404 until `pnpm gen:static-paths` refreshes `apps/docs/lib/static-paths.json`.
 
 - `packages/ui/src/my-component.tsx` — component template
 - `packages/ui/package.json` — subpath export
@@ -34,7 +34,7 @@ This creates all files and updates all registries automatically:
 - `packages/ui/src/_registry.ts` — shadcn registry entry
 - `apps/storybook/stories/my-component.stories.tsx` — story template
 - `apps/docs/demos/my-component/default.tsx` — default demo
-- `apps/docs/demos/index.ts` — demo registry entry
+- `apps/docs/demos/manifest.json` and `apps/docs/demos/loader.tsx` — demo registry, regenerated with the new demo in it
 - `apps/docs/content/docs/components/my-component.mdx` — documentation page
 - `apps/docs/content/docs/components/meta.json` — navigation entry
 
@@ -84,16 +84,18 @@ export default function MyComponentDefault() {
 
 ### 5. Register demos
 
-Add each demo to `apps/docs/demos/index.ts`:
+The demo registry is generated from the files under `apps/docs/demos/`, so a demo is registered by regenerating it, not by editing it:
 
-```ts
-import MyComponentDefault from "./my-component/default";
-import MyComponentVariants from "./my-component/variants";
-
-// In the demos record:
-"my-component-default": { component: MyComponentDefault, file: "my-component/default.tsx" },
-"my-component-variants": { component: MyComponentVariants, file: "my-component/variants.tsx" },
+```bash
+pnpm gen:demos          # regenerate apps/docs/demos/manifest.json and loader.tsx
+pnpm gen:static-paths   # regenerate apps/docs/lib/static-paths.json
 ```
+
+After you run both generators for `MyComponent`, `apps/docs/lib/static-paths.json` contains `/docs/components/my-component` in `docs` and `my-component-default` in `preview`. `<ComponentPreview>` renders the demo inline. Open `/preview/my-component-default` to view it on its own.
+
+The proxy checks only `/docs`, `/blog` and `/preview`. It returns 404 for an unknown page path or preview key under those prefixes. A docs page and its `.mdx` URL use the same entry. If you add a page later, run `pnpm gen:static-paths` again after writing its MDX.
+
+A file at `apps/docs/demos/my-component/variants.tsx` gets the key `my-component-variants`, the name `<ComponentPreview>` takes. Never edit `manifest.json`, `loader.tsx` or `static-paths.json` by hand; `pnpm lint:docs` fails when any of them is stale.
 
 ### 6. Write MDX documentation
 
@@ -151,12 +153,21 @@ The lint is also wired into `pnpm lint:docs` so CI catches drift on every PR.
 
 Blocks are full-page or feature-level compositions (sign-in pages, data tables, etc.). Unlike components, there is no `pnpm add:block` scaffolder yet — block items in `registry.json` are hand-maintained. Brief workflow:
 
-1. Author source under `apps/docs/demos/blocks/<name>{.tsx,/}` and register the demo in `apps/docs/demos/index.ts` as `block-<name>`.
-2. Add the registry entry by hand-editing `registry.json`. **The `categories: [...]` field is required** — at least one of `authentication`, `login`, `signup` (mirrors shadcn), `navigation`, `data`, `betting`, or a new single-word lowercase string. `pnpm sync:registry` warns when missing.
-3. Files within the block must be tagged with per-file types: `registry:page` (with `target`) for the entry, `registry:component` for everything else.
-4. Author MDX at `apps/docs/content/docs/blocks/<name>.mdx` following `apps/docs/content/docs/blocks/_block-template.mdx`. The lint at `pnpm lint:docs` enforces install fence + `<BlockPreview>` + `## Components Used`.
-5. Run `pnpm docs:backlinks` to refresh the auto-injected `## Related Blocks` sections in component MDX, then `pnpm registry:build`.
-6. Add the block to the Block Selection table in `skills/keystoneui-react/SKILL.md` so consumer agents can discover it.
+1. Write the demo at `apps/docs/demos/blocks/<name>.tsx` or `apps/docs/demos/blocks/<name>/index.tsx`. For a single file, use a top-level function declaration for the component. End the demo with a named `export default function` that renders it. A directory block exports its demo as the default from `index.tsx`.
+2. Run `pnpm gen:demos`. Both layouts use the key `block-<name>`.
+3. Add a `registry:block` item named `<name>` to `registry.json`.
+   - Include at least one category in `categories`. Examples include `authentication`, `login`, `signup`, `navigation`, `data` and `betting`. Use a single lowercase word for a new category. `pnpm registry:sync` warns if categories are missing.
+   - List component files as `registry:component`. A single-file block needs exactly one component `path`.
+   - For a directory block's generated components, use `registry/default/blocks/<name>/components/` and the original sibling filenames. `index.tsx` is the preview entry.
+   - If the block installs a page, declare a `registry:page` file with a source `path` and a `target` such as `app/<slug>/page.tsx`.
+4. For each `registry:page` entry, write the page by hand at its `path`, such as `registry/default/blocks/<name>/page.tsx`. The entry's `target` is the install location in the consumer's app. Have the page import and render the installed component.
+5. Run `pnpm sync:blocks` to generate the installable components.
+6. Write `apps/docs/content/docs/blocks/<name>.mdx` using `apps/docs/content/docs/blocks/_block-template.mdx`. Include the install command in a bash fence, `<BlockPreview name="block-<name>" />` and links to the primitives under `## Components Used`.
+7. Run `pnpm gen:static-paths`. In `apps/docs/lib/static-paths.json`, the MDX filename supplies `/docs/blocks/<name>` in `docs`. The demo manifest supplies `block-<name>` in `preview`. The docs entry can exist before the preview key. `<BlockPreview>` embeds `/preview/block-<name>` in an iframe.
+8. Run `pnpm docs:backlinks` to update `## Related Blocks` on the linked component pages.
+9. Add the block to the Block Selection table in `skills/keystoneui-react/SKILL.md`.
+
+Run `pnpm registry:build` to refresh the installable items in `apps/docs/public/r/`.
 
 See `.claude/skills/contributing/SKILL.md` → "Adding a New Block" for the full per-step checklist and the current category taxonomy.
 
@@ -188,7 +199,7 @@ See `.claude/skills/contributing/SKILL.md` → "Adding a New Block" for the full
 1. Update the component source
 2. Add Storybook stories for the new sub-component
 3. Create a demo showing the sub-component in use
-4. Register the demo in `apps/docs/demos/index.ts`
+4. Run `pnpm gen:demos`, then `pnpm gen:static-paths`.
 5. Update the MDX Import section and add a `<ComponentPreview>` for the new demo
 6. Update the `## Composition` ASCII tree in the MDX so agents see the new nesting
 

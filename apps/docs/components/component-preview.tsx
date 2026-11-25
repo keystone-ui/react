@@ -36,7 +36,8 @@ export function ComponentPreview({
       >
         <p className="text-destructive text-sm">
           Component demo &quot;{name}&quot; not found. Make sure the demo file
-          exists under apps/docs/demos and run `pnpm gen:demos`.
+          exists under apps/docs/demos and run `pnpm gen:demos`, then `pnpm
+          gen:static-paths`.
         </p>
       </div>
     );
