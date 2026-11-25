@@ -197,7 +197,7 @@ Mechanical migration: `node scripts/migrate-component-mdx.mjs`. Validation: `pnp
 
 ## Block Authoring
 
-Blocks are full-page or feature-level compositions registered as `registry:block` items in `registry.json` (hand-maintained — *not* generated from sources). Each block has source under `apps/docs/demos/blocks/<name>{.tsx,/}` and an MDX page under `apps/docs/content/docs/blocks/<name>.mdx`.
+Blocks are full-page or feature-level compositions registered as `registry:block` items in `registry.json` (hand-maintained — *not* generated from sources). Each original block has source under `apps/docs/demos/blocks/<name>{.tsx,/}` and an MDX page under `apps/docs/content/docs/blocks/<name>.mdx`; a package flavour such as `npm/users-01` shares its parent's demo and a section of its parent's page.
 
 **Block items in `registry.json` must declare:**
 
@@ -210,6 +210,7 @@ Blocks are full-page or feature-level compositions registered as `registry:block
   - `data` — tables, CRM-style data management
   - `dashboard` — analytics dashboards, KPI + chart pages
   - `admin` — admin panels and app shells
+  - `settings` — account settings pages
   - `betting` — betting/wager UI (keystone-specific)
   - When inventing a new category, prefer single-word lowercase that mirrors shadcn naming where possible
 - `pnpm registry:sync` warns if any block is missing `categories`

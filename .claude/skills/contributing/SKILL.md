@@ -61,6 +61,7 @@ Every block must carry at least one category. Current values in use:
 | `data` | `tickets-01` | new |
 | `dashboard` | `dashboard-01` | new |
 | `admin` | `admin-01` | new |
+| `settings` | `settings-01` | new |
 | `betting` | `betting-panel-0X` | new |
 
 When adding a new category, prefer single-word lowercase strings that mirror shadcn naming where any overlap exists (shadcn's own `registry.json`, at https://ui.shadcn.com/r/registry.json, is the reference). Document the new category in this table and in `AGENTS.md` → "Block Authoring".
@@ -101,7 +102,7 @@ Three surfaces drift if not maintained explicitly. Run through this checklist af
 | `packages/ui/tsup.config.ts` entryPoints | Add the source path. |
 | `skills/keystoneui-react/SKILL.md` | Bump the exact component count at the **Component List** heading and add the kebab-case name to the list. |
 | `skills/keystoneui-react/SKILL.md` Component Selection table | Add the component to the appropriate row (e.g. "Form layout" / "Overlays" / "Feedback"). |
-| `apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx` | Bump the "all 54+ UI components" count if you reference one. |
+| `apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx` | Keep its `50+` component count; see the count policy below. |
 | Component counts elsewhere | **Do not bump them.** Every other surface says `50+` on purpose. |
 
 **Count policy.** The component count is hardcoded in ~12 places. Only **two**
@@ -156,7 +157,7 @@ The eval suite at `skills/keystoneui-react/evals/evals.json` exists to catch thi
 
 ## Demo File Pattern
 
-Every demo must follow this exact pattern:
+Every component demo must follow this exact pattern. A block demo follows step 1 of [Adding a New Block](#adding-a-new-block) instead:
 
 ```tsx
 "use client";
