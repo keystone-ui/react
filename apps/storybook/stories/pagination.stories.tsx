@@ -26,7 +26,7 @@ import {
   ChevronsLeft as ChevronsLeftIcon,
   ChevronsRight as ChevronsRightIcon,
 } from "lucide-react";
-import { expect, within } from "storybook/test";
+import { expect, fn, within } from "storybook/test";
 
 const meta = {
   title: "Components/Pagination",
@@ -75,7 +75,7 @@ import {
 - Previous / Next buttons with text labels (hidden on small screens)
 - First / Last page buttons with double-chevron icons
 - Ellipsis indicator for truncated page ranges
-- Renders as \`<a>\` tags by default for link-based navigation
+- With \`href\`, every page control is a real \`<a>\` link; without \`href\` it is a \`<button>\` for \`onClick\` paging
 `,
       },
     },
@@ -227,20 +227,98 @@ export const WorstCase: Story = {
     const frame = canvas.getByTestId("frame").getBoundingClientRect();
 
     // A four-digit page grows its link instead of spilling out of a square.
-    const current = canvas.getByRole("button", { name: /^1,284$/ });
+    const current = canvas.getByRole("link", { name: /^1,284$/ });
     expectNoOverflow(current);
     const currentRect = current.getBoundingClientRect();
     await expect(currentRect.width).toBeGreaterThan(currentRect.height);
 
     // A single digit keeps the square, same height as its neighbours.
-    const first = canvas.getByRole("button", { name: /^1$/ });
+    const first = canvas.getByRole("link", { name: /^1$/ });
     const firstRect = first.getBoundingClientRect();
     await expect(Math.abs(firstRect.width - firstRect.height)).toBeLessThan(1);
     await expect(firstRect.height).toBeCloseTo(currentRect.height, 0);
 
-    // Base UI gives a non-native Button `role="button"`, links included.
-    for (const link of canvas.getAllByRole("button")) {
+    // Every control here has an `href`, so every one is a link.
+    await expect(canvas.queryAllByRole("button")).toHaveLength(0);
+    for (const link of canvas.getAllByRole("link")) {
       expectInside(link.getBoundingClientRect(), frame);
     }
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Keyboard
+// ---------------------------------------------------------------------------
+
+/** Vitest's real (Playwright) input; absent when Storybook runs the play. */
+interface RealUser {
+  keyboard: (text: string) => Promise<void>;
+}
+const realUser = () =>
+  (globalThis as { __realUserEvent?: RealUser }).__realUserEvent;
+
+/** A role query option, kept out of story-name scans. */
+const named = (accessibleName: string) => ({ name: accessibleName });
+
+const onPageLinkClick = fn();
+const onPageLinkKeyDown = fn();
+const onPreviousClick = fn();
+
+/**
+ * A page link with `href` follows on Enter only, like any link; Space does
+ * nothing. A control without `href` is a native button: Enter and Space both
+ * run `onClick`. The handlers cancel the navigation so the test frame stays.
+ */
+export const Keyboard: Story = {
+  render: () => (
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious onClick={onPreviousClick} />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink
+            href="#page-2"
+            onClick={(event) => {
+              event.preventDefault();
+              onPageLinkClick();
+            }}
+            onKeyDown={() => onPageLinkKeyDown()}
+          >
+            2
+          </PaginationLink>
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const link = canvas.getByRole("link", named("2"));
+    const previous = canvas.getByRole("button", named("Go to previous page"));
+    await expect(link).not.toHaveAttribute("role");
+    await expect(link).not.toHaveAttribute("tabindex");
+    await expect(previous.tagName).toBe("BUTTON");
+
+    const user = realUser();
+    if (!user) {
+      return;
+    }
+    onPageLinkClick.mockClear();
+    onPageLinkKeyDown.mockClear();
+    onPreviousClick.mockClear();
+
+    link.focus();
+    await user.keyboard(" ");
+    // The key reached the link, and still no click.
+    await expect(onPageLinkKeyDown).toHaveBeenCalledTimes(1);
+    await expect(onPageLinkClick).toHaveBeenCalledTimes(0);
+    await user.keyboard("{Enter}");
+    await expect(onPageLinkClick).toHaveBeenCalledTimes(1);
+
+    previous.focus();
+    await user.keyboard("{Enter}");
+    await expect(onPreviousClick).toHaveBeenCalledTimes(1);
+    await user.keyboard(" ");
+    await expect(onPreviousClick).toHaveBeenCalledTimes(2);
   },
 };

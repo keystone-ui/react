@@ -30,6 +30,7 @@ import { flushSync } from "react-dom";
 import { hydrateRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
 import { expect, waitFor, within } from "storybook/test";
+import { outsideVitest } from "./real-browser";
 
 const meta = {
   title: "Components/FilterChips",
@@ -2346,6 +2347,9 @@ export const Motion: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     // The page's own reduced-motion rule zeroes the token the chip reads.
     // Read from the loaded stylesheets rather than by emulating the media
     // query, which would leak into later stories.

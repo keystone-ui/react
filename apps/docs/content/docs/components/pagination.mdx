@@ -19,7 +19,7 @@ import {
 
 ## Usage
 
-For the footer of a paginated data table — rows-per-page, "page N of M" and the four navigation buttons — use [`TablePagination`](/docs/components/table-pagination) instead. `Pagination` is a list of page *links* (`nav > ul > li > a`, with `aria-current="page"`); a data-table footer is a toolbar with an opaque page index and no per-page URLs.
+For the footer of a paginated data table — rows-per-page, "page N of M" and the four navigation buttons — use [`TablePagination`](/docs/components/table-pagination) instead. `Pagination` is a list of page *links*: a page control with a URL renders `nav > ul > li > a`, one without a URL (paging by `onClick`) renders `li > button` with `type="button"`, and the current page carries `aria-current="page"` on either; a data-table footer is a toolbar with an opaque page index and no per-page URLs.
 
 
 <ComponentPreview name="pagination-default" />
@@ -88,6 +88,6 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `href` | `string` | - | Page URL |
+| `href` | `string` | - | Page URL. With it the control is an `<a>` (`li > a`); without it, a `<button type="button">` (`li > button`) that pages by `onClick` |
 | `isActive` | `boolean` | `false` | Whether this is the current page |
 | `className` | `string` | - | Additional CSS classes |

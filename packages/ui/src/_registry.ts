@@ -212,7 +212,7 @@ export const ui: RegistryItem[] = [
   {
     name: "pagination",
     type: "registry:ui",
-    dependencies: ["lucide-react"],
+    dependencies: ["class-variance-authority", "lucide-react"],
     registryDependencies: ["button"],
     files: [{ path: "ui/pagination.tsx", type: "registry:ui" }],
   },

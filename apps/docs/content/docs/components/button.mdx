@@ -104,9 +104,11 @@ Disabled buttons show `opacity-50` and `cursor-not-allowed`, and the press anima
 
 ### As Link
 
-Render a button as an anchor tag with correct semantics:
+A link that should look like a button is a plain `<a>` styled with `buttonVariants`. It stays a link: it is announced as a link and follows on Enter, not on Space. `buttonVariants` takes the same `variant`, `size` and `fullWidth` options as `Button`. It is exported from a client module, so call it in a client component (`"use client"`), as the demo below does:
 
 <ComponentPreview name="button-as-link" />
+
+Don't render an anchor through `Button` (`nativeButton={false} render={<a href="…" />}`): Base UI gives it `role="button"`, so it is announced as a button, and Space follows it.
 
 
 ### Rounded

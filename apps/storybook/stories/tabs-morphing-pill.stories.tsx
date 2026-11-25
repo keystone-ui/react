@@ -39,6 +39,7 @@ import { flushSync } from "react-dom";
 import { hydrateRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
 import { expect } from "storybook/test";
+import { outsideVitest } from "./real-browser";
 import BASE_TRACE from "./tabs-morphing-pill.base-trace.json";
 
 const meta = {
@@ -572,6 +573,9 @@ export const SpanAdjacentLongLabel: Story = {
     />
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -715,6 +719,9 @@ export const CurveStoryLabels: Story = {
     />
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -758,6 +765,9 @@ export const FirstFrame: Story = {
   tags: TEST_ONLY,
   render: () => <Lab id="first" labels={FIXED} />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     try {
@@ -784,6 +794,9 @@ export const Hydration: Story = {
   tags: TEST_ONLY,
   render: () => <div data-testid="ssr" />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     let root: ReturnType<typeof hydrateRoot> | undefined;
@@ -865,6 +878,9 @@ export const NullThenTab: Story = {
   tags: TEST_ONLY,
   render: () => <Lab id="null" labels={FIXED} />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -937,6 +953,9 @@ export const CancelledActivation: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -1003,6 +1022,9 @@ export const ResizeMidGlide: Story = {
   tags: TEST_ONLY,
   render: () => <Lab id="resize" labels={FIXED} />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const root = document.documentElement;
@@ -1039,6 +1061,9 @@ export const RestCleanup: Story = {
   tags: TEST_ONLY,
   render: () => <Lab id="rest" labels={FIXED} />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     try {
@@ -1100,6 +1125,9 @@ export const SourceRemoved: Story = {
   tags: TEST_ONLY,
   render: () => <Lab id="removed" labels={FIXED} />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     try {
@@ -1134,6 +1162,9 @@ export const RightToLeft: Story = {
   tags: TEST_ONLY,
   render: () => <Lab dir="rtl" id="rtl" labels={[60, 20, 90, 15, 46]} />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -1183,6 +1214,9 @@ export const Vertical: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -1234,6 +1268,9 @@ export const ReducedMotion: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const commands = realCommands();
     const clock = manualClock();
@@ -1297,6 +1334,9 @@ export const Interruption: Story = {
   tags: TEST_ONLY,
   render: () => <Lab activateOnFocus id="interrupt" labels={FIXED} />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -1370,6 +1410,9 @@ export const TwoLists: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -1425,6 +1468,9 @@ export const MorphingOff: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     try {
@@ -1470,6 +1516,9 @@ export const ScrolledReel: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -1523,6 +1572,9 @@ export const ScaledAncestor: Story = {
   tags: TEST_ONLY,
   render: () => <Lab id="scaled" labels={FIXED} scale="scale(0.8, 1)" />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -1568,6 +1620,9 @@ export const ChangedWhileHidden: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -1619,6 +1674,9 @@ export const UnmountMidGlide: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const proto = Element.prototype;
@@ -1937,6 +1995,9 @@ export const FirstFrameTabsMoved: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -2107,6 +2168,9 @@ export const LineTabHeightMidGlide: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -2179,6 +2243,9 @@ export const BorderMidGlide: Story = {
     />
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     let failures: string[] = [];
@@ -2233,6 +2300,9 @@ export const ZeroSizeList: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -2301,6 +2371,9 @@ export const AncestorScales: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -2396,6 +2469,9 @@ export const RenderWrapper: Story = {
   tags: TEST_ONLY,
   render: () => <Lab id="wrap" labels={FIXED} wrap />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -2439,6 +2515,9 @@ export const SettledThenUnmounted: Story = {
   tags: TEST_ONLY,
   render: () => <Lab id="settled" labels={FIXED} />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     try {
@@ -2461,6 +2540,9 @@ export const NullMidGlide: Story = {
   tags: TEST_ONLY,
   render: () => <Lab id="null-mid" labels={FIXED} />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const frames = trackPostRender();
@@ -2505,6 +2587,9 @@ export const StaggeredFinish: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -2554,6 +2639,9 @@ export const InterruptionEarly: Story = {
   tags: TEST_ONLY,
   render: () => <Lab id="early" labels={FIXED} />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -2759,6 +2847,9 @@ export const CurveRecordedTrace: Story = {
   tags: TEST_ONLY,
   render: () => <TraceLabs />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     const failures: string[] = [];
@@ -2835,6 +2926,9 @@ export const LayoutStepLongLabel: Story = {
     />
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     await ready();
     const clock = manualClock();
     let failures: string[] = [];

@@ -9,6 +9,7 @@ import {
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { memo, Suspense, use, useEffect, useState } from "react";
 import { expect } from "storybook/test";
+import { outsideVitest } from "./real-browser";
 
 const meta: Meta<typeof Countdown> = {
   title: "Countdown",
@@ -789,6 +790,9 @@ export const ReducedMotion: Story = {
     );
   },
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     const commands = realCommands();
     if (!commands) {
       throw new Error("The reduced-motion command is not available.");
