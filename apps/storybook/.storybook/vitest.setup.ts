@@ -1,5 +1,6 @@
 import * as a11yAddonAnnotations from "@storybook/addon-a11y/preview";
 import { setProjectAnnotations } from "@storybook/react-vite";
+import { afterEach, beforeEach } from "vitest";
 import { commands, page, userEvent } from "vitest/browser";
 import * as previewAnnotations from "./preview";
 
@@ -23,6 +24,28 @@ const _annotations = setProjectAnnotations([
 // A held press (custom commands in vitest.config.ts), for plays that must
 // see `:active` while the pointer is still down. Absent under Storybook.
 (globalThis as { __realCommands?: typeof commands }).__realCommands = commands;
+
+declare module "vitest/browser" {
+  interface BrowserCommands {
+    pointerMoveOffscreen: () => Promise<void>;
+    pointerRelease: () => Promise<boolean>;
+  }
+}
+
+// Every story in a file shares one page and one real mouse. A play that
+// fails or times out between its `pointerDown` and `pointerUp` leaves the
+// button down, and the next story's first move would arrive with
+// `buttons === 1`. Before each story, and again after it, let go of a press
+// `pointerDown` left held: the pointer moves outside the viewport, then the
+// button goes up. When the record holds no press this sends nothing. A
+// release that fails rejects the hook, so the story fails before or after its
+// play instead of starting with the button in an unknown state.
+beforeEach(async () => {
+  await commands.pointerRelease();
+});
+afterEach(async () => {
+  await commands.pointerRelease();
+});
 
 // The tester iframe's size, for plays that must measure a layout at a given
 // viewport width (media queries and `useIsMobile`). Absent under Storybook.
