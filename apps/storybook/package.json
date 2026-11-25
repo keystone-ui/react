@@ -10,6 +10,7 @@
     "clean": "rm -rf .turbo && rm -rf node_modules",
     "test": "vitest run",
     "test-storybook": "vitest run --project=storybook",
+    "probe:reel-retry": "node scripts/reel-guard-retry-probe.mjs",
     "chromatic": "chromatic --exit-zero-on-changes --auto-accept-changes=main",
     "deploy:cf": "wrangler pages deploy storybook-static --project-name=keystoneui-storybook"
   },
