@@ -16,8 +16,12 @@
  *   - Fumadocs demo + registry entry + MDX page
  */
 
+import { randomBytes } from "node:crypto";
 import {
   closeSync,
+  constants,
+  fchmodSync,
+  fchownSync,
   fstatSync,
   ftruncateSync,
   lstatSync,
@@ -26,10 +30,11 @@ import {
   readdirSync,
   readFileSync,
   readSync,
-  statSync,
+  renameSync,
+  unlinkSync,
   writeSync,
 } from "node:fs";
-import { join, relative } from "node:path";
+import { basename, dirname, join, relative } from "node:path";
 
 import { renderLoader, renderManifest } from "./gen-demos.mjs";
 import { demoEntriesFromPaths } from "./lib/demo-entries.mjs";
@@ -140,12 +145,13 @@ const META = "apps/docs/content/docs/components/meta.json";
 // stops the run: guessing would add an entry in the wrong place, or
 // overwrite one.
 
-/** Why a JSON registry cannot be edited; the message is the `Stopped at` reason. */
+/** Why a registry cannot be edited; the message is the `Stopped at` reason. */
 class RegistryShapeError extends Error {}
 
 const UTF8 = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true });
 const JSON_SPACE = /[ \t\n\r]/;
 const LITERAL_END = /[ \t\n\r,\]}]/;
+const CLOSER = { object: "}", array: "]" };
 
 /** Registry bytes as text. Bytes that are not UTF-8 are not JSON. */
 function decodeRegistry(bytes) {
@@ -170,77 +176,96 @@ function stringEnd(source, start) {
  * An object holds `members` (a Map by decoded key), an array `items`;
  * `lastEnd` is where the last child ends, null when there is none. A
  * repeated key is invalid: `JSON.parse` keeps the last value silently, and
- * the first would be lost.
+ * the first would be lost. Open containers live on an explicit stack, so
+ * nesting depth costs memory, not call stack.
  */
 function parseJsonTree(source) {
-  let i = 0;
-  const skipSpace = () => {
-    while (i < source.length && JSON_SPACE.test(source[i])) {
-      i++;
-    }
-  };
-  const readString = () => {
-    const start = i;
-    i = stringEnd(source, i) + 1;
-    return JSON.parse(source.slice(start, i));
-  };
-  const readChildren = (node, close, readChild) => {
-    i++;
-    skipSpace();
-    while (source[i] !== close) {
-      node.lastEnd = readChild().end;
-      skipSpace();
-      if (source[i] === ",") {
-        i++;
-        skipSpace();
+  const cursor = { source, i: 0 };
+  const stack = [];
+  for (;;) {
+    skipSpace(cursor);
+    const parent = stack.at(-1);
+    if (parent && source[cursor.i] === CLOSER[parent.type]) {
+      cursor.i++;
+      parent.end = cursor.i;
+      stack.pop();
+      if (stack.length === 0) {
+        return parent;
+      }
+      stack.at(-1).lastEnd = parent.end;
+    } else if (source[cursor.i] === ",") {
+      cursor.i++;
+    } else {
+      const node = readJsonNode(cursor, parent, stack.length);
+      if (CLOSER[node.type]) {
+        stack.push(node);
+      } else if (parent) {
+        parent.lastEnd = node.end;
+      } else {
+        return node;
       }
     }
-    i++;
-    node.end = i;
-    return node;
-  };
-  const readObject = (depth) => {
-    const members = new Map();
-    const node = { type: "object", start: i, depth, lastEnd: null, members };
-    return readChildren(node, "}", () => {
-      const key = readString();
-      if (members.has(key)) {
-        throw new RegistryShapeError("invalid JSON");
-      }
-      skipSpace();
-      i++;
-      const value = readValue(depth + 1);
-      members.set(key, value);
-      return value;
-    });
-  };
-  const readArray = (depth) => {
-    const node = { type: "array", start: i, depth, lastEnd: null, items: [] };
-    return readChildren(node, "]", () => {
-      const item = readValue(depth + 1);
-      node.items.push(item);
-      return item;
-    });
-  };
-  const readValue = (depth) => {
-    skipSpace();
-    const start = i;
-    if (source[i] === "{") {
-      return readObject(depth);
+  }
+}
+
+function skipSpace(cursor) {
+  while (
+    cursor.i < cursor.source.length &&
+    JSON_SPACE.test(cursor.source[cursor.i])
+  ) {
+    cursor.i++;
+  }
+}
+
+function readJsonString(cursor) {
+  const start = cursor.i;
+  cursor.i = stringEnd(cursor.source, start) + 1;
+  return JSON.parse(cursor.source.slice(start, cursor.i));
+}
+
+/**
+ * One value at the cursor (after its key, inside an object), attached to
+ * `parent`. A container comes back open: its `end` is set when it closes.
+ */
+function readJsonNode(cursor, parent, depth) {
+  let key;
+  if (parent?.type === "object") {
+    key = readJsonString(cursor);
+    if (parent.members.has(key)) {
+      throw new RegistryShapeError("invalid JSON");
     }
-    if (source[i] === "[") {
-      return readArray(depth);
-    }
-    if (source[i] === '"') {
-      const value = readString();
-      return { type: "string", start, end: i, value };
-    }
-    while (i < source.length && !LITERAL_END.test(source[i])) {
-      i++;
-    }
-    return { type: "literal", start, end: i };
-  };
-  return readValue(0);
+    skipSpace(cursor);
+    cursor.i++;
+    skipSpace(cursor);
+  }
+  const node = readJsonValueStart(cursor, depth);
+  if (parent?.type === "object") {
+    parent.members.set(key, node);
+  } else if (parent) {
+    parent.items.push(node);
+  }
+  return node;
+}
+
+function readJsonValueStart(cursor, depth) {
+  const { source } = cursor;
+  const start = cursor.i;
+  const char = source[start];
+  if (char === "{" || char === "[") {
+    cursor.i++;
+    const node = { start, depth, lastEnd: null };
+    return char === "{"
+      ? { ...node, type: "object", members: new Map() }
+      : { ...node, type: "array", items: [] };
+  }
+  if (char === '"') {
+    const value = readJsonString(cursor);
+    return { type: "string", start, end: cursor.i, value };
+  }
+  while (cursor.i < source.length && !LITERAL_END.test(source[cursor.i])) {
+    cursor.i++;
+  }
+  return { type: "literal", start, end: cursor.i };
 }
 
 function parseRegistryJson(source) {
@@ -300,15 +325,47 @@ function inspectMeta(tree, name) {
   };
 }
 
+/** Opens a registry without following a symlink at its path. */
+function openRegistry(path, flags) {
+  try {
+    return openSync(join(ROOT, path), noFollow(flags));
+  } catch (error) {
+    if (error.code === "ELOOP") {
+      throw new RegistryShapeError("symlinked registry", { cause: error });
+    }
+    throw error;
+  }
+}
+
+/** Every byte of `fd`, read positionally from offset zero to EOF. */
+function readToEnd(fd) {
+  const buffer = Buffer.alloc(64 * 1024);
+  const chunks = [];
+  let position = 0;
+  let read;
+  do {
+    read = readSync(fd, buffer, 0, buffer.length, position);
+    chunks.push(Buffer.from(buffer.subarray(0, read)));
+    position += read;
+  } while (read > 0);
+  return Buffer.concat(chunks);
+}
+
 /**
  * Preflight read of one JSON registry: the lines naming why it, or a part of
  * it, cannot be read, beside the collisions it can still show, so the other
  * registries are checked and listed too.
  */
 function readRegistry(path, inspect) {
-  const bytes = readFileSync(join(ROOT, path));
   let found;
   try {
+    const fd = openRegistry(path, constants.O_RDONLY);
+    let bytes;
+    try {
+      bytes = readToEnd(fd);
+    } finally {
+      closeSync(fd);
+    }
     found = inspect(parseRegistryJson(decodeRegistry(bytes)));
   } catch (error) {
     if (error instanceof RegistryShapeError) {
@@ -354,31 +411,224 @@ function memberText(key, value) {
   return `${JSON.stringify(key)}: ${JSON.stringify(value, null, 2)}`;
 }
 
-/**
- * The last check before a JSON registry edit is written: read the descriptor
- * again from offset zero and compare the bytes with those the edit was made
- * from, then check the path still names the open file. A save in place, or
- * a file renamed over the path, since the read stops the run before any
- * write to this registry.
- */
-function verifyJsonSnapshot(path, fd, originalBytes) {
-  const buffer = Buffer.alloc(64 * 1024);
-  const chunks = [];
-  let position = 0;
-  let read;
-  do {
-    read = readSync(fd, buffer, 0, buffer.length, position);
-    chunks.push(Buffer.from(buffer.subarray(0, read)));
-    position += read;
-  } while (read > 0);
-  const changed = new RegistryShapeError("registry changed after the read");
-  if (!Buffer.concat(chunks).equals(originalBytes)) {
-    throw changed;
+// --- Replacing a registry ---
+//
+// A registry is never written in place: a contributor's editor may save it
+// at any moment, and a write or a cut through the scaffold's descriptor
+// would land on top of that save. Instead:
+//
+//  1. Read: open the regular file without following a symlink, pin its
+//     identity and bytes, and compute the edit from those bytes.
+//  2. Stage: write the result to a new sibling file only this run created.
+//  3. Publish: check the registry and the staging file are both still what
+//     this run saw and wrote, then rename the staging file over the
+//     registry. The rename is the last thing this run does to the registry.
+//
+// Usable by any registry whose edit is a function of its text.
+
+const fsError = (code) => Object.assign(new Error(code), { code });
+/** open(2) flags that refuse a symlink at the final path component. */
+function noFollow(flags) {
+  // biome-ignore lint/suspicious/noBitwiseOperators: open(2) flags are a bit set
+  return flags | constants.O_NOFOLLOW;
+}
+
+/** `mode & 07777`: the permission bits, without the file type. */
+function permissionBits(mode) {
+  // biome-ignore lint/suspicious/noBitwiseOperators: st_mode is a bit set
+  return mode & 0o7777n;
+}
+
+/** The parts of a stat that say "same file, same owner, same mode". */
+function identity(stat) {
+  return {
+    dev: stat.dev,
+    ino: stat.ino,
+    uid: stat.uid,
+    gid: stat.gid,
+    mode: stat.mode,
+  };
+}
+
+function sameIdentity(a, b) {
+  return (
+    a.dev === b.dev &&
+    a.ino === b.ino &&
+    a.uid === b.uid &&
+    a.gid === b.gid &&
+    a.mode === b.mode
+  );
+}
+
+/** Step 1: the open, regular registry with its pinned identity and bytes. */
+function pinRegistry(path) {
+  const fd = openRegistry(path, constants.O_RDWR);
+  try {
+    const stat = fstatSync(fd, { bigint: true });
+    if (!stat.isFile()) {
+      throw new Error("not a regular file");
+    }
+    return { fd, pinned: identity(stat), bytes: readToEnd(fd) };
+  } catch (error) {
+    closeQuietly(fd);
+    throw error;
   }
-  const live = statSync(join(ROOT, path), { bigint: true });
-  const own = fstatSync(fd, { bigint: true });
-  if (live.dev !== own.dev || live.ino !== own.ino) {
-    throw changed;
+}
+
+/**
+ * The check just before publishing: the pinned descriptor read again from
+ * offset zero gives the same bytes, and the path still names a file with
+ * the pinned identity, owner and mode. Anything else, including the path
+ * having gone, means someone saved it since the read.
+ */
+function verifyJsonSnapshot(path, fd, snapshot) {
+  const changed = () =>
+    new RegistryShapeError("registry changed after the read");
+  if (!readToEnd(fd).equals(snapshot.bytes)) {
+    throw changed();
+  }
+  let live;
+  try {
+    live = lstatSync(join(ROOT, path), { bigint: true });
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      throw changed();
+    }
+    throw error;
+  }
+  if (!sameIdentity(identity(live), snapshot.pinned)) {
+    throw changed();
+  }
+}
+
+/** Step 2a: an exclusive, private sibling of the registry. */
+function createStaging(path) {
+  const name = `${dirname(path)}/.${basename(path)}.${randomBytes(8).toString("hex")}.tmp`;
+  const fd = openSync(join(ROOT, name), "wx", 0o600);
+  const stat = fstatSync(fd, { bigint: true });
+  return {
+    path: name,
+    fd,
+    dev: stat.dev,
+    ino: stat.ino,
+    mode: 0o600n,
+    written: 0,
+  };
+}
+
+/**
+ * Step 2b: all of `candidate` into the staging file, then the registry's
+ * owner, group and permission bits, set explicitly so the umask plays no
+ * part. A write that makes no progress is an I/O error.
+ */
+function fillStaging(staging, candidate, pinned) {
+  while (staging.written < candidate.length) {
+    const count = writeSync(
+      staging.fd,
+      candidate,
+      staging.written,
+      candidate.length - staging.written,
+      staging.written
+    );
+    if (count === 0) {
+      throw fsError("EIO");
+    }
+    staging.written += count;
+  }
+  const own = fstatSync(staging.fd, { bigint: true });
+  if (own.uid !== pinned.uid || own.gid !== pinned.gid) {
+    fchownSync(staging.fd, Number(pinned.uid), Number(pinned.gid));
+  }
+  fchmodSync(staging.fd, Number(permissionBits(pinned.mode)));
+  staging.mode = permissionBits(pinned.mode);
+  closeSync(staging.fd);
+  staging.fd = undefined;
+}
+
+/**
+ * The staging file as it is now, if it is still the one this run created
+ * holding exactly `expected` with the permissions this run gave it.
+ */
+function stagingIntact(staging, expected, owner) {
+  let fd;
+  try {
+    fd = openSync(join(ROOT, staging.path), noFollow(constants.O_RDONLY));
+    const stat = fstatSync(fd, { bigint: true });
+    return (
+      stat.dev === staging.dev &&
+      stat.ino === staging.ino &&
+      permissionBits(stat.mode) === staging.mode &&
+      (owner === undefined ||
+        (stat.uid === owner.uid && stat.gid === owner.gid)) &&
+      readToEnd(fd).equals(expected)
+    );
+  } catch {
+    return false;
+  } finally {
+    if (fd !== undefined) {
+      closeQuietly(fd);
+    }
+  }
+}
+
+/**
+ * After a stop: remove the staging file only if it is still this run's,
+ * unmodified. Otherwise leave it and list it with the paths this run
+ * created, for the person to look at.
+ */
+function releaseStaging(staging, candidate) {
+  if (staging.fd !== undefined) {
+    closeQuietly(staging.fd);
+    staging.fd = undefined;
+  }
+  if (stagingIntact(staging, candidate.subarray(0, staging.written))) {
+    try {
+      unlinkSync(join(ROOT, staging.path));
+      return;
+    } catch {
+      // Unremovable: reported below.
+    }
+  }
+  created.push(staging.path);
+}
+
+/**
+ * Replaces the registry at `path` with `change(text)`, by the three steps
+ * above. `change` throws a RegistryShapeError to refuse; a refusal is only
+ * reported once the registry is known not to have changed since the read,
+ * since a refusal of bytes someone has already replaced would be wrong.
+ */
+function replaceRegistry(path, change) {
+  let source;
+  let staging;
+  let candidate;
+  try {
+    source = pinRegistry(path);
+    try {
+      candidate = Buffer.from(change(decodeRegistry(source.bytes)));
+    } catch (error) {
+      if (error instanceof RegistryShapeError) {
+        verifyJsonSnapshot(path, source.fd, source);
+      }
+      throw error;
+    }
+    staging = createStaging(path);
+    fillStaging(staging, candidate, source.pinned);
+    verifyJsonSnapshot(path, source.fd, source);
+    if (!stagingIntact(staging, candidate, source.pinned)) {
+      throw new RegistryShapeError("staging file changed");
+    }
+    closeSync(source.fd);
+    source.fd = undefined;
+    renameSync(join(ROOT, staging.path), join(ROOT, path));
+  } catch (error) {
+    if (source?.fd !== undefined) {
+      closeQuietly(source.fd);
+    }
+    if (staging) {
+      releaseStaging(staging, candidate);
+    }
+    stopAt(path, error);
   }
 }
 
@@ -547,10 +797,10 @@ function makeDirectory(path) {
 /**
  * Rewrites a registry file through one descriptor: read it, apply `change`,
  * write back only if the bytes differ. A generated output that is absent is
- * created exclusively instead. A JSON registry (`json`) must be UTF-8 and is
- * checked again just before the write. Returns whether the file changed.
+ * created exclusively instead. Returns whether the file changed. The JSON
+ * registries do not come here: see replaceRegistry().
  */
-function editFile(path, change, { generated = false, json = false } = {}) {
+function editFile(path, change, { generated = false } = {}) {
   let fd;
   try {
     fd = openSync(join(ROOT, path), "r+");
@@ -573,15 +823,11 @@ function editFile(path, change, { generated = false, json = false } = {}) {
     if (!fstatSync(fd).isFile()) {
       throw new Error("not a regular file");
     }
-    const bytes = readFileSync(fd);
-    const source = json ? decodeRegistry(bytes) : bytes.toString("utf-8");
+    const source = readFileSync(fd, "utf-8");
     const next = change(source);
     if (next === source) {
       closeSync(fd);
       return false;
-    }
-    if (json) {
-      verifyJsonSnapshot(path, fd, bytes);
     }
     ftruncateSync(fd, writeAll(fd, next, 0));
     closeSync(fd);
@@ -726,30 +972,26 @@ import { ${pascal} } from "@keystoneui/react/${kebab}";
 
 function addPackageJsonExport(kebab) {
   const key = `./${kebab}`;
-  editFile(
-    PACKAGE,
-    (source) => {
-      const found = inspectPackage(parseRegistryJson(source), kebab);
-      requireEditable(found);
-      const withSource = insertLast(
-        source,
-        found.maps[0],
-        memberText(key, `./src/${kebab}.tsx`)
-      );
-      // Offsets after the first insertion moved, so read the result again.
-      const publishMap = inspectPackage(parseRegistryJson(withSource), kebab)
-        .maps[1];
-      return insertLast(
-        withSource,
-        publishMap,
-        memberText(key, {
-          types: `./dist/${kebab}.d.ts`,
-          default: `./dist/${kebab}.js`,
-        })
-      );
-    },
-    { json: true }
-  );
+  replaceRegistry(PACKAGE, (source) => {
+    const found = inspectPackage(parseRegistryJson(source), kebab);
+    requireEditable(found);
+    const withSource = insertLast(
+      source,
+      found.maps[0],
+      memberText(key, `./src/${kebab}.tsx`)
+    );
+    // Offsets after the first insertion moved, so read the result again.
+    const publishMap = inspectPackage(parseRegistryJson(withSource), kebab)
+      .maps[1];
+    return insertLast(
+      withSource,
+      publishMap,
+      memberText(key, {
+        types: `./dist/${kebab}.d.ts`,
+        default: `./dist/${kebab}.js`,
+      })
+    );
+  });
   console.log(`  ✓ ${PACKAGE} — added export "${key}"`);
 }
 
@@ -835,15 +1077,11 @@ function writeDemoLoader(entries) {
 }
 
 function addToComponentsMetaJson(kebab) {
-  editFile(
-    META,
-    (source) => {
-      const found = inspectMeta(parseRegistryJson(source), kebab);
-      requireEditable(found);
-      return insertLast(source, found.pages, JSON.stringify(kebab));
-    },
-    { json: true }
-  );
+  replaceRegistry(META, (source) => {
+    const found = inspectMeta(parseRegistryJson(source), kebab);
+    requireEditable(found);
+    return insertLast(source, found.pages, JSON.stringify(kebab));
+  });
   console.log(`  ✓ ${META} — added "${kebab}"`);
 }
 

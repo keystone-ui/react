@@ -26,13 +26,18 @@
 import { spawn, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
+  chmodSync,
   existsSync,
+  lstatSync,
   mkdirSync,
   mkdtempSync,
   readdirSync,
   readFileSync,
   realpathSync,
+  renameSync,
   rmSync,
+  statSync,
+  symlinkSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -723,11 +728,14 @@ function stoppedLine(path: string, reason: string) {
   return `Stopped at ${path} (${reason}).`;
 }
 
-/** Runs the scaffold with `action` done just before the `r+` open of `path`. */
+/**
+ * Runs the scaffold with `action` done just before the edit's open of
+ * `path`, matched by access mode: the string "r+" or a numeric O_RDWR open.
+ */
 function runBeforeEdit(repo: string, path: string, action: string) {
   return runHooked(
     repo,
-    `before("openSync", (path, flags) => is(path, ${JSON.stringify(path)}) && flags === "r+", () => {
+    `before("openSync", (path, flags) => is(path, ${JSON.stringify(path)}) && (flags === "r+" || (typeof flags === "number" && (flags & fs.constants.O_RDWR) !== 0)), () => {
 ${action}
 });`
   );
@@ -959,36 +967,189 @@ function trackedRepo() {
 }
 
 /**
- * Runs the scaffold and does `action` once, just before the first positional
- * read at offset 0 of the `r+` descriptor of `path`: the moment after the
- * edit is prepared and before the scaffold writes it.
+ * The named seams of the JSON registry write (spec-json-write.md). Each is a
+ * point in the scaffold's Read, Stage or Publish of `TARGET` where the
+ * preload runs the action once:
+ *  - before-open: before forwarding the edit's O_RDWR open
+ *  - before-first-read: before forwarding the first read of the pinned fd
+ *  - between-chunks: after the first snapshot read returned bytes
+ *  - snapshot-eof: after the snapshot read that returned 0
+ *  - first-staging-write: after the first staging write, forced to 1 byte
+ *  - last-staging-write: after the staging write that completes the bytes
+ *  - staging-close: after the staging file's close
+ *  - before-verify-read: before forwarding the first read at offset 0 of the
+ *    pinned fd after the staging close
+ *  - after-rename: after the native rename onto TARGET, before it returns
+ * `FAIL` injects an error instead: "enospc" fails the staging write after a
+ * one-byte first write, "zero" makes the first staging write report 0
+ * bytes, "rename-eio" fails the rename onto TARGET; "short" only forces the
+ * one-byte first write. The preload records in OUT: `fired` when the action
+ * ran, and `live-writes`, the count of writes and cuts the scaffold made on
+ * the registry's inode (the original one, or the one at the path then).
  */
-function runAtFinalCheck(repo: string, path: string, action: string) {
-  return runHooked(
-    repo,
-    `let target;
-const open = fs.openSync;
-fs.openSync = function (...args) {
-  const fd = open.apply(this, args);
-  if (is(args[0], ${JSON.stringify(path)}) && args[1] === "r+") {
-    target = fd;
-  }
-  return fd;
+const SEAM_PRELOAD = `const { O_RDWR } = fs.constants;
+const { basename, dirname } = await import("node:path");
+let editing = false;
+let done = false;
+let sourceFd;
+let stagingFd;
+let stagingClosed = false;
+let firstRead = true;
+let eofSeen = false;
+let firstStagingWrite = true;
+let liveWrites = 0;
+const origin = real.statSync(at(TARGET), { bigint: true });
+const isEditOpen = (path, flags) =>
+  is(path, TARGET) && typeof flags === "number" && (flags & O_RDWR) !== 0;
+const isStaging = (path) =>
+  dirname(String(path)) === dirname(at(TARGET)) &&
+  basename(String(path)).startsWith("." + basename(TARGET) + ".") &&
+  String(path).endsWith(".tmp");
+const onLiveInode = (fd) => {
+  const own = real.fstatSync(fd, { bigint: true });
+  const now = real.existsSync(at(TARGET)) ? real.lstatSync(at(TARGET), { bigint: true }) : null;
+  return [origin, now].some((s) => s && s.dev === own.dev && s.ino === own.ino);
 };
-before("readSync", (fd, _buffer, _offset, _length, position) => target !== undefined && fd === target && position === 0, () => {
-${action}
-});`
+const act = (seam) => {
+  if (done || seam !== SEAM) return;
+  done = true;
+  editing = true;
+  try {
+    ACTION();
+  } finally {
+    editing = false;
+  }
+  real.writeFileSync(join(OUT, "fired"), SEAM);
+};
+const wrap = (name, wrapper) => {
+  const inner = fs[name];
+  fs[name] = function (...args) {
+    return editing ? inner.apply(this, args) : wrapper.call(this, inner, args);
+  };
+};
+wrap("openSync", function (inner, args) {
+  if (isEditOpen(args[0], args[1])) act("before-open");
+  const fd = inner.apply(this, args);
+  if (isEditOpen(args[0], args[1])) sourceFd = fd;
+  if (isStaging(args[0]) && args[1] === "wx") stagingFd = fd;
+  return fd;
+});
+wrap("readSync", function (inner, args) {
+  const [fd, , , , position] = args;
+  const pinned = sourceFd !== undefined && fd === sourceFd;
+  if (pinned && firstRead) act("before-first-read");
+  if (pinned && stagingClosed && position === 0) act("before-verify-read");
+  const count = inner.apply(this, args);
+  if (pinned && !stagingClosed) {
+    if (firstRead && count > 0) act("between-chunks");
+    if (count === 0 && !eofSeen) {
+      eofSeen = true;
+      act("snapshot-eof");
+    }
+    firstRead = false;
+  }
+  return count;
+});
+wrap("writeSync", function (inner, args) {
+  const [fd, buffer, offset] = args;
+  if (stagingFd === undefined || fd !== stagingFd) {
+    if (onLiveInode(fd)) liveWrites++;
+    return inner.apply(this, args);
+  }
+  const first = firstStagingWrite;
+  firstStagingWrite = false;
+  if (FAIL === "zero" && first) return 0;
+  if (FAIL === "enospc" && !first) fail("ENOSPC");
+  if (first && (SEAM === "first-staging-write" || FAIL === "short" || FAIL === "enospc")) args[3] = 1;
+  const count = inner.apply(this, args);
+  if (first) act("first-staging-write");
+  if (offset + count === buffer.length) act("last-staging-write");
+  return count;
+});
+wrap("ftruncateSync", function (inner, args) {
+  if (onLiveInode(args[0])) liveWrites++;
+  return inner.apply(this, args);
+});
+wrap("closeSync", function (inner, args) {
+  const result = inner.apply(this, args);
+  if (args[0] === sourceFd) sourceFd = undefined;
+  if (stagingFd !== undefined && args[0] === stagingFd) {
+    stagingFd = undefined;
+    stagingClosed = true;
+    act("staging-close");
+  }
+  return result;
+});
+wrap("renameSync", function (inner, args) {
+  if (FAIL === "rename-eio" && is(args[1], TARGET)) fail("EIO");
+  const result = inner.apply(this, args);
+  if (is(args[1], TARGET)) act("after-rename");
+  return result;
+});
+process.on("exit", () => {
+  real.writeFileSync(join(OUT, "live-writes"), String(liveWrites));
+});
+`;
+
+type Seam =
+  | "before-open"
+  | "before-first-read"
+  | "between-chunks"
+  | "snapshot-eof"
+  | "first-staging-write"
+  | "last-staging-write"
+  | "staging-close"
+  | "before-verify-read"
+  | "after-rename"
+  | "none";
+
+/** Runs the scaffold with SEAM_PRELOAD on `path`; `out` holds the preload's records. */
+function runAtSeam(
+  repo: string,
+  path: string,
+  seam: Seam,
+  action = "",
+  fail = ""
+) {
+  const out = tempDir("ks-add-component-out-");
+  const extra = `const TARGET = ${JSON.stringify(path)};
+const SEAM = ${JSON.stringify(seam)};
+const FAIL = ${JSON.stringify(fail)};
+const OUT = ${JSON.stringify(out)};
+`;
+  const hook = hookFile(
+    repo,
+    `const ACTION = () => {\n${action}\n};\n${SEAM_PRELOAD}`,
+    extra
   );
+  const result = spawnSync(
+    process.execPath,
+    ["--import", hook, join(repo, "scripts/add-component.mjs"), PASCAL],
+    { encoding: "utf8", timeout: 30_000 }
+  );
+  return {
+    result,
+    out,
+    fired: existsSync(join(out, "fired")),
+    liveWrites: Number(readFileSync(join(out, "live-writes"), "utf8")),
+    saved: () => readFileSync(join(out, "saved.json"), "utf8"),
+  };
 }
 
-/** Hook source: an editor save of `path`, in place or by rename, to `bytes`. */
-function editorSave(path: string, change: string, how: "in place" | "rename") {
-  return `const saved = (() => {
-  const value = JSON.parse(real.readFileSync(at(${JSON.stringify(path)}), "utf8"));
-  ${change}
-  return JSON.stringify(value, null, 2) + "\\n";
-})();
-real.writeFileSync(at("saved-copy.json"), saved);
+/**
+ * Hook source: an editor save of `path` computed from its current text by
+ * `change` (on `value`), in place or by a sibling renamed over it. The
+ * saved bytes also go to OUT/saved.json.
+ */
+function editorSaveAction(
+  path: string,
+  change: string,
+  how: "in place" | "rename"
+) {
+  return `const value = JSON.parse(real.readFileSync(at(${JSON.stringify(path)}), "utf8"));
+${change}
+const saved = JSON.stringify(value, null, 2) + "\\n";
+real.writeFileSync(join(OUT, "saved.json"), saved);
 ${
   how === "in place"
     ? `real.writeFileSync(at(${JSON.stringify(path)}), saved);`
@@ -997,85 +1158,377 @@ real.renameSync(at(${JSON.stringify(`${path}.editor-tmp`)}), at(${JSON.stringify
 }`;
 }
 
-describe("JSON registries: a save after the read stops the edit (rows 11-14)", () => {
-  it.each([
-    ["in place", '"./saved.js"'],
-    ["in place", "null"],
-    ["rename", '"./saved.js"'],
-  ] as const)(
-    "keeps a package save made %s (%s) and edits nothing after it",
-    (how, value) => {
-      const repo = trackedRepo();
-      const before = snapshot(repo);
+/** Hook source: `bytes` written in place over `path`, and to OUT/saved.json. */
+function installAction(path: string, bytes: Buffer) {
+  return `const bytes = Buffer.from(${JSON.stringify(bytes.toString("base64"))}, "base64");
+real.writeFileSync(join(OUT, "saved.json"), bytes);
+real.writeFileSync(at(${JSON.stringify(path)}), bytes);`;
+}
 
-      const result = runAtFinalCheck(
-        repo,
+/** Seams from snapshot EOF up to the gap (rows 11 to 14). */
+const LATE_SEAMS: Seam[] = [
+  "snapshot-eof",
+  "first-staging-write",
+  "last-staging-write",
+  "staging-close",
+  "before-verify-read",
+];
+const METHODS = ["in place", "rename"] as const;
+const EARLIER_THAN_META = [
+  PACKAGE,
+  "packages/ui/tsup.config.ts",
+  "packages/ui/src/_registry.ts",
+  MANIFEST,
+  LOADER,
+];
+const DRIFT = "registry changed after the read";
+/** An unrelated editor change to each JSON registry. */
+const UNRELATED: Record<string, string> = {
+  [PACKAGE]: `value["x-editor-note"] = "saved by an editor";`,
+  [META]: `value.pages.push("editor-page");`,
+};
+
+function registrations(text: string, path: string) {
+  const key = path === META ? `"${KEBAB}"` : `"./${KEBAB}"`;
+  return text.split(key).length - 1;
+}
+
+/** Every key in the matrix, crossed. */
+function cross<A, B>(as: readonly A[], bs: readonly B[]): [A, B][] {
+  return as.flatMap((a) => bs.map((b): [A, B] => [a, b]));
+}
+
+describe("JSON registries: a save at a late seam stops the publish (rows 11-14)", () => {
+  it.each(
+    cross(cross(LATE_SEAMS, METHODS), ['"./saved.js"', "null"]).map(
+      ([[seam, how], value]) => [seam, how, value] as const
+    )
+  )("row 11/12: package saved at %s, %s, to %s", (seam, how, value) => {
+    const repo = trackedRepo();
+    const before = snapshot(repo);
+
+    const seamRun = runAtSeam(
+      repo,
+      PACKAGE,
+      seam,
+      editorSaveAction(
         PACKAGE,
-        editorSave(
-          PACKAGE,
-          `value.publishConfig.exports["./${KEBAB}"] = ${value};`,
-          how
-        )
-      );
+        `value.publishConfig.exports["./${KEBAB}"] = ${value};`,
+        how
+      )
+    );
 
-      expectLateStop(
-        result,
-        PACKAGE,
-        "registry changed after the read",
-        ALL_FIVE
-      );
-      expect(read(repo, PACKAGE)).toBe(read(repo, "saved-copy.json"));
-      expect(
-        Object.hasOwn(JSON.parse(read(repo, PACKAGE)).exports, `./${KEBAB}`)
-      ).toBe(false);
-      expectTree(before, snapshot(repo), {
-        added: [...ALL_FIVE, "saved-copy.json"],
-        changed: [PACKAGE],
-      });
-    }
-  );
+    expect(seamRun.fired, "the save ran").toBe(true);
+    expect(seamRun.liveWrites, "writes or cuts on the live inode").toBe(0);
+    expectLateStop(seamRun.result, PACKAGE, DRIFT, ALL_FIVE);
+    expect(read(repo, PACKAGE)).toBe(seamRun.saved());
+    const pkg = JSON.parse(read(repo, PACKAGE));
+    expect(Object.hasOwn(pkg.exports, `./${KEBAB}`)).toBe(false);
+    expect(pkg.publishConfig.exports[`./${KEBAB}`]).toEqual(JSON.parse(value));
+    expectTree(before, snapshot(repo), {
+      added: ALL_FIVE,
+      changed: [PACKAGE],
+    });
+  });
 
-  it.each(["in place", "rename"] as const)(
-    "keeps a navigation save made %s, with the earlier registries as a successful run left them",
-    (how) => {
+  it.each(cross(LATE_SEAMS, METHODS))(
+    "row 13/14: navigation saved at %s, %s",
+    (seam, how) => {
       const solo = trackedRepo();
       expect(run(solo, PASCAL).status).toBe(0);
       const repo = trackedRepo();
       const before = snapshot(repo);
 
-      const result = runAtFinalCheck(
+      const seamRun = runAtSeam(
         repo,
         META,
-        editorSave(META, `value.pages.push("editor-page");`, how)
+        seam,
+        editorSaveAction(META, UNRELATED[META], how)
       );
 
-      expectLateStop(result, META, "registry changed after the read", ALL_FIVE);
-      expect(read(repo, META)).toBe(read(repo, "saved-copy.json"));
+      expect(seamRun.fired, "the save ran").toBe(true);
+      expect(seamRun.liveWrites, "writes or cuts on the live inode").toBe(0);
+      expectLateStop(seamRun.result, META, DRIFT, ALL_FIVE);
+      expect(read(repo, META)).toBe(seamRun.saved());
       const pages = JSON.parse(read(repo, META)).pages;
       expect(pages).toContain("editor-page");
       expect(pages).not.toContain(KEBAB);
-      for (const path of [
-        PACKAGE,
-        "packages/ui/tsup.config.ts",
-        "packages/ui/src/_registry.ts",
-        MANIFEST,
-        LOADER,
-      ]) {
+      for (const path of EARLIER_THAN_META) {
         expect(read(repo, path), path).toBe(read(solo, path));
       }
       expectTree(before, snapshot(repo), {
-        added: [...ALL_FIVE, "saved-copy.json"],
-        changed: [
-          PACKAGE,
-          "packages/ui/tsup.config.ts",
-          "packages/ui/src/_registry.ts",
-          MANIFEST,
-          LOADER,
-          META,
-        ],
+        added: ALL_FIVE,
+        changed: [...EARLIER_THAN_META, META],
       });
     }
   );
+});
+
+describe("JSON registries: a save before or during the snapshot (row 15)", () => {
+  // The snapshot sees an in-place save made before the first read, so the
+  // edit merges it. A rename leaves the pinned fd on the old file, and a
+  // save between chunks leaves a snapshot that is neither file: both drift.
+  const cases = [
+    ["before-open", "in place", 0],
+    ["before-open", "rename", 0],
+    ["before-first-read", "in place", 0],
+    ["before-first-read", "rename", 1],
+    ["between-chunks", "in place", 1],
+    ["between-chunks", "rename", 1],
+  ] as const;
+
+  it.each(
+    cross([PACKAGE, META], cases).map(
+      ([path, [seam, how, exit]]) => [path, seam, how, exit] as const
+    )
+  )("%s: unrelated save at %s, %s, exits %s", (path, seam, how, exit) => {
+    const repo = trackedRepo();
+
+    const seamRun = runAtSeam(
+      repo,
+      path,
+      seam,
+      editorSaveAction(path, UNRELATED[path], how)
+    );
+
+    expect(seamRun.fired, "the save ran").toBe(true);
+    expect(seamRun.liveWrites, "writes or cuts on the live inode").toBe(0);
+    const live = read(repo, path);
+    if (exit === 0) {
+      expect(seamRun.result.status, seamRun.result.stderr).toBe(0);
+      expect(seamRun.result.stderr).toBe("");
+      expect(registrations(live, path)).toBe(path === META ? 1 : 2);
+      expect(live).toContain(path === META ? '"editor-page"' : "x-editor-note");
+    } else {
+      expectLateStop(seamRun.result, path, DRIFT, ALL_FIVE);
+      expect(live).toBe(seamRun.saved());
+    }
+  });
+
+  it.each([
+    [PACKAGE, `value.publishConfig.exports["./${KEBAB}"] = "./saved.js";`],
+    [META, `value.pages.push("${KEBAB}");`],
+  ])(
+    "%s: a captured save of the target entry is entry appeared after the check",
+    (path, change) => {
+      const repo = trackedRepo();
+
+      const seamRun = runAtSeam(
+        repo,
+        path,
+        "before-first-read",
+        editorSaveAction(path, change, "in place")
+      );
+
+      expect(seamRun.fired).toBe(true);
+      expectLateStop(
+        seamRun.result,
+        path,
+        "entry appeared after the check",
+        ALL_FIVE
+      );
+      expect(read(repo, path)).toBe(seamRun.saved());
+    }
+  );
+});
+
+describe("JSON registries: staging writes and the rename fail (row 16)", () => {
+  it.each([PACKAGE, META])(
+    "%s: a one-byte first staging write still completes the registration",
+    (path) => {
+      const solo = trackedRepo();
+      expect(run(solo, PASCAL).status).toBe(0);
+      const repo = trackedRepo();
+
+      const seamRun = runAtSeam(repo, path, "none", "", "short");
+
+      expect(seamRun.result.status, seamRun.result.stderr).toBe(0);
+      expect(seamRun.result.stderr).toBe("");
+      expect(read(repo, path)).toBe(read(solo, path));
+    }
+  );
+
+  it.each(
+    cross([PACKAGE, META], [
+      ["enospc", "ENOSPC"],
+      ["zero", "EIO"],
+      ["rename-eio", "EIO"],
+    ] as const).map(([path, [fail, code]]) => [path, fail, code] as const)
+  )("%s: %s stops with %s and keeps the registry", (path, fail, code) => {
+    const solo = trackedRepo();
+    expect(run(solo, PASCAL).status).toBe(0);
+    const repo = trackedRepo();
+    const before = snapshot(repo);
+
+    const seamRun = runAtSeam(repo, path, "none", "", fail);
+
+    expect(seamRun.liveWrites).toBe(0);
+    expectStop(seamRun.result, path, code, ALL_FIVE);
+    const earlier = path === META ? EARLIER_THAN_META : [];
+    for (const other of earlier) {
+      expect(read(repo, other), other).toBe(read(solo, other));
+    }
+    // The registry keeps its bytes; the staging file is gone.
+    expectTree(before, snapshot(repo), { added: ALL_FIVE, changed: earlier });
+  });
+});
+
+describe("JSON registries: a save after the rename is the editor's (row 17)", () => {
+  it.each(cross([PACKAGE, META], METHODS))(
+    "%s: edited %s right after the rename",
+    (path, how) => {
+      const repo = trackedRepo();
+
+      const seamRun = runAtSeam(
+        repo,
+        path,
+        "after-rename",
+        editorSaveAction(path, UNRELATED[path], how)
+      );
+
+      expect(seamRun.fired).toBe(true);
+      expect(seamRun.result.status, seamRun.result.stderr).toBe(0);
+      expect(seamRun.result.stderr).toBe("");
+      expect(read(repo, path)).toBe(seamRun.saved());
+      expect(registrations(seamRun.saved(), path)).toBe(path === META ? 1 : 2);
+    }
+  );
+});
+
+describe("JSON registries: deep nesting (row 18)", () => {
+  const DEPTH = 2048;
+  const nested = (leaf: string) =>
+    `${"[".repeat(DEPTH)}${leaf}${"]".repeat(DEPTH)}`;
+  const document = (path: string, leaf: string) =>
+    Buffer.from(
+      `${path === META ? '{"pages":[],"x":' : '{"exports":{},"publishConfig":{"exports":{}},"x":'}${nested(leaf)}}\n`
+    );
+  const DUPLICATE = '{"dup":0,"\\u0064up":1}';
+
+  it.each(cross([PACKAGE, META], ["preflight", "before-open"] as const))(
+    "%s: 2,048 nested arrays installed at %s are kept and registered",
+    (path, when) => {
+      const repo = trackedRepo();
+      const bytes = document(path, "0");
+      let result: ReturnType<typeof run>;
+      if (when === "preflight") {
+        writeFileSync(join(repo, path), bytes);
+        result = run(repo, PASCAL);
+      } else {
+        const seamRun = runAtSeam(
+          repo,
+          path,
+          "before-open",
+          installAction(path, bytes)
+        );
+        expect(seamRun.fired).toBe(true);
+        result = seamRun.result;
+      }
+
+      expect(result.status, result.stderr).toBe(0);
+      expect(result.stderr).toBe("");
+      const live = read(repo, path);
+      expect(live).toContain(`"x":${nested("0")}}`);
+      expect(registrations(live, path)).toBe(path === META ? 1 : 2);
+      expect(() => JSON.parse(live)).not.toThrow();
+    }
+  );
+
+  it.each([PACKAGE, META])(
+    "%s: a decoded duplicate key deep inside stops preflight with invalid JSON",
+    (path) => {
+      const repo = trackedRepo();
+      const bytes = document(path, DUPLICATE);
+      writeFileSync(join(repo, path), bytes);
+
+      expectRefusal(repo, [stoppedLine(path, "invalid JSON")]);
+      expect(readFileSync(join(repo, path)).equals(bytes)).toBe(true);
+    }
+  );
+
+  it.each([PACKAGE, META])(
+    "%s: a decoded duplicate key deep inside, installed before the edit open, stops late",
+    (path) => {
+      const repo = trackedRepo();
+      const bytes = document(path, DUPLICATE);
+
+      const seamRun = runAtSeam(
+        repo,
+        path,
+        "before-open",
+        installAction(path, bytes)
+      );
+
+      expect(seamRun.fired).toBe(true);
+      expectLateStop(seamRun.result, path, "invalid JSON", ALL_FIVE);
+      expect(readFileSync(join(repo, path)).equals(bytes)).toBe(true);
+    }
+  );
+});
+
+describe("JSON registries: symlinks, modes and the staging file", () => {
+  const REFERENT = "packages/ui/package.real.json";
+  const LINK_ACTION = `real.renameSync(at(${JSON.stringify(PACKAGE)}), at(${JSON.stringify(REFERENT)}));
+real.symlinkSync("package.real.json", at(${JSON.stringify(PACKAGE)}));`;
+
+  it("refuses a symlinked registry in preflight and keeps its referent", () => {
+    const repo = trackedRepo();
+    const bytes = readFileSync(join(repo, PACKAGE));
+    renameSync(join(repo, PACKAGE), join(repo, REFERENT));
+    symlinkSync("package.real.json", join(repo, PACKAGE));
+
+    expectRefusal(repo, [stoppedLine(PACKAGE, "symlinked registry")]);
+    expect(readFileSync(join(repo, REFERENT)).equals(bytes)).toBe(true);
+  });
+
+  it("stops at a registry made a symlink just before the edit open, keeping the referent", () => {
+    const repo = trackedRepo();
+    const bytes = readFileSync(join(repo, PACKAGE));
+
+    const seamRun = runAtSeam(repo, PACKAGE, "before-open", LINK_ACTION);
+
+    expect(seamRun.fired).toBe(true);
+    expectLateStop(seamRun.result, PACKAGE, "symlinked registry", ALL_FIVE);
+    expect(lstatSync(join(repo, PACKAGE)).isSymbolicLink()).toBe(true);
+    expect(readFileSync(join(repo, REFERENT)).equals(bytes)).toBe(true);
+  });
+
+  it.each([PACKAGE, META])(
+    "%s keeps its permission bits through the replacement",
+    (path) => {
+      const repo = trackedRepo();
+      chmodSync(join(repo, path), 0o640);
+
+      const result = run(repo, PASCAL);
+
+      expect(result.status, result.stderr).toBe(0);
+      expect(statSync(join(repo, path)).mode % 0o1_0000).toBe(0o640);
+    }
+  );
+
+  it("keeps and lists a staging file someone edited, and leaves the registry", () => {
+    const repo = trackedRepo();
+    const before = snapshot(repo);
+    const dir = dirname(PACKAGE);
+
+    const seamRun = runAtSeam(
+      repo,
+      PACKAGE,
+      "staging-close",
+      `const name = real.readdirSync(at(${JSON.stringify(dir)})).find((n) => n.startsWith(".package.json.") && n.endsWith(".tmp"));
+real.appendFileSync(at(${JSON.stringify(dir)} + "/" + name), "edited\\n");
+real.writeFileSync(join(OUT, "staging"), ${JSON.stringify(dir)} + "/" + name);`
+    );
+
+    expect(seamRun.fired).toBe(true);
+    const staging = readFileSync(join(seamRun.out, "staging"), "utf8");
+    expectLateStop(seamRun.result, PACKAGE, "staging file changed", [
+      ...ALL_FIVE,
+      staging,
+    ]);
+    expect(read(repo, staging).endsWith("edited\n")).toBe(true);
+    expectTree(before, snapshot(repo), { added: [...ALL_FIVE, staging] });
+  });
 });
 
 const REVIEW_LINE =
