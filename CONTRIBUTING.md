@@ -99,42 +99,7 @@ A file at `apps/docs/demos/my-component/variants.tsx` gets the key `my-component
 
 ### 6. Write MDX documentation
 
-Edit `apps/docs/content/docs/components/my-component.mdx`:
-
-```mdx
----
-title: MyComponent
-description: A brief description of the component.
----
-
-## Import
-
-\`\`\`tsx
-import { MyComponent } from "@keystoneui/react/my-component";
-\`\`\`
-
-## Usage
-
-<ComponentPreview name="my-component-default" />
-
-## Composition
-
-\`\`\`text
-MyComponent
-├── MyComponentHeader
-└── MyComponentContent
-\`\`\`
-
-## Variants
-
-<ComponentPreview name="my-component-variants" />
-
-## API Reference
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `variant` | `"default" \| "outline"` | `"default"` | Visual variant |
-```
+Edit `apps/docs/content/docs/components/my-component.mdx`, following `apps/docs/content/docs/components/_template.mdx`. Keep its section order: frontmatter, `<ComponentPreview name="my-component-default" />`, `## Installation`, `## Usage` (with the import line), `## Composition` for a compound component, `## Examples` with one `###` heading per variant preview, the optional `## RTL`, then `## API Reference`. `pnpm lint:docs` fails the page when `## Installation`, `## Usage` or `## API Reference` is missing, a compound component lacks `## Composition`, or a variant preview sits under its own `##` heading instead of a `###` heading in `## Examples`.
 
 ### 7. LLMs.txt (automatic)
 
@@ -179,7 +144,7 @@ See `.claude/skills/contributing/SKILL.md` → "Adding a New Block" for the full
 |-------------|-----------|-------|-----|
 | **New prop or variant** | Add/update story | Add demo if user-facing | Update API Reference table |
 | **Prop renamed or removed** | Update stories | Update affected demos | Update API Reference table |
-| **New sub-component** | Add stories | Add demo if useful | Add to Import section AND update Composition tree |
+| **New sub-component** | Add stories | Add demo if no existing demo shows it | Update the page's import block AND the Composition tree |
 | **Visual/styling change** | Auto-reflects | Auto-reflects | No change needed |
 | **Bug fix** | Add regression story | No change needed | No change needed |
 | **Description change** | N/A | N/A | Update MDX frontmatter |
@@ -190,7 +155,7 @@ See `.claude/skills/contributing/SKILL.md` → "Adding a New Block" for the full
 2. Update or add Storybook stories
 3. If the change is user-facing:
    - Update relevant demos in `apps/docs/demos/{name}/`
-   - Add new demos for new features
+   - Add a demo for a new feature that no existing demo shows
    - Update the MDX API Reference table
 4. If dependencies changed, update `packages/ui/src/_registry.ts`
 
@@ -198,9 +163,9 @@ See `.claude/skills/contributing/SKILL.md` → "Adding a New Block" for the full
 
 1. Update the component source
 2. Add Storybook stories for the new sub-component
-3. Create a demo showing the sub-component in use
-4. Run `pnpm gen:demos`, then `pnpm gen:static-paths`.
-5. Update the MDX Import section and add a `<ComponentPreview>` for the new demo
+3. If no existing demo shows the sub-component, create one showing it in use
+4. If you created a demo, run `pnpm gen:demos`, then `pnpm gen:static-paths`.
+5. Update the page's import block (under `## Usage` in the template; an older page keeps it under `## Import`), and add a `<ComponentPreview>` under a `###` heading in `## Examples` for any new demo
 6. Update the `## Composition` ASCII tree in the MDX so agents see the new nesting
 
 ### Composition section (compound components)
