@@ -27,12 +27,12 @@ export const ROLES = [
   {
     role: "base",
     storyId: "components-reel--reveal-on-room",
-    name: "N1 Reveal on room",
+    name: "Reveal on room",
   },
   {
     role: "companion",
     storyId: "components-reel--reveal-on-room-restores-counter",
-    name: "N1 Reveal on room restores counter",
+    name: "Reveal on room restores counter",
   },
 ];
 

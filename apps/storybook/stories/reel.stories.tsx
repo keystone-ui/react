@@ -1753,7 +1753,7 @@ function ReselectFixture() {
 // revealed again.
 // `NoDragBack` stays the control for an unrelated update.
 export const RevealReselectedAfterEmpty: Story = {
-  name: "N2 N3 Reveal reselected after empty",
+  name: "Reveal reselected after empty",
   tags: TEST_ONLY,
   render: () => <ReselectFixture />,
   play: async ({ canvasElement }) => {
@@ -1761,7 +1761,7 @@ export const RevealReselectedAfterEmpty: Story = {
     const bar = parts(canvasElement, "bar");
     const a = currentLink(bar.host);
     await eventually(() =>
-      expect(isClear(bar.viewport, a), "N1 first reveal").toBe(true)
+      expect(isClear(bar.viewport, a), "first reveal").toBe(true)
     );
     const held = holdPage(canvasElement);
 
@@ -1777,7 +1777,7 @@ export const RevealReselectedAfterEmpty: Story = {
     await frame();
     await expect(currentLink(bar.host)).toBe(a);
     await eventually(() =>
-      expect(isClear(bar.viewport, a), "N3 same node reselected").toBe(true)
+      expect(isClear(bar.viewport, a), "same node reselected").toBe(true)
     );
     await expectPageHeld(held);
 
@@ -1789,7 +1789,7 @@ export const RevealReselectedAfterEmpty: Story = {
     await expect(bar.viewport.scrollLeft).toBe(0);
     bar.viewport.append(row);
     await eventually(() =>
-      expect(isClear(bar.viewport, a), "N3 N2 row removed, put back").toBe(true)
+      expect(isClear(bar.viewport, a), "row removed, put back").toBe(true)
     );
     await expectPageHeld(held);
   },
@@ -2007,7 +2007,7 @@ async function mountRecorded(canvasElement: HTMLElement, testId: string) {
 // jumps. A hidden Reel whose marker moved reveals the new item when shown,
 // once; so does a Reel squeezed to its own padding when it is widened.
 export const RevealOnRoom: Story = {
-  name: "N1 Reveal on room",
+  name: "Reveal on room",
   tags: TEST_ONLY,
   render: () => (
     <Mounted>
@@ -2123,7 +2123,7 @@ export const RevealOnRoom: Story = {
 
 // Removing the commands makes the room play reject and restore its query counter.
 export const RevealOnRoomRestoresCounter: Story = {
-  name: "N1 Reveal on room restores counter",
+  name: "Reveal on room restores counter",
   tags: TEST_ONLY,
   render: RevealOnRoom.render,
   play: async (context) => {
@@ -2218,7 +2218,7 @@ function MixedMarkersFixture() {
 // current wins, so `data-selected="false"` and `aria-current="FALSE"` lose to
 // the distant selected chip, and the later current link loses to it too.
 export const RevealFirstMatch: Story = {
-  name: "N2 Reveal first match",
+  name: "Reveal first match",
   tags: TEST_ONLY,
   render: () => (
     <Mounted>
@@ -2262,7 +2262,7 @@ export const RevealFirstMatch: Story = {
 // A, then no match, then the same A, each in its own delivery: a new
 // selection, revealed again (smoothly: the first reveal was spent at mount).
 export const RevealSameAfterNone: Story = {
-  name: "N3 Reveal same after none",
+  name: "Reveal same after none",
   tags: TEST_ONLY,
   render: () => (
     <Mounted>
@@ -2304,7 +2304,7 @@ export const RevealSameAfterNone: Story = {
 // A current item already clear at mount spends the first reveal with no
 // request; the next selection follows the motion preference.
 export const FirstRevealSpentWhenClear: Story = {
-  name: "N4 First reveal spent when clear",
+  name: "First reveal spent when clear",
   tags: TEST_ONLY,
   render: () => (
     <Mounted>
@@ -2359,7 +2359,7 @@ export const FirstRevealSpentWhenClear: Story = {
 // again by a later delivery: shown, moved into a new row, or the Reel
 // resized. The next different match is revealed, and it is the first reveal.
 export const SameMatchNotRetried: Story = {
-  name: "N5 Same match not retried",
+  name: "Same match not retried",
   tags: TEST_ONLY,
   render: () => (
     <Mounted>
@@ -2430,7 +2430,7 @@ export const SameMatchNotRetried: Story = {
 // No busy state: a selection made while the row is still moving (Reel's
 // own glide, or an arrow's page) replaces that scroll and ends clear.
 export const SelectionWhileMoving: Story = {
-  name: "N6 Selection while moving",
+  name: "Selection while moving",
   tags: TEST_ONLY,
   render: () => (
     <Mounted>
@@ -2508,7 +2508,7 @@ export const SelectionWhileMoving: Story = {
 
 // A selection already clear leaves the scroll alone: no request at all.
 export const ClearSelectionNoRequest: Story = {
-  name: "N7 Clear selection no request",
+  name: "Clear selection no request",
   tags: TEST_ONLY,
   render: () => (
     <Mounted>
@@ -2546,7 +2546,7 @@ export const ClearSelectionNoRequest: Story = {
 // mutation observer and one size observer of the reveal, beside the edges'
 // own; unmounted while hidden, by none.
 export const ObserversReleased: Story = {
-  name: "N8 Observers released",
+  name: "Observers released",
   tags: TEST_ONLY,
   render: () => (
     <Mounted>
