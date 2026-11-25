@@ -946,6 +946,219 @@ real.writeFileSync(at(${JSON.stringify(PACKAGE)}), JSON.stringify(pkg, null, 2) 
   });
 });
 
+const MANIFEST = "apps/docs/demos/manifest.json";
+const LOADER = "apps/docs/demos/loader.tsx";
+
+/** A scratch tree that also holds the checked-in manifest and loader. */
+function trackedRepo() {
+  const repo = scratchRepo();
+  for (const path of [MANIFEST, LOADER]) {
+    writeFileSync(join(repo, path), readFileSync(join(REPO_ROOT, path)));
+  }
+  return repo;
+}
+
+/**
+ * Runs the scaffold and does `action` once, just before the first positional
+ * read at offset 0 of the `r+` descriptor of `path`: the moment after the
+ * edit is prepared and before the scaffold writes it.
+ */
+function runAtFinalCheck(repo: string, path: string, action: string) {
+  return runHooked(
+    repo,
+    `let target;
+const open = fs.openSync;
+fs.openSync = function (...args) {
+  const fd = open.apply(this, args);
+  if (is(args[0], ${JSON.stringify(path)}) && args[1] === "r+") {
+    target = fd;
+  }
+  return fd;
+};
+before("readSync", (fd, _buffer, _offset, _length, position) => target !== undefined && fd === target && position === 0, () => {
+${action}
+});`
+  );
+}
+
+/** Hook source: an editor save of `path`, in place or by rename, to `bytes`. */
+function editorSave(path: string, change: string, how: "in place" | "rename") {
+  return `const saved = (() => {
+  const value = JSON.parse(real.readFileSync(at(${JSON.stringify(path)}), "utf8"));
+  ${change}
+  return JSON.stringify(value, null, 2) + "\\n";
+})();
+real.writeFileSync(at("saved-copy.json"), saved);
+${
+  how === "in place"
+    ? `real.writeFileSync(at(${JSON.stringify(path)}), saved);`
+    : `real.writeFileSync(at(${JSON.stringify(`${path}.editor-tmp`)}), saved);
+real.renameSync(at(${JSON.stringify(`${path}.editor-tmp`)}), at(${JSON.stringify(path)}));`
+}`;
+}
+
+describe("JSON registries: a save after the read stops the edit (rows 11-14)", () => {
+  it.each([
+    ["in place", '"./saved.js"'],
+    ["in place", "null"],
+    ["rename", '"./saved.js"'],
+  ] as const)(
+    "keeps a package save made %s (%s) and edits nothing after it",
+    (how, value) => {
+      const repo = trackedRepo();
+      const before = snapshot(repo);
+
+      const result = runAtFinalCheck(
+        repo,
+        PACKAGE,
+        editorSave(
+          PACKAGE,
+          `value.publishConfig.exports["./${KEBAB}"] = ${value};`,
+          how
+        )
+      );
+
+      expectLateStop(
+        result,
+        PACKAGE,
+        "registry changed after the read",
+        ALL_FIVE
+      );
+      expect(read(repo, PACKAGE)).toBe(read(repo, "saved-copy.json"));
+      expect(
+        Object.hasOwn(JSON.parse(read(repo, PACKAGE)).exports, `./${KEBAB}`)
+      ).toBe(false);
+      expectTree(before, snapshot(repo), {
+        added: [...ALL_FIVE, "saved-copy.json"],
+        changed: [PACKAGE],
+      });
+    }
+  );
+
+  it.each(["in place", "rename"] as const)(
+    "keeps a navigation save made %s, with the earlier registries as a successful run left them",
+    (how) => {
+      const solo = trackedRepo();
+      expect(run(solo, PASCAL).status).toBe(0);
+      const repo = trackedRepo();
+      const before = snapshot(repo);
+
+      const result = runAtFinalCheck(
+        repo,
+        META,
+        editorSave(META, `value.pages.push("editor-page");`, how)
+      );
+
+      expectLateStop(result, META, "registry changed after the read", ALL_FIVE);
+      expect(read(repo, META)).toBe(read(repo, "saved-copy.json"));
+      const pages = JSON.parse(read(repo, META)).pages;
+      expect(pages).toContain("editor-page");
+      expect(pages).not.toContain(KEBAB);
+      for (const path of [
+        PACKAGE,
+        "packages/ui/tsup.config.ts",
+        "packages/ui/src/_registry.ts",
+        MANIFEST,
+        LOADER,
+      ]) {
+        expect(read(repo, path), path).toBe(read(solo, path));
+      }
+      expectTree(before, snapshot(repo), {
+        added: [...ALL_FIVE, "saved-copy.json"],
+        changed: [
+          PACKAGE,
+          "packages/ui/tsup.config.ts",
+          "packages/ui/src/_registry.ts",
+          MANIFEST,
+          LOADER,
+          META,
+        ],
+      });
+    }
+  );
+});
+
+const REVIEW_LINE =
+  '  "x-review": {"label": true, "10": "ten", "2": "two", "id": 9007199254740993, "bound": 1e400},';
+
+describe("JSON registries: the edit changes nothing but the new entry", () => {
+  it.each([PACKAGE, META])(
+    "keeps member order and number text in %s",
+    (path) => {
+      const solo = scratchRepo();
+      expect(run(solo, PASCAL).status).toBe(0);
+      const repo = scratchRepo();
+      edit(repo, path, (source) =>
+        source.replace("{\n", `{\n${REVIEW_LINE}\n`)
+      );
+
+      const result = run(repo, PASCAL);
+
+      expect(result.status, result.stderr).toBe(0);
+      const after = read(repo, path);
+      expect(after).toContain(`\n${REVIEW_LINE}\n`);
+      expect(after.replace(`${REVIEW_LINE}\n`, "")).toBe(read(solo, path));
+    }
+  );
+});
+
+describe("JSON registries: bytes that are not UTF-8", () => {
+  const META_BYTES = Buffer.concat([
+    Buffer.from('{"pages":["caf'),
+    Buffer.from([0xe9]),
+    Buffer.from('"]}\n'),
+  ]);
+  const PACKAGE_BYTES = Buffer.concat([
+    Buffer.from('{"exports":{},"publishConfig":{"exports":{}},"x":"caf'),
+    Buffer.from([0xe9]),
+    Buffer.from('"}\n'),
+  ]);
+
+  it.each([
+    [META, META_BYTES],
+    [PACKAGE, PACKAGE_BYTES],
+  ] as const)("refuses %s in preflight and keeps its bytes", (path, bytes) => {
+    const repo = scratchRepo();
+    writeFileSync(join(repo, path), bytes);
+
+    expectRefusal(repo, [stoppedLine(path, "invalid JSON")]);
+    expect(readFileSync(join(repo, path)).equals(bytes)).toBe(true);
+  });
+
+  it("stops when meta.json turns invalid just before its edit, keeping its bytes", () => {
+    const repo = trackedRepo();
+
+    const result = runBeforeEdit(
+      repo,
+      META,
+      `real.writeFileSync(at(${JSON.stringify(META)}), Buffer.from(${JSON.stringify([...META_BYTES])}));`
+    );
+
+    expectLateStop(result, META, "invalid JSON", ALL_FIVE);
+    expect(readFileSync(join(repo, META)).equals(META_BYTES)).toBe(true);
+  });
+});
+
+describe("JSON registries: one malformed export map does not hide the other's entry", () => {
+  it.each([
+    [
+      '{"exports":{"./scaffold-probe":null},"publishConfig":{}}\n',
+      "expected publishConfig.exports object",
+      `${PACKAGE}: exports "./${KEBAB}"`,
+    ],
+    [
+      '{"exports":[],"publishConfig":{"exports":{"./scaffold-probe":null}}}\n',
+      "expected exports object",
+      `${PACKAGE}: publishConfig.exports "./${KEBAB}"`,
+    ],
+  ])("reports both for %s", (content, reason, collision) => {
+    const repo = scratchRepo();
+    put(repo, PACKAGE, content);
+
+    expectRefusal(repo, [stoppedLine(PACKAGE, reason), collision]);
+  });
+});
+
 describe("a new name", () => {
   it("creates the four files and the registry entries, with nothing on stderr", () => {
     const repo = scratchRepo();

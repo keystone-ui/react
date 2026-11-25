@@ -25,6 +25,8 @@ import {
   openSync,
   readdirSync,
   readFileSync,
+  readSync,
+  statSync,
   writeSync,
 } from "node:fs";
 import { join, relative } from "node:path";
@@ -107,9 +109,7 @@ function findCollisions(name) {
   );
 
   collisions.push(
-    ...readRegistry(PACKAGE, (source) =>
-      packageCollisions(readPackage(source), name)
-    )
+    ...readRegistry(PACKAGE, (tree) => inspectPackage(tree, name))
   );
 
   const tsup = readFileSync(join(UI_DIR, "tsup.config.ts"), "utf-8");
@@ -122,11 +122,7 @@ function findCollisions(name) {
     collisions.push(`packages/ui/src/_registry.ts: entry name: "${name}"`);
   }
 
-  collisions.push(
-    ...readRegistry(META, (source) =>
-      readMeta(source).pages.includes(name) ? [`${META}: pages "${name}"`] : []
-    )
-  );
+  collisions.push(...readRegistry(META, (tree) => inspectMeta(tree, name)));
 
   return collisions;
 }
@@ -137,15 +133,27 @@ const META = "apps/docs/content/docs/components/meta.json";
 
 // --- JSON registries ---
 //
-// Read by their fields, never by text search. A registry that does not have
-// the shape the scaffold edits stops the run: guessing would add an entry in
-// the wrong place, or overwrite one.
+// Read by their fields, never by text search, and edited by inserting the
+// new entry as text, so the rest of the document keeps its bytes: a parse
+// and stringify of the whole file would move integer-like keys first and
+// round numbers. A registry that does not have the shape the scaffold edits
+// stops the run: guessing would add an entry in the wrong place, or
+// overwrite one.
 
-/** A registry whose content cannot be read by its fields; the message is the reason. */
+/** Why a JSON registry cannot be edited; the message is the `Stopped at` reason. */
 class RegistryShapeError extends Error {}
 
-function isPlainObject(value) {
-  return value !== null && typeof value === "object" && !Array.isArray(value);
+const UTF8 = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true });
+const JSON_SPACE = /[ \t\n\r]/;
+const LITERAL_END = /[ \t\n\r,\]}]/;
+
+/** Registry bytes as text. Bytes that are not UTF-8 are not JSON. */
+function decodeRegistry(bytes) {
+  try {
+    return UTF8.decode(bytes);
+  } catch (error) {
+    throw new RegistryShapeError("invalid JSON", { cause: error });
+  }
 }
 
 /** Index of the quote that closes the JSON string opening at `start`. */
@@ -157,109 +165,220 @@ function stringEnd(source, start) {
   return i;
 }
 
-/** Records an object key (its JSON string token); false if already seen. */
-function addKey(frame, token) {
-  const key = JSON.parse(token);
-  if (frame.keys.has(key)) {
-    return false;
-  }
-  frame.keys.add(key);
-  frame.expectKey = false;
-  return true;
-}
-
 /**
- * Whether a source that `JSON.parse` accepted repeats a key inside one
- * object. `JSON.parse` keeps the last value silently, so the first would be
- * lost on the rewrite. One frame per open object (`null` for an array).
+ * A document `JSON.parse` accepted, as nodes that keep their source offsets.
+ * An object holds `members` (a Map by decoded key), an array `items`;
+ * `lastEnd` is where the last child ends, null when there is none. A
+ * repeated key is invalid: `JSON.parse` keeps the last value silently, and
+ * the first would be lost.
  */
-function hasDuplicateKey(source) {
-  const frames = [];
-  for (let i = 0; i < source.length; i++) {
-    const char = source[i];
-    const frame = frames.at(-1);
-    if (char === "{" || char === "[") {
-      frames.push(char === "{" ? { keys: new Set(), expectKey: true } : null);
-    } else if (char === "}" || char === "]") {
-      frames.pop();
-    } else if (char === "," && frame) {
-      frame.expectKey = true;
-    } else if (char === '"') {
-      const end = stringEnd(source, i);
-      if (frame?.expectKey && !addKey(frame, source.slice(i, end + 1))) {
-        return true;
-      }
-      i = end;
+function parseJsonTree(source) {
+  let i = 0;
+  const skipSpace = () => {
+    while (i < source.length && JSON_SPACE.test(source[i])) {
+      i++;
     }
-  }
-  return false;
+  };
+  const readString = () => {
+    const start = i;
+    i = stringEnd(source, i) + 1;
+    return JSON.parse(source.slice(start, i));
+  };
+  const readChildren = (node, close, readChild) => {
+    i++;
+    skipSpace();
+    while (source[i] !== close) {
+      node.lastEnd = readChild().end;
+      skipSpace();
+      if (source[i] === ",") {
+        i++;
+        skipSpace();
+      }
+    }
+    i++;
+    node.end = i;
+    return node;
+  };
+  const readObject = (depth) => {
+    const members = new Map();
+    const node = { type: "object", start: i, depth, lastEnd: null, members };
+    return readChildren(node, "}", () => {
+      const key = readString();
+      if (members.has(key)) {
+        throw new RegistryShapeError("invalid JSON");
+      }
+      skipSpace();
+      i++;
+      const value = readValue(depth + 1);
+      members.set(key, value);
+      return value;
+    });
+  };
+  const readArray = (depth) => {
+    const node = { type: "array", start: i, depth, lastEnd: null, items: [] };
+    return readChildren(node, "]", () => {
+      const item = readValue(depth + 1);
+      node.items.push(item);
+      return item;
+    });
+  };
+  const readValue = (depth) => {
+    skipSpace();
+    const start = i;
+    if (source[i] === "{") {
+      return readObject(depth);
+    }
+    if (source[i] === "[") {
+      return readArray(depth);
+    }
+    if (source[i] === '"') {
+      const value = readString();
+      return { type: "string", start, end: i, value };
+    }
+    while (i < source.length && !LITERAL_END.test(source[i])) {
+      i++;
+    }
+    return { type: "literal", start, end: i };
+  };
+  return readValue(0);
 }
 
 function parseRegistryJson(source) {
-  let value;
   try {
-    value = JSON.parse(source);
+    JSON.parse(source);
   } catch (error) {
     throw new RegistryShapeError("invalid JSON", { cause: error });
   }
-  if (hasDuplicateKey(source)) {
-    throw new RegistryShapeError("invalid JSON");
-  }
-  return value;
+  return parseJsonTree(source);
 }
 
-/** packages/ui/package.json, with both export maps required to be objects. */
-function readPackage(source) {
-  const pkg = parseRegistryJson(source);
-  if (!isPlainObject(pkg?.exports)) {
-    throw new RegistryShapeError("expected exports object");
-  }
-  if (!isPlainObject(pkg.publishConfig?.exports)) {
-    throw new RegistryShapeError("expected publishConfig.exports object");
-  }
-  return pkg;
-}
-
-/** A key counts as taken even when it holds `null`. */
-function packageCollisions(pkg, name) {
-  const key = `./${name}`;
-  const collisions = [];
-  if (Object.hasOwn(pkg.exports, key)) {
-    collisions.push(`${PACKAGE}: exports "${key}"`);
-  }
-  if (Object.hasOwn(pkg.publishConfig.exports, key)) {
-    collisions.push(`${PACKAGE}: publishConfig.exports "${key}"`);
-  }
-  return collisions;
-}
-
-/** apps/docs/content/docs/components/meta.json, with `pages` all strings. */
-function readMeta(source) {
-  const meta = parseRegistryJson(source);
-  if (
-    !(
-      Array.isArray(meta?.pages) &&
-      meta.pages.every((page) => typeof page === "string")
-    )
-  ) {
-    throw new RegistryShapeError("expected pages array of strings");
-  }
-  return meta;
+function member(node, key) {
+  return node?.type === "object" ? node.members.get(key) : undefined;
 }
 
 /**
- * Preflight read of one registry. Its collisions, or the line naming why it
- * cannot be read, so the other registries are still checked and listed.
+ * Both export maps of packages/ui/package.json, each checked on its own: a
+ * map that is not an object gives its reason, and the other map's collision
+ * is still reported. A key counts as taken even when it holds `null`.
  */
-function readRegistry(path, check) {
-  const source = readFileSync(join(ROOT, path), "utf-8");
+function inspectPackage(tree, name) {
+  const key = `./${name}`;
+  const maps = [
+    ["exports", member(tree, "exports")],
+    ["publishConfig.exports", member(member(tree, "publishConfig"), "exports")],
+  ];
+  const reasons = [];
+  const collisions = [];
+  for (const [field, node] of maps) {
+    if (node?.type !== "object") {
+      reasons.push(`expected ${field} object`);
+    } else if (node.members.has(key)) {
+      collisions.push(`${PACKAGE}: ${field} "${key}"`);
+    }
+  }
+  return { maps: maps.map(([, node]) => node), reasons, collisions };
+}
+
+/** apps/docs/content/docs/components/meta.json, with `pages` all strings. */
+function inspectMeta(tree, name) {
+  const pages = member(tree, "pages");
+  if (
+    pages?.type !== "array" ||
+    !pages.items.every((item) => item.type === "string")
+  ) {
+    return {
+      pages,
+      reasons: ["expected pages array of strings"],
+      collisions: [],
+    };
+  }
+  const taken = pages.items.some((item) => item.value === name);
+  return {
+    pages,
+    reasons: [],
+    collisions: taken ? [`${META}: pages "${name}"`] : [],
+  };
+}
+
+/**
+ * Preflight read of one JSON registry: the lines naming why it, or a part of
+ * it, cannot be read, beside the collisions it can still show, so the other
+ * registries are checked and listed too.
+ */
+function readRegistry(path, inspect) {
+  const bytes = readFileSync(join(ROOT, path));
+  let found;
   try {
-    return check(source);
+    found = inspect(parseRegistryJson(decodeRegistry(bytes)));
   } catch (error) {
     if (error instanceof RegistryShapeError) {
       return [`Stopped at ${path} (${error.message}).`];
     }
     throw error;
+  }
+  return [
+    ...found.reasons.map((reason) => `Stopped at ${path} (${reason}).`),
+    ...found.collisions,
+  ];
+}
+
+/**
+ * The edit's own reading of a registry: a shape reason stops it, and so does
+ * the entry already being there (someone saved it after the check, and the
+ * save is theirs to keep).
+ */
+function requireEditable(found) {
+  if (found.reasons.length > 0) {
+    throw new RegistryShapeError(found.reasons[0]);
+  }
+  if (found.collisions.length > 0) {
+    throw new RegistryShapeError("entry appeared after the check");
+  }
+}
+
+/**
+ * `source` with `text` added as the last child of `node`, laid out the way
+ * `JSON.stringify(…, null, 2)` lays out a child at that depth.
+ */
+function insertLast(source, node, text) {
+  const inner = "  ".repeat(node.depth + 1);
+  const entry = text.split("\n").join(`\n${inner}`);
+  if (node.lastEnd === null) {
+    const outer = "  ".repeat(node.depth);
+    return `${source.slice(0, node.start + 1)}\n${inner}${entry}\n${outer}${source.slice(node.end - 1)}`;
+  }
+  return `${source.slice(0, node.lastEnd)},\n${inner}${entry}${source.slice(node.lastEnd)}`;
+}
+
+function memberText(key, value) {
+  return `${JSON.stringify(key)}: ${JSON.stringify(value, null, 2)}`;
+}
+
+/**
+ * The last check before a JSON registry edit is written: read the descriptor
+ * again from offset zero and compare the bytes with those the edit was made
+ * from, then check the path still names the open file. A save in place, or
+ * a file renamed over the path, since the read stops the run before any
+ * write to this registry.
+ */
+function verifyJsonSnapshot(path, fd, originalBytes) {
+  const buffer = Buffer.alloc(64 * 1024);
+  const chunks = [];
+  let position = 0;
+  let read;
+  do {
+    read = readSync(fd, buffer, 0, buffer.length, position);
+    chunks.push(Buffer.from(buffer.subarray(0, read)));
+    position += read;
+  } while (read > 0);
+  const changed = new RegistryShapeError("registry changed after the read");
+  if (!Buffer.concat(chunks).equals(originalBytes)) {
+    throw changed;
+  }
+  const live = statSync(join(ROOT, path), { bigint: true });
+  const own = fstatSync(fd, { bigint: true });
+  if (live.dev !== own.dev || live.ino !== own.ino) {
+    throw changed;
   }
 }
 
@@ -428,9 +547,10 @@ function makeDirectory(path) {
 /**
  * Rewrites a registry file through one descriptor: read it, apply `change`,
  * write back only if the bytes differ. A generated output that is absent is
- * created exclusively instead. Returns whether the file changed.
+ * created exclusively instead. A JSON registry (`json`) must be UTF-8 and is
+ * checked again just before the write. Returns whether the file changed.
  */
-function editFile(path, change, { generated = false } = {}) {
+function editFile(path, change, { generated = false, json = false } = {}) {
   let fd;
   try {
     fd = openSync(join(ROOT, path), "r+");
@@ -453,11 +573,15 @@ function editFile(path, change, { generated = false } = {}) {
     if (!fstatSync(fd).isFile()) {
       throw new Error("not a regular file");
     }
-    const source = readFileSync(fd, "utf-8");
+    const bytes = readFileSync(fd);
+    const source = json ? decodeRegistry(bytes) : bytes.toString("utf-8");
     const next = change(source);
     if (next === source) {
       closeSync(fd);
       return false;
+    }
+    if (json) {
+      verifyJsonSnapshot(path, fd, bytes);
     }
     ftruncateSync(fd, writeAll(fd, next, 0));
     closeSync(fd);
@@ -600,29 +724,33 @@ import { ${pascal} } from "@keystoneui/react/${kebab}";
 // order the main block calls them. A registry that already holds the entry
 // is left byte-for-byte as it is.
 
-/**
- * Thrown inside an edit when the registry, read again through the edit's own
- * descriptor, already holds the entry: someone saved it after the check, and
- * the save is theirs to keep.
- */
-function appearedAfterCheck() {
-  return new RegistryShapeError("entry appeared after the check");
-}
-
 function addPackageJsonExport(kebab) {
-  editFile(PACKAGE, (source) => {
-    const pkg = readPackage(source);
-    if (packageCollisions(pkg, kebab).length > 0) {
-      throw appearedAfterCheck();
-    }
-    pkg.exports[`./${kebab}`] = `./src/${kebab}.tsx`;
-    pkg.publishConfig.exports[`./${kebab}`] = {
-      types: `./dist/${kebab}.d.ts`,
-      default: `./dist/${kebab}.js`,
-    };
-    return `${JSON.stringify(pkg, null, 2)}\n`;
-  });
-  console.log(`  ✓ ${PACKAGE} — added export "./${kebab}"`);
+  const key = `./${kebab}`;
+  editFile(
+    PACKAGE,
+    (source) => {
+      const found = inspectPackage(parseRegistryJson(source), kebab);
+      requireEditable(found);
+      const withSource = insertLast(
+        source,
+        found.maps[0],
+        memberText(key, `./src/${kebab}.tsx`)
+      );
+      // Offsets after the first insertion moved, so read the result again.
+      const publishMap = inspectPackage(parseRegistryJson(withSource), kebab)
+        .maps[1];
+      return insertLast(
+        withSource,
+        publishMap,
+        memberText(key, {
+          types: `./dist/${kebab}.d.ts`,
+          default: `./dist/${kebab}.js`,
+        })
+      );
+    },
+    { json: true }
+  );
+  console.log(`  ✓ ${PACKAGE} — added export "${key}"`);
 }
 
 function addTsupEntry(kebab) {
@@ -707,14 +835,15 @@ function writeDemoLoader(entries) {
 }
 
 function addToComponentsMetaJson(kebab) {
-  editFile(META, (source) => {
-    const meta = readMeta(source);
-    if (meta.pages.includes(kebab)) {
-      throw appearedAfterCheck();
-    }
-    meta.pages.push(kebab);
-    return `${JSON.stringify(meta, null, 2)}\n`;
-  });
+  editFile(
+    META,
+    (source) => {
+      const found = inspectMeta(parseRegistryJson(source), kebab);
+      requireEditable(found);
+      return insertLast(source, found.pages, JSON.stringify(kebab));
+    },
+    { json: true }
+  );
   console.log(`  ✓ ${META} — added "${kebab}"`);
 }
 
