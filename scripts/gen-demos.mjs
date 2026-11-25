@@ -17,7 +17,12 @@
  * The naming rule lives in scripts/lib/demo-entries.mjs.
  */
 
-import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  readdirSync,
+  readFileSync,
+  realpathSync,
+  writeFileSync,
+} from "node:fs";
 import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -42,12 +47,12 @@ function withoutExtension(file) {
   return file.replace(/\.tsx$/, "");
 }
 
-function renderManifest(entries) {
+export function renderManifest(entries) {
   const manifest = Object.fromEntries(entries.map((e) => [e.key, e.file]));
   return `${JSON.stringify(manifest, null, 2)}\n`;
 }
 
-function renderLoader(entries) {
+export function renderLoader(entries) {
   const lines = entries.map(
     (e) =>
       `  "${e.key}": dynamic(() =>
@@ -142,4 +147,11 @@ function main() {
   );
 }
 
-main();
+// Imported by scripts/add-component.mjs for the renderers; regenerate only
+// when run as a script.
+if (
+  process.argv[1] &&
+  realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
+  main();
+}
