@@ -34,7 +34,6 @@ import { demoEntriesFromPaths } from "./lib/demo-entries.mjs";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
 const UI_DIR = join(ROOT, "packages/ui");
-const DOCS_DIR = join(ROOT, "apps/docs");
 
 // --- Name utilities ---
 
@@ -107,17 +106,11 @@ function findCollisions(name) {
     ...duplicateDemoKeys([...demoFiles(), `${name}/default.tsx`])
   );
 
-  const pkg = JSON.parse(readFileSync(join(UI_DIR, "package.json"), "utf-8"));
-  const exportKey = `./${name}`;
-  if (pkg.exports && Object.hasOwn(pkg.exports, exportKey)) {
-    collisions.push(`packages/ui/package.json: exports "${exportKey}"`);
-  }
-  const published = pkg.publishConfig?.exports;
-  if (published && Object.hasOwn(published, exportKey)) {
-    collisions.push(
-      `packages/ui/package.json: publishConfig.exports "${exportKey}"`
-    );
-  }
+  collisions.push(
+    ...readRegistry(PACKAGE, (source) =>
+      packageCollisions(readPackage(source), name)
+    )
+  );
 
   const tsup = readFileSync(join(UI_DIR, "tsup.config.ts"), "utf-8");
   if (tsup.includes(`"src/${name}.tsx"`)) {
@@ -129,19 +122,146 @@ function findCollisions(name) {
     collisions.push(`packages/ui/src/_registry.ts: entry name: "${name}"`);
   }
 
-  const meta = JSON.parse(
-    readFileSync(join(DOCS_DIR, "content/docs/components/meta.json"), "utf-8")
+  collisions.push(
+    ...readRegistry(META, (source) =>
+      readMeta(source).pages.includes(name) ? [`${META}: pages "${name}"`] : []
+    )
   );
-  if (meta.pages.includes(name)) {
-    collisions.push(
-      `apps/docs/content/docs/components/meta.json: pages "${name}"`
-    );
-  }
 
   return collisions;
 }
 
 const DEMOS = "apps/docs/demos";
+const PACKAGE = "packages/ui/package.json";
+const META = "apps/docs/content/docs/components/meta.json";
+
+// --- JSON registries ---
+//
+// Read by their fields, never by text search. A registry that does not have
+// the shape the scaffold edits stops the run: guessing would add an entry in
+// the wrong place, or overwrite one.
+
+/** A registry whose content cannot be read by its fields; the message is the reason. */
+class RegistryShapeError extends Error {}
+
+function isPlainObject(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+/** Index of the quote that closes the JSON string opening at `start`. */
+function stringEnd(source, start) {
+  let i = start + 1;
+  while (source[i] !== '"') {
+    i += source[i] === "\\" ? 2 : 1;
+  }
+  return i;
+}
+
+/** Records an object key (its JSON string token); false if already seen. */
+function addKey(frame, token) {
+  const key = JSON.parse(token);
+  if (frame.keys.has(key)) {
+    return false;
+  }
+  frame.keys.add(key);
+  frame.expectKey = false;
+  return true;
+}
+
+/**
+ * Whether a source that `JSON.parse` accepted repeats a key inside one
+ * object. `JSON.parse` keeps the last value silently, so the first would be
+ * lost on the rewrite. One frame per open object (`null` for an array).
+ */
+function hasDuplicateKey(source) {
+  const frames = [];
+  for (let i = 0; i < source.length; i++) {
+    const char = source[i];
+    const frame = frames.at(-1);
+    if (char === "{" || char === "[") {
+      frames.push(char === "{" ? { keys: new Set(), expectKey: true } : null);
+    } else if (char === "}" || char === "]") {
+      frames.pop();
+    } else if (char === "," && frame) {
+      frame.expectKey = true;
+    } else if (char === '"') {
+      const end = stringEnd(source, i);
+      if (frame?.expectKey && !addKey(frame, source.slice(i, end + 1))) {
+        return true;
+      }
+      i = end;
+    }
+  }
+  return false;
+}
+
+function parseRegistryJson(source) {
+  let value;
+  try {
+    value = JSON.parse(source);
+  } catch (error) {
+    throw new RegistryShapeError("invalid JSON", { cause: error });
+  }
+  if (hasDuplicateKey(source)) {
+    throw new RegistryShapeError("invalid JSON");
+  }
+  return value;
+}
+
+/** packages/ui/package.json, with both export maps required to be objects. */
+function readPackage(source) {
+  const pkg = parseRegistryJson(source);
+  if (!isPlainObject(pkg?.exports)) {
+    throw new RegistryShapeError("expected exports object");
+  }
+  if (!isPlainObject(pkg.publishConfig?.exports)) {
+    throw new RegistryShapeError("expected publishConfig.exports object");
+  }
+  return pkg;
+}
+
+/** A key counts as taken even when it holds `null`. */
+function packageCollisions(pkg, name) {
+  const key = `./${name}`;
+  const collisions = [];
+  if (Object.hasOwn(pkg.exports, key)) {
+    collisions.push(`${PACKAGE}: exports "${key}"`);
+  }
+  if (Object.hasOwn(pkg.publishConfig.exports, key)) {
+    collisions.push(`${PACKAGE}: publishConfig.exports "${key}"`);
+  }
+  return collisions;
+}
+
+/** apps/docs/content/docs/components/meta.json, with `pages` all strings. */
+function readMeta(source) {
+  const meta = parseRegistryJson(source);
+  if (
+    !(
+      Array.isArray(meta?.pages) &&
+      meta.pages.every((page) => typeof page === "string")
+    )
+  ) {
+    throw new RegistryShapeError("expected pages array of strings");
+  }
+  return meta;
+}
+
+/**
+ * Preflight read of one registry. Its collisions, or the line naming why it
+ * cannot be read, so the other registries are still checked and listed.
+ */
+function readRegistry(path, check) {
+  const source = readFileSync(join(ROOT, path), "utf-8");
+  try {
+    return check(source);
+  } catch (error) {
+    if (error instanceof RegistryShapeError) {
+      return [`Stopped at ${path} (${error.message}).`];
+    }
+    throw error;
+  }
+}
 
 /**
  * Every file under apps/docs/demos, relative and POSIX-separated, walked the
@@ -480,26 +600,29 @@ import { ${pascal} } from "@keystoneui/react/${kebab}";
 // order the main block calls them. A registry that already holds the entry
 // is left byte-for-byte as it is.
 
+/**
+ * Thrown inside an edit when the registry, read again through the edit's own
+ * descriptor, already holds the entry: someone saved it after the check, and
+ * the save is theirs to keep.
+ */
+function appearedAfterCheck() {
+  return new RegistryShapeError("entry appeared after the check");
+}
+
 function addPackageJsonExport(kebab) {
-  const added = editFile("packages/ui/package.json", (source) => {
-    const pkg = JSON.parse(source);
-    if (pkg.exports[`./${kebab}`]) {
-      return source;
+  editFile(PACKAGE, (source) => {
+    const pkg = readPackage(source);
+    if (packageCollisions(pkg, kebab).length > 0) {
+      throw appearedAfterCheck();
     }
     pkg.exports[`./${kebab}`] = `./src/${kebab}.tsx`;
-    if (pkg.publishConfig?.exports) {
-      pkg.publishConfig.exports[`./${kebab}`] = {
-        types: `./dist/${kebab}.d.ts`,
-        default: `./dist/${kebab}.js`,
-      };
-    }
+    pkg.publishConfig.exports[`./${kebab}`] = {
+      types: `./dist/${kebab}.d.ts`,
+      default: `./dist/${kebab}.js`,
+    };
     return `${JSON.stringify(pkg, null, 2)}\n`;
   });
-  console.log(
-    added
-      ? `  ✓ packages/ui/package.json — added export "./${kebab}"`
-      : "  ⊘ package.json export already exists"
-  );
+  console.log(`  ✓ ${PACKAGE} — added export "./${kebab}"`);
 }
 
 function addTsupEntry(kebab) {
@@ -584,22 +707,15 @@ function writeDemoLoader(entries) {
 }
 
 function addToComponentsMetaJson(kebab) {
-  const added = editFile(
-    "apps/docs/content/docs/components/meta.json",
-    (source) => {
-      const meta = JSON.parse(source);
-      if (meta.pages.includes(kebab)) {
-        return source;
-      }
-      meta.pages.push(kebab);
-      return `${JSON.stringify(meta, null, 2)}\n`;
+  editFile(META, (source) => {
+    const meta = readMeta(source);
+    if (meta.pages.includes(kebab)) {
+      throw appearedAfterCheck();
     }
-  );
-  console.log(
-    added
-      ? `  ✓ apps/docs/content/docs/components/meta.json — added "${kebab}"`
-      : `  ⊘ components/meta.json already includes "${kebab}"`
-  );
+    meta.pages.push(kebab);
+    return `${JSON.stringify(meta, null, 2)}\n`;
+  });
+  console.log(`  ✓ ${META} — added "${kebab}"`);
 }
 
 // --- Main ---

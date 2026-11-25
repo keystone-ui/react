@@ -715,6 +715,237 @@ before("writeSync", (fd) => fd === storyFd, () => fail("ENOSPC"));`
   });
 });
 
+const PACKAGE = "packages/ui/package.json";
+const META = "apps/docs/content/docs/components/meta.json";
+
+/** `Stopped at <path> (<reason>).`, the line for an unusable registry. */
+function stoppedLine(path: string, reason: string) {
+  return `Stopped at ${path} (${reason}).`;
+}
+
+/** Runs the scaffold with `action` done just before the `r+` open of `path`. */
+function runBeforeEdit(repo: string, path: string, action: string) {
+  return runHooked(
+    repo,
+    `before("openSync", (path, flags) => is(path, ${JSON.stringify(path)}) && flags === "r+", () => {
+${action}
+});`
+  );
+}
+
+/** A late stop: exit 1, the reason, the created list, never "Nothing was written.". */
+function expectLateStop(
+  result: { status: number | null; stderr: string },
+  path: string,
+  reason: string,
+  created: string[]
+) {
+  expect(result.status, result.stderr).toBe(1);
+  expect(result.stderr).toContain(stoppedLine(path, reason));
+  expect(result.stderr).toContain(createdLine(created));
+  expect(result.stderr).not.toContain("Nothing was written.");
+}
+
+describe("JSON registries: read by their fields", () => {
+  // Row 1. A key holding `null` is still a key: the edit must not take it.
+  it.each([
+    ["exports", (pkg: Record<string, any>) => pkg.exports],
+    [
+      "publishConfig.exports",
+      (pkg: Record<string, any>) => pkg.publishConfig.exports,
+    ],
+  ] as const)('refuses %s "./scaffold-probe": null', (field, map) => {
+    const repo = scratchRepo();
+    editJson(repo, PACKAGE, (pkg) => {
+      map(pkg)[`./${KEBAB}`] = null;
+    });
+
+    expectRefusal(repo, [`${PACKAGE}: ${field} "./${KEBAB}"`]);
+  });
+
+  // Row 2. A registry the scaffold cannot read by its fields stops the run
+  // before anything is written, with the file and the reason.
+  it.each([
+    [
+      "publishConfig.exports deleted",
+      (repo: string) =>
+        editJson(repo, PACKAGE, (pkg) => {
+          // JSON.stringify drops the undefined member.
+          pkg.publishConfig.exports = undefined;
+        }),
+      PACKAGE,
+      "expected publishConfig.exports object",
+    ],
+    [
+      "exports deleted",
+      (repo: string) =>
+        editJson(repo, PACKAGE, (pkg) => {
+          // JSON.stringify drops the undefined member.
+          pkg.exports = undefined;
+        }),
+      PACKAGE,
+      "expected exports object",
+    ],
+    [
+      "pages set to a string",
+      (repo: string) =>
+        editJson(repo, META, (meta) => {
+          meta.pages = KEBAB;
+        }),
+      META,
+      "expected pages array of strings",
+    ],
+    [
+      "package.json is just {",
+      (repo: string) => put(repo, PACKAGE, "{"),
+      PACKAGE,
+      "invalid JSON",
+    ],
+    [
+      "meta.json is just {",
+      (repo: string) => put(repo, META, "{"),
+      META,
+      "invalid JSON",
+    ],
+    [
+      "package.json has a duplicate key",
+      (repo: string) =>
+        edit(repo, PACKAGE, (source) =>
+          source.replace(
+            '"exports": {',
+            '"exports": {\n    "./a": "./x.js",\n    "./a": "./y.js",'
+          )
+        ),
+      PACKAGE,
+      "invalid JSON",
+    ],
+  ] as const)(
+    "stops on %s, naming the file and the reason",
+    (_label, arrange, path, reason) => {
+      const repo = scratchRepo();
+      arrange(repo);
+
+      expectRefusal(repo, [stoppedLine(path, reason)]);
+    }
+  );
+
+  it("still lists the collisions it can read beside an unreadable registry", () => {
+    const repo = scratchRepo();
+    put(repo, PACKAGE, "{");
+    COLLISIONS.story.arrange(repo);
+    COLLISIONS["meta.json entry"].arrange(repo);
+
+    expectRefusal(repo, [
+      stoppedLine(PACKAGE, "invalid JSON"),
+      FILES.story,
+      COLLISIONS["meta.json entry"].reported,
+    ]);
+  });
+
+  // Row 3. An entry saved after the check is the contributor's: the run
+  // stops before its own edit, and the saved value survives.
+  it.each([
+    ["publishConfig.exports", '"./saved.js"'],
+    ["exports", "null"],
+  ] as const)(
+    "stops when %s gains the entry just before the package edit, keeping the save",
+    (field, value) => {
+      const repo = scratchRepo();
+      const before = snapshot(repo);
+
+      const result = runBeforeEdit(
+        repo,
+        PACKAGE,
+        `const pkg = JSON.parse(real.readFileSync(at(${JSON.stringify(PACKAGE)}), "utf8"));
+${field === "exports" ? "pkg.exports" : "pkg.publishConfig.exports"}["./${KEBAB}"] = ${value};
+real.writeFileSync(at(${JSON.stringify(PACKAGE)}), JSON.stringify(pkg, null, 2) + "\\n");
+real.writeFileSync(at("saved-package.json"), JSON.stringify(pkg, null, 2) + "\\n");`
+      );
+
+      expectLateStop(
+        result,
+        PACKAGE,
+        "entry appeared after the check",
+        ALL_FIVE
+      );
+      expect(read(repo, PACKAGE)).toBe(read(repo, "saved-package.json"));
+      expectTree(before, snapshot(repo), {
+        added: [...ALL_FIVE, "saved-package.json"],
+        changed: [PACKAGE],
+      });
+    }
+  );
+
+  it("stops when publishConfig.exports is deleted just before the package edit, keeping the save", () => {
+    const repo = scratchRepo();
+    const before = snapshot(repo);
+
+    const result = runBeforeEdit(
+      repo,
+      PACKAGE,
+      `const pkg = JSON.parse(real.readFileSync(at(${JSON.stringify(PACKAGE)}), "utf8"));
+delete pkg.publishConfig.exports;
+real.writeFileSync(at(${JSON.stringify(PACKAGE)}), JSON.stringify(pkg, null, 2) + "\\n");
+real.writeFileSync(at("saved-package.json"), JSON.stringify(pkg, null, 2) + "\\n");`
+    );
+
+    expectLateStop(
+      result,
+      PACKAGE,
+      "expected publishConfig.exports object",
+      ALL_FIVE
+    );
+    expect(read(repo, PACKAGE)).toBe(read(repo, "saved-package.json"));
+    expectTree(before, snapshot(repo), {
+      added: [...ALL_FIVE, "saved-package.json"],
+      changed: [PACKAGE],
+    });
+  });
+
+  it("stops when meta.json gains the page just before its edit, keeping the save", () => {
+    const repo = scratchRepo();
+
+    const result = runBeforeEdit(
+      repo,
+      META,
+      `const meta = JSON.parse(real.readFileSync(at(${JSON.stringify(META)}), "utf8"));
+meta.pages.unshift("${KEBAB}");
+real.writeFileSync(at(${JSON.stringify(META)}), JSON.stringify(meta, null, 2) + "\\n");
+real.writeFileSync(at("saved-meta.json"), JSON.stringify(meta, null, 2) + "\\n");`
+    );
+
+    // The manifest and loader were absent in the scratch tree, so this run
+    // created them exclusively before it reached meta.json.
+    expectLateStop(result, META, "entry appeared after the check", [
+      ...ALL_FIVE,
+      "apps/docs/demos/manifest.json",
+      "apps/docs/demos/loader.tsx",
+    ]);
+    expect(read(repo, META)).toBe(read(repo, "saved-meta.json"));
+  });
+
+  it("keeps a save to another key that lands just before the package edit", () => {
+    const repo = scratchRepo();
+
+    const result = runBeforeEdit(
+      repo,
+      PACKAGE,
+      `const pkg = JSON.parse(real.readFileSync(at(${JSON.stringify(PACKAGE)}), "utf8"));
+pkg.publishConfig.exports["./saved"] = "./saved.js";
+real.writeFileSync(at(${JSON.stringify(PACKAGE)}), JSON.stringify(pkg, null, 2) + "\\n");`
+    );
+
+    expect(result.status, result.stderr).toBe(0);
+    const pkg = JSON.parse(read(repo, PACKAGE));
+    expect(pkg.publishConfig.exports["./saved"]).toBe("./saved.js");
+    expect(pkg.exports[`./${KEBAB}`]).toBe(`./src/${KEBAB}.tsx`);
+    expect(pkg.publishConfig.exports[`./${KEBAB}`]).toEqual({
+      types: `./dist/${KEBAB}.d.ts`,
+      default: `./dist/${KEBAB}.js`,
+    });
+  });
+});
+
 describe("a new name", () => {
   it("creates the four files and the registry entries, with nothing on stderr", () => {
     const repo = scratchRepo();
