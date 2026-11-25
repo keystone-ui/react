@@ -330,7 +330,7 @@
       "scrollable-content"
     ],
     "native-select": ["field", "field-example", "form", "opaque-options"],
-    "pagination": ["worst-case"],
+    "pagination": ["keyboard", "worst-case"],
     "popover": ["basic", "with-close"],
     "popup origin": [
       "combobox-origin",

@@ -1,6 +1,9 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src/strings-exact-optional-types.test.tsx"],
+  "include": [
+    "src/strings-exact-optional-types.test.tsx",
+    "src/pagination-exact-optional-types.test.tsx"
+  ],
   "compilerOptions": {
     "noEmit": true,
     "declaration": false,
