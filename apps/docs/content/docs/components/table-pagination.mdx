@@ -3,24 +3,7 @@ title: Table Pagination
 description: The footer of a paginated data table — rows selected, rows per page, which page, and the four navigation buttons.
 ---
 
-## Import
-
-```tsx
-import {
-  TablePagination,
-  TablePaginationButtons,
-  TablePaginationControls,
-  TablePaginationInfo,
-  TablePaginationPageSize,
-  TablePaginationStatus,
-} from "@keystoneui/react/table-pagination";
-```
-
-## Usage
-
 <ComponentPreview name="table-pagination-default" />
-
-This is deliberately **not** [`Pagination`](/docs/components/pagination). That component is a list of page *links* — `nav > ul > li > a`, with `aria-current="page"` — which is right when every page has its own URL. A data-table footer is a toolbar over an opaque page index: no per-page URLs, `aria-live` instead of `aria-current`, and a dependency on `Select` and `Label`. Merging the two would drag Base UI's Select into every bundle that only wanted page links.
 
 ## Installation
 
@@ -35,6 +18,21 @@ pnpm add @keystoneui/react@beta
 ```
 
 </CodeBlockTabs>
+
+## Usage
+
+```tsx
+import {
+  TablePagination,
+  TablePaginationButtons,
+  TablePaginationControls,
+  TablePaginationInfo,
+  TablePaginationPageSize,
+  TablePaginationStatus,
+} from "@keystoneui/react/table-pagination";
+```
+
+This is deliberately **not** [`Pagination`](/docs/components/pagination). That component is a list of page *links* — `nav > ul > li > a`, with `aria-current="page"` — which is right when every page has its own URL. A data-table footer is a toolbar over an opaque page index: no per-page URLs, `aria-live` instead of `aria-current`, and a dependency on `Select` and `Label`. Merging the two would drag Base UI's Select into every bundle that only wanted page links.
 
 ## Composition
 

@@ -3,14 +3,6 @@ title: TagGroup
 description: Managed group of tags with add and remove capabilities for multi-value selection.
 ---
 
-## Import
-
-```tsx
-import { TagGroup, TagGroupItem } from "@keystoneui/react/tag-group";
-```
-
-## Usage
-
 <ComponentPreview name="tag-group-default" />
 
 ## Installation
@@ -42,6 +34,22 @@ pnpm add @keystoneui/react@beta @base-ui/react
 </div>
 
 </CodeBlockTabs>
+
+## Usage
+
+```tsx
+import { TagGroup, TagGroupItem } from "@keystoneui/react/tag-group";
+```
+
+```tsx
+<TagGroup defaultValue={["fitness", "parking"]} multiple>
+  <TagGroupItem value="laundry">Laundry</TagGroupItem>
+  <TagGroupItem value="fitness">Fitness center</TagGroupItem>
+  <TagGroupItem value="parking">Parking</TagGroupItem>
+  <TagGroupItem value="pool">Swimming pool</TagGroupItem>
+  <TagGroupItem value="breakfast">Breakfast</TagGroupItem>
+</TagGroup>
+```
 
 ## Composition
 

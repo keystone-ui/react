@@ -3,14 +3,6 @@ title: Calendar
 description: Interactive date calendar for browsing and selecting dates by month.
 ---
 
-## Import
-
-```tsx
-import { Calendar } from "@keystoneui/react/calendar";
-```
-
-## Usage
-
 <ComponentPreview name="calendar-default" />
 
 ## Installation
@@ -44,6 +36,19 @@ pnpm add @keystoneui/react@beta @base-ui/react
 </CodeBlockTabs>
 
 To open a Calendar in a popup from a button or a text field, see [Date Picker](/docs/components/date-picker).
+
+## Usage
+
+```tsx
+import { Calendar } from "@keystoneui/react/calendar";
+```
+
+```tsx
+<Calendar
+  className="rounded-lg shadow-lg ring-1 ring-popup-ring"
+  mode="single"
+/>
+```
 
 ## Examples
 

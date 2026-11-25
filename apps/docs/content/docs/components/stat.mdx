@@ -3,17 +3,7 @@ title: Stat
 description: The headline number of a metric and its change, with colour derived from what the metric means rather than from the sign of the delta.
 ---
 
-## Import
-
-```tsx
-import { deltaTone, StatDelta, StatValue } from "@keystoneui/react/stat";
-```
-
-## Usage
-
 <ComponentPreview name="stat-default" />
-
-Stat is deliberately two parts plus a helper. It has no root of its own and no surface: a KPI tile is a [Card](/docs/components/card) with a label, a number and a change, and [`Card`](/docs/components/card) already provides the surface system — giving Stat its own would duplicate it, and you would have two answers to "how do I get an outline KPI row?".
 
 ## Installation
 
@@ -28,6 +18,14 @@ pnpm add @keystoneui/react@beta
 ```
 
 </CodeBlockTabs>
+
+## Usage
+
+```tsx
+import { deltaTone, StatDelta, StatValue } from "@keystoneui/react/stat";
+```
+
+Stat is deliberately two parts plus a helper. It has no root of its own and no surface: a KPI tile is a [Card](/docs/components/card) with a label, a number and a change, and [`Card`](/docs/components/card) already provides the surface system — giving Stat its own would duplicate it, and you would have two answers to "how do I get an outline KPI row?".
 
 ## Composition
 

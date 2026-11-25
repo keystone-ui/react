@@ -3,14 +3,6 @@ title: Avatar
 description: User avatar displaying a profile image with a text or icon fallback.
 ---
 
-## Import
-
-```tsx
-import { Avatar, AvatarImage, AvatarFallback, AvatarGroup } from "@keystoneui/react/avatar";
-```
-
-## Usage
-
 <ComponentPreview name="avatar-default" />
 
 ## Installation
@@ -42,6 +34,22 @@ pnpm add @keystoneui/react@beta @base-ui/react
 </div>
 
 </CodeBlockTabs>
+
+## Usage
+
+```tsx
+import { Avatar, AvatarImage, AvatarFallback, AvatarGroup } from "@keystoneui/react/avatar";
+```
+
+```tsx
+<Avatar>
+  <AvatarImage
+    alt="@shadcn"
+    src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=face"
+  />
+  <AvatarFallback>CN</AvatarFallback>
+</Avatar>
+```
 
 ## Composition
 

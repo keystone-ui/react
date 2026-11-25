@@ -3,24 +3,7 @@ title: Tag
 description: Removable label element for displaying categories, filters, or selections.
 ---
 
-## Import
-
-```tsx
-import { Tag, TagRemove } from "@keystoneui/react/tag";
-```
-
-## Usage
-
 <ComponentPreview name="tag-default" />
-
-```tsx
-<Tag value="react">React</Tag>
-
-// Removable: pass the remove button as `remove`
-<Tag remove={<TagRemove onClick={() => removeTag("react")} />} value="react">
-  React
-</Tag>
-```
 
 ## Installation
 
@@ -51,6 +34,21 @@ pnpm add @keystoneui/react@beta @base-ui/react
 </div>
 
 </CodeBlockTabs>
+
+## Usage
+
+```tsx
+import { Tag, TagRemove } from "@keystoneui/react/tag";
+```
+
+```tsx
+<Tag value="react">React</Tag>
+
+// Removable: pass the remove button as `remove`
+<Tag remove={<TagRemove onClick={() => removeTag("react")} />} value="react">
+  React
+</Tag>
+```
 
 ## Composition
 
