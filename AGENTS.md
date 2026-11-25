@@ -155,12 +155,12 @@ Run the scaffolding command:
 pnpm add:component MyComponent
 ```
 
-This creates all files (component, story, demo, MDX page) and updates all registries. Then follow the **Storybook-first** workflow:
+The scaffold creates the component, story, default demo and MDX page. It updates the package exports, tsup entry, `_registry.ts` and docs navigation. It regenerates `apps/docs/demos/manifest.json` and `apps/docs/demos/loader.tsx`. The new docs page and standalone preview return 404 until `pnpm gen:static-paths` refreshes `apps/docs/lib/static-paths.json`. Then follow the **Storybook-first** workflow:
 
 1. Implement the component in `packages/ui/src/`
 2. Write Storybook stories (primary development surface)
 3. Create simplified Fumadocs demos (3-6 per component)
-4. Register demos in `apps/docs/demos/index.ts`
+4. Run `pnpm gen:demos`, then `pnpm gen:static-paths`. These commands regenerate `apps/docs/demos/manifest.json`, `apps/docs/demos/loader.tsx` and `apps/docs/lib/static-paths.json`. Never hand-edit these files.
 5. Write MDX documentation with `<ComponentPreview>` tags
 6. LLMs.txt endpoints update automatically (no manual step)
 
@@ -203,7 +203,7 @@ Blocks are full-page or feature-level compositions registered as `registry:block
 
 - `name`, `type: "registry:block"`, `title`, `description`
 - `dependencies` (npm) and `registryDependencies` (other registry items it pulls)
-- `files[]` with **per-file types** — use `registry:page` (with `target` like `app/<slug>/page.tsx`) for the entry point, `registry:component` for everything else
+- Give each `files[]` entry a type. Use `registry:component` for components. For a page, use `registry:page` with a `target` such as `app/<slug>/page.tsx`.
 - **`categories: [...]`** — at least one. Mirrors shadcn's taxonomy where it overlaps; current categories in use:
   - `authentication`, `login`, `signup` — sign-in / sign-up flows (mirrors shadcn)
   - `navigation` — user menus, dropdowns, sidebars
@@ -212,12 +212,24 @@ Blocks are full-page or feature-level compositions registered as `registry:block
   - `admin` — admin panels and app shells
   - `betting` — betting/wager UI (keystone-specific)
   - When inventing a new category, prefer single-word lowercase that mirrors shadcn naming where possible
-- `pnpm sync:registry` warns if any block is missing `categories`
-- The installable copy under `registry/default/blocks/<name>/components/` is **generated** by `pnpm sync:blocks` from the demo — never hand-edit it. `pnpm lint:docs` runs `--check` and fails on drift. Only `page.tsx` is hand-written. Single-file blocks (`apps/docs/demos/blocks/<name>.tsx`: sign-in, sign-up, profile-dropdown, betting-panel) are generated too: the demo's default-exported preview shell is dropped, the component it renders is exported by name, and the result is written to the block's one `registry:component` path in `registry.json`. So a single-file demo must end in `export default function …` rendering a component declared in the same file.
+- `pnpm registry:sync` warns if any block is missing `categories`
+- The installable copy under `registry/default/blocks/<name>/components/` is **generated** by `pnpm sync:blocks` from the demo — never hand-edit it. `pnpm lint:docs` runs `--check` and fails on drift. Single-file blocks (`apps/docs/demos/blocks/<name>.tsx`: sign-in, sign-up, profile-dropdown, betting-panel) are generated too: the demo's default-exported preview shell is dropped, the component it renders is exported by name, and the result is written to the block's one `registry:component` path in `registry.json`. So a single-file demo must end in `export default function …` rendering a component declared in the same file.
 
 **Discoverability via categories**: `keystoneui blocks --category authentication` (CLI) and `search_components({ type: "block", category: "authentication" })` (MCP) both filter by category. Kits (`registry:component` items taken from a block, such as `sidebar` and `filter-pills`) are not blocks: `keystoneui list --type kit` and `list_components({ type: "kit" })` list them, and their `meta.keystoneui` in `registry.json` (`docs`, `partOf`, and for a package flavour `flavourOf` plus an optional documented `minPackageVersion`) is what the MCP server reads to describe them. Categories also participate in fuzzy-match — searching `"authentication"` finds the auth blocks even if the word isn't in their description.
 
-When adding a new block, also: register the demo in `apps/docs/demos/index.ts` as `block-<name>` (used by `<BlockPreview name="block-<name>">` in MDX), write the MDX with `## Components Used` linking to `/docs/components/<name>` for each primitive (powers the auto-generated `## Related Blocks` backlinks via `pnpm docs:backlinks`), and run `pnpm registry:build` to refresh `apps/docs/public/r/`.
+1. Write the demo at `apps/docs/demos/blocks/<name>.tsx` or `apps/docs/demos/blocks/<name>/index.tsx`.
+2. Run `pnpm gen:demos`. Both layouts use the key `block-<name>`.
+3. Add a `registry:block` item named `<name>` to `registry.json`.
+   - List component files as `registry:component`. A single-file block needs exactly one component `path`.
+   - For a directory block's generated components, use `registry/default/blocks/<name>/components/` and the original sibling filenames. `index.tsx` is the preview entry.
+   - If the block installs a page, declare a `registry:page` file with a source `path` and a `target` such as `app/<slug>/page.tsx`.
+4. For each `registry:page` entry, write the page by hand at its `path`, such as `registry/default/blocks/<name>/page.tsx`. The entry's `target` is the install location in the consumer's app. Have the page import and render the installed component.
+5. Run `pnpm sync:blocks` to generate the installable components.
+6. Write `apps/docs/content/docs/blocks/<name>.mdx` using `apps/docs/content/docs/blocks/_block-template.mdx`. Include the install command in a bash fence, `<BlockPreview name="block-<name>" />` and links to the primitives under `## Components Used`.
+7. Run `pnpm gen:static-paths`. In `apps/docs/lib/static-paths.json`, the MDX filename supplies `/docs/blocks/<name>` in `docs`. The demo manifest supplies `block-<name>` in `preview`. The docs entry can exist before the preview key. `<BlockPreview>` embeds `/preview/block-<name>` in an iframe.
+8. Run `pnpm docs:backlinks` to update `## Related Blocks` on the linked component pages.
+
+Run `pnpm registry:build` to refresh the installable items in `apps/docs/public/r/`.
 
 ## Important Constraints
 

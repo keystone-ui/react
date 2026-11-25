@@ -224,7 +224,7 @@ function addRegistryEntry(kebab) {
 }
 
 function regenerateDemoRegistry() {
-  // demos/manifest.json, loader.tsx and index.ts are generated from the
+  // demos/manifest.json and loader.tsx are generated from the
   // files under apps/docs/demos. Regenerate rather than edit by hand; the
   // scaffolded <kebab>/default.tsx becomes the "<kebab>-default" entry.
   const result = spawnSync(

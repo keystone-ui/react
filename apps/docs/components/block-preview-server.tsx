@@ -31,7 +31,8 @@ export function BlockPreview({
       >
         <p className="text-destructive text-sm">
           Block demo &quot;{name}&quot; not found. Make sure the demo file
-          exists under apps/docs/demos/blocks and run `pnpm gen:demos`.
+          exists under apps/docs/demos/blocks and run `pnpm gen:demos`, then
+          `pnpm gen:static-paths`.
         </p>
       </div>
     );
