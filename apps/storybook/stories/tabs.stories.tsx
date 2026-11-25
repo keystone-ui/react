@@ -35,6 +35,7 @@ import {
 } from "lucide-react";
 import { type ReactNode, useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
+import { outsideVitest } from "./real-browser";
 
 const meta = {
   title: "Components/Tabs",
@@ -1274,6 +1275,9 @@ export const ScrollableChevronHover: Story = {
   tags: TEST_ONLY,
   render: () => <ScrollTabs testId="scroll" />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     const { commands } = requireReal();
     await commands.emulateReducedMotion(true);
     try {
@@ -1463,14 +1467,24 @@ async function switchFromCode(canvasElement: HTMLElement, reduce: boolean) {
 export const ScrollableSwitchFromCode: Story = {
   tags: TEST_ONLY,
   render: () => <SwitchFixture />,
-  play: ({ canvasElement }) => switchFromCode(canvasElement, false),
+  play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
+    await switchFromCode(canvasElement, false);
+  },
 };
 
 // T-SWITCH under reduced motion: the same request jumps.
 export const ScrollableSwitchFromCodeReducedMotion: Story = {
   tags: TEST_ONLY,
   render: () => <SwitchFixture />,
-  play: ({ canvasElement }) => switchFromCode(canvasElement, true),
+  play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
+    await switchFromCode(canvasElement, true);
+  },
 };
 
 // T-HIDDEN. A change made while the list is not displayed makes no request
@@ -1649,6 +1663,9 @@ export const ScrollableKeyboard: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     for (const id of ["enter", "space", "auto"]) {
       // biome-ignore lint/performance/noAwaitInLoops: one list at a time
       const { failures } = await walkKeys(canvasElement, id);
@@ -1675,6 +1692,9 @@ export const ScrollableArrowsInert: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     const { commands, user } = requireReal();
     const s = scrollParts(canvasElement, "scroll");
     for (const side of ["start", "end"] as const) {
@@ -2158,13 +2178,23 @@ async function pillPlay(canvasElement: HTMLElement, line: boolean) {
 export const ScrollableMorphingPillGlide: Story = {
   tags: TEST_ONLY,
   render: () => <PillFixture line={false} />,
-  play: ({ canvasElement }) => pillPlay(canvasElement, false),
+  play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
+    await pillPlay(canvasElement, false);
+  },
 };
 
 export const ScrollableMorphingLinePillGlide: Story = {
   tags: TEST_ONLY,
   render: () => <PillFixture line />,
-  play: ({ canvasElement }) => pillPlay(canvasElement, true),
+  play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
+    await pillPlay(canvasElement, true);
+  },
 };
 
 // T-MORPH-LIMIT. Reel reveals the trigger at the width it has when it becomes
@@ -2174,6 +2204,9 @@ export const ScrollableMorphingLabelLimit: Story = {
   tags: TEST_ONLY,
   render: () => <PillFixture line={false} />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     const { commands } = requireReal();
     await commands.emulateReducedMotion(false);
     const s = scrollParts(canvasElement, "scroll");

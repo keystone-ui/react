@@ -17,6 +17,13 @@ import {
 } from "lucide-react";
 import { type ReactNode, StrictMode, useState } from "react";
 import { expect, waitFor, within } from "storybook/test";
+import type { WorkerGlobalState } from "vitest";
+import { outsideVitest } from "./real-browser";
+
+const vitestGlobals = globalThis as {
+  __vitest_browser__?: boolean;
+  __vitest_worker__?: WorkerGlobalState;
+};
 
 const meta = {
   title: "Components/Reel",
@@ -2019,6 +2026,12 @@ export const RevealOnRoom: Story = {
     </Mounted>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      if (vitestGlobals.__vitest_worker__) {
+        throw new Error("RevealOnRoom skipped in a Vitest worker");
+      }
+      return;
+    }
     // A no-room mount skips the current-item search. Marker deliveries still
     // search the row, and gaining room performs one search of its own.
     const queries = countCurrentQueries();
@@ -2108,16 +2121,29 @@ export const RevealOnRoom: Story = {
   },
 };
 
-// The room story's setup rejects without the real browser commands, and the query
-// counter it installed first is restored.
+// Removing the commands makes the room play reject and restore its query counter.
 export const RevealOnRoomRestoresCounter: Story = {
   name: "N1 Reveal on room restores counter",
   tags: TEST_ONLY,
   render: RevealOnRoom.render,
   play: async (context) => {
+    // Check the runner independently of the guard and the setup handles.
+    if (
+      vitestGlobals.__vitest_browser__ !== true &&
+      !vitestGlobals.__vitest_worker__
+    ) {
+      return;
+    }
     const original = Element.prototype.querySelector;
     const g = globalThis as { __realCommands?: RealCommands };
     const commands = g.__realCommands;
+    // The focused retry probe reaches the guard on Vitest's second attempt.
+    const worker = vitestGlobals.__vitest_worker__;
+    if (worker?.config.env.MODE === "reel-guard-retry") {
+      await expect(worker.current?.result?.retryCount, "Vitest retry").toBe(1);
+    }
+    // Check before clearing the commands normally installed by setup.
+    await expect(outsideVitest(), "skip guard under Vitest").toBe(false);
     g.__realCommands = undefined;
     try {
       await expect(RevealOnRoom.play?.(context)).rejects.toThrow(
@@ -2200,6 +2226,9 @@ export const RevealFirstMatch: Story = {
     </Mounted>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     const { held, recorder } = await mountRecorded(canvasElement, "bar");
     try {
       const bar = parts(canvasElement, "bar");
@@ -2245,6 +2274,9 @@ export const RevealSameAfterNone: Story = {
     </Mounted>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     const { held, recorder } = await mountRecorded(canvasElement, "bar");
     try {
       const bar = parts(canvasElement, "bar");
@@ -2286,6 +2318,9 @@ export const FirstRevealSpentWhenClear: Story = {
     </Mounted>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     const { commands, held, recorder } = await mountRecorded(
       canvasElement,
       "normal"
@@ -2349,6 +2384,9 @@ export const SameMatchNotRetried: Story = {
     </Mounted>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     const { held, recorder } = await mountRecorded(canvasElement, "bar");
     try {
       const bar = parts(canvasElement, "bar");
@@ -2406,6 +2444,9 @@ export const SelectionWhileMoving: Story = {
     </Mounted>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     const { held, recorder } = await mountRecorded(canvasElement, "glide");
     try {
       const glide = parts(canvasElement, "glide");
@@ -2479,6 +2520,9 @@ export const ClearSelectionNoRequest: Story = {
     </Mounted>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     const { held, recorder } = await mountRecorded(canvasElement, "bar");
     try {
       const bar = parts(canvasElement, "bar");
@@ -2518,6 +2562,9 @@ export const ObserversReleased: Story = {
     </Mounted>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     const mutations = spyObserved(MutationObserver);
     const sizes = spyObserved(ResizeObserver);
     try {
@@ -2822,6 +2869,9 @@ export const RevealAriaSelected: Story = {
   tags: TEST_ONLY,
   render: () => <AriaSelectedFixture />,
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     // Real input is required: without it the play fails before mounting.
     const commands = requireCommands();
     await commands.emulateReducedMotion(false);

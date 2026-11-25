@@ -7,6 +7,7 @@ import { StatValue } from "@keystoneui/react/stat";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect } from "storybook/test";
+import { outsideVitest } from "./real-browser";
 
 const meta: Meta<typeof RollingNumber> = {
   title: "RollingNumber",
@@ -224,6 +225,9 @@ export const TokenDrivesRoll: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     const reducedTokens: string[] = [];
     const walk = (rules: CSSRuleList, reduced: boolean) => {
       for (const rule of rules) {
@@ -683,6 +687,9 @@ export const Layout: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     // A number never breaks between two digits, however narrow its box.
     for (const id of ["narrow", "narrowstat"]) {
       const rootHeight = byTestId(canvasElement, id).getBoundingClientRect()
