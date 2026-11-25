@@ -413,21 +413,57 @@ export default function ${pascal}Default() {
 `;
 }
 
+// The canonical page of apps/docs/content/docs/components/_template.mdx:
+// preview first, Installation, then Usage with the import. The demo above is
+// a bare `return` of one element from that import, so Usage carries it as
+// the snippet, as `migrate-component-mdx.mjs` would.
 function mdxTemplate(pascal, kebab) {
   return `---
 title: ${pascal}
 description: TODO - Add a description for the ${pascal} component.
 ---
 
-## Import
+<ComponentPreview name="${kebab}-default" />
+
+## Installation
+
+<CodeBlockTabs items={["CLI", "Manual"]}>
+
+\`\`\`bash tab="CLI"
+npx shadcn@latest add https://keystoneui.io/r/${kebab}.json
+\`\`\`
+
+<div tab="Manual">
+
+<Steps>
+
+<Step>Install dependencies.</Step>
+
+\`\`\`bash
+pnpm add @keystoneui/react@beta @base-ui/react
+\`\`\`
+
+<Step>Copy the source.</Step>
+
+<ComponentSource name="${kebab}-default" />
+
+<Step>Update import paths to match your project.</Step>
+
+</Steps>
+
+</div>
+
+</CodeBlockTabs>
+
+## Usage
 
 \`\`\`tsx
 import { ${pascal} } from "@keystoneui/react/${kebab}";
 \`\`\`
 
-## Usage
-
-<ComponentPreview name="${kebab}-default" />
+\`\`\`tsx
+<${pascal}>${pascal} component</${pascal}>
+\`\`\`
 
 ## API Reference
 
