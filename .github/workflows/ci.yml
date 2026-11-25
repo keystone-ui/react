@@ -319,6 +319,13 @@ jobs:
       - name: Run Storybook interaction tests
         run: pnpm test --filter=@keystoneui/storybook
 
+      # Checks that the reel skip guard still holds on Vitest's retry attempt.
+      # Its own run (mode reel-guard-retry, retry 1); the script fails unless
+      # both stories ran and passed and the companion passed on its retry.
+      - name: Run reel guard retry probe
+        run: pnpm run probe:reel-retry
+        working-directory: apps/storybook
+
   chromatic:
     name: Visual Regression
     runs-on: ubuntu-latest
