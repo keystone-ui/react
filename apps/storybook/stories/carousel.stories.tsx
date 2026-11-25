@@ -22,6 +22,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { expect, within } from "storybook/test";
+import { outsideVitest } from "./real-browser";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -283,6 +284,9 @@ export const WithDots: Story = {
   // Each dot draws the library's keyboard focus outline, not the browser's
   // 1px `auto` ring.
   play: async ({ canvasElement }) => {
+    if (outsideVitest()) {
+      return;
+    }
     const dots = canvasElement.querySelectorAll<HTMLElement>(
       "[data-slot='carousel-dots'] button"
     );

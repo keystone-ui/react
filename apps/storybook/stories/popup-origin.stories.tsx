@@ -39,6 +39,7 @@ import {
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type * as React from "react";
 import { expect, userEvent, waitFor } from "storybook/test";
+import { outsideVitest } from "./real-browser";
 
 /**
  * These stories measure the computed transform origin after Popover, Dropdown
@@ -536,6 +537,9 @@ async function checkSub(id: string, side: "left" | "right") {
 
 export const DropdownMenuSubOrigin: Story = {
   play: async () => {
+    if (outsideVitest()) {
+      return;
+    }
     await playOrigin({
       slot: "dropdown-menu-sub-content",
       cross: "aligned-edge",
