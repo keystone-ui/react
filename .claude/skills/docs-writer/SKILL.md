@@ -273,7 +273,10 @@ Keep the total description under 30 lines. No paragraphs, no philosophy.
 
 When Fumadocs is added, this skill extends to cover MDX pages. The expected workflow:
 
-### MDX Document Structure (Anticipated)
+### MDX Document Structure
+
+Component pages follow `apps/docs/content/docs/components/_template.mdx`
+(`pnpm lint:docs` enforces it):
 
 ```markdown
 ---
@@ -281,31 +284,31 @@ title: ComponentName
 description: Brief one-line description
 ---
 
-## Import
+<ComponentPreview name="component-default" />
+
+## Installation
+
+<CodeBlockTabs> with the shadcn add command and the manual steps
+
+## Usage
 
 \`\`\`tsx
 import { Component } from "@keystoneui/react/component";
 \`\`\`
 
-### Usage
+\`\`\`tsx
+<Component>...</Component>
+\`\`\`
 
-Basic usage example with live preview.
+## Composition   (compound components only)
+
+## Examples
 
 ### Variants
 
-Variant examples.
-
-### Sizes
-
-Size examples.
-
-## Styling
-
-How to customize with Tailwind CSS.
-
 ## API Reference
 
-### Component Props
+### Component
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
@@ -314,10 +317,10 @@ How to customize with Tailwind CSS.
 
 ### MDX Writing Rules (When Applicable)
 
-- No redundant title after frontmatter — go straight to `## Import`
-- No Installation section
-- Usage is a subsection (`### Usage`) under Import
-- Feature sections are subsections (`### Feature Name`)
+- No redundant title after frontmatter: the `<name>-default` preview comes first, then `## Installation`
+- The import goes at the top of `## Usage`. There is no `## Import` section: the linter refuses one
+- After the import, a snippet only where the default demo is a bare `return` of one element built from that import; otherwise the import alone
+- Variants are `###` subsections under `## Examples`
 - All prop names in backticks in tables
 - Code examples must be complete and runnable
 - Show imports in every code block

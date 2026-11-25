@@ -165,7 +165,7 @@ See `.claude/skills/contributing/SKILL.md` → "Adding a New Block" for the full
 2. Add Storybook stories for the new sub-component
 3. If no existing demo shows the sub-component, create one showing it in use
 4. If you created a demo, run `pnpm gen:demos`, then `pnpm gen:static-paths`.
-5. Update the page's import block (under `## Usage` in the template; an older page keeps it under `## Import`), and add a `<ComponentPreview>` under a `###` heading in `## Examples` for any new demo
+5. Update the page's import block (at the top of `## Usage`), and add a `<ComponentPreview>` under a `###` heading in `## Examples` for any new demo
 6. Update the `## Composition` ASCII tree in the MDX so agents see the new nesting
 
 ### Composition section (compound components)
