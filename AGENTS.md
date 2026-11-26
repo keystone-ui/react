@@ -2,6 +2,13 @@
 
 This file provides guidance to AI coding agents working with this repository.
 
+## Read first
+
+- [`plan.md`](plan.md): where the project stands: what was done, what is merged and deployed, what is built but not merged.
+- [`todo.md`](todo.md): what still needs doing, in order, with the owner-only items listed apart.
+
+Both were written on 26 Nov 2026 when work was stopped. Git, GitHub and the task board win where they disagree.
+
 ## Repository Overview
 
 Keystone UI is a React component library built as a pnpm monorepo managed by Turborepo.
