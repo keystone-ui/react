@@ -3,24 +3,6 @@ title: Code Block
 description: Code, terminal output, logs and diffs, with an optional header and copy button.
 ---
 
-## Import
-
-```tsx
-import {
-  CodeBlock,
-  CodeBlockActions,
-  CodeBlockContent,
-  CodeBlockCopyButton,
-  CodeBlockHeader,
-  CodeBlockTitle,
-} from "@keystoneui/react/code-block";
-```
-
-## Usage
-
-Pass the source as `code`. The header is optional; the copy button copies `code`
-itself, so it never picks up line numbers or diff markers.
-
 <ComponentPreview name="code-block-default" />
 
 ## Installation
@@ -52,6 +34,22 @@ pnpm add @keystoneui/react@beta lucide-react
 </div>
 
 </CodeBlockTabs>
+
+## Usage
+
+```tsx
+import {
+  CodeBlock,
+  CodeBlockActions,
+  CodeBlockContent,
+  CodeBlockCopyButton,
+  CodeBlockHeader,
+  CodeBlockTitle,
+} from "@keystoneui/react/code-block";
+```
+
+Pass the source as `code`. The header is optional; the copy button copies `code`
+itself, so it never picks up line numbers or diff markers.
 
 ## Composition
 

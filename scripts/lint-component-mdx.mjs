@@ -22,6 +22,8 @@
  *   6. ## API Reference must exist with at least one Markdown table.
  *   7. Every <ComponentPreview name="X"> referenced in MDX must exist as a
  *      key in apps/docs/demos/manifest.json.
+ *   8. No ## Import section: the import line lives at the top of ## Usage.
+ *      A ## Usage holding only the import passes; no snippet is demanded.
  */
 
 import { existsSync, readdirSync, readFileSync } from "node:fs";
@@ -33,7 +35,6 @@ const UI_SRC = join(ROOT, "packages/ui/src");
 const DEMOS_MANIFEST = join(ROOT, "apps/docs/demos/manifest.json");
 
 const PROTECTED_HEADINGS = new Set([
-  "Import",
   "Installation",
   "Usage",
   "Composition",
@@ -236,6 +237,16 @@ function checkPreviewDemoNames(content, demoNames) {
   return errors;
 }
 
+function checkNoImportSection(content) {
+  const line = content.split("\n").findIndex((l) => /^## Import\s*$/.test(l));
+  if (line === -1) {
+    return [];
+  }
+  return [
+    `## Import (line ${line + 1}) is retired: put the import at the top of ## Usage, after ## Installation — run \`node scripts/migrate-component-mdx.mjs --only usage-import\``,
+  ];
+}
+
 function lintFile(filePath, demoNames) {
   const content = readFileSync(filePath, "utf-8");
   const componentName = basename(filePath, ".mdx");
@@ -247,6 +258,7 @@ function lintFile(filePath, demoNames) {
       componentName,
       errors: [
         ...checkFrontmatter(content),
+        ...checkNoImportSection(content),
         ...checkPreviewDemoNames(content, demoNames),
       ],
     };
@@ -257,6 +269,7 @@ function lintFile(filePath, demoNames) {
 
   const errors = [
     ...checkFrontmatter(content),
+    ...checkNoImportSection(content),
     ...checkInstallation(componentName, sections, headingNames),
     ...(headingNames.has("Usage") ? [] : ["missing ## Usage"]),
     ...(isCompound(content, componentName) && !headingNames.has("Composition")

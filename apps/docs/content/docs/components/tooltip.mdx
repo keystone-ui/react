@@ -3,21 +3,7 @@ title: Tooltip
 description: Small floating label that appears on hover to provide additional descriptive text.
 ---
 
-## Import
-
-```tsx
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@keystoneui/react/tooltip";
-```
-
-## Usage
-
 <ComponentPreview name="tooltip-default" />
-
-<Callout type="warn">
-**Tooltip is a visual enhancement only.** Base UI's tooltip wires no `aria-describedby` and no `role` — the only `aria-*` attribute anywhere in its tooltip implementation is `aria-hidden` on the arrow — and its trigger is mouse-only. So a Tooltip is announced to **no** screen reader and opens on **no** touch device. It is keyboard-reachable, which makes the gap easy to miss.
-
-Never put information in a Tooltip that is not available elsewhere. When the tooltip really is the only place some text appears, use the [Info Tip](#info-tip) pattern below.
-</Callout>
 
 ## Installation
 
@@ -48,6 +34,18 @@ pnpm add @keystoneui/react@beta @base-ui/react
 </div>
 
 </CodeBlockTabs>
+
+## Usage
+
+```tsx
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@keystoneui/react/tooltip";
+```
+
+<Callout type="warn">
+**Tooltip is a visual enhancement only.** Base UI's tooltip wires no `aria-describedby` and no `role` — the only `aria-*` attribute anywhere in its tooltip implementation is `aria-hidden` on the arrow — and its trigger is mouse-only. So a Tooltip is announced to **no** screen reader and opens on **no** touch device. It is keyboard-reachable, which makes the gap easy to miss.
+
+Never put information in a Tooltip that is not available elsewhere. When the tooltip really is the only place some text appears, use the [Info Tip](#info-tip) pattern below.
+</Callout>
 
 ## Composition
 

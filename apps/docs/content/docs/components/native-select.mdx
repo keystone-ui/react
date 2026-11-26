@@ -3,18 +3,6 @@ title: NativeSelect
 description: Native browser select dropdown for simple selection scenarios with optimal mobile support.
 ---
 
-## Import
-
-```tsx
-import {
-  NativeSelect,
-  NativeSelectOption,
-  NativeSelectOptGroup,
-} from "@keystoneui/react/native-select";
-```
-
-## Usage
-
 <ComponentPreview name="native-select-default" />
 
 ## Installation
@@ -46,6 +34,26 @@ pnpm add @keystoneui/react@beta @base-ui/react
 </div>
 
 </CodeBlockTabs>
+
+## Usage
+
+```tsx
+import {
+  NativeSelect,
+  NativeSelectOption,
+  NativeSelectOptGroup,
+} from "@keystoneui/react/native-select";
+```
+
+```tsx
+<NativeSelect>
+  <NativeSelectOption value="">Select status</NativeSelectOption>
+  <NativeSelectOption value="todo">Todo</NativeSelectOption>
+  <NativeSelectOption value="in-progress">In Progress</NativeSelectOption>
+  <NativeSelectOption value="done">Done</NativeSelectOption>
+  <NativeSelectOption value="cancelled">Cancelled</NativeSelectOption>
+</NativeSelect>
+```
 
 ## Composition
 

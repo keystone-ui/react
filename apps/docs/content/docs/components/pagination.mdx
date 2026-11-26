@@ -3,25 +3,6 @@ title: Pagination
 description: Page navigation controls for browsing through paginated content.
 ---
 
-## Import
-
-```tsx
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationPrevious,
-  PaginationNext,
-  PaginationLink,
-  PaginationEllipsis,
-} from "@keystoneui/react/pagination";
-```
-
-## Usage
-
-For the footer of a paginated data table — rows-per-page, "page N of M" and the four navigation buttons — use [`TablePagination`](/docs/components/table-pagination) instead. `Pagination` is a list of page *links*: a page control with a URL renders `nav > ul > li > a`, one without a URL (paging by `onClick`) renders `li > button` with `type="button"`, and the current page carries `aria-current="page"` on either; a data-table footer is a toolbar with an opaque page index and no per-page URLs.
-
-
 <ComponentPreview name="pagination-default" />
 
 ## Installation
@@ -53,6 +34,49 @@ pnpm add @keystoneui/react@beta @base-ui/react
 </div>
 
 </CodeBlockTabs>
+
+## Usage
+
+```tsx
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationLink,
+  PaginationEllipsis,
+} from "@keystoneui/react/pagination";
+```
+
+```tsx
+<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious href="#" />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#">1</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#" isActive>
+        2
+      </PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#">3</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationEllipsis />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext href="#" />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>
+```
+
+For the footer of a paginated data table — rows-per-page, "page N of M" and the four navigation buttons — use [`TablePagination`](/docs/components/table-pagination) instead. `Pagination` is a list of page *links*: a page control with a URL renders `nav > ul > li > a`, one without a URL (paging by `onClick`) renders `li > button` with `type="button"`, and the current page carries `aria-current="page"` on either; a data-table footer is a toolbar with an opaque page index and no per-page URLs.
 
 ## Composition
 

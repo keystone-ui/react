@@ -3,21 +3,6 @@ title: Slider
 description: Range slider input for selecting a numeric value within a defined range.
 ---
 
-## Import
-
-```tsx
-import {
-  Slider,
-  SliderControl,
-  SliderTrack,
-  SliderIndicator,
-  SliderThumb,
-  SliderValue,
-} from "@keystoneui/react/slider";
-```
-
-## Usage
-
 <ComponentPreview name="slider-default" />
 
 ## Installation
@@ -49,6 +34,30 @@ pnpm add @keystoneui/react@beta @base-ui/react
 </div>
 
 </CodeBlockTabs>
+
+## Usage
+
+```tsx
+import {
+  Slider,
+  SliderControl,
+  SliderTrack,
+  SliderIndicator,
+  SliderThumb,
+  SliderValue,
+} from "@keystoneui/react/slider";
+```
+
+```tsx
+<Slider className="max-w-sm" defaultValue={25}>
+  <SliderControl>
+    <SliderTrack>
+      <SliderIndicator />
+      <SliderThumb aria-label="Volume" />
+    </SliderTrack>
+  </SliderControl>
+</Slider>
+```
 
 ## Composition
 

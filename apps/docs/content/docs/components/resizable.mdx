@@ -3,14 +3,6 @@ title: Resizable
 description: Resizable panel layout that allows users to adjust the size of content areas by dragging handles.
 ---
 
-## Import
-
-```tsx
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@keystoneui/react/resizable";
-```
-
-## Usage
-
 <ComponentPreview name="resizable-default" />
 
 ## Installation
@@ -42,6 +34,28 @@ pnpm add @keystoneui/react@beta @base-ui/react
 </div>
 
 </CodeBlockTabs>
+
+## Usage
+
+```tsx
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@keystoneui/react/resizable";
+```
+
+```tsx
+<ResizablePanelGroup className="max-w-md rounded-lg border">
+  <ResizablePanel defaultSize={50}>
+    <div className="flex h-32 items-center justify-center p-4">
+      <span className="font-semibold text-sm">Panel A</span>
+    </div>
+  </ResizablePanel>
+  <ResizableHandle />
+  <ResizablePanel defaultSize={50}>
+    <div className="flex h-32 items-center justify-center p-4">
+      <span className="font-semibold text-sm">Panel B</span>
+    </div>
+  </ResizablePanel>
+</ResizablePanelGroup>
+```
 
 ## Composition
 

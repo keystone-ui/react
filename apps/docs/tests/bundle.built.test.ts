@@ -97,11 +97,14 @@ describe("docs page client bundle", () => {
     // and again in the Flight payload. button.rsc was 205 KB; as one HTML
     // string it is 149 KB. What remains is the code itself, so the next
     // step down is loading code on demand, not a tighter serialisation.
+    // The page's usage snippet brought the payload to 164,098 bytes. The
+    // guard exists to catch a return to per-token serialisation (205 KB),
+    // so 168 KB still does that.
     const rsc = statSync(
       join(NEXT_DIR, "server", "app", "docs", "components", "button.rsc")
     ).size;
     expect(rsc, `button.rsc is ${Math.round(rsc / KB)} KB`).toBeLessThan(
-      160 * KB
+      168 * KB
     );
   });
 

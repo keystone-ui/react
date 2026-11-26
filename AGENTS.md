@@ -187,7 +187,7 @@ Every `apps/docs/content/docs/components/<name>.mdx` follows the canonical struc
 1. Frontmatter (`title`, `description`)
 2. `<ComponentPreview name="<component>-default" />` — first non-heading content
 3. `## Installation` — `<CodeBlockTabs items={["CLI", "Manual"]}>` with the shadcn add command and a `<Steps>`/`<Step>` manual flow
-4. `## Usage` — import line + minimal usage snippet
+4. `## Usage` — import line, then a minimal usage snippet only where the default demo is a bare `return` of one element built from that import (no `## Import` section)
 5. `## Composition` — required for compound components (any component exporting more than one named symbol)
 6. `## Examples` — variants as `### `-level subheaders, each with a 1-sentence description and a `<ComponentPreview>`
 7. `## RTL` — optional, only for components with non-trivial RTL behavior

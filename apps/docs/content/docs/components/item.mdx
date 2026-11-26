@@ -3,23 +3,6 @@ title: Item
 description: Generic list item primitive for building consistent list-based interfaces.
 ---
 
-## Import
-
-```tsx
-import {
-  Item,
-  ItemMedia,
-  ItemContent,
-  ItemTitle,
-  ItemDescription,
-  ItemActions,
-  ItemGroup,
-  ItemSeparator,
-} from "@keystoneui/react/item";
-```
-
-## Usage
-
 <ComponentPreview name="item-default" />
 
 ## Installation
@@ -51,6 +34,29 @@ pnpm add @keystoneui/react@beta @base-ui/react
 </div>
 
 </CodeBlockTabs>
+
+## Usage
+
+```tsx
+import {
+  Item,
+  ItemMedia,
+  ItemContent,
+  ItemTitle,
+  ItemDescription,
+  ItemActions,
+  ItemGroup,
+  ItemSeparator,
+} from "@keystoneui/react/item";
+```
+
+```tsx
+<Item className="max-w-md" variant="outline">
+  <ItemContent>
+    <ItemTitle>Basic Item</ItemTitle>
+  </ItemContent>
+</Item>
+```
 
 ## Composition
 
