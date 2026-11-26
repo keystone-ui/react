@@ -28,6 +28,9 @@ export const metadata: Metadata = {
     template: "%s | Keystone UI",
   },
   description: DESCRIPTION,
+  // Icons for "Add to Home Screen" and installed tabs; favicon.ico, icon.svg
+  // and apple-icon.png in app/ are picked up by file convention.
+  manifest: "/site.webmanifest",
   // No title, description or url here: Next merges `openGraph`/`twitter`
   // only when the current segment sets them, so a root value would pin every
   // page's social card to the home page. Left unset, each card takes the
