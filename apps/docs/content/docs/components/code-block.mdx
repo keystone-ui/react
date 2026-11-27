@@ -48,20 +48,9 @@ import {
 } from "@keystoneui/react/code-block";
 ```
 
-```tsx
-<CodeBlock code={code}>
-  <CodeBlockHeader>
-    <CodeBlockTitle>save-button.tsx</CodeBlockTitle>
-    <CodeBlockActions>
-      <CodeBlockCopyButton />
-    </CodeBlockActions>
-  </CodeBlockHeader>
-  <CodeBlockContent />
-</CodeBlock>
-```
-
-Pass the source as `code`. The header is optional; the copy button copies `code`
-itself, so it never picks up line numbers or diff markers.
+Pass the source to `CodeBlock` as `code` and render it with `CodeBlockContent`.
+`CodeBlockHeader` is optional; `CodeBlockCopyButton` copies `code` itself, so it
+never picks up line numbers or diff markers.
 
 ## Composition
 
