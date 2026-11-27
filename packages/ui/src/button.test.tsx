@@ -49,8 +49,55 @@ describe("Button", () => {
     expect(screen.getByRole("button")).toBeDisabled();
   });
 
-  it("is disabled when isLoading is true", () => {
+  // A loading button can't be pressed but stays in the tab order, so a
+  // keyboard or screen reader user who pressed it keeps their place.
+  it("is unavailable but still focusable while loading", () => {
     render(<Button isLoading>Loading</Button>);
+    const button = screen.getByRole("button");
+    expect(button).toHaveAttribute("aria-disabled", "true");
+    expect(button).not.toHaveAttribute("disabled");
+    button.focus();
+    expect(button).toHaveFocus();
+  });
+
+  it("ignores clicks and Enter while loading", async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    render(
+      <Button isLoading onClick={onClick}>
+        Save
+      </Button>
+    );
+    const button = screen.getByRole("button");
+    await user.click(button);
+    button.focus();
+    await user.keyboard("{Enter}");
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it("keeps focus when a focused button starts loading", () => {
+    const { rerender } = render(<Button>Save</Button>);
+    const button = screen.getByRole("button", { name: "Save" });
+    button.focus();
+    rerender(<Button isLoading>Save</Button>);
+    expect(screen.getByRole("button", { name: "Save" })).toHaveFocus();
+  });
+
+  it("stays natively disabled when also disabled", () => {
+    render(
+      <Button disabled isLoading>
+        Save
+      </Button>
+    );
+    expect(screen.getByRole("button")).toBeDisabled();
+  });
+
+  it("can opt out of staying focusable while loading", () => {
+    render(
+      <Button focusableWhenDisabled={false} isLoading>
+        Save
+      </Button>
+    );
     expect(screen.getByRole("button")).toBeDisabled();
   });
 
@@ -63,17 +110,12 @@ describe("Button", () => {
   // The name is only computed for real in a browser, where the hidden label's
   // CSS applies: `button.stories.tsx` (LoadingNames) proves it there. jsdom
   // loads no stylesheet, so here only the attributes are pinned.
-  it("is busy while loading and keeps its label's name", () => {
+  // No aria-busy: JAWS can hide the contents of a busy element, taking the
+  // button's name with it.
+  it("keeps its label's name while loading and is never marked busy", () => {
     render(<Button isLoading>Save</Button>);
     const button = screen.getByRole("button", { name: "Save" });
-    expect(button).toHaveAttribute("aria-busy", "true");
-  });
-
-  it("is not marked busy when not loading", () => {
-    render(<Button>Save</Button>);
-    expect(screen.getByRole("button", { name: "Save" })).not.toHaveAttribute(
-      "aria-busy"
-    );
+    expect(button).not.toHaveAttribute("aria-busy");
   });
 
   it("a loading icon-only button keeps its explicit aria-label", () => {
@@ -82,10 +124,9 @@ describe("Button", () => {
         <svg aria-hidden="true" />
       </Button>
     );
-    expect(screen.getByRole("button", { name: "Add item" })).toHaveAttribute(
-      "aria-busy",
-      "true"
-    );
+    const button = screen.getByRole("button", { name: "Add item" });
+    expect(button).toHaveAttribute("aria-disabled", "true");
+    expect(button).not.toHaveAttribute("aria-busy");
   });
 
   it("applies custom className", () => {

@@ -12,20 +12,20 @@ import { cn, mergeClassName } from "./utils";
 // ---------------------------------------------------------------------------
 
 const buttonVariants = cva(
-  "relative z-0 inline-flex shrink-0 cursor-pointer touch-manipulation select-none items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-md font-medium text-sm transition-[scale,background-color,color,border-color,box-shadow,outline-color] duration-(--duration-fast,125ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)) [-webkit-tap-highlight-color:transparent] focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "relative z-0 inline-flex shrink-0 cursor-pointer touch-manipulation select-none items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-md font-medium text-sm transition-[scale,background-color,color,border-color,box-shadow,outline-color] duration-(--duration-fast,125ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)) [-webkit-tap-highlight-color:transparent] focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-loading:cursor-not-allowed data-loading:active:scale-100 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/90 disabled:bg-primary/50 disabled:text-primary-foreground/50",
+          "bg-primary text-primary-foreground hover:bg-primary/90 active:bg-primary/90 disabled:bg-primary/50 disabled:text-primary-foreground/50 data-loading:bg-primary/50 data-loading:text-primary-foreground/50",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary-hover active:bg-secondary-hover disabled:bg-secondary/50 disabled:text-secondary-foreground/50",
+          "bg-secondary text-secondary-foreground hover:bg-secondary-hover active:bg-secondary-hover disabled:bg-secondary/50 disabled:text-secondary-foreground/50 data-loading:bg-secondary/50 data-loading:text-secondary-foreground/50",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-visible:outline-destructive/50 active:bg-destructive/90 disabled:bg-destructive/50 disabled:text-destructive-foreground/50",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-visible:outline-destructive/50 active:bg-destructive/90 disabled:bg-destructive/50 disabled:text-destructive-foreground/50 data-loading:bg-destructive/50 data-loading:text-destructive-foreground/50",
         ghost:
-          "bg-transparent hover:bg-accent active:bg-accent disabled:bg-transparent disabled:text-foreground/50",
+          "bg-transparent hover:bg-accent active:bg-accent disabled:bg-transparent disabled:text-foreground/50 data-loading:bg-transparent data-loading:text-foreground/50",
         outline:
-          "border border-input bg-background text-foreground shadow-xs hover:bg-accent hover:text-foreground active:bg-accent active:text-foreground disabled:border-border/50 disabled:bg-transparent disabled:text-foreground/50 aria-expanded:bg-accent aria-expanded:text-foreground aria-expanded:disabled:text-foreground/50 data-disabled:text-foreground/50 dark:border-input dark:bg-input-bg dark:active:bg-input/50 dark:hover:bg-input/50",
+          "border border-input bg-background text-foreground shadow-xs hover:bg-accent hover:text-foreground active:bg-accent active:text-foreground disabled:border-border/50 disabled:bg-transparent disabled:text-foreground/50 aria-expanded:bg-accent aria-expanded:text-foreground aria-expanded:disabled:text-foreground/50 data-loading:border-border/50 data-loading:bg-transparent data-disabled:text-foreground/50 data-loading:text-foreground/50 dark:border-input dark:bg-input-bg dark:active:bg-input/50 dark:hover:bg-input/50",
         link: "text-primary underline-offset-4 hover:underline active:scale-100",
       },
       // Only the 24px rung restates the radius. `rounded-md` on a 24px box
@@ -65,7 +65,12 @@ export interface ButtonProps
     ButtonVariantsProps {
   /** Whether the button should span the full width of its container. */
   fullWidth?: boolean;
-  /** Shows a loading spinner and disables the button. */
+  /**
+   * Shows a loading spinner and disables the button. A loading button stays
+   * in the tab order (`aria-disabled`, not the native `disabled`), so focus
+   * is not lost when a pressed button starts loading. Pass
+   * `focusableWhenDisabled={false}` to opt out.
+   */
   isLoading?: boolean;
   /**
    * The size of the button.
@@ -100,6 +105,7 @@ const Button = ({
   fullWidth,
   isLoading = false,
   disabled,
+  focusableWhenDisabled,
   type = "button",
   children,
   ref,
@@ -116,10 +122,13 @@ const Button = ({
         ),
         className
       )}
-      aria-busy={isLoading || undefined}
       data-loading={isLoading || undefined}
       data-slot="button"
       disabled={isDisabled}
+      // Not aria-busy: JAWS can hide the contents of a busy element, which
+      // would take the button's name with it. aria-disabled (from
+      // focusableWhenDisabled) already says it can't be pressed.
+      focusableWhenDisabled={focusableWhenDisabled ?? (isLoading && !disabled)}
       ref={ref}
       type={type}
       {...props}

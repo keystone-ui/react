@@ -21,7 +21,7 @@ import {
   ThumbsUp as ThumbsUpIcon,
 } from "lucide-react";
 import { useState } from "react";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 
 // Use a cast to silence TypeScript for the meta configuration
 const meta = {
@@ -716,20 +716,48 @@ export const LoadingNames: Story = {
       await expect(
         canvas.getAllByRole("button", { name: `Save ${id}` })
       ).toContain(loading);
-      await expect(loading).toHaveAttribute("aria-busy", "true");
-      await expect(canvas.getByTestId(`${id}-idle`)).not.toHaveAttribute(
-        "aria-busy"
-      );
+      // Not aria-busy (JAWS can hide a busy element's contents); unavailable
+      // through aria-disabled, so it stays in the tab order.
+      await expect(loading).not.toHaveAttribute("aria-busy");
+      await expect(loading).toHaveAttribute("aria-disabled", "true");
+      await expect(loading).not.toHaveAttribute("disabled");
     }
+    // Explicitly disabled wins: natively disabled, out of the tab order.
     await expect(
       canvas.getByRole("button", { name: loadingNames[0] })
-    ).toHaveAttribute("aria-busy", "true");
-    await expect(
-      canvas.getByRole("button", { name: loadingNames[1] })
-    ).toHaveAttribute("aria-busy", "true");
-    await expect(
-      canvas.getByRole("button", { name: loadingNames[2] })
-    ).toHaveAttribute("aria-busy", "true");
+    ).toBeDisabled();
+    for (const name of loadingNames.slice(1)) {
+      // biome-ignore lint/performance/noAwaitInLoops: one case at a time
+      await expect(canvas.getByRole("button", { name })).toHaveAttribute(
+        "aria-disabled",
+        "true"
+      );
+    }
+  },
+};
+
+const submitLabel = "Submit order";
+
+function LoadOnPress() {
+  const [loading, setLoading] = useState(false);
+  return (
+    <Button isLoading={loading} onClick={() => setLoading(true)}>
+      {submitLabel}
+    </Button>
+  );
+}
+
+// A real browser drops focus from a button that becomes natively disabled;
+// jsdom does not, so this lives here rather than in the unit tests.
+export const LoadingKeepsFocus: Story = {
+  render: () => <LoadOnPress />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole("button", { name: submitLabel });
+    button.focus();
+    await userEvent.keyboard("{Enter}");
+    await waitFor(() => expect(button).toHaveAttribute("data-loading"));
+    await expect(button).toHaveFocus();
   },
 };
 
