@@ -1,5 +1,91 @@
 # @keystoneui/react
 
+## 1.0.0-beta.17
+
+### Minor Changes
+
+- f864bf7: Combobox and Button: icon-only controls and loading buttons have an accessible name
+  
+  Four controls had no name for a screen reader, or lost it:
+  
+  - The chevron button of `ComboboxInput` is named "Options", with its open or closed state in `aria-expanded`. Under a Base UI `Field.Label` or Base UI's `Combobox.Label` it takes that label as its name instead. A Keystone `FieldLabel` names the input only, so beside it the chevron is "Options".
+  - `ComboboxClear`, including the one `<ComboboxInput showClear>` renders, is named "Clear selection" by visually hidden text inside the button, and no `title` is added. `<label for>`, `title`, `aria-label` or `aria-labelledby` each replace it, on `ComboboxClear` or on the element you pass as `render`, and so does visible text inside the element you pass as `render`. Children given to `ComboboxClear` itself are not rendered; `aria-label={undefined}` and `title={undefined}` keep it. Clear omits its hidden fallback when the title contains non-whitespace text, using the render element's `title` prop if present and Clear's own `title` otherwise.
+  - A `ComboboxChip`'s remove button is named "Remove" followed by what the chip shows ("Remove Next.js"). Use "Remove" alone when the chip contributes no accessible text. The browser computes the name from the chip itself, so it follows the chip's content when that changes, leaves out text hidden by CSS and icons hidden with `aria-hidden`, and is in server-rendered HTML.
+  - A `Button` with `isLoading` keeps its label as its name and sets `aria-busy="true"`. The label is now hidden with `opacity-0` instead of `invisible`, so the button's size and the spinner's position are unchanged.
+  
+  The chip's children and layout are unchanged. `showRemove` adds a root ID if needed. Only the default name adds the word and ID references. Forward the root `id` when referenced. Set `aria-labelledby` on the chip or render element and forward it unchanged, or supply `removeLabel`. With the default name, the remove button gains `aria-labelledby` and, before its icon, a hidden, empty `<span role="img" aria-label="Remove">`.
+  
+  Each render reads children once. Use a repeatable iterable or array across renders, including development Strict Mode.
+  
+  Which of your own names win:
+  
+  - If you label the chip yourself, the remove button follows: with `aria-label` it is "Remove" plus your label; with `aria-labelledby` it is "Remove" plus the elements you reference. Give a chip you name with `aria-label` a role that can be named, such as `role="group"`.
+  - The new optional `removeLabel` prop replaces a chip's whole default name with a plain `aria-label`. A blank `removeLabel` keeps the default.
+  - If you replace the clear button's content through `render`: Name icon-only replacements with `aria-label` or `aria-labelledby`. For visible text, replace the rendered button's children. For a title-based name, forward the supplied title unchanged.
+  - On the default button, `ComboboxClear` keeps your `title` alongside your `aria-label`. A `title` prop on the element passed directly to `render` overrides Clear's `title`, even when that prop is `undefined`. To keep the chosen `title` on the final button, forward it unchanged through every nested `render`.
+  - On a `ComboboxTrigger` or `Button` you render yourself, your `aria-label` or `aria-labelledby` is kept; `ComboboxTrigger` itself has no default name.
+  - The chevron and clear button inside `ComboboxInput` take no props, so their defaults cannot be replaced there. To name them yourself, set `showTrigger={false}` and `showClear={false}` and compose your own named `ComboboxTrigger` and `ComboboxClear`.
+  
+  For tests: a query by role and name finds these buttons, for example a button named "Options", "Clear selection" or "Remove …". The chip's `textContent` is unchanged. Clear's `textContent` includes "Clear selection" while the fallback is present. A loading button's label is now transparent (`opacity: 0`) instead of `visibility: hidden`. With library CSS in Chromium and WebKit, Playwright's `isVisible()` is true for the loading label and jest-dom's `toBeVisible()` is false. Without CSS both are true. In jsdom 30.1.2 jest-dom returns true with or without the compiled CSS. Snapshots of these buttons may gain `aria-label`, `aria-busy` or `aria-labelledby`, the clear button gains a visually hidden span, a chip's remove button gains its hidden word, and the chip root an `id`.
+- ffb6165: Strings: replace the built-in English with a StringsProvider
+  
+  `@keystoneui/react/strings` adds `StringsProvider`, which replaces the library's built-in English for everything inside it. Wrap your app once:
+  
+  ```tsx
+  import { StringsProvider, type StringsOverrides } from "@keystoneui/react/strings";
+  
+  const strings: StringsOverrides = { modal: { close: "Fermer", footerClose: "Fermer" } };
+  
+  <StringsProvider strings={strings}>
+    <App />
+  </StringsProvider>
+  ```
+  
+  With no provider nothing changes: every component renders the same English as before. A part's own prop or children still win over the provider. Nested providers merge, the nearest winning per key; a key left out or set to `undefined` inherits, and `""` is kept. Pass a stable object (a module constant or `useMemo`), since every new `strings` object re-renders the components that read it.
+  
+  In this release Modal reads it: `modal.close` names ModalContent's corner close button and `modal.footerClose` is the text of ModalFooter's close button. Other components keep their built-in English.
+  
+  The subpath also exports `useStrings(namespace)`, the frozen English as `defaultStrings` (readable in `"use client"` files only), and the types `KeystoneStrings` and `StringsOverrides`; type your translations as `StringsOverrides`. The registry adds a `strings` item, installed with Modal.
+
+### Patch Changes
+
+- 8dc9076: Slide the sidebar's phone drawer open and closed
+  
+  The sidebar installed by `admin-01`, `sidebar` and `npm/sidebar` now slides its phone drawer open and closed like a Drawer, and a swipe to close no longer snaps it back open for a frame. If you already installed the sidebar, re-add the same registry item or remove `data-slot="sidebar"` from the phone `<DrawerContent>` in your `components/sidebar.tsx`.
+- 1e69df8: Badge: soft status text stays readable on a selected or hovered table row
+  
+  Four soft status text colours are slightly adjusted, on every surface: in light mode the warning and error text is a little darker, and in dark mode the info and error text is a little lighter. Only lightness changes; the hue, the tinted fill and the border are unchanged, and success, light-mode info and dark-mode warning are untouched. A soft Badge's text now reaches a 4.5:1 contrast ratio on a selected or hovered table row (`bg-muted`, `bg-muted/50`) as well as on the page background; before, light warning and error and dark info and error fell just short on a selected row.
+- 2c1ce64: Outline Button text colour at rest and when disabled
+  
+  At rest, the default text colour for an enabled outline Button has changed from its parent's text colour to `text-foreground`. In the FileUpload form example, the "Choose files" label now appears in the foreground colour at rest beside the muted dropzone instructions. To keep that muted look at rest, put `className="text-muted-foreground"` on the enabled Button itself.
+  
+  In light and dark themes, a disabled outline Button defaults to `text-foreground/50` at rest, on hover, while pressed and with `aria-expanded="true"`. This covers the `disabled` prop, a Button disabled by a `<fieldset disabled>`, a disabled native button passed to `render`, `disabled` with `focusableWhenDisabled`, and a disabled Button rendered as a link.
+  
+  Previously, the focusable and link forms defaulted to their parent's text colour at rest, and a native button with the `disabled` prop defaulted to full-strength foreground when expanded.
+- dd8f182: FileUpload: an empty list no longer adds a gap under the dropzone
+  
+  An empty `FileUploadList` no longer adds a gap beneath the dropzone (12px with the default spacing). While it has no rows the list is visually hidden (`sr-only`) instead of a 0px flex item: it stays in the DOM, with its `ref`, `role="list"` and your `className`, and stays exposed to assistive technology, so its accessible name and references to it remain available while it is empty. To keep the old gap, add `empty:not-sr-only` to its `className`. A negative margin you added to cancel the gap can go. With files, the list's layout is unchanged.
+- 523fcba: Pagination: a page link with `href` is a link, not a button
+  
+  `PaginationLink` with `href` now renders a plain `<a>` with the same classes as a ghost (or, when active, outline) `Button`, instead of an anchor rendered through `Button`, which gave it `role="button"`. It now has the link role and no `tabindex`, follows on Enter, and no longer follows on Space. `PaginationPrevious`, `PaginationNext`, `PaginationFirst` and `PaginationLast` with `href` change the same way. Classes, `data-slot="pagination-link"`, `data-active` and `aria-current="page"` are unchanged.
+  
+  A `PaginationLink` (or Previous, Next, First, Last) without `href`, paging by `onClick`, is now a native `<button type="button">` element instead of an `<a>`. Enter and Space both run `onClick`, as before.
+  
+  What you may have to change: a test that finds a page link with `href` by role `button` must find it by role `link`. The `ref` type follows `href`: with `href` it is an `HTMLAnchorElement` ref, as before, and a button ref is a type error; without `href` it may be an `HTMLButtonElement` ref. An `HTMLAnchorElement` ref still compiles on a control without `href`, or with an `href` that can be `undefined`, but when `href` is absent it receives the `<button>`. Event handlers on a control without `href` are still typed for an anchor (`event.currentTarget` is typed `HTMLAnchorElement`) while the element is a `<button>`. A control whose `href` is added or removed between renders is a new DOM node (an `<a>` replaced by a `<button>`, or the reverse) and loses focus if it had it. A control with `href` no longer carries `type="button"`. A control with `href` gets an ordinary React click event with no `preventBaseUIHandler`, and `preventDefault()` in its `onClick` cancels the navigation. A control without `href` is a native button. When a `<fieldset disabled>` or a `disabled` prop passed from JavaScript or in a prop spread makes the control match `:disabled`, both the inactive (ghost) and active (outline) variants now use the disabled styles of `Button`. The label defaults to `text-foreground/50`, the cursor becomes `not-allowed` and the button stays at full size when pressed. The old anchor kept its enabled appearance. When an active page control is kept focusable with `disabled` and `focusableWhenDisabled`, its label changes from full-strength foreground to `text-foreground/50` at rest, on hover and while pressed, even with `aria-expanded="true"`. An inline callback ref that reads anchor members (such as `el?.href`) on a control without `href`, or with `href={undefined}`, no longer compiles, because the element is a `<button>`. With `href=""`, DOM Testing Library finds the control by neither the `link` nor the `button` role, so a test fixture needs a non-empty URL. Previously, in a client render, `PaginationLink` with an HTML label (`dangerouslySetInnerHTML`) rendered the HTML with or without `href` only for explicitly passed `children={undefined}` or `children={null}`. Omitting `children` or passing text or `false` made React throw. `PaginationPrevious`, `PaginationNext`, `PaginationFirst` and `PaginationLast` supplied their own children and threw with or without `href`. Now, without `href`, TypeScript accepts the HTML-label prop on all five controls and they drop it at runtime. A `PaginationLink` without `href` that previously showed an HTML label when you explicitly passed `children={undefined}` or `children={null}` now drops the label and renders an empty button. `PaginationLink` shows its children, so pass the label as children. The directional controls keep their own content. Dropping a non-nullish label logs one error per render when `process.env.NODE_ENV` evaluates to anything other than `"production"`. With no replacement and no global `process`, the drop is silent. With `href`, `PaginationLink` renders the HTML when `children` is omitted, `undefined` or `null`. React throws for HTML combined with text or `false`, and for HTML on any directional link.
+- 16e6972: RollingNumber's digits keep their width on hinted text
+  
+  RollingNumber now sets `text-rendering: geometricPrecision` on its root. Where the system rounds each glyph to whole pixels (hinted text, common on Linux), tabular digits differed by a pixel or two each, so a number changed width as its digits changed. In our Linux Chromium measurements with Geist, changing only the digits at the same length now keeps the figure's width; a sign, a separator or a change of length still changes it. The figure is no longer hinted, which is most visible at small sizes, and where text was hinted its width changes once on upgrade (a 12px `1,284` measured about 4px narrower). To restore the browser's default, pass `className="[text-rendering:auto]"`: it replaces the root's value.
+  
+  Countdown sets the same value on its root, so its placeholder, plain digits, separators and labels render like its animated digits. In our Linux Chromium measurements with Geist, the placeholder and two-digit cells keep the same boxes from the server HTML to the hydrated value; a compact day count or a value past two digits can still widen its cell. Its text is no longer hinted either. `className="[text-rendering:auto]"` on a Countdown restores the browser's default for all of it.
+- 25f4b37: Point the dropdown submenu chevron left with a right-to-left `DirectionProvider`
+  
+  Inside a right-to-left Base UI `DirectionProvider`, the `DropdownMenuSubTrigger` chevron used to point right and now points left. With `<html dir="rtl">` and no provider, it points right. Wrap your right-to-left menu in `<DirectionProvider direction="rtl">` to use the left-pointing chevron.
+  
+  When a right-to-left row has space left over beside its label, the chevron can now move to the row's inline end (on the left).
+- a9a1986: A dropdown submenu prefers the left side inside a right-to-left DirectionProvider
+  
+  Inside a right-to-left Base UI `DirectionProvider`, `DropdownMenuSubContent` with no `side` now prefers the left: when there is room, it opens to the left of its row and slides out from the row. Before, it preferred the right. For a horizontal row laid out right to left, the left edge is its inline end. Menus without a right-to-left `DirectionProvider` are unchanged, including under `dir="rtl"` on the document alone. An explicit `side` sets the preference in either direction, and Base UI can flip it to the other side when there is no room, as it does the default; set `side="right"` to keep the former placement.
+
 ## 1.0.0-beta.16
 
 ### Patch Changes
