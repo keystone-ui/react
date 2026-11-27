@@ -16,21 +16,26 @@
  *   - Fumadocs demo + registry entry + MDX page
  */
 
+import { execFileSync } from "node:child_process";
 import { randomBytes } from "node:crypto";
 import {
+  chmodSync,
   closeSync,
   constants,
   fchmodSync,
   fchownSync,
   fstatSync,
   ftruncateSync,
+  linkSync,
   lstatSync,
   mkdirSync,
+  mkdtempSync,
   openSync,
   readdirSync,
   readFileSync,
   readSync,
   renameSync,
+  rmdirSync,
   unlinkSync,
   writeSync,
 } from "node:fs";
@@ -325,10 +330,14 @@ function inspectMeta(tree, name) {
   };
 }
 
-/** Opens a registry without following a symlink at its path. */
+/**
+ * Opens a registry without following a symlink at its path, and without
+ * waiting: a named pipe put there would block a plain open until something
+ * opened its other end. Callers check the type before the first read.
+ */
 function openRegistry(path, flags) {
   try {
-    return openSync(join(ROOT, path), noFollow(flags));
+    return openSync(join(ROOT, path), noFollow(nonBlocking(flags)));
   } catch (error) {
     if (error.code === "ELOOP") {
       throw new RegistryShapeError("symlinked registry", { cause: error });
@@ -362,6 +371,7 @@ function readRegistry(path, inspect) {
     const fd = openRegistry(path, constants.O_RDONLY);
     let bytes;
     try {
+      requireRegularFile(fd);
       bytes = readToEnd(fd);
     } finally {
       closeSync(fd);
@@ -414,17 +424,20 @@ function memberText(key, value) {
 // --- Replacing a registry ---
 //
 // A registry is never written in place: a contributor's editor may save it
-// at any moment, and a write or a cut through the scaffold's descriptor
-// would land on top of that save. Instead:
+// at any moment, and a write through the scaffold's descriptor would land on
+// top of that save. Instead:
 //
 //  1. Read: open the regular file without following a symlink, pin its
-//     identity and bytes, and compute the edit from those bytes.
+//     identity and bytes, and compute the edit from those bytes. The whole
+//     result is parsed again before anything is written.
 //  2. Stage: write the result to a new sibling file only this run created.
 //  3. Publish: check the registry and the staging file are both still what
 //     this run saw and wrote, then rename the staging file over the
 //     registry. The rename is the last thing this run does to the registry.
 //
-// Usable by any registry whose edit is a function of its text.
+// After a stop the staging file is removed only when it is provably this
+// run's and unmodified (see discardStaging); anything else is left and
+// listed. Usable by any registry whose edit is a function of its text.
 
 const fsError = (code) => Object.assign(new Error(code), { code });
 /** open(2) flags that refuse a symlink at the final path component. */
@@ -432,6 +445,23 @@ function noFollow(flags) {
   // biome-ignore lint/suspicious/noBitwiseOperators: open(2) flags are a bit set
   return flags | constants.O_NOFOLLOW;
 }
+
+/** open(2) flags that return at once on a named pipe instead of waiting. */
+function nonBlocking(flags) {
+  // biome-ignore lint/suspicious/noBitwiseOperators: open(2) flags are a bit set
+  return flags | constants.O_NONBLOCK;
+}
+
+/**
+ * The staging file's open(2) flags. O_EXCL with O_CREAT: a new file or
+ * EEXIST. O_APPEND: every write goes after whatever the file holds, so the
+ * write that continues after a short one cannot land on bytes someone else
+ * put there meanwhile; the check before publishing sees them instead.
+ */
+const STAGING_FLAGS = noFollow(
+  // biome-ignore lint/suspicious/noBitwiseOperators: open(2) flags are a bit set
+  constants.O_WRONLY | constants.O_CREAT | constants.O_EXCL | constants.O_APPEND
+);
 
 /** `mode & 07777`: the permission bits, without the file type. */
 function permissionBits(mode) {
@@ -460,14 +490,20 @@ function sameIdentity(a, b) {
   );
 }
 
+/** The bigint stat of `fd`, which must be a regular file. */
+function requireRegularFile(fd) {
+  const stat = fstatSync(fd, { bigint: true });
+  if (!stat.isFile()) {
+    throw new RegistryShapeError("not a regular file");
+  }
+  return stat;
+}
+
 /** Step 1: the open, regular registry with its pinned identity and bytes. */
 function pinRegistry(path) {
   const fd = openRegistry(path, constants.O_RDWR);
   try {
-    const stat = fstatSync(fd, { bigint: true });
-    if (!stat.isFile()) {
-      throw new Error("not a regular file");
-    }
+    const stat = requireRegularFile(fd);
     return { fd, pinned: identity(stat), bytes: readToEnd(fd) };
   } catch (error) {
     closeQuietly(fd);
@@ -501,19 +537,97 @@ function verifyJsonSnapshot(path, fd, snapshot) {
   }
 }
 
-/** Step 2a: an exclusive, private sibling of the registry. */
+/**
+ * The access control list on `path` as text, "" when it has none. Mode bits
+ * cannot say "everyone but this user may read", and the rename puts the
+ * staging file's list in the registry's place, so the two are compared
+ * before publishing. macOS `ls -le` prints the entries (`ls -l` shows an `@`
+ * instead of the `+` when the file also has extended attributes); elsewhere
+ * `ls -l` marks a list with `+` and `getfacl` prints it.
+ */
+function accessControlList(path) {
+  const absolute = join(ROOT, path);
+  const output = (file, args) =>
+    execFileSync(file, args, {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+  if (process.platform === "darwin") {
+    return output("/bin/ls", ["-lde", absolute])
+      .split("\n")
+      .slice(1)
+      .join("\n")
+      .trim();
+  }
+  if (output("ls", ["-ld", "--", absolute])[10] !== "+") {
+    return "";
+  }
+  return output("getfacl", [
+    "--omit-header",
+    "--absolute-names",
+    "--",
+    absolute,
+  ]).trim();
+}
+
+/**
+ * The staging file would publish with the registry's access control list.
+ * Runs before the verification read, keeping the external commands out of
+ * the gap between it and the rename. When a listing fails, the registry
+ * and staging checks say why if they can (one of them changed); otherwise
+ * the list cannot be shown to be kept, and the run stops.
+ */
+function requireSameAccessControl(path, source, staging, candidate) {
+  let same;
+  try {
+    same = accessControlList(path) === accessControlList(staging.path);
+  } catch (error) {
+    verifyJsonSnapshot(path, source.fd, source);
+    requireStagingIntact(staging, candidate);
+    throw new RegistryShapeError("access control list unreadable", {
+      cause: error,
+    });
+  }
+  if (!same) {
+    throw new RegistryShapeError("access control list would not be kept");
+  }
+}
+
+/** The staging file is still this run's, holding `candidate`. */
+function requireStagingIntact(staging, candidate) {
+  if (!stagingIntact(staging, candidate)) {
+    staging.changed = true;
+    throw new RegistryShapeError("staging file changed");
+  }
+}
+
+/**
+ * Step 2a: an exclusive, private sibling of the registry, returned as soon
+ * as it exists so a stop at any later step can find it. A name that is
+ * taken stops the run at that name.
+ */
 function createStaging(path) {
   const name = `${dirname(path)}/.${basename(path)}.${randomBytes(8).toString("hex")}.tmp`;
-  const fd = openSync(join(ROOT, name), "wx", 0o600);
-  const stat = fstatSync(fd, { bigint: true });
-  return {
-    path: name,
-    fd,
-    dev: stat.dev,
-    ino: stat.ino,
-    mode: 0o600n,
-    written: 0,
-  };
+  try {
+    return {
+      path: name,
+      fd: openSync(join(ROOT, name), STAGING_FLAGS, 0o600),
+      written: 0,
+    };
+  } catch (error) {
+    error.stopPath = name;
+    throw error;
+  }
+}
+
+/** The staging file's identity, owner and actual mode (0600 less the umask). */
+function recordStaging(staging) {
+  const stat = fstatSync(staging.fd, { bigint: true });
+  staging.dev = stat.dev;
+  staging.ino = stat.ino;
+  staging.uid = stat.uid;
+  staging.gid = stat.gid;
+  staging.mode = permissionBits(stat.mode);
 }
 
 /**
@@ -527,69 +641,159 @@ function fillStaging(staging, candidate, pinned) {
       staging.fd,
       candidate,
       staging.written,
-      candidate.length - staging.written,
-      staging.written
+      candidate.length - staging.written
     );
     if (count === 0) {
       throw fsError("EIO");
     }
     staging.written += count;
   }
-  const own = fstatSync(staging.fd, { bigint: true });
-  if (own.uid !== pinned.uid || own.gid !== pinned.gid) {
+  if (staging.uid !== pinned.uid || staging.gid !== pinned.gid) {
     fchownSync(staging.fd, Number(pinned.uid), Number(pinned.gid));
+    staging.uid = pinned.uid;
+    staging.gid = pinned.gid;
   }
   fchmodSync(staging.fd, Number(permissionBits(pinned.mode)));
   staging.mode = permissionBits(pinned.mode);
-  closeSync(staging.fd);
+  const { fd } = staging;
   staging.fd = undefined;
+  closeSync(fd);
 }
 
 /**
- * The staging file as it is now, if it is still the one this run created
- * holding exactly `expected` with the permissions this run gave it.
+ * Whether `path` (the staging name by default) is still the staging file
+ * this run created, with the owner and permissions it gave it, holding
+ * exactly `expected`. Only absence, a symlink or other non-regular file, or
+ * a different identity, owner, mode or content mean "changed". Every other
+ * error, a failed close included, is thrown: an I/O failure stops the run
+ * with its own code rather than passing or reading as a change.
  */
-function stagingIntact(staging, expected, owner) {
+function stagingIntact(staging, expected, path = staging.path) {
   let fd;
   try {
-    fd = openSync(join(ROOT, staging.path), noFollow(constants.O_RDONLY));
+    fd = openSync(join(ROOT, path), noFollow(nonBlocking(constants.O_RDONLY)));
+  } catch (error) {
+    if (error.code === "ENOENT" || error.code === "ELOOP") {
+      return false;
+    }
+    throw error;
+  }
+  let intact;
+  try {
     const stat = fstatSync(fd, { bigint: true });
-    return (
+    intact =
+      stat.isFile() &&
       stat.dev === staging.dev &&
       stat.ino === staging.ino &&
+      stat.uid === staging.uid &&
+      stat.gid === staging.gid &&
       permissionBits(stat.mode) === staging.mode &&
-      (owner === undefined ||
-        (stat.uid === owner.uid && stat.gid === owner.gid)) &&
-      readToEnd(fd).equals(expected)
-    );
-  } catch {
-    return false;
-  } finally {
-    if (fd !== undefined) {
-      closeQuietly(fd);
-    }
+      readToEnd(fd).equals(expected);
+  } catch (error) {
+    closeQuietly(fd);
+    throw error;
   }
+  closeSync(fd);
+  return intact;
 }
 
 /**
- * After a stop: remove the staging file only if it is still this run's,
- * unmodified. Otherwise leave it and list it with the paths this run
- * created, for the person to look at.
+ * After a stop: remove the staging file only if it is provably this run's
+ * and unmodified, and list whatever is left with the paths this run
+ * created. One already seen changed is left as it is. Never throws.
  */
-function releaseStaging(staging, candidate) {
+function releaseStaging(staging, expected) {
   if (staging.fd !== undefined) {
+    if (staging.ino === undefined) {
+      try {
+        recordStaging(staging);
+      } catch {
+        // Its identity is unknown, so it cannot be told apart: it is kept.
+      }
+    }
     closeQuietly(staging.fd);
     staging.fd = undefined;
   }
-  if (stagingIntact(staging, candidate.subarray(0, staging.written))) {
+  const left =
+    staging.ino === undefined || staging.changed
+      ? staging.path
+      : discardStaging(staging, expected);
+  if (left) {
+    created.push(left);
+  }
+}
+
+/**
+ * Removes the staging file if it is intact. It is first renamed into a new
+ * private directory beside it: the rename moves whatever holds the name at
+ * that instant, and the checks then run on a name nobody else knows, so a
+ * file put at the staging name before them is never the one removed.
+ * Anything that is not this run's is linked back under the staging name
+ * (never over something new there). Returns the path where what was there
+ * now is, or null when nothing is left.
+ */
+function discardStaging(staging, expected) {
+  let dir;
+  try {
+    dir = relative(
+      ROOT,
+      mkdtempSync(join(ROOT, dirname(staging.path), ".add-component-"))
+    );
+    // mkdtemp's 0700 less the umask: a umask such as 0277 would leave it
+    // without the write permission the rename into it needs.
+    chmodSync(join(ROOT, dir), 0o700);
+  } catch {
+    if (dir !== undefined) {
+      removeDirectoryQuietly(dir);
+    }
+    return staging.path;
+  }
+  const moved = `${dir}/staging`;
+  try {
+    renameSync(join(ROOT, staging.path), join(ROOT, moved));
+  } catch (error) {
+    removeDirectoryQuietly(dir);
+    return error.code === "ENOENT" ? null : staging.path;
+  }
+  let intact = false;
+  try {
+    intact = stagingIntact(staging, expected, moved);
+  } catch {
+    // Not provably this run's: it goes back.
+  }
+  if (intact) {
     try {
-      unlinkSync(join(ROOT, staging.path));
-      return;
+      unlinkSync(join(ROOT, moved));
+      removeDirectoryQuietly(dir);
+      return null;
     } catch {
-      // Unremovable: reported below.
+      // Unremovable: it goes back and is listed.
     }
   }
-  created.push(staging.path);
+  try {
+    if (lstatSync(join(ROOT, moved)).isDirectory()) {
+      return moved;
+    }
+    linkSync(join(ROOT, moved), join(ROOT, staging.path));
+  } catch {
+    // The name is taken again, or this cannot be linked: it stays here.
+    return moved;
+  }
+  try {
+    unlinkSync(join(ROOT, moved));
+  } catch {
+    return staging.path;
+  }
+  removeDirectoryQuietly(dir);
+  return staging.path;
+}
+
+function removeDirectoryQuietly(path) {
+  try {
+    rmdirSync(join(ROOT, path));
+  } catch {
+    // An empty directory left behind is harmless; nothing else is in it.
+  }
 }
 
 /**
@@ -597,15 +801,21 @@ function releaseStaging(staging, candidate) {
  * above. `change` throws a RegistryShapeError to refuse; a refusal is only
  * reported once the registry is known not to have changed since the read,
  * since a refusal of bytes someone has already replaced would be wrong.
+ * `added(tree)` says whether the complete result, parsed again, holds the
+ * new entry.
  */
-function replaceRegistry(path, change) {
+function replaceRegistry(path, change, added) {
   let source;
   let staging;
   let candidate;
   try {
     source = pinRegistry(path);
     try {
-      candidate = Buffer.from(change(decodeRegistry(source.bytes)));
+      const text = change(decodeRegistry(source.bytes));
+      if (!added(parseRegistryJson(text))) {
+        throw new RegistryShapeError("the edit did not add the entry");
+      }
+      candidate = Buffer.from(text);
     } catch (error) {
       if (error instanceof RegistryShapeError) {
         verifyJsonSnapshot(path, source.fd, source);
@@ -613,22 +823,23 @@ function replaceRegistry(path, change) {
       throw error;
     }
     staging = createStaging(path);
+    recordStaging(staging);
     fillStaging(staging, candidate, source.pinned);
+    requireSameAccessControl(path, source, staging, candidate);
     verifyJsonSnapshot(path, source.fd, source);
-    if (!stagingIntact(staging, candidate, source.pinned)) {
-      throw new RegistryShapeError("staging file changed");
-    }
-    closeSync(source.fd);
+    requireStagingIntact(staging, candidate);
+    const { fd } = source;
     source.fd = undefined;
+    closeSync(fd);
     renameSync(join(ROOT, staging.path), join(ROOT, path));
   } catch (error) {
     if (source?.fd !== undefined) {
       closeQuietly(source.fd);
     }
     if (staging) {
-      releaseStaging(staging, candidate);
+      releaseStaging(staging, candidate.subarray(0, staging.written));
     }
-    stopAt(path, error);
+    stopAt(error.stopPath ?? path, error);
   }
 }
 
@@ -795,6 +1006,27 @@ function makeDirectory(path) {
 }
 
 /**
+ * The file `editFile` opened is not a JSON registry under another name, a
+ * symlink or a hard link to it: a write through it would write the live
+ * registry in place, which only replaceRegistry() may change. Compared with
+ * what the registry paths name now, so a package.json this run already
+ * replaced counts as its new file.
+ */
+function requireNotJsonRegistry(stat) {
+  for (const registry of [PACKAGE, META]) {
+    let live;
+    try {
+      live = lstatSync(join(ROOT, registry), { bigint: true });
+    } catch {
+      continue;
+    }
+    if (live.dev === stat.dev && live.ino === stat.ino) {
+      throw new RegistryShapeError(`same file as ${registry}`);
+    }
+  }
+}
+
+/**
  * Rewrites a registry file through one descriptor: read it, apply `change`,
  * write back only if the bytes differ. A generated output that is absent is
  * created exclusively instead. Returns whether the file changed. The JSON
@@ -820,9 +1052,11 @@ function editFile(path, change, { generated = false } = {}) {
     return true;
   }
   try {
-    if (!fstatSync(fd).isFile()) {
+    const stat = fstatSync(fd, { bigint: true });
+    if (!stat.isFile()) {
       throw new Error("not a regular file");
     }
+    requireNotJsonRegistry(stat);
     const source = readFileSync(fd, "utf-8");
     const next = change(source);
     if (next === source) {
@@ -972,26 +1206,33 @@ import { ${pascal} } from "@keystoneui/react/${kebab}";
 
 function addPackageJsonExport(kebab) {
   const key = `./${kebab}`;
-  replaceRegistry(PACKAGE, (source) => {
-    const found = inspectPackage(parseRegistryJson(source), kebab);
-    requireEditable(found);
-    const withSource = insertLast(
-      source,
-      found.maps[0],
-      memberText(key, `./src/${kebab}.tsx`)
-    );
-    // Offsets after the first insertion moved, so read the result again.
-    const publishMap = inspectPackage(parseRegistryJson(withSource), kebab)
-      .maps[1];
-    return insertLast(
-      withSource,
-      publishMap,
-      memberText(key, {
-        types: `./dist/${kebab}.d.ts`,
-        default: `./dist/${kebab}.js`,
-      })
-    );
-  });
+  replaceRegistry(
+    PACKAGE,
+    (source) => {
+      const found = inspectPackage(parseRegistryJson(source), kebab);
+      requireEditable(found);
+      const withSource = insertLast(
+        source,
+        found.maps[0],
+        memberText(key, `./src/${kebab}.tsx`)
+      );
+      // Offsets after the first insertion moved, so read the result again.
+      const publishMap = inspectPackage(parseRegistryJson(withSource), kebab)
+        .maps[1];
+      return insertLast(
+        withSource,
+        publishMap,
+        memberText(key, {
+          types: `./dist/${kebab}.d.ts`,
+          default: `./dist/${kebab}.js`,
+        })
+      );
+    },
+    (tree) => {
+      const found = inspectPackage(tree, kebab);
+      return found.reasons.length === 0 && found.collisions.length === 2;
+    }
+  );
   console.log(`  ✓ ${PACKAGE} — added export "${key}"`);
 }
 
@@ -1077,11 +1318,21 @@ function writeDemoLoader(entries) {
 }
 
 function addToComponentsMetaJson(kebab) {
-  replaceRegistry(META, (source) => {
-    const found = inspectMeta(parseRegistryJson(source), kebab);
-    requireEditable(found);
-    return insertLast(source, found.pages, JSON.stringify(kebab));
-  });
+  replaceRegistry(
+    META,
+    (source) => {
+      const found = inspectMeta(parseRegistryJson(source), kebab);
+      requireEditable(found);
+      return insertLast(source, found.pages, JSON.stringify(kebab));
+    },
+    (tree) => {
+      const found = inspectMeta(tree, kebab);
+      return (
+        found.reasons.length === 0 &&
+        found.pages.items.filter((item) => item.value === kebab).length === 1
+      );
+    }
+  );
   console.log(`  ✓ ${META} — added "${kebab}"`);
 }
 

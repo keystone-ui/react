@@ -28,6 +28,7 @@ import { createHash } from "node:crypto";
 import {
   chmodSync,
   existsSync,
+  linkSync,
   lstatSync,
   mkdirSync,
   mkdtempSync,
@@ -987,7 +988,9 @@ function trackedRepo() {
  * ran, and `live-writes`, the count of writes and cuts the scaffold made on
  * the registry's inode (the original one, or the one at the path then).
  */
-const SEAM_PRELOAD = `const { O_RDWR } = fs.constants;
+const SEAM_PRELOAD = `const { O_RDWR, O_EXCL } = fs.constants;
+const isExclusive = (flags) =>
+  flags === "wx" || (typeof flags === "number" && (flags & O_EXCL) !== 0);
 const { basename, dirname } = await import("node:path");
 let editing = false;
 let done = false;
@@ -1031,7 +1034,7 @@ wrap("openSync", function (inner, args) {
   if (isEditOpen(args[0], args[1])) act("before-open");
   const fd = inner.apply(this, args);
   if (isEditOpen(args[0], args[1])) sourceFd = fd;
-  if (isStaging(args[0]) && args[1] === "wx") stagingFd = fd;
+  if (isStaging(args[0]) && isExclusive(args[1])) stagingFd = fd;
   return fd;
 });
 wrap("readSync", function (inner, args) {
@@ -1528,6 +1531,486 @@ real.writeFileSync(join(OUT, "staging"), ${JSON.stringify(dir)} + "/" + name);`
     ]);
     expect(read(repo, staging).endsWith("edited\n")).toBe(true);
     expectTree(before, snapshot(repo), { added: [...ALL_FIVE, staging] });
+  });
+});
+
+/**
+ * A preload for the staging-file cases (review round 3). It follows
+ * TARGET's staging file from its exclusive open and does what CASE names,
+ * once:
+ *  - enospc-first: fail the first staging write with ENOSPC
+ *  - replace-at-cleanup: as enospc-first, then put a different file (NOTE)
+ *    at the staging name just before the call that removes or moves it
+ *  - chgrp: after the staging writer closes, give the staging file another
+ *    of this user's groups
+ *  - append-after-short: force the first staging write to one byte, then
+ *    append NOTE to the staging file
+ *  - eio-first-fstat: fail the first fstat of the staging descriptor
+ *  - umask: run under umask 0277, then as enospc-first
+ *  - taken-name: put NOTE at the staging name just before its open
+ *  - eio-verify-read / eio-verify-close: fail the first read, or the close
+ *    after it released the descriptor, of the publish check's open of the
+ *    staging file
+ *  - fifo-at-staging: after the staging writer closes, rename the FIFO at
+ *    FIFO over the staging name
+ *  - parse-before-stage: record whether JSON.parse saw the complete text of
+ *    the first staging write before the staging file was created
+ * OUT/staging holds the staging name, OUT/fired is written when the case's
+ * action ran, OUT/renamed-onto-target when a rename onto TARGET ran.
+ */
+const STAGING_PRELOAD = `const { O_EXCL, O_RDWR } = fs.constants;
+const { basename, dirname, relative } = await import("node:path");
+let stagingPath;
+let stagingFd;
+let stagingClosed = false;
+let verifyFd;
+let writes = 0;
+let sourceOpen = false;
+let done = false;
+const parsed = new Set();
+const once = () => {
+  if (done) return false;
+  done = true;
+  real.writeFileSync(join(OUT, "fired"), CASE);
+  return true;
+};
+const isStaging = (path) =>
+  dirname(String(path)) === dirname(at(TARGET)) &&
+  basename(String(path)).startsWith("." + basename(TARGET) + ".") &&
+  String(path).endsWith(".tmp");
+const exclusive = (flags) =>
+  flags === "wx" || (typeof flags === "number" && (flags & O_EXCL) !== 0);
+if (CASE === "umask") process.umask(0o277);
+if (CASE === "parse-before-stage") {
+  const parse = JSON.parse;
+  JSON.parse = function (text, ...rest) {
+    const value = parse.call(this, text, ...rest);
+    if (sourceOpen && stagingPath === undefined) parsed.add(text);
+    return value;
+  };
+}
+const wrap = (name, wrapper) => {
+  const inner = fs[name];
+  fs[name] = function (...args) {
+    return wrapper.call(this, inner, args);
+  };
+};
+const replaceAtCleanup = () => {
+  if (CASE !== "replace-at-cleanup" || !once()) return;
+  real.writeFileSync(stagingPath + ".replacement", NOTE);
+  real.renameSync(stagingPath + ".replacement", stagingPath);
+};
+wrap("openSync", function (inner, args) {
+  const [path, flags] = args;
+  if (is(path, TARGET) && typeof flags === "number" && (flags & O_RDWR) !== 0) sourceOpen = true;
+  if (isStaging(path) && exclusive(flags)) {
+    stagingPath = String(path);
+    real.writeFileSync(join(OUT, "staging"), relative(ROOT, stagingPath));
+    if (CASE === "taken-name" && once()) real.writeFileSync(stagingPath, NOTE);
+    stagingFd = inner.apply(this, args);
+    return stagingFd;
+  }
+  const fd = inner.apply(this, args);
+  if (stagingClosed && String(path) === stagingPath && verifyFd === undefined) verifyFd = fd;
+  return fd;
+});
+wrap("fstatSync", function (inner, args) {
+  if (CASE === "eio-first-fstat" && stagingFd !== undefined && args[0] === stagingFd && once()) fail("EIO");
+  return inner.apply(this, args);
+});
+wrap("readSync", function (inner, args) {
+  if (CASE === "eio-verify-read" && typeof verifyFd === "number" && args[0] === verifyFd && once()) fail("EIO");
+  return inner.apply(this, args);
+});
+wrap("writeSync", function (inner, args) {
+  if (stagingFd === undefined || args[0] !== stagingFd) return inner.apply(this, args);
+  writes++;
+  if (writes === 1 && CASE === "parse-before-stage") {
+    real.writeFileSync(join(OUT, "parsed"), String(parsed.has(Buffer.from(args[1]).toString("utf8"))));
+  }
+  if (writes === 1 && ["enospc-first", "umask", "replace-at-cleanup"].includes(CASE)) fail("ENOSPC");
+  if (writes === 1 && CASE === "append-after-short") {
+    args[3] = 1;
+    const count = inner.apply(this, args);
+    if (once()) real.appendFileSync(stagingPath, NOTE);
+    return count;
+  }
+  return inner.apply(this, args);
+});
+wrap("closeSync", function (inner, args) {
+  const [fd] = args;
+  const result = inner.apply(this, args);
+  if (stagingFd !== undefined && fd === stagingFd) {
+    stagingFd = undefined;
+    stagingClosed = true;
+    if (CASE === "chgrp" && once()) {
+      const own = real.statSync(stagingPath).gid;
+      const other = process.getgroups().find((gid) => gid !== own);
+      real.chownSync(stagingPath, process.getuid(), other);
+    }
+    if (CASE === "fifo-at-staging" && once()) real.renameSync(FIFO, stagingPath);
+  }
+  if (typeof verifyFd === "number" && fd === verifyFd) {
+    verifyFd = null;
+    if (CASE === "eio-verify-close" && once()) fail("EIO");
+  }
+  return result;
+});
+wrap("unlinkSync", function (inner, args) {
+  if (String(args[0]) === stagingPath) replaceAtCleanup();
+  return inner.apply(this, args);
+});
+wrap("renameSync", function (inner, args) {
+  if (is(args[1], TARGET)) real.writeFileSync(join(OUT, "renamed-onto-target"), "");
+  if (String(args[0]) === stagingPath && !is(args[1], TARGET)) replaceAtCleanup();
+  return inner.apply(this, args);
+});
+`;
+
+const NOTE = "editor note\n";
+
+type StagingCase =
+  | "enospc-first"
+  | "replace-at-cleanup"
+  | "chgrp"
+  | "append-after-short"
+  | "eio-first-fstat"
+  | "umask"
+  | "taken-name"
+  | "eio-verify-read"
+  | "eio-verify-close"
+  | "fifo-at-staging"
+  | "parse-before-stage";
+
+/** Runs the scaffold with STAGING_PRELOAD doing `kase` on `path`. */
+function runStagingCase(
+  repo: string,
+  path: string,
+  kase: StagingCase,
+  { fifo = "", timeout = 30_000 } = {}
+) {
+  const out = tempDir("ks-add-component-out-");
+  const hook = hookFile(
+    repo,
+    STAGING_PRELOAD,
+    `const TARGET = ${JSON.stringify(path)};
+const CASE = ${JSON.stringify(kase)};
+const OUT = ${JSON.stringify(out)};
+const NOTE = ${JSON.stringify(NOTE)};
+const FIFO = ${JSON.stringify(fifo)};
+`
+  );
+  const result = spawnSync(
+    process.execPath,
+    ["--import", hook, join(repo, "scripts/add-component.mjs"), PASCAL],
+    { encoding: "utf8", timeout }
+  );
+  const record = (name: string) =>
+    existsSync(join(out, name))
+      ? readFileSync(join(out, name), "utf8")
+      : undefined;
+  return {
+    result,
+    fired: record("fired") !== undefined,
+    staging: record("staging") ?? "",
+    parsed: record("parsed"),
+    renamedOntoTarget: record("renamed-onto-target") !== undefined,
+  };
+}
+
+/** A named pipe at `path`; mkfifo(1) is on macOS and Linux. */
+function makeFifo(path: string) {
+  const made = spawnSync("mkfifo", [path], { encoding: "utf8" });
+  expect(made.status, made.stderr).toBe(0);
+}
+
+/**
+ * The access control list entry "nobody may read" on `file`, or false where
+ * this machine cannot set one (no setfacl, or a file system without ACLs).
+ */
+function denyNobodyRead(file: string) {
+  const set =
+    process.platform === "darwin"
+      ? spawnSync("/bin/chmod", ["+a", "user:nobody deny read", file])
+      : spawnSync("setfacl", ["-m", "u:nobody:---", file]);
+  return set.status === 0;
+}
+
+/** Whether this machine can set the entry at all, tried on a throwaway file. */
+const ACL_SETTABLE = (() => {
+  const dir = mkdtempSync(join(tmpdir(), "ks-add-component-acl-"));
+  try {
+    const file = join(dir, "probe");
+    writeFileSync(file, "");
+    return denyNobodyRead(file);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+})();
+
+function aclText(file: string) {
+  return process.platform === "darwin"
+    ? spawnSync("/bin/ls", ["-lde", file], { encoding: "utf8" }).stdout
+    : spawnSync("getfacl", ["--omit-header", file], { encoding: "utf8" })
+        .stdout;
+}
+
+/** Registries the scaffold edits before `path`, which a late stop at it keeps edited. */
+const earlierThan = (path: string) => (path === META ? EARLIER_THAN_META : []);
+
+describe("JSON registries: another output is never the live registry (review r3 finding 1)", () => {
+  it.each([
+    [PACKAGE, "symlink"],
+    [META, "symlink"],
+    [META, "hard link"],
+  ] as const)(
+    "stops at a manifest that is a %s %s, writing nothing through it",
+    (path, kind) => {
+      const solo = trackedRepo();
+      expect(run(solo, PASCAL).status).toBe(0);
+      const repo = trackedRepo();
+      const manifest = join(repo, MANIFEST);
+      rmSync(manifest);
+      if (kind === "symlink") {
+        symlinkSync(relative(dirname(manifest), join(repo, path)), manifest);
+      } else {
+        linkSync(join(repo, path), manifest);
+      }
+      const original = readFileSync(join(repo, path));
+
+      const seamRun = runAtSeam(repo, path, "none");
+
+      expect(seamRun.liveWrites, "writes or cuts on the registry").toBe(0);
+      expectLateStop(
+        seamRun.result,
+        MANIFEST,
+        `same file as ${path}`,
+        ALL_FIVE
+      );
+      // The package was already replaced, as in a successful run; meta.json
+      // comes after the manifest and keeps its bytes.
+      if (path === PACKAGE) {
+        expect(read(repo, PACKAGE)).toBe(read(solo, PACKAGE));
+      } else {
+        expect(readFileSync(join(repo, META)).equals(original)).toBe(true);
+      }
+    }
+  );
+});
+
+describe("JSON registries: the access control list survives (review r3 finding 2)", () => {
+  it.skipIf(!ACL_SETTABLE).each([PACKAGE, META])(
+    "%s with an ACL stops before publishing and keeps the list",
+    (path) => {
+      const repo = trackedRepo();
+      const file = join(repo, path);
+      expect(denyNobodyRead(file)).toBe(true);
+      const bytes = readFileSync(file);
+      const acl = aclText(file);
+      expect(acl).toContain("nobody");
+
+      const result = run(repo, PASCAL);
+
+      expectLateStop(
+        result,
+        path,
+        "access control list would not be kept",
+        ALL_FIVE
+      );
+      expect(readFileSync(file).equals(bytes)).toBe(true);
+      expect(aclText(file)).toBe(acl);
+    }
+  );
+});
+
+describe("JSON registries: cleanup removes only its own unmodified staging file (review r3 findings 3 and 5)", () => {
+  it.each([PACKAGE, META])(
+    "%s: a file put at the staging name just before cleanup is kept and listed",
+    (path) => {
+      const repo = trackedRepo();
+      const before = snapshot(repo);
+
+      const staged = runStagingCase(repo, path, "replace-at-cleanup");
+
+      expect(staged.fired, "the replacement ran").toBe(true);
+      expectStop(staged.result, path, "ENOSPC", [...ALL_FIVE, staged.staging]);
+      expect(read(repo, staged.staging)).toBe(NOTE);
+      expectTree(before, snapshot(repo), {
+        added: [...ALL_FIVE, staged.staging],
+        changed: earlierThan(path),
+      });
+    }
+  );
+
+  // Needs a second group of this user to change the staging file to.
+  it.skipIf((process.getgroups?.() ?? []).length < 2).each([PACKAGE, META])(
+    "%s: a staging file whose group changed is kept and listed",
+    (path) => {
+      const repo = trackedRepo();
+      const before = snapshot(repo);
+
+      const staged = runStagingCase(repo, path, "chgrp");
+
+      expect(staged.fired, "the group change ran").toBe(true);
+      expectLateStop(staged.result, path, "staging file changed", [
+        ...ALL_FIVE,
+        staged.staging,
+      ]);
+      expectTree(before, snapshot(repo), {
+        added: [...ALL_FIVE, staged.staging],
+        changed: earlierThan(path),
+      });
+    }
+  );
+
+  it.each([PACKAGE, META])(
+    "%s: an I/O error on the staging file's first fstat still removes it",
+    (path) => {
+      const repo = trackedRepo();
+      const before = snapshot(repo);
+
+      const staged = runStagingCase(repo, path, "eio-first-fstat");
+
+      expect(staged.fired).toBe(true);
+      expectStop(staged.result, path, "EIO", ALL_FIVE);
+      expectTree(before, snapshot(repo), {
+        added: ALL_FIVE,
+        changed: earlierThan(path),
+      });
+    }
+  );
+
+  it.each([PACKAGE, META])(
+    "%s: under umask 0277 a failed first write still removes the 0400 staging file",
+    (path) => {
+      const repo = trackedRepo();
+      mkdirSync(join(repo, DEMO_DIR));
+      const before = snapshot(repo);
+      const created = ALL_FIVE.filter((entry) => entry !== DEMO_DIR);
+
+      const staged = runStagingCase(repo, path, "umask");
+
+      expectStop(staged.result, path, "ENOSPC", created);
+      expectTree(before, snapshot(repo), {
+        added: created,
+        changed: earlierThan(path),
+      });
+    }
+  );
+
+  it.each([PACKAGE, META])(
+    "%s: a taken staging name stops at that name and keeps its file",
+    (path) => {
+      const repo = trackedRepo();
+      const bytes = readFileSync(join(repo, path));
+
+      const staged = runStagingCase(repo, path, "taken-name");
+
+      expect(staged.fired).toBe(true);
+      expectStop(staged.result, staged.staging, "EEXIST", ALL_FIVE);
+      expect(read(repo, staged.staging)).toBe(NOTE);
+      expect(readFileSync(join(repo, path)).equals(bytes)).toBe(true);
+    }
+  );
+});
+
+describe("JSON registries: a short staging write never overwrites (review r3 finding 4)", () => {
+  it.each([PACKAGE, META])(
+    "%s: bytes appended to the staging file after a one-byte write survive",
+    (path) => {
+      const repo = trackedRepo();
+      const before = snapshot(repo);
+
+      const staged = runStagingCase(repo, path, "append-after-short");
+
+      expect(staged.fired).toBe(true);
+      expectLateStop(staged.result, path, "staging file changed", [
+        ...ALL_FIVE,
+        staged.staging,
+      ]);
+      expect(read(repo, staged.staging).slice(1, 1 + NOTE.length)).toBe(NOTE);
+      expectTree(before, snapshot(repo), {
+        added: [...ALL_FIVE, staged.staging],
+        changed: earlierThan(path),
+      });
+    }
+  );
+});
+
+describe("JSON registries: the publish check stops on I/O errors (review r3 finding 6)", () => {
+  it.each(
+    cross([PACKAGE, META], ["eio-verify-read", "eio-verify-close"] as const)
+  )("%s: %s stops with EIO and publishes nothing", (path, kase) => {
+    const repo = trackedRepo();
+    const before = snapshot(repo);
+
+    const staged = runStagingCase(repo, path, kase);
+
+    expect(staged.fired).toBe(true);
+    expect(staged.renamedOntoTarget, "rename onto the registry").toBe(false);
+    expectStop(staged.result, path, "EIO", ALL_FIVE);
+    expectTree(before, snapshot(repo), {
+      added: ALL_FIVE,
+      changed: earlierThan(path),
+    });
+  });
+});
+
+describe("JSON registries: a named pipe never blocks the run (review r3 finding 7)", () => {
+  it.each([PACKAGE, META])(
+    "%s: a FIFO put at the staging name is reported, not read",
+    (path) => {
+      const repo = trackedRepo();
+      const bytes = readFileSync(join(repo, path));
+      const fifo = join(tempDir("ks-add-component-fifo-"), "pipe");
+      makeFifo(fifo);
+
+      const staged = runStagingCase(repo, path, "fifo-at-staging", {
+        fifo,
+        timeout: 10_000,
+      });
+
+      expect(staged.fired).toBe(true);
+      expectLateStop(staged.result, path, "staging file changed", [
+        ...ALL_FIVE,
+        staged.staging,
+      ]);
+      expect(lstatSync(join(repo, staged.staging)).isFIFO()).toBe(true);
+      expect(readFileSync(join(repo, path)).equals(bytes)).toBe(true);
+    }
+  );
+
+  it.each([PACKAGE, META])(
+    "%s: a FIFO at the registry stops preflight",
+    (path) => {
+      const repo = trackedRepo();
+      rmSync(join(repo, path));
+      makeFifo(join(repo, path));
+
+      const result = spawnSync(
+        process.execPath,
+        [join(repo, "scripts/add-component.mjs"), PASCAL],
+        { encoding: "utf8", timeout: 10_000 }
+      );
+
+      expect(result.status, result.stderr).toBe(1);
+      expect(result.stderr).toContain(stoppedLine(path, "not a regular file"));
+      expect(result.stderr).toContain("Nothing was written.");
+      for (const created of ALL_FIVE) {
+        expect(existsSync(join(repo, created)), created).toBe(false);
+      }
+    }
+  );
+});
+
+describe("JSON registries: the complete result is parsed before staging (review r3 finding 8)", () => {
+  it.each([PACKAGE, META])("%s", (path) => {
+    const repo = trackedRepo();
+
+    const staged = runStagingCase(repo, path, "parse-before-stage");
+
+    expect(staged.result.status, staged.result.stderr).toBe(0);
+    expect(staged.parsed).toBe("true");
   });
 });
 
