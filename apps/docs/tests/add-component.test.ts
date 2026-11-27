@@ -986,7 +986,8 @@ function trackedRepo() {
  * bytes, "rename-eio" fails the rename onto TARGET; "short" only forces the
  * one-byte first write. The preload records in OUT: `fired` when the action
  * ran, and `live-writes`, the count of writes and cuts the scaffold made on
- * the registry's inode (the original one, or the one at the path then).
+ * the registry's inode: through a descriptor opened on the original file
+ * while the path still named it, or on the file the path names then.
  */
 const SEAM_PRELOAD = `const { O_RDWR, O_EXCL } = fs.constants;
 const isExclusive = (flags) =>
@@ -1008,10 +1009,23 @@ const isStaging = (path) =>
   dirname(String(path)) === dirname(at(TARGET)) &&
   basename(String(path)).startsWith("." + basename(TARGET) + ".") &&
   String(path).endsWith(".tmp");
+// Descriptors opened on the original registry while TARGET still named it.
+// Once a rename frees that inode, Linux file systems hand its number to the
+// next new file (ext4 does, APFS does not), so a later file with the same
+// number is not the registry: matching on the number alone counted the
+// meta.json staging write as a write to package.json.
+const originFds = new Set();
+const same = (a, b) => a && b && a.dev === b.dev && a.ino === b.ino;
+const liveStat = () =>
+  real.existsSync(at(TARGET)) ? real.lstatSync(at(TARGET), { bigint: true }) : null;
+const noteOpen = (fd) => {
+  const own = real.fstatSync(fd, { bigint: true });
+  if (same(own, origin) && same(liveStat(), origin)) originFds.add(fd);
+};
 const onLiveInode = (fd) => {
   const own = real.fstatSync(fd, { bigint: true });
-  const now = real.existsSync(at(TARGET)) ? real.lstatSync(at(TARGET), { bigint: true }) : null;
-  const hit = [origin, now].some((s) => s && s.dev === own.dev && s.ino === own.ino);
+  const now = liveStat();
+  const hit = originFds.has(fd) || same(own, now);
   if (hit) {
     let file = "?";
     try {
@@ -1047,6 +1061,7 @@ wrap("openSync", function (inner, args) {
   const fd = inner.apply(this, args);
   if (isEditOpen(args[0], args[1])) sourceFd = fd;
   if (isStaging(args[0]) && isExclusive(args[1])) stagingFd = fd;
+  noteOpen(fd);
   return fd;
 });
 wrap("readSync", function (inner, args) {
@@ -1087,6 +1102,7 @@ wrap("ftruncateSync", function (inner, args) {
 });
 wrap("closeSync", function (inner, args) {
   const result = inner.apply(this, args);
+  originFds.delete(args[0]);
   if (args[0] === sourceFd) sourceFd = undefined;
   if (stagingFd !== undefined && args[0] === stagingFd) {
     stagingFd = undefined;
