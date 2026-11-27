@@ -1424,9 +1424,13 @@ function addRegistryEntry(kebab) {
 /**
  * The demo files as they are now that the four files exist: another process
  * may have added a demo with the new key since the check. These are the
- * inputs for this run's manifest and loader.
+ * inputs for this run's manifest and loader, so they must map the key the
+ * new MDX page previews to the demo this run wrote. A demo moved, removed or
+ * replaced since its close, or a path gen-demos keys another way, would give
+ * a manifest without the page's preview: the run stops before any registry
+ * edit instead.
  */
-function liveDemoEntries() {
+function liveDemoEntries(name) {
   let files;
   try {
     files = demoFiles();
@@ -1437,7 +1441,15 @@ function liveDemoEntries() {
   if (duplicates.length > 0) {
     stop(duplicates);
   }
-  return demoEntriesFromPaths(files);
+  const entries = demoEntriesFromPaths(files);
+  const key = `${name}-default`;
+  const file = `${name}/default.tsx`;
+  if (!entries.some((entry) => entry.key === key && entry.file === file)) {
+    stop([
+      `Stopped at ${DEMOS}/${file} (demo key "${key}" not in the rescan).`,
+    ]);
+  }
+  return entries;
 }
 
 /** apps/docs/demos/manifest.json, rendered by gen-demos' own renderer. */
@@ -1514,7 +1526,7 @@ console.log(`  ✓ ${mdxFile}`);
 // Registries, only once all four files are closed
 console.log("\nUpdating registries:");
 
-const demoEntries = liveDemoEntries();
+const demoEntries = liveDemoEntries(kebab);
 addPackageJsonExport(kebab);
 addTsupEntry(kebab);
 addRegistryEntry(kebab);
