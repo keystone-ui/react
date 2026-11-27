@@ -43,9 +43,14 @@ import { basename, dirname, join, relative } from "node:path";
 
 import { renderLoader, renderManifest } from "./gen-demos.mjs";
 import { demoEntriesFromPaths } from "./lib/demo-entries.mjs";
+import {
+  appendElement,
+  LiteralShapeError,
+  readTsupEntries,
+  readUiRows,
+} from "./lib/ts-registry.mjs";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
-const UI_DIR = join(ROOT, "packages/ui");
 
 // --- Name utilities ---
 
@@ -95,51 +100,103 @@ function statOrNull(path) {
   }
 }
 
+/** The `Stopped at` line for a filesystem error at `path`. */
+function stoppedLine(path, error) {
+  return `Stopped at ${path} (${error.code}).`;
+}
+
+/** An fs error, as opposed to a bug: it has a string code such as EACCES. */
+function isFsError(error) {
+  return typeof error?.code === "string";
+}
+
+/**
+ * Preflight lstat of a repo-relative path: its stat, or null when it does
+ * not exist. Only ENOENT means absent. Any other error (EACCES on a parent,
+ * ENOTDIR, EIO) says nothing about whether the path is taken, so it is
+ * pushed onto `lines` as a stop, and false comes back.
+ */
+function lookup(path, lines) {
+  try {
+    return lstatSync(join(ROOT, path));
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      return null;
+    }
+    if (!isFsError(error)) {
+      throw error;
+    }
+    lines.push(stoppedLine(path, error));
+    return false;
+  }
+}
+
+/**
+ * Every demo file for the preflight key check, or null after pushing the
+ * stop for a scan error onto `lines`, named at the directory that failed.
+ */
+function preflightDemoFiles(lines) {
+  try {
+    return demoFiles();
+  } catch (error) {
+    if (!isFsError(error)) {
+      throw error;
+    }
+    const at =
+      typeof error.path === "string" && error.path.startsWith(`${ROOT}/`)
+        ? relative(ROOT, error.path)
+        : DEMOS;
+    lines.push(stoppedLine(at, error));
+    return null;
+  }
+}
+
 /**
  * Everything the scaffold would create or add that is already there, one
  * line each. Runs before the first write: a single collision means nothing
- * is written, so a contributor's existing story, demo or page survives.
+ * is written, so a contributor's existing story, demo or page survives. A
+ * lookup that fails for any reason but absence is a line too, and the
+ * checks that can still run do.
  */
 function findCollisions(name) {
   const collisions = [];
 
   for (const path of destinations(name)) {
-    if (statOrNull(join(ROOT, path))) {
+    if (lookup(path, collisions)) {
       collisions.push(path);
     }
   }
   const demoDir = `apps/docs/demos/${name}`;
-  const demoDirStat = statOrNull(join(ROOT, demoDir));
+  const demoDirStat = lookup(demoDir, collisions);
   if (demoDirStat && !demoDirStat.isDirectory()) {
     collisions.push(`${demoDir} (exists and is not a directory)`);
   }
 
-  collisions.push(
-    ...duplicateDemoKeys([...demoFiles(), `${name}/default.tsx`])
-  );
-
-  collisions.push(
-    ...readRegistry(PACKAGE, (tree) => inspectPackage(tree, name))
-  );
-
-  const tsup = readFileSync(join(UI_DIR, "tsup.config.ts"), "utf-8");
-  if (tsup.includes(`"src/${name}.tsx"`)) {
-    collisions.push(`packages/ui/tsup.config.ts: entry "src/${name}.tsx"`);
+  const demos = preflightDemoFiles(collisions);
+  if (demos) {
+    collisions.push(...duplicateDemoKeys([...demos, `${name}/default.tsx`]));
   }
 
-  const registry = readFileSync(join(UI_DIR, "src/_registry.ts"), "utf-8");
-  if (registry.includes(`name: "${name}"`)) {
-    collisions.push(`packages/ui/src/_registry.ts: entry name: "${name}"`);
-  }
+  collisions.push(
+    ...readRegistry(PACKAGE, (bytes) => inspectPackage(bytes, name))
+  );
 
-  collisions.push(...readRegistry(META, (tree) => inspectMeta(tree, name)));
+  collisions.push(...readRegistry(TSUP, (bytes) => inspectTsup(bytes, name)));
+  collisions.push(
+    ...readRegistry(UI_REGISTRY, (bytes) => inspectUi(bytes, name))
+  );
+  collisions.push(...readRegistry(META, (bytes) => inspectMeta(bytes, name)));
 
   return collisions;
 }
 
 const DEMOS = "apps/docs/demos";
 const PACKAGE = "packages/ui/package.json";
+const TSUP = "packages/ui/tsup.config.ts";
+const UI_REGISTRY = "packages/ui/src/_registry.ts";
 const META = "apps/docs/content/docs/components/meta.json";
+/** Every registry replaceRegistry() replaces, in the order they are edited. */
+const REGISTRIES = [PACKAGE, TSUP, UI_REGISTRY, META];
 
 // --- JSON registries ---
 //
@@ -158,12 +215,15 @@ const JSON_SPACE = /[ \t\n\r]/;
 const LITERAL_END = /[ \t\n\r,\]}]/;
 const CLOSER = { object: "}", array: "]" };
 
-/** Registry bytes as text. Bytes that are not UTF-8 are not JSON. */
-function decodeRegistry(bytes) {
+/**
+ * Registry bytes as text. Bytes that are not UTF-8 are not the registry's
+ * shape: `reason` says what that shape is.
+ */
+function decodeRegistry(bytes, reason = "invalid JSON") {
   try {
     return UTF8.decode(bytes);
   } catch (error) {
-    throw new RegistryShapeError("invalid JSON", { cause: error });
+    throw new RegistryShapeError(reason, { cause: error });
   }
 }
 
@@ -282,6 +342,13 @@ function parseRegistryJson(source) {
   return parseJsonTree(source);
 }
 
+/** The JSON tree of registry bytes or text. */
+function jsonTree(input) {
+  return parseRegistryJson(
+    Buffer.isBuffer(input) ? decodeRegistry(input) : input
+  );
+}
+
 function member(node, key) {
   return node?.type === "object" ? node.members.get(key) : undefined;
 }
@@ -291,7 +358,8 @@ function member(node, key) {
  * map that is not an object gives its reason, and the other map's collision
  * is still reported. A key counts as taken even when it holds `null`.
  */
-function inspectPackage(tree, name) {
+function inspectPackage(input, name) {
+  const tree = jsonTree(input);
   const key = `./${name}`;
   const maps = [
     ["exports", member(tree, "exports")],
@@ -310,7 +378,8 @@ function inspectPackage(tree, name) {
 }
 
 /** apps/docs/content/docs/components/meta.json, with `pages` all strings. */
-function inspectMeta(tree, name) {
+function inspectMeta(input, name) {
+  const tree = jsonTree(input);
   const pages = member(tree, "pages");
   if (
     pages?.type !== "array" ||
@@ -327,6 +396,57 @@ function inspectMeta(tree, name) {
     pages,
     reasons: [],
     collisions: taken ? [`${META}: pages "${name}"`] : [],
+  };
+}
+
+// --- TypeScript registries ---
+//
+// tsup's `entryPoints` and _registry.ts's `ui` are read as literal arrays by
+// scripts/lib/ts-registry.mjs, never by text search: a comment holding the
+// entry is not the entry, and `'./src/x.tsx'` is. Anything that is not a
+// literal array of the expected elements stops the run with the file's one
+// reason.
+
+const TSUP_SHAPE = "expected literal entryPoints path array";
+const UI_SHAPE = "expected literal ui array of named objects";
+
+/** `read(text)` of registry bytes or text, its refusals as `reason`. */
+function readLiteralRegistry(input, read, reason) {
+  const text = Buffer.isBuffer(input) ? decodeRegistry(input, reason) : input;
+  try {
+    return read(text);
+  } catch (error) {
+    if (error instanceof LiteralShapeError) {
+      throw new RegistryShapeError(reason, { cause: error });
+    }
+    throw error;
+  }
+}
+
+/** packages/ui/tsup.config.ts: whether `src/<name>.tsx` is an entry. */
+function inspectTsup(input, name) {
+  const entries = readLiteralRegistry(input, readTsupEntries, TSUP_SHAPE);
+  const path = `src/${name}.tsx`;
+  return {
+    array: entries,
+    values: entries.items.map((item) => item.path),
+    reasons: [],
+    collisions: entries.items.some((item) => item.path === path)
+      ? [`${TSUP}: entry "${path}"`]
+      : [],
+  };
+}
+
+/** packages/ui/src/_registry.ts: whether a `ui` row is named `name`. */
+function inspectUi(input, name) {
+  const rows = readLiteralRegistry(input, readUiRows, UI_SHAPE);
+  return {
+    array: rows,
+    values: rows.items.map((item) => item.name),
+    reasons: [],
+    collisions: rows.items.some((item) => item.name === name)
+      ? [`${UI_REGISTRY}: entry name: "${name}"`]
+      : [],
   };
 }
 
@@ -361,9 +481,9 @@ function readToEnd(fd) {
 }
 
 /**
- * Preflight read of one JSON registry: the lines naming why it, or a part of
- * it, cannot be read, beside the collisions it can still show, so the other
- * registries are checked and listed too.
+ * Preflight read of one registry, `inspect(bytes)`: the lines naming why
+ * it, or a part of it, cannot be read, beside the collisions it can still
+ * show, so the other registries are checked and listed too.
  */
 function readRegistry(path, inspect) {
   let found;
@@ -376,10 +496,14 @@ function readRegistry(path, inspect) {
     } finally {
       closeSync(fd);
     }
-    found = inspect(parseRegistryJson(decodeRegistry(bytes)));
+    found = inspect(bytes);
   } catch (error) {
     if (error instanceof RegistryShapeError) {
       return [`Stopped at ${path} (${error.message}).`];
+    }
+    // A registry that cannot be read, ENOENT included: it is required.
+    if (isFsError(error)) {
+      return [stoppedLine(path, error)];
     }
     throw error;
   }
@@ -801,19 +925,21 @@ function removeDirectoryQuietly(path) {
  * above. `change` throws a RegistryShapeError to refuse; a refusal is only
  * reported once the registry is known not to have changed since the read,
  * since a refusal of bytes someone has already replaced would be wrong.
- * `added(tree)` says whether the complete result, parsed again, holds the
- * new entry.
+ * `added(text)` parses the complete result again and says whether it holds
+ * exactly the new entry. Bytes that are not UTF-8 are refused as `reason`.
  */
-function replaceRegistry(path, change, added) {
+function replaceRegistry(path, change, added, reason = "invalid JSON") {
   let source;
   let staging;
   let candidate;
   try {
     source = pinRegistry(path);
     try {
-      const text = change(decodeRegistry(source.bytes));
-      if (!added(parseRegistryJson(text))) {
-        throw new RegistryShapeError("the edit did not add the entry");
+      const text = change(decodeRegistry(source.bytes, reason));
+      if (!added(text)) {
+        throw new RegistryShapeError(
+          reason === "invalid JSON" ? "the edit did not add the entry" : reason
+        );
       }
       candidate = Buffer.from(text);
     } catch (error) {
@@ -1006,19 +1132,25 @@ function makeDirectory(path) {
 }
 
 /**
- * The file `editFile` opened is not a JSON registry under another name, a
+ * The file `editFile` opened is not a registry under another name, a
  * symlink or a hard link to it: a write through it would write the live
  * registry in place, which only replaceRegistry() may change. Compared with
- * what the registry paths name now, so a package.json this run already
+ * what the registry paths name now, so a registry this run already
  * replaced counts as its new file.
  */
-function requireNotJsonRegistry(stat) {
-  for (const registry of [PACKAGE, META]) {
+function requireNotRegistry(stat) {
+  for (const registry of REGISTRIES) {
     let live;
     try {
       live = lstatSync(join(ROOT, registry), { bigint: true });
-    } catch {
-      continue;
+    } catch (error) {
+      // A registry that is not there cannot be this file; any other error
+      // leaves that unknown, so the write does not happen.
+      if (error.code === "ENOENT") {
+        continue;
+      }
+      error.stopPath = registry;
+      throw error;
     }
     if (live.dev === stat.dev && live.ino === stat.ino) {
       throw new RegistryShapeError(`same file as ${registry}`);
@@ -1029,7 +1161,7 @@ function requireNotJsonRegistry(stat) {
 /**
  * Rewrites a registry file through one descriptor: read it, apply `change`,
  * write back only if the bytes differ. A generated output that is absent is
- * created exclusively instead. Returns whether the file changed. The JSON
+ * created exclusively instead. Returns whether the file changed. The four
  * registries do not come here: see replaceRegistry().
  */
 function editFile(path, change, { generated = false } = {}) {
@@ -1056,7 +1188,7 @@ function editFile(path, change, { generated = false } = {}) {
     if (!stat.isFile()) {
       throw new Error("not a regular file");
     }
-    requireNotJsonRegistry(stat);
+    requireNotRegistry(stat);
     const source = readFileSync(fd, "utf-8");
     const next = change(source);
     if (next === source) {
@@ -1068,7 +1200,7 @@ function editFile(path, change, { generated = false } = {}) {
     return true;
   } catch (error) {
     closeQuietly(fd);
-    stopAt(path, error);
+    stopAt(error.stopPath ?? path, error);
   }
 }
 
@@ -1209,7 +1341,7 @@ function addPackageJsonExport(kebab) {
   replaceRegistry(
     PACKAGE,
     (source) => {
-      const found = inspectPackage(parseRegistryJson(source), kebab);
+      const found = inspectPackage(source, kebab);
       requireEditable(found);
       const withSource = insertLast(
         source,
@@ -1217,8 +1349,7 @@ function addPackageJsonExport(kebab) {
         memberText(key, `./src/${kebab}.tsx`)
       );
       // Offsets after the first insertion moved, so read the result again.
-      const publishMap = inspectPackage(parseRegistryJson(withSource), kebab)
-        .maps[1];
+      const publishMap = inspectPackage(withSource, kebab).maps[1];
       return insertLast(
         withSource,
         publishMap,
@@ -1228,59 +1359,66 @@ function addPackageJsonExport(kebab) {
         })
       );
     },
-    (tree) => {
-      const found = inspectPackage(tree, kebab);
+    (text) => {
+      const found = inspectPackage(text, kebab);
       return found.reasons.length === 0 && found.collisions.length === 2;
     }
   );
   console.log(`  ✓ ${PACKAGE} — added export "${key}"`);
 }
 
-function addTsupEntry(kebab) {
-  const entry = `"src/${kebab}.tsx"`;
-  const added = editFile("packages/ui/tsup.config.ts", (source) => {
-    if (source.includes(entry)) {
-      return source;
-    }
-    // Append before the closing bracket of the entryPoints array. Anchoring
-    // on a particular last entry broke silently once `src/utils.ts` stopped
-    // being last: the replace matched nothing and the script still reported
-    // success, shipping an export that `tsup` never built.
-    const updated = source.replace(
-      /(entryPoints:\s*\[[\s\S]*?)(\n\s*\],)/,
-      `$1\n    ${entry},$2`
-    );
-    if (updated === source) {
-      throw new Error("could not find the entryPoints array");
-    }
-    return updated;
-  });
-  console.log(
-    added
-      ? "  ✓ packages/ui/tsup.config.ts — added entry"
-      : "  ⊘ tsup.config.ts entry already exists"
+/**
+ * Replaces the TypeScript registry at `path` with `entry` appended to its
+ * literal array, read by `inspect`. The result is read again and must list
+ * exactly the old elements and then `value`.
+ */
+function appendToLiteralArray(path, inspect, value, entry, closingIndent) {
+  let before;
+  replaceRegistry(
+    path,
+    (source) => {
+      const found = inspect(source);
+      requireEditable(found);
+      before = found.values;
+      return appendElement(source, found.array, entry, closingIndent);
+    },
+    (text) => {
+      const after = inspect(text).values;
+      return (
+        after.length === before.length + 1 &&
+        before.every((item, index) => after[index] === item) &&
+        after.at(-1) === value
+      );
+    },
+    path === TSUP ? TSUP_SHAPE : UI_SHAPE
   );
 }
 
+function addTsupEntry(kebab) {
+  appendToLiteralArray(
+    TSUP,
+    (source) => inspectTsup(source, kebab),
+    `src/${kebab}.tsx`,
+    `    "src/${kebab}.tsx",`,
+    "  "
+  );
+  console.log(`  ✓ ${TSUP} — added entry`);
+}
+
 function addRegistryEntry(kebab) {
-  const added = editFile("packages/ui/src/_registry.ts", (source) => {
-    if (source.includes(`name: "${kebab}"`)) {
-      return source;
-    }
-    const entry = `  {
+  appendToLiteralArray(
+    UI_REGISTRY,
+    (source) => inspectUi(source, kebab),
+    kebab,
+    `  {
     name: "${kebab}",
     type: "registry:ui",
     dependencies: [],
     files: [{ path: "ui/${kebab}.tsx", type: "registry:ui" }],
-  },`;
-    // Insert before the closing ];
-    return source.replace(/\n];/, `\n${entry}\n];`);
-  });
-  console.log(
-    added
-      ? "  ✓ packages/ui/src/_registry.ts — added entry"
-      : "  ⊘ _registry.ts entry already exists"
+  },`,
+    ""
   );
+  console.log(`  ✓ ${UI_REGISTRY} — added entry`);
 }
 
 /**
@@ -1321,12 +1459,12 @@ function addToComponentsMetaJson(kebab) {
   replaceRegistry(
     META,
     (source) => {
-      const found = inspectMeta(parseRegistryJson(source), kebab);
+      const found = inspectMeta(source, kebab);
       requireEditable(found);
       return insertLast(source, found.pages, JSON.stringify(kebab));
     },
-    (tree) => {
-      const found = inspectMeta(tree, kebab);
+    (text) => {
+      const found = inspectMeta(text, kebab);
       return (
         found.reasons.length === 0 &&
         found.pages.items.filter((item) => item.value === kebab).length === 1

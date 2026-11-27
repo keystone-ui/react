@@ -42,7 +42,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join, relative } from "node:path";
+import { basename, dirname, join, relative } from "node:path";
 import { pathToFileURL } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -53,6 +53,7 @@ const COPIED = [
   "scripts/add-component.mjs",
   "scripts/gen-demos.mjs",
   "scripts/lib/demo-entries.mjs",
+  "scripts/lib/ts-registry.mjs",
   "packages/ui/package.json",
   "packages/ui/tsup.config.ts",
   "packages/ui/src/_registry.ts",
@@ -705,9 +706,11 @@ before("writeSync", (fd) => fd === storyFd, () => fail("ENOSPC"));`
     const repo = scratchRepo();
     const before = snapshot(repo);
 
+    // The edit's open, by access mode: preflight reads tsup too, through a
+    // read-only open, and an error there is a preflight stop.
     const result = runHooked(
       repo,
-      `before("openSync", (path) => is(path, "packages/ui/tsup.config.ts"), () => fail("EIO"));`
+      `before("openSync", (path, flags) => is(path, "packages/ui/tsup.config.ts") && (flags === "r+" || (typeof flags === "number" && (flags & fs.constants.O_RDWR) !== 0)), () => fail("EIO"));`
     );
 
     expectStop(result, "packages/ui/tsup.config.ts", "EIO", ALL_FIVE);
@@ -2126,6 +2129,623 @@ describe("JSON registries: one malformed export map does not hide the other's en
     put(repo, PACKAGE, content);
 
     expectRefusal(repo, [stoppedLine(PACKAGE, reason), collision]);
+  });
+});
+
+// --- TypeScript registries (spec-registry-read.md rows 4-8) ---
+
+const TSUP = "packages/ui/tsup.config.ts";
+const UI_REGISTRY = "packages/ui/src/_registry.ts";
+const TSUP_SHAPE = "expected literal entryPoints path array";
+const UI_SHAPE = "expected literal ui array of named objects";
+/** The lines the scaffold appends to each array, as main writes them. */
+const TSUP_ENTRY = `    "src/${KEBAB}.tsx",`;
+const UI_ENTRY = `  {
+    name: "${KEBAB}",
+    type: "registry:ui",
+    dependencies: [],
+    files: [{ path: "ui/${KEBAB}.tsx", type: "registry:ui" }],
+  },`;
+/** The checked-in closes: tsup's `],` and ui's `];`, each alone on its line. */
+const TSUP_CLOSE = "\n  ],";
+const UI_CLOSE = "\n];";
+
+/** `source` with the entry on its own line above the checked-in close. */
+const withTsupEntry = (source: string) =>
+  source.replace(TSUP_CLOSE, `\n${TSUP_ENTRY}${TSUP_CLOSE}`);
+const withUiEntry = (source: string) =>
+  source.replace(UI_CLOSE, `\n${UI_ENTRY}${UI_CLOSE}`);
+
+/**
+ * A complete run: exit 0, empty stderr, the four files, both exports and
+ * the page, and the two TypeScript registries exactly as `tsup` and `ui`.
+ */
+function expectComplete(
+  repo: string,
+  result: { status: number | null; stderr: string },
+  { tsup, ui }: { tsup: string; ui: string }
+) {
+  expect(result.status, result.stderr).toBe(0);
+  expect(result.stderr).toBe("");
+  for (const path of Object.values(FILES)) {
+    expect(existsSync(join(repo, path)), path).toBe(true);
+  }
+  const pkg = JSON.parse(read(repo, PACKAGE));
+  expect(pkg.exports[`./${KEBAB}`]).toBe(`./src/${KEBAB}.tsx`);
+  expect(pkg.publishConfig.exports[`./${KEBAB}`]).toBeDefined();
+  expect(JSON.parse(read(repo, META)).pages).toContain(KEBAB);
+  expect(read(repo, TSUP)).toBe(tsup);
+  expect(read(repo, UI_REGISTRY)).toBe(ui);
+}
+
+/** Hook source: `path`'s text rewritten in place by `change` (a JS function). */
+function rewriteAction(path: string, change: string) {
+  return `const text = real.readFileSync(at(${JSON.stringify(path)}), "utf8");
+const saved = (${change})(text);
+if (saved === text) throw new Error("the save changed nothing");
+real.writeFileSync(at(${JSON.stringify(path)}), saved);
+real.writeFileSync(at("saved.txt"), saved);`;
+}
+
+/**
+ * Hook source for the seam harness: an editor save of `path` that appends
+ * a comment, in place or by a sibling renamed over it. The saved bytes also
+ * go to OUT/saved.json.
+ */
+function textSaveAction(path: string, how: "in place" | "rename") {
+  return `const saved = real.readFileSync(at(${JSON.stringify(path)}), "utf8") + "// editor note\\n";
+real.writeFileSync(join(OUT, "saved.json"), saved);
+${
+  how === "in place"
+    ? `real.writeFileSync(at(${JSON.stringify(path)}), saved);`
+    : `real.writeFileSync(at(${JSON.stringify(`${path}.editor-tmp`)}), saved);
+real.renameSync(at(${JSON.stringify(`${path}.editor-tmp`)}), at(${JSON.stringify(path)}));`
+}`;
+}
+
+describe("TypeScript registries: an entry spelled another way is still the entry (row 4)", () => {
+  it.each([
+    [
+      "tsup 'src/scaffold-probe.tsx'",
+      TSUP,
+      (source: string) =>
+        source.replace(
+          "entryPoints: [",
+          `entryPoints: [\n    'src/${KEBAB}.tsx',`
+        ),
+      `${TSUP}: entry "src/${KEBAB}.tsx"`,
+    ],
+    [
+      'tsup "./src/scaffold-probe.tsx"',
+      TSUP,
+      (source: string) =>
+        source.replace(
+          "entryPoints: [",
+          `entryPoints: [\n    "./src/${KEBAB}.tsx",`
+        ),
+      `${TSUP}: entry "src/${KEBAB}.tsx"`,
+    ],
+    [
+      'ui {name:"scaffold-probe",…}',
+      UI_REGISTRY,
+      (source: string) =>
+        source.replace(
+          UI_CLOSE,
+          `\n  {name:"${KEBAB}",type:"registry:ui",files:[]},${UI_CLOSE}`
+        ),
+      `${UI_REGISTRY}: entry name: "${KEBAB}"`,
+    ],
+    [
+      "ui {name : 'scaffold-probe',…}",
+      UI_REGISTRY,
+      (source: string) =>
+        source.replace(
+          UI_CLOSE,
+          `\n  {name : '${KEBAB}',type:"registry:ui",files:[]},${UI_CLOSE}`
+        ),
+      `${UI_REGISTRY}: entry name: "${KEBAB}"`,
+    ],
+  ] as const)("row 4: refuses %s", (_label, path, change, reported) => {
+    const repo = scratchRepo();
+    edit(repo, path, change);
+
+    expectRefusal(repo, [reported]);
+  });
+});
+
+describe("TypeScript registries: comments are not entries (row 5)", () => {
+  it.each([
+    [
+      "inside the arrays",
+      (source: string) =>
+        source.replace(
+          "entryPoints: [\n",
+          `entryPoints: [\n    // "src/${KEBAB}.tsx" ]\n`
+        ),
+      (source: string) =>
+        source.replace(UI_CLOSE, `\n/* name: "${KEBAB}" ]; */${UI_CLOSE}`),
+    ],
+    [
+      "at EOF",
+      (source: string) => `${source}// "src/${KEBAB}.tsx" ]\n`,
+      (source: string) => `${source}/* name: "${KEBAB}" ]; */\n`,
+    ],
+  ] as const)(
+    "row 5: registers past comments naming the entry %s and keeps them",
+    (_label, tsupChange, uiChange) => {
+      const repo = scratchRepo();
+      edit(repo, TSUP, tsupChange);
+      edit(repo, UI_REGISTRY, uiChange);
+      const tsup = read(repo, TSUP);
+      const ui = read(repo, UI_REGISTRY);
+
+      const result = run(repo, PASCAL);
+
+      expectComplete(repo, result, {
+        tsup: withTsupEntry(tsup),
+        ui: withUiEntry(ui),
+      });
+    }
+  );
+});
+
+describe("TypeScript registries: the close may move (row 6)", () => {
+  const STRINGS = `"src/strings.tsx"`;
+  it.each([
+    [
+      "ui `  ];` after a trailing comma",
+      UI_REGISTRY,
+      (source: string) => source.replace(UI_CLOSE, "\n  ];"),
+      (source: string) => source.replace("\n  ];", `\n${UI_ENTRY}\n  ];`),
+    ],
+    [
+      "ui `  ];` without a trailing comma",
+      UI_REGISTRY,
+      (source: string) => source.replace(`  },${UI_CLOSE}`, "  }\n  ];"),
+      (source: string) =>
+        source.replace("  }\n  ];", `  },\n${UI_ENTRY}\n  ];`),
+    ],
+    [
+      "tsup `],` on the last path's line after a trailing comma",
+      TSUP,
+      (source: string) =>
+        source.replace(`${STRINGS},${TSUP_CLOSE}`, `${STRINGS},],`),
+      (source: string) =>
+        source.replace(`${STRINGS},],`, `${STRINGS},\n${TSUP_ENTRY}\n  ],`),
+    ],
+    [
+      "tsup `],` on the last path's line without a trailing comma",
+      TSUP,
+      (source: string) =>
+        source.replace(`${STRINGS},${TSUP_CLOSE}`, `${STRINGS}],`),
+      (source: string) =>
+        source.replace(`${STRINGS}],`, `${STRINGS},\n${TSUP_ENTRY}\n  ],`),
+    ],
+  ] as const)(
+    "row 6: appends the entry last with %s",
+    (_label, path, change, expected) => {
+      const repo = scratchRepo();
+      edit(repo, path, change);
+      const tsup = read(repo, TSUP);
+      const ui = read(repo, UI_REGISTRY);
+
+      const result = run(repo, PASCAL);
+
+      expectComplete(repo, result, {
+        tsup: path === TSUP ? expected(tsup) : withTsupEntry(tsup),
+        ui: path === UI_REGISTRY ? expected(ui) : withUiEntry(ui),
+      });
+    }
+  );
+});
+
+describe("TypeScript registries: anything but a literal array stops preflight (row 7)", () => {
+  it.each([
+    [
+      "a spread first in entryPoints",
+      TSUP,
+      (source: string) =>
+        source.replace("entryPoints: [", "entryPoints: [\n    ...more,"),
+      TSUP_SHAPE,
+    ],
+    [
+      "entryPoints' ] deleted",
+      TSUP,
+      (source: string) => source.replace(TSUP_CLOSE, "\n  ,"),
+      TSUP_SHAPE,
+    ],
+    [
+      "a spread first in ui",
+      UI_REGISTRY,
+      (source: string) =>
+        source.replace(
+          "ui: RegistryItem[] = [",
+          "ui: RegistryItem[] = [\n  ...more,"
+        ),
+      UI_SHAPE,
+    ],
+    [
+      "ui's ] deleted",
+      UI_REGISTRY,
+      (source: string) => source.replace(UI_CLOSE, "\n;"),
+      UI_SHAPE,
+    ],
+  ] as const)("row 7: refuses %s", (_label, path, change, reason) => {
+    const repo = scratchRepo();
+    edit(repo, path, change);
+
+    expectRefusal(repo, [stoppedLine(path, reason)]);
+  });
+});
+
+describe("TypeScript registries: a save just before the edit open (row 8)", () => {
+  it("row 8: merges a comment saved on the last path's line", () => {
+    const repo = scratchRepo();
+    const ui = read(repo, UI_REGISTRY);
+
+    const result = runBeforeEdit(
+      repo,
+      TSUP,
+      rewriteAction(
+        TSUP,
+        `(text) => text.replace('"src/strings.tsx",\\n  ],', '"src/strings.tsx" /*saved*/],')`
+      )
+    );
+
+    expectComplete(repo, result, {
+      tsup: read(repo, "saved.txt").replace(
+        `"src/strings.tsx" /*saved*/],`,
+        `"src/strings.tsx", /*saved*/\n${TSUP_ENTRY}\n  ],`
+      ),
+      ui: withUiEntry(ui),
+    });
+    expect(read(repo, TSUP)).toContain("/*saved*/");
+  });
+
+  it.each([
+    [
+      TSUP,
+      `(text) => text.replace("entryPoints: [", "entryPoints: [\\n    ...more,")`,
+      TSUP_SHAPE,
+      [PACKAGE, TSUP],
+    ],
+    [
+      UI_REGISTRY,
+      `(text) => text.replace("ui: RegistryItem[] = [", "ui: RegistryItem[] = [\\n  ...more,")`,
+      UI_SHAPE,
+      [PACKAGE, TSUP, UI_REGISTRY],
+    ],
+  ] as const)(
+    "row 8: stops at a spread saved in %s, keeping it",
+    (path, change, reason, changed) => {
+      const solo = scratchRepo();
+      expect(run(solo, PASCAL).status).toBe(0);
+      const repo = scratchRepo();
+      const before = snapshot(repo);
+
+      const result = runBeforeEdit(repo, path, rewriteAction(path, change));
+
+      expectLateStop(result, path, reason, ALL_FIVE);
+      expect(read(repo, path)).toBe(read(repo, "saved.txt"));
+      expect(read(repo, path)).toContain("...more,");
+      for (const earlier of changed.filter((other) => other !== path)) {
+        expect(read(repo, earlier), earlier).toBe(read(solo, earlier));
+      }
+      expectTree(before, snapshot(repo), {
+        added: [...ALL_FIVE, "saved.txt"],
+        changed: [...changed],
+      });
+    }
+  );
+});
+
+describe("TypeScript registries: an entry saved after the check is the contributor's", () => {
+  it.each([
+    [
+      TSUP,
+      `(text) => text.replace("entryPoints: [", "entryPoints: [\\n    'src/${KEBAB}.tsx',")`,
+      [PACKAGE, TSUP],
+    ],
+    [
+      UI_REGISTRY,
+      `(text) => text.replace("\\n];", "\\n  {name:'${KEBAB}',type:'registry:ui',files:[]},\\n];")`,
+      [PACKAGE, TSUP, UI_REGISTRY],
+    ],
+  ] as const)(
+    "stops at %s gaining the entry just before its edit, keeping the save",
+    (path, change, changed) => {
+      const solo = scratchRepo();
+      expect(run(solo, PASCAL).status).toBe(0);
+      const repo = scratchRepo();
+      const before = snapshot(repo);
+
+      const result = runBeforeEdit(repo, path, rewriteAction(path, change));
+
+      expectLateStop(result, path, "entry appeared after the check", ALL_FIVE);
+      expect(read(repo, path)).toBe(read(repo, "saved.txt"));
+      for (const earlier of changed.filter((other) => other !== path)) {
+        expect(read(repo, earlier), earlier).toBe(read(solo, earlier));
+      }
+      expectTree(before, snapshot(repo), {
+        added: [...ALL_FIVE, "saved.txt"],
+        changed: [...changed],
+      });
+    }
+  );
+});
+
+describe("TypeScript registries: read, staged and published like the JSON ones", () => {
+  it.each(
+    cross(cross([TSUP, UI_REGISTRY], LATE_SEAMS), METHODS).map(
+      ([[path, seam], how]) => [path, seam, how] as const
+    )
+  )("%s saved at %s, %s, stops the publish", (path, seam, how) => {
+    const repo = trackedRepo();
+    const before = snapshot(repo);
+
+    const seamRun = runAtSeam(repo, path, seam, textSaveAction(path, how));
+
+    expect(seamRun.fired, "the save ran").toBe(true);
+    expect(seamRun.liveWrites, "writes or cuts on the live inode").toBe(0);
+    expectLateStop(seamRun.result, path, DRIFT, ALL_FIVE);
+    expect(read(repo, path)).toBe(seamRun.saved());
+    expect(read(repo, path)).not.toContain(KEBAB);
+    expectTree(before, snapshot(repo), {
+      added: ALL_FIVE,
+      changed: path === TSUP ? [PACKAGE, TSUP] : [PACKAGE, TSUP, UI_REGISTRY],
+    });
+  });
+
+  it.each([TSUP, UI_REGISTRY])(
+    "stops at a manifest that is a symlink to %s, writing nothing through it",
+    (path) => {
+      const solo = trackedRepo();
+      expect(run(solo, PASCAL).status).toBe(0);
+      const repo = trackedRepo();
+      const manifest = join(repo, MANIFEST);
+      rmSync(manifest);
+      symlinkSync(relative(dirname(manifest), join(repo, path)), manifest);
+
+      const seamRun = runAtSeam(repo, path, "none");
+
+      expect(seamRun.liveWrites, "writes or cuts on the registry").toBe(0);
+      expectLateStop(
+        seamRun.result,
+        MANIFEST,
+        `same file as ${path}`,
+        ALL_FIVE
+      );
+      expect(read(repo, path)).toBe(read(solo, path));
+    }
+  );
+
+  it.each([TSUP, UI_REGISTRY])(
+    "refuses a symlinked %s in preflight and keeps its referent",
+    (path) => {
+      const repo = scratchRepo();
+      const referent = `${path}.real`;
+      const bytes = readFileSync(join(repo, path));
+      renameSync(join(repo, path), join(repo, referent));
+      symlinkSync(basename(referent), join(repo, path));
+
+      expectRefusal(repo, [stoppedLine(path, "symlinked registry")]);
+      expect(readFileSync(join(repo, referent)).equals(bytes)).toBe(true);
+    }
+  );
+
+  it.each([TSUP, UI_REGISTRY])(
+    "%s keeps its permission bits through the replacement",
+    (path) => {
+      const repo = scratchRepo();
+      chmodSync(join(repo, path), 0o640);
+
+      const result = run(repo, PASCAL);
+
+      expect(result.status, result.stderr).toBe(0);
+      expect(statSync(join(repo, path)).mode % 0o1_0000).toBe(0o640);
+    }
+  );
+
+  it.skipIf(!ACL_SETTABLE).each([TSUP, UI_REGISTRY])(
+    "%s with an ACL stops before publishing and keeps the list",
+    (path) => {
+      const repo = scratchRepo();
+      const file = join(repo, path);
+      expect(denyNobodyRead(file)).toBe(true);
+      const bytes = readFileSync(file);
+      const acl = aclText(file);
+
+      const result = run(repo, PASCAL);
+
+      expectLateStop(
+        result,
+        path,
+        "access control list would not be kept",
+        ALL_FIVE
+      );
+      expect(readFileSync(file).equals(bytes)).toBe(true);
+      expect(aclText(file)).toBe(acl);
+    }
+  );
+
+  it.each([TSUP, UI_REGISTRY])(
+    "%s: a FIFO at the registry stops preflight",
+    (path) => {
+      const repo = scratchRepo();
+      rmSync(join(repo, path));
+      makeFifo(join(repo, path));
+
+      const result = spawnSync(
+        process.execPath,
+        [join(repo, "scripts/add-component.mjs"), PASCAL],
+        { encoding: "utf8", timeout: 10_000 }
+      );
+
+      expect(result.status, result.stderr).toBe(1);
+      expect(result.stderr).toContain(stoppedLine(path, "not a regular file"));
+      expect(result.stderr).toContain("Nothing was written.");
+    }
+  );
+
+  it.each([
+    [TSUP, TSUP_SHAPE],
+    [UI_REGISTRY, UI_SHAPE],
+  ])("refuses %s bytes that are not UTF-8 in preflight", (path, reason) => {
+    const repo = scratchRepo();
+    const bytes = Buffer.concat([
+      readFileSync(join(repo, path)),
+      Buffer.from("// caf"),
+      Buffer.from([0xe9]),
+      Buffer.from("\n"),
+    ]);
+    writeFileSync(join(repo, path), bytes);
+
+    expectRefusal(repo, [stoppedLine(path, reason)]);
+    expect(readFileSync(join(repo, path)).equals(bytes)).toBe(true);
+  });
+});
+
+// --- Lookup errors (spec-registry-read.md row 9) ---
+
+/** A preflight stop: exit 1, every line, "Nothing was written.", the tree as `before`. */
+function expectPreflightStop(
+  repo: string,
+  before: Record<string, string>,
+  result: { status: number | null; stderr: string },
+  lines: string[]
+) {
+  expect(result.status, result.stderr).toBe(1);
+  expect(result.stderr).toContain("Nothing was written.");
+  for (const line of lines) {
+    expect(result.stderr).toContain(line);
+  }
+  expect(snapshot(repo)).toEqual(before);
+}
+
+describe("lookup errors other than ENOENT stop preflight (row 9)", () => {
+  const SAVED_STORY = "// my saved story\n";
+
+  it("row 9: EACCES at the story lstat stops at the story and keeps it", () => {
+    const repo = scratchRepo();
+    put(repo, FILES.story, SAVED_STORY);
+    const before = snapshot(repo);
+
+    const result = runHooked(
+      repo,
+      `before("lstatSync", (path) => is(path, ${JSON.stringify(FILES.story)}), () => fail("EACCES"));`
+    );
+
+    expectPreflightStop(repo, before, result, [
+      stoppedLine(FILES.story, "EACCES"),
+    ]);
+    expect(read(repo, FILES.story)).toBe(SAVED_STORY);
+  });
+
+  // The spec's own setup. A privileged user reads through mode 000, so
+  // there the injected EACCES above is the case.
+  it.skipIf(process.getuid?.() === 0)(
+    "row 9: a story directory at mode 000 stops at the story and keeps it",
+    () => {
+      const repo = scratchRepo();
+      put(repo, FILES.story, SAVED_STORY);
+      const before = snapshot(repo);
+      const dir = join(repo, dirname(FILES.story));
+
+      chmodSync(dir, 0);
+      let result: ReturnType<typeof run>;
+      try {
+        result = run(repo, PASCAL);
+      } finally {
+        chmodSync(dir, 0o755);
+      }
+
+      expectPreflightStop(repo, before, result, [
+        stoppedLine(FILES.story, "EACCES"),
+      ]);
+      expect(read(repo, FILES.story)).toBe(SAVED_STORY);
+    }
+  );
+
+  it("row 9: ENOTDIR on the story's parent is a stop, not absence", () => {
+    const repo = scratchRepo();
+    const parent = dirname(FILES.story);
+    rmSync(join(repo, parent), { recursive: true });
+    put(repo, parent, "a file where the stories folder goes\n");
+    const before = snapshot(repo);
+
+    const result = run(repo, PASCAL);
+
+    expectPreflightStop(repo, before, result, [
+      stoppedLine(FILES.story, "ENOTDIR"),
+    ]);
+  });
+
+  it.each([TSUP, UI_REGISTRY])(
+    "row 9: a missing %s stops preflight with ENOENT beside the other collisions",
+    (path) => {
+      const repo = scratchRepo();
+      rmSync(join(repo, path));
+      COLLISIONS["meta.json entry"].arrange(repo);
+      const before = snapshot(repo);
+
+      const result = run(repo, PASCAL);
+
+      expectPreflightStop(repo, before, result, [
+        stoppedLine(path, "ENOENT"),
+        COLLISIONS["meta.json entry"].reported,
+      ]);
+    }
+  );
+
+  it.each([PACKAGE, TSUP, UI_REGISTRY, META])(
+    "row 9: EIO opening %s in preflight stops beside the other collisions",
+    (path) => {
+      const repo = scratchRepo();
+      COLLISIONS.story.arrange(repo);
+      const before = snapshot(repo);
+
+      // The first open of a registry is the preflight read.
+      const result = runHooked(
+        repo,
+        `before("openSync", (path) => is(path, ${JSON.stringify(path)}), () => fail("EIO"));`
+      );
+
+      expectPreflightStop(repo, before, result, [
+        stoppedLine(path, "EIO"),
+        FILES.story,
+      ]);
+    }
+  );
+
+  it("row 9: EACCES scanning the demos folder stops preflight", () => {
+    const repo = scratchRepo();
+    const before = snapshot(repo);
+
+    const result = runHooked(
+      repo,
+      `before("readdirSync", (path) => is(path, "apps/docs/demos"), () => fail("EACCES"));`
+    );
+
+    expectPreflightStop(repo, before, result, [
+      stoppedLine("apps/docs/demos", "EACCES"),
+    ]);
+  });
+
+  it("row 9: an error checking that the manifest is not a registry stops before writing it", () => {
+    const repo = trackedRepo();
+    const before = snapshot(repo);
+
+    // meta.json's first lstat is the manifest write's alias check.
+    const result = runHooked(
+      repo,
+      `before("lstatSync", (path) => is(path, ${JSON.stringify(META)}), () => fail("EIO"));`
+    );
+
+    expectStop(result, META, "EIO", ALL_FIVE);
+    expectTree(before, snapshot(repo), {
+      added: ALL_FIVE,
+      changed: [PACKAGE, TSUP, UI_REGISTRY],
+    });
   });
 });
 
