@@ -2439,6 +2439,41 @@ describe("TypeScript registries: a save just before the edit open (row 8)", () =
   );
 });
 
+describe("TypeScript registries: an entry saved after the check is the contributor's", () => {
+  it.each([
+    [
+      TSUP,
+      `(text) => text.replace("entryPoints: [", "entryPoints: [\\n    'src/${KEBAB}.tsx',")`,
+      [PACKAGE, TSUP],
+    ],
+    [
+      UI_REGISTRY,
+      `(text) => text.replace("\\n];", "\\n  {name:'${KEBAB}',type:'registry:ui',files:[]},\\n];")`,
+      [PACKAGE, TSUP, UI_REGISTRY],
+    ],
+  ] as const)(
+    "stops at %s gaining the entry just before its edit, keeping the save",
+    (path, change, changed) => {
+      const solo = scratchRepo();
+      expect(run(solo, PASCAL).status).toBe(0);
+      const repo = scratchRepo();
+      const before = snapshot(repo);
+
+      const result = runBeforeEdit(repo, path, rewriteAction(path, change));
+
+      expectLateStop(result, path, "entry appeared after the check", ALL_FIVE);
+      expect(read(repo, path)).toBe(read(repo, "saved.txt"));
+      for (const earlier of changed.filter((other) => other !== path)) {
+        expect(read(repo, earlier), earlier).toBe(read(solo, earlier));
+      }
+      expectTree(before, snapshot(repo), {
+        added: [...ALL_FIVE, "saved.txt"],
+        changed: [...changed],
+      });
+    }
+  );
+});
+
 describe("TypeScript registries: read, staged and published like the JSON ones", () => {
   it.each(
     cross(cross([TSUP, UI_REGISTRY], LATE_SEAMS), METHODS).map(
