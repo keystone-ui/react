@@ -100,28 +100,82 @@ function statOrNull(path) {
   }
 }
 
+/** The `Stopped at` line for a filesystem error at `path`. */
+function stoppedLine(path, error) {
+  return `Stopped at ${path} (${error.code}).`;
+}
+
+/** An fs error, as opposed to a bug: it has a string code such as EACCES. */
+function isFsError(error) {
+  return typeof error?.code === "string";
+}
+
+/**
+ * Preflight lstat of a repo-relative path: its stat, or null when it does
+ * not exist. Only ENOENT means absent. Any other error (EACCES on a parent,
+ * ENOTDIR, EIO) says nothing about whether the path is taken, so it is
+ * pushed onto `lines` as a stop, and false comes back.
+ */
+function lookup(path, lines) {
+  try {
+    return lstatSync(join(ROOT, path));
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      return null;
+    }
+    if (!isFsError(error)) {
+      throw error;
+    }
+    lines.push(stoppedLine(path, error));
+    return false;
+  }
+}
+
+/**
+ * Every demo file for the preflight key check, or null after pushing the
+ * stop for a scan error onto `lines`, named at the directory that failed.
+ */
+function preflightDemoFiles(lines) {
+  try {
+    return demoFiles();
+  } catch (error) {
+    if (!isFsError(error)) {
+      throw error;
+    }
+    const at =
+      typeof error.path === "string" && error.path.startsWith(`${ROOT}/`)
+        ? relative(ROOT, error.path)
+        : DEMOS;
+    lines.push(stoppedLine(at, error));
+    return null;
+  }
+}
+
 /**
  * Everything the scaffold would create or add that is already there, one
  * line each. Runs before the first write: a single collision means nothing
- * is written, so a contributor's existing story, demo or page survives.
+ * is written, so a contributor's existing story, demo or page survives. A
+ * lookup that fails for any reason but absence is a line too, and the
+ * checks that can still run do.
  */
 function findCollisions(name) {
   const collisions = [];
 
   for (const path of destinations(name)) {
-    if (statOrNull(join(ROOT, path))) {
+    if (lookup(path, collisions)) {
       collisions.push(path);
     }
   }
   const demoDir = `apps/docs/demos/${name}`;
-  const demoDirStat = statOrNull(join(ROOT, demoDir));
+  const demoDirStat = lookup(demoDir, collisions);
   if (demoDirStat && !demoDirStat.isDirectory()) {
     collisions.push(`${demoDir} (exists and is not a directory)`);
   }
 
-  collisions.push(
-    ...duplicateDemoKeys([...demoFiles(), `${name}/default.tsx`])
-  );
+  const demos = preflightDemoFiles(collisions);
+  if (demos) {
+    collisions.push(...duplicateDemoKeys([...demos, `${name}/default.tsx`]));
+  }
 
   collisions.push(
     ...readRegistry(PACKAGE, (bytes) => inspectPackage(bytes, name))
@@ -446,6 +500,10 @@ function readRegistry(path, inspect) {
   } catch (error) {
     if (error instanceof RegistryShapeError) {
       return [`Stopped at ${path} (${error.message}).`];
+    }
+    // A registry that cannot be read, ENOENT included: it is required.
+    if (isFsError(error)) {
+      return [stoppedLine(path, error)];
     }
     throw error;
   }
@@ -1085,8 +1143,14 @@ function requireNotRegistry(stat) {
     let live;
     try {
       live = lstatSync(join(ROOT, registry), { bigint: true });
-    } catch {
-      continue;
+    } catch (error) {
+      // A registry that is not there cannot be this file; any other error
+      // leaves that unknown, so the write does not happen.
+      if (error.code === "ENOENT") {
+        continue;
+      }
+      error.stopPath = registry;
+      throw error;
     }
     if (live.dev === stat.dev && live.ino === stat.ino) {
       throw new RegistryShapeError(`same file as ${registry}`);
@@ -1136,7 +1200,7 @@ function editFile(path, change, { generated = false } = {}) {
     return true;
   } catch (error) {
     closeQuietly(fd);
-    stopAt(path, error);
+    stopAt(error.stopPath ?? path, error);
   }
 }
 

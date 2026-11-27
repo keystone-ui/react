@@ -2570,6 +2570,150 @@ describe("TypeScript registries: read, staged and published like the JSON ones",
   });
 });
 
+// --- Lookup errors (spec-registry-read.md row 9) ---
+
+/** A preflight stop: exit 1, every line, "Nothing was written.", the tree as `before`. */
+function expectPreflightStop(
+  repo: string,
+  before: Record<string, string>,
+  result: { status: number | null; stderr: string },
+  lines: string[]
+) {
+  expect(result.status, result.stderr).toBe(1);
+  expect(result.stderr).toContain("Nothing was written.");
+  for (const line of lines) {
+    expect(result.stderr).toContain(line);
+  }
+  expect(snapshot(repo)).toEqual(before);
+}
+
+describe("lookup errors other than ENOENT stop preflight (row 9)", () => {
+  const SAVED_STORY = "// my saved story\n";
+
+  it("row 9: EACCES at the story lstat stops at the story and keeps it", () => {
+    const repo = scratchRepo();
+    put(repo, FILES.story, SAVED_STORY);
+    const before = snapshot(repo);
+
+    const result = runHooked(
+      repo,
+      `before("lstatSync", (path) => is(path, ${JSON.stringify(FILES.story)}), () => fail("EACCES"));`
+    );
+
+    expectPreflightStop(repo, before, result, [
+      stoppedLine(FILES.story, "EACCES"),
+    ]);
+    expect(read(repo, FILES.story)).toBe(SAVED_STORY);
+  });
+
+  // The spec's own setup. A privileged user reads through mode 000, so
+  // there the injected EACCES above is the case.
+  it.skipIf(process.getuid?.() === 0)(
+    "row 9: a story directory at mode 000 stops at the story and keeps it",
+    () => {
+      const repo = scratchRepo();
+      put(repo, FILES.story, SAVED_STORY);
+      const before = snapshot(repo);
+      const dir = join(repo, dirname(FILES.story));
+
+      chmodSync(dir, 0);
+      let result: ReturnType<typeof run>;
+      try {
+        result = run(repo, PASCAL);
+      } finally {
+        chmodSync(dir, 0o755);
+      }
+
+      expectPreflightStop(repo, before, result, [
+        stoppedLine(FILES.story, "EACCES"),
+      ]);
+      expect(read(repo, FILES.story)).toBe(SAVED_STORY);
+    }
+  );
+
+  it("row 9: ENOTDIR on the story's parent is a stop, not absence", () => {
+    const repo = scratchRepo();
+    const parent = dirname(FILES.story);
+    rmSync(join(repo, parent), { recursive: true });
+    put(repo, parent, "a file where the stories folder goes\n");
+    const before = snapshot(repo);
+
+    const result = run(repo, PASCAL);
+
+    expectPreflightStop(repo, before, result, [
+      stoppedLine(FILES.story, "ENOTDIR"),
+    ]);
+  });
+
+  it.each([TSUP, UI_REGISTRY])(
+    "row 9: a missing %s stops preflight with ENOENT beside the other collisions",
+    (path) => {
+      const repo = scratchRepo();
+      rmSync(join(repo, path));
+      COLLISIONS["meta.json entry"].arrange(repo);
+      const before = snapshot(repo);
+
+      const result = run(repo, PASCAL);
+
+      expectPreflightStop(repo, before, result, [
+        stoppedLine(path, "ENOENT"),
+        COLLISIONS["meta.json entry"].reported,
+      ]);
+    }
+  );
+
+  it.each([PACKAGE, TSUP, UI_REGISTRY, META])(
+    "row 9: EIO opening %s in preflight stops beside the other collisions",
+    (path) => {
+      const repo = scratchRepo();
+      COLLISIONS.story.arrange(repo);
+      const before = snapshot(repo);
+
+      // The first open of a registry is the preflight read.
+      const result = runHooked(
+        repo,
+        `before("openSync", (path) => is(path, ${JSON.stringify(path)}), () => fail("EIO"));`
+      );
+
+      expectPreflightStop(repo, before, result, [
+        stoppedLine(path, "EIO"),
+        FILES.story,
+      ]);
+    }
+  );
+
+  it("row 9: EACCES scanning the demos folder stops preflight", () => {
+    const repo = scratchRepo();
+    const before = snapshot(repo);
+
+    const result = runHooked(
+      repo,
+      `before("readdirSync", (path) => is(path, "apps/docs/demos"), () => fail("EACCES"));`
+    );
+
+    expectPreflightStop(repo, before, result, [
+      stoppedLine("apps/docs/demos", "EACCES"),
+    ]);
+  });
+
+  it("row 9: an error checking that the manifest is not a registry stops before writing it", () => {
+    const repo = trackedRepo();
+    const before = snapshot(repo);
+
+    // meta.json's first lstat is the manifest write's alias check.
+    const result = runHooked(
+      repo,
+      `before("lstatSync", (path) => is(path, ${JSON.stringify(META)}), () => fail("EIO"));`
+    );
+
+    expectStop(result, META, "EIO", ALL_FIVE);
+    expectTree(before, snapshot(repo), {
+      added: ALL_FIVE,
+      changed: [PACKAGE, TSUP, UI_REGISTRY],
+    });
+  });
+});
+
 describe("a new name", () => {
   it("creates the four files and the registry entries, with nothing on stderr", () => {
     const repo = scratchRepo();
