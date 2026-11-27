@@ -34,14 +34,14 @@ function isDevelopment(): boolean {
 // module, so a Server Component that renders a page link could not run it.
 // `pagination.test.tsx` pins these equal to `buttonVariants`.
 const paginationLinkVariants = cva(
-  "relative z-0 inline-flex shrink-0 cursor-pointer touch-manipulation select-none items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-md font-medium text-sm transition-[scale,background-color,color,border-color,box-shadow,outline-color] duration-(--duration-fast,125ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)) [-webkit-tap-highlight-color:transparent] focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "relative z-0 inline-flex shrink-0 cursor-pointer touch-manipulation select-none items-center justify-center gap-2 overflow-hidden whitespace-nowrap rounded-md font-medium text-sm transition-[scale,background-color,color,border-color,box-shadow,outline-color] duration-(--duration-fast,125ms) ease-(--ease-ks-out,cubic-bezier(0.23,1,0.32,1)) [-webkit-tap-highlight-color:transparent] focus:ring-0 focus:ring-offset-0 focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-loading:cursor-not-allowed data-loading:active:scale-100 dark:aria-invalid:ring-destructive/40 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         ghost:
-          "bg-transparent hover:bg-accent active:bg-accent disabled:bg-transparent disabled:text-foreground/50",
+          "bg-transparent hover:bg-accent active:bg-accent disabled:bg-transparent disabled:text-foreground/50 data-loading:bg-transparent data-loading:text-foreground/50",
         outline:
-          "border border-input bg-background text-foreground shadow-xs hover:bg-accent hover:text-foreground active:bg-accent active:text-foreground disabled:border-border/50 disabled:bg-transparent disabled:text-foreground/50 aria-expanded:bg-accent aria-expanded:text-foreground aria-expanded:disabled:text-foreground/50 data-disabled:text-foreground/50 dark:border-input dark:bg-input-bg dark:active:bg-input/50 dark:hover:bg-input/50",
+          "border border-input bg-background text-foreground shadow-xs hover:bg-accent hover:text-foreground active:bg-accent active:text-foreground disabled:border-border/50 disabled:bg-transparent disabled:text-foreground/50 aria-expanded:bg-accent aria-expanded:text-foreground aria-expanded:disabled:text-foreground/50 data-loading:border-border/50 data-loading:bg-transparent data-disabled:text-foreground/50 data-loading:text-foreground/50 dark:border-input dark:bg-input-bg dark:active:bg-input/50 dark:hover:bg-input/50",
       },
       size: {
         default: "h-(--ks-control-md,2.5rem) px-4 py-2",

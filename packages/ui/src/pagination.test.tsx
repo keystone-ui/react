@@ -1133,7 +1133,8 @@ describe("PaginationLink without href keeps untyped Button props", () => {
       </PaginationLink>
     );
     const control = document.querySelector("[data-slot='pagination-link']");
-    expect(control).toHaveAttribute("aria-busy", "true");
+    expect(control).toHaveAttribute("aria-disabled", "true");
+    expect(control).not.toHaveAttribute("aria-busy");
     expect(control?.querySelector(".animate-spin")).not.toBeNull();
     expect(control?.querySelector(".opacity-0")?.textContent).toBe("4");
   });
