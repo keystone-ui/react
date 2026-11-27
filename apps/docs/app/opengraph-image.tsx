@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { BRAND_MARK_SVG } from "@/lib/brand-mark";
 
 export const alt = "Keystone UI: accessible React components";
 export const size = { width: 1200, height: 630 };
@@ -34,13 +35,13 @@ export default function OpenGraphImage() {
           opacity: 0.8,
         }}
       >
-        <div
-          style={{
-            background: "linear-gradient(135deg, #00E1FF, #0072F5, #9750DD)",
-            borderRadius: 12,
-            height: 40,
-            width: 40,
-          }}
+        {/* 64 px = 4 px per cell of the 16-unit pixel grid, so it stays crisp. */}
+        {/* biome-ignore lint/performance/noImgElement: Satori renders plain <img>, not next/image */}
+        <img
+          alt=""
+          height={64}
+          src={`data:image/svg+xml;base64,${btoa(BRAND_MARK_SVG)}`}
+          width={64}
         />
         keystoneui.io
       </div>
