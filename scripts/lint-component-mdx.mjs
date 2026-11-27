@@ -24,6 +24,11 @@
  *      key in apps/docs/demos/manifest.json.
  *   8. No ## Import section: the import line lives at the top of ## Usage.
  *      A ## Usage holding only the import passes; no snippet is demanded.
+ *      Any H2 that renders as "Import" counts (`##  Import`, `## Import ##`,
+ *      a Setext underline); a `## Import` line inside a code fence does not.
+ *
+ * H2s are read the way the MDX parser reads them: lines inside a ``` or ~~~
+ * fence are never headings.
  */
 
 import { existsSync, readdirSync, readFileSync } from "node:fs";
@@ -78,24 +83,112 @@ function parseFrontmatter(content) {
   return fields;
 }
 
+// Markdown block syntax, as the docs' MDX parser reads it. Kept in step with
+// the copy in scripts/migrate-component-mdx.mjs; each script stays standalone.
+const FENCE_RE = /^ {0,3}(`{3,}|~{3,})(.*)$/;
+const ATX_H2_RE = /^ {0,3}##(?:[ \t]+(.*?))?(?:[ \t]+#+)?[ \t]*$/;
+const SETEXT_H2_RE = /^ {0,3}-+[ \t]*$/;
+// A line that starts some other block, so it cannot be a Setext heading text.
+const NOT_PARAGRAPH_RE = /^\s*(?:[<{|>#]|[-*+][ \t]|\d+[.)][ \t])/;
+
+/** The marker of the fence `line` opens, or null. */
+function opensFence(line) {
+  const f = FENCE_RE.exec(line);
+  // A backtick fence's info string cannot hold a backtick.
+  return f && !(f[1][0] === "`" && f[2].includes("`")) ? f[1] : null;
+}
+
+/** Whether `line` closes the fence opened with `marker`. */
+function closesFence(line, marker) {
+  const f = FENCE_RE.exec(line);
+  return (
+    f !== null &&
+    f[1][0] === marker[0] &&
+    f[1].length >= marker.length &&
+    f[2].trim() === ""
+  );
+}
+
+/** Whether lines[i] is a one-line paragraph that lines[i + 1] underlines. */
+function isSetextText(lines, out, i) {
+  const prev = i === 0 ? null : out[i - 1];
+  const startsParagraph =
+    prev === null ||
+    prev.fenced ||
+    prev.h2 !== null ||
+    lines[i - 1].trim() === "";
+  return (
+    startsParagraph &&
+    !out[i].fenced &&
+    out[i].h2 === null &&
+    !out[i].underline &&
+    !out[i + 1].fenced &&
+    lines[i].trim() !== "" &&
+    !NOT_PARAGRAPH_RE.test(lines[i]) &&
+    SETEXT_H2_RE.test(lines[i + 1])
+  );
+}
+
+/**
+ * One entry per line: `fenced` when the line opens, sits in or closes a
+ * ``` or ~~~ code fence; `h2` holds the heading text when the line starts an
+ * H2 (`## Text`, `##\tText`, `## Text ##`, or a Setext `Text` over `---`);
+ * `underline` marks a Setext heading's second line.
+ */
+function scanLines(lines) {
+  const out = [];
+  let fence = null;
+  for (const line of lines) {
+    if (fence) {
+      if (closesFence(line, fence)) {
+        fence = null;
+      }
+      out.push({ fenced: true, h2: null });
+      continue;
+    }
+    fence = opensFence(line);
+    const atx = fence ? null : ATX_H2_RE.exec(line);
+    out.push({
+      fenced: fence !== null,
+      h2: atx ? (atx[1] ?? "").trim() : null,
+    });
+  }
+  for (let i = 0; i + 1 < lines.length; i++) {
+    if (isSetextText(lines, out, i)) {
+      out[i] = { fenced: false, h2: lines[i].trim() };
+      out[i + 1] = { fenced: false, h2: null, underline: true };
+    }
+  }
+  return out;
+}
+
+/** The page's lines after the frontmatter, with their 1-based line numbers. */
+function bodyLines(content) {
+  const lines = content.split("\n");
+  const fm = content.match(/^---\n[\s\S]*?\n---\n/);
+  const skip = fm ? fm[0].split("\n").length - 1 : 0;
+  const rest = lines.slice(skip);
+  return { first: skip + 1, lines: rest, scan: scanLines(rest) };
+}
+
 function getH2Sections(content) {
   // Returns ordered list of { heading, body, lineNumber }
-  const lines = content.split("\n");
+  const { first, lines, scan } = bodyLines(content);
   const sections = [];
   let current = null;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    if (line.startsWith("## ")) {
+    if (scan[i].h2 !== null) {
       if (current) {
         sections.push(current);
       }
       current = {
-        heading: line.slice(3).trim(),
+        heading: scan[i].h2,
         body: [],
-        lineNumber: i + 1,
+        lineNumber: first + i,
       };
-    } else if (current) {
+    } else if (current && !scan[i].underline) {
       current.body.push(line);
     }
   }
@@ -238,12 +331,14 @@ function checkPreviewDemoNames(content, demoNames) {
 }
 
 function checkNoImportSection(content) {
-  const line = content.split("\n").findIndex((l) => /^## Import\s*$/.test(l));
+  // Any H2 the docs render as "Import" (ATX or Setext); a fenced one is text.
+  const { first, scan } = bodyLines(content);
+  const line = scan.findIndex((l) => l.h2 === "Import");
   if (line === -1) {
     return [];
   }
   return [
-    `## Import (line ${line + 1}) is retired: put the import at the top of ## Usage, after ## Installation — run \`node scripts/migrate-component-mdx.mjs --only usage-import\``,
+    `## Import (line ${first + line}) is retired: put the import at the top of ## Usage, after ## Installation — run \`node scripts/migrate-component-mdx.mjs --only usage-import\``,
   ];
 }
 
