@@ -323,7 +323,7 @@ import { Component } from "@keystoneui/react/component";
 - Variants are `###` subsections under `## Examples`
 - All prop names in backticks in tables
 - Code examples must be complete and runnable
-- Show imports in every code block
+- Show the imports in every code block, with one exception: the `## Usage` snippet sits in its own fence directly under the import block, so it does not repeat the import
 
 Until Fumadocs is set up, focus exclusively on Storybook stories.
 

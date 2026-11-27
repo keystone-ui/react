@@ -51,7 +51,22 @@ import {
 } from "@keystoneui/react/command";
 ```
 
-A simple command menu in a dialog:
+```tsx
+<CommandDialog onOpenChange={setOpen} open={open}>
+  <Command>
+    <CommandInput placeholder="Type a command or search..." />
+    <CommandList>
+      <CommandEmpty>No results found.</CommandEmpty>
+      <CommandGroup heading="Suggestions">
+        <CommandItem>Calendar</CommandItem>
+        <CommandItem>Search Emoji</CommandItem>
+      </CommandGroup>
+    </CommandList>
+  </Command>
+</CommandDialog>
+```
+
+`CommandDialog` puts the menu in a modal dialog that you open and close with `open` and `onOpenChange`, from a button, as the preview does, or from a [keyboard shortcut](#keyboard-trigger).
 
 ## Composition
 
