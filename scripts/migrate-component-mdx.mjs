@@ -25,9 +25,14 @@
  *      when the default demo is a bare `return <El …>` whose root and every
  *      identifier come from the page's own import; the snippet is that element
  *      as the demo writes it. A `## Usage` that already has a tsx/jsx block
- *      gets no snippet. Any other prose or block under `## Usage` follows, in
- *      order. This transform deletes the `## Import` heading and nothing else.
- *      It splices the page text in place: every other section keeps its bytes.
+ *      (``` or ~~~ fenced) gets no snippet. Any other prose or block under
+ *      `## Usage` follows, in order. This transform deletes the `## Import`
+ *      heading and nothing else. It splices the page text in place: every
+ *      other section keeps its bytes. Headings and previews inside a code
+ *      fence are text, not structure. A page it cannot place without
+ *      guessing (two `## Import` or two `## Usage` sections, or the default
+ *      preview under another section) is left untouched, named on stderr,
+ *      and the run exits 1.
  *
  * Transforms 1-3 re-serialize the page (blank lines normalised). With
  * `--only usage-import` only transform 4 runs. Every transform is a no-op on
@@ -249,26 +254,108 @@ function checkCompositionWarning(parsed) {
 
 const JS_LITERALS = new Set(["true", "false", "null", "undefined"]);
 
+// Markdown block syntax, as the docs' MDX parser reads it. Kept in step with
+// the copy in scripts/lint-component-mdx.mjs; each script stays standalone.
+const FENCE_RE = /^ {0,3}(`{3,}|~{3,})(.*)$/;
+const ATX_H2_RE = /^ {0,3}##(?:[ \t]+(.*?))?(?:[ \t]+#+)?[ \t]*$/;
+const SETEXT_H2_RE = /^ {0,3}-+[ \t]*$/;
+// A line that starts some other block, so it cannot be a Setext heading text.
+const NOT_PARAGRAPH_RE = /^\s*(?:[<{|>#]|[-*+][ \t]|\d+[.)][ \t])/;
+
+/** The marker of the fence `line` opens, or null. */
+function opensFence(line) {
+  const f = FENCE_RE.exec(line);
+  // A backtick fence's info string cannot hold a backtick.
+  return f && !(f[1][0] === "`" && f[2].includes("`")) ? f[1] : null;
+}
+
+/** Whether `line` closes the fence opened with `marker`. */
+function closesFence(line, marker) {
+  const f = FENCE_RE.exec(line);
+  return (
+    f !== null &&
+    f[1][0] === marker[0] &&
+    f[1].length >= marker.length &&
+    f[2].trim() === ""
+  );
+}
+
+/** Whether lines[i] is a one-line paragraph that lines[i + 1] underlines. */
+function isSetextText(lines, out, i) {
+  const prev = i === 0 ? null : out[i - 1];
+  const startsParagraph =
+    prev === null ||
+    prev.fenced ||
+    prev.h2 !== null ||
+    lines[i - 1].trim() === "";
+  return (
+    startsParagraph &&
+    !out[i].fenced &&
+    out[i].h2 === null &&
+    !out[i].underline &&
+    !out[i + 1].fenced &&
+    lines[i].trim() !== "" &&
+    !NOT_PARAGRAPH_RE.test(lines[i]) &&
+    SETEXT_H2_RE.test(lines[i + 1])
+  );
+}
+
+/**
+ * One entry per line: `fenced` when the line opens, sits in or closes a
+ * ``` or ~~~ code fence; `h2` holds the heading text when the line starts an
+ * H2 (`## Text`, `##\tText`, `## Text ##`, or a Setext `Text` over `---`);
+ * `underline` marks a Setext heading's second line.
+ */
+function scanLines(lines) {
+  const out = [];
+  let fence = null;
+  for (const line of lines) {
+    if (fence) {
+      if (closesFence(line, fence)) {
+        fence = null;
+      }
+      out.push({ fenced: true, h2: null });
+      continue;
+    }
+    fence = opensFence(line);
+    const atx = fence ? null : ATX_H2_RE.exec(line);
+    out.push({
+      fenced: fence !== null,
+      h2: atx ? (atx[1] ?? "").trim() : null,
+    });
+  }
+  for (let i = 0; i + 1 < lines.length; i++) {
+    if (isSetextText(lines, out, i)) {
+      out[i] = { fenced: false, h2: lines[i].trim() };
+      out[i + 1] = { fenced: false, h2: null, underline: true };
+    }
+  }
+  return out;
+}
+
 /**
  * Split text (after frontmatter) into the prose before the first H2 and the
  * H2 sections, each kept as its raw text (heading line through the byte
- * before the next heading). Lines inside ``` fences never start a section.
+ * before the next heading). Lines inside a fence never start a section.
  */
 function splitRaw(rest) {
   const lines = rest.split("\n");
-  const chunks = [{ heading: null, lines: [] }];
-  let fence = false;
-  for (const line of lines) {
-    if (line.startsWith("```")) {
-      fence = !fence;
-    }
-    if (!fence && line.startsWith("## ")) {
-      chunks.push({ heading: line.slice(3).trim(), lines: [] });
+  const scan = scanLines(lines);
+  const chunks = [{ heading: null, headLines: 0, lines: [] }];
+  lines.forEach((line, i) => {
+    if (scan[i].h2 !== null) {
+      chunks.push({
+        heading: scan[i].h2,
+        // A Setext heading is its text line plus the underline.
+        headLines: scan[i + 1]?.underline ? 2 : 1,
+        lines: [],
+      });
     }
     chunks.at(-1).lines.push(line);
-  }
+  });
   const raw = chunks.map((c, i) => ({
     heading: c.heading,
+    headLines: c.headLines,
     // Each chunk but the last owns the newline that ended its last line.
     raw: c.lines.join("\n") + (i < chunks.length - 1 ? "\n" : ""),
   }));
@@ -276,7 +363,28 @@ function splitRaw(rest) {
 }
 
 function sectionBody(section) {
-  return section.raw.slice(section.raw.indexOf("\n") + 1);
+  let at = 0;
+  for (let n = 0; n < section.headLines; n++) {
+    at = section.raw.indexOf("\n", at) + 1;
+  }
+  return section.raw.slice(at);
+}
+
+/**
+ * The first line of `text` outside a fence that `re` matches, as character
+ * offsets, or null. `text` must start outside a fence.
+ */
+function findLiveLine(text, re) {
+  const lines = text.split("\n");
+  const scan = scanLines(lines);
+  let offset = 0;
+  for (const [i, line] of lines.entries()) {
+    if (!scan[i].fenced && re.test(line)) {
+      return { start: offset, end: offset + line.length };
+    }
+    offset += line.length + 1;
+  }
+  return null;
 }
 
 function trimNewlines(text) {
@@ -380,12 +488,14 @@ class JsxReader {
   }
 
   readIdentifier(prev) {
-    const before = this.src.slice(0, this.i).trimEnd().at(-1);
+    const before = this.src.slice(0, this.i).trimEnd();
+    // `a.name` and `a?.name` read a property; `...name` reads the binding.
+    const isProperty = before.endsWith(".") && !before.endsWith("...");
     const name = IDENT_RE.exec(this.src.slice(this.i))[0];
     this.i += name.length;
     const after = this.src.slice(this.i).trimStart()[0];
     const isKey = after === ":" && (prev === "{" || prev === ",");
-    if (before !== "." && !isKey) {
+    if (!(isProperty || isKey)) {
       this.used.add(name);
     }
   }
@@ -542,9 +652,11 @@ function readJsx(src, start) {
  * Otherwise null, with the reason.
  */
 function defaultDemoSnippet(demoSource, provided) {
-  const head = /export\s+default\s+function\s*[\w$]*\s*\([^)]*\)\s*\{/.exec(
-    demoSource
-  );
+  // An optional return type (`): ReactElement {`) sits before the body.
+  const head =
+    /export\s+default\s+function\s*[\w$]*\s*\([^)]*\)\s*(?::[^{=]+)?\{/.exec(
+      demoSource
+    );
   if (!head) {
     return { reason: "no default function export", snippet: null };
   }
@@ -597,56 +709,97 @@ function defaultDemoSnippet(demoSource, provided) {
 }
 
 /**
+ * Put the live `<name>-default` preview at the top of the page: it stays
+ * where it is when the lead already has it, and moves out of `## Usage`
+ * otherwise. A preview under any other section is an error, since moving it
+ * could leave an empty variant behind. Fenced copies are text and stay put.
+ */
+function placePreview(lead, usageRest, others, componentName) {
+  const previewLine = `<ComponentPreview name="${componentName}-default" />`;
+  const previewRe = new RegExp(
+    `^${previewLine.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[ \\t]*$`
+  );
+  if (findLiveLine(lead, previewRe)) {
+    return { lead, note: null, usageRest };
+  }
+  const m = findLiveLine(usageRest, previewRe);
+  if (m) {
+    const before = usageRest.slice(0, m.start).replace(/\n+$/, "");
+    const after = usageRest.slice(m.end).replace(/^\n+/, "");
+    const leadText = trimNewlines(lead);
+    return {
+      lead: `\n${[previewLine, leadText].filter(Boolean).join("\n\n")}\n\n`,
+      note: "moved preview to top",
+      usageRest: [before, after].filter(Boolean).join("\n\n"),
+    };
+  }
+  const holder = others.find((s) => findLiveLine(sectionBody(s), previewRe));
+  if (holder) {
+    return {
+      error: `${previewLine} sits under ## ${holder.heading}, not ## Usage — move it to the top of the page, then rerun`,
+    };
+  }
+  return {
+    lead,
+    note: `no ${previewLine} under ## Usage — left the preview alone`,
+    usageRest,
+  };
+}
+
+/** The snippet to add under the import, or null, with a note saying why. */
+function usageSnippet(usageRest, importBody, demo) {
+  if (/^ {0,3}(?:`{3,}|~{3,})[ \t]*(?:tsx|jsx)\b/m.test(usageRest)) {
+    return { note: "kept existing snippet", snippet: null };
+  }
+  const result =
+    demo === null
+      ? { reason: "no default demo", snippet: null }
+      : defaultDemoSnippet(demo, importedNames(importBody));
+  return {
+    note: result.snippet ? "snippet" : `import only (${result.reason})`,
+    snippet: result.snippet,
+  };
+}
+
+/**
  * Splice `## Import` into `## Usage` (see the header). Returns null when the
- * page has no `## Import`.
+ * page has no `## Import`, and `{ error }` for a page it leaves untouched.
  */
 function moveImportUnderUsage(original, componentName, readDemo) {
   const fm = original.match(/^(---\n[\s\S]*?\n---\n)/);
   const frontmatter = fm ? fm[1] : "";
   const { lead, sections } = splitRaw(original.slice(frontmatter.length));
-  const importIdx = sections.findIndex((s) => s.heading === "Import");
-  if (importIdx === -1) {
+  const imports = sections.filter((s) => s.heading === "Import");
+  if (imports.length === 0) {
     return null;
   }
-  const notes = [];
-  const importBody = trimNewlines(sectionBody(sections[importIdx]));
-  const usage = sections.find((s) => s.heading === "Usage");
-  let usageRest = usage ? trimNewlines(sectionBody(usage)) : "";
-
-  const previewLine = `<ComponentPreview name="${componentName}-default" />`;
-  const previewRe = new RegExp(
-    `^${previewLine.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[ \\t]*$`,
-    "m"
+  // A page the transform cannot place without guessing is left as it is.
+  if (imports.length > 1) {
+    return { error: `${imports.length} ## Import sections — merge them first` };
+  }
+  const usages = sections.filter((s) => s.heading === "Usage");
+  if (usages.length > 1) {
+    return { error: `${usages.length} ## Usage sections — merge them first` };
+  }
+  const importBody = trimNewlines(sectionBody(imports[0]));
+  const usage = usages[0];
+  const placed = placePreview(
+    lead,
+    usage ? trimNewlines(sectionBody(usage)) : "",
+    sections.filter((s) => s !== imports[0] && s !== usage),
+    componentName
   );
-  let newLead = lead;
-  if (!previewRe.test(lead)) {
-    const m = previewRe.exec(usageRest);
-    if (m) {
-      const before = usageRest.slice(0, m.index).replace(/\n+$/, "");
-      const after = usageRest.slice(m.index + m[0].length).replace(/^\n+/, "");
-      usageRest = [before, after].filter(Boolean).join("\n\n");
-      notes.push("moved preview to top");
-    } else {
-      notes.push(`no ${previewLine} under ## Usage — left the preview alone`);
-    }
-    if (m) {
-      const leadText = trimNewlines(lead);
-      newLead = `\n${[previewLine, leadText].filter(Boolean).join("\n\n")}\n\n`;
-    }
+  if (placed.error) {
+    return { error: placed.error };
   }
-
-  let snippet = null;
-  if (/^```(tsx|jsx)\b/m.test(usageRest)) {
-    notes.push("kept existing snippet");
-  } else {
-    const demo = readDemo(componentName);
-    const result =
-      demo === null
-        ? { reason: "no default demo", snippet: null }
-        : defaultDemoSnippet(demo, importedNames(importBody));
-    snippet = result.snippet;
-    notes.push(snippet ? "snippet" : `import only (${result.reason})`);
-  }
+  const { usageRest } = placed;
+  let newLead = placed.lead;
+  const { snippet, note } = usageSnippet(
+    usageRest,
+    importBody,
+    readDemo(componentName)
+  );
+  const notes = [placed.note, note].filter(Boolean);
 
   const parts = [importBody];
   if (snippet) {
@@ -655,7 +808,7 @@ function moveImportUnderUsage(original, componentName, readDemo) {
   if (usageRest) {
     parts.push(usageRest);
   }
-  const kept = sections.filter((s) => s.heading !== "Import" && s !== usage);
+  const kept = sections.filter((s) => s !== imports[0] && s !== usage);
   const installIdx = kept.findIndex((s) => s.heading === "Installation");
   const at = installIdx + 1;
   const isLast = at === kept.length;
@@ -695,6 +848,17 @@ function migrate(filePath) {
   let text = original;
   if (runs("usage-import")) {
     const moved = moveImportUnderUsage(text, componentName, readDefaultDemo);
+    if (moved?.error) {
+      // Leave the whole page untouched: no other transform runs on it either.
+      return {
+        applied,
+        changed: false,
+        componentName,
+        error: `usage-import: ${moved.error}`,
+        next: original,
+        warnings,
+      };
+    }
     if (moved) {
       text = moved.next;
       applied.push(`usage-import: ${moved.notes.join(", ")}`);
@@ -745,33 +909,37 @@ function migrate(filePath) {
   return { applied, changed: next !== original, componentName, next, warnings };
 }
 
+/** Report one file's result, write it unless dry, and tally the summary. */
+function record(filePath, result, summary) {
+  summary.files += 1;
+  if (result.error) {
+    summary.errors += 1;
+    console.error(`  ${result.componentName}: ${result.error} (left as is)`);
+  }
+  if (result.changed) {
+    summary.changed += 1;
+    const note =
+      result.applied.length > 0 ? result.applied.join(", ") : "no-op";
+    console.log(`  ${dryRun ? "(dry) " : ""}${result.componentName}: ${note}`);
+    if (!dryRun) {
+      writeFileSync(filePath, result.next);
+    }
+  }
+  for (const w of result.warnings) {
+    summary.warnings.push(`${result.componentName}: ${w}`);
+  }
+}
+
 function main() {
   const files = readdirSync(COMPONENTS_DIR)
     .filter((f) => f.endsWith(".mdx") && !f.startsWith("_"))
     .sort();
 
-  const summary = { changed: 0, files: 0, warnings: [] };
+  const summary = { changed: 0, errors: 0, files: 0, warnings: [] };
 
   for (const file of files) {
     const filePath = join(COMPONENTS_DIR, file);
-    const result = migrate(filePath);
-    summary.files += 1;
-
-    if (result.changed) {
-      summary.changed += 1;
-      const note =
-        result.applied.length > 0 ? result.applied.join(", ") : "no-op";
-      console.log(
-        `  ${dryRun ? "(dry) " : ""}${result.componentName}: ${note}`
-      );
-      if (!dryRun) {
-        writeFileSync(filePath, result.next);
-      }
-    }
-
-    for (const w of result.warnings) {
-      summary.warnings.push(`${result.componentName}: ${w}`);
-    }
+    record(filePath, migrate(filePath), summary);
   }
 
   console.log("");
@@ -785,6 +953,14 @@ function main() {
     for (const w of summary.warnings) {
       console.log(`  - ${w}`);
     }
+  }
+
+  if (summary.errors > 0) {
+    console.error("");
+    console.error(
+      `FAIL — left ${summary.errors} file(s) untouched; fix them by hand and rerun.`
+    );
+    process.exit(1);
   }
 }
 

@@ -119,6 +119,36 @@ describe("lint-component-mdx", () => {
     expect(result.stdout).toContain("migrate-component-mdx.mjs");
   });
 
+  it.each([
+    ["two spaces after the hashes", "##  Import"],
+    ["a tab after the hashes", "##\tImport"],
+    ["closing hashes", "## Import ##"],
+    ["a Setext underline", "Import\n------"],
+  ])("refuses an Import heading written with %s", (_label, heading) => {
+    const repo = lintRepo(
+      `${FRONTMATTER}\n<ComponentPreview name="probe-default" />\n\n${INSTALLATION("probe")}\n## Usage\n\n${IMPORT}\n${API}\n${heading}\n`
+    );
+
+    const result = node(repo, "scripts/lint-component-mdx.mjs");
+
+    expect(result.stdout).toContain("is retired");
+    expect(result.status).toBe(1);
+  });
+
+  it.each([
+    ["backtick", "```md\n## Import\n```"],
+    ["tilde", "~~~md\n## Import\n~~~"],
+  ])("accepts a literal ## Import inside a %s fence", (_label, block) => {
+    const repo = lintRepo(
+      `${FRONTMATTER}\n<ComponentPreview name="probe-default" />\n\n${INSTALLATION("probe")}\n## Usage\n\n${IMPORT}\n${block}\n\n${API}`
+    );
+
+    const result = node(repo, "scripts/lint-component-mdx.mjs");
+
+    expect(result.stdout).toContain("OK");
+    expect(result.status).toBe(0);
+  });
+
   it("accepts a ## Usage holding only the import", () => {
     const repo = lintRepo(
       `${FRONTMATTER}\n<ComponentPreview name="probe-default" />\n\n${INSTALLATION("probe")}\n## Usage\n\n${IMPORT}\n${API}`
@@ -161,6 +191,9 @@ describe("add-component scaffold", () => {
     expect(scaffold.status, scaffold.stderr).toBe(0);
     const page = read(repo, `${PAGES}/scaffold-probe.mdx`);
     expect(page).not.toMatch(IMPORT_HEADING);
+    expect(page).toContain(
+      '## Usage\n\n```tsx\nimport { ScaffoldProbe } from "@keystoneui/react/scaffold-probe";\n```\n\n```tsx\n<ScaffoldProbe>'
+    );
 
     const lint = node(repo, "scripts/lint-component-mdx.mjs");
 
@@ -177,10 +210,29 @@ function migrateRepo(page: string, demo: string) {
   return repo;
 }
 
+/** Run the usage-import transform; the caller asserts the exit status. */
+function migrate(repo: string, ...args: string[]) {
+  return node(
+    repo,
+    "scripts/migrate-component-mdx.mjs",
+    "--only",
+    "usage-import",
+    ...args
+  );
+}
+
 const DEMO_HEAD = `"use client";
 
 import { Probe, ProbePart } from "@keystoneui/react/probe";
 `;
+
+const demoReturning = (body: string) => `${DEMO_HEAD}
+export default function ProbeDefault() {
+  ${body}
+}
+`;
+
+const PREVIEW = '<ComponentPreview name="probe-default" />';
 
 const OLD_PAGE = (usageExtra = "") => `${FRONTMATTER}
 ## Import
@@ -264,18 +316,13 @@ ${API}`);
     ["an intrinsic root", "return <div><Probe /></div>;"],
     ["a name the import lacks", "return <Probe icon={<StarIcon />} />;"],
     ["a fragment root", "return <><Probe /></>;"],
+    ["a spread of a name the import lacks", "return <Probe {...demoProps} />;"],
   ])("keeps import only for %s", (_label, body) => {
-    const repo = migrateRepo(
-      OLD_PAGE(),
-      `${DEMO_HEAD}
-export default function ProbeDefault() {
-  ${body}
-}
-`
-    );
+    const repo = migrateRepo(OLD_PAGE(), demoReturning(body));
 
-    node(repo, "scripts/migrate-component-mdx.mjs", "--only", "usage-import");
+    const result = migrate(repo);
 
+    expect(result.status, result.stderr).toBe(0);
     const page = read(repo, `${PAGES}/probe.mdx`);
     expect(page).toContain(
       '## Usage\n\n```tsx\nimport {\n  Probe,\n  ProbePart,\n} from "@keystoneui/react/probe";\n```\n\n## Examples'
@@ -292,8 +339,9 @@ export default function ProbeDefault() {
 `
     );
 
-    node(repo, "scripts/migrate-component-mdx.mjs", "--only", "usage-import");
+    const result = migrate(repo);
 
+    expect(result.status, result.stderr).toBe(0);
     const page = read(repo, `${PAGES}/probe.mdx`);
     expect(page).toContain(
       '} from "@keystoneui/react/probe";\n```\n\nSome prose.\n\n```tsx\n<Probe custom />\n```\n\n## Examples'
@@ -312,20 +360,127 @@ export default function ProbeDefault() {
     );
     const before = read(repo, `${PAGES}/probe.mdx`);
 
-    node(
-      repo,
-      "scripts/migrate-component-mdx.mjs",
-      "--only",
-      "usage-import",
-      "--dry"
-    );
+    const dry = migrate(repo, "--dry");
+    expect(dry.status, dry.stderr).toBe(0);
+    expect(dry.stdout).toContain("Would change 1 of 1 files.");
     expect(read(repo, `${PAGES}/probe.mdx`)).toBe(before);
 
-    node(repo, "scripts/migrate-component-mdx.mjs", "--only", "usage-import");
+    const first = migrate(repo);
+    expect(first.status, first.stderr).toBe(0);
     const once = read(repo, `${PAGES}/probe.mdx`);
     expect(once).not.toBe(before);
-    node(repo, "scripts/migrate-component-mdx.mjs", "--only", "usage-import");
+    const second = migrate(repo);
+    expect(second.status, second.stderr).toBe(0);
+    expect(second.stdout).toContain("Changed 0 of 1 files.");
 
     expect(read(repo, `${PAGES}/probe.mdx`)).toBe(once);
+  });
+
+  it("snippets a demo whose default function declares a return type", () => {
+    const repo = migrateRepo(
+      OLD_PAGE(),
+      `${DEMO_HEAD}import type { ReactElement } from "react";
+
+export default function ProbeDefault(): ReactElement {
+  return <Probe size={2} />;
+}
+`
+    );
+
+    const result = migrate(repo);
+
+    expect(result.status, result.stderr).toBe(0);
+    expect(read(repo, `${PAGES}/probe.mdx`)).toContain(
+      '} from "@keystoneui/react/probe";\n```\n\n```tsx\n<Probe size={2} />\n```\n\n## Examples'
+    );
+  });
+
+  it("adds no snippet when ## Usage already has one in a ~~~ fence", () => {
+    const repo = migrateRepo(
+      OLD_PAGE("\n~~~tsx\n<Probe custom />\n~~~\n"),
+      demoReturning("return <Probe />;")
+    );
+
+    const result = migrate(repo);
+
+    expect(result.status, result.stderr).toBe(0);
+    const page = read(repo, `${PAGES}/probe.mdx`);
+    expect(page).toContain(
+      '} from "@keystoneui/react/probe";\n```\n\n~~~tsx\n<Probe custom />\n~~~\n\n## Examples'
+    );
+    expect(page).not.toContain("```tsx\n<Probe />\n```");
+  });
+
+  it("leaves a fenced copy of the default preview whole and moves the live one", () => {
+    const literal = `\`\`\`mdx\n${PREVIEW}\n\`\`\``;
+    const repo = migrateRepo(
+      OLD_PAGE().replace(PREVIEW, `${literal}\n\n${PREVIEW}`),
+      demoReturning("return <Probe />;")
+    );
+
+    const result = migrate(repo);
+
+    expect(result.status, result.stderr).toBe(0);
+    const page = read(repo, `${PAGES}/probe.mdx`);
+    expect(page).toContain(`${FRONTMATTER}\n${PREVIEW}\n\n## Installation`);
+    expect(page).toContain(
+      `\`\`\`tsx\n<Probe />\n\`\`\`\n\n${literal}\n\n## Examples`
+    );
+    // One live preview at the top, one inside the literal example.
+    expect(page.split(PREVIEW)).toHaveLength(3);
+  });
+
+  it("keeps a literal ## Import inside a ~~~ fence and the prose after it", () => {
+    const literal = "~~~md\n## Import\nExample text.\n~~~";
+    const prose = "Keep this authored paragraph.";
+    const repo = migrateRepo(
+      OLD_PAGE().replace(
+        "## Installation",
+        `${literal}\n\n${prose}\n\n## Installation`
+      ),
+      demoReturning("return <Probe />;")
+    );
+
+    const result = migrate(repo);
+
+    expect(result.status, result.stderr).toBe(0);
+    const page = read(repo, `${PAGES}/probe.mdx`);
+    expect(page).toContain(`${literal}\n\n${prose}\n`);
+    expect(page.match(/^## Import/gm)).toHaveLength(1);
+  });
+
+  it.each([
+    [
+      "a second ## Import",
+      (page: string) =>
+        page.replace(
+          "## Usage",
+          '## Import\n\n```tsx\nimport { Spinner } from "@keystoneui/react/spinner";\n```\n\nKeep the loading-state note.\n\n## Usage'
+        ),
+    ],
+    [
+      "a second ## Usage",
+      (page: string) =>
+        page.replace("## Examples", "## Usage\n\nMore usage.\n\n## Examples"),
+    ],
+    [
+      "no ## Usage and the default preview under ## Examples",
+      (page: string) =>
+        page
+          .replace(`## Usage\n\n${PREVIEW}\n`, "")
+          .replace("## Examples\n", `## Examples\n\n${PREVIEW}\n`),
+    ],
+  ])("leaves a page with %s intact and exits 1", (_label, edit) => {
+    const repo = migrateRepo(
+      edit(OLD_PAGE()),
+      demoReturning("return <Probe />;")
+    );
+    const before = read(repo, `${PAGES}/probe.mdx`);
+
+    const result = migrate(repo);
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("probe:");
+    expect(read(repo, `${PAGES}/probe.mdx`)).toBe(before);
   });
 });
