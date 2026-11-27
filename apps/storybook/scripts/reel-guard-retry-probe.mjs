@@ -7,10 +7,15 @@
 // filter that matches nothing passes silently, and a filename filter matches
 // substrings (an archived copy of the file would run too), so this script
 // runs one exact project/module specification and then checks the returned
-// cases by display name and by Storybook ID.
+// cases by display name and by Storybook ID. A Storybook ID is generated from
+// the export name, and two exports can generate the same one
+// (`RevealOnRoomRestoresCounter` and `Reveal_On_Room_Restores_Counter`), so
+// the Storybook index of the module must also bind each ID to exactly one
+// export, the expected one.
 //
 // Run from apps/storybook: `pnpm run probe:reel-retry` (CI runs the same).
 import { realpathSync } from "node:fs";
+import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createVitest } from "vitest/node";
 
@@ -18,19 +23,22 @@ const PROJECT = "storybook (chromium)";
 const MODULE_ID = fileURLToPath(
   new URL("../stories/reel.stories.tsx", import.meta.url)
 );
+const CONFIG_DIR = fileURLToPath(new URL("../.storybook", import.meta.url));
 
 // The one expectation table: the filter, the comparisons and the messages all
 // read it. On an intentional rename, update the story in
 // stories/reel.stories.tsx and its row here: a `name` change updates `name`,
-// an export rename updates `storyId`.
+// an export rename updates `exportName` and `storyId`.
 export const ROLES = [
   {
     role: "base",
+    exportName: "RevealOnRoom",
     storyId: "components-reel--reveal-on-room",
     name: "Reveal on room",
   },
   {
     role: "companion",
+    exportName: "RevealOnRoomRestoresCounter",
     storyId: "components-reel--reveal-on-room-restores-counter",
     name: "Reveal on room restores counter",
   },
@@ -88,18 +96,22 @@ function observedRetry(retryCount) {
 }
 
 /** The lines one role adds: none when its case is identified and passed. */
-function checkRole(tests, expected) {
+function checkRole(tests, indexed, expected) {
   const byName = tests.filter((record) => record.name === expected.name);
   const byId = tests.filter((record) => record.storyId === expected.storyId);
-  if (byName.length > 1 || byId.length > 1) {
+  const bindings = indexed.filter((item) => item.id === expected.storyId);
+  if (byName.length > 1 || byId.length > 1 || bindings.length > 1) {
     return [MESSAGES.ambiguous(expected.name)];
   }
   const [found] = byName;
+  const [binding] = bindings;
   const identified =
     found !== undefined &&
     byId[0] === found &&
     found.project === PROJECT &&
-    found.moduleId === MODULE_ID;
+    found.moduleId === MODULE_ID &&
+    binding?.exportName === expected.exportName &&
+    binding.moduleId === MODULE_ID;
   if (!(identified && (found.state === "passed" || found.state === "failed"))) {
     return [MESSAGES.missing(expected.name), MESSAGES.renamed];
   }
@@ -117,12 +129,23 @@ function checkRole(tests, expected) {
 
 /**
  * Decides the probe from the boundary records. `modules` is undefined when
- * Vitest failed before selecting the target module; `runnerErrors` holds
- * startup, collection, suite, unhandled and teardown errors; `exitCode` is
- * `process.exitCode` after Vitest closed. Returns the lines to print and the
- * exit code (0 only with the success sentence).
+ * Vitest failed before selecting the target module; `indexed` holds the
+ * Storybook index entries of the Reel module (`{ id, exportName, moduleId }`,
+ * duplicates kept) and is undefined when the index could not be read;
+ * `runnerErrors` holds startup, indexing, collection, suite, unhandled and
+ * teardown errors; `exitCode` is `process.exitCode` after Vitest closed.
+ * Returns the lines to print and the exit code (0 only with the success
+ * sentence).
+ *
+ * @param {{
+ *   modules?: object[],
+ *   indexed?: { id: string, exportName: string, moduleId: string }[],
+ *   runnerErrors?: unknown[],
+ *   exitCode?: number,
+ * }} probe
+ * @returns {{ lines: string[], exitCode: number }}
  */
-export function checkProbe({ modules, runnerErrors = [], exitCode }) {
+export function checkProbe({ modules, indexed, runnerErrors = [], exitCode }) {
   const errors = [];
   if (modules !== undefined) {
     const targets = modules.filter(
@@ -130,20 +153,79 @@ export function checkProbe({ modules, runnerErrors = [], exitCode }) {
     );
     if (targets.length === 1) {
       const tests = targets[0].tests ?? [];
-      errors.push(...ROLES.flatMap((expected) => checkRole(tests, expected)));
+      errors.push(
+        ...ROLES.flatMap((expected) =>
+          checkRole(tests, indexed ?? [], expected)
+        )
+      );
     } else {
       errors.push(MESSAGES.scope);
     }
   }
   const failedStatus = exitCode !== undefined && exitCode !== 0;
-  if (modules === undefined || runnerErrors.length > 0 || failedStatus) {
+  if (
+    modules === undefined ||
+    indexed === undefined ||
+    runnerErrors.length > 0 ||
+    failedStatus
+  ) {
     errors.push(MESSAGES.runner);
   }
   if (errors.length === 0) {
     return { lines: [MESSAGES.success], exitCode: 0 };
   }
-  const status = typeof exitCode === "number" && exitCode !== 0 ? exitCode : 1;
-  return { lines: errors, exitCode: status };
+  // A Unix exit status is eight bits (256 reaches the shell as 0), so only
+  // 1..255 is forwarded.
+  const forwardable =
+    Number.isInteger(exitCode) && exitCode >= 1 && exitCode <= 255;
+  return { lines: errors, exitCode: forwardable ? exitCode : 1 };
+}
+
+/**
+ * The Storybook index entries of the Reel module, read per file before the
+ * index merges entries that share an ID (it keeps the first of two from one
+ * file, which hides a colliding export). Uses the configured indexers, the
+ * same as `storybook build`; relative import paths resolve against the
+ * working directory, as the index generator's do.
+ */
+async function readIndexedStories() {
+  const { experimental_loadStorybook, StoryIndexGenerator } = await import(
+    "storybook/internal/core-server"
+  );
+  const { normalizeStories } = await import("storybook/internal/common");
+  const { presets } = await experimental_loadStorybook({
+    configDir: CONFIG_DIR,
+  });
+  const [indexers, stories, docs, features] = await Promise.all([
+    presets.apply("experimental_indexers", []),
+    presets.apply("stories", []),
+    presets.apply("docs"),
+    presets.apply("features"),
+  ]);
+  const workingDir = process.cwd();
+  const generator = new StoryIndexGenerator(
+    normalizeStories(stories, { configDir: CONFIG_DIR, workingDir }),
+    { configDir: CONFIG_DIR, workingDir, indexers, docs, build: {}, features }
+  );
+  await generator.initialize();
+  // Throws on an indexing error, as `storybook build` would.
+  await generator.getIndex();
+  const indexed = [];
+  for (const files of generator.specifierToCache.values()) {
+    for (const cached of Object.values(files)) {
+      for (const indexEntry of cached?.entries ?? []) {
+        const moduleId = resolve(workingDir, indexEntry.importPath);
+        if (indexEntry.type === "story" && moduleId === MODULE_ID) {
+          indexed.push({
+            id: indexEntry.id,
+            exportName: indexEntry.exportName,
+            moduleId,
+          });
+        }
+      }
+    }
+  }
+  return indexed;
 }
 
 function describeError(error) {
@@ -161,6 +243,7 @@ async function main() {
   let vitest;
   let ran = false;
   let modules;
+  let indexed;
   // What `startVitest` sets before creating Vitest; the Storybook plugin adds
   // the story files to the project only when `VITEST` is set.
   process.env.TEST = "true";
@@ -207,11 +290,17 @@ async function main() {
     }
   }
 
+  try {
+    indexed = await readIndexedStories();
+  } catch (error) {
+    runnerErrors.push(error);
+  }
+
   const exitCode =
     process.exitCode === undefined || process.exitCode === ""
       ? undefined
       : Number(process.exitCode);
-  const result = checkProbe({ modules, runnerErrors, exitCode });
+  const result = checkProbe({ modules, indexed, runnerErrors, exitCode });
   if (result.exitCode === 0) {
     console.log(`\n${result.lines.join("\n")}`);
   } else {
