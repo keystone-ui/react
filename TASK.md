@@ -1,22 +1,18 @@
 # Keystone UI: todo (what still needs doing)
 
-Written by the team lead, 26 Nov 2026 22:25. Nothing here is started; nothing starts until the owner says. Card ids are on the board (`card show <id> --board keystone-ui`).
+Written by the team lead, 26 Nov 2026 22:25; updated 27 Nov after a session with the owner (done items removed, see PLAN.md). Card ids are on the board (`card show <id> --board keystone-ui`).
 
 ## Only the owner can do these
 - `o-figma`: Review and publish the Figma library; give a token and open the Blocks file
-- `o-npm-latest`: Move npm latest to the current beta (needs your npm login)
 - `o-chromatic`: Renew or raise the Chromatic plan so UI Tests run again
-- `o-npm-name-keystoneui`: Register the unscoped npm name our docs told users to run?
-- PR #123 "Version Packages (beta)": merging it publishes the next beta to npm.
+- Delete the remote branches of the 14 merged PRs #93 to #110 (an agent's delete was refused).
+- Bring the board in line (needs the lead role): see PLAN.md → Board.
 - Any push, merge, release or publish: each needs the owner's word.
 
-## Next, in the order I would take them
-1. `c-27bb16` (was held; it can go now).
-2. `c-9c9666` items 2 to 4: a dead shadcn taxonomy link in the contributing skill, the "dashboard" category row, the consumer category tables.
-3. `c-7f6052`: harden the pages codemod and linter (Codex's 7 findings and 2 later), and reword the five lead-in sentences.
-4. `c-2e0d3f`: the parked scaffold registry work (branch `fix/scaffold-registry-read`, 8 findings), if it is still wanted.
-5. Housekeeping: go through the old `~/dev/react-wt-*` worktrees, confirm which are merged, remove those, and decide on the three with one uncommitted file each.
-6. Before any future push that changes docs pages: run `pnpm --filter @keystoneui/docs test:built` after a forced build (the check I missed on #148).
+## Next
+1. `c-2e0d3f`: scaffold registry work. The JSON-registry part (branch `fix/scaffold-registry-read`, rebased, 8 findings) is in a PR; the TypeScript-array part (`w-scaffold-reg-ts`, rows 4-8) and lookup errors (`w-scaffold-lookup-errors`, row 9) are still to do.
+2. `c-f62364`: the JAWS check of the loading Button was meant to precede the next npm release; beta.17 is out, so do it before beta.18.
+3. Before any push that changes docs pages: run `pnpm --filter @keystoneui/docs test:built` after a forced build.
 
 ## Todo cards on the board (not ordered beyond the list above)
 - `w-base-ui-bump-modal-tab`: Base UI: bump the pin when the release with the modal Tab fix is out; six saved stories as the acceptance test
@@ -52,15 +48,12 @@ Written by the team lead, 26 Nov 2026 22:25. Nothing here is started; nothing st
 - `c-storybook-timeout-reload`: Measure a page reload after a timed-out Storybook play
 - `c-pagination-link-later`: Pagination and Button-as-link leftovers found in review
 - `c-27aa48`: Docs housekeeping, later: Tabs page order and demo counts, add:component should run gen:static-paths, stale test header
-- `c-27bb16`: Reel retry probe, later: a colliding export name can stand in for the companion; exit status above 255 wraps to 0
 - `c-a94115`: Scaffold: later findings from Codex c-77071c (entry spellings, unreadable folder, indented registry close)
-- `c-9c9666`: Guides and scaffold, later: 58 pages and the scaffold still use ## Import; skill's shadcn reference URL is 404; dashboard row; consumer category table
 - `w-scaffold-reg-ts`: Scaffold 2/3: read and edit the two TypeScript arrays as literals (rows 4-8, 10)
 - `w-scaffold-lookup-errors`: Scaffold 3/3: a lookup error other than ENOENT stops the preflight (rows 9, 10)
 
 ## Triage (looked at, not planned)
 - `c-d694ea`: Popup-origin scan: known gaps (element access, re-exports, let reassignment, loop bindings)
-- `w-release-beta15`: Release 1.0.0-beta.15: Version Packages PR #111 merged on the owner's word (13:52)
 - `c-4cee0d`: UI test files fail tsc6 --noEmit -p packages/ui/tsconfig.json (ten files); CI does not typecheck them
 - `c-89bcc8`: Combobox: three observations of the second review (later)
 - `c-9550c9`: ComboboxChip: one-shot iterator children blank on a second render
@@ -70,6 +63,4 @@ Written by the team lead, 26 Nov 2026 22:25. Nothing here is started; nothing st
 - `c-79d870`: Docs: should API tables show the className state callback? (72 rows say string, 3 give the callback; Codex asked for it on DropdownMenuSubContent; D166)
 - `c-3dae17`: Submenu RTL: later items from blind r2 (rtl.mdx wrapper snippet leaves portaled rows LTR; three suggestions)
 - `c-4e91d0`: Badge soft contrast test: read every TableRow class string and group variants (Codex r2 Later notes); badge.mdx:81 old palette steps
-- `c-2e0d3f`: Scaffold later: cards 2/3 and 3/3 with the write-verify-rename protocol
 - `w-scaffold-reg-json`: Scaffold 1/3: read and edit the JSON registries by their fields (rows 1-3, 10)
-- `c-7f6052`: Pages codemod and linter: Codex's 7 findings and 2 later

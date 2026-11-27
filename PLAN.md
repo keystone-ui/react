@@ -1,28 +1,36 @@
 # Keystone UI: plan (where things stand)
 
-Written by the team lead, 26 Nov 2026 22:25, on the owner's order to stop. Source of truth is git, GitHub and the board (`card ls --board keystone-ui`); this is a summary.
+Updated 27 Nov 2026 from a session with the owner. Source of truth is git, GitHub, npm and the board (`card ls --board keystone-ui`); this is a summary. The board itself was not updated: card changes need the lead role, and the lead is stopped (see "Board" below).
 
 ## State now
-- **Stopped and holding.** No worker, reviewer, shell or run of this project is live. Nothing uncommitted was in flight: the last work was merged at 15:36 today and the project has held since 15:44.
-- `origin/main` = `de480ba1` (PR #148). Its CI, Deploy Docs, Deploy Storybook and Release runs all succeeded on the first attempt, so the docs site and Storybook are deployed from that commit.
-- npm: `@keystoneui/react` latest = `1.0.0-beta.10`, beta = `1.0.0-beta.16`. No release was cut today. The next one is the open "Version Packages (beta)" PR #123, which is the owner's to merge.
-- Open pull requests: #123 (Version Packages), #80 (a dependency bot's bump of the Chromatic action). No other branch of ours is on GitHub waiting.
+- `origin/main` = `912508de` (PR #152). Its CI, Deploy Docs, Deploy Storybook and Release runs all succeeded, so the docs site and Storybook are deployed from that commit.
+- npm: `@keystoneui/react` latest = beta = `1.0.0-beta.17` (published by Release from #123; `latest` moved by the owner on 27 Nov).
+- Open pull requests: #80 (a dependency bot's bump of the Chromatic action), and the scaffold registry PR from `fix/scaffold-registry-read` (item 4 below) once it is opened.
+- Worktrees: only `~/dev/react-wt-scaffold-reg` (scaffold work) and `~/dev/react-wt-plan-task` (this change) remain.
 
-## What was done (merged to main, 23 to 26 Nov)
-- 26 Nov: #148 every component page has its import under `## Usage`; the old `## Import` section is gone from 58 pages, the linter refuses it, the scaffold and guides follow. One size guard for the Button page was raised from 160 KB to 168 KB on the owner's word.
-- 25 Nov: #140 to #147: the scaffold no longer overwrites existing files (#144); a pagination link with `href` renders as a link (#142); Storybook test fixes and the Reel retry probe in CI (#140, #141, #143, #146); contributor guides corrected (#145, #147).
-- 24 Nov: #135 to #139: outline Button text colour, RTL submenu chevron, the RTL guide, changelog scripts, a docs smoke check.
-- 23 Nov: #127 to #134: StringsProvider (#131), the bottom-nav-01 block (#132), RollingNumber and Countdown digit steadiness (#130), accessible names for Combobox controls and loading Buttons (#129), RTL submenu side (#128), FileUpload gap (#127), changelog header and RTL docs.
-- Earlier work (Reel, Tabs on Reel, RollingNumber, Countdown, FileUpload, data table, Figma library build) is in the board's 277 done cards and in `MEMORY-archive-*.md`.
+## What was done
+- 27 Nov:
+  - #149 new pixel keystone app icon everywhere: favicon (`favicon.ico`, `icon.svg`), apple-touch and web-manifest icons, nav logos, social card, Storybook favicon and sidebar logo, and the macOS `.icns` set. Sources and generator in `brand/` (`python3 -B brand/build.py`).
+  - #123 Version Packages: `@keystoneui/react@1.0.0-beta.17` published.
+  - #150 contributing skill and consumer category tables corrected (shadcn reference URL, `dashboard` mirrors shadcn, tables match `registry.json`). Closes `c-9c9666` items 2 to 4.
+  - #151 Reel retry probe checks each story's raw export name and maps exit statuses outside 1..255 to 1. Closes `c-27bb16`.
+  - #152 usage-import codemod and `## Import` lint hardened against all six Codex findings and the two later ones; Command, Code Block and Copy Button lead-ins reworded. Closes `c-7f6052`.
+  - 27 old worktrees removed; local branches of 14 merged PRs deleted.
+- 26 Nov: #148 every component page has its import under `## Usage`.
+- 25 Nov: #140 to #147: scaffold no longer overwrites files (#144); pagination link renders as a link (#142); Storybook test fixes and the Reel retry probe in CI (#140, #141, #143, #146); contributor guides (#145, #147).
+- 24 Nov: #135 to #139. 23 Nov: #127 to #134.
+- Earlier work is in the board's done cards and in `MEMORY-archive-*.md`.
 
-## Built but NOT merged (local only, nothing lost)
-- **Scaffold registry reads** (`fix/scaffold-registry-read` at `fcaf0e11`, worktree `~/dev/react-wt-scaffold-reg`, clean). Parked by decision after three Codex returns; 8 findings open. Card `c-2e0d3f`.
-- About 28 older worktrees `~/dev/react-wt-*` remain on disk. Most belong to branches already merged by squash; I have NOT checked each one. Three preview worktrees (`react-wt-pill-preview`, `react-wt-rn-preview`, `react-wt-tabs-preview`) each hold one uncommitted file; I did not touch them. Sorting these is on the todo list.
+## Decided
+- `o-npm-name-keystoneui`: not needed. npm refuses the bare name `keystoneui` for every account ("too similar to existing package keystone-ui"), so nobody can publish it and `npx keystoneui` fails with not found. The docs were fixed by #86. Close the card.
 
-## Known gaps in what is merged
-- #148 was merged on the owner's word although Codex had returned it: 7 findings about the codemod and linter on page shapes that do not exist in the repo today, and 2 minor ones. Not reproduced, not fixed. Card `c-7f6052`.
-- On five pages (code-block, command, copy-button, pagination, textarea) a lead-in sentence now sits after the import instead of before the preview.
-- The live site was checked only by the deploy runs and one page answering 200.
+## Known gaps
+- `c-f62364` asked for a JAWS check of the loading Button (aria-busy) before the next npm release; beta.17 went out without it.
+- Chromatic "UI Tests" stays pending on every PR until `o-chromatic` is done.
+- The remote branches of 14 merged PRs (#93 to #110) are still on GitHub; deleting them needs the owner.
+
+## Board
+Card changes (`card accept`, `drop`, `note`) are refused unless run as the lead. To bring the board in line: accept `c-27bb16`, `c-9c9666`, `c-7f6052`, `o-npm-latest`; drop `o-npm-name-keystoneui` (reason above); note `c-2e0d3f` with its PR.
 
 ## Where the records are
-- State: `~/data/keystone-ui-lead/MEMORY.md` (top block). Decisions: `DECISIONS.md` (latest D266, D267). Reports: `reports/`. Board: slug `keystone-ui`.
+- State: `~/data/keystone-ui-lead/MEMORY.md` (top block). Decisions: `DECISIONS.md`. Reports: `reports/`. Board: slug `keystone-ui`.
