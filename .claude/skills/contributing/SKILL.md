@@ -57,14 +57,14 @@ Every block must carry at least one category. Current values in use:
 | `authentication` | sign-in + sign-up blocks | ✅ |
 | `login` | `signin-0X` (alongside `authentication`) | ✅ |
 | `signup` | `signup-0X` (alongside `authentication`) | ✅ |
-| `navigation` | `profile-dropdown-01`, `category-nav-01` | new |
-| `data` | `tickets-01` | new |
-| `dashboard` | `dashboard-01` | new |
-| `admin` | `admin-01` | new |
+| `navigation` | `profile-dropdown-01`, `category-nav-01`, `bottom-nav-01` | new |
+| `data` | `tickets-01`, `users-01` | new |
+| `dashboard` | `dashboard-01` | ✅ |
+| `admin` | `admin-01`, `users-01`, `settings-01` | new |
 | `settings` | `settings-01` | new |
 | `betting` | `betting-panel-0X` | new |
 
-When adding a new category, prefer single-word lowercase strings that mirror shadcn naming where any overlap exists (shadcn's own `registry.json`, at https://ui.shadcn.com/r/registry.json, is the reference). Document the new category in this table and in `AGENTS.md` → "Block Authoring".
+When adding a new category, prefer single-word lowercase strings that mirror shadcn naming where any overlap exists (shadcn's own registry, at https://ui.shadcn.com/r/styles/new-york-v4/registry.json, is the reference; its blocks are the `registry:block` items). Document the new category in this table and in `AGENTS.md` → "Block Authoring".
 
 ## Updating an Existing Component
 
