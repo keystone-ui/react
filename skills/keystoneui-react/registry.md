@@ -128,7 +128,7 @@ drive `list_components({ type: "block", category })` (or `type: "kit"`) and
 | `authentication` | 9 — every `signin-*` and `signup-*` | |
 | `login` | 4 | |
 | `signup` | 5 | |
-| `navigation` | 2 | `sidebar`, `npm/sidebar` |
+| `navigation` | 3 | `sidebar`, `npm/sidebar` |
 | `admin` | 4 | |
 | `settings` | 1 | |
 | `dashboard` | 1 | |

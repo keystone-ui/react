@@ -208,7 +208,7 @@ Blocks are full-page or feature-level compositions registered as `registry:block
   - `authentication`, `login`, `signup` — sign-in / sign-up flows (mirrors shadcn)
   - `navigation` — user menus, dropdowns, sidebars
   - `data` — tables, CRM-style data management
-  - `dashboard` — analytics dashboards, KPI + chart pages
+  - `dashboard` — analytics dashboards, KPI + chart pages (mirrors shadcn)
   - `admin` — admin panels and app shells
   - `settings` — account settings pages
   - `betting` — betting/wager UI (keystone-specific)
