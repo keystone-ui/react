@@ -178,6 +178,7 @@ describe("add-component scaffold", () => {
       "scripts/add-component.mjs",
       "scripts/gen-demos.mjs",
       "scripts/lib/demo-entries.mjs",
+      "scripts/lib/ts-registry.mjs",
       "scripts/lint-component-mdx.mjs",
       "packages/ui/package.json",
       "packages/ui/tsup.config.ts",
