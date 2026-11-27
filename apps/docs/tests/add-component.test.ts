@@ -1011,7 +1011,19 @@ const isStaging = (path) =>
 const onLiveInode = (fd) => {
   const own = real.fstatSync(fd, { bigint: true });
   const now = real.existsSync(at(TARGET)) ? real.lstatSync(at(TARGET), { bigint: true }) : null;
-  return [origin, now].some((s) => s && s.dev === own.dev && s.ino === own.ino);
+  const hit = [origin, now].some((s) => s && s.dev === own.dev && s.ino === own.ino);
+  if (hit) {
+    let file = "?";
+    try {
+      file = real.readlinkSync("/proc/self/fd/" + fd);
+    } catch {}
+    real.appendFileSync(
+      join(OUT, "live-log"),
+      "fd=" + fd + " file=" + file + " ino=" + own.ino + " origin=" + origin.ino +
+        " now=" + (now ? now.ino : "none") + " nlink=" + own.nlink + "\\n"
+    );
+  }
+  return hit;
 };
 const act = (seam) => {
   if (done || seam !== SEAM) return;
@@ -1135,6 +1147,9 @@ const OUT = ${JSON.stringify(out)};
     out,
     fired: existsSync(join(out, "fired")),
     liveWrites: Number(readFileSync(join(out, "live-writes"), "utf8")),
+    liveLog: existsSync(join(out, "live-log"))
+      ? readFileSync(join(out, "live-log"), "utf8")
+      : "",
     saved: () => readFileSync(join(out, "saved.json"), "utf8"),
   };
 }
@@ -1295,7 +1310,10 @@ describe("JSON registries: a save before or during the snapshot (row 15)", () =>
     );
 
     expect(seamRun.fired, "the save ran").toBe(true);
-    expect(seamRun.liveWrites, "writes or cuts on the live inode").toBe(0);
+    expect(
+      seamRun.liveWrites,
+      `writes or cuts on the live inode:\n${seamRun.liveLog}`
+    ).toBe(0);
     const live = read(repo, path);
     if (exit === 0) {
       expect(seamRun.result.status, seamRun.result.stderr).toBe(0);
