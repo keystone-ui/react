@@ -702,6 +702,94 @@ before("writeSync", (fd) => fd === storyFd, () => fail("ENOSPC"));`
     });
   });
 
+  // The rescan fixes the manifest and loader inputs, so it must map the key
+  // the new MDX page previews to the demo this run wrote, before any
+  // registry is edited.
+  it.each([
+    [
+      "removed",
+      `real.unlinkSync(at(${JSON.stringify(FILES.demo)}));`,
+      [],
+      false,
+    ],
+    [
+      "moved to another path with the same key",
+      `real.mkdirSync(at("apps/docs/demos/scaffold"));
+real.renameSync(at(${JSON.stringify(FILES.demo)}), at("apps/docs/demos/scaffold/probe-default.tsx"));`,
+      [
+        "apps/docs/demos/scaffold",
+        "apps/docs/demos/scaffold/probe-default.tsx",
+      ],
+      false,
+    ],
+    [
+      "replaced by a symlink to a regular file",
+      `real.renameSync(at(${JSON.stringify(FILES.demo)}), at("moved-demo.tsx"));
+real.symlinkSync(at("moved-demo.tsx"), at(${JSON.stringify(FILES.demo)}));`,
+      ["moved-demo.tsx"],
+      true,
+    ],
+  ] as const)(
+    "stops before any registry edit when the new demo is %s after its close",
+    (_label, action, foreign, demoPathLeft) => {
+      const repo = scratchRepo();
+      const before = snapshot(repo);
+
+      const result = runHooked(
+        repo,
+        `before("openSync", (path) => is(path, ${JSON.stringify(FILES.mdx)}), () => {
+${action}
+});`
+      );
+
+      expect(result.status, result.stderr).toBe(1);
+      expect(result.stderr).toContain(
+        `Stopped at ${FILES.demo} (demo key "${KEBAB}-default" not in the rescan).`
+      );
+      expect(result.stderr).toContain(createdLine(ALL_FIVE));
+      expect(result.stderr).not.toContain("Nothing was written.");
+      expect(result.stdout).not.toContain("✓ packages/ui/package.json");
+      for (const path of foreign.filter((p) => p.endsWith(".tsx"))) {
+        expect(read(repo, path)).toContain(
+          `export default function ${PASCAL}Default()`
+        );
+      }
+      const after = snapshot(repo);
+      expect(after).not.toHaveProperty("apps/docs/demos/manifest.json");
+      expect(after).not.toHaveProperty("apps/docs/demos/loader.tsx");
+      expectTree(before, after, {
+        added: [
+          ...ALL_FIVE.filter((path) => demoPathLeft || path !== FILES.demo),
+          ...foreign,
+        ],
+      });
+    }
+  );
+
+  it("stops before any registry edit when gen-demos keys the new demo another way", () => {
+    // `blocks/default.tsx` is the block key "block-default", not the
+    // "blocks-default" the new page previews.
+    const repo = scratchRepo();
+    const before = snapshot(repo);
+    const created = [
+      "packages/ui/src/blocks.tsx",
+      "apps/storybook/stories/blocks.stories.tsx",
+      "apps/docs/demos/blocks",
+      "apps/docs/demos/blocks/default.tsx",
+      "apps/docs/content/docs/components/blocks.mdx",
+    ];
+
+    const result = run(repo, "Blocks");
+
+    expect(result.status, result.stderr).toBe(1);
+    expect(result.stderr).toContain(
+      'Stopped at apps/docs/demos/blocks/default.tsx (demo key "blocks-default" not in the rescan).'
+    );
+    expect(result.stderr).toContain(createdLine(created));
+    expect(result.stderr).not.toContain("Nothing was written.");
+    expectTree(before, snapshot(repo), { added: created });
+  });
+
   it("stops at an I/O error on the tsup config with only the package exports edited", () => {
     const repo = scratchRepo();
     const before = snapshot(repo);
