@@ -1,0 +1,65 @@
+---
+title: Build something concrete
+description: One sentence naming what the reader builds and learns, such as "Build a settings screen with a form and a table, from an empty Next.js app."
+contentType: Tutorial
+---
+
+{/*
+
+Reference template for a tutorial (apps/docs/WRITING.md). Not published.
+
+A tutorial teaches a newcomer by doing. It is one safe path that always
+works: no options, no alternatives, no long explanations (link to concept
+pages). Every step ends with something the reader can see. Every code
+block is backed by a demo file under apps/docs/demos/ so CI compiles it.
+Keep the tone warm and the structure predictable.
+
+*/}
+
+In this tutorial, you'll build a short description of the end result. It takes about N minutes.
+
+## What you'll build
+
+<ComponentPreview name="tutorial-final" />
+
+## Before you start
+
+You need:
+
+- Node.js 22 or later
+- A new Next.js app (`pnpm create next-app@latest`)
+
+<Steps>
+
+<Step>Add the first thing.</Step>
+
+Say what the reader is about to do, in one sentence.
+
+```bash
+pnpm add @keystoneui/react@beta @base-ui/react
+```
+
+<Step>Render it.</Step>
+
+Say what the code does.
+
+```tsx title="app/page.tsx"
+import { Button } from "@keystoneui/react/button";
+
+export default function Page() {
+  return <Button>Save</Button>;
+}
+```
+
+You should now see a button on the page.
+
+</Steps>
+
+## What you learned
+
+- Each skill the reader practised, in one line
+
+## Next steps
+
+- [How-to guide that builds on this](/docs/guides/name)
+- [Concept page behind one of the steps](/docs/concepts/name)
