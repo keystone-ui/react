@@ -13,6 +13,7 @@
     "accessibility",
     "styling-hooks",
     "server-rendering",
-    "rtl"
+    "rtl",
+    "filter-and-table-patterns"
   ]
 }

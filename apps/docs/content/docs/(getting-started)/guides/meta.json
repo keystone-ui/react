@@ -9,6 +9,9 @@
     "add-shadcn-components",
     "set-up-right-to-left",
     "publish-a-theme",
-    "upgrade-to-1-0"
+    "upgrade-to-1-0",
+    "adapt-admin-01",
+    "page-the-users-table-on-the-server",
+    "keep-content-clear-of-the-bottom-nav"
   ]
 }

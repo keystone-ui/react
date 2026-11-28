@@ -1,6 +1,7 @@
 ---
 title: Tickets 01
 description: A sortable, filterable tickets table with inline cell editing, a new-ticket modal, and a floating bulk-edit action bar.
+contentType: Reference
 ---
 
 ```bash
@@ -11,16 +12,16 @@ npx shadcn@latest add https://keystoneui.io/r/tickets-01.json
 
 ## Features
 
-- Sticky-header table with 3-state column sort and column visibility toggle
+- Sticky-header table with 3-state column sort and a column visibility toggle
 - Row checkbox selection with indeterminate header state
-- Inline cell editing — click Subject for inline `Input`; `DropdownMenu` for all enum cells (Status, Priority, Assignee, Category, Channel, Health)
-- Trailing row-actions menu (View details / Copy ticket ID) → floating `Drawer` with full ticket-detail editor
+- Inline cell editing: click Subject for an inline `Input`, and a `DropdownMenu` for every enum cell (Status, Priority, Assignee, Category, Channel, Health)
+- Trailing row-actions menu (View details / Copy ticket ID), whose View details opens a floating `Drawer` with the full ticket-detail editor
 - New-ticket `Modal` with required Subject validation and Status / Priority / Category / Channel / Assignee selectors
 - Floating `SelectionBar` for bulk Change Status / Assign / Priority / Health / Channel / Export CSV / Delete (with `AlertDialog` confirmation)
 - Drag-to-reorder rows when sort preset is "Manual" (`@dnd-kit/*`)
 - Mobile toolbar collapses Sort / Status / Columns / View into a single `Drawer` + `Stepper` filters panel
-- Filter triggers name their own dimension — `Sort: Manual`, `Status: All` — matching [`admin-01`](/docs/blocks/admin-01)
-- Pagination footer reports the visible range — `Showing 1–10 of 20 tickets` — rather than repeating the selection count the `SelectionBar` already carries
+- Filter triggers name their own dimension (`Sort: Manual`, `Status: All`), matching [`admin-01`](/docs/blocks/admin-01)
+- Pagination footer reports the visible range (`Showing 1–10 of 20 tickets`) rather than repeating the selection count the `SelectionBar` already carries
 
 ## Components used
 
