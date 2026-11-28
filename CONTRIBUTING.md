@@ -99,7 +99,7 @@ A file at `apps/docs/demos/my-component/variants.tsx` gets the key `my-component
 
 ### 6. Write MDX documentation
 
-Edit `apps/docs/content/docs/components/my-component.mdx`, following `apps/docs/content/docs/components/_template.mdx`. Keep its section order: frontmatter, `<ComponentPreview name="my-component-default" />`, `## Installation`, `## Usage` (with the import line), `## Composition` for a compound component, `## Examples` with one `###` heading per variant preview, the optional `## RTL`, then `## API Reference`. `pnpm lint:docs` fails the page when `## Installation`, `## Usage` or `## API Reference` is missing, a compound component lacks `## Composition`, or a variant preview sits under its own `##` heading instead of a `###` heading in `## Examples`.
+Edit `apps/docs/content/docs/components/my-component.mdx`, following `apps/docs/content/docs/components/_template.mdx`. Keep its section order: frontmatter, `<ComponentPreview name="my-component-default" />`, `## Installation`, `## Usage` (with the import line), `## Composition` for a compound component, `## Examples` with one `###` heading per variant preview, the optional `## RTL`, then `## API reference`. `pnpm lint:docs` fails the page when `## Installation`, `## Usage` or `## API reference` is missing, a compound component lacks `## Composition`, or a variant preview sits under its own `##` heading instead of a `###` heading in `## Examples`.
 
 ### 7. LLMs.txt (automatic)
 
@@ -127,9 +127,9 @@ Blocks are full-page or feature-level compositions (sign-in pages, data tables, 
    - If the block installs a page, declare a `registry:page` file with a source `path` and a `target` such as `app/<slug>/page.tsx`.
 4. For each `registry:page` entry, write the page by hand at its `path`, such as `registry/default/blocks/<name>/page.tsx`. The entry's `target` is the install location in the consumer's app. Have the page import and render the installed component.
 5. Run `pnpm sync:blocks` to generate the installable components.
-6. Write `apps/docs/content/docs/blocks/<name>.mdx` using `apps/docs/content/docs/blocks/_block-template.mdx`. Include the install command in a bash fence, `<BlockPreview name="block-<name>" />` and links to the primitives under `## Components Used`.
+6. Write `apps/docs/content/docs/blocks/<name>.mdx` using `apps/docs/content/docs/blocks/_block-template.mdx`. Include the install command in a bash fence, `<BlockPreview name="block-<name>" />` and links to the primitives under `## Components used`.
 7. Run `pnpm gen:static-paths`. In `apps/docs/lib/static-paths.json`, the MDX filename supplies `/docs/blocks/<name>` in `docs`. The demo manifest supplies `block-<name>` in `preview`. The docs entry can exist before the preview key. `<BlockPreview>` embeds `/preview/block-<name>` in an iframe.
-8. Run `pnpm docs:backlinks` to update `## Related Blocks` on the linked component pages.
+8. Run `pnpm docs:backlinks` to update `## Related blocks` on the linked component pages.
 9. Add the block to the Block Selection table in `skills/keystoneui-react/SKILL.md`.
 
 Run `pnpm registry:build` to refresh the installable items in `apps/docs/public/r/`.
@@ -142,8 +142,8 @@ See `.claude/skills/contributing/SKILL.md` → "Adding a New Block" for the full
 
 | Change type | Storybook | Demos | MDX |
 |-------------|-----------|-------|-----|
-| **New prop or variant** | Add/update story | Add demo if user-facing | Update API Reference table |
-| **Prop renamed or removed** | Update stories | Update affected demos | Update API Reference table |
+| **New prop or variant** | Add/update story | Add demo if user-facing | Update API reference table |
+| **Prop renamed or removed** | Update stories | Update affected demos | Update API reference table |
 | **New sub-component** | Add stories | Add demo if no existing demo shows it | Update the page's import block AND the Composition tree |
 | **Visual/styling change** | Auto-reflects | Auto-reflects | No change needed |
 | **Bug fix** | Add regression story | No change needed | No change needed |
@@ -156,7 +156,7 @@ See `.claude/skills/contributing/SKILL.md` → "Adding a New Block" for the full
 3. If the change is user-facing:
    - Update relevant demos in `apps/docs/demos/{name}/`
    - Add a demo for a new feature that no existing demo shows
-   - Update the MDX API Reference table
+   - Update the MDX API reference table
 4. If dependencies changed, update `packages/ui/src/_registry.ts`
 
 ### Checklist for new sub-components

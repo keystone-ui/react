@@ -191,7 +191,7 @@ Every `apps/docs/content/docs/components/<name>.mdx` follows the canonical struc
 5. `## Composition` — required for compound components (any component exporting more than one named symbol)
 6. `## Examples` — variants as `### `-level subheaders, each with a 1-sentence description and a `<ComponentPreview>`
 7. `## RTL` — optional, only for components with non-trivial RTL behavior
-8. `## API Reference` — one Props table per part
+8. `## API reference` — one Props table per part
 
 Mechanical migration: `node scripts/migrate-component-mdx.mjs`. Validation: `pnpm lint:docs`.
 
@@ -226,9 +226,9 @@ Blocks are full-page or feature-level compositions registered as `registry:block
    - If the block installs a page, declare a `registry:page` file with a source `path` and a `target` such as `app/<slug>/page.tsx`.
 4. For each `registry:page` entry, write the page by hand at its `path`, such as `registry/default/blocks/<name>/page.tsx`. The entry's `target` is the install location in the consumer's app. Have the page import and render the installed component.
 5. Run `pnpm sync:blocks` to generate the installable components.
-6. Write `apps/docs/content/docs/blocks/<name>.mdx` using `apps/docs/content/docs/blocks/_block-template.mdx`. Include the install command in a bash fence, `<BlockPreview name="block-<name>" />` and links to the primitives under `## Components Used`.
+6. Write `apps/docs/content/docs/blocks/<name>.mdx` using `apps/docs/content/docs/blocks/_block-template.mdx`. Include the install command in a bash fence, `<BlockPreview name="block-<name>" />` and links to the primitives under `## Components used`.
 7. Run `pnpm gen:static-paths`. In `apps/docs/lib/static-paths.json`, the MDX filename supplies `/docs/blocks/<name>` in `docs`. The demo manifest supplies `block-<name>` in `preview`. The docs entry can exist before the preview key. `<BlockPreview>` embeds `/preview/block-<name>` in an iframe.
-8. Run `pnpm docs:backlinks` to update `## Related Blocks` on the linked component pages.
+8. Run `pnpm docs:backlinks` to update `## Related blocks` on the linked component pages.
 
 Run `pnpm registry:build` to refresh the installable items in `apps/docs/public/r/`.
 

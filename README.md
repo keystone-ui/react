@@ -21,7 +21,7 @@ Keystone UI is built to be consumed by AI coding assistants as a first-class con
 - **LLMs.txt endpoints** — three dynamic routes generated from MDX, never stale: `/llms.txt`, `/llms-full.txt`, `/llms-components.txt`.
 - **AGENTS.md** — repo-root file with development conventions; also served at `/agents-md`.
 
-See [`/docs/agents`](https://keystoneui.io/docs/agents) for setup instructions per AI client.
+See the [MCP server guide](https://keystoneui.io/docs/agents/mcp-server) for setup instructions per AI client.
 
 ## Quick Start
 

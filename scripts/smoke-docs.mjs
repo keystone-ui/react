@@ -57,6 +57,13 @@ export const DEFAULT_CHECKS = [
     status: 200,
     bodyIncludes: "/docs/components/button",
   },
+  // Search tags pages by content type (lib/search-tag.ts). A tagged query
+  // proves the custom index built on the Worker, not only the default one.
+  {
+    path: "/api/search?query=button&tag=Components",
+    status: 200,
+    bodyIncludes: "/docs/components/button",
+  },
   { path: "/r/demos/button", status: 200, bodyIncludes: '"name":"button"' },
   {
     path: "/sitemap.xml",

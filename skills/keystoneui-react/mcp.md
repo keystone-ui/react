@@ -29,7 +29,7 @@ You can also run the init helper from the `@keystoneui/mcp` package to write the
 
 | Tool | When to use |
 |---|---|
-| `get_docs` | Full docs page for a component, block, kit, or package flavour (a kit or flavour resolves to the page section that documents it), **including the API Reference table**. Props live only here -- `view_component` returns source, not prop docs. |
+| `get_docs` | Full docs page for a component, block, kit, or package flavour (a kit or flavour resolves to the page section that documents it), **including the API reference table**. Props live only here -- `view_component` returns source, not prop docs. |
 | `get_project_context` | **Call first** when the server is connected through a launch configuration trusted for this project. Install mode, path aliases, theme CSS file, icon library, RSC, package manager. Import style depends on it. |
 | `list_components` | Browse all components, blocks, kits, or named examples. Params: `limit`, `offset`, `type` (`ui \| block \| example \| kit \| style \| theme \| item`), `category`. A package flavour (`npm/users-01`) is its own entry with a `Flavour of:` line; a kit has `Kind: kit` and `Part of:` lines. |
 | `search_components` | Fuzzy search by name, description, keywords, or category. Use when the exact name isn't known. Params: `query`, `limit`, `type`, `category`. |
@@ -43,7 +43,7 @@ You can also run the init helper from the `@keystoneui/mcp` package to write the
 
 1. **Orient** — `get_project_context`, when the server is connected through a launch configuration trusted for this project, to learn how this project consumes Keystone; otherwise read `components.json` and `package.json` as SKILL.md describes. Everything you write depends on `installMode`.
 2. **Discover** — `list_components` (broad) or `search_components` (targeted) to find the right component.
-3. **Inspect** — `view_component({ names: [...] })` for source, and `get_docs({ name })` for the API Reference table. Props are documented only in the docs page.
+3. **Inspect** — `view_component({ names: [...] })` for source, and `get_docs({ name })` for the API reference table. Props are documented only in the docs page.
 4. **See real usage** — `get_examples({ name })` to fetch demo TSX files. Especially useful for blocks (`signin-01`, `tickets-01`) and complex components.
 5. **Install** — `get_add_command({ names: [...] })` to get the install command; add `flavour: "package"` when `get_project_context` says `package`. Run it only when executing tools in this project is already within the user's authorized task.
 6. **Verify** — `audit_checklist` after first install to confirm CSS, Tailwind, and theme tokens are wired correctly.

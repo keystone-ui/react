@@ -1,0 +1,83 @@
+[
+  {
+    "rule": "heading-case",
+    "match": "Quick Start",
+    "reason": "matches the Quick Start page title until that page is renamed"
+  },
+  {
+    "rule": "banned-word",
+    "match": "Quick Start",
+    "reason": "matches the Quick Start page title until that page is renamed"
+  },
+  {
+    "rule": "banned-word",
+    "match": "quick start guide",
+    "reason": "names the Quick Start page until that page is renamed"
+  },
+  {
+    "file": "blocks/admin-01.mdx",
+    "rule": "banned-word",
+    "match": "simple pill",
+    "reason": "block term: a simple pill is a dimension and a value, as opposed to an operator pill"
+  },
+  {
+    "file": "blocks/admin-01.mdx",
+    "rule": "banned-word",
+    "match": "Simple filters",
+    "reason": "block term: introduces simple pills versus operator pills"
+  },
+  {
+    "file": "components/pagination.mdx",
+    "rule": "banned-word",
+    "match": "Simple",
+    "reason": "names the pagination-simple demo"
+  },
+  {
+    "file": "components/date-picker.mdx",
+    "rule": "banned-word",
+    "match": "Quick Picks",
+    "reason": "names the date-picker presets demo"
+  },
+  {
+    "file": "blocks/admin-01.mdx",
+    "rule": "the-user",
+    "match": "user",
+    "reason": "the block manages user records; the user is a row in the table, not the reader"
+  },
+  {
+    "file": "components/combobox.mdx",
+    "rule": "the-user",
+    "match": "the user",
+    "reason": "the end user of the app typing into the combobox"
+  },
+  {
+    "file": "components/copy-button.mdx",
+    "rule": "the-user",
+    "match": "the user",
+    "reason": "the end user of the app pasting the copied text"
+  },
+  {
+    "file": "components/drawer.mdx",
+    "rule": "the-user",
+    "match": "the user",
+    "reason": "the end user of the app glancing back at the list"
+  },
+  {
+    "file": "components/filter-chips.mdx",
+    "rule": "the-user",
+    "match": "the user",
+    "reason": "the end user of the app picking a chip"
+  },
+  {
+    "file": "(getting-started)/agents/mcp-server.mdx",
+    "rule": "rhetorical-question",
+    "match": "What form components does Keystone UI have?",
+    "reason": "an example prompt the reader types to an agent, not a rhetorical question"
+  },
+  {
+    "file": "(getting-started)/agents/mcp-server.mdx",
+    "rule": "rhetorical-question",
+    "match": "How do I set up Keystone UI CSS?",
+    "reason": "an example prompt the reader types to an agent, not a rhetorical question"
+  }
+]

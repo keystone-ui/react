@@ -15,7 +15,7 @@
  *   2. examples: wrap loose variant H2s (any H2 containing a <ComponentPreview>
  *      that isn't a protected section name) under a single ## Examples parent
  *      with the variant heading demoted to H3.
- *   3. rtl: insert a ## RTL paragraph before ## API Reference if missing.
+ *   3. rtl: insert a ## RTL paragraph before ## API reference if missing.
  *      The codemod uses a fallback paragraph (no demo reference) so it
  *      doesn't break lint until Phase 4.5 authors per-component RTL demos.
  *   4. usage-import: retire the older `## Import` section. Its body moves,
@@ -56,8 +56,8 @@ const PROTECTED_HEADINGS = new Set([
   "Composition",
   "Examples",
   "RTL",
-  "API Reference",
-  "Related Blocks",
+  "API reference",
+  "Related blocks",
 ]);
 
 const DEMOS_DIR = join(ROOT, "apps/docs/demos");
@@ -148,7 +148,7 @@ function buildInstallationSection(componentName) {
 function buildRtlSection() {
   return {
     heading: "RTL",
-    body: `\nThis component supports RTL layouts via the standard \`dir="rtl"\` attribute on a parent element. See [the RTL guide](/docs/rtl).\n\n`,
+    body: `\nThis component supports RTL layouts via the standard \`dir="rtl"\` attribute on a parent element. See [the RTL guide](/docs/concepts/rtl).\n\n`,
   };
 }
 
@@ -219,7 +219,7 @@ function tryWrapVariantsUnderExamples(parsed) {
     .map((s) => `\n### ${s.heading}\n${s.body.replace(/\n+$/, "\n")}`)
     .join("\n");
   const examplesSection = { heading: "Examples", body: `${examplesBody}\n` };
-  const apiIdx = kept.findIndex((s) => s.heading === "API Reference");
+  const apiIdx = kept.findIndex((s) => s.heading === "API reference");
   const insertIdx = apiIdx === -1 ? kept.length : apiIdx;
   kept.splice(insertIdx, 0, examplesSection);
   parsed.sections = kept;
@@ -231,7 +231,7 @@ function tryInsertRtl(parsed) {
     return null;
   }
   const apiIdx = parsed.sections.findIndex(
-    (s) => s.heading === "API Reference"
+    (s) => s.heading === "API reference"
   );
   if (apiIdx === -1) {
     return null;
