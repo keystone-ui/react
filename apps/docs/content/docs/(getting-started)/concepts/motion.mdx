@@ -5,7 +5,8 @@ contentType: Conceptual
 ---
 
 Keystone UI times its motion from 4 duration tokens and 3 easing curves in
-`base.css`, and every transition in the library derives its time from them.
+`base.css`. Every transition time in `base.css` derives from them, and so does
+every duration a component declares.
 That single source is what lets one reduced-motion rule stop the whole
 library, and it keeps durations consistent as components are added. The rest
 of the motion rules follow from Tailwind CSS v4 details: which properties a
@@ -95,7 +96,8 @@ Base UI sets `data-instant` when a menu or popover opens from the keyboard or
 closes with Escape, and when a tooltip opens on focus. `base.css` removes the
 transition in those states, because a keyboard user already knows where the
 popup comes from and any duration reads as lag. The command palette's dialog
-opens and closes with no transition at all, since it opens many times a day.
+content appears and leaves at once, since it is a keyboard surface opened
+with a shortcut, while its overlay keeps a short fade.
 
 ### One rule handles reduced motion
 
@@ -131,7 +133,7 @@ reads as a hung interface.
 
 ### Live values have their own components
 
-A number that changes while someone watches, such as a balance or a live KPI,
+A number that changes while someone watches, such as a balance or a live key performance indicator (KPI),
 is a [RollingNumber](/docs/components/rolling-number). It rolls only the digits
 that changed, one row each, with a CSS transition timed by `--duration-slow`,
 and it doesn't roll under reduced motion. The time left until a deadline is a

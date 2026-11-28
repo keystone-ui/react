@@ -48,7 +48,8 @@ The components on the ladder, and the rungs each one offers:
 - **Table**: `size="sm"` on the table moves `TableHead` from `default` to `sm`.
 - **Pagination**: its page links copy Button's sizes.
 
-Controls on the ladder also share a corner: every one is `rounded-md`, and
+The controls that share a row also share a corner. Button, Toggle, Input,
+Textarea, InputGroup, SelectTrigger and NativeSelect are `rounded-md`, and
 only the 24px rung steps down to `rounded-sm`, where a larger radius would
 leave almost no straight edge.
 
@@ -80,8 +81,7 @@ changes.
 ### Only Button and Toggle reach 48px
 
 `lg` exists only on Button, Toggle and ToggleGroup. The input family stops at
-`default`, so a 48px row cannot contain a text field. Use `lg` for a call to
-action that stands on its own, not for a toolbar.
+`default`, so a 48px row cannot contain a text field.
 
 ### Popup rows sit off the ladder
 
@@ -121,7 +121,8 @@ inside an otherwise default app:
 </section>
 ```
 
-Keep every rung at 24px or more, the minimum target size in WCAG 2.5.8.
+Keep every rung at 24px or more, the minimum target size in the Web Content
+Accessibility Guidelines (WCAG) 2.5.8.
 
 ## Trade-offs
 
@@ -155,7 +156,7 @@ variables.
 ## Related
 
 - [Customization: control density](/docs/theming/customization#control-density)
-- [Using Keystone UI with shadcn](/docs/interop#control-heights-differ)
+- [Using shadcn Components: control heights differ](/docs/interop#control-heights-differ)
 - [Button](/docs/components/button)
 - [Input group](/docs/components/input-group)
 - [Toggle group](/docs/components/toggle-group)

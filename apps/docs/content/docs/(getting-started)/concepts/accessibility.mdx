@@ -23,6 +23,9 @@ parent. None of these throws an error, so each one needs a rule and a test.
 
 ## How Keystone UI handles it
 
+Keystone relies on Base UI for behaviour and adds rules for focus, disabled
+states, names, colour and touch input, most of them pinned by a test.
+
 ### Keyboard and roles come from Base UI
 
 Interactive parts are built on `@base-ui/react` primitives, which supply the
@@ -109,8 +112,9 @@ every form of colour-vision deficiency (CVD) preserves, rather than by hue.
 The test simulates protanopia, deuteranopia and tritanopia and requires every
 pair of slots to stay at least 10 apart in CIEDE2000 colour difference, where
 1 to 2 is the smallest difference people notice. Success and destructive stay
-at least 35 apart under the same simulations, and StatDelta never relies on
-colour alone: it adds an arrow and a visually hidden qualifier.
+at least 35 apart under the same simulations. StatDelta can carry more than
+colour: an arrow for a nonzero value while its icon is shown, and an optional
+visually hidden qualifier.
 
 ### Touch input
 
@@ -118,7 +122,14 @@ Text fields use a 16px font on touch devices and 14px only under a fine
 pointer (`pointer-fine:text-sm`). iOS Safari zooms the page when focus lands
 on a field under 16px and never zooms back. Control heights stay on the
 [control ladder](/docs/concepts/control-sizing), whose smallest rung is 24px,
-the minimum target size in WCAG 2.5.8.
+the minimum target size in the Web Content Accessibility Guidelines (WCAG)
+2.5.8.
+
+### Inline values stay inside paragraphs
+
+Components that render inline values, such as RollingNumber and Countdown,
+render only `<span>` elements, so they are valid inside a paragraph. The
+reasons are in [Server rendering and hydration](/docs/concepts/server-rendering).
 
 ## Trade-offs
 
@@ -129,10 +140,6 @@ yours runs alongside it, and some components document how to take a key over
 The contrast tests guard the shipped tokens only. A theme you build or edit is
 yours to measure, and a token whose value is a `color-mix()` or a `var()` is
 not measured at all.
-
-Components that render inline values, such as RollingNumber and Countdown,
-render only `<span>` elements so they are valid inside a paragraph; the
-reasons are in [Server rendering and hydration](/docs/concepts/server-rendering).
 
 ## What this means for your code
 

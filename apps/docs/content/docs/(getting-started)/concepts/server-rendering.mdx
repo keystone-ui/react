@@ -24,6 +24,10 @@ None of these shows up in a client-only test.
 
 ## How Keystone UI handles it
 
+Keystone marks its client boundaries per file, keeps functions out of the
+props that cross them, and makes live components print the same text on both
+sides.
+
 ### Most parts are client components
 
 52 of the 64 component files in `packages/ui/src` start with `"use client"`,
@@ -59,8 +63,10 @@ Props that cross the boundary must serialise, so functions can't:
 - **Blocks** take data rather than callbacks, such as `format="money"` on a
   dashboard panel, or an element (`icon: <Home />`) rather than a component.
 
+This page is a Server Component, and it passes StringsProvider a dictionary of
+plain strings:
+
 ```tsx
-// app/page.tsx is a Server Component
 import { StringsProvider } from "@keystoneui/react/strings";
 
 <StringsProvider strings={{ modal: { close: "Fermer" } }}>
@@ -102,7 +108,7 @@ server HTML and the hydrated value.
 
 ### Inline values render phrasing content
 
-A number or a countdown often sits inside a sentence. HTML allows only
+A number or a countdown can sit inside a sentence. HTML allows only
 phrasing content, such as `<span>`, inside a `<p>`, and a parser that meets a
 `<div>` there closes the paragraph first. The server HTML then parses into a
 different tree from the one React rendered, and hydration fails. RollingNumber
@@ -135,8 +141,10 @@ off.
 
 ## What this means for your code
 
-- Render Keystone components from Server Components freely, but call
-  functions such as `buttonVariants` only in a `"use client"` file.
+- Render client components such as Button from a Server Component, and call
+  functions such as `buttonVariants` only in a `"use client"` file. Of the
+  directive-free components, only Spinner and Pagination are documented for
+  Server Components.
 - Pass data, strings and elements across the boundary, never functions.
 - Pass an explicit `locale` and deterministic formatters to anything that
   formats numbers or dates, and the same values on both sides.
