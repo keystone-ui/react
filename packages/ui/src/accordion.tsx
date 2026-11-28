@@ -149,6 +149,7 @@ const Accordion = ({
       <AccordionLeadingIconContext.Provider value={false}>
         <AccordionPrimitive.Root
           className={mergeClassName(baseClasses, classNameProp)}
+          data-slot="accordion"
           defaultValue={defaultValue}
           disabled={disabled}
           hiddenUntilFound={hiddenUntilFound}
@@ -195,6 +196,7 @@ const AccordionItem = ({
   return (
     <AccordionPrimitive.Item
       className={mergeClassName(baseClasses, classNameProp)}
+      data-slot="accordion-item"
       ref={ref}
       {...props}
     />
@@ -215,6 +217,7 @@ const AccordionHeader = ({
   RefAttributes<ComponentRef<typeof AccordionPrimitive.Header>>) => (
   <AccordionPrimitive.Header
     className={mergeClassName("", className)}
+    data-slot="accordion-header"
     ref={ref}
     {...props}
   />
@@ -250,6 +253,7 @@ const AccordionTrigger = ({
   return (
     <AccordionPrimitive.Trigger
       className={mergeClassName(baseClasses, classNameProp)}
+      data-slot="accordion-trigger"
       ref={ref}
       {...props}
     >
@@ -307,6 +311,7 @@ const AccordionPanel = ({
   return (
     <AccordionPrimitive.Panel
       className={mergeClassName(baseClasses, classNameProp)}
+      data-slot="accordion-panel"
       keepMounted
       ref={ref}
       {...props}
