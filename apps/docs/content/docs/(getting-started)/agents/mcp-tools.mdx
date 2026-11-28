@@ -1,0 +1,59 @@
+---
+title: MCP tools
+description: The 9 tools the Keystone UI MCP server exposes, their inputs, and example prompts that use them.
+contentType: Reference
+---
+
+The Keystone UI MCP server exposes 9 tools that AI assistants can call. Your assistant picks the tool; this page lists what each one takes and returns, so you can phrase a request or read a transcript. [Set up the MCP server](/docs/agents/mcp-server) connects the server to your editor.
+
+## Tools
+
+Inputs marked `?` are optional:
+
+| Tool | Input | Description |
+|---|---|---|
+| `get_docs` | `name`, `type?` | Full docs page including the API reference table; previews resolved to inline TSX. A kit or package flavour with no page of its own resolves to the page section that documents it |
+| `get_project_context` | None | Install mode, aliases, theme CSS file, icon library, RSC, package manager. Call first: import style depends on it |
+| `list_components` | `limit?`, `offset?`, `type?`, `category?` | Paginated list of all components, blocks, kits, and named examples. `type`: `ui`, `block`, `example`, `kit`, `style`, `theme`, `item`. A package flavour such as `npm/users-01` is its own entry, with a `Flavour of:` line |
+| `search_components` | `query`, `limit?`, `type?`, `category?` | Fuzzy search by name, description, keywords, or category; same `type` values as `list_components` |
+| `view_component` | `names[]` | Full source code, dependencies, and metadata for up to 5 components, blocks, kits, or package flavours |
+| `get_examples` | `name` | Live demo TSX files for a component or block (e.g. `button`, `tickets-01`). A kit with no demos of its own names the block whose demos show it |
+| `get_add_command` | `names[]`, `flavour?` | Generates `npx shadcn@latest add` commands with registry URLs (up to 20 names). `flavour: "package"` installs a block's or kit's package flavour where one exists, for a project on the `@keystoneui/react` package |
+| `get_theme_info` | None | CSS setup, OKLCH color tokens, radius scale, dark mode |
+| `audit_checklist` | None | Post-install verification checklist |
+
+## Example prompts
+
+These prompts exercise the tools above, grouped by what you want to do.
+
+Browse and search:
+
+```text
+Show me all available Keystone UI components
+What form components does Keystone UI have?
+Find me a date picker component
+```
+
+Install components:
+
+```text
+Add the button and card components to my project
+Install all the form-related components from Keystone UI
+Set up a modal with an alert dialog
+```
+
+Build with components:
+
+```text
+Create a sign-in form using Keystone UI
+Build a settings page with tabs, inputs, and a switch
+Add a dropdown menu with checkable items
+```
+
+Theme and setup:
+
+```text
+How do I set up Keystone UI CSS?
+Show me the Keystone UI color tokens
+Run an audit to check my Keystone UI setup
+```

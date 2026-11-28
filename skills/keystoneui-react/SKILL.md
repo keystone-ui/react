@@ -246,7 +246,7 @@ flavour instead: `npx shadcn@latest add https://keystoneui.io/r/npm/sidebar.json
    component in a Keystone toolbar is visibly short, and nothing errors.
 
 Full guidance, including which tokens the shadcn sidebar reads:
-`https://keystoneui.io/docs/interop`.
+`https://keystoneui.io/docs/concepts/keystone-and-shadcn`.
 
 ## Component Selection
 

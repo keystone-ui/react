@@ -360,7 +360,7 @@ Three reasons, recorded so the question is not re-derived:
 Note keystone's 40px differs from shadcn's current 36px (`new-york-v4`) and
 its newer 32px preset. Since both registries install to the same paths, a
 shadcn component composed alongside keystone's inherits keystone's Button —
-see the interop guide.
+see `apps/docs/content/docs/(getting-started)/concepts/keystone-and-shadcn.mdx`.
 
 ### Dense screens use `sm`, not a smaller default
 

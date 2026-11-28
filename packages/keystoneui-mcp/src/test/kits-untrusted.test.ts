@@ -406,33 +406,35 @@ describe("docs pointer URLs are composed into the docs URL", () => {
   const SIDEBAR: RegistryItem = {
     name: "sidebar",
     type: "registry:component",
-    meta: { keystoneui: { docs: "/docs/interop#the-sidebar-item" } },
+    meta: {
+      keystoneui: { docs: "/docs/reference/shadcn-sidebar#installation" },
+    },
   };
 
   it.each([
     [
       "an origin",
       "https://docs.example.test",
-      "https://docs.example.test/llms.mdx/docs/interop",
-      "https://docs.example.test/docs/interop#the-sidebar-item",
+      "https://docs.example.test/llms.mdx/docs/reference/shadcn-sidebar",
+      "https://docs.example.test/docs/reference/shadcn-sidebar#installation",
     ],
     [
       "a base path with a trailing slash",
       "https://docs.example.test/site/",
-      "https://docs.example.test/site/llms.mdx/docs/interop",
-      "https://docs.example.test/site/docs/interop#the-sidebar-item",
+      "https://docs.example.test/site/llms.mdx/docs/reference/shadcn-sidebar",
+      "https://docs.example.test/site/docs/reference/shadcn-sidebar#installation",
     ],
     [
       "a query and a fragment",
       "https://docs.example.test/site?lang=en#old",
-      "https://docs.example.test/site/llms.mdx/docs/interop?lang=en",
-      "https://docs.example.test/site/docs/interop?lang=REDACTED#the-sidebar-item",
+      "https://docs.example.test/site/llms.mdx/docs/reference/shadcn-sidebar?lang=en",
+      "https://docs.example.test/site/docs/reference/shadcn-sidebar?lang=REDACTED#installation",
     ],
     [
       "a credential",
       "https://user:FAKE_S@docs.example.test",
-      "https://user:FAKE_S@docs.example.test/llms.mdx/docs/interop",
-      "https://docs.example.test/docs/interop#the-sidebar-item",
+      "https://user:FAKE_S@docs.example.test/llms.mdx/docs/reference/shadcn-sidebar",
+      "https://docs.example.test/docs/reference/shadcn-sidebar#installation",
     ],
   ])("with %s", async (_label, docsUrl, request, printed) => {
     const config = { ...CONFIG, docsUrl };
@@ -441,12 +443,12 @@ describe("docs pointer URLs are composed into the docs URL", () => {
     const { calls } = stubFetch({
       [first]: { status: 404 },
       [MANIFEST_URL]: { body: manifest([SIDEBAR]) },
-      [request]: { body: "# Interop\n" },
+      [request]: { body: "# shadcn sidebar\n" },
     });
     expect(
       await getDocsTool(config, { name: "sidebar", type: "component" })
     ).toBe(
-      "Documented in section #the-sidebar-item of /docs/interop.\n\n# Interop\n"
+      "Documented in section #installation of /docs/reference/shadcn-sidebar.\n\n# shadcn sidebar\n"
     );
     expect(calls).toEqual([first, MANIFEST_URL, request]);
   });
@@ -481,7 +483,12 @@ describe("an index holding an entry that is not an item", () => {
       name: "sidebar",
       type: "registry:component",
       title: "Sidebar",
-      meta: { keystoneui: { docs: "/docs/interop", partOf: ["admin-01"] } },
+      meta: {
+        keystoneui: {
+          docs: "/docs/reference/shadcn-sidebar",
+          partOf: ["admin-01"],
+        },
+      },
     },
   ]);
 
@@ -489,11 +496,13 @@ describe("an index holding an entry that is not an item", () => {
     stubFetch({
       [`${DOCS}/components/sidebar`]: { status: 404 },
       [MANIFEST_URL]: { body: BROKEN },
-      [`${DOCS}/interop`]: { body: "# Interop\n" },
+      [`${DOCS}/reference/shadcn-sidebar`]: { body: "# shadcn sidebar\n" },
     });
     expect(
       await getDocsTool(CONFIG, { name: "sidebar", type: "component" })
-    ).toBe("Documented in /docs/interop.\n\n# Interop\n");
+    ).toBe(
+      "Documented in /docs/reference/shadcn-sidebar.\n\n# shadcn sidebar\n"
+    );
   });
 
   it("get_examples still gives its hint", async () => {

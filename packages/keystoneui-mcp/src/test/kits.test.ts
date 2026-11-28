@@ -92,7 +92,7 @@ const SIDEBAR: RegistryItem = {
   categories: ["navigation"],
   meta: {
     keystoneui: {
-      docs: "/docs/interop#the-sidebar-item",
+      docs: "/docs/reference/shadcn-sidebar#installation",
       partOf: ["admin-01"],
     },
   },
@@ -236,7 +236,7 @@ The sidebar.
 Categories: navigation
 Kind: kit
 Part of: admin-01
-Docs: https://docs.example.test/docs/interop#the-sidebar-item`);
+Docs: https://docs.example.test/docs/reference/shadcn-sidebar#installation`);
     // No metadata: no lines, not even Kind.
     expect(byName.get("loose")).toBe("**Loose** (`loose`)");
     expect(byName.get("button")).toBe("**Button** (`button`)");
@@ -352,7 +352,7 @@ Docs: https://docs.example.test/docs/interop#the-sidebar-item`);
       { limit: 20, offset: 0 }
     );
     expect(out).toContain(
-      "Docs: https://docs.example.test/docs/interop#the-sidebar-item"
+      "Docs: https://docs.example.test/docs/reference/shadcn-sidebar#installation"
     );
     expect(out).not.toContain(SECRET);
   });
@@ -639,17 +639,17 @@ describe("get_docs pointers", () => {
   it("follows a kit's pointer after a 404, with its section", async () => {
     const { calls } = serveIndex(ITEMS, {
       [`${DOCS}/components/sidebar`]: { status: 404 },
-      [`${DOCS}/interop`]: { body: "# Interop\n" },
+      [`${DOCS}/reference/shadcn-sidebar`]: { body: "# shadcn sidebar\n" },
     });
     expect(
       await getDocsTool(CONFIG, { name: "sidebar", type: "component" })
     ).toBe(
-      "Documented in section #the-sidebar-item of /docs/interop.\n\n# Interop\n"
+      "Documented in section #installation of /docs/reference/shadcn-sidebar.\n\n# shadcn sidebar\n"
     );
     expect(calls).toEqual([
       `${DOCS}/components/sidebar`,
       MANIFEST_URL,
-      `${DOCS}/interop`,
+      `${DOCS}/reference/shadcn-sidebar`,
     ]);
   });
 
@@ -705,16 +705,18 @@ describe("get_docs pointers", () => {
         {
           name: "k",
           type: "registry:component",
-          meta: { keystoneui: { docs: "/docs/interop" } },
+          meta: { keystoneui: { docs: "/docs/reference/shadcn-sidebar" } },
         },
       ],
       {
         [`${DOCS}/components/k`]: { status: 404 },
-        [`${DOCS}/interop`]: { body: "# Interop\n" },
+        [`${DOCS}/reference/shadcn-sidebar`]: { body: "# shadcn sidebar\n" },
       }
     );
     const out = await getDocsTool(CONFIG, { name: "k", type: "component" });
-    expect(out).toBe("Documented in /docs/interop.\n\n# Interop\n");
+    expect(out).toBe(
+      "Documented in /docs/reference/shadcn-sidebar.\n\n# shadcn sidebar\n"
+    );
     expect(out).not.toContain("undefined");
   });
 
@@ -733,7 +735,7 @@ describe("get_docs pointers", () => {
   it("gives today's not-found text when the pointed page fails", async () => {
     serveIndex(ITEMS, {
       [`${DOCS}/components/sidebar`]: { status: 404 },
-      [`${DOCS}/interop`]: { status: 500 },
+      [`${DOCS}/reference/shadcn-sidebar`]: { status: 500 },
     });
     expect(
       await getDocsTool(CONFIG, { name: "sidebar", type: "component" })

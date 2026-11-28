@@ -1,15 +1,16 @@
 ---
 title: Colors
-description: OKLCH-based semantic color tokens used throughout Keystone UI.
+description: The semantic color tokens in Keystone UI, the Tailwind classes they generate, and the default light and dark palettes.
+contentType: Reference
 ---
 
-Keystone UI uses the [OKLCH color space](https://oklch.com/) for all color tokens. OKLCH provides perceptually uniform colors, meaning equal changes in values produce equal perceived differences -- making it ideal for design systems.
+Keystone UI colors every component from semantic tokens written in OKLCH. This page lists what each token is for and the classes it generates. The values themselves are in the [theme tokens reference](/docs/reference/theme-tokens), and [Theming](/docs/concepts/theming#why-oklch) explains the choice of OKLCH.
 
-## Semantic Tokens
+## Semantic tokens
 
-Every color token comes in a **background/foreground pair**. The background suffix is omitted:
+Every color token comes in a background and foreground pair. The background token has no suffix:
 
-| Token | Background Class | Text Class | Purpose |
+| Token | Background class | Text class | Purpose |
 | --- | --- | --- | --- |
 | `primary` | `bg-primary` | `text-primary-foreground` | Primary actions, CTAs |
 | `secondary` | `bg-secondary` | `text-secondary-foreground` | Secondary actions |
@@ -19,7 +20,9 @@ Every color token comes in a **background/foreground pair**. The background suff
 | `card` | `bg-card` | `text-card-foreground` | Card surfaces |
 | `popover` | `bg-popover` | `text-popover-foreground` | Popup surfaces |
 
-## Border Tokens
+## Border tokens
+
+These tokens color borders, form controls and focus rings:
 
 | Token | Class | Purpose |
 | --- | --- | --- |
@@ -28,7 +31,9 @@ Every color token comes in a **background/foreground pair**. The background suff
 | `input` | `border-input` | Form control borders |
 | `ring` | `ring-ring` | Focus ring color |
 
-## Usage Examples
+## Usage examples
+
+Components read the tokens for you, and your own markup uses the same classes:
 
 ```tsx
 // Primary action button
@@ -46,20 +51,32 @@ Every color token comes in a **background/foreground pair**. The background suff
 </div>
 ```
 
-## Light Mode Values
+## Light mode palette
 
 In light mode, the palette is based on the Zinc scale:
 
-- **Background**: White (`oklch(1 0 0)`)
+- **Background**: white (`oklch(1 0 0)`)
 - **Foreground**: Zinc-950 (`oklch(0.141 0.005 285.823)`)
-- **Primary**: Zinc-900 with Zinc-50 foreground
+- **Primary**: Zinc-900 with a Zinc-50 foreground
 - **Borders**: Zinc-200
 
-## Dark Mode Values
+## Dark mode palette
 
 In dark mode, the palette inverts:
 
 - **Background**: Zinc-950 (`oklch(0.141 0.005 285.823)`)
 - **Foreground**: Zinc-50 (`oklch(0.985 0 0)`)
-- **Primary**: Zinc-200 with Zinc-900 foreground
-- **Borders**: White at 10% opacity for subtlety
+- **Primary**: Zinc-200 with a Zinc-900 foreground
+- **Borders**: white at 10% opacity
+
+3 tokens take a different form in dark mode:
+
+- **Borders** use `oklch(1 0 0 / 10%)`, white at 10% opacity.
+- **Input backgrounds** use `oklch(1 0 0 / 5%)`, which lifts a field off the surface.
+- **Secondary hover** uses `color-mix()` with white instead of black.
+
+## Related
+
+- [Theme tokens](/docs/reference/theme-tokens): every value in both modes
+- [Customize the theme](/docs/guides/customize-the-theme#change-a-color)
+- [Dark mode](/docs/concepts/dark-mode)

@@ -1,0 +1,42 @@
+---
+title: Fit the mobile viewport
+description: Let Drawer, Toast and SelectionBar clear the notch and the home indicator by opting the page in to safe-area insets.
+contentType: How-to
+---
+
+Drawer, Toast and SelectionBar pad themselves with `env(safe-area-inset-*)`, so they clear the notch and the home indicator on phones. Browsers report those insets as `0` unless the page opts in with `viewport-fit=cover`. This guide adds that opt-in.
+
+## Before you start
+
+You need Keystone UI installed ([Install Keystone UI](/docs/installation)).
+
+## Opt in to safe-area insets
+
+Add `viewport-fit=cover` to the viewport meta tag in your HTML:
+
+```html
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+/>
+```
+
+In the Next.js App Router, export the viewport from your root layout instead:
+
+```tsx title="app/layout.tsx"
+import type { Viewport } from "next";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+```
+
+## Leave pinch-zoom on
+
+Text inputs render at 16px on touch devices and 14px under a mouse or trackpad, so iOS never zooms the page when a field takes focus. Don't add `maximum-scale=1` to stop that zoom: it also blocks pinch-zoom for everyone.
+
+## Check that it works
+
+Open a Drawer or a Toast on a phone with a notch, or in a device emulator. Its content should sit clear of the home indicator instead of under it.

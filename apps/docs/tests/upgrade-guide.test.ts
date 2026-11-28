@@ -17,7 +17,7 @@ import { REPO_ROOT } from "./registry-paths";
 
 const GUIDE = join(
   REPO_ROOT,
-  "apps/docs/content/docs/(getting-started)/upgrading.mdx"
+  "apps/docs/content/docs/(getting-started)/guides/upgrade-to-1-0.mdx"
 );
 
 /** Phrases the changesets in this repo use to flag a consumer-facing break. */
@@ -66,13 +66,16 @@ describe("upgrade guide", () => {
     expect(wrong).toEqual([]);
   });
 
-  it("is listed in the Getting Started navigation", () => {
+  it("is listed in the Getting Started guides navigation", () => {
     const meta = JSON.parse(
       readFileSync(
-        join(REPO_ROOT, "apps/docs/content/docs/(getting-started)/meta.json"),
+        join(
+          REPO_ROOT,
+          "apps/docs/content/docs/(getting-started)/guides/meta.json"
+        ),
         "utf-8"
       )
     );
-    expect(meta.pages).toContain("upgrading");
+    expect(meta.pages).toContain("upgrade-to-1-0");
   });
 });

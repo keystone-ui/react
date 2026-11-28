@@ -1,0 +1,49 @@
+---
+title: Set up right-to-left layouts
+description: Set the reading direction for Keystone UI's popups and keyboard navigation, and work around components that keep their physical layout.
+contentType: How-to
+---
+
+This guide sets up a right-to-left (RTL) app: the root direction for popup layout, Base UI's provider for arrow keys and logical popup sides, and overrides for components that keep their physical layout. Support is partial, so read [Right-to-left (RTL) support](/docs/concepts/rtl) first to see what follows the reading direction and what doesn't.
+
+## Before you start
+
+You need Keystone UI installed ([Install Keystone UI](/docs/installation)). For a package install, add `@base-ui/react` as a direct dependency at the version Keystone UI uses, and make sure your app's provider and Keystone UI's components load the same Base UI module instance.
+
+## Set the reading direction
+
+Set the direction on the root element (`<html dir="rtl">`) and wrap your app in Base UI's `DirectionProvider`. The root direction drives popup layout; the provider direction drives Base UI's horizontal arrow navigation (including the key that opens a submenu) and logical popup sides.
+
+```tsx
+import { DirectionProvider } from "@base-ui/react/direction-provider";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html dir="rtl">
+      <body>
+        <DirectionProvider direction="rtl">{children}</DirectionProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+Pass `dir="rtl"` to Calendar itself for its day-grid arrow keys.
+
+Set the direction on the root, not on a wrapper. A top-level popup uses a body portal, so a popup opened from an RTL wrapper on an LTR page still lays out left-to-right, even with the provider.
+
+## Override physical utilities
+
+Where a component keeps its physical layout, use these options:
+
+- When the part that owns a utility exposes `className`, pass the override there. For an internal element with a `data-slot`, target that slot in your CSS. On `ModalHeader`, `sm:text-start` replaces `sm:text-left`. For single edges, `ps-4` leaves `pl-4` in place. To move that padding to the right in an RTL-only layout, use `pl-0 pr-4`.
+- Restrict RTL to layouts you compose yourself and keep Keystone UI components in direction-neutral positions.
+- Accept the visual mirroring gaps that remain once the root direction, the provider and Calendar's `dir` are set.
+
+## Fix a component upstream
+
+To fix a component in the library itself, convert spacing and offsets that should follow reading order (`pl-`/`pr-` to `ps-`/`pe-`, `ml-`/`mr-` to `ms-`/`me-`, `left-`/`right-` to `start-`/`end-`). Keep offsets tied to a physical gesture on that edge, such as a Drawer's swipe side. See [CONTRIBUTING.md](https://github.com/keystone-ui/react/blob/main/CONTRIBUTING.md).
+
+## Check that it works
+
+Open a DropdownMenu with a submenu. The submenu should open on the left when there is room, and the Left arrow key should open it. If arrow keys still move left-to-right, the `DirectionProvider` is missing or loads a different Base UI instance.

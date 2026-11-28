@@ -92,7 +92,7 @@ export default function HomePage() {
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 font-medium text-primary-foreground transition-colors hover:bg-primary/90 sm:w-auto"
-              href="/docs/installation/quick-start"
+              href="/docs/installation"
             >
               Get Started
               <ArrowRight className="size-4" />
@@ -191,7 +191,7 @@ export default function HomePage() {
           <div className="mt-10 flex items-center justify-center gap-4">
             <Link
               className="inline-flex h-12 items-center gap-2 rounded-lg bg-primary px-6 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-              href="/docs/installation/quick-start"
+              href="/docs/installation"
             >
               Read the Docs
               <ArrowRight className="size-4" />

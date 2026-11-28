@@ -18,7 +18,7 @@
   "meta": {
     "keystoneui": {
       "flavourOf": "sidebar",
-      "docs": "/docs/interop#the-sidebar-item"
+      "docs": "/docs/reference/shadcn-sidebar#package-flavour"
     }
   },
   "categories": [

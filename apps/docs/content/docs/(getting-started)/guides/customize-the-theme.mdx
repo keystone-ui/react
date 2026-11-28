@@ -1,0 +1,198 @@
+---
+title: Customize the theme
+description: Get a theme from the theme builder, check its contrast, and change colors, density, corner radius and fonts in your own CSS.
+contentType: How-to
+---
+
+This guide covers the changes you'll make to a Keystone UI theme, one task per section. The theme lives in your own CSS, so every change is an edit to `globals.css`. [Theming](/docs/concepts/theming) explains how the tokens fit together, and the [theme tokens reference](/docs/reference/theme-tokens) lists every value.
+
+## Before you start
+
+You need Keystone UI installed with its theme CSS in your project ([Installation](/docs/installation)).
+
+## Start from the theme builder
+
+The [theme builder](/theme-builder) turns your choices into a short code (base color, primary, radius and font) and serves that code as a registry theme.
+
+<Steps>
+
+<Step>Pick your settings in the theme builder.</Step>
+
+<Step>Copy the install command from its **Code** panel and run it.</Step>
+
+The command installs the theme the code describes:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/theme/k1_slate_0.55_0.2_262.5_large_inter.json
+```
+
+</Steps>
+
+Add `?only=theme` to the URL to take only the colors and radius, or `?only=font` to take only the font, when you want to keep the rest of your setup.
+
+The code is the whole theme, so it's also what to paste into an issue or hand to an agent. `keystoneui theme <code>` prints the decoded settings, this command and a link back into the builder.
+
+## Check your theme's contrast
+
+Keystone UI measures its own palettes in CI. After you edit a token such as `--primary`, measure yours with the audit:
+
+```bash
+npx @keystoneui/mcp audit --theme
+```
+
+The audit reads the `:root` and `.dark` blocks of the CSS file your `components.json` names, or a path you pass. It reports every text-on-surface pair against WCAG AA (4.5:1) in both modes. Add `--strict` to exit non-zero on a failure, for CI.
+
+The [theme builder](/theme-builder) runs the same checks live in its **Code** panel, so a primary that no foreground can clear shows up before you export it. Keystone UI's default theme clears 4.5:1 on every pair in both modes. In dark mode `--destructive-foreground` is a dark red, like the success, warning and info foregrounds, because near-white text on the lighter dark-mode red can't reach 4.5:1.
+
+## Change a color
+
+Set the new value in both `:root` and `.dark`, so the pair keeps its contrast in both modes. Use [oklch.com](https://oklch.com/) to pick OKLCH values.
+
+```css title="globals.css"
+:root {
+  --primary: oklch(0.55 0.2 250);
+}
+
+.dark {
+  --primary: oklch(0.75 0.15 250);
+}
+```
+
+The [colors reference](/docs/reference/colors) says what each token is for.
+
+## Add a color
+
+Define the variables in `:root` and `.dark`, then register them in the `@theme inline` block:
+
+```css title="globals.css"
+:root {
+  --warning: oklch(0.84 0.16 84);
+  --warning-foreground: oklch(0.28 0.07 46);
+}
+
+.dark {
+  --warning: oklch(0.41 0.11 46);
+  --warning-foreground: oklch(0.99 0.02 95);
+}
+
+@theme inline {
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+}
+```
+
+Use `bg-warning text-warning-foreground` in your components. The default theme already declares `--warning`, so this example replaces its values; a token of your own follows the same 3 steps under a new name.
+
+## Change the control density
+
+Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle and TableHead take their height from the `--ks-control-*` variables in `base.css`. Changing them moves every control together, so a toolbar left at its defaults still lines up. The [base.css reference](/docs/reference/base-css#control-heights) lists the values.
+
+Install the compact ladder app-wide:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/density/compact.json
+```
+
+Or set the variables on one container, such as a dense data screen inside an otherwise default app:
+
+```tsx
+<section className="[--ks-control-sm:1.75rem] [--ks-control-md:2rem]">
+  {/* every control in here is one step denser */}
+</section>
+```
+
+Keep every value at 24px or more, the WCAG minimum target size.
+
+## Change the corner radius
+
+Set `--radius` in `:root`. The whole scale, `rounded-sm` through `rounded-4xl`, follows it, and `--radius: 0` gives square corners.
+
+```css title="globals.css"
+:root {
+  --radius: 0.5rem;
+}
+```
+
+To use a different derivation for one tier, declare your own `@theme inline` **after** the import. The later block wins:
+
+```css
+@import "@keystoneui/react/base.css";
+
+@theme inline {
+  --radius-xl: calc(var(--radius) * 2);
+}
+```
+
+<Callout type="warn">
+  Declare only the tiers you mean to change. A whole block copied from these
+  docs into your own CSS shadows the library's without a warning, and freezes
+  your scale at the version you copied it from. [Theming](/docs/concepts/theming#why-the-radius-scale-is-a-ratio) explains why.
+</Callout>
+
+## Set the font
+
+Keystone UI reads the base font family from the `--font-sans` CSS variable. Load the font and define the variable in your theme.
+
+### Next.js
+
+`next/font/google` self-hosts the font, so the page makes no external requests.
+
+<Steps>
+
+<Step>Load the font in your root layout.</Step>
+
+The `variable` option exposes the font as a CSS variable on `<html>`:
+
+```tsx title="app/layout.tsx"
+import { Inter } from "next/font/google";
+
+const font = Inter({ subsets: ["latin"], variable: "--font-inter" });
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={font.variable}>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+<Step>Set `--font-sans` in your CSS.</Step>
+
+Point the base font at the variable the layout exposes:
+
+```css title="globals.css"
+:root {
+  --font-sans: var(--font-inter);
+}
+```
+
+</Steps>
+
+### Other frameworks
+
+Add a Google Fonts link to your `<head>`:
+
+```html
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+```
+
+Then set the font family directly:
+
+```css title="globals.css"
+:root {
+  --font-sans: "Inter", sans-serif;
+}
+```
+
+The [theme tokens reference](/docs/reference/theme-tokens#fonts) lists the fonts the theme builder previews, with their `next/font` imports.
+
+## Check that it works
+
+Reload the app and look at a primary Button: it should show your new color, radius and font. If nothing changed, check that your edits come after `@import "@keystoneui/react/base.css"` and that `:root` and `.dark` both declare the token.
+
+## Related
+
+- [Theming](/docs/concepts/theming)
+- [Theme tokens](/docs/reference/theme-tokens)
+- [Publish a theme](/docs/guides/publish-a-theme)

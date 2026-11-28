@@ -1,0 +1,57 @@
+---
+title: Publish a theme
+description: Write your own color palette as a shadcn registry theme item, host it, and install it into any Keystone UI project.
+contentType: How-to
+---
+
+A registry theme item carries your color values, so any Keystone UI project can install your palette with one command. This guide writes the item, hosts it and installs it. [Styles and themes](/docs/concepts/styles-and-themes) explains what a theme item changes.
+
+## Before you start
+
+You need a place that serves JSON over HTTP, such as your own site or a GitHub raw URL.
+
+## Write and install the theme
+
+<Steps>
+
+<Step>Create the theme item.</Step>
+
+Write a `registry:theme` JSON file with your color values for light and dark mode:
+
+```json title="my-theme.json"
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "my-custom-theme",
+  "type": "registry:theme",
+  "cssVars": {
+    "light": {
+      "primary": "oklch(0.55 0.2 260)",
+      "primary-foreground": "oklch(0.98 0 0)"
+    },
+    "dark": {
+      "primary": "oklch(0.75 0.15 260)",
+      "primary-foreground": "oklch(0.15 0 0)"
+    }
+  }
+}
+```
+
+The [theme tokens reference](/docs/reference/theme-tokens) lists every token you can set.
+
+<Step>Host the file.</Step>
+
+Upload `my-theme.json` anywhere that serves JSON over HTTP.
+
+<Step>Install it.</Step>
+
+Pass the file's URL to the shadcn CLI:
+
+```bash
+npx shadcn add https://your-site.com/r/my-theme.json
+```
+
+</Steps>
+
+## Check that it works
+
+Open `globals.css` in the project. The `:root` and `.dark` blocks should hold your values for the tokens you set, and the rest of the file should be unchanged. Run `npx @keystoneui/mcp audit --theme` to check the contrast of your palette, as [Customize the theme](/docs/guides/customize-the-theme#check-your-themes-contrast) describes.

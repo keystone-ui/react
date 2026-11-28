@@ -1,0 +1,14 @@
+{
+  "title": "Guides",
+  "icon": "Compass",
+  "pages": [
+    "install-from-the-registry",
+    "customize-the-theme",
+    "enable-dark-mode",
+    "fit-the-mobile-viewport",
+    "add-shadcn-components",
+    "set-up-right-to-left",
+    "publish-a-theme",
+    "upgrade-to-1-0"
+  ]
+}

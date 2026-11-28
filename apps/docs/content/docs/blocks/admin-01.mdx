@@ -26,7 +26,7 @@ npx shadcn@latest add https://keystoneui.io/r/admin-01.json
 
 ## Requirements
 
-The sidebar is **shadcn's, adapted onto keystone's primitives** and shipped inside the block as `components/sidebar.tsx`. Keystone deliberately ships no app shell in the library — see [Using shadcn Components](/docs/interop) for why, and for how the sidebar behaves: its keyboard shortcut, its `sidebar_state` cookie and its drawer on phones. Do not also run `shadcn add sidebar`: the bare name selects shadcn's item, whose dependencies install to the same paths as keystone's Button, Input and Tooltip, and accepting an overwrite (or passing `--overwrite`) replaces keystone's files with the selected shadcn style's versions.
+The sidebar is **shadcn's, adapted onto keystone's primitives** and shipped inside the block as `components/sidebar.tsx`. Keystone deliberately ships no app shell in the library — see [Keystone UI and shadcn](/docs/concepts/keystone-and-shadcn) and the [sidebar reference](/docs/reference/shadcn-sidebar) for why, and for how the sidebar behaves: its keyboard shortcut, its `sidebar_state` cookie and its drawer on phones. Do not also run `shadcn add sidebar`: the bare name selects shadcn's item, whose dependencies install to the same paths as keystone's Button, Input and Tooltip, and accepting an overwrite (or passing `--overwrite`) replaces keystone's files with the selected shadcn style's versions.
 
 It reads six `--sidebar-*` tokens (`--sidebar`, `--sidebar-foreground`, `--sidebar-accent`, `--sidebar-accent-foreground`, `--sidebar-border`, `--sidebar-ring`). Keystone's style item declares all eight of the set as aliases of your theme tokens, so the sidebar follows whichever keystone theme is active.
 
@@ -182,7 +182,7 @@ whose dependencies share paths with keystone's files. A later `add` of
 `sidebar` or of this block offers to overwrite a `components/sidebar.tsx` you
 have edited; accepting discards your edits. The
 navigation itself is this block's content, so `admin-sidebar.tsx` and
-`admin-topbar.tsx` stay here; [Using shadcn Components](/docs/interop#the-sidebar-item)
+`admin-topbar.tsx` stay here; [the sidebar reference](/docs/reference/shadcn-sidebar)
 has a composition to start from, what the sidebar does and does not include,
 and the tokens it needs. It is the vendored version: it imports your local
 keystone components through the UI alias in `components.json` (normally

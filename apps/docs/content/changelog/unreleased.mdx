@@ -1,7 +1,7 @@
 ---
 date: "2026-11-28"
 description: "What's coming in the next release"
-excerpt: "2 changes queued for the next release."
+excerpt: "4 changes queued for the next release."
 ---
 
 ## Minor changes
@@ -16,6 +16,16 @@ The label on a destructive Button did not reach the 4.5:1 contrast ratio WCAG AA
 If you installed the style or a theme before this release, your CSS still has the old values. Run the same add command again, for example `npx shadcn add https://keystoneui.io/r/themes/zinc.json`, or `npx shadcn add https://keystoneui.io/r/theme/<code>.json` for a theme from the theme builder. You can also edit the two values by hand: `--destructive` in `:root`, and `--destructive-foreground` in `.dark`.
 
 ## Patch changes
+
+### Accordion: every part has a `data-slot`
+
+`Accordion`, `AccordionItem`, `AccordionHeader`, `AccordionTrigger` and `AccordionPanel` now render `data-slot="accordion"`, `"accordion-item"`, `"accordion-header"`, `"accordion-trigger"` and `"accordion-panel"`, like every other component's parts. Target them in CSS or tests with `[data-slot="accordion-trigger"]` instead of Base UI's internal attributes. Nothing else about the markup changes.
+
+---
+
+### README: point the theming and AI agent links at the restructured Getting Started docs (the theme tokens reference and the AI agents section).
+
+---
 
 ### Registry style: the base layer's `@apply` rules now reach your CSS
 

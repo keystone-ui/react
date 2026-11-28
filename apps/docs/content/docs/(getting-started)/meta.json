@@ -1,19 +1,14 @@
 {
-  "title": "Getting Started",
+  "title": "Getting started",
   "icon": "BookOpen",
   "root": true,
   "pages": [
     "index",
-    "---Installation---",
-    "...installation",
-    "---Theming---",
-    "...theming",
-    "---Guides---",
-    "interop",
-    "upgrading",
-    "---Concepts---",
-    "...concepts",
-    "---AI for Agents---",
-    "...agents"
+    "installation",
+    "tutorials",
+    "guides",
+    "concepts",
+    "reference",
+    "agents"
   ]
 }

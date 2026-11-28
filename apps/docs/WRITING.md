@@ -54,6 +54,7 @@ Tone follows the type: tutorials are warm and predictable, how-tos are terse, re
 - Write steps in the imperative: "Add the provider", not "You will need to add the provider".
 - Keep sentences under 20 words where you can, and paragraphs to 2 to 4 sentences on one idea.
 - Use contractions (`you'll`, `it's`) and the present tense.
+- Use American spelling (`color`, `behavior`, `center`), the same as the CSS (`--color-*`).
 - Use "we" only for deliberate project decisions ("we recommend", "we deprecated").
 - Ask no rhetorical questions, including in headings.
 
@@ -138,6 +139,7 @@ Watch for patterns that read as machine-written:
 - an em dash or spaced hyphen as punctuation
 - three dots instead of `…`
 - a banned word
+- a British spelling (`colour`, `behaviour`, `centre`)
 - "the user" or "one can" (use the allowlist for real end-user references)
 - a Title Case heading
 - a question in a heading or prose

@@ -1,41 +1,28 @@
 ---
 title: Introduction
-description: A modern React component library built with Tailwind CSS v4 and Base UI.
+description: Keystone UI is a React component library built on Base UI and Tailwind CSS v4. Start here to find the page for your task.
 icon: BookOpen
+contentType: Landing
 ---
 
-## What is Keystone UI?
+Keystone UI is a React 19 component library with 50+ accessible components, built on [Base UI](https://base-ui.com) primitives and styled with Tailwind CSS v4. You install it as an npm package or copy components into your project through a shadcn-compatible registry, and you own the theme in your own CSS. [Architecture](/docs/concepts/architecture) explains how the pieces fit.
 
-Keystone UI is a comprehensive React component library that provides 50+ production-ready components for building beautiful, accessible user interfaces. Every component is designed to work seamlessly with Tailwind CSS v4 and follows modern React patterns.
+## Start from your task
 
-### Key Features
+Pick the page for what you want to do:
 
-- **50+ Components** -- Buttons, inputs, modals, tables, and everything in between
-- **Accessible** -- Built on Base UI primitives with ARIA support, keyboard navigation, and screen reader compatibility
-- **Tailwind CSS v4** -- CSS-first configuration with OKLCH color tokens and custom variants
-- **Dark Mode** -- First-class dark mode support with automatic adaptation
-- **Tree-Shakeable** -- Subpath exports mean you only ship what you use
-- **TypeScript** -- Fully typed with comprehensive type exports
+- **Install it**: [Install Keystone UI](/docs/installation) in a Next.js or Vite app, or [install from the registry](/docs/guides/install-from-the-registry) with the shadcn CLI.
+- **Theme it**: [customize the theme](/docs/guides/customize-the-theme), [enable dark mode](/docs/guides/enable-dark-mode) or [publish a theme](/docs/guides/publish-a-theme).
+- **Use shadcn components alongside it**: [add shadcn components](/docs/guides/add-shadcn-components) without overwriting Keystone UI's files.
+- **Upgrade it**: [upgrade to 1.0](/docs/guides/upgrade-to-1-0) from any beta.
+- **Use it with AI agents**: [choose an integration](/docs/agents/choose-an-integration), then [set up the MCP server](/docs/agents/mcp-server) or another option.
 
-### Architecture
+## Browse by type
 
-Keystone UI uses a flat, single-file component architecture. Every component is one `.tsx` file with no nested directories. Consumers import via subpath exports:
+The docs are split by what you need from a page:
 
-```tsx
-import { Button } from "@keystoneui/react/button";
-import { Input } from "@keystoneui/react/input";
-import { Card, CardHeader, CardTitle, CardContent } from "@keystoneui/react/card";
-```
-
-### Tech Stack
-
-| Technology | Purpose |
-| --- | --- |
-| [Base UI](https://base-ui.com) | Unstyled accessible primitives |
-| [Tailwind CSS v4](https://tailwindcss.com) | Utility-first styling |
-| [CVA](https://cva.style) | Variant management |
-| [Lucide React](https://lucide.dev) | Icon library |
-
-## Getting Started
-
-Ready to start building? Follow our [quick start guide](/docs/installation/quick-start) to set up Keystone UI in your project.
+- **Guides** walk you through a task, such as [enabling dark mode](/docs/guides/enable-dark-mode) or [setting up right-to-left layouts](/docs/guides/set-up-right-to-left).
+- **Concepts** explain why Keystone UI works the way it does, such as [Theming](/docs/concepts/theming) and [Keystone UI and shadcn](/docs/concepts/keystone-and-shadcn).
+- **Reference** lists the facts: [theme tokens](/docs/reference/theme-tokens), [colors](/docs/reference/colors), [base.css](/docs/reference/base-css) and [CSS utilities](/docs/reference/css-utilities).
+- **Components** document each component's props and examples, starting with [Button](/docs/components/button).
+- **Blocks** are full-page compositions you install as a unit, such as [Sign in](/docs/blocks/signin-01).

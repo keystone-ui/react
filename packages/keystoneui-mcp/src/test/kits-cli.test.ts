@@ -42,7 +42,7 @@ const SIDEBAR: RegistryItem = {
   title: "Sidebar",
   meta: {
     keystoneui: {
-      docs: "/docs/interop#the-sidebar-item",
+      docs: "/docs/reference/shadcn-sidebar#installation",
       partOf: ["admin-01"],
     },
   },
@@ -140,12 +140,12 @@ describe("keystoneui docs", () => {
   it("follows a pointer after a 404 and exits 0", async () => {
     serve({
       [`${DOCS}/components/sidebar`]: { status: 404 },
-      [`${DOCS}/interop`]: { body: "# Interop\n" },
+      [`${DOCS}/reference/shadcn-sidebar`]: { body: "# shadcn sidebar\n" },
     });
     const io = captureConsole();
     await runCli(["docs", "sidebar"]);
     expect(io.stdout).toBe(
-      "Documented in section #the-sidebar-item of /docs/interop.\n\n# Interop\n"
+      "Documented in section #installation of /docs/reference/shadcn-sidebar.\n\n# shadcn sidebar\n"
     );
     expect(io.stderr).toBe("");
     expect(process.exitCode).toBeUndefined();
@@ -197,7 +197,7 @@ describe("keystoneui view and examples with an invalid name", () => {
     const io = captureConsole();
     await runCli(["view", "sidebar", "../x"]);
     expect(io.stdout).toBe(
-      "**Sidebar** (`sidebar`)\nKind: kit\nPart of: admin-01\nDocs: https://docs.example.test/docs/interop#the-sidebar-item"
+      "**Sidebar** (`sidebar`)\nKind: kit\nPart of: admin-01\nDocs: https://docs.example.test/docs/reference/shadcn-sidebar#installation"
     );
     expect(io.stderr).toBe(
       "**../x**: not a valid registry item name (dot segment)."

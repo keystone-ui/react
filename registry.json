@@ -1513,7 +1513,7 @@
       "name": "stat",
       "type": "registry:ui",
       "title": "Stat",
-      "description": "The headline number of a metric and its change, with colour derived from what the metric means rather than from the sign of the delta.",
+      "description": "The headline number of a metric and its change, with color derived from what the metric means rather than from the sign of the delta.",
       "dependencies": [
         "class-variance-authority",
         "lucide-react"
@@ -2639,7 +2639,7 @@
       "name": "sidebar",
       "type": "registry:component",
       "title": "Sidebar",
-      "description": "The collapsible app sidebar from admin-01, installable on its own: shadcn's sidebar adapted onto Keystone's Button, Drawer, Input, Separator, Skeleton and Tooltip, with an icon rail, a drawer on phones and a Cmd/Ctrl+B shortcut. Your theme must declare the six --sidebar-* tokens it reads (the default style declares all eight of the set). Install it by its full URL, https://keystoneui.io/r/sidebar.json: the bare name `sidebar` selects shadcn's item. Docs: https://keystoneui.io/docs/interop#the-sidebar-item",
+      "description": "The collapsible app sidebar from admin-01, installable on its own: shadcn's sidebar adapted onto Keystone's Button, Drawer, Input, Separator, Skeleton and Tooltip, with an icon rail, a drawer on phones and a Cmd/Ctrl+B shortcut. Your theme must declare the six --sidebar-* tokens it reads (the default style declares all eight of the set). Install it by its full URL, https://keystoneui.io/r/sidebar.json: the bare name `sidebar` selects shadcn's item. Docs: https://keystoneui.io/docs/reference/shadcn-sidebar",
       "categories": [
         "navigation"
       ],
@@ -2664,7 +2664,7 @@
       ],
       "meta": {
         "keystoneui": {
-          "docs": "/docs/interop#the-sidebar-item",
+          "docs": "/docs/reference/shadcn-sidebar#installation",
           "partOf": [
             "admin-01"
           ]
@@ -2693,7 +2693,7 @@
       "meta": {
         "keystoneui": {
           "flavourOf": "sidebar",
-          "docs": "/docs/interop#the-sidebar-item"
+          "docs": "/docs/reference/shadcn-sidebar#package-flavour"
         }
       }
     },
