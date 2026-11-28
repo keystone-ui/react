@@ -1,0 +1,216 @@
+---
+title: Filter and table patterns
+description: Why the admin-01 and users-01 tables filter with self-describing pills, keep one sort state, fold into a drawer on phones, and keep their view in the URL.
+contentType: Conceptual
+---
+
+The data tables in [`admin-01`](/docs/blocks/admin-01) and [`users-01`](/docs/blocks/users-01) share one toolbar design: a search field, a row of filter pills that each say what they filter, and view controls at the far end. Every decision below follows from two goals. What is applied must always be visible, and a filter change must take as few steps as possible. Read this page to predict how the tables behave, and to keep that behavior when you add a filter, a column or a table of your own.
+
+## One toolbar design for both tables
+
+Users and Payments are built from the same parts (`filter-pills.tsx`, `sort-menu.tsx`, `columns-menu.tsx`, `skeleton-rows.tsx`, `filtered-empty.tsx`) over a state hook they also share, `useDataTable`. What differs is each table's vocabulary file (`admin-filters.ts`, `payment-filters.ts`): its filters, options, sort labels, URL parameters and CSV columns. A change to how a pill behaves, how a page resets or how a selection survives paging is made once.
+
+The block used to show two filter layouts side by side. The users filters sat in a drawer at every width, with the applied ones shown as a row of applied-filter chips, and the payments filters sat inline as pills. The pills won on the measure that matters for an admin table: changing a filter takes two clicks rather than three or four, and what is filterable is on screen rather than behind a button. The drawer is still the right shell on a phone, so both tables keep one there.
+
+## Filters are self-describing pills
+
+### Every filter names the dimension it filters
+
+A pill reads `Action: Deposit`, not `Deposit`. A bare value turns ambiguous the moment it sits next to another one: "Deposit" could be a type or a status. The toolbar previously had exactly that pair, one control naming a value without its dimension beside one naming a dimension without a value.
+
+The exception is a value that names its own dimension. A date range reads as `Last 24h`; `Period: Last 24h` only says it twice.
+
+### No applied-filter chip row
+
+Applied-filter chips exist to surface filters a panel has hidden. When the control itself says what it is and what it holds, a chip repeating it is a second representation of the same fact, and two representations can disagree. The pills are the record of what is applied, so there is nothing to keep in sync.
+
+The invariant that makes that safe lives in `visibleKeys`: a pill is shown if it's on the row (the starting two, plus any added by hand) **or if its filter holds a value**. That last term means applied state can't be invisible. A filter narrowing the table with no pill on the row is structurally impossible, not merely tested for.
+
+### Two filters to start, the rest added
+
+Six pills at once wrap before anyone has used one, so each row starts with its two most common cuts: Role and Status on Users, Action and Status on Payments. `+ Add filter` offers only what isn't already on the row, and it disappears when everything is. The starting two aren't permanent: they come off like any other pill, and `Clear all` puts them back.
+
+Picking a filter from `+ Add filter` mounts its pill with the menu or popover already open. You picked "Currency" to filter by currency, so a second click on the new pill would be a wasted step.
+
+### Multi-select labels
+
+A multi-select names its first value and counts the rest: `Currency: BTC, +2`. A bare `3` says how many without saying which, and four values side by side stop being scannable.
+
+The popover spells the selection out as chips in a field, like Notion's multi-select:
+
+- Picked options stay in the list below the field with a check, so nothing shifts under the pointer between picks, and a second click unpicks.
+- Typing filters the list.
+- A round X clears the lot, shown only while there is something to clear.
+
+## Plain pills and operator chips
+
+Most pills are a dimension and a value: `Status: Failed`. A few also carry a comparison, the way Notion's filters do. Which kind a field gets follows from its type, not from how much a filter could do. Every operator is a menu and a click, so a field gets them only when people ask the second question: "everything except BTC", "anything over 100".
+
+| Field | Kind | Operators | Why |
+|---|---|---|---|
+| Action, Provider, Role, Seats, Two-factor | plain pill | none, `is` is implied | one choice from a short list |
+| Status (both tables) | operator chip, multi-select | `is`, `is not` | "everything but failed", "every account but suspended": asked as often as the inverse |
+| Created | operator chip with a calendar | Notion's nine, `is between` by default, including `is relative to today` (`Past [7] [days]`, `This [week]`) | a date is asked about as a day, a side of a day, a range, or a window that moves with today |
+| Currency | operator chip, multi-select | `is`, `is not` | a payment holds one currency, so `contains USDT` would match exactly what `is USDT` does |
+| Amount | operator chip | `between`, `=`, `>`, `<` | the common questions are thresholds |
+| Player | operator chip, text | `contains`, `does not contain`, `is`, `is not`, `starts with`, `ends with` | free text: `ends with @gmail.com` is the filter an email invites |
+
+`is empty` is left out everywhere, because none of these fields can be empty.
+
+The operator sits in the popover header (`Currency [is ⌄]`) above the values, so opening the pill lands on what you came to set; Currency and Player put focus straight in their field. The default operator goes unsaid on the pill (`Currency: BTC`), and only a qualifier earns words: `Currency is not: BTC`. An operator with nothing to compare reads as nothing: `Currency: All`, never `Currency is not: All`.
+
+Switching the amount operator drops the bound the new one doesn't read. So `between 10 – 500` switched to `>` can't keep a hidden ceiling of 500 that no label shows.
+
+### Date operators
+
+Created takes Notion's nine date operators, on the desktop pill's header menu and the phone step's badge alike. `is relative to today` is a rule (`Past [7] [days]`, `This [week]`) and is stored as one (`?createdOp=relative&rel=past.7.day`), so a link still means the past seven days tomorrow. The presets are rules too: `Today` to `This year` for payments, `Past 30 days` to `This year` for sign-ups.
+
+- `Past N` counts today, and weeks start on Monday.
+- `Next` is left out, because nothing is created in the future.
+- `is empty` and `is not empty` are there for parity, though every row has a creation date.
+- Under `is between`, one tap is a day and a second makes a range. A third starts again, so the table behind the sheet never shows a half-open range you didn't ask for.
+- Older `from` / `to` links read as the range they meant.
+
+The fixture ends on 28 Aug 2026, so the block's `TODAY` is pinned there; in your app it's `new Date()`.
+
+## Removing a filter
+
+On a plain pill, the X takes the chevron's 16px slot on hover and on keyboard focus, so the pill never changes width, and Backspace removes a focused pill. Touch screens have no hover and never see the X, so on those the pill's menu carries a **Delete filter** row instead.
+
+Operator chips take the same X and Backspace, so every pill on the row comes off the same way. They also keep **Delete filter** behind the `⋯` in the popover header, which is their touch path. Every pill has the X, the starting two included, so it always means the same thing: clear the filter and take its pill off the row. Focus moves to the next pill, or to `+ Add filter`, where the removed filter is back on offer.
+
+Picking `All` never takes a pill off the row. Removing the control from under the cursor mid-interaction is worse than a pill reading `All`, so removal is always its own, explicit action.
+
+Ranges open a `Popover` rather than a menu, because a menu is a list of choices and a pair of bounds is a small form. An open-ended range still says which end it's open at: `Amount: from 20`, not `Amount: 20`.
+
+The filter menus are [`DropdownMenuRadioGroup`](/docs/components/dropdown-menu#radio-group), not checkbox items. Each of those filters is single-select, so picking a value closes the menu. That's Keystone UI's default for radio items, and the reason a second filter is clickable straight after the first: a menu left open holds an inert overlay across the page that swallows the next click.
+
+## One sort state, two controls
+
+Sorting has two handles on one state: the column headers, and a `Sort` menu pushed to the far end of the row. The menu sits apart from the pills and is labeled as a sort, so it doesn't read as one more filter.
+
+The menu is column first, then direction, and the direction is named for the column: `Newest first` for dates, `Largest first` for amounts, `A–Z` for names. The column's natural direction is listed first and picked by default, and a header's first click uses that same default. Below `sm` the menu becomes the drawer's last step.
+
+Both controls write the same `sort` value, so picking "Name Z–A" moves the header arrow, and clicking a header updates the menu's label, with no syncing code. That only holds because the menu splits the choice into column and direction, so every pair the headers can reach is nameable by construction. A state the headers could produce but the menu couldn't name would leave the radio group with nothing selected.
+
+Both tables are always sorted. An "Unsorted" option would mean fixture order, which is no order anyone asked for, and it gave the headers a third click that undid the second.
+
+Rows without a value sort last in both directions:
+
+- Unfinished payments have no finish time, so sorting by Finished sinks them to the end rather than opening "Newest first" on a page of dashes.
+- Users who have never been active sort last whichever way Last active runs.
+
+Five payments columns sort. The other three carry no `aria-sort` at all, because `none` would claim a column sorts and is merely inactive.
+
+The Status column passes **no** `sortDirection`, where the sortable columns pass `null`. That distinction is the point of the three-way prop: omitted means the column doesn't sort and emits no `aria-sort`, while `null` means sortable but not currently active.
+
+## Filters on a phone
+
+Below `sm` the pills fold away, and a drawer carries the whole filter set. It's the same bottom sheet and `Stepper` drilldown in both tables: a menu of "label + current value" rows that each open one screen per filter. A row of pills becomes a column of pills on a phone, burying the table it filters, and a scrolling column of selects is a desktop panel moved sideways. Each row's value comes from the same descriptor the pills read, so a row and its pill can't disagree about what is applied.
+
+### The toolbar forks in CSS
+
+The toolbar forks at `sm:`, following [`tickets-01`](/docs/blocks/tickets-01). Search is shared and always visible; the pills and the view controls are `hidden sm:flex`, and below that a single Filters button opens a bottom-sheet drawer. The fork is CSS-only: both trees are always mounted, so there is no `useMediaQuery` to get wrong on the server, and no flash of the wrong layout during hydration.
+
+The drawer's body is a [`Stepper`](/docs/components/stepper): a menu of "label + current value" rows that drill into one `RadioGroup` screen per filter, with a back arrow and an Apply footer. Filters apply **live**. `Apply` only dismisses, so there is no draft state to reconcile.
+
+### The drawer holds every filter
+
+The drawer holds *every* filter, not only the optional ones. At that width it's the only way in, so anything missing from it is unreachable rather than inconvenient.
+
+Its trigger carries a count of the filters that hold a value, because at that width nothing else says the table is filtered. Sort isn't counted, because a badge that ticks up when you reorder a column misstates what it counts.
+
+### Applied filters read as sentences on a phone
+
+The phone menu reads the way Linear's does. `Applied filters` lists each filter holding a value as a sentence, `Currency [is not] [BTC, ETH] ✕`. Its value opens the filter's step, its operator badge opens its operator sheet, and its ✕ clears it. `All filters` below names every filter and nothing more, so what is applied is said in one place. Action and Provider have no operator, so their rows carry no badge.
+
+An operator is a badge beside its step's title, `Player [contains ⌄]`. Tapping it, there or in the applied row, stacks a sheet of operators on the filter drawer, one radio row each. It replaced a segmented control above the values, which cost the Created row the room its calendar needed, and a full-width select for Player's six operators.
+
+### Why not a filter rail
+
+A rail was the other candidate, and the payments table can't afford one. The payments columns need about 1050px; the content area is 1024px at a 1280px viewport, so the table is already short before anything is taken from it. A 300px filter sidebar would leave 724px and force horizontal scrolling on a standard laptop. That trade is table-shaped rather than universal: a rail works well beside a narrow single-column list, which is why chat and mail apps use one.
+
+## View controls sit apart from the filters
+
+`Columns`, `Export` and `Sort` change how the rows are shown, not which rows, so they live at the far end of the row and each names itself: `Sort:` reads as a sort, not one more filter. When the row is full, search keeps a minimum width and this group wraps to a second line rather than crushing the field.
+
+`Columns` lists only what can go. The id or name, the selection checkbox and the row actions identify and act on a row, so they always stay. Column visibility is a view preference, not part of the query, so it isn't in the URL: a link should show someone the same rows, not your layout.
+
+### Export is the result, not the page
+
+`Export` writes every row the filters and sort produce (all eighteen, not the ten on screen) as CSV, in the order the table shows them. It writes raw values:
+
+- the provider's amount string rather than `10,000.00`, whose comma a spreadsheet would misread
+- enum ids rather than labels
+- an empty cell rather than a dash for a payment that hasn't finished
+
+It's disabled when there is nothing to export, and desktop-only, like the pills.
+
+## Records: a side panel or a page
+
+A payment's record is a side panel, and a user's is a page. A payment is looked at and left: check a status, copy an id, go back to the row you were on. So the ledger, its filters and its scroll position stay behind a right-hand `Drawer`. A user is a record you work in, which is why that one replaces the table. Both build their values from the same `DescriptionList` pairs.
+
+The payment panel shows only the fields a payment has. A refund or retry button belongs there in a real app, but one that does nothing is worse than none.
+
+### An open record is a sub-state of the users section
+
+A new section would need a sidebar entry, and you can't navigate to a detail page with no record chosen. So the open user is a separate `openUserId`, resolved to a record at render. Changing section clears it, or leaving to Billing and returning would land on a stale record.
+
+The breadcrumb reflects that: with a record open, `Users` stops being the page and becomes the way back to the list, with the open record's name as the terminal crumb.
+
+### Record layout
+
+Values are stacked above their labels in two columns: `DescriptionList`'s `orientation="stacked"`, with the grid itself in `className`. Its default row layout right-aligns each value against its label, which reads as a summary; a record wants the label to sit above the value it describes. A field the record doesn't have renders `-` rather than being omitted, so the grid keeps its alignment.
+
+The header spans the full width with the actions at its right edge, while the card is capped. So the buttons reach the container without the record's two columns drifting apart on a wide screen. Sections carry their own padding and the card's is zeroed, which lets the rules between them run the full width of the card instead of stopping short of its edges.
+
+`invitedBy` stores the inviter's **id**, not their name, so **Invited by** links to that user's record rather than naming it as dead text. A detail page that mentions another record it can already open should take you there.
+
+### Row actions live in a trailing menu
+
+Both tables carry their row actions in a **trailing menu**. A hover-revealed button is unreachable on touch (`focus-visible` rescues a keyboard, not a finger), and these are the widest surfaces in the block, so the likeliest to be read on a phone. A ledger is also where per-row actions accumulate, and a menu absorbs a fourth and fifth where a row of inline buttons can't.
+
+The trigger names its row: five identical "Actions" buttons would leave a screen reader to work out which one it's on from context it doesn't have. The record's name or id stays clickable, so opening keeps a one-click path.
+
+## Ids and amounts
+
+Payment ids are middle-truncated in the table with a copy button, and shown in full on the record. The head and tail are what you eyeball against a provider's dashboard; the whole value is what you paste into it. `Copy payment ID` in the row menu duplicates the icon button beside the id on purpose: that one is the fast path for a value shown truncated, this one is the labeled path for anyone who wouldn't read an unlabeled icon.
+
+Amounts are formatted for reading and stored for computing. The fixture holds the provider's raw string (`10000.000000` for every currency), which is what sorting and the Amount filter read. The cell shows it grouped and at its currency's precision, with tabular figures so the column lines up: two places for EUR and USDT, and as many as it carries for BTC and ETH. Amounts compare across currencies as plain numbers, so 1 BTC sorts below 600 EUR; a real ledger sorts on a converted reporting-currency column, or narrows to one currency first.
+
+## An empty result says how to get out of it
+
+Both tables render an `Empty` inside `TableEmpty` when the filters leave nothing: an icon, "No payments match these filters", and a `Clear filters` button. The toolbar's own `Clear all` is hard to spot on a wide row, and a phone has none: its drawer clears filters one ✕ at a time. The component takes `filtered` rather than assuming it, because a real table also needs "No payments yet", where there is nothing to clear.
+
+## Selection outlives the page and the filter
+
+Ticking rows on page one, then page two, then exporting is the point of a selection that is kept by id rather than by position. The bar's actions read from the full data set, not the current result, for the same reason. The bar offers only what the block can do: export the selection and copy its ids. The role changes and suspensions a real admin needs require a backend, and buttons that do nothing are what this bar used to carry.
+
+Select-all is binary rather than tri-state. Keystone UI's [`Checkbox`](/docs/components/checkbox) has no indeterminate variant, and re-implementing the custom mixed-state control that [`tickets-01`](/docs/blocks/tickets-01) uses would duplicate a workaround rather than share one.
+
+## Loading is a stand-in request
+
+The fixtures are local, so without a stand-in request the loading state would never be seen. `useDataTable` answers each query after 300 ms. While it waits, the table carries `aria-busy`, and the body shows skeleton rows built to the real rows' height (49px, or 53px where a name sits over an email) in the count the previous page had, so nothing jumps when the data lands.
+
+Each change restarts the wait, which makes search settle once rather than per keystroke. The pagination and summary keep describing the last answer meanwhile. Swap `useSimulatedFetch` for your data layer and keep the rest: [Filter and page the users table on the server](/docs/guides/page-the-users-table-on-the-server) shows how.
+
+## The view lives in the URL
+
+The open section and that section's query (search, filters, sort, page, page size) are written to the query string with `replaceState`, because one history entry per keystroke would make Back useless. Defaults are left out, so an untouched table has a clean URL.
+
+On load the URL is read once and validated value by value: `?status=bogus` opens the table unfiltered rather than broken, and a page past the end snaps to the last one. It's plain `history`, so the block works in any React app; in Next.js the router observes it and `useSearchParams` follows.
+
+Every filter change resets `pageIndex` to 0. Page 2 of the unfiltered list usually doesn't exist once a filter is applied, and a table reading "Page 2 of 1" with no rows looks broken.
+
+## Control sizes in the toolbar
+
+Every control in the row sits on the **32px** `sm` tier, the same tier as the pagination below the table and the app chrome around it. Anything added to the row should take `size="sm"` too: mixing sizes between neighbors is the usual cause of a toolbar that looks subtly off. Forms inside the filter drawers stay at `default`. [Control sizing and density](/docs/concepts/control-sizing) explains the ladder.
+
+## Related
+
+- [`admin-01` reference](/docs/blocks/admin-01)
+- [`users-01` reference](/docs/blocks/users-01)
+- [`tickets-01` reference](/docs/blocks/tickets-01)
+- [Adapt admin-01 to your app](/docs/guides/adapt-admin-01)
+- [Filter and page the users table on the server](/docs/guides/page-the-users-table-on-the-server)
+- [Control sizing and density](/docs/concepts/control-sizing)

@@ -1,6 +1,7 @@
 ---
 title: Users 01
-description: The users view from admin-01 on its own. A filterable, sortable users table with row selection, CSV export, loading states and URL-synced filters, and a record view for each user. No sidebar, overview or payments.
+description: The users view from admin-01 on its own, a filterable, sortable users table with row selection, CSV export, loading states, URL-synced filters and a record view for each user.
+contentType: Reference
 ---
 
 ```bash
@@ -13,15 +14,17 @@ npx shadcn@latest add https://keystoneui.io/r/users-01.json
 
 - **Toolbar** with search, filter pills (`Role: Admin`, `Status is not: Suspended`, a created-date range) and `+ Add filter`, then `Columns`, `Export` and `Sort` at the far end of the row.
 - **Sorting** from the `Sort` menu or the column headers, in words that fit the column (`A–Z`, `Newest first`, `Most first`).
-- **Row selection** with a [`SelectionBar`](/docs/components/selection-bar) whose actions — export the selection, copy its ids — run. A selection outlives filters and pages.
-- **Loading** — [`Skeleton`](/docs/components/skeleton) rows at the real rows' height while a query settles, and an [`Empty`](/docs/components/empty) state that offers `Clear filters` when nothing matches.
-- **Shareable views** — search, filters, sort and page live in the URL, so a link or a reload lands on the same rows.
-- **User record** — a name opens a read-only record view built from [`DescriptionList`](/docs/components/description-list), with [`CopyButton`](/docs/components/copy-button) on the values that exist to be pasted elsewhere. It swaps in for the table on the same page: the open record is not in the URL, so a reload lands on the table. `Edit user` and `Archive user` in its header are placeholders with no handler.
-- **Mobile filters** — below `sm` the pills, view controls and sort fold into a bottom-sheet [`Drawer`](/docs/components/drawer) with a [`Stepper`](/docs/components/stepper) drilldown.
+- **Row selection** with a [`SelectionBar`](/docs/components/selection-bar) whose actions (export the selection, copy its ids) run. A selection outlives filters and pages.
+- **Loading**: [`Skeleton`](/docs/components/skeleton) rows at the real rows' height while a query settles, and an [`Empty`](/docs/components/empty) state that offers `Clear filters` when nothing matches.
+- **Shareable views**: search, filters, sort and page live in the URL, so a link or a reload lands on the same rows.
+- **User record**: a name opens a read-only record view built from [`DescriptionList`](/docs/components/description-list), with [`CopyButton`](/docs/components/copy-button) on the values you'd paste elsewhere. It swaps in for the table on the same page: the open record is not in the URL, so a reload lands on the table. `Edit user` and `Archive user` in its header are placeholders with no handler.
+- **Mobile filters**: below `sm` the pills, view controls and sort fold into a bottom-sheet [`Drawer`](/docs/components/drawer) with a [`Stepper`](/docs/components/stepper) drilldown.
+
+[Filter and table patterns](/docs/concepts/filter-and-table-patterns) explains the design behind the toolbar, sorting, selection, loading and URL state.
 
 ## Same files as admin-01
 
-This is the users section of [`admin-01`](/docs/blocks/admin-01), installable without the sidebar, overview and payments. It installs **the same files** `admin-01` does — `admin-users-table.tsx`, `admin-filters.ts`, `use-data-table.ts` and the rest — which is why they keep their `admin-` names. Both items are built from one source, so an app that installs both from the same release gets identical bytes at identical paths. If `admin-01` is already in your app from an earlier release, add it again together with `users-01`: the two share files, and the older `admin-page.tsx` does not pass the `users` prop that `AdminUsersTable` now takes.
+This is the users section of [`admin-01`](/docs/blocks/admin-01), installable without the sidebar, overview and payments. It installs **the same files** `admin-01` does (`admin-users-table.tsx`, `admin-filters.ts`, `use-data-table.ts` and the rest), which is why they keep their `admin-` names. Both items are built from one source, so an app that installs both from the same release gets identical bytes at identical paths. If `admin-01` is already in your app from an earlier release, add it again together with `users-01`: the two share files, and the older `admin-page.tsx` does not pass the `users` prop that `AdminUsersTable` now takes.
 
 The only file of its own is `users-view.tsx`: the page shell that holds the table state, the open user, and the URL. The page lands at `app/users/page.tsx`. The view is meant to be the whole page: `useUrlState` owns the whole query string, so a parameter it does not know (a tab, a locale, `utm_*`) is removed as soon as the view loads.
 
@@ -70,24 +73,19 @@ export function useUsersTable(rows: readonly User[]) {
 
 As installed, `useUsersTable()` reads the fixture from `mock-users.ts`. Replace that file, or take the rows as an argument as above and pass them from `users-view.tsx`. If you replace it, keep `User`, `Role`, `Status` and `statusLabels`, which the table, filters and record import; only the `users` array is fixture.
 
-**What `DataTableConfig` asks for:** `rows`, a `matches(row, filters)` predicate and a `sortRows(rows, sort)` function — the users versions live in `admin-filters.ts` — plus the starting filters, sort and page size. `latency` is how long the stand-in request takes (300 ms by default); set it to `0` when your rows are already in memory.
+**What `DataTableConfig` asks for:** `rows`, a `matches(row, filters)` predicate and a `sortRows(rows, sort)` function (the users versions live in `admin-filters.ts`), plus the starting filters, sort and page size. `latency` is how long the stand-in request takes (300 ms by default); set it to `0` when your rows are already in memory.
 
 **Rows can change after mount.** Different rows are a new answer even when the query has not changed, so a refetch shows up.
 
 Load the first rows before you render the view: await them in `app/users/page.tsx` and pass them down, or show your own loading state until they are there. The table has no "still fetching" input. Started from an empty array it settles on `No users yet` until the rows arrive, and a `?page=` in the link falls back to the first page, because that page does not exist in an empty list.
 
-**Treat `rows` as immutable.** Hand in a new array when the rows change, and replace an edited row object rather than mutating it: an array changed in place, or a row object edited in place, is not seen. Rows are compared one by one, each by identity or by its own fields, so an array rebuilt inline each render is fine while its rows hold plain fields — `data.filter(…)`, or `data.map(toUser)` to flat objects. Rows that hold fresh nested objects or arrays each render (`{ ...row, tags: [...row.tags] }`) differ on every render. Rebuilt in the component that calls the hook, that fails loudly, with React's "Too many re-renders" error. Rebuilt in a parent and passed down, there is no error: the table reloads on each of the parent's renders, and stays on its skeleton rows while the parent renders more often than `latency`. Build those in a `useMemo`.
+**Treat `rows` as immutable.** Hand in a new array when the rows change, and replace an edited row object rather than mutating it: an array changed in place, or a row object edited in place, is not seen. Rows are compared one by one, each by identity or by its own fields, so an array rebuilt inline each render is fine while its rows hold plain fields: `data.filter(…)`, or `data.map(toUser)` to flat objects. Rows that hold fresh nested objects or arrays each render (`{ ...row, tags: [...row.tags] }`) differ on every render. Rebuilt in the component that calls the hook, they fail loudly, with React's "Too many re-renders" error. Rebuilt in a parent and passed down, there is no error: the table reloads on each of the parent's renders, and stays on its skeleton rows while the parent renders more often than `latency`. Build those in a `useMemo`.
 
 **What it does not do:** it filters, sorts and pages in the browser, over every row it is given. There is no server paging, no request error state, and `Export` writes every matching row from `rows`. That suits hundreds or a few thousand users, not an unbounded table.
 
 ### Paging on the server
 
-When the server does the filtering, keep everything above the request and swap the request itself. In `use-data-table.ts`, `run()` is what a server would do with the query and `useSimulatedFetch` stands in for the network:
-
-1. Replace `useSimulatedFetch` and the `run(config, query)` call together — `run()` is called synchronously inside a `useMemo`, so this is one change, not two. Use your data layer's query hook, keyed on `query` — filters, sort, `pageIndex`, `pageSize` — and keep the last answer while the next one loads, so the pagination does not collapse to zero. Return `{ page, total, pageCount }`, with `pageCount` at least 1 for an empty result: a page past the last snaps to `pageCount - 1`, so 0 would land on page −1.
-2. `usersToParams(query)` in `admin-filters.ts` already turns a query into flat string parameters. It leaves defaults out — the first page, the default sort and page size, a filter left at all — so the server must apply the same defaults.
-3. `result.all` no longer holds every matching row. Point `Export` at an endpoint that exports the query, or remove it. If your result has another shape, update the code that reads `all` with it.
-4. The selection bar, and the open-user and inviter lookups in `users-view.tsx`, resolve ids against the rows you hand in, and a selected user, an open user or an inviter may not be on the loaded page. Keep the records you have loaded, or fetch them by id; the selection export needs every selected record, not only the current page.
+To filter, sort and page on the server instead, keep everything above the request and swap the request itself: [Filter and page the users table on the server](/docs/guides/page-the-users-table-on-the-server) has the steps.
 
 ## Components used
 
@@ -117,6 +115,8 @@ When the server does the filtering, keep everything above the request and swap t
 - [Toggle](/docs/components/toggle)
 
 ## Composition
+
+The view's layout tree:
 
 ```text
 UsersView
