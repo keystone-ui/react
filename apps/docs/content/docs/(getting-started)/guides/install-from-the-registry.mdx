@@ -1,0 +1,99 @@
+---
+title: Install from the registry
+description: Install the Keystone UI style, swap colour themes, set up the @keystone namespace and add blocks with the shadcn CLI.
+contentType: How-to
+---
+
+Keystone UI publishes its styles, themes, components and blocks as a [shadcn registry](https://ui.shadcn.com/docs/registry), so the shadcn CLI can write them into your project. This guide installs the style, swaps the colour theme, sets up a namespace for shorter commands and adds a block. [Styles and themes](/docs/concepts/styles-and-themes) explains the two kinds of theme item.
+
+## Before you start
+
+You need:
+
+- A project with a `components.json`
+- shadcn CLI 4.7 or later (`npx shadcn@latest`)
+
+<Callout type="info">
+Components install to the directory your `components.json` names as
+`aliases.ui`, through the `@ui/` target placeholder that 4.7 introduced. An
+older CLI writes a literal `@ui/button.tsx` path instead.
+</Callout>
+
+## Install the style
+
+The style item sets up a new project. Install the package, then the style:
+
+```bash
+# 1. Install the package
+pnpm add @keystoneui/react@beta
+
+# 2. Install the Keystone style (generates theme CSS in your project)
+npx shadcn add https://keystoneui.io/r/default.json
+```
+
+The CLI writes the complete theme CSS into your `globals.css`: the `base.css` import, the dark mode variant, the Tailwind registration, the colour tokens and the base layer defaults. Then add the `@source` directive, as [Install Keystone UI](/docs/installation) shows.
+
+## Swap the colour theme
+
+A theme item replaces only the colour token values in `:root` and `.dark`, so you can switch palettes without re-initializing. Install the default theme:
+
+```bash
+npx shadcn add https://keystoneui.io/r/themes/default.json
+```
+
+Or pick one of the base themes. Each uses a different gray scale for the structural tokens (backgrounds, borders, text):
+
+| Theme | Command |
+| --- | --- |
+| Zinc (default) | `npx shadcn add https://keystoneui.io/r/themes/zinc.json` |
+| Slate | `npx shadcn add https://keystoneui.io/r/themes/slate.json` |
+| Stone | `npx shadcn add https://keystoneui.io/r/themes/stone.json` |
+| Gray | `npx shadcn add https://keystoneui.io/r/themes/gray.json` |
+| Neutral | `npx shadcn add https://keystoneui.io/r/themes/neutral.json` |
+
+All themes use the OKLCH colour space and include light and dark mode tokens.
+
+## Install by name with the namespace
+
+For repeated use, configure the `@keystone` namespace in your `components.json`:
+
+```json title="components.json"
+{
+  "registries": {
+    "@keystone": "https://keystoneui.io/r/{name}.json"
+  }
+}
+```
+
+Then install items by name:
+
+```bash
+npx shadcn add @keystone/default
+npx shadcn add @keystone/themes/zinc
+```
+
+## Install a block
+
+Blocks are multi-file page layouts built from Keystone UI components. Install one the same way as a style or theme:
+
+```bash
+npx shadcn add https://keystoneui.io/r/signin-01.json
+```
+
+Or with the namespace:
+
+```bash
+npx shadcn add @keystone/signin-01
+```
+
+The CLI installs the page component and any files that come with it. The [Blocks](/docs/blocks/signin-01) tab has the full catalog.
+
+## Check that it works
+
+Open `globals.css`. It should contain `@import "@keystoneui/react/base.css"`, a `@custom-variant dark` line, an `@theme inline` block, and `:root` and `.dark` token blocks. After a theme swap, only the values inside `:root` and `.dark` change.
+
+## Related
+
+- [Styles and themes](/docs/concepts/styles-and-themes)
+- [Publish a theme](/docs/guides/publish-a-theme)
+- [Theme tokens](/docs/reference/theme-tokens)

@@ -1,0 +1,33 @@
+---
+title: Styles and themes
+description: The difference between the Keystone UI registry style item, which sets up a project, and theme items, which only swap colour values.
+contentType: Conceptual
+---
+
+The Keystone UI registry has two kinds of item for your CSS. A style item (`registry:style`) sets up everything a project needs once. A theme item (`registry:theme`) changes only colour values, so you can swap palettes as often as you like without touching the setup. Knowing which one you're installing tells you what the shadcn CLI will change in your `globals.css`.
+
+## The style item sets up a project
+
+The style item at `https://keystoneui.io/r/default.json` installs the full setup:
+
+- `@import "@keystoneui/react/base.css"`
+- `@custom-variant dark`
+- the `@theme inline` block
+- the default colour tokens in `:root` and `.dark`
+- `@layer base`
+
+It's the item for setting up a new project.
+
+## A theme item swaps colour values
+
+A theme item, such as `https://keystoneui.io/r/themes/slate.json`, replaces only the colour token values in `:root` and `.dark`. It doesn't touch `base.css`, `@custom-variant`, `@theme inline` or `@layer base`.
+
+Each base theme uses a different gray scale for the structural tokens: backgrounds, borders and text. The default is Zinc. Because every theme keeps the same token names, the components and your own classes never change when you swap.
+
+A theme item is also the format for sharing a palette: the [theme builder](/theme-builder) serves its codes as theme items, and you can [publish your own](/docs/guides/publish-a-theme).
+
+## Related
+
+- [Install from the registry](/docs/guides/install-from-the-registry)
+- [Theming](/docs/concepts/theming)
+- [Theme tokens](/docs/reference/theme-tokens)

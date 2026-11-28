@@ -78,7 +78,7 @@ const DOCS = [
   "apps/docs/content/docs/(getting-started)/reference/base-css.mdx",
   "apps/docs/content/docs/(getting-started)/guides/customize-the-theme.mdx",
   "apps/docs/content/docs/(getting-started)/concepts/theming.mdx",
-  "apps/docs/content/docs/(getting-started)/installation/quick-start.mdx",
+  "apps/docs/content/docs/(getting-started)/installation.mdx",
 ];
 
 /** More than one tier in a file's CSS is a copied block, not an example. */

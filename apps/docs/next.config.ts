@@ -55,12 +55,12 @@ const config: NextConfig = {
       },
       {
         source: "/docs/getting-started/quick-start",
-        destination: "/docs/installation/quick-start",
+        destination: "/docs/installation",
         permanent: true,
       },
       {
         source: "/docs/getting-started/registry",
-        destination: "/docs/installation/registry",
+        destination: "/docs/guides/install-from-the-registry",
         permanent: true,
       },
       {

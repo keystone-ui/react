@@ -4,9 +4,9 @@
   "root": true,
   "pages": [
     "index",
+    "installation",
     "upgrading",
     "interop",
-    "installation",
     "guides",
     "concepts",
     "reference",

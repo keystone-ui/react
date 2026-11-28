@@ -1,0 +1,106 @@
+---
+title: Install Keystone UI
+description: Add @keystoneui/react to a Next.js or Vite app, set up the theme CSS, and render your first component.
+contentType: How-to
+---
+
+This guide installs Keystone UI in a Next.js or Vite app that already uses Tailwind CSS v4. You'll add the package, write the theme CSS, and render a component to check that the styles load. It takes 2 commands and one CSS edit.
+
+## Before you start
+
+You need:
+
+- React 19.2 or later, and React DOM at the same version
+- Tailwind CSS v4 set up in your app. There's no `tailwind.config.js`: configuration lives in your CSS.
+- Node.js 22 or later
+
+## Install the package
+
+<Steps>
+
+<Step>Add `@keystoneui/react`.</Step>
+
+Install the package with your package manager:
+
+```bash tab="pnpm"
+pnpm add @keystoneui/react@beta
+```
+
+```bash tab="npm"
+npm install @keystoneui/react@beta
+```
+
+```bash tab="yarn"
+yarn add @keystoneui/react@beta
+```
+
+<Step>Add the theme CSS.</Step>
+
+Run the registry command. It writes the complete theme into your `globals.css`: the `base.css` import, the dark mode variant, the Tailwind colour registration, the default tokens and the base layer.
+
+```bash
+npx shadcn add https://keystoneui.io/r/default.json
+```
+
+To write the theme by hand instead, copy every part of the [theme tokens reference](/docs/reference/theme-tokens) into your main CSS file. [Install from the registry](/docs/guides/install-from-the-registry) covers the namespace setup, swapping themes and the shadcn CLI version.
+
+<Step>Point Tailwind CSS at the component sources.</Step>
+
+Keystone UI components use Tailwind utility classes in their source files. Add an `@source` directive so Tailwind CSS v4 scans those files and generates the classes:
+
+```css title="globals.css" {4}
+@import "tailwindcss";
+@import "@keystoneui/react/base.css";
+
+@source "../node_modules/@keystoneui/react/src/**/*.{ts,tsx}";
+
+/* ... rest of generated theme ... */
+```
+
+The path is relative to your CSS file. In a project with a `src/` directory (such as `src/app/globals.css`), go up two levels: `@source "../../node_modules/@keystoneui/react/src/**/*.{ts,tsx}";`. Without the directive, component styles are missing.
+
+<Step>Render a component.</Step>
+
+Import each component from its own subpath. There's no barrel export (`@keystoneui/react`).
+
+```tsx
+import { Button } from "@keystoneui/react/button";
+import { Input } from "@keystoneui/react/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@keystoneui/react/card";
+
+export default function LoginCard() {
+  return (
+    <Card className="w-[380px]">
+      <CardHeader>
+        <CardTitle>Sign In</CardTitle>
+        <CardDescription>Enter your credentials to continue.</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <Input type="email" placeholder="Email" />
+        <Input type="password" placeholder="Password" />
+        <Button className="w-full">Sign In</Button>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+</Steps>
+
+## Check that it works
+
+Start your dev server and open the page. The card should have a border, rounded corners and a filled primary button. If the elements render unstyled, the `@source` path doesn't reach `node_modules` from your CSS file. If the borders take the text colour, your CSS is missing the `* { @apply border-border outline-ring/50; }` base rule.
+
+## Next steps
+
+- [Enable dark mode](/docs/guides/enable-dark-mode)
+- [Fit the mobile viewport](/docs/guides/fit-the-mobile-viewport)
+- [Customize the theme](/docs/guides/customize-the-theme)
+- [Install from the registry](/docs/guides/install-from-the-registry): namespaces, themes and blocks
+- [Button](/docs/components/button), or any other component in the Components tab
