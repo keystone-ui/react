@@ -1,6 +1,7 @@
 ---
 title: Command
-description: A searchable command menu for quick actions, navigation, and filtering.
+description: A searchable menu of commands, inline or in a dialog, that you filter by typing and run from the keyboard.
+contentType: Reference
 ---
 
 <ComponentPreview name="command-default" />
@@ -71,49 +72,45 @@ CommandDialog
 
 ### Shortcuts
 
-Items can display keyboard shortcut labels using `CommandShortcut`:
+`CommandShortcut` shows an item's keyboard shortcut.
 
 <ComponentPreview name="command-with-shortcuts" />
 
-
 ### Groups
 
-Organize items into groups with headings and separators:
+Items sorted into groups with headings and separators.
 
 <ComponentPreview name="command-groups" />
 
-
 ### Scrollable
 
-The command list scrolls automatically when content exceeds the max height:
+The list scrolls once its content passes the maximum height.
 
 <ComponentPreview name="command-scrollable" />
 
+### Keyboard trigger
 
-### Keyboard Trigger
-
-Command palette triggered by keyboard shortcut:
+A keyboard shortcut opens the command palette.
 
 <ComponentPreview name="command-keyboard-trigger" />
 
+### Disabled items
 
-### Disabled Items
-
-Command menu with disabled items:
+A menu in which some items are disabled.
 
 <ComponentPreview name="command-disabled-items" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 ## API reference
 
-Built on top of [cmdk](https://github.com/dip/cmdk). See the cmdk documentation for the full API reference.
+Command is built on [cmdk](https://github.com/dip/cmdk). The [cmdk documentation](https://github.com/dip/cmdk) lists the full API.
 
 ### Command
 
-The root command menu wrapper. Handles filtering, sorting, and keyboard navigation.
+The root of the menu. It filters and sorts the items and handles keyboard navigation.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -125,7 +122,7 @@ The root command menu wrapper. Handles filtering, sorting, and keyboard navigati
 
 ### CommandDialog
 
-A command menu rendered inside a modal dialog.
+The menu inside a modal dialog.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -137,7 +134,7 @@ A command menu rendered inside a modal dialog.
 
 ### CommandInput
 
-Search input with a built-in search icon.
+The search input, with a built-in search icon.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -147,7 +144,7 @@ Search input with a built-in search icon.
 
 ### CommandItem
 
-An individual command item. Becomes active on pointer enter.
+One command. It becomes active when the pointer enters it.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -158,7 +155,7 @@ An individual command item. Becomes active on pointer enter.
 
 ### CommandGroup
 
-Groups items together with an optional heading.
+A group of items with an optional heading.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |

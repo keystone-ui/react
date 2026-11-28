@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "form",
   "title": "Form",
-  "description": "A form wrapper component that provides consistent layout and validation support.",
+  "description": "A form element with consistent spacing between its fields, plus the label, description and error message parts.",
   "registryDependencies": [
     "https://keystoneui.io/r/label.json"
   ],

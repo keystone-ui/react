@@ -1,6 +1,7 @@
 ---
 title: Switch
-description: A toggle control for boolean states with smooth animation.
+description: A toggle that turns a setting on or off, taking effect immediately.
+contentType: Reference
 ---
 
 <ComponentPreview name="switch-default" />
@@ -43,17 +44,17 @@ import { Switch } from "@keystoneui/react/switch";
 
 ## Examples
 
-### With Description
+### With description
 
-Pair with Field components for label and helper text:
+A `Field` adds a label and helper text to the switch.
 
 <ComponentPreview name="switch-with-description" />
 
-
 ### Sizes
 
-<ComponentPreview name="switch-sizes" />
+The `sm` and `default` sizes side by side.
 
+<ComponentPreview name="switch-sizes" />
 
 ### Disabled
 
@@ -61,17 +62,15 @@ The label dims with the switch because it is a `FieldLabel` inside `<Field data-
 
 <ComponentPreview name="switch-disabled" />
 
+### Choice card
 
-### Choice Card
-
-Switch in a choice card layout:
+Each switch sits inside a card-shaped `FieldLabel`, so a click anywhere on the card toggles it.
 
 <ComponentPreview name="switch-choice-card" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 

@@ -1,6 +1,7 @@
 ---
 title: RadioGroup
-description: A set of mutually exclusive options where only one can be selected at a time.
+description: A set of mutually exclusive options, of which exactly one is selected.
+contentType: Reference
 ---
 
 <ComponentPreview name="radio-group-default" />
@@ -52,40 +53,37 @@ RadioGroup
 
 ### Horizontal
 
+The options laid out in a row instead of a column.
+
 <ComponentPreview name="radio-group-horizontal" />
 
+### With descriptions
 
-### With Descriptions
-
-Add descriptions to each option:
+Each option has a description below its label.
 
 <ComponentPreview name="radio-group-with-description" />
 
+### Choice card
 
-### Choice Card
-
-Card-style selection for prominent choices:
+Each option is a selectable card, for choices that need more room.
 
 <ComponentPreview name="radio-group-choice-card" />
 
-
 ### Disabled
 
-Disabled radio group. The disabled option's label dims because it is a `FieldLabel` inside `<Field data-disabled>`; a plain `Label` beside the default-rendered control keeps full opacity. See [Label](/docs/components/label#disabled).
+A disabled radio group. The disabled option's label dims because it is a `FieldLabel` inside `<Field data-disabled>`; a plain `Label` beside the default-rendered control keeps full opacity. See [Label](/docs/components/label#disabled).
 
 <ComponentPreview name="radio-group-disabled" />
 
-
 ### Fieldset
 
-Radio group inside a fieldset:
+A radio group inside a fieldset with a legend.
 
 <ComponentPreview name="radio-group-fieldset" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 

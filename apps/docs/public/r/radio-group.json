@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "radio-group",
   "title": "Radio Group",
-  "description": "A set of mutually exclusive options where only one can be selected at a time.",
+  "description": "A set of mutually exclusive options, of which exactly one is selected.",
   "dependencies": [
     "@base-ui/react"
   ],

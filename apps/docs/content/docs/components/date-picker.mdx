@@ -1,6 +1,7 @@
 ---
 title: Date Picker
-description: Compose a date picker from Popover, Calendar and Button — single dates, ranges, typed entry and forms.
+description: Compose a date picker from Popover, Calendar and Button, for single dates, ranges, typed entry and forms.
+contentType: Reference
 ---
 
 <ComponentPreview name="date-picker-default" />
@@ -8,6 +9,8 @@ description: Compose a date picker from Popover, Calendar and Button — single 
 ## Usage
 
 There is no `DatePicker` export. A date picker is a `Calendar` inside a `Popover`, opened by a `Button` (or an `InputGroupButton` beside a text field). Copy the example closest to what you need and own it: the trigger, the date format and whether picking closes the popup are yours to change.
+
+Import the parts, `date-fns` for formatting and `useState` for the open state and the date:
 
 ```tsx
 import { Button } from "@keystoneui/react/button";
@@ -20,6 +23,8 @@ import {
 import { format } from "date-fns";
 import { useState } from "react";
 ```
+
+This picker closes as soon as a date is picked:
 
 ```tsx
 const [open, setOpen] = useState(false);
@@ -69,25 +74,25 @@ A `mode="range"` calendar showing two months; the popup stays open so both ends 
 
 <ComponentPreview name="date-picker-range" />
 
-### Date of Birth
+### Date of birth
 
 Month and year dropdowns (`captionLayout="dropdown"`) with `startMonth` reaching back to 1900, so a year decades ago is two picks away.
 
 <ComponentPreview name="date-picker-date-of-birth" />
 
-### With Input
+### With input
 
 A text field with a calendar button: typing a valid date moves the calendar, picking a date fills the field, and text that is not a date is flagged on blur.
 
 <ComponentPreview name="date-picker-with-input" />
 
-### With Time
+### With time
 
 A date picker beside a native time input that keeps its value when the date changes.
 
 <ComponentPreview name="date-picker-with-time" />
 
-### Quick Picks
+### Date shortcuts
 
 Shortcuts such as "Tomorrow" or "Next week" beside the calendar, each resolved to a date when clicked.
 

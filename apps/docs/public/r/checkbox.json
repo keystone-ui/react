@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "checkbox",
   "title": "Checkbox",
-  "description": "A toggle control for binary choices, supporting checked, unchecked, and indeterminate states.",
+  "description": "A box that is checked or unchecked for a yes-or-no choice, with an indeterminate state for partial selections.",
   "dependencies": [
     "@base-ui/react"
   ],

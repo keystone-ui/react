@@ -808,7 +808,7 @@
       "name": "checkbox",
       "type": "registry:ui",
       "title": "Checkbox",
-      "description": "A toggle control for binary choices, supporting checked, unchecked, and indeterminate states.",
+      "description": "A box that is checked or unchecked for a yes-or-no choice, with an indeterminate state for partial selections.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -840,7 +840,7 @@
       "name": "combobox",
       "type": "registry:ui",
       "title": "Combobox",
-      "description": "Searchable dropdown with autocomplete for filtering and selecting from a list of options.",
+      "description": "A text input that filters a list of options as you type, for picking one value or several.",
       "dependencies": [
         "@base-ui/react",
         "lucide-react"
@@ -861,7 +861,7 @@
       "name": "command",
       "type": "registry:ui",
       "title": "Command",
-      "description": "A searchable command menu for quick actions, navigation, and filtering.",
+      "description": "A searchable menu of commands, inline or in a dialog, that you filter by typing and run from the keyboard.",
       "dependencies": [
         "cmdk",
         "lucide-react"
@@ -882,7 +882,7 @@
       "name": "date-input",
       "type": "registry:ui",
       "title": "Date Input",
-      "description": "Date picker input field for selecting dates with keyboard and calendar support.",
+      "description": "A native date input, typed with the keyboard, with a button that opens the browser's date picker.",
       "registryDependencies": [
         "https://keystoneui.io/r/input-group.json"
       ],
@@ -963,7 +963,7 @@
       "name": "field",
       "type": "registry:ui",
       "title": "Field",
-      "description": "Form field wrapper that provides a label, description, and error message around a form control.",
+      "description": "Wraps a form control with its label, description and error message, and groups fields into fieldsets.",
       "registryDependencies": [
         "https://keystoneui.io/r/label.json",
         "https://keystoneui.io/r/separator.json"
@@ -980,7 +980,7 @@
       "name": "form",
       "type": "registry:ui",
       "title": "Form",
-      "description": "A form wrapper component that provides consistent layout and validation support.",
+      "description": "A form element with consistent spacing between its fields, plus the label, description and error message parts.",
       "registryDependencies": [
         "https://keystoneui.io/r/label.json"
       ],
@@ -1026,7 +1026,7 @@
       "name": "input-group",
       "type": "registry:ui",
       "title": "Input Group",
-      "description": "Groups an input with adjacent buttons, icons, or text add-ons for combined input actions.",
+      "description": "Joins an input or textarea with buttons, icons or text add-ons inside one bordered frame.",
       "registryDependencies": [
         "https://keystoneui.io/r/button.json",
         "https://keystoneui.io/r/input.json",
@@ -1044,7 +1044,7 @@
       "name": "input-otp",
       "type": "registry:ui",
       "title": "Input OTP",
-      "description": "One-time password input with individual digit slots for verification codes.",
+      "description": "A one-time password input with one slot per character, for verification and recovery codes.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -1073,7 +1073,7 @@
       "name": "label",
       "type": "registry:ui",
       "title": "Label",
-      "description": "An accessible label component for form controls with optional description and error messages.",
+      "description": "Names a form control, with sibling parts for helper text and an error message.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -1111,7 +1111,7 @@
       "name": "native-select",
       "type": "registry:ui",
       "title": "Native Select",
-      "description": "Native browser select dropdown for simple selection scenarios with optimal mobile support.",
+      "description": "The browser's own select element, styled to match, for picking one option with the platform's native picker on mobile.",
       "dependencies": [
         "lucide-react"
       ],
@@ -1180,7 +1180,7 @@
       "name": "radio-group",
       "type": "registry:ui",
       "title": "Radio Group",
-      "description": "A set of mutually exclusive options where only one can be selected at a time.",
+      "description": "A set of mutually exclusive options, of which exactly one is selected.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -1229,7 +1229,7 @@
       "name": "slider",
       "type": "registry:ui",
       "title": "Slider",
-      "description": "Range slider input for selecting a numeric value within a defined range.",
+      "description": "A draggable control for picking a number, or a range of numbers, between a minimum and a maximum.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -1317,7 +1317,7 @@
       "name": "switch",
       "type": "registry:ui",
       "title": "Switch",
-      "description": "A toggle control for boolean states with smooth animation.",
+      "description": "A toggle that turns a setting on or off, taking effect immediately.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -1372,7 +1372,7 @@
       "name": "textarea",
       "type": "registry:ui",
       "title": "Textarea",
-      "description": "A multi-line text input for longer form content.",
+      "description": "A multi-line text input that grows with its content, for messages, comments and other long text.",
       "files": [
         {
           "path": "packages/ui/src/textarea.tsx",

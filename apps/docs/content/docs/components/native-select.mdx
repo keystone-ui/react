@@ -1,6 +1,7 @@
 ---
 title: NativeSelect
-description: Native browser select dropdown for simple selection scenarios with optimal mobile support.
+description: The browser's own select element, styled to match, for picking one option with the platform's native picker on mobile.
+contentType: Reference
 ---
 
 <ComponentPreview name="native-select-default" />
@@ -45,6 +46,8 @@ import {
 } from "@keystoneui/react/native-select";
 ```
 
+List the options as `NativeSelectOption` children:
+
 ```tsx
 <NativeSelect>
   <NativeSelectOption value="">Select status</NativeSelectOption>
@@ -68,37 +71,37 @@ NativeSelect
 
 ### Groups
 
-Organize options into labeled optgroups:
+`NativeSelectOptGroup` sorts the options into labeled groups.
 
 <ComponentPreview name="native-select-groups" />
 
-
 ### Sizes
+
+The `default` and `sm` sizes side by side.
 
 <ComponentPreview name="native-select-sizes" />
 
-
 ### Disabled
+
+A select with `disabled` set.
 
 <ComponentPreview name="native-select-disabled" />
 
-
 ### Invalid
 
-Native select with error state:
+A select in its invalid state.
 
 <ComponentPreview name="native-select-invalid" />
 
+### In a form
 
-### Form Example
-
-Native select in a form context:
+Two selects in a form, each with a `FieldLabel`.
 
 <ComponentPreview name="native-select-form-example" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 
