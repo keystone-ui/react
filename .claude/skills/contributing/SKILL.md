@@ -109,7 +109,7 @@ Three surfaces drift if not maintained explicitly. Run through this checklist af
 state an exact number and both must be updated:
 
 - `skills/keystoneui-react/SKILL.md` — the `## Component List` heading.
-- `apps/docs/content/docs/(getting-started)/rtl.mdx` — a *ratio* ("30 of its 56
+- `apps/docs/content/docs/(getting-started)/concepts/rtl.mdx` — a *ratio* ("30 of its 56
   components"), so recompute it rather than incrementing:
 
   ```bash

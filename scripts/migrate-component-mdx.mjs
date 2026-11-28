@@ -148,7 +148,7 @@ function buildInstallationSection(componentName) {
 function buildRtlSection() {
   return {
     heading: "RTL",
-    body: `\nThis component supports RTL layouts via the standard \`dir="rtl"\` attribute on a parent element. See [the RTL guide](/docs/rtl).\n\n`,
+    body: `\nThis component supports RTL layouts via the standard \`dir="rtl"\` attribute on a parent element. See [the RTL guide](/docs/concepts/rtl).\n\n`,
   };
 }
 
