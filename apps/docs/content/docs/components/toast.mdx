@@ -1,6 +1,7 @@
 ---
 title: Toast
-description: Temporary notification messages that appear briefly to provide non-intrusive feedback.
+description: Short notifications that appear briefly over the page to confirm an action or report its result.
+contentType: Reference
 ---
 
 <ComponentPreview name="toast-default" />
@@ -37,13 +38,17 @@ pnpm add @keystoneui/react@beta @base-ui/react
 
 ## Usage
 
+Import `Toaster` and `toast` from the `toast` subpath.
+
 ```tsx
 import { Toaster, toast } from "@keystoneui/react/toast";
 ```
 
 ## Composition
 
-`Toaster` is the rendering surface — mount it once at the root of your app (typically in your root layout). `toast` is an imperative API: call `toast.success(...)`, `toast.error(...)`, etc. from anywhere in your app to enqueue a toast for the mounted `Toaster` to render.
+`Toaster` is the rendering surface. Mount it once at the root of your app, usually in your root layout. `toast` is an imperative API: call `toast.success(...)`, `toast.error(...)` and the other methods from anywhere in your app to queue a toast for the mounted `Toaster` to render.
+
+This snippet shows where each part goes.
 
 ```tsx
 // app/layout.tsx
@@ -54,67 +59,63 @@ toast.success("Saved");
 toast.error("Something went wrong");
 ```
 
+The toast viewport sits above every other layer, including modals and popups. [Popup layering and modality](/docs/concepts/popup-layering) explains the scale.
+
 ## Examples
 
 ### Types
 
-Different toast types for success, error, warning, and info messages:
+Call `toast.success`, `toast.error`, `toast.warning` or `toast.info` for each message type.
 
 <ComponentPreview name="toast-types" />
 
+### With an action
 
-### With Action
-
-Include action buttons inside a toast notification:
+Pass `action` to add a button to the toast.
 
 <ComponentPreview name="toast-with-action" />
 
-
 ### Promise
 
-Automatically handle loading, success, and error states for async operations:
+Pass a promise to `toast.promise` to show its loading, success and error states in one toast.
 
 <ComponentPreview name="toast-promise" />
 
-
 ### Position
 
-Customize where toasts appear on screen:
+Set `position` on `Toaster` to choose where toasts appear on screen.
 
 <ComponentPreview name="toast-position" />
 
+### With a description
 
-### With Description
-
-Toast with title and description:
+Pass a `title` and a `description` for a toast with 2 lines.
 
 <ComponentPreview name="toast-with-description" />
 
-
 ### Custom
 
-Custom styled toast:
+Render your own JSX with `toast.custom`.
 
 <ComponentPreview name="toast-custom" />
 
-
 ### Duration
 
-Toast with custom duration and close:
+Set `duration` to change how long a toast stays, and `closeButton` to show a close button.
 
 <ComponentPreview name="toast-duration" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 ## API reference
 
 ### toast()
 
-Two call forms. A bare message becomes the **description** — the muted single
-line, and the default shape of a toast. Add a `title` for an emphasized line
-above it.
+`toast()` takes 2 call forms: a message, or an object. A bare message becomes
+the **description**: the muted single line, and the default shape of a toast.
+Add a `title` for an emphasized line above it.
 
 ```tsx
 toast("Event has been created.");
@@ -130,42 +131,45 @@ The same two forms work on `toast.success`, `toast.error`, `toast.warning`,
 `toast.info` and `toast.loading`. (Base UI's `toastManager.add({ description })`
 maps to `toast({ description })`.)
 
-**Content** — `ToastInput`
+**Content**: `ToastInput`
 
 | Field | Type | Default | Description |
 | --- | --- | --- | --- |
 | `description` | `ReactNode` | - | The toast message. Filled by a bare `toast("…")` |
 | `title` | `ReactNode` | - | Optional emphasized line above the description |
 
-**Behavior** — `ToastOptions`, accepted in either form
+**Behavior**: `ToastOptions`, accepted in either form
 
 | Field | Type | Default | Description |
 | --- | --- | --- | --- |
 | `action` | `ToastAction` | - | Primary action button. Runs `onClick`, then closes the toast |
 | `cancel` | `ToastAction` | - | Secondary cancel/dismiss button. Runs `onClick`, then closes the toast |
-| `duration` | `number` | Toaster's `duration` | Milliseconds before auto-dismiss. `Infinity` keeps the toast open. Inert on `toast.loading`, which never auto-dismisses — update it by `id` or use `toast.promise` |
+| `duration` | `number` | Toaster's `duration` | Milliseconds before auto-dismiss. `Infinity` keeps the toast open. Inert on `toast.loading`, which never auto-dismisses; update it by `id` or use `toast.promise` |
 | `dismissible` | `boolean` | `true` | Whether the toast can be swiped away or closed. Toasts swipe toward their vertical edge, plus their side for corner positions (`bottom-right` swipes down or right; `top-center` only up) |
 | `closeButton` | `boolean` | Toaster's `closeButton` | Show a close button on this specific toast |
 | `id` | `string` | - | Pass an existing toast ID to update it in place |
 | `onAutoClose` | `() => void` | - | Called when the toast closes on its own: its `duration` ran out, or it was swiped away or closed with Escape. Falls back to `onDismiss` when unset |
-| `onDismiss` | `() => void` | - | Called when the toast is closed by its close, `cancel` or `action` button, or by `toast.dismiss()` |
+| `onDismiss` | `() => void` | - | Called when its close, `cancel` or `action` button or `toast.dismiss()` closes the toast |
 
-Swipe and Escape closes carry no reason from Base UI, so they are treated as
-unattributed: they call `onAutoClose` when it is set and `onDismiss` otherwise.
-Each close calls exactly one of the two.
+Base UI reports no reason for a swipe or Escape close, so Keystone UI treats
+them as unattributed: they call `onAutoClose` when it is set and `onDismiss`
+otherwise. Each close calls exactly one of the two.
 
-Other methods: `toast.promise(promise, { loading, success, error })` — each
-state takes the same message-or-object input; `toast.custom(render, options?)`
-for arbitrary JSX; `toast.dismiss(id?)`, which closes every toast when called
-without an id.
+The other methods are:
 
-Semantic colors for `success`, `error`, `warning` and `info` are always applied
-— there is no opt-in flag. Only the icon is colored; the title and description
+- `toast.promise(promise, { loading, success, error })`: each state takes the
+  same message-or-object input.
+- `toast.custom(render, options?)`: renders arbitrary JSX.
+- `toast.dismiss(id?)`: closes one toast, or every toast when called without an
+  id.
+
+`success`, `error`, `warning` and `info` toasts always get their semantic
+color, with no opt-in flag. Only the icon is colored; the title and description
 stay neutral.
 
-Note: with no `title`, nothing registers as the toast's accessible name, so the
-description is used as an `aria-label` fallback. Passing a `title` labels it
-instead.
+With no `title`, nothing registers as the toast's accessible name, so Keystone
+UI uses the description as an `aria-label` fallback. Passing a `title` labels
+it instead.
 
 ### Toaster
 

@@ -42,7 +42,7 @@ npx @keystoneui/mcp audit --theme
 
 The audit reads the `:root` and `.dark` blocks of the CSS file your `components.json` names, or a path you pass. It reports every text-on-surface pair against WCAG AA (4.5:1) in both modes. Add `--strict` to exit non-zero on a failure, for CI.
 
-The [theme builder](/theme-builder) runs the same checks live in its **Code** panel, so a primary that no foreground can clear shows up before you export it. Keystone UI's default `--destructive-foreground` sits slightly under the line in light mode and well under it in dark mode, and the audit reports that rather than hiding it.
+The [theme builder](/theme-builder) runs the same checks live in its **Code** panel, so a primary that no foreground can clear shows up before you export it. Keystone UI's default theme clears 4.5:1 on every pair in both modes. In dark mode `--destructive-foreground` is a dark red, like the success, warning and info foregrounds, because near-white text on the lighter dark-mode red can't reach 4.5:1.
 
 ## Change a color
 
