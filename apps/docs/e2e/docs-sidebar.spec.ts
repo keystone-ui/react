@@ -83,3 +83,19 @@ test.describe("docs sidebar", () => {
     ).toHaveCount(0);
   });
 });
+
+test.describe("docs sidebar on a phone", () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
+
+  test("the tab switcher shows the tab's icon once", async ({ page }) => {
+    await page.goto("/docs/components/checkbox");
+    await page.getByRole("button", { name: "Open Sidebar" }).click();
+
+    const trigger = page
+      .getByRole("complementary")
+      .getByRole("button", { name: "Components", exact: true });
+    await expect(trigger).toBeVisible();
+    // One icon for the tab, one chevron for the dropdown.
+    await expect(trigger.locator("svg")).toHaveCount(2);
+  });
+});
