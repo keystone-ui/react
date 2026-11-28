@@ -1,20 +1,21 @@
 #!/usr/bin/env node
 
 /**
- * Auto-generates "## Related Blocks" sections inside each component MDX
- * by inverting the "Components Used" list of every block MDX.
+ * Auto-generates "## Related blocks" sections inside each component MDX
+ * by inverting the "Components used" list of every block MDX.
  *
  * Usage:
  *   node scripts/generate-block-backlinks.mjs           # apply
  *   node scripts/generate-block-backlinks.mjs --dry     # report only
+ *   node scripts/generate-block-backlinks.mjs --check   # fail if any page is stale (CI)
  *
  * Idempotent: the injected section is fenced with HTML comments so
  * re-running replaces the contents in-place without disturbing anything
  * else on the page.
  *
  *   {/* backlinks:start *\/}
- *   ## Related Blocks
- *   - [Block](/docs/blocks/block-name) — description
+ *   ## Related blocks
+ *   - [Block](/docs/blocks/block-name): description
  *   {/* backlinks:end *\/}
  */
 
@@ -29,7 +30,8 @@ const FENCE_START = "{/* backlinks:start */}";
 const FENCE_END = "{/* backlinks:end */}";
 
 const args = process.argv.slice(2);
-const dryRun = args.includes("--dry");
+const checkOnly = args.includes("--check");
+const dryRun = checkOnly || args.includes("--dry");
 
 function parseFrontmatter(content) {
   const match = content.match(/^---\n([\s\S]*?)\n---/);
@@ -47,7 +49,7 @@ function parseFrontmatter(content) {
 }
 
 function extractComponentsUsed(content) {
-  const match = content.match(/## Components Used\n([\s\S]*?)(?=\n## |$)/);
+  const match = content.match(/## Components used\n([\s\S]*?)(?=\n## |$)/);
   if (!match) {
     return [];
   }
@@ -62,11 +64,11 @@ function extractComponentsUsed(content) {
 }
 
 function buildBacklinksBlock(blocks) {
-  const lines = [FENCE_START, "", "## Related Blocks", ""];
+  const lines = [FENCE_START, "", "## Related blocks", ""];
   for (const block of blocks) {
     const desc = block.description ?? "";
     if (desc) {
-      lines.push(`- [${block.title}](/docs/blocks/${block.name}) — ${desc}`);
+      lines.push(`- [${block.title}](/docs/blocks/${block.name}): ${desc}`);
     } else {
       lines.push(`- [${block.title}](/docs/blocks/${block.name})`);
     }
@@ -76,7 +78,7 @@ function buildBacklinksBlock(blocks) {
 }
 
 function injectBacklinks(content, block) {
-  // Replace existing fenced block, or insert before ## API Reference.
+  // Replace existing fenced block, or insert before ## API reference.
   const fenceRegex = new RegExp(
     `${escapeRegex(FENCE_START)}[\\s\\S]*?${escapeRegex(FENCE_END)}`
   );
@@ -84,7 +86,7 @@ function injectBacklinks(content, block) {
     return content.replace(fenceRegex, block);
   }
 
-  const apiIdx = content.indexOf("\n## API Reference");
+  const apiIdx = content.indexOf("\n## API reference");
   if (apiIdx !== -1) {
     return `${content.slice(0, apiIdx)}\n\n${block}${content.slice(apiIdx)}`;
   }
@@ -164,6 +166,18 @@ function main() {
   }
 
   console.log("");
+  if (checkOnly) {
+    if (changed > 0) {
+      console.log(
+        `FAIL — ${changed} component MDX file(s) have stale Related blocks. Run \`pnpm docs:backlinks\`.`
+      );
+      process.exit(1);
+    }
+    console.log(
+      `OK — ${componentFiles.length} component MDX backlinks up to date.`
+    );
+    return;
+  }
   console.log(
     `${dryRun ? "Would update" : "Updated"} ${changed} component MDX file(s).`
   );

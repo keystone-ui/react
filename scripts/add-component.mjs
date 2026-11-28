@@ -1276,7 +1276,8 @@ export default function ${pascal}Default() {
 function mdxTemplate(pascal, kebab) {
   return `---
 title: ${pascal}
-description: TODO - Add a description for the ${pascal} component.
+description: "TODO: describe what the ${pascal} component does, in one sentence."
+contentType: Reference
 ---
 
 <ComponentPreview name="${kebab}-default" />
@@ -1321,7 +1322,7 @@ import { ${pascal} } from "@keystoneui/react/${kebab}";
 <${pascal}>${pascal} component</${pascal}>
 \`\`\`
 
-## API Reference
+## API reference
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |

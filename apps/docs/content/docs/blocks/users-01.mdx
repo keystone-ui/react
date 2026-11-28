@@ -1,6 +1,6 @@
 ---
 title: Users 01
-description: The users view from admin-01 on its own — a filterable, sortable users table with row selection, CSV export, loading states and URL-synced filters, and a record view for each user. No sidebar, overview or payments.
+description: The users view from admin-01 on its own. A filterable, sortable users table with row selection, CSV export, loading states and URL-synced filters, and a record view for each user. No sidebar, overview or payments.
 ---
 
 ```bash
@@ -89,7 +89,7 @@ When the server does the filtering, keep everything above the request and swap t
 3. `result.all` no longer holds every matching row. Point `Export` at an endpoint that exports the query, or remove it. If your result has another shape, update the code that reads `all` with it.
 4. The selection bar, and the open-user and inviter lookups in `users-view.tsx`, resolve ids against the rows you hand in, and a selected user, an open user or an inviter may not be on the loaded page. Keep the records you have loaded, or fetch them by id; the selection export needs every selected record, not only the current page.
 
-## Components Used
+## Components used
 
 - [Avatar](/docs/components/avatar)
 - [Badge](/docs/components/badge)
