@@ -47,6 +47,19 @@ import {
 } from "@keystoneui/react/description-list";
 ```
 
+### Stacked records in columns
+
+`orientation="stacked"` puts the term above the details, the shape a read-only detail page needs. The default row layout right-aligns each value against its label and reads as a summary.
+
+Columns are layout, so they go in `className`. `grid` replaces the component's default `flex`, and the stacked row gap stays alongside your own `gap-x-*`:
+
+```tsx
+<DescriptionList
+  className="grid grid-cols-1 gap-x-8 sm:grid-cols-2"
+  orientation="stacked"
+>
+```
+
 ## Composition
 
 ```text
@@ -84,16 +97,7 @@ A description list inside a Card:
 
 ### Record
 
-`orientation="stacked"` puts the term above the details, the shape a read-only detail page needs. The default row layout right-aligns each value against its label and reads as a summary.
-
-Columns are layout, so they go in `className`. `grid` replaces the component's default `flex`, and the stacked row gap stays alongside your own `gap-x-*`:
-
-```tsx
-<DescriptionList
-  className="grid grid-cols-1 gap-x-8 sm:grid-cols-2"
-  orientation="stacked"
->
-```
+A read-only record in 2 stacked columns. [Stacked records in columns](#stacked-records-in-columns) shows the classes:
 
 <ComponentPreview name="description-list-record" />
 

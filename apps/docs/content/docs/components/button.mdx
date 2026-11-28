@@ -46,6 +46,12 @@ import { Button } from "@keystoneui/react/button";
 <Button>Default Button</Button>
 ```
 
+### Links that look like buttons
+
+A link that should look like a button is a plain `<a>` styled with `buttonVariants`. It stays a link: screen readers announce it as a link, and Enter follows it but Space doesn't. `buttonVariants` takes the same `variant`, `size` and `fullWidth` options as `Button`. It's exported from a client module, so call it in a client component (`"use client"`), as the [As link](#as-link) demo does.
+
+Don't render an anchor through `Button` (`nativeButton={false} render={<a href="…" />}`). Base UI gives it `role="button"`, so screen readers announce it as a button, and Space follows it.
+
 ## Examples
 
 ### Variants
@@ -107,11 +113,9 @@ A disabled button shows `opacity-50` and `cursor-not-allowed`, and skips the pre
 
 ### As link
 
-A link that should look like a button is a plain `<a>` styled with `buttonVariants`. It stays a link: screen readers announce it as a link, and Enter follows it but Space doesn't. `buttonVariants` takes the same `variant`, `size` and `fullWidth` options as `Button`. It's exported from a client module, so call it in a client component (`"use client"`), as the demo does:
+A plain `<a>` styled with `buttonVariants`, from a client component. [Links that look like buttons](#links-that-look-like-buttons) explains why it isn't a `Button`:
 
 <ComponentPreview name="button-as-link" />
-
-Don't render an anchor through `Button` (`nativeButton={false} render={<a href="…" />}`). Base UI gives it `role="button"`, so screen readers announce it as a button, and Space follows it.
 
 ### Rounded
 

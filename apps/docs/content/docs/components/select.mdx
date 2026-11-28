@@ -51,24 +51,6 @@ import {
 } from "@keystoneui/react/select";
 ```
 
-## Composition
-
-```text
-Select
-├── SelectTrigger
-│   └── SelectValue
-└── SelectContent
-    └── SelectGroup
-        ├── SelectLabel
-        ├── SelectItem
-        └── SelectSeparator
-```
-
-**Invalid nesting:** `SelectLabel` must sit inside a `SelectGroup`. Placed
-directly in `SelectContent`, Base UI throws `SelectGroupContext is missing`.
-
-## Examples
-
 ### Displaying labels in the trigger
 
 `SelectValue` renders the selected option's `value` by default, such as `"us"`.
@@ -96,6 +78,30 @@ For a computed display, pass a render function as `SelectValue`'s child. The
 ```tsx
 <SelectValue>{(value) => labels[value] ?? "Select…"}</SelectValue>
 ```
+
+### Responsive branches on the server
+
+The [responsive](#responsive) example renders a Select from 768px up and a Drawer on phones. `useMediaQuery` can't see a viewport on the server, so the server HTML is the phone branch. A desktop visitor sees the phone trigger until hydration, then the Select's. Both triggers share one look, so the swap moves nothing and hydration doesn't warn. [Server rendering](/docs/concepts/server-rendering) explains why a media query result can't render on the server.
+
+Each branch keeps its own open state. If the viewport crosses the breakpoint while the Drawer or the Select is open, it closes with its branch: the value is kept and the page isn't left scroll-locked.
+
+## Composition
+
+```text
+Select
+├── SelectTrigger
+│   └── SelectValue
+└── SelectContent
+    └── SelectGroup
+        ├── SelectLabel
+        ├── SelectItem
+        └── SelectSeparator
+```
+
+**Invalid nesting:** `SelectLabel` must sit inside a `SelectGroup`. Placed
+directly in `SelectContent`, Base UI throws `SelectGroupContext is missing`.
+
+## Examples
 
 ### Groups
 
@@ -129,13 +135,9 @@ A **Select all** row above the options shows none, some (a dash) or all. It togg
 
 ### Responsive
 
-A Select from 768px up and a Drawer with a list of options on phones, sharing one value:
+A Select from 768px up and a Drawer with a list of options on phones, sharing one value. [Responsive branches on the server](#responsive-branches-on-the-server) covers hydration and open state:
 
 <ComponentPreview name="select-responsive" />
-
-`useMediaQuery` can't see a viewport on the server, so the server HTML is the phone branch. A desktop visitor sees the phone trigger until hydration, then the Select's. Both triggers share one look, so the swap moves nothing and hydration doesn't warn. [Server rendering](/docs/concepts/server-rendering) explains why a media query result can't render on the server.
-
-Each branch keeps its own open state. If the viewport crosses the breakpoint while the Drawer or the Select is open, it closes with its branch: the value is kept and the page isn't left scroll-locked.
 
 ### Disabled
 
