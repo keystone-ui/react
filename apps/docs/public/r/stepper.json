@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "stepper",
   "title": "Stepper",
-  "description": "Multi-step progress indicator for guiding users through sequential workflows.",
+  "description": "A container that shows one step of a sequential flow at a time and animates between steps.",
   "dependencies": [
     "motion",
     "react-use-measure"

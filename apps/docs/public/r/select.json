@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "select",
   "title": "Select",
-  "description": "A dropdown control for selecting one or more options from a list.",
+  "description": "A control that opens a list of options and sets one or more of them as the value.",
   "dependencies": [
     "@base-ui/react",
     "lucide-react"

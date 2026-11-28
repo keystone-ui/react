@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "resizable",
   "title": "Resizable",
-  "description": "Resizable panel layout that allows users to adjust the size of content areas by dragging handles.",
+  "description": "A group of panels whose sizes change when you drag the handle between them.",
   "dependencies": [
     "react-resizable-panels"
   ],

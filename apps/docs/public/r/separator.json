@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "separator",
   "title": "Separator",
-  "description": "Visual divider for separating content sections horizontally or vertically.",
+  "description": "A horizontal or vertical line that divides sections of content.",
   "files": [
     {
       "path": "packages/ui/src/separator.tsx",
