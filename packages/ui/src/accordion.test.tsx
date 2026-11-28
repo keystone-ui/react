@@ -826,3 +826,37 @@ describe("function className contract", () => {
     expect(last).toEqual(expect.objectContaining({ disabled: true }));
   });
 });
+
+// =============================================================================
+// data-slot
+// =============================================================================
+describe("Accordion data-slot", () => {
+  it("marks every part with a stable data-slot", () => {
+    const { container } = render(
+      <Accordion defaultValue={["item-1"]}>
+        <AccordionItem value="item-1">
+          <AccordionHeader>
+            <AccordionTrigger>Trigger 1</AccordionTrigger>
+          </AccordionHeader>
+          <AccordionPanel>Content 1</AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+    );
+
+    for (const slot of [
+      "accordion",
+      "accordion-item",
+      "accordion-header",
+      "accordion-trigger",
+      "accordion-panel",
+    ]) {
+      expect(container.querySelectorAll(`[data-slot="${slot}"]`)).toHaveLength(
+        1
+      );
+    }
+    expect(screen.getByRole("button", { name: "Trigger 1" })).toHaveAttribute(
+      "data-slot",
+      "accordion-trigger"
+    );
+  });
+});
