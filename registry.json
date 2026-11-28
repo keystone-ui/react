@@ -1317,7 +1317,7 @@
       "name": "switch",
       "type": "registry:ui",
       "title": "Switch",
-      "description": "A toggle that turns a setting on or off, taking effect immediately.",
+      "description": "A toggle that turns a setting on or off.",
       "dependencies": [
         "@base-ui/react"
       ],

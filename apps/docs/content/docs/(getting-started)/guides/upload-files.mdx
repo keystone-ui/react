@@ -26,7 +26,7 @@ Choose one mode per uploader, never both, or every file is sent twice:
 
 <Step>Give the uploader a `name`.</Step>
 
-With `name` set, the chosen files submit with the form, and `required` and a form reset work as they do on a native file input. For a native submit, set `encType="multipart/form-data"` on the `<form>`.
+With `name` set, the chosen files submit with the form, including `required` and reset. For a native submit, set `encType="multipart/form-data"` on the `<form>`.
 
 <Step>Read the files in the submit handler.</Step>
 
@@ -58,7 +58,7 @@ In `onValueChange`, start a request for each file in `details.added`, and keep a
 
 Render each row as `FileUploadItem` with the `status`, `progress` and `error` from your entry. `FileUploadItemProgress` and `FileUploadItemError` then show the progress bar and the error.
 
-<Step>Let the reader retry a failed upload.</Step>
+<Step>Add a retry for failed uploads.</Step>
 
 Number each attempt, and ignore a result from an older attempt after a retry. A retry button inside the row reads `errorId` from `useFileUploadItem()` for its `aria-describedby`.
 
