@@ -1,7 +1,6 @@
 import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
 
-import { DOCS_REDIRECTS } from "./lib/redirects";
 import { securityHeaders } from "./lib/security-headers";
 
 /**
@@ -49,11 +48,46 @@ const config: NextConfig = {
         destination: "/theme-builder",
         permanent: true,
       },
-      ...Object.entries(DOCS_REDIRECTS).map(([source, destination]) => ({
-        source,
-        destination,
+      {
+        source: "/docs/getting-started",
+        destination: "/docs",
         permanent: true,
-      })),
+      },
+      {
+        source: "/docs/getting-started/quick-start",
+        destination: "/docs/installation/quick-start",
+        permanent: true,
+      },
+      {
+        source: "/docs/getting-started/registry",
+        destination: "/docs/installation/registry",
+        permanent: true,
+      },
+      {
+        source: "/docs/getting-started/theming",
+        destination: "/docs/theming",
+        permanent: true,
+      },
+      {
+        source: "/docs/getting-started/colors",
+        destination: "/docs/theming/colors",
+        permanent: true,
+      },
+      {
+        source: "/docs/getting-started/dark-mode",
+        destination: "/docs/theming/dark-mode",
+        permanent: true,
+      },
+      {
+        source: "/docs/getting-started/customization",
+        destination: "/docs/theming/customization",
+        permanent: true,
+      },
+      {
+        source: "/docs/getting-started/llms-txt",
+        destination: "/docs/agents/llms-txt",
+        permanent: true,
+      },
     ]);
   },
   rewrites() {

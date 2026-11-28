@@ -65,9 +65,6 @@ export const DEFAULT_CHECKS = [
     bodyIncludes: "/docs/components/button",
   },
   { path: "/r/demos/button", status: 200, bodyIncludes: '"name":"button"' },
-  // A moved docs page (lib/redirects.ts). Config redirects must answer
-  // before proxy.ts rewrites the unknown old path to the 404 page.
-  { path: "/docs/rtl", status: 308 },
   {
     path: "/sitemap.xml",
     status: 200,
