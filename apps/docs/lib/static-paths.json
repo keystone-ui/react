@@ -122,7 +122,8 @@
     "/docs/reference/colors",
     "/docs/reference/css-utilities",
     "/docs/reference/shadcn-sidebar",
-    "/docs/reference/theme-tokens"
+    "/docs/reference/theme-tokens",
+    "/docs/tutorials/build-a-settings-screen"
   ],
   "blog": [
     "/blog",
@@ -613,6 +614,9 @@
     "tooltip-info-tip",
     "tooltip-sides",
     "tooltip-with-kbd",
+    "tutorial-settings-card",
+    "tutorial-settings-final",
+    "tutorial-settings-form",
     "typography-blockquote",
     "typography-default",
     "typography-h1",

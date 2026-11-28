@@ -2453,6 +2453,21 @@ const loaders: Record<string, ComponentType> = {
       default: hydrated("tooltip-with-kbd", m.default),
     }))
   ),
+  "tutorial-settings-card": dynamic(() =>
+    import("./tutorial/settings-card").then((m) => ({
+      default: hydrated("tutorial-settings-card", m.default),
+    }))
+  ),
+  "tutorial-settings-final": dynamic(() =>
+    import("./tutorial/settings-final").then((m) => ({
+      default: hydrated("tutorial-settings-final", m.default),
+    }))
+  ),
+  "tutorial-settings-form": dynamic(() =>
+    import("./tutorial/settings-form").then((m) => ({
+      default: hydrated("tutorial-settings-form", m.default),
+    }))
+  ),
   "typography-blockquote": dynamic(() =>
     import("./typography/blockquote").then((m) => ({
       default: hydrated("typography-blockquote", m.default),
