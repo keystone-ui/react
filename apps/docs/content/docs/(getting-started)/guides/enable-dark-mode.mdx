@@ -1,0 +1,151 @@
+---
+title: Enable dark mode
+description: Switch every Keystone UI component to dark tokens with a class or next-themes, keep printed pages light, and hide app chrome on paper.
+contentType: How-to
+---
+
+This guide turns on dark mode, makes it follow the system setting, and keeps printed pages readable. Every component adapts on its own once the `dark` class is on an ancestor. [Dark mode](/docs/concepts/dark-mode) explains how the class and the screen-only tokens work.
+
+## Before you start
+
+You need Keystone UI installed with its theme CSS ([Installation](/docs/installation/quick-start)). The theme must include the `.dark` token block and the `dark` custom variant, which the registry style item writes for you.
+
+## Turn on dark mode with a class
+
+Add the `dark` class to your `<html>` element. All components render in dark mode:
+
+```html
+<html class="dark">
+  <body>
+    <!-- All components render in dark mode -->
+  </body>
+</html>
+```
+
+## Follow the system setting with next-themes
+
+In Next.js, [next-themes](https://github.com/pacocoursey/next-themes) toggles the class for you and follows the operating system's setting.
+
+<Steps>
+
+<Step>Install next-themes.</Step>
+
+Add the package to your app:
+
+```bash
+pnpm add next-themes
+```
+
+<Step>Wrap your app in the provider.</Step>
+
+`attribute="class"` makes next-themes write the `dark` class that the theme reads. `suppressHydrationWarning` silences the warning about the class it adds before hydration.
+
+```tsx title="app/layout.tsx"
+import { ThemeProvider } from "next-themes";
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+</Steps>
+
+## Keep printed pages light
+
+The style item at `/r/default.json` and the [theme builder](/theme-builder) export write the flat variant, `@custom-variant dark (&:is(.dark *));`. With it, printing in dark mode produces black rectangles. Scope the variant and the dark tokens to screens:
+
+<Steps>
+
+<Step>Replace the variant.</Step>
+
+Swap the flat `@custom-variant dark` line for the screen-only form:
+
+```css title="globals.css"
+@custom-variant dark {
+  @media screen {
+    &:is(.dark *) {
+      @slot;
+    }
+  }
+}
+```
+
+<Step>Wrap the dark tokens.</Step>
+
+Wrap the body of your `.dark { … }` block in `@media screen { … }`, so paper always gets the light values:
+
+```css title="globals.css"
+.dark {
+  @media screen {
+    --background: oklch(0.141 0.005 285.823);
+    /* …the rest of your dark tokens */
+  }
+}
+```
+
+</Steps>
+
+## Print your own layout
+
+No print rules ship in the library's CSS, so hide the chrome that can't exist on paper yourself. Every part carries a stable `data-slot`; copy the rules that apply to your layout:
+
+```css title="globals.css"
+@media print {
+  /* Chrome that cannot exist on paper. */
+  [data-slot="drawer-content"],
+  [data-slot="modal-popup"],
+  [data-slot="toast-viewport"],
+  [data-slot="selection-bar"],
+  [data-slot="table-pagination"] {
+    display: none;
+  }
+
+  /* A horizontal scroller clips at paper width rather than wrapping, which
+     silently drops columns off the right of the page. */
+  [data-slot="table-container"] {
+    overflow: visible !important;
+  }
+
+  /* Keep a row and its values on one page. */
+  tr {
+    break-inside: avoid;
+  }
+
+  /* Browsers drop backgrounds when printing, and for these the background IS
+     the mark — without this a badge prints as bare text. */
+  [data-slot="badge"],
+  [data-slot="progress-indicator"],
+  [data-slot="avatar-fallback"] {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+```
+
+Pair every `sticky` with `print:static` too. A sticky element resolves against a scrollport that doesn't exist on paper, so it lands over the content it was pinned above.
+
+If you use shadcn's sidebar beside Keystone UI, add `[data-slot="sidebar-container"]` and `[data-slot="sidebar-gap"]` to the hidden list. See [the shadcn sidebar reference](/docs/interop#the-sidebar-item).
+
+## Check that it works
+
+Toggle dark mode from the browser console. Every component should switch between light and dark tokens:
+
+```js
+document.documentElement.classList.toggle("dark");
+```
+
+To check print, open the print preview in dark mode. Filled surfaces should print light. If they print black, the variant or the `.dark` block is still unscoped.
+
+## Related
+
+- [Dark mode](/docs/concepts/dark-mode): how it works and why dark tokens are screen-only
+- [Colours](/docs/reference/colors#dark-mode-palette): the dark palette
+- [Theme tokens](/docs/reference/theme-tokens#dark-values): every dark value

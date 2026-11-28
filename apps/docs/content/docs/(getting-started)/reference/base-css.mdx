@@ -1,0 +1,114 @@
+---
+title: base.css
+description: Everything @keystoneui/react/base.css defines: the hover variant, motion and layering tokens, the radius scale, the control heights and the reduced-motion rule.
+contentType: Reference
+---
+
+`@keystoneui/react/base.css` is the stylesheet every Keystone UI app imports. It holds the tokens and rules the library owns, and no colour values, so it works with any theme. Your own tokens are in the [theme tokens reference](/docs/reference/theme-tokens), and [Theming](/docs/concepts/theming) explains the split.
+
+## Import
+
+Import it after Tailwind CSS:
+
+```css title="globals.css"
+@import "tailwindcss";
+@import "@keystoneui/react/base.css";
+```
+
+A registry install still imports this one file from the npm package. [Add shadcn components](/docs/interop#vendoring-basecss) shows how to copy it into your project instead.
+
+## Hover variant
+
+`base.css` redefines Tailwind's `hover:` variant to apply only under `@media (hover: hover)`, so a tap on a touch screen doesn't leave an element stuck in its hover state.
+
+## Motion tokens
+
+Every transition time in `base.css` derives from a `--duration-*` token. Use them as utilities, such as `duration-(--duration-base)` and `ease-(--ease-ks-out)`, or read them in your own CSS.
+
+| Token | Value |
+| --- | --- |
+| `--ease-ks-out` | `cubic-bezier(0.23, 1, 0.32, 1)` |
+| `--ease-ks-in-out` | `cubic-bezier(0.77, 0, 0.175, 1)` |
+| `--ease-drawer` | `cubic-bezier(0.32, 0.72, 0, 1)` |
+| `--duration-fast` | `125ms` |
+| `--duration-base` | `180ms` |
+| `--duration-slow` | `250ms` |
+| `--duration-drawer` | `400ms` |
+
+[Theming](/docs/concepts/theming#why-library-names-carry-a-ks-prefix) explains the `ks` in the easing names.
+
+## Layering tokens
+
+The z-index scale names each layer. Portaled popups sit above modals and drawers, so a select opened inside a modal overlays the dialog.
+
+| Token | Value | Used by |
+| --- | --- | --- |
+| `--z-sticky` | `30` | Sticky table parts |
+| `--z-drawer` | `40` | Drawer |
+| `--z-modal` | `50` | Modal, AlertDialog |
+| `--z-dropdown` | `60` | DropdownMenu |
+| `--z-popover` | `60` | Popover, Select, Combobox |
+| `--z-tooltip` | `70` | Tooltip |
+| `--z-toast` | `80` | Toast |
+
+A drawer opened from inside a modal renders behind it.
+
+## Radius scale
+
+`--radius` is the only radius token you set; the scale derives from it. Each step is a multiple of `--radius`:
+
+| Utility | Value | At the `0.625rem` default |
+| --- | --- | --- |
+| `rounded-sm` | `--radius * 0.6` | 6px |
+| `rounded-md` | `--radius * 0.8` | 8px |
+| `rounded-lg` | `--radius` | 10px |
+| `rounded-xl` | `--radius * 1.4` | 14px |
+| `rounded-2xl` | `--radius * 1.8` | 18px |
+| `rounded-3xl` | `--radius * 2.2` | 22px |
+| `rounded-4xl` | `--radius * 2.6` | 26px |
+
+[Theming](/docs/concepts/theming#why-the-radius-scale-is-a-ratio) explains the ratios.
+
+## Control heights
+
+Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle and TableHead take their height from 4 variables. The `density/compact` registry item sets a denser ladder.
+
+| Variable | Default | `density/compact` |
+| --- | --- | --- |
+| `--ks-control-xs` | 24px | 24px |
+| `--ks-control-sm` | 32px | 28px |
+| `--ks-control-md` | 40px (`size="default"`) | 32px |
+| `--ks-control-lg` | 48px | 40px |
+
+The variables are defined from `--spacing`, so they follow it if you rescale spacing. Each component carries the default as a fallback, such as `h-(--ks-control-md,2.5rem)`. Keep every value at 24px or more, the WCAG minimum target size. [Customize the theme](/docs/guides/customize-the-theme#change-the-control-density) shows how to change them.
+
+## Info colour registration
+
+`base.css` registers `--color-info` and `--color-info-foreground`, with the light values as a fallback. The [theme tokens reference](/docs/reference/theme-tokens#tailwind-registration) says what to declare in your theme.
+
+## Reduced motion
+
+Under `prefers-reduced-motion: reduce`, `base.css` sets the 4 `--duration-*` tokens to `0.01ms` and cuts every animation and transition to the same time. Spinners (`.animate-spin`) and `[data-indeterminate]` elements keep animating, because a stopped spinner reads as a hung page.
+
+The rule is unlayered and uses no `!important`, so it beats Tailwind's `duration-*` and `animate-*` utilities while any selector of yours can override it. Your own rules that set a duration, such as `html { scroll-behavior: smooth }`, need their own `prefers-reduced-motion` rule.
+
+## Scrollbar classes
+
+`base.css` defines 2 scrollbar classes:
+
+- **`no-scrollbar`**: hides the scrollbar and keeps the element scrollable.
+- **`ks-scrollbar`**: an opt-in thin, token-coloured scrollbar. See [CSS utilities](/docs/reference/css-utilities#ks-scrollbar).
+
+## What base.css leaves to your theme
+
+These live in your theme CSS, not in `base.css`:
+
+- colour tokens, including the 8 `--sidebar-*` tokens
+- the `* { @apply border-border outline-ring/50; }` base rule
+- print rules
+
+## Related
+
+- [Theme tokens](/docs/reference/theme-tokens)
+- [CSS utilities](/docs/reference/css-utilities)
+- [Theming](/docs/concepts/theming)

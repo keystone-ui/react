@@ -1,0 +1,5 @@
+{
+  "title": "Guides",
+  "icon": "Compass",
+  "pages": ["customize-the-theme", "enable-dark-mode"]
+}

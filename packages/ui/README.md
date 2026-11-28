@@ -59,7 +59,7 @@ npx shadcn@latest add https://keystoneui.io/r/themes/slate.json
 ```
 
 Available themes: `default`, `zinc`, `slate`, `stone`, `gray`, `neutral`. See
-[Theming](https://keystoneui.io/docs/theming) to write the tokens by hand.
+[Theme tokens](https://keystoneui.io/docs/reference/theme-tokens) to write the tokens by hand.
 
 Dark mode is class-based. The registry style installs
 `@custom-variant dark (&:is(.dark *))`, so add `class="dark"` to a parent

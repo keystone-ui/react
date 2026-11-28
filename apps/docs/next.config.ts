@@ -65,22 +65,22 @@ const config: NextConfig = {
       },
       {
         source: "/docs/getting-started/theming",
-        destination: "/docs/theming",
+        destination: "/docs/concepts/theming",
         permanent: true,
       },
       {
         source: "/docs/getting-started/colors",
-        destination: "/docs/theming/colors",
+        destination: "/docs/reference/colors",
         permanent: true,
       },
       {
         source: "/docs/getting-started/dark-mode",
-        destination: "/docs/theming/dark-mode",
+        destination: "/docs/guides/enable-dark-mode",
         permanent: true,
       },
       {
         source: "/docs/getting-started/customization",
-        destination: "/docs/theming/customization",
+        destination: "/docs/reference/theme-tokens",
         permanent: true,
       },
       {

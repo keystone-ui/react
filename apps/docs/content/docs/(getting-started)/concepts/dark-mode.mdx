@@ -1,0 +1,43 @@
+---
+title: Dark mode
+description: How Keystone UI switches to dark tokens with one class, why the dark tokens apply to screens only, and why the library ships no print rules.
+contentType: Conceptual
+---
+
+Dark mode in Keystone UI is a second set of token values, switched on by a `dark` class on an ancestor. Components read the same tokens in both modes, and the `.dark` scope changes what those tokens resolve to. A few components add `dark:` utilities on top. To turn it on, follow [Enable dark mode](/docs/guides/enable-dark-mode).
+
+## How the dark class works
+
+Your theme CSS declares a `dark` custom variant. Any element inside a `.dark` ancestor receives the `dark:` styles, and the `.dark` block redefines every colour token with a value tuned for dark surfaces. With the class on `<html>`, the whole page switches at once.
+
+The recommended variant is scoped to screens:
+
+```css
+@custom-variant dark {
+  @media screen {
+    &:is(.dark *) {
+      @slot;
+    }
+  }
+}
+```
+
+The `.dark { … }` token block is wrapped in `@media screen` the same way. The docs site and Storybook use this form.
+
+## Why dark tokens are screen-only
+
+Printing a dark page renders every filled surface as a **solid black rectangle**: summary tiles, badges and chart bands. The tokens on paper are still the dark ones.
+
+One fix is a list of print overrides, one per token. A list can be forgotten by whoever adds the next token, and it's forgotten without any signal, because nobody prints a dark page to check. Scoping the variant can't be forgotten: paper never receives the dark values in the first place.
+
+The registry style item also writes a `@media print` block that moves the light tokens toward ink: pure black on white rather than the near-blacks a screen prefers, and a `--muted-foreground` dark enough to survive a laser printer. With a screen-scoped variant, that block has no dark theme to undo. The [theme tokens reference](/docs/reference/theme-tokens#print-values) lists its values.
+
+## Why the library ships no print rules
+
+Hiding chrome when printing is policy about your layout, so it belongs in your CSS. Library CSS would need `!important` to win, and a consumer's class can't undo `!important`. A blanket `display: none` on dialogs, for example, would break "print the contents of this dialog" with no way out. Every part carries a stable `data-slot` instead, so your print rules can target exactly what applies, as [Enable dark mode](/docs/guides/enable-dark-mode#print-your-own-layout) shows.
+
+## Related
+
+- [Enable dark mode](/docs/guides/enable-dark-mode)
+- [Colours](/docs/reference/colors#dark-mode-palette)
+- [Theming](/docs/concepts/theming)

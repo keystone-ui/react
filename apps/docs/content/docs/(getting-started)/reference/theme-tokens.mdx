@@ -1,21 +1,39 @@
 ---
-title: Customization
-description: Override design tokens to match your brand.
+title: Theme tokens
+description: The complete default Keystone UI theme as CSS, part by part, with every token value in light and dark mode.
+contentType: Reference
 ---
 
-Keystone UI's theme is built entirely on CSS custom properties. You own the theme CSS in your project and can customize every token.
+This page is the complete default theme: the CSS the [registry style item](/docs/installation/registry) writes into your `globals.css`, split into its parts. Copy every part, in order, into your main CSS file for a manual setup, and change any value you like. [Theming](/docs/concepts/theming) explains how the parts fit together.
 
-## Complete Theme Reference
+## Imports
 
-Below is the full theme CSS. Copy this into your `globals.css` after `@import "@keystoneui/react/base.css"` and modify any values.
+The file starts with Tailwind CSS, the library stylesheet and an `@source` directive. Keystone UI components use Tailwind utility classes in their source files, and `@source` tells Tailwind CSS v4 to scan those files so it generates the classes. Without it, component styles are missing.
 
-<Callout type="info">
-  You can also generate this automatically via the [Registry CLI](/docs/installation/registry): `npx shadcn add https://keystoneui.io/r/default.json`
-</Callout>
+```css title="globals.css"
+@import "tailwindcss";
+@import "@keystoneui/react/base.css";
+
+@source "../node_modules/@keystoneui/react/src/**/*.{ts,tsx}";
+```
+
+The `@source` path is relative to your CSS file. In a project with a `src/` directory (`src/app/globals.css`), go up two levels: `@source "../../node_modules/@keystoneui/react/src/**/*.{ts,tsx}";`.
+
+## Dark mode variant
+
+The variant makes `dark:` utilities apply inside any `.dark` ancestor:
 
 ```css title="globals.css"
 @custom-variant dark (&:is(.dark *));
+```
 
+[Enable dark mode](/docs/guides/enable-dark-mode#keep-printed-pages-light) shows the screen-only form, which keeps printed pages light.
+
+## Tailwind registration
+
+The `@theme inline` block maps each token to a Tailwind colour, so `--primary` becomes `bg-primary`, `text-primary` and the rest:
+
+```css title="globals.css"
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -52,8 +70,21 @@ Below is the full theme CSS. Copy this into your `globals.css` after `@import "@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
 }
+```
 
+`--info` and `--info-foreground` are not in this block: `base.css` registers them, with the light values as a fallback. Don't copy that registration into your own `@theme inline`. Declare `--info` in both `:root` and `.dark`, or the info `Alert` and `Toast` keep the light-mode blue in dark mode.
+
+## Light values
+
+The `:root` block holds the light mode values and `--radius`:
+
+```css title="globals.css"
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
@@ -77,7 +108,7 @@ Below is the full theme CSS. Copy this into your `globals.css` after `@import "@
   --popup-ring: oklch(0.92 0.004 286.32 / 0.1);
   --input: oklch(0.92 0.004 286.32);
   --input-bg: transparent;
-  --ring: oklch(0.705 0.015 286.067);
+  --ring: oklch(0.21 0.006 285.885);
   --skeleton-shimmer: oklch(1 0 0 / 0.06);
   --success: oklch(0.627 0.194 149.214);
   --success-foreground: oklch(0.266 0.065 152.934);
@@ -93,9 +124,20 @@ Below is the full theme CSS. Copy this into your `globals.css` after `@import "@
   --sidebar-accent-foreground: var(--accent-foreground);
   --sidebar-border: var(--border);
   --sidebar-ring: var(--ring);
+  --chart-1: oklch(0.55 0.16 258);
+  --chart-2: oklch(0.68 0.14 150);
+  --chart-3: oklch(0.56 0.19 25);
+  --chart-4: oklch(0.72 0.17 338);
+  --chart-5: oklch(0.8 0.16 100);
   --radius: 0.625rem;
 }
+```
 
+## Dark values
+
+The `.dark` block redefines the colours for dark mode. Always define both `:root` and `.dark`, so every pair keeps its contrast in both modes:
+
+```css title="globals.css"
 .dark {
   --background: oklch(0.141 0.005 285.823);
   --foreground: oklch(0.985 0 0);
@@ -119,7 +161,7 @@ Below is the full theme CSS. Copy this into your `globals.css` after `@import "@
   --popup-ring: oklch(1 0 0 / 3%);
   --input: oklch(1 0 0 / 15%);
   --input-bg: oklch(1 0 0 / 5%);
-  --ring: oklch(0.552 0.016 285.938);
+  --ring: oklch(0.92 0.004 286.32);
   --skeleton-shimmer: oklch(1 0 0 / 0.1);
   --success: oklch(0.723 0.19 149.579);
   --success-foreground: oklch(0.266 0.065 152.934);
@@ -128,8 +170,41 @@ Below is the full theme CSS. Copy this into your `globals.css` after `@import "@
   --info: oklch(0.707 0.165 254.624);
   --info-foreground: oklch(0.282 0.091 267.935);
   --sidebar: var(--card);
+  --chart-1: oklch(0.65 0.16 258);
+  --chart-2: oklch(0.74 0.14 150);
+  --chart-3: oklch(0.66 0.18 25);
+  --chart-4: oklch(0.78 0.16 338);
+  --chart-5: oklch(0.9 0.16 100);
 }
+```
 
+## Print values
+
+The style item also writes a `@media print` block that moves the light tokens toward ink: pure black on white, and a `--muted-foreground` dark enough for a laser printer. [Dark mode](/docs/concepts/dark-mode#why-dark-tokens-are-screen-only) explains why print gets light tokens.
+
+```css title="globals.css"
+@media print {
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+    --card: #ffffff;
+    --card-foreground: #000000;
+    --popover: #ffffff;
+    --popover-foreground: #000000;
+    --muted: #f4f4f5;
+    --muted-foreground: #3f3f46;
+    --border: #d4d4d8;
+    --border-muted: #e4e4e7;
+    --input: #d4d4d8;
+  }
+}
+```
+
+## Base layer
+
+The base layer sets the default border and outline colours, the page colours and a thin scrollbar on code blocks:
+
+```css title="globals.css"
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -155,169 +230,21 @@ Below is the full theme CSS. Copy this into your `globals.css` after `@import "@
 }
 ```
 
-<Callout type="info">
-  Always define both `:root` (light) and `.dark` (dark) values to maintain
-  proper contrast in both modes.
-</Callout>
-
 <Callout type="warn">
-  Keep the `*` rule in `@layer base`: components that draw a border without a
-  colour depend on it, and `base.css` does not ship it. See [Manual
-  Setup](/docs/installation/quick-start#manual-setup).
+  Keep the `* { @apply border-border outline-ring/50; }` rule in `@layer base`.
+  Several components, such as Drawer, Kbd and Table rows, draw a border without
+  naming a colour and rely on it. `@keystoneui/react/base.css` does not ship it
+  (the default registry style at `/r/default.json` does), so without it those
+  borders take the text colour.
 </Callout>
 
-## Control density
+## Chart tokens
 
-Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle and TableHead
-take their height from four variables in `base.css`. Changing them moves every
-control together, so a toolbar left at its defaults still lines up:
-
-| Variable | Default | `density/compact` |
-| --- | --- | --- |
-| `--ks-control-xs` | 24px | 24px |
-| `--ks-control-sm` | 32px | 28px |
-| `--ks-control-md` | 40px (`size="default"`) | 32px |
-| `--ks-control-lg` | 48px | 40px |
-
-Install the compact ladder app-wide:
-
-```bash
-npx shadcn@latest add https://keystoneui.io/r/density/compact.json
-```
-
-Or set the variables on one container — a dense data screen inside an
-otherwise default app:
-
-```tsx
-<section className="[--ks-control-sm:1.75rem] [--ks-control-md:2rem]">
-  {/* every control in here is one step denser */}
-</section>
-```
-
-The variables are defined from `--spacing`, so they follow it if you rescale
-spacing. Keep every value at 24px or more — the WCAG minimum target size.
-
-## Corner radius
-
-`--radius` is the only radius token you set. The scale Keystone derives from it
-— `rounded-sm` through `rounded-4xl` — lives in `base.css`, so it arrives with
-the import and tracks the package:
-
-| Utility | Value | At the `0.625rem` default |
-| --- | --- | --- |
-| `rounded-sm` | `--radius * 0.6` | 6px |
-| `rounded-md` | `--radius * 0.8` | 8px |
-| `rounded-lg` | `--radius` | 10px |
-| `rounded-xl` | `--radius * 1.4` | 14px |
-| `rounded-2xl` | `--radius * 1.8` | 18px |
-| `rounded-3xl` | `--radius * 2.2` | 22px |
-| `rounded-4xl` | `--radius * 2.6` | 26px |
-
-The steps are ratios, so the scale stays proportional at any base and
-`--radius: 0` gives genuinely square corners.
-
-To use a different derivation, declare your own `@theme inline` **after** the
-import — the later block wins:
-
-```css
-@import "@keystoneui/react/base.css";
-
-@theme inline {
-  --radius-xl: calc(var(--radius) * 2);
-}
-```
-
-<Callout type="warn">
-  That is also the failure mode to avoid: a block copied from these docs into
-  your own CSS shadows the library's silently, and freezes your scale at the
-  version you copied it from. Declare only the tiers you mean to change.
-</Callout>
-
-## Adding New Colors
-
-Define variables in `:root` / `.dark`, then register them in the `@theme inline` block:
-
-```css title="globals.css"
-:root {
-  --warning: oklch(0.84 0.16 84);
-  --warning-foreground: oklch(0.28 0.07 46);
-}
-
-.dark {
-  --warning: oklch(0.41 0.11 46);
-  --warning-foreground: oklch(0.99 0.02 95);
-}
-
-@theme inline {
-  --color-warning: var(--warning);
-  --color-warning-foreground: var(--warning-foreground);
-}
-```
-
-Use `bg-warning text-warning-foreground` in your components.
-
-## Using OKLCH
-
-We recommend using [oklch.com](https://oklch.com/) to pick colors. OKLCH provides:
-
-- **Perceptual uniformity** -- Equal changes in L (lightness) look equally different
-- **Wide gamut** -- Access to colors outside sRGB on modern displays
-- **Intuitive** -- L (lightness 0-1), C (chroma 0-0.4), H (hue 0-360)
-
-```css
-/* OKLCH format: oklch(lightness chroma hue) */
---primary: oklch(0.55 0.2 250); /* Medium blue */
---primary: oklch(0.55 0.25 150); /* Vivid green */
---primary: oklch(0.55 0.2 30); /* Warm orange */
-```
+`--chart-1` to `--chart-5` are 5 categorical slots for chart series, the same hues in every theme. They're separated by lightness rather than hue alone, so they stay distinct under colour-vision deficiency.
 
 ## Fonts
 
-Keystone UI uses the `--font-sans` CSS variable for the base font family. You need to load the font and define this variable in your theme.
-
-### Next.js (recommended)
-
-Use `next/font/google` for automatic self-hosting with zero external requests:
-
-```tsx title="app/layout.tsx"
-import { Inter } from "next/font/google";
-
-const font = Inter({ subsets: ["latin"], variable: "--font-inter" });
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en" className={font.variable}>
-      <body>{children}</body>
-    </html>
-  );
-}
-```
-
-Then set `--font-sans` in your `globals.css`:
-
-```css title="globals.css"
-:root {
-  --font-sans: var(--font-inter);
-}
-```
-
-### Other frameworks
-
-Add a Google Fonts link to your `<head>` and set the font family directly:
-
-```html
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-```
-
-```css title="globals.css"
-:root {
-  --font-sans: "Inter", sans-serif;
-}
-```
-
-### Available fonts
-
-The [Theme Builder](/theme-builder) lets you preview these fonts:
+Keystone UI reads the base font family from `--font-sans`. Load the font and set the variable in your theme, as [Customize the theme](/docs/guides/customize-the-theme#set-the-font) shows. The [theme builder](/theme-builder) previews these fonts:
 
 | Font | next/font import | CSS variable |
 | --- | --- | --- |
@@ -327,3 +254,9 @@ The [Theme Builder](/theme-builder) lets you preview these fonts:
 | Figtree | `Figtree` | `--font-figtree` |
 | Public Sans | `Public_Sans` | `--font-public-sans` |
 | JetBrains Mono | `JetBrains_Mono` | `--font-jetbrains-mono` |
+
+## Related
+
+- [Colours](/docs/reference/colors): what each token is for
+- [base.css reference](/docs/reference/base-css): the tokens the library owns
+- [Customize the theme](/docs/guides/customize-the-theme)

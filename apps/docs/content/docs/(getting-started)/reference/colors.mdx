@@ -1,0 +1,82 @@
+---
+title: Colours
+description: The semantic colour tokens in Keystone UI, the Tailwind classes they generate, and the default light and dark palettes.
+contentType: Reference
+---
+
+Keystone UI colours every component from semantic tokens written in OKLCH. This page lists what each token is for and the classes it generates. The values themselves are in the [theme tokens reference](/docs/reference/theme-tokens), and [Theming](/docs/concepts/theming#why-oklch) explains the choice of OKLCH.
+
+## Semantic tokens
+
+Every colour token comes in a background and foreground pair. The background token has no suffix:
+
+| Token | Background class | Text class | Purpose |
+| --- | --- | --- | --- |
+| `primary` | `bg-primary` | `text-primary-foreground` | Primary actions, CTAs |
+| `secondary` | `bg-secondary` | `text-secondary-foreground` | Secondary actions |
+| `destructive` | `bg-destructive` | `text-destructive-foreground` | Danger, delete actions |
+| `muted` | `bg-muted` | `text-muted-foreground` | Subtle backgrounds, secondary text |
+| `accent` | `bg-accent` | `text-accent-foreground` | Hover states, highlights |
+| `card` | `bg-card` | `text-card-foreground` | Card surfaces |
+| `popover` | `bg-popover` | `text-popover-foreground` | Popup surfaces |
+
+## Border tokens
+
+These tokens colour borders, form controls and focus rings:
+
+| Token | Class | Purpose |
+| --- | --- | --- |
+| `border` | `border-border` | Structural borders (cards, buttons) |
+| `border-muted` | `border-border-muted` | Subtle borders (popup separators) |
+| `input` | `border-input` | Form control borders |
+| `ring` | `ring-ring` | Focus ring colour |
+
+## Usage examples
+
+Components read the tokens for you, and your own markup uses the same classes:
+
+```tsx
+// Primary action button
+<Button variant="default">Save</Button> // Uses bg-primary text-primary-foreground
+
+// Card with muted description
+<Card>
+  <CardTitle>Title</CardTitle>
+  <p className="text-muted-foreground">Description text</p>
+</Card>
+
+// Custom usage with tokens
+<div className="rounded-lg bg-muted p-4 text-muted-foreground">
+  Subtle info box
+</div>
+```
+
+## Light mode palette
+
+In light mode, the palette is based on the Zinc scale:
+
+- **Background**: white (`oklch(1 0 0)`)
+- **Foreground**: Zinc-950 (`oklch(0.141 0.005 285.823)`)
+- **Primary**: Zinc-900 with a Zinc-50 foreground
+- **Borders**: Zinc-200
+
+## Dark mode palette
+
+In dark mode, the palette inverts:
+
+- **Background**: Zinc-950 (`oklch(0.141 0.005 285.823)`)
+- **Foreground**: Zinc-50 (`oklch(0.985 0 0)`)
+- **Primary**: Zinc-200 with a Zinc-900 foreground
+- **Borders**: white at 10% opacity
+
+3 tokens take a different form in dark mode:
+
+- **Borders** use `oklch(1 0 0 / 10%)`, white at 10% opacity.
+- **Input backgrounds** use `oklch(1 0 0 / 5%)`, which lifts a field off the surface.
+- **Secondary hover** uses `color-mix()` with white instead of black.
+
+## Related
+
+- [Theme tokens](/docs/reference/theme-tokens): every value in both modes
+- [Customize the theme](/docs/guides/customize-the-theme#change-a-colour)
+- [Dark mode](/docs/concepts/dark-mode)

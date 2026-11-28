@@ -1,0 +1,82 @@
+---
+title: Theming
+description: How Keystone UI splits styling between a stylesheet the library ships and design tokens your project owns, and the principles behind the tokens.
+contentType: Conceptual
+---
+
+Keystone UI styles every component from semantic tokens: CSS custom properties that Tailwind CSS v4 turns into utilities such as `bg-primary`. The library ships the mechanism, and you own the values. The theme lives in your project's CSS, not in a package dependency, so you can change any token without waiting for a release.
+
+## Two layers: library CSS and your theme
+
+The styling system has two layers. The first comes from the package and is the same in every app. The second is yours.
+
+### `@keystoneui/react/base.css` is required
+
+`base.css` is the component runtime CSS, and every project imports it. It holds hover gating, animations, the drawer and tabs transitions, the motion and layering tokens, the radius scale, the control heights and a few structural utilities. It declares no colour tokens, so it works with any theme. The [base.css reference](/docs/reference/base-css) lists what it defines.
+
+Import it after Tailwind CSS in your main stylesheet:
+
+```css title="globals.css"
+@import "tailwindcss";
+@import "@keystoneui/react/base.css";
+```
+
+### Theme tokens are yours
+
+The colour variables, the Tailwind registration, the dark mode variant and the base layer defaults live in your own CSS file. The [registry](/docs/installation/registry) writes them for you, or you can copy them from the [theme tokens reference](/docs/reference/theme-tokens).
+
+A complete theme has 5 parts:
+
+- `@custom-variant dark (&:is(.dark *))`: class-based dark mode
+- `@theme inline { ... }`: maps the CSS variables to Tailwind utilities
+- `:root { ... }`: the light mode values
+- `.dark { ... }`: the dark mode values
+- `@layer base { ... }`: global defaults, such as the border colour and the body background
+
+## Design principles
+
+The tokens follow 5 rules:
+
+- **Semantic over literal**: use `bg-primary`, not `bg-zinc-900`, so a theme change reaches every component.
+- **OKLCH colour space**: perceptually uniform, for consistent contrast. See [why OKLCH](#why-oklch).
+- **Background and foreground pairs**: every colour has a matching foreground token. The [colours reference](/docs/reference/colors) lists the pairs.
+- **CSS first**: there's no JavaScript theme runtime, only CSS custom properties.
+- **Consumer owned**: you define your theme tokens, and `base.css` handles the rest.
+
+## Why OKLCH
+
+Keystone UI writes every colour token in the [OKLCH colour space](https://oklch.com/). In OKLCH, equal changes in a value produce equal perceived differences, which suits a design system. It has 3 properties that matter when you pick colours:
+
+- **Perceptual uniformity**: equal changes in L (lightness) look equally different.
+- **Wide gamut**: it reaches colours outside sRGB on displays that support them.
+- **Readable values**: L is lightness from 0 to 1, C is chroma from 0 to 0.4, and H is hue from 0 to 360.
+
+A value reads as `oklch(lightness chroma hue)`. Holding lightness and chroma steady while you move the hue gives colours of similar weight:
+
+```css
+/* OKLCH format: oklch(lightness chroma hue) */
+--primary: oklch(0.55 0.2 250); /* Medium blue */
+--primary: oklch(0.55 0.25 150); /* Vivid green */
+--primary: oklch(0.55 0.2 30); /* Warm orange */
+```
+
+We recommend [oklch.com](https://oklch.com/) to pick values.
+
+## Why the radius scale is a ratio
+
+`--radius` is the only radius token you set. The scale Keystone UI derives from it, `rounded-sm` through `rounded-4xl`, lives in `base.css`, so it arrives with the import and tracks the package. The [base.css reference](/docs/reference/base-css#radius-scale) lists the steps.
+
+The steps are multiples of `--radius`, the same scale shadcn uses, so a mixed project has one set of corners. Ratios keep the scale proportional at any base, and `--radius: 0` gives square corners. The scale used to add and subtract pixel offsets instead. Those stopped being proportional as soon as the base moved: at `--radius: 0` the largest step stayed at 16px and the smallest went negative. At the `0.625rem` default the two spellings agree, so nothing moved for themes that kept the default radius. A `--radius` near 0 or far above the default now scales instead of clamping.
+
+Tailwind CSS takes the later `@theme inline` block whole. A copy of the scale in your own CSS therefore shadows the library's without any warning, and it freezes your scale at the version you copied it from. Declare only the tiers you mean to change, as [Customize the theme](/docs/guides/customize-the-theme#change-the-corner-radius) shows.
+
+## Why library names carry a `ks` prefix
+
+The easing tokens are `--ease-ks-out` and `--ease-ks-in-out`, not `--ease-out` and `--ease-in-out`. A `--ease-out` entry in `base.css` would make Tailwind CSS emit an `ease-out` utility that replaces the framework's own in every consumer app, not only inside the library.
+
+## Related
+
+- [Customize the theme](/docs/guides/customize-the-theme)
+- [Theme tokens](/docs/reference/theme-tokens)
+- [base.css reference](/docs/reference/base-css)
+- [Dark mode](/docs/concepts/dark-mode)
