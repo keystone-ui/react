@@ -44,13 +44,13 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@keystoneu
 
 ```tsx
 <ResizablePanelGroup className="max-w-md rounded-lg border">
-  <ResizablePanel defaultSize={50}>
+  <ResizablePanel defaultSize="50%">
     <div className="flex h-32 items-center justify-center p-4">
       <span className="font-semibold text-sm">Panel A</span>
     </div>
   </ResizablePanel>
   <ResizableHandle />
-  <ResizablePanel defaultSize={50}>
+  <ResizablePanel defaultSize="50%">
     <div className="flex h-32 items-center justify-center p-4">
       <span className="font-semibold text-sm">Panel B</span>
     </div>
@@ -108,15 +108,15 @@ Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `direction` | `"horizontal" \| "vertical"` | - | The direction of the panel group |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Lay the panels out in a row or a column |
 
 ### ResizablePanel
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `defaultSize` | `number` | - | Initial size as a percentage |
-| `minSize` | `number` | - | Minimum size as a percentage |
-| `maxSize` | `number` | - | Maximum size as a percentage |
+| `defaultSize` | `number \| string` | - | Initial size. A number is pixels; a string without a unit, or with `%`, is a percentage (`"25%"`); `px`, `rem`, `em`, `vh` and `vw` also work |
+| `minSize` | `number \| string` | - | Minimum size, in the same units as `defaultSize` |
+| `maxSize` | `number \| string` | - | Maximum size, in the same units as `defaultSize` |
 
 ### ResizableHandle
 
