@@ -1,0 +1,144 @@
+---
+title: Build a settings screen
+description: Build a settings screen with a profile form and a table of active sessions, from a new Next.js app to dark mode.
+contentType: Tutorial
+---
+
+In this tutorial, you'll build the settings screen of a web app. It has a profile form with a notifications switch, a table of the devices signed in to the account, and a dark theme. You'll start from a new Next.js app and add one piece at a time, checking the result in your browser after every step.
+
+## What you'll build
+
+<ComponentPreview name="tutorial-settings-final" hideCode />
+
+## Before you start
+
+You need:
+
+- Node.js 22 or later
+- pnpm
+- A terminal and a code editor
+
+You don't need to know Keystone UI or Tailwind CSS. Each step tells you what to type and what you should see.
+
+<Steps>
+
+<Step>Create a Next.js app.</Step>
+
+This command creates an app called `my-settings`. The `--yes` flag accepts the default setup, which includes TypeScript, Tailwind CSS and the App Router.
+
+```bash
+pnpm create next-app@latest my-settings --yes
+```
+
+Move into the new folder, add Keystone UI, and start the development server:
+
+```bash
+cd my-settings
+pnpm add @keystoneui/react@beta
+pnpm dev
+```
+
+The `@beta` tag matters: Keystone UI is in beta, and the package name without a tag can install an older release.
+
+Open `http://localhost:3000` in your browser. You should see the Next.js welcome page. Leave the server running, and open a second terminal in the `my-settings` folder for the commands that follow. The page reloads by itself after every change you save.
+
+<Step>Add the theme CSS.</Step>
+
+Keystone UI components are styled with Tailwind CSS classes and a set of color tokens. In this step you'll add both to `app/globals.css`, using the shadcn command-line tool (CLI) to write the tokens.
+
+The shadcn CLI needs a `components.json` file that says where your stylesheet lives. Create it in the root of the app:
+
+```json title="components.json"
+{
+  "style": "new-york",
+  "rsc": true,
+  "tailwind": { "css": "app/globals.css", "baseColor": "neutral" },
+  "aliases": { "components": "@/components", "utils": "@/lib/utils" }
+}
+```
+
+Next, replace everything in `app/globals.css` with the lines below. The `@source` line tells Tailwind CSS to scan the Keystone UI source files, so it generates the classes the components use:
+
+```css title="app/globals.css"
+@import "tailwindcss";
+
+@source "../node_modules/@keystoneui/react/src/**/*.{ts,tsx}";
+```
+
+Then run the CLI with the address of the Keystone UI theme:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/default.json
+```
+
+The CLI asks whether to install a new style. Type `y` and press Enter. It adds the Keystone UI base CSS, the light and dark color tokens, and a few base styles to `app/globals.css`.
+
+You should see the welcome page again, now in your system's sans-serif font. The theme's colors show up on the components you add in the next step.
+
+<Step>Render a card.</Step>
+
+A `Card` groups related settings under a title. Replace everything in `app/page.tsx` with this code:
+
+<ComponentSource name="tutorial-settings-card" />
+
+Each component has its own import path, such as `@keystoneui/react/card`. The `"use client"` line at the top lets the form you'll add next handle events in the browser.
+
+You should now see a card with the title **Profile** and a line of description below it.
+
+<Step>Build the profile form.</Step>
+
+The form goes in `CardContent`, under the card header. Each `Field` pairs a `FieldLabel` with its control, and `FieldGroup` spaces the fields evenly. The new code adds:
+
+- a **Name** and an **Email** `Input`
+- a `Switch` for email notifications, in a horizontal `Field` that places it beside its label and description
+- a **Cancel** and a **Save** button
+
+Replace everything in `app/page.tsx` with this code:
+
+<ComponentSource name="tutorial-settings-form" />
+
+**Cancel** comes before **Save** because Keystone UI puts the primary action last in every action row, so it's always the rightmost button, as in the [Settings block](/docs/blocks/settings-01). The `onSubmit` handler stops the page from reloading when you press **Save**; your own save logic goes there later.
+
+You should now see the form inside the card. Click **Email notifications** to turn the switch off and on.
+
+<Step>Add a table of active sessions.</Step>
+
+A second card lists the devices signed in to the account. The `Table` goes inside `CardContent`, so its columns line up with the card title. The `sessions` array above `Page` holds the rows.
+
+Replace everything in `app/page.tsx` with this code:
+
+<ComponentSource name="tutorial-settings-final" />
+
+You should now see two cards: the profile form, and a table with 3 sessions under it.
+
+<Step>Turn on dark mode.</Step>
+
+The theme you added defines a dark value for every color token. Those values apply to everything inside an element with the `dark` class. Open `app/layout.tsx` and add `dark` to the classes on the `<html>` element:
+
+```tsx title="app/layout.tsx" {3}
+<html
+  lang="en"
+  className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
+>
+```
+
+You should now see the whole screen in dark colors: the page, both cards, the inputs, the switch and the table.
+
+</Steps>
+
+## What you learned
+
+- Install Keystone UI and its theme in a Next.js app
+- Import each component from its own path, such as `@keystoneui/react/card`
+- Group related settings in a `Card` with a header and content
+- Build a form from `Field`, `FieldLabel`, `Input` and `Switch`, with the primary button last
+- Put a `Table` inside `CardContent` so it lines up with the card title
+- Turn on dark mode with one class on `<html>`
+
+## Next steps
+
+- [Dark mode](/docs/theming/dark-mode): follow the system setting or add a theme toggle
+- [Theming](/docs/theming): change the colors and tokens
+- [Field](/docs/components/field): validation errors, descriptions and more layouts
+- [Table](/docs/components/table): sorting, pagination and empty states
+- [Settings block](/docs/blocks/settings-01): a complete settings page you can install

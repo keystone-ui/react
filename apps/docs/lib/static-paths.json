@@ -102,6 +102,7 @@
     "/docs/theming/customization",
     "/docs/theming/dark-mode",
     "/docs/theming/utilities",
+    "/docs/tutorials/build-a-settings-screen",
     "/docs/upgrading"
   ],
   "blog": [
@@ -593,6 +594,9 @@
     "tooltip-info-tip",
     "tooltip-sides",
     "tooltip-with-kbd",
+    "tutorial-settings-card",
+    "tutorial-settings-final",
+    "tutorial-settings-form",
     "typography-blockquote",
     "typography-default",
     "typography-h1",
