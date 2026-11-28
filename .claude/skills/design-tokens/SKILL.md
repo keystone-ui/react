@@ -24,7 +24,7 @@ Component runtime CSS (animations, transitions, hover gating) is in `packages/ui
 
 Use `text-success` / `bg-success` and `text-warning` / `bg-warning` rather than raw palette colors, and never add a `dark:` override — both tokens re-step for a dark surface already.
 
-`--success-foreground` and `--warning-foreground` are both **dark**, breaking the pattern where every other `*-foreground` is near-white. Near-white measures 3.10:1 on the success green and 1.97:1 on the warning amber — both WCAG failures. Dark text gives 4.60 and 6.97. Do not "fix" these for symmetry; `apps/docs/tests/palette.test.ts` measures them.
+`--success-foreground` and `--warning-foreground` are both **dark**, unlike the near-white foregrounds of the neutral and primary surfaces. Near-white measures 3.10:1 on the success green and 1.97:1 on the warning amber — both WCAG failures. Dark text gives 4.60 and 6.97. Do not "fix" these for symmetry; `apps/docs/tests/palette.test.ts` measures them.
 
 `--destructive-foreground` on `--destructive` clears AA as painted: 4.85:1 light (near-white on `oklch(0.54 0.245 27.325)`) and 5.58:1 dark, where the foreground is a **dark** red (`oklch(0.258 0.092 26.042)`) like success, warning and info, because no lightness of the dark-mode red takes near-white to 4.5:1 while `text-destructive` stays 4.5:1 on the dark page. The light red lies outside sRGB, so `palette.test.ts` measures it clipped as a browser paints it (`renderedContrast`), and checks the `hover:bg-destructive/90` label and `text-destructive` on every surface too. Do not lighten the light red back to Tailwind `red-600` (0.577): it paints at 4.36:1.
 

@@ -209,8 +209,9 @@ describe("status tones", () => {
     }
   );
 
-  // The label on every destructive Button, and the check mark of an invalid
-  // checked Checkbox/Radio. Measured as painted: light 4.85 (4.54 under
+  // The label on every destructive Button (and, in light mode, the check mark
+  // of an invalid checked Checkbox/Radio: in dark mode their fill is primary,
+  // a separate bug). Measured as painted: light 4.85 (4.54 under
   // hover), dark 5.58 (4.63 under hover). Before: light 4.36 as painted (4.47
   // as specified, since the old red lies outside sRGB) and dark 2.65, both
   // under AA. See destructiveFailures for everything it checks.
@@ -221,8 +222,8 @@ describe("status tones", () => {
     }
   );
 
-  // The reason --warning-foreground is dark rather than near-white like every
-  // other *-foreground. Near-white on amber-500 is about 1.9:1. The sample is
+  // The reason --warning-foreground is dark rather than near-white like the
+  // neutral and primary foregrounds. Near-white on amber-500 is about 1.9:1. The sample is
   // light mode's destructive-foreground in both modes: dark mode's is a dark
   // red, for the same reason this one is dark.
   it.each(MODES)("would fail with a near-white warning text in %s", (mode) => {
