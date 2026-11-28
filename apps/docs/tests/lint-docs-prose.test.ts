@@ -104,6 +104,20 @@ describe("lint-docs-prose rules", () => {
     expect(rules(good)).not.toContain(rule);
   });
 
+  it.each([
+    ["em-dash", "- [Button](/docs/components/button) - A button."],
+    ["em-dash", "Use it - [see the guide](/docs/x)."],
+    ["rhetorical-question", "Ready for [the next step](/docs/next)? Go."],
+  ])("%s: still flags %j beside a masked link", (rule, bad) => {
+    expect(rules(bad)).toContain(rule);
+  });
+
+  it("does not read link syntax inside inline code as a link", () => {
+    expect(rules("Write `[here](/docs)` in the source.")).not.toContain(
+      "anchor-text"
+    );
+  });
+
   it("counts each occurrence on a line", () => {
     const found = lint("One — two — three.");
     expect(found.filter((f) => f.rule === "em-dash")).toHaveLength(2);

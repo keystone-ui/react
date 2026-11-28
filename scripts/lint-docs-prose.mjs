@@ -148,13 +148,16 @@ const AUTOLINK_RE = /<(https?:\/\/[^>\s]+)>/g;
 const BARE_URL_RE = /\bhttps?:\/\/[^\s)>\]]+/g;
 
 const EM_DASH_RE = /—| -- /g;
-// A hyphen with a space on each side, unless digits sit on both sides (1 - 2).
-const SPACED_HYPHEN_RE = /(?<=\S) - (?=\S)/g;
+// A hyphen with a space on each side and text somewhere before and after it
+// on the line (masked links leave spaces beside it), unless digits sit
+// directly on both sides (1 - 2).
+const SPACED_HYPHEN_RE = / - /g;
 const ELLIPSIS_RE = /\.{3}/g;
 const BANNED_RE = /\b(?:easy|simple|simply|quick|just|very|really)\b/gi;
 const THE_USER_RE = /\b(?:the user|one can)\b/gi;
 const UNIT_RE = /\b\d+(?:KB|MB|GB|ms)\b/g;
-const QUESTION_RE = /[^\s?]\?(?=[\s"')*_]|$)/g;
+// A "?" closing a sentence. The text before it may be a masked link.
+const QUESTION_RE = /(?<!\?)\?(?=[\s"')*_]|$)/g;
 const BAD_ANCHOR_RE = /^(?:here|link|this link)$/i;
 const WORD_RE = /[A-Za-z][A-Za-z0-9'’.-]*[A-Za-z0-9]|[A-Za-z]/g;
 const CLAUSE_BREAK_RE = /[:—]\s*$/;
@@ -359,9 +362,13 @@ function checkEmDash(text, line, out) {
     );
   });
   each(SPACED_HYPHEN_RE, text, (m) => {
-    const before = text[m.index - 1];
-    const after = text[m.index + 3];
-    if (/\d/.test(before) && /\d/.test(after)) {
+    const before = text[m.index - 1] ?? "";
+    const after = text[m.index + 3] ?? "";
+    const isRange = /\d/.test(before) && /\d/.test(after);
+    const isolated =
+      text.slice(0, m.index).trim() === "" ||
+      text.slice(m.index + 3).trim() === "";
+    if (isRange || isolated) {
       return;
     }
     out.push(
@@ -428,11 +435,14 @@ function checkUnits(text, line, out) {
 
 function checkQuestions(text, line, out, what) {
   each(QUESTION_RE, text, (m) => {
+    if (text.slice(0, m.index).trim() === "") {
+      return;
+    }
     out.push(
       finding(
         line,
         "rhetorical-question",
-        m.index + 1,
+        m.index,
         "?",
         `${what} ends in "?"; state the answer instead`
       )
@@ -441,7 +451,8 @@ function checkQuestions(text, line, out, what) {
 }
 
 function checkAnchors(text, raw, line, out) {
-  each(LINK_RE, raw, (m) => {
+  // Link syntax inside inline code is code, not a link.
+  each(LINK_RE, maskAll(raw, CODE_SPAN_RE), (m) => {
     if (!m[1] && BAD_ANCHOR_RE.test(m[2].trim())) {
       out.push(
         finding(
