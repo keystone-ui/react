@@ -12,7 +12,7 @@ The styling system has two layers. The first comes from the package and is the s
 
 ### `@keystoneui/react/base.css` is required
 
-`base.css` is the component runtime CSS, and every project imports it. It holds hover gating, animations, the drawer and tabs transitions, the motion and layering tokens, the radius scale, the control heights and a few structural utilities. It declares no colour tokens, so it works with any theme. The [base.css reference](/docs/reference/base-css) lists what it defines.
+`base.css` is the component runtime CSS, and every project imports it. It holds hover gating, animations, the drawer and tabs transitions, the motion and layering tokens, the radius scale, the control heights and a few structural utilities. It declares no color tokens, so it works with any theme. The [base.css reference](/docs/reference/base-css) lists what it defines.
 
 Import it after Tailwind CSS in your main stylesheet:
 
@@ -23,7 +23,7 @@ Import it after Tailwind CSS in your main stylesheet:
 
 ### Theme tokens are yours
 
-The colour variables, the Tailwind registration, the dark mode variant and the base layer defaults live in your own CSS file. The [registry](/docs/guides/install-from-the-registry) writes them for you, or you can copy them from the [theme tokens reference](/docs/reference/theme-tokens).
+The color variables, the Tailwind registration, the dark mode variant and the base layer defaults live in your own CSS file. The [registry](/docs/guides/install-from-the-registry) writes them for you, or you can copy them from the [theme tokens reference](/docs/reference/theme-tokens).
 
 A complete theme has 5 parts:
 
@@ -31,27 +31,27 @@ A complete theme has 5 parts:
 - `@theme inline { ... }`: maps the CSS variables to Tailwind utilities
 - `:root { ... }`: the light mode values
 - `.dark { ... }`: the dark mode values
-- `@layer base { ... }`: global defaults, such as the border colour and the body background
+- `@layer base { ... }`: global defaults, such as the border color and the body background
 
 ## Design principles
 
 The tokens follow 5 rules:
 
 - **Semantic over literal**: use `bg-primary`, not `bg-zinc-900`, so a theme change reaches every component.
-- **OKLCH colour space**: perceptually uniform, for consistent contrast. See [why OKLCH](#why-oklch).
-- **Background and foreground pairs**: every colour has a matching foreground token. The [colours reference](/docs/reference/colors) lists the pairs.
+- **OKLCH color space**: perceptually uniform, for consistent contrast. See [why OKLCH](#why-oklch).
+- **Background and foreground pairs**: every color has a matching foreground token. The [colors reference](/docs/reference/colors) lists the pairs.
 - **CSS first**: there's no JavaScript theme runtime, only CSS custom properties.
 - **Consumer owned**: you define your theme tokens, and `base.css` handles the rest.
 
 ## Why OKLCH
 
-Keystone UI writes every colour token in the [OKLCH colour space](https://oklch.com/). In OKLCH, equal changes in a value produce equal perceived differences, which suits a design system. It has 3 properties that matter when you pick colours:
+Keystone UI writes every color token in the [OKLCH color space](https://oklch.com/). In OKLCH, equal changes in a value produce equal perceived differences, which suits a design system. It has 3 properties that matter when you pick colors:
 
 - **Perceptual uniformity**: equal changes in L (lightness) look equally different.
-- **Wide gamut**: it reaches colours outside sRGB on displays that support them.
+- **Wide gamut**: it reaches colors outside sRGB on displays that support them.
 - **Readable values**: L is lightness from 0 to 1, C is chroma from 0 to 0.4, and H is hue from 0 to 360.
 
-A value reads as `oklch(lightness chroma hue)`. Holding lightness and chroma steady while you move the hue gives colours of similar weight:
+A value reads as `oklch(lightness chroma hue)`. Holding lightness and chroma steady while you move the hue gives colors of similar weight:
 
 ```css
 /* OKLCH format: oklch(lightness chroma hue) */

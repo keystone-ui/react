@@ -1513,7 +1513,7 @@
       "name": "stat",
       "type": "registry:ui",
       "title": "Stat",
-      "description": "The headline number of a metric and its change, with colour derived from what the metric means rather than from the sign of the delta.",
+      "description": "The headline number of a metric and its change, with color derived from what the metric means rather than from the sign of the delta.",
       "dependencies": [
         "class-variance-authority",
         "lucide-react"

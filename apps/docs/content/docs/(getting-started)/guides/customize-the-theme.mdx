@@ -1,6 +1,6 @@
 ---
 title: Customize the theme
-description: Get a theme from the theme builder, check its contrast, and change colours, density, corner radius and fonts in your own CSS.
+description: Get a theme from the theme builder, check its contrast, and change colors, density, corner radius and fonts in your own CSS.
 contentType: How-to
 ---
 
@@ -12,7 +12,7 @@ You need Keystone UI installed with its theme CSS in your project ([Installation
 
 ## Start from the theme builder
 
-The [theme builder](/theme-builder) turns your choices into a short code (base colour, primary, radius and font) and serves that code as a registry theme.
+The [theme builder](/theme-builder) turns your choices into a short code (base color, primary, radius and font) and serves that code as a registry theme.
 
 <Steps>
 
@@ -28,7 +28,7 @@ npx shadcn@latest add https://keystoneui.io/r/theme/k1_slate_0.55_0.2_262.5_larg
 
 </Steps>
 
-Add `?only=theme` to the URL to take only the colours and radius, or `?only=font` to take only the font, when you want to keep the rest of your setup.
+Add `?only=theme` to the URL to take only the colors and radius, or `?only=font` to take only the font, when you want to keep the rest of your setup.
 
 The code is the whole theme, so it's also what to paste into an issue or hand to an agent. `keystoneui theme <code>` prints the decoded settings, this command and a link back into the builder.
 
@@ -44,7 +44,7 @@ The audit reads the `:root` and `.dark` blocks of the CSS file your `components.
 
 The [theme builder](/theme-builder) runs the same checks live in its **Code** panel, so a primary that no foreground can clear shows up before you export it. Keystone UI's default `--destructive-foreground` sits slightly under the line in light mode and well under it in dark mode, and the audit reports that rather than hiding it.
 
-## Change a colour
+## Change a color
 
 Set the new value in both `:root` and `.dark`, so the pair keeps its contrast in both modes. Use [oklch.com](https://oklch.com/) to pick OKLCH values.
 
@@ -58,9 +58,9 @@ Set the new value in both `:root` and `.dark`, so the pair keeps its contrast in
 }
 ```
 
-The [colours reference](/docs/reference/colors) says what each token is for.
+The [colors reference](/docs/reference/colors) says what each token is for.
 
-## Add a colour
+## Add a color
 
 Define the variables in `:root` and `.dark`, then register them in the `@theme inline` block:
 
@@ -189,7 +189,7 @@ The [theme tokens reference](/docs/reference/theme-tokens#fonts) lists the fonts
 
 ## Check that it works
 
-Reload the app and look at a primary Button: it should show your new colour, radius and font. If nothing changed, check that your edits come after `@import "@keystoneui/react/base.css"` and that `:root` and `.dark` both declare the token.
+Reload the app and look at a primary Button: it should show your new color, radius and font. If nothing changed, check that your edits come after `@import "@keystoneui/react/base.css"` and that `:root` and `.dark` both declare the token.
 
 ## Related
 

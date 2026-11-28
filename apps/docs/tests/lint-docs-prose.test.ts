@@ -68,6 +68,8 @@ describe("lint-docs-prose rules", () => {
     ["ellipsis", "Wait for it...", "Wait for it…"],
     ["banned-word", "Just add the class.", "Add the class; adjustment helps."],
     ["banned-word", "It is EASY to miss.", "It is easygoing."],
+    ["us-spelling", "Set the colour token.", "Set the color token."],
+    ["us-spelling", "Its Behaviour changes.", "Its behavior changes."],
     [
       "the-user",
       "When the user clicks, it opens.",

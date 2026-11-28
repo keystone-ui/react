@@ -31,7 +31,7 @@ The variant makes `dark:` utilities apply inside any `.dark` ancestor:
 
 ## Tailwind registration
 
-The `@theme inline` block maps each token to a Tailwind colour, so `--primary` becomes `bg-primary`, `text-primary` and the rest:
+The `@theme inline` block maps each token to a Tailwind color, so `--primary` becomes `bg-primary`, `text-primary` and the rest:
 
 ```css title="globals.css"
 @theme inline {
@@ -135,7 +135,7 @@ The `:root` block holds the light mode values and `--radius`:
 
 ## Dark values
 
-The `.dark` block redefines the colours for dark mode. Always define both `:root` and `.dark`, so every pair keeps its contrast in both modes:
+The `.dark` block redefines the colors for dark mode. Always define both `:root` and `.dark`, so every pair keeps its contrast in both modes:
 
 ```css title="globals.css"
 .dark {
@@ -202,7 +202,7 @@ The style item also writes a `@media print` block that moves the light tokens to
 
 ## Base layer
 
-The base layer sets the default border and outline colours, the page colours and a thin scrollbar on code blocks:
+The base layer sets the default border and outline colors, the page colors and a thin scrollbar on code blocks:
 
 ```css title="globals.css"
 @layer base {
@@ -233,9 +233,9 @@ The base layer sets the default border and outline colours, the page colours and
 <Callout type="warn">
   Keep the `* { @apply border-border outline-ring/50; }` rule in `@layer base`.
   Several components, such as Drawer, Kbd and Table rows, draw a border without
-  naming a colour and rely on it. `@keystoneui/react/base.css` does not ship it
+  naming a color and rely on it. `@keystoneui/react/base.css` does not ship it
   (the default registry style at `/r/default.json` does), so without it those
-  borders take the text colour.
+  borders take the text color.
 </Callout>
 
 ## Sidebar tokens
@@ -244,7 +244,7 @@ shadcn defines 8 `--sidebar-*` tokens for its sidebar, and the theme declares al
 
 ## Chart tokens
 
-`--chart-1` to `--chart-5` are 5 categorical slots for chart series, the same hues in every theme. They're separated by lightness rather than hue alone, so they stay distinct under colour-vision deficiency.
+`--chart-1` to `--chart-5` are 5 categorical slots for chart series, the same hues in every theme. They're separated by lightness rather than hue alone, so they stay distinct under color-vision deficiency.
 
 ## Fonts
 
@@ -261,6 +261,6 @@ Keystone UI reads the base font family from `--font-sans`. Load the font and set
 
 ## Related
 
-- [Colours](/docs/reference/colors): what each token is for
+- [Colors](/docs/reference/colors): what each token is for
 - [base.css reference](/docs/reference/base-css): the tokens the library owns
 - [Customize the theme](/docs/guides/customize-the-theme)

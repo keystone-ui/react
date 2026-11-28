@@ -56,7 +56,7 @@ import { Reel } from "@keystoneui/react/reel";
 
 A Reel scrolls one row of controls sideways when it is wider than its container: a bar of category links, or a row of [FilterChips](/docs/components/filter-chips). It is ordinary native scrolling, so touch momentum, trackpad scrolling and the browser's own scrolling of a focused item all work as they do anywhere else.
 
-The Reel takes exactly one child, the row, and adds no semantics of its own. The label (`<nav aria-label>`), the list, which item is current and how the items look stay with you. Give the row `w-max` so it keeps its natural width, and `mx-auto` to centre it when everything fits.
+The Reel takes exactly one child, the row, and adds no semantics of its own. The label (`<nav aria-label>`), the list, which item is current and how the items look stay with you. Give the row `w-max` so it keeps its natural width, and `mx-auto` to center it when everything fits.
 
 ### Reel or Carousel
 
@@ -66,7 +66,7 @@ The Reel takes exactly one child, the row, and adds no semantics of its own. The
 
 - Each edge fades only where there is more to scroll. The fade is a mask on the row itself (the [`ks-scroll-fade-x`](/docs/reference/css-utilities) utility), so it works on any surface: a card, a muted panel or the page.
 - With `arrows="pointer"` (the default), an arrow appears at each end that has more to scroll, but only on a device with a mouse or trackpad (`hover: hover` and `pointer: fine`). A touch screen swipes, and the fade is its cue. Where a default arrow can show, the fade is 3rem deep so the arrow sits on faded content; behind a plain arrow it is 2rem after the hidden strip; otherwise it is 1.5rem.
-- `arrowVariant="plain"` draws each arrow as a bare chevron in the muted text colour, with no fill, border or shadow, for a row that sits on its own track, such as tabs. A bare chevron cannot cover what is under it, so while a plain arrow shows, the Reel hides the first five spacing units (1.25rem with the default spacing scale) of the row on that side, and the fade starts after that. This holds in browsers without scroll-driven animations too. When an arrow shows, how far a press scrolls, and that it is never a Tab stop or announced, are the same for both styles. `arrows` decides when either style can show.
+- `arrowVariant="plain"` draws each arrow as a bare chevron in the muted text color, with no fill, border or shadow, for a row that sits on its own track, such as tabs. A bare chevron cannot cover what is under it, so while a plain arrow shows, the Reel hides the first five spacing units (1.25rem with the default spacing scale) of the row on that side, and the fade starts after that. This holds in browsers without scroll-driven animations too. When an arrow shows, how far a press scrolls, and that it is never a Tab stop or announced, are the same for both styles. `arrows` decides when either style can show.
 - Set `--ks-reel-fade-size` on the Reel through `className`, or on any ancestor, to choose how deep the fade is: `[--ks-reel-fade-size:2rem]`. The value needs a unit (`0px`, not `0`). Left unset, the fade is 3rem where a default arrow can show, 2rem where a plain arrow can, and 1.5rem where none can. Once set, that depth applies on every device.
 - A press on an arrow scrolls 80% of the visible width.
 - Arrows are never Tab stops and are hidden from assistive technology, and a press on one does not take focus: Tab or the row's own keyboard navigation reaches every item, and the Reel brings each one into view.

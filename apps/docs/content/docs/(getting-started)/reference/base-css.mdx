@@ -4,7 +4,7 @@ description: Everything @keystoneui/react/base.css defines, including the hover 
 contentType: Reference
 ---
 
-`@keystoneui/react/base.css` is the stylesheet every Keystone UI app imports. It holds the tokens and rules the library owns, and no colour values, so it works with any theme. Your own tokens are in the [theme tokens reference](/docs/reference/theme-tokens), and [Theming](/docs/concepts/theming) explains the split.
+`@keystoneui/react/base.css` is the stylesheet every Keystone UI app imports. It holds the tokens and rules the library owns, and no color values, so it works with any theme. Your own tokens are in the [theme tokens reference](/docs/reference/theme-tokens), and [Theming](/docs/concepts/theming) explains the split.
 
 ## Import
 
@@ -82,7 +82,7 @@ Button, Input, InputGroup, SelectTrigger, NativeSelect, Toggle and TableHead tak
 
 The variables are defined from `--spacing`, so they follow it if you rescale spacing. Each component carries the default as a fallback, such as `h-(--ks-control-md,2.5rem)`. Keep every value at 24px or more, the WCAG minimum target size. [Customize the theme](/docs/guides/customize-the-theme#change-the-control-density) shows how to change them.
 
-## Info colour registration
+## Info color registration
 
 `base.css` registers `--color-info` and `--color-info-foreground`, with the light values as a fallback. The [theme tokens reference](/docs/reference/theme-tokens#tailwind-registration) says what to declare in your theme.
 
@@ -97,13 +97,13 @@ The rule is unlayered and uses no `!important`, so it beats Tailwind's `duration
 `base.css` defines 2 scrollbar classes:
 
 - **`no-scrollbar`**: hides the scrollbar and keeps the element scrollable.
-- **`ks-scrollbar`**: an opt-in thin, token-coloured scrollbar. See [CSS utilities](/docs/reference/css-utilities#ks-scrollbar).
+- **`ks-scrollbar`**: an opt-in thin, token-colored scrollbar. See [CSS utilities](/docs/reference/css-utilities#ks-scrollbar).
 
 ## What base.css leaves to your theme
 
 These live in your theme CSS, not in `base.css`:
 
-- colour tokens, including the 8 `--sidebar-*` tokens
+- color tokens, including the 8 `--sidebar-*` tokens
 - the `* { @apply border-border outline-ring/50; }` base rule
 - print rules
 

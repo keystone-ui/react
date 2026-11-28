@@ -4,7 +4,7 @@ description: Every change during the 1.0 beta that can break a build or change w
 contentType: How-to
 ---
 
-This guide walks you from any `1.0.0-beta.N` release to `1.0.0`. The betas shipped as `1.0.0-beta.N`, so a semver range never warned you about the changes below. If you installed any beta, walk this list once before you move to `1.0.0`. Each item says what changed and the smallest edit that restores the old behaviour, or adopts the new one.
+This guide walks you from any `1.0.0-beta.N` release to `1.0.0`. The betas shipped as `1.0.0-beta.N`, so a semver range never warned you about the changes below. If you installed any beta, walk this list once before you move to `1.0.0`. Each item says what changed and the smallest edit that restores the old behavior, or adopts the new one.
 
 ## Before you start
 
@@ -48,7 +48,7 @@ Base UI renamed the prop. The old name is spread through and ignored without an 
 
 Primitives no longer use `forwardRef`; `ref` is an ordinary prop. Most callers need no change. Demos and blocks moved to `lucide-react` 1.x, whose default exports dropped the `*Icon` suffix, so fix the import names in any block you copied.
 
-## Check markup and behaviour changes
+## Check markup and behavior changes
 
 These changes compile but render or behave differently. Check each one you use.
 
@@ -99,7 +99,7 @@ A Badge with `variant="destructive"` now draws the solid red by default. Use `ap
 +<Badge variant="error" appearance="soft">Failed</Badge>
 ```
 
-A linked red Badge now underlines on hover, and its fill stays the same. The red is now a fixed palette red, like the other 3 tones, so a Badge no longer follows a customised `--destructive` token; only its focus-ring colour modifiers (`focus-visible:ring-destructive/20`, `dark:focus-visible:ring-destructive/40`) still do. `data-variant` reports the name you pass, so when you change a Badge from `destructive` to `error`, update selectors that target the old name. Button's `destructive` is unchanged.
+A linked red Badge now underlines on hover, and its fill stays the same. The red is now a fixed palette red, like the other 3 tones, so a Badge no longer follows a customized `--destructive` token; only its focus-ring color modifiers (`focus-visible:ring-destructive/20`, `dark:focus-visible:ring-destructive/40`) still do. `data-variant` reports the name you pass, so when you change a Badge from `destructive` to `error`, update selectors that target the old name. Button's `destructive` is unchanged.
 
 {/* changeset: status-tones-tokenized */}
 

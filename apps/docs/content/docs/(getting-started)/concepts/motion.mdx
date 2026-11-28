@@ -29,11 +29,11 @@ CSS variable:
 | Token | Value | Used for |
 | --- | --- | --- |
 | `--duration-fast` | 125 ms | Button presses, tooltips, modal backdrops |
-| `--duration-base` | 180 ms | Popups, filter chip colour changes |
+| `--duration-base` | 180 ms | Popups, filter chip color changes |
 | `--duration-slow` | 250 ms | Modal content, RollingNumber digits |
 | `--duration-drawer` | 400 ms | Drawer |
 | `--ease-ks-out` | `cubic-bezier(0.23, 1, 0.32, 1)` | Most enters and presses |
-| `--ease-ks-in-out` | `cubic-bezier(0.77, 0, 0.175, 1)` | Colour changes on filter chips |
+| `--ease-ks-in-out` | `cubic-bezier(0.77, 0, 0.175, 1)` | Color changes on filter chips |
 | `--ease-drawer` | `cubic-bezier(0.32, 0.72, 0, 1)` | Drawer |
 
 Components read them as utilities, with the default inline so a registry copy
@@ -140,7 +140,7 @@ and it doesn't roll under reduced motion. The time left until a deadline is a
 [Countdown](/docs/components/countdown), whose `animated` mode renders each
 value as a RollingNumber. [Reel](/docs/components/reel) jumps instead of
 gliding under reduced motion, and a [FilterChips](/docs/components/filter-chips)
-press changes only colour, so chips never scale or move.
+press changes only color, so chips never scale or move.
 
 ## Trade-offs
 
@@ -176,6 +176,6 @@ hover.
 - [Countdown](/docs/components/countdown)
 - [Reel](/docs/components/reel)
 - [Filter chips](/docs/components/filter-chips)
-- [Upgrading: easing tokens are namespaced](/docs/upgrading#easing-tokens-are-namespaced)
-- [CSS utilities: ks-shimmer](/docs/theming/utilities#ks-shimmer)
+- [Upgrade to 1.0: rename the easing tokens](/docs/guides/upgrade-to-1-0#rename-the-easing-tokens)
+- [CSS utilities: ks-shimmer](/docs/reference/css-utilities#ks-shimmer)
 - [Popup layering and modality](/docs/concepts/popup-layering)

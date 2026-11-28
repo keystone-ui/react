@@ -1,10 +1,10 @@
 ---
 title: Install from the registry
-description: Install the Keystone UI style, swap colour themes, set up the @keystone namespace and add blocks with the shadcn CLI.
+description: Install the Keystone UI style, swap color themes, set up the @keystone namespace and add blocks with the shadcn CLI.
 contentType: How-to
 ---
 
-Keystone UI publishes its styles, themes, components and blocks as a [shadcn registry](https://ui.shadcn.com/docs/registry), so the shadcn CLI can write them into your project. This guide installs the style, swaps the colour theme, sets up a namespace for shorter commands and adds a block. [Styles and themes](/docs/concepts/styles-and-themes) explains the two kinds of theme item.
+Keystone UI publishes its styles, themes, components and blocks as a [shadcn registry](https://ui.shadcn.com/docs/registry), so the shadcn CLI can write them into your project. This guide installs the style, swaps the color theme, sets up a namespace for shorter commands and adds a block. [Styles and themes](/docs/concepts/styles-and-themes) explains the two kinds of theme item.
 
 ## Before you start
 
@@ -31,11 +31,11 @@ pnpm add @keystoneui/react@beta
 npx shadcn add https://keystoneui.io/r/default.json
 ```
 
-The CLI writes the complete theme CSS into your `globals.css`: the `base.css` import, the dark mode variant, the Tailwind registration, the colour tokens and the base layer defaults. Then add the `@source` directive, as [Install Keystone UI](/docs/installation) shows.
+The CLI writes the complete theme CSS into your `globals.css`: the `base.css` import, the dark mode variant, the Tailwind registration, the color tokens and the base layer defaults. Then add the `@source` directive, as [Install Keystone UI](/docs/installation) shows.
 
-## Swap the colour theme
+## Swap the color theme
 
-A theme item replaces only the colour token values in `:root` and `.dark`, so you can switch palettes without re-initializing. Install the default theme:
+A theme item replaces only the color token values in `:root` and `.dark`, so you can switch palettes without re-initializing. Install the default theme:
 
 ```bash
 npx shadcn add https://keystoneui.io/r/themes/default.json
@@ -51,7 +51,7 @@ Or pick one of the base themes. Each uses a different gray scale for the structu
 | Gray | `npx shadcn add https://keystoneui.io/r/themes/gray.json` |
 | Neutral | `npx shadcn add https://keystoneui.io/r/themes/neutral.json` |
 
-All themes use the OKLCH colour space and include light and dark mode tokens.
+All themes use the OKLCH color space and include light and dark mode tokens.
 
 ## Install by name with the namespace
 

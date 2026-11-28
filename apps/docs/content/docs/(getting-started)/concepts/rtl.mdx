@@ -20,7 +20,7 @@ Support differs by layer:
 
 ## What works
 
-Components built on [Base UI](https://base-ui.com) inherit its direction-aware behaviour where it applies: horizontal arrow-key navigation, the `inline-start`/`inline-end` popup sides, and slider axis handling. Base UI reads the reading direction for these from its own context, which defaults to `ltr`.
+Components built on [Base UI](https://base-ui.com) inherit its direction-aware behavior where it applies: horizontal arrow-key navigation, the `inline-start`/`inline-end` popup sides, and slider axis handling. Base UI reads the reading direction for these from its own context, which defaults to `ltr`.
 
 Popup alignment works differently. Above or below the trigger, `start` and `end` use the positioner's computed direction, normally inherited from the root. Beside the trigger, `start` uses the top edge in either reading direction. Alignment offsets and collision handling can move the popup from that edge. Select's item-aligned mode uses the provider's direction. Drawer swipe directions stay physical (`left`, `right`, `up`, `down`), so choose `swipeDirection` for your layout.
 
@@ -42,4 +42,4 @@ Calendar uses `rtl:` variants for its default month navigation chevrons. Reel us
 
 - [Set up right-to-left layouts](/docs/guides/set-up-right-to-left)
 - [Strings](/docs/components/strings)
-- [shadcn sidebar](/docs/reference/shadcn-sidebar#behaviour): not mirrored
+- [shadcn sidebar](/docs/reference/shadcn-sidebar#behavior): not mirrored

@@ -4,10 +4,10 @@ description: What Keystone UI does for focus, disabled states, names, contrast a
 contentType: Conceptual
 ---
 
-Keystone UI gets keyboard behaviour and roles from Base UI, and adds its own
+Keystone UI gets keyboard behavior and roles from Base UI, and adds its own
 rules for what Base UI doesn't decide: how focus looks, how a disabled control
 reads, which names a component gives itself and which it needs from you, and
-which colour pairs stay legible. Most of these rules are pinned by tests that
+which color pairs stay legible. Most of these rules are pinned by tests that
 read the source, so they hold as components change. None of them makes an app
 accessible by itself; they set defaults that your composition can keep or
 break.
@@ -17,14 +17,14 @@ break.
 Accessibility regressions in a component library are quiet. A focus outline
 that computes to `none` still reads like Button's in the source: TagRemove and
 the Toast close button once showed no keyboard focus at all for that reason.
-A status colour that looks fine in light mode can fail contrast in dark mode,
+A status color that looks fine in light mode can fail contrast in dark mode,
 and a control can lose its accessible name when it is placed inside the wrong
 parent. None of these throws an error, so each one needs a rule and a test.
 
 ## How Keystone UI handles it
 
-Keystone relies on Base UI for behaviour and adds rules for focus, disabled
-states, names, colour and touch input, most of them pinned by a test.
+Keystone relies on Base UI for behavior and adds rules for focus, disabled
+states, names, color and touch input, most of them pinned by a test.
 
 ### Keyboard and roles come from Base UI
 
@@ -63,7 +63,7 @@ A disabled control reads as unavailable twice: it dims, and the cursor turns
 to `cursor-not-allowed`. Native elements style it through `disabled:`, and
 Base UI parts through `data-disabled:`, so components that can be either carry
 both. Most dim with `opacity-50`. Button instead dims each variant's own
-colours to half, for example `disabled:bg-primary/50`. `base.css` also restores `cursor: pointer` on every enabled `button`
+colors to half, for example `disabled:bg-primary/50`. `base.css` also restores `cursor: pointer` on every enabled `button`
 and `[role="button"]`, which Tailwind CSS v4 no longer does.
 
 ### Names: what components supply and what they need
@@ -90,7 +90,7 @@ that looks like a button is an `<a>` styled with `buttonVariants` instead.
 
 ### Contrast is measured, not assumed
 
-`apps/docs/tests/palette.test.ts` measures the shipped colour tokens and pins
+`apps/docs/tests/palette.test.ts` measures the shipped color tokens and pins
 each result as a floor, so a change can't make it worse. It records what the
 palette achieves; it doesn't claim compliance with a standard.
 
@@ -105,15 +105,15 @@ palette achieves; it doesn't claim compliance with a standard.
   clears 4.5:1 on the page and on cards, and `--primary-foreground` clears it
   on `--primary`.
 
-### Chart colours separate by lightness
+### Chart colors separate by lightness
 
 The 5 chart slots, `--chart-1` to `--chart-5`, are spaced by lightness, which
-every form of colour-vision deficiency (CVD) preserves, rather than by hue.
+every form of color-vision deficiency (CVD) preserves, rather than by hue.
 The test simulates protanopia, deuteranopia and tritanopia and requires every
-pair of slots to stay at least 10 apart in CIEDE2000 colour difference, where
+pair of slots to stay at least 10 apart in CIEDE2000 color difference, where
 1 to 2 is the smallest difference people notice. Success and destructive stay
 at least 35 apart under the same simulations. StatDelta can carry more than
-colour: an arrow for a nonzero value while its icon is shown, and an optional
+color: an arrow for a nonzero value while its icon is shown, and an optional
 visually hidden qualifier.
 
 ### Touch input
@@ -162,6 +162,6 @@ not measured at all.
 - [Copy button](/docs/components/copy-button)
 - [Button](/docs/components/button)
 - [Stat](/docs/components/stat)
-- [Theming colors](/docs/theming/colors)
+- [Colors](/docs/reference/colors)
 - [Control sizing and density](/docs/concepts/control-sizing)
 - [Motion](/docs/concepts/motion)
