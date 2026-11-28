@@ -5,8 +5,9 @@
  * npm, where `publishConfig.exports` points each subpath at the tsup build.
  *
  * The build moves a module that more than one entry imports into a shared
- * `chunk-*.js`, and esbuild keeps a module's "use client" directive only on
- * the entry file built from it, never on a chunk. So `dist/pagination.js`
+ * `chunk-*.js`, and esbuild (0.27, under tsup 8.5) keeps a module's
+ * "use client" directive only on the entry file built from it, never on a
+ * chunk. So `dist/pagination.js`
  * (no directive) imports Button's code from a chunk without the directive,
  * and under a React Server Components bundler that code runs on the server:
  * `buttonVariants` and the `Button` wrapper are ordinary server functions.
@@ -40,6 +41,7 @@ import {
   mkdtempSync,
   readdirSync,
   readFileSync,
+  realpathSync,
   rmSync,
   symlinkSync,
   writeFileSync,
@@ -152,6 +154,7 @@ const TREES = `
 export default async function trees({ createElement: h }) {
   const p = await import("./dist/pagination.js");
   const { Spinner } = await import("./dist/spinner.js");
+  const { Button } = await import("./dist/button.js");
   const wrap = (...children) =>
     h(p.Pagination, null, h(p.PaginationContent, null,
       ...children.map((child, i) => h(p.PaginationItem, { key: i }, child))));
@@ -169,6 +172,7 @@ export default async function trees({ createElement: h }) {
     noHrefLink: wrap(h(p.PaginationLink, { "aria-disabled": "true" }, "7")),
     noHrefPrevious: wrap(h(p.PaginationPrevious, { disabled: true })),
     noHrefActive: wrap(h(p.PaginationLink, { isActive: true }, "3")),
+    clientEntry: h(Button, null, "Save"),
   };
 }
 `;
@@ -177,10 +181,7 @@ const HREF_TREES = ["spinner", "hrefPage"] as const;
 const NO_HREF_TREES = ["noHrefLink", "noHrefPrevious", "noHrefActive"] as const;
 const CLIENT_ID = /"(file:[^"]+)"/g;
 const BASE_UI_BUTTON = /\/@base-ui\/react\/button\/Button\.mjs$/;
-const LUCIDE_ICON = /\/lucide-react\/dist\/esm\/Icon\.mjs$/;
-const DEPENDENCY_BOUNDARY = new RegExp(
-  `${BASE_UI_BUTTON.source}|${LUCIDE_ICON.source}`
-);
+const DEPENDENCY = /\/node_modules\//;
 
 type Results = Partial<Record<string, { error?: string; payload?: string }>>;
 
@@ -191,7 +192,9 @@ let results: Results = {};
 let renderStderr = "";
 
 beforeAll(() => {
-  dir = mkdtempSync(join(tmpdir(), "ks-package-rsc-"));
+  // Real path: the render reports module URLs with symlinks resolved
+  // (macOS's /var is /private/var), and the test compares against them.
+  dir = realpathSync(mkdtempSync(join(tmpdir(), "ks-package-rsc-")));
   outDir = join(dir, "dist");
   // The built files import react, lucide-react and Base UI by bare name.
   symlinkSync(join(PACKAGE_DIR, "node_modules"), join(dir, "node_modules"));
@@ -278,18 +281,20 @@ describe("the npm build", () => {
 describe("rendering the npm build from a Server Component", () => {
   it("renders every tree", () => {
     expect(renderStderr).toBe("");
-    for (const name of [...HREF_TREES, ...NO_HREF_TREES]) {
+    for (const name of [...HREF_TREES, ...NO_HREF_TREES, "clientEntry"]) {
       expect(results[name]?.error, name).toBeUndefined();
       expect(results[name]?.payload, name).toBeTruthy();
     }
   });
 
   it("renders Spinner and the links with a URL on the server", () => {
-    // Lucide's icon is a "use client" module of its own, so the only client
-    // reference these trees may hold is that icon.
+    // Lucide's icon is a "use client" module of its own, so these trees may
+    // hold client references, but only to a dependency's module.
+    const built = pathToFileURL(outDir).href;
     for (const name of HREF_TREES) {
       for (const id of clientModules(results[name]?.payload)) {
-        expect(id, name).toMatch(LUCIDE_ICON);
+        expect(id.startsWith(built), `${name}: ${id}`).toBe(false);
+        expect(id, name).toMatch(DEPENDENCY);
       }
     }
     const payload = results.hrefPage?.payload ?? "";
@@ -309,8 +314,17 @@ describe("rendering the npm build from a Server Component", () => {
       ).toHaveLength(1);
       for (const id of ids) {
         expect(id.startsWith(built), `${name}: ${id}`).toBe(false);
-        expect(id, name).toMatch(DEPENDENCY_BOUNDARY);
+        expect(id, name).toMatch(DEPENDENCY);
       }
     }
+  });
+
+  it("would name a built file if one were the boundary", () => {
+    // Button's own entry keeps the directive, so rendering it gives a client
+    // reference to that built file: the check above can see one.
+    const built = pathToFileURL(outDir).href;
+    expect(clientModules(results.clientEntry?.payload)).toEqual([
+      `${built}/button.js`,
+    ]);
   });
 });
