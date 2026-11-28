@@ -1,0 +1,110 @@
+---
+title: Upload files with FileUpload
+description: Send the files chosen in a FileUpload to your server, either with the form submit or as soon as each file arrives, and edit a record that already has attachments.
+contentType: How-to
+---
+
+`FileUpload` chooses, validates and lists files, but it never sends them. Your app sends them in one of 2 ways: the form submit posts the bytes, or the app uploads each file as it arrives. This guide sets up each mode, then an edit form for a record that already has saved attachments. Every prop it names is in the [FileUpload reference](/docs/components/file-upload).
+
+## Before you start
+
+You need:
+
+- Keystone UI installed ([Install Keystone UI](/docs/installation))
+- `FileUpload` and `Item` added to your project ([FileUpload installation](/docs/components/file-upload#installation))
+
+## Pick one mode
+
+Choose one mode per uploader, never both, or every file is sent twice:
+
+- **Submit with the form**: set `name` and leave out the row status props. The form posts the bytes.
+- **Upload eagerly**: leave out `name`, upload in the app, and submit the resulting server ids in your own hidden inputs.
+
+## Submit the files with the form
+
+<Steps>
+
+<Step>Give the uploader a `name`.</Step>
+
+With `name` set, the chosen files submit with the form, and `required` and a form reset work as they do on a native file input. For a native submit, set `encType="multipart/form-data"` on the `<form>`.
+
+<Step>Read the files in the submit handler.</Step>
+
+Build a `FormData` from the form and read the entries under your `name`. With no files chosen, `FormData` still holds one empty entry for the input, so make your server code ignore a `File` with an empty name.
+
+<Step>Handle browsers that can't set a file input's files.</Step>
+
+Where the browser lacks the `DataTransfer()` constructor, the root gets `data-form-bridge="unsupported"` and the input loses `name` and `required`. In that case, check that `value` isn't empty and append each file in `value` to the `FormData` yourself.
+
+</Steps>
+
+The Form submit example does all 3 steps:
+
+<ComponentPreview name="file-upload-form-submit" />
+
+## Upload each file as it arrives
+
+<Steps>
+
+<Step>Leave out `name`.</Step>
+
+The uploader then adds nothing to the form, so nothing is sent twice.
+
+<Step>Start an upload for each added file.</Step>
+
+In `onValueChange`, start a request for each file in `details.added`, and keep a status entry per file in your own state. Drop the entries for the files in `details.removed`, so a late result for a removed file finds no row.
+
+<Step>Pass each row its status.</Step>
+
+Render each row as `FileUploadItem` with the `status`, `progress` and `error` from your entry. `FileUploadItemProgress` and `FileUploadItemError` then show the progress bar and the error.
+
+<Step>Let the reader retry a failed upload.</Step>
+
+Number each attempt, and ignore a result from an older attempt after a retry. A retry button inside the row reads `errorId` from `useFileUploadItem()` for its `aria-describedby`.
+
+<Step>Submit the server ids.</Step>
+
+Put the id your server returns for each finished upload in a hidden input of your own, and submit those.
+
+</Steps>
+
+The Eager upload example uploads each file as it arrives and fails any file whose name contains "fail" on its first try, so you can test the retry:
+
+<ComponentPreview name="file-upload-eager-upload" />
+
+## Edit a record that has saved attachments
+
+The uploader's value holds new files only, and `maxFiles` and `required` count new files only. Keep the saved attachments out of it.
+
+<Steps>
+
+<Step>List the saved attachments yourself.</Step>
+
+Render them in your own `ItemGroup` above the uploader, never inside `FileUploadList`. Give each one a hidden input with its id, so the form submits the ids you keep.
+
+<Step>Limit the uploader to the room left.</Step>
+
+Pass the uploader `multiple`, `maxFiles={remaining}` and `required={kept.length === 0}`, where `remaining = Math.max(0, limit - kept.length)`.
+
+<Step>Disable the trigger when no room is left.</Step>
+
+At `0`, set `disabled` on `FileUploadTrigger`, never on the root: a disabled root also stops the chosen files from submitting.
+
+<Step>Check the total on submit.</Step>
+
+Lowering the capacity never removes chosen files, so validate the total when the form is submitted.
+
+</Steps>
+
+The Edit form example keeps 2 saved attachments against a limit of 3:
+
+<ComponentPreview name="file-upload-edit-form" />
+
+## Check that it works
+
+Choose a file and submit the form. In the form mode, your handler receives the file under its `name`. In the eager mode, the row shows a progress bar, then reaches `success`, and the form submits only your hidden ids. If a file is sent twice, the uploader has a `name` while the app also uploads it.
+
+## Related
+
+- [FileUpload reference](/docs/components/file-upload): form submission, validation and every prop
+- [Field](/docs/components/field): a label and an error message for the uploader
