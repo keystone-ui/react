@@ -1,0 +1,173 @@
+---
+title: Styling hooks
+description: The stable places Keystone UI lets you restyle a component, from data-slot attributes and className to variant functions, scoped CSS variables and the ks- utilities, and why each is built the way it is.
+contentType: Conceptual
+---
+
+Keystone UI gives you a small set of stable places to restyle a component:
+`data-slot` attributes to target a part, a `className` that wins over the
+defaults, variant functions built with class-variance-authority (CVA), CSS variables scoped to a component, and a
+few `ks-` utilities in `base.css`. Each one is built so that your override
+takes effect and keeps taking effect after an update. Everything else in a
+component's markup, such as internal class names and Base UI's own
+attributes, can change without notice.
+
+## The problem it solves
+
+Restyling a library component without hooks means reaching into its markup. Class
+names, element order and the attributes a primitive emits are all
+implementation details, so a selector built on them breaks on the next
+release. Overrides can also lose silently: a class you pass can be outranked
+by a more specific default, or dropped before it reaches the element. Keystone
+has shipped bugs of both kinds, and each hook below exists because of one.
+
+## How Keystone UI handles it
+
+Each hook below is a contract Keystone keeps across releases, and most are
+pinned by a test that fails when a component breaks it.
+
+### `data-slot` names a part
+
+Keystone components mark the parts they render with a `data-slot` attribute
+named after the part: `data-slot="modal-content"`, `data-slot="reel-viewport"`,
+`data-slot="filter-chip-count"`. The slot is the contract for targeting a part
+from your CSS, including internal elements you can't pass a `className` to:
+
+```css
+[data-slot="filter-chip-count"] {
+  font-variant-numeric: tabular-nums;
+}
+```
+
+Components with a richer contract list it in a **Styling hooks** section,
+alongside the state attributes that go with the slots. FilterChips, for
+example, exposes `data-selected`, `data-disabled` and `data-empty` on each
+chip. Base UI also emits attributes of its own, such as `data-checked`; they
+are not part of Keystone's contract, so style the selected chip from
+`data-selected`. Internal class names, such as a chip's `group/filter-chip`,
+are not hooks either.
+
+A part rendered through another component keeps its own slot. A
+`DropdownMenuTrigger` rendered with `render={<Button />}` emits
+`data-slot="dropdown-menu-trigger"`, not `data-slot="button"`, so target it by
+its own name.
+
+### `className` wins over the defaults
+
+Keystone parts merge your `className` into their defaults with
+[tailwind-merge](https://github.com/dcastil/tailwind-merge), so a class you
+pass replaces the default from the same group instead of competing with it.
+`<CardTitle className="font-semibold">` drops the default weight rather than
+emitting two.
+
+Base UI adds a twist: a part's `className` can be a function of its state.
+Keystone's `cn()` helper (clsx plus tailwind-merge) accepts a function in its
+types and then drops it. 92 exported parts lost a function `className` this
+way, so parts built on Base UI merge with `mergeClassName` instead:
+
+```tsx
+import { Popover as PopoverPrimitive } from "@base-ui/react/popover";
+import { mergeClassName } from "@keystoneui/react/utils";
+
+<PopoverPrimitive.Popup
+  className={mergeClassName("rounded-lg bg-popover", className)}
+/>
+```
+
+`mergeClassName` returns a string for a string and a function for a function,
+merging the base classes either way. `function-classname-guard.test.ts`
+type-checks the library and fails on any `cn(…)` that could receive a
+function, so the next part can't reintroduce the bug.
+
+### Variants come from CVA
+
+Size and appearance variants are defined with
+[CVA](https://cva.style). Some components export
+the variant function, such as `buttonVariants`, so you can style another
+element to match. A link that should look like a button stays an `<a>` and
+takes Button's classes from `buttonVariants`. `button.tsx` is a client module,
+so call `buttonVariants` from a client component.
+
+### Scoped CSS variables carry a value through a subtree
+
+Some values are CSS variables read from the component or an ancestor, so one
+declaration on a container reaches every part inside it. Card drives all its
+padding and gaps from `--card-spacing`, and the
+[control ladder](/docs/concepts/control-sizing) reads `--ks-control-*`. A card
+that is nothing but a table sets the spacing to zero:
+
+```tsx
+<Card className="[--card-spacing:0px]" variant="outline">
+  <Table>{rows}</Table>
+</Card>
+```
+
+Card's `size` prop resolves the variable through CVA, not through
+`data-[size=sm]:[--card-spacing:…]` variants. A variant modifier is part of
+tailwind-merge's group key, so your unmodified override would not replace it,
+and the variant would compile to a more specific selector than your class.
+`<Card size="sm" className="[--card-spacing:0px]">` once kept its padding for
+that reason. With one unmodified declaration per size, tailwind-merge decides,
+and your override wins at every size.
+
+### The `ks-` utilities
+
+`base.css` ships utilities with no component: `ks-typeset` for rendered
+markdown, `ks-scroll-fade` and `ks-scroll-fade-x` for edge fades, and
+`ks-shimmer` for live status text. They are Tailwind `@utility` blocks, so
+Tailwind emits them only in apps that use them, and they accept variants such
+as `md:ks-typeset`.
+
+The `ks-` prefix exists because of shadcn. Every project set up with
+`shadcn init` imports `shadcn/tailwind.css`, which defines its own
+`scroll-fade` and `shimmer`, and Tailwind applies both rules when two
+`@utility` blocks share a name. `base-css.test.ts` reads the installed shadcn
+stylesheet and fails if Keystone defines any `@utility`, `@keyframes`,
+`@property` or `@custom-variant` with a name shadcn also uses.
+
+`ks-scrollbar` is a plain class rather than a utility. Keystone no longer
+restyles every scrollbar: add `ks-scrollbar` to `<html>` for the thin,
+token-coloured skin everywhere, or to one scroll container. Its selectors sit
+inside `:where()`, so they have zero specificity and `no-scrollbar` still
+hides the scrollbar on an element that opts out.
+
+## Trade-offs
+
+A small contract means some styling needs a `className` on a part, or a
+`data-slot` selector, rather than a prop. Props cover the choices a component
+names, such as `size` and `variant`; anything else goes through `className`.
+
+`data-slot` covers the parts Keystone renders as named elements. Roots that
+render no element of their own, such as `Select` and `StringsProvider`, have no
+slot. Accordion's parts carry no `data-slot` today, so style them through
+`className`.
+
+tailwind-merge resolves conflicts between Tailwind classes only. A class from
+your own stylesheet competes with the defaults through normal CSS specificity
+and order.
+
+## What this means for your code
+
+- Target internal parts with `[data-slot="…"]` and documented state
+  attributes, never with Keystone's internal class names or Base UI's own
+  attributes.
+- Pass `className` for one-off changes, and expect a conflicting default to
+  be replaced.
+- When you wrap a Base UI part yourself, merge with `mergeClassName`, not
+  `cn`.
+- Change a component's spacing or density with its CSS variable on a
+  container rather than a class on each part.
+- Name your own utilities so they don't collide with Keystone's `ks-` names or
+  shadcn's.
+
+## Related
+
+- [Card](/docs/components/card)
+- [Button](/docs/components/button)
+- [Filter chips](/docs/components/filter-chips)
+- [Reel](/docs/components/reel)
+- [Rolling number](/docs/components/rolling-number)
+- [CSS utilities](/docs/theming/utilities)
+- [Customization](/docs/theming/customization)
+- [Using shadcn Components](/docs/interop)
+- [Right-to-left (RTL) support](/docs/concepts/rtl)

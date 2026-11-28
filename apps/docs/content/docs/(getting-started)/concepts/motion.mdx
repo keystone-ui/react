@@ -1,0 +1,181 @@
+---
+title: Motion
+description: Why Keystone UI times every transition from a few tokens, names the properties it animates, gates hover on real pointers, and stops motion for reduced-motion users from one rule.
+contentType: Conceptual
+---
+
+Keystone UI times its motion from 4 duration tokens and 3 easing curves in
+`base.css`. Every transition time in `base.css` derives from them, and so does
+every duration a component declares.
+That single source is what lets one reduced-motion rule stop the whole
+library, and it keeps durations consistent as components are added. The rest
+of the motion rules follow from Tailwind CSS v4 details: which properties a
+utility sets, which utility names a theme entry can replace, and when `hover:`
+applies.
+
+## The problem it solves
+
+Motion drifts when each component picks its own numbers. A `duration-150` here
+and a `duration-[160ms]` there can't be retuned together, and a reduced-motion
+rule has to find and override each one. Keystone hit both failure modes:
+transitions that read as animated in the source but snapped in the browser,
+and a reduced-motion rule that relied on `!important`.
+
+## How Keystone UI handles it
+
+The tokens live in an `@theme` block, so each one is a Tailwind value and a
+CSS variable:
+
+| Token | Value | Used for |
+| --- | --- | --- |
+| `--duration-fast` | 125 ms | Button presses, tooltips, modal backdrops |
+| `--duration-base` | 180 ms | Popups, filter chip colour changes |
+| `--duration-slow` | 250 ms | Modal content, RollingNumber digits |
+| `--duration-drawer` | 400 ms | Drawer |
+| `--ease-ks-out` | `cubic-bezier(0.23, 1, 0.32, 1)` | Most enters and presses |
+| `--ease-ks-in-out` | `cubic-bezier(0.77, 0, 0.175, 1)` | Colour changes on filter chips |
+| `--ease-drawer` | `cubic-bezier(0.32, 0.72, 0, 1)` | Drawer |
+
+Components read them as utilities, with the default inline so a registry copy
+works against an older `base.css`. Button, for example, uses
+`duration-(--duration-fast,125ms)`. Your own elements read the same tokens,
+like this panel that fades and slides in (`cn` is your class-merging helper):
+
+```tsx
+<div
+  className={cn(
+    "transition-[opacity,translate]",
+    "duration-(--duration-base) ease-(--ease-ks-out)"
+  )}
+>
+  {children}
+</div>
+```
+
+Exits are shorter than enters, as fractions of the same token: a popup leaves
+in two thirds of `--duration-base`, a tooltip in four fifths of
+`--duration-fast`, and modal content in three fifths of `--duration-slow`.
+A unit test fails on a literal duration such as `duration-150` anywhere in the
+library source, and `base.css` carries no literal time outside the token
+block.
+
+### Easing tokens carry a namespace
+
+The curves are `--ease-ks-out` and `--ease-ks-in-out`, not `--ease-out` and
+`--ease-in-out`. In Tailwind CSS v4, an `--ease-out` entry in `@theme` makes
+Tailwind emit an `ease-out` utility, and that utility replaces Tailwind's own
+`ease-out` in every app that imports the stylesheet, not only inside the
+library. The `ks` namespace leaves Tailwind's `ease-out` meaning what Tailwind
+says it means. For the same reason, components, demos and stories never use
+the bare `ease-out` or `ease-in-out` utilities; a test scans all three.
+
+### Transitions name their properties
+
+`transition-all` is banned in the library, the docs demos, the stories and the
+docs app, so a transition only animates what it lists. The list has to match
+what Tailwind CSS v4 emits: `scale-*`, `translate-*` and `rotate-*` set the
+standalone `scale`, `translate` and `rotate` properties, not `transform`. A
+`transition-[transform,opacity]` list therefore never animates a `scale-95`.
+Button's press, the Checkbox and Radio indicators, the Slider thumb and
+SelectionBar's rise all snapped this way while their classes looked animated.
+`transition-transform` is safe, because v4 expands it to all 4 properties, and
+`motion-props.test.ts` fails on `transform` inside a `transition-[…]` list.
+
+### Hover applies only to real pointers
+
+`base.css` redefines the `hover:` variant to apply inside
+`@media (hover: hover)`. On a touch screen, a tap triggers `:hover` and the
+style sticks until the next tap elsewhere. Gating the variant removes that
+sticky state on touch devices without touching any component class. The gate
+only covers the `hover:` variant, so a `:hover` written inside an arbitrary
+selector skips it.
+
+### Keyboard surfaces open without motion
+
+Base UI sets `data-instant` when a menu or popover opens from the keyboard or
+closes with Escape, and when a tooltip opens on focus. `base.css` removes the
+transition in those states, because a keyboard user already knows where the
+popup comes from and any duration reads as lag. The command palette's dialog
+content appears and leaves at once, since it is a keyboard surface opened
+with a shortcut, while its overlay keeps a short fade.
+
+### One rule handles reduced motion
+
+Under `prefers-reduced-motion: reduce`, one rule at the end of `base.css` does
+3 things:
+
+- Sets all 4 duration tokens to `0.01ms`, which stops every library
+  transition that derives from them, including the `[data-slot]` rules that a
+  zero-specificity selector could not reach.
+- Caps every element's animation and transition duration at `0.01ms`, plays
+  animations once and turns smooth scrolling off.
+- Turns off view transitions, which `*` never matches, by naming their
+  pseudo-elements.
+
+The rule is deliberately outside any cascade layer and has no `!important`.
+This excerpt shows its shape:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  :where(*:not(.animate-spin, [data-indeterminate])) {
+    animation-duration: 0.01ms;
+    transition-duration: 0.01ms;
+  }
+}
+```
+
+Unlayered styles beat every layer, so this zero-specificity rule still
+overrides Tailwind's `duration-*` and `animate-*` utilities in
+`@layer utilities`. Any selector of yours, also unlayered, can override it
+back. Inside `@layer base` it would lose to every utility and do nothing.
+Spinners and indeterminate progress keep moving, because a stopped spinner
+reads as a hung interface.
+
+### Live values have their own components
+
+A number that changes while someone watches, such as a balance or a live key performance indicator (KPI),
+is a [RollingNumber](/docs/components/rolling-number). It rolls only the digits
+that changed, one row each, with a CSS transition timed by `--duration-slow`,
+and it doesn't roll under reduced motion. The time left until a deadline is a
+[Countdown](/docs/components/countdown), whose `animated` mode renders each
+value as a RollingNumber. [Reel](/docs/components/reel) jumps instead of
+gliding under reduced motion, and a [FilterChips](/docs/components/filter-chips)
+press changes only colour, so chips never scale or move.
+
+## Trade-offs
+
+Tokens make motion consistent, and they also make it shared: changing
+`--duration-base` retimes every popup at once. A component that needs
+different timing derives it from a token, as the exit fractions do, rather than
+introducing a literal.
+
+The reduced-motion rule stops the library's motion, not yours. A duration you
+set in your own unlayered CSS, such as `html { scroll-behavior: smooth }`,
+outranks the zero-specificity rule and needs its own
+`prefers-reduced-motion` query.
+
+Hover gating means a hover-only affordance never appears on touch screens.
+Anything a person needs to reach must have a path that doesn't depend on
+hover.
+
+## What this means for your code
+
+- Time your own transitions with `duration-(--duration-base)` and
+  `ease-(--ease-ks-out)`, so they follow the library and stop under reduced
+  motion.
+- List the exact properties you animate, and name `scale`, `translate` and
+  `rotate` rather than `transform`.
+- Write hover styles with the `hover:` variant, not a `:hover` selector inside
+  brackets.
+- Use RollingNumber, StatValue and Countdown for live numbers and timers
+  instead of animating digits or ticking a timer by hand.
+
+## Related
+
+- [Rolling number](/docs/components/rolling-number)
+- [Countdown](/docs/components/countdown)
+- [Reel](/docs/components/reel)
+- [Filter chips](/docs/components/filter-chips)
+- [Upgrading: easing tokens are namespaced](/docs/upgrading#easing-tokens-are-namespaced)
+- [CSS utilities: ks-shimmer](/docs/theming/utilities#ks-shimmer)
+- [Popup layering and modality](/docs/concepts/popup-layering)

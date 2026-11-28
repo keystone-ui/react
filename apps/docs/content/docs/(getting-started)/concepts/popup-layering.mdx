@@ -1,0 +1,156 @@
+---
+title: Popup layering and modality
+description: Why every popup sits above modals and drawers, how the z-index scale enforces it, and what a modal does to the page behind it.
+contentType: Conceptual
+---
+
+Keystone UI stacks its floating layers with one named z-index scale in
+`base.css`. Drawers sit lowest, modals above them, popups (menus, selects,
+comboboxes and popovers) above modals, then tooltips, then toasts. The order
+exists so a popup opened from inside a dialog always appears over that
+dialog, and it only works because the z-index goes on the element that is
+actually positioned.
+
+## The problem it solves
+
+A Select inside a Modal is the case that breaks naive layering. The modal is
+portalled to the end of the document with a high z-index, and so is the
+select's list. If both carry the same z-index, the list can open behind the
+dialog that contains its trigger, and the control looks dead.
+
+Keystone had a subtler version of this bug. The popups carried
+`z-(--z-popover,60)` on their visible panel while the wrapper around the panel
+carried `isolate z-50`. The documented scale was dead CSS: every popup sat at
+50, level with an open Modal.
+
+## How Keystone UI handles it
+
+The scale is a set of `@theme` tokens, so each one is also a Tailwind value
+(`z-(--z-modal)`):
+
+| Token | Value | Read by |
+| --- | --- | --- |
+| `--z-sticky` | 30 | Sticky table headers you build |
+| `--z-drawer` | 40 | Drawer overlay and content |
+| `--z-modal` | 50 | Modal and AlertDialog overlay and content |
+| `--z-dropdown` | 60 | DropdownMenu and its submenus |
+| `--z-popover` | 60 | Popover, Select and Combobox |
+| `--z-tooltip` | 70 | Tooltip |
+| `--z-toast` | 80 | The toast viewport |
+
+Each component writes the token with its default inline, such as
+`z-(--z-popover,60)`, so a component installed from the registry keeps its
+place even against an older `base.css`.
+
+### Popups sit above dialogs
+
+Menus, selects, comboboxes and popovers sit at 60, above Modal at 50 and
+Drawer at 40. A popup triggered from inside a dialog must cover the dialog,
+and the scale makes that the default rather than something you configure:
+
+```tsx
+import { Modal, ModalContent, ModalTitle } from "@keystoneui/react/modal";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from "@keystoneui/react/select";
+
+<Modal open>
+  <ModalContent>
+    <ModalTitle>Edit ticket</ModalTitle>
+    <Select>
+      <SelectTrigger>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>{items}</SelectContent>
+    </Select>
+  </ModalContent>
+</Modal>
+```
+
+The list opens over the dialog because its layer (60) is above the modal's
+(50), wherever each one is portalled. Tooltips sit above popups, and toasts
+sit above everything.
+
+### Drawer sits below Modal
+
+Drawer uses its own token at 40, so a Modal opened from a Drawer covers the
+drawer. The reverse follows from the same scale: a Drawer opened from inside a
+Modal renders behind it.
+
+### The z-index goes on the positioner
+
+A Base UI popup is two elements: a `Positioner` that Base UI places next to
+the trigger, wrapping the `Popup` you see. A z-index on the `Popup` only
+orders it inside the positioner's own stacking context, so it never competes
+with a Modal. Keystone puts the token on each `Positioner` and none on the
+`Popup`, and `popup-layering.test.ts` fails on a `Positioner` without a token,
+on any `isolate` or bare `z-50` there, and on a z-index repeated on its
+`Popup`.
+
+Toasts use the same idea in reverse. Each toast's own z-index orders it among
+the other toasts inside the viewport, which is a stacking context at 80, so
+those values never compete with the page's scale.
+
+### Every dialog and popup paints the popover surface
+
+`--background` is the page. Modal, AlertDialog, Drawer, Popover, DropdownMenu,
+Select and Combobox paint `bg-popover` instead, which shipped themes set one
+step above the page in dark mode. Modal, AlertDialog and Drawer once used
+`bg-background`, and in dark mode a dialog was the page's own colour over a
+page dimmed to nearly the same black, so its edge disappeared. Light mode hid
+the bug, because both tokens are white there. Tooltip is the exception: it
+inverts to `bg-foreground` with `text-background`.
+
+### Modality is separate from layering
+
+The z-index decides what paints on top. Modality decides what the page behind
+a Modal can still do. By default the page behind an open Modal is inert and
+scroll-locked. Base UI's `modal` prop on the root changes that:
+
+- **Default**: focus stays inside the dialog and the document does not scroll.
+- **`modal="trap-focus"`**: focus stays inside, and the page can scroll.
+- **`modal={false}`**: no focus trap and no scroll lock.
+
+Hiding the backdrop with `overlayClassName` is visual only and leaves
+modality as it was. For clicks to reach the page behind a hidden backdrop,
+the Modal also needs `scrollBehavior="inside"`, as the
+[Modal overlay example](/docs/components/modal#overlay) shows.
+
+## Trade-offs
+
+A fixed scale means a Drawer can never cover a Modal.
+
+Popovers, selects, comboboxes and menus share 60. When two of them are open at
+once, the scale does not order them: CSS paints the one later in the document
+on top.
+
+The scale only orders Keystone's layers against each other. Your own fixed
+headers, chat widgets and banners need a value on the same scale, or they will
+cover a popup or sit under a drawer.
+
+## What this means for your code
+
+- Leave popups inside dialogs as they are. The layering already accounts for
+  them.
+- Place your own floating layers on the scale with the tokens, such as
+  `z-[var(--z-sticky,30)]` for a sticky table header, rather than with a
+  literal like `z-50`.
+- When you wrap a Base UI popup yourself, give the z-index to its
+  `Positioner`, never to the `Popup` inside it.
+- Choose modality per dialog with the `modal` prop on the root, not by hiding
+  the overlay.
+
+## Related
+
+- [Modal](/docs/components/modal)
+- [Drawer](/docs/components/drawer)
+- [Popover](/docs/components/popover)
+- [Select](/docs/components/select)
+- [Dropdown menu](/docs/components/dropdown-menu)
+- [Tooltip](/docs/components/tooltip)
+- [Toast](/docs/components/toast)
+- [Upgrading: Drawer layers below Modal](/docs/upgrading#drawer-layers-below-modal)
+- [Right-to-left (RTL) support](/docs/concepts/rtl)
