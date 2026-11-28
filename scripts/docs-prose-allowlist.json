@@ -1,5 +1,11 @@
 [
   {
+    "file": "components/date-picker.mdx",
+    "rule": "banned-word",
+    "match": "Quick picks",
+    "reason": "names the date-picker presets demo"
+  },
+  {
     "file": "blocks/admin-01.mdx",
     "rule": "the-user",
     "match": "user",
