@@ -102,7 +102,7 @@
   --muted-foreground: oklch(0.552 0.016 285.938);
   --accent: oklch(0.967 0.001 286.375);
   --accent-foreground: oklch(0.21 0.006 285.885);
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: oklch(0.54 0.245 27.325);
   --destructive-foreground: oklch(0.971 0.013 17.38);
   --border: oklch(0.92 0.004 286.32);
   --border-muted: oklch(0.92 0.004 286.32 / 0.5);
@@ -116,9 +116,10 @@
    * mean the same thing in every theme, so the six theme items do not carry
    * them.
    *
-   * --warning-foreground is deliberately DARK, breaking the pattern where
-   * every other *-foreground is near-white. Near-white on amber-500 is about
-   * 1.9:1, a WCAG failure. Do not "fix" this for symmetry. */
+   * --warning-foreground is deliberately DARK, unlike the near-white
+   * foregrounds of the neutral and primary surfaces. Near-white on amber-500
+   * is about 1.9:1, a WCAG failure. Do not "fix" this for symmetry. Dark
+   * mode's --destructive-foreground is dark for the same reason. */
   --success: oklch(0.627 0.194 149.214);
   --success-foreground: oklch(0.266 0.065 152.934);
   --warning: oklch(0.769 0.188 70.08);
@@ -177,7 +178,7 @@
     --accent: oklch(0.274 0.006 286.033);
     --accent-foreground: oklch(0.985 0 0);
     --destructive: oklch(0.704 0.191 22.216);
-    --destructive-foreground: oklch(0.971 0.013 17.38);
+    --destructive-foreground: oklch(0.258 0.092 26.042);
     --border: oklch(1 0 0 / 10%);
     --border-muted: oklch(1 0 0 / 5%);
     --popup-ring: oklch(1 0 0 / 3%);
