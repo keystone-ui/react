@@ -23,8 +23,17 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
+import { baseColorIds } from "@/app/(home)/theme-builder/theme-data";
+import { resolveThemeVars } from "@/app/(home)/theme-builder/utils/generate-css-output";
 
-import { ciede2000, closestPair, contrast, simulate } from "./color-math";
+import {
+  ciede2000,
+  closestPair,
+  contrast,
+  over,
+  renderedContrast,
+  simulate,
+} from "./color-math";
 import { MODES, type Mode, tokenSource } from "./css-tokens";
 import { REPO_ROOT, type RegistryItem, readJson } from "./registry-paths";
 
@@ -36,6 +45,44 @@ const THEME_INLINE_RE = /@theme inline\s*\{([\s\S]*?)\n\}/;
 
 const css = readFileSync(GLOBAL_CSS, "utf-8");
 const appTokens = tokenSource(GLOBAL_CSS);
+
+/** WCAG AA for normal text. */
+const AA = 4.5;
+
+/**
+ * Every way `--destructive` is read as text or behind text, measured as a
+ * browser paints it (out-of-gamut channels clipped, alpha composited):
+ *
+ *   - the destructive Button label, at rest and under `hover:bg-destructive/90`
+ *     on each surface it can sit on;
+ *   - `text-destructive` error copy on each surface.
+ *
+ * Returns one line per pair under AA, so a failure names the pair and ratio.
+ */
+function destructiveFailures(
+  tokens: Record<string, string>,
+  surfaces: readonly string[] = ["background", "card", "popover"]
+): string[] {
+  const fg = tokens["destructive-foreground"];
+  const fill = tokens.destructive;
+  const ratios: [string, number][] = [
+    ["foreground on fill", renderedContrast(fg, fill)],
+    ["foreground on fill (specified)", contrast(fg, fill)],
+  ];
+  for (const surface of surfaces) {
+    const backdrop = tokens[surface];
+    ratios.push(
+      [
+        `foreground on hover fill over ${surface}`,
+        renderedContrast(fg, over(fill, 0.9, backdrop)),
+      ],
+      [`text-destructive on ${surface}`, renderedContrast(fill, backdrop)]
+    );
+  }
+  return ratios
+    .filter(([, ratio]) => ratio < AA)
+    .map(([pair, ratio]) => `${pair}: ${ratio.toFixed(2)}`);
+}
 
 const chartRamp = (mode: Mode) =>
   [1, 2, 3, 4, 5].map((slot) => appTokens[mode][`chart-${slot}`]);
@@ -162,30 +209,24 @@ describe("status tones", () => {
     }
   );
 
-  // `--destructive-foreground` on `--destructive` does NOT clear AA, and this
-  // test records that rather than hiding it: measured 4.47 light / 2.63 dark,
-  // against a 4.5 requirement. Both values predate this suite.
-  //
-  // Not silently changed, because `--destructive-foreground` is the label
-  // colour on every destructive Button in every theme, so re-picking it is a
-  // visual change that deserves its own decision. Pinned just under the
-  // measured figures so it cannot get worse in the meantime.
-  const DESTRUCTIVE_ON_FILL: Record<Mode, number> = { dark: 2.6, light: 4.4 };
-
-  it.each(MODES)("does not regress destructive-foreground in %s", (mode) => {
-    const ratio = contrast(
-      appTokens[mode]["destructive-foreground"],
-      appTokens[mode].destructive
-    );
-    expect(ratio).toBeGreaterThanOrEqual(DESTRUCTIVE_ON_FILL[mode]);
-    // Documents the shortfall so it shows up when someone reads the suite.
-    expect(ratio).toBeLessThan(MIN_ON_FILL);
-  });
+  // The label on every destructive Button, and the check mark of an invalid
+  // checked Checkbox/Radio. Measured as painted: light 4.85 (4.54 under
+  // hover), dark 5.58 (4.63 under hover). Before: light 4.36 as painted (4.47
+  // as specified, since the old red lies outside sRGB) and dark 2.65, both
+  // under AA. See destructiveFailures for everything it checks.
+  it.each(MODES)(
+    "destructive-foreground clears AA on destructive in %s",
+    (mode) => {
+      expect(destructiveFailures(appTokens[mode])).toEqual([]);
+    }
+  );
 
   // The reason --warning-foreground is dark rather than near-white like every
-  // other *-foreground. Near-white on amber-500 is about 1.9:1.
+  // other *-foreground. Near-white on amber-500 is about 1.9:1. The sample is
+  // light mode's destructive-foreground in both modes: dark mode's is a dark
+  // red, for the same reason this one is dark.
   it.each(MODES)("would fail with a near-white warning text in %s", (mode) => {
-    const nearWhite = appTokens[mode]["destructive-foreground"];
+    const nearWhite = appTokens.light["destructive-foreground"];
     expect(contrast(nearWhite, appTokens[mode].warning)).toBeLessThan(
       MIN_ON_FILL
     );
@@ -193,7 +234,7 @@ describe("status tones", () => {
 
   // Success and destructive are the two tones a reader has to tell apart at a
   // glance in a metric delta, and they are the classic red/green trap.
-  // Measured worst-of-three: 50.3 (light) / 39.4 (dark) -- they separate by
+  // Measured worst-of-three: 47.2 (light) / 39.4 (dark) -- they separate by
   // lightness, not hue, which is what makes a red/green pair safe here.
   it.each(MODES)(
     "keeps success and destructive apart under CVD in %s",
@@ -259,6 +300,16 @@ describe("theme legibility", () => {
     }
   );
 
+  // The destructive Button label and error text, in every theme a consumer can
+  // install. Measured minimum as painted: 4.54 (light, label under hover);
+  // dark-mode hover differs slightly per theme surface, minimum 4.61 (slate).
+  it.each(cases)(
+    "%s/%s: destructive clears AA as a fill and as text",
+    (name, mode) => {
+      expect(destructiveFailures(themeTokens(name)[mode])).toEqual([]);
+    }
+  );
+
   // Body text. Measured minimum: 15.6 -- comfortably AAA, and worth pinning
   // so a future theme cannot quietly ship at 5.
   it.each(cases)(
@@ -282,6 +333,9 @@ describe("theme legibility", () => {
       "muted-foreground",
       "primary",
       "primary-foreground",
+      "popover",
+      "destructive",
+      "destructive-foreground",
     ];
     const unresolvable: string[] = [];
     for (const mode of MODES) {
@@ -293,5 +347,34 @@ describe("theme legibility", () => {
       }
     }
     expect(unresolvable).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Theme builder output
+// ---------------------------------------------------------------------------
+
+describe("theme builder destructive", () => {
+  // The builder and the /r/theme/<code> route both serve resolveThemeVars, so
+  // a theme generated per request carries the same destructive pair as the
+  // registry themes. Checked against every base, since the surfaces differ.
+  const cases = baseColorIds.flatMap((base) =>
+    MODES.map((mode) => [base, mode] as const)
+  );
+
+  it.each(cases)("%s/%s: destructive clears AA", (base, mode) => {
+    const { darkVars, lightVars } = resolveThemeVars({
+      base,
+      font: "geist",
+      primaryC: 0.006,
+      primaryH: 285.885,
+      primaryL: 0.21,
+      radius: "default",
+    });
+    const vars = mode === "light" ? lightVars : { ...lightVars, ...darkVars };
+    const tokens = Object.fromEntries(
+      Object.entries(vars).map(([name, value]) => [name.slice(2), value])
+    );
+    expect(destructiveFailures(tokens)).toEqual([]);
   });
 });

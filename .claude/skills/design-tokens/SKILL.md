@@ -26,7 +26,7 @@ Use `text-success` / `bg-success` and `text-warning` / `bg-warning` rather than 
 
 `--success-foreground` and `--warning-foreground` are both **dark**, breaking the pattern where every other `*-foreground` is near-white. Near-white measures 3.10:1 on the success green and 1.97:1 on the warning amber — both WCAG failures. Dark text gives 4.60 and 6.97. Do not "fix" these for symmetry; `apps/docs/tests/palette.test.ts` measures them.
 
-Note `--destructive-foreground` on `--destructive` is 4.47:1 in light and 2.63:1 in dark, i.e. below AA. That predates the status tokens and is left alone deliberately — it is the label colour on every destructive Button in every theme, so re-picking it is its own decision. The palette test pins it so it cannot get worse.
+`--destructive-foreground` on `--destructive` clears AA as painted: 4.85:1 light (near-white on `oklch(0.54 0.245 27.325)`) and 5.58:1 dark, where the foreground is a **dark** red (`oklch(0.258 0.092 26.042)`) like success, warning and info, because no lightness of the dark-mode red takes near-white to 4.5:1 while `text-destructive` stays 4.5:1 on the dark page. The light red lies outside sRGB, so `palette.test.ts` measures it clipped as a browser paints it (`renderedContrast`), and checks the `hover:bg-destructive/90` label and `text-destructive` on every surface too. Do not lighten the light red back to Tailwind `red-600` (0.577): it paints at 4.36:1.
 
 Reserve `--warning` for caution and threshold states (approaching a limit, a stale sync). A metric that simply got worse is `--destructive`, not `--warning` — one channel, one meaning.
 
