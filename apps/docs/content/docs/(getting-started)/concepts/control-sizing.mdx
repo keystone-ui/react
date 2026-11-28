@@ -1,0 +1,163 @@
+---
+title: Control sizing and density
+description: Why Keystone UI controls share one height ladder, why popup rows and filter chips sit off it, and how density moves every rung at once.
+contentType: Conceptual
+---
+
+Keystone UI controls take their height from one shared ladder of 4 rungs:
+`xs` 24px, `sm` 32px, `default` 40px and `lg` 48px. Two controls left at the
+same size name line up in a row, whichever components they are. The ladder is
+also the unit of density: change the 4 rungs and every control that reads them
+moves together.
+
+## The problem it solves
+
+A toolbar is the place where mismatched heights show. Each component can be
+internally consistent and still clash with its neighbour: a search field at
+40px beside filter buttons at 32px leaves an 8px step along the row.
+
+Keystone shipped exactly that mismatch in the `admin-01` block, and Toggle
+once sat at 36, 32 and 40px, a ladder it had inherited from shadcn. Neither
+bug was visible to a test of one component, because each component was
+correct on its own terms. The bug only exists between two controls in the
+same row.
+
+## How Keystone UI handles it
+
+The ladder is 4 CSS variables in `base.css`, each defined from Tailwind's
+`--spacing`, so a project that rescales its spacing rescales its controls too:
+
+| Rung | Variable | Default |
+| --- | --- | --- |
+| `xs` | `--ks-control-xs` | 24px (`--spacing` × 6) |
+| `sm` | `--ks-control-sm` | 32px (`--spacing` × 8) |
+| `default` | `--ks-control-md` | 40px (`--spacing` × 10) |
+| `lg` | `--ks-control-lg` | 48px (`--spacing` × 12) |
+
+Every control that can share a row reads its height from these variables
+instead of a literal such as `h-10`. Each class also carries the default as a
+fallback, `h-(--ks-control-md,2.5rem)`, so a component installed from the
+registry still renders at the right height against an older `base.css`.
+
+The components on the ladder, and the rungs each one offers:
+
+- **Button**: `xs`, `sm`, `default` and `lg`, plus the matching icon sizes.
+- **Toggle and ToggleGroup**: `sm`, `default` and `lg`, the same heights as
+  Button at each shared size.
+- **Input, InputGroup, SelectTrigger and NativeSelect**: `sm` and `default`.
+- **Table**: `size="sm"` on the table moves `TableHead` from `default` to `sm`.
+- **Pagination**: its page links copy Button's sizes.
+
+Controls on the ladder also share a corner: every one is `rounded-md`, and
+only the 24px rung steps down to `rounded-sm`, where a larger radius would
+leave almost no straight edge.
+
+### One tier per row
+
+The rule that follows from the ladder is to pick one tier for a whole row and
+keep every control in it on that tier. This toolbar is dense, so every control
+in it is `sm`:
+
+```tsx
+import { Button } from "@keystoneui/react/button";
+import { InputGroup, InputGroupInput } from "@keystoneui/react/input-group";
+
+<div className="flex items-center gap-2">
+  <InputGroup size="sm">
+    <InputGroupInput placeholder="Search tickets…" />
+  </InputGroup>
+  <Button size="sm" variant="outline">Status</Button>
+  <Button size="sm">New ticket</Button>
+</div>
+```
+
+The tier follows the screen, not the component. Sign-in and other standalone
+forms stay on `default`. Dense app screens, such as toolbars, filter rows and
+pagination, use `sm` throughout the card. A `size` prop is how you choose the
+tier; a literal `h-8` on one control would leave it behind when the density
+changes.
+
+### Only Button and Toggle reach 48px
+
+`lg` exists only on Button, Toggle and ToggleGroup. The input family stops at
+`default`, so a 48px row cannot contain a text field. Use `lg` for a call to
+action that stands on its own, not for a toolbar.
+
+### Popup rows sit off the ladder
+
+A row inside a menu, select or combobox popup is 36px, and 32px when you pass
+`size="compact"` to `SelectContent`, `DropdownMenuContent` or
+`ComboboxContent`. A menu row is not something you place beside a button, so
+it has its own height and its own density switch. A unit test fails if
+anything else in the library declares a 36px height, so the popup tier can't
+leak into a control.
+
+### Filter chips sit one rung below
+
+[FilterChips](/docs/components/filter-chips) name their sizes after the chip,
+not the rung. Their `sm`, `default` and `lg` read the `xs`, `sm` and `default`
+rungs (24, 32 and 40px). A chip row is a secondary row of its own, under a
+toolbar or a tabs list, rather than a neighbour of a button or an input.
+
+### Density is 4 values
+
+Because every ladder control reads the same 4 variables, a density is one set
+of values rather than a fork of each component. The `density/compact` registry
+item sets them app-wide:
+
+| Variable | Default | `density/compact` |
+| --- | --- | --- |
+| `--ks-control-xs` | 24px | 24px |
+| `--ks-control-sm` | 32px | 28px |
+| `--ks-control-md` | 40px | 32px |
+| `--ks-control-lg` | 48px | 40px |
+
+The same variables work on one container, which gives a dense data screen
+inside an otherwise default app:
+
+```tsx
+<section className="[--ks-control-sm:1.75rem] [--ks-control-md:2rem]">
+  {children}
+</section>
+```
+
+Keep every rung at 24px or more, the minimum target size in WCAG 2.5.8.
+
+## Trade-offs
+
+The ladder makes a row line up only when its controls share a tier. Choosing
+the tier is still your decision, and no unit test can see a `size="sm"` button
+beside a default input. The docs' end-to-end suite catches this in the block
+previews by grouping rendered controls into visual rows at 3 widths and
+comparing their heights and corners, but it cannot see your screens.
+
+The default rung is 40px. shadcn's controls have ranged from 32px to 40px
+across its styles, so a shadcn component that renders Keystone's Button can
+end up taller than the layout it was built for. Both libraries put `sm` at
+32px, so a mixed toolbar lines up most reliably at `sm`.
+
+Density covers the ladder and nothing else. Popup rows, Tabs triggers and
+other parts with their own heights stay where they are when you change the
+variables.
+
+## What this means for your code
+
+- Decide the tier per screen or per card, then set `size` on every control in
+  each row. Leave a row at its defaults when the screen is a standalone form.
+- Reach for a `size` prop before a height class. A literal height opts that
+  control out of density.
+- Use `size="compact"` on popup content when menu rows need to be tighter;
+  it is independent of the control ladder.
+- Change density with the `--ks-control-*` variables or the
+  `density/compact` item, as described in
+  [Customization](/docs/theming/customization#control-density).
+
+## Related
+
+- [Customization: control density](/docs/theming/customization#control-density)
+- [Using Keystone UI with shadcn](/docs/interop#control-heights-differ)
+- [Button](/docs/components/button)
+- [Input group](/docs/components/input-group)
+- [Toggle group](/docs/components/toggle-group)
+- [Filter chips](/docs/components/filter-chips)
+- [Table](/docs/components/table)

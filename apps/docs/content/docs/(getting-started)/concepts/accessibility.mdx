@@ -1,0 +1,160 @@
+---
+title: Accessibility
+description: What Keystone UI does for focus, disabled states, names, contrast and touch input, why, and what it leaves to you.
+contentType: Conceptual
+---
+
+Keystone UI gets keyboard behaviour and roles from Base UI, and adds its own
+rules for what Base UI doesn't decide: how focus looks, how a disabled control
+reads, which names a component gives itself and which it needs from you, and
+which colour pairs stay legible. Most of these rules are pinned by tests that
+read the source, so they hold as components change. None of them makes an app
+accessible by itself; they set defaults that your composition can keep or
+break.
+
+## The problem it solves
+
+Accessibility regressions in a component library are quiet. A focus outline
+that computes to `none` still reads like Button's in the source: TagRemove and
+the Toast close button once showed no keyboard focus at all for that reason.
+A status colour that looks fine in light mode can fail contrast in dark mode,
+and a control can lose its accessible name when it is placed inside the wrong
+parent. None of these throws an error, so each one needs a rule and a test.
+
+## How Keystone UI handles it
+
+### Keyboard and roles come from Base UI
+
+Interactive parts are built on `@base-ui/react` primitives, which supply the
+roles, the ARIA state and the keyboard model: arrow keys in menus and radio
+groups, Escape to close a popup. Keystone documents
+the specifics per component. The [FilterChips](/docs/components/filter-chips#keyboard-and-focus)
+page, for example, lists exactly where Tab enters the row and what each arrow
+key does. Where Keystone builds a primitive itself, such as FilterChips' Tab
+stop or Reel's arrows that never take focus, its page says so.
+
+### Two focus styles, never mixed
+
+Keystone draws keyboard focus in one of 2 ways, chosen by the kind of
+control:
+
+- **Outline**: buttons, toggles, checkboxes, tab triggers, filter chips and
+  other parts that are clicked. They draw
+  `focus-visible:outline-2 focus-visible:outline-ring/50 focus-visible:outline-offset-2`,
+  only for keyboard focus.
+- **Ring**: text fields and select triggers. Input, SelectTrigger and
+  NativeSelect draw `focus:border-ring focus:ring-1 focus:ring-ring focus:ring-inset`,
+  an inset ring that recolours the field's own border.
+
+`focus-outline.test.ts` pins the outline on the parts the library paints
+itself, such as BreadcrumbLink, Toast's action buttons, FilterChip and the
+FileUpload root, and fails if one of them also draws a focus ring, which would
+paint a second indicator beside the outline. It also fails on any class string
+that pairs a bare `outline-none` with an outline width: in Tailwind CSS v4,
+`outline-none` sets the outline style to `none`, so the width alone draws
+nothing.
+
+### Disabled controls look and point the same way
+
+A disabled control reads as unavailable twice: it dims, and the cursor turns
+to `cursor-not-allowed`. Native elements style it through `disabled:`, and
+Base UI parts through `data-disabled:`, so components that can be either carry
+both. Most dim with `opacity-50`. Button instead dims each variant's own
+colours to half, for example `disabled:bg-primary/50`. `base.css` also restores `cursor: pointer` on every enabled `button`
+and `[role="button"]`, which Tailwind CSS v4 no longer does.
+
+### Names: what components supply and what they need
+
+Some components name themselves, and some need a name from you:
+
+- **Countdown** has `role="timer"`, the name "Time remaining" by default, and
+  visually hidden text such as "1 hour, 36 minutes". Its visible digits are
+  hidden from assistive technology.
+- **RollingNumber** gives assistive technology one visually hidden formatted
+  value and hides the moving digits. Live announcements are off unless you
+  pass `aria-live`.
+- **CopyButton** carries its confirmation in its name, which changes from
+  `Copy` to `Copied`, because an icon swap alone announces nothing.
+- **FilterChips** needs a name for the row from `aria-label` or
+  `aria-labelledby`, and logs a warning in development without one. Each chip
+  is read as its label and count, such as "Typography 3".
+
+Composition can change a name. Inside a labelled Base UI `Field`, a chip
+without its own `aria-label` takes the Field's label and loses its own text,
+which is why FilterChips is not supported inside a `Field`. A link rendered
+through `Button` gets `role="button"` and is announced as a button, so a link
+that looks like a button is an `<a>` styled with `buttonVariants` instead.
+
+### Contrast is measured, not assumed
+
+`apps/docs/tests/palette.test.ts` measures the shipped colour tokens and pins
+each result as a floor, so a change can't make it worse. It records what the
+palette achieves; it doesn't claim compliance with a standard.
+
+- **Warning text is dark.** `--warning-foreground` is dark rather than
+  near-white, because near-white text on the amber `--warning` fill measures
+  about 1.9:1. Success, warning and info foregrounds
+  measure at least 4.5:1 on their fills in both modes.
+- **Destructive falls short.** `--destructive-foreground` on `--destructive`
+  measures 4.47:1 in light mode and 2.63:1 in dark mode, below 4.5:1. The test
+  records the shortfall and stops it from getting worse.
+- **Theme text clears AA.** In every shipped theme, `--muted-foreground`
+  clears 4.5:1 on the page and on cards, and `--primary-foreground` clears it
+  on `--primary`.
+
+### Chart colours separate by lightness
+
+The 5 chart slots, `--chart-1` to `--chart-5`, are spaced by lightness, which
+every form of colour-vision deficiency (CVD) preserves, rather than by hue.
+The test simulates protanopia, deuteranopia and tritanopia and requires every
+pair of slots to stay at least 10 apart in CIEDE2000 colour difference, where
+1 to 2 is the smallest difference people notice. Success and destructive stay
+at least 35 apart under the same simulations, and StatDelta never relies on
+colour alone: it adds an arrow and a visually hidden qualifier.
+
+### Touch input
+
+Text fields use a 16px font on touch devices and 14px only under a fine
+pointer (`pointer-fine:text-sm`). iOS Safari zooms the page when focus lands
+on a field under 16px and never zooms back. Control heights stay on the
+[control ladder](/docs/concepts/control-sizing), whose smallest rung is 24px,
+the minimum target size in WCAG 2.5.8.
+
+## Trade-offs
+
+Base UI's keyboard model is consistent, but it is Base UI's: a key handler of
+yours runs alongside it, and some components document how to take a key over
+(FilterChips uses `event.preventBaseUIHandler()`).
+
+The contrast tests guard the shipped tokens only. A theme you build or edit is
+yours to measure, and a token whose value is a `color-mix()` or a `var()` is
+not measured at all.
+
+Components that render inline values, such as RollingNumber and Countdown,
+render only `<span>` elements so they are valid inside a paragraph; the
+reasons are in [Server rendering and hydration](/docs/concepts/server-rendering).
+
+## What this means for your code
+
+- Keep focus styles on the pattern of the part you extend: outline for
+  clickable parts, inset ring for fields.
+- Style disabled states with both `disabled:` and `data-disabled:` when a
+  part can be either a native element or a Base UI part.
+- Give every row, group and icon-only control a name, and check names after
+  you nest one component in another.
+- Measure your own theme's foreground and fill pairs, especially
+  `--destructive-foreground`, before you ship it.
+- Respect reduced motion in your own CSS as described in
+  [Motion](/docs/concepts/motion).
+
+## Related
+
+- [Filter chips](/docs/components/filter-chips)
+- [Countdown](/docs/components/countdown)
+- [Rolling number](/docs/components/rolling-number)
+- [Copy button](/docs/components/copy-button)
+- [Button](/docs/components/button)
+- [Stat](/docs/components/stat)
+- [Theming colors](/docs/theming/colors)
+- [Control sizing and density](/docs/concepts/control-sizing)
+- [Motion](/docs/concepts/motion)
