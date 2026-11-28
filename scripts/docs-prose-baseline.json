@@ -79,24 +79,12 @@
     "content-type": 1,
     "heading-case": 1
   },
-  "components/alert-dialog.mdx": {
-    "content-type": 1,
-    "heading-case": 2
-  },
-  "components/alert.mdx": {
-    "content-type": 1,
-    "heading-case": 3
-  },
   "components/aspect-ratio.mdx": {
     "content-type": 1
   },
   "components/avatar.mdx": {
     "content-type": 1,
     "heading-case": 2
-  },
-  "components/badge.mdx": {
-    "content-type": 1,
-    "heading-case": 3
   },
   "components/breadcrumb.mdx": {
     "content-type": 1,
@@ -128,11 +116,6 @@
   "components/checkbox.mdx": {
     "content-type": 1,
     "heading-case": 2
-  },
-  "components/circular-progress.mdx": {
-    "content-type": 1,
-    "em-dash": 1,
-    "heading-case": 1
   },
   "components/code-block.mdx": {
     "content-type": 1
@@ -170,16 +153,6 @@
     "content-type": 1,
     "em-dash": 1,
     "heading-case": 3
-  },
-  "components/drawer.mdx": {
-    "content-type": 1,
-    "em-dash": 5,
-    "heading-case": 2
-  },
-  "components/dropdown-menu.mdx": {
-    "content-type": 1,
-    "em-dash": 6,
-    "heading-case": 2
   },
   "components/empty.mdx": {
     "content-type": 1,
@@ -239,14 +212,6 @@
     "content-type": 1,
     "em-dash": 2
   },
-  "components/popover.mdx": {
-    "content-type": 1,
-    "heading-case": 2
-  },
-  "components/progress.mdx": {
-    "content-type": 1,
-    "em-dash": 1
-  },
   "components/radio-group.mdx": {
     "content-type": 1,
     "heading-case": 1
@@ -275,16 +240,9 @@
     "content-type": 1,
     "heading-case": 1
   },
-  "components/skeleton.mdx": {
-    "content-type": 1,
-    "heading-case": 1
-  },
   "components/slider.mdx": {
     "content-type": 1,
     "heading-case": 1
-  },
-  "components/spinner.mdx": {
-    "content-type": 1
   },
   "components/stat.mdx": {
     "banned-word": 1,
@@ -329,11 +287,6 @@
     "content-type": 1,
     "heading-case": 2
   },
-  "components/toast.mdx": {
-    "content-type": 1,
-    "em-dash": 6,
-    "heading-case": 2
-  },
   "components/toggle-group.mdx": {
     "content-type": 1,
     "em-dash": 1,
@@ -343,12 +296,6 @@
     "content-type": 1,
     "em-dash": 1,
     "heading-case": 1
-  },
-  "components/tooltip.mdx": {
-    "banned-word": 3,
-    "content-type": 1,
-    "em-dash": 6,
-    "heading-case": 2
   },
   "components/typography.mdx": {
     "content-type": 1,

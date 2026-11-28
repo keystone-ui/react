@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "alert-dialog",
   "title": "Alert Dialog",
-  "description": "Modal confirmation dialog for destructive or irreversible actions requiring user acknowledgement.",
+  "description": "A modal dialog that asks the reader to confirm a destructive or irreversible action before it runs.",
   "dependencies": [
     "@base-ui/react"
   ],

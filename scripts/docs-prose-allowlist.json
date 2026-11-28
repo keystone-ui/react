@@ -42,12 +42,6 @@
     "reason": "the end user of the app pasting the copied text"
   },
   {
-    "file": "components/drawer.mdx",
-    "rule": "the-user",
-    "match": "the user",
-    "reason": "the end user of the app glancing back at the list"
-  },
-  {
     "file": "components/filter-chips.mdx",
     "rule": "the-user",
     "match": "the user",

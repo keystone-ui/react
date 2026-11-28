@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "popover",
   "title": "Popover",
-  "description": "Floating content panel anchored to a trigger element for contextual information or controls.",
+  "description": "A floating panel anchored to a trigger that holds extra information or controls for it.",
   "dependencies": [
     "@base-ui/react"
   ],

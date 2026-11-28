@@ -1,6 +1,7 @@
 ---
 title: Tooltip
-description: Small floating label that appears on hover to provide additional descriptive text.
+description: A small floating label that shows a short description of its trigger on hover or keyboard focus.
+contentType: Reference
 ---
 
 <ComponentPreview name="tooltip-default" />
@@ -37,17 +38,21 @@ pnpm add @keystoneui/react@beta @base-ui/react
 
 ## Usage
 
+Import the parts from the `tooltip` subpath.
+
 ```tsx
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@keystoneui/react/tooltip";
 ```
 
 <Callout type="warn">
-**Tooltip is a visual enhancement only.** Base UI's tooltip wires no `aria-describedby` and no `role` — the only `aria-*` attribute anywhere in its tooltip implementation is `aria-hidden` on the arrow — and its trigger is mouse-only. So a Tooltip is announced to **no** screen reader and opens on **no** touch device. It is keyboard-reachable, which makes the gap easy to miss.
+**Tooltip is a visual enhancement only.** Base UI's tooltip wires no `aria-describedby` and no `role`. The only `aria-*` attribute anywhere in its tooltip implementation is `aria-hidden` on the arrow, and its trigger is mouse-only. So **no** screen reader announces a Tooltip, and **no** touch device opens one. It is keyboard-reachable, which makes the gap hard to spot.
 
-Never put information in a Tooltip that is not available elsewhere. When the tooltip really is the only place some text appears, use the [Info Tip](#info-tip) pattern below.
+Never put information in a Tooltip that is not available elsewhere. When the tooltip is the only place some text appears, use the [info tip](#info-tip) pattern below.
 </Callout>
 
 ## Composition
+
+`TooltipProvider` wraps one or more tooltips, each with a trigger and its content.
 
 ```text
 TooltipProvider
@@ -56,42 +61,43 @@ TooltipProvider
     └── TooltipContent
 ```
 
+Tooltips sit above dialogs and popups. [Popup layering and modality](/docs/concepts/popup-layering) explains the scale.
+
 ## Examples
 
 ### Sides
 
-Position the tooltip on different sides of the trigger:
+Set `side` on `TooltipContent` to place the tooltip on a different side of the trigger.
 
 <ComponentPreview name="tooltip-sides" />
 
-
 ### With Kbd
 
-Display a keyboard shortcut inside the tooltip:
+Show a keyboard shortcut inside the tooltip with Kbd.
 
 <ComponentPreview name="tooltip-with-kbd" />
 
-
 ### Disabled Button
 
-Show a tooltip on a disabled button using a wrapper element:
+Render `TooltipTrigger` as a `<span>` around a disabled button, so the span still receives the pointer events the button ignores.
 
 <ComponentPreview name="tooltip-disabled-button" />
 
+### Info tip
 
-### Info Tip
-
-The pattern to reach for whenever a tooltip carries text that appears nowhere else — a metric definition, a units note, an explanation of a threshold.
+Use this pattern whenever a tooltip carries text that appears nowhere else, such as a metric definition, a units note or an explanation of a threshold.
 
 <ComponentPreview name="tooltip-info-tip" />
 
-Three things make it work, and all three are load-bearing:
+It needs all 3 of these parts to work:
 
-1. **The text lives in an always-present `hidden` span**, associated with the trigger through `aria-describedby`. That span — not the popup — is what assistive technology reads, on every device, open or closed. `aria-describedby` still reads a `hidden` element's text, and `hidden` keeps the span out of reading order, where it would be read a second time. Pointing `aria-describedby` at the popup does not work: it is unmounted while closed, so the reference dangles and is silently ignored.
+1. **The text lives in an always-present `hidden` span**, associated with the trigger through `aria-describedby`. Assistive technology reads that span, not the popup, on every device, open or closed. `aria-describedby` still reads a `hidden` element's text, and `hidden` keeps the span out of reading order, where it would be read a second time. Pointing `aria-describedby` at the popup does not work: it is unmounted while closed, so the reference dangles and assistive technology silently ignores it.
 2. **The popup is `aria-hidden`.** Without it the same string sits in the accessibility tree twice while open, and a screen reader in browse mode reads it twice.
-3. **`open` is controlled and toggles on click**, so the tip works on touch — with `closeOnClick={false}`, because `TooltipTrigger` closes on click by default and would otherwise fight the toggle.
+3. **`open` is controlled and toggles on click**, so the tip works on touch. Set `closeOnClick={false}`, because `TooltipTrigger` closes on click by default and would otherwise fight the toggle.
 
-On a touch screen a tap that lands at the very end of the label may open the tip too, since browsers snap a tap to the nearest target.
+On a touch screen, a tap that lands at the end of the label can open the tip too, because browsers snap a tap to the nearest target.
+
+This snippet puts the 3 parts together.
 
 ```tsx
 const descriptionId = useId();
@@ -116,16 +122,15 @@ const [open, setOpen] = useState(false);
 <span id={descriptionId} hidden>{content}</span>
 ```
 
-### Group Delay
+### Group delay
 
-Tooltip group with shared delay:
+Wrap several tooltips in one `TooltipProvider` so they share its `delay` and `closeDelay`.
 
 <ComponentPreview name="tooltip-group-delay" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 

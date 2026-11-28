@@ -610,7 +610,7 @@
       "name": "alert-dialog",
       "type": "registry:ui",
       "title": "Alert Dialog",
-      "description": "Modal confirmation dialog for destructive or irreversible actions requiring user acknowledgement.",
+      "description": "A modal dialog that asks the reader to confirm a destructive or irreversible action before it runs.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -645,7 +645,7 @@
       "name": "badge",
       "type": "registry:ui",
       "title": "Badge",
-      "description": "Small status indicator or count label for highlighting categories, statuses, or counts.",
+      "description": "A small label that marks a status, a category or a count.",
       "dependencies": [
         "@base-ui/react",
         "class-variance-authority"
@@ -759,7 +759,7 @@
       "name": "alert",
       "type": "registry:ui",
       "title": "Alert",
-      "description": "Prominent message banner for displaying important information, warnings, or errors to users.",
+      "description": "A banner that shows an important message, such as a warning, an error or a confirmation, inline on the page.",
       "dependencies": [
         "class-variance-authority"
       ],
@@ -791,7 +791,7 @@
       "name": "circular-progress",
       "type": "registry:ui",
       "title": "Circular Progress",
-      "description": "Circular progress indicator for showing completion percentage in a ring format.",
+      "description": "A ring that shows how far a task has progressed, as a percentage.",
       "dependencies": [
         "@base-ui/react",
         "class-variance-authority"
@@ -911,7 +911,7 @@
       "name": "drawer",
       "type": "registry:ui",
       "title": "Drawer",
-      "description": "Slide-out panel that emerges from screen edges for supplementary content or navigation.",
+      "description": "A panel that slides in from an edge of the screen to hold secondary content, filters or navigation.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -943,7 +943,7 @@
       "name": "dropdown-menu",
       "type": "registry:ui",
       "title": "Dropdown Menu",
-      "description": "Contextual menu triggered by a button, with support for items, separators, and sub-menus.",
+      "description": "A menu of actions or options that opens from a button, with groups, checkbox and radio items, and submenus.",
       "dependencies": [
         "@base-ui/react",
         "lucide-react"
@@ -1147,7 +1147,7 @@
       "name": "popover",
       "type": "registry:ui",
       "title": "Popover",
-      "description": "Floating content panel anchored to a trigger element for contextual information or controls.",
+      "description": "A floating panel anchored to a trigger that holds extra information or controls for it.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -1163,7 +1163,7 @@
       "name": "progress",
       "type": "registry:ui",
       "title": "Progress",
-      "description": "Linear progress bar for visualizing completion or loading progress.",
+      "description": "A horizontal bar that shows how far a task has progressed.",
       "dependencies": [
         "@base-ui/react",
         "class-variance-authority"
@@ -1258,7 +1258,7 @@
       "name": "skeleton",
       "type": "registry:ui",
       "title": "Skeleton",
-      "description": "Animated placeholder shapes for previewing content layout while data is loading.",
+      "description": "Placeholder shapes that show the layout of content while it loads.",
       "files": [
         {
           "path": "packages/ui/src/skeleton.tsx",
@@ -1271,7 +1271,7 @@
       "name": "spinner",
       "type": "registry:ui",
       "title": "Spinner",
-      "description": "Animated loading spinner for indicating indeterminate loading states.",
+      "description": "An animated ring that shows something is loading when you can't say how long it will take.",
       "dependencies": [
         "lucide-react"
       ],
@@ -1460,7 +1460,7 @@
       "name": "tooltip",
       "type": "registry:ui",
       "title": "Tooltip",
-      "description": "Small floating label that appears on hover to provide additional descriptive text.",
+      "description": "A small floating label that shows a short description of its trigger on hover or keyboard focus.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -1476,7 +1476,7 @@
       "name": "toast",
       "type": "registry:ui",
       "title": "Toast",
-      "description": "Temporary notification messages that appear briefly to provide non-intrusive feedback.",
+      "description": "Short notifications that appear briefly over the page to confirm an action or report its result.",
       "dependencies": [
         "@base-ui/react",
         "lucide-react"

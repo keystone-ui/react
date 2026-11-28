@@ -1,6 +1,7 @@
 ---
 title: DropdownMenu
-description: Contextual menu triggered by a button, with support for items, separators, and sub-menus.
+description: A menu of actions or options that opens from a button, with groups, checkbox and radio items, and submenus.
+contentType: Reference
 ---
 
 <ComponentPreview name="dropdown-menu-default" />
@@ -37,6 +38,8 @@ pnpm add @keystoneui/react@beta @base-ui/react
 
 ## Usage
 
+Import the parts from the `dropdown-menu` subpath.
+
 ```tsx
 import {
   DropdownMenu,
@@ -57,6 +60,8 @@ import {
 ```
 
 ## Composition
+
+`DropdownMenuContent` holds groups of items, separators and submenus.
 
 ```text
 DropdownMenu
@@ -79,90 +84,83 @@ DropdownMenu
 or `DropdownMenuRadioGroup`. Placed directly in `DropdownMenuContent`, Base UI
 throws `MenuGroupContext is missing` when the menu opens.
 
+A menu opened from inside a Modal or Drawer appears above it. [Popup layering and modality](/docs/concepts/popup-layering) explains the scale.
+
 ## Examples
 
-### With Icons
+### With icons
 
-Add icons to menu items for visual clarity:
+Add an icon to each menu item.
 
 <ComponentPreview name="dropdown-menu-with-icons" />
 
-
 ### Checkboxes
 
-Use checkbox items for toggling options:
+Use `DropdownMenuCheckboxItem` for options the reader turns on and off.
 
 <ComponentPreview name="dropdown-menu-checkboxes" />
 
-Checkbox items **leave the menu open** when clicked, so a group of them can be
-toggled in one visit — the column-visibility menu in [`tickets-01`](/docs/blocks/tickets-01)
-depends on it. Pass `closeOnClick` if a single checkbox is the whole interaction.
+Checkbox items **leave the menu open** when clicked, so you can toggle a group
+of them in one visit. The column-visibility menu in [`tickets-01`](/docs/blocks/tickets-01)
+depends on this. Pass `closeOnClick` if a single checkbox is the whole interaction.
 
+### Radio group
 
-### Radio Group
-
-Use radio items for mutually exclusive selection:
+Use `DropdownMenuRadioItem` inside a `DropdownMenuRadioGroup` when only one option can be selected.
 
 <ComponentPreview name="dropdown-menu-radio-group" />
 
-Radio items **close the menu** when picked, which is the opposite of the
-checkbox behavior above. Picking one *is* the interaction, so there is nothing
-left in the popup to act on — and a menu that stays open keeps an inert overlay
-across the page that silently swallows the next click. Pass `closeOnClick={false}`
-to keep it open, for a menu that reveals more controls once a choice is made.
+Radio items **close the menu** when picked, the opposite of checkbox items.
+Picking one *is* the interaction, so nothing is left in the popup to act on. A
+menu that stays open keeps an inert overlay across the page that silently
+swallows the next click. Pass `closeOnClick={false}` to keep it open, for a menu
+that reveals more controls once a choice is made.
 
 <Callout type="info">
   This is a deliberate deviation from Base UI, which defaults `closeOnClick` to
-  `false` on both item types. Radix — and therefore shadcn — closes on select,
-  so keystone's radio items behave the way a port expects.
+  `false` on both item types. Radix, and therefore shadcn, closes on select,
+  so Keystone UI's radio items behave the way a port expects.
 </Callout>
-
 
 ### Filter
 
-A toolbar filter: the trigger reads `Status: Failed` — the dimension muted, then the value — and opens a radio group. A bare value is ambiguous beside another one ("Failed" next to "Deposit"), and the muted unset value (`Status: All`) lets the filters doing something stand out. See [`admin-01`](/docs/blocks/admin-01) for a full filter row built on this, with removable pills and `+ Add filter`.
+A toolbar filter whose trigger reads `Status: Failed`, the dimension muted and then the value, and opens a radio group. A bare value is ambiguous beside another one ("Failed" next to "Deposit"). The muted unset value (`Status: All`) lets the active filters stand out. [`admin-01`](/docs/blocks/admin-01) has a full filter row built on this, with removable pills and `+ Add filter`.
 
 <ComponentPreview name="dropdown-menu-filter" />
 
-
 ### Submenu
 
-Nest menus with sub-triggers for hierarchical navigation:
+Nest a menu under a `DropdownMenuSubTrigger` for hierarchical navigation.
 
 <ComponentPreview name="dropdown-menu-submenu" />
 
-
 ### Shortcuts
 
-Display keyboard shortcuts alongside menu items:
+Add `DropdownMenuShortcut` to show an item's keyboard shortcut.
 
 <ComponentPreview name="dropdown-menu-shortcuts" />
 
-
 ### Destructive
 
-Dropdown menu with destructive/danger items:
+Set `variant="destructive"` on a `DropdownMenuItem` for an action that deletes or can't be undone.
 
 <ComponentPreview name="dropdown-menu-destructive" />
 
-
 ### Account
 
-Account dropdown menu:
+A menu for a signed-in account.
 
 <ComponentPreview name="dropdown-menu-account" />
 
-
 ### Complex
 
-Complex dropdown combining multiple features:
+A menu that combines groups, checkbox and radio items, shortcuts and a submenu.
 
 <ComponentPreview name="dropdown-menu-complex" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 
