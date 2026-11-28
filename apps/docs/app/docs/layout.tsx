@@ -1,5 +1,12 @@
 import { DocsLayout } from "fumadocs-ui/layouts/notebook";
+import {
+  SidebarCollapseTrigger,
+  SidebarProvider,
+  SidebarTrigger,
+  useSidebar,
+} from "fumadocs-ui/layouts/notebook/slots/sidebar";
 import type { ReactNode } from "react";
+import { DocsSidebar } from "@/components/docs-sidebar";
 import { baseOptions } from "@/lib/layout.shared";
 import { source } from "@/lib/source";
 
@@ -21,6 +28,17 @@ export default function Layout({ children }: { children: ReactNode }) {
       nav={{
         ...base.nav,
         mode: "top",
+      }}
+      // The page tree inside the sidebar shows one section at a time
+      // (components/docs-sidebar.tsx); Fumadocs keeps everything around it.
+      slots={{
+        sidebar: {
+          provider: SidebarProvider,
+          root: DocsSidebar,
+          trigger: SidebarTrigger,
+          collapseTrigger: SidebarCollapseTrigger,
+          useSidebar,
+        },
       }}
       sidebar={{
         collapsible: false,
