@@ -1,0 +1,184 @@
+---
+title: Upgrade to 1.0
+description: Every change during the 1.0 beta that can break a build or change what renders, and what to do about each.
+contentType: How-to
+---
+
+This guide walks you from any `1.0.0-beta.N` release to `1.0.0`. The betas shipped as `1.0.0-beta.N`, so a semver range never warned you about the changes below. If you installed any beta, walk this list once before you move to `1.0.0`. Each item says what changed and the smallest edit that restores the old behaviour, or adopts the new one.
+
+## Before you start
+
+Registry users (`npx shadcn add`) own their copy of each component, so nothing changes until you add it again. Adding it again overwrites the file, so diff it first.
+
+## Fix the type errors
+
+These changes fail the type check, so `tsc` lists every call site for you.
+
+{/* changeset: toast-description-first-api */}
+
+### `toast()`: a bare message is the description
+
+`toast("Saved")` now renders one muted description line, and `title` is opt-in. `description` moved off the options argument, so passing it there is a type error. Use the object form:
+
+```diff
+-toast("Event created", { description: "Monday at 6:00pm" })
++toast({ title: "Event created", description: "Monday at 6:00pm" })
+```
+
+{/* changeset: react-day-picker-10 */}
+
+### `Calendar`: react-day-picker 10
+
+`Calendar` forwards its props to `DayPicker`, so the props v10 removed are removed here too and do nothing at runtime. Replace them:
+
+| Removed | Use instead |
+| --- | --- |
+| `fromDate` / `fromMonth` / `fromYear` | `startMonth` (and `disabled={{ before }}` for dates) |
+| `toDate` / `toMonth` / `toYear` | `endMonth` (and `disabled={{ after }}` for dates) |
+
+{/* changeset: base-ui-1-7 */}
+
+### `InputOTP`: `sanitizeValue` is `normalizeValue`
+
+Base UI renamed the prop. The old name is spread through and ignored without an error, so rename it at every call site.
+
+{/* changeset: upgrade-2026-04 */}
+
+### React 19 refs and lucide 1.x
+
+Primitives no longer use `forwardRef`; `ref` is an ordinary prop. Most callers need no change. Demos and blocks moved to `lucide-react` 1.x, whose default exports dropped the `*Icon` suffix, so fix the import names in any block you copied.
+
+## Check markup and behaviour changes
+
+These changes compile but render or behave differently. Check each one you use.
+
+{/* changeset: tabs-morphing-pill-span */}
+
+### Morphing `Tabs`: the pill is not a `layoutId` element
+
+The morphing pill no longer joins your `LayoutGroup` or a parent `motion` element's `layout` animation. If an ancestor animates its layout, the pill now moves and scales with that ancestor like the tab around it.
+
+Update style snapshots or read the bounding box. During a glide the pill sets inline `left`, `top`, `width`, `height`, `right: auto` and `bottom: auto`. At rest it removes its geometry and preserves unrelated inline declarations. Motion previously supplied transform, transform origin and shared-layout opacity and pointer-event styles. A `ResizeObserver` on the pill now sees its animated layout size.
+
+Remove positional and size transitions, including `transition-all`, from the pill slot. Color and opacity transitions can remain. The controller samples author insets when the switch starts, and its inline geometry takes precedence while moving. Percentage insets and the line's bar height are sampled when the switch starts; a change to them during the switch shows when it ends.
+
+At rest, inserting, reordering or closing tabs moves the pill with its tab immediately. Removing the active tab as its neighbour becomes active places the pill directly on the neighbour.
+
+A rapid selection starts the next glide from the pill's current box, clipped to the span of the tabs after the selection commits. If the boxes no longer overlap, the pill appears on the selected tab. If a participating tab is disconnected or belongs to another list when the controller next checks, the glide ends and the pill returns to its CSS position.
+
+On each frame the controller can measure a connected list with positive width and height, the pill stays within the outer edges of the tabs taking part in the glide, to within one CSS pixel. These include the tabs involved in earlier selections during the same glide. This holds under positive, axis-aligned ancestor scales. The pill's inset and minimum-size rules must allow it to fit. Changes after the controller's frame pass, rotations, skews, perspective, reflections, transforms between the list and its tabs, and CSS animation or transitions on pill geometry fall outside it. Tabs moved between lists by DOM manipulation, a tab rendered through a portal into a container that another component removes, and glides between tabs more than about 100,000 CSS pixels apart are also outside it.
+
+{/* changeset: form-renders-form-element */}
+
+### `<Form>` renders a real `<form>`
+
+Remove your own `<form>` wrapper around it, or switch to `<FieldGroup>` for the old layout-only `<div>`.
+
+{/* changeset: input-group-auto-fit */}
+
+### `InputGroupButton` defaults to `size="auto"`
+
+An unsized button now fills the group: 32×32 in a default group, 24×24 in `size="sm"`. Pass `size="icon-xs"` or `size="xs"` to keep the old 24px button.
+
+### `DropdownMenuRadioItem` closes the menu
+
+Picking a radio item now closes the menu, as Radix and shadcn do. Pass `closeOnClick={false}` to keep it open.
+
+### Toggle sizes are on the control ladder
+
+Toggle sizes now match the [control height ladder](/docs/reference/base-css#control-heights): `xs` 24px, `sm` 32px, `default` 40px and `lg` 48px. If you used `size="lg"` to line a `ToggleGroup` up with a default `Button`, drop the prop.
+
+{/* changeset: badge-status-tones */}
+
+### `Badge`: `destructive` is deprecated and draws solid
+
+A Badge with `variant="destructive"` now draws the solid red by default. Use `appearance="soft"` for the tinted look, which now has a border, a slightly deeper red in light mode and a slightly fainter tint in dark mode. Prefer `variant="error"`: `destructive` is deprecated on Badge and will be removed in a later release.
+
+```diff
+-<Badge variant="destructive">Failed</Badge>
++<Badge variant="error" appearance="soft">Failed</Badge>
+```
+
+A linked red Badge now underlines on hover, and its fill stays the same. The red is now a fixed palette red, like the other 3 tones, so a Badge no longer follows a customised `--destructive` token; only its focus-ring colour modifiers (`focus-visible:ring-destructive/20`, `dark:focus-visible:ring-destructive/40`) still do. `data-variant` reports the name you pass, so when you change a Badge from `destructive` to `error`, update selectors that target the old name. Button's `destructive` is unchanged.
+
+{/* changeset: status-tones-tokenized */}
+
+### Status alerts use the status tokens
+
+`Alert`'s `success`, `warning`, `error` and `info` variants tint the surface and the icon from `--success`, `--warning`, `--destructive` and the new `--info`; the text stays neutral. If you matched the old `bg-green-500/15` classes in tests, match `bg-success/10` (and so on) instead. Add the `--info` token to your theme from the [theme tokens reference](/docs/reference/theme-tokens). Without it, info falls back to the light-mode blue in dark mode.
+
+{/* changeset: tabs-scrollable-reel */}
+
+### Scrollable `TabsList` is built on `Reel`
+
+`<TabsList scrollable>` keeps its look and now scrolls in a [Reel](/docs/components/reel). If you style or test the scrollable list:
+
+- `data-slot="tabs-list-wrapper"`, `"tabs-list-scroll"` and `"tabs-scroll-button"` are removed. Use `reel`, `reel-viewport` and `reel-arrow`. `reel-arrow` is the chevron's picture, a `span`; the element that takes the press is its parent, `[data-slot="reel"] > span[data-side]`.
+- The arrows are no longer buttons: they're not Tab stops, have no accessible names, are always in the DOM (hidden with `visibility` when there is nothing to scroll that way) and come after the scroller. `getByRole("button", { name: "Scroll tabs right" })` no longer finds anything.
+- `[data-scrollable]` moves from the scroller to `[data-slot="tabs-list"]`.
+- `--tabs-fade-left`, `--tabs-fade-right` and the `tabs-scroll-fade` keyframes are removed. Set one depth for both edges with `--ks-reel-fade-size`.
+
+For a registry installation, update `@keystoneui/react` or copy your vendored `base.css` again when updating `tabs` and `reel`. The stylesheet draws the clear strip, and an older copy can leave the track or tab content visible beneath a chevron.
+
+### Popups and overlays
+
+Check these 3 changes if you style popups:
+
+- `PopoverContent` has no `max-height`; cap long content with `className`.
+- `Modal`, `AlertDialog` and `Drawer` paint `bg-popover`, one step above the page in dark mode.
+- `Drawer` content scrolls by default. Use `DrawerBody` for a pinned header and footer around a scrolling middle.
+
+## Reinstall registry components
+
+Registry installs need 3 fixes.
+
+### Add components installed by URL again
+
+Until this release, installing a Keystone UI item by URL also installed *shadcn's* versions of its dependencies: `combobox` brought shadcn's Radix `button`, `input` and `input-group`. If `components/ui/button.tsx` imports `radix-ui` or `cn`, it's shadcn's. Add it again with `npx shadcn@latest add https://keystoneui.io/r/button.json --overwrite`.
+
+### Add `admin-01` again
+
+`admin-01` now ships its own `components/sidebar.tsx`. If you installed an earlier version, `components/ui/sidebar.tsx` and `components/ui/sheet.tsx` came from shadcn and can be deleted once you add the block again.
+
+### Use shadcn CLI 4.7 or later
+
+Components now install to your `aliases.ui` directory through the `@ui/` target placeholder, which needs shadcn CLI 4.7 or later.
+
+## Update CSS and tokens
+
+These changes are in `base.css` and your theme CSS.
+
+{/* changeset: ease-tokens-reduced-motion-scrollbar */}
+
+### Rename the easing tokens
+
+`--ease-out` / `--ease-in-out` are now `--ease-ks-out` / `--ease-ks-in-out`. [Theming](/docs/concepts/theming#why-library-names-carry-a-ks-prefix) explains the rename.
+
+```diff
+-transition-timing-function: var(--ease-out);
++transition-timing-function: var(--ease-ks-out);
+```
+
+### Add your own reduced-motion rules
+
+Reduced motion no longer uses `!important`. The library's transitions still stop, but your own rules that set a duration, such as `html { scroll-behavior: smooth }`, need their own `prefers-reduced-motion` rule. See [reduced motion](/docs/reference/base-css#reduced-motion).
+
+### Opt in to the thin scrollbar
+
+The thin scrollbar is opt-in. Add `ks-scrollbar` to `<html>` to restore it everywhere, or to one scroll container.
+
+### Check drawers opened from a modal
+
+`Drawer` sits at `--z-drawer` (40), below `Modal` (50), so a drawer opened from inside a modal now renders behind it. See the [layering tokens](/docs/reference/base-css#layering-tokens).
+
+### Check extreme radius values
+
+`--radius-sm` to `--radius-4xl` are multiples of `--radius` rather than pixel offsets, matching shadcn. Nothing moves at the default radius. See [why the radius scale is a ratio](/docs/concepts/theming#why-the-radius-scale-is-a-ratio).
+
+### Expect light tokens on paper
+
+The `dark` variant and the `.dark` token block are wrapped in `@media screen`, so a printed page always gets the light tokens. See [why dark tokens are screen-only](/docs/concepts/dark-mode#why-dark-tokens-are-screen-only), and [Enable dark mode](/docs/guides/enable-dark-mode#keep-printed-pages-light) to scope your own theme the same way.
+
+## Check that it works
+
+Run your type check and your tests. The type check catches the items under [Fix the type errors](#fix-the-type-errors); snapshot and role-based tests catch most of the markup changes.

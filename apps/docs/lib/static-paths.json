@@ -105,13 +105,13 @@
     "/docs/guides/fit-the-mobile-viewport",
     "/docs/guides/install-from-the-registry",
     "/docs/guides/publish-a-theme",
+    "/docs/guides/upgrade-to-1-0",
     "/docs/installation",
     "/docs/reference/base-css",
     "/docs/reference/colors",
     "/docs/reference/css-utilities",
     "/docs/reference/shadcn-sidebar",
-    "/docs/reference/theme-tokens",
-    "/docs/upgrading"
+    "/docs/reference/theme-tokens"
   ],
   "blog": [
     "/blog",
