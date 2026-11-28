@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "skeleton",
   "title": "Skeleton",
-  "description": "Animated placeholder shapes for previewing content layout while data is loading.",
+  "description": "Placeholder shapes that show the layout of content while it loads.",
   "files": [
     {
       "path": "packages/ui/src/skeleton.tsx",

@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "badge",
   "title": "Badge",
-  "description": "Small status indicator or count label for highlighting categories, statuses, or counts.",
+  "description": "A small label that marks a status, a category or a count.",
   "dependencies": [
     "@base-ui/react",
     "class-variance-authority"

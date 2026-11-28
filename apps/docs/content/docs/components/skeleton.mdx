@@ -1,6 +1,7 @@
 ---
 title: Skeleton
-description: Animated placeholder shapes for previewing content layout while data is loading.
+description: Placeholder shapes that show the layout of content while it loads.
+contentType: Reference
 ---
 
 <ComponentPreview name="skeleton-default" />
@@ -37,11 +38,15 @@ pnpm add @keystoneui/react@beta @base-ui/react
 
 ## Usage
 
+Import Skeleton from its subpath.
+
 ```tsx
 import { Skeleton } from "@keystoneui/react/skeleton";
 ```
 
 ## Composition
+
+`SkeletonGroup` wraps any number of `Skeleton` shapes.
 
 ```text
 SkeletonGroup
@@ -55,49 +60,43 @@ of placeholders animates as one surface instead of each bar on its own clock.
 
 ### Card
 
-A skeleton placeholder mimicking a card layout:
+Placeholders in the shape of a card.
 
 <ComponentPreview name="skeleton-card" />
 
-
 ### Form
 
-A skeleton placeholder mimicking a form layout:
+Placeholders in the shape of a form.
 
 <ComponentPreview name="skeleton-form" />
 
-
 ### Shimmer
 
-A shimmer animation variant for a more dynamic loading effect:
+Wrap static skeletons in `SkeletonGroup` to run one shimmer across all of them.
 
 <ComponentPreview name="skeleton-shimmer" />
 
-
 ### Text
 
-Text/paragraph skeleton:
+Lines of different widths in the shape of a paragraph.
 
 <ComponentPreview name="skeleton-text" />
 
-
 ### Table
 
-Table skeleton loading state:
+Placeholders in the shape of a table while its rows load.
 
 <ComponentPreview name="skeleton-table" />
 
+### Without animation
 
-### No Animation
-
-Static skeleton without animation:
+Set `animationType="none"` for a static placeholder.
 
 <ComponentPreview name="skeleton-no-animation" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 
