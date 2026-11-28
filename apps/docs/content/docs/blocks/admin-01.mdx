@@ -39,27 +39,27 @@ The sidebar reads 6 `--sidebar-*` tokens (`--sidebar`, `--sidebar-foreground`, `
 
 ## Files
 
-The block installs 45 files under `components/` and one page at `app/admin/page.tsx`. Every table reads fixture rows. [Adapt admin-01 to your app](/docs/guides/adapt-admin-01) shows how to keep only the users view and give it your own rows.
+The block installs 46 files under `components/` and one page at `app/admin/page.tsx`. Every table reads fixture rows. [Adapt admin-01 to your app](/docs/guides/adapt-admin-01) shows how to keep only the users view and give it your own rows.
 
 ### Files the users view imports
 
-`admin-users-table.tsx` and the files it imports, directly or through others, are 27 files:
+`admin-users-table.tsx` and the files it imports, directly or through others, are 26 files:
 
 | Role | Files |
 | --- | --- |
 | Table and toolbar | `admin-users-table.tsx`, `admin-users-toolbar.tsx`, `admin-filters-drawer.tsx`, `user-filter-pills.tsx` |
-| State and vocabulary | `use-users-table.ts`, `use-data-table.ts`, `admin-filters.ts`, `mock-admin.ts` |
+| State and vocabulary | `use-users-table.ts`, `use-data-table.ts`, `admin-filters.ts`, `mock-users.ts` |
 | Shared table parts | `columns-menu.tsx`, `sort-menu.tsx`, `skeleton-rows.tsx`, `filtered-empty.tsx`, `result-summary.tsx`, `csv.ts`, `sort.ts`, `url-params.ts`, `filter-row.ts` |
 | Filter pills and dates | `filter-pills.tsx`, `filter-trigger.tsx`, `pill-shell.tsx`, `set-pill.tsx`, `date-pill.tsx`, `date-filter.ts`, `date-filter-step.tsx`, `drawer-parts.tsx` |
-| Imported for one thing | `use-reduced-motion.ts` (the filters drawer), `series-legend.tsx` (a type `mock-admin.ts` imports) |
+| Imported for one thing | `use-reduced-motion.ts` (the filters drawer) |
 
-`mock-admin.ts` stays even with your own rows: the `User`, `Role` and `Status` types and `statusLabels` live there, and `admin-filters.ts` and the table import them.
+`mock-users.ts` stays even with your own rows: the `User`, `Role` and `Status` types and `statusLabels` live there, and `admin-filters.ts`, the table and the user record import them. Only its `users` array is fixture.
 
 ### Files the other views add
 
-The users table doesn't import the other 18 files. `admin-page.tsx` reaches them, because it wires every view together:
+The users table doesn't import the other 20 files. `admin-page.tsx` reaches them, because it wires every view together:
 
-- **Overview**: `admin-overview.tsx`, `chart.tsx`, `chart-formatters.ts`.
+- **Overview**: `admin-overview.tsx`, `chart.tsx`, `chart-formatters.ts`, `mock-admin.ts`, `series-legend.tsx`.
 - **Payments**: `admin-payments-table.tsx`, `admin-payments-toolbar.tsx`, `use-payments-table.ts`, `payment-filters.ts`, `payment-filter-pills.tsx`, `payment-filters-drawer.tsx`, `operator-filter-chip.tsx`, `payment-detail-drawer.tsx`, `mock-payments.ts`.
 - **Sidebar shell**: `admin-sidebar.tsx`, `admin-topbar.tsx`, `sidebar.tsx`.
 - **Page wiring**: `admin-page.tsx`, `use-url-state.ts`, `admin-user-detail.tsx`. They carry the URL sync and the user record view. Neither `use-url-state.ts` nor `admin-user-detail.tsx` imports a file from the other groups.

@@ -21,7 +21,7 @@ You need:
 
 <Step>Write a users-only client component.</Step>
 
-Start the file with `"use client"`, because the installed `page.tsx` isn't a client component. The component calls `useUsersTable()` and renders `<AdminUsersTable table={…} onOpenUser={…} />`.
+Start the file with `"use client"`, because the installed `page.tsx` isn't a client component. The component calls `useUsersTable()` and renders `<AdminUsersTable table={…} onOpenUser={…} users={…} />`, passing the same rows the hook reads as `users`.
 
 <Step>Render it from the page.</Step>
 
@@ -35,7 +35,7 @@ Remove the overview, payments, sidebar shell and page wiring files listed under 
 
 ## Give the users table your rows
 
-The rows enter in three places. All three import `users` from `mock-admin.ts`.
+The rows come from one file, `mock-users.ts`, read in two places: `use-users-table.ts` passes them to `useDataTable`, and `admin-page.tsx` looks up the open user and passes the same rows to the table for its selection bar.
 
 <Steps>
 
@@ -44,7 +44,7 @@ The rows enter in three places. All three import `users` from `mock-admin.ts`.
 `use-users-table.ts` passes the fixture rows to `useDataTable`:
 
 ```ts title="components/use-users-table.ts"
-import { type User, users } from "@/components/mock-admin";
+import { type User, users } from "@/components/mock-users";
 import { useDataTable } from "@/components/use-data-table";
 
 export function useUsersTable() {
@@ -59,7 +59,7 @@ export function useUsersTable() {
 Give the hook your rows instead, for example as a parameter:
 
 ```ts title="components/use-users-table.ts"
-import type { User } from "@/components/mock-admin";
+import type { User } from "@/components/mock-users";
 
 export function useUsersTable(rows: readonly User[]) {
   return useDataTable<User, UserFilters, FilterKey, UserSortKey, UserColumnId>({
@@ -72,11 +72,13 @@ export function useUsersTable(rows: readonly User[]) {
 
 Its caller then becomes `useUsersTable(rows)`.
 
-The rows must be complete when the hook first renders: fetch them on the server and pass them down, or mount the table once they have loaded. The hook works out its answer again only when the filters, sort or page change, not when `rows` changes, so rows that arrive or refresh later stay out of the table until the next filter change. To follow changing rows, edit `useSimulatedFetch` (see [Replace the stand-in request](#replace-the-stand-in-request)).
+Rows can change after mount. Different rows are a new answer even when the query hasn't changed, so a refetch shows up. Load the first rows before you render the table, or show your own loading state until they're there: started from an empty array, the table settles on its empty state until the rows arrive.
 
-<Step>Point the selection bar at your rows.</Step>
+Treat `rows` as immutable. Hand in a new array when the rows change, and replace an edited row object rather than mutating it. Rows are compared one by one, each by identity or by its own fields, so an array rebuilt inline each render is fine while its rows hold plain fields. [Use it with your data](/docs/blocks/users-01#use-it-with-your-data) on the `users-01` page covers rows that hold nested objects.
 
-In `admin-users-table.tsx`, `UserSelectionBar` builds the rows for its Export and Copy ids actions from the fixture, `users.filter((user) => selected.has(user.id))`. Change it to filter your rows. If you leave it, those two actions read the fixture.
+<Step>Pass your rows to the table's `users` prop.</Step>
+
+`AdminUsersTable` takes a `users` prop, and its `UserSelectionBar` builds the rows for the Export and Copy ids actions from it, `users.filter((user) => selected.has(user.id))`. A selection outlives filters and pages, so it resolves ids against every row rather than the rows on show. In `admin-page.tsx`, pass your rows where it passes the fixture, `users={users}`. If you leave it, those two actions read the fixture.
 
 <Step>Point the user record at your rows.</Step>
 
@@ -86,7 +88,7 @@ In `admin-users-table.tsx`, `UserSelectionBar` builds the rows for its Export an
 
 ### Match the `User` shape
 
-Your rows must have the `User` shape from `mock-admin.ts`. The table's columns read its fields, and so do the filters, sort and CSV in `admin-filters.ts`: `name` and `email` for search, and `role`, `status`, `seats`, `twoFactor` and `createdAt` for the pills. If your records differ, change `User`, the columns and those functions together.
+Your rows must have the `User` shape from `mock-users.ts`. Keep `User`, `Role`, `Status` and `statusLabels` in that file, because the table, the filters and the record import them; only the `users` array is fixture. The table's columns read its fields, and so do the filters, sort and CSV in `admin-filters.ts`: `name` and `email` for search, and `role`, `status`, `seats`, `twoFactor` and `createdAt` for the pills. If your records differ, change `User`, the columns and those functions together.
 
 Change these 3 fixture details with them:
 
