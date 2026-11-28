@@ -101,6 +101,8 @@ A file at `apps/docs/demos/my-component/variants.tsx` gets the key `my-component
 
 Edit `apps/docs/content/docs/components/my-component.mdx`, following `apps/docs/content/docs/components/_template.mdx`. Keep its section order: frontmatter, `<ComponentPreview name="my-component-default" />`, `## Installation`, `## Usage` (with the import line), `## Composition` for a compound component, `## Examples` with one `###` heading per variant preview, the optional `## RTL`, then `## API Reference`. `pnpm lint:docs` fails the page when `## Installation`, `## Usage` or `## API Reference` is missing, a compound component lacks `## Composition`, or a variant preview sits under its own `##` heading instead of a `###` heading in `## Examples`.
 
+Write the prose by `apps/docs/WRITING.md`: one content type per page, sentence-case headings, no banned words or em dashes. `pnpm lint:docs` runs the prose lint (`scripts/lint-docs-prose.mjs`) over every page.
+
 ### 7. LLMs.txt (automatic)
 
 No manual step. The LLMs.txt pipeline reads MDX pages and replaces `<ComponentPreview>` tags with actual demo source code. After deployment, the endpoints at `/llms.txt`, `/llms-full.txt`, `/llms-components.txt`, and `/docs/components/my-component.mdx` are updated automatically.
@@ -135,6 +137,10 @@ Blocks are full-page or feature-level compositions (sign-in pages, data tables, 
 Run `pnpm registry:build` to refresh the installable items in `apps/docs/public/r/`.
 
 See `.claude/skills/contributing/SKILL.md` → "Adding a New Block" for the full per-step checklist and the current category taxonomy.
+
+## Writing guides and concept pages
+
+Pages outside `components/` and `blocks/` follow the [Diátaxis](https://diataxis.fr) types in `apps/docs/WRITING.md`. Start from the matching template in `apps/docs/content/docs/` (`_tutorial-template.mdx`, `_how-to-template.mdx`, `_concept-template.mdx`) and put the page in the folder for its type. When you move a page, add its old URL to `apps/docs/lib/redirects.ts`: old URLs are printed in published READMEs and must keep working.
 
 ## Updating an Existing Component
 

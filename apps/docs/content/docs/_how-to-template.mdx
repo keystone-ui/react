@@ -1,0 +1,69 @@
+---
+title: Verb the object the reader wants
+description: One sentence naming the result the reader gets, such as "Switch every Keystone UI surface to dark tokens with next-themes."
+contentType: How-to
+---
+
+{/*
+
+Reference template for a how-to guide (apps/docs/WRITING.md). Not published.
+
+A how-to serves a reader who already knows what they want. Keep it terse:
+the steps, the check, and links out for everything else. Title it as the
+task in the imperative, in sentence case. Use this shape for
+troubleshooting pages too, with contentType: Troubleshooting, the error
+text as the title, and "Cause" and "Fix" sections instead of the steps.
+
+*/}
+
+One paragraph: what this guide gets you, and when you need it. Link the concept page that explains why it works.
+
+## Before you start
+
+You need:
+
+- Keystone UI installed ([install in Next.js](/docs/guides/install-nextjs))
+- Any other prerequisite, named precisely
+
+## Verb the first part of the task
+
+<Steps>
+
+<Step>Install the dependency.</Step>
+
+Say what the command does in one sentence.
+
+```bash
+pnpm add package-name
+```
+
+<Step>Add the provider to your root layout.</Step>
+
+Say what the code changes and why it goes here.
+
+```tsx title="app/layout.tsx" {3,9}
+import type { ReactNode } from "react";
+
+import { Provider } from "package-name";
+
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <Provider>{children}</Provider>
+      </body>
+    </html>
+  );
+}
+```
+
+</Steps>
+
+## Check that it works
+
+Say what the reader sees when it worked, and the most likely reason if they don't.
+
+## Related
+
+- [Concept page that explains this](/docs/concepts/name)
+- [Reference for every option](/docs/reference/name)

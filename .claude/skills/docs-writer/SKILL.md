@@ -1,6 +1,6 @@
 ---
 name: docs-writer
-description: Use this agent to create or update technical documentation for Keystone UI components, features, or guides. This includes Storybook stories in /apps/storybook/stories/ and (future) Fumadocs MDX documentation. The agent follows Keystone UI's documentation standards emphasizing brevity, accuracy, and practical code examples. Triggers on keywords like write documentation, create story, new component docs, write stories, document component, add storybook story, update docs, create guide.
+description: Use this agent to create or update technical documentation for Keystone UI components, features, or guides. This includes Storybook stories in /apps/storybook/stories/ and the Fumadocs pages in /apps/docs/content/docs/ (tutorials, how-to guides, concept pages, reference, component and block pages). Docs pages follow apps/docs/WRITING.md: one Diátaxis content type per page, the Vercel-derived voice rules, and the prose lint. Triggers on keywords like write documentation, create story, new component docs, write stories, document component, add storybook story, update docs, create guide.
 ---
 
 # Keystone UI Documentation Writer
@@ -41,14 +41,18 @@ Read these rule files to ensure your output follows conventions:
 
 Confirm the component has a subpath export in `/packages/ui/package.json`. If it's a new component, note that the export needs to be added.
 
-## Writing Style (Ultra-Concise)
+## Writing Style
 
-- **80% code, 20% text** — let code examples do the explaining
-- **Maximum 1-2 sentences** per section if text is absolutely necessary
-- **No marketing language** — remove "powerful", "flexible", "modern", "beautiful"
-- **No obvious explanations** — don't explain what a button does
-- **Start with verbs** — "Use", "Add", "Pass", "Override"
-- **3-second rule** — a developer should understand any section in 3 seconds
+Docs site pages follow `apps/docs/WRITING.md`. Read it before writing any MDX. The short version:
+
+- **One job per page**: declare `contentType` (`Tutorial`, `How-to`, `Conceptual`, `Reference`, `Troubleshooting`, `Landing`) and split anything that does a second job
+- **Voice**: active, `you`, imperative steps, present tense, sentences under 20 words
+- **Banned**: `easy`, `simple`, `quick`, `just`, `very`, `really`, `simply`, marketing adjectives, rhetorical questions
+- **Typography**: no em dashes or spaced hyphens as punctuation, `…` not `...`, `64 KB` and `200 ms`
+- **Headings**: sentence case everywhere, descriptive, never `Notes` or `Overview` alone
+- **Code**: language tag on every fence, prose before every block, 25 lines max per block
+
+Storybook descriptions stay ultra-concise: no marketing language, no obvious explanations, a developer should understand any description in 3 seconds.
 
 ## Storybook Story Creation
 
@@ -269,63 +273,31 @@ The `parameters.docs.description.component` field should be:
 
 Keep the total description under 30 lines. No paragraphs, no philosophy.
 
-## Fumadocs MDX Documentation (Future)
+## Docs site pages (Fumadocs)
 
-When Fumadocs is added, this skill extends to cover MDX pages. The expected workflow:
+Pages live in `apps/docs/content/docs/`. Pick the folder by content type (see the table in `apps/docs/WRITING.md`) and start from its template:
 
-### MDX Document Structure
+- **Tutorial**: `_tutorial-template.mdx`. Back every code block with a demo file so CI compiles it.
+- **How-to or troubleshooting**: `_how-to-template.mdx`
+- **Concept**: `_concept-template.mdx`
+- **Component reference**: `components/_template.mdx`, scaffolded by `pnpm add:component`. `scripts/lint-component-mdx.mjs` enforces its section order.
+- **Block reference**: `blocks/_block-template.mdx`. See "Block Authoring" in AGENTS.md.
 
-Component pages follow `apps/docs/content/docs/components/_template.mdx`
-(`pnpm lint:docs` enforces it):
+Rules specific to component pages:
 
-```markdown
----
-title: ComponentName
-description: Brief one-line description
----
-
-<ComponentPreview name="component-default" />
-
-## Installation
-
-<CodeBlockTabs> with the shadcn add command and the manual steps
-
-## Usage
-
-\`\`\`tsx
-import { Component } from "@keystoneui/react/component";
-\`\`\`
-
-\`\`\`tsx
-<Component>...</Component>
-\`\`\`
-
-## Composition   (compound components only)
-
-## Examples
-
-### Variants
-
-## API Reference
-
-### Component
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `"default" \| "secondary"` | `"default"` | Visual style |
-```
-
-### MDX Writing Rules (When Applicable)
-
-- No redundant title after frontmatter: the `<name>-default` preview comes first, then `## Installation`
+- The `<name>-default` preview comes first; the frontmatter `description` is the page summary
 - The import goes at the top of `## Usage`. There is no `## Import` section: the linter refuses one
 - After the import, a snippet only where the default demo is a bare `return` of one element built from that import; otherwise the import alone
-- Variants are `###` subsections under `## Examples`
+- Variants are `###` subsections under `## Examples`, each with one sentence and a `<ComponentPreview>`
+- A recipe longer than one example becomes a how-to guide that the component page links to; design rationale becomes a concept page
 - All prop names in backticks in tables
-- Code examples must be complete and runnable
-- Show the imports in every code block, with one exception: the `## Usage` snippet sits in its own fence directly under the import block, so it does not repeat the import
 
-Until Fumadocs is set up, focus exclusively on Storybook stories.
+Before you finish a docs page:
+
+1. Verify every claim against `packages/ui/src` and its tests
+2. Run `pnpm lint:docs`; it includes the prose lint (`scripts/lint-docs-prose.mjs`)
+3. If a page moved, add the old URL to `apps/docs/lib/redirects.ts` and run `pnpm gen:static-paths`
+4. Test the page with a prompt: given its goal, can a model finish the task using only this page
 
 ## Verification Checklist
 

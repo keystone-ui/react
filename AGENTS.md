@@ -195,6 +195,16 @@ Every `apps/docs/content/docs/components/<name>.mdx` follows the canonical struc
 
 Mechanical migration: `node scripts/migrate-component-mdx.mjs`. Validation: `pnpm lint:docs`.
 
+## Docs writing
+
+Every page under `apps/docs/content/docs/` follows `apps/docs/WRITING.md`, which combines [Diátaxis](https://diataxis.fr) with the Vercel writing guidelines:
+
+- **One job per page**, declared as frontmatter `contentType`: `Tutorial` (`/docs/tutorials/`), `How-to` and `Troubleshooting` (`/docs/guides/`), `Conceptual` (`/docs/concepts/`), `Reference` (`/docs/reference/`, components, blocks) or `Landing`. A long recipe on a component page becomes a guide; rationale becomes a concept page; the component page links to both.
+- **Voice**: active, `you`, imperative steps, sentence-case headings, no `easy`/`simple`/`quick`/`just`/`very`/`really`, no em dashes or `...`, no rhetorical questions.
+- **Templates**: `_tutorial-template.mdx`, `_how-to-template.mdx` and `_concept-template.mdx` in `apps/docs/content/docs/`.
+- **Moved pages** keep their old URL in `apps/docs/lib/redirects.ts`, forever: published READMEs and the MCP server print docs URLs.
+- **Lint**: `scripts/lint-docs-prose.mjs` (in `pnpm lint:docs`) fails on new violations. Existing ones are in a baseline that can only shrink.
+
 ## Block Authoring
 
 Blocks are full-page or feature-level compositions registered as `registry:block` items in `registry.json` (hand-maintained — *not* generated from sources). Each original block has source under `apps/docs/demos/blocks/<name>{.tsx,/}` and an MDX page under `apps/docs/content/docs/blocks/<name>.mdx`; a package flavour such as `npm/users-01` shares its parent's demo and a section of its parent's page.
