@@ -296,7 +296,7 @@ Before you finish a docs page:
 
 1. Verify every claim against `packages/ui/src` and its tests
 2. Run `pnpm lint:docs`; it includes the prose lint (`scripts/lint-docs-prose.mjs`)
-3. If a page moved, add the old URL to `apps/docs/lib/redirects.ts` and run `pnpm gen:static-paths`
+3. If a page moved, update every link to its old URL (there are no redirects) and run `pnpm gen:static-paths`; `apps/docs/tests/docs-links.test.ts` fails on a dead docs link
 4. Test the page with a prompt: given its goal, can a model finish the task using only this page
 
 ## Verification Checklist

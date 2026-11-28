@@ -140,7 +140,7 @@ See `.claude/skills/contributing/SKILL.md` → "Adding a New Block" for the full
 
 ## Writing guides and concept pages
 
-Pages outside `components/` and `blocks/` follow the [Diátaxis](https://diataxis.fr) types in `apps/docs/WRITING.md`. Start from the matching template in `apps/docs/content/docs/` (`_tutorial-template.mdx`, `_how-to-template.mdx`, `_concept-template.mdx`) and put the page in the folder for its type. When you move a page, add its old URL to `apps/docs/lib/redirects.ts`: old URLs are printed in published READMEs and must keep working.
+Pages outside `components/` and `blocks/` follow the [Diátaxis](https://diataxis.fr) types in `apps/docs/WRITING.md`. Start from the matching template in `apps/docs/content/docs/` (`_tutorial-template.mdx`, `_how-to-template.mdx`, `_concept-template.mdx`) and put the page in the folder for its type. Moved pages are not redirected: when you move a page, update every link to its old URL in the same change and run `pnpm gen:static-paths`. `apps/docs/tests/docs-links.test.ts` fails on any link to a docs page that does not exist.
 
 ## Updating an Existing Component
 

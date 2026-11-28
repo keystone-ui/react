@@ -202,7 +202,7 @@ Every page under `apps/docs/content/docs/` follows `apps/docs/WRITING.md`, which
 - **One job per page**, declared as frontmatter `contentType`: `Tutorial` (`/docs/tutorials/`), `How-to` and `Troubleshooting` (`/docs/guides/`), `Conceptual` (`/docs/concepts/`), `Reference` (`/docs/reference/`, components, blocks) or `Landing`. A long recipe on a component page becomes a guide; rationale becomes a concept page; the component page links to both.
 - **Voice**: active, `you`, imperative steps, sentence-case headings, no `easy`/`simple`/`quick`/`just`/`very`/`really`, no em dashes or `...`, no rhetorical questions.
 - **Templates**: `_tutorial-template.mdx`, `_how-to-template.mdx` and `_concept-template.mdx` in `apps/docs/content/docs/`.
-- **Moved pages** keep their old URL in `apps/docs/lib/redirects.ts`, forever: published READMEs and the MCP server print docs URLs.
+- **Moved pages** are not redirected. Update every link to the old URL in the same change (content, READMEs, skills, MCP source) and run `pnpm gen:static-paths`; `apps/docs/tests/docs-links.test.ts` fails on any link to a page that does not exist.
 - **Lint**: `scripts/lint-docs-prose.mjs` (in `pnpm lint:docs`) fails on new violations. Existing ones are in a baseline that can only shrink.
 
 ## Block Authoring

@@ -149,6 +149,10 @@ Watch for patterns that read as machine-written:
 
 Existing pages are recorded in `scripts/docs-prose-baseline.json`. A page can only lower its counts; run `node scripts/lint-docs-prose.mjs --update-baseline` after fixing one. Legitimate exceptions go in `scripts/docs-prose-allowlist.json` with a reason.
 
+## Moving a page
+
+Docs URLs are not redirected. When a page moves, update every link to its old URL in the same change: the docs content, the READMEs, the agent skill and the MCP server source. Then run `pnpm gen:static-paths`, and carry the page's baseline to its new path with `node scripts/lint-docs-prose.mjs --update-baseline --allow-increase`. `apps/docs/tests/docs-links.test.ts` fails on any link to a page that does not exist.
+
 ## Credits
 
 The voice, structure, code and typography rules adapt the Vercel writing guidelines, used under the MIT License:
