@@ -87,9 +87,6 @@
     "content-type": 1,
     "heading-case": 3
   },
-  "components/aspect-ratio.mdx": {
-    "content-type": 1
-  },
   "components/avatar.mdx": {
     "content-type": 1,
     "heading-case": 2
@@ -98,28 +95,14 @@
     "content-type": 1,
     "heading-case": 3
   },
-  "components/breadcrumb.mdx": {
-    "content-type": 1,
-    "heading-case": 2
-  },
   "components/button-group.mdx": {
     "content-type": 1,
     "heading-case": 2
-  },
-  "components/button.mdx": {
-    "content-type": 1,
-    "heading-case": 8
   },
   "components/calendar.mdx": {
     "banned-word": 1,
     "content-type": 1,
     "heading-case": 4
-  },
-  "components/card.mdx": {
-    "banned-word": 1,
-    "content-type": 1,
-    "em-dash": 6,
-    "heading-case": 3
   },
   "components/carousel.mdx": {
     "content-type": 1,
@@ -166,11 +149,6 @@
     "content-type": 1,
     "heading-case": 3
   },
-  "components/description-list.mdx": {
-    "content-type": 1,
-    "em-dash": 1,
-    "heading-case": 3
-  },
   "components/drawer.mdx": {
     "content-type": 1,
     "em-dash": 5,
@@ -180,10 +158,6 @@
     "content-type": 1,
     "em-dash": 6,
     "heading-case": 2
-  },
-  "components/empty.mdx": {
-    "content-type": 1,
-    "heading-case": 5
   },
   "components/field.mdx": {
     "content-type": 1,
@@ -211,10 +185,6 @@
     "content-type": 1,
     "heading-case": 4
   },
-  "components/input.mdx": {
-    "content-type": 1,
-    "heading-case": 6
-  },
   "components/item.mdx": {
     "content-type": 1,
     "heading-case": 8
@@ -227,17 +197,9 @@
     "content-type": 1,
     "heading-case": 1
   },
-  "components/modal.mdx": {
-    "content-type": 1,
-    "heading-case": 4
-  },
   "components/native-select.mdx": {
     "content-type": 1,
     "heading-case": 1
-  },
-  "components/pagination.mdx": {
-    "content-type": 1,
-    "em-dash": 2
   },
   "components/popover.mdx": {
     "content-type": 1,
@@ -251,27 +213,11 @@
     "content-type": 1,
     "heading-case": 1
   },
-  "components/reel.mdx": {
-    "banned-word": 1,
-    "content-type": 1
-  },
-  "components/resizable.mdx": {
-    "content-type": 1,
-    "heading-case": 2
-  },
   "components/rolling-number.mdx": {
     "banned-word": 1,
     "content-type": 1
   },
-  "components/select.mdx": {
-    "content-type": 1,
-    "heading-case": 4
-  },
   "components/selection-bar.mdx": {
-    "content-type": 1,
-    "heading-case": 1
-  },
-  "components/separator.mdx": {
     "content-type": 1,
     "heading-case": 1
   },
@@ -293,10 +239,6 @@
     "heading-case": 1,
     "rhetorical-question": 1
   },
-  "components/stepper.mdx": {
-    "content-type": 1,
-    "heading-case": 1
-  },
   "components/strings.mdx": {
     "content-type": 1
   },
@@ -304,18 +246,10 @@
     "content-type": 1,
     "heading-case": 1
   },
-  "components/table-pagination.mdx": {
-    "content-type": 1,
-    "em-dash": 4
-  },
   "components/table.mdx": {
     "content-type": 1,
     "em-dash": 5,
     "heading-case": 5
-  },
-  "components/tabs.mdx": {
-    "content-type": 1,
-    "heading-case": 6
   },
   "components/tag-group.mdx": {
     "content-type": 1,

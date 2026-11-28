@@ -1,6 +1,7 @@
 ---
 title: Reel
 description: A native sideways scroller for one row of controls, with edge fades where there is more to scroll and arrows for mouse and trackpad users.
+contentType: Reference
 ---
 
 <ComponentPreview name="reel-default" />
@@ -54,19 +55,19 @@ import { Reel } from "@keystoneui/react/reel";
 </nav>
 ```
 
-A Reel scrolls one row of controls sideways when it is wider than its container: a bar of category links, or a row of [FilterChips](/docs/components/filter-chips). It is ordinary native scrolling, so touch momentum, trackpad scrolling and the browser's own scrolling of a focused item all work as they do anywhere else.
+A Reel scrolls one row of controls sideways when it is wider than its container: a bar of category links, or a row of [FilterChips](/docs/components/filter-chips). It's ordinary native scrolling, so touch momentum, trackpad scrolling and the browser's own scrolling of a focused item all work as they do anywhere else.
 
 The Reel takes exactly one child, the row, and adds no semantics of its own. The label (`<nav aria-label>`), the list, which item is current and how the items look stay with you. Give the row `w-max` so it keeps its natural width, and `mx-auto` to center it when everything fits.
 
 ### Reel or Carousel
 
-[Carousel](/docs/components/carousel) shows content cards: slides that snap, with previous and next buttons, dots and a counter, moved by JavaScript (embla). A Reel is for a row of *controls* that should behave like plain scrolling: it is the browser's own scroller, it does not snap, and it adds no Tab stops.
+[Carousel](/docs/components/carousel) shows content cards: slides that snap, with previous and next buttons, dots and a counter, moved by JavaScript (embla). A Reel is for a row of *controls* that should behave like plain scrolling: it's the browser's own scroller, it doesn't snap, and it adds no Tab stops.
 
 ### Edges and arrows
 
 - Each edge fades only where there is more to scroll. The fade is a mask on the row itself (the [`ks-scroll-fade-x`](/docs/reference/css-utilities) utility), so it works on any surface: a card, a muted panel or the page.
 - With `arrows="pointer"` (the default), an arrow appears at each end that has more to scroll, but only on a device with a mouse or trackpad (`hover: hover` and `pointer: fine`). A touch screen swipes, and the fade is its cue. Where a default arrow can show, the fade is 3rem deep so the arrow sits on faded content; behind a plain arrow it is 2rem after the hidden strip; otherwise it is 1.5rem.
-- `arrowVariant="plain"` draws each arrow as a bare chevron in the muted text color, with no fill, border or shadow, for a row that sits on its own track, such as tabs. A bare chevron cannot cover what is under it, so while a plain arrow shows, the Reel hides the first five spacing units (1.25rem with the default spacing scale) of the row on that side, and the fade starts after that. This holds in browsers without scroll-driven animations too. When an arrow shows, how far a press scrolls, and that it is never a Tab stop or announced, are the same for both styles. `arrows` decides when either style can show.
+- `arrowVariant="plain"` draws each arrow as a bare chevron in the muted text color, with no fill, border or shadow, for a row that sits on its own track, such as tabs. A bare chevron can't cover what is under it, so while a plain arrow shows, the Reel hides the first five spacing units (1.25rem with the default spacing scale) of the row on that side, and the fade starts after that. This holds in browsers without scroll-driven animations too. When an arrow shows, how far a press scrolls, and that it is never a Tab stop or announced, are the same for both styles. `arrows` decides when either style can show.
 - Set `--ks-reel-fade-size` on the Reel through `className`, or on any ancestor, to choose how deep the fade is: `[--ks-reel-fade-size:2rem]`. The value needs a unit (`0px`, not `0`). Left unset, the fade is 3rem where a default arrow can show, 2rem where a plain arrow can, and 1.5rem where none can. Once set, that depth applies on every device.
 - A press on an arrow scrolls 80% of the visible width.
 - Arrows are never Tab stops and are hidden from assistive technology, and a press on one does not take focus: Tab or the row's own keyboard navigation reaches every item, and the Reel brings each one into view.
@@ -75,7 +76,7 @@ The Reel takes exactly one child, the row, and adds no semantics of its own. The
 ### Keyboard and focus
 
 - Reel clears a keyboard-focused or current item by the greater of 48px, the arrow's width, and the hidden strip (plain arrows only) plus the fade depth, wherever the available scroll range allows. An item wider than the clear space aligns at inline start.
-- A nonempty `aria-current` other than `false`, `aria-selected="true"`, or the presence of `data-selected` (present, with any value except `false` in any letter case) marks the current item. If several items are marked, Reel uses the first in DOM order. To reveal it, Reel scrolls the row just far enough to clear the item as described above, and does nothing if it already is clear. Reel checks the current item whenever the Reel comes to have room (at mount if its content width is positive, and whenever it regains positive content width) and whenever a different item becomes current (or the same item is unmarked and, in a later update, marked again). Reel reveals that item only if the Reel's last measured content width and the item's bounding-box width are both positive. A reveal on coming to have room, and the first reveal after mount, jump; later ones glide, or jump under `prefers-reduced-motion`. A reveal replaces a scroll already in progress, such as an arrow press, a swipe or an earlier glide. Reel skips a current item whose bounding box has zero width at that moment, even if a later marked item has width. Giving the item width later, resizing the Reel while it still has room, or shifting the row's layout does not trigger another reveal. Reel never moves focus or scrolls the page.
+- A nonempty `aria-current` other than `false`, `aria-selected="true"`, or the presence of `data-selected` (present, with any value except `false` in any letter case) marks the current item. If several items are marked, Reel uses the first in DOM order. To reveal it, Reel scrolls the row only far enough to clear the item as described above, and does nothing if it's already clear. Reel checks the current item whenever the Reel comes to have room (at mount if its content width is positive, and whenever it regains positive content width) and whenever a different item becomes current (or the same item is unmarked and, in a later update, marked again). Reel reveals that item only if the Reel's last measured content width and the item's bounding-box width are both positive. A reveal on coming to have room, and the first reveal after mount, jump; later ones glide, or jump under `prefers-reduced-motion`. A reveal replaces a scroll already in progress, such as an arrow press, a swipe or an earlier glide. Reel skips a current item whose bounding box has zero width at that moment, even if a later marked item has width. Giving the item width later, resizing the Reel while it still has room, or shifting the row's layout does not trigger another reveal. Reel never moves focus or scrolls the page.
 - If the current item gets its width later, or is moved to another row, give the Reel a new `key` or unmark the item and mark it again in a later update.
 - With `prefers-reduced-motion`, arrow presses and current-item scrolls jump instead of gliding.
 - The row has 4px of padding inside the scroller, at any root font size, so a focus outline is not clipped (Tabs zeroes it and pads the list itself).
@@ -95,25 +96,25 @@ Reel
 
 ### With FilterChips
 
-A row of FilterChips that filters in place keeps to one line instead of wrapping (`className="w-max flex-nowrap"`).
+A row of FilterChips that filters in place keeps to one line instead of wrapping, with `className="w-max flex-nowrap"`:
 
 <ComponentPreview name="reel-with-filter-chips" />
 
 ### Custom chips
 
-FilterChips restyled through `FilterChip`'s `className` state function to match a link bar: no border or shadow, muted idle text, and the quiet `secondary` fill on the selected chip.
+FilterChips restyled through `FilterChip`'s `className` state function to match a link bar, with no border or shadow, muted idle text, and the quiet `secondary` fill on the selected chip:
 
 <ComponentPreview name="reel-custom-chips" />
 
 ### Plain arrows
 
-This Reel uses `arrowVariant="plain"` and `arrows="always"` to show a bare chevron at each overflowing edge on every device. The muted track is hidden beneath each visible chevron.
+This Reel uses `arrowVariant="plain"` and `arrows="always"` to show a bare chevron at each overflowing edge on every device. The muted track is hidden beneath each visible chevron:
 
 <ComponentPreview name="reel-plain-arrows" />
 
 ## RTL
 
-In right-to-left text the fades and the arrows mirror: the end arrow sits on the left and scrolls towards the end, and the chevrons point the way they scroll. To align the arrows' sides and paging (computed direction) with the fade and chevrons (the nearest explicit `dir="ltr"` or `dir="rtl"` on the Reel or an ancestor), put the explicit direction on an ancestor of the whole Reel and let the scroller and arrows inherit it. See [the RTL guide](/docs/concepts/rtl).
+In right-to-left text the fades and the arrows mirror: the end arrow sits on the left and scrolls toward the end, and the chevrons point the way they scroll. The arrows' sides and paging follow the computed direction. The fade and chevrons follow the nearest explicit `dir="ltr"` or `dir="rtl"` on the Reel or an ancestor. To keep the two aligned, put the explicit direction on an ancestor of the whole Reel and let the scroller and arrows inherit it. [Right-to-left support](/docs/concepts/rtl) covers the rest of the library.
 
 <ComponentPreview name="reel-rtl" />
 

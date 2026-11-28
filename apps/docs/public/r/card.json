@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "card",
   "title": "Card",
-  "description": "Structured container with header, content, and footer sections for grouping related information.",
+  "description": "A container with header, content and footer parts that groups related information on one surface.",
   "dependencies": [
     "class-variance-authority"
   ],

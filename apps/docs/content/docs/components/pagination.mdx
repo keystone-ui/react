@@ -1,6 +1,7 @@
 ---
 title: Pagination
-description: Page navigation controls for browsing through paginated content.
+description: A list of page links, with previous and next controls, for moving through paginated content.
+contentType: Reference
 ---
 
 <ComponentPreview name="pagination-default" />
@@ -76,7 +77,13 @@ import {
 </Pagination>
 ```
 
-For the footer of a paginated data table — rows-per-page, "page N of M" and the four navigation buttons — use [`TablePagination`](/docs/components/table-pagination) instead. `Pagination` is a list of page *links*: a page control with a URL renders `nav > ul > li > a`, one without a URL (paging by `onClick`) renders `li > button` with `type="button"`, and the current page carries `aria-current="page"` on either; a data-table footer is a toolbar with an opaque page index and no per-page URLs.
+### Rendered markup
+
+`Pagination` is a list of page *links*. A page control with a URL renders `nav > ul > li > a`. One without a URL, paging by `onClick`, renders `li > button` with `type="button"`. The current page carries `aria-current="page"` on either.
+
+### Pagination or TablePagination
+
+For the footer of a paginated data table, with rows per page, "page N of M" and the four navigation buttons, use [`TablePagination`](/docs/components/table-pagination) instead. A data-table footer is a toolbar with an opaque page index and no per-page URLs.
 
 ## Composition
 
@@ -94,17 +101,15 @@ Pagination
 
 ## Examples
 
-### Simple
+### Previous and next only
 
-A minimal previous/next pagination without page numbers:
+Previous and next controls without page numbers:
 
 <ComponentPreview name="pagination-simple" />
 
-
-
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 ## API reference
 
