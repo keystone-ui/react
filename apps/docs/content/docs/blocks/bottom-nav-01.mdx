@@ -1,6 +1,7 @@
 ---
 title: Bottom Nav 01
-description: A phone's main navigation, four or five labelled links in a bar fixed to the bottom of the screen, the current page marked, hidden from md up.
+description: A phone's main navigation, four or five labeled links in a bar fixed to the bottom of the screen, the current page marked, hidden from md up.
+contentType: Reference
 ---
 
 ```bash
@@ -12,7 +13,7 @@ npx shadcn@latest add https://keystoneui.io/r/bottom-nav-01.json
 ## Features
 
 - Real links: a `<nav aria-label>` holding a list of `<a href>`s, each with an icon and a visible text label. The current one carries `aria-current="page"` and gets a filled pill behind its icon, so the current page is not marked by color alone.
-- Each link fills one of five equal cells and is at least 44 px tall, so with 200% text on a 320 px screen every link still sits inside the screen and a tap on its edge reaches it, not its neighbour; a label that no longer fits is cut short with an ellipsis and keeps its full accessible name. The keyboard focus outline is drawn inward so the bar's edge cannot clip it.
+- Each link fills one of five equal cells and is at least 44 px tall, so with 200% text on a 320 px screen every link still sits inside the screen and a tap on its edge reaches it, not its neighbor; a label that no longer fits is cut short with an ellipsis and keeps its full accessible name. The keyboard focus outline is drawn inward so the bar's edge cannot clip it.
 - Fixed to the bottom of the viewport and layered with the `--z-sticky` token. In print, `md:hidden` still applies to the print layout's width (the paper less its margins): when that width reaches `md` (768 CSS px) the bar is left out, as on a desktop; below it the bar prints once, in normal flow where it sits (`print:static`), not over every page.
 - Hidden from `md` up. On a wider screen the same destinations belong in a sidebar: the [sidebar item](/docs/reference/shadcn-sidebar) from `admin-01` is one.
 - Takes `items`, `currentHref` and a `label` for the `<nav>` (default `"Main"`). No router dependency: pass the current path from your router, and swap the `<a>` for your router's link component if it renders an `<a>`.
@@ -20,20 +21,9 @@ npx shadcn@latest add https://keystoneui.io/r/bottom-nav-01.json
 - A positive `count` on an item shows a [Badge](/docs/components/badge) over its icon (99+ above 99); `0` or no count shows nothing. The badge itself is hidden from assistive technology; `countLabel` (for example `"3 unread"`) is read after the label instead, so the link is announced as "Inbox (3 unread)".
 - Right-to-left: the order mirrors and the badge sits at the inline end of the icon's pill, inside its own link, because only logical properties (`end-0`) are used.
 
-## Keeping content clear of the bar
+## Scroll padding the bar adds
 
-The bar is exactly `--bottom-nav-height` tall (4rem, its top border included) plus the device's bottom safe area. The page keeps ordinary document scrolling, so Back returns a reader to where they were. Two things keep content clear of the bar below `md`:
-
-1. **What you add:** the page reserves that same height at its end, so the last row ends above the bar.
-
-```tsx
-<main className="pb-[calc(var(--bottom-nav-height,4rem)+env(safe-area-inset-bottom))] md:pb-0 print:pb-0">
-  …
-</main>
-<BottomNav currentHref="/home" />
-```
-
-2. **What the bar adds itself:** padding alone still lets the browser scroll a keyboard-focused control to the very bottom of the screen, under the bar. So `BottomNav` renders this rule for the document's scrollport, as a React 19 `<style>` that is hoisted into `<head>` once:
+Below `md`, `BottomNav` renders a scroll-padding rule for the document's scrollport, as a React 19 `<style>` that's hoisted into `<head>` once. It keeps the browser from scrolling a keyboard-focused control to the bottom edge of the screen, under the bar:
 
 ```css
 @media screen and (width < 48rem) {
@@ -43,53 +33,17 @@ The bar is exactly `--bottom-nav-height` tall (4rem, its top border included) pl
 }
 ```
 
-The rule sits on `html` because that is the element that scrolls. It sets only the bottom (block-end) side: the top side belongs to your page, for example the offset for a sticky header, and the bar never changes it. React may leave the `<style>` element in `<head>` after the bar unmounts; its selector only matches while the document holds a bar. An app that keeps left routes mounted but hidden (Next.js `cacheComponents`) still holds the bar while its route is kept alive, so the bottom padding can stay in force on other pages at phone width. It never changes the layout: it only acts when the browser scrolls something into view, such as a focused control or an anchor.
+- **Height**: the bar is exactly `--bottom-nav-height` tall (4rem, its top border included) plus the device's bottom safe area. Set the variable on `:root`, where both the bar and this rule read it.
+- **Element**: the rule sits on `html`, because that's the element that scrolls.
+- **Side**: it sets only the bottom (block-end) side. The top side belongs to your page, for example the offset for a sticky header, and the bar never changes it.
+- **Lifetime**: React may leave the `<style>` element in `<head>` after the bar unmounts; its selector only matches while the document holds a bar. An app that keeps left routes mounted but hidden (Next.js `cacheComponents`) still holds the bar while its route is kept alive, so the bottom padding can stay in force on other pages at phone width.
+- **Effect**: it never changes the layout. It only acts when the browser scrolls something into view, such as a focused control or an anchor.
 
-If your app's Content-Security-Policy forbids inline styles (`style-src 'self'` without a nonce), the browser refuses this `<style>` element. Put the bar's rule above in your app's global stylesheet. In the installed `bottom-nav.tsx`, remove the `SCROLL_PADDING_CSS` constant, the `<style>` element that renders it, and the lint-suppression comment above the element. Remove the surrounding `<>` and `</>` so `BottomNav` returns `<nav>` directly, then format the file. Otherwise a keyboard-focused control can land under the bar.
+The bar doesn't pad your page. [Keep content clear of the bottom nav](/docs/guides/keep-content-clear-of-the-bottom-nav) adds the page padding, moves this rule into your stylesheet under a strict Content-Security-Policy, and combines it with your app's own scroll offsets.
 
-To change the bar's height, set `--bottom-nav-height` on `:root`, where both the bar and this rule read it. An inner ancestor is not enough, because `html` cannot see it.
+## Surface color
 
-`env(safe-area-inset-bottom)` is zero unless the page's viewport meta opts in with `viewport-fit=cover`. In Next.js, export `viewport = { viewportFit: "cover" }` from the root layout.
-
-### When your app sets its own offsets
-
-`scroll-padding-block-end` takes one winning value: the browser does not add your app's bottom offset and the bar's together. So the bar's rule can replace an offset of your app's, smaller or larger. A page with a 160 px fixed toolbar that sets a 160 px bottom offset on `html` in `@layer base` gets the bar's 80 px instead while the document holds a bar, which with `cacheComponents` includes a hidden one kept alive from a page you left. The other way round, a more specific declaration of your app's can defeat the bar's: `:root { scroll-padding: 72px 0 0; }` sets the bottom to zero, beats `html:where(…)`, and lets a focused field land under the bar.
-
-A page that only needs room under a header sets `scroll-padding-block-start`, not the `scroll-padding` shorthand. If your app also needs room at the bottom, declare it after any shorthand of its own and take the greater of its offset and the bar's:
-
-```css
-:root {
-  --page-end: 160px;
-  scroll-padding-block-end: var(--page-end);
-}
-
-@media screen and (width < 48rem) {
-  :root:where(:has([data-slot="bottom-nav"])) {
-    scroll-padding-block-end: max(
-      var(--page-end),
-      calc(var(--bottom-nav-height, 4rem) + env(safe-area-inset-bottom) + 1rem)
-    );
-  }
-}
-```
-
-### A form page with no header
-
-In WebKit, Shift+Tab back up a page of padded native inputs can stop with the focused input partly above the top of the screen, and the bar's bottom padding makes that happen on more fields. A form page with no start offset of its own (no sticky header to clear) should give itself a 1rem start offset: mark its `<main data-headerless-form>` and add this rule to your app's stylesheet.
-
-```css
-@media screen and (width < 48rem) {
-  :where(html:has([data-headerless-form] input:focus)) {
-    scroll-padding-block-start: 1rem;
-  }
-}
-```
-
-The selector asks for focus inside the marked form, not just for the marker, so a form that a kept-alive route holds hidden cannot switch the offset on for another page. This is your page's own rule, in your app's stylesheet: the block does not ship it. A form under a sticky header already has its start offset and leaves the marker off.
-
-## Surface
-
-The bar paints `bg-background` with a `border-t`. It is part of the page's own plane, like a sticky table header, not a layer opened over the page: `bg-popover` is for popups, Modal, AlertDialog and Drawer, and in dark mode it would lift the bar a step above the page it belongs to.
+The bar paints `bg-background` with a `border-t`. It's part of the page's own plane, like a sticky table header, not a layer opened over the page: `bg-popover` is for popups, Modal, AlertDialog and Drawer, and in dark mode it would lift the bar a step above the page it belongs to.
 
 ## Components used
 
