@@ -98,13 +98,16 @@ describe("docs page client bundle", () => {
     // string it is 149 KB. What remains is the code itself, so the next
     // step down is loading code on demand, not a tighter serialisation.
     // The page's usage snippet brought the payload to 164,098 bytes. The
-    // guard exists to catch a return to per-token serialisation (205 KB),
-    // so 168 KB still does that.
+    // guard exists to catch a return to per-token serialisation (205 KB).
+    // The payload also carries the sidebar's page tree, so it grows with the
+    // docs: the Diátaxis restructure took the tree from 103 to 124 pages and
+    // the payload to 175,944 bytes. 184 KB leaves room for more pages and
+    // still fails well before 205 KB.
     const rsc = statSync(
       join(NEXT_DIR, "server", "app", "docs", "components", "button.rsc")
     ).size;
     expect(rsc, `button.rsc is ${Math.round(rsc / KB)} KB`).toBeLessThan(
-      168 * KB
+      184 * KB
     );
   });
 
