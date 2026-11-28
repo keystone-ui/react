@@ -1,5 +1,12 @@
 {
   "title": "Concepts",
   "icon": "Lightbulb",
-  "pages": ["architecture", "theming", "styles-and-themes", "dark-mode", "rtl"]
+  "pages": [
+    "architecture",
+    "theming",
+    "styles-and-themes",
+    "dark-mode",
+    "keystone-and-shadcn",
+    "rtl"
+  ]
 }

@@ -1,0 +1,119 @@
+---
+title: shadcn sidebar
+description: The sidebar registry item: shadcn's collapsible app sidebar adapted onto Keystone UI's components, its install commands, tokens, parts and behaviour.
+contentType: Reference
+---
+
+The sidebar item is shadcn's app sidebar, adapted onto Keystone UI's Button, Drawer, Input, Separator, Skeleton and Tooltip. It's a registry item, not a library export: one file, `components/sidebar.tsx`, installed on its own or as part of [`admin-01`](/docs/blocks/admin-01). [Keystone UI and shadcn](/docs/concepts/keystone-and-shadcn#what-keystone-ui-leaves-to-shadcn) explains why Keystone UI reuses shadcn's sidebar.
+
+## Installation
+
+Install the item by its full URL:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/sidebar.json
+```
+
+<Callout type="warn">
+Use the full URL. The bare name `sidebar` selects **shadcn's** item, whose dependencies include its Button, Input, Separator, Skeleton and Tooltip, which install to the same paths as Keystone UI's files. Accepting the CLI's offer to overwrite them, or passing `--overwrite`, replaces Keystone UI's files with the selected shadcn style's versions. That's what happened when `admin-01` depended on shadcn's item: installing the block replaced Keystone UI's files with Radix ones.
+</Callout>
+
+The item writes `sidebar.tsx` under your components alias (`components/sidebar.tsx` by default) and installs Keystone UI's Button, Drawer, Input, Separator, Skeleton and Tooltip beside it. It's the same file [`admin-01`](/docs/blocks/admin-01) installs, so an app that adds both from the same release gets identical bytes at that path. If you edit your copy (the drawer's name, the cookie line, the shortcut), a later `add` of `sidebar` or `admin-01` finds a file that differs and offers to overwrite it. Accepting, or passing `--overwrite`, discards your edits.
+
+### Package flavour
+
+The item above is the vendored version: it imports your local Keystone UI components through the UI alias in `components.json` (normally `@/components/ui`). In an app that imports components from the `@keystoneui/react` package instead, install the package flavour. It writes the same `sidebar.tsx`, importing `@keystoneui/react/*`:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/npm/sidebar.json
+```
+
+It's tested with `@keystoneui/react` 1.0.0-beta.11 and needs a `components.json` ([Apps that use the npm package](/docs/blocks/users-01#apps-that-use-the-npm-package) gives one). It installs `@base-ui/react` unpinned: keep your `@base-ui/react` at the version `@keystoneui/react` pins. Pick one flavour per app.
+
+## Tokens
+
+The sidebar reads 6 `--sidebar-*` tokens: `--sidebar`, `--sidebar-foreground`, `--sidebar-accent`, `--sidebar-accent-foreground`, `--sidebar-border` and `--sidebar-ring`. The default style at `https://keystoneui.io/r/default.json` and the manual CSS in the [theme tokens reference](/docs/reference/theme-tokens#sidebar-tokens) declare all 8 of the set. `@keystoneui/react/base.css` declares none, so an app that imports only `base.css` gets a sidebar with no surface or hover colours.
+
+## Composition
+
+An app shell puts the sidebar and the page content inside one provider:
+
+```tsx
+import { House as HouseIcon } from "lucide-react";
+import type { ReactNode } from "react";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarRail,
+  SidebarTrigger,
+} from "@/components/sidebar";
+
+export function AppShell({ children }: { children: ReactNode }) {
+  return (
+    <SidebarProvider>
+      <Sidebar collapsible="icon">
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton isActive render={<a href="/" />} tooltip="Home">
+                  <HouseIcon />
+                  <span>Home</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarRail />
+      </Sidebar>
+      <SidebarInset>
+        <header className="flex h-14 items-center px-4">
+          <SidebarTrigger />
+        </header>
+        {children}
+      </SidebarInset>
+    </SidebarProvider>
+  );
+}
+```
+
+`SidebarMenuButton` is a `<button>` unless you pass `render`. Which item is active is yours to decide, through `isActive`.
+
+## Behaviour
+
+- **Collapsing**: `<Sidebar>` defaults to `collapsible="offcanvas"`: collapsed, it slides fully off-screen. `collapsible="icon"` leaves a rail of icons instead (3rem wide in the default `variant`), and each `SidebarMenuButton`'s `tooltip` shows only while the sidebar is collapsed and not on a phone. `collapsible="none"` renders a static column at every width: no collapse, no drawer on phones, and not `fixed`. The open state lives in the provider, so the shortcut and the cookie work even with `collapsible="none"`, where the column itself doesn't move. Expanded, the sidebar is 16rem wide; `variant` is `sidebar`, `floating` or `inset`, and `side` is `left` or `right`.
+- **Phones**: below 768px the sidebar renders inside Keystone UI's [`Drawer`](/docs/components/drawer), opening from its `side`, 18rem wide at every phone width (`SIDEBAR_WIDTH_MOBILE`) rather than at the Drawer's own three quarters of the viewport. The drawer's accessible name is a visually hidden "Sidebar", in English; change it in your copy of the file. The server renders the desktop markup, which is hidden below `md`, and the phone layout takes over after hydration.
+- **Keyboard**: Cmd+B or Ctrl+B toggles the sidebar from anywhere on the page. On desktop it collapses and expands without animation, and on a phone it opens and closes the drawer. The listener is on `window`, in the bubble phase, and calls `preventDefault()` even when focus is in a text field. Pressing Cmd/Ctrl+B in an editor toggles the sidebar too, unless the editor stops the event from propagating, and it cancels the browser's own default for the key, so it can conflict with an editor's bold. To change the key, edit `SIDEBAR_KEYBOARD_SHORTCUT` in your copy; to remove the shortcut, delete the effect that adds the `keydown` listener. `SidebarTrigger` is a button in the tab order; `SidebarRail` toggles on click and is left out of it.
+- **The `sidebar_state` cookie**: only the provider's own `setOpen` writes it. The desktop trigger, the rail and the shortcut call it, and so does `setOpen` from `useSidebar()`, on any viewport. Each call writes the value it asked for, `sidebar_state=true` or `sidebar_state=false`, with `path=/` and a lifetime of 7 days (`max-age=604800`). The default state writes nothing. The phone drawer keeps separate state: opening or closing it never writes the cookie or calls `onOpenChange`. The file never reads the cookie back: to restore the state on the next load, read it on the server and pass it to `SidebarProvider` as `defaultOpen`. To stop the writes, remove the `document.cookie` line from your copy.
+- **Controlled state**: with `open` and `onOpenChange`, each `setOpen` call passes the requested value to `onOpenChange` and still writes it to the cookie, even if your callback ignores it. A change you make to `open` yourself writes nothing, so the cookie can disagree with the screen. `onOpenChange` without `open` freezes the desktop sidebar: the request goes to your callback and the provider's own state never changes. `open` governs the desktop state only; the phone drawer doesn't follow it.
+- **Reduced motion**: every sidebar transition is timed by `--duration-fast` or `--duration-base` from `base.css`, which drop to `0.01ms` under `prefers-reduced-motion: reduce`, so collapsing and hover colours change at once. The phone drawer follows `Drawer`'s own motion.
+- **Right-to-left**: not mirrored. `side` doesn't follow `dir`, and positions are physical: the container is pinned with `left`/`right`, menu text is left-aligned, and badges and actions sit at the right edge. A `dir` passed to `<Sidebar>` reaches only the phone drawer.
+- **Layering**: on desktop a collapsible sidebar is `fixed` at `z-10` and its rail at `z-20`.
+
+### `SidebarInset` carries `min-w-0`
+
+Keystone UI's `components/sidebar.tsx` sets `min-w-0` on `SidebarInset` itself, so you don't need to add it. Keep it if you restyle the inset, and add it at the call site if you use a sidebar file that doesn't set it:
+
+```tsx
+<SidebarInset className="min-w-0">
+```
+
+It isn't cosmetic. A flex item won't shrink below its content's intrinsic width, so without it any wide child (a table, a chart, a long unbroken string) pushes the inset open and the whole document gains a horizontal scrollbar. In the app this pattern was taken from, the omission produced **+256px of overflow across 8 pages, at every width from 768 to 1600**, and went unnoticed until a test measured it.
+
+### Hydration fix
+
+While adapting it we also fixed a hydration bug present upstream: `SidebarMenuSkeleton` calls `Math.random()` in a `useState` initialiser, so the server and the client pick different widths.
+
+## What it doesn't include
+
+The item has no navigation content, routing or active-link detection, collapsible sub-menu, topbar or breadcrumb, or server-side read of the cookie. `admin-01`'s own `admin-sidebar.tsx` and `admin-topbar.tsx` show a full composition and aren't part of the item.
+
+When you print a page with the sidebar, hide `[data-slot="sidebar-container"]` and `[data-slot="sidebar-gap"]`, as [Enable dark mode](/docs/guides/enable-dark-mode#print-your-own-layout) shows.

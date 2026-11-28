@@ -1,0 +1,52 @@
+---
+title: Keystone UI and shadcn
+description: Keystone UI is a shadcn-compatible registry on the same Base UI primitives, so components it doesn't ship can come from shadcn's. This page explains what that costs.
+contentType: Conceptual
+---
+
+Keystone UI installs to the same paths shadcn does (`@/components/ui/*`, `@/lib/utils`) and uses the same registry format. Anything Keystone UI doesn't ship, you can install from shadcn's registry, side by side. The two now share their primitives, so the differences left are in what each ships, which file wins a shared path, and how tall the controls are. [Add shadcn components](/docs/guides/add-shadcn-components) has the steps.
+
+## Both libraries are on Base UI
+
+Since July 2026, [shadcn's default base is Base UI](https://ui.shadcn.com/docs/changelog), the same primitives Keystone UI has always used. New shadcn projects get it unless they opt out with `shadcn init -b radix`.
+
+That makes mixing the two far less risky than it used to be. A shadcn component installed next to Keystone UI wraps the same primitive, exposes the same `render` prop rather than Radix's `asChild`, and carries the same accessibility semantics. The differences left are visual, not behavioural.
+
+Two things follow:
+
+- **A snippet's base matters.** A Radix-era snippet uses `asChild`; Keystone UI and Base UI-era shadcn both use `render`. The rename is mechanical, but nothing reports it: `asChild` on a Base UI component is an unknown prop, not an error.
+- **Radix is not deprecated.** shadcn still ships every component for it, so a snippet you find may be written either way.
+
+## What Keystone UI leaves to shadcn
+
+Keystone UI deliberately doesn't ship 3 kinds of component, and reuses shadcn's instead.
+
+**Sidebar.** An app shell is a large, opinionated component: a collapsible icon rail, a mobile drawer, persisted state, a keyboard shortcut, and a `peer`/`group` layout contract between 4 parts. shadcn's is good, widely understood and already maintained. Reimplementing it would mean owning about 900 lines to arrive somewhere close to it. So Keystone UI's sidebar is shadcn's, adapted onto Keystone UI's Button, Drawer, Input, Separator, Skeleton and Tooltip. It's a registry item, not a library export; see the [sidebar reference](/docs/reference/shadcn-sidebar).
+
+**Charts.** A chart wrapper is mostly a list of `[&_.recharts-*]` overrides that make recharts' hardcoded `#ccc` and `#fff` marks respect your theme: archaeology, not something worth deriving again. The real reason it stays out of `@keystoneui/react` is recharts itself. A chart is one screen in most apps, and a library dependency would bill every other screen for it. Keystone UI's own `dashboard-01` and `admin-01` blocks vendor shadcn's chart file rather than importing it from the library, for the same reason.
+
+**Chat and agent UI.** shadcn's chat components (`MessageScroller`, `Message`, `Bubble`, `Attachment`, `Marker`, and the AI Elements compositions built on them) are Base UI, read the same semantic tokens and work in a Keystone UI app.
+
+## Which file wins a shared path
+
+Both registries write to the same paths, so it matters which registry a dependency resolves against. A registry item's `registryDependencies` may name items by bare name (`"button"`) or by namespace (`"@keystone/button"`), and bare names resolve against shadcn's registry.
+
+`shadcn add` skips a file that already exists. That protects an app that installed Keystone UI's `button.tsx` earlier. It doesn't protect one command that resolves both: an item that pulls shadcn's `button` and Keystone UI's in the same run writes one of them, and it was shadcn's when we measured. That's why every Keystone UI item names its Keystone UI dependencies by full URL (`https://keystoneui.io/r/button.json`), never by bare name.
+
+The same rule makes `toast.tsx` the one real collision. shadcn now ships its own Base UI [Toast](https://ui.shadcn.com/docs/components/base/toast), and it writes to the same path as Keystone UI's. Whichever is installed first wins without a warning, and the two have different APIs. shadcn's Sonner is still in the registry but has lost its docs page, so treat it as on the way out rather than as the alternative.
+
+## Control heights differ
+
+Keystone UI's controls are **40px** at their default size, on the [control height ladder](/docs/reference/base-css#control-heights). shadcn's depend on the style you install: they have run from 32px to 40px across the 8 current styles, so check rather than assume.
+
+Because Keystone UI's files win the path collision, a shadcn component that composes `Button` renders Keystone UI's height inside a layout built for shadcn's. It only shows when the two sit in the same row. Both libraries expose `sm` at 32px, so a mixed toolbar is most reliable with `size="sm"` throughout.
+
+## Two stylesheets side by side
+
+shadcn's chat items style themselves with utilities from `shadcn/tailwind.css`, which `shadcn init` imports. The two stylesheets don't collide, because Keystone UI's own utilities carry a `ks-` prefix; [Theming](/docs/concepts/theming#why-library-names-carry-a-ks-prefix) explains why.
+
+## Related
+
+- [Add shadcn components](/docs/guides/add-shadcn-components)
+- [shadcn sidebar reference](/docs/reference/shadcn-sidebar)
+- [base.css reference](/docs/reference/base-css)

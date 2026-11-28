@@ -238,6 +238,10 @@ The base layer sets the default border and outline colours, the page colours and
   borders take the text colour.
 </Callout>
 
+## Sidebar tokens
+
+shadcn defines 8 `--sidebar-*` tokens for its sidebar, and the theme declares all 8 in the [light values](#light-values) as **aliases** of your theme tokens, such as `--sidebar-foreground: var(--foreground)`. Because they're aliases rather than literals, the sidebar follows whichever theme is active: pick `slate` and the sidebar goes slate too. Only `--sidebar` has a dark override (`var(--card)`), since its formula differs rather than its inputs. The [shadcn sidebar reference](/docs/reference/shadcn-sidebar#tokens) lists the 6 the sidebar item reads.
+
 ## Chart tokens
 
 `--chart-1` to `--chart-5` are 5 categorical slots for chart series, the same hues in every theme. They're separated by lightness rather than hue alone, so they stay distinct under colour-vision deficiency.

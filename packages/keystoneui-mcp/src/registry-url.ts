@@ -159,7 +159,7 @@ function joinBase(raw: string, path: string): string {
 }
 
 /**
- * A page path (`docs/interop`, `llms.mdx/docs/interop`) composed into the
+ * A page path (`docs/reference/shadcn-sidebar`, `llms.mdx/docs/reference/shadcn-sidebar`) composed into the
  * docs URL by the same rules as a resource into a base URL.
  */
 export function docsResourceUrl(docsUrl: string, path: string): string {

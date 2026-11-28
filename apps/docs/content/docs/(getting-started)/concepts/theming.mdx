@@ -74,6 +74,8 @@ Tailwind CSS takes the later `@theme inline` block whole. A copy of the scale in
 
 The easing tokens are `--ease-ks-out` and `--ease-ks-in-out`, not `--ease-out` and `--ease-in-out`. A `--ease-out` entry in `base.css` would make Tailwind CSS emit an `ease-out` utility that replaces the framework's own in every consumer app, not only inside the library.
 
+The CSS utilities are namespaced for a similar reason: `ks-typeset`, `ks-scroll-fade`, `ks-shimmer` and `ks-scrollbar`. shadcn's `shadcn/tailwind.css`, which every `shadcn init` project imports, defines `scroll-fade` and `shimmer` too, and Tailwind CSS applies both rules when two `@utility` blocks share a name. A test reads the installed `shadcn/tailwind.css` and fails if a Keystone UI name ever overlaps again.
+
 ## Related
 
 - [Customize the theme](/docs/guides/customize-the-theme)
