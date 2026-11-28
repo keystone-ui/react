@@ -1,6 +1,7 @@
 ---
 title: Button
-description: A versatile button component with multiple variants, sizes, and states.
+description: A button that triggers an action, in 6 visual variants and 8 sizes, with loading and disabled states.
+contentType: Reference
 ---
 
 <ComponentPreview name="button-default" />
@@ -45,98 +46,98 @@ import { Button } from "@keystoneui/react/button";
 <Button>Default Button</Button>
 ```
 
+### Links that look like buttons
+
+A link that should look like a button is a plain `<a>` styled with `buttonVariants`. It stays a link: screen readers announce it as a link, and Enter follows it but Space doesn't. `buttonVariants` takes the same `variant`, `size` and `fullWidth` options as `Button`. It's exported from a client module, so call it in a client component (`"use client"`), as the [As link](#as-link) demo does.
+
+Don't render an anchor through `Button` (`nativeButton={false} render={<a href="…" />}`). Base UI gives it `role="button"`, so screen readers announce it as a button, and Space follows it.
+
 ## Examples
 
 ### Variants
 
-The Button component supports six visual variants:
+Button has 6 visual variants, set with `variant`:
 
 <ComponentPreview name="button-variants" />
 
-| Variant | Use Case |
+| Variant | Use case |
 | --- | --- |
-| `default` | Primary actions, CTAs |
+| `default` | Primary actions, calls to action |
 | `secondary` | Secondary actions alongside a primary |
 | `destructive` | Delete, remove, or dangerous operations |
-| `outline` | Bordered button, often used for cancel |
+| `outline` | Bordered button, for example a Cancel action |
 | `ghost` | Minimal emphasis, toolbar actions |
 | `link` | Inline text-style links with button behavior |
 
-### Link Variant
+### Link variant
+
+`variant="link"` draws the button as inline text with button behavior:
 
 <ComponentPreview name="button-link" />
 
-
 ### Sizes
+
+`size` sets the height from the shared control ladder, described in [Control sizing](/docs/concepts/control-sizing):
 
 <ComponentPreview name="button-sizes" />
 
-### Icon Buttons
+### Icon buttons
 
-Square icon buttons across different variants:
+The `icon` sizes make a square button for a single icon, in any variant:
 
 <ComponentPreview name="button-icon-buttons" />
 
+### With icons
 
-### With Icons
-
-Icons are automatically sized and positioned:
+Button sizes and positions an icon placed beside the label:
 
 <ComponentPreview name="button-with-icons" />
 
+### Loading state
 
-### Loading State
-
-Click the buttons to see the interactive loading state with a spinner overlay:
+`isLoading` shows a spinner over the label and disables the button. Click a button in the preview to see it:
 
 <ComponentPreview name="button-loading" />
 
-
 ### Disabled
+
+A disabled button shows `opacity-50` and `cursor-not-allowed`, and skips the press animation:
 
 <ComponentPreview name="button-disabled" />
 
-Disabled buttons show `opacity-50` and `cursor-not-allowed`, and the press animation is cancelled.
+### Full width
 
-
-### Full Width
+`className="w-full"` makes the button fill its container:
 
 <ComponentPreview name="button-full-width" />
 
+### As link
 
-### As Link
-
-A link that should look like a button is a plain `<a>` styled with `buttonVariants`. It stays a link: it is announced as a link and follows on Enter, not on Space. `buttonVariants` takes the same `variant`, `size` and `fullWidth` options as `Button`. It is exported from a client module, so call it in a client component (`"use client"`), as the demo below does:
+A plain `<a>` styled with `buttonVariants`, from a client component. [Links that look like buttons](#links-that-look-like-buttons) explains why it isn't a `Button`:
 
 <ComponentPreview name="button-as-link" />
 
-Don't render an anchor through `Button` (`nativeButton={false} render={<a href="…" />}`): Base UI gives it `role="button"`, so it is announced as a button, and Space follows it.
-
-
 ### Rounded
 
-Apply `rounded-full` for pill-shaped buttons:
+`rounded-full` makes a pill-shaped button:
 
 <ComponentPreview name="button-rounded" />
 
+### Social buttons
 
-### Social Buttons
-
-Social media login buttons:
+Outline buttons with brand icons work as social sign-in buttons:
 
 <ComponentPreview name="button-social-buttons" />
 
+### Custom loading
 
-### Custom Loading
-
-Button with a custom loading indicator:
+A disabled button with your own spinner icon replaces the default loading indicator:
 
 <ComponentPreview name="button-custom-loading" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 
@@ -173,5 +174,6 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 | `size` | `"default" \| "xs" \| "sm" \| "lg" \| "icon" \| "icon-xs" \| "icon-sm" \| "icon-lg"` | `"default"` | Size of the button |
 | `isLoading` | `boolean` | `false` | Shows loading spinner and disables button; the button keeps its label as its name and sets `aria-busy` |
 | `disabled` | `boolean` | `false` | Disables the button |
+| `fullWidth` | `boolean` | `false` | Stretch the button to the full width of its container |
 | `className` | `string` | - | Additional CSS classes |
 | `render` | `React.ReactElement` | - | Render as a different element (Base UI polymorphism) |

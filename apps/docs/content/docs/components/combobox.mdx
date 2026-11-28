@@ -1,6 +1,7 @@
 ---
 title: Combobox
-description: Searchable dropdown with autocomplete for filtering and selecting from a list of options.
+description: A text input that filters a list of options as you type, for picking one value or several.
+contentType: Reference
 ---
 
 <ComponentPreview name="combobox-default" />
@@ -68,104 +69,91 @@ Combobox
         └── ComboboxSeparator
 ```
 
-**Invalid nesting:** `ComboboxLabel` must sit inside a `ComboboxGroup`. Placed
-directly in `ComboboxList`, Base UI throws `ComboboxGroupContext is missing`.
+**Invalid nesting:** `ComboboxLabel` must sit inside a `ComboboxGroup`. Placed directly in `ComboboxList`, it makes Base UI throw `ComboboxGroupContext is missing`.
 
 ## Examples
 
-### Custom Items
+### Custom items
 
-Render rich item content with icons, avatars, or descriptions:
+Items with icons, avatars or descriptions.
 
 <ComponentPreview name="combobox-custom-items" />
 
+### Multiple selection
 
-### Multiple Selection
-
-Enable multi-select with chips display:
+`multiple` allows several values, shown as chips.
 
 <ComponentPreview name="combobox-multiple" />
 
+### Multiple selection with create
 
-### Multiple Selection With Create
-
-Multi-select chips combobox that lets the user create a new value when their typed input doesn't match any existing item — exposes an "Add &quot;X&quot;" row separated from the existing list.
+A multi-select chips combobox that creates a new value when the typed text matches no existing item. It shows an "Add &quot;X&quot;" row, separated from the existing list.
 
 <ComponentPreview name="combobox-multi-with-create" />
 
-### Multiple Selection In A Popover
+### Multiple selection in a popover
 
-A multi-select filter, Notion-style: a trigger opens a popover holding an `inline` combobox, so the list renders in place rather than in a second popup. Chosen values show as chips in the search field, picked items stay in the list with a check — nothing shifts under the pointer between picks — and the trigger names its first value and counts the rest. The [`admin-01`](/docs/blocks/admin-01) payments table uses this for its Currency filter.
+A multi-select filter in the style of Notion: a trigger opens a popover holding an `inline` combobox, so the list renders in place rather than in a second popup. Chosen values show as chips in the search field. Picked items stay in the list with a check, so nothing shifts under the pointer between picks. The trigger names its first value and counts the rest. The [`admin-01`](/docs/blocks/admin-01) payments table uses this for its Currency filter.
 
 <ComponentPreview name="combobox-multiple-in-popover" />
 
+### With clear button
 
-### With Clear Button
-
-Add a clear button to reset the selection:
+A clear button that resets the selection.
 
 <ComponentPreview name="combobox-with-clear" />
 
-
 ### Groups
 
-Organize items into labeled groups:
+Items sorted into labeled groups.
 
 <ComponentPreview name="combobox-groups" />
 
-
 ### Disabled
 
-Disable the entire combobox or individual items:
+A disabled combobox. Individual items take `disabled` too.
 
 <ComponentPreview name="combobox-disabled" />
 
-
 ### Popup
 
-Customize the popup alignment and behavior:
+A button trigger opens a popup with the search input inside it.
 
 <ComponentPreview name="combobox-popup" />
 
-
 ### Countries
 
-Country selector with flags:
+A country picker with flags.
 
 <ComponentPreview name="combobox-countries" />
 
-
 ### Scrollable
 
-Combobox with a long scrollable list:
+A long list that scrolls.
 
 <ComponentPreview name="combobox-scrollable" />
 
+### Compact items
 
-### Compact Items
-
-Combobox with compact item styling:
+`size="compact"` on `ComboboxContent` makes the items shorter.
 
 <ComponentPreview name="combobox-compact-items" />
 
-
 ### Controlled
 
-Controlled combobox with external state:
+A combobox whose value lives in React state.
 
 <ComponentPreview name="combobox-controlled" />
 
+### In a form
 
-### Form Example
-
-Combobox used within a form:
+A combobox inside a form.
 
 <ComponentPreview name="combobox-form-example" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 
@@ -240,7 +228,7 @@ export function CityPicker() {
 
 `ComboboxClear` is named "Clear selection" by visually hidden text inside the button, and no `title` is added. `<label for>`, `title`, `aria-label` or `aria-labelledby` each replace it, on `ComboboxClear` or on the element you pass as `render`, and so does visible text inside the element you pass as `render`. Children given to `ComboboxClear` itself are not rendered; `aria-label={undefined}` and `title={undefined}` keep it. Clear omits its hidden fallback when the title contains non-whitespace text, using the render element's `title` prop if present and Clear's own `title` otherwise. To keep the chosen `title` on the final button, forward it unchanged through every nested `render`.
 
-If you replace the button's content through `render`: Name icon-only replacements with `aria-label` or `aria-labelledby`. For visible text, replace the rendered button's children. For a title-based name, forward the supplied title unchanged.
+When you replace the button's content through `render`, name an icon-only replacement with `aria-label` or `aria-labelledby`. For visible text, replace the rendered button's children. For a name from `title`, forward the supplied title unchanged. This replacement is an icon-only button:
 
 ```tsx
 import { Trash2 as Trash2Icon } from "lucide-react";
@@ -254,7 +242,7 @@ import { Trash2 as Trash2Icon } from "lucide-react";
 />
 ```
 
-For tests: a query by role and name finds "Remove …" and "Clear selection". Clear's `textContent` includes "Clear selection" while the fallback is present. With library CSS in Chromium and WebKit, Playwright's `isVisible()` is true for the loading label and jest-dom's `toBeVisible()` is false. Without CSS both are true. In jsdom 30.1.2 jest-dom returns true with or without the compiled CSS.
+In tests, a query by role and name finds "Remove …" and "Clear selection". Clear's `textContent` includes "Clear selection" while the fallback is present. With library CSS in Chromium and WebKit, Playwright's `isVisible()` is true for the loading label and jest-dom's `toBeVisible()` is false. Without CSS both are true. In jsdom 30.1.2 jest-dom returns true with or without the compiled CSS.
 
 ### ComboboxChip
 

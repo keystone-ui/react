@@ -1,6 +1,7 @@
 ---
 title: Breadcrumb
-description: Navigation breadcrumb trail showing the user's current location within a hierarchy.
+description: A trail of links that shows where the current page sits in the site's hierarchy.
+contentType: Reference
 ---
 
 <ComponentPreview name="breadcrumb-default" />
@@ -81,37 +82,33 @@ Breadcrumb
 
 ## Examples
 
-### Custom Separator
+### Custom separator
 
-Use a custom separator character or icon:
+`BreadcrumbSeparator` takes a custom character or icon as its child:
 
 <ComponentPreview name="breadcrumb-custom-separator" />
 
-
 ### Collapsed
 
-Collapse middle items with an ellipsis when the trail is long:
+`BreadcrumbEllipsis` stands in for the middle items of a long trail:
 
 <ComponentPreview name="breadcrumb-collapsed" />
 
+### With dropdown
 
-### With Dropdown
-
-Expand collapsed items into a dropdown menu:
+A dropdown menu on the ellipsis lists the collapsed items:
 
 <ComponentPreview name="breadcrumb-with-dropdown" />
 
+### Link component
 
-### Link Component
-
-Using a custom link component for routing integration:
+`BreadcrumbLink` takes a `render` element, so it can render your router's link component:
 
 <ComponentPreview name="breadcrumb-link-component" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 

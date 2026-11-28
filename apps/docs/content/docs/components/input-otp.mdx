@@ -1,6 +1,7 @@
 ---
 title: InputOTP
-description: One-time password input with individual digit slots for verification codes.
+description: A one-time password input with one slot per character, for verification and recovery codes.
+contentType: Reference
 ---
 
 <ComponentPreview name="input-otp-default" />
@@ -57,87 +58,81 @@ InputOTP
 
 ## Examples
 
-### With Label
+### With label
 
-Pair the input with a native `<label>` and an `aria-describedby` description for accessibility:
+A native `<label>` names the input and `aria-describedby` points to its description.
 
 <ComponentPreview name="input-otp-with-label" />
 
+### With separator
 
-### With Separator
-
-Group slots with visual separators for codes presented as `123-456`:
+A separator splits the slots into groups, for codes shown as `123-456`.
 
 <ComponentPreview name="input-otp-with-separator" />
 
+### Four digits
 
-### Four Digits
-
-A shorter OTP input for 4-digit codes:
+A shorter input for 4-digit codes.
 
 <ComponentPreview name="input-otp-four-digits" />
 
-
 ### Alphanumeric
 
-Use `validationType="alphanumeric"` for recovery, backup, or invite codes that mix letters and numbers:
+`validationType="alphanumeric"` accepts letters and numbers, for recovery, backup or invite codes.
 
 <ComponentPreview name="input-otp-alphanumeric" />
 
-
 ### Masked
 
-Set `mask` to obscure entered characters on shared screens:
+`mask` hides the entered characters on shared screens.
 
 <ComponentPreview name="input-otp-masked" />
 
+### Placeholder hints
 
-### Placeholder Hints
-
-`InputOTPSlot` renders a real `<input>`, so native `placeholder` props and CSS work as usual:
+`InputOTPSlot` renders a real `<input>`, so the native `placeholder` prop and CSS work as usual.
 
 <ComponentPreview name="input-otp-placeholder" />
 
+### Custom sanitization
 
-### Custom Sanitization
-
-Set `validationType="none"` together with `sanitizeValue` to apply custom rules. Use `onValueInvalid` to react to rejected characters:
+`validationType="none"` with `sanitizeValue` applies your own rules, and `onValueInvalid` reacts to rejected characters.
 
 <ComponentPreview name="input-otp-custom-sanitization" />
 
+### Auto submit
 
-### Auto Submit
-
-Pass `autoSubmit` to submit the owning form automatically once all slots are filled. Use `onValueComplete` if you need to react to completion without submitting:
+`autoSubmit` submits the owning form once every slot is filled. To react to completion without submitting, use `onValueComplete`.
 
 <ComponentPreview name="input-otp-auto-submit" />
 
-
 ### Disabled
+
+A disabled input that holds a filled-in value.
 
 <ComponentPreview name="input-otp-disabled" />
 
-
 ### Loading
 
-OTP with a loading/verification state:
+`isLoading` shows a spinner and disables the input while the code is verified.
 
 <ComponentPreview name="input-otp-loading" />
 
-
 ### Form
+
+The input inside a card, with a label and a button that resends the code.
 
 <ComponentPreview name="input-otp-form" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 ## API reference
 
 ### InputOTP
 
-Powered by Base UI's [`OTPField`](https://base-ui.com/react/components/otp-field) preview primitive.
+Built on Base UI's [`OTPField`](https://base-ui.com/react/components/otp-field) primitive, stable since Base UI 1.6.0.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -163,8 +158,8 @@ Powered by Base UI's [`OTPField`](https://base-ui.com/react/components/otp-field
 
 ### InputOTPSlot
 
-Renders a single character `<input>`. Standard input props (including `placeholder`, `aria-label`, `type`) are supported. Each slot should expose its position via `aria-label="Character N of M"` so assistive technology can announce the focused slot.
+Renders a single-character `<input>` and takes the standard input props, including `placeholder`, `aria-label` and `type`. Give each slot its position with `aria-label="Character N of M"`, so assistive technology announces the focused slot.
 
 ### InputOTPSeparator
 
-A decorative separator (rendered as `OTPField.Separator` with `role="separator"`). Defaults to a minus icon; pass `children` to customize.
+A decorative separator, rendered as `OTPField.Separator` with `role="separator"`. It shows a minus icon by default; pass `children` to replace it.

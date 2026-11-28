@@ -1,6 +1,7 @@
 ---
 title: Alert
-description: Prominent message banner for displaying important information, warnings, or errors to users.
+description: A banner that shows an important message, such as a warning, an error or a confirmation, inline on the page.
+contentType: Reference
 ---
 
 <ComponentPreview name="alert-default" />
@@ -37,11 +38,15 @@ pnpm add @keystoneui/react@beta @base-ui/react
 
 ## Usage
 
+Import the parts from the `alert` subpath.
+
 ```tsx
 import { Alert, AlertTitle, AlertDescription, AlertAction } from "@keystoneui/react/alert";
 ```
 
 ## Composition
+
+An Alert holds an optional icon, a title, a description and an optional action.
 
 ```text
 Alert
@@ -55,11 +60,11 @@ Alert
 
 ### Variants
 
-The Alert supports semantic color variants for different message types:
+Set `variant` to match the kind of message.
 
 <ComponentPreview name="alert-variants" />
 
-| Variant | Use Case |
+| Variant | Use case |
 | --- | --- |
 | `default` | General informational messages |
 | `success` | Successful operations or confirmations |
@@ -67,31 +72,27 @@ The Alert supports semantic color variants for different message types:
 | `error` | Errors or critical failures |
 | `info` | Informational tips or notes |
 
+### With an action
 
-### With Action
-
-Include an action button inside the alert:
+Put a button in `AlertAction` for an action that follows from the message.
 
 <ComponentPreview name="alert-with-action" />
 
+### Without an icon
 
-### Without Icon
-
-Alerts without a leading icon:
+Leave out the leading icon for a text-only alert.
 
 <ComponentPreview name="alert-without-icon" />
 
+### Custom colors
 
-### Custom Colors
-
-Apply custom color styling for brand-specific alerts:
+Override the colors with `className` for a brand-specific alert.
 
 <ComponentPreview name="alert-custom-colors" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 

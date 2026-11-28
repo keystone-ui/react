@@ -1,6 +1,7 @@
 ---
 title: File Upload
 description: Chooses files by picker, drop or paste, validates them and keeps the list, with rows for the app's upload status. It never uploads.
+contentType: Reference
 ---
 
 <ComponentPreview name="file-upload-default" />
@@ -52,6 +53,8 @@ import {
 import { ItemActions, ItemContent } from "@keystoneui/react/item";
 ```
 
+Put the trigger in the drop zone and render a row per file with the function form of `FileUploadList`:
+
 ```tsx
 <FileUpload aria-label="Attachments" multiple>
   <FileUploadDropzone>
@@ -98,31 +101,31 @@ FileUpload
 
 `FileUploadTrigger` is unstyled; give it a look with `render={<Button />}`. It keeps `data-slot="file-upload-trigger"` either way. The trigger is the only keyboard path to the picker: the zone has no role and is not focusable, so buttons can sit inside it.
 
-Every child of `FileUploadList` is a `FileUploadItem` for a file in the value. The function form keys and fills each row. The node form is for an app that keeps its own id per file: it renders `FileUploadItem file={…} key={…}` itself (see Eager upload). Saved attachments and other rows go in a list of their own, because the list's count, removal and announcements describe the value.
+Every child of `FileUploadList` is a `FileUploadItem` for a file in the value. The function form keys and fills each row. The node form is for an app that keeps its own id per file: it renders `FileUploadItem file={…} key={…}` itself (see [Eager upload](#eager-upload)). Saved attachments and other rows go in a list of their own, because the list's count, removal and announcements describe the value.
 
 ## Examples
 
 ### With Field
 
-Inside a `Field`, with rejections shown by `FieldError` and `messages={{ rejected: null }}` so they are spoken once.
+The uploader inside a `Field`. `FieldError` shows rejections, and `messages={{ rejected: null }}` makes sure they're spoken once.
 
 <ComponentPreview name="file-upload-with-field" />
 
 ### Eager upload
 
-Upload as files arrive. The app keeps a status entry per file, drops entries for `details.removed`, and ignores results from an older attempt after a retry. The retry button reads `errorId` from `useFileUploadItem()`.
+The app uploads each file as it arrives, keeps a status entry per file, drops entries for `details.removed`, and ignores results from an older attempt after a retry. The retry button reads `errorId` from `useFileUploadItem()`. [Upload files with FileUpload](/docs/guides/upload-files#upload-each-file-as-it-arrives) walks through it.
 
 <ComponentPreview name="file-upload-eager-upload" />
 
 ### Form submit
 
-Set `name` and the files submit with the form, including `required` and reset. Read `FormData` in the submit handler.
+With `name` set, the files submit with the form, including `required` and reset. The submit handler reads `FormData`.
 
 <ComponentPreview name="file-upload-form-submit" />
 
 ### Edit form
 
-Saved attachments stay in the app's own list above the uploader, which holds new files only.
+Saved attachments stay in the app's own list above the uploader, which holds new files only. See [Saved attachments](#saved-attachments).
 
 <ComponentPreview name="file-upload-edit-form" />
 
@@ -132,31 +135,28 @@ Without `multiple`, a new file replaces the current one.
 
 <ComponentPreview name="file-upload-single" />
 
-## Two modes
+## Form submission
 
-Pick one; never both, or every file is sent twice.
+The uploader either submits its files with the form (`name` set) or leaves the upload to the app (`name` left out). Use one mode, never both, or every file is sent twice. [Upload files with FileUpload](/docs/guides/upload-files) sets up each mode.
 
-- **Submit with the form.** Set `name` and leave out the row status props. The form posts the bytes; use `encType="multipart/form-data"` for a native submit.
-- **Upload eagerly.** Leave out `name`, upload in the app, and submit the resulting server ids in your own hidden inputs.
+With `name` set and no files chosen, `FormData` still holds **one** entry for the input: a `File` with an empty name and type `application/octet-stream`. Your server code must ignore it. `required` means a file is selected, not that an upload succeeded.
 
-With `name` set and no files chosen, `FormData` still holds **one** entry for the input: a `File` with an empty name and type `application/octet-stream`. Server code must ignore it. `required` means a file is selected, not that an upload succeeded.
-
-The form input is synchronized after a value commits. During `onValueChange`, use the proposed value rather than reading `FormData`; a form reset may already have emptied the native input. Reset handling runs in a later task. In that task the uploader uses `flushSync` to commit its uncontrolled reset, or a controlled parent's ordinary synchronous state update, before restoring the form input from the committed value. A parent that delays or refuses the proposal keeps its currently committed files mirrored. Reading `FormData` in the same task as `form.reset()` is unsupported. On a form reset, `onValueChange` (`reason: "reset"`) runs in a task after the `reset` event, so an app handler can still cancel the reset; a state update made inside it is committed synchronously, before the input is re-written. A reset asks a controlled parent to empty a non-empty value; an uncontrolled uploader returns to `defaultValue`.
+The uploader syncs the form input after a value commits. During `onValueChange`, use the proposed value rather than reading `FormData`; a form reset may already have emptied the native input. Reset handling runs in a later task. In that task the uploader uses `flushSync` to commit its uncontrolled reset, or a controlled parent's ordinary synchronous state update, before restoring the form input from the committed value. A parent that delays or refuses the proposal keeps its currently committed files mirrored. Reading `FormData` in the same task as `form.reset()` is unsupported. On a form reset, `onValueChange` (`reason: "reset"`) runs in a task after the `reset` event, so an app handler can still cancel the reset; a state update made inside it is committed synchronously, before the input is re-written. A reset asks a controlled parent to empty a non-empty value; an uncontrolled uploader returns to `defaultValue`.
 
 <Callout type="warn">
-Setting a file input's files needs the `DataTransfer()` constructor (Chrome 59, Edge 17, Firefox 62, Safari 14.1, iOS Safari 14.5). Where it fails, the root gets `data-form-bridge="unsupported"`, the input loses `name` and `required`, and the app submits from `value` and checks emptiness itself. The Form submit example shows this.
+Setting a file input's files needs the `DataTransfer()` constructor (Chrome 59, Edge 17, Firefox 62, Safari 14.1, iOS Safari 14.5). Where it fails, the root gets `data-form-bridge="unsupported"`, the input loses `name` and `required`, and the app submits from `value` and checks emptiness itself. The [Form submit](#form-submit) example shows this.
 </Callout>
 
 ## Saved attachments
 
-The value holds new files only, and `maxFiles` and `required` count new files only. For an edit form, list saved attachments in your own `ItemGroup`, submit the ids you keep, and pass the uploader `multiple`, `maxFiles={remaining}` and `required={kept.length === 0}`, where `remaining = Math.max(0, limit - kept.length)`.
+The value holds new files only, and `maxFiles` and `required` count new files only. Saved attachments go in a list of your own; [Edit a record that has saved attachments](/docs/guides/upload-files#edit-a-record-that-has-saved-attachments) sets up the edit form, with `maxFiles` set to the room left. That capacity follows these rules:
 
 - At `0`, otherwise-valid additions are rejected with `too-many-files`; invalid files keep their ordinary validation errors. Chosen files can still be removed and still submit.
 - Disable the **trigger** at `0`, never the root: a disabled root also stops the chosen files from submitting.
 - Lowering the capacity never removes chosen files. Validate the total when the form is submitted.
 
 <Callout type="warn">
-Do not put `new File([], name)` in the value for a saved attachment: it submits as a 0-byte file, shows as "0 B" and escapes the duplicate check.
+Don't put `new File([], name)` in the value for a saved attachment: it submits as a 0-byte file, shows as "0 B" and escapes the duplicate check.
 </Callout>
 
 ## Validation
@@ -179,7 +179,7 @@ Limits are unset by default. A negative `maxFiles` is `0` and a fraction is floo
 | `error` | non-finite | Nothing |
 | `idle`, `success` | any | Nothing |
 
-Each bar is named "Upload progress for …" (`messages.progressLabel`). Localise the value text with `locale`, `format` or `getAriaValueText`. Its second argument is `null` for the indeterminate state, which otherwise reads in English:
+Each bar is named "Upload progress for …" (`messages.progressLabel`). Localize the value text with `locale`, `format` or `getAriaValueText`. The second argument of `getAriaValueText` is `null` for the indeterminate state, which otherwise reads in English. This German value text covers both states:
 
 ```tsx
 <FileUploadItemProgress
@@ -206,7 +206,7 @@ The remove button is 24px (`icon-xs`), the WCAG 2.2 AA minimum; in touch-first l
 
 ## Events
 
-Consumer handlers run before the component's own. Calling `preventDefault()` or Base UI's `preventBaseUIHandler()` on the event cancels the built-in behavior as follows:
+Your handlers run before the component's own. Calling `preventDefault()` or Base UI's `preventBaseUIHandler()` on the event cancels the built-in behavior as follows:
 
 | Event | Part | `preventDefault()` | `preventBaseUIHandler()` |
 | --- | --- | --- | --- |
@@ -219,7 +219,7 @@ The picker opens by a programmatic click on a hidden input. That click is stoppe
 
 ## Server-rendered rows
 
-The default size format uses the runtime's locale. When rows render on the server (a `defaultValue`, or node-form rows), pass a fixed-locale `formatSize` so the server and client agree:
+The default size format uses the runtime's locale. When rows render on the server (a `defaultValue`, or node-form rows), pass a fixed-locale `formatSize`, so the server and client agree. This one always formats megabytes in US English:
 
 ```tsx
 const formatter = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
@@ -231,7 +231,7 @@ const formatter = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
 - No previews, directory picking, "clear all", imperative handle or upload transport.
 - `capture` is a hint. On Chrome and Edge for Android 13+, an image-only `accept` may open the photo picker with no camera option; offering both can need two triggers.
 - `preventDocumentDrop` cannot see a native file input inside a closed shadow root; leave it off on such pages.
-- Many files are not virtualised; add `max-h-* overflow-y-auto` to the list.
+- Long lists aren't virtualized; add `max-h-* overflow-y-auto` to the list.
 
 ## API reference
 
@@ -255,7 +255,7 @@ const formatter = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
 | `disabled` | `boolean` | `false` | Disables the picker, drops, pastes, both inputs and the remove buttons. |
 | `capture` | `boolean \| "user" \| "environment"` | - | A camera hint for the picker, as for a native input. |
 | `allowPaste` | `boolean` | `false` | Take pasted files while focus is inside, outside editable fields. |
-| `onPaste` | `(event: BaseUIEvent<ClipboardEvent<HTMLDivElement>>) => void` | - | Runs before the component's own; `preventDefault()` or `event.preventBaseUIHandler()` stops intake. See Events. |
+| `onPaste` | `(event: BaseUIEvent<ClipboardEvent<HTMLDivElement>>) => void` | - | Runs before the component's own; `preventDefault()` or `event.preventBaseUIHandler()` stops intake. See [Events](#events). |
 | `preventDocumentDrop` | `boolean` | `false` | Stop a file dropped elsewhere on the page from opening in the tab. |
 | `messages` | `Partial<FileUploadMessages>` | English | Every visible and announced string. Keys: `added`, `removed`, `replaced`, `cleared`, `rejected`, `rejection`, `required`, `itemSucceeded`, `itemFailed`, `itemFailedText`, `progressLabel`, `removeLabel`. |
 | `aria-invalid` | `boolean \| "true" \| "false" \| "grammar" \| "spelling"` | - | Not rendered: every value but `false` and `"false"` becomes `data-invalid` on the root and the zone, which a `Field` `data-[invalid=true]` selector does not match. |
@@ -271,7 +271,7 @@ A `div` that takes drops and opens the picker on a click on its empty area (not 
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `...props` | `div` props | - | Handlers merge with the zone's own; see Events. |
+| `...props` | `div` props | - | Handlers merge with the zone's own; see [Events](#events). |
 
 Props type: `FileUploadDropzoneProps`.
 
@@ -335,13 +335,13 @@ Props type: `FileUploadItemSizeProps`.
 
 ### FileUploadItemProgress
 
-Renders as in the Status and progress table; the value always comes from the row.
+Renders as in the [Status and progress](#status-and-progress) table; the value always comes from the row.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `color` | `Progress` colors | `Progress`'s, `"destructive"` on error | Yours wins over the error default. |
 | `aria-label` | `string` | `messages.progressLabel(name)` | The bar's name. |
-| `locale` / `format` / `getAriaValueText` | as `Progress` | - | Localise the value text, including the indeterminate state. |
+| `locale` / `format` / `getAriaValueText` | as `Progress` | - | Localize the value text, including the indeterminate state. |
 | `...props` | `Progress` props except `value`, `min` and `max` | - | |
 
 Props type: `FileUploadItemProgressProps`.

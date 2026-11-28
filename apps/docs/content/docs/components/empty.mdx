@@ -1,6 +1,7 @@
 ---
 title: Empty
-description: Empty state placeholder with icon and message for when no content is available.
+description: A placeholder with an icon, a title and a message for a view that has no content yet.
+contentType: Reference
 ---
 
 <ComponentPreview name="empty-default" />
@@ -67,80 +68,69 @@ Empty draws no border until you add `border`, which turns on a dashed outline (`
 
 <ComponentPreview name="empty-outline" />
 
+### With avatar
 
-### With Avatar
-
-Display an avatar or icon inside the media area:
+`EmptyMedia` can hold an avatar or an icon:
 
 <ComponentPreview name="empty-with-avatar" />
 
-
 ### Background
 
-A filled background variant for more visual emphasis:
+A background class such as `bg-muted/50` gives the empty state more emphasis:
 
 <ComponentPreview name="empty-background" />
 
-
 ### With Spinner
 
-Use a Spinner inside EmptyMedia for loading/processing states:
+A Spinner inside `EmptyMedia` shows a loading or processing state:
 
 <ComponentPreview name="empty-with-spinner" />
 
+### With action
 
-### With Action
-
-Empty state with action buttons:
+`EmptyContent` holds action buttons:
 
 <ComponentPreview name="empty-with-action" />
 
+### With description
 
-### With Description
-
-Empty state with descriptive text:
+`EmptyDescription` adds a line of text below the title:
 
 <ComponentPreview name="empty-with-description" />
 
+### With image
 
-### With Image
-
-Empty state with an image placeholder:
+An empty state with an image placeholder:
 
 <ComponentPreview name="empty-with-image" />
 
+### With form
 
-### With Form
-
-Empty state containing a form:
+An empty state that contains a form:
 
 <ComponentPreview name="empty-with-form" />
 
+### With search
 
-### With Search
-
-Empty state with search input:
+An empty state with a search input:
 
 <ComponentPreview name="empty-with-search" />
 
+### With input
 
-### With Input
-
-Empty state with an input field:
+An empty state with an input field:
 
 <ComponentPreview name="empty-with-input" />
 
+### With list
 
-### With List
-
-Empty state with a list of suggestions:
+An empty state with a list of suggestions:
 
 <ComponentPreview name="empty-with-list" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 

@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "tooltip",
   "title": "Tooltip",
-  "description": "Small floating label that appears on hover to provide additional descriptive text.",
+  "description": "A small floating label that shows a short description of its trigger on hover or keyboard focus.",
   "dependencies": [
     "@base-ui/react"
   ],

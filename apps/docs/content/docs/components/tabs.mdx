@@ -1,6 +1,7 @@
 ---
 title: Tabs
-description: Tabbed interface for organizing content into selectable panels.
+description: A row of tabs that shows one panel of content at a time.
+contentType: Reference
 ---
 
 <ComponentPreview name="tabs-default" />
@@ -82,6 +83,38 @@ import {
 </Tabs>
 ```
 
+### Morphing triggers
+
+`morphing` on `TabsList` collapses inactive triggers to icon-only and shows the label only on the active tab. Wrap each trigger's text in `<TabsTriggerLabel>`, and give every trigger an icon so the collapsed state still reads. The pill and the label width use the same spring settings. The filled pill keeps its round caps.
+
+A rapid selection starts the next glide from the pill's current box, clipped to the span of the tabs after the selection commits. If the boxes no longer overlap, the pill appears on the selected tab.
+
+On each frame where the controller can measure a connected list with positive width and height, the pill stays within the outer edges of the tabs taking part in the glide, to within one CSS pixel. These include the tabs involved in earlier selections during the same glide. This holds under positive, axis-aligned ancestor scales. The pill's inset and minimum-size rules must allow it to fit.
+
+That guarantee doesn't cover:
+
+- changes after the controller's frame pass
+- rotations, skews, perspective and reflections
+- transforms between the list and its tabs
+- CSS animations or transitions on pill geometry
+- tabs moved between lists by DOM manipulation
+- a tab rendered through a portal into a container that another component removes
+- glides between tabs more than about 100,000 CSS pixels apart
+
+If a participating tab is disconnected or belongs to another list when the controller next checks, the glide ends and the pill returns to its CSS position.
+
+### Scrollable lists
+
+`scrollable` puts the list in a [Reel](/docs/components/reel). It scrolls sideways when the tabs don't fit, on desktop and touch. Each edge fades where there is more to scroll, and a bare chevron at that edge scrolls the list by 80% of its visible width.
+
+The chevrons aren't buttons: they aren't Tab stops and screen readers don't announce them. Tab enters the list at its roving tab stop, and the arrow keys, Home and End reach every tab with as much edge clearance as the scroll range allows. The row is hidden for 5 spacing units (1.25rem with the default spacing scale) under each visible chevron, so it never draws over a tab.
+
+Reel brings the active tab into view when the list gains room or the selection changes, if the Reel's last measured content width and the tab's width are positive. Focus stays where it is. In `morphing` mode, Reel uses the trigger's width at the time of the reveal. If the label grows afterwards, part of it can remain under the fade.
+
+To choose when the arrows show or how they look, leave `scrollable` off and wrap the `TabsList` in your own Reel. Reel finds the active tab by its `aria-selected`. A tab earlier in the list that carries your own `aria-current` or `data-selected` would be brought into view instead of the active tab.
+
+Change the fade's depth with `--ks-reel-fade-size` on `Tabs`: `className="[--ks-reel-fade-size:1rem]"`.
+
 ## Composition
 
 ```text
@@ -95,104 +128,71 @@ Tabs
 
 ## Examples
 
-### Line Variant
+### Line variant
 
-An underlined tab style for a more subtle appearance:
+`variant="line"` underlines the active tab for a quieter style:
 
 <ComponentPreview name="tabs-line" />
 
-
 ### Vertical
 
-Stack tabs vertically for sidebar-style navigation:
+`orientation="vertical"` stacks the tabs for sidebar-style navigation:
 
 <ComponentPreview name="tabs-vertical" />
 
-
 ### Disabled
 
-Individual tabs can be disabled to prevent selection:
+`disabled` on a `TabsTrigger` stops that tab from being selected:
 
 <ComponentPreview name="tabs-disabled" />
 
+### With icons
 
-### With Icons
-
-Add icons alongside tab labels:
+Icons sit beside the tab labels:
 
 <ComponentPreview name="tabs-with-icons" />
 
-
 ### Morphing
 
-Collapse inactive triggers to icon-only and reveal the label only on the active
-tab. Set `morphing` on `TabsList` and wrap each trigger's text in
-`<TabsTriggerLabel>`. Every trigger should include an icon so the collapsed
-state still reads. The pill and the label width use the same spring settings. A
-rapid selection starts the next glide from the pill's current box, clipped to
-the span of the tabs after the selection commits. If the boxes no longer
-overlap, the pill appears on the selected tab. The filled pill keeps its round
-caps.
-
-On each frame the controller can measure a connected list with positive width
-and height, the pill stays within the outer edges of the tabs taking part in the
-glide, to within one CSS pixel. These include the tabs involved in earlier
-selections during the same glide. This holds under positive, axis-aligned
-ancestor scales. The pill's inset and minimum-size rules must allow it to fit.
-Changes after the controller's frame pass, rotations, skews, perspective,
-reflections, transforms between the list and its tabs, and CSS animation or
-transitions on pill geometry fall outside it. Tabs moved between lists by DOM
-manipulation, a tab rendered through a portal into a container that another
-component removes, and glides between tabs more than about 100,000 CSS pixels
-apart are also outside it.
-If a participating tab is disconnected or belongs to another list when the
-controller next checks, the glide ends and the pill returns to its CSS position.
+Inactive triggers collapse to their icon and the active one shows its label. [Morphing triggers](#morphing-triggers) describes the behavior:
 
 <ComponentPreview name="tabs-morphing" />
 
-### Morphing with Line Variant
+### Morphing with line variant
 
-Combine `morphing` with `variant="line"` for an underline-style morph. The 2px
-bar stretches and slides to match the active trigger's expanded width.
+Combine `morphing` with `variant="line"` for an underline-style morph. The 2px bar stretches and slides to match the active trigger's expanded width.
 
 <ComponentPreview name="tabs-morphing-line" />
 
+### Pill variant
 
-### Pill Variant
-
-Rounded pill-shaped tabs:
+`shape="pill"` gives the triggers fully rounded corners:
 
 <ComponentPreview name="tabs-pill" />
 
-
 ### Scrollable
 
-`scrollable` puts the list in a [Reel](/docs/components/reel). It scrolls sideways when the tabs do not fit, on desktop and touch. Each edge fades where there is more to scroll, and a bare chevron at that edge scrolls the list by 80% of its visible width. The chevrons are not buttons: they are not Tab stops and are not announced, because Tab enters the list at its roving tab stop, and the arrow keys, Home and End reach every tab with as much edge clearance as the scroll range allows. The row is hidden for five spacing units (1.25rem with the default spacing scale) under each visible chevron, so it never draws over a tab. Reel brings the active tab into view when the list gains room or the selection changes, if the Reel's last measured content width and the tab's width are positive. Focus stays where it is. In `morphing` mode, Reel uses the trigger's width at the time of the reveal; if its label grows afterwards, part of it can remain under the fade.
-
-To choose when the arrows show or how they look, leave `scrollable` off and wrap the `TabsList` in your own Reel. Reel finds the active tab by its `aria-selected`. A tab earlier in the list that carries your own `aria-current` or `data-selected` would be brought into view instead of the active tab.
-
-Change the fade's depth with `--ks-reel-fade-size` on `Tabs`: `className="[--ks-reel-fade-size:1rem]"`.
+A `scrollable` list scrolls sideways in a Reel when the tabs don't fit. [Scrollable lists](#scrollable-lists) describes the fades, chevrons and keyboard behavior:
 
 <ComponentPreview name="tabs-scrollable" />
 
+### Animated indicator
 
-### Animated Indicator
-
-Tabs with animated sliding indicator:
+The indicator slides to the active tab in the default, pill and line styles:
 
 <ComponentPreview name="tabs-animated-indicator" />
 
+### Line vertical
 
-### Line Vertical
-
-Vertical tabs with line variant:
+Vertical tabs with the line variant:
 
 <ComponentPreview name="tabs-line-vertical" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today. A scrollable list's fade, arrows and paging mirror as described for Reel; put the explicit `dir` on an ancestor of the whole list, such as the `Tabs` root.
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
+A scrollable list's fade, arrows and paging mirror as described for [Reel](/docs/components/reel#rtl). Put the explicit `dir` on an ancestor of the whole list, such as the `Tabs` root.
 
 {/* backlinks:start */}
 
@@ -238,4 +238,4 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 ### TabsTriggerLabel
 
 Wraps a tab's text label so it can collapse to width 0 in `morphing` mode.
-Outside morphing mode it behaves like a plain `<span>`.
+Outside `morphing` mode it behaves like a plain `<span>`.

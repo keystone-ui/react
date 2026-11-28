@@ -1,6 +1,7 @@
 ---
 title: Table Pagination
-description: The footer of a paginated data table — rows selected, rows per page, which page, and the four navigation buttons.
+description: The footer of a paginated data table, with the selected-row count, rows per page, the current page and the four navigation buttons.
+contentType: Reference
 ---
 
 <ComponentPreview name="table-pagination-default" />
@@ -32,7 +33,34 @@ import {
 } from "@keystoneui/react/table-pagination";
 ```
 
-This is deliberately **not** [`Pagination`](/docs/components/pagination). That component is a list of page *links* — `nav > ul > li > a`, with `aria-current="page"` — which is right when every page has its own URL. A data-table footer is a toolbar over an opaque page index: no per-page URLs, `aria-live` instead of `aria-current`, and a dependency on `Select` and `Label`. Merging the two would drag Base UI's Select into every bundle that only wanted page links.
+### TablePagination or Pagination
+
+`TablePagination` is deliberately separate from [`Pagination`](/docs/components/pagination). That component is a list of page *links* (`nav > ul > li > a`, with `aria-current="page"`), which fits when every page has its own URL. A data-table footer is a toolbar over an opaque page index: no per-page URLs, `aria-live` instead of `aria-current`, and a dependency on `Select` and `Label`. Merging the two would pull Base UI's Select into every bundle that only wanted page links.
+
+### Page index and page size
+
+`pageIndex` is **0-based**, and the status line renders it 1-based. `pageCount` is clamped to a minimum of 1 for display, so an empty result set reads "Page 1 of 1" rather than "Page 1 of 0".
+
+When the page size changes, reset the page index, because page 3 of a 10-per-page list doesn't exist at 50 per page:
+
+```tsx
+onPageSizeChange={(size) => {
+  setPageSize(size);
+  setPageIndex(0);
+}}
+```
+
+### Layout at each width
+
+`TablePaginationInfo` shows at every width. Below the `lg` breakpoint it takes its own row above the controls, so the count reads on one line instead of being squeezed beside the buttons. An empty slot takes no room, so a footer without one stays a single row. `TablePaginationPageSize` and the first and last buttons are hidden below `lg`, so the controls fit one row on a phone.
+
+### Accessibility
+
+Paging swaps the table's contents with no other visible confirmation, so without an announcement a screen reader says **nothing at all** after a press on the next-page button. `TablePaginationStatus` and `TablePaginationInfo` are both `aria-live="polite"` for that reason.
+
+Every navigation button carries an explicit `aria-label`, such as "Go to first page", because each one is icon-only.
+
+`TablePaginationPageSize` wires its `Label` to the select trigger with a generated id. Without that, the control announces only its current value, with no hint of what the number means.
 
 ## Composition
 
@@ -45,39 +73,17 @@ TablePagination
     └── TablePaginationButtons
 ```
 
-Give `TablePagination` the props and it renders that composition for you. Pass `children` and it renders exactly what you give it instead — the same shape as [`Progress`](/docs/components/progress).
+Give `TablePagination` the props and it renders that composition for you. Pass `children` and it renders exactly what you give it instead, the same pattern as [`Progress`](/docs/components/progress).
 
-`TablePaginationControls` is the grouping the last three sit in: full width below `lg` so they fill the row under the info slot, intrinsic above it so they sit at the end. It is named because `children` replaces the default composition entirely, and without it there is no way to reproduce that grouping except by copying its classes.
+`TablePaginationControls` is the group the last three parts sit in. It's full width below `lg`, so the controls fill the row under the info slot, and intrinsic width above it, so they sit at the end. It's exported because `children` replaces the default composition entirely, and without it the only way to reproduce that grouping is to copy its classes.
 
 ## Examples
 
 ### Composed
 
+Pass `children` to build the footer from its parts:
+
 <ComponentPreview name="table-pagination-composed" />
-
-## Accessibility
-
-Paging swaps the table's contents with no other visible confirmation, so without an announcement a screen-reader user hears **nothing at all** after clicking "next page". `TablePaginationStatus` and `TablePaginationInfo` are therefore both `aria-live="polite"`.
-
-Every navigation button carries an explicit `aria-label` ("Go to first page", and so on), since each one is icon-only.
-
-`TablePaginationPageSize` wires its `Label` to the select trigger with a generated id. Without that the control announces only its current value, with no indication of what the number means.
-
-## Notes
-
-`pageIndex` is **0-based**; the status line renders it 1-based. `pageCount` is clamped to a minimum of 1 for display, so an empty result set reads "Page 1 of 1" rather than "Page 1 of 0".
-
-When the page size changes, reset the page index — page 3 of a 10-per-page list does not exist at 50 per page:
-
-```tsx
-onPageSizeChange={(size) => {
-  setPageSize(size);
-  setPageIndex(0);
-}}
-```
-
-`TablePaginationInfo` shows at every width. Below the `lg` breakpoint it takes its own row above the controls, so the count reads on one line instead of being squeezed beside the buttons; an empty slot takes no room, so a footer without one stays a single row. `TablePaginationPageSize` and the first/last buttons are hidden below `lg`, so the controls fit one row on a phone.
-
 
 {/* backlinks:start */}
 

@@ -1,6 +1,7 @@
 ---
 title: Badge
-description: Small status indicator or count label for highlighting categories, statuses, or counts.
+description: A small label that marks a status, a category or a count.
+contentType: Reference
 ---
 
 <ComponentPreview name="badge-default" />
@@ -37,9 +38,13 @@ pnpm add @keystoneui/react@beta @base-ui/react
 
 ## Usage
 
+Import Badge from its subpath.
+
 ```tsx
 import { Badge } from "@keystoneui/react/badge";
 ```
+
+Put the label text inside it.
 
 ```tsx
 <Badge>Badge</Badge>
@@ -49,9 +54,11 @@ import { Badge } from "@keystoneui/react/badge";
 
 ### Variants
 
+Set `variant` to pick one of 10 styles.
+
 <ComponentPreview name="badge-variants" />
 
-| Variant | Use Case |
+| Variant | Use case |
 | --- | --- |
 | `default` | Primary emphasis badges |
 | `secondary` | Subtle secondary labels |
@@ -66,9 +73,11 @@ import { Badge } from "@keystoneui/react/badge";
 
 ### Status
 
-The four status tones, `success`, `warning`, `info` and `error`, each come in two appearances. Solid is the default. `appearance="soft"` tints the fill with the tone's color and adds a border in the same color, for a quieter badge in dense lists and tables. A status Badge rendered as a link underlines on hover and keeps its fill.
+The 4 status tones, `success`, `warning`, `info` and `error`, each come in 2 appearances. Solid is the default. `appearance="soft"` tints the fill with the tone's color and adds a border in the same color, for a quieter badge in dense lists and tables. A status Badge rendered as a link underlines on hover and keeps its fill.
 
 <ComponentPreview name="badge-status" />
+
+This snippet renders a solid `success` badge and a soft `error` badge with an icon.
 
 ```tsx
 <Badge variant="success">Paid</Badge>
@@ -84,61 +93,55 @@ The red fill, text and soft border use Tailwind's red palette. A customized `--d
 
 ### Destructive (deprecated)
 
-`variant="destructive"` is a deprecated alias of `error` and draws exactly what `error` draws. A Badge with `variant="destructive"` now draws the solid red by default. Use `appearance="soft"` for the tinted look, which now has a border, a slightly deeper red in light mode and a slightly fainter tint in dark mode. Prefer `variant="error"`: `destructive` is deprecated on Badge and will be removed in a later release. Button's `destructive` variant is unchanged.
+`variant="destructive"` is a deprecated alias of `error` and draws exactly what `error` draws. A Badge with `variant="destructive"` now draws the solid red by default. Use `appearance="soft"` for the tinted look, which now has a border, a slightly deeper red in light mode and a slightly fainter tint in dark mode. Use `variant="error"` instead: we'll remove `destructive` from Badge in a later release. Button's `destructive` variant is unchanged.
 
 <ComponentPreview name="badge-destructive" />
 
-
 ### Sizes
+
+Set `size="sm"` for a smaller badge.
 
 <ComponentPreview name="badge-sizes" />
 
+### With an icon
 
-### With Icon
-
-Add an icon before or after the badge text:
+Add an icon before or after the badge text.
 
 <ComponentPreview name="badge-with-icon" />
 
+### As a link
 
-### As Link
-
-Render a badge as an anchor element:
+Render a badge as an anchor element with the `render` prop.
 
 <ComponentPreview name="badge-as-link" />
 
-
 ### With Spinner
 
-A badge with a loading spinner:
+Add a Spinner to a badge for a status that is still loading.
 
 <ComponentPreview name="badge-with-spinner" />
 
-
 ### Removable
 
-Badges with a remove button:
+Add a remove button inside the badge.
 
 <ComponentPreview name="badge-removable" />
 
+### Custom colors
 
-### Custom Colors
-
-Badges with custom color styling:
+Override the colors with `className`.
 
 <ComponentPreview name="badge-custom-colors" />
 
-
 ### Stats
 
-Badges used for displaying statistics:
+Badges with an icon show a statistic, such as a count or the days left.
 
 <ComponentPreview name="badge-stats" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 

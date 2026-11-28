@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "input",
   "title": "Input",
-  "description": "A form input field with consistent styling and focus states.",
+  "description": "A single-line text field for forms, with sizes, a focus ring and an invalid state.",
   "files": [
     {
       "path": "packages/ui/src/input.tsx",

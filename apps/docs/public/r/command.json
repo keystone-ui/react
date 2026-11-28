@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "command",
   "title": "Command",
-  "description": "A searchable command menu for quick actions, navigation, and filtering.",
+  "description": "A searchable menu of commands, inline or in a dialog, that you filter by typing and run from the keyboard.",
   "dependencies": [
     "cmdk",
     "lucide-react"

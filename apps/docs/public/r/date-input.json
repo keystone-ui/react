@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "date-input",
   "title": "Date Input",
-  "description": "Date picker input field for selecting dates with keyboard and calendar support.",
+  "description": "A native date input, typed with the keyboard, with a button that opens the browser's date picker.",
   "registryDependencies": [
     "https://keystoneui.io/r/input-group.json"
   ],

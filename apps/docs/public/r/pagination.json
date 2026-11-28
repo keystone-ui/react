@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "pagination",
   "title": "Pagination",
-  "description": "Page navigation controls for browsing through paginated content.",
+  "description": "A list of page links, with previous and next controls, for moving through paginated content.",
   "dependencies": [
     "class-variance-authority",
     "lucide-react"

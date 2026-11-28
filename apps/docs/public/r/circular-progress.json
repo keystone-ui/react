@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "circular-progress",
   "title": "Circular Progress",
-  "description": "Circular progress indicator for showing completion percentage in a ring format.",
+  "description": "A ring that shows how far a task has progressed, as a percentage.",
   "dependencies": [
     "@base-ui/react",
     "class-variance-authority"

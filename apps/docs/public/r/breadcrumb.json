@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "breadcrumb",
   "title": "Breadcrumb",
-  "description": "Navigation breadcrumb trail showing the user's current location within a hierarchy.",
+  "description": "A trail of links that shows where the current page sits in the site's hierarchy.",
   "dependencies": [
     "@base-ui/react",
     "lucide-react"

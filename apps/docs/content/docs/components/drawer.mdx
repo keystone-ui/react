@@ -1,6 +1,7 @@
 ---
 title: Drawer
-description: Slide-out panel that emerges from screen edges for supplementary content or navigation.
+description: A panel that slides in from an edge of the screen to hold secondary content, filters or navigation.
+contentType: Reference
 ---
 
 <ComponentPreview name="drawer-default" />
@@ -37,6 +38,8 @@ pnpm add @keystoneui/react@beta @base-ui/react
 
 ## Usage
 
+Import the parts from the `drawer` subpath.
+
 ```tsx
 import {
   Drawer,
@@ -53,6 +56,8 @@ import {
 
 ## Composition
 
+`DrawerContent` holds a header, a scrolling body and a footer.
+
 ```text
 Drawer
 ├── DrawerTrigger
@@ -65,25 +70,25 @@ Drawer
         └── DrawerClose
 ```
 
+A Drawer sits below Modal and every popup, so a Modal opened from a drawer covers it. [Popup layering and modality](/docs/concepts/popup-layering) explains the scale and what the `modal` prop does to the page behind.
+
 ## Examples
 
 ### Sides
 
-Open the drawer from different edges of the screen:
+Set `swipeDirection` to open the drawer from a different edge of the screen.
 
 <ComponentPreview name="drawer-sides" />
 
-
 ### Floating
 
-Pass `variant="floating"` on `DrawerContent` to detach a side drawer from the viewport edge on `md+` breakpoints. The drawer gets a small inset on the outer side + top + bottom, all four corners rounded, a soft shadow, and a slightly wider default — making it feel like a layer above the page rather than part of the chrome.
+Pass `variant="floating"` on `DrawerContent` to detach a side drawer from the viewport edge on `md+` breakpoints. The drawer gets a small inset on its outer side, top and bottom, all 4 corners rounded, a soft shadow and a slightly wider default width. It reads as a layer above the page rather than part of the chrome.
 
-Use this for inspector / detail panels where the user benefits from glancing back at the underlying list (e.g. clicking a row to inspect it). For forms or focus-heavy dialogs, prefer the [Responsive](#responsive) Modal+Drawer pattern instead.
+Use it for inspector and detail panels, where people glance back at the list behind it, such as after clicking a row to inspect it. For forms or focus-heavy dialogs, use the [Responsive](#responsive) Modal and Drawer pattern instead.
 
-The variant has no effect on `top` / `bottom` directions or below the `md` breakpoint — those always render flush.
+The variant has no effect on `top` and `bottom` drawers or below the `md` breakpoint, where drawers always render flush.
 
 <ComponentPreview name="drawer-floating" />
-
 
 ### Scrollable
 
@@ -91,50 +96,44 @@ The variant has no effect on `top` / `bottom` directions or below the `md` break
 instead of being clipped at the drawer's max height.
 
 Wrap the middle region in `DrawerBody` when `DrawerHeader` and `DrawerFooter`
-should stay pinned while only the body scrolls. `DrawerBody` ships horizontal
-padding only — add `py-*` if it has no header or footer to sit against.
+should stay pinned while only the body scrolls. `DrawerBody` has horizontal
+padding only, so add `py-*` if it has no header or footer to sit against.
 
 <ComponentPreview name="drawer-scrollable" />
 
-
 ### Nested
 
-A `Drawer` rendered inside another drawer's `DrawerContent` nests. While it is open, the bottom drawer behind it steps back — 5% narrower and peeking out above it at its height — and eases back into place as the front one is swiped down:
+A `Drawer` rendered inside another drawer's `DrawerContent` nests. While it is open, the bottom drawer behind it steps back: it gets 5% narrower and peeks out above the front drawer at its height. It eases back into place as you swipe the front drawer down.
 
 <ComponentPreview name="drawer-nested" />
 
-
 ### Responsive
 
-Combine Modal and Drawer to create a responsive dialog. On desktop it renders as a centered Modal; on mobile it slides up as a Drawer. Uses the `useMediaQuery` hook to detect the viewport width.
+Combine Modal and Drawer for a responsive dialog. On desktop it renders as a centered Modal, and on mobile it slides up as a Drawer. The example uses the `useMediaQuery` hook to detect the viewport width.
 
 <ComponentPreview name="drawer-responsive" />
 
-
 ### Filter
 
-A practical filter panel drawer pattern:
+A drawer that holds a filter panel.
 
 <ComponentPreview name="drawer-filter" />
 
+### Sort by
 
-### Sort By
-
-Sort-by drawer for mobile interfaces:
+A drawer of sort options for mobile screens.
 
 <ComponentPreview name="drawer-sort-by" />
 
+### Complex filter
 
-### Complex Filter
-
-Complex filter drawer with multiple controls:
+A filter drawer that combines several kinds of controls.
 
 <ComponentPreview name="drawer-complex-filter" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 
@@ -171,4 +170,4 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `className` | `string` | - | Additional CSS classes. Ships `px-4` only — add `py-*` for a body with no header or footer beside it. |
+| `className` | `string` | - | Additional CSS classes. Ships `px-4` only; add `py-*` for a body with no header or footer beside it. |

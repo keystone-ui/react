@@ -1,6 +1,7 @@
 ---
 title: Popover
-description: Floating content panel anchored to a trigger element for contextual information or controls.
+description: A floating panel anchored to a trigger that holds extra information or controls for it.
+contentType: Reference
 ---
 
 <ComponentPreview name="popover-default" />
@@ -37,6 +38,8 @@ pnpm add @keystoneui/react@beta @base-ui/react
 
 ## Usage
 
+Import the parts from the `popover` subpath.
+
 ```tsx
 import {
   Popover,
@@ -52,6 +55,8 @@ import {
 
 ## Composition
 
+`PopoverContent` holds an optional header, an arrow and a close button.
+
 ```text
 Popover
 ├── PopoverTrigger
@@ -63,39 +68,37 @@ Popover
     └── PopoverClose
 ```
 
+A Popover opened from inside a Modal or Drawer appears above it. [Popup layering and modality](/docs/concepts/popup-layering) explains the scale.
+
 ## Examples
 
-### With Form
+### With a form
 
-Embed a form inside a popover for inline editing:
+Put a form inside a popover to edit a value in place.
 
 <ComponentPreview name="popover-with-form" />
 
-
 ### Alignments
 
-Control the popover placement relative to the trigger:
+Set `align` on `PopoverContent` to place the popover relative to the trigger.
 
 <ComponentPreview name="popover-alignments" />
 
+### With an arrow
 
-### With Arrow
-
-Add an arrow indicator pointing to the trigger:
+Add `PopoverArrow` to point the popover at its trigger.
 
 <ComponentPreview name="popover-with-arrow" />
 
+### Open on hover
 
-### Open on Hover
-
-Popover that opens on hover:
+Set `openOnHover` on the trigger to open the popover on hover, after a `delay`.
 
 <ComponentPreview name="popover-open-on-hover" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 

@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "table-pagination",
   "title": "Table Pagination",
-  "description": "The footer of a paginated data table — rows selected, rows per page, which page, and the four navigation buttons.",
+  "description": "The footer of a paginated data table, with the selected-row count, rows per page, the current page and the four navigation buttons.",
   "dependencies": [
     "lucide-react"
   ],

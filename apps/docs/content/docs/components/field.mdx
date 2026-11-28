@@ -1,6 +1,7 @@
 ---
 title: Field
-description: Form field wrapper that provides a label, description, and error message around a form control.
+description: Wraps a form control with its label, description and error message, and groups fields into fieldsets.
+contentType: Reference
 ---
 
 <ComponentPreview name="field-default" />
@@ -68,91 +69,79 @@ FieldSet
 
 ### Horizontal
 
-A horizontal field layout with the label beside the control:
+`orientation="horizontal"` puts the label beside the control.
 
 <ComponentPreview name="field-horizontal" />
 
+### Validation error
 
-### Validation Error
-
-Display validation errors with destructive styling:
+`FieldError` shows a validation error in the destructive color.
 
 <ComponentPreview name="field-validation-error" />
 
-
 ### Fieldset
 
-Group related fields with a fieldset and legend:
+`FieldSet` and `FieldLegend` group related fields under a legend.
 
 <ComponentPreview name="field-fieldset" />
 
-
 ### Grid
 
-Arrange multiple fields in a grid layout:
+Several fields arranged in a grid.
 
 <ComponentPreview name="field-grid" />
 
-
 ### With Switch
 
-Use a field to wrap a switch control with a label and description:
+A field wraps a switch with a label and a description.
 
 <ComponentPreview name="field-with-switch" />
 
+### Settings form
 
-### Settings Form
-
-A settings form composing radio card selections, a numeric counter, and Switch toggles:
+A settings form with radio cards, a numeric counter and `Switch` toggles.
 
 <ComponentPreview name="field-settings-form" />
 
+### Checkout form
 
-### Checkout Form
-
-A complete payment checkout form with card fields, Select dropdowns, and billing address:
+A payment checkout form with card fields, `Select` dropdowns and a billing address.
 
 <ComponentPreview name="field-checkout-form" />
 
-
 ### Textarea
 
-Field with a textarea control:
+A field around a textarea.
 
 <ComponentPreview name="field-textarea-example" />
 
+### Multiple errors
 
-### Multiple Errors
-
-Field displaying multiple validation errors:
+A field that shows several validation errors at once.
 
 <ComponentPreview name="field-multiple-errors" />
 
-
 ### Required
 
-Required field with indicator:
+A required field with an indicator in its label.
 
 <ComponentPreview name="field-required" />
 
-
 ### With Checkbox
 
-Field with checkbox controls:
+Fields around checkbox controls.
 
 <ComponentPreview name="field-with-checkbox" />
 
+### Payment method
 
-### Payment Method
-
-Payment method selection using fields:
+A payment method picker built from fields.
 
 <ComponentPreview name="field-payment-method" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 

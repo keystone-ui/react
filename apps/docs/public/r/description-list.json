@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "description-list",
   "title": "Description List",
-  "description": "Displays term-description pairs for presenting metadata, settings, or key-value information.",
+  "description": "A list of term and value pairs, for metadata, settings or a read-only record.",
   "files": [
     {
       "path": "packages/ui/src/description-list.tsx",

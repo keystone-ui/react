@@ -1,6 +1,7 @@
 ---
 title: AspectRatio
-description: Constrains content to a consistent width-to-height ratio for images, videos, or embeds.
+description: A box that keeps its content at a fixed width-to-height ratio, for an image, a video or an embed.
+contentType: Reference
 ---
 
 <ComponentPreview name="aspect-ratio-default" />
@@ -45,31 +46,29 @@ import { AspectRatio } from "@keystoneui/react/aspect-ratio";
 
 ### Square
 
-A 1:1 aspect ratio for square content:
+`ratio={1}` makes a square:
 
 <ComponentPreview name="aspect-ratio-square" />
 
-
 ### Wide
 
-Ultra-wide 21:9 aspect ratio for cinematic content:
+`ratio={21 / 9}` makes a wide, cinematic frame:
 
 <ComponentPreview name="aspect-ratio-wide" />
 
-
 ### Portrait
 
-3:4 portrait aspect ratio:
+`ratio={3 / 4}` makes a portrait frame:
 
 <ComponentPreview name="aspect-ratio-portrait" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 ## API reference
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `ratio` | `number` | - | The desired aspect ratio expressed as width / height (e.g. `16/9`) |
+| `ratio` | `number` | - | The desired aspect ratio expressed as width / height, such as `16/9` |
 | `className` | `string` | - | Additional CSS classes |

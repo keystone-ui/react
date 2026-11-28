@@ -66,6 +66,47 @@ export function contrast(foreground: string, background: string): number {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
+const clampChannel = (value: number) => Math.min(Math.max(value, 0), 1);
+
+/** sRGB as a browser paints it: out-of-gamut channels clipped to 0–1. */
+export function renderedRgb(color: string): Rgb {
+  const { b, g, r } = rgb(color);
+  return { b: clampChannel(b), g: clampChannel(g), r: clampChannel(r) };
+}
+
+/** `color` at `alpha` composited over an opaque `backdrop`, as painted. */
+export function over(color: string, alpha: number, backdrop: string): Rgb {
+  const top = renderedRgb(color);
+  const bottom = renderedRgb(backdrop);
+  const mix = (a: number, b: number) => a * alpha + b * (1 - alpha);
+  return {
+    b: mix(top.b, bottom.b),
+    g: mix(top.g, bottom.g),
+    r: mix(top.r, bottom.r),
+  };
+}
+
+/**
+ * WCAG contrast of what a browser actually paints.
+ *
+ * `contrast()` measures the colour as specified. A high-chroma red such as
+ * `oklch(0.577 0.245 27.325)` lies outside sRGB, and its negative green channel
+ * makes it measure darker than it renders: 4.47 specified, 4.36 painted. A
+ * claim of AA has to hold for the painted colour, so it uses this. Either
+ * argument may be an already-composited `Rgb` (see `over`).
+ */
+export function renderedContrast(
+  foreground: string | Rgb,
+  background: string | Rgb
+): number {
+  const lum = (color: string | Rgb) =>
+    relativeLuminance(typeof color === "string" ? renderedRgb(color) : color);
+  const a = lum(foreground);
+  const b = lum(background);
+  const [lighter, darker] = a > b ? [a, b] : [b, a];
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
 // ---------------------------------------------------------------------------
 // CIEDE2000
 // ---------------------------------------------------------------------------

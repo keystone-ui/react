@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "spinner",
   "title": "Spinner",
-  "description": "Animated loading spinner for indicating indeterminate loading states.",
+  "description": "An animated ring that shows something is loading when you can't say how long it will take.",
   "dependencies": [
     "lucide-react"
   ],

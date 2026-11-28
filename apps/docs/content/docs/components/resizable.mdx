@@ -1,6 +1,7 @@
 ---
 title: Resizable
-description: Resizable panel layout that allows users to adjust the size of content areas by dragging handles.
+description: A group of panels whose sizes change when you drag the handle between them.
+contentType: Reference
 ---
 
 <ComponentPreview name="resizable-default" />
@@ -43,13 +44,13 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@keystoneu
 
 ```tsx
 <ResizablePanelGroup className="max-w-md rounded-lg border">
-  <ResizablePanel defaultSize={50}>
+  <ResizablePanel defaultSize="50%">
     <div className="flex h-32 items-center justify-center p-4">
       <span className="font-semibold text-sm">Panel A</span>
     </div>
   </ResizablePanel>
   <ResizableHandle />
-  <ResizablePanel defaultSize={50}>
+  <ResizablePanel defaultSize="50%">
     <div className="flex h-32 items-center justify-center p-4">
       <span className="font-semibold text-sm">Panel B</span>
     </div>
@@ -69,41 +70,37 @@ ResizablePanelGroup
 
 ### Vertical
 
-Panels can be stacked vertically by setting `direction="vertical"`:
+`orientation="vertical"` stacks the panels from top to bottom:
 
 <ComponentPreview name="resizable-vertical" />
 
+### With handle
 
-### With Handle
-
-Add a visible drag handle indicator to the resize bar:
+`withHandle` adds a visible grip to the resize bar:
 
 <ComponentPreview name="resizable-with-handle" />
 
-
 ### Nested
 
-Nested resizable panels:
+A panel group inside a panel splits it again:
 
 <ComponentPreview name="resizable-nested" />
 
-
 ### Collapsible
 
-Collapsible resizable panel:
+A `collapsible` panel collapses to its `collapsedSize` when dragged below its `minSize`:
 
 <ComponentPreview name="resizable-collapsible" />
 
+### Complex layout
 
-### Complex Layout
-
-Complex layout with multiple panels:
+A layout that combines a horizontal group with a vertical one:
 
 <ComponentPreview name="resizable-complex-layout" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 ## API reference
 
@@ -111,15 +108,15 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `direction` | `"horizontal" \| "vertical"` | - | The direction of the panel group |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Lay the panels out in a row or a column |
 
 ### ResizablePanel
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `defaultSize` | `number` | - | Initial size as a percentage |
-| `minSize` | `number` | - | Minimum size as a percentage |
-| `maxSize` | `number` | - | Maximum size as a percentage |
+| `defaultSize` | `number \| string` | - | Initial size. A number is pixels; a string without a unit, or with `%`, is a percentage (`"25%"`); `px`, `rem`, `em`, `vh` and `vw` also work |
+| `minSize` | `number \| string` | - | Minimum size, in the same units as `defaultSize` |
+| `maxSize` | `number \| string` | - | Maximum size, in the same units as `defaultSize` |
 
 ### ResizableHandle
 

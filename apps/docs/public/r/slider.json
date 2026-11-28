@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "slider",
   "title": "Slider",
-  "description": "Range slider input for selecting a numeric value within a defined range.",
+  "description": "A draggable control for picking a number, or a range of numbers, between a minimum and a maximum.",
   "dependencies": [
     "@base-ui/react"
   ],

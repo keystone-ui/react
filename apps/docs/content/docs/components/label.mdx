@@ -1,6 +1,7 @@
 ---
 title: Label
-description: An accessible label component for form controls with optional description and error messages.
+description: Names a form control, with sibling parts for helper text and an error message.
+contentType: Reference
 ---
 
 <ComponentPreview name="label-default" />
@@ -43,7 +44,7 @@ import { Label, Description, ErrorMessage } from "@keystoneui/react/label";
 
 ## Composition
 
-`Label`, `Description`, and `ErrorMessage` are siblings, not nested. Place them alongside a control inside a parent wrapper (typically `Field` from `@keystoneui/react/field`, or a custom `<div>`):
+`Label`, `Description` and `ErrorMessage` are siblings, not nested. Place them beside a control inside a wrapper, such as `Field` from `@keystoneui/react/field` or your own `<div>`:
 
 ```tsx
 <Field>
@@ -58,21 +59,19 @@ import { Label, Description, ErrorMessage } from "@keystoneui/react/label";
 
 ### Required
 
-Indicate required fields:
+A label that marks its field as required.
 
 <ComponentPreview name="label-required" />
 
+### With description
 
-### With Description
-
-Add helper text below the input:
+Helper text below the input.
 
 <ComponentPreview name="label-with-description" />
 
-
 ### Disabled
 
-With the default rendering of `Checkbox`, `RadioGroupItem` and `Switch`, a sibling `Label` does not automatically dim when the control is disabled. Use `FieldLabel` inside `<Field data-disabled>` to dim the label, and pass `disabled` to the control:
+With the default rendering of `Checkbox`, `RadioGroupItem` and `Switch`, a sibling `Label` doesn't dim when the control is disabled. To dim the label, use `FieldLabel` inside `<Field data-disabled>` and pass `disabled` to the control:
 
 ```tsx
 import { Checkbox } from "@keystoneui/react/checkbox";
@@ -88,8 +87,7 @@ import { Field, FieldLabel } from "@keystoneui/react/field";
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 

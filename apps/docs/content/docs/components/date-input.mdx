@@ -1,6 +1,7 @@
 ---
 title: DateInput
-description: Date picker input field for selecting dates with keyboard and calendar support.
+description: A native date input, typed with the keyboard, with a button that opens the browser's date picker.
+contentType: Reference
 ---
 
 <ComponentPreview name="date-input-default" />
@@ -43,6 +44,8 @@ pnpm add @keystoneui/react@beta @base-ui/react
 import { DateInput } from "@keystoneui/react/date-input";
 ```
 
+Render it with no props for an empty date field:
+
 ```tsx
 <DateInput />
 ```
@@ -51,55 +54,49 @@ import { DateInput } from "@keystoneui/react/date-input";
 
 ### Range
 
-Select a date range with start and end values:
+Two date inputs, **From** and **To**, for the start and end of a range.
 
 <ComponentPreview name="date-input-range" />
 
+### With input
 
-### With Input
-
-Combine a date picker with a text input for manual entry:
+A date input inside a `Field` with a label and a description.
 
 <ComponentPreview name="date-input-with-input" />
 
-
 ### Presets
 
-Quick date selection with predefined options like "Today" or "Last 7 days":
+Buttons such as **Today** and **In a week** fill the input with a date in one click.
 
 <ComponentPreview name="date-input-presets" />
 
+### Date of birth
 
-### Date of Birth
-
-A date picker configured for selecting a date of birth with month/year navigation:
+`min` and `max` limit a date of birth to the years from 1900 to 2010.
 
 <ComponentPreview name="date-input-date-of-birth" />
 
+### With time
 
-### With Time
-
-Date picker with time selection:
+A `Popover` date picker beside a time input.
 
 <ComponentPreview name="date-input-with-time" />
 
+### Natural language
 
-### Natural Language
-
-Date input with natural language hints:
+Shortcuts named in words, such as **Tomorrow** or **Next Monday**, beside a `Calendar` in a popover, each resolved to a date when clicked.
 
 <ComponentPreview name="date-input-natural-language" />
 
-
 ### Controlled
 
-Controlled date picker:
+A `Popover` date picker whose date lives in React state.
 
 <ComponentPreview name="date-input-controlled" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 ## API reference
 

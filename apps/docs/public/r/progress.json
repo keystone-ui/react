@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "progress",
   "title": "Progress",
-  "description": "Linear progress bar for visualizing completion or loading progress.",
+  "description": "A horizontal bar that shows how far a task has progressed.",
   "dependencies": [
     "@base-ui/react",
     "class-variance-authority"

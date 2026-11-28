@@ -12,13 +12,13 @@ export default function ResizableWithHandle() {
       className="max-w-md rounded-lg border"
       orientation="horizontal"
     >
-      <ResizablePanel defaultSize={30}>
+      <ResizablePanel defaultSize="30%">
         <div className="flex h-32 items-center justify-center p-4">
           <span className="font-semibold text-sm">Sidebar</span>
         </div>
       </ResizablePanel>
       <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={70}>
+      <ResizablePanel defaultSize="70%">
         <div className="flex h-32 items-center justify-center p-4">
           <span className="font-semibold text-sm">Content</span>
         </div>
