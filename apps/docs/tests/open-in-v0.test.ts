@@ -21,4 +21,8 @@ describe("openInV0Href", () => {
   it("can be switched off", () => {
     expect(openInV0Href("button", { v0Url: "" })).toBeUndefined();
   });
+
+  it("offers no button for a tutorial step, which is not a registry item", () => {
+    expect(openInV0Href("tutorial-settings-final", {})).toBeUndefined();
+  });
 });

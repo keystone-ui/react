@@ -105,7 +105,9 @@ function loadDemoIndex() {
       return (
         !(entry.startsWith("_") || entry.startsWith(".")) &&
         statSync(full).isDirectory() &&
-        entry !== "blocks"
+        entry !== "blocks" &&
+        // Tutorial demos are steps of a docs page, with no story to match.
+        entry !== "tutorial"
       );
     });
 
