@@ -1,0 +1,7 @@
+---
+"@keystoneui/react": patch
+---
+
+Registry style: the base layer's `@apply` rules now reach your CSS
+
+`npx shadcn add https://keystoneui.io/r/default.json` wrote `@apply: border-border outline-ring/50;` and `@apply: bg-background text-foreground;` into your global CSS. Tailwind ignores a declaration named `@apply:`, so unthemed borders (table rows, separators) drew in the text colour and `body` had no theme background, which left a dark-mode page white. The style item now writes each rule as an at-rule (`@apply border-border outline-ring/50;`). If you installed the style before this release, remove the colon after `@apply` in those two rules, or run the add command again.
