@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "button",
   "title": "Button",
-  "description": "A versatile button component with multiple variants, sizes, and states.",
+  "description": "A button that triggers an action, in 6 visual variants and 8 sizes, with loading and disabled states.",
   "dependencies": [
     "@base-ui/react",
     "class-variance-authority",

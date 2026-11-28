@@ -12,12 +12,6 @@
     "reason": "block term: introduces simple pills versus operator pills"
   },
   {
-    "file": "components/pagination.mdx",
-    "rule": "banned-word",
-    "match": "Simple",
-    "reason": "names the pagination-simple demo"
-  },
-  {
     "file": "components/date-picker.mdx",
     "rule": "banned-word",
     "match": "Quick picks",

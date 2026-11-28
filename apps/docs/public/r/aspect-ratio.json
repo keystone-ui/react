@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "aspect-ratio",
   "title": "Aspect Ratio",
-  "description": "Constrains content to a consistent width-to-height ratio for images, videos, or embeds.",
+  "description": "A box that keeps its content at a fixed width-to-height ratio, for an image, a video or an embed.",
   "files": [
     {
       "path": "packages/ui/src/aspect-ratio.tsx",

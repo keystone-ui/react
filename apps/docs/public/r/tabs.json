@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "tabs",
   "title": "Tabs",
-  "description": "Tabbed interface for organizing content into selectable panels.",
+  "description": "A row of tabs that shows one panel of content at a time.",
   "dependencies": [
     "@base-ui/react",
     "class-variance-authority",

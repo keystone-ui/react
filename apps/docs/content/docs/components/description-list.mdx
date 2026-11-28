@@ -1,6 +1,7 @@
 ---
 title: DescriptionList
-description: Displays term-description pairs for presenting metadata, settings, or key-value information.
+description: A list of term and value pairs, for metadata, settings or a read-only record.
+contentType: Reference
 ---
 
 <ComponentPreview name="description-list-default" />
@@ -46,6 +47,19 @@ import {
 } from "@keystoneui/react/description-list";
 ```
 
+### Stacked records in columns
+
+`orientation="stacked"` puts the term above the details, the shape a read-only detail page needs. The default row layout right-aligns each value against its label and reads as a summary.
+
+Columns are layout, so they go in `className`. `grid` replaces the component's default `flex`, and the stacked row gap stays alongside your own `gap-x-*`:
+
+```tsx
+<DescriptionList
+  className="grid grid-cols-1 gap-x-8 sm:grid-cols-2"
+  orientation="stacked"
+>
+```
+
 ## Composition
 
 ```text
@@ -57,59 +71,45 @@ DescriptionList
 
 ## Examples
 
-### Card Variant
+### Card variant
 
-A variant with rounded corners and background fill on each row:
+`variant="card"` gives each row rounded corners and a background fill:
 
 <ComponentPreview name="description-list-card-variant" />
 
-
 ### Compact
 
-A smaller, denser layout for tighter spaces:
+`size="sm"` makes a denser layout for tight spaces:
 
 <ComponentPreview name="description-list-compact" />
 
+### In a Card
 
-### In Card
-
-Embed a description list inside a Card for structured content blocks:
+A description list inside a Card:
 
 <ComponentPreview name="description-list-in-card" />
 
+### Custom values
 
-### Custom Values
-
-Description list with custom value rendering:
+`DescriptionListDetails` can hold any content, such as a badge, in place of plain text:
 
 <ComponentPreview name="description-list-custom-values" />
 
-
 ### Record
 
-`orientation="stacked"` puts the term above the details — the shape a read-only detail page wants, where the default row layout right-aligns each value against its label and reads as a summary.
-
-Columns are layout, so they go in `className`. `grid` supersedes the component's default `flex`, and the stacked row gap survives alongside your own `gap-x-*`:
-
-```tsx
-<DescriptionList
-  className="grid grid-cols-1 gap-x-8 sm:grid-cols-2"
-  orientation="stacked"
->
-```
+A read-only record in 2 stacked columns. [Stacked records in columns](#stacked-records-in-columns) shows the classes:
 
 <ComponentPreview name="description-list-record" />
 
-### Order Summary
+### Order summary
 
-Order summary using description list:
+An order summary with line items and a total:
 
 <ComponentPreview name="description-list-order-summary" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 

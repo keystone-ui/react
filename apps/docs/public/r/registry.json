@@ -597,7 +597,7 @@
       "name": "aspect-ratio",
       "type": "registry:ui",
       "title": "Aspect Ratio",
-      "description": "Constrains content to a consistent width-to-height ratio for images, videos, or embeds.",
+      "description": "A box that keeps its content at a fixed width-to-height ratio, for an image, a video or an embed.",
       "files": [
         {
           "path": "packages/ui/src/aspect-ratio.tsx",
@@ -662,7 +662,7 @@
       "name": "breadcrumb",
       "type": "registry:ui",
       "title": "Breadcrumb",
-      "description": "Navigation breadcrumb trail showing the user's current location within a hierarchy.",
+      "description": "A trail of links that shows where the current page sits in the site's hierarchy.",
       "dependencies": [
         "@base-ui/react",
         "lucide-react"
@@ -679,7 +679,7 @@
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
-      "description": "A versatile button component with multiple variants, sizes, and states.",
+      "description": "A button that triggers an action, in 6 visual variants and 8 sizes, with loading and disabled states.",
       "dependencies": [
         "@base-ui/react",
         "class-variance-authority",
@@ -775,7 +775,7 @@
       "name": "card",
       "type": "registry:ui",
       "title": "Card",
-      "description": "Structured container with header, content, and footer sections for grouping related information.",
+      "description": "A container with header, content and footer parts that groups related information on one surface.",
       "dependencies": [
         "class-variance-authority"
       ],
@@ -898,7 +898,7 @@
       "name": "description-list",
       "type": "registry:ui",
       "title": "Description List",
-      "description": "Displays term-description pairs for presenting metadata, settings, or key-value information.",
+      "description": "A list of term and value pairs, for metadata, settings or a read-only record.",
       "files": [
         {
           "path": "packages/ui/src/description-list.tsx",
@@ -927,7 +927,7 @@
       "name": "empty",
       "type": "registry:ui",
       "title": "Empty",
-      "description": "Empty state placeholder with icon and message for when no content is available.",
+      "description": "A placeholder with an icon, a title and a message for a view that has no content yet.",
       "dependencies": [
         "class-variance-authority"
       ],
@@ -1013,7 +1013,7 @@
       "name": "input",
       "type": "registry:ui",
       "title": "Input",
-      "description": "A form input field with consistent styling and focus states.",
+      "description": "A single-line text field for forms, with sizes, a focus ring and an invalid state.",
       "files": [
         {
           "path": "packages/ui/src/input.tsx",
@@ -1089,7 +1089,7 @@
       "name": "modal",
       "type": "registry:ui",
       "title": "Modal",
-      "description": "A dialog overlay for focused interactions like confirmations, forms, and detail views.",
+      "description": "A dialog that opens over the page for a confirmation, a form or a detail view, and keeps focus inside until it closes.",
       "dependencies": [
         "@base-ui/react",
         "class-variance-authority",
@@ -1127,7 +1127,7 @@
       "name": "pagination",
       "type": "registry:ui",
       "title": "Pagination",
-      "description": "Page navigation controls for browsing through paginated content.",
+      "description": "A list of page links, with previous and next controls, for moving through paginated content.",
       "dependencies": [
         "class-variance-authority",
         "lucide-react"
@@ -1196,7 +1196,7 @@
       "name": "resizable",
       "type": "registry:ui",
       "title": "Resizable",
-      "description": "Resizable panel layout that allows users to adjust the size of content areas by dragging handles.",
+      "description": "A group of panels whose sizes change when you drag the handle between them.",
       "dependencies": [
         "react-resizable-panels"
       ],
@@ -1212,7 +1212,7 @@
       "name": "select",
       "type": "registry:ui",
       "title": "Select",
-      "description": "A dropdown control for selecting one or more options from a list.",
+      "description": "A control that opens a list of options and sets one or more of them as the value.",
       "dependencies": [
         "@base-ui/react",
         "lucide-react"
@@ -1245,7 +1245,7 @@
       "name": "separator",
       "type": "registry:ui",
       "title": "Separator",
-      "description": "Visual divider for separating content sections horizontally or vertically.",
+      "description": "A horizontal or vertical line that divides sections of content.",
       "files": [
         {
           "path": "packages/ui/src/separator.tsx",
@@ -1287,7 +1287,7 @@
       "name": "stepper",
       "type": "registry:ui",
       "title": "Stepper",
-      "description": "Multi-step progress indicator for guiding users through sequential workflows.",
+      "description": "A container that shows one step of a sequential flow at a time and animates between steps.",
       "dependencies": [
         "motion",
         "react-use-measure"
@@ -1350,7 +1350,7 @@
       "name": "tabs",
       "type": "registry:ui",
       "title": "Tabs",
-      "description": "Tabbed interface for organizing content into selectable panels.",
+      "description": "A row of tabs that shows one panel of content at a time.",
       "dependencies": [
         "@base-ui/react",
         "class-variance-authority",
@@ -1533,7 +1533,7 @@
       "name": "table-pagination",
       "type": "registry:ui",
       "title": "Table Pagination",
-      "description": "The footer of a paginated data table — rows selected, rows per page, which page, and the four navigation buttons.",
+      "description": "The footer of a paginated data table, with the selected-row count, rows per page, the current page and the four navigation buttons.",
       "dependencies": [
         "lucide-react"
       ],

@@ -1,6 +1,7 @@
 ---
 title: Input
-description: A form input field with consistent styling and focus states.
+description: A single-line text field for forms, with sizes, a focus ring and an invalid state.
+contentType: Reference
 ---
 
 <ComponentPreview name="input-default" />
@@ -49,98 +50,85 @@ import { Input } from "@keystoneui/react/input";
 
 ### With Field
 
-Use `Field`, `FieldLabel`, and `FieldDescription` for accessible, structured form inputs:
+`Field`, `FieldLabel` and `FieldDescription` give the input an associated label and description:
 
 <ComponentPreview name="input-with-field" />
 
-
 ### Disabled
 
-Use the `disabled` prop on the input and `data-disabled` on the `Field` to style the disabled state:
+Set `disabled` on the input and `data-disabled` on the `Field` to style the disabled state:
 
 <ComponentPreview name="input-disabled" />
 
+### With error
 
-### With Error
-
-Use `aria-invalid` on the input and `data-invalid` on the `Field` to show error styling. Use `FieldError` for the error message:
+Set `aria-invalid` on the input and `data-invalid` on the `Field` to show error styling, and put the message in `FieldError`:
 
 <ComponentPreview name="input-with-error" />
 
+### File input
 
-### File Input
-
-For a list of the chosen files, a drop, a paste or validation, use [File Upload](/docs/components/file-upload).
+`type="file"` renders the browser's file picker. For a list of the chosen files, a drop, a paste or validation, use [File Upload](/docs/components/file-upload).
 
 <ComponentPreview name="input-file" />
 
+### Form example
 
-### Form Example
-
-A complete form built with `FieldGroup`, `Field`, and `Input`:
+A complete form built with `FieldGroup`, `Field` and `Input`:
 
 <ComponentPreview name="input-form-example" />
 
+### With label
 
-### With Label
-
-Input with a label and description:
+An input with a label and a description:
 
 <ComponentPreview name="input-with-label" />
 
-
 ### Sizes
 
-Different input sizes:
+`size` sets the height from the shared control ladder, described in [Control sizing](/docs/concepts/control-sizing):
 
 <ComponentPreview name="input-sizes" />
 
+### With icon
 
-### With Icon
-
-Input with an icon:
+An `InputGroup` puts an icon inside the field:
 
 <ComponentPreview name="input-with-icon" />
 
+### With button
 
-### With Button
-
-Input combined with a button:
+An input beside a button:
 
 <ComponentPreview name="input-with-button" />
 
+### With password toggle
 
-### With Password Toggle
-
-Password input with show/hide toggle:
+A password input with a button that shows or hides the value:
 
 <ComponentPreview name="input-with-password-toggle" />
 
+### With helper text
 
-### With Helper Text
-
-Input with helper text:
+An input with helper text below it:
 
 <ComponentPreview name="input-with-helper-text" />
 
+### With prefix
 
-### With Prefix
-
-Input with a text prefix:
+An `InputGroup` puts a text prefix before the field:
 
 <ComponentPreview name="input-with-prefix" />
 
-
 ### Types
 
-Different input types:
+`type` sets the HTML input type, such as `email`, `number`, `tel` or `url`:
 
 <ComponentPreview name="input-types" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 
@@ -174,4 +162,4 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 | `htmlSize` | `number` | - | Native HTML `size` attribute |
 | `className` | `string` | - | Additional CSS classes |
 
-The Input forwards all standard HTML `<input>` props.
+Input forwards every standard HTML `<input>` prop.

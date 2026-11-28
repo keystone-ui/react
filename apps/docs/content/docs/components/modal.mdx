@@ -1,6 +1,7 @@
 ---
 title: Modal
-description: A dialog overlay for focused interactions like confirmations, forms, and detail views.
+description: A dialog that opens over the page for a confirmation, a form or a detail view, and keeps focus inside until it closes.
+contentType: Reference
 ---
 
 <ComponentPreview name="modal-default" />
@@ -67,86 +68,77 @@ Modal
 
 ### Sizes
 
-The Modal supports multiple width presets:
+`size` on `ModalContent` picks one of 5 width presets:
 
 <ComponentPreview name="modal-sizes" />
 
-| Size | Width | Use Case |
+| Size | Width | Use case |
 | --- | --- | --- |
-| `sm` | 400px | Simple confirmations |
+| `sm` | 400px | Short confirmations |
 | `default` | 500px | Standard dialogs |
 | `lg` | 640px | Forms and detail views |
 | `xl` | 780px | Complex content |
-| `full` | Full screen | Immersive experiences |
-
+| `full` | Full screen | Content that needs the whole viewport |
 
 ### Scrollable
 
-A modal with scrollable body content for long forms:
+The body content scrolls, for a long form:
 
 <ComponentPreview name="modal-scrollable" />
 
+### Sign-up form
 
-### Sign Up Form
-
-A practical sign-up form modal pattern:
+A sign-up form inside a modal:
 
 <ComponentPreview name="modal-sign-up-form" />
 
-
 ### Controlled
 
-Control the modal open state programmatically:
+`open` and `onOpenChange` hold the open state in your own state:
 
 <ComponentPreview name="modal-controlled" />
 
-
 ### Nested
 
-Stack multiple modals on top of each other:
+A modal can open another modal on top of it:
 
 <ComponentPreview name="modal-nested" />
 
+### Sticky footer
 
-### Sticky Footer
-
-Modal with a sticky footer:
+A footer that stays visible while the content scrolls:
 
 <ComponentPreview name="modal-sticky-footer" />
 
-
 ### Confirmation
 
-Confirmation dialog modal:
+A modal that asks for confirmation before an action:
 
 <ComponentPreview name="modal-confirmation" />
 
+### Multi-step
 
-### Multi Step
-
-Multi-step wizard modal:
+A wizard that moves through several steps inside one modal:
 
 <ComponentPreview name="modal-multi-step" />
 
+### Long content
 
-### Long Content
-
-Modal with long scrollable content:
+A modal whose content is longer than the viewport and scrolls:
 
 <ComponentPreview name="modal-long-content" />
 
 ### Overlay
 
-Restyle the built-in overlay per modal with `overlayClassName`. Your classes win over the default tint, so `bg-black/20` lightens it and `hidden` removes it.
+`overlayClassName` restyles the built-in overlay for one modal. Your classes win over the default tint, so `bg-black/20` lightens it and `hidden` removes it.
 
 <ComponentPreview name="modal-overlay" />
 
-Hiding the backdrop is visual only. By default, the page behind is inert and scroll-locked. On the root, `modal={false}` turns off the focus trap and document scroll lock. `modal="trap-focus"` releases the scroll lock and keeps keyboard focus inside. For clicks to reach the page behind a hidden backdrop, also use `scrollBehavior="inside"`.
+Hiding the backdrop is visual only. By default, the page behind is inert and scroll-locked. On the root, `modal={false}` turns off the focus trap and document scroll lock. `modal="trap-focus"` releases the scroll lock and keeps keyboard focus inside. For clicks to reach the page behind a hidden backdrop, also use `scrollBehavior="inside"`. [Popup layering](/docs/concepts/popup-layering) explains each `modal` setting.
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 

@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "modal",
   "title": "Modal",
-  "description": "A dialog overlay for focused interactions like confirmations, forms, and detail views.",
+  "description": "A dialog that opens over the page for a confirmation, a form or a detail view, and keeps focus inside until it closes.",
   "dependencies": [
     "@base-ui/react",
     "class-variance-authority",

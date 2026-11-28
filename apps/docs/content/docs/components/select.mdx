@@ -1,6 +1,7 @@
 ---
 title: Select
-description: A dropdown control for selecting one or more options from a list.
+description: A control that opens a list of options and sets one or more of them as the value.
+contentType: Reference
 ---
 
 <ComponentPreview name="select-default" />
@@ -50,6 +51,40 @@ import {
 } from "@keystoneui/react/select";
 ```
 
+### Displaying labels in the trigger
+
+`SelectValue` renders the selected option's `value` by default, such as `"us"`.
+To show the label, such as `"United States"`, pass an `items` map to `Select`
+so it can resolve each value to its label:
+
+```tsx
+const countries = { us: "United States", ca: "Canada", uk: "United Kingdom" };
+
+<Select items={countries} defaultValue="us">
+  <SelectTrigger>
+    <SelectValue />
+  </SelectTrigger>
+  <SelectContent>
+    {Object.entries(countries).map(([value, label]) => (
+      <SelectItem key={value} value={value}>{label}</SelectItem>
+    ))}
+  </SelectContent>
+</Select>
+```
+
+For a computed display, pass a render function as `SelectValue`'s child. The
+[multiple selection](#multiple-selection) example uses this pattern:
+
+```tsx
+<SelectValue>{(value) => labels[value] ?? "Select…"}</SelectValue>
+```
+
+### Responsive branches on the server
+
+The [responsive](#responsive) example renders a Select from 768px up and a Drawer on phones. `useMediaQuery` can't see a viewport on the server, so the server HTML is the phone branch. A desktop visitor sees the phone trigger until hydration, then the Select's. Both triggers share one look, so the swap moves nothing and hydration doesn't warn. [Server rendering](/docs/concepts/server-rendering) explains why a media query result can't render on the server.
+
+Each branch keeps its own open state. If the viewport crosses the breakpoint while the Drawer or the Select is open, it closes with its branch: the value is kept and the page isn't left scroll-locked.
+
 ## Composition
 
 ```text
@@ -68,108 +103,69 @@ directly in `SelectContent`, Base UI throws `SelectGroupContext is missing`.
 
 ## Examples
 
-### Displaying labels in the trigger
-
-`SelectValue` renders the selected option's `value` by default (e.g. `"us"`).
-To show the label (e.g. `"United States"`) instead, pass an `items` map to
-`Select` so it can resolve value → label:
-
-```tsx
-const countries = { us: "United States", ca: "Canada", uk: "United Kingdom" };
-
-<Select items={countries} defaultValue="us">
-  <SelectTrigger>
-    <SelectValue />
-  </SelectTrigger>
-  <SelectContent>
-    {Object.entries(countries).map(([value, label]) => (
-      <SelectItem key={value} value={value}>{label}</SelectItem>
-    ))}
-  </SelectContent>
-</Select>
-```
-
-For dynamic or computed display, pass a render function as `SelectValue`'s
-child. This is the pattern used by `<ComponentPreview name="select-multiple" />`:
-
-```tsx
-<SelectValue>{(value) => labels[value] ?? "Select…"}</SelectValue>
-```
-
-
 ### Groups
 
-Organize options into labeled groups:
+`SelectGroup` and `SelectLabel` sort options into labeled groups:
 
 <ComponentPreview name="select-groups" />
 
-
 ### Scrollable
 
-For long lists, the content scrolls automatically:
+A long list scrolls inside the popup:
 
 <ComponentPreview name="select-scrollable" />
 
+### With icons
 
-### With Icons
-
-Add icons to select items:
+Items can show an icon before their label:
 
 <ComponentPreview name="select-with-icons" />
 
+### Multiple selection
 
-### Multiple Selection
-
-Select multiple values:
+`multiple` allows several selected values:
 
 <ComponentPreview name="select-multiple" />
 
+### Multiple with Select all
 
-### Multiple with Select All
-
-A "Select all" row above the options shows none, some (a dash) or all, and toggles every enabled option while leaving disabled ones as they are:
+A **Select all** row above the options shows none, some (a dash) or all. It toggles every enabled option and leaves disabled ones as they are:
 
 <ComponentPreview name="select-multiple-select-all" />
 
-
 ### Responsive
 
-A Select from 768px up and a Drawer with a list of options on phones, sharing one value:
+A Select from 768px up and a Drawer with a list of options on phones, sharing one value. [Responsive branches on the server](#responsive-branches-on-the-server) covers hydration and open state:
 
 <ComponentPreview name="select-responsive" />
 
-`useMediaQuery` cannot see a viewport on the server, so the server HTML is the phone branch: a desktop visitor sees the phone trigger until hydration, then the Select's. Both triggers share one look, so the swap moves nothing and hydration does not warn. Each branch keeps its own open state, so if the viewport crosses the breakpoint while the Drawer or the Select is open, it closes with its branch: the value is kept and the page is not left scroll-locked.
-
-
 ### Disabled
+
+`disabled` on `Select` disables the whole control, and `disabled` on a `SelectItem` disables one option:
 
 <ComponentPreview name="select-disabled" />
 
-
 ### Sizes
 
-Select in different sizes:
+`size` on `SelectTrigger` sets the height from the shared control ladder, described in [Control sizing](/docs/concepts/control-sizing):
 
 <ComponentPreview name="select-sizes" />
 
-
 ### Controlled
 
-Controlled select with state management:
+`value` and `onValueChange` hold the selection in your own state:
 
 <ComponentPreview name="select-controlled" />
 
+### Form example
 
-### Form Example
-
-Select used in a form context:
+A select inside a form, with a label:
 
 <ComponentPreview name="select-form-example" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 
