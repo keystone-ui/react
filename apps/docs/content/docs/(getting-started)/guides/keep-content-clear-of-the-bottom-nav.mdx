@@ -34,7 +34,7 @@ Set `--bottom-nav-height` on `:root`, where both the bar and its scroll-padding 
 
 ## Move the rule into your stylesheet under a strict CSP
 
-If your app's Content-Security-Policy forbids inline styles (`style-src 'self'` without a nonce), the browser refuses the bar's `<style>` element. Otherwise a keyboard-focused control can land under the bar.
+If your app's Content-Security-Policy forbids inline styles (`style-src 'self'` without a nonce), the browser refuses the bar's `<style>` element. Until the rule is in your stylesheet, a keyboard-focused control can land under the bar.
 
 <Steps>
 
