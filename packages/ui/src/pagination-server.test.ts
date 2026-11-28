@@ -37,9 +37,9 @@
  * with the literal `process.env.NODE_ENV` replaced by "development" and by
  * "production". Their development error goes to a log file, not stderr.
  *
- * It does not cover Next's own bundler, a browser, Flight's development
- * build, or an npm install (whose build puts Button's code in a chunk
- * without the directive).
+ * It does not cover Next's own bundler, a browser or Flight's development
+ * build. An npm install, whose build puts Button's code in a chunk without
+ * the directive, is covered by `package-server.test.ts`.
  */
 
 import { spawnSync } from "node:child_process";
