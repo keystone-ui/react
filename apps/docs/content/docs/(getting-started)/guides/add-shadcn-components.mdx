@@ -16,17 +16,7 @@ Before you copy a shadcn snippet, check whether the project is on Base UI or Rad
 
 ## Resolve dependencies to Keystone UI
 
-Bare names in `registryDependencies` resolve against shadcn's registry. Configure the `@keystone` namespace so you can name Keystone UI's items:
-
-```json title="components.json"
-{
-  "registries": {
-    "@keystone": "https://keystoneui.io/r/{name}.json"
-  }
-}
-```
-
-Then install Keystone UI's items through the namespace:
+Bare names in `registryDependencies` resolve against shadcn's registry. Configure the `@keystone` namespace in `components.json`, as [Install from the registry](/docs/guides/install-from-the-registry#install-by-name-with-the-namespace) shows, so you can name Keystone UI's items. Then install them through the namespace:
 
 ```bash
 npx shadcn@latest add @keystone/button

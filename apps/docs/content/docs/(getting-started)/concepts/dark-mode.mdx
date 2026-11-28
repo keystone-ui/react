@@ -10,19 +10,7 @@ Dark mode in Keystone UI is a second set of token values, switched on by a `dark
 
 Your theme CSS declares a `dark` custom variant. Any element inside a `.dark` ancestor receives the `dark:` styles, and the `.dark` block redefines every colour token with a value tuned for dark surfaces. With the class on `<html>`, the whole page switches at once.
 
-The recommended variant is scoped to screens:
-
-```css
-@custom-variant dark {
-  @media screen {
-    &:is(.dark *) {
-      @slot;
-    }
-  }
-}
-```
-
-The `.dark { … }` token block is wrapped in `@media screen` the same way. The docs site and Storybook use this form.
+The recommended form scopes both to screens: the variant's selector and the `.dark { … }` token block each sit inside `@media screen`. The docs site and Storybook use this form. The registry style item and the theme builder export still write the flat `@custom-variant dark (&:is(.dark *));`, and [Enable dark mode](/docs/guides/enable-dark-mode#keep-printed-pages-light) shows the screen-only version to switch to.
 
 ## Why dark tokens are screen-only
 

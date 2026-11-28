@@ -86,7 +86,7 @@ Picking a radio item now closes the menu, as Radix and shadcn do. Pass `closeOnC
 
 ### Toggle sizes are on the control ladder
 
-Toggle sizes now match the [control height ladder](/docs/reference/base-css#control-heights): `xs` 24px, `sm` 32px, `default` 40px and `lg` 48px. If you used `size="lg"` to line a `ToggleGroup` up with a default `Button`, drop the prop.
+Toggle sizes now match the [control height ladder](/docs/reference/base-css#control-heights), so a default `Toggle` is as tall as a default `Button`. If you used `size="lg"` to line a `ToggleGroup` up with a default `Button`, drop the prop.
 
 {/* changeset: badge-status-tones */}
 
@@ -177,7 +177,7 @@ The thin scrollbar is opt-in. Add `ks-scrollbar` to `<html>` to restore it every
 
 ### Expect light tokens on paper
 
-The `dark` variant and the `.dark` token block are wrapped in `@media screen`, so a printed page always gets the light tokens. See [why dark tokens are screen-only](/docs/concepts/dark-mode#why-dark-tokens-are-screen-only), and [Enable dark mode](/docs/guides/enable-dark-mode#keep-printed-pages-light) to scope your own theme the same way.
+Keystone UI's own stylesheets wrap the `dark` variant and the `.dark` token block in `@media screen`, so a printed page gets the light tokens. The registry style item still writes the flat variant, so scope your theme as [Enable dark mode](/docs/guides/enable-dark-mode#keep-printed-pages-light) shows. [Dark mode](/docs/concepts/dark-mode#why-dark-tokens-are-screen-only) explains why.
 
 ## Check that it works
 

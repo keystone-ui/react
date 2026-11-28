@@ -13,7 +13,7 @@ Support differs by layer:
 | Area | Status |
 | --- | --- |
 | Base UI keyboard nav and popup positioning | Popups normally inherit direction from the root. Above or below the trigger, `start`/`end` follow the positioner's computed direction. A `DirectionProvider` maps horizontal arrow keys and `inline-*` sides |
-| Keystone's own spacing and positioning CSS | Many one-sided gutters, offsets and text alignments keep their physical side |
+| Keystone's own spacing and positioning CSS | 31 of 64 components keep some one-sided gutters, offsets or text alignments on their physical side |
 | Explicit `rtl:` handling in the library | Calendar's default month navigation chevrons |
 | i18n / locale / message layer | No locale layer; [`StringsProvider`](/docs/components/strings) replaces some built-in English |
 | RTL tests or visual baselines | Targeted right-to-left checks for some components; Storybook snapshot comparison of RTL examples such as Reel |
@@ -30,7 +30,7 @@ That's why an RTL app sets two directions. The root direction (`<html dir="rtl">
 
 ## What does not work
 
-**Many one-sided gutters, offsets and text alignments keep their physical side in RTL.** They use physical utilities (`pl-`, `pr-`, `ml-`, `mr-`, `left-`, `right-`, `text-left`, `text-right`), which do not respond to `dir`. For example, from `sm` up, the Modal header stays left-aligned and the footer actions align at the inline end.
+**One-sided gutters, offsets and text alignments in 31 of the 64 components keep their physical side in RTL.** They use physical utilities (`pl-`, `pr-`, `ml-`, `mr-`, `left-`, `right-`, `text-left`, `text-right`), which do not respond to `dir`. For example, from `sm` up, the Modal header stays left-aligned and the footer actions align at the inline end.
 
 Calendar uses `rtl:` variants for its default month navigation chevrons. Reel uses logical positioning for its arrows and the scroller's computed direction for paging. Its chevrons and the horizontal fade follow the nearest explicit `dir="ltr"` or `dir="rtl"`. `FileUploadItemName` sets `dir="auto"` so a file name keeps its own direction. RollingNumber's direction and numbering systems are covered in [its RTL section](/docs/components/rolling-number#rtl).
 
