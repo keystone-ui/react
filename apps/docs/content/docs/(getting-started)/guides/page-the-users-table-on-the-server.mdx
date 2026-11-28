@@ -1,0 +1,63 @@
+---
+title: Filter and page the users table on the server
+description: Replace the stand-in request in the users table of admin-01 and users-01 with your data layer, so the server filters, sorts and pages the rows.
+contentType: How-to
+---
+
+The users table in [`admin-01`](/docs/blocks/admin-01) and [`users-01`](/docs/blocks/users-01) filters, sorts and pages in the browser, over every row it's given. This guide swaps the stand-in request for your data layer, so the server does that work and the table keeps its toolbar, URL state and selection.
+
+## Before you start
+
+You need:
+
+- `admin-01` or `users-01` installed. Both install the same `use-data-table.ts`.
+- A data layer with a query hook that can filter, sort and page users on your server
+
+## Swap the request
+
+In `use-data-table.ts`, `run()` is what a server would do with the query, and `useSimulatedFetch` stands in for the network. It isn't exported, so you edit `use-data-table.ts` itself. Keep everything above the request and swap the request itself.
+
+<Steps>
+
+<Step>Replace `useSimulatedFetch` and the `run(config, query)` call together.</Step>
+
+`run()` is called synchronously inside a `useMemo`, so this is one change, not two. Use your data layer's query hook, keyed on `query`: `filters`, `sort`, `pageIndex` and `pageSize`, where `pageIndex` counts from 0. Keep the last answer while the next one loads, so the pagination doesn't collapse to zero.
+
+Give the rest of the hook back `{ loading, result }`, where `result` is a `DataTableResult`:
+
+- `page`: the rows on the current page.
+- `total`: the row count across every page.
+- `pageCount`: the number of pages, at least 1 even when nothing matches: `Math.max(1, Math.ceil(total / query.pageSize))`. A page past the last snaps to `pageCount - 1`, so 0 would land on page −1. An empty result is `{ all: [], page: [], total: 0, pageCount: 1 }`.
+- `all`: every row that passes the filters, in sort order. The toolbar's Export writes this to CSV, so with a paged API it needs its own request.
+
+<Step>Send the query as URL parameters.</Step>
+
+`usersToParams(query)` in `admin-filters.ts` already turns a query into flat string parameters. It leaves defaults out (the first page, the default sort and page size, a filter left at `All`), so the server must apply the same defaults.
+
+<Step>Point Export at the server.</Step>
+
+`result.all` no longer holds every matching row. Point `Export` at an endpoint that exports the query, or remove it. If your result has another shape, update the code that reads `all` with it.
+
+<Step>Resolve selected and open users by id.</Step>
+
+The selection bar, and the open-user and inviter lookups in `users-view.tsx`, resolve ids against the rows you hand in. A selected user, an open user or an inviter may not be on the loaded page. Keep the records you have loaded, or fetch them by id; the selection export needs every selected record, not only the current page.
+
+</Steps>
+
+## Add what the stand-in gave you
+
+Replacing `useSimulatedFetch` removes 2 behaviors you now own:
+
+- `useSimulatedFetch` restarts its wait on every change, so search waits for typing to stop. Your data layer needs its own debounce.
+- There is no error state. A request that fails has nowhere to show.
+
+## Check that it works
+
+Change a filter and watch the network panel: each change sends one request with the query as parameters, and the table shows skeleton rows until it answers. Go to the last page and check the pagination reads the server's `total`.
+
+## Related
+
+- [`users-01`: use it with your data](/docs/blocks/users-01#use-it-with-your-data)
+- [`admin-01`: data table hook](/docs/blocks/admin-01#data-table-hook)
+- [Adapt admin-01 to your app](/docs/guides/adapt-admin-01)
+- [Filter and table patterns](/docs/concepts/filter-and-table-patterns)

@@ -1,6 +1,7 @@
 ---
 title: Dashboard 01
 description: An analytics dashboard with a KPI row of semantic deltas, a stacked revenue chart with a toggleable legend, a sessions area chart, and a sortable, paginated top-pages table.
+contentType: Reference
 ---
 
 ```bash
@@ -11,22 +12,24 @@ npx shadcn@latest add https://keystoneui.io/r/dashboard-01.json
 
 ## Features
 
-- **KPI row** using [`StatValue`](/docs/components/stat) and `StatDelta`, where the tone comes from what the metric *means*. The bounce-rate tile is `down-is-good`, so a fall renders green — with a down arrow.
+- **KPI row** using [`StatValue`](/docs/components/stat) and `StatDelta`, where the tone comes from what the metric *means*. The bounce-rate tile is `down-is-good`, so a fall renders green, with a down arrow.
 - **Stacked revenue chart** with a legend you can switch series off in. Hidden series stay listed and struck through, and the last visible one refuses to switch off.
 - **Sessions area chart** sharing the same chart layer and color ramp.
-- **Sortable, paginated table** in a [`Card`](/docs/components/card), with three-state sorting and [`TablePagination`](/docs/components/table-pagination) — the same rows-per-page footer [`tickets-01`](/docs/blocks/tickets-01) uses.
-- **Charts respect reduced motion** — which a stylesheet cannot do on its own.
+- **Sortable, paginated table** in a [`Card`](/docs/components/card), with three-state sorting and [`TablePagination`](/docs/components/table-pagination), the same rows-per-page footer [`tickets-01`](/docs/blocks/tickets-01) uses.
+- **Charts respect reduced motion**, which a stylesheet can't do on its own.
 - **An accessible info tip** in the header, with its text in the accessibility tree whether or not the tooltip is open.
 
-## Charts are a block dependency, not a library one
+## Charts are a block dependency, not a library dependency
 
 `recharts` is a dependency of this block, not of `@keystoneui/react`. The library stays dependency-light and the chart layer lives in `chart.tsx` inside the block, vendored from shadcn. `tickets-01` does the same with `@dnd-kit`.
 
 Two changes from upstream shadcn are load-bearing, and both are commented in the file so they survive a tidy-up: `aspect-auto` rather than `aspect-video`, which under an explicit pixel height otherwise produces a 462px floor and a horizontal document scrollbar; and an added `min-w-0`, because a chart is a grid child and those default to `min-content`.
 
-`ChartLegend` is dropped from the port. The block ships its own toggleable legend, so recharts' `<Legend>` never mounts — leaving the dead path in would mean two legends to choose between.
+`ChartLegend` is dropped from the port. The block ships its own toggleable legend, so recharts' `<Legend>` never mounts. Leaving the dead path in would mean two legends to choose between.
 
 ## One place decides a series' color
+
+`seriesColor` in the block resolves the color of every series:
 
 ```tsx
 export function seriesColor(item: SeriesDef, index: number): string {
@@ -37,16 +40,16 @@ export function seriesColor(item: SeriesDef, index: number): string {
 }
 ```
 
-Both the mark and the legend swatch resolve through this, so they cannot disagree — a legend that says one thing while the band says another is worse than no legend at all.
+Both the mark and the legend swatch resolve through it, so they can't disagree. A legend that says one thing while the band says another is worse than no legend at all.
 
-The `token` escape hatch matters. The "Other" band is `var(--muted-foreground)`, not a ramp slot: it is a fold of everything too small to name, and giving it a categorical hue would claim a channel that does not exist.
+The `token` field covers the case a ramp slot can't. The "Other" band is `var(--muted-foreground)`, not a ramp slot: it is a fold of everything too small to name, and giving it a categorical hue would claim a channel that does not exist.
 
-The ramp itself ([`--chart-1` … `--chart-5`](/docs/reference/theme-tokens#chart-tokens)) separates by **lightness**, which every form of color blindness preserves, rather than by hue, which none of them do.
+The ramp itself ([`--chart-1` … `--chart-5`](/docs/reference/theme-tokens#chart-tokens)) separates by **lightness**, which every form of color blindness preserves, rather than by hue, which none of them preserve.
 
 ## The page header is three utilities, not a component
 
-Keystone ships no `PageHeader`, and this block hand-rolls its header in four
-lines. Layout belongs in `className` — but three of those utilities are
+Keystone UI ships no `PageHeader`, and this block hand-rolls its header in 4
+lines. Layout belongs in `className`, but 3 of those utilities are
 load-bearing rather than cosmetic, and each is the one people delete when
 tidying up:
 
@@ -64,21 +67,21 @@ tidying up:
 
 **`shrink-0 flex-wrap`** on the actions. `shrink-0` stops the buttons being squashed; `flex-wrap` lets a four-button cluster wrap *inside* the header rather than forcing the whole header onto a second line.
 
-**`items-end`**, not `items-center`. With a description present the action row should align to the bottom of the text column — `items-center` looks fine until you add a description, then reads as misaligned.
+**`items-end`**, not `items-center`. With a description present, the action row should align to the bottom of the text column. `items-center` looks fine until you add a description, then reads as misaligned.
 
 ## Serializable props
 
-Panels take `format="money"`, not `formatter={(v) => …}`. The installed entry point is `app/dashboard/page.tsx` — a server component — and a function cannot cross that boundary; React rejects it at render time. A block that taught the function form would teach a pattern that breaks on install.
+Panels take `format="money"`, not `formatter={(v) => …}`. The installed entry point is `app/dashboard/page.tsx`, a server component, and a function can't cross that boundary; React rejects it at render time. A block that taught the function form would teach a pattern that breaks on install.
 
-The same formatter keeps `null` distinct from `0`. Coercing with `Number(value)` turns an absent measurement into `0`, which then prints as "$0" — a reading the data never took.
+The same formatter keeps `null` distinct from `0`. Coercing with `Number(value)` turns an absent measurement into `0`, which then prints as "$0", a reading the data never took.
 
 ## Accessibility
 
-The legend entries are real buttons with `aria-pressed`, and a hidden series stays in the list struck through rather than disappearing — it is the only way back.
+The legend entries are real buttons with `aria-pressed`, and a hidden series stays in the list struck through rather than disappearing, because it's the only way back.
 
-Charts pass `isAnimationActive={!reducedMotion}`. `base.css` already zeroes CSS animation under `prefers-reduced-motion`, but recharts animates SVG *attributes* from JavaScript, which no stylesheet can reach, so the library's central rule silently does not cover charts.
+Charts pass `isAnimationActive={!reducedMotion}`. `base.css` already zeroes CSS animation under `prefers-reduced-motion`, but recharts animates SVG *attributes* from JavaScript, which no stylesheet can reach, so the library's central rule doesn't cover charts. [Motion](/docs/concepts/motion) covers the reduced-motion rule.
 
-The bars carry no click handler, deliberately. A chart whose only affordance is `onClick` on an SVG path offers nothing to a keyboard or a screen reader — no focusable target, no middle-click, no "copy link" — and the fix is a visually hidden list of the same links beneath it. Not creating that debt is cheaper than remediating it.
+The bars carry no click handler, on purpose. A chart whose only affordance is `onClick` on an SVG path offers nothing to a keyboard or a screen reader: no focusable target, no middle-click, no "copy link". The fix is a visually hidden list of the same links beneath it, and not creating that debt is cheaper than remediating it.
 
 ## Components used
 
@@ -91,6 +94,8 @@ The bars carry no click handler, deliberately. A chart whose only affordance is 
 - [Tooltip](/docs/components/tooltip)
 
 ## Composition
+
+The dashboard's layout tree:
 
 ```text
 DashboardPage

@@ -1,6 +1,7 @@
 ---
 title: Bet Slip 01
 description: A sportsbook bet slip with singles and accumulator modes, live odds changes that must be accepted, and a responsible-gambling daily limit.
+contentType: Reference
 ---
 
 ```bash
@@ -11,11 +12,11 @@ npx shadcn@latest add https://keystoneui.io/r/bet-slip-01.json
 
 ## Features
 
-- **Singles and accumulator** — a stake per selection, or one stake across every leg at the combined odds. The accumulator tab is disabled until there are two selections.
-- **Live odds** — a stand-in feed moves one price every few seconds. A moved price shows its direction, and the slip asks the punter to accept the new odds before it can be placed, as regulated sportsbooks must.
-- **Responsible-gambling limit** — the slip knows today's remaining limit. A stake over it blocks the bet and says how much is left, and that check runs before the odds check, so accepting a new price is never a way past a limit.
-- **Money in cents** — stakes and returns are integer minor units, rounded down per selection, so a long slip never totals €30.000000004. Every figure is `tabular-nums`.
-- **Placed state** — confirmation with the stake and potential return, and a fresh slip.
+- **Singles and accumulator**: a stake per selection, or one stake across every leg at the combined odds. The accumulator tab is disabled until there are two selections.
+- **Live odds**: a stand-in feed moves one price every few seconds. A moved price shows its direction, and the slip asks the punter to accept the new odds before it can be placed, as regulated sportsbooks must.
+- **Responsible-gambling limit**: the slip knows today's remaining limit. A stake over it blocks the bet and says how much is left, and that check runs before the odds check, so accepting a new price is never a way past a limit.
+- **Money in cents**: stakes and returns are integer minor units, rounded down per selection, so a long slip never totals €30.000000004. Every figure is `tabular-nums`.
+- **Placed state**: confirmation with the stake and potential return, and a fresh slip.
 
 The arithmetic lives in `bet-slip-math.ts`, separate from the UI, and `use-odds-feed.ts` is the one file to replace with your price feed's subscription.
 

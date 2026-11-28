@@ -21,6 +21,10 @@ const COMPONENT =
   "registry/default/blocks/bottom-nav-01/components/bottom-nav.tsx";
 const PAGE = "registry/default/blocks/bottom-nav-01/page.tsx";
 const MDX = "apps/docs/content/docs/blocks/bottom-nav-01.mdx";
+// The page padding is a recipe, so it lives in a guide; the block page keeps
+// the rule the bar adds.
+const GUIDE =
+  "apps/docs/content/docs/(getting-started)/guides/keep-content-clear-of-the-bottom-nav.mdx";
 
 const BAR_HEIGHT =
   "h-[calc(var(--bottom-nav-height,4rem)+env(safe-area-inset-bottom))]";
@@ -86,7 +90,8 @@ describe("bottom-nav-01 clearance recipe", () => {
     // The preview's markup and the component comment's snippet.
     [DEMO, 2],
     [PAGE, 1],
-    [MDX, 1],
+    [MDX, 0],
+    [GUIDE, 1],
   ] as const) {
     it(`every <main> in ${path} reserves exactly the bar, nothing else`, () => {
       const mains = [...read(path).matchAll(MAIN_CLASSES)].map((m) =>

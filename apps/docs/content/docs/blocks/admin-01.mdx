@@ -1,6 +1,7 @@
 ---
 title: Admin 01
 description: An admin panel with a collapsible sidebar shell, a topbar with breadcrumb, an overview with KPI tiles and a signups chart, and users and payments tables sharing one toolbar design.
+contentType: Reference
 ---
 
 ```bash
@@ -14,316 +15,94 @@ npx shadcn@latest add https://keystoneui.io/r/admin-01.json
 - **Collapsible sidebar shell** with an icon rail, grouped navigation, a badge, and a footer account row.
 - **Topbar** with a sidebar trigger and a [breadcrumb](/docs/components/breadcrumb).
 - **Overview** with a KPI row and a stacked signups chart sharing the same toggleable legend as [`dashboard-01`](/docs/blocks/dashboard-01).
-- **Two tables, one design** — Users and Payments share the same toolbar, header, skeleton, empty state, footer and selection bar, built from the same parts over two filter vocabularies.
-- **Filter pills** — every filter is a self-describing pill (`Role: Admin`, `Action: Deposit`), two on the row from the start and the rest added from `+ Add filter`. Payments' Currency, Amount and Player are operator chips (`Currency is not: BTC`, `Amount: > 100`, `Player does not contain: gmail`), Notion-style.
-- **View controls** — at the far end of the row, `Columns` hides and shows columns, `Export` downloads the filtered result as CSV, and `Sort` orders by any sortable column in words that fit it (`Newest first`, `Largest first`, `A–Z`). The headers sort the same state.
-- **Row selection** — a checkbox column and a [`SelectionBar`](/docs/components/selection-bar) whose actions — export the selection, copy its ids — actually run.
-- **Loading** — every change goes through a stand-in request, with [`Skeleton`](/docs/components/skeleton) rows at the real rows' height while it is in flight.
-- **Shareable views** — the open section, filters, sort and page live in the URL, so a link or a reload lands on the same rows.
-- **Payments details** — amounts grouped at their currency's precision, a record that opens in a side [`Drawer`](/docs/components/drawer), and an [`Empty`](/docs/components/empty) state that offers `Clear filters`.
-- **Mobile filters** — below `sm` both tables fold their pills, view controls and sort into the same bottom-sheet `Drawer` and [`Stepper`](/docs/components/stepper) drilldown.
-- **User detail** — clicking a name opens a read-only record view built from [`DescriptionList`](/docs/components/description-list), with [`CopyButton`](/docs/components/copy-button) on the values that exist to be pasted elsewhere.
+- **Two tables, one design**: Users and Payments share the same toolbar, header, skeleton, empty state, footer and selection bar, built from the same parts over two filter vocabularies.
+- **Filter pills**: every filter is a self-describing pill (`Role: Admin`, `Action: Deposit`). Two are on the row from the start, and you add the rest from `+ Add filter`. Payments' Currency, Amount and Player are Notion-style operator chips (`Currency is not: BTC`, `Amount: > 100`, `Player does not contain: gmail`).
+- **View controls**: at the far end of the row, `Columns` hides and shows columns, `Export` downloads the filtered result as CSV, and `Sort` orders by any sortable column in words that fit it (`Newest first`, `Largest first`, `A–Z`). The headers sort the same state.
+- **Row selection**: a checkbox column and a [`SelectionBar`](/docs/components/selection-bar) whose actions (export the selection, copy its ids) run.
+- **Loading**: every change goes through a stand-in request, with [`Skeleton`](/docs/components/skeleton) rows at the real rows' height while it's in flight.
+- **Shareable views**: the open section, filters, sort and page live in the URL, so a link or a reload lands on the same rows.
+- **Payments details**: amounts grouped at their currency's precision, a record that opens in a side [`Drawer`](/docs/components/drawer), and an [`Empty`](/docs/components/empty) state that offers `Clear filters`.
+- **Mobile filters**: below `sm` both tables fold their pills, view controls and sort into the same bottom-sheet `Drawer` and [`Stepper`](/docs/components/stepper) drilldown.
+- **User detail**: clicking a name opens a read-only record view built from [`DescriptionList`](/docs/components/description-list), with [`CopyButton`](/docs/components/copy-button) on the values you'd paste elsewhere.
+
+[Filter and table patterns](/docs/concepts/filter-and-table-patterns) explains the design behind these tables: why the filters are pills, how operators are chosen, how sorting, selection, loading and the URL behave, and what changes below `sm`.
 
 ## Requirements
 
-The sidebar is **shadcn's, adapted onto keystone's primitives** and shipped inside the block as `components/sidebar.tsx`. Keystone deliberately ships no app shell in the library — see [Keystone UI and shadcn](/docs/concepts/keystone-and-shadcn) and the [sidebar reference](/docs/reference/shadcn-sidebar) for why, and for how the sidebar behaves: its keyboard shortcut, its `sidebar_state` cookie and its drawer on phones. Do not also run `shadcn add sidebar`: the bare name selects shadcn's item, whose dependencies install to the same paths as keystone's Button, Input and Tooltip, and accepting an overwrite (or passing `--overwrite`) replaces keystone's files with the selected shadcn style's versions.
+The sidebar is **shadcn's, adapted onto Keystone UI's primitives**, and ships inside the block as `components/sidebar.tsx`. Keystone UI ships no app shell in the library on purpose. [Keystone UI and shadcn](/docs/concepts/keystone-and-shadcn) explains why, and the [sidebar reference](/docs/reference/shadcn-sidebar) covers how the sidebar behaves: its keyboard shortcut, its `sidebar_state` cookie and its drawer on phones.
 
-It reads six `--sidebar-*` tokens (`--sidebar`, `--sidebar-foreground`, `--sidebar-accent`, `--sidebar-accent-foreground`, `--sidebar-border`, `--sidebar-ring`). Keystone's style item declares all eight of the set as aliases of your theme tokens, so the sidebar follows whichever keystone theme is active.
+Don't also run `shadcn add sidebar`. The bare name selects shadcn's item, whose dependencies install to the same paths as Keystone UI's Button, Input and Tooltip. Accepting an overwrite (or passing `--overwrite`) replaces Keystone UI's files with the selected shadcn style's versions.
+
+The sidebar reads 6 `--sidebar-*` tokens (`--sidebar`, `--sidebar-foreground`, `--sidebar-accent`, `--sidebar-accent-foreground`, `--sidebar-border`, `--sidebar-ring`). Keystone UI's style item declares all 8 of the set as aliases of your theme tokens, so the sidebar follows whichever Keystone UI theme is active.
 
 **`SidebarInset` carries `min-w-0`.** The sidebar file sets it, so the wide users table shrinks inside the inset instead of giving the whole document a horizontal scrollbar. Keep it if you restyle the inset.
 
-## Use it with your data
+## Files
 
-The block installs 45 files under `components/` and one page at `app/admin/page.tsx`. Every table reads fixture rows. This section shows how to keep one view, the users table, and give it your own rows.
+The block installs 46 files under `components/` and one page at `app/admin/page.tsx`. Every table reads fixture rows. [Adapt admin-01 to your app](/docs/guides/adapt-admin-01) shows how to keep only the users view and give it your own rows.
 
-### Which files make the users view
+### Files the users view imports
 
-`admin-users-table.tsx` and the files it imports, directly or through others, are 27 files:
+`admin-users-table.tsx` and the files it imports, directly or through others, are 26 files:
 
 | Role | Files |
 | --- | --- |
 | Table and toolbar | `admin-users-table.tsx`, `admin-users-toolbar.tsx`, `admin-filters-drawer.tsx`, `user-filter-pills.tsx` |
-| State and vocabulary | `use-users-table.ts`, `use-data-table.ts`, `admin-filters.ts`, `mock-admin.ts` |
+| State and vocabulary | `use-users-table.ts`, `use-data-table.ts`, `admin-filters.ts`, `mock-users.ts` |
 | Shared table parts | `columns-menu.tsx`, `sort-menu.tsx`, `skeleton-rows.tsx`, `filtered-empty.tsx`, `result-summary.tsx`, `csv.ts`, `sort.ts`, `url-params.ts`, `filter-row.ts` |
 | Filter pills and dates | `filter-pills.tsx`, `filter-trigger.tsx`, `pill-shell.tsx`, `set-pill.tsx`, `date-pill.tsx`, `date-filter.ts`, `date-filter-step.tsx`, `drawer-parts.tsx` |
-| Imported for one thing | `use-reduced-motion.ts` (the filters drawer), `series-legend.tsx` (a type `mock-admin.ts` imports) |
+| Imported for one thing | `use-reduced-motion.ts` (the filters drawer) |
 
-`mock-admin.ts` stays even with your own rows: the `User`, `Role` and `Status` types and `statusLabels` live there, and `admin-filters.ts` and the table import them.
+`mock-users.ts` stays even with your own rows: the `User`, `Role` and `Status` types and `statusLabels` live there, and `admin-filters.ts`, the table and the user record import them. Only its `users` array is fixture.
 
-The other 18 files are not imported by the users table. They are reached through `admin-page.tsx`, which wires every view together. Removing its imports and JSX is not enough: it also calls `usePaymentsTable()`, restores and writes the payments filters in the URL, and opens on the `"overview"` section, falling back to it for a bare URL. So to drop the other views, replace `AdminPage` with a users-only client component of your own (`"use client"`; the installed `page.tsx` is not one). It calls `useUsersTable()`, renders `<AdminUsersTable table={…} onOpenUser={…} />`, and `app/admin/page.tsx` renders it in place of `AdminPage`. Then these files can go:
+### Files the other views add
 
-- **Overview:** `admin-overview.tsx`, `chart.tsx`, `chart-formatters.ts`.
-- **Payments:** `admin-payments-table.tsx`, `admin-payments-toolbar.tsx`, `use-payments-table.ts`, `payment-filters.ts`, `payment-filter-pills.tsx`, `payment-filters-drawer.tsx`, `operator-filter-chip.tsx`, `payment-detail-drawer.tsx`, `mock-payments.ts`.
-- **Sidebar shell:** `admin-sidebar.tsx`, `admin-topbar.tsx`, `sidebar.tsx`.
-- **Page wiring:** `admin-page.tsx`, `use-url-state.ts`, `admin-user-detail.tsx`. Without them you lose the URL sync and the user record view. Keep `use-url-state.ts` or `admin-user-detail.tsx` if your component wires them in; neither imports a file from the other groups.
+The users table doesn't import the other 20 files. `admin-page.tsx` reaches them, because it wires every view together:
 
-### Where the fixture rows come in
+- **Overview**: `admin-overview.tsx`, `chart.tsx`, `chart-formatters.ts`, `mock-admin.ts`, `series-legend.tsx`.
+- **Payments**: `admin-payments-table.tsx`, `admin-payments-toolbar.tsx`, `use-payments-table.ts`, `payment-filters.ts`, `payment-filter-pills.tsx`, `payment-filters-drawer.tsx`, `operator-filter-chip.tsx`, `payment-detail-drawer.tsx`, `mock-payments.ts`.
+- **Sidebar shell**: `admin-sidebar.tsx`, `admin-topbar.tsx`, `sidebar.tsx`.
+- **Page wiring**: `admin-page.tsx`, `use-url-state.ts`, `admin-user-detail.tsx`. They carry the URL sync and the user record view. Neither `use-url-state.ts` nor `admin-user-detail.tsx` imports a file from the other groups.
 
-The rows enter in three places. All three import `users` from `mock-admin.ts`.
+### Files shared with dashboard-01
 
-**The table's rows.** `use-users-table.ts` passes them to `useDataTable`:
+Four files are duplicated byte for byte from [`dashboard-01`](/docs/blocks/dashboard-01) rather than shared through a common registry item: `chart.tsx`, `chart-formatters.ts`, `series-legend.tsx` and `use-reduced-motion.ts`.
 
-```ts title="components/use-users-table.ts"
-import { type User, users } from "@/components/mock-admin";
-import { useDataTable } from "@/components/use-data-table";
+A block's installable copy is flat: every component lands at `@/components/<basename>.tsx`, so two blocks shipping a `chart.tsx` write to the same path, and installing both is last-writer-wins. A registry item of their own would have put chart code back on the installable component surface, which keeping recharts a *block* dependency avoids.
 
-export function useUsersTable() {
-  return useDataTable<User, UserFilters, FilterKey, UserSortKey, UserColumnId>({
-    // …
-    rows: users,
-    sortRows: sortUsers,
-  });
-}
-```
+`apps/docs/tests/block-shared-files.test.ts` asserts the copies are byte-identical, and fails if a new basename starts colliding without being classified. Only infrastructure is shared this way. The panels and fixtures are each block's own, because two blocks sharing those would be the same demo twice.
 
-Give the hook your rows instead, for example as a parameter:
+## Data table hook
 
-```ts title="components/use-users-table.ts"
-import type { User } from "@/components/mock-admin";
-
-export function useUsersTable(rows: readonly User[]) {
-  return useDataTable<User, UserFilters, FilterKey, UserSortKey, UserColumnId>({
-    // …
-    rows,
-    sortRows: sortUsers,
-  });
-}
-```
-
-Its caller then becomes `useUsersTable(rows)`.
-
-The rows must be complete when the hook first renders: fetch them on the server and pass them down, or mount the table once they have loaded. The hook works out its answer again only when the filters, sort or page change, not when `rows` changes, so rows that arrive or refresh later stay out of the table until the next filter change. To follow changing rows, edit `useSimulatedFetch` (below).
-
-**The selection bar.** In `admin-users-table.tsx`, `UserSelectionBar` builds the rows for its Export and Copy ids actions from the fixture, `users.filter((user) => selected.has(user.id))`. Change it to filter your rows. If you leave it, those two actions read the fixture.
-
-**The user record.** `admin-page.tsx` finds the open user, and the user who invited them, with `users.find`. Point both at your rows, or drop them with the page wiring above.
-
-Your rows must have the `User` shape from `mock-admin.ts`. The table's columns read its fields, and so do the filters, sort and CSV in `admin-filters.ts`: `name` and `email` for search, `role`, `status`, `seats`, `twoFactor` and `createdAt` for the pills. If your records differ, change `User`, the columns and those functions together.
-
-Three fixture details to change with them:
-
-- `createdAt` is a `YYYY-MM-DD` string, or `""` for none. The date filter compares it as text, so a timestamp or a `Date` needs converting first.
-- `TODAY` in `date-filter.ts` is a fixed date, so the date presets match the fixture. With live data it is `new Date()`.
-- `lastActive` is the text the table shows, such as `2 hours ago`. `sortUsers` parses that text back into minutes to sort it. With a timestamp, sort on the timestamp.
+Both tables get their state from `useDataTable` in `use-data-table.ts`.
 
 ### What `useDataTable` asks for
 
-`DataTableConfig` in `use-data-table.ts`. Each row needs a string `id`; selection is keyed on it.
+`DataTableConfig` in `use-data-table.ts` takes the fields below. Each row needs a string `id`; selection is keyed on it.
 
-- `rows` — every row the table can show.
-- `matches(row, filters)` — whether one row passes the current filters.
-- `sortRows(rows, sort)` — returns the rows in `sort` order.
-- `emptyFilters` — the filter state with nothing applied. The table starts on it, and `Clear all` returns to it.
-- `defaultKeys` — the pills on a fresh row. `Clear all` puts these back.
-- `defaultSort` — the sort the table opens on.
-- `defaultPageSize` — the page size the table opens on.
-- `clearFor(key)` — a filter's reset patch, applied when its pill is removed.
-- `latency` — how long the stand-in request takes, in milliseconds. Optional; 300 when left out.
+- `rows`: every row the table can show.
+- `matches(row, filters)`: whether one row passes the current filters.
+- `sortRows(rows, sort)`: returns the rows in `sort` order.
+- `emptyFilters`: the filter state with nothing applied. The table starts on it, and `Clear all` returns to it.
+- `defaultKeys`: the pills on a fresh row. `Clear all` puts these back.
+- `defaultSort`: the sort the table opens on.
+- `defaultPageSize`: the page size the table opens on.
+- `clearFor(key)`: a filter's reset patch, applied when its pill is removed.
+- `latency`: how long the stand-in request takes, in milliseconds. Optional; 300 when left out.
 
-### What it does not do
+### Where filtering runs
 
-Filtering, sorting and paging all run in the browser, over the whole `rows` array. The function `run` in `use-data-table.ts` filters with `matches`, sorts with `sortRows`, and slices out the current page. There is no request: `useSimulatedFetch`, in the same file, stands in for one. It computes `run` and hands the answer back after `latency`, so the skeleton rows have a loading state to show.
+Filtering, sorting and paging all run in the browser, over the whole `rows` array. The function `run` in `use-data-table.ts` filters with `matches`, sorts with `sortRows`, and slices out the current page.
 
-For server-side filtering, sorting or paging, replace `useSimulatedFetch` with your data layer. It is not exported, so you edit `use-data-table.ts` itself. Send `query` (`filters`, `sort`, `pageIndex`, `pageSize`; `pageIndex` counts from 0), and give the rest of the hook back `{ loading, result }`, where `result` is a `DataTableResult`:
+There is no request: `useSimulatedFetch`, in the same file, stands in for one. It computes `run` and returns the answer after `latency`, so the skeleton rows have a loading state to show. [Filter and page the users table on the server](/docs/guides/page-the-users-table-on-the-server) replaces it with your data layer.
 
-- `page` — the rows on the current page.
-- `total` — the row count across every page.
-- `pageCount` — the number of pages, at least 1 even when nothing matches: `Math.max(1, Math.ceil(total / query.pageSize))`. An empty result is `{ all: [], page: [], total: 0, pageCount: 1 }`.
-- `all` — every row that passes the filters, in sort order. The toolbar's Export writes this to CSV, so with a paged API it needs its own request.
+## Reusing parts of the block
 
-What you lose when you replace it:
+Three parts of this block install on their own. [Adapt admin-01 to your app](/docs/guides/adapt-admin-01) has the commands and what each one writes:
 
-- `useSimulatedFetch` restarts its wait on every change, so search waits for typing to stop. Your data layer needs its own debounce.
-- There is no error state. A request that fails has nowhere to show.
-
-If you only want the filter row and not the table, the [`filter-pills`](#reusing-the-filter-pills) item below installs it on its own.
-
-## Reusing the filter pills
-
-The filter row — `FilterTrigger`, `OptionPill`, `DateRangePill`, `AddFilterMenu`
-and the `usePillRow` hook — installs on its own, without the rest of the admin
-panel:
-
-```bash
-npx shadcn@latest add https://keystoneui.io/r/filter-pills.json
-```
-
-It writes the same four files this block uses (`filter-trigger.tsx`,
-`pill-shell.tsx`, `filter-pills.tsx`, `drawer-parts.tsx`), so the two stay in
-step: the item is built from this block's source. The payments table's
-operator chip stays in the block, since it is written against payment fields.
-
-In an app that imports components from the `@keystoneui/react` package rather
-than copying them into `components/ui/`, install the package flavour instead.
-It has the same four files, importing `@keystoneui/react/*`:
-
-```bash
-npx shadcn@latest add https://keystoneui.io/r/npm/filter-pills.json
-```
-
-It is tested with `@keystoneui/react` 1.0.0-beta.11. It needs a
-`components.json`: keep a valid one your app already has, or write the one
-[Apps that use the npm package](/docs/blocks/users-01#apps-that-use-the-npm-package)
-gives. Pick one flavour per app: both write the same file names with different
-imports.
-
-## Reusing the sidebar
-
-The collapsible sidebar installs on its own, without the rest of the admin
-panel:
-
-```bash
-npx shadcn@latest add https://keystoneui.io/r/sidebar.json
-```
-
-It writes the same `components/sidebar.tsx` this block uses, built from the
-same source. Use the full URL: the bare name `sidebar` selects shadcn's item,
-whose dependencies share paths with keystone's files. A later `add` of
-`sidebar` or of this block offers to overwrite a `components/sidebar.tsx` you
-have edited; accepting discards your edits. The
-navigation itself is this block's content, so `admin-sidebar.tsx` and
-`admin-topbar.tsx` stay here; [the sidebar reference](/docs/reference/shadcn-sidebar)
-has a composition to start from, what the sidebar does and does not include,
-and the tokens it needs. It is the vendored version: it imports your local
-keystone components through the UI alias in `components.json` (normally
-`@/components/ui`). In an app that uses the `@keystoneui/react` package, install
-the package flavour instead, which writes the same file importing
-`@keystoneui/react/*`:
-
-```bash
-npx shadcn@latest add https://keystoneui.io/r/npm/sidebar.json
-```
-
-It is tested with `@keystoneui/react` 1.0.0-beta.11 and needs a
-`components.json` ([Apps that use the npm package](/docs/blocks/users-01#apps-that-use-the-npm-package)
-gives one). It installs `@base-ui/react` unpinned: keep your
-`@base-ui/react` at the version `@keystoneui/react` pins.
-
-## Reusing the users view
-
-The users section — table, toolbar, filter pills, sort and column menus,
-selection bar, URL state and the user record view — installs on its own as
-[`users-01`](/docs/blocks/users-01), without the sidebar, overview or payments:
-
-```bash
-npx shadcn@latest add https://keystoneui.io/r/users-01.json
-```
-
-It installs the same files as this block, built from the same source, plus a
-`users-view.tsx` page shell. Installing both from the same release writes
-identical files to the same paths. If this block is already in your app from
-an earlier release, add it again together with `users-01`: the two share
-files, and the older `admin-page.tsx` does not pass the `users` prop that
-`AdminUsersTable` now takes.
-
-## Shared with dashboard-01, byte for byte
-
-Four files — `chart.tsx`, `chart-formatters.ts`, `series-legend.tsx`, `use-reduced-motion.ts` — are duplicated verbatim from [`dashboard-01`](/docs/blocks/dashboard-01) rather than shared through a common registry item.
-
-That is deliberate. A block's installable copy is flat: every component lands at `@/components/<basename>.tsx`, so two blocks shipping a `chart.tsx` write to the same path and installing both is last-writer-wins. Hoisting them into their own registry item would have put chart code back on the installable component surface, which is exactly what keeping recharts a *block* dependency avoids.
-
-So they are duplicated and the duplication is enforced: `apps/docs/tests/block-shared-files.test.ts` asserts the copies are byte-identical and fails if a new basename starts colliding without being classified. Only infrastructure is shared this way — the panels and fixtures are each block's own, because two blocks sharing those would be the same demo twice.
-
-## Notes
-
-**One toolbar design for both tables.** Users and Payments are built from the same parts — `filter-pills.tsx`, `sort-menu.tsx`, `columns-menu.tsx`, `skeleton-rows.tsx`, `filtered-empty.tsx` — over a state hook they also share, `useDataTable`. What differs is each table's vocabulary file (`admin-filters.ts`, `payment-filters.ts`): its filters, options, sort labels, URL parameters and CSV columns. A change to how a pill behaves, how a page resets or how a selection survives paging is made once.
-
-This block used to show two filter layouts side by side — the users filters in a drawer at every width with the applied ones as a row of applied-filter chips, the payments filters inline as pills. The pills won on the measure that matters for an admin table: changing a filter is two clicks rather than three or four, and what is filterable is on screen rather than behind a button. The drawer is still the right shell on a phone, so both tables keep one there.
-
-**Every filter names the dimension it filters.** A pill reads `Action: Deposit`, not `Deposit`. A bare value turns ambiguous the moment it sits next to another one — is "Deposit" a type or a status? — and the toolbar previously had exactly that pair: one control naming a value without its dimension, beside one naming a dimension without a value.
-
-The exception is a value that names its own dimension. A date range reads as `Last 24h`; `Period: Last 24h` only says it twice.
-
-**Self-describing pills are why there is no applied-filter chip row.** Applied-filter chips exist to surface filters a panel has hidden. When the control itself says what it is and what it holds, an applied-filter chip repeating it is a second representation of the same fact — and two representations can disagree. The pills are the record of what is applied, so there is nothing to keep in sync.
-
-The invariant that makes that safe lives in `visibleKeys`: a pill is shown if it is on the row — the starting two, plus any added by hand — **or if its filter holds a value**. That last term means applied state cannot be invisible — a filter narrowing the table with no pill on the row is structurally impossible rather than merely tested for.
-
-**Two filters to start; the rest are added.** Six pills at once wrap before anyone has used one, so each row starts with its two most common cuts — Role and Status on Users, Action and Status on Payments — `+ Add filter` offers only what is not already on the row, and it disappears when everything is. The starting two are not permanent: they come off like any other pill, and `Clear all` puts them back. Picking a filter there mounts its pill with the menu or popover already open — you picked "Currency" to filter by currency, so a second click on the new pill would be a wasted step.
-
-A multi-select names its first value and counts the rest — `Currency: BTC, +2`. A bare `3` says how many without saying which, and four values side by side stop being scannable. The popover spells the selection out as chips in a field, Notion's multi-select: picked options stay in the list below it with a check — so nothing shifts under the pointer between picks, and a second click unpicks — typing filters the list, and a round X clears the lot — shown only while there is something to clear.
-
-**Simple filters and operator filters.** Most pills are a dimension and a value — `Status: Failed`. A few also carry a comparison, the way Notion's filters do. Which kind a field gets follows from its type, not from how much a filter could do: every operator is a menu and a click, so a field gets them only when people really ask the second question — "everything except BTC", "anything over 100".
-
-| Field | Kind | Operators | Why |
-|---|---|---|---|
-| Action, Provider, Role, Seats, Two-factor | simple pill | none — `is` is implied | one choice from a short list |
-| Status (both tables) | operator chip, multi-select | `is`, `is not` | "everything but failed", "every account but suspended" — asked as often as the inverse |
-| Created | operator chip with a calendar | Notion's nine, `is between` by default, including `is relative to today` (`Past [7] [days]`, `This [week]`) | a date is asked about as a day, a side of a day, a range, or a window that moves with today |
-| Currency | operator chip, multi-select | `is`, `is not` | a payment holds one currency, so `contains USDT` would match exactly what `is USDT` does |
-| Amount | operator chip | `between`, `=`, `>`, `<` | the common questions are thresholds |
-| Player | operator chip, text | `contains`, `does not contain`, `is`, `is not`, `starts with`, `ends with` | free text — `ends with @gmail.com` is the filter an email invites |
-
-`is empty` is left out everywhere, because none of these fields can be empty. The operator sits in the popover header — `Currency [is ⌄]` — above the values, so opening the pill lands on what you came to set; Currency and Player put focus straight in their field. The default operator goes unsaid on the pill — `Currency: BTC` — and only a qualifier earns words: `Currency is not: BTC`. An operator with nothing to compare reads as nothing: `Currency: All`, never `Currency is not: All`. Switching the amount operator drops the bound the new one does not read, so `between 10 – 500` switched to `>` cannot keep a hidden ceiling of 500 that no label shows.
-
-**Removing a filter.** On a simple pill the X takes the chevron's 16px slot on hover and on keyboard focus, so the pill never changes width, and Backspace removes a focused pill. Touch screens have no hover and never see the X, so on those the pill's menu carries a **Delete filter** row instead. Operator chips take the same X and Backspace, so every pill on the row comes off the same way; they also keep **Delete filter** behind the `⋯` in the popover header, which is their touch path. Every pill has the X, the starting two included, so it always means the same thing: clear the filter and take its pill off the row. Focus moves to the next pill, or to `+ Add filter`, where the removed filter is back on offer.
-
-Picking `All` never takes a pill off the row — removing the control from under the cursor mid-interaction is worse than a pill reading `All`. Removal is always its own, explicit action.
-
-Ranges open a `Popover` rather than a menu, because a menu is a list of choices and a pair of bounds is a small form. An open-ended range still says which end it is open at — `Amount: from 20`, not `Amount: 20`.
-
-**Sorting has two handles on one state**, as in the users table: the column headers and a `Sort` menu pushed to the far end of the row, apart from the pills and labelled as a sort so it does not read as one more filter. The menu is column first, then direction, and the direction is named for the column — `Newest first` for dates, `Largest first` for amounts, `A–Z` for names — with the column's natural direction listed first and picked by default. A header's first click uses that same default. Unfinished payments have no finish time, so sorting by Finished sinks them to the end in both directions rather than opening "Newest first" on a page of dashes. Below `sm` the menu becomes the drawer's last step. Five columns sort; the other three carry no `aria-sort` at all, because `none` would claim a column sorts and is merely inactive.
-
-**Below `sm` the pills fold away and a drawer carries the whole filter set** — the same bottom sheet and `Stepper` drilldown the users drawer uses, a menu of "label + current value" rows that open one screen per filter. A row of pills becomes a column of pills on a phone, burying the table it is filtering, and a scrolling column of selects is just a desktop panel moved sideways. Each row's value comes from the same descriptor the pills read, so a row and its pill cannot disagree about what is applied.
-
-**The phone menu reads the way Linear's does.** `Applied filters` lists each filter holding a value as a sentence — `Currency [is not] [BTC, ETH] ✕` — whose value opens the filter's step, whose operator badge opens its operator sheet, and whose ✕ clears it. `All filters` below names every filter and nothing more, so what is applied is said in one place. Action and Provider have no operator, so their rows carry no badge for one.
-
-**An operator is a badge beside its step's title**, `Player [contains ⌄]`, and tapping it — there or in the applied row — stacks a sheet of operators on the filter drawer, one radio row each. It replaced a segmented control above the values (which cost Created the row its calendar needed) and a full-width select for Player's six.
-
-**Created takes Notion's nine date operators**, on the desktop pill's header menu and the phone step's badge alike. `is relative to today` is a rule — `Past [7] [days]`, `This [week]` — stored as one (`?createdOp=relative&rel=past.7.day`), so a link still means the past seven days tomorrow; the presets (`Today` to `This year` for payments, `Past 30 days` to `This year` for sign-ups) are rules too. `Past N` counts today, weeks start on Monday, and `Next` is left out because nothing is created in the future. `is empty` and `is not empty` are there for parity, though every row has a creation date. Under `is between`, one tap is a day and a second makes a range; a third starts again, so the table behind the sheet never shows a half-open range you did not ask for. Older `from` / `to` links read as the range they meant. The fixture ends on 28 Aug 2026, so the block's `TODAY` is pinned there; in your app it is `new Date()`.
-
-The drawer holds *every* filter, not just the optional ones: at that width it is the only way in, so anything missing from it is unreachable rather than inconvenient. Its trigger carries the active count, because nothing else at that width says the table is filtered.
-
-**A rail was the other candidate, and this table cannot afford one.** The payments columns need about 1050px; the content area is 1024px at a 1280px viewport, so the table is already short before anything is taken from it. A 300px filter sidebar would leave 724px and force horizontal scrolling on a standard laptop. That trade is table-shaped rather than universal — a rail works well beside a narrow single-column list, which is why chat and mail apps use one.
-
-Payment ids are middle-truncated in the table with a copy button, and shown in full on the record. The head and tail are what you eyeball against a provider's dashboard; the whole value is what you paste into it.
-
-**A payment's record is a side panel; a user's is a page.** A payment is looked at and left — check a status, copy an id, go back to the row you were on — so the ledger, its filters and its scroll position stay behind a right-hand `Drawer`. A user is a record you work in, which is why that one replaces the table. Both build their values from the same `DescriptionList` pairs. The panel shows only the fields a payment has: a refund or retry button belongs there in a real app, but one that does nothing is worse than none.
-
-**Amounts are formatted for reading, stored for computing.** The fixture holds the provider's raw string (`10000.000000` for every currency), which is what sorting and the Amount filter read. The cell shows it grouped and at its currency's precision — two places for EUR and USDT, as many as it carries for BTC and ETH — with tabular figures so the column lines up. Amounts compare across currencies as plain numbers, so 1 BTC sorts below 600 EUR; a real ledger sorts on a converted reporting-currency column, or narrows to one currency first.
-
-**Export is the result, not the page.** `Export` writes every row the filters and sort produce — all eighteen, not the ten on screen — as CSV, in the order the table shows them. It writes raw values: the provider's amount string rather than `10,000.00`, whose comma a spreadsheet would misread; enum ids rather than labels; an empty cell rather than a dash for a payment that has not finished. It is disabled when there is nothing to export, and desktop-only, like the pills.
-
-**An empty result says how to get out of it.** Both tables render an `Empty` inside `TableEmpty` when the filters leave nothing: an icon, "No payments match these filters", and a `Clear filters` button — the toolbar's own `Clear all` is easy to miss on a wide row, and a phone has none — its drawer clears filters one ✕ at a time. The component takes `filtered` rather than assuming it, because a real table also needs "No payments yet", where there is nothing to clear.
-
-**The detail view is a sub-state of Users, not a section of its own.** A new section would need a sidebar entry — and you cannot navigate to a detail page with no record chosen — so the open user is a separate `openUserId`, resolved to a record at render. Changing section clears it, or leaving to Billing and returning would land on a stale record.
-
-The breadcrumb reflects that: with a record open, `Users` stops being the page and becomes the way back to the list, with the user's name as the terminal crumb.
-
-Values are stacked above their labels in two columns — `DescriptionList`'s `orientation="stacked"`, with the grid itself in `className`. Its default row layout right-aligns each value against its label, which reads as a summary; a record wants the label to sit above the value it describes. A field the record does not have renders `-` rather than being omitted, so the grid keeps its alignment.
-
-Both tables carry their row actions in a **trailing menu**. A hover-revealed button is unreachable on touch — `focus-visible` rescues a keyboard, not a finger — and these are the widest surfaces in the block, so the likeliest to be read on a phone. A ledger is also where per-row actions accumulate, and a menu absorbs a fourth and fifth where a row of inline buttons cannot.
-
-The trigger names its row: five identical "Actions" buttons would leave a screen reader to work out which one it is on from context it does not have. The record's name or id stays clickable, so opening keeps a one-click path.
-
-`Copy payment ID` duplicates the icon button beside the id on purpose: that one is the fast path for a value shown truncated, this one is the labelled path for anyone who would not read an unlabelled icon.
-
-`invitedBy` stores the inviter's **id**, not their name, so **Invited by** links to that user's record rather than naming it as dead text. A detail page that mentions another record it can already open should take you there.
-
-The header spans the full width with the actions at its right edge, while the card is capped — so the buttons reach the container without the record's two columns drifting apart on a wide screen. Sections carry their own padding and the card's is zeroed, which lets the rules between them run the full width of the card instead of stopping short of its edges.
-
-**The toolbar forks at `sm:`, following [`tickets-01`](/docs/blocks/tickets-01).** Search is shared and always visible; the pills and the view controls are `hidden sm:flex`, and below that a single Filters button opens a bottom-sheet drawer. The fork is CSS-only — both trees are always mounted, so there is no `useMediaQuery` to get wrong on the server, and no flash of the wrong layout during hydration.
-
-The drawer's body is a [`Stepper`](/docs/components/stepper): a menu of "label + current value" rows that drill into one `RadioGroup` screen per filter, with a back arrow and an Apply footer. Filters apply **live** — `Apply` only dismisses, there is no draft state to reconcile. Its trigger carries a count of the filters that hold a value, because at that width nothing else says the table is filtered; sort is not counted, because a badge that ticks up when you reorder a column is lying about what it counts.
-
-**Columns, Export and Sort sit apart from the pills.** They change how the rows are shown, not which rows, so they live at the far end of the row and each names itself — `Sort:` reads as a sort, not one more filter. When the row is full, search keeps a minimum width and this group wraps to a second line rather than crushing the field. `Columns` lists only what can go: the id or name, the selection checkbox and the row actions identify and act on a row, so they always stay. It is a view preference, not part of the query, so it is not in the URL — a link should show someone the same rows, not your layout.
-
-**Selection outlives the page and the filter.** Ticking rows on page one, then page two, then exporting is the point of a selection that is kept by id rather than by position. The bar's actions read from the full data set, not the current result, for the same reason. It offers only what this block can do — export the selection, copy its ids; the role changes and suspensions a real admin needs require a backend, and buttons that do nothing are what this bar used to carry.
-
-**Loading is a stand-in request.** The fixtures are local, so without one the loading state would never be seen. `useDataTable` answers each query after 300ms; while it waits the table carries `aria-busy` and the body shows skeleton rows built to the real rows' height — 49px, or 53px where a name sits over an email — in the count the previous page had, so nothing jumps when the data lands. Each change restarts the wait, which makes search settle once rather than per keystroke. The pagination and summary keep describing the last answer meanwhile. Swap `useSimulatedFetch` for your data layer and keep the rest.
-
-**The view lives in the URL.** The open section and that section's query — search, filters, sort, page, page size — are written to the query string with `replaceState` (one history entry per keystroke would make Back useless), defaults left out, so an untouched table has a clean URL. On load the URL is read once and validated value by value: `?status=bogus` opens the table unfiltered rather than broken, and a page past the end snaps to the last one. It is plain `history`, so the block works in any React app; in Next.js the router observes it and `useSearchParams` follows.
-
-**Sorting is one piece of state, not two.** The toolbar's Sort menu and the column headers write the same `sort` value, so picking "Name Z–A" moves the header arrow and clicking a header updates the menu's label, with no syncing code. That only holds because the menu splits the choice into column and direction, so every pair the headers can reach is nameable by construction — a state the headers could produce but the menu could not name would leave the radio group with nothing selected. Both tables are always sorted: an "Unsorted" option would mean fixture order, which is no order anyone asked for, and it gave the headers a third click that undid the second. Users who have never been active sort last whichever way Last active runs, as unfinished payments do on Finished.
-
-Every control in the row sits on the **32px** `sm` tier, the same tier as the pagination below the table and the app chrome around it. Anything added to the row should take `size="sm"` too — mixing sizes between neighbours is the usual cause of a toolbar that looks subtly off. Forms inside the filter drawers stay at `default`.
-
-The filter menus are [`DropdownMenuRadioGroup`](/docs/components/dropdown-menu#radio-group), not checkbox items — each filter is single-select, so picking a value closes the menu. That is keystone's default for radio items and the reason a second filter is clickable straight after the first; a menu left open holds an inert overlay across the page that swallows the next click.
-
-Every filter change resets `pageIndex` to 0. Page 2 of the unfiltered list usually does not exist once a filter is applied, and a table reading "Page 2 of 1" with no rows looks broken.
-
-Select-all is binary rather than tri-state. Keystone's [`Checkbox`](/docs/components/checkbox) has no indeterminate variant, and re-implementing the custom mixed-state control that [`tickets-01`](/docs/blocks/tickets-01) uses would duplicate a workaround rather than share one.
-
-The Status column passes **no** `sortDirection` at all, where the sortable columns pass `null`. That distinction is the point of the three-way prop: omitted means the column does not sort and emits no `aria-sort`, while `null` means sortable but not currently active.
+- **Filter pills**: the `filter-pills` item, and `npm/filter-pills` for apps that use the package ([install the filter pills on their own](/docs/guides/adapt-admin-01#install-the-filter-pills-on-their-own)).
+- **Sidebar**: the `sidebar` item, and `npm/sidebar` for apps that use the package ([install the sidebar on its own](/docs/guides/adapt-admin-01#install-the-sidebar-on-its-own)).
+- **Users view**: the [`users-01`](/docs/blocks/users-01) block ([install the users view on its own](/docs/guides/adapt-admin-01#install-the-users-view-on-its-own)).
 
 ## Components used
 
@@ -357,6 +136,8 @@ The Status column passes **no** `sortDirection` at all, where the sortable colum
 - [Toggle](/docs/components/toggle)
 
 ## Composition
+
+The block's layout tree, from the sidebar provider down to each view:
 
 ```text
 SidebarProvider

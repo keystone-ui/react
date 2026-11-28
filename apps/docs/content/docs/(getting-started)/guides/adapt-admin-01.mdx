@@ -1,0 +1,195 @@
+---
+title: Adapt admin-01 to your app
+description: Keep only the users view of the admin-01 block, give its table your own rows, or install its filter pills, sidebar or users view on their own.
+contentType: How-to
+---
+
+The [`admin-01`](/docs/blocks/admin-01) block installs a whole admin panel that reads fixture rows. This guide keeps one view, the users table, gives it your own rows, and installs the block's reusable parts without the rest of the panel. [Filter and table patterns](/docs/concepts/filter-and-table-patterns) explains how the tables behave.
+
+## Before you start
+
+You need:
+
+- `admin-01` installed (`npx shadcn@latest add https://keystoneui.io/r/admin-01.json`)
+- The block's [file list](/docs/blocks/admin-01#files), which says which files the users view imports
+
+## Keep only the users view
+
+`admin-page.tsx` wires every view together, so removing its imports and JSX isn't enough. It also calls `usePaymentsTable()`, restores and writes the payments filters in the URL, and opens on the `"overview"` section, falling back to it for a bare URL.
+
+<Steps>
+
+<Step>Write a users-only client component.</Step>
+
+Start the file with `"use client"`, because the installed `page.tsx` isn't a client component. The component calls `useUsersTable()` and renders `<AdminUsersTable table={…} onOpenUser={…} users={…} />`, passing the same rows the hook reads as `users`.
+
+<Step>Render it from the page.</Step>
+
+In `app/admin/page.tsx`, render your component in place of `AdminPage`.
+
+<Step>Delete the files of the other views.</Step>
+
+Remove the overview, payments, sidebar shell and page wiring files listed under [Files the other views add](/docs/blocks/admin-01#files-the-other-views-add). Without the page wiring you lose the URL sync and the record view for a user. Keep `use-url-state.ts` or `admin-user-detail.tsx` if your component wires them in.
+
+</Steps>
+
+## Give the users table your rows
+
+The rows come from one file, `mock-users.ts`, read in two places: `use-users-table.ts` passes them to `useDataTable`, and `admin-page.tsx` looks up the open user and passes the same rows to the table for its selection bar.
+
+<Steps>
+
+<Step>Pass your rows to the table hook.</Step>
+
+`use-users-table.ts` passes the fixture rows to `useDataTable`:
+
+```ts title="components/use-users-table.ts"
+import { type User, users } from "@/components/mock-users";
+import { useDataTable } from "@/components/use-data-table";
+
+export function useUsersTable() {
+  return useDataTable<User, UserFilters, FilterKey, UserSortKey, UserColumnId>({
+    // …
+    rows: users,
+    sortRows: sortUsers,
+  });
+}
+```
+
+Give the hook your rows instead, for example as a parameter:
+
+```ts title="components/use-users-table.ts"
+import type { User } from "@/components/mock-users";
+
+export function useUsersTable(rows: readonly User[]) {
+  return useDataTable<User, UserFilters, FilterKey, UserSortKey, UserColumnId>({
+    // …
+    rows,
+    sortRows: sortUsers,
+  });
+}
+```
+
+Its caller then becomes `useUsersTable(rows)`.
+
+Rows can change after mount. Different rows are a new answer even when the query hasn't changed, so a refetch shows up. Load the first rows before you render the table, or show your own loading state until they're there: started from an empty array, the table settles on its empty state until the rows arrive.
+
+Treat `rows` as immutable. Hand in a new array when the rows change, and replace an edited row object rather than mutating it. Rows are compared one by one, each by identity or by its own fields, so an array rebuilt inline each render is fine while its rows hold plain fields. [Use it with your data](/docs/blocks/users-01#use-it-with-your-data) on the `users-01` page covers rows that hold nested objects.
+
+<Step>Pass your rows to the table's `users` prop.</Step>
+
+`AdminUsersTable` takes a `users` prop, and its `UserSelectionBar` builds the rows for the Export and Copy ids actions from it, `users.filter((user) => selected.has(user.id))`. A selection outlives filters and pages, so it resolves ids against every row rather than the rows on show. In `admin-page.tsx`, pass your rows where it passes the fixture, `users={users}`. If you leave it, those two actions read the fixture.
+
+<Step>Point the user record at your rows.</Step>
+
+`admin-page.tsx` finds the open user, and their inviter, with `users.find`. Point both at your rows, or drop them with the page wiring in [Keep only the users view](#keep-only-the-users-view).
+
+</Steps>
+
+### Match the `User` shape
+
+Your rows must have the `User` shape from `mock-users.ts`. Keep `User`, `Role`, `Status` and `statusLabels` in that file, because the table, the filters and the record import them; only the `users` array is fixture. The table's columns read its fields, and so do the filters, sort and CSV in `admin-filters.ts`: `name` and `email` for search, and `role`, `status`, `seats`, `twoFactor` and `createdAt` for the pills. If your records differ, change `User`, the columns and those functions together.
+
+Change these 3 fixture details with them:
+
+- `createdAt` is a `YYYY-MM-DD` string, or `""` for none. The date filter compares it as text, so a timestamp or a `Date` needs converting first.
+- `TODAY` in `date-filter.ts` is a fixed date, so the date presets match the fixture. With live data it's `new Date()`.
+- `lastActive` is the text the table shows, such as `2 hours ago`. `sortUsers` parses that text back into minutes to sort it. With a timestamp, sort on the timestamp.
+
+[What `useDataTable` asks for](/docs/blocks/admin-01#what-usedatatable-asks-for) lists every field of the hook's config.
+
+## Replace the stand-in request
+
+The table filters, sorts and pages in the browser, and `useSimulatedFetch` stands in for a request. To filter, sort or page on the server, follow [Filter and page the users table on the server](/docs/guides/page-the-users-table-on-the-server). If you only want the filter row and not the table, [install the filter pills on their own](#install-the-filter-pills-on-their-own).
+
+## Install the filter pills on their own
+
+The filter row (`FilterTrigger`, `OptionPill`, `DateRangePill`, `AddFilterMenu`
+and the `usePillRow` hook) installs on its own, without the rest of the admin
+panel:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/filter-pills.json
+```
+
+It writes the same 4 files this block uses (`filter-trigger.tsx`,
+`pill-shell.tsx`, `filter-pills.tsx`, `drawer-parts.tsx`), so the two stay in
+step: the item is built from the block's source. The payments table's
+operator chip stays in the block, because it's written against payment fields.
+
+In an app that imports components from the `@keystoneui/react` package rather
+than copying them into `components/ui/`, install the package flavour instead.
+It has the same 4 files, importing `@keystoneui/react/*`:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/npm/filter-pills.json
+```
+
+It's tested with `@keystoneui/react` 1.0.0-beta.11. It needs a
+`components.json`: keep a valid one your app already has, or write the one
+[Apps that use the npm package](/docs/blocks/users-01#apps-that-use-the-npm-package)
+gives. Pick one flavour per app: both write the same file names with different
+imports.
+
+## Install the sidebar on its own
+
+The collapsible sidebar installs on its own, without the rest of the admin
+panel:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/sidebar.json
+```
+
+It writes the same `components/sidebar.tsx` the block uses, built from the
+same source. Use the full URL: the bare name `sidebar` selects shadcn's item,
+whose dependencies share paths with Keystone UI's files. A later `add` of
+`sidebar` or of `admin-01` offers to overwrite a `components/sidebar.tsx` you
+have edited; accepting discards your edits.
+
+The navigation itself is the block's content, so `admin-sidebar.tsx` and
+`admin-topbar.tsx` stay in `admin-01`. [The sidebar reference](/docs/reference/shadcn-sidebar)
+has a composition to start from, what the sidebar does and doesn't include,
+and the tokens it needs.
+
+The `sidebar` item is the vendored version: it imports your local
+Keystone UI components through the UI alias in `components.json` (normally
+`@/components/ui`). In an app that uses the `@keystoneui/react` package, install
+the package flavour instead, which writes the same file importing
+`@keystoneui/react/*`:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/npm/sidebar.json
+```
+
+It's tested with `@keystoneui/react` 1.0.0-beta.11 and needs a
+`components.json` ([Apps that use the npm package](/docs/blocks/users-01#apps-that-use-the-npm-package)
+gives one). It installs `@base-ui/react` unpinned: keep your
+`@base-ui/react` at the version `@keystoneui/react` pins.
+
+## Install the users view on its own
+
+The users section installs on its own as [`users-01`](/docs/blocks/users-01),
+without the sidebar, overview or payments. It brings the table, toolbar, filter
+pills, sort and column menus, selection bar, URL state and the record view for each user:
+
+```bash
+npx shadcn@latest add https://keystoneui.io/r/users-01.json
+```
+
+It installs the same files as `admin-01`, built from the same source, plus a
+`users-view.tsx` page shell. Installing both from the same release writes
+identical files to the same paths. If `admin-01` is already in your app from
+an earlier release, add it again together with `users-01`: the two share
+files, and the older `admin-page.tsx` doesn't pass the `users` prop that
+`AdminUsersTable` now takes.
+
+## Check that it works
+
+Open `/admin` (or the route that renders your users-only component). The table shows your rows, the pills filter them, and `Export` on a selection writes your records rather than the fixture's.
+
+## Related
+
+- [`admin-01` reference](/docs/blocks/admin-01)
+- [`users-01` reference](/docs/blocks/users-01)
+- [Filter and page the users table on the server](/docs/guides/page-the-users-table-on-the-server)
+- [Filter and table patterns](/docs/concepts/filter-and-table-patterns)

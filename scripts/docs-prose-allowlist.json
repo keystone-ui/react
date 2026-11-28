@@ -1,17 +1,5 @@
 [
   {
-    "file": "blocks/admin-01.mdx",
-    "rule": "banned-word",
-    "match": "simple pill",
-    "reason": "block term: a simple pill is a dimension and a value, as opposed to an operator pill"
-  },
-  {
-    "file": "blocks/admin-01.mdx",
-    "rule": "banned-word",
-    "match": "Simple filters",
-    "reason": "block term: introduces simple pills versus operator pills"
-  },
-  {
     "file": "components/date-picker.mdx",
     "rule": "banned-word",
     "match": "Quick picks",

@@ -1,0 +1,103 @@
+---
+title: Keep content clear of the bottom nav
+description: Reserve room for the bottom-nav-01 bar so the last row of a page and every focused control stay above it on phones.
+contentType: How-to
+---
+
+The [`bottom-nav-01`](/docs/blocks/bottom-nav-01) bar is fixed to the bottom of the screen below `md`, so it can cover the end of your page and any control the browser scrolls into view. The bar already adds a bottom scroll padding of its own ([Scroll padding the bar adds](/docs/blocks/bottom-nav-01#scroll-padding-the-bar-adds)). This guide adds the part that's yours: room at the end of the page, and the cases where your app sets its own offsets.
+
+## Before you start
+
+You need:
+
+- `bottom-nav-01` installed (`npx shadcn@latest add https://keystoneui.io/r/bottom-nav-01.json`)
+- The page's viewport opted in to safe-area insets, because `env(safe-area-inset-bottom)` is zero unless the viewport meta sets `viewport-fit=cover`. In Next.js, export `viewport = { viewportFit: "cover" }` from the root layout. [Fit the mobile viewport](/docs/guides/fit-the-mobile-viewport) has the details.
+
+## Reserve room at the end of the page
+
+The bar is exactly `--bottom-nav-height` tall (4rem, its top border included) plus the device's bottom safe area. The page keeps ordinary document scrolling, so Back returns a reader to where they were.
+
+Pad your `<main>` by that same height below `md`, so the last row ends above the bar:
+
+```tsx
+<main className="pb-[calc(var(--bottom-nav-height,4rem)+env(safe-area-inset-bottom))] md:pb-0 print:pb-0">
+  …
+</main>
+<BottomNav currentHref="/home" />
+```
+
+Padding alone still lets the browser scroll a keyboard-focused control to the bottom edge of the screen, under the bar. The scroll padding `BottomNav` renders covers that case.
+
+## Change the bar's height
+
+Set `--bottom-nav-height` on `:root`, where both the bar and its scroll-padding rule read it. An inner ancestor isn't enough, because `html` can't see it.
+
+## Move the rule into your stylesheet under a strict CSP
+
+If your app's Content-Security-Policy forbids inline styles (`style-src 'self'` without a nonce), the browser refuses the bar's `<style>` element. Until the rule is in your stylesheet, a keyboard-focused control can land under the bar.
+
+<Steps>
+
+<Step>Copy the rule into your app's global stylesheet.</Step>
+
+Use the rule from [Scroll padding the bar adds](/docs/blocks/bottom-nav-01#scroll-padding-the-bar-adds) as written.
+
+<Step>Remove the inline style from the component.</Step>
+
+In the installed `bottom-nav.tsx`, remove the `SCROLL_PADDING_CSS` constant, the `<style>` element that renders it, and the lint-suppression comment above the element.
+
+<Step>Return the `<nav>` directly.</Step>
+
+Remove the surrounding `<>` and `</>` so `BottomNav` returns `<nav>` directly, then format the file.
+
+</Steps>
+
+## Combine the bar's offset with your app's
+
+`scroll-padding-block-end` takes one winning value: the browser doesn't add your app's bottom offset and the bar's together. So the bar's rule can replace an offset of your app's, smaller or larger.
+
+- A page with a 160 px fixed toolbar that sets a 160 px bottom offset on `html` in `@layer base` gets the bar's 80 px instead while the document holds a bar. With `cacheComponents`, that includes a hidden bar kept alive from a page you left.
+- The other way round, a more specific declaration of your app's can defeat the bar's. `:root { scroll-padding: 72px 0 0; }` sets the bottom to zero, beats `html:where(…)`, and lets a focused field land under the bar.
+
+A page that only needs room under a header sets `scroll-padding-block-start`, not the `scroll-padding` shorthand. If your app also needs room at the bottom, declare it after any shorthand of its own and take the greater of its offset and the bar's:
+
+```css
+:root {
+  --page-end: 160px;
+  scroll-padding-block-end: var(--page-end);
+}
+
+@media screen and (width < 48rem) {
+  :root:where(:has([data-slot="bottom-nav"])) {
+    scroll-padding-block-end: max(
+      var(--page-end),
+      calc(var(--bottom-nav-height, 4rem) + env(safe-area-inset-bottom) + 1rem)
+    );
+  }
+}
+```
+
+## Give a form page with no header a start offset
+
+In WebKit, Shift+Tab back up a page of padded native inputs can stop with the focused input partly above the top of the screen, and the bar's bottom padding makes that happen on more fields. A form page with no start offset of its own (no sticky header to clear) should give itself a 1rem start offset.
+
+Mark the page's `<main data-headerless-form>` and add this rule to your app's stylesheet:
+
+```css
+@media screen and (width < 48rem) {
+  :where(html:has([data-headerless-form] input:focus)) {
+    scroll-padding-block-start: 1rem;
+  }
+}
+```
+
+The selector asks for focus inside the marked form, not only for the marker, so a form that a kept-alive route holds hidden can't switch the offset on for another page. This is your page's own rule, in your app's stylesheet: the block doesn't ship it. A form under a sticky header already has its start offset and leaves the marker off.
+
+## Check that it works
+
+Open the page at phone width and scroll to the end: the last row sits above the bar. Tab through the fields near the bottom: each focused field stops above the bar, not under it.
+
+## Related
+
+- [`bottom-nav-01` reference](/docs/blocks/bottom-nav-01)
+- [Fit the mobile viewport](/docs/guides/fit-the-mobile-viewport)
