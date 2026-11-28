@@ -6,6 +6,10 @@
  * itself with NEXT_PUBLIC_APP_URL. Set NEXT_PUBLIC_V0_URL to an empty string
  * to hide the button.
  *
+ * Tutorial demos (`tutorial-*`) are steps of a docs page, not registry
+ * items (scripts/sync-registry.mjs skips demos/tutorial), so they get no
+ * button.
+ *
  * Every component carries its base.css tokens inline as fallbacks
  * (`z-(--z-modal,50)`), because v0 loads no base.css — without them a modal
  * opened in v0 would have `z-index: auto`.
@@ -22,7 +26,7 @@ export function openInV0Href(
   }
 ): string | undefined {
   const v0Url = env.v0Url ?? DEFAULT_V0_URL;
-  if (v0Url === "") {
+  if (v0Url === "" || registryName.startsWith("tutorial-")) {
     return;
   }
   const appUrl = env.appUrl || DEFAULT_APP_URL;

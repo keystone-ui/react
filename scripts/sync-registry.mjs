@@ -283,7 +283,9 @@ function buildExampleItems(uiNames) {
     if (!statSync(full).isDirectory()) {
       return false;
     }
-    if (entry === "blocks") {
+    // Blocks are their own items. Tutorial demos are steps of a docs page
+    // (content/docs/(getting-started)/tutorials), not installable examples.
+    if (entry === "blocks" || entry === "tutorial") {
       return false;
     }
     return true;

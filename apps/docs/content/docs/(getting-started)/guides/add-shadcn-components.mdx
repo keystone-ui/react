@@ -1,0 +1,129 @@
+---
+title: Add shadcn components
+description: Install shadcn components beside Keystone UI so they resolve to Keystone UI's files, match your theme and avoid the toast collision.
+contentType: How-to
+---
+
+This guide adds components Keystone UI doesn't ship, such as charts and chat UI, from shadcn's registry. It keeps Keystone UI's files in place, makes shadcn's items match your theme and lines up mixed toolbars. [Keystone UI and shadcn](/docs/concepts/keystone-and-shadcn) explains why each step is needed.
+
+## Before you start
+
+You need Keystone UI installed through the registry ([Install from the registry](/docs/guides/install-from-the-registry)) and shadcn CLI 4.7 or later.
+
+## Check which base the project uses
+
+Before you copy a shadcn snippet, check whether the project is on Base UI or Radix. A Radix-era snippet uses `asChild`; rename it to `render` for Keystone UI and Base UI-era shadcn. `asChild` on a Base UI component is an unknown prop, so nothing warns you if you miss one.
+
+## Resolve dependencies to Keystone UI
+
+Bare names in `registryDependencies` resolve against shadcn's registry. Configure the `@keystone` namespace in `components.json`, as [Install from the registry](/docs/guides/install-from-the-registry#install-by-name-with-the-namespace) shows, so you can name Keystone UI's items. Then install them through the namespace:
+
+```bash
+npx shadcn@latest add @keystone/button
+```
+
+You can also declare registries in `package.json` instead of `components.json`; shadcn reads both and merges them.
+
+## Add a chart
+
+<Steps>
+
+<Step>Install shadcn's chart.</Step>
+
+Add the `chart` item from shadcn's registry:
+
+```bash
+npx shadcn@latest add chart
+```
+
+shadcn's `chart` item lists `card` as a registry dependency. That's harmless here: `shadcn add` skips files that already exist, so Keystone UI's [`Card`](/docs/components/card) stays.
+
+<Step>Carry over the 2 fixes from Keystone UI's blocks.</Step>
+
+Keystone UI's `dashboard-01` and `admin-01` blocks vendor this file with 2 changes that upstream doesn't have. Make the same edit to the chart container's classes:
+
+```diff
+- <div className="aspect-video ...">
++ <div className="aspect-auto min-w-0 ...">
+```
+
+- **`aspect-auto`, not `aspect-video`.** Under an explicit pixel height the upstream class still imposes a 462px floor, which overflows the row and gives the whole document a horizontal scrollbar.
+- **`min-w-0`.** A chart is usually a grid or flex child, and those default to `min-content`. Without it, a wide chart pushes its container open instead of shrinking.
+
+</Steps>
+
+## Add the sidebar
+
+Install Keystone UI's sidebar item by its full URL, not shadcn's `sidebar`. The [shadcn sidebar reference](/docs/reference/shadcn-sidebar#installation) has the command and explains why the bare name breaks Keystone UI's files.
+
+If you already ran `npx shadcn add sidebar`, delete the `--sidebar-*` block it injected into your CSS:
+
+<Callout type="warn">
+`npx shadcn add sidebar` appends **its own** `--sidebar-*` block to your CSS, with shadcn's neutral values hardcoded. Because it lands after Keystone UI's, it wins, and your sidebar renders neutral gray inside a slate app.
+
+**Delete the injected block.** It's the last `--sidebar-*` group in your `globals.css` after running the command.
+</Callout>
+
+Keystone UI's own `--sidebar-*` tokens are aliases of your theme tokens, so the sidebar follows the active theme. See [sidebar tokens](/docs/reference/theme-tokens#sidebar-tokens).
+
+## Keep Keystone UI's toast
+
+Use Keystone UI's `Toast`, and don't run `shadcn add toast`: shadcn's toast writes to the same `toast.tsx` path with a different API. If you already ran it, delete `toast.tsx` and reinstall Keystone UI's:
+
+```bash
+npx shadcn@latest add @keystone/toast
+```
+
+## Add chat and agent UI
+
+<Steps>
+
+<Step>Install the chat items after Keystone UI's components.</Step>
+
+Run the command **after** Keystone UI's components are installed, and never with `--overwrite`. The chat items depend on shadcn's `button` and its neighbours, and an existing Keystone UI file at the same path is what keeps them composing Keystone UI's Button rather than replacing it.
+
+```bash
+npx shadcn@latest add message-scroller message bubble attachment marker
+```
+
+<Step>Import shadcn's utilities.</Step>
+
+The chat items style themselves with utilities from `shadcn/tailwind.css`, which `shadcn init` imports. If your project started from `pnpm add @keystoneui/react@beta` instead, add it next to Keystone UI's stylesheet:
+
+```css title="globals.css"
+@import "tailwindcss";
+@import "shadcn/tailwind.css";
+@import "@keystoneui/react/base.css";
+```
+
+</Steps>
+
+## Line up a mixed toolbar
+
+Keystone UI's default controls are 40px tall, and shadcn's vary by style. Both libraries expose `sm` at 32px, so pass `size="sm"` to every control in a row that mixes the two.
+
+## Vendor base.css
+
+`@keystoneui/react/base.css` is the one runtime file a registry install still imports from the npm package. To drop the dependency, copy it into your project:
+
+```bash
+cp node_modules/@keystoneui/react/src/base.css src/styles/keystone-base.css
+```
+
+Then import the copy instead:
+
+```css
+@import "./styles/keystone-base.css";
+```
+
+You then own it: future fixes to motion tokens, popup layering or the [CSS utilities](/docs/reference/css-utilities) reach you only when you copy it again.
+
+## Check that it works
+
+Open `components/ui/button.tsx`. If it imports `radix-ui` or `cn`, it's shadcn's and a shadcn item replaced it; reinstall it with `npx shadcn@latest add https://keystoneui.io/r/button.json --overwrite`. Then render a shadcn component beside a Keystone UI one: both should use your theme's colors.
+
+## Related
+
+- [Keystone UI and shadcn](/docs/concepts/keystone-and-shadcn)
+- [shadcn sidebar reference](/docs/reference/shadcn-sidebar)
+- [Install from the registry](/docs/guides/install-from-the-registry)

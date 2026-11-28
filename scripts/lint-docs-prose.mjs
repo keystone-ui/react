@@ -8,6 +8,8 @@
  *   em-dash              "—", " -- " or a spaced " - " used as punctuation
  *   ellipsis             "..." (write "…")
  *   banned-word          easy, simple, simply, quick, just, very, really
+ *   us-spelling          British spellings (colour, behaviour, centre…); the
+ *                        docs and the CSS (`--color-*`) use American English
  *   the-user             "the user" or "one can" addressing the reader
  *   heading-case         Title Case in a Markdown heading (use sentence case)
  *   rhetorical-question  a heading or a prose sentence ending in "?"
@@ -55,6 +57,7 @@ export const RULE_IDS = [
   "em-dash",
   "ellipsis",
   "banned-word",
+  "us-spelling",
   "the-user",
   "heading-case",
   "rhetorical-question",
@@ -154,6 +157,30 @@ const EM_DASH_RE = /—| -- /g;
 const SPACED_HYPHEN_RE = / - /g;
 const ELLIPSIS_RE = /\.{3}/g;
 const BANNED_RE = /\b(?:easy|simple|simply|quick|just|very|really)\b/gi;
+// British spellings, with their American form. The docs follow the CSS
+// (`color`, `--color-*`), so prose and code read the same way.
+const US_SPELLING = new Map([
+  ["colour", "color"],
+  ["colours", "colors"],
+  ["coloured", "colored"],
+  ["behaviour", "behavior"],
+  ["behaviours", "behaviors"],
+  ["centre", "center"],
+  ["centred", "centered"],
+  ["favour", "favor"],
+  ["favourite", "favorite"],
+  ["grey", "gray"],
+  ["initialise", "initialize"],
+  ["customise", "customize"],
+  ["customised", "customized"],
+  ["optimise", "optimize"],
+  ["recognise", "recognize"],
+  ["licence", "license"],
+]);
+const US_SPELLING_RE = new RegExp(
+  `\\b(?:${[...US_SPELLING.keys()].join("|")})\\b`,
+  "gi"
+);
 const THE_USER_RE = /\b(?:the user|one can)\b/gi;
 const UNIT_RE = /\b\d+(?:KB|MB|GB|ms)\b/g;
 // A "?" closing a sentence. The text before it may be a masked link.
@@ -405,6 +432,21 @@ function checkBanned(text, line, out) {
   });
 }
 
+function checkUsSpelling(text, line, out) {
+  each(US_SPELLING_RE, text, (m) => {
+    const us = US_SPELLING.get(m[0].toLowerCase());
+    out.push(
+      finding(
+        line,
+        "us-spelling",
+        m.index,
+        m[0],
+        `"${m[0]}": the docs use American spelling ("${us}")`
+      )
+    );
+  });
+}
+
 function checkTheUser(text, line, out) {
   each(THE_USER_RE, text, (m) => {
     out.push(
@@ -617,6 +659,7 @@ export function lintProse(source, file = "", { properNouns = [] } = {}) {
       checkEmDash(text, line, out);
       checkEllipsis(text, line, out);
       checkBanned(text, line, out);
+      checkUsSpelling(text, line, out);
       checkTheUser(text, line, out);
       checkUnits(text, line, out);
       checkAnchors(l.text, l.raw, line, out);

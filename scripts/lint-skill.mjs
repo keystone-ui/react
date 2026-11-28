@@ -190,6 +190,7 @@ const countSurfaces = [
   "README.md",
   "apps/docs/content/docs/(getting-started)/agents/skills.mdx",
   "apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx",
+  "apps/docs/content/docs/(getting-started)/agents/mcp-tools.mdx",
 ];
 
 for (const file of countSurfaces) {
@@ -213,7 +214,7 @@ for (const file of countSurfaces) {
 // Every tool the MCP docs tabulate must exist, and its documented parameters
 // must match the registered schema. This is what the `category` omission was.
 const mcpServerDoc = read(
-  "apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx"
+  "apps/docs/content/docs/(getting-started)/agents/mcp-tools.mdx"
 );
 for (const name of toolNames) {
   const row = mcpServerDoc.match(
@@ -221,7 +222,7 @@ for (const name of toolNames) {
   );
   if (!row) {
     fail(
-      "apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx",
+      "apps/docs/content/docs/(getting-started)/agents/mcp-tools.mdx",
       `tool table has no row for \`${name}\``
     );
     continue;
@@ -234,7 +235,7 @@ for (const name of toolNames) {
   for (const key of keys) {
     if (!documented.includes(key)) {
       fail(
-        "apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx",
+        "apps/docs/content/docs/(getting-started)/agents/mcp-tools.mdx",
         `\`${name}\` accepts \`${key}\` but the tool table omits it`
       );
     }
@@ -347,7 +348,9 @@ for (const file of skillFiles.filter((f) => f.endsWith(".md"))) {
 // 6. The ASCII tree in skills.mdx matches the real directory.
 // ---------------------------------------------------------------------------
 const skillsDoc = readFileSync(join(AGENTS_DOCS, "skills.mdx"), "utf-8");
-const tree = skillsDoc.match(/```\nskills\/keystoneui-react\/\n([\s\S]*?)```/);
+const tree = skillsDoc.match(
+  /```(?:text)?\nskills\/keystoneui-react\/\n([\s\S]*?)```/
+);
 if (tree) {
   const documented = new Set(
     [...tree[1].matchAll(/[├└]──\s+([A-Za-z0-9._-]+)/g)].map((m) => m[1])

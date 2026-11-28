@@ -1,0 +1,165 @@
+---
+title: Server rendering and hydration
+description: Which Keystone UI parts are client components, what can cross the server boundary, and how live components keep the server HTML and the first client render identical.
+contentType: Conceptual
+---
+
+Keystone UI components render on the server and hydrate on the client. Most
+of them are client components, marked with a `"use client"` directive, so a
+React Server Component can render them but can't call their code. The
+components that show live values, such as RollingNumber, Countdown and
+FilterChips counts, are built so the server HTML and the first client render
+match exactly, which is what hydration requires. Inline values render only
+`<span>` elements, so they stay valid inside a paragraph.
+
+## The problem it solves
+
+Server rendering fails in 3 quiet ways. A Server Component calls a function
+from a client module and throws at render time. A component prints something
+on the server that differs on the client, such as a time, a locale-formatted
+number or a media query result, and React reports a hydration mismatch. A
+component renders a `<div>` inside a `<p>`, the HTML parser closes the
+paragraph early, and the browser's tree no longer matches the one React sent.
+None of these shows up in a client-only test.
+
+## How Keystone UI handles it
+
+Keystone marks its client boundaries per file, keeps functions out of the
+props that cross them, and makes live components print the same text on both
+sides.
+
+### Most parts are client components
+
+52 of the 64 component files in `packages/ui/src` start with `"use client"`,
+including every component with state or an interactive Base UI primitive:
+Button, Modal, Select, Tabs, RollingNumber and the rest. The package build keeps the
+directive at the top of each entry file that has one.
+
+12 files carry no directive: Alert, AspectRatio, Card, DescriptionList, Empty,
+Form, Item, Kbd, Pagination, Separator, Skeleton and Spinner. No directive
+does not make a file server-only. `form.tsx` re-exports parts from the client
+module `label.tsx`, and Item builds on Base UI's `useRender`. Spinner and
+Pagination are the ones documented to render from Server Components.
+
+### What crosses the boundary
+
+A Server Component can render a client component, such as `<Button>`, because
+React sends a reference to it. It can't call a function exported from a client
+module, because on the server that export is only a reference and calling it
+throws. `buttonVariants` is the common case: it lives in `button.tsx`, so it
+belongs in a client component.
+
+Pagination shows how Keystone works around this. Its page links need Button's
+classes, so `pagination.tsx` keeps its own copy of them instead of calling
+`buttonVariants`, and a unit test pins the two equal. A second test renders
+Pagination to a React Server Components payload in the registry's one-file
+layout, with every client module swapped for a reference that throws if
+called, then decodes and renders it as a client would.
+
+Props that cross the boundary must serialise, so functions can't:
+
+- **StringsProvider** takes plain-string overrides from a Server Component; a
+  dictionary that holds functions must be built in a `"use client"` file.
+- **Blocks** take data rather than callbacks, such as `format="money"` on a
+  dashboard panel, or an element (`icon: <Home />`) rather than a component.
+
+This page is a Server Component, and it passes StringsProvider a dictionary of
+plain strings:
+
+```tsx
+import { StringsProvider } from "@keystoneui/react/strings";
+
+<StringsProvider strings={{ modal: { close: "Fermer" } }}>
+  {children}
+</StringsProvider>
+```
+
+The overrides are plain strings, so they serialise. A function in the same
+object would be rejected.
+
+### The first client render matches the server
+
+Hydration compares the server HTML with the first client render. A component
+that reads the clock, the viewport or the runtime's default locale during
+render prints different text in each, so Keystone's live components avoid all
+3:
+
+- **RollingNumber** formats with `Intl.NumberFormat(locale, format)` and a
+  default `locale` of `en-US`, not the runtime's default, and nothing rolls on
+  hydration. A test hydrates a `de-DE` currency value with no warning and no
+  roll. Server and client still need Intl data that formats the locale the
+  same way.
+- **Countdown** renders `--` placeholders on the server and during hydration,
+  without reading the clock, then shows the live value. It stores its value in
+  `useSyncExternalStore` with a server snapshot. Its `target` is an absolute
+  instant, so a prerendered page passes a serialised deadline rather than
+  computing one during render.
+- **FilterChips** prints a count as `String(count)` by default, the same on
+  both sides. A `formatCount` you pass has to be as deterministic, for
+  example a formatter with a fixed locale. The chips' Tab stops are also the
+  same on the server and the first client render.
+- **useMediaQuery** reports `false` on the server, where no viewport exists,
+  and React reconciles after hydration without a warning. A layout that must be
+  right in the first paint belongs in CSS.
+
+Countdown and RollingNumber also set `text-rendering: geometricPrecision`.
+Where text is hinted, mixing renderings moved digits by a pixel between the
+server HTML and the hydrated value.
+
+### Inline values render phrasing content
+
+A number or a countdown can sit inside a sentence. HTML allows only
+phrasing content, such as `<span>`, inside a `<p>`, and a parser that meets a
+`<div>` there closes the paragraph first. The server HTML then parses into a
+different tree from the one React rendered, and hydration fails. RollingNumber
+and Countdown render a `<span>` root with only `<span>` elements inside, and a
+Countdown test asserts that no other tag appears, so both are safe in running
+text:
+
+```tsx
+import { Countdown } from "@keystoneui/react/countdown";
+
+<p>
+  The offer ends in <Countdown target={endsAt} />.
+</p>
+```
+
+## Trade-offs
+
+Marking most components `"use client"` keeps their state and Base UI
+behavior working everywhere, at the cost of shipping their code to the
+browser. The few directive-free components are not a promise that any
+directive-free component works in a Server Component.
+
+The Pagination server test covers the registry layout, where each component
+is its own file. It does not cover an npm install, whose build puts Button's
+code in a shared chunk without the directive, nor Next.js's own bundler.
+
+Placeholders trade a first-paint value for a correct hydration. A Countdown
+shows `--` until the client takes over, and stays that way with JavaScript
+off.
+
+## What this means for your code
+
+- Render client components such as Button from a Server Component, and call
+  functions such as `buttonVariants` only in a `"use client"` file. Of the
+  directive-free components, only Spinner and Pagination are documented for
+  Server Components.
+- Pass data, strings and elements across the boundary, never functions.
+- Pass an explicit `locale` and deterministic formatters to anything that
+  formats numbers or dates, and the same values on both sides.
+- Compute deadlines and other time-based values outside render, and send them
+  to the page as serialised values.
+- Express viewport-dependent layout in CSS when it must be right before
+  hydration.
+
+## Related
+
+- [Rolling number](/docs/components/rolling-number)
+- [Countdown](/docs/components/countdown)
+- [Filter chips](/docs/components/filter-chips)
+- [Strings](/docs/components/strings)
+- [Pagination](/docs/components/pagination)
+- [Button](/docs/components/button)
+- [Select](/docs/components/select)
+- [Accessibility](/docs/concepts/accessibility)

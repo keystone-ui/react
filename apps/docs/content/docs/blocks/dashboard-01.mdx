@@ -13,7 +13,7 @@ npx shadcn@latest add https://keystoneui.io/r/dashboard-01.json
 
 - **KPI row** using [`StatValue`](/docs/components/stat) and `StatDelta`, where the tone comes from what the metric *means*. The bounce-rate tile is `down-is-good`, so a fall renders green — with a down arrow.
 - **Stacked revenue chart** with a legend you can switch series off in. Hidden series stay listed and struck through, and the last visible one refuses to switch off.
-- **Sessions area chart** sharing the same chart layer and colour ramp.
+- **Sessions area chart** sharing the same chart layer and color ramp.
 - **Sortable, paginated table** in a [`Card`](/docs/components/card), with three-state sorting and [`TablePagination`](/docs/components/table-pagination) — the same rows-per-page footer [`tickets-01`](/docs/blocks/tickets-01) uses.
 - **Charts respect reduced motion** — which a stylesheet cannot do on its own.
 - **An accessible info tip** in the header, with its text in the accessibility tree whether or not the tooltip is open.
@@ -26,7 +26,7 @@ Two changes from upstream shadcn are load-bearing, and both are commented in the
 
 `ChartLegend` is dropped from the port. The block ships its own toggleable legend, so recharts' `<Legend>` never mounts — leaving the dead path in would mean two legends to choose between.
 
-## One place decides a series' colour
+## One place decides a series' color
 
 ```tsx
 export function seriesColor(item: SeriesDef, index: number): string {
@@ -41,7 +41,7 @@ Both the mark and the legend swatch resolve through this, so they cannot disagre
 
 The `token` escape hatch matters. The "Other" band is `var(--muted-foreground)`, not a ramp slot: it is a fold of everything too small to name, and giving it a categorical hue would claim a channel that does not exist.
 
-The ramp itself ([`--chart-1` … `--chart-5`](/docs/theming/customization)) separates by **lightness**, which every form of colour blindness preserves, rather than by hue, which none of them do.
+The ramp itself ([`--chart-1` … `--chart-5`](/docs/reference/theme-tokens#chart-tokens)) separates by **lightness**, which every form of color blindness preserves, rather than by hue, which none of them do.
 
 ## The page header is three utilities, not a component
 

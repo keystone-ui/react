@@ -189,4 +189,4 @@ registries install to the same path** (`components/ui/`). A block that means to
 pull Keystone's `button` but says `"button"` will quietly fetch shadcn's and
 overwrite the file — and shadcn's Button sits on a different control-height
 tier, so the result is a visibly mismatched toolbar rather than an error. See
-the interop guide at `https://keystoneui.io/docs/interop`.
+the guide at `https://keystoneui.io/docs/concepts/keystone-and-shadcn`.

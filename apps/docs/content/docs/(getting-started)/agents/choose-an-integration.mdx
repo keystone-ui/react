@@ -1,0 +1,53 @@
+---
+title: Choose an integration
+description: How the MCP server, the agent skill, AGENTS.md and llms.txt differ, so you can pick how your AI assistant learns Keystone UI.
+contentType: Conceptual
+---
+
+Keystone UI reaches AI assistants in 4 ways: a live MCP server, an installable agent skill, an `AGENTS.md` file in your project and the llms.txt files on this site. They differ in how they install, whether they work offline, how they stay current and how much they cover. Most projects need one; the MCP server and the skill also work together.
+
+## The 4 options
+
+Each option suits a different setup:
+
+- **[MCP server](/docs/agents/mcp-server)**: your editor runs a local tool that looks up components, examples and install commands from the registry on demand. It needs network access and a client that speaks MCP.
+- **[Agent skill](/docs/agents/skills)**: files your assistant loads when a task involves Keystone UI, with the conventions as do and don't rules. It suits power users of Claude Code, Cursor, OpenCode, Codex or Gemini CLI.
+- **[AGENTS.md](/docs/agents/agents-md)**: one Markdown file in your project, read by any tool that reads project files. It works offline after download and has no dependencies, which suits projects that want AI context without installing skills or pointing to external URLs.
+- **[llms.txt](/docs/agents/llms-txt)**: the full docs as plain text at a URL. Any AI tool that can fetch or take pasted text can use it.
+
+## Compared side by side
+
+The options trade depth against setup:
+
+| Feature | AGENTS.md | [Agent Skills](/docs/agents/skills) | [LLMs.txt](/docs/agents/llms-txt) |
+|---|---|---|---|
+| Install method | `curl` one file | `curl` or `npx skills add` | Point to URL |
+| Works offline | Yes | Partially (scripts need network) | No |
+| Live updates | Re-run curl | Re-install skill | Always current |
+| Depth | Overview + component list | Full guide + scripts | Full documentation |
+| Best for | Quick setup | Power users | Any AI tool |
+
+## llms.txt
+
+The llms.txt endpoints are generated from the same MDX files that render this docs site. The pipeline:
+
+1. reads the raw MDX content from disk
+2. replaces each interactive `<ComponentPreview>` tag with the demo's source code
+3. strips the remaining UI-only component tags
+4. wraps the result with metadata (title, URL, description)
+5. returns plain text
+
+So every code example in the output is **real, executable code**: the same code that renders in the interactive previews on this site.
+
+All llms.txt endpoints are cached at the CDN:
+
+- **fresh for 1 hour** (`s-maxage=3600`)
+- **stale-while-revalidate for 24 hours** (`stale-while-revalidate=86400`)
+- **regenerated on each deployment**
+
+After a deployment, the first request regenerates the content, then the CDN serves cached versions.
+
+## Related
+
+- [How the MCP server works](/docs/agents/how-mcp-works)
+- [Use llms.txt](/docs/agents/llms-txt)

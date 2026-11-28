@@ -1,20 +1,5 @@
 [
   {
-    "rule": "heading-case",
-    "match": "Quick Start",
-    "reason": "matches the Quick Start page title until that page is renamed"
-  },
-  {
-    "rule": "banned-word",
-    "match": "Quick Start",
-    "reason": "matches the Quick Start page title until that page is renamed"
-  },
-  {
-    "rule": "banned-word",
-    "match": "quick start guide",
-    "reason": "names the Quick Start page until that page is renamed"
-  },
-  {
     "file": "blocks/admin-01.mdx",
     "rule": "banned-word",
     "match": "simple pill",
@@ -67,17 +52,5 @@
     "rule": "the-user",
     "match": "the user",
     "reason": "the end user of the app picking a chip"
-  },
-  {
-    "file": "(getting-started)/agents/mcp-server.mdx",
-    "rule": "rhetorical-question",
-    "match": "What form components does Keystone UI have?",
-    "reason": "an example prompt the reader types to an agent, not a rhetorical question"
-  },
-  {
-    "file": "(getting-started)/agents/mcp-server.mdx",
-    "rule": "rhetorical-question",
-    "match": "How do I set up Keystone UI CSS?",
-    "reason": "an example prompt the reader types to an agent, not a rhetorical question"
   }
 ]

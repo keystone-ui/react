@@ -206,7 +206,7 @@ The remove button is 24px (`icon-xs`), the WCAG 2.2 AA minimum; in touch-first l
 
 ## Events
 
-Consumer handlers run before the component's own. Calling `preventDefault()` or Base UI's `preventBaseUIHandler()` on the event cancels the built-in behaviour as follows:
+Consumer handlers run before the component's own. Calling `preventDefault()` or Base UI's `preventBaseUIHandler()` on the event cancels the built-in behavior as follows:
 
 | Event | Part | `preventDefault()` | `preventBaseUIHandler()` |
 | --- | --- | --- | --- |
@@ -339,7 +339,7 @@ Renders as in the Status and progress table; the value always comes from the row
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `color` | `Progress` colours | `Progress`'s, `"destructive"` on error | Yours wins over the error default. |
+| `color` | `Progress` colors | `Progress`'s, `"destructive"` on error | Yours wins over the error default. |
 | `aria-label` | `string` | `messages.progressLabel(name)` | The bar's name. |
 | `locale` / `format` / `getAriaValueText` | as `Progress` | - | Localise the value text, including the indeterminate state. |
 | `...props` | `Progress` props except `value`, `min` and `max` | - | |

@@ -1,6 +1,7 @@
 import type { StructuredData } from "fumadocs-core/mdx-plugins";
 import { createFromSource } from "fumadocs-core/search/server";
 import type { ContentType } from "@/lib/content-types";
+import { rankResults, type SearchResult } from "@/lib/search-rank";
 import { searchTag } from "@/lib/search-tag";
 import { source } from "@/lib/source";
 
@@ -12,7 +13,7 @@ interface IndexedPageData {
   title?: string;
 }
 
-export const { GET } = createFromSource(source, {
+const api = createFromSource(source, {
   async buildIndex(page) {
     const data = page.data as IndexedPageData;
     // Same lookup as fumadocs' default index: lazily loaded pages only
@@ -32,3 +33,24 @@ export const { GET } = createFromSource(source, {
     };
   },
 });
+
+// The search returns page groups in index order, so ask for enough
+// candidates to rank (lib/search-rank.ts), then return the requested number.
+const CANDIDATES = 600;
+const DEFAULT_LIMIT = 60;
+
+export async function GET(request: Request): Promise<Response> {
+  const params = new URL(request.url).searchParams;
+  const query = params.get("query");
+  if (!query) {
+    return Response.json([]);
+  }
+  const requested = Number(params.get("limit"));
+  const limit =
+    Number.isInteger(requested) && requested > 0 ? requested : DEFAULT_LIMIT;
+  const results = (await api.search(query, {
+    tag: params.get("tag")?.split(","),
+    limit: CANDIDATES,
+  })) as SearchResult[];
+  return Response.json(rankResults(results, query, limit));
+}

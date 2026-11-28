@@ -1,0 +1,53 @@
+---
+title: Architecture
+description: Why every Keystone UI component is one file with its own subpath export, and what the library is built on.
+contentType: Conceptual
+---
+
+Keystone UI uses a flat, single-file component architecture. Every component is one `.tsx` file with no nested directories, and each file is its own entry point in the package. That shape decides how you import components, what ends up in your bundle and how a registry install copies them into your project.
+
+## One subpath per component
+
+You import each component from its own subpath:
+
+```tsx
+import { Button } from "@keystoneui/react/button";
+import { Input } from "@keystoneui/react/input";
+import { Card, CardHeader, CardTitle, CardContent } from "@keystoneui/react/card";
+```
+
+A compound component exports each part by name from the same subpath:
+
+```tsx
+import { Button } from "@keystoneui/react/button";
+import { Badge } from "@keystoneui/react/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@keystoneui/react/tabs";
+```
+
+<Callout type="warn">
+  There is no barrel export (`@keystoneui/react`). Always use the subpath import
+  pattern shown above.
+</Callout>
+
+## What the subpaths buy you
+
+Subpath exports make the package tree-shakeable by construction: you ship only the components you import. The package is ESM-only, and only its CSS files have side effects. Because each component is one file, the registry can install it into your project as one file.
+
+## What it's built on
+
+Each layer of a component comes from one library:
+
+| Technology | Purpose |
+| --- | --- |
+| [Base UI](https://base-ui.com) | Unstyled accessible primitives |
+| [Tailwind CSS v4](https://tailwindcss.com) | Utility-first styling |
+| [CVA](https://cva.style) | Variant management |
+| [Lucide React](https://lucide.dev) | Icon library |
+
+Base UI supplies the behavior: ARIA support, keyboard navigation and screen reader semantics. Tailwind CSS v4 supplies the styling, configured in CSS with OKLCH color tokens and custom variants; [Theming](/docs/concepts/theming) covers the tokens. Every component is typed, and its prop types are exported.
+
+## Related
+
+- [Install Keystone UI](/docs/installation)
+- [Theming](/docs/concepts/theming)
+- [Keystone UI and shadcn](/docs/concepts/keystone-and-shadcn)

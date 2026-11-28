@@ -1,0 +1,11 @@
+{
+  "title": "Reference",
+  "icon": "BookMarked",
+  "pages": [
+    "theme-tokens",
+    "colors",
+    "base-css",
+    "css-utilities",
+    "shadcn-sidebar"
+  ]
+}

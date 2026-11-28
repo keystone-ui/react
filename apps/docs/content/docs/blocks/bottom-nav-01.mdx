@@ -11,10 +11,10 @@ npx shadcn@latest add https://keystoneui.io/r/bottom-nav-01.json
 
 ## Features
 
-- Real links: a `<nav aria-label>` holding a list of `<a href>`s, each with an icon and a visible text label. The current one carries `aria-current="page"` and gets a filled pill behind its icon, so the current page is not marked by colour alone.
+- Real links: a `<nav aria-label>` holding a list of `<a href>`s, each with an icon and a visible text label. The current one carries `aria-current="page"` and gets a filled pill behind its icon, so the current page is not marked by color alone.
 - Each link fills one of five equal cells and is at least 44 px tall, so with 200% text on a 320 px screen every link still sits inside the screen and a tap on its edge reaches it, not its neighbour; a label that no longer fits is cut short with an ellipsis and keeps its full accessible name. The keyboard focus outline is drawn inward so the bar's edge cannot clip it.
 - Fixed to the bottom of the viewport and layered with the `--z-sticky` token. In print, `md:hidden` still applies to the print layout's width (the paper less its margins): when that width reaches `md` (768 CSS px) the bar is left out, as on a desktop; below it the bar prints once, in normal flow where it sits (`print:static`), not over every page.
-- Hidden from `md` up. On a wider screen the same destinations belong in a sidebar: the [sidebar item](/docs/interop#the-sidebar-item) from `admin-01` is one.
+- Hidden from `md` up. On a wider screen the same destinations belong in a sidebar: the [sidebar item](/docs/reference/shadcn-sidebar) from `admin-01` is one.
 - Takes `items`, `currentHref` and a `label` for the `<nav>` (default `"Main"`). No router dependency: pass the current path from your router, and swap the `<a>` for your router's link component if it renders an `<a>`.
 - An item's `icon` is an element (`icon: <Home />`), not the component (`icon: Home`): the installed page is a Server Component and `BottomNav` a Client Component, and an element can cross that boundary while a component function cannot.
 - A positive `count` on an item shows a [Badge](/docs/components/badge) over its icon (99+ above 99); `0` or no count shows nothing. The badge itself is hidden from assistive technology; `countLabel` (for example `"3 unread"`) is read after the label instead, so the link is announced as "Inbox (3 unread)".
