@@ -1,6 +1,7 @@
 ---
 title: Slider
-description: Range slider input for selecting a numeric value within a defined range.
+description: A draggable control for picking a number, or a range of numbers, between a minimum and a maximum.
+contentType: Reference
 ---
 
 <ComponentPreview name="slider-default" />
@@ -48,6 +49,8 @@ import {
 } from "@keystoneui/react/slider";
 ```
 
+Nest the track, indicator and thumb inside `SliderControl`:
+
 ```tsx
 <Slider className="max-w-sm" defaultValue={25}>
   <SliderControl>
@@ -72,42 +75,39 @@ Slider
 
 ## Examples
 
-### With Label
+### With label
 
-Display the current value alongside the slider:
+A label with the current value shown beside it.
 
 <ComponentPreview name="slider-with-label" />
 
-
 ### Range
 
-A dual-thumb slider for selecting a range of values:
+Two thumbs select a range of values.
 
 <ComponentPreview name="slider-range" />
 
-
 ### Disabled
+
+A slider with `disabled` set.
 
 <ComponentPreview name="slider-disabled" />
 
-
 ### Controlled
 
-Controlled slider with value display:
+A slider whose value lives in React state and is shown beside it.
 
 <ComponentPreview name="slider-controlled" />
 
+### Custom step
 
-### Custom Step
-
-Slider with custom step values:
+A slider that moves in steps larger than `1`.
 
 <ComponentPreview name="slider-custom-step" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 

@@ -1,6 +1,7 @@
 ---
 title: Checkbox
-description: A toggle control for binary choices, supporting checked, unchecked, and indeterminate states.
+description: A box that is checked or unchecked for a yes-or-no choice, with an indeterminate state for partial selections.
+contentType: Reference
 ---
 
 <ComponentPreview name="checkbox-default" />
@@ -43,19 +44,17 @@ import { Checkbox } from "@keystoneui/react/checkbox";
 
 ## Examples
 
-### With Description
+### With description
 
-Use Field components for labels and helper text:
+A `Field` adds a label and helper text to the checkbox.
 
 <ComponentPreview name="checkbox-with-description" />
 
-
 ### Group
 
-Multiple checkboxes in a fieldset:
+Several checkboxes grouped in a fieldset.
 
 <ComponentPreview name="checkbox-group" />
-
 
 ### Disabled
 
@@ -63,24 +62,21 @@ The label dims with the checkbox because it is a `FieldLabel` inside `<Field dat
 
 <ComponentPreview name="checkbox-disabled" />
 
+### Pill group
 
-### Pill Group
-
-Pill-style checkboxes with animated check indicator that slides in from the left:
+Pill-shaped checkboxes whose check indicator slides in from the left.
 
 <ComponentPreview name="checkbox-pill-group" />
 
-
 ### Controlled
 
-Controlled checkbox with state management:
+A checkbox whose checked state lives in React state.
 
 <ComponentPreview name="checkbox-controlled" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 

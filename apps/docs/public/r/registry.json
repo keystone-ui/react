@@ -112,7 +112,7 @@
           "muted-foreground": "oklch(0.552 0.016 285.938)",
           "accent": "oklch(0.967 0.001 286.375)",
           "accent-foreground": "oklch(0.21 0.006 285.885)",
-          "destructive": "oklch(0.577 0.245 27.325)",
+          "destructive": "oklch(0.54 0.245 27.325)",
           "destructive-foreground": "oklch(0.971 0.013 17.38)",
           "border": "oklch(0.92 0.004 286.32)",
           "border-muted": "oklch(0.92 0.004 286.32 / 0.5)",
@@ -159,7 +159,7 @@
           "accent": "oklch(0.274 0.006 286.033)",
           "accent-foreground": "oklch(0.985 0 0)",
           "destructive": "oklch(0.704 0.191 22.216)",
-          "destructive-foreground": "oklch(0.971 0.013 17.38)",
+          "destructive-foreground": "oklch(0.258 0.092 26.042)",
           "border": "oklch(1 0 0 / 10%)",
           "border-muted": "oklch(1 0 0 / 5%)",
           "popup-ring": "oklch(1 0 0 / 3%)",
@@ -206,7 +206,7 @@
           "muted-foreground": "oklch(0.552 0.016 285.938)",
           "accent": "oklch(0.967 0.001 286.375)",
           "accent-foreground": "oklch(0.21 0.006 285.885)",
-          "destructive": "oklch(0.577 0.245 27.325)",
+          "destructive": "oklch(0.54 0.245 27.325)",
           "destructive-foreground": "oklch(0.971 0.013 17.38)",
           "border": "oklch(0.92 0.004 286.32)",
           "border-muted": "oklch(0.92 0.004 286.32 / 0.5)",
@@ -234,7 +234,7 @@
           "accent": "oklch(0.274 0.006 286.033)",
           "accent-foreground": "oklch(0.985 0 0)",
           "destructive": "oklch(0.704 0.191 22.216)",
-          "destructive-foreground": "oklch(0.971 0.013 17.38)",
+          "destructive-foreground": "oklch(0.258 0.092 26.042)",
           "border": "oklch(1 0 0 / 10%)",
           "border-muted": "oklch(1 0 0 / 5%)",
           "popup-ring": "oklch(1 0 0 / 3%)",
@@ -269,7 +269,7 @@
           "muted-foreground": "oklch(0.551 0.027 264.364)",
           "accent": "oklch(0.967 0.003 264.542)",
           "accent-foreground": "oklch(0.21 0.034 264.665)",
-          "destructive": "oklch(0.577 0.245 27.325)",
+          "destructive": "oklch(0.54 0.245 27.325)",
           "destructive-foreground": "oklch(0.971 0.013 17.38)",
           "border": "oklch(0.928 0.006 264.531)",
           "border-muted": "oklch(0.928 0.006 264.531 / 0.5)",
@@ -297,7 +297,7 @@
           "accent": "oklch(0.278 0.033 256.848)",
           "accent-foreground": "oklch(0.985 0.002 247.839)",
           "destructive": "oklch(0.704 0.191 22.216)",
-          "destructive-foreground": "oklch(0.971 0.013 17.38)",
+          "destructive-foreground": "oklch(0.258 0.092 26.042)",
           "border": "oklch(1 0 0 / 10%)",
           "border-muted": "oklch(1 0 0 / 5%)",
           "popup-ring": "oklch(1 0 0 / 3%)",
@@ -332,7 +332,7 @@
           "muted-foreground": "oklch(0.556 0 0)",
           "accent": "oklch(0.97 0 0)",
           "accent-foreground": "oklch(0.205 0 0)",
-          "destructive": "oklch(0.577 0.245 27.325)",
+          "destructive": "oklch(0.54 0.245 27.325)",
           "destructive-foreground": "oklch(0.971 0.013 17.38)",
           "border": "oklch(0.922 0 0)",
           "border-muted": "oklch(0.922 0 0 / 0.5)",
@@ -360,7 +360,7 @@
           "accent": "oklch(0.269 0 0)",
           "accent-foreground": "oklch(0.985 0 0)",
           "destructive": "oklch(0.704 0.191 22.216)",
-          "destructive-foreground": "oklch(0.971 0.013 17.38)",
+          "destructive-foreground": "oklch(0.258 0.092 26.042)",
           "border": "oklch(1 0 0 / 10%)",
           "border-muted": "oklch(1 0 0 / 5%)",
           "popup-ring": "oklch(1 0 0 / 3%)",
@@ -395,7 +395,7 @@
           "muted-foreground": "oklch(0.554 0.046 257.417)",
           "accent": "oklch(0.968 0.007 247.896)",
           "accent-foreground": "oklch(0.208 0.042 265.755)",
-          "destructive": "oklch(0.577 0.245 27.325)",
+          "destructive": "oklch(0.54 0.245 27.325)",
           "destructive-foreground": "oklch(0.971 0.013 17.38)",
           "border": "oklch(0.929 0.013 255.508)",
           "border-muted": "oklch(0.929 0.013 255.508 / 0.5)",
@@ -423,7 +423,7 @@
           "accent": "oklch(0.279 0.041 260.031)",
           "accent-foreground": "oklch(0.984 0.003 247.858)",
           "destructive": "oklch(0.704 0.191 22.216)",
-          "destructive-foreground": "oklch(0.971 0.013 17.38)",
+          "destructive-foreground": "oklch(0.258 0.092 26.042)",
           "border": "oklch(1 0 0 / 10%)",
           "border-muted": "oklch(1 0 0 / 5%)",
           "popup-ring": "oklch(1 0 0 / 3%)",
@@ -458,7 +458,7 @@
           "muted-foreground": "oklch(0.553 0.013 58.071)",
           "accent": "oklch(0.97 0.001 106.424)",
           "accent-foreground": "oklch(0.216 0.006 56.043)",
-          "destructive": "oklch(0.577 0.245 27.325)",
+          "destructive": "oklch(0.54 0.245 27.325)",
           "destructive-foreground": "oklch(0.971 0.013 17.38)",
           "border": "oklch(0.923 0.003 48.717)",
           "border-muted": "oklch(0.923 0.003 48.717 / 0.5)",
@@ -486,7 +486,7 @@
           "accent": "oklch(0.268 0.007 34.298)",
           "accent-foreground": "oklch(0.985 0.001 106.423)",
           "destructive": "oklch(0.704 0.191 22.216)",
-          "destructive-foreground": "oklch(0.971 0.013 17.38)",
+          "destructive-foreground": "oklch(0.258 0.092 26.042)",
           "border": "oklch(1 0 0 / 10%)",
           "border-muted": "oklch(1 0 0 / 5%)",
           "popup-ring": "oklch(1 0 0 / 3%)",
@@ -521,7 +521,7 @@
           "muted-foreground": "oklch(0.552 0.016 285.938)",
           "accent": "oklch(0.967 0.001 286.375)",
           "accent-foreground": "oklch(0.21 0.006 285.885)",
-          "destructive": "oklch(0.577 0.245 27.325)",
+          "destructive": "oklch(0.54 0.245 27.325)",
           "destructive-foreground": "oklch(0.971 0.013 17.38)",
           "border": "oklch(0.92 0.004 286.32)",
           "border-muted": "oklch(0.92 0.004 286.32 / 0.5)",
@@ -549,7 +549,7 @@
           "accent": "oklch(0.274 0.006 286.033)",
           "accent-foreground": "oklch(0.985 0 0)",
           "destructive": "oklch(0.704 0.191 22.216)",
-          "destructive-foreground": "oklch(0.971 0.013 17.38)",
+          "destructive-foreground": "oklch(0.258 0.092 26.042)",
           "border": "oklch(1 0 0 / 10%)",
           "border-muted": "oklch(1 0 0 / 5%)",
           "popup-ring": "oklch(1 0 0 / 3%)",
@@ -610,7 +610,7 @@
       "name": "alert-dialog",
       "type": "registry:ui",
       "title": "Alert Dialog",
-      "description": "Modal confirmation dialog for destructive or irreversible actions requiring user acknowledgement.",
+      "description": "A modal dialog that asks for confirmation before a destructive or irreversible action runs.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -645,7 +645,7 @@
       "name": "badge",
       "type": "registry:ui",
       "title": "Badge",
-      "description": "Small status indicator or count label for highlighting categories, statuses, or counts.",
+      "description": "A small label that marks a status, a category or a count.",
       "dependencies": [
         "@base-ui/react",
         "class-variance-authority"
@@ -759,7 +759,7 @@
       "name": "alert",
       "type": "registry:ui",
       "title": "Alert",
-      "description": "Prominent message banner for displaying important information, warnings, or errors to users.",
+      "description": "A banner that shows an important message, such as a warning, an error or a confirmation, inline on the page.",
       "dependencies": [
         "class-variance-authority"
       ],
@@ -791,7 +791,7 @@
       "name": "circular-progress",
       "type": "registry:ui",
       "title": "Circular Progress",
-      "description": "Circular progress indicator for showing completion percentage in a ring format.",
+      "description": "A ring that shows how far a task has progressed, as a percentage.",
       "dependencies": [
         "@base-ui/react",
         "class-variance-authority"
@@ -808,7 +808,7 @@
       "name": "checkbox",
       "type": "registry:ui",
       "title": "Checkbox",
-      "description": "A toggle control for binary choices, supporting checked, unchecked, and indeterminate states.",
+      "description": "A box that is checked or unchecked for a yes-or-no choice, with an indeterminate state for partial selections.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -840,7 +840,7 @@
       "name": "combobox",
       "type": "registry:ui",
       "title": "Combobox",
-      "description": "Searchable dropdown with autocomplete for filtering and selecting from a list of options.",
+      "description": "A text input that filters a list of options as you type, for picking one value or several.",
       "dependencies": [
         "@base-ui/react",
         "lucide-react"
@@ -861,7 +861,7 @@
       "name": "command",
       "type": "registry:ui",
       "title": "Command",
-      "description": "A searchable command menu for quick actions, navigation, and filtering.",
+      "description": "A searchable menu of commands, inline or in a dialog, that you filter by typing and run from the keyboard.",
       "dependencies": [
         "cmdk",
         "lucide-react"
@@ -882,7 +882,7 @@
       "name": "date-input",
       "type": "registry:ui",
       "title": "Date Input",
-      "description": "Date picker input field for selecting dates with keyboard and calendar support.",
+      "description": "A native date input, typed with the keyboard, with a button that opens the browser's date picker.",
       "registryDependencies": [
         "https://keystoneui.io/r/input-group.json"
       ],
@@ -911,7 +911,7 @@
       "name": "drawer",
       "type": "registry:ui",
       "title": "Drawer",
-      "description": "Slide-out panel that emerges from screen edges for supplementary content or navigation.",
+      "description": "A panel that slides in from an edge of the screen to hold secondary content, filters or navigation.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -943,7 +943,7 @@
       "name": "dropdown-menu",
       "type": "registry:ui",
       "title": "Dropdown Menu",
-      "description": "Contextual menu triggered by a button, with support for items, separators, and sub-menus.",
+      "description": "A menu of actions or options that opens from a button, with groups, checkbox and radio items, and submenus.",
       "dependencies": [
         "@base-ui/react",
         "lucide-react"
@@ -963,7 +963,7 @@
       "name": "field",
       "type": "registry:ui",
       "title": "Field",
-      "description": "Form field wrapper that provides a label, description, and error message around a form control.",
+      "description": "Wraps a form control with its label, description and error message, and groups fields into fieldsets.",
       "registryDependencies": [
         "https://keystoneui.io/r/label.json",
         "https://keystoneui.io/r/separator.json"
@@ -980,7 +980,7 @@
       "name": "form",
       "type": "registry:ui",
       "title": "Form",
-      "description": "A form wrapper component that provides consistent layout and validation support.",
+      "description": "A form element with consistent spacing between its fields, plus the label, description and error message parts.",
       "registryDependencies": [
         "https://keystoneui.io/r/label.json"
       ],
@@ -1026,7 +1026,7 @@
       "name": "input-group",
       "type": "registry:ui",
       "title": "Input Group",
-      "description": "Groups an input with adjacent buttons, icons, or text add-ons for combined input actions.",
+      "description": "Joins an input or textarea with buttons, icons or text add-ons inside one bordered frame.",
       "registryDependencies": [
         "https://keystoneui.io/r/button.json",
         "https://keystoneui.io/r/input.json",
@@ -1044,7 +1044,7 @@
       "name": "input-otp",
       "type": "registry:ui",
       "title": "Input OTP",
-      "description": "One-time password input with individual digit slots for verification codes.",
+      "description": "A one-time password input with one slot per character, for verification and recovery codes.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -1073,7 +1073,7 @@
       "name": "label",
       "type": "registry:ui",
       "title": "Label",
-      "description": "An accessible label component for form controls with optional description and error messages.",
+      "description": "Names a form control, with sibling parts for helper text and an error message.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -1111,7 +1111,7 @@
       "name": "native-select",
       "type": "registry:ui",
       "title": "Native Select",
-      "description": "Native browser select dropdown for simple selection scenarios with optimal mobile support.",
+      "description": "The browser's own select element, styled to match, for picking one option with the platform's native picker on mobile.",
       "dependencies": [
         "lucide-react"
       ],
@@ -1147,7 +1147,7 @@
       "name": "popover",
       "type": "registry:ui",
       "title": "Popover",
-      "description": "Floating content panel anchored to a trigger element for contextual information or controls.",
+      "description": "A floating panel anchored to a trigger that holds extra information or controls for it.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -1163,7 +1163,7 @@
       "name": "progress",
       "type": "registry:ui",
       "title": "Progress",
-      "description": "Linear progress bar for visualizing completion or loading progress.",
+      "description": "A horizontal bar that shows how far a task has progressed.",
       "dependencies": [
         "@base-ui/react",
         "class-variance-authority"
@@ -1180,7 +1180,7 @@
       "name": "radio-group",
       "type": "registry:ui",
       "title": "Radio Group",
-      "description": "A set of mutually exclusive options where only one can be selected at a time.",
+      "description": "A set of mutually exclusive options, of which exactly one is selected.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -1229,7 +1229,7 @@
       "name": "slider",
       "type": "registry:ui",
       "title": "Slider",
-      "description": "Range slider input for selecting a numeric value within a defined range.",
+      "description": "A draggable control for picking a number, or a range of numbers, between a minimum and a maximum.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -1258,7 +1258,7 @@
       "name": "skeleton",
       "type": "registry:ui",
       "title": "Skeleton",
-      "description": "Animated placeholder shapes for previewing content layout while data is loading.",
+      "description": "Placeholder shapes that show the layout of content while it loads.",
       "files": [
         {
           "path": "packages/ui/src/skeleton.tsx",
@@ -1271,7 +1271,7 @@
       "name": "spinner",
       "type": "registry:ui",
       "title": "Spinner",
-      "description": "Animated loading spinner for indicating indeterminate loading states.",
+      "description": "An animated ring that shows something is loading when you can't say how long it will take.",
       "dependencies": [
         "lucide-react"
       ],
@@ -1317,7 +1317,7 @@
       "name": "switch",
       "type": "registry:ui",
       "title": "Switch",
-      "description": "A toggle control for boolean states with smooth animation.",
+      "description": "A toggle that turns a setting on or off.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -1372,7 +1372,7 @@
       "name": "textarea",
       "type": "registry:ui",
       "title": "Textarea",
-      "description": "A multi-line text input for longer form content.",
+      "description": "A multi-line text input that grows with its content, for messages, comments and other long text.",
       "files": [
         {
           "path": "packages/ui/src/textarea.tsx",
@@ -1460,7 +1460,7 @@
       "name": "tooltip",
       "type": "registry:ui",
       "title": "Tooltip",
-      "description": "Small floating label that appears on hover to provide additional descriptive text.",
+      "description": "A small floating label that shows a short description of its trigger on hover or keyboard focus.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -1476,7 +1476,7 @@
       "name": "toast",
       "type": "registry:ui",
       "title": "Toast",
-      "description": "Temporary notification messages that appear briefly to provide non-intrusive feedback.",
+      "description": "Short notifications that appear briefly over the page to confirm an action or report its result.",
       "dependencies": [
         "@base-ui/react",
         "lucide-react"

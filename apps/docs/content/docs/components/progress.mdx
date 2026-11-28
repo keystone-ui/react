@@ -1,6 +1,7 @@
 ---
 title: Progress
-description: Linear progress bar for visualizing completion or loading progress.
+description: A horizontal bar that shows how far a task has progressed.
+contentType: Reference
 ---
 
 <ComponentPreview name="progress-default" />
@@ -37,15 +38,21 @@ pnpm add @keystoneui/react@beta @base-ui/react
 
 ## Usage
 
+Import Progress from its subpath.
+
 ```tsx
 import { Progress } from "@keystoneui/react/progress";
 ```
+
+Pass `value` to set how much of the bar is filled.
 
 ```tsx
 <Progress className="max-w-md" value={60} />
 ```
 
 ## Composition
+
+Progress has a label, a value and a track that holds the indicator.
 
 ```text
 Progress
@@ -56,56 +63,50 @@ Progress
 ```
 
 With no children, `Progress` renders `ProgressTrack` and `ProgressIndicator`
-for you. Pass children to add a label or value — then you own the whole tree,
-track included.
+for you. When you pass children to add a label or value, you render the whole
+tree yourself, track included.
 
 ## Examples
 
 ### Animated
 
-A smoothly animated progress bar:
+Update `value` over time and the indicator animates to each new value.
 
 <ComponentPreview name="progress-animated" />
 
+### With a label
 
-### With Label
-
-Display a text label alongside the progress bar:
+Add `ProgressLabel` and `ProgressValue` to show a label and the percentage beside the bar.
 
 <ComponentPreview name="progress-with-label" />
 
-
 ### Colors
 
-Apply custom color themes to the progress indicator:
+Set `color` to `default`, `success`, `warning` or `destructive`.
 
 <ComponentPreview name="progress-colors" />
 
-
 ### Indeterminate
 
-An indeterminate progress bar for unknown durations:
+Pass `value={null}` when you can't tell how long the task will take.
 
 <ComponentPreview name="progress-indeterminate" />
 
-
 ### Controlled
 
-Interactive controlled progress bar:
+Drive `value` from state, here from a Slider.
 
 <ComponentPreview name="progress-controlled" />
 
-
 ### Complete
 
-Completed progress state:
+The bar at 100%, when the task is done.
 
 <ComponentPreview name="progress-complete" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 
@@ -122,4 +123,5 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 | --- | --- | --- | --- |
 | `value` | `number` | `0` | Current progress value (0-100) |
 | `max` | `number` | `100` | Maximum progress value |
+| `color` | `"default" \| "success" \| "warning" \| "destructive"` | `"default"` | Color of the indicator |
 | `className` | `string` | - | Additional CSS classes |

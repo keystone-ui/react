@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "toast",
   "title": "Toast",
-  "description": "Temporary notification messages that appear briefly to provide non-intrusive feedback.",
+  "description": "Short notifications that appear briefly over the page to confirm an action or report its result.",
   "dependencies": [
     "@base-ui/react",
     "lucide-react"

@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "label",
   "title": "Label",
-  "description": "An accessible label component for form controls with optional description and error messages.",
+  "description": "Names a form control, with sibling parts for helper text and an error message.",
   "dependencies": [
     "@base-ui/react"
   ],

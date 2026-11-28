@@ -434,12 +434,12 @@ export const primaryPresets: Record<PrimaryPresetId, PrimaryPreset> = {
 
 export const destructiveTokens = {
   light: {
-    "--destructive": "oklch(0.577 0.245 27.325)",
+    "--destructive": "oklch(0.54 0.245 27.325)",
     "--destructive-foreground": "oklch(0.971 0.013 17.38)",
   },
   dark: {
     "--destructive": "oklch(0.704 0.191 22.216)",
-    "--destructive-foreground": "oklch(0.971 0.013 17.38)",
+    "--destructive-foreground": "oklch(0.258 0.092 26.042)",
   },
 };
 

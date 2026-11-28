@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "alert",
   "title": "Alert",
-  "description": "Prominent message banner for displaying important information, warnings, or errors to users.",
+  "description": "A banner that shows an important message, such as a warning, an error or a confirmation, inline on the page.",
   "dependencies": [
     "class-variance-authority"
   ],
