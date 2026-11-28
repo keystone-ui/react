@@ -44,8 +44,12 @@ export default function Layout({ children }: { children: ReactNode }) {
         collapsible: false,
         defaultOpenLevel: 1,
         tabs: {
+          // The icon goes inside the title, so the navbar tabs show it. The
+          // mobile tab dropdown draws `icon` beside `title` as well, so the
+          // separate icon is dropped or it would show twice.
           transform: (tab) => ({
             ...tab,
+            icon: undefined,
             title: (
               <span className="inline-flex items-center gap-2 [&_svg]:size-4">
                 {tab.icon}
