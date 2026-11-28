@@ -2,8 +2,11 @@
  * `keystoneui audit --theme` measures a consumer's tokens without culori, so
  * it can ship in the CLI with no dependency. This pins it to the culori-based
  * maths palette.test.ts uses for keystone's own palettes, across every pair
- * it audits in both modes. The small tolerance covers where each clips an
- * out-of-gamut OKLCH value.
+ * it audits in both modes. Both clip an out-of-gamut OKLCH value to sRGB, as a
+ * browser paints it -- the audit in linear light, renderedContrast after
+ * gamma encoding, which agree -- so the reference is renderedContrast, not
+ * contrast(). The default light `--destructive` lies outside sRGB, where the
+ * unclipped ratio reads 0.24 higher than what is painted.
  */
 
 import { readFileSync } from "node:fs";
@@ -15,12 +18,12 @@ import {
   auditTheme,
   readThemeTokens,
 } from "../../../packages/keystoneui-mcp/src/theme-audit";
-import { contrast } from "./color-math";
+import { renderedContrast } from "./color-math";
 import { MODES, tokenSource } from "./css-tokens";
 import { REPO_ROOT } from "./registry-paths";
 
 const GLOBAL_CSS = join(REPO_ROOT, "apps/docs/app/global.css");
-const TOLERANCE = 0.15;
+const TOLERANCE = 0.01;
 
 describe("keystoneui audit --theme", () => {
   const results = auditTheme(
@@ -45,11 +48,14 @@ describe("keystoneui audit --theme", () => {
     }
   });
 
-  it("agrees with culori on every ratio", () => {
+  it("agrees with culori on every ratio, as painted", () => {
     const drift: string[] = [];
     for (const r of results) {
       const [fg, bg] = r.pair.split(" on ");
-      const expected = contrast(reference[r.mode][fg], reference[r.mode][bg]);
+      const expected = renderedContrast(
+        reference[r.mode][fg],
+        reference[r.mode][bg]
+      );
       if (r.ratio === null || Math.abs(r.ratio - expected) > TOLERANCE) {
         drift.push(`${r.mode} ${r.pair}: ${r.ratio} vs ${expected.toFixed(2)}`);
       }
