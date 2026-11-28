@@ -1,16 +1,6 @@
 [
   {
     "rule": "heading-case",
-    "match": "API Reference",
-    "reason": "scripts/lint-component-mdx.mjs requires this exact H2 on every component page"
-  },
-  {
-    "rule": "heading-case",
-    "match": "Components Used",
-    "reason": "scripts/lint-block-mdx.mjs requires this exact H2 on every block page"
-  },
-  {
-    "rule": "heading-case",
     "match": "Quick Start",
     "reason": "matches the Quick Start page title until that page is renamed"
   },

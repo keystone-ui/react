@@ -1276,7 +1276,8 @@ export default function ${pascal}Default() {
 function mdxTemplate(pascal, kebab) {
   return `---
 title: ${pascal}
-description: TODO - Add a description for the ${pascal} component.
+description: "TODO: describe what the ${pascal} component does, in one sentence."
+contentType: Reference
 ---
 
 <ComponentPreview name="${kebab}-default" />

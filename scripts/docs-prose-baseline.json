@@ -50,9 +50,6 @@
     "em-dash": 17,
     "unit-spacing": 1
   },
-  "(getting-started)/rtl.mdx": {
-    "content-type": 1
-  },
   "(getting-started)/theming/colors.mdx": {
     "content-type": 1,
     "em-dash": 1,

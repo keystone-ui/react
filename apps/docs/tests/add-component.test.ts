@@ -2922,3 +2922,17 @@ describe("add-component arguments", () => {
     }
   });
 });
+
+describe("scaffolded MDX page", () => {
+  it("passes the prose lint, so a new page needs no baseline entry", async () => {
+    const { lintProse } = await import("../../../scripts/lint-docs-prose.mjs");
+    const repo = scratchRepo();
+    expect(run(repo, PASCAL).status).toBe(0);
+
+    const findings = lintProse(read(repo, FILES.mdx), FILES.mdx, {
+      properNouns: [PASCAL],
+    });
+
+    expect(findings).toEqual([]);
+  });
+});
