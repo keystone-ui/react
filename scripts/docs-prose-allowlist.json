@@ -20,7 +20,7 @@
   {
     "file": "components/date-picker.mdx",
     "rule": "banned-word",
-    "match": "Quick Picks",
+    "match": "Quick picks",
     "reason": "names the date-picker presets demo"
   },
   {
@@ -28,12 +28,6 @@
     "rule": "the-user",
     "match": "user",
     "reason": "the block manages user records; the user is a row in the table, not the reader"
-  },
-  {
-    "file": "components/combobox.mdx",
-    "rule": "the-user",
-    "match": "the user",
-    "reason": "the end user of the app typing into the combobox"
   },
   {
     "file": "components/copy-button.mdx",

@@ -1,6 +1,7 @@
 ---
 title: Textarea
-description: A multi-line text input for longer form content.
+description: A multi-line text input that grows with its content, for messages, comments and other long text.
+contentType: Reference
 ---
 
 <ComponentPreview name="textarea-default" />
@@ -41,42 +42,43 @@ pnpm add @keystoneui/react@beta @base-ui/react
 import { Textarea } from "@keystoneui/react/textarea";
 ```
 
+Render it with a placeholder:
+
 ```tsx
 <Textarea placeholder="Type your message here." />
 ```
 
-The textarea auto-sizes to fit its content using `field-sizing-content`. Resizing is disabled by default.
+The textarea grows to fit its content with `field-sizing-content`. Manual resizing is off by default.
 
 ## Examples
 
 ### With Field
 
-Compose with Field components for labels and descriptions:
+A `Field` adds a label and a description to the textarea.
 
 <ComponentPreview name="textarea-with-field" />
 
+### Character count
 
-### Character Count
-
-Track input length with a controlled value and `maxLength`:
+A controlled value and `maxLength` drive a live character count.
 
 <ComponentPreview name="textarea-character-count" />
 
-
 ### Disabled
+
+A disabled textarea inside `<Field data-disabled>`, so the label and description dim with it.
 
 <ComponentPreview name="textarea-disabled" />
 
+### With error
 
-### With Error
-
-Textarea with error state:
+A textarea in its invalid state, with an error message below it.
 
 <ComponentPreview name="textarea-with-error" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 ## API reference
 
@@ -87,4 +89,4 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 | `placeholder` | `string` | - | Placeholder text |
 | `maxLength` | `number` | - | Maximum character length |
 
-The Textarea auto-sizes to fit content. Pass `rows` if you need a fixed initial height. It forwards all standard HTML `<textarea>` props.
+The textarea grows to fit its content. Pass `rows` for a fixed initial height. It forwards every standard HTML `<textarea>` prop.

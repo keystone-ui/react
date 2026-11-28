@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "native-select",
   "title": "Native Select",
-  "description": "Native browser select dropdown for simple selection scenarios with optimal mobile support.",
+  "description": "The browser's own select element, styled to match, for picking one option with the platform's native picker on mobile.",
   "dependencies": [
     "lucide-react"
   ],

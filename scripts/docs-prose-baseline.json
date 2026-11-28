@@ -113,10 +113,6 @@
     "content-type": 1,
     "heading-case": 4
   },
-  "components/checkbox.mdx": {
-    "content-type": 1,
-    "heading-case": 2
-  },
   "components/code-block.mdx": {
     "content-type": 1
   },
@@ -124,30 +120,12 @@
     "content-type": 1,
     "heading-case": 1
   },
-  "components/combobox.mdx": {
-    "content-type": 1,
-    "em-dash": 3,
-    "heading-case": 7
-  },
-  "components/command.mdx": {
-    "content-type": 1,
-    "heading-case": 2
-  },
   "components/copy-button.mdx": {
     "content-type": 1,
     "em-dash": 1
   },
   "components/countdown.mdx": {
     "content-type": 1
-  },
-  "components/date-input.mdx": {
-    "banned-word": 1,
-    "content-type": 1,
-    "heading-case": 3
-  },
-  "components/date-picker.mdx": {
-    "content-type": 1,
-    "heading-case": 3
   },
   "components/description-list.mdx": {
     "content-type": 1,
@@ -158,31 +136,9 @@
     "content-type": 1,
     "heading-case": 5
   },
-  "components/field.mdx": {
-    "content-type": 1,
-    "heading-case": 3
-  },
-  "components/file-upload.mdx": {
-    "content-type": 1
-  },
   "components/filter-chips.mdx": {
     "banned-word": 1,
     "content-type": 1
-  },
-  "components/form.mdx": {
-    "content-type": 1,
-    "em-dash": 2,
-    "heading-case": 1
-  },
-  "components/input-group.mdx": {
-    "banned-word": 1,
-    "content-type": 1,
-    "em-dash": 2,
-    "heading-case": 5
-  },
-  "components/input-otp.mdx": {
-    "content-type": 1,
-    "heading-case": 4
   },
   "components/input.mdx": {
     "content-type": 1,
@@ -196,25 +152,13 @@
     "content-type": 1,
     "heading-case": 4
   },
-  "components/label.mdx": {
-    "content-type": 1,
-    "heading-case": 1
-  },
   "components/modal.mdx": {
     "content-type": 1,
     "heading-case": 4
   },
-  "components/native-select.mdx": {
-    "content-type": 1,
-    "heading-case": 1
-  },
   "components/pagination.mdx": {
     "content-type": 1,
     "em-dash": 2
-  },
-  "components/radio-group.mdx": {
-    "content-type": 1,
-    "heading-case": 1
   },
   "components/reel.mdx": {
     "banned-word": 1,
@@ -240,10 +184,6 @@
     "content-type": 1,
     "heading-case": 1
   },
-  "components/slider.mdx": {
-    "content-type": 1,
-    "heading-case": 1
-  },
   "components/stat.mdx": {
     "banned-word": 1,
     "content-type": 1,
@@ -257,10 +197,6 @@
   },
   "components/strings.mdx": {
     "content-type": 1
-  },
-  "components/switch.mdx": {
-    "content-type": 1,
-    "heading-case": 1
   },
   "components/table-pagination.mdx": {
     "content-type": 1,
@@ -280,10 +216,6 @@
     "heading-case": 3
   },
   "components/tag.mdx": {
-    "content-type": 1,
-    "heading-case": 2
-  },
-  "components/textarea.mdx": {
     "content-type": 1,
     "heading-case": 2
   },

@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "input-otp",
   "title": "Input OTP",
-  "description": "One-time password input with individual digit slots for verification codes.",
+  "description": "A one-time password input with one slot per character, for verification and recovery codes.",
   "dependencies": [
     "@base-ui/react"
   ],

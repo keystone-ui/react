@@ -1,6 +1,7 @@
 ---
 title: Form
-description: A form wrapper component that provides consistent layout and validation support.
+description: A form element with consistent spacing between its fields, plus the label, description and error message parts.
+contentType: Reference
 ---
 
 <ComponentPreview name="form-default" />
@@ -50,9 +51,17 @@ Form
 └── ErrorMessage
 ```
 
-## Submission
+## Examples
 
-`Form` is a real `<form>` element, so it accepts `onSubmit` and any standard form attribute. Nested inputs submit on Enter without extra wiring.
+### With validation
+
+A form whose fields show their invalid state and error messages.
+
+<ComponentPreview name="form-with-validation" />
+
+## Form submission
+
+`Form` is a real `<form>` element, so it takes `onSubmit` and any standard form attribute. Pressing Enter in a nested input submits the form with no extra wiring. Call `preventDefault()` in the handler to submit with JavaScript:
 
 ```tsx
 <Form
@@ -66,9 +75,9 @@ Form
 </Form>
 ```
 
-## FieldGroup
+## FieldGroup without a form
 
-When you need the same vertical layout but not the `<form>` semantics — for example a group of fields nested inside an existing `<form>`, or a non-submittable settings panel — use `FieldGroup`. It renders a `<div>` with the same spacing as `Form`.
+`FieldGroup` renders a `<div>` with the same spacing as `Form`, without the `<form>` semantics. Use it for a group of fields inside an existing `<form>`, or for a settings panel that doesn't submit. This form holds 2 groups:
 
 ```tsx
 <form onSubmit={handleSubmit}>
@@ -82,23 +91,15 @@ When you need the same vertical layout but not the `<form>` semantics — for ex
 </form>
 ```
 
-## Examples
-
-### With Validation
-
-Form with validation feedback:
-
-<ComponentPreview name="form-with-validation" />
-
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 ## API reference
 
 ### Form
 
-Renders a `<form>` element with consistent vertical spacing between children. Accepts all `FormHTMLAttributes<HTMLFormElement>`.
+Renders a `<form>` element with consistent vertical spacing between children. It takes every `FormHTMLAttributes<HTMLFormElement>` prop.
 
 | Prop        | Type                                   | Default | Description                                              |
 | ----------- | -------------------------------------- | ------- | -------------------------------------------------------- |
@@ -108,14 +109,14 @@ Renders a `<form>` element with consistent vertical spacing between children. Ac
 
 ### FieldGroup
 
-Layout-only `<div>` wrapper that provides the same spacing as `Form` without form semantics. Use inside an existing `<form>`, or for groups of fields that don't submit.
+A layout-only `<div>` with the same spacing as `Form` and no form semantics. Use it inside an existing `<form>`, or for groups of fields that don't submit.
 
 | Prop        | Type                            | Default | Description             |
 | ----------- | ------------------------------- | ------- | ----------------------- |
 | `className` | `string`                        | -       | Additional CSS classes. |
 | `children`  | `ReactNode`                     | -       | Grouped fields.         |
 
-Also accepts all `HTMLAttributes<HTMLDivElement>`.
+It also takes every `HTMLAttributes<HTMLDivElement>` prop.
 
 ### Label
 
@@ -138,7 +139,7 @@ Renders muted helper text for form fields.
 
 ### ErrorMessage
 
-Renders destructive-colored validation error text. Pair with `aria-invalid` on the control.
+Renders validation error text in the destructive color. Pair it with `aria-invalid` on the control.
 
 | Prop        | Type        | Default | Description             |
 | ----------- | ----------- | ------- | ----------------------- |

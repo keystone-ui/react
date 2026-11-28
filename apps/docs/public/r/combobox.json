@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "combobox",
   "title": "Combobox",
-  "description": "Searchable dropdown with autocomplete for filtering and selecting from a list of options.",
+  "description": "A text input that filters a list of options as you type, for picking one value or several.",
   "dependencies": [
     "@base-ui/react",
     "lucide-react"
