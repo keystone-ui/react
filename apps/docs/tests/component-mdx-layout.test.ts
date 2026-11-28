@@ -77,7 +77,7 @@ npx shadcn@latest add https://keystoneui.io/r/${name}.json
 </CodeBlockTabs>
 `;
 
-const API = `## API Reference
+const API = `## API reference
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |

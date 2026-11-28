@@ -82,7 +82,7 @@ The MCP server exposes 9 tools that AI assistants can call:
 
 | Tool | Input | Description |
 |---|---|---|
-| `get_docs` | `name`, `type?` | Full docs page including the API Reference table; previews resolved to inline TSX. A kit or package flavour with no page of its own resolves to the page section that documents it |
+| `get_docs` | `name`, `type?` | Full docs page including the API reference table; previews resolved to inline TSX. A kit or package flavour with no page of its own resolves to the page section that documents it |
 | `get_project_context` | -- | Install mode, aliases, theme CSS file, icon library, RSC, package manager. Call first: import style depends on it |
 | `list_components` | `limit?`, `offset?`, `type?`, `category?` | Paginated list of all components, blocks, kits, and named examples. `type`: `ui`, `block`, `example`, `kit`, `style`, `theme`, `item`. A package flavour such as `npm/users-01` is its own entry, with a `Flavour of:` line |
 | `search_components` | `query`, `limit?`, `type?`, `category?` | Fuzzy search by name, description, keywords, or category; same `type` values as `list_components` |

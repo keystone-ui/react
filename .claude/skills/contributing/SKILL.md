@@ -41,9 +41,9 @@ Blocks are full-page compositions, hand-registered (no `pnpm add:block` scaffold
    - If the block installs a page, declare a `registry:page` file with a source `path` and a `target` such as `app/<slug>/page.tsx`.
 4. For each `registry:page` entry, write the page by hand at its `path`, such as `registry/default/blocks/<name>/page.tsx`. The entry's `target` is the install location in the consumer's app. Have the page import and render the installed component.
 5. Run `pnpm sync:blocks` to generate the installable components. For example, `@keystoneui/react/button` becomes `@/components/ui/button` and `@keystoneui/react/utils` becomes `@/lib/utils`. The script rewrites `from "./sibling"` to `from "@/components/sibling"`, removes aliases from named `lucide-react` imports and formats the generated files. Edit the demo source when the components need changes. `pnpm lint:docs` checks the copies for drift.
-6. Write `apps/docs/content/docs/blocks/<name>.mdx` using `apps/docs/content/docs/blocks/_block-template.mdx`. Include the install command in a bash fence, `<BlockPreview name="block-<name>" />` and links to the primitives under `## Components Used`.
+6. Write `apps/docs/content/docs/blocks/<name>.mdx` using `apps/docs/content/docs/blocks/_block-template.mdx`. Include the install command in a bash fence, `<BlockPreview name="block-<name>" />` and links to the primitives under `## Components used`.
 7. Run `pnpm gen:static-paths`. In `apps/docs/lib/static-paths.json`, the MDX filename supplies `/docs/blocks/<name>` in `docs`. The demo manifest supplies `block-<name>` in `preview`. The docs entry can exist before the preview key. `<BlockPreview>` embeds `/preview/block-<name>` in an iframe.
-8. Run `pnpm docs:backlinks` to update `## Related Blocks` on the linked component pages.
+8. Run `pnpm docs:backlinks` to update `## Related blocks` on the linked component pages.
 9. Add the block to the Block Selection table in `skills/keystoneui-react/SKILL.md`.
 
 Run `pnpm registry:build` to refresh the installable items in `apps/docs/public/r/`.
@@ -73,7 +73,7 @@ When adding a new category, prefer single-word lowercase strings that mirror sha
 1. Update component source
 2. Update Storybook stories
 3. Update Fumadocs demos if user-facing
-4. Update MDX API Reference table
+4. Update MDX API reference table
 5. **If a sub-component was added/removed/renamed**: update the `## Composition` ASCII tree in the MDX
 6. Update `_registry.ts` if dependencies changed
 7. Sync the AI agent surface (below) — *if the change affects rules, conventions, or the public API the skill teaches*

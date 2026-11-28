@@ -19,7 +19,7 @@
  *   5. Variant subheadings must be ###-level under ## Examples — no loose
  *      top-level variant H2s allowed (anything that contains a
  *      <ComponentPreview> and isn't a protected section name).
- *   6. ## API Reference must exist with at least one Markdown table.
+ *   6. ## API reference must exist with at least one Markdown table.
  *   7. Every <ComponentPreview name="X"> referenced in MDX must exist as a
  *      key in apps/docs/demos/manifest.json.
  *   8. No ## Import section: the import line lives at the top of ## Usage.
@@ -45,15 +45,15 @@ const PROTECTED_HEADINGS = new Set([
   "Composition",
   "Examples",
   "RTL",
-  "API Reference",
-  "Related Blocks",
+  "API reference",
+  "Related blocks",
 ]);
 
 // Files that legitimately don't follow the canonical component-MDX shape
 // (utility-class references, multi-component overview pages, etc.).
 // Each entry must have a one-line rationale below it.
 const STRUCTURE_EXEMPT = new Set([
-  // utility-class reference, not a component — no Usage/API Reference applies
+  // utility-class reference, not a component — no Usage/API reference applies
   "typography",
   // a page of composition examples: no component and no registry item of its own
   "date-picker",
@@ -292,12 +292,12 @@ function checkInstallation(componentName, sections, headingNames) {
 }
 
 function checkApiReference(sections, headingNames) {
-  if (!headingNames.has("API Reference")) {
-    return ["missing ## API Reference"];
+  if (!headingNames.has("API reference")) {
+    return ["missing ## API reference"];
   }
-  const api = sections.find((s) => s.heading === "API Reference");
+  const api = sections.find((s) => s.heading === "API reference");
   if (!/^\|.+\|$/m.test(api.body)) {
-    return ["## API Reference must contain at least one props table"];
+    return ["## API reference must contain at least one props table"];
   }
   return [];
 }
@@ -347,7 +347,7 @@ function lintFile(filePath, demoNames) {
   const componentName = basename(filePath, ".mdx");
 
   // Exempt files only get frontmatter + preview-name validation.
-  // Skip structural checks (Installation, Usage, Composition, API Reference).
+  // Skip structural checks (Installation, Usage, Composition, API reference).
   if (STRUCTURE_EXEMPT.has(componentName)) {
     return {
       componentName,

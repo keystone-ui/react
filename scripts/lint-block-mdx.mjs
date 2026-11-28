@@ -11,8 +11,8 @@
  *   2. First non-heading content must be a ```bash install command
  *      referencing https://keystoneui.io/r/<name>.json.
  *   3. <BlockPreview name="block-<name>"> must appear after the install fence.
- *   4. ## Components Used must exist with at least one link.
- *   5. Every link in ## Components Used must resolve to a real
+ *   4. ## Components used must exist with at least one link.
+ *   5. Every link in ## Components used must resolve to a real
  *      apps/docs/content/docs/components/<name>.mdx file.
  */
 
@@ -39,7 +39,7 @@ function parseFrontmatter(content) {
 }
 
 function findComponentsUsedSection(content) {
-  const match = content.match(/## Components Used\n([\s\S]*?)(?=\n## |$)/);
+  const match = content.match(/## Components used\n([\s\S]*?)(?=\n## |$)/);
   return match ? match[1] : null;
 }
 
@@ -74,7 +74,7 @@ function lintFile(filePath) {
 
   const componentsUsed = findComponentsUsedSection(content);
   if (componentsUsed === null) {
-    errors.push("missing ## Components Used");
+    errors.push("missing ## Components used");
   } else {
     const linkMatches = componentsUsed.matchAll(
       /\[[^\]]+\]\(\/docs\/components\/([a-z0-9-]+)\)/g
@@ -86,12 +86,12 @@ function lintFile(filePath) {
       const referencedPath = join(COMPONENTS_DIR, `${referenced}.mdx`);
       if (!existsSync(referencedPath)) {
         errors.push(
-          `## Components Used references missing component "${referenced}"`
+          `## Components used references missing component "${referenced}"`
         );
       }
     }
     if (linkCount === 0) {
-      errors.push("## Components Used contains no /docs/components/ links");
+      errors.push("## Components used contains no /docs/components/ links");
     }
   }
 

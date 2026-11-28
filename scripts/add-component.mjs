@@ -1321,7 +1321,7 @@ import { ${pascal} } from "@keystoneui/react/${kebab}";
 <${pascal}>${pascal} component</${pascal}>
 \`\`\`
 
-## API Reference
+## API reference
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |

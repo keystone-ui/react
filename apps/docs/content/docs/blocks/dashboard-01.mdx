@@ -1,6 +1,6 @@
 ---
 title: Dashboard 01
-description: An analytics dashboard — KPI row with semantic deltas, a stacked revenue chart with a toggleable legend, a sessions area chart, and a sortable, paginated top-pages table.
+description: An analytics dashboard with a KPI row of semantic deltas, a stacked revenue chart with a toggleable legend, a sessions area chart, and a sortable, paginated top-pages table.
 ---
 
 ```bash
@@ -80,7 +80,7 @@ Charts pass `isAnimationActive={!reducedMotion}`. `base.css` already zeroes CSS 
 
 The bars carry no click handler, deliberately. A chart whose only affordance is `onClick` on an SVG path offers nothing to a keyboard or a screen reader — no focusable target, no middle-click, no "copy link" — and the fix is a visually hidden list of the same links beneath it. Not creating that debt is cheaper than remediating it.
 
-## Components Used
+## Components used
 
 - [Button](/docs/components/button)
 - [Card](/docs/components/card)

@@ -321,7 +321,7 @@ the keystone monorepo.
 4. **Inspect** — `view_component({ names: [...] })` for source, and
    `keystoneui docs <name>` (or fetch
    `https://keystoneui.io/llms.mdx/docs/components/<name>`) for the prose docs
-   and the API Reference table. The `/llms.mdx/...` route resolves
+   and the API reference table. The `/llms.mdx/...` route resolves
    `<ComponentPreview>` tags to inline TSX, so one fetch gives you docs and
    working code together. **Before composing any compound component (one with
    more than one exported part), run `keystoneui docs <name>` (or fetch the URL
@@ -361,7 +361,7 @@ downloaded in this session, or were asked to review.
   - `https://keystoneui.io/llms-components.txt` — every component in one document.
   - `https://keystoneui.io/AGENTS.md` — condensed project guidance.
 
-Component props live in the `## API Reference` table of each component's docs
+Component props live in the `## API reference` table of each component's docs
 page. They are not in the registry JSON, so `view_component` alone will not
 give them to you — read the docs when you need a prop's type or default.
 
