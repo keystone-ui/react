@@ -12,7 +12,7 @@ A modern React component library built with [Base UI](https://base-ui.com), [Tai
 
 For full documentation, visit [keystoneui.io](https://keystoneui.io).
 
-## AI for Agents
+## AI agents
 
 Keystone UI is built to be consumed by AI coding assistants as a first-class concern. Every documented surface has a working implementation:
 

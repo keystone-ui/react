@@ -1,48 +1,47 @@
 ---
-title: Agent Skills
-description: Install Keystone UI knowledge directly into your AI assistant.
+title: Agent skill
+description: The keystoneui-react agent skill: how to install it, how to call it, the files it contains, and the evals that test it.
+contentType: Reference
 ---
 
-Agent Skills give your AI assistant comprehensive knowledge of Keystone UI components, patterns, and best practices.
+The `keystoneui-react` agent skill gives your AI assistant the Keystone UI components, patterns and conventions as files it loads when it needs them. It works with Claude Code, Cursor, OpenCode, Codex and Gemini CLI. [Choose an integration](/docs/agents/choose-an-integration) compares it with the MCP server, `AGENTS.md` and llms.txt.
 
 ## Installation
+
+Install the skill with the install script:
 
 ```bash
 curl -fsSL https://keystoneui.io/install | bash -s keystoneui-react
 ```
 
-Or using the [skills.sh](https://skills.sh/) package manager:
+Or with the [skills.sh](https://skills.sh/) package manager:
 
 ```bash
 npx skills add keystone-ui/react@keystoneui-react
 ```
 
-Supports Claude Code, Cursor, OpenCode, Codex, and Gemini CLI.
+## Invocation
 
-## Usage
+Your assistant discovers the skill on its own when a task involves Keystone UI, or you can call it with the `/keystoneui-react` command. It covers requests such as:
 
-Skills are automatically discovered by your AI assistant, or call it directly using `/keystoneui-react` command.
+- building components with Keystone UI
+- creating pages from Keystone UI components
+- customizing themes and styles
+- looking up component documentation
 
-Simply ask your AI assistant to:
+## Contents
 
-- Build components using Keystone UI
-- Create pages with Keystone UI components
-- Customize themes and styles
-- Access component documentation
+The skill is a slim entry point plus topic files, so your assistant pulls the section it needs rather than loading one large guide:
 
-## What's Included
-
-The skill is organized into a slim entry point plus modular topic files. Your AI assistant pulls the section it needs rather than loading one giant guide.
-
-- Identity, install, key patterns, and component-selection table in `SKILL.md`
+- identity, install, key patterns and the component-selection table in `SKILL.md`
 - MCP server setup and tool reference (`mcp.md`)
 - CLI and shadcn install paths (`cli.md`)
-- Theming deep-dive (`customization.md`)
-- Topic-specific rules with do/don't code pairs in `rules/`
+- theming in depth (`customization.md`)
+- topic-specific rules with do and don't code pairs in `rules/`
 
-## Structure
+The files are laid out like this:
 
-```
+```text
 skills/keystoneui-react/
 ├── SKILL.md              # Entry point: identity, install, principles, key patterns
 ├── mcp.md                # MCP setup + 9 tools reference
@@ -64,29 +63,18 @@ skills/keystoneui-react/
 
 ## Evals
 
-`evals/` in the [keystone-ui/react](https://github.com/keystone-ui/react)
-repository holds one directory per case — a `prompt.md` with a realistic request,
-and `graders/` asserting what a correct answer must contain (subpath imports,
-`render` rather than `asChild`, `aria-invalid` + `FieldError` rather than
-`data-invalid`, `TablePagination` rather than `Pagination`).
+`evals/` in the [keystone-ui/react](https://github.com/keystone-ui/react) repository holds one directory per case: a `prompt.md` with a realistic request, and `graders/` asserting what a correct answer must contain. The graders check for subpath imports, `render` rather than `asChild`, `aria-invalid` plus `FieldError` rather than `data-invalid`, and `TablePagination` rather than `Pagination`.
 
-They live at the repository root rather than inside the skill, because that
-is where the plugin evaluator discovers them -- and because they are our
-regression suite, not something a consumer needs shipped to them.
-
-Run them from the repository root:
+The evals live at the repository root rather than inside the skill, because that's where the plugin evaluator discovers them, and because they're our regression suite, not something a consumer needs shipped to them. Run them from the repository root:
 
 ```bash
 claude plugin eval . --threshold 0.8
 ```
 
-The run scores the same prompts twice, with the skill loaded and without it, so
-the number it reports is whether the skill *helped* — not just whether the model
-happened to answer well. Use it to catch regressions when components or
-conventions change.
+The run scores the same prompts twice, with the skill loaded and without it, so the number it reports is whether the skill *helped*, not only whether the model answered well. Use it to catch regressions when components or conventions change.
 
 ## Related
 
-- [LLMs.txt](/docs/agents/llms-txt) — Static text files for AI assistants
-- [MCP Server](/docs/agents/mcp-server) — Real-time component lookup over MCP
-- [AGENTS.md](/docs/agents/agents-md) — Download documentation into your project
+- [Use llms.txt](/docs/agents/llms-txt): static text files for AI assistants
+- [Set up the MCP server](/docs/agents/mcp-server): live component lookup over MCP
+- [Add an AGENTS.md file](/docs/agents/agents-md): documentation in your project

@@ -2,9 +2,13 @@
   "docs": [
     "/docs",
     "/docs/agents/agents-md",
+    "/docs/agents/choose-an-integration",
+    "/docs/agents/how-mcp-works",
     "/docs/agents/llms-txt",
     "/docs/agents/mcp-server",
+    "/docs/agents/mcp-tools",
     "/docs/agents/skills",
+    "/docs/agents/troubleshoot-mcp",
     "/docs/blocks/admin-01",
     "/docs/blocks/bet-slip-01",
     "/docs/blocks/betting-panel-01",

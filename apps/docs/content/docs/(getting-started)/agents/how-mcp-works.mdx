@@ -1,0 +1,49 @@
+---
+title: How the MCP server works
+description: What the Keystone UI MCP server lets an assistant do, how it runs on your machine, and why the project you open decides what it runs.
+contentType: Conceptual
+---
+
+The Keystone UI MCP server is a small local program your editor starts for your AI assistant. It answers the assistant's questions about Keystone UI from the public registry, so you can ask "Add a button and card from Keystone UI" or "Show me all available form components" in plain language. Because it runs inside your project, the project decides part of what it runs. To connect it, follow [Set up the MCP server](/docs/agents/mcp-server).
+
+## What MCP is
+
+[Model Context Protocol (MCP)](https://modelcontextprotocol.io) is an open protocol that connects AI assistants to external tools and data sources. With the Keystone UI MCP server, your assistant can:
+
+- **Browse components**: list all 50+ UI components and blocks with descriptions
+- **Search by name or keyword**: fuzzy search across components and blocks
+- **View full source code**: inspect component implementations, dependencies and registry dependencies
+- **Fetch live examples**: pull demo TSX files for any component or block to see real usage
+- **Get install commands**: generate `npx shadcn add` commands for any component
+- **Read theme info**: view the CSS setup, OKLCH colour tokens, radius scale and dark mode configuration
+- **Run an audit**: check that your project is configured for Keystone UI
+
+[MCP tools](/docs/agents/mcp-tools) lists the tool behind each one.
+
+## How a request flows
+
+The MCP server runs locally on your machine as a background process your editor manages. A request goes through 4 stages:
+
+1. **Your editor starts the process**: it reads the MCP config and runs `npx @keystoneui/mcp@latest`.
+2. **You ask in plain language**: you describe what you need to the assistant.
+3. **The assistant calls a tool**: it picks the MCP tool that fits, such as search, view or install.
+4. **The tool reads the registry**: it fetches component data from `keystoneui.io/r/` and returns it to the assistant.
+
+No server infrastructure is involved: the MCP server fetches static JSON files from the registry and runs fuzzy search locally.
+
+## Why the project you open matters
+
+Your editor starts the MCP server on your machine, usually with a package runner such as `npx`, inside the project you have open. The runner and the server then work with that project's settings:
+
+- its package-manager configuration
+- the programs installed in its dependencies
+- the runtime version a version manager picks for the folder
+- its `components.json`
+
+They also inherit whatever environment your editor or shell has loaded for that folder. Through these, a project can run its own code when the server starts, or point the server at a different host for components and docs. That's why starting the server is like running the project's own scripts, and why [Set up the MCP server](/docs/agents/mcp-server#projects-you-do-not-trust) lists what to do before you open a project you haven't reviewed.
+
+## Related
+
+- [Set up the MCP server](/docs/agents/mcp-server)
+- [MCP tools](/docs/agents/mcp-tools)
+- [Choose an integration](/docs/agents/choose-an-integration)

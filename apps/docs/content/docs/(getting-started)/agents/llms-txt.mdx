@@ -1,43 +1,26 @@
 ---
-title: LLMs.txt
-description: Enable AI assistants like Claude, Cursor, and ChatGPT to understand Keystone UI documentation.
+title: Use llms.txt
+description: Give Cursor, Claude, ChatGPT or any agent the Keystone UI docs as plain text, through the llms.txt files.
+contentType: How-to
 ---
 
-We provide [LLMs.txt](https://llmstxt.org/) files to make Keystone UI documentation accessible to AI coding assistants.
+We publish [LLMs.txt](https://llmstxt.org/) files so AI coding assistants can read the Keystone UI docs as plain text. This guide picks a file and hands it to your assistant. [Choose an integration](/docs/agents/choose-an-integration#llmstxt) explains how the files are built and how fresh they are.
 
-## Available Files
+## Pick a file
 
-**Core documentation:**
+Each file covers a different slice of the docs:
 
-- [`/llms.txt`](/llms.txt) — Quick reference index for Keystone UI documentation
-- [`/llms-full.txt`](/llms-full.txt) — Complete Keystone UI documentation
-- [`/llms-components.txt`](/llms-components.txt) — Component documentation only
+- [`/llms.txt`](/llms.txt): a quick reference index for the Keystone UI docs
+- [`/llms-full.txt`](/llms-full.txt): the complete Keystone UI docs
+- [`/llms-components.txt`](/llms-components.txt): the component docs only
 
-**Individual pages:**
+For one page, append `.mdx` to any docs path to get its plain-text version. For example, [`/docs/components/button.mdx`](/docs/components/button.mdx) is the Button page.
 
-- Append `.mdx` to any docs path to get the plain text version
-- Example: [`/docs/components/button.mdx`](/docs/components/button.mdx) — Button component documentation
+## Add the docs to Cursor
 
-## How It Works
+Add a rule that points Cursor at the component docs:
 
-The LLMs.txt endpoints are generated on-the-fly from the same MDX documentation files that render this docs site. The processing pipeline:
-
-1. Reads the raw MDX content from disk
-2. Replaces interactive `<ComponentPreview>` tags with the actual demo source code
-3. Strips remaining UI-only component tags
-4. Wraps with metadata (title, URL, description)
-5. Returns plain text
-
-This means every code example in the LLM output is **real, executable code** — the same code that renders in the interactive previews on this site.
-
-## Usage with AI Assistants
-
-### Cursor
-
-Add Keystone UI documentation to your Cursor rules:
-
-```
-# .cursor/rules/keystoneui.mdc
+```markdown title=".cursor/rules/keystoneui.mdc"
 ---
 description: Keystone UI component library reference
 alwaysApply: true
@@ -46,23 +29,23 @@ alwaysApply: true
 Use Keystone UI for all UI components. Reference: https://keystoneui.io/llms-components.txt
 ```
 
-Or fetch the full documentation:
+Or download the full docs into a rule file:
 
 ```bash
 curl -o .cursor/rules/keystoneui-docs.md https://keystoneui.io/llms-full.txt
 ```
 
-### Claude / ChatGPT
+## Give the docs to Claude or ChatGPT
 
 Paste the contents of `/llms-full.txt` or `/llms-components.txt` as context, or reference individual component pages:
 
-```
+```text
 https://keystoneui.io/docs/components/button.mdx
 ```
 
-### AGENTS.md
+## Reference the docs from AGENTS.md
 
-Add to your project's `AGENTS.md`:
+Add this section to your project's `AGENTS.md`:
 
 ```markdown
 ## UI Library
@@ -73,12 +56,6 @@ Documentation: https://keystoneui.io/llms-components.txt
 Import pattern: `import { Button } from "@keystoneui/react/button"`
 ```
 
-## Cache Behavior
+## Check that it works
 
-All LLMs.txt endpoints are cached at the CDN level:
-
-- **Fresh for 1 hour** (`s-maxage=3600`)
-- **Stale-while-revalidate for 24 hours** (`stale-while-revalidate=86400`)
-- **Regenerated on each deployment**
-
-After a deployment, the first request regenerates the content, then the CDN serves cached versions.
+Ask your assistant how to import a Keystone UI Button. It should answer with the subpath import, `import { Button } from "@keystoneui/react/button"`, not a barrel import from `@keystoneui/react`.

@@ -1,5 +1,14 @@
 {
-  "title": "AI for Agents",
+  "title": "AI agents",
   "icon": "Bot",
-  "pages": ["mcp-server", "llms-txt", "skills", "agents-md"]
+  "pages": [
+    "choose-an-integration",
+    "mcp-server",
+    "how-mcp-works",
+    "mcp-tools",
+    "troubleshoot-mcp",
+    "skills",
+    "agents-md",
+    "llms-txt"
+  ]
 }

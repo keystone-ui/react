@@ -134,7 +134,7 @@ npx shadcn@latest add @keystone/button
 An MCP server and CLI ([`@keystoneui/mcp`](https://www.npmjs.com/package/@keystoneui/mcp))
 let agents search, view, and install components, and the docs site serves
 [`/llms.txt`](https://keystoneui.io/llms.txt) and a packaged Agent Skill. See
-[AI for Agents](https://keystoneui.io/docs/agents/mcp-server).
+[AI agents](https://keystoneui.io/docs/agents/mcp-server).
 
 ## License
 

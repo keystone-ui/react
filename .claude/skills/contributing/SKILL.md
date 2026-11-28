@@ -102,7 +102,7 @@ Three surfaces drift if not maintained explicitly. Run through this checklist af
 | `packages/ui/tsup.config.ts` entryPoints | Add the source path. |
 | `skills/keystoneui-react/SKILL.md` | Bump the exact component count at the **Component List** heading and add the kebab-case name to the list. |
 | `skills/keystoneui-react/SKILL.md` Component Selection table | Add the component to the appropriate row (e.g. "Form layout" / "Overlays" / "Feedback"). |
-| `apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx` | Keep its `50+` component count; see the count policy below. |
+| `apps/docs/content/docs/(getting-started)/agents/how-mcp-works.mdx` | Keep its `50+` component count; see the count policy below. |
 | Component counts elsewhere | **Do not bump them.** Every other surface says `50+` on purpose. |
 
 **Count policy.** The component count is hardcoded in ~12 places. Only **two**
@@ -119,7 +119,7 @@ state an exact number and both must be updated:
   ```
 
 Everywhere else — `README.md`, the home page, the gallery, `index.mdx`,
-`llms-utils.ts`, `mcp-server.mdx`, the intro blog post — says `50+` and should
+`llms-utils.ts`, `how-mcp-works.mdx`, the intro blog post — says `50+` and should
 stay that way. Bumping a dozen numbers per component is how they end up
 disagreeing with each other, which is exactly the state this replaced (three
 different values across ten files).
@@ -137,7 +137,7 @@ different values across ten files).
 | New popup behavior (height, animation, z-stack) | `skills/keystoneui-react/rules/composition.md` AND `.claude/skills/popup-patterns/SKILL.md`. |
 | New data-table convention (filter toolbar, applied state, sort affordance, pagination footer, mobile fold) | `skills/keystoneui-react/rules/data-tables.md` AND `.claude/skills/data-table-patterns/SKILL.md` AND the Notes section of every block that already does it differently. The shipped rule is the consumer-facing half; the project skill keeps the repo-only material (guard discipline, e2e paths). |
 | New install path or CLI flow | `skills/keystoneui-react/cli.md` AND `apps/docs/content/docs/(getting-started)/agents/skills.mdx`. |
-| New MCP tool | `packages/keystoneui-mcp/src/{server,tools,fetcher}.ts` AND `skills/keystoneui-react/mcp.md` AND `apps/docs/content/docs/(getting-started)/agents/mcp-server.mdx`. |
+| New MCP tool | `packages/keystoneui-mcp/src/{server,tools,fetcher}.ts` AND `skills/keystoneui-react/mcp.md` AND the tool table in `apps/docs/content/docs/(getting-started)/agents/mcp-tools.mdx`. |
 | New block | Follow [Adding a New Block](#adding-a-new-block). |
 | New block category | `AGENTS.md` "Block Authoring" taxonomy AND the table in [Adding a New Block](#adding-a-new-block) above AND the **Block Selection** table in `skills/keystoneui-react/SKILL.md`. |
 | New story or demo variant | Run `pnpm lint:stories-demos`. If the lint flags it as story-only or demo-only and that's intentional (per-variant story vs consolidated `variants.tsx` demo, dev-only fixture, etc.), add the entry to `scripts/stories-demos-allowlist.json` with a one-line rationale in the `_notes` block. Otherwise author the missing counterpart on the other surface. |
@@ -234,7 +234,7 @@ Authoring rules:
 - AGENTS.md route: `apps/docs/app/agents-md/route.ts`
 - LLMs.txt routes: `apps/docs/app/llms{,-full,-components}.txt/route.ts`
 - MCP server: `packages/keystoneui-mcp/src/{server,tools,fetcher,config}.ts`
-- MCP docs: `apps/docs/content/docs/(getting-started)/agents/{mcp-server,skills,llms-txt,agents-md}.mdx`
+- MCP docs: `apps/docs/content/docs/(getting-started)/agents/{choose-an-integration,mcp-server,how-mcp-works,mcp-tools,troubleshoot-mcp,skills,llms-txt,agents-md}.mdx`
 
 ### Project-internal Claude/Cursor skills
 - `.claude/skills/{component-architecture,design-tokens,popup-patterns,data-table-patterns,contributing}/SKILL.md`
