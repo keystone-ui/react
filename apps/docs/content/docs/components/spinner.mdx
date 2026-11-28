@@ -1,6 +1,7 @@
 ---
 title: Spinner
-description: Animated loading spinner for indicating indeterminate loading states.
+description: An animated ring that shows something is loading when you can't say how long it will take.
+contentType: Reference
 ---
 
 <ComponentPreview name="spinner-default" />
@@ -37,9 +38,13 @@ pnpm add @keystoneui/react@beta @base-ui/react
 
 ## Usage
 
+Import Spinner from its subpath.
+
 ```tsx
 import { Spinner } from "@keystoneui/react/spinner";
 ```
+
+Render it with no props for the default size.
 
 ```tsx
 <Spinner />
@@ -49,36 +54,38 @@ import { Spinner } from "@keystoneui/react/spinner";
 
 ### Sizes
 
+Set the size with a `size-*` class in `className`. The default is `size-4`.
+
 <ComponentPreview name="spinner-sizes" />
 
 
 ### With Button
 
-Use a spinner inside a button to indicate a loading action:
+Place a spinner inside a button to show that its action is running.
 
 <ComponentPreview name="spinner-with-button" />
 
 
 ### With Badge
 
-Spinner inside a badge:
+A spinner inside a badge marks a status that is still in progress.
 
 <ComponentPreview name="spinner-with-badge" />
 
 
 ### With Empty
 
-Spinner in an empty state:
+A spinner in an empty state shows that content is loading.
 
 <ComponentPreview name="spinner-with-empty" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 ## API reference
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `size` | `number` | - | Size of the spinner in pixels |
-| `className` | `string` | - | Additional CSS classes |
+| `className` | `string` | - | Additional CSS classes. Set the size with a `size-*` class (default `size-4`). |
+| `...props` | `ComponentProps<"svg">` | - | Passed to the `<svg>` |

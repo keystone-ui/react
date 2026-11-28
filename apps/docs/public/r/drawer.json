@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "drawer",
   "title": "Drawer",
-  "description": "Slide-out panel that emerges from screen edges for supplementary content or navigation.",
+  "description": "A panel that slides in from an edge of the screen to hold secondary content, filters or navigation.",
   "dependencies": [
     "@base-ui/react"
   ],

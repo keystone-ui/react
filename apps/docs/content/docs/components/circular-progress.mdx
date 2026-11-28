@@ -1,6 +1,7 @@
 ---
 title: CircularProgress
-description: Circular progress indicator for showing completion percentage in a ring format.
+description: A ring that shows how far a task has progressed, as a percentage.
+contentType: Reference
 ---
 
 <ComponentPreview name="circular-progress-default" />
@@ -37,15 +38,21 @@ pnpm add @keystoneui/react@beta @base-ui/react
 
 ## Usage
 
+Import CircularProgress from its subpath.
+
 ```tsx
 import { CircularProgress } from "@keystoneui/react/circular-progress";
 ```
+
+Pass `value` to set how much of the ring is filled.
 
 ```tsx
 <CircularProgress value={65} />
 ```
 
 ## Composition
+
+CircularProgress has a track, an indicator, a value and a label.
 
 ```text
 CircularProgress
@@ -56,76 +63,68 @@ CircularProgress
 ```
 
 With no children, `CircularProgress` renders the track, indicator and value.
-Pass children to add a label or drop the value — then you own the whole tree.
+When you pass children to add a label or drop the value, you render the whole
+tree yourself.
 
 ## Examples
 
 ### Sizes
 
-Different size presets for various contexts:
+Set `size` to `sm`, `default` or `lg`.
 
 <ComponentPreview name="circular-progress-sizes" />
 
+### With a label
 
-### With Label
-
-Display a label or percentage inside the ring:
+Show a label or the percentage inside the ring.
 
 <ComponentPreview name="circular-progress-with-label" />
 
-
 ### Animated
 
-A smoothly animated circular progress:
+Update `value` over time and the ring animates to each new value.
 
 <ComponentPreview name="circular-progress-animated" />
 
-
 ### Indeterminate
 
-A spinning indeterminate state for unknown durations:
+Pass `value={null}` for a spinning ring when you can't tell how long the task will take.
 
 <ComponentPreview name="circular-progress-indeterminate" />
 
-
 ### Colors
 
-Different color variants:
+Set `color` to `default`, `success`, `warning` or `destructive`.
 
 <ComponentPreview name="circular-progress-colors" />
 
-
 ### With Avatar
 
-Circular progress wrapping an avatar:
+The ring wraps an Avatar.
 
 <ComponentPreview name="circular-progress-with-avatar" />
 
+### Custom center content
 
-### Custom Center Content
-
-Custom content in the center of the ring:
+Render your own content in the center of the ring.
 
 <ComponentPreview name="circular-progress-custom-center-content" />
 
-
 ### Controlled
 
-Interactive controlled progress:
+Drive `value` from state.
 
 <ComponentPreview name="circular-progress-controlled" />
 
-
 ### Complete
 
-Completed progress state:
+The ring at 100%, when the task is done.
 
 <ComponentPreview name="circular-progress-complete" />
 
 ## RTL
 
-RTL support in Keystone UI is partial: Base UI handles keyboard navigation and popup positioning when you supply a `DirectionProvider`, but the library's own spacing is written with physical utilities and does not mirror. See [the RTL guide](/docs/concepts/rtl) for what works today.
-
+Keystone UI's own spacing doesn't mirror in right-to-left layouts yet. [Right-to-left support](/docs/concepts/rtl) lists what works and how to set it up.
 
 {/* backlinks:start */}
 
@@ -141,6 +140,6 @@ RTL support in Keystone UI is partial: Base UI handles keyboard navigation and p
 | --- | --- | --- | --- |
 | `value` | `number` | `0` | Current progress value (0-100) |
 | `max` | `number` | `100` | Maximum progress value |
-| `size` | `number` | - | Diameter of the circle in pixels |
-| `strokeWidth` | `number` | - | Thickness of the progress ring |
+| `size` | `"sm" \| "default" \| "lg"` | `"default"` | Diameter: 48px, 64px or 96px |
+| `color` | `"default" \| "success" \| "warning" \| "destructive"` | `"default"` | Color of the progress ring |
 | `className` | `string` | - | Additional CSS classes |
